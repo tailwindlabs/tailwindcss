@@ -8,7 +8,7 @@ import { segment } from './utils/segment'
 
 type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
-) => AstNode[] | undefined
+) => AstNode[] | undefined | null
 
 interface SuggestionGroup {
   supportsNegative?: boolean
@@ -28,7 +28,6 @@ type SuggestionDefinition =
     }
 
 export class Utilities {
-  private arbitraryFn!: CompileFn<'arbitrary'>
   private utilities = new DefaultMap<
     string,
     {
@@ -45,10 +44,6 @@ export class Utilities {
 
   functional(name: string, compileFn: CompileFn<'functional'>) {
     this.utilities.get(name).push({ kind: 'functional', compileFn })
-  }
-
-  arbitrary(compileFn: CompileFn<'arbitrary'>) {
-    this.arbitraryFn = compileFn
   }
 
   has(name: string, kind: 'static' | 'functional') {
@@ -83,10 +78,6 @@ export class Utilities {
 
     return keys
   }
-
-  getArbitrary() {
-    return this.arbitraryFn
-  }
 }
 
 function atRoot(rules: Rule[]) {
@@ -110,7 +101,7 @@ function property(ident: string, initialValue?: string, syntax?: string) {
 /**
  * Apply opacity to a color using `color-mix`.
  */
-function withAlpha(value: string, alpha: string): string {
+export function withAlpha(value: string, alpha: string): string {
   if (alpha === null) return value
 
   // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
@@ -134,7 +125,11 @@ function withAlpha(value: string, alpha: string): string {
 /**
  * Resolve a color value + optional opacity modifier to a final color.
  */
-function asColor(value: string, modifier: CandidateModifier | null, theme: Theme): string | null {
+export function asColor(
+  value: string,
+  modifier: CandidateModifier | null,
+  theme: Theme,
+): string | null {
   if (!modifier) return value
 
   if (modifier.kind === 'arbitrary') {
@@ -159,7 +154,7 @@ function asColor(value: string, modifier: CandidateModifier | null, theme: Theme
 /**
  * Negate a numeric value — literals get simplified by Lightning CSS.
  */
-function withNegative(
+export function withNegative(
   value: string,
   candidate: Extract<Candidate, { kind: 'static' | 'functional' }>,
 ) {
@@ -214,20 +209,6 @@ function resolveThemeColor<T extends ColorThemeKey>(
 
 export function createUtilities(theme: Theme) {
   let utilities = new Utilities()
-
-  utilities.arbitrary((candidate) => {
-    let value: string | null = candidate.value
-
-    // Assumption: If an arbitrary property has a modifier, then we assume it
-    // is an opacity modifier.
-    if (candidate.modifier) {
-      value = asColor(value, candidate.modifier, theme)
-    }
-
-    if (value === null) return
-
-    return [decl(candidate.property, value)]
-  })
 
   /**
    * Register list of suggestions for a class

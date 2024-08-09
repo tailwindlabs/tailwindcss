@@ -15395,3 +15395,848 @@ describe('custom utilities', () => {
     )
   })
 })
+
+describe('legacy: addUtilities', () => {
+  test('custom static utility', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.text-trim': {
+                'text-box-trim': 'both',
+                'text-box-edge': 'cap alphabetic',
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['text-trim', 'lg:text-trim'])).trim())
+      .toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-trim {
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:text-trim {
+            text-box-trim: both;
+            text-box-edge: cap alphabetic;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('camel case properties are converted to kebab-case', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.text-trim': {
+                WebkitAppearance: 'none',
+                textBoxTrim: 'both',
+                textBoxEdge: 'cap alphabetic',
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['text-trim'])).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-trim {
+          -webkit-appearance: none;
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+      }"
+    `)
+  })
+
+  test('custom static utilities support `@apply`', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.foo': {
+                '@apply flex dark:underline': {},
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['foo', 'lg:foo'])).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo {
+          display: flex;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .foo {
+            text-decoration-line: underline;
+          }
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo {
+            display: flex;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            .lg\\:foo {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('throws on custom static utilities with an invalid name', async () => {
+    await expect(() => {
+      return compile(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ addUtilities }) => {
+              addUtilities({
+                '.text-trim > *': {
+                  'text-box-trim': 'both',
+                  'text-box-edge': 'cap alphabetic',
+                },
+              })
+            }
+          },
+        },
+      )
+    }).rejects.toThrowError(/invalid utility selector/)
+  })
+})
+
+describe('legacy: matchUtilities', () => {
+  test('custom functional utility', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  'border-block': (value) => ({ 'border-block-width': value }),
+                },
+                {
+                  values: {
+                    DEFAULT: '1px',
+                    '2': '2px',
+                  },
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run([
+          'border-block',
+          'border-block-2',
+          'border-block-[35px]',
+          'border-block-[var(--foo)]',
+          'lg:border-block-2',
+        ]),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".border-block {
+        border-block-width: 1px;
+      }
+
+      .border-block-2 {
+        border-block-width: 2px;
+      }
+
+      .border-block-\\[35px\\] {
+        border-block-width: 35px;
+      }
+
+      .border-block-\\[var\\(--foo\\)\\] {
+        border-block-width: var(--foo);
+      }
+
+      @media (width >= 1024px) {
+        .lg\\:border-block-2 {
+          border-block-width: 2px;
+        }
+      }"
+    `)
+
+    expect(
+      optimizeCss(
+        await run([
+          '-border-block',
+          '-border-block-2',
+          'lg:-border-block-2',
+          'border-block-unknown',
+          'border-block/1',
+        ]),
+      ).trim(),
+    ).toEqual('')
+  })
+
+  test('custom functional utility with any modifier', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  'border-block': (value, { modifier }) => ({
+                    '--my-modifier': modifier ?? 'none',
+                    'border-block-width': value,
+                  }),
+                },
+                {
+                  values: {
+                    DEFAULT: '1px',
+                    '2': '2px',
+                  },
+
+                  modifiers: 'any',
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".border-block {
+        --my-modifier: none;
+        border-block-width: 1px;
+      }
+
+      .border-block-2 {
+        --my-modifier: none;
+        border-block-width: 2px;
+      }
+
+      .border-block-2\\/foo {
+        --my-modifier: foo;
+        border-block-width: 2px;
+      }
+
+      .border-block\\/foo {
+        --my-modifier: foo;
+        border-block-width: 1px;
+      }"
+    `)
+  })
+
+  test('custom functional utility with known modifier', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  'border-block': (value, { modifier }) => ({
+                    '--my-modifier': modifier ?? 'none',
+                    'border-block-width': value,
+                  }),
+                },
+                {
+                  values: {
+                    DEFAULT: '1px',
+                    '2': '2px',
+                  },
+
+                  modifiers: {
+                    foo: 'foo',
+                  },
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".border-block {
+        --my-modifier: none;
+        border-block-width: 1px;
+      }
+
+      .border-block-2 {
+        --my-modifier: none;
+        border-block-width: 2px;
+      }
+
+      .border-block-2\\/foo {
+        --my-modifier: foo;
+        border-block-width: 2px;
+      }
+
+      .border-block\\/foo {
+        --my-modifier: foo;
+        border-block-width: 1px;
+      }"
+    `)
+
+    expect(
+      optimizeCss(await run(['border-block/unknown', 'border-block-2/unknown'])).trim(),
+    ).toEqual('')
+  })
+
+  // We're not married to this behavior — if there's a good reason to do this differently in the
+  // future don't be afraid to change what should happen in this scenario.
+  describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
+    test('implicit color modifier', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            async loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
+                  },
+                  { type: ['color', 'any'] },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-width': value }),
+                  },
+                  { type: ['length'] },
+                )
+              }
+            },
+          },
+        )
+
+        return compiled.build(candidates)
+      }
+
+      expect(
+        optimizeCss(
+          await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50']),
+        ).trim(),
+      ).toMatchInlineSnapshot(`
+        ".scrollbar-\\[\\#08c\\] {
+          scrollbar-color: #08c;
+        }
+
+        .scrollbar-\\[\\#08c\\]\\/50 {
+          scrollbar-color: #0088cc80;
+        }
+
+        .scrollbar-\\[2px\\] {
+          scrollbar-width: 2px;
+        }"
+      `)
+      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+    })
+
+    test('no modifiers are supported by the plugins', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            async loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ '--scrollbar-angle': value }),
+                  },
+                  { type: ['angle', 'any'] },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ '--scrollbar-width': value }),
+                  },
+                  { type: ['length'] },
+                )
+              }
+            },
+          },
+        )
+
+        return compiled.build(candidates)
+      }
+
+      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+    })
+
+    test('invalid named modifier', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            async loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
+                  },
+                  { type: ['color', 'any'], modifiers: { foo: 'foo' } },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-width': value }),
+                  },
+                  { type: ['length'], modifiers: { bar: 'bar' } },
+                )
+              }
+            },
+          },
+        )
+
+        return compiled.build(candidates)
+      }
+
+      expect(optimizeCss(await run(['scrollbar-[2px]/foo'])).trim()).toEqual('')
+    })
+  })
+
+  test('custom functional utilities with different types', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value) => ({ 'scrollbar-color': value }),
+                },
+                {
+                  type: ['color', 'any'],
+                  values: {
+                    black: 'black',
+                  },
+                },
+              )
+
+              matchUtilities(
+                {
+                  scrollbar: (value) => ({ 'scrollbar-width': value }),
+                },
+                {
+                  type: ['length'],
+                  values: {
+                    2: '2px',
+                  },
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run([
+          'scrollbar-black',
+          'scrollbar-black/50',
+          'scrollbar-2',
+          'scrollbar-[#fff]',
+          'scrollbar-[#fff]/50',
+          'scrollbar-[2px]',
+          'scrollbar-[var(--my-color)]',
+          'scrollbar-[var(--my-color)]/50',
+          'scrollbar-[color:var(--my-color)]',
+          'scrollbar-[color:var(--my-color)]/50',
+          'scrollbar-[length:var(--my-width)]',
+        ]),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".scrollbar-2 {
+        scrollbar-width: 2px;
+      }
+
+      .scrollbar-\\[\\#fff\\] {
+        scrollbar-color: #fff;
+      }
+
+      .scrollbar-\\[\\#fff\\]\\/50 {
+        scrollbar-color: #ffffff80;
+      }
+
+      .scrollbar-\\[2px\\] {
+        scrollbar-width: 2px;
+      }
+
+      .scrollbar-\\[color\\:var\\(--my-color\\)\\] {
+        scrollbar-color: var(--my-color);
+      }
+
+      .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+      }
+
+      .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
+        scrollbar-width: var(--my-width);
+      }
+
+      .scrollbar-\\[var\\(--my-color\\)\\] {
+        scrollbar-color: var(--my-color);
+      }
+
+      .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+      }
+
+      .scrollbar-black {
+        scrollbar-color: black;
+      }
+
+      .scrollbar-black\\/50 {
+        scrollbar-color: #00000080;
+      }"
+    `)
+
+    expect(
+      optimizeCss(
+        await run([
+          'scrollbar-2/50',
+          'scrollbar-[2px]/50',
+          'scrollbar-[length:var(--my-width)]/50',
+        ]),
+      ).trim(),
+    ).toEqual('')
+  })
+
+  test('functional utilities with `type: color` automatically support opacity', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value) => ({ 'scrollbar-color': value }),
+                },
+                {
+                  type: ['color', 'any'],
+                  values: {
+                    black: 'black',
+                  },
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run([
+          'scrollbar-current',
+          'scrollbar-current/45',
+          'scrollbar-black',
+          'scrollbar-black/33',
+          'scrollbar-black/[50%]',
+          'scrollbar-[var(--my-color)]/[25%]',
+        ]),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 25%, transparent);
+      }
+
+      .scrollbar-black {
+        scrollbar-color: black;
+      }
+
+      .scrollbar-black\\/33 {
+        scrollbar-color: #00000054;
+      }
+
+      .scrollbar-black\\/\\[50\\%\\] {
+        scrollbar-color: #00000080;
+      }
+
+      .scrollbar-current {
+        scrollbar-color: currentColor;
+      }
+
+      .scrollbar-current\\/45 {
+        scrollbar-color: color-mix(in srgb, currentColor 45%, transparent);
+      }"
+    `)
+  })
+
+  test('functional utilities with type: color and explicit modifiers', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+            --opacity-my-opacity: 0.5;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value, { modifier }) => ({
+                    '--modifier': modifier ?? 'none',
+                    'scrollbar-width': value,
+                  }),
+                },
+                {
+                  type: ['any'],
+                  values: {},
+                  modifiers: {
+                    foo: 'foo',
+                  },
+                },
+              )
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        await run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar']),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".scrollbar-\\[12px\\] {
+        --modifier: none;
+        scrollbar-width: 12px;
+      }
+
+      .scrollbar-\\[12px\\]\\/foo {
+        --modifier: foo;
+        scrollbar-width: 12px;
+      }"
+    `)
+  })
+
+  test('functional utilities support `@apply`', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ matchUtilities }) => {
+            matchUtilities(
+              {
+                foo: (value) => ({
+                  '--foo': value,
+                  [`@apply flex`]: {},
+                }),
+              },
+              {
+                values: {
+                  bar: 'bar',
+                },
+              },
+            )
+          }
+        },
+      },
+    )
+
+    expect(
+      optimizeCss(compiled.build(['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'])).trim(),
+    ).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-\\[12px\\] {
+          --foo: 12px;
+          display: flex;
+        }
+
+        .foo-bar {
+          --foo: bar;
+          display: flex;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo-\\[12px\\] {
+            --foo: 12px;
+            display: flex;
+          }
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo-bar {
+            --foo: bar;
+            display: flex;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('throws on custom utilities with an invalid name', async () => {
+    await expect(() => {
+      return compile(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities({
+                '.text-trim > *': () => ({
+                  'text-box-trim': 'both',
+                  'text-box-edge': 'cap alphabetic',
+                }),
+              })
+            }
+          },
+        },
+      )
+    }).rejects.toThrowError(/invalid utility name/)
+  })
+})

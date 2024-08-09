@@ -1,7 +1,8 @@
-import { WalkAction, rule, walk, type AstNode, type Rule } from './ast'
+import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
+import { asColor } from './utilities'
 import { compare } from './utils/compare'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
@@ -102,39 +103,9 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
   let candidate = designSystem.parseCandidate(rawCandidate)
   if (candidate === null) return null
 
-  let nodes: AstNode[] = []
+  let nodes = compileBaseUtility(candidate, designSystem)
 
-  // Handle arbitrary properties
-  if (candidate.kind === 'arbitrary') {
-    let compileFn = designSystem.utilities.getArbitrary()
-
-    // Build the node
-    let compiledNodes = compileFn(candidate)
-    if (compiledNodes === undefined) return null
-
-    nodes = compiledNodes
-  }
-
-  // Handle named utilities
-  else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-    let fns = designSystem.utilities.get(candidate.root)
-
-    // Build the node
-    let compiledNodes: AstNode[] | undefined
-
-    for (let i = fns.length - 1; i >= 0; i--) {
-      let fn = fns[i]
-
-      if (candidate.kind !== fn.kind) continue
-
-      compiledNodes = fn.compileFn(candidate)
-      if (compiledNodes) break
-    }
-
-    if (compiledNodes === undefined) return null
-
-    nodes = compiledNodes
-  }
+  if (!nodes) return null
 
   let propertySort = getPropertySort(nodes)
 
@@ -224,6 +195,36 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
   // All other variants
   let result = applyFn(node, variant)
   if (result === null) return null
+}
+
+function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
+  if (candidate.kind === 'arbitrary') {
+    let value: string | null = candidate.value
+
+    // Assumption: If an arbitrary property has a modifier, then we assume it
+    // is an opacity modifier.
+    if (candidate.modifier) {
+      value = asColor(value, candidate.modifier, designSystem.theme)
+    }
+
+    if (value === null) return
+
+    return [decl(candidate.property, value)]
+  }
+
+  let utilities = designSystem.utilities.get(candidate.root) ?? []
+
+  for (let i = utilities.length - 1; i >= 0; i--) {
+    let utility = utilities[i]
+
+    if (candidate.kind !== utility.kind) continue
+
+    let compiledNodes = utility.compileFn(candidate)
+    if (compiledNodes === null) return null
+    if (compiledNodes) return compiledNodes
+  }
+
+  return null
 }
 
 function applyImportant(ast: AstNode[]): void {
