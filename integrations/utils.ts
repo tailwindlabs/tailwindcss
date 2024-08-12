@@ -59,7 +59,7 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false }: TestFlags = {},
 ) {
-  return (only ? defaultTest.only : defaultTest)(
+  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
     name,
     { timeout: TEST_TIMEOUT },
     async (options) => {
@@ -321,7 +321,7 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
-  return test(name, config, testCallback, { only: true, debug: true })
+  return test(name, config, testCallback, { debug: true })
 }
 
 // Maps package names to their tarball filenames. See scripts/pack-packages.ts
