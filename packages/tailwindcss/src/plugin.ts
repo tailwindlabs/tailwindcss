@@ -1,6 +1,6 @@
 import type { PluginAPI } from './plugin-api'
 
-interface Config {}
+type Config = Record<string, any>
 
 type PluginFn = (api: PluginAPI) => void
 type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
