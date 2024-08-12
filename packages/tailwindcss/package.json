@@ -31,7 +31,8 @@
     "./theme.css": "./theme.css",
     "./theme": "./theme.css",
     "./utilities.css": "./utilities.css",
-    "./utilities": "./utilities.css"
+    "./utilities": "./utilities.css",
+    "./plugin": "./dist/plugin.js"
   },
   "publishConfig": {
     "provenance": true,

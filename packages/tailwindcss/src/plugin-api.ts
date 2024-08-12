@@ -1,6 +1,7 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
+import type { Plugin } from './plugin'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 
@@ -175,5 +176,31 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
         })
       }
     },
+  }
+}
+
+export async function registerPlugins(
+  plugins: Plugin[],
+  designSystem: DesignSystem,
+  ast: AstNode[],
+) {
+  let pluginApi = buildPluginApi(designSystem, ast)
+
+  for (let plugin of plugins) {
+    if ('__isOptionsFunction' in plugin) {
+      // Happens with `plugin.withOptions()` and no options were passed
+      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
+      plugin().handler(pluginApi)
+    } else if ('handler' in plugin) {
+      // Happens with `plugin(…)`:
+      // e.g. `require("my-plugin")`
+      //
+      // or with `plugin.withOptions()` and the user passed options
+      // e.g. `require("my-plugin")(options)`
+      plugin.handler(pluginApi)
+    } else {
+      // Just a plain function without using the plugin(…) API
+      plugin(pluginApi)
+    }
   }
 }
