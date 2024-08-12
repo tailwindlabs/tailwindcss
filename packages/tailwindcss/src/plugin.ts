@@ -4,25 +4,25 @@ type Config = Record<string, any>
 
 type PluginFn = (api: PluginAPI) => void
 type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
-type PluginWithOptions = {
-  (options?: any): PluginWithConfig
+type PluginWithOptions<T> = {
+  (options?: T): PluginWithConfig
   __isOptionsFunction: true
 }
 
-export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions
+export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 
-function createPlugin(handler: PluginFn, config?: Partial<Config>): Plugin {
+function createPlugin(handler: PluginFn, config?: Partial<Config>): PluginWithConfig {
   return {
     handler,
     config,
   }
 }
 
-createPlugin.withOptions = function (
-  pluginFunction: (options?: any) => PluginFn,
-  configFunction: (options?: any) => Partial<Config> = () => ({}),
-): PluginWithOptions {
-  function optionsFunction(options: any): PluginWithConfig {
+createPlugin.withOptions = function <T>(
+  pluginFunction: (options?: T) => PluginFn,
+  configFunction: (options?: T) => Partial<Config> = () => ({}),
+): PluginWithOptions<T> {
+  function optionsFunction(options: T): PluginWithConfig {
     return {
       handler: pluginFunction(options),
       config: configFunction(options),
@@ -31,7 +31,7 @@ createPlugin.withOptions = function (
 
   optionsFunction.__isOptionsFunction = true as const
 
-  return optionsFunction
+  return optionsFunction as PluginWithOptions<T>
 }
 
 export default createPlugin
