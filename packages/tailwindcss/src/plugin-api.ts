@@ -179,11 +179,7 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
   }
 }
 
-export async function registerPlugins(
-  plugins: Plugin[],
-  designSystem: DesignSystem,
-  ast: AstNode[],
-) {
+export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
   let pluginApi = buildPluginApi(designSystem, ast)
 
   for (let plugin of plugins) {
