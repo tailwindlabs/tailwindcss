@@ -23,6 +23,10 @@
       "require": "./dist/lib.js",
       "import": "./src/index.ts"
     },
+    "./plugin": {
+      "require": "./src/plugin.cts",
+      "import": "./src/plugin.ts"
+    },
     "./package.json": "./package.json",
     "./index.css": "./index.css",
     "./index": "./index.css",
@@ -31,8 +35,7 @@
     "./theme.css": "./theme.css",
     "./theme": "./theme.css",
     "./utilities.css": "./utilities.css",
-    "./utilities": "./utilities.css",
-    "./plugin": "./dist/plugin.js"
+    "./utilities": "./utilities.css"
   },
   "publishConfig": {
     "provenance": true,
@@ -43,6 +46,10 @@
         "style": "./index.css",
         "require": "./dist/lib.js",
         "import": "./dist/lib.mjs"
+      },
+      "./plugin": {
+        "require": "./dist/plugin.js",
+        "import": "./src/plugin.mjs"
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
