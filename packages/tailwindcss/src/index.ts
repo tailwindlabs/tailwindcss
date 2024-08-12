@@ -281,7 +281,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
     customUtility(designSystem)
   }
 
-  let pluginApi = buildPluginApi(designSystem)
+  let pluginApi = buildPluginApi(designSystem, ast)
 
   await Promise.all(pluginLoaders.map((loader) => loader.then((plugin) => plugin(pluginApi))))
 
