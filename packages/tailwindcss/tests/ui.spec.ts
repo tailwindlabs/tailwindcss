@@ -9,7 +9,7 @@ const html = String.raw
 const css = String.raw
 
 test('touch action', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="touch-pan-x touch-pan-y hover:touch-pinch-zoom">Hello world</div>`,
   )
@@ -17,7 +17,6 @@ test('touch action', async ({ page }) => {
   expect(await getPropertyValue('#x', 'touch-action')).toEqual('pan-x pan-y')
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect([
     // `manipulation` is an alias for `pan-x pan-y pinch-zoom` and some engines
@@ -59,7 +58,7 @@ for (let [classes, expected] of [
 }
 
 test('background gradient, going from 2 to 3', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`
       <div id="x" class="bg-gradient-to-r from-red-500 hover:via-green-500 to-blue-500">
@@ -73,7 +72,6 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
   )
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
@@ -81,7 +79,7 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
 })
 
 test('background gradient, going from 3 to 2', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`
       <div id="x" class="bg-gradient-to-r from-red-500 via-green-500 hover:via-none to-blue-500">
@@ -95,7 +93,6 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
   )
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
@@ -212,7 +209,7 @@ test('outline style is optional', async ({ page }) => {
 })
 
 test('outline style is preserved when changing outline width', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="outline-2 outline-dotted outline-white hover:outline-4">
       Hello world
@@ -222,7 +219,6 @@ test('outline style is preserved when changing outline width', async ({ page }) 
   expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 2px')
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 4px')
 })
@@ -237,7 +233,7 @@ test('borders can be added without a border-style utility', async ({ page }) => 
 })
 
 test('borders can be added to a single side without a border-style utility', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="text-black border-r-2 border-dashed hover:border-r-4">
       Hello world
@@ -246,7 +242,6 @@ test('borders can be added to a single side without a border-style utility', asy
   expect(await getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
 })
@@ -267,21 +262,20 @@ test('dividers can be added without setting border-style', async ({ page }) => {
 })
 
 test('scale can be a number or percentage', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="scale-[50%] hover:scale-[1.5]">Hello world</div>`,
   )
   expect(await getPropertyValue('#x', 'scale')).toEqual('0.5')
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue('#x', 'scale')).toEqual('1.5')
 })
 
 // https://github.com/tailwindlabs/tailwindcss/issues/13185
 test('content-none persists when conditionally styling a pseudo-element', async ({ page }) => {
-  let { getPropertyValue, nextFrame } = await render(
+  let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="after:content-none after:hover:underline">Hello world</div>`,
   )
@@ -289,7 +283,6 @@ test('content-none persists when conditionally styling a pseudo-element', async 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 
   await page.locator('#x').hover()
-  await nextFrame()
 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 })
@@ -339,15 +332,6 @@ async function render(page: Page, content: string) {
         Array.isArray(selector) ? selector : [selector, undefined],
         property,
       )
-    },
-
-    // Wait for the next frame to ensure the styles are applied
-    async nextFrame() {
-      await page.evaluate(() => {
-        return new Promise<void>((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-        )
-      })
     },
   }
 }
