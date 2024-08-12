@@ -41,5 +41,8 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  // If rustup is installed outside of the default ~/.rustup directory, we need
+  // to pass the path through to the individual rust tasks.
+  "globalPassThroughEnv": ["RUSTUP_HOME"]
 }
