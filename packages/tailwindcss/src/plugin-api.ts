@@ -6,7 +6,6 @@ import { inferDataType } from './utils/infer-data-type'
 
 export type PluginAPI = {
   addBase(base: CssInJs): void
-
   addVariant(name: string, variant: string | string[] | CssInJs): void
   addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
   matchUtilities(
