@@ -13,8 +13,7 @@ export default defineConfig([
   },
   {
     format: ['esm'],
-    splitting: false,
-    minify: false,
+    minify: true,
     dts: true,
     entry: {
       plugin: 'src/plugin.ts',
@@ -22,7 +21,7 @@ export default defineConfig([
   },
   {
     format: ['cjs'],
-    minify: false,
+    minify: true,
     dts: true,
     entry: {
       plugin: 'src/plugin.cts',
