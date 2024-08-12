@@ -48,8 +48,10 @@ interface TestFlags {
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
-const TEST_TIMEOUT = 30000
-const ASSERTION_TIMEOUT = 5000
+const IS_WINDOWS = platform() === 'win32'
+
+const TEST_TIMEOUT = IS_WINDOWS ? 60000 : 30000
+const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
 export function test(
   name: string,
@@ -65,7 +67,7 @@ export function test(
         ? path.join(REPO_ROOT, '.debug')
         : // On Windows CI, tmpdir returns a path containing a weird RUNNER~1
           // folder  that apparently causes the vite builds to not work.
-          process.env.CI && platform() === 'win32'
+          process.env.CI && IS_WINDOWS
           ? homedir()
           : tmpdir()
       await fs.mkdir(rootDir, { recursive: true })
@@ -250,7 +252,7 @@ export function test(
             }
 
             // Ensure that files written on Windows use \r\n line ending
-            if (platform() === 'win32') {
+            if (IS_WINDOWS) {
               content = content.replace(/\n/g, '\r\n')
             }
 
