@@ -2074,3 +2074,43 @@ describe('@variant', () => {
     `)
   })
 })
+
+test('addBase', async () => {
+  let { build } = await compile(
+    css`
+      @plugin "my-plugin";
+      @layer base, utilities;
+      @layer utilities {
+        @tailwind utilities;
+      }
+    `,
+
+    {
+      loadPlugin: async () => {
+        return ({ addBase }) => {
+          addBase({
+            body: {
+              'font-feature-settings': '"tnum"',
+            },
+          })
+        }
+      },
+    },
+  )
+
+  let compiled = build(['underline'])
+
+  expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    "@layer base {
+      body {
+        font-feature-settings: "tnum";
+      }
+    }
+
+    @layer utilities {
+      .underline {
+        text-decoration-line: underline;
+      }
+    }"
+  `)
+})

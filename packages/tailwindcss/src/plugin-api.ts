@@ -1,10 +1,12 @@
 import { substituteAtApply } from './apply'
-import { objectToAst, rule, type CssInJs } from './ast'
+import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 
 export type PluginAPI = {
+  addBase(base: CssInJs): void
+
   addVariant(name: string, variant: string | string[] | CssInJs): void
   addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
   matchUtilities(
@@ -20,8 +22,12 @@ export type PluginAPI = {
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
+export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): PluginAPI {
   return {
+    addBase(css) {
+      ast.push(rule('@layer base', objectToAst(css)))
+    },
+
     addVariant(name, variant) {
       // Single selector
       if (typeof variant === 'string') {
