@@ -40,11 +40,11 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "npx napi artifacts",
-    "build": "npx napi build --platform --release --no-const-enum",
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release --no-const-enum",
     "dev": "cargo watch --quiet --shell 'npm run build'",
-    "build:debug": "npx napi build --platform --no-const-enum",
-    "version": "npx napi version"
+    "build:debug": "napi build --platform --no-const-enum",
+    "version": "napi version"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-android-arm64": "workspace:*",
