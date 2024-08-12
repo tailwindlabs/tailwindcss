@@ -305,12 +305,22 @@ async function render(page: Page, content: string) {
     }
   `)
 
+  // We noticed that some of the tests depending on the `hover:` variant were
+  // flaky. After some investigation, we found that injected elements had the
+  // `:hover` state without us explicitly hovering over the element.
+  //
+  // To avoid this, we now set up an explicit placeholder element to move the
+  // mouse to before running the tests.
+  content = `<div id="mouse-park" class="size-12"></div>${content}`
+
   await page.setContent(content)
   await page.addStyleTag({
     content: optimizeCss(
       build(scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential)),
     ),
   })
+
+  await page.locator('#mouse-park').hover()
 
   return {
     getPropertyValue(selector: string | [string, string], property: string) {
