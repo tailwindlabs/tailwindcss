@@ -20,20 +20,20 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: ^9.5.0
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -45,7 +45,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./target/
@@ -77,7 +77,7 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:ui
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report

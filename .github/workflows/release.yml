@@ -75,20 +75,20 @@ jobs:
     container: ${{ matrix.container }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -100,7 +100,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./oxide/target/
@@ -110,7 +110,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install Node.JS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -136,7 +136,7 @@ jobs:
         run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -155,13 +155,13 @@ jobs:
       - build
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -169,7 +169,7 @@ jobs:
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -181,7 +181,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./oxide/target/
@@ -197,7 +197,7 @@ jobs:
         run: pnpm run build
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: ${{ env.OXIDE_LOCATION }}
 
