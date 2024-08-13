@@ -50,7 +50,7 @@ type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void
 
 const IS_WINDOWS = platform() === 'win32'
 
-const TEST_TIMEOUT = IS_WINDOWS ? 60000 : 30000
+const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
 export function test(
@@ -63,6 +63,9 @@ export function test(
     name,
     { timeout: TEST_TIMEOUT },
     async (options) => {
+      const startSetup = Date.now()
+      console.log('start setup for', options.task.file.name, options.task.name)
+
       let rootDir = debug
         ? path.join(REPO_ROOT, '.debug')
         : // On Windows CI, tmpdir returns a path containing a weird RUNNER~1
@@ -291,6 +294,8 @@ export function test(
         await context.fs.write(filename, content)
       }
 
+      console.log('setup so far:', Date.now() - startSetup)
+
       try {
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
@@ -303,6 +308,8 @@ export function test(
         console.error(error)
         throw error
       }
+
+      console.log('setup so far:', Date.now() - startSetup)
 
       let disposables: (() => Promise<void>)[] = []
 
@@ -322,6 +329,8 @@ export function test(
 
       options.onTestFinished(dispose)
 
+      console.log('end setup for test', options.task.file.name, options.task.name)
+      console.log('setup took', Date.now() - startSetup, 'ms')
       return await testCallback(context)
     },
   )
