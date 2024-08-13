@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod scanner {
+    use scanner::auto_content::AutoContent;
     use serial_test::serial;
     use std::process::Command;
     use std::{fs, path};
@@ -38,24 +39,26 @@ mod scanner {
         let base = format!("{}", dir.display());
 
         // Resolve all content paths for the (temporary) current working directory
-        let result = scan_dir(ScanOptions {
-            base: Some(base.clone()),
-            sources: globs
-                .iter()
-                .map(|x| GlobEntry {
-                    base: base.clone(),
-                    pattern: x.to_string(),
-                })
-                .collect(),
-        });
+        let scanner = Scanner::new(
+            Some(AutoContent::new(base.clone().into())),
+            Some(
+                globs
+                    .iter()
+                    .map(|x| GlobEntry {
+                        base: base.clone(),
+                        pattern: x.to_string(),
+                    })
+                    .collect(),
+            ),
+        );
 
-        let mut paths: Vec<_> = result
-            .files
+        let mut paths: Vec<_> = scanner
+            .get_files()
             .into_iter()
             .map(|x| x.replace(&format!("{}{}", &base, path::MAIN_SEPARATOR), ""))
             .collect();
 
-        for glob in result.globs {
+        for glob in scanner.get_globs() {
             paths.push(format!(
                 "{}{}{}",
                 glob.base,
@@ -78,7 +81,7 @@ mod scanner {
         // _could_ be random)
         paths.sort();
 
-        (paths, result.candidates)
+        (paths, scanner.get_candidates())
     }
 
     fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {

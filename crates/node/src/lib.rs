@@ -1,68 +1,53 @@
-use std::collections::HashSet;
-
 #[macro_use]
 extern crate napi_derive;
+
+#[napi]
+pub fn clear_cache() {
+  tailwindcss_oxide::clear_cache();
+}
 
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ChangedContent {
+  /// File path to the changed file
   pub file: Option<String>,
+
+  /// Contents of the changed file
   pub content: Option<String>,
+
+  /// File extension
   pub extension: String,
+}
+
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct AutoContent {
+  /// Base path to start scanning from
+  pub base: String,
+}
+
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct GlobEntry {
+  /// Base path of the glob
+  pub base: String,
+
+  /// Glob pattern
+  pub pattern: String,
 }
 
 impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
   fn from(changed_content: ChangedContent) -> Self {
-    tailwindcss_oxide::ChangedContent {
+    Self {
       file: changed_content.file.map(Into::into),
       content: changed_content.content,
     }
   }
 }
 
-#[derive(Debug, Clone)]
-#[napi]
-pub struct ScanResult {
-  // Private information necessary for incremental rebuilds. Note: these fields are not exposed
-  // to JS
-  base: Option<String>,
-  sources: Vec<tailwindcss_oxide::GlobEntry>,
-
-  // Public API:
-  pub globs: Vec<GlobEntry>,
-  pub files: Vec<String>,
-  pub candidates: Vec<String>,
-}
-
-#[napi]
-impl ScanResult {
-  #[napi]
-  pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
-    let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-      base: self.base.clone(),
-      sources: self.sources.clone(),
-    });
-
-    let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
-    let candidates_from_files: HashSet<String> = HashSet::from_iter(tailwindcss_oxide::scan_files(
-      input.into_iter().map(Into::into).collect(),
-    ));
-
-    unique_candidates.extend(candidates_from_files);
-    unique_candidates.into_iter().map(Into::into).collect()
-  }
-}
-
-#[derive(Debug, Clone)]
-#[napi(object)]
-pub struct GlobEntry {
-  pub base: String,
-  pub pattern: String,
-}
-
 impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
   fn from(glob: GlobEntry) -> Self {
-    tailwindcss_oxide::GlobEntry {
+    Self {
       base: glob.base,
       pattern: glob.pattern,
     }
@@ -71,49 +56,85 @@ impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
 
 impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   fn from(glob: tailwindcss_oxide::GlobEntry) -> Self {
-    GlobEntry {
+    Self {
       base: glob.base,
       pattern: glob.pattern,
     }
   }
 }
 
+impl From<AutoContent> for tailwindcss_oxide::scanner::auto_content::AutoContent {
+  fn from(auto_content: AutoContent) -> Self {
+    Self::new(auto_content.base.into())
+  }
+}
+
+// ---
+
 #[derive(Debug, Clone)]
 #[napi(object)]
-pub struct ScanOptions {
-  /// Base path to start scanning from
-  pub base: Option<String>,
+pub struct ScannerOptions {
+  /// Auto content configuration
+  pub auto_content: Option<AutoContent>,
+
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
 }
 
+#[derive(Debug, Clone)]
 #[napi]
-pub fn clear_cache() {
-  tailwindcss_oxide::clear_cache();
+pub struct Scanner {
+  scanner: tailwindcss_oxide::Scanner,
 }
 
 #[napi]
-pub fn scan_dir(args: ScanOptions) -> ScanResult {
-  let sources = args
-    .sources
-    .unwrap_or_default()
-    .into_iter()
-    .map(Into::into)
-    .collect::<Vec<_>>();
+impl Scanner {
+  #[napi(constructor)]
+  pub fn new(opts: ScannerOptions) -> Self {
+    Self {
+      scanner: tailwindcss_oxide::Scanner::new(
+        opts.auto_content.map(Into::into),
+        opts
+          .sources
+          .map(|x| x.into_iter().map(Into::into).collect()),
+      ),
+    }
+  }
 
-  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-    base: args.base.clone(),
-    sources: sources.clone(),
-  });
+  #[napi]
+  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> bool {
+    let candidate_count_before = self.scanner.total_candidates();
 
-  ScanResult {
-    // Private
-    base: args.base,
-    sources,
+    // Scan new content
+    self
+      .scanner
+      .scan_content(input.into_iter().map(Into::into).collect());
 
-    // Public
-    files: result.files,
-    candidates: result.candidates,
-    globs: result.globs.into_iter().map(Into::into).collect(),
+    let candidate_count_after = self.scanner.total_candidates();
+
+    // Return whether we scanned new candidates or not. We can do this because:
+    // 1. It's a set, so we can't have duplicates
+    // 2. We're only adding new candidates, not removing them
+    candidate_count_before != candidate_count_after
+  }
+
+  #[napi]
+  pub fn get_candidates(&self) -> Vec<String> {
+    self.scanner.get_candidates()
+  }
+
+  #[napi]
+  pub fn get_files(&self) -> Vec<String> {
+    self.scanner.get_files()
+  }
+
+  #[napi]
+  pub fn get_globs(&self) -> Vec<GlobEntry> {
+    self
+      .scanner
+      .get_globs()
+      .into_iter()
+      .map(Into::into)
+      .collect()
   }
 }

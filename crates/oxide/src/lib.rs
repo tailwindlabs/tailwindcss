@@ -74,13 +74,13 @@ pub fn clear_cache() {
     cache.clear();
 }
 
-#[derive(Debug, Default)]
-struct Scanner {
+#[derive(Debug, Clone, Default)]
+pub struct Scanner {
     /// Auto content configuration
-    pub auto_content: Option<AutoContent>,
+    auto_content: Option<AutoContent>,
 
     /// Glob sources
-    pub sources: Vec<GlobEntry>,
+    sources: Option<Vec<GlobEntry>>,
 
     /// All files that we have to scan
     files: Vec<PathBuf>,
@@ -93,9 +93,41 @@ struct Scanner {
 }
 
 impl Scanner {
-    pub fn scan(&mut self) {
+    pub fn new(auto_content: Option<AutoContent>, sources: Option<Vec<GlobEntry>>) -> Self {
+        let mut scanner = Self {
+            auto_content,
+            sources,
+            ..Default::default()
+        };
+
+        scanner.scan();
+
+        scanner
+    }
+
+    fn scan(&mut self) {
         self.scan_auto_content();
         self.scan_sources();
+        self.compute_candidates();
+    }
+
+    pub fn total_candidates(&self) -> usize {
+        self.candidates.len()
+    }
+
+    pub fn get_candidates(&self) -> Vec<String> {
+        self.candidates.clone()
+    }
+
+    pub fn get_files(&self) -> Vec<String> {
+        self.files
+            .iter()
+            .map(|x| x.to_string_lossy().into())
+            .collect()
+    }
+
+    pub fn get_globs(&self) -> Vec<GlobEntry> {
+        self.globs.clone()
     }
 
     fn scan_auto_content(&mut self) {
@@ -107,11 +139,15 @@ impl Scanner {
     }
 
     fn scan_sources(&mut self) {
-        if self.sources.is_empty() {
+        let Some(sources) = &self.sources else {
+            return;
+        };
+
+        if sources.is_empty() {
             return;
         }
 
-        let resolved_files: Vec<_> = match fast_glob(&self.sources) {
+        let resolved_files: Vec<_> = match fast_glob(sources) {
             Ok(matches) => matches
                 .filter_map(|x| dunce::canonicalize(&x).ok())
                 .collect(),
@@ -122,7 +158,7 @@ impl Scanner {
         };
 
         self.files.extend(resolved_files);
-        self.globs.extend(self.sources.clone());
+        self.globs.extend(sources.clone());
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = get_fast_patterns(&self.globs)
@@ -152,7 +188,14 @@ impl Scanner {
             .collect::<Vec<GlobEntry>>();
     }
 
-    pub fn compute_candidates(&mut self) {
+    pub fn scan_content(&mut self, files: Vec<ChangedContent>) {
+        let candidates = scan_files(files);
+        let mut cache = GLOBAL_CACHE.lock().unwrap();
+        cache.add_candidates(candidates);
+        self.candidates = cache.get_candidates();
+    }
+
+    fn compute_candidates(&mut self) {
         let mut cache = GLOBAL_CACHE.lock().unwrap();
 
         let modified_files = cache.find_modified_files(&self.files);
@@ -171,30 +214,6 @@ impl Scanner {
         }
 
         self.candidates = cache.get_candidates();
-    }
-}
-
-pub fn scan_dir(opts: ScanOptions) -> ScanResult {
-    init_tracing();
-
-    let mut scanner = Scanner {
-        auto_content: opts.base.map(Into::into).map(AutoContent::new),
-        sources: opts.sources,
-        ..Default::default()
-    };
-
-    scanner.scan();
-
-    scanner.compute_candidates();
-
-    ScanResult {
-        candidates: scanner.candidates,
-        files: scanner
-            .files
-            .into_iter()
-            .map(|x| x.to_string_lossy().into())
-            .collect(),
-        globs: scanner.globs,
     }
 }
 
