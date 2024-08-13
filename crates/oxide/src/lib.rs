@@ -18,6 +18,19 @@ pub mod glob;
 pub mod parser;
 pub mod scanner;
 
+lazy_static! {
+    static ref SHOULD_TRACE: bool = {
+        matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind"))
+    };
+
+    /// Track file modification times and cache candidates. This cache lives for the lifetime of
+    /// the process and simply adds candidates when files are modified. Since candidates aren't
+    /// removed, incremental builds may contain extra candidates.
+    static ref GLOBAL_CACHE: Mutex<Cache> = {
+        Mutex::new(Cache::default())
+    };
+}
+
 fn init_tracing() {
     if !*SHOULD_TRACE {
         return;
@@ -144,19 +157,6 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
         files,
         globs,
     }
-}
-
-lazy_static! {
-    static ref SHOULD_TRACE: bool = {
-        matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind"))
-    };
-
-    /// Track file modification times and cache candidates. This cache lives for the lifetime of
-    /// the process and simply adds candidates when files are modified. Since candidates aren't
-    /// removed, incremental builds may contain extra candidates.
-    static ref GLOBAL_CACHE: Mutex<Cache> = {
-        Mutex::new(Cache::default())
-    };
 }
 
 #[tracing::instrument(skip(input))]
