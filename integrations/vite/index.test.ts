@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { expect } from 'vitest'
-import { candidate, css, fetchStylesheetsFromIndex, html, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, fetchStylesFromIndex, html, js, json, test, ts, yaml } from '../utils'
 
 test(
   'production build',
@@ -125,10 +125,7 @@ test(
 
     await process.onStdout((message) => message.includes('ready in'))
 
-    let stylesheets = await fetchStylesheetsFromIndex(port)
-    expect(stylesheets).toHaveLength(1)
-    let [, css] = stylesheets[0]
-
+    let css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`underline`)
 
     await fs.write(
@@ -144,10 +141,7 @@ test(
     )
     await process.onStdout((message) => message.includes('page reload'))
 
-    stylesheets = await fetchStylesheetsFromIndex(port)
-    expect(stylesheets).toHaveLength(1)
-    ;[, css] = stylesheets[0]
-
+    css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`m-2`)
 
     await fs.write(
@@ -159,10 +153,7 @@ test(
     )
     await process.onStdout((message) => message.includes('page reload'))
 
-    stylesheets = await fetchStylesheetsFromIndex(port)
-    expect(stylesheets).toHaveLength(1)
-    ;[, css] = stylesheets[0]
-
+    css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
   },
 )

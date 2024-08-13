@@ -501,7 +501,7 @@ async function retryUntil<T>(
   throw error
 }
 
-export async function fetchStylesheetsFromIndex(port: number): Promise<[string, string][]> {
+export async function fetchStylesFromIndex(port: number): Promise<string> {
   let index = await fetch(`http://localhost:${port}`)
   let html = await index.text()
 
@@ -512,19 +512,23 @@ export async function fetchStylesheetsFromIndex(port: number): Promise<[string, 
   while ((match = regex.exec(html)) !== null) {
     let path: string = match[1]
     if (path.startsWith('./')) {
-      path = path.substring(1)
+      path = path.slice(1)
     }
     paths.push(path)
   }
 
-  return Promise.all(
+  let stylesheets = await Promise.all(
     paths.map(async (path) => {
       let css = await fetch(`http://localhost:${port}${path}`, {
         headers: {
           Accept: 'text/css',
         },
       })
-      return [path, await css.text()]
+      return await css.text()
     }),
   )
+
+  return stylesheets.reduce((acc, css) => {
+    return acc + '\n' + css
+  })
 }
