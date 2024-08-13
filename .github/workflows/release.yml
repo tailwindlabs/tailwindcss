@@ -15,7 +15,6 @@ permissions:
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 20
-  PNPM_VERSION: ^9.5.0
   OXIDE_LOCATION: ./crates/node
 
 jobs:
@@ -77,8 +76,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -157,8 +154,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
