@@ -2,196 +2,212 @@ use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_pat
 use crate::GlobEntry;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
-use std::path::Path;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
-#[tracing::instrument(skip(root))]
-pub fn resolve_files(root: &Path) -> (Vec<PathBuf>, Vec<PathBuf>) {
-    let mut files: Vec<PathBuf> = vec![];
-    let mut dirs: Vec<PathBuf> = vec![];
-
-    for entry in resolve_allowed_paths(root) {
-        let Some(file_type) = entry.file_type() else {
-            continue;
-        };
-
-        if file_type.is_file() {
-            files.push(entry.into_path());
-        } else if file_type.is_dir() {
-            dirs.push(entry.into_path());
-        }
-    }
-
-    (files, dirs)
+#[derive(Debug)]
+pub struct AutoContent {
+    base: PathBuf,
 }
 
-#[tracing::instrument(skip(root))]
-pub fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
-    let allowed_paths = FxHashSet::from_iter(dirs);
+impl AutoContent {
+    pub fn new(base: PathBuf) -> Self {
+        Self { base }
+    }
 
-    // A list of directory names where we can't use globs, but we should track each file
-    // individually instead. This is because these directories are often used for both source and
-    // destination files.
-    let mut forced_static_directories = vec![root.join("public")];
+    pub fn scan(&self) -> (Vec<PathBuf>, Vec<GlobEntry>) {
+        let (files, dirs) = self.resolve_files();
+        let globs = self.resolve_globs(&dirs);
 
-    // A list of known extensions + a list of extensions we found in the project.
-    let mut found_extensions = FxHashSet::from_iter(
-        include_str!("fixtures/template-extensions.txt")
-            .trim()
-            .lines()
-            .filter(|x| !x.starts_with('#')) // Drop commented lines
-            .filter(|x| !x.is_empty()) // Drop empty lines
-            .map(|x| x.to_string()),
-    );
+        (files, globs)
+    }
 
-    // All root directories.
-    let mut root_directories = FxHashSet::from_iter(vec![root.to_path_buf()]);
+    fn resolve_files(&self) -> (Vec<PathBuf>, Vec<PathBuf>) {
+        let mut files: Vec<PathBuf> = vec![];
+        let mut dirs: Vec<PathBuf> = vec![];
 
-    // All directories where we can safely use deeply nested globs to watch all files.
-    // In other comments we refer to these as "deep glob directories" or similar.
-    //
-    // E.g.: `./src/**/*.{html,js}`
-    let mut deep_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
+        for entry in resolve_allowed_paths(&self.base) {
+            let Some(file_type) = entry.file_type() else {
+                continue;
+            };
 
-    // All directories where we can only use shallow globs to watch all direct files but not
-    // folders.
-    // In other comments we refer to these as "shallow glob directories" or similar.
-    //
-    // E.g.: `./src/*/*.{html,js}`
-    let mut shallow_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
-
-    // Collect all valid paths from the root. This will already filter out ignored files, unknown
-    // extensions and binary files.
-    let mut it = WalkDir::new(root)
-        // Sorting to make sure that we always see the directories before the files. Also sorting
-        // alphabetically by default.
-        .sort_by(
-            |a, z| match (a.file_type().is_dir(), z.file_type().is_dir()) {
-                (true, false) => Ordering::Less,
-                (false, true) => Ordering::Greater,
-                _ => a.file_name().cmp(z.file_name()),
-            },
-        )
-        .into_iter();
-
-    loop {
-        // We are only interested in valid entries
-        let entry = match it.next() {
-            Some(Ok(entry)) => entry,
-            _ => break,
-        };
-
-        // Ignore known directories that we don't want to traverse into.
-        if entry.file_type().is_dir() && entry.file_name() == ".git" {
-            it.skip_current_dir();
-            continue;
+            if file_type.is_file() {
+                files.push(entry.into_path());
+            } else if file_type.is_dir() {
+                dirs.push(entry.into_path());
+            }
         }
 
-        if entry.file_type().is_dir() {
-            // If we are in a directory where we know that we can't use any globs, then we have to
-            // track each file individually.
-            if forced_static_directories.contains(&entry.path().to_path_buf()) {
-                forced_static_directories.push(entry.path().to_path_buf());
-                root_directories.insert(entry.path().to_path_buf());
-                continue;
-            }
+        (files, dirs)
+    }
 
-            // If we are in a directory where the parent is a forced static directory, then this
-            // will become a forced static directory as well.
-            if forced_static_directories.contains(&entry.path().parent().unwrap().to_path_buf()) {
-                forced_static_directories.push(entry.path().to_path_buf());
-                root_directories.insert(entry.path().to_path_buf());
-                continue;
-            }
+    fn resolve_globs(&self, dirs: &Vec<PathBuf>) -> Vec<GlobEntry> {
+        let allowed_paths = FxHashSet::from_iter(dirs);
 
-            // If we are in a directory, and the directory is git ignored, then we don't have to
-            // descent into the directory. However, we have to make sure that we mark the _parent_
-            // directory as a shallow glob directory because using deep globs from any of the
-            // parent directories will include this ignored directory which should not be the case.
-            //
-            // Another important part is that if one of the ignored directories is a deep glob
-            // directory, then all of its parents (until the root) should be marked as shallow glob
-            // directories as well.
-            if !allowed_paths.contains(&entry.path().to_path_buf()) {
-                let mut parent = entry.path().parent();
-                while let Some(parent_path) = parent {
-                    // If the parent is already marked as a valid deep glob directory, then we have
-                    // to mark it as a shallow glob directory instead, because we won't be able to
-                    // use deep globs for this directory anymore.
-                    if deep_globable_directories.contains(parent_path) {
-                        deep_globable_directories.remove(parent_path);
-                        shallow_globable_directories.insert(parent_path.to_path_buf());
-                    }
+        // A list of directory names where we can't use globs, but we should track each file
+        // individually instead. This is because these directories are often used for both source and
+        // destination files.
+        let mut forced_static_directories = vec![self.base.join("public")];
 
-                    // If we reached the root, then we can stop.
-                    if parent_path == root {
-                        break;
-                    }
+        // A list of known extensions + a list of extensions we found in the project.
+        let mut found_extensions = FxHashSet::from_iter(
+            include_str!("fixtures/template-extensions.txt")
+                .trim()
+                .lines()
+                .filter(|x| !x.starts_with('#')) // Drop commented lines
+                .filter(|x| !x.is_empty()) // Drop empty lines
+                .map(|x| x.to_string()),
+        );
 
-                    // Mark the parent directory as a shallow glob directory and continue with its
-                    // parent.
-                    shallow_globable_directories.insert(parent_path.to_path_buf());
-                    parent = parent_path.parent();
-                }
+        // All root directories.
+        let mut root_directories = FxHashSet::from_iter(vec![self.base.clone()]);
 
+        // All directories where we can safely use deeply nested globs to watch all files.
+        // In other comments we refer to these as "deep glob directories" or similar.
+        //
+        // E.g.: `./src/**/*.{html,js}`
+        let mut deep_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
+
+        // All directories where we can only use shallow globs to watch all direct files but not
+        // folders.
+        // In other comments we refer to these as "shallow glob directories" or similar.
+        //
+        // E.g.: `./src/*/*.{html,js}`
+        let mut shallow_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
+
+        // Collect all valid paths from the root. This will already filter out ignored files, unknown
+        // extensions and binary files.
+        let mut it = WalkDir::new(&self.base)
+            // Sorting to make sure that we always see the directories before the files. Also sorting
+            // alphabetically by default.
+            .sort_by(
+                |a, z| match (a.file_type().is_dir(), z.file_type().is_dir()) {
+                    (true, false) => Ordering::Less,
+                    (false, true) => Ordering::Greater,
+                    _ => a.file_name().cmp(z.file_name()),
+                },
+            )
+            .into_iter();
+
+        loop {
+            // We are only interested in valid entries
+            let entry = match it.next() {
+                Some(Ok(entry)) => entry,
+                _ => break,
+            };
+
+            // Ignore known directories that we don't want to traverse into.
+            if entry.file_type().is_dir() && entry.file_name() == ".git" {
                 it.skip_current_dir();
                 continue;
             }
 
-            // If we are in a directory that is not git ignored, then we can mark this directory as
-            // a valid deep glob directory. This is only necessary if any of its parents aren't
-            // marked as deep glob directories already.
-            let mut found_deep_glob_parent = false;
-            let mut parent = entry.path().parent();
-            while let Some(parent_path) = parent {
-                // If we reached the root, then we can stop.
-                if parent_path == root {
-                    break;
+            if entry.file_type().is_dir() {
+                // If we are in a directory where we know that we can't use any globs, then we have to
+                // track each file individually.
+                if forced_static_directories.contains(&entry.path().to_path_buf()) {
+                    forced_static_directories.push(entry.path().to_path_buf());
+                    root_directories.insert(entry.path().to_path_buf());
+                    continue;
                 }
 
-                // If the parent is already marked as a deep glob directory, then we can stop
-                // because this glob will match the current directory already.
-                if deep_globable_directories.contains(parent_path) {
-                    found_deep_glob_parent = true;
-                    break;
+                // If we are in a directory where the parent is a forced static directory, then this
+                // will become a forced static directory as well.
+                if forced_static_directories.contains(&entry.path().parent().unwrap().to_path_buf())
+                {
+                    forced_static_directories.push(entry.path().to_path_buf());
+                    root_directories.insert(entry.path().to_path_buf());
+                    continue;
                 }
 
-                parent = parent_path.parent();
+                // If we are in a directory, and the directory is git ignored, then we don't have to
+                // descent into the directory. However, we have to make sure that we mark the _parent_
+                // directory as a shallow glob directory because using deep globs from any of the
+                // parent directories will include this ignored directory which should not be the case.
+                //
+                // Another important part is that if one of the ignored directories is a deep glob
+                // directory, then all of its parents (until the root) should be marked as shallow glob
+                // directories as well.
+                if !allowed_paths.contains(&entry.path().to_path_buf()) {
+                    let mut parent = entry.path().parent();
+                    while let Some(parent_path) = parent {
+                        // If the parent is already marked as a valid deep glob directory, then we have
+                        // to mark it as a shallow glob directory instead, because we won't be able to
+                        // use deep globs for this directory anymore.
+                        if deep_globable_directories.contains(parent_path) {
+                            deep_globable_directories.remove(parent_path);
+                            shallow_globable_directories.insert(parent_path.to_path_buf());
+                        }
+
+                        // If we reached the root, then we can stop.
+                        if parent_path == self.base {
+                            break;
+                        }
+
+                        // Mark the parent directory as a shallow glob directory and continue with its
+                        // parent.
+                        shallow_globable_directories.insert(parent_path.to_path_buf());
+                        parent = parent_path.parent();
+                    }
+
+                    it.skip_current_dir();
+                    continue;
+                }
+
+                // If we are in a directory that is not git ignored, then we can mark this directory as
+                // a valid deep glob directory. This is only necessary if any of its parents aren't
+                // marked as deep glob directories already.
+                let mut found_deep_glob_parent = false;
+                let mut parent = entry.path().parent();
+                while let Some(parent_path) = parent {
+                    // If we reached the root, then we can stop.
+                    if parent_path == self.base {
+                        break;
+                    }
+
+                    // If the parent is already marked as a deep glob directory, then we can stop
+                    // because this glob will match the current directory already.
+                    if deep_globable_directories.contains(parent_path) {
+                        found_deep_glob_parent = true;
+                        break;
+                    }
+
+                    parent = parent_path.parent();
+                }
+
+                // If we didn't find a deep glob directory parent, then we can mark this directory as a
+                // deep glob directory (unless it is the root).
+                if !found_deep_glob_parent && entry.path() != self.base {
+                    deep_globable_directories.insert(entry.path().to_path_buf());
+                }
             }
 
-            // If we didn't find a deep glob directory parent, then we can mark this directory as a
-            // deep glob directory (unless it is the root).
-            if !found_deep_glob_parent && entry.path() != root {
-                deep_globable_directories.insert(entry.path().to_path_buf());
+            // Handle allowed content paths
+            if is_allowed_content_path(entry.path())
+                && allowed_paths.contains(&entry.path().to_path_buf())
+            {
+                let path = entry.path();
+
+                // Collect the extension for future use when building globs.
+                if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
+                    found_extensions.insert(extension.to_string());
+                }
             }
         }
 
-        // Handle allowed content paths
-        if is_allowed_content_path(entry.path())
-            && allowed_paths.contains(&entry.path().to_path_buf())
-        {
-            let path = entry.path();
+        let extension_list = found_extensions.into_iter().collect::<Vec<_>>().join(",");
 
-            // Collect the extension for future use when building globs.
-            if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
-                found_extensions.insert(extension.to_string());
-            }
-        }
+        // Build the globs for all globable directories.
+        let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
+            base: path.display().to_string(),
+            pattern: format!("*/*.{{{}}}", extension_list),
+        });
+
+        let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
+            base: path.display().to_string(),
+            pattern: format!("**/*.{{{}}}", extension_list),
+        });
+
+        shallow_globs.chain(deep_globs).collect::<Vec<_>>()
     }
-
-    let extension_list = found_extensions.into_iter().collect::<Vec<_>>().join(",");
-
-    // Build the globs for all globable directories.
-    let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
-        base: path.display().to_string(),
-        pattern: format!("*/*.{{{}}}", extension_list),
-    });
-
-    let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
-        base: path.display().to_string(),
-        pattern: format!("**/*.{{{}}}", extension_list),
-    });
-
-    shallow_globs.chain(deep_globs).collect::<Vec<_>>()
 }

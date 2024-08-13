@@ -1,12 +1,11 @@
 use crate::parser::Extractor;
-use crate::scanner::auto_content::{resolve_files, resolve_globs};
+use crate::scanner::auto_content::AutoContent;
 use bstr::ByteSlice;
 use cache::Cache;
 use glob::fast_glob;
 use glob::get_fast_patterns;
 use lazy_static::lazy_static;
 use rayon::prelude::*;
-use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Mutex;
 use tracing::event;
@@ -78,16 +77,12 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let (mut files, mut globs) = match opts.base {
-        Some(base) => {
-            // Only enable auto content detection when `base` is provided.
-            let base = Path::new(&base);
-            let (files, dirs) = resolve_files(base);
-            let globs = resolve_globs(base, dirs);
-
-            (files, globs)
-        }
-        None => (vec![], vec![]),
+    // Only enable auto content detection when `base` is provided.
+    let (mut files, mut globs) = if let Some(base) = opts.base {
+        let auto_content = AutoContent::new(base.into());
+        auto_content.scan()
+    } else {
+        (vec![], vec![])
     };
 
     // If we have additional sources, then we have to resolve them as well.
