@@ -122,8 +122,10 @@ impl Scanner {
         };
 
         self.files.extend(resolved_files);
+        self.globs.extend(self.sources.clone());
 
-        let optimized_incoming_globs = get_fast_patterns(&self.sources)
+        // Re-optimize the globs to reduce the number of patterns we have to scan.
+        self.globs = get_fast_patterns(&self.globs)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
@@ -148,8 +150,6 @@ impl Scanner {
                 })
             })
             .collect::<Vec<GlobEntry>>();
-
-        self.globs.extend(optimized_incoming_globs);
     }
 
     pub fn compute_candidates(&mut self) {
