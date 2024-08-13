@@ -235,7 +235,11 @@ export function test(
                       return
                     }
 
-                    await killPort(port)
+                    try {
+                      await killPort(port)
+                    } catch {
+                      // If the process can not be killed, we can't do anything
+                    }
                   })
                   resolve(port)
                 }
