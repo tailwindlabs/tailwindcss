@@ -1,4 +1,4 @@
-import { scanDir } from '@tailwindcss/oxide'
+import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -10,7 +10,7 @@ export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
-  let scanDirResult: ReturnType<typeof scanDir> | null = null
+  let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
@@ -63,21 +63,14 @@ export default function tailwindcss(): Plugin[] {
   function scan(src: string, extension: string) {
     let updated = false
 
-    if (scanDirResult === null) {
+    if (scanner === null) {
       changedContent.push({ content: src, extension })
       return updated
     }
 
     // Parse all candidates given the resolved files
-    for (let candidate of scanDirResult?.scanFiles([{ content: src, extension }]) ?? []) {
-      // On an initial or full build, updated becomes true immediately so we
-      // won't be making extra checks.
-      if (!updated) {
-        if (candidates.has(candidate)) continue
-        updated = true
-      }
-      candidates.add(candidate)
-    }
+    updated = scanner?.scanFiles([{ content: src, extension }])
+
     return updated
   }
 
@@ -93,7 +86,7 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
-    scanDirResult = scanDir({
+    scanner = new Scanner({
       sources: globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
         pattern,
@@ -101,20 +94,20 @@ export default function tailwindcss(): Plugin[] {
     })
 
     if (changedContent.length > 0) {
-      scanDirResult.candidates = scanDirResult.scanFiles(changedContent.splice(0))
+      scanner.scanFiles(changedContent.splice(0))
     }
 
-    for (let candidate of scanDirResult.candidates) {
+    for (let candidate of scanner.getCandidates()) {
       candidates.add(candidate)
     }
 
     // Watch individual files
-    for (let file of scanDirResult.files) {
+    for (let file of scanner.getFiles()) {
       addWatchFile(file)
     }
 
     // Watch globs
-    for (let glob of scanDirResult.globs) {
+    for (let glob of scanner.getGlobs()) {
       if (glob.pattern[0] === '!') continue
 
       let relative = path.relative(config!.root, glob.base)
