@@ -8673,6 +8673,35 @@ test('scroll-behavior', async () => {
   ).toEqual('')
 })
 
+test('scrollbar-width', async () => {
+  expect(await run(['scrollbar-width-auto', 'scrollbar-thin', 'scrollbar-none']))
+    .toMatchInlineSnapshot(`
+    ".scrollbar-none {
+      scrollbar-width: none;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-thin {
+      scrollbar-width: thin;
+    }
+    
+    .scrollbar-width-auto {
+      scrollbar-width: auto;
+    }"
+  `)
+  expect(
+    await run([
+      'scrollbar-width-none',
+      'scrollbar-width-thin',
+      '-scrollbar-none',
+      'scrollbar-none/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('truncate', async () => {
   expect(await run(['truncate'])).toMatchInlineSnapshot(`
     ".truncate {
