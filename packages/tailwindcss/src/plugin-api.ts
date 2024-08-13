@@ -4,6 +4,17 @@ import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 
+export type Config = Record<string, any>
+
+export type PluginFn = (api: PluginAPI) => void
+export type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
+export type PluginWithOptions<T> = {
+  (options?: T): PluginWithConfig
+  __isOptionsFunction: true
+}
+
+export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
+
 export type PluginAPI = {
   addBase(base: CssInJs): void
   addVariant(name: string, variant: string | string[] | CssInJs): void
@@ -175,5 +186,27 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
         })
       }
     },
+  }
+}
+
+export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
+  let pluginApi = buildPluginApi(designSystem, ast)
+
+  for (let plugin of plugins) {
+    if ('__isOptionsFunction' in plugin) {
+      // Happens with `plugin.withOptions()` when no options were passed:
+      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
+      plugin().handler(pluginApi)
+    } else if ('handler' in plugin) {
+      // Happens with `plugin(…)`:
+      // e.g. `require("my-plugin")`
+      //
+      // or with `plugin.withOptions()` when the user passed options:
+      // e.g. `require("my-plugin")(options)`
+      plugin.handler(pluginApi)
+    } else {
+      // Just a plain function without using the plugin(…) API
+      plugin(pluginApi)
+    }
   }
 }

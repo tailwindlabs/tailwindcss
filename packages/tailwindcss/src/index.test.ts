@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile } from '.'
+import type { PluginAPI } from './plugin-api'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
@@ -1299,7 +1300,7 @@ describe('plugins', () => {
         `,
         {
           loadPlugin: async () => {
-            return ({ addVariant }) => {
+            return ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
             }
           },
@@ -1317,7 +1318,7 @@ describe('plugins', () => {
         `,
         {
           loadPlugin: async () => {
-            return ({ addVariant }) => {
+            return ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
             }
           },
@@ -1335,7 +1336,7 @@ describe('plugins', () => {
       `,
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('hocus', '&:hover, &:focus')
           }
         },
@@ -1366,7 +1367,7 @@ describe('plugins', () => {
       `,
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('hocus', ['&:hover', '&:focus'])
           }
         },
@@ -1398,7 +1399,7 @@ describe('plugins', () => {
       `,
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '&:hover': '@slot',
               '&:focus': '@slot',
@@ -1432,7 +1433,7 @@ describe('plugins', () => {
       `,
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '@media (hover: hover)': {
                 '&:hover': '@slot',
@@ -1480,7 +1481,7 @@ describe('plugins', () => {
       `,
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '&': {
                 '--custom-property': '@slot',
@@ -1518,7 +1519,7 @@ describe('plugins', () => {
 
       {
         loadPlugin: async () => {
-          return ({ addVariant }) => {
+          return ({ addVariant }: PluginAPI) => {
             addVariant('dark', '&:is([data-theme=dark] *)')
           }
         },
@@ -2087,7 +2088,7 @@ test('addBase', async () => {
 
     {
       loadPlugin: async () => {
-        return ({ addBase }) => {
+        return ({ addBase }: PluginAPI) => {
           addBase({
             body: {
               'font-feature-settings': '"tnum"',

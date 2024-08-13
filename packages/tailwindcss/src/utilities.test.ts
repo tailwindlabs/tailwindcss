@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { compile } from '.'
+import type { PluginAPI } from './plugin-api'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
@@ -15411,7 +15412,7 @@ describe('legacy: addUtilities', () => {
       `,
       {
         async loadPlugin() {
-          return ({ addUtilities }) => {
+          return ({ addUtilities }: PluginAPI) => {
             addUtilities({
               '.text-trim': {
                 'text-box-trim': 'both',
@@ -15451,7 +15452,7 @@ describe('legacy: addUtilities', () => {
       `,
       {
         async loadPlugin() {
-          return ({ addUtilities }) => {
+          return ({ addUtilities }: PluginAPI) => {
             addUtilities({
               '.text-trim': {
                 WebkitAppearance: 'none',
@@ -15489,7 +15490,7 @@ describe('legacy: addUtilities', () => {
       `,
       {
         async loadPlugin() {
-          return ({ addUtilities }) => {
+          return ({ addUtilities }: PluginAPI) => {
             addUtilities({
               '.foo': {
                 '@apply flex dark:underline': {},
@@ -15542,7 +15543,7 @@ describe('legacy: addUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ addUtilities }) => {
+            return ({ addUtilities }: PluginAPI) => {
               addUtilities({
                 '.text-trim > *': {
                   'text-box-trim': 'both',
@@ -15572,7 +15573,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   'border-block': (value) => ({ 'border-block-width': value }),
@@ -15653,7 +15654,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   'border-block': (value, { modifier }) => ({
@@ -15719,7 +15720,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   'border-block': (value, { modifier }) => ({
@@ -15789,7 +15790,7 @@ describe('legacy: matchUtilities', () => {
           `,
           {
             async loadPlugin() {
-              return ({ matchUtilities }) => {
+              return ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
                   {
                     scrollbar: (value) => ({ 'scrollbar-color': value }),
@@ -15840,7 +15841,7 @@ describe('legacy: matchUtilities', () => {
           `,
           {
             async loadPlugin() {
-              return ({ matchUtilities }) => {
+              return ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
                   {
                     scrollbar: (value) => ({ '--scrollbar-angle': value }),
@@ -15874,7 +15875,7 @@ describe('legacy: matchUtilities', () => {
           `,
           {
             async loadPlugin() {
-              return ({ matchUtilities }) => {
+              return ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
                   {
                     scrollbar: (value) => ({ 'scrollbar-color': value }),
@@ -15914,7 +15915,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   scrollbar: (value) => ({ 'scrollbar-color': value }),
@@ -16033,7 +16034,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   scrollbar: (value) => ({ 'scrollbar-color': value }),
@@ -16106,7 +16107,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
                 {
                   scrollbar: (value, { modifier }) => ({
@@ -16161,7 +16162,7 @@ describe('legacy: matchUtilities', () => {
       `,
       {
         async loadPlugin() {
-          return ({ matchUtilities }) => {
+          return ({ matchUtilities }: PluginAPI) => {
             matchUtilities(
               {
                 foo: (value) => ({
@@ -16226,7 +16227,7 @@ describe('legacy: matchUtilities', () => {
         `,
         {
           async loadPlugin() {
-            return ({ matchUtilities }) => {
+            return ({ matchUtilities }: PluginAPI) => {
               matchUtilities({
                 '.text-trim > *': () => ({
                   'text-box-trim': 'both',

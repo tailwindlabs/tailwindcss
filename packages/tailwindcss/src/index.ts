@@ -4,13 +4,11 @@ import { WalkAction, comment, decl, rule, toCss, walk, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { buildPluginApi, type PluginAPI } from './plugin-api'
+import { registerPlugins, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
-
-type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Promise<Plugin>
@@ -40,7 +38,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let pluginLoaders: Promise<Plugin>[] = []
+  let pluginPaths: string[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
@@ -60,7 +58,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      pluginLoaders.push(loadPlugin(node.selector.slice(9, -1)))
+      pluginPaths.push(node.selector.slice(9, -1))
       replaceWith([])
       return
     }
@@ -281,9 +279,9 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
     customUtility(designSystem)
   }
 
-  let pluginApi = buildPluginApi(designSystem, ast)
+  let plugins = await Promise.all(pluginPaths.map(loadPlugin))
 
-  await Promise.all(pluginLoaders.map((loader) => loader.then((plugin) => plugin(pluginApi))))
+  registerPlugins(plugins, designSystem, ast)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
