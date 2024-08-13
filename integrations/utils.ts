@@ -316,7 +316,7 @@ export function test(
           await fs.rm(root, { recursive: true, force: true })
         }
 
-        console.log('end disposal for test', options.task.file, options.task.name)
+        console.log('end disposal for test', options.task.file.name, options.task.name)
         console.log('disposal took', Date.now() - now, 'ms')
       }
 
