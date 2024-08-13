@@ -1,9 +1,10 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
-import { WalkAction, comment, decl, rule, toCss, walk, type Rule } from './ast'
+import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
 import { registerPlugins, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
@@ -288,6 +289,11 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
     substituteAtApply(ast, designSystem)
   }
 
+  // Replace `theme()` function calls with the actual theme variables.
+  if (css.includes(THEME_FUNCTION_INVOCATION)) {
+    substituteFunctions(ast, designSystem)
+  }
+
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
   walk(ast, (node, { replaceWith }) => {
@@ -381,6 +387,8 @@ export async function compile(
         if (previousAstNodeCount === newNodes.length) {
           return compiledCss
         }
+
+        substituteFunctions(newNodes, designSystem)
 
         previousAstNodeCount = newNodes.length
 
