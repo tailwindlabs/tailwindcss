@@ -308,10 +308,10 @@ export function test(
 
       async function dispose() {
         const now = Date.now()
-        console.log('start disposal for test', options.task.file, options.task.name)
+        console.log('start disposal for test', options.task.file.name, options.task.name)
         await Promise.all(disposables.map((dispose) => dispose()))
 
-        // Skip removing the directory in CI beause it can stall on Windows
+        // Skip removing the directory in CI because it can stall on Windows
         if (!process.env.CI && !debug) {
           await fs.rm(root, { recursive: true, force: true })
         }
