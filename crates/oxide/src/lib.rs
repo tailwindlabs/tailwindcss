@@ -94,6 +94,8 @@ pub struct Scanner {
 
 impl Scanner {
     pub fn new(auto_content: Option<AutoContent>, sources: Option<Vec<GlobEntry>>) -> Self {
+        init_tracing();
+
         let mut scanner = Self {
             auto_content,
             sources,
@@ -105,20 +107,24 @@ impl Scanner {
         scanner
     }
 
+    #[tracing::instrument(skip_all)]
     fn scan(&mut self) {
         self.scan_auto_content();
         self.scan_sources();
         self.compute_candidates();
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn total_candidates(&self) -> usize {
         self.candidates.len()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn get_candidates(&self) -> Vec<String> {
         self.candidates.clone()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn get_files(&self) -> Vec<String> {
         self.files
             .iter()
@@ -126,10 +132,12 @@ impl Scanner {
             .collect()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn get_globs(&self) -> Vec<GlobEntry> {
         self.globs.clone()
     }
 
+    #[tracing::instrument(skip_all)]
     fn scan_auto_content(&mut self) {
         if let Some(auto_content) = &self.auto_content {
             let (files, globs) = auto_content.scan();
@@ -138,6 +146,7 @@ impl Scanner {
         }
     }
 
+    #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
         let Some(sources) = &self.sources else {
             return;
@@ -188,6 +197,7 @@ impl Scanner {
             .collect::<Vec<GlobEntry>>();
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn scan_content(&mut self, files: Vec<ChangedContent>) {
         let candidates = scan_files(files);
         let mut cache = GLOBAL_CACHE.lock().unwrap();
@@ -195,6 +205,7 @@ impl Scanner {
         self.candidates = cache.get_candidates();
     }
 
+    #[tracing::instrument(skip_all)]
     fn compute_candidates(&mut self) {
         let mut cache = GLOBAL_CACHE.lock().unwrap();
 
@@ -217,7 +228,7 @@ impl Scanner {
     }
 }
 
-#[tracing::instrument(skip(input))]
+#[tracing::instrument(skip_all)]
 pub fn scan_files(input: Vec<ChangedContent>) -> Vec<String> {
     parse_all_blobs(read_all_files(input))
 }
@@ -248,7 +259,7 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
     }
 }
 
-#[tracing::instrument(skip(changed_content))]
+#[tracing::instrument(skip_all)]
 fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
     event!(
         tracing::Level::INFO,
@@ -262,7 +273,7 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
         .collect()
 }
 
-#[tracing::instrument(skip(blobs))]
+#[tracing::instrument(skip_all)]
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let input: Vec<_> = blobs.iter().map(|blob| &blob[..]).collect();
     let input = &input[..];
