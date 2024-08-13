@@ -496,3 +496,31 @@ async function retryUntil<T>(
   }
   throw error
 }
+
+export async function fetchStylesheetsFromIndex(port: number): Promise<[string, string][]> {
+  let index = await fetch(`http://localhost:${port}`)
+  let html = await index.text()
+
+  let regex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/g
+
+  let paths: string[] = []
+  let match
+  while ((match = regex.exec(html)) !== null) {
+    let path: string = match[1]
+    if (path.startsWith('./')) {
+      path = path.substring(1)
+    }
+    paths.push(path)
+  }
+
+  return Promise.all(
+    paths.map(async (path) => {
+      let css = await fetch(`http://localhost:${port}${path}`, {
+        headers: {
+          Accept: 'text/css',
+        },
+      })
+      return [path, await css.text()]
+    }),
+  )
+}
