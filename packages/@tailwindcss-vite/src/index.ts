@@ -9,7 +9,6 @@ import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let config: ResolvedConfig | null = null
-  let candidates = new Set<string>()
   let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
 
@@ -97,10 +96,6 @@ export default function tailwindcss(): Plugin[] {
       scanner.scanFiles(changedContent.splice(0))
     }
 
-    for (let candidate of scanner.getCandidates()) {
-      candidates.add(candidate)
-    }
-
     // Watch individual files
     for (let file of scanner.getFiles()) {
       addWatchFile(file)
@@ -121,7 +116,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(Array.from(candidates))
+    return build(scanner.getCandidates())
   }
 
   async function generateOptimizedCss(
