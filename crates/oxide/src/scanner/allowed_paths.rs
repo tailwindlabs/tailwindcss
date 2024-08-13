@@ -1,6 +1,6 @@
 use ignore::{DirEntry, WalkBuilder};
 use lazy_static::lazy_static;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 lazy_static! {
     static ref BINARY_EXTENSIONS: Vec<&'static str> =
@@ -40,8 +40,6 @@ pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
 }
 
 pub fn is_allowed_content_path(path: &Path) -> bool {
-    let path = PathBuf::from(path);
-
     // Skip known ignored files
     if path
         .file_name()
