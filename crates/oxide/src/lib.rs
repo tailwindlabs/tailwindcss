@@ -1,11 +1,10 @@
 use crate::parser::Extractor;
+use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_paths};
 use bstr::ByteSlice;
 use cache::Cache;
 use fxhash::FxHashSet;
 use glob::fast_glob;
 use glob::get_fast_patterns;
-use ignore::DirEntry;
-use ignore::WalkBuilder;
 use lazy_static::lazy_static;
 use rayon::prelude::*;
 use std::cmp::Ordering;
@@ -20,6 +19,7 @@ pub mod cursor;
 pub mod fast_skip;
 pub mod glob;
 pub mod parser;
+pub mod scanner;
 
 fn init_tracing() {
     if !*SHOULD_TRACE {
@@ -160,7 +160,7 @@ fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
 
     // A list of known extensions + a list of extensions we found in the project.
     let mut found_extensions = FxHashSet::from_iter(
-        include_str!("fixtures/template-extensions.txt")
+        include_str!("scanner/fixtures/template-extensions.txt")
             .trim()
             .lines()
             .filter(|x| !x.starts_with('#')) // Drop commented lines
@@ -339,41 +339,7 @@ fn resolve_files(root: &Path) -> (Vec<PathBuf>, Vec<PathBuf>) {
     (files, dirs)
 }
 
-#[tracing::instrument(skip(root))]
-pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
-    WalkBuilder::new(root)
-        .hidden(false)
-        .require_git(false)
-        .filter_entry(|entry| match entry.file_type() {
-            Some(file_type) if file_type.is_dir() => match entry.file_name().to_str() {
-                Some(dir) => !IGNORED_CONTENT_DIRS.contains(&dir),
-                None => false,
-            },
-            Some(file_type) if file_type.is_file() || file_type.is_symlink() => {
-                is_allowed_content_path(entry.path())
-            }
-            _ => false,
-        })
-        .build()
-        .filter_map(Result::ok)
-}
-
 lazy_static! {
-    static ref BINARY_EXTENSIONS: Vec<&'static str> =
-        include_str!("fixtures/binary-extensions.txt")
-            .trim()
-            .lines()
-            .collect::<Vec<_>>();
-    static ref IGNORED_EXTENSIONS: Vec<&'static str> =
-        include_str!("fixtures/ignored-extensions.txt")
-            .trim()
-            .lines()
-            .collect::<Vec<_>>();
-    static ref IGNORED_FILES: Vec<&'static str> = include_str!("fixtures/ignored-files.txt")
-        .trim()
-        .lines()
-        .collect::<Vec<_>>();
-    static ref IGNORED_CONTENT_DIRS: Vec<&'static str> = vec![".git"];
     static ref SHOULD_TRACE: bool = {
         matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind"))
     };
@@ -384,27 +350,6 @@ lazy_static! {
     static ref GLOBAL_CACHE: Mutex<Cache> = {
         Mutex::new(Cache::default())
     };
-}
-
-pub fn is_allowed_content_path(path: &Path) -> bool {
-    let path = PathBuf::from(path);
-
-    // Skip known ignored files
-    if path
-        .file_name()
-        .unwrap()
-        .to_str()
-        .map(|s| IGNORED_FILES.contains(&s))
-        .unwrap_or(false)
-    {
-        return false;
-    }
-
-    // Skip known ignored extensions
-    path.extension()
-        .map(|s| s.to_str().unwrap_or_default())
-        .map(|ext| !IGNORED_EXTENSIONS.contains(&ext) && !BINARY_EXTENSIONS.contains(&ext))
-        .unwrap_or(false)
 }
 
 #[tracing::instrument(skip(input))]
