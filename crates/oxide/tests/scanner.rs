@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod scan_dir {
+mod scanner {
     use serial_test::serial;
     use std::process::Command;
     use std::{fs, path};
