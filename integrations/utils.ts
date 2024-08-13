@@ -307,12 +307,17 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
+        const now = Date.now()
+        console.log('start disposal for test', options.task.file, options.task.name)
         await Promise.all(disposables.map((dispose) => dispose()))
 
         // Skip removing the directory in CI beause it can stall on Windows
         if (!process.env.CI && !debug) {
           await fs.rm(root, { recursive: true, force: true })
         }
+
+        console.log('end disposal for test', options.task.file, options.task.name)
+        console.log('disposal took', Date.now() - now, 'ms')
       }
 
       options.onTestFinished(dispose)
