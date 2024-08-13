@@ -194,14 +194,14 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
 
   for (let plugin of plugins) {
     if ('__isOptionsFunction' in plugin) {
-      // Happens with `plugin.withOptions()` and no options were passed
+      // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
       plugin().handler(pluginApi)
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
-      // or with `plugin.withOptions()` and the user passed options
+      // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
       plugin.handler(pluginApi)
     } else {
