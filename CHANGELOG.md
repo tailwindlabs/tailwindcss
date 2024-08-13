@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Bump versions of plugins in the Standalone CLI ([#14185](https://github.com/tailwindlabs/tailwindcss/pull/14185))
 
 ## [3.4.9] - 2024-08-08
 
