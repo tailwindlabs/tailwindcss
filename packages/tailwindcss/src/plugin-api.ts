@@ -1,9 +1,19 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
-import type { Plugin } from './plugin'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
+
+export type Config = Record<string, any>
+
+export type PluginFn = (api: PluginAPI) => void
+export type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
+export type PluginWithOptions<T> = {
+  (options?: T): PluginWithConfig
+  __isOptionsFunction: true
+}
+
+export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 
 export type PluginAPI = {
   addBase(base: CssInJs): void

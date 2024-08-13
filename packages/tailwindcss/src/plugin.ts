@@ -1,15 +1,4 @@
-import type { PluginAPI } from './plugin-api'
-
-type Config = Record<string, any>
-
-type PluginFn = (api: PluginAPI) => void
-type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
-type PluginWithOptions<T> = {
-  (options?: T): PluginWithConfig
-  __isOptionsFunction: true
-}
-
-export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
+import type { Config, PluginFn, PluginWithConfig, PluginWithOptions } from './plugin-api'
 
 function createPlugin(handler: PluginFn, config?: Partial<Config>): PluginWithConfig {
   return {
