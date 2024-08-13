@@ -145,7 +145,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Compile the input
   let compiler = await compile(input)
-  let scanDirResult = scanDir({
+  let scanner = scanDir({
     base, // Root directory, mainly used for auto content detection
     sources: compiler.globs.map((pattern) => ({
       base: inputBasePath, // Globs are relative to the input.css file
@@ -156,7 +156,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
-      watchDirectories(base, scanDirResult),
+      watchDirectories(base, scanner),
       async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
@@ -212,7 +212,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             compiler = await compile(input)
 
             // Re-scan the directory to get the new `candidates`
-            scanDirResult = scanDir({
+            let scanner = scanDir({
               base, // Root directory, mainly used for auto content detection
               sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
@@ -221,19 +221,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             })
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(base, scanDirResult), handle)
+            cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
 
             // Re-compile the CSS
-            compiledCss = compiler.build(scanDirResult.candidates)
+            compiledCss = compiler.build(scanner.candidates)
           }
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
-            let candidates = scanDirResult.scanFiles(changedFiles)
-
             // No candidates found which means we don't need to rebuild. This can
             // happen if a file is detected but doesn't match any of the globs.
-            if (candidates.length === 0) return
+            let candidates = scanner.scanFiles(changedFiles)
+            if (candidates.length <= 0) return
 
             compiledCss = compiler.build(candidates)
           }
@@ -265,7 +264,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  await write(compiler.build(scanDirResult.candidates), args)
+  await write(compiler.build(scanner.candidates), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
