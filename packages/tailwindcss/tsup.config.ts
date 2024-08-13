@@ -3,7 +3,6 @@ import { defineConfig } from 'tsup'
 export default defineConfig([
   {
     format: ['esm', 'cjs'],
-    cjsInterop: false,
     clean: true,
     minify: true,
     dts: true,
