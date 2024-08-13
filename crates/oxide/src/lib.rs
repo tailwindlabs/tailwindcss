@@ -74,20 +74,44 @@ pub fn clear_cache() {
     cache.clear();
 }
 
-pub fn scan_dir(opts: ScanOptions) -> ScanResult {
-    init_tracing();
+#[derive(Debug, Default)]
+struct Scanner {
+    /// Auto content configuration
+    pub auto_content: Option<AutoContent>,
 
-    // Only enable auto content detection when `base` is provided.
-    let (mut files, mut globs) = if let Some(base) = opts.base {
-        let auto_content = AutoContent::new(base.into());
-        auto_content.scan()
-    } else {
-        (vec![], vec![])
-    };
+    /// Glob sources
+    pub sources: Vec<GlobEntry>,
 
-    // If we have additional sources, then we have to resolve them as well.
-    if !opts.sources.is_empty() {
-        let resolved_files: Vec<_> = match fast_glob(&opts.sources) {
+    /// All files that we have to scan
+    files: Vec<PathBuf>,
+
+    /// All generated globs
+    globs: Vec<GlobEntry>,
+
+    /// All found candidates in the files
+    candidates: Vec<String>,
+}
+
+impl Scanner {
+    pub fn scan(&mut self) {
+        self.scan_auto_content();
+        self.scan_sources();
+    }
+
+    fn scan_auto_content(&mut self) {
+        if let Some(auto_content) = &self.auto_content {
+            let (files, globs) = auto_content.scan();
+            self.files.extend(files);
+            self.globs.extend(globs);
+        }
+    }
+
+    fn scan_sources(&mut self) {
+        if self.sources.is_empty() {
+            return;
+        }
+
+        let resolved_files: Vec<_> = match fast_glob(&self.sources) {
             Ok(matches) => matches
                 .filter_map(|x| dunce::canonicalize(&x).ok())
                 .collect(),
@@ -97,9 +121,9 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
             }
         };
 
-        files.extend(resolved_files);
+        self.files.extend(resolved_files);
 
-        let optimized_incoming_globs = get_fast_patterns(&opts.sources)
+        let optimized_incoming_globs = get_fast_patterns(&self.sources)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
@@ -125,32 +149,52 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
             })
             .collect::<Vec<GlobEntry>>();
 
-        globs.extend(optimized_incoming_globs);
+        self.globs.extend(optimized_incoming_globs);
     }
 
-    let mut cache = GLOBAL_CACHE.lock().unwrap();
+    pub fn compute_candidates(&mut self) {
+        let mut cache = GLOBAL_CACHE.lock().unwrap();
 
-    let modified_files = cache.find_modified_files(&files);
+        let modified_files = cache.find_modified_files(&self.files);
 
-    let files = files.iter().map(|x| x.display().to_string()).collect();
+        if !modified_files.is_empty() {
+            let content: Vec<_> = modified_files
+                .into_iter()
+                .map(|file| ChangedContent {
+                    file: Some(file.clone()),
+                    content: None,
+                })
+                .collect();
 
-    if !modified_files.is_empty() {
-        let content: Vec<_> = modified_files
-            .into_iter()
-            .map(|file| ChangedContent {
-                file: Some(file.clone()),
-                content: None,
-            })
-            .collect();
+            let candidates = scan_files(content);
+            cache.add_candidates(candidates);
+        }
 
-        let candidates = scan_files(content);
-        cache.add_candidates(candidates);
+        self.candidates = cache.get_candidates();
     }
+}
+
+pub fn scan_dir(opts: ScanOptions) -> ScanResult {
+    init_tracing();
+
+    let mut scanner = Scanner {
+        auto_content: opts.base.map(Into::into).map(AutoContent::new),
+        sources: opts.sources,
+        ..Default::default()
+    };
+
+    scanner.scan();
+
+    scanner.compute_candidates();
 
     ScanResult {
-        candidates: cache.get_candidates(),
-        files,
-        globs,
+        candidates: scanner.candidates,
+        files: scanner
+            .files
+            .into_iter()
+            .map(|x| x.to_string_lossy().into())
+            .collect(),
+        globs: scanner.globs,
     }
 }
 

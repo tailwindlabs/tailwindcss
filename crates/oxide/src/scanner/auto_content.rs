@@ -5,7 +5,7 @@ use std::cmp::Ordering;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AutoContent {
     base: PathBuf,
 }
