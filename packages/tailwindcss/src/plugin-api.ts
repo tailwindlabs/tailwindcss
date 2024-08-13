@@ -1,8 +1,10 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
+import type { ThemeKey } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
+import { segment } from './utils/segment'
 
 export type Config = Record<string, any>
 
@@ -28,11 +30,16 @@ export type PluginAPI = {
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
+  theme(path: string): any
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): PluginAPI {
+export function buildPluginApi(
+  designSystem: DesignSystem,
+  ast: AstNode[],
+  resolvedConfig: { theme?: Record<string, any> },
+): PluginAPI {
   return {
     addBase(css) {
       ast.push(rule('@layer base', objectToAst(css)))
@@ -61,6 +68,11 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
 
     addUtilities(utilities) {
       for (let [name, css] of Object.entries(utilities)) {
+        if (name.startsWith('@keyframes ')) {
+          ast.push(rule(name, objectToAst(css)))
+          continue
+        }
+
         if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
           throw new Error(
             `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
@@ -186,27 +198,87 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
         })
       }
     },
+    theme(path) {
+      let parts = segment(path, '.')
+
+      let result = resolvedConfig.theme ?? {}
+
+      for (let part of parts) {
+        result = result?.[part]
+      }
+
+      if (
+        [
+          'accentColor',
+          'backgroundColor',
+          'borderColor',
+          'boxShadowColor',
+          'caretColor',
+          'divideColor',
+          'fill',
+          'gradientColorStops',
+          'outlineColor',
+          'placeholderColor',
+          'ringColor',
+          'ringOffsetColor',
+          'stroke',
+          'textColor',
+          'textDecorationColor',
+        ].includes(path)
+      ) {
+        // Convert camelCase to kebab-case:
+        // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
+        let newPath = `--${path.replace(/([A-Z])/g, '-$1').toLowerCase()}` as ThemeKey
+
+        for (let [key] of designSystem.theme.namespace('--color')) {
+          result[key ?? 'DEFAULT'] = designSystem.theme.resolve(key, ['--color'])
+        }
+
+        for (let [key] of designSystem.theme.namespace(newPath)) {
+          result[key ?? 'DEFAULT'] = designSystem.theme.resolve(key, [newPath])
+        }
+      }
+
+      return result
+    },
   }
 }
 
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
-  let pluginApi = buildPluginApi(designSystem, ast)
+  let pluginObjects = []
 
   for (let plugin of plugins) {
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugin().handler(pluginApi)
+      pluginObjects.push(plugin())
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugin.handler(pluginApi)
+      pluginObjects.push(plugin)
     } else {
       // Just a plain function without using the plugin(…) API
-      plugin(pluginApi)
+      pluginObjects.push({ handler: plugin, config: {} as Config })
     }
+  }
+
+  // Now merge all the configs and make all that crap work
+  let resolvedConfig: Config = { theme: {} }
+
+  for (let { config } of pluginObjects) {
+    for (let key in config?.theme?.extend) {
+      resolvedConfig.theme[key] ??= {}
+      Object.assign(resolvedConfig.theme[key], config?.theme.extend[key])
+    }
+  }
+
+  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
+
+  // Loop over the handlers and run them all with the resolved config + CSS theme probably somehow
+  for (let { handler } of pluginObjects) {
+    handler(pluginApi)
   }
 }
