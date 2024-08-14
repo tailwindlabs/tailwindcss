@@ -335,20 +335,20 @@ describe('theme', async () => {
 
     expect(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']))
       .toMatchInlineSnapshot(`
-      ".animation {
-        --animation: pulse 1s linear infinite;
-      }
-      .animation-spin {
-        --animation: spin 1s linear infinite;
-      }
-      .animation2 {
-        --animation: pulse 1s linear infinite;
-      }
-      .animation2-twist {
-        --animation: spin 1s linear infinite;
-      }
-      "
-    `)
+        ".animation {
+          --animation: var(--animation, pulse 1s linear infinite);
+        }
+        .animation-spin {
+          --animation: var(--animation-spin, spin 1s linear infinite);
+        }
+        .animation2 {
+          --animation: var(--animation, pulse 1s linear infinite);
+        }
+        .animation2-twist {
+          --animation: var(--animation-spin, spin 1s linear infinite);
+        }
+        "
+      `)
   })
 
   test('CSS theme values are mreged with JS theme values', async ({ expect }) => {
@@ -389,17 +389,17 @@ describe('theme', async () => {
 
     expect(compiler.build(['animation', 'animation-spin', 'animation-bounce']))
       .toMatchInlineSnapshot(`
-      ".animation {
-        --animation: pulse 1s linear infinite;
-      }
-      .animation-bounce {
-        --animation: bounce 1s linear infinite;
-      }
-      .animation-spin {
-        --animation: spin 1s linear infinite;
-      }
-      "
-    `)
+        ".animation {
+          --animation: var(--animation, pulse 1s linear infinite);
+        }
+        .animation-bounce {
+          --animation: bounce 1s linear infinite;
+        }
+        .animation-spin {
+          --animation: var(--animation-spin, spin 1s linear infinite);
+        }
+        "
+      `)
   })
 
   test('CSS theme defaults take precedence over JS theme defaults', async ({ expect }) => {
@@ -440,7 +440,7 @@ describe('theme', async () => {
 
     expect(compiler.build(['animation'])).toMatchInlineSnapshot(`
       ".animation {
-        --animation: pulse 1s linear infinite;
+        --animation: var(--animation, pulse 1s linear infinite);
       }
       "
     `)
@@ -478,8 +478,8 @@ describe('theme', async () => {
     })
 
     expect(fn).toHaveBeenCalledWith({
-      spin: 'spin 1s linear infinite',
-      bounce: 'bounce 1s linear infinite',
+      spin: 'var(--animation-simple-spin, spin 1s linear infinite)',
+      bounce: 'var(--animation-simple-bounce, bounce 1s linear infinite)',
     })
   })
 })
