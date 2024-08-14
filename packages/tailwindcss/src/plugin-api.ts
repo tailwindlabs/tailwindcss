@@ -230,10 +230,10 @@ export function buildPluginApi(
   }
 }
 
-// We can't use a symbol here because a lot of code in the ecosystem assumes an object with string / number keys
-// for example using Object.entries() + Object.fromEntries() to modify an object which removes symbol keys
-// We use `Math.random()` to ensure that users are unable to rely on the name of thiskey
-const BARE_VALUE = `__BARE_VALUE__${Math.random().toString(36).slice(2)}`
+// Ideally this would be a Symbol but some of the ecosystem assumes object with
+// string / number keys for example by using `Object.entries()` which means that
+// the function that handles the bare value would be lost
+const BARE_VALUE = `__BARE_VALUE__`
 
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
   let pluginObjects = []
@@ -280,6 +280,10 @@ export function createCompatabilityConfig(theme: Theme) {
             return `${value}ms`
           }
         },
+      },
+
+      transitionTimingFunction: {
+        DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
       },
     },
   }
