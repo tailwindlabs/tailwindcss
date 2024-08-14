@@ -1,4 +1,4 @@
-import { describe, test } from 'vitest'
+import { describe, test, vi } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
 
@@ -289,16 +289,12 @@ describe('theme', async () => {
     })
 
     expect(compiler.build(['animate-duration'])).toMatchInlineSnapshot(`
-      ".animate-delay {
+      ".animate-duration {
         animation-delay: 1500ms;
       }
       "
     `)
   })
-
-  // 1. Access "new" theme keys from CSS using the old theme key notation
-  //   e.g. read `--animation-*` using theme('animation')
-  //   e.g. read `--animation-foo` using theme('animation.foo')
 
   test('plugins can read CSS theme keys using the old theme key notation', async ({ expect }) => {
     let input = css`
@@ -337,8 +333,153 @@ describe('theme', async () => {
       },
     })
 
-    expect(
-      compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']),
-    ).toMatchInlineSnapshot(`""`)
+    expect(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']))
+      .toMatchInlineSnapshot(`
+      ".animation {
+        --animation: pulse 1s linear infinite;
+      }
+      .animation-spin {
+        --animation: spin 1s linear infinite;
+      }
+      .animation2 {
+        --animation: pulse 1s linear infinite;
+      }
+      .animation2-twist {
+        --animation: spin 1s linear infinite;
+      }
+      "
+    `)
+  })
+
+  test('CSS theme values are mreged with JS theme values', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme reference {
+        --animation: pulse 1s linear infinite;
+        --animation-spin: spin 1s linear infinite;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                animation: (value) => ({ '--animation': value }),
+              },
+              {
+                values: theme('animation'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                animation: {
+                  bounce: 'bounce 1s linear infinite',
+                },
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['animation', 'animation-spin', 'animation-bounce']))
+      .toMatchInlineSnapshot(`
+      ".animation {
+        --animation: pulse 1s linear infinite;
+      }
+      .animation-bounce {
+        --animation: bounce 1s linear infinite;
+      }
+      .animation-spin {
+        --animation: spin 1s linear infinite;
+      }
+      "
+    `)
+  })
+
+  test('CSS theme defaults take precedence over JS theme defaults', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme reference {
+        --animation: pulse 1s linear infinite;
+        --animation-spin: spin 1s linear infinite;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                animation: (value) => ({ '--animation': value }),
+              },
+              {
+                values: theme('animation'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                animation: {
+                  DEFAULT: 'twist 1s linear infinite',
+                },
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['animation'])).toMatchInlineSnapshot(`
+      ".animation {
+        --animation: pulse 1s linear infinite;
+      }
+      "
+    `)
+  })
+
+  test('CSS theme values take precedence even over non-object JS values', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme reference {
+        --animation-simple-spin: spin 1s linear infinite;
+        --animation-simple-bounce: bounce 1s linear infinite;
+      }
+    `
+
+    let fn = vi.fn()
+
+    await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ theme }) {
+            fn(theme('animation.simple'))
+          },
+          {
+            theme: {
+              extend: {
+                animation: {
+                  simple: 'simple 1s linear',
+                },
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(fn).toHaveBeenCalledWith({
+      spin: 'spin 1s linear infinite',
+      bounce: 'bounce 1s linear infinite',
+    })
   })
 })

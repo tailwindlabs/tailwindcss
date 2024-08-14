@@ -1,10 +1,12 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
+import { deepMerge } from './compat/config/deep-merge'
 import { resolveConfig } from './compat/config/resolve-config'
 import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
 import type { Theme } from './theme'
 import { withAlpha, withNegative } from './utilities'
+import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
@@ -208,6 +210,13 @@ export function buildPluginApi(
       }
     },
     theme(path) {
+      let readFromCss = createReadFromCss(designSystem.theme)
+      let cssThemeValue = readFromCss(path)
+
+      if (typeof cssThemeValue !== 'object') {
+        return cssThemeValue
+      }
+
       if (path === 'colors') {
         let result: Record<string, string> = resolvedConfig.theme?.colors ?? {}
 
@@ -218,8 +227,24 @@ export function buildPluginApi(
         return result
       }
 
-      let parts = segment(path, '.')
       let result = resolvedConfig.theme ?? {}
+
+      // 1. Convert `path` to an array of parts (segment)
+      // 2. Find the "obeject" that corresponds to the path
+      // 3. Deep merge the object with the resolved theme
+      let parts = segment(path, '.')
+
+      let obj = get(result, parts) ?? {}
+
+      if (typeof obj === 'object') {
+        deepMerge(obj, [cssThemeValue], (a, b) => b)
+        set(result, parts, obj)
+      } else {
+        // This case happens when the CSS theme produces an object for a given
+        // keypath but the v3-style config does not. However we still want the
+        // CSS to "win" in this case so we overwrite the v3-style config value.
+        set(result, parts, cssThemeValue)
+      }
 
       for (let part of parts) {
         result = result?.[part]
@@ -287,4 +312,120 @@ export function createCompatabilityConfig(theme: Theme) {
       },
     },
   }
+}
+
+function createReadFromCss(theme: Theme) {
+  type ThemeValue =
+    // A normal string value
+    | string
+
+    // A nested tuple with additional data
+    | [main: string, extra: Record<string, string>]
+
+  return function readFromCss(path: string) {
+    // This only supports reading from the CSS Theme:…
+    let original = path
+      // Escape dots used inside square brackets
+      .replace(/\[(.*?)\]/g, (_, value) => `-${value.replace('.', '_')}`)
+      // Replace dots with dashes
+      .replace(/\./g, '-')
+      // Replace camelCase with dashes
+      .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+
+    // Perform an "upgrade" on the path so that, for example, a request for
+    // accentColor merges values from --color-* and --accent-color-*
+    let paths: string[] = []
+
+    // Make sure the original path is included last because it should take precedence
+    paths.push(original)
+
+    let map = new Map<string | null, ThemeValue>()
+    let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
+
+    for (let path of paths) {
+      path = path.replace('-DEFAULT', '')
+
+      let ns = theme.namespace(`--${path}` as any)
+
+      for (let [key, value] of ns) {
+        // Non-nested values can be set directly
+        if (!key || !key.includes('--')) {
+          map.set(key, value)
+          continue
+        }
+
+        // Nested values are stored separately
+        let nestedIndex = key.indexOf('--')
+
+        let mainKey = key.slice(0, nestedIndex)
+        let nestedKey = key.slice(nestedIndex + 2)
+
+        // Make `nestedKey` camel case:
+        nestedKey = nestedKey.replace(/-([a-z])/g, (_, a) => a.toUpperCase())
+
+        nested.get(mainKey === '' ? null : mainKey).set(nestedKey, value)
+      }
+    }
+
+    for (let [key, extra] of nested) {
+      let value = map.get(key)
+      if (typeof value !== 'string') continue
+
+      map.set(key, [value, Object.fromEntries(extra)])
+    }
+
+    // We have to turn the map into object-like structure for v3 compatibility
+    let obj = {}
+    let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
+
+    for (let [key, value] of map) {
+      key = key ?? 'DEFAULT'
+
+      let path: string[] = []
+      let splitIndex = key.indexOf('-')
+
+      if (useNestedObjects && splitIndex !== -1) {
+        path.push(key.slice(0, splitIndex))
+        path.push(key.slice(splitIndex + 1))
+      } else {
+        path.push(key)
+      }
+
+      set(obj, path, value)
+    }
+
+    if (path.endsWith('.DEFAULT') && 'DEFAULT' in obj) {
+      return obj.DEFAULT ?? null
+    }
+
+    if (Object.keys(obj).length === 1 && 'DEFAULT' in obj) {
+      return obj.DEFAULT
+    }
+
+    return obj
+  }
+}
+
+function get(obj: any, path: string[]) {
+  for (let key of path) {
+    if (obj[key] === undefined) {
+      return undefined
+    }
+
+    obj = obj[key]
+  }
+
+  return obj
+}
+
+function set(obj: any, path: string[], value: any) {
+  for (let key of path.slice(0, -1)) {
+    if (obj[key] === undefined) {
+      obj[key] = {}
+    }
+
+    obj = obj[key]
+  }
+
+  obj[path[path.length - 1]] = value
 }
