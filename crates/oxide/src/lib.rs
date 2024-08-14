@@ -68,6 +68,10 @@ pub struct Scanner {
     /// Glob sources
     sources: Option<Vec<GlobEntry>>,
 
+    /// Scanner is ready to scan. We delay the file system traversal for detecting all files until
+    /// we actually need them.
+    ready: bool,
+
     /// All files that we have to scan
     files: Vec<PathBuf>,
 
@@ -92,9 +96,7 @@ impl Scanner {
 
     pub fn scan(&mut self) -> Vec<String> {
         init_tracing();
-
-        self.scan_auto_content();
-        self.scan_sources();
+        self.prepare();
 
         self.compute_candidates();
 
@@ -106,7 +108,26 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_files(&self) -> Vec<String> {
+    pub fn scan_content(&mut self, changed_content: Vec<ChangedContent>) -> Vec<String> {
+        self.prepare();
+        let candidates = parse_all_blobs(read_all_files(changed_content));
+
+        let mut new_candidates = vec![];
+        for candidate in candidates {
+            if self.candidates.contains(&candidate) {
+                continue;
+            }
+            self.candidates.insert(candidate.clone());
+            new_candidates.push(candidate);
+        }
+
+        new_candidates
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub fn get_files(&mut self) -> Vec<String> {
+        self.prepare();
+
         self.files
             .iter()
             .map(|x| x.to_string_lossy().into())
@@ -114,8 +135,59 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_globs(&self) -> Vec<GlobEntry> {
+    pub fn get_globs(&mut self) -> Vec<GlobEntry> {
+        self.prepare();
+
         self.globs.clone()
+    }
+
+    #[tracing::instrument(skip_all)]
+    fn compute_candidates(&mut self) {
+        let mut changed_content = vec![];
+
+        for path in &self.files {
+            let current_time = fs::metadata(path)
+                .and_then(|m| m.modified())
+                .unwrap_or(SystemTime::now());
+
+            let previous_time = self.mtimes.insert(path.clone(), current_time);
+
+            let should_scan_file = match previous_time {
+                // Time has changed, so we need to re-scan the file
+                Some(prev) if prev != current_time => true,
+
+                // File was in the cache, no need to re-scan
+                Some(_) => false,
+
+                // File didn't exist before, so we need to scan it
+                None => true,
+            };
+
+            if should_scan_file {
+                changed_content.push(ChangedContent {
+                    file: Some(path.clone()),
+                    content: None,
+                });
+            }
+        }
+
+        if !changed_content.is_empty() {
+            let candidates = parse_all_blobs(read_all_files(changed_content));
+            self.candidates.extend(candidates);
+        }
+    }
+
+    // Ensures that all files/globs are resolved and the scanner is ready to scan
+    // content for candidates.
+    fn prepare(&mut self) {
+        if self.ready {
+            return;
+        }
+
+        self.scan_auto_content();
+        self.scan_sources();
+
+        self.ready = true;
     }
 
     #[tracing::instrument(skip_all)]
@@ -176,58 +248,6 @@ impl Scanner {
                 })
             })
             .collect::<Vec<GlobEntry>>();
-    }
-
-    #[tracing::instrument(skip_all)]
-    pub fn scan_content(&mut self, changed_content: Vec<ChangedContent>) -> Vec<String> {
-        let candidates = parse_all_blobs(read_all_files(changed_content));
-
-        let mut new_candidates = vec![];
-        for candidate in candidates {
-            if self.candidates.contains(&candidate) {
-                continue;
-            }
-            self.candidates.insert(candidate.clone());
-            new_candidates.push(candidate);
-        }
-
-        new_candidates
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn compute_candidates(&mut self) {
-        let mut changed_content = vec![];
-
-        for path in &self.files {
-            let current_time = fs::metadata(path)
-                .and_then(|m| m.modified())
-                .unwrap_or(SystemTime::now());
-
-            let previous_time = self.mtimes.insert(path.clone(), current_time);
-
-            let should_scan_file = match previous_time {
-                // Time has changed, so we need to re-scan the file
-                Some(prev) if prev != current_time => true,
-
-                // File was in the cache, no need to re-scan
-                Some(_) => false,
-
-                // File didn't exist before, so we need to scan it
-                None => true,
-            };
-
-            if should_scan_file {
-                changed_content.push(ChangedContent {
-                    file: Some(path.clone()),
-                    content: None,
-                });
-            }
-        }
-
-        if !changed_content.is_empty() {
-            let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.extend(candidates);
-        }
     }
 }
 

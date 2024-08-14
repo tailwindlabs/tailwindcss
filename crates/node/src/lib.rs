@@ -109,12 +109,12 @@ impl Scanner {
   }
 
   #[napi(getter)]
-  pub fn files(&self) -> Vec<String> {
+  pub fn files(&mut self) -> Vec<String> {
     self.scanner.get_files()
   }
 
   #[napi(getter)]
-  pub fn globs(&self) -> Vec<GlobEntry> {
+  pub fn globs(&mut self) -> Vec<GlobEntry> {
     self
       .scanner
       .get_globs()
