@@ -1,5 +1,3 @@
-type Customizer = (a: any, b: any) => any
-
 export function isPlainObject<T>(value: T): value is T & Record<keyof T, unknown> {
   if (Object.prototype.toString.call(value) !== '[object Object]') {
     return false
@@ -12,32 +10,25 @@ export function isPlainObject<T>(value: T): value is T & Record<keyof T, unknown
 export function deepMerge<T extends object>(
   target: T,
   sources: (Partial<T> | null | undefined)[],
-  customizer: Customizer,
+  customizer: (a: any, b: any) => any,
 ) {
   type Key = keyof T
   type Value = T[Key]
-  type KnownSource = Record<Key, Value>
 
   for (let source of sources) {
     if (source === null || source === undefined) {
       continue
     }
 
-    let keys = [
-      //
-      ...Object.getOwnPropertyNames(source),
-      ...Object.getOwnPropertySymbols(source),
-    ]
-
-    for (let k of keys as Key[]) {
+    for (let k of Reflect.ownKeys(source) as Key[]) {
       let merged = customizer(target[k], source[k])
 
       if (merged !== undefined) {
         target[k] = merged
       } else if (!isPlainObject(target[k]) || !isPlainObject(source[k])) {
-        target[k] = source[k] as any
+        target[k] = source[k] as Value
       } else {
-        target[k] = deepMerge({}, [target[k], source[k]] as any, customizer) as any
+        target[k] = deepMerge({}, [target[k], source[k]], customizer) as Value
       }
     }
   }
