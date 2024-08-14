@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { clearCache, Scanner, type ChangedContent } from '@tailwindcss/oxide'
+import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
@@ -194,9 +194,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           if (rebuildStrategy === 'full') {
             // Clear all watchers
             cleanupWatchers()
-
-            // Clear cached candidates
-            clearCache()
 
             // Collect the new `input` and `cssImportPaths`.
             ;[input, cssImportPaths] = await handleImports(

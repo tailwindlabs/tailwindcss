@@ -11,9 +11,6 @@ mod scanner {
         paths_with_content: &[(&str, Option<&str>)],
         globs: Vec<&str>,
     ) -> (Vec<String>, Vec<String>) {
-        // Ensure that every test truly runs in isolation without any cache
-        clear_cache();
-
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
 

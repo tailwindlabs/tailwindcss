@@ -1,11 +1,6 @@
 #[macro_use]
 extern crate napi_derive;
 
-#[napi]
-pub fn clear_cache() {
-  tailwindcss_oxide::clear_cache();
-}
-
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ChangedContent {
