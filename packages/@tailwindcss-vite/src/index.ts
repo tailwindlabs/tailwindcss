@@ -85,6 +85,8 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
+    let candidatesFromPreviousScanner = scanner?.getCandidates() ?? []
+
     scanner = new Scanner({
       sources: globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
@@ -116,7 +118,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(scanner.getCandidates())
+    return build(candidatesFromPreviousScanner.concat(scanner.getCandidates()))
   }
 
   async function generateOptimizedCss(
