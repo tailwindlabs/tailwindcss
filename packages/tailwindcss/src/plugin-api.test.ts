@@ -135,9 +135,11 @@ describe('theme', async () => {
           {
             theme: {
               extend: {
-                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
-                  ...theme('transitionDuration'),
-                }),
+                animationDuration: ({ theme }: { theme: (path: string) => any }) => {
+                  return {
+                    ...theme('transitionDuration'),
+                  }
+                },
               },
             },
           },
@@ -148,6 +150,107 @@ describe('theme', async () => {
     expect(compiler.build(['animate-duration-316'])).toMatchInlineSnapshot(`
       ".animate-duration-316 {
         animation-duration: 316ms;
+      }
+      "
+    `)
+  })
+
+  test('plugin theme values that support bare values are merged with other values for that theme key', async ({
+    expect,
+  }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                'animate-duration': (value) => ({ 'animation-duration': value }),
+              },
+              {
+                values: theme('animationDuration'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                transitionDuration: {
+                  slow: '800ms',
+                },
+
+                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                  ...theme('transitionDuration'),
+                }),
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['animate-duration-316', 'animate-duration-slow']))
+      .toMatchInlineSnapshot(`
+      ".animate-duration-316 {
+        animation-duration: 316ms;
+      }
+      .animate-duration-slow {
+        animation-duration: 800ms;
+      }
+      "
+    `)
+  })
+
+  test('theme value functions are resolved correctly regardless of order', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                'animate-delay': (value) => ({ 'animation-delay': value }),
+              },
+              {
+                values: theme('animationDelay'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                  ...theme('transitionDuration'),
+                }),
+
+                animationDelay: ({ theme }: { theme: (path: string) => any }) => ({
+                  ...theme('animationDuration'),
+                }),
+
+                transitionDuration: {
+                  slow: '800ms',
+                },
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['animate-delay-316', 'animate-delay-slow'])).toMatchInlineSnapshot(`
+      ".animate-delay-316 {
+        animation-delay: 316ms;
+      }
+      .animate-delay-slow {
+        animation-delay: 800ms;
       }
       "
     `)

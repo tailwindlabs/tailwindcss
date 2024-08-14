@@ -1,14 +1,14 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
+import { resolveConfig } from './compat/config/resolve-config'
+import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
-export type Config = Record<string, any>
-
 export type PluginFn = (api: PluginAPI) => void
-export type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
+export type PluginWithConfig = { handler: PluginFn; config?: UserConfig }
 export type PluginWithOptions<T> = {
   (options?: T): PluginWithConfig
   __isOptionsFunction: true
@@ -243,35 +243,15 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
       pluginObjects.push(plugin)
     } else {
       // Just a plain function without using the plugin(…) API
-      pluginObjects.push({ handler: plugin, config: {} as Config })
+      pluginObjects.push({ handler: plugin, config: {} as UserConfig })
     }
   }
 
   // Now merge all the configs and make all that crap work
-  let resolvedConfig: Config = { theme: {} }
-
-  for (let { config } of pluginObjects) {
-    for (let key in config?.theme?.extend) {
-      resolvedConfig.theme[key] ??= {}
-      let value = config.theme.extend[key]
-      if (value instanceof Function) {
-        value = value({
-          theme(path: string) {
-            if (path === 'transitionDuration') {
-              return {
-                [BARE_VALUE]: (value: string) => {
-                  if (!Number.isNaN(Number(value))) {
-                    return `${value}ms`
-                  }
-                },
-              }
-            }
-          },
-        })
-      }
-      Object.assign(resolvedConfig.theme[key], value)
-    }
-  }
+  let resolvedConfig = resolveConfig([
+    compatabilityConfig,
+    ...pluginObjects.map(({ config }) => config ?? {}),
+  ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
@@ -279,4 +259,16 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   for (let { handler } of pluginObjects) {
     handler(pluginApi)
   }
+}
+
+export const compatabilityConfig = {
+  theme: {
+    transitionDuration: {
+      [BARE_VALUE]: (value: string) => {
+        if (!Number.isNaN(Number(value))) {
+          return `${value}ms`
+        }
+      },
+    },
+  },
 }
