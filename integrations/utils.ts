@@ -77,8 +77,6 @@ export function test(
     name,
     { timeout: TEST_TIMEOUT },
     async (options) => {
-      const startSetup = Date.now()
-
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
 
@@ -303,11 +301,14 @@ export function test(
 
       try {
         try {
-          // Move a potential node_modules folder from the nodeModulesCacheDir to
-          // the root dir, to quickly restore in the next text run
+          // Copy the contents of a potential node_modules folder from
+          // the nodeModulesCacheDir to the root dir, to quickly restore
+          // in the next text run
           let nodeModulesDir = path.join(nodeModulesCacheDir!, 'node_modules')
           if (await dirExists(nodeModulesDir)) {
-            await fs.rename(nodeModulesDir, path.join(root, 'node_modules'))
+            await fs.cp(nodeModulesDir, path.join(root, 'node_modules'), {
+              recursive: true,
+            })
           }
         } catch {}
 
@@ -334,6 +335,7 @@ export function test(
           try {
             // Move a potential node_modules folder to the nodeModulesCacheDir to
             // quickly restore in the next text run
+            await gracefullyRemove(path.join(nodeModulesCacheDir!, 'node_modules'))
             let nodeModulesDir = path.join(root, 'node_modules')
             if (await dirExists(nodeModulesDir)) {
               await fs.rename(nodeModulesDir, path.join(nodeModulesCacheDir!, 'node_modules'))
