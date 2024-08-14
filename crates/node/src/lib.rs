@@ -103,23 +103,13 @@ impl Scanner {
 
   #[napi]
   pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> bool {
-    let candidate_count_before = self.scanner.total_candidates();
-
-    // Scan new content
     self
       .scanner
-      .scan_content(input.into_iter().map(Into::into).collect());
-
-    let candidate_count_after = self.scanner.total_candidates();
-
-    // Return whether we scanned new candidates or not. We can do this because:
-    // 1. It's a set, so we can't have duplicates
-    // 2. We're only adding new candidates, not removing them
-    candidate_count_before != candidate_count_after
+      .scan_content(input.into_iter().map(Into::into).collect())
   }
 
   #[napi]
-  pub fn get_candidates(&self) -> Vec<String> {
+  pub fn get_candidates(&mut self) -> Vec<String> {
     self.scanner.get_candidates()
   }
 

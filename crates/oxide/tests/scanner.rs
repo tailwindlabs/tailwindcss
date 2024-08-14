@@ -39,7 +39,7 @@ mod scanner {
         let base = format!("{}", dir.display());
 
         // Resolve all content paths for the (temporary) current working directory
-        let scanner = Scanner::new(
+        let mut scanner = Scanner::new(
             Some(AutoContent::new(base.clone().into())),
             Some(
                 globs

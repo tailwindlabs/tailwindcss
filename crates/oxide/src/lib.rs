@@ -1,16 +1,16 @@
 use crate::parser::Extractor;
 use crate::scanner::auto_content::AutoContent;
 use bstr::ByteSlice;
-use cache::Cache;
+use fxhash::{FxHashMap, FxHashSet};
 use glob::fast_glob;
 use glob::get_fast_patterns;
 use lazy_static::lazy_static;
 use rayon::prelude::*;
+use std::fs;
 use std::path::PathBuf;
-use std::sync::Mutex;
+use std::time::SystemTime;
 use tracing::event;
 
-pub mod cache;
 pub mod cursor;
 pub mod fast_skip;
 pub mod glob;
@@ -20,13 +20,6 @@ pub mod scanner;
 lazy_static! {
     static ref SHOULD_TRACE: bool = {
         matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind"))
-    };
-
-    /// Track file modification times and cache candidates. This cache lives for the lifetime of
-    /// the process and simply adds candidates when files are modified. Since candidates aren't
-    /// removed, incremental builds may contain extra candidates.
-    static ref GLOBAL_CACHE: Mutex<Cache> = {
-        Mutex::new(Cache::default())
     };
 }
 
@@ -69,11 +62,6 @@ pub struct GlobEntry {
     pub pattern: String,
 }
 
-pub fn clear_cache() {
-    let mut cache = GLOBAL_CACHE.lock().unwrap();
-    cache.clear();
-}
-
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
     /// Auto content configuration
@@ -88,14 +76,19 @@ pub struct Scanner {
     /// All generated globs
     globs: Vec<GlobEntry>,
 
-    /// All found candidates in the files
-    candidates: Vec<String>,
+    /// Track file modification times
+    mtimes: FxHashMap<PathBuf, SystemTime>,
+
+    /// Track unique set of candidates
+    candidates: FxHashSet<String>,
+
+    /// All new candidates found since the last time we requested them. This will only ever contain
+    /// new candidates. Existing candidates will not be included.
+    candidates_since_last_request: Vec<String>,
 }
 
 impl Scanner {
     pub fn new(auto_content: Option<AutoContent>, sources: Option<Vec<GlobEntry>>) -> Self {
-        init_tracing();
-
         let mut scanner = Self {
             auto_content,
             sources,
@@ -107,21 +100,33 @@ impl Scanner {
         scanner
     }
 
-    #[tracing::instrument(skip_all)]
     fn scan(&mut self) {
+        init_tracing();
+
         self.scan_auto_content();
         self.scan_sources();
+
         self.compute_candidates();
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn total_candidates(&self) -> usize {
-        self.candidates.len()
-    }
+    pub fn get_candidates(&mut self) -> Vec<String> {
+        // Nothing changed since the last request.
+        if self.candidates_since_last_request.is_empty() {
+            return vec![];
+        }
 
-    #[tracing::instrument(skip_all)]
-    pub fn get_candidates(&self) -> Vec<String> {
-        self.candidates.clone()
+        let mut candidates = self.candidates_since_last_request.clone();
+
+        // We sort candidates in Tailwind's TypeScript core, but providing a sorted list is faster
+        // than sorting it in the core. Rust is faster at sorting than TypeScript, so let's do it
+        // here.
+        candidates.sort();
+
+        // Prepare the candidates_since_last_request for the next request.
+        self.candidates_since_last_request.clear();
+
+        candidates
     }
 
     #[tracing::instrument(skip_all)]
@@ -198,39 +203,63 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn scan_content(&mut self, files: Vec<ChangedContent>) {
-        let candidates = scan_files(files);
-        let mut cache = GLOBAL_CACHE.lock().unwrap();
-        cache.add_candidates(candidates);
-        self.candidates = cache.get_candidates();
+    pub fn scan_content(&mut self, changed_content: Vec<ChangedContent>) -> bool {
+        let candidates = parse_all_blobs(read_all_files(changed_content));
+
+        for candidate in candidates {
+            if self.candidates.contains(&candidate) {
+                continue;
+            }
+            self.candidates.insert(candidate.clone());
+            self.candidates_since_last_request.push(candidate)
+        }
+
+        // Return true if we found new candidates
+        !self.candidates_since_last_request.is_empty()
     }
 
     #[tracing::instrument(skip_all)]
     fn compute_candidates(&mut self) {
-        let mut cache = GLOBAL_CACHE.lock().unwrap();
+        let mut changed_content = vec![];
 
-        let modified_files = cache.find_modified_files(&self.files);
+        for path in &self.files {
+            let current_time = fs::metadata(path)
+                .and_then(|m| m.modified())
+                .unwrap_or(SystemTime::now());
 
-        if !modified_files.is_empty() {
-            let content: Vec<_> = modified_files
-                .into_iter()
-                .map(|file| ChangedContent {
-                    file: Some(file.clone()),
+            let previous_time = self.mtimes.insert(path.clone(), current_time);
+
+            let should_scan_file = match previous_time {
+                // Time has changed, so we need to re-scan the file
+                Some(prev) if prev != current_time => true,
+
+                // File was in the cache, no need to re-scan
+                Some(_) => false,
+
+                // File didn't exist before, so we need to scan it
+                None => true,
+            };
+
+            if should_scan_file {
+                changed_content.push(ChangedContent {
+                    file: Some(path.clone()),
                     content: None,
-                })
-                .collect();
-
-            let candidates = scan_files(content);
-            cache.add_candidates(candidates);
+                });
+            }
         }
 
-        self.candidates = cache.get_candidates();
-    }
-}
+        if !changed_content.is_empty() {
+            let candidates = parse_all_blobs(read_all_files(changed_content));
 
-#[tracing::instrument(skip_all)]
-pub fn scan_files(input: Vec<ChangedContent>) -> Vec<String> {
-    parse_all_blobs(read_all_files(input))
+            for candidate in candidates {
+                if self.candidates.contains(&candidate) {
+                    continue;
+                }
+                self.candidates.insert(candidate.clone());
+                self.candidates_since_last_request.push(candidate);
+            }
+        }
+    }
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
