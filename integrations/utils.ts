@@ -300,17 +300,8 @@ export function test(
       }
 
       try {
-        try {
-          // Copy the contents of a potential node_modules folder from
-          // the nodeModulesCacheDir to the root dir, to quickly restore
-          // in the next text run
-          let nodeModulesDir = path.join(nodeModulesCacheDir!, 'node_modules')
-          if (await dirExists(nodeModulesDir)) {
-            await fs.cp(nodeModulesDir, path.join(root, 'node_modules'), {
-              recursive: true,
-            })
-          }
-        } catch {}
+        // Create a symlink from the node_modules dir to the nodeModulesCacheDir
+        await fs.symlink(nodeModulesCacheDir!, path.join(root, 'node_modules'))
 
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
@@ -332,16 +323,6 @@ export function test(
         await Promise.all(disposables.map((dispose) => dispose()))
 
         if (!debug) {
-          try {
-            // Move a potential node_modules folder to the nodeModulesCacheDir to
-            // quickly restore in the next text run
-            await gracefullyRemove(path.join(nodeModulesCacheDir!, 'node_modules'))
-            let nodeModulesDir = path.join(root, 'node_modules')
-            if (await dirExists(nodeModulesDir)) {
-              await fs.rename(nodeModulesDir, path.join(nodeModulesCacheDir!, 'node_modules'))
-            }
-          } catch {}
-
           await gracefullyRemove(root)
         }
       }
