@@ -97,24 +97,29 @@ impl Scanner {
   }
 
   #[napi]
-  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> bool {
+  pub fn scan(&mut self) -> Vec<String> {
+    self.scanner.scan()
+  }
+
+  #[napi]
+  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> Vec<String> {
     self
       .scanner
       .scan_content(input.into_iter().map(Into::into).collect())
   }
 
   #[napi(getter)]
-  pub fn candidates(&mut self) -> Vec<String> {
-    self.scanner.candidates()
-  }
-
-  #[napi(getter)]
   pub fn files(&self) -> Vec<String> {
-    self.scanner.files()
+    self.scanner.get_files()
   }
 
   #[napi(getter)]
   pub fn globs(&self) -> Vec<GlobEntry> {
-    self.scanner.globs().into_iter().map(Into::into).collect()
+    self
+      .scanner
+      .get_globs()
+      .into_iter()
+      .map(Into::into)
+      .collect()
   }
 }

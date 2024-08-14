@@ -10,7 +10,7 @@ const root = process.env.FOLDER || process.cwd()
 // Auto content detection
 const scanner = new Scanner({ autoContent: { base: root } })
 
-const candidates = scanner.candidates
+const candidates = scanner.scan()
 const designSystem = buildDesignSystem(new Theme())
 
 bench('parseCandidate', () => {

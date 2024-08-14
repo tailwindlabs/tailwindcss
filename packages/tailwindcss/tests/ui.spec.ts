@@ -317,10 +317,10 @@ async function render(page: Page, content: string) {
 
   await page.setContent(content)
 
-  scanner.scanFiles([{ content, extension: 'html' }])
+  let candidates = scanner.scanFiles([{ content, extension: 'html' }])
 
   await page.addStyleTag({
-    content: optimizeCss(build(scanner.candidates)),
+    content: optimizeCss(build(candidates)),
   })
 
   await page.locator('#mouse-park').hover()

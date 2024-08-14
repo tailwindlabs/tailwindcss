@@ -11,6 +11,7 @@ export default function tailwindcss(): Plugin[] {
   let config: ResolvedConfig | null = null
   let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
+  let candidates: string[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -68,7 +69,11 @@ export default function tailwindcss(): Plugin[] {
     }
 
     // Parse all candidates given the resolved files
-    updated = scanner?.scanFiles([{ content: src, extension }])
+    let newCandidates = scanner.scanFiles([{ content: src, extension }])
+    for (let candidate of newCandidates) {
+      updated = true
+      candidates.push(candidate)
+    }
 
     return updated
   }
@@ -85,8 +90,6 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
-    let candidatesFromPreviousScanner = scanner?.candidates ?? []
-
     scanner = new Scanner({
       sources: globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
@@ -94,8 +97,15 @@ export default function tailwindcss(): Plugin[] {
       })),
     })
 
+    // This should not be here, but right now the Vite plugin is setup where we
+    // setup a new scanner and compiler every time we request the CSS file
+    // (regardless whether it actually changed or not).
+    let initialCandidates = scanner.scan()
+
     if (changedContent.length > 0) {
-      scanner.scanFiles(changedContent.splice(0))
+      for (let candidate of scanner.scanFiles(changedContent.splice(0))) {
+        initialCandidates.push(candidate)
+      }
     }
 
     // Watch individual files
@@ -118,7 +128,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(candidatesFromPreviousScanner.concat(scanner.candidates))
+    return build(candidates.splice(0).concat(initialCandidates))
   }
 
   async function generateOptimizedCss(

@@ -209,7 +209,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             compiler = await compile(input)
 
             // Re-scan the directory to get the new `candidates`
-            let scanner = new Scanner({
+            scanner = new Scanner({
               autoContent: { base },
               sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
@@ -217,20 +217,25 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               })),
             })
 
+            // Scan the directory for candidates
+            let candidates = scanner.scan()
+
             // Setup new watchers
             cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
 
             // Re-compile the CSS
-            compiledCss = compiler.build(scanner.candidates)
+            compiledCss = compiler.build(candidates)
           }
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
+            let newCandidates = scanner.scanFiles(changedFiles)
+
             // No candidates found which means we don't need to rebuild. This can
             // happen if a file is detected but doesn't match any of the globs.
-            if (!scanner.scanFiles(changedFiles)) return
+            if (newCandidates.length <= 0) return
 
-            compiledCss = compiler.build(scanner.candidates)
+            compiledCss = compiler.build(newCandidates)
           }
 
           await write(compiledCss, args)
@@ -260,7 +265,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  await write(compiler.build(scanner.candidates), args)
+  await write(compiler.build(scanner.scan()), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())

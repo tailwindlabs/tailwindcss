@@ -8,9 +8,11 @@ const css = String.raw
 
 bench('compile', async () => {
   let scanner = new Scanner({ autoContent: { base: root } })
+  let candidates = scanner.scan()
 
   let { build } = await compile(css`
     @tailwind utilities;
   `)
-  build(scanner.candidates)
+
+  build(candidates)
 })

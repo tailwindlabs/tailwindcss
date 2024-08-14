@@ -137,6 +137,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             })),
           })
 
+          //
+          let candidates = scanner.scan()
+
           // Add all found files as direct dependencies
           for (let file of scanner.files) {
             result.messages.push({
@@ -162,9 +165,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           if (rebuildStrategy === 'full') {
             context.compiler = await createCompiler()
-            css = context.compiler.build(hasTailwind ? scanner.candidates : [])
+            css = context.compiler.build(hasTailwind ? candidates : [])
           } else if (rebuildStrategy === 'incremental') {
-            css = context.compiler.build!(scanner.candidates)
+            css = context.compiler.build!(candidates)
           }
 
           // Replace CSS
