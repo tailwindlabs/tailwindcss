@@ -320,6 +320,8 @@ export function test(
         await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
       } catch (error: any) {
         console.error(error)
+        console.error(error.stdout?.toString())
+        console.error(error.stderr?.toString())
         throw error
       }
 
