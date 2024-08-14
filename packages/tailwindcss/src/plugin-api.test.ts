@@ -101,8 +101,53 @@ describe('theme', async () => {
     })
 
     expect(compiler.build(['scrollbar-red-500', 'scrollbar-russet-700'])).toMatchInlineSnapshot(`
-      ".scrollbar-russet-700 {
+      ".scrollbar-red-500 {
+        scrollbar-color: var(--color-red-500, #ef4444);
+      }
+      .scrollbar-russet-700 {
         scrollbar-color: #7a4724;
+      }
+      "
+    `)
+  })
+
+  test('plugin theme values can reference legacy theme keys that have been replaced with bare value support', async ({
+    expect,
+  }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                'animate-duration': (value) => ({ 'animation-duration': value }),
+              },
+              {
+                values: theme('animationDuration'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                  ...theme('transitionDuration'),
+                }),
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['animate-duration-316'])).toMatchInlineSnapshot(`
+      ".animate-duration-316 {
+        animation-duration: 316ms;
       }
       "
     `)

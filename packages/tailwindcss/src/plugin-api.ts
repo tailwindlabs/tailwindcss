@@ -1,7 +1,6 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
-import type { ThemeKey } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
@@ -26,7 +25,9 @@ export type PluginAPI = {
     options?: Partial<{
       type: string | string[]
       supportsNegativeValues: boolean
-      values: Record<string, string>
+      values: Record<string, string> & {
+        [BARE_VALUE]?: (value: string) => string | null | undefined
+      }
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
@@ -132,7 +133,7 @@ export function buildPluginApi(
           let isColor = types.includes('color')
 
           // Resolve the candidate value
-          let value: string | null
+          let value: string | null = null
 
           {
             let values = options?.values ?? {}
@@ -152,8 +153,10 @@ export function buildPluginApi(
               value = values.DEFAULT ?? null
             } else if (candidate.value.kind === 'arbitrary') {
               value = candidate.value.value
-            } else {
-              value = values[candidate.value.value] ?? null
+            } else if (values[candidate.value.value]) {
+              value = values[candidate.value.value]
+            } else if (values[BARE_VALUE]) {
+              value = values[BARE_VALUE](candidate.value.value) ?? null
             }
           }
 
@@ -199,50 +202,29 @@ export function buildPluginApi(
       }
     },
     theme(path) {
-      let parts = segment(path, '.')
+      if (path === 'colors') {
+        let result: Record<string, string> = resolvedConfig.theme?.colors ?? {}
 
+        for (let [key] of designSystem.theme.namespace('--color')) {
+          result[key ?? 'DEFAULT'] = designSystem.theme.resolve(key, ['--color'])!
+        }
+
+        return result
+      }
+
+      let parts = segment(path, '.')
       let result = resolvedConfig.theme ?? {}
 
       for (let part of parts) {
         result = result?.[part]
       }
 
-      if (
-        [
-          'accentColor',
-          'backgroundColor',
-          'borderColor',
-          'boxShadowColor',
-          'caretColor',
-          'divideColor',
-          'fill',
-          'gradientColorStops',
-          'outlineColor',
-          'placeholderColor',
-          'ringColor',
-          'ringOffsetColor',
-          'stroke',
-          'textColor',
-          'textDecorationColor',
-        ].includes(path)
-      ) {
-        // Convert camelCase to kebab-case:
-        // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
-        let newPath = `--${path.replace(/([A-Z])/g, '-$1').toLowerCase()}` as ThemeKey
-
-        for (let [key] of designSystem.theme.namespace('--color')) {
-          result[key ?? 'DEFAULT'] = designSystem.theme.resolve(key, ['--color'])
-        }
-
-        for (let [key] of designSystem.theme.namespace(newPath)) {
-          result[key ?? 'DEFAULT'] = designSystem.theme.resolve(key, [newPath])
-        }
-      }
-
       return result
     },
   }
 }
+
+const BARE_VALUE = Symbol('BARE_VALUE')
 
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
   let pluginObjects = []
@@ -271,7 +253,23 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   for (let { config } of pluginObjects) {
     for (let key in config?.theme?.extend) {
       resolvedConfig.theme[key] ??= {}
-      Object.assign(resolvedConfig.theme[key], config?.theme.extend[key])
+      let value = config.theme.extend[key]
+      if (value instanceof Function) {
+        value = value({
+          theme(path: string) {
+            if (path === 'transitionDuration') {
+              return {
+                [BARE_VALUE]: (value: string) => {
+                  if (!Number.isNaN(Number(value))) {
+                    return `${value}ms`
+                  }
+                },
+              }
+            }
+          },
+        })
+      }
+      Object.assign(resolvedConfig.theme[key], value)
     }
   }
 
