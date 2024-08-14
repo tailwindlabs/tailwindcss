@@ -69,20 +69,20 @@ pub struct Scanner {
     sources: Option<Vec<GlobEntry>>,
 
     /// All files that we have to scan
-    files: Vec<PathBuf>,
+    _files: Vec<PathBuf>,
 
     /// All generated globs
-    globs: Vec<GlobEntry>,
+    _globs: Vec<GlobEntry>,
 
     /// Track file modification times
-    mtimes: FxHashMap<PathBuf, SystemTime>,
+    _mtimes: FxHashMap<PathBuf, SystemTime>,
 
     /// Track unique set of candidates
-    candidates: FxHashSet<String>,
+    _candidates: FxHashSet<String>,
 
     /// All new candidates found since the last time we requested them. This will only ever contain
     /// new candidates. Existing candidates will not be included.
-    candidates_since_last_request: Vec<String>,
+    _candidates_since_last_request: Vec<String>,
 }
 
 impl Scanner {
@@ -108,13 +108,13 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_candidates(&mut self) -> Vec<String> {
+    pub fn candidates(&mut self) -> Vec<String> {
         // Nothing changed since the last request.
-        if self.candidates_since_last_request.is_empty() {
+        if self._candidates_since_last_request.is_empty() {
             return vec![];
         }
 
-        let mut candidates = self.candidates_since_last_request.clone();
+        let mut candidates = self._candidates_since_last_request.clone();
 
         // We sort candidates in Tailwind's TypeScript core, but providing a sorted list is faster
         // than sorting it in the core. Rust is faster at sorting than TypeScript, so let's do it
@@ -122,30 +122,30 @@ impl Scanner {
         candidates.sort();
 
         // Prepare the candidates_since_last_request for the next request.
-        self.candidates_since_last_request.clear();
+        self._candidates_since_last_request.clear();
 
         candidates
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_files(&self) -> Vec<String> {
-        self.files
+    pub fn files(&self) -> Vec<String> {
+        self._files
             .iter()
             .map(|x| x.to_string_lossy().into())
             .collect()
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_globs(&self) -> Vec<GlobEntry> {
-        self.globs.clone()
+    pub fn globs(&self) -> Vec<GlobEntry> {
+        self._globs.clone()
     }
 
     #[tracing::instrument(skip_all)]
     fn scan_auto_content(&mut self) {
         if let Some(auto_content) = &self.auto_content {
             let (files, globs) = auto_content.scan();
-            self.files.extend(files);
-            self.globs.extend(globs);
+            self._files.extend(files);
+            self._globs.extend(globs);
         }
     }
 
@@ -169,11 +169,11 @@ impl Scanner {
             }
         };
 
-        self.files.extend(resolved_files);
-        self.globs.extend(sources.clone());
+        self._files.extend(resolved_files);
+        self._globs.extend(sources.clone());
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
-        self.globs = get_fast_patterns(&self.globs)
+        self._globs = get_fast_patterns(&self._globs)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
@@ -205,27 +205,27 @@ impl Scanner {
         let candidates = parse_all_blobs(read_all_files(changed_content));
 
         for candidate in candidates {
-            if self.candidates.contains(&candidate) {
+            if self._candidates.contains(&candidate) {
                 continue;
             }
-            self.candidates.insert(candidate.clone());
-            self.candidates_since_last_request.push(candidate)
+            self._candidates.insert(candidate.clone());
+            self._candidates_since_last_request.push(candidate)
         }
 
         // Return true if we found new candidates
-        !self.candidates_since_last_request.is_empty()
+        !self._candidates_since_last_request.is_empty()
     }
 
     #[tracing::instrument(skip_all)]
     fn compute_candidates(&mut self) {
         let mut changed_content = vec![];
 
-        for path in &self.files {
+        for path in &self._files {
             let current_time = fs::metadata(path)
                 .and_then(|m| m.modified())
                 .unwrap_or(SystemTime::now());
 
-            let previous_time = self.mtimes.insert(path.clone(), current_time);
+            let previous_time = self._mtimes.insert(path.clone(), current_time);
 
             let should_scan_file = match previous_time {
                 // Time has changed, so we need to re-scan the file
@@ -250,11 +250,11 @@ impl Scanner {
             let candidates = parse_all_blobs(read_all_files(changed_content));
 
             for candidate in candidates {
-                if self.candidates.contains(&candidate) {
+                if self._candidates.contains(&candidate) {
                     continue;
                 }
-                self.candidates.insert(candidate.clone());
-                self.candidates_since_last_request.push(candidate);
+                self._candidates.insert(candidate.clone());
+                self._candidates_since_last_request.push(candidate);
             }
         }
     }

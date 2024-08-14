@@ -221,7 +221,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
 
             // Re-compile the CSS
-            compiledCss = compiler.build(scanner.getCandidates())
+            compiledCss = compiler.build(scanner.candidates())
           }
 
           // Scan changed files only for incremental rebuilds.
@@ -230,7 +230,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // happen if a file is detected but doesn't match any of the globs.
             if (!scanner.scanFiles(changedFiles)) return
 
-            compiledCss = compiler.build(scanner.getCandidates())
+            compiledCss = compiler.build(scanner.candidates())
           }
 
           await write(compiledCss, args)
@@ -260,7 +260,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  await write(compiler.build(scanner.getCandidates()), args)
+  await write(compiler.build(scanner.candidates()), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -270,7 +270,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
 function watchDirectories(base: string, scanner: Scanner) {
   return [base].concat(
-    scanner.getGlobs().flatMap((globEntry) => {
+    scanner.globs().flatMap((globEntry) => {
       // We don't want a watcher for negated globs.
       if (globEntry.pattern[0] === '!') return []
 

@@ -49,12 +49,12 @@ mod scanner {
         );
 
         let mut paths: Vec<_> = scanner
-            .get_files()
+            .files()
             .into_iter()
             .map(|x| x.replace(&format!("{}{}", &base, path::MAIN_SEPARATOR), ""))
             .collect();
 
-        for glob in scanner.get_globs() {
+        for glob in scanner.globs() {
             paths.push(format!(
                 "{}{}{}",
                 glob.base,
@@ -77,7 +77,7 @@ mod scanner {
         // _could_ be random)
         paths.sort();
 
-        (paths, scanner.get_candidates())
+        (paths, scanner.candidates())
     }
 
     fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
