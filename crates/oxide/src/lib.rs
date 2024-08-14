@@ -4,10 +4,10 @@ use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::fast_glob;
 use glob::get_fast_patterns;
-use lazy_static::lazy_static;
 use rayon::prelude::*;
 use std::fs;
 use std::path::PathBuf;
+use std::sync;
 use std::time::SystemTime;
 use tracing::event;
 
@@ -17,11 +17,9 @@ pub mod glob;
 pub mod parser;
 pub mod scanner;
 
-lazy_static! {
-    static ref SHOULD_TRACE: bool = {
-        matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind"))
-    };
-}
+static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
+    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind")),
+);
 
 fn init_tracing() {
     if !*SHOULD_TRACE {

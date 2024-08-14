@@ -627,7 +627,6 @@ dependencies = [
  "glob-match",
  "globwalk",
  "ignore",
- "lazy_static",
  "log",
  "rayon",
  "tempfile",

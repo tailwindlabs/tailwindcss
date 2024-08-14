@@ -1,24 +1,29 @@
 use ignore::{DirEntry, WalkBuilder};
-use lazy_static::lazy_static;
-use std::path::Path;
+use std::{path::Path, sync};
 
-lazy_static! {
-    static ref BINARY_EXTENSIONS: Vec<&'static str> =
-        include_str!("fixtures/binary-extensions.txt")
-            .trim()
-            .lines()
-            .collect::<Vec<_>>();
-    static ref IGNORED_EXTENSIONS: Vec<&'static str> =
-        include_str!("fixtures/ignored-extensions.txt")
-            .trim()
-            .lines()
-            .collect::<Vec<_>>();
-    static ref IGNORED_FILES: Vec<&'static str> = include_str!("fixtures/ignored-files.txt")
+static BINARY_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
+    include_str!("fixtures/binary-extensions.txt")
         .trim()
         .lines()
-        .collect::<Vec<_>>();
-    static ref IGNORED_CONTENT_DIRS: Vec<&'static str> = vec![".git"];
-}
+        .collect()
+});
+
+static IGNORED_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
+    include_str!("fixtures/ignored-extensions.txt")
+        .trim()
+        .lines()
+        .collect()
+});
+
+static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
+    include_str!("fixtures/ignored-files.txt")
+        .trim()
+        .lines()
+        .collect()
+});
+
+static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
+    sync::LazyLock::new(|| vec![".git"]);
 
 #[tracing::instrument(skip(root))]
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
