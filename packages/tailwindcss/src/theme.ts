@@ -270,6 +270,7 @@ export type ThemeKey =
   | '--translate'
   | '--width'
   | '--z-index'
+  | `--default-${string}`
 
 export type ColorThemeKey =
   | '--color'

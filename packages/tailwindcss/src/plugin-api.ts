@@ -420,6 +420,10 @@ function createCompatabilityConfig(theme: Theme): UserConfig {
       transitionTimingFunction: {
         DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
       },
+      fontFamily: {
+        DEFAULT: theme.get(['--default-font-family']) ?? null,
+        mono: theme.get(['--default-mono-font-family']) ?? null,
+      },
 
       zIndex: {
         [BARE_VALUE]: (value: string) => {
