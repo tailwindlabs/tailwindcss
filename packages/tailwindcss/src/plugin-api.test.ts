@@ -255,4 +255,44 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('wip', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                duration: (value) => ({ 'animation-duration': value }),
+              },
+              {
+                values: theme('animationDuration'),
+              },
+            )
+          },
+          {
+            theme: {
+              extend: {
+                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                  ...theme('transitionDuration'),
+                }),
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(compiler.build(['duration-316'])).toMatchInlineSnapshot(`
+      ".duration-316 {
+        animation-duration: 316ms;
+      }
+      "
+    `)
+  })
 })

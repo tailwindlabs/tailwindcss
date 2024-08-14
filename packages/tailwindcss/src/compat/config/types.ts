@@ -1,8 +1,8 @@
-import type { PluginAPI } from '../api'
-import type { CorePluginName } from '../generated/core-utils'
-import type { PluginUtils } from './utils'
+import type { PluginUtils } from './resolve-config'
 
 export type ImportableFile = string | [path: string, options: Record<string, any>]
+
+type PluginAPI = {}
 
 type FilePath = string
 type RawFile = { raw: string; extension?: string }
@@ -55,7 +55,6 @@ export interface UserConfig {
   presets?: Preset[]
   plugins?: Plugin[]
   theme?: ThemeConfig
-  corePlugins?: Partial<Record<CorePluginName, boolean>> | CorePluginName[] | boolean
 }
 
 export type ThemeValue = ResolvableTo<Record<string, unknown>> | null | undefined
@@ -74,5 +73,4 @@ export interface ResolvedConfig {
   darkMode: DarkModeConfig
   plugins: RawPlugin[]
   theme: Record<string, Record<string, unknown>>
-  corePlugins: Record<CorePluginName, boolean>
 }

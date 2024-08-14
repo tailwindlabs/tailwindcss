@@ -3,10 +3,12 @@ import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
 import { resolveConfig } from './compat/config/resolve-config'
 import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
+import type { Theme } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
+export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
 export type PluginWithConfig = { handler: PluginFn; config?: UserConfig }
 export type PluginWithOptions<T> = {
@@ -25,9 +27,7 @@ export type PluginAPI = {
     options?: Partial<{
       type: string | string[]
       supportsNegativeValues: boolean
-      values: Record<string, string> & {
-        [BARE_VALUE]?: (value: string) => string | null | undefined
-      }
+      values: Record<string, string>
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
@@ -136,7 +136,7 @@ export function buildPluginApi(
           let value: string | null = null
 
           {
-            let values = options?.values ?? {}
+            let values: Record<string, string> = options?.values ?? {}
 
             if (isColor) {
               // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
@@ -156,11 +156,17 @@ export function buildPluginApi(
             } else if (values[candidate.value.value]) {
               value = values[candidate.value.value]
             } else if (values[BARE_VALUE]) {
-              value = values[BARE_VALUE](candidate.value.value) ?? null
+              // We've snuk the bare value in here as a function even though values are
+              // typically only ever strings. This is a backwards compatibility hack.
+              let handleBareValue = values[BARE_VALUE] as unknown as (
+                value: string,
+              ) => string | null
+
+              value = handleBareValue(candidate.value.value) ?? null
             }
           }
 
-          if (!value) return
+          if (value === null) return
 
           // Resolve the modifier value
           let modifier: string | null
@@ -182,12 +188,12 @@ export function buildPluginApi(
           }
 
           // A modifier was provided but is invalid
-          if (candidate.modifier && !modifier) {
+          if (candidate.modifier && modifier !== null) {
             // For arbitrary values, return `null` to avoid falling through to the next utility
             return candidate.value?.kind === 'arbitrary' ? null : undefined
           }
 
-          if (isColor && modifier) {
+          if (isColor && modifier !== null) {
             value = withAlpha(value, modifier)
           }
 
@@ -224,7 +230,10 @@ export function buildPluginApi(
   }
 }
 
-const BARE_VALUE = Symbol('BARE_VALUE')
+// We can't use a symbol here because a lot of code in the ecosystem assumes an object with string / number keys
+// for example using Object.entries() + Object.fromEntries() to modify an object which removes symbol keys
+// We use `Math.random()` to ensure that users are unable to rely on the name of thiskey
+const BARE_VALUE = `__BARE_VALUE__${Math.random().toString(36).slice(2)}`
 
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
   let pluginObjects = []
@@ -249,7 +258,7 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
 
   // Now merge all the configs and make all that crap work
   let resolvedConfig = resolveConfig([
-    compatabilityConfig,
+    createCompatabilityConfig(designSystem.theme),
     ...pluginObjects.map(({ config }) => config ?? {}),
   ])
 
@@ -261,14 +270,17 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   }
 }
 
-export const compatabilityConfig = {
-  theme: {
-    transitionDuration: {
-      [BARE_VALUE]: (value: string) => {
-        if (!Number.isNaN(Number(value))) {
-          return `${value}ms`
-        }
+export function createCompatabilityConfig(theme: Theme) {
+  return {
+    theme: {
+      transitionDuration: {
+        DEFAULT: theme.get(['--default-transition-duration']) ?? null,
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}ms`
+          }
+        },
       },
     },
-  },
+  }
 }
