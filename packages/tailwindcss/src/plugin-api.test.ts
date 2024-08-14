@@ -256,7 +256,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('wip', async ({ expect }) => {
+  test('wip about the DEFAULT key', async ({ expect }) => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -268,19 +268,19 @@ describe('theme', async () => {
           function ({ matchUtilities, theme }) {
             matchUtilities(
               {
-                duration: (value) => ({ 'animation-duration': value }),
+                'animate-duration': (value) => ({ 'animation-delay': value }),
               },
               {
-                values: theme('animationDuration'),
+                values: theme('transitionDuration'),
               },
             )
           },
           {
             theme: {
               extend: {
-                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
-                  ...theme('transitionDuration'),
-                }),
+                transitionDuration: {
+                  DEFAULT: '1500ms',
+                },
               },
             },
           },
@@ -288,11 +288,57 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['duration-316'])).toMatchInlineSnapshot(`
-      ".duration-316 {
-        animation-duration: 316ms;
+    expect(compiler.build(['animate-duration'])).toMatchInlineSnapshot(`
+      ".animate-delay {
+        animation-delay: 1500ms;
       }
       "
     `)
+  })
+
+  // 1. Access "new" theme keys from CSS using the old theme key notation
+  //   e.g. read `--animation-*` using theme('animation')
+  //   e.g. read `--animation-foo` using theme('animation.foo')
+
+  test('plugins can read CSS theme keys using the old theme key notation', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme reference {
+        --animation: pulse 1s linear infinite;
+        --animation-spin: spin 1s linear infinite;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(function ({ matchUtilities, theme }) {
+          matchUtilities(
+            {
+              animation: (value) => ({ '--animation': value }),
+            },
+            {
+              values: theme('animation'),
+            },
+          )
+
+          matchUtilities(
+            {
+              animation2: (value) => ({ '--animation': value }),
+            },
+            {
+              values: {
+                DEFAULT: theme('animation.DEFAULT'),
+                twist: theme('animation.spin'),
+              },
+            },
+          )
+        })
+      },
+    })
+
+    expect(
+      compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']),
+    ).toMatchInlineSnapshot(`""`)
   })
 })
