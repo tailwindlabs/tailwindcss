@@ -302,12 +302,14 @@ export function test(
       }
 
       try {
-        // Move a potential node_modules folder from the nodeModulesCacheDir to
-        // the root dir, to quickly restore in the next text run
-        let nodeModulesDir = path.join(nodeModulesCacheDir!, 'node_modules')
-        if (await dirExists(nodeModulesDir)) {
-          await fs.rename(nodeModulesDir, path.join(root, 'node_modules'))
-        }
+        try {
+          // Move a potential node_modules folder from the nodeModulesCacheDir to
+          // the root dir, to quickly restore in the next text run
+          let nodeModulesDir = path.join(nodeModulesCacheDir!, 'node_modules')
+          if (await dirExists(nodeModulesDir)) {
+            await fs.rename(nodeModulesDir, path.join(root, 'node_modules'))
+          }
+        } catch {}
 
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
@@ -327,12 +329,14 @@ export function test(
         await Promise.all(disposables.map((dispose) => dispose()))
 
         if (!debug) {
-          // Move a potential node_modules folder to the nodeModulesCacheDir to
-          // quickly restore in the next text run
-          let nodeModulesDir = path.join(root, 'node_modules')
-          if (await dirExists(nodeModulesDir)) {
-            await fs.rename(nodeModulesDir, path.join(nodeModulesCacheDir!, 'node_modules'))
-          }
+          try {
+            // Move a potential node_modules folder to the nodeModulesCacheDir to
+            // quickly restore in the next text run
+            let nodeModulesDir = path.join(root, 'node_modules')
+            if (await dirExists(nodeModulesDir)) {
+              await fs.rename(nodeModulesDir, path.join(nodeModulesCacheDir!, 'node_modules'))
+            }
+          } catch {}
 
           await gracefullyRemove(root)
         }
