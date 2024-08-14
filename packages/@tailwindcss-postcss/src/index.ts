@@ -138,7 +138,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           })
 
           // Add all found files as direct dependencies
-          for (let file of scanner.files()) {
+          for (let file of scanner.files) {
             result.messages.push({
               type: 'dependency',
               plugin: '@tailwindcss/postcss',
@@ -150,7 +150,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, pattern } of scanner.globs()) {
+          for (let { base, pattern } of scanner.globs) {
             result.messages.push({
               type: 'dir-dependency',
               plugin: '@tailwindcss/postcss',
@@ -162,9 +162,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           if (rebuildStrategy === 'full') {
             context.compiler = await createCompiler()
-            css = context.compiler.build(hasTailwind ? scanner.candidates() : [])
+            css = context.compiler.build(hasTailwind ? scanner.candidates : [])
           } else if (rebuildStrategy === 'incremental') {
-            css = context.compiler.build!(scanner.candidates())
+            css = context.compiler.build!(scanner.candidates)
           }
 
           // Replace CSS

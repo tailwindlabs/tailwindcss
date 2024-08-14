@@ -103,17 +103,17 @@ impl Scanner {
       .scan_content(input.into_iter().map(Into::into).collect())
   }
 
-  #[napi]
+  #[napi(getter)]
   pub fn candidates(&mut self) -> Vec<String> {
     self.scanner.candidates()
   }
 
-  #[napi]
+  #[napi(getter)]
   pub fn files(&self) -> Vec<String> {
     self.scanner.files()
   }
 
-  #[napi]
+  #[napi(getter)]
   pub fn globs(&self) -> Vec<GlobEntry> {
     self.scanner.globs().into_iter().map(Into::into).collect()
   }

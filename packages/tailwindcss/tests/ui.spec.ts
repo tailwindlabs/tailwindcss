@@ -320,7 +320,7 @@ async function render(page: Page, content: string) {
   scanner.scanFiles([{ content, extension: 'html' }])
 
   await page.addStyleTag({
-    content: optimizeCss(build(scanner.getCandidates())),
+    content: optimizeCss(build(scanner.candidates)),
   })
 
   await page.locator('#mouse-park').hover()

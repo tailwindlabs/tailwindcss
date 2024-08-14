@@ -12,5 +12,5 @@ bench('compile', async () => {
   let { build } = await compile(css`
     @tailwind utilities;
   `)
-  build(scanner.getCandidates())
+  build(scanner.candidates)
 })

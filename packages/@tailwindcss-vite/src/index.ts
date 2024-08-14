@@ -85,7 +85,7 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
-    let candidatesFromPreviousScanner = scanner?.candidates() ?? []
+    let candidatesFromPreviousScanner = scanner?.candidates ?? []
 
     scanner = new Scanner({
       sources: globs.map((pattern) => ({
@@ -99,12 +99,12 @@ export default function tailwindcss(): Plugin[] {
     }
 
     // Watch individual files
-    for (let file of scanner.files()) {
+    for (let file of scanner.files) {
       addWatchFile(file)
     }
 
     // Watch globs
-    for (let glob of scanner.globs()) {
+    for (let glob of scanner.globs) {
       if (glob.pattern[0] === '!') continue
 
       let relative = path.relative(config!.root, glob.base)
@@ -118,7 +118,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(candidatesFromPreviousScanner.concat(scanner.candidates()))
+    return build(candidatesFromPreviousScanner.concat(scanner.candidates))
   }
 
   async function generateOptimizedCss(
