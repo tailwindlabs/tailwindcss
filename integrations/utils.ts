@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { afterAll, beforeAll, test as defaultTest, expect } from 'vitest'
+import { test as defaultTest, expect } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -56,16 +56,6 @@ const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
 // apparently causes the vite builds to not work.
 const TMP_ROOT = process.env.CI && IS_WINDOWS ? homedir() : tmpdir()
-
-// Set up a cache directory that we can move `node_modules` to in between test
-// runs so that subsequent `pnpm install`s are faster.
-let nodeModulesCacheDir: string | undefined
-beforeAll(async () => {
-  nodeModulesCacheDir = await fs.mkdtemp(
-    path.join(TMP_ROOT, 'tailwind-integrations-node_modules-cache-'),
-  )
-})
-afterAll(() => gracefullyRemove(nodeModulesCacheDir!))
 
 export function test(
   name: string,
@@ -300,9 +290,6 @@ export function test(
       }
 
       try {
-        // Create a symlink from the node_modules dir to the nodeModulesCacheDir
-        await fs.symlink(nodeModulesCacheDir!, path.join(root, 'node_modules'))
-
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
         // pnpm install on the workspace instead (expect if the root dir defines
