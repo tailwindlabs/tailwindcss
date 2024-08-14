@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, fetchStylesFromIndex, js, json, test } from '../utils'
+import { candidate, css, fetchStylesFromIndex, js, json, retryAssertion, test } from '../utils'
 
 test(
   'production build',
@@ -127,19 +127,13 @@ test(
       },
     },
     async ({ fs, spawn, getFreePort }) => {
-      const start = Date.now()
-      console.log('start test for', bundler)
       let port = await getFreePort()
-      let process = await spawn(
-        `pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`,
-      )
+      await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
 
-      await process.onStdout((message) => message.includes('Ready in'))
-
-      console.log('so far:', Date.now() - start)
-      let css = await fetchStylesFromIndex(port)
-      expect(css).toContain(candidate`underline`)
-      console.log('so far:', Date.now() - start)
+      await retryAssertion(async () => {
+        let css = await fetchStylesFromIndex(port)
+        expect(css).toContain(candidate`underline`)
+      })
 
       await fs.write(
         'app/page.js',
@@ -149,16 +143,12 @@ test(
           }
         `,
       )
-      console.log('so far:', Date.now() - start)
-      await process.onStdout((message) => message.includes('Compiled in'))
 
-      console.log('so far:', Date.now() - start)
-      css = await fetchStylesFromIndex(port)
-      console.log('so far:', Date.now() - start)
-      expect(css).toContain(candidate`underline`)
-      expect(css).toContain(candidate`text-red-500`)
-      console.log('end test for', bundler)
-      console.log('took:', Date.now() - start)
+      await retryAssertion(async () => {
+        let css = await fetchStylesFromIndex(port)
+        expect(css).toContain(candidate`underline`)
+        expect(css).toContain(candidate`text-red-500`)
+      })
     },
   )
 })

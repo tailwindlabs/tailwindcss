@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest, expect } from 'vitest'
+import { afterAll, beforeAll, test as defaultTest, expect } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -53,6 +53,20 @@ const IS_WINDOWS = platform() === 'win32'
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
+// On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
+// apparently causes the vite builds to not work.
+const TMP_ROOT = process.env.CI && IS_WINDOWS ? homedir() : tmpdir()
+
+// Set up a cache directory that we can move `node_modules` to in between test
+// runs so that subsequent `pnpm install`s are faster.
+let nodeModulesCacheDir: string | undefined
+beforeAll(async () => {
+  nodeModulesCacheDir = await fs.mkdtemp(
+    path.join(TMP_ROOT, 'tailwind-integrations-node_modules-cache-'),
+  )
+})
+afterAll(() => gracefullyRemove(nodeModulesCacheDir!))
+
 export function test(
   name: string,
   config: TestConfig,
@@ -64,15 +78,8 @@ export function test(
     { timeout: TEST_TIMEOUT },
     async (options) => {
       const startSetup = Date.now()
-      console.log('start setup for', options.task.file.name, options.task.name)
 
-      let rootDir = debug
-        ? path.join(REPO_ROOT, '.debug')
-        : // On Windows CI, tmpdir returns a path containing a weird RUNNER~1
-          // folder  that apparently causes the vite builds to not work.
-          process.env.CI && IS_WINDOWS
-          ? homedir()
-          : tmpdir()
+      let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
 
       let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
@@ -186,7 +193,7 @@ export function test(
           })
 
           options.onTestFailed(() => {
-            // In debug mode, messages are logged to the console immediatly
+            // In debug mode, messages are logged to the console immediately
             if (debug) return
 
             for (let [type, message] of combined) {
@@ -280,7 +287,7 @@ export function test(
             )
           },
           async expectFileToContain(filePath, contents) {
-            return retryUntil(async () => {
+            return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of contents) {
                 expect(fileContent).toContain(content)
@@ -294,43 +301,45 @@ export function test(
         await context.fs.write(filename, content)
       }
 
-      console.log('setup so far:', Date.now() - startSetup)
-
       try {
+        // Move a potential node_modules folder from the nodeModulesCacheDir to
+        // the root dir, to quickly restore in the next text run
+        let nodeModulesDir = path.join(nodeModulesCacheDir!, 'node_modules')
+        if (await dirExists(nodeModulesDir)) {
+          await fs.rename(nodeModulesDir, path.join(root, 'node_modules'))
+        }
+
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
         // pnpm install on the workspace instead (expect if the root dir defines
         // a separate workspace). We work around this by using the
         // `--ignore-workspace` flag.
         let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-        context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
       } catch (error: any) {
         console.error(error)
         throw error
       }
 
-      console.log('setup so far:', Date.now() - startSetup)
-
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
-        const now = Date.now()
-        console.log('start disposal for test', options.task.file.name, options.task.name)
         await Promise.all(disposables.map((dispose) => dispose()))
 
-        // Skip removing the directory in CI because it can stall on Windows
-        if (!process.env.CI && !debug) {
-          await fs.rm(root, { recursive: true, force: true })
-        }
+        if (!debug) {
+          // Move a potential node_modules folder to the nodeModulesCacheDir to
+          // quickly restore in the next text run
+          let nodeModulesDir = path.join(root, 'node_modules')
+          if (await dirExists(nodeModulesDir)) {
+            await fs.rename(nodeModulesDir, path.join(nodeModulesCacheDir!, 'node_modules'))
+          }
 
-        console.log('end disposal for test', options.task.file.name, options.task.name)
-        console.log('disposal took', Date.now() - now, 'ms')
+          await gracefullyRemove(root)
+        }
       }
 
       options.onTestFinished(dispose)
 
-      console.log('end setup for test', options.task.file.name, options.task.name)
-      console.log('setup took', Date.now() - startSetup, 'ms')
       return await testCallback(context)
     },
   )
@@ -498,7 +507,7 @@ export function escape(value: string) {
   return result
 }
 
-async function retryUntil<T>(
+export async function retryAssertion<T>(
   fn: () => Promise<T>,
   { timeout = ASSERTION_TIMEOUT, delay = 5 }: { timeout?: number; delay?: number } = {},
 ) {
@@ -545,4 +554,19 @@ export async function fetchStylesFromIndex(port: number): Promise<string> {
   return stylesheets.reduce((acc, css) => {
     return acc + '\n' + css
   })
+}
+
+async function gracefullyRemove(dir: string) {
+  // Skip removing the directory in CI because it can stall on Windows
+  if (!process.env.CI) {
+    await fs.rm(dir, { recursive: true, force: true })
+  }
+}
+
+async function dirExists(dir: string): Promise<boolean> {
+  try {
+    return await fs.stat(dir).then((stat) => stat.isDirectory())
+  } catch {
+    return false
+  }
 }
