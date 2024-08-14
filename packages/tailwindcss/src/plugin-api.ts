@@ -284,25 +284,6 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   }
 }
 
-export function createCompatabilityConfig(theme: Theme) {
-  return {
-    theme: {
-      transitionDuration: {
-        DEFAULT: theme.get(['--default-transition-duration']) ?? null,
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}ms`
-          }
-        },
-      },
-
-      transitionTimingFunction: {
-        DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
-      },
-    },
-  }
-}
-
 function readFromCss(theme: Theme, path: string) {
   type ThemeValue =
     // A normal string value
@@ -431,4 +412,404 @@ function set(obj: any, path: string[], value: any) {
 
 let themeUpgradeMap: Record<string, string[]> = {
   colors: ['color'],
+}
+
+function createCompatabilityConfig(theme: Theme): UserConfig {
+  return {
+    theme: {
+      transitionTimingFunction: {
+        DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
+      },
+
+      zIndex: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      order: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      gridRowStart: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      gridRowEnd: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      lineClamp: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      aspectRatio: {
+        [BARE_VALUE]: (value: string) => {
+          throw new Error('TODO')
+          // TODO:
+          // if (fraction === null) return
+          // let [lhs, rhs] = segment(fraction, '/')
+          // if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+          // return fraction
+        },
+      },
+
+      flexShrink: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      flexGrow: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      scale: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      rotate: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}deg`
+          }
+        },
+      },
+
+      skew: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}deg`
+          }
+        },
+      },
+
+      columns: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return value
+          }
+        },
+      },
+
+      gridTemplateColumns: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `repeat(${value}, minmax(0, 1fr))`
+          }
+        },
+      },
+
+      gridTemplateRows: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `repeat(${value}, minmax(0, 1fr))`
+          }
+        },
+      },
+
+      divideWidth: ({ theme }) => ({
+        ...theme('borderWidth'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      }),
+
+      brightness: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropBrightness: ({ theme }) => ({
+        ...theme('brightness'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      contrast: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropContrast: ({ theme }) => ({
+        ...theme('contrast'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      grayscale: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropGrayscale: ({ theme }) => ({
+        ...theme('grayscale'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      hueRotate: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}deg`
+          }
+        },
+      },
+
+      backdropHueRotate: ({ theme }) => ({
+        ...theme('hueRotate'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}deg`
+          }
+        },
+      }),
+
+      invert: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropInvert: ({ theme }) => ({
+        ...theme('invert'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      saturate: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropSaturate: ({ theme }) => ({
+        ...theme('saturate'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      sepia: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      backdropSepia: ({ theme }) => ({
+        ...theme('sepia'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      backdropOpacity: ({ theme }) => ({
+        ...theme('opacity'),
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      }),
+
+      transitionDuration: {
+        DEFAULT: theme.get(['--default-transition-duration']) ?? null,
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}ms`
+          }
+        },
+      },
+
+      transitionDelay: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}ms`
+          }
+        },
+      },
+
+      outlineWidth: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      outlineOffset: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      ringWidth: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      ringOffsetWidth: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      opacity: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      textUnderlineOffset: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      border: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      gradientColorStopPositions: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}%`
+          }
+        },
+      },
+
+      strokeWidth: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      textDecorationThickness: {
+        [BARE_VALUE]: (value: string) => {
+          if (!Number.isNaN(Number(value))) {
+            return `${value}px`
+          }
+        },
+      },
+
+      accentColor: ({ theme }) => theme('colors'),
+      backdropBlur: ({ theme }) => theme('blur'),
+      backgroundColor: ({ theme }) => theme('colors'),
+      backgroundOpacity: ({ theme }) => theme('opacity'),
+      borderColor: ({ theme }) => theme('colors'),
+      borderOpacity: ({ theme }) => theme('opacity'),
+      borderSpacing: ({ theme }) => theme('spacing'),
+      boxShadowColor: ({ theme }) => theme('colors'),
+      caretColor: ({ theme }) => theme('colors'),
+      divideColor: ({ theme }) => theme('borderColor'),
+      divideOpacity: ({ theme }) => theme('borderOpacity'),
+      fill: ({ theme }) => theme('colors'),
+      flexBasis: ({ theme }) => theme('spacing'),
+      gap: ({ theme }) => theme('spacing'),
+      gradientColorStops: ({ theme }) => theme('colors'),
+      height: ({ theme }) => theme('spacing'),
+      inset: ({ theme }) => theme('spacing'),
+      margin: ({ theme }) => theme('spacing'),
+      maxHeight: ({ theme }) => theme('spacing'),
+      maxWidth: ({ theme }) => theme('spacing'),
+      minHeight: ({ theme }) => theme('spacing'),
+      minWidth: ({ theme }) => theme('spacing'),
+      outlineColor: ({ theme }) => theme('colors'),
+      padding: ({ theme }) => theme('spacing'),
+      placeholderColor: ({ theme }) => theme('colors'),
+      placeholderOpacity: ({ theme }) => theme('opacity'),
+      ringColor: ({ theme }) => theme('colors'),
+      ringOffsetColor: ({ theme }) => theme('colors'),
+      ringOpacity: ({ theme }) => theme('opacity'),
+      scrollMargin: ({ theme }) => theme('spacing'),
+      scrollPadding: ({ theme }) => theme('spacing'),
+      space: ({ theme }) => theme('spacing'),
+      stroke: ({ theme }) => theme('colors'),
+      textColor: ({ theme }) => theme('colors'),
+      textDecorationColor: ({ theme }) => theme('colors'),
+      textIndent: ({ theme }) => theme('spacing'),
+      textOpacity: ({ theme }) => theme('opacity'),
+      translate: ({ theme }) => theme('spacing'),
+      size: ({ theme }) => theme('spacing'),
+      width: ({ theme }) => theme('spacing'),
+    },
+  }
 }
