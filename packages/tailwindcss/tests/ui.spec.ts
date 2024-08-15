@@ -291,7 +291,6 @@ test('content-none persists when conditionally styling a pseudo-element', async 
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
-const scanner = new Scanner({})
 
 async function render(page: Page, content: string) {
   let { build } = await compile(css`
@@ -317,6 +316,7 @@ async function render(page: Page, content: string) {
 
   await page.setContent(content)
 
+  let scanner = new Scanner({})
   let candidates = scanner.scanFiles([{ content, extension: 'html' }])
 
   await page.addStyleTag({
