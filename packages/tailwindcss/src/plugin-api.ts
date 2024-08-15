@@ -1,5 +1,6 @@
 import { substituteAtApply } from './apply'
 import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
+import type { NamedUtilityValue } from './candidate'
 import { deepMerge } from './compat/config/deep-merge'
 import { resolveConfig } from './compat/config/resolve-config'
 import type { UserConfig } from './compat/config/types'
@@ -29,7 +30,10 @@ export type PluginAPI = {
     options?: Partial<{
       type: string | string[]
       supportsNegativeValues: boolean
-      values: Record<string, string>
+      values: { __BARE_VALUE__?: (value: NamedUtilityValue) => string | undefined } & Record<
+        string,
+        string
+      >
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
@@ -138,17 +142,19 @@ export function buildPluginApi(
           let value: string | null = null
 
           {
-            let values: Record<string, string> = options?.values ?? {}
+            let values = options?.values ?? {}
 
             if (isColor) {
               // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
               // for backwards compatibility but still allow them to be overridden
-              values = {
-                inherit: 'inherit',
-                transparent: 'transparent',
-                current: 'currentColor',
-                ...values,
-              }
+              values = Object.assign(
+                {
+                  inherit: 'inherit',
+                  transparent: 'transparent',
+                  current: 'currentColor',
+                },
+                values,
+              )
             }
 
             if (!candidate.value) {
@@ -157,14 +163,8 @@ export function buildPluginApi(
               value = candidate.value.value
             } else if (values[candidate.value.value]) {
               value = values[candidate.value.value]
-            } else if (values[BARE_VALUE]) {
-              // We've snuk the bare value in here as a function even though values are
-              // typically only ever strings. This is a backwards compatibility hack.
-              let handleBareValue = values[BARE_VALUE] as unknown as (
-                value: string,
-              ) => string | null
-
-              value = handleBareValue(candidate.value.value) ?? null
+            } else if (values.__BARE_VALUE__) {
+              value = values.__BARE_VALUE__(candidate.value) ?? null
             }
           }
 
@@ -190,7 +190,7 @@ export function buildPluginApi(
           }
 
           // A modifier was provided but is invalid
-          if (candidate.modifier && modifier !== null) {
+          if (candidate.modifier && modifier === null) {
             // For arbitrary values, return `null` to avoid falling through to the next utility
             return candidate.value?.kind === 'arbitrary' ? null : undefined
           }
@@ -243,11 +243,6 @@ export function buildPluginApi(
     },
   }
 }
-
-// Ideally this would be a Symbol but some of the ecosystem assumes object with
-// string / number keys for example by using `Object.entries()` which means that
-// the function that handles the bare value would be lost
-const BARE_VALUE = `__BARE_VALUE__`
 
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
   let pluginObjects = []
@@ -414,406 +409,176 @@ let themeUpgradeMap: Record<string, string[]> = {
   colors: ['color'],
 }
 
+function bareValues(fn: (value: NamedUtilityValue) => string | undefined) {
+  return {
+    // Ideally this would be a Symbol but some of the ecosystem assumes object with
+    // string / number keys for example by using `Object.entries()` which means that
+    // the function that handles the bare value would be lost
+    __BARE_VALUE__: fn,
+  }
+}
+
+let bareIntegers = bareValues((value) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return value.value
+  }
+})
+
+let barePercentages = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}%`
+  }
+})
+
+let barePixels = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}px`
+  }
+})
+
+let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}ms`
+  }
+})
+
+let bareDegrees = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}deg`
+  }
+})
+
 function createCompatabilityConfig(theme: Theme): UserConfig {
   return {
     theme: {
-      transitionTimingFunction: {
-        DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
-      },
-      fontFamily: {
-        DEFAULT: theme.get(['--default-font-family']) ?? null,
-        mono: theme.get(['--default-mono-font-family']) ?? null,
-      },
-
-      zIndex: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      order: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      gridRowStart: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      gridRowEnd: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      lineClamp: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      aspectRatio: {
-        [BARE_VALUE]: (value: string) => {
-          throw new Error('TODO')
-          // TODO:
-          // if (fraction === null) return
-          // let [lhs, rhs] = segment(fraction, '/')
-          // if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
-          // return fraction
-        },
-      },
-
-      flexShrink: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      flexGrow: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      scale: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
-      rotate: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}deg`
-          }
-        },
-      },
-
-      skew: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}deg`
-          }
-        },
-      },
-
-      columns: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return value
-          }
-        },
-      },
-
-      gridTemplateColumns: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `repeat(${value}, minmax(0, 1fr))`
-          }
-        },
-      },
-
-      gridTemplateRows: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `repeat(${value}, minmax(0, 1fr))`
-          }
-        },
-      },
-
-      divideWidth: ({ theme }) => ({
-        ...theme('borderWidth'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
+      accentColor: ({ theme }) => theme('colors'),
+      aspectRatio: bareValues((value) => {
+        if (value.fraction === null) return
+        let [lhs, rhs] = segment(value.fraction, '/')
+        if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+        return value.fraction
       }),
-
-      brightness: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
+      backdropBlur: ({ theme }) => theme('blur'),
       backdropBrightness: ({ theme }) => ({
         ...theme('brightness'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
+        ...barePercentages,
       }),
-
-      contrast: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
       backdropContrast: ({ theme }) => ({
         ...theme('contrast'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
+        ...barePercentages,
       }),
-
-      grayscale: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
       backdropGrayscale: ({ theme }) => ({
         ...theme('grayscale'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
+        ...barePercentages,
       }),
-
-      hueRotate: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}deg`
-          }
-        },
-      },
-
       backdropHueRotate: ({ theme }) => ({
         ...theme('hueRotate'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}deg`
-          }
-        },
+        ...bareDegrees,
       }),
-
-      invert: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
       backdropInvert: ({ theme }) => ({
         ...theme('invert'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
+        ...barePercentages,
       }),
-
-      saturate: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
-      backdropSaturate: ({ theme }) => ({
-        ...theme('saturate'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      }),
-
-      sepia: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
-      backdropSepia: ({ theme }) => ({
-        ...theme('sepia'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      }),
-
       backdropOpacity: ({ theme }) => ({
         ...theme('opacity'),
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
+        ...barePercentages,
       }),
-
-      transitionDuration: {
-        DEFAULT: theme.get(['--default-transition-duration']) ?? null,
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}ms`
-          }
-        },
-      },
-
-      transitionDelay: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}ms`
-          }
-        },
-      },
-
-      outlineWidth: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      outlineOffset: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      ringWidth: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      ringOffsetWidth: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      opacity: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
-      textUnderlineOffset: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      border: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      gradientColorStopPositions: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}%`
-          }
-        },
-      },
-
-      strokeWidth: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      textDecorationThickness: {
-        [BARE_VALUE]: (value: string) => {
-          if (!Number.isNaN(Number(value))) {
-            return `${value}px`
-          }
-        },
-      },
-
-      accentColor: ({ theme }) => theme('colors'),
-      backdropBlur: ({ theme }) => theme('blur'),
+      backdropSaturate: ({ theme }) => ({
+        ...theme('saturate'),
+        ...barePercentages,
+      }),
+      backdropSepia: ({ theme }) => ({
+        ...theme('sepia'),
+        ...barePercentages,
+      }),
       backgroundColor: ({ theme }) => theme('colors'),
       backgroundOpacity: ({ theme }) => theme('opacity'),
+      border: barePixels,
       borderColor: ({ theme }) => theme('colors'),
       borderOpacity: ({ theme }) => theme('opacity'),
       borderSpacing: ({ theme }) => theme('spacing'),
       boxShadowColor: ({ theme }) => theme('colors'),
+      brightness: barePercentages,
       caretColor: ({ theme }) => theme('colors'),
+      columns: bareIntegers,
+      contrast: barePercentages,
       divideColor: ({ theme }) => theme('borderColor'),
       divideOpacity: ({ theme }) => theme('borderOpacity'),
+      divideWidth: ({ theme }) => ({
+        ...theme('borderWidth'),
+        ...barePixels,
+      }),
       fill: ({ theme }) => theme('colors'),
       flexBasis: ({ theme }) => theme('spacing'),
+      flexGrow: bareIntegers,
+      flexShrink: bareIntegers,
       gap: ({ theme }) => theme('spacing'),
+      gradientColorStopPositions: barePercentages,
       gradientColorStops: ({ theme }) => theme('colors'),
+      grayscale: barePercentages,
+      gridRowEnd: bareIntegers,
+      gridRowStart: bareIntegers,
+      gridTemplateColumns: bareValues((value) => {
+        if (!Number.isNaN(Number(value.value))) {
+          return `repeat(${value.value}, minmax(0, 1fr))`
+        }
+      }),
+      gridTemplateRows: bareValues((value) => {
+        if (!Number.isNaN(Number(value.value))) {
+          return `repeat(${value.value}, minmax(0, 1fr))`
+        }
+      }),
       height: ({ theme }) => theme('spacing'),
+      hueRotate: bareDegrees,
       inset: ({ theme }) => theme('spacing'),
+      invert: barePercentages,
+      lineClamp: bareIntegers,
       margin: ({ theme }) => theme('spacing'),
       maxHeight: ({ theme }) => theme('spacing'),
       maxWidth: ({ theme }) => theme('spacing'),
       minHeight: ({ theme }) => theme('spacing'),
       minWidth: ({ theme }) => theme('spacing'),
+      opacity: barePercentages,
+      order: bareIntegers,
       outlineColor: ({ theme }) => theme('colors'),
+      outlineOffset: barePixels,
+      outlineWidth: barePixels,
       padding: ({ theme }) => theme('spacing'),
       placeholderColor: ({ theme }) => theme('colors'),
       placeholderOpacity: ({ theme }) => theme('opacity'),
       ringColor: ({ theme }) => theme('colors'),
       ringOffsetColor: ({ theme }) => theme('colors'),
+      ringOffsetWidth: barePixels,
       ringOpacity: ({ theme }) => theme('opacity'),
+      ringWidth: barePixels,
+      rotate: bareDegrees,
+      saturate: barePercentages,
+      scale: barePercentages,
       scrollMargin: ({ theme }) => theme('spacing'),
       scrollPadding: ({ theme }) => theme('spacing'),
+      sepia: barePercentages,
+      size: ({ theme }) => theme('spacing'),
+      skew: bareDegrees,
       space: ({ theme }) => theme('spacing'),
       stroke: ({ theme }) => theme('colors'),
+      strokeWidth: barePixels,
       textColor: ({ theme }) => theme('colors'),
       textDecorationColor: ({ theme }) => theme('colors'),
+      textDecorationThickness: barePixels,
       textIndent: ({ theme }) => theme('spacing'),
       textOpacity: ({ theme }) => theme('opacity'),
+      textUnderlineOffset: barePixels,
+      transitionDelay: { ...bareMilliseconds },
+      transitionDuration: {
+        DEFAULT: theme.get(['--default-transition-duration']) ?? null,
+        ...bareMilliseconds,
+      },
+      transitionTimingFunction: {
+        DEFAULT: theme.get(['--default-transition-timing-function']) ?? null,
+      },
       translate: ({ theme }) => theme('spacing'),
-      size: ({ theme }) => theme('spacing'),
       width: ({ theme }) => theme('spacing'),
+      zIndex: bareIntegers,
     },
   }
 }

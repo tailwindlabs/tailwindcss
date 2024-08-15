@@ -16092,7 +16092,7 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test('functional utilities with type: color and explicit modifiers', async () => {
+  test('functional utilities with explicit modifiers', async () => {
     async function run(candidates: string[]) {
       let compiled = await compile(
         css`
