@@ -861,7 +861,7 @@ test('peer-[...]', async () => {
       css`
         @tailwind utilities;
       `,
-      ['peer-[@media_foo]:flex', 'peer-[>img]'],
+      ['peer-[@media_foo]:flex', 'peer-[>img]:flex'],
     ),
   ).toEqual('')
 })
@@ -1668,6 +1668,7 @@ test('not', async () => {
         @tailwind utilities;
       `,
       [
+        'not-[>img]:flex',
         'not-[:checked]/foo:flex',
         'not-[@media_print]:flex',
         'not-custom-at-rule:flex',
