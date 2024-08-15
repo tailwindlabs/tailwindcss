@@ -224,27 +224,28 @@ impl Scanner {
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = get_fast_patterns(&self.globs)
-            .iter()
-            .flat_map(|(root, globs)| {
-                globs.iter().filter_map(|glob| {
-                    let root = match dunce::canonicalize(root.clone()) {
-                        Ok(root) => root,
-                        Err(error) => {
-                            event!(
-                                tracing::Level::ERROR,
-                                "Failed to canonicalize base path {:?}",
-                                error
-                            );
-                            return None;
-                        }
-                    };
+            .into_iter()
+            .filter_map(|(root, globs)| {
+                let root = match dunce::canonicalize(root) {
+                    Ok(root) => root,
+                    Err(error) => {
+                        event!(
+                            tracing::Level::ERROR,
+                            "Failed to canonicalize base path {:?}",
+                            error
+                        );
+                        return None;
+                    }
+                };
 
-                    let base = root.display().to_string();
-                    let glob = glob.to_string();
-                    Some(GlobEntry {
-                        base,
-                        pattern: glob,
-                    })
+                Some((root, globs))
+            })
+            .flat_map(|(root, globs)| {
+                let base = root.display().to_string();
+
+                globs.into_iter().map(move |glob| GlobEntry {
+                    base: base.clone(),
+                    pattern: glob,
                 })
             })
             .collect::<Vec<GlobEntry>>();
