@@ -3,12 +3,24 @@ use crate::GlobEntry;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
 use std::path::PathBuf;
+use std::sync;
 use walkdir::WalkDir;
 
 #[derive(Debug, Clone)]
 pub struct AutoContent {
     base: PathBuf,
 }
+
+static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
+  include_str!("fixtures/template-extensions.txt")
+      .trim()
+      .lines()
+      // Drop commented lines
+      .filter(|x| !x.starts_with('#'))
+      // Drop empty lines
+      .filter(|x| !x.is_empty())
+      .collect()
+});
 
 impl AutoContent {
     pub fn new(base: PathBuf) -> Self {
@@ -51,12 +63,9 @@ impl AutoContent {
 
         // A list of known extensions + a list of extensions we found in the project.
         let mut found_extensions = FxHashSet::from_iter(
-            include_str!("fixtures/template-extensions.txt")
-                .trim()
-                .lines()
-                .filter(|x| !x.starts_with('#')) // Drop commented lines
-                .filter(|x| !x.is_empty()) // Drop empty lines
-                .map(|x| x.to_string()),
+            KNOWN_EXTENSIONS
+              .iter()
+              .map(|x| x.to_string())
         );
 
         // All root directories.
