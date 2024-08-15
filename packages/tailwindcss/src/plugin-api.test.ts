@@ -482,4 +482,242 @@ describe('theme', async () => {
       bounce: 'var(--animation-simple-bounce, bounce 1s linear infinite)',
     })
   })
+
+  test('all necessary theme keys support bare values', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let { build } = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(function ({ matchUtilities, theme }) {
+          function utility(name: string, themeKey: string) {
+            matchUtilities(
+              { [name]: (value) => ({ '--value': value }) },
+              { values: theme(themeKey) },
+            )
+          }
+
+          utility('my-aspect', 'aspectRatio')
+          utility('my-backdrop-brightness', 'backdropBrightness')
+          utility('my-backdrop-contrast', 'backdropContrast')
+          utility('my-backdrop-grayscale', 'backdropGrayscale')
+          utility('my-backdrop-hue-rotate', 'backdropHueRotate')
+          utility('my-backdrop-invert', 'backdropInvert')
+          utility('my-backdrop-opacity', 'backdropOpacity')
+          utility('my-backdrop-saturate', 'backdropSaturate')
+          utility('my-backdrop-sepia', 'backdropSepia')
+          utility('my-border', 'border')
+          utility('my-brightness', 'brightness')
+          utility('my-columns', 'columns')
+          utility('my-contrast', 'contrast')
+          utility('my-divide-width', 'divideWidth')
+          utility('my-flex-grow', 'flexGrow')
+          utility('my-flex-shrink', 'flexShrink')
+          utility('my-gradient-color-stop-positions', 'gradientColorStopPositions')
+          utility('my-grayscale', 'grayscale')
+          utility('my-grid-row-end', 'gridRowEnd')
+          utility('my-grid-row-start', 'gridRowStart')
+          utility('my-grid-template-columns', 'gridTemplateColumns')
+          utility('my-grid-template-rows', 'gridTemplateRows')
+          utility('my-hue-rotate', 'hueRotate')
+          utility('my-invert', 'invert')
+          utility('my-line-clamp', 'lineClamp')
+          utility('my-opacity', 'opacity')
+          utility('my-order', 'order')
+          utility('my-outline-offset', 'outlineOffset')
+          utility('my-outline-width', 'outlineWidth')
+          utility('my-ring-offset-width', 'ringOffsetWidth')
+          utility('my-ring-width', 'ringWidth')
+          utility('my-rotate', 'rotate')
+          utility('my-saturate', 'saturate')
+          utility('my-scale', 'scale')
+          utility('my-sepia', 'sepia')
+          utility('my-skew', 'skew')
+          utility('my-stroke-width', 'strokeWidth')
+          utility('my-text-decoration-thickness', 'textDecorationThickness')
+          utility('my-text-underline-offset', 'textUnderlineOffset')
+          utility('my-transition-delay', 'transitionDelay')
+          utility('my-transition-duration', 'transitionDuration')
+          utility('my-z-index', 'zIndex')
+        })
+      },
+    })
+
+    let output = build([
+      'my-aspect-2/5',
+      'my-backdrop-brightness-1',
+      'my-backdrop-contrast-1',
+      'my-backdrop-grayscale-1',
+      'my-backdrop-hue-rotate-1',
+      'my-backdrop-invert-1',
+      'my-backdrop-opacity-1',
+      'my-backdrop-saturate-1',
+      'my-backdrop-sepia-1',
+      'my-border-1',
+      'my-brightness-1',
+      'my-columns-1',
+      'my-contrast-1',
+      'my-divide-width-1',
+      'my-flex-grow-1',
+      'my-flex-shrink-1',
+      'my-gradient-color-stop-positions-1',
+      'my-grayscale-1',
+      'my-grid-row-end-1',
+      'my-grid-row-start-1',
+      'my-grid-template-columns-1',
+      'my-grid-template-rows-1',
+      'my-hue-rotate-1',
+      'my-invert-1',
+      'my-line-clamp-1',
+      'my-opacity-1',
+      'my-order-1',
+      'my-outline-offset-1',
+      'my-outline-width-1',
+      'my-ring-offset-width-1',
+      'my-ring-width-1',
+      'my-rotate-1',
+      'my-saturate-1',
+      'my-scale-1',
+      'my-sepia-1',
+      'my-skew-1',
+      'my-stroke-width-1',
+      'my-text-decoration-thickness-1',
+      'my-text-underline-offset-1',
+      'my-transition-delay-1',
+      'my-transition-duration-1',
+      'my-z-index-1',
+    ])
+
+    expect(output).toMatchInlineSnapshot(`
+      ".my-aspect-2\\/5 {
+        --value: 2/5;
+      }
+      .my-backdrop-brightness-1 {
+        --value: 1%;
+      }
+      .my-backdrop-contrast-1 {
+        --value: 1%;
+      }
+      .my-backdrop-grayscale-1 {
+        --value: 1%;
+      }
+      .my-backdrop-hue-rotate-1 {
+        --value: 1deg;
+      }
+      .my-backdrop-invert-1 {
+        --value: 1%;
+      }
+      .my-backdrop-opacity-1 {
+        --value: 1%;
+      }
+      .my-backdrop-saturate-1 {
+        --value: 1%;
+      }
+      .my-backdrop-sepia-1 {
+        --value: 1%;
+      }
+      .my-border-1 {
+        --value: 1px;
+      }
+      .my-brightness-1 {
+        --value: 1%;
+      }
+      .my-columns-1 {
+        --value: 1;
+      }
+      .my-contrast-1 {
+        --value: 1%;
+      }
+      .my-divide-width-1 {
+        --value: 1px;
+      }
+      .my-flex-grow-1 {
+        --value: 1;
+      }
+      .my-flex-shrink-1 {
+        --value: 1;
+      }
+      .my-gradient-color-stop-positions-1 {
+        --value: 1%;
+      }
+      .my-grayscale-1 {
+        --value: 1%;
+      }
+      .my-grid-row-end-1 {
+        --value: 1;
+      }
+      .my-grid-row-start-1 {
+        --value: 1;
+      }
+      .my-grid-template-columns-1 {
+        --value: repeat(1, minmax(0, 1fr));
+      }
+      .my-grid-template-rows-1 {
+        --value: repeat(1, minmax(0, 1fr));
+      }
+      .my-hue-rotate-1 {
+        --value: 1deg;
+      }
+      .my-invert-1 {
+        --value: 1%;
+      }
+      .my-line-clamp-1 {
+        --value: 1;
+      }
+      .my-opacity-1 {
+        --value: 1%;
+      }
+      .my-order-1 {
+        --value: 1;
+      }
+      .my-outline-offset-1 {
+        --value: 1px;
+      }
+      .my-outline-width-1 {
+        --value: 1px;
+      }
+      .my-ring-offset-width-1 {
+        --value: 1px;
+      }
+      .my-ring-width-1 {
+        --value: 1px;
+      }
+      .my-rotate-1 {
+        --value: 1deg;
+      }
+      .my-saturate-1 {
+        --value: 1%;
+      }
+      .my-scale-1 {
+        --value: 1%;
+      }
+      .my-sepia-1 {
+        --value: 1%;
+      }
+      .my-skew-1 {
+        --value: 1deg;
+      }
+      .my-stroke-width-1 {
+        --value: 1px;
+      }
+      .my-text-decoration-thickness-1 {
+        --value: 1px;
+      }
+      .my-text-underline-offset-1 {
+        --value: 1px;
+      }
+      .my-transition-delay-1 {
+        --value: 1ms;
+      }
+      .my-transition-duration-1 {
+        --value: 1ms;
+      }
+      .my-z-index-1 {
+        --value: 1;
+      }
+      "
+    `)
+  })
 })
