@@ -93,6 +93,7 @@ it('should parse a simple utility with a variant', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "hover",
@@ -118,11 +119,13 @@ it('should parse a simple utility with stacked variants', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "hover",
         },
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "focus",
@@ -144,8 +147,10 @@ it('should parse a simple utility with an arbitrary variant', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "& p",
         },
       ],
@@ -168,6 +173,7 @@ it('should parse a simple utility with a parameterized variant', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "functional",
           "modifier": null,
@@ -197,6 +203,7 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "compound",
           "modifier": {
@@ -205,8 +212,10 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
           },
           "root": "group",
           "variant": {
+            "compounded": true,
             "compounds": true,
             "kind": "arbitrary",
+            "relative": false,
             "selector": "& p",
           },
         },
@@ -232,6 +241,7 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
         "root": "flex",
         "variants": [
           {
+            "compounded": false,
             "compounds": true,
             "kind": "compound",
             "modifier": {
@@ -240,6 +250,7 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
             },
             "root": "group",
             "variant": {
+              "compounded": true,
               "compounds": true,
               "kind": "functional",
               "modifier": null,
@@ -272,6 +283,7 @@ it('should parse compound group with itself group-group-*', () => {
         "root": "flex",
         "variants": [
           {
+            "compounded": false,
             "compounds": true,
             "kind": "compound",
             "modifier": {
@@ -280,16 +292,19 @@ it('should parse compound group with itself group-group-*', () => {
             },
             "root": "group",
             "variant": {
+              "compounded": true,
               "compounds": true,
               "kind": "compound",
               "modifier": null,
               "root": "group",
               "variant": {
+                "compounded": true,
                 "compounds": true,
                 "kind": "compound",
                 "modifier": null,
                 "root": "group",
                 "variant": {
+                  "compounded": true,
                   "compounds": true,
                   "kind": "static",
                   "root": "hover",
@@ -314,8 +329,10 @@ it('should parse a simple utility with an arbitrary media variant', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "@media(width>=123px)",
         },
       ],
@@ -427,6 +444,7 @@ it('should parse a utility with a modifier and a variant', () => {
       },
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "hover",
@@ -822,6 +840,7 @@ it('should parse a static variant starting with @', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "@lg",
@@ -846,6 +865,7 @@ it('should parse a functional variant with a modifier', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "functional",
           "modifier": {
@@ -878,6 +898,7 @@ it('should parse a functional variant starting with @', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "functional",
           "modifier": null,
@@ -907,6 +928,7 @@ it('should parse a functional variant starting with @ and a modifier', () => {
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "functional",
           "modifier": {
@@ -1053,6 +1075,7 @@ it('should parse arbitrary properties with a variant', () => {
       "value": "red",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "hover",
@@ -1076,11 +1099,13 @@ it('should parse arbitrary properties with stacked variants', () => {
       "value": "red",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "hover",
         },
         {
+          "compounded": false,
           "compounds": true,
           "kind": "static",
           "root": "focus",
@@ -1100,13 +1125,17 @@ it('should parse arbitrary properties that are important and using stacked arbit
       "value": "red",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "& p",
         },
         {
+          "compounded": false,
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "@media(width>=123px)",
         },
       ],
@@ -1139,6 +1168,7 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
       "root": "flex",
       "variants": [
         {
+          "compounded": false,
           "compounds": true,
           "kind": "functional",
           "modifier": null,

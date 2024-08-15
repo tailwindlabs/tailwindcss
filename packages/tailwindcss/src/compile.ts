@@ -136,6 +136,12 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
 
 export function applyVariant(node: Rule, variant: Variant, variants: Variants): null | void {
   if (variant.kind === 'arbitrary') {
+    // Relative selectors are not valid as an entire arbitrary variant, only as
+    // an arbitrary variant that is part of another compound variant.
+    //
+    // E.g. `[>img]:flex` is not valid, but `has-[>img]:flex` is
+    if (variant.relative && !variant.compounded) return null
+
     node.nodes = [rule(variant.selector, node.nodes)]
     return
   }

@@ -101,6 +101,13 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
+
+      // Whether or not this variant is part of a compound variant
+      compounded: boolean
+
+      // Whether or not the selector is a relative selector
+      // @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#relative_selector
+      relative: boolean
     }
 
   /**
@@ -114,6 +121,9 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
+
+      // Whether or not this variant is part of a compound variant
+      compounded: boolean
     }
 
   /**
@@ -136,6 +146,9 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
+
+      // Whether or not this variant is part of a compound variant
+      compounded: boolean
     }
 
   /**
@@ -155,6 +168,9 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
+
+      // Whether or not this variant is part of a compound variant
+      compounded: boolean
     }
 
 export type Candidate =
@@ -510,21 +526,24 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
     let selector = decodeArbitraryValue(variant.slice(1, -1))
 
-    if (selector[0] !== '@') {
-      // Ensure `&` is always present by wrapping the selector in `&:is(…)`
-      //
-      // E.g.:
-      //
-      // - `[p]:flex`
-      if (!selector.includes('&')) {
-        selector = `&:is(${selector})`
-      }
+    let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
+
+    // Ensure `&` is always present by wrapping the selector in `&:is(…)`,
+    // unless it's a relative selector like `> img`.
+    //
+    // E.g.:
+    //
+    // - `[p]:flex`
+    if (selector[0] !== '@' && !selector.includes('&') && !relative) {
+      selector = `&:is(${selector})`
     }
 
     return {
       kind: 'arbitrary',
       selector,
       compounds: true,
+      compounded: false,
+      relative,
     }
   }
 
@@ -562,6 +581,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           kind: 'static',
           root,
           compounds: designSystem.variants.compounds(root),
+          compounded: false,
         }
       }
 
@@ -578,6 +598,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
               value: decodeArbitraryValue(value.slice(1, -1)),
             },
             compounds: designSystem.variants.compounds(root),
+            compounded: false,
           }
         }
 
@@ -587,6 +608,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           modifier: modifier === null ? null : parseModifier(modifier),
           value: { kind: 'named', value },
           compounds: designSystem.variants.compounds(root),
+          compounded: false,
         }
       }
 
@@ -601,8 +623,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           kind: 'compound',
           root,
           modifier: modifier === null ? null : { kind: 'named', value: modifier },
-          variant: subVariant,
+          variant: { ...subVariant, compounded: true },
           compounds: designSystem.variants.compounds(root),
+          compounded: false,
         }
       }
     }

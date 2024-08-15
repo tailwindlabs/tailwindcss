@@ -759,7 +759,7 @@ test('group-[...]', async () => {
       css`
         @tailwind utilities;
       `,
-      ['group-[@media_foo]:flex'],
+      ['group-[@media_foo]:flex', 'group-[>img]:flex'],
     ),
   ).toEqual('')
 })
@@ -861,7 +861,7 @@ test('peer-[...]', async () => {
       css`
         @tailwind utilities;
       `,
-      ['peer-[@media_foo]:flex'],
+      ['peer-[@media_foo]:flex', 'peer-[>img]'],
     ),
   ).toEqual('')
 })
@@ -1690,24 +1690,41 @@ test('has', async () => {
         @tailwind utilities;
       `,
       [
+        'has-checked:flex',
         'has-[:checked]:flex',
+        'has-[>img]:flex',
+        'has-[&>img]:flex',
         'has-hocus:flex',
 
         'group-has-[:checked]:flex',
         'group-has-[:checked]/parent-name:flex',
         'group-has-checked:flex',
+        'group-has-checked/parent-name:flex',
+        'group-has-[>img]:flex',
+        'group-has-[>img]/parent-name:flex',
+        'group-has-[&>img]:flex',
+        'group-has-[&>img]/parent-name:flex',
         'group-has-hocus:flex',
         'group-has-hocus/parent-name:flex',
 
         'peer-has-[:checked]:flex',
         'peer-has-[:checked]/sibling-name:flex',
         'peer-has-checked:flex',
+        'peer-has-checked/sibling-name:flex',
+        'peer-has-[>img]:flex',
+        'peer-has-[>img]/sibling-name:flex',
+        'peer-has-[&>img]:flex',
+        'peer-has-[&>img]/sibling-name:flex',
         'peer-has-hocus:flex',
         'peer-has-hocus/sibling-name:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
     ".group-has-checked\\:flex:is(:where(.group):has(:checked) *) {
+      display: flex;
+    }
+
+    .group-has-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *) {
       display: flex;
     }
 
@@ -1727,7 +1744,27 @@ test('has', async () => {
       display: flex;
     }
 
+    .group-has-\\[\\&\\>img\\]\\:flex:is(:where(.group):has(* > img) *) {
+      display: flex;
+    }
+
+    .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(* > img) *) {
+      display: flex;
+    }
+
+    .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *) {
+      display: flex;
+    }
+
+    .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *) {
+      display: flex;
+    }
+
     .peer-has-checked\\:flex:is(:where(.peer):has(:checked) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *) {
       display: flex;
     }
 
@@ -1747,11 +1784,39 @@ test('has', async () => {
       display: flex;
     }
 
+    .peer-has-\\[\\&\\>img\\]\\:flex:is(:where(.peer):has(* > img) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(* > img) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *) {
+      display: flex;
+    }
+
+    .has-checked\\:flex:has(:checked) {
+      display: flex;
+    }
+
     .has-hocus\\:flex:has(:hover, :focus) {
       display: flex;
     }
 
     .has-\\[\\:checked\\]\\:flex:has(:checked) {
+      display: flex;
+    }
+
+    .has-\\[\\&\\>img\\]\\:flex:has(* > img) {
+      display: flex;
+    }
+
+    .has-\\[\\>img\\]\\:flex:has( > img) {
       display: flex;
     }"
   `)

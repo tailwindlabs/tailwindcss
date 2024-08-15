@@ -242,6 +242,8 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.compound('group', (ruleNode, variant) => {
+    if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
+
     // Name the group by appending the modifier to `group` class itself if
     // present.
     let groupSelector = variant.modifier
