@@ -102,9 +102,6 @@ export type Variant =
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
 
-      // Whether or not this variant is part of a compound variant
-      compounded: boolean
-
       // Whether or not the selector is a relative selector
       // @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#relative_selector
       relative: boolean
@@ -121,9 +118,6 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
-
-      // Whether or not this variant is part of a compound variant
-      compounded: boolean
     }
 
   /**
@@ -146,9 +140,6 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
-
-      // Whether or not this variant is part of a compound variant
-      compounded: boolean
     }
 
   /**
@@ -168,9 +159,6 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
-
-      // Whether or not this variant is part of a compound variant
-      compounded: boolean
     }
 
 export type Candidate =
@@ -542,7 +530,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
       kind: 'arbitrary',
       selector,
       compounds: true,
-      compounded: false,
       relative,
     }
   }
@@ -581,7 +568,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           kind: 'static',
           root,
           compounds: designSystem.variants.compounds(root),
-          compounded: false,
         }
       }
 
@@ -598,7 +584,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
               value: decodeArbitraryValue(value.slice(1, -1)),
             },
             compounds: designSystem.variants.compounds(root),
-            compounded: false,
           }
         }
 
@@ -608,7 +593,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           modifier: modifier === null ? null : parseModifier(modifier),
           value: { kind: 'named', value },
           compounds: designSystem.variants.compounds(root),
-          compounded: false,
         }
       }
 
@@ -623,9 +607,8 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           kind: 'compound',
           root,
           modifier: modifier === null ? null : { kind: 'named', value: modifier },
-          variant: { ...subVariant, compounded: true },
+          variant: subVariant,
           compounds: designSystem.variants.compounds(root),
-          compounded: false,
         }
       }
     }
