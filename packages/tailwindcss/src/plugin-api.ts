@@ -568,7 +568,7 @@ function createCompatabilityConfig(theme: Theme): UserConfig {
       textIndent: ({ theme }) => theme('spacing'),
       textOpacity: ({ theme }) => theme('opacity'),
       textUnderlineOffset: barePixels,
-      transitionDelay: { ...bareMilliseconds },
+      transitionDelay: bareMilliseconds,
       transitionDuration: {
         DEFAULT: theme.get(['--default-transition-duration']) ?? null,
         ...bareMilliseconds,
