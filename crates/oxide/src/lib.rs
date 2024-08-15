@@ -307,17 +307,17 @@ fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
 
     extension_list.sort();
 
-    let extension_list_joined = extension_list.join(",");
+    let extension_list = extension_list.join(",");
 
     // Build the globs for all globable directories.
     let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        pattern: format!("*/*.{{{}}}", extension_list_joined),
+        pattern: format!("*/*.{{{}}}", extension_list),
     });
 
     let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        pattern: format!("**/*.{{{}}}", extension_list_joined),
+        pattern: format!("**/*.{{{}}}", extension_list),
     });
 
     shallow_globs.chain(deep_globs).collect::<Vec<_>>()
