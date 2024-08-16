@@ -356,7 +356,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --font-size-base: 1rem;
     --font-size-base--line-height: 1.5rem;
     --font-size-lg: 1.125rem;
-    --font-size-lg--line-height: 1.75rem;
+    --font-size-lg--line-height: 1.625rem;
     --font-size-xl: 1.25rem;
     --font-size-xl--line-height: 1.75rem;
     --font-size-2xl: 1.5rem;
