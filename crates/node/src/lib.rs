@@ -1,74 +1,48 @@
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-use std::{collections::HashSet, path::PathBuf};
-
 #[macro_use]
 extern crate napi_derive;
 
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ChangedContent {
+  /// File path to the changed file
   pub file: Option<String>,
+
+  /// Contents of the changed file
   pub content: Option<String>,
+
+  /// File extension
   pub extension: String,
 }
 
-impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
-  fn from(changed_content: ChangedContent) -> Self {
-    tailwindcss_oxide::ChangedContent {
-      file: changed_content.file.map(PathBuf::from),
-      content: changed_content.content,
-    }
-  }
-}
-
 #[derive(Debug, Clone)]
-#[napi]
-pub struct ScanResult {
-  // Private information necessary for incremental rebuilds. Note: these fields are not exposed
-  // to JS
-  base: Option<String>,
-  sources: Vec<GlobEntry>,
-
-  // Public API:
-  pub globs: Vec<GlobEntry>,
-  pub files: Vec<String>,
-  pub candidates: Vec<String>,
-}
-
-#[napi]
-impl ScanResult {
-  #[napi]
-  pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
-    let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-      base: self.base.clone(),
-      sources: self.sources.clone().into_iter().map(Into::into).collect(),
-    });
-
-    let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
-    let candidates_from_files: HashSet<String> = HashSet::from_iter(tailwindcss_oxide::scan_files(
-      input.into_iter().map(Into::into).collect(),
-      IO::Parallel as u8 | Parsing::Parallel as u8,
-    ));
-
-    unique_candidates.extend(candidates_from_files);
-
-    unique_candidates
-      .into_iter()
-      .map(|x| x.to_string())
-      .collect()
-  }
+#[napi(object)]
+pub struct DetectSources {
+  /// Base path to start scanning from
+  pub base: String,
 }
 
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct GlobEntry {
+  /// Base path of the glob
   pub base: String,
+
+  /// Glob pattern
   pub pattern: String,
+}
+
+impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
+  fn from(changed_content: ChangedContent) -> Self {
+    Self {
+      file: changed_content.file.map(Into::into),
+      content: changed_content.content,
+    }
+  }
 }
 
 impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
   fn from(glob: GlobEntry) -> Self {
-    tailwindcss_oxide::GlobEntry {
+    Self {
       base: glob.base,
       pattern: glob.pattern,
     }
@@ -77,67 +51,75 @@ impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
 
 impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   fn from(glob: tailwindcss_oxide::GlobEntry) -> Self {
-    GlobEntry {
+    Self {
       base: glob.base,
       pattern: glob.pattern,
     }
   }
 }
 
+impl From<DetectSources> for tailwindcss_oxide::scanner::detect_sources::DetectSources {
+  fn from(detect_sources: DetectSources) -> Self {
+    Self::new(detect_sources.base.into())
+  }
+}
+
+// ---
+
 #[derive(Debug, Clone)]
 #[napi(object)]
-pub struct ScanOptions {
-  /// Base path to start scanning from
-  pub base: Option<String>,
+pub struct ScannerOptions {
+  /// Automatically detect sources in the base path
+  pub detect_sources: Option<DetectSources>,
+
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
 }
 
+#[derive(Debug, Clone)]
 #[napi]
-pub fn clear_cache() {
-  tailwindcss_oxide::clear_cache();
+pub struct Scanner {
+  scanner: tailwindcss_oxide::Scanner,
 }
 
 #[napi]
-pub fn scan_dir(args: ScanOptions) -> ScanResult {
-  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-    base: args.base.clone(),
-    sources: args
-      .sources
-      .clone()
-      .unwrap_or_default()
+impl Scanner {
+  #[napi(constructor)]
+  pub fn new(opts: ScannerOptions) -> Self {
+    Self {
+      scanner: tailwindcss_oxide::Scanner::new(
+        opts.detect_sources.map(Into::into),
+        opts
+          .sources
+          .map(|x| x.into_iter().map(Into::into).collect()),
+      ),
+    }
+  }
+
+  #[napi]
+  pub fn scan(&mut self) -> Vec<String> {
+    self.scanner.scan()
+  }
+
+  #[napi]
+  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> Vec<String> {
+    self
+      .scanner
+      .scan_content(input.into_iter().map(Into::into).collect())
+  }
+
+  #[napi(getter)]
+  pub fn files(&mut self) -> Vec<String> {
+    self.scanner.get_files()
+  }
+
+  #[napi(getter)]
+  pub fn globs(&mut self) -> Vec<GlobEntry> {
+    self
+      .scanner
+      .get_globs()
       .into_iter()
       .map(Into::into)
-      .collect(),
-  });
-
-  ScanResult {
-    // Private
-    base: args.base,
-    sources: args.sources.unwrap_or_default(),
-
-    // Public
-    files: result.files,
-    candidates: result.candidates,
-    globs: result.globs.into_iter().map(Into::into).collect(),
+      .collect()
   }
-}
-
-#[derive(Debug)]
-#[napi]
-pub enum IO {
-  Sequential = 0b0001,
-  Parallel = 0b0010,
-}
-
-#[derive(Debug)]
-#[napi]
-pub enum Parsing {
-  Sequential = 0b0100,
-  Parallel = 0b1000,
-}
-
-#[napi]
-pub fn scan_files(input: Vec<ChangedContent>, strategy: u8) -> Vec<String> {
-  tailwindcss_oxide::scan_files(input.into_iter().map(Into::into).collect(), strategy)
 }
