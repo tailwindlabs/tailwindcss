@@ -382,7 +382,7 @@ describe('arbitrary variants', () => {
   })
 
   it('discards arbitrary variants using relative selectors', async () => {
-    expect(await run(['[>img]:flex'])).toBe('')
+    expect(await run(['[>img]:flex', '[+img]:flex', '[~img]:flex'])).toBe('')
   })
 })
 

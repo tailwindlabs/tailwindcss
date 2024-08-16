@@ -1669,6 +1669,8 @@ test('not', async () => {
       `,
       [
         'not-[>img]:flex',
+        'not-[+img]:flex',
+        'not-[~img]:flex',
         'not-[:checked]/foo:flex',
         'not-[@media_print]:flex',
         'not-custom-at-rule:flex',
@@ -1694,6 +1696,8 @@ test('has', async () => {
         'has-checked:flex',
         'has-[:checked]:flex',
         'has-[>img]:flex',
+        'has-[+img]:flex',
+        'has-[~img]:flex',
         'has-[&>img]:flex',
         'has-hocus:flex',
 
@@ -1703,6 +1707,8 @@ test('has', async () => {
         'group-has-checked/parent-name:flex',
         'group-has-[>img]:flex',
         'group-has-[>img]/parent-name:flex',
+        'group-has-[+img]:flex',
+        'group-has-[~img]:flex',
         'group-has-[&>img]:flex',
         'group-has-[&>img]/parent-name:flex',
         'group-has-hocus:flex',
@@ -1714,6 +1720,8 @@ test('has', async () => {
         'peer-has-checked/sibling-name:flex',
         'peer-has-[>img]:flex',
         'peer-has-[>img]/sibling-name:flex',
+        'peer-has-[+img]:flex',
+        'peer-has-[~img]:flex',
         'peer-has-[&>img]:flex',
         'peer-has-[&>img]/sibling-name:flex',
         'peer-has-hocus:flex',
@@ -1753,11 +1761,19 @@ test('has', async () => {
       display: flex;
     }
 
+    .group-has-\\[\\+img\\]\\:flex:is(:where(.group):has( + img) *) {
+      display: flex;
+    }
+
     .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *) {
       display: flex;
     }
 
     .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *) {
+      display: flex;
+    }
+
+    .group-has-\\[\\~img\\]\\:flex:is(:where(.group):has( ~ img) *) {
       display: flex;
     }
 
@@ -1793,11 +1809,19 @@ test('has', async () => {
       display: flex;
     }
 
+    .peer-has-\\[\\+img\\]\\:flex:is(:where(.peer):has( + img) ~ *) {
+      display: flex;
+    }
+
     .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *) {
       display: flex;
     }
 
     .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-\\[\\~img\\]\\:flex:is(:where(.peer):has( ~ img) ~ *) {
       display: flex;
     }
 
@@ -1817,7 +1841,15 @@ test('has', async () => {
       display: flex;
     }
 
+    .has-\\[\\+img\\]\\:flex:has( + img) {
+      display: flex;
+    }
+
     .has-\\[\\>img\\]\\:flex:has( > img) {
+      display: flex;
+    }
+
+    .has-\\[\\~img\\]\\:flex:has( ~ img) {
       display: flex;
     }"
   `)
