@@ -1,6 +1,8 @@
-import { describe, test, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
+import type { PluginAPI } from './plugin-api'
+import { optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
@@ -718,6 +720,190 @@ describe('theme', async () => {
         --value: 1;
       }
       "
+    `)
+  })
+})
+
+describe('matchComponents', async () => {
+  test('example typography plugin', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+          @theme reference {
+            --font-size-sm: 14px;
+            --font-size-sm--line-height: 18px;
+            --spacing-8: 32px;
+            --font-weight-bold: 700;
+            --radius-lg: 16px;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return plugin(
+              ({ addComponents, theme }: PluginAPI) => {
+                addComponents({
+                  '.prose': theme('typography.base.css'),
+                })
+              },
+              {
+                theme: {
+                  typography: {
+                    base: {
+                      css: {
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        '* + *': {
+                          marginTop: '32px',
+                        },
+                        h1: {
+                          fontSize: '32px',
+                          lineHeight: '36px',
+                        },
+                        h2: {
+                          fontSize: '24px',
+                          lineHeight: '28px',
+                        },
+                        img: {
+                          borderRadius: '12px',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            )
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(optimizeCss(await run(['font-bold', 'text-sm', 'rounded-lg', 'mt-8', 'prose'])).trim())
+      .toMatchInlineSnapshot(`
+      ".prose {
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      .prose * + * {
+        margin-top: 32px;
+      }
+
+      .prose h1 {
+        font-size: 32px;
+        line-height: 36px;
+      }
+
+      .prose h2 {
+        font-size: 24px;
+        line-height: 28px;
+      }
+
+      .prose img {
+        border-radius: 12px;
+      }
+
+      .mt-8 {
+        margin-top: var(--spacing-8, 32px);
+      }
+
+      .rounded-lg {
+        border-radius: var(--radius-lg, 16px);
+      }
+
+      .text-sm {
+        font-size: var(--font-size-sm, 14px);
+        line-height: var(--font-size-sm--line-height, 18px);
+      }
+
+      .font-bold {
+        font-weight: var(--font-weight-bold, 700);
+      }"
+    `)
+  })
+
+  test('example container plugin', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+          @theme reference {
+            --width-sm: 24rem;
+          }
+        `,
+        {
+          async loadPlugin() {
+            return plugin(({ addComponents }: PluginAPI) => {
+              addComponents({
+                '.zontainer': {
+                  maxWidth: '100%',
+                  '@media (min-width: 640px)': {
+                    maxWidth: '640px',
+                  },
+                  '@media (min-width: 768px)': {
+                    maxWidth: '768px',
+                  },
+                  '@media (min-width: 1024px)': {
+                    maxWidth: '1024px',
+                  },
+                  '@media (min-width: 1280px)': {
+                    maxWidth: '1280px',
+                  },
+                  '@media (min-width: 1536px)': {
+                    maxWidth: '1536px',
+                  },
+                },
+              })
+            })
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(optimizeCss(await run(['max-w-sm', 'zontainer'])).trim()).toMatchInlineSnapshot(`
+      ".zontainer {
+        max-width: 100%;
+      }
+
+      @media (width >= 640px) {
+        .zontainer {
+          max-width: 640px;
+        }
+      }
+
+      @media (width >= 768px) {
+        .zontainer {
+          max-width: 768px;
+        }
+      }
+
+      @media (width >= 1024px) {
+        .zontainer {
+          max-width: 1024px;
+        }
+      }
+
+      @media (width >= 1280px) {
+        .zontainer {
+          max-width: 1280px;
+        }
+      }
+
+      @media (width >= 1536px) {
+        .zontainer {
+          max-width: 1536px;
+        }
+      }
+
+      .max-w-sm {
+        max-width: var(--width-sm, 24rem);
+      }"
     `)
   })
 })

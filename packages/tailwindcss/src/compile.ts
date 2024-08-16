@@ -14,7 +14,7 @@ export function compileCandidates(
 ) {
   let nodeSorting = new Map<
     AstNode,
-    { properties: number[]; variants: bigint; candidate: string }
+    { properties: [number[], number[]]; variants: bigint; candidate: string }
   >()
   let astNodes: AstNode[] = []
   let candidates = new Map<Candidate, string>()
@@ -68,6 +68,9 @@ export function compileCandidates(
     let aSorting = nodeSorting.get(a)!
     let zSorting = nodeSorting.get(z)!
 
+    let [aProperties, aCounts] = aSorting.properties
+    let [zProperties, zCounts] = zSorting.properties
+
     // Sort by variant order first
     if (aSorting.variants - zSorting.variants !== 0n) {
       return Number(aSorting.variants - zSorting.variants)
@@ -76,21 +79,29 @@ export function compileCandidates(
     // Find the first property that is different between the two rules
     let offset = 0
     while (
-      aSorting.properties.length < offset &&
-      zSorting.properties.length < offset &&
-      aSorting.properties[offset] === zSorting.properties[offset]
+      aProperties.length < offset &&
+      zProperties.length < offset &&
+      aProperties[offset] === zProperties[offset]
     ) {
       offset += 1
     }
 
-    return (
-      // Sort by lowest property index first
-      (aSorting.properties[offset] ?? Infinity) - (zSorting.properties[offset] ?? Infinity) ||
-      // Sort by most properties first, then by least properties
-      zSorting.properties.length - aSorting.properties.length ||
-      // Sort alphabetically
-      compare(aSorting.candidate, zSorting.candidate)
-    )
+    // Sort by lowest property index first
+    let lowestPropertyDelta = (aProperties[offset] ?? Infinity) - (zProperties[offset] ?? Infinity)
+    if (lowestPropertyDelta) return lowestPropertyDelta
+
+    // Sort by most properties first, then by least properties
+    let uniquePropertyDelta = zProperties.length - aProperties.length
+    if (uniquePropertyDelta) return uniquePropertyDelta
+
+    // If both have the same unique properties, sort based on instances of those properties
+    for (let i = 0; i < aProperties.length; i++) {
+      let delta = zCounts[i] - aCounts[i]
+      if (delta) return delta
+    }
+
+    // Sort alphabetically
+    return compare(aSorting.candidate, zSorting.candidate)
   })
 
   return {
@@ -243,9 +254,9 @@ function applyImportant(ast: AstNode[]): void {
   }
 }
 
-function getPropertySort(nodes: AstNode[]) {
+function getPropertySort(nodes: AstNode[]): [number[], number[]] {
   // Determine sort order based on properties used
-  let propertySort = new Set<number>()
+  let propertySort = new Map<number, number>()
   let q: AstNode[] = nodes.slice()
 
   while (q.length > 0) {
@@ -256,13 +267,13 @@ function getPropertySort(nodes: AstNode[]) {
       if (node.property === '--tw-sort') {
         let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value)
         if (idx !== -1) {
-          propertySort.add(idx)
+          propertySort.set(idx, (propertySort.get(idx) ?? 0) + 1)
           break
         }
       }
 
       let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
-      if (idx !== -1) propertySort.add(idx)
+      if (idx !== -1) propertySort.set(idx, (propertySort.get(idx) ?? 0) + 1)
     } else if (node.kind === 'rule') {
       // Don't consider properties within `@at-root` when determining the sort
       // order for a rule.
@@ -274,5 +285,10 @@ function getPropertySort(nodes: AstNode[]) {
     }
   }
 
-  return Array.from(propertySort).sort((a, z) => a - z)
+  let sorted = Array.from(propertySort).sort(([a, _a], [z, _z]) => a - z)
+
+  return [
+    sorted.map(([propertySort]) => propertySort),
+    sorted.map(([, propertyCount]) => propertyCount),
+  ]
 }

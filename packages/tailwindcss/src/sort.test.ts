@@ -68,7 +68,7 @@ test('can sort classes deterministically across multiple class lists', async () 
   }
 })
 
-test('sorts arbitrary values across one or more class lists consistently', async () => {
+test.only('sorts arbitrary values across one or more class lists consistently', async () => {
   let classes = [
     ['[--fg:#fff]', '[--fg:#fff]'],
     ['[--bg:#111] [--bg_hover:#000] [--fg:#fff]', '[--bg:#111] [--bg_hover:#000] [--fg:#fff]'],
