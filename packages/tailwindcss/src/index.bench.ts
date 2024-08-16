@@ -7,7 +7,7 @@ const root = process.env.FOLDER || process.cwd()
 const css = String.raw
 
 bench('compile', async () => {
-  let scanner = new Scanner({ autoContent: { base: root } })
+  let scanner = new Scanner({ detectSources: { base: root } })
   let candidates = scanner.scan()
 
   let { build } = await compile(css`

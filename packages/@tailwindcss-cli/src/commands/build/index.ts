@@ -146,7 +146,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // Compile the input
   let compiler = await compile(input)
   let scanner = new Scanner({
-    autoContent: { base },
+    detectSources: { base },
     sources: compiler.globs.map((pattern) => ({
       base: inputBasePath, // Globs are relative to the input.css file
       pattern,
@@ -210,7 +210,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             // Re-scan the directory to get the new `candidates`
             scanner = new Scanner({
-              autoContent: { base },
+              detectSources: { base },
               sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
                 pattern,

@@ -1,5 +1,5 @@
 use crate::parser::Extractor;
-use crate::scanner::auto_content::AutoContent;
+use crate::scanner::detect_sources::DetectSources;
 use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::fast_glob;
@@ -63,7 +63,7 @@ pub struct GlobEntry {
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
     /// Auto content configuration
-    auto_content: Option<AutoContent>,
+    detect_sources: Option<DetectSources>,
 
     /// Glob sources
     sources: Option<Vec<GlobEntry>>,
@@ -86,9 +86,9 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(auto_content: Option<AutoContent>, sources: Option<Vec<GlobEntry>>) -> Self {
+    pub fn new(detect_sources: Option<DetectSources>, sources: Option<Vec<GlobEntry>>) -> Self {
         Self {
-            auto_content,
+            detect_sources,
             sources,
             ..Default::default()
         }
@@ -184,16 +184,16 @@ impl Scanner {
             return;
         }
 
-        self.scan_auto_content();
+        self.detect_sources();
         self.scan_sources();
 
         self.ready = true;
     }
 
     #[tracing::instrument(skip_all)]
-    fn scan_auto_content(&mut self) {
-        if let Some(auto_content) = &self.auto_content {
-            let (files, globs) = auto_content.scan();
+    fn detect_sources(&mut self) {
+        if let Some(detect_sources) = &self.detect_sources {
+            let (files, globs) = detect_sources.detect();
             self.files.extend(files);
             self.globs.extend(globs);
         }

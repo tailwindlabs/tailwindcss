@@ -130,7 +130,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Look for candidates used to generate the CSS
           let scanner = new Scanner({
-            autoContent: { base },
+            detectSources: { base },
             sources: context.compiler.globs.map((pattern) => ({
               base: inputBasePath, // Globs are relative to the input.css file
               pattern,

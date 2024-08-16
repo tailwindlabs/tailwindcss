@@ -16,7 +16,7 @@ pub struct ChangedContent {
 
 #[derive(Debug, Clone)]
 #[napi(object)]
-pub struct AutoContent {
+pub struct DetectSources {
   /// Base path to start scanning from
   pub base: String,
 }
@@ -58,9 +58,9 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   }
 }
 
-impl From<AutoContent> for tailwindcss_oxide::scanner::auto_content::AutoContent {
-  fn from(auto_content: AutoContent) -> Self {
-    Self::new(auto_content.base.into())
+impl From<DetectSources> for tailwindcss_oxide::scanner::detect_sources::DetectSources {
+  fn from(detect_sources: DetectSources) -> Self {
+    Self::new(detect_sources.base.into())
   }
 }
 
@@ -69,8 +69,8 @@ impl From<AutoContent> for tailwindcss_oxide::scanner::auto_content::AutoContent
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScannerOptions {
-  /// Auto content configuration
-  pub auto_content: Option<AutoContent>,
+  /// Automatically detect sources in the base path
+  pub detect_sources: Option<DetectSources>,
 
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
@@ -88,7 +88,7 @@ impl Scanner {
   pub fn new(opts: ScannerOptions) -> Self {
     Self {
       scanner: tailwindcss_oxide::Scanner::new(
-        opts.auto_content.map(Into::into),
+        opts.detect_sources.map(Into::into),
         opts
           .sources
           .map(|x| x.into_iter().map(Into::into).collect()),

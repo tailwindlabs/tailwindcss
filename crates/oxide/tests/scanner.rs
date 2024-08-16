@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod scanner {
-    use scanner::auto_content::AutoContent;
+    use scanner::detect_sources::DetectSources;
     use std::process::Command;
     use std::{fs, path};
 
@@ -36,7 +36,7 @@ mod scanner {
 
         // Resolve all content paths for the (temporary) current working directory
         let mut scanner = Scanner::new(
-            Some(AutoContent::new(base.clone().into())),
+            Some(DetectSources::new(base.clone().into())),
             Some(
                 globs
                     .iter()
