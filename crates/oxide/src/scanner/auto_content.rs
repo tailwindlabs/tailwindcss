@@ -12,14 +12,14 @@ pub struct AutoContent {
 }
 
 static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
-  include_str!("fixtures/template-extensions.txt")
-      .trim()
-      .lines()
-      // Drop commented lines
-      .filter(|x| !x.starts_with('#'))
-      // Drop empty lines
-      .filter(|x| !x.is_empty())
-      .collect()
+    include_str!("fixtures/template-extensions.txt")
+        .trim()
+        .lines()
+        // Drop commented lines
+        .filter(|x| !x.starts_with('#'))
+        // Drop empty lines
+        .filter(|x| !x.is_empty())
+        .collect()
 });
 
 impl AutoContent {
@@ -62,11 +62,8 @@ impl AutoContent {
         let mut forced_static_directories = vec![self.base.join("public")];
 
         // A list of known extensions + a list of extensions we found in the project.
-        let mut found_extensions = FxHashSet::from_iter(
-            KNOWN_EXTENSIONS
-              .iter()
-              .map(|x| x.to_string())
-        );
+        let mut found_extensions =
+            FxHashSet::from_iter(KNOWN_EXTENSIONS.iter().map(|x| x.to_string()));
 
         // All root directories.
         let mut root_directories = FxHashSet::from_iter(vec![self.base.clone()]);
