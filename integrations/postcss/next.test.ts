@@ -127,11 +127,9 @@ test(
       },
     },
     async ({ fs, spawn, getFreePort }) => {
-      console.log('start of test' + bundler)
       let port = await getFreePort()
       await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
 
-      console.log('retryAssertion #1' + bundler)
       await retryAssertion(async () => {
         let css = await fetchStylesFromIndex(port)
         expect(css).toContain(candidate`underline`)
@@ -145,15 +143,12 @@ test(
           }
         `,
       )
-      console.log('retryAssertion #2' + bundler)
 
       await retryAssertion(async () => {
         let css = await fetchStylesFromIndex(port)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
       })
-
-      console.log('end of test' + bundler)
     },
   )
 })
