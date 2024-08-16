@@ -256,7 +256,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('wip about the DEFAULT key', async ({ expect }) => {
+  test('plugins can override the default key', async ({ expect }) => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -311,7 +311,7 @@ describe('theme', async () => {
         return plugin(function ({ matchUtilities, theme }) {
           matchUtilities(
             {
-              animation: (value) => ({ '--animation': value }),
+              animation: (value) => ({ animation: value }),
             },
             {
               values: theme('animation'),
@@ -320,7 +320,7 @@ describe('theme', async () => {
 
           matchUtilities(
             {
-              animation2: (value) => ({ '--animation': value }),
+              animation2: (value) => ({ animation: value }),
             },
             {
               values: {
@@ -336,16 +336,16 @@ describe('theme', async () => {
     expect(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']))
       .toMatchInlineSnapshot(`
         ".animation {
-          --animation: var(--animation, pulse 1s linear infinite);
+          animation: var(--animation, pulse 1s linear infinite);
         }
         .animation-spin {
-          --animation: var(--animation-spin, spin 1s linear infinite);
+          animation: var(--animation-spin, spin 1s linear infinite);
         }
         .animation2 {
-          --animation: var(--animation, pulse 1s linear infinite);
+          animation: var(--animation, pulse 1s linear infinite);
         }
         .animation2-twist {
-          --animation: var(--animation-spin, spin 1s linear infinite);
+          animation: var(--animation-spin, spin 1s linear infinite);
         }
         "
       `)
