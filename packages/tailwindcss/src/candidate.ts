@@ -522,7 +522,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // E.g.:
     //
     // - `[p]:flex`
-    if (selector[0] !== '@' && !selector.includes('&') && !relative) {
+    if (!relative && selector[0] !== '@' && !selector.includes('&')) {
       selector = `&:is(${selector})`
     }
 
