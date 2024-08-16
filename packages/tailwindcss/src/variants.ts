@@ -204,6 +204,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('*', [':where(& > *)'], { compounds: false })
 
   variants.compound('not', (ruleNode, variant) => {
+    if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
+
     if (variant.modifier) return null
 
     let didApply = false
@@ -242,6 +244,8 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.compound('group', (ruleNode, variant) => {
+    if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
+
     // Name the group by appending the modifier to `group` class itself if
     // present.
     let groupSelector = variant.modifier
@@ -301,6 +305,8 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.compound('peer', (ruleNode, variant) => {
+    if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
+
     // Name the peer by appending the modifier to `peer` class itself if
     // present.
     let peerSelector = variant.modifier
