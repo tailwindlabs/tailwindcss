@@ -1,11 +1,7 @@
 import { segment } from '../../utils/segment'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
-  type LoadedPlugin,
-  type LoadedPreset,
-  type RawPlugin,
   type ResolvedConfig,
-  type ResolvedContentConfig,
   type ResolvedThemeValue,
   type ThemeValue,
   type UserConfig,
@@ -13,35 +9,18 @@ import {
 
 interface ResolutionContext {
   configs: UserConfig[]
-  plugins: RawPlugin[]
-  content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
   result: ResolvedConfig
 }
 
 let minimal: ResolvedConfig = {
-  important: false,
-  content: {
-    files: [],
-    transform: {},
-  },
-  blocklist: [],
-  prefix: '',
-  separator: ':',
-  darkMode: 'media',
   theme: {},
-  plugins: [],
 }
 
 export function resolveConfig(configs: UserConfig[]): ResolvedConfig {
   let ctx: ResolutionContext = {
-    configs: [],
-    plugins: [],
-    content: {
-      files: [],
-      transform: {},
-    },
+    configs,
     theme: {},
     extend: {},
 
@@ -49,45 +28,11 @@ export function resolveConfig(configs: UserConfig[]): ResolvedConfig {
     result: structuredClone(minimal),
   }
 
-  // Gather a list of mergable configs
-  // Gather a final list of plugins
-  for (let config of configs) {
-    resolveInternal(config, ctx)
-  }
-
-  // Merge top-level keys
-  mergeTopLevel(ctx)
-
-  // Merge content
-  mergeContent(ctx)
-
   // Merge themes
   mergeTheme(ctx)
 
   return {
-    ...ctx.result,
     theme: ctx.theme as ResolvedConfig['theme'],
-    content: ctx.content,
-    plugins: ctx.plugins,
-  }
-}
-
-function mergeTopLevel(ctx: ResolutionContext) {
-  for (let config of ctx.configs) {
-    Object.assign(ctx.result, config)
-  }
-}
-
-function mergeContent(ctx: ResolutionContext) {
-  let resolved = ctx.content
-
-  for (let config of ctx.configs) {
-    let content = config.content ?? []
-    let files = Array.isArray(content) ? content : content.files
-    let transform = Array.isArray(content) ? {} : content.transform
-
-    resolved.files.push(...files)
-    Object.assign(resolved.transform, transform)
   }
 }
 
@@ -193,36 +138,4 @@ function mergeTheme(ctx: ResolutionContext) {
   for (let key in ctx.theme) {
     ctx.theme[key] = resolveValue(ctx.theme[key])
   }
-}
-
-function resolveInternal(user: UserConfig, ctx: ResolutionContext): void {
-  let presets = (user.presets ?? []) as LoadedPreset[]
-  let plugins = (user.plugins ?? []) as LoadedPlugin[]
-
-  // Presets are applied first
-  // They may define presets, plugins, and configs
-  for (let preset of presets) {
-    resolveInternal(preset, ctx)
-  }
-
-  // Plugins are applied next
-  // They may define presets, plugins, and configs
-  for (let plugin of plugins) {
-    if (typeof plugin === 'function') {
-      ctx.plugins.push(plugin)
-    } else {
-      ctx.plugins.push(plugin.handler)
-
-      if (plugin.config) {
-        resolveInternal(plugin.config(), ctx)
-      }
-    }
-  }
-
-  // The "user" config is then applied
-  // This config may actually represent:
-  // - a preset config
-  // - a plugin config
-  // - a user config
-  ctx.configs.push(user)
 }
