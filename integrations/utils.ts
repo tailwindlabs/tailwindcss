@@ -48,8 +48,14 @@ interface TestFlags {
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
-const TEST_TIMEOUT = 30000
-const ASSERTION_TIMEOUT = 5000
+const IS_WINDOWS = platform() === 'win32'
+
+const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
+const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
+
+// On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
+// apparently causes the vite builds to not work.
+const TMP_ROOT = process.env.CI && IS_WINDOWS ? homedir() : tmpdir()
 
 export function test(
   name: string,
@@ -57,17 +63,11 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false }: TestFlags = {},
 ) {
-  return (only ? defaultTest.only : defaultTest)(
+  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
     name,
     { timeout: TEST_TIMEOUT },
     async (options) => {
-      let rootDir = debug
-        ? path.join(REPO_ROOT, '.debug')
-        : // On Windows CI, tmpdir returns a path containing a weird RUNNER~1
-          // folder  that apparently causes the vite builds to not work.
-          process.env.CI && platform() === 'win32'
-          ? homedir()
-          : tmpdir()
+      let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
 
       let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
@@ -181,7 +181,7 @@ export function test(
           })
 
           options.onTestFailed(() => {
-            // In debug mode, messages are logged to the console immediatly
+            // In debug mode, messages are logged to the console immediately
             if (debug) return
 
             for (let [type, message] of combined) {
@@ -233,7 +233,11 @@ export function test(
                       return
                     }
 
-                    await killPort(port)
+                    try {
+                      await killPort(port)
+                    } catch {
+                      // If the process can not be killed, we can't do anything
+                    }
                   })
                   resolve(port)
                 }
@@ -250,7 +254,7 @@ export function test(
             }
 
             // Ensure that files written on Windows use \r\n line ending
-            if (platform() === 'win32') {
+            if (IS_WINDOWS) {
               content = content.replace(/\n/g, '\r\n')
             }
 
@@ -271,7 +275,7 @@ export function test(
             )
           },
           async expectFileToContain(filePath, contents) {
-            return retryUntil(async () => {
+            return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of contents) {
                 expect(fileContent).toContain(content)
@@ -292,9 +296,11 @@ export function test(
         // a separate workspace). We work around this by using the
         // `--ignore-workspace` flag.
         let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-        context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
       } catch (error: any) {
         console.error(error)
+        console.error(error.stdout?.toString())
+        console.error(error.stderr?.toString())
         throw error
       }
 
@@ -303,9 +309,8 @@ export function test(
       async function dispose() {
         await Promise.all(disposables.map((dispose) => dispose()))
 
-        // Skip removing the directory in CI beause it can stall on Windows
-        if (!process.env.CI && !debug) {
-          await fs.rm(root, { recursive: true, force: true })
+        if (!debug) {
+          await gracefullyRemove(root)
         }
       }
 
@@ -319,7 +324,7 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
-  return test(name, config, testCallback, { only: true, debug: true })
+  return test(name, config, testCallback, { debug: true })
 }
 
 // Maps package names to their tarball filenames. See scripts/pack-packages.ts
@@ -478,7 +483,7 @@ export function escape(value: string) {
   return result
 }
 
-async function retryUntil<T>(
+export async function retryAssertion<T>(
   fn: () => Promise<T>,
   { timeout = ASSERTION_TIMEOUT, delay = 5 }: { timeout?: number; delay?: number } = {},
 ) {
@@ -493,4 +498,51 @@ async function retryUntil<T>(
     }
   }
   throw error
+}
+
+export async function fetchStylesFromIndex(port: number): Promise<string> {
+  let index = await fetch(`http://localhost:${port}`)
+  let html = await index.text()
+
+  let regex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/g
+
+  let paths: string[] = []
+  let match
+  while ((match = regex.exec(html)) !== null) {
+    let path: string = match[1]
+    if (path.startsWith('./')) {
+      path = path.slice(1)
+    }
+    paths.push(path)
+  }
+
+  let stylesheets = await Promise.all(
+    paths.map(async (path) => {
+      let css = await fetch(`http://localhost:${port}${path}`, {
+        headers: {
+          Accept: 'text/css',
+        },
+      })
+      return await css.text()
+    }),
+  )
+
+  return stylesheets.reduce((acc, css) => {
+    return acc + '\n' + css
+  })
+}
+
+async function gracefullyRemove(dir: string) {
+  // Skip removing the directory in CI because it can stall on Windows
+  if (!process.env.CI) {
+    await fs.rm(dir, { recursive: true, force: true })
+  }
+}
+
+async function dirExists(dir: string): Promise<boolean> {
+  try {
+    return await fs.stat(dir).then((stat) => stat.isDirectory())
+  } catch {
+    return false
+  }
 }

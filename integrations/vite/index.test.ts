@@ -1,21 +1,6 @@
 import path from 'node:path'
 import { expect } from 'vitest'
-import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
-
-async function fetchCSS(pathname: string, port: number) {
-  // We need to fetch the main index.html file to populate the list of
-  // candidates.
-  let body = await fetch(`http://localhost:${port}`)
-  // Make sure the main request is garbage collected.
-  body.blob()
-
-  let response = await fetch(`http://localhost:${port}${pathname}`, {
-    headers: {
-      Accept: 'text/css',
-    },
-  })
-  return response.text()
-}
+import { candidate, css, fetchStylesFromIndex, html, js, json, test, ts, yaml } from '../utils'
 
 test(
   'production build',
@@ -140,7 +125,7 @@ test(
 
     await process.onStdout((message) => message.includes('ready in'))
 
-    let css = await fetchCSS('/src/index.css', port)
+    let css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`underline`)
 
     await fs.write(
@@ -156,7 +141,7 @@ test(
     )
     await process.onStdout((message) => message.includes('page reload'))
 
-    css = await fetchCSS('/src/index.css', port)
+    css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`m-2`)
 
     await fs.write(
@@ -168,7 +153,7 @@ test(
     )
     await process.onStdout((message) => message.includes('page reload'))
 
-    css = await fetchCSS('/src/index.css', port)
+    css = await fetchStylesFromIndex(port)
     expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
   },
 )
