@@ -42,7 +42,7 @@ export type PluginAPI = {
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(
+function buildPluginApi(
   designSystem: DesignSystem,
   ast: AstNode[],
   resolvedConfig: { theme?: Record<string, any> },
