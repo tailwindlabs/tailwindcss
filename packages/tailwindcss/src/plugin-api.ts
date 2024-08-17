@@ -24,7 +24,7 @@ export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 export type PluginAPI = {
   addBase(base: CssInJs): void
   addVariant(name: string, variant: string | string[] | CssInJs): void
-  addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
+  addUtilities(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
   matchUtilities(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
@@ -38,7 +38,7 @@ export type PluginAPI = {
     }>,
   ): void
   theme(path: string): any
-  addComponents(components: Record<string, CssInJs>, options?: {}): void
+  addComponents(components: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
   matchComponents(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
@@ -52,6 +52,7 @@ export type PluginAPI = {
     }>,
   ): void
   theme(path: string): any
+  prefix(selector: string): string
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -62,25 +63,30 @@ export function buildPluginApi(
   resolvedConfig: { theme?: Record<string, any> },
 ): PluginAPI {
   let addUtilities: PluginAPI['addUtilities'] = (utilities) => {
-    for (let [name, css] of Object.entries(utilities)) {
-      if (name.startsWith('@keyframes ')) {
-        ast.push(rule(name, objectToAst(css)))
-        continue
+    if (!Array.isArray(utilities)) {
+      utilities = [utilities]
+    }
+    for (let obj of utilities) {
+      for (let [name, css] of Object.entries(obj)) {
+        if (name.startsWith('@keyframes ')) {
+          ast.push(rule(name, objectToAst(css)))
+          continue
+        }
+
+        if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
+          throw new Error(
+            `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
+          )
+        }
+
+        designSystem.utilities.static(name.slice(1), (candidate) => {
+          if (candidate.negative) return
+
+          let ast = objectToAst(css)
+          substituteAtApply(ast, designSystem)
+          return ast
+        })
       }
-
-      if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
-        throw new Error(
-          `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
-        )
-      }
-
-      designSystem.utilities.static(name.slice(1), (candidate) => {
-        if (candidate.negative) return
-
-        let ast = objectToAst(css)
-        substituteAtApply(ast, designSystem)
-        return ast
-      })
     }
   }
 
@@ -260,6 +266,9 @@ export function buildPluginApi(
       }
 
       return result
+    },
+    prefix(selector: string) {
+      return selector
     },
   }
 }

@@ -26,4 +26,20 @@ export default defineConfig([
       plugin: 'src/plugin.cts',
     },
   },
+  {
+    format: ['esm'],
+    minify: true,
+    dts: true,
+    entry: {
+      plugin: 'src/colors.ts',
+    },
+  },
+  {
+    format: ['cjs'],
+    minify: true,
+    dts: true,
+    entry: {
+      plugin: 'src/colors.cts',
+    },
+  },
 ])

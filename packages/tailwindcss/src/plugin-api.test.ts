@@ -751,24 +751,28 @@ describe('matchComponents', async () => {
                 theme: {
                   typography: {
                     base: {
-                      css: {
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                        '* + *': {
-                          marginTop: '32px',
+                      css: [
+                        {
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                          '* + *': {
+                            marginTop: '32px',
+                          },
                         },
-                        h1: {
-                          fontSize: '32px',
-                          lineHeight: '36px',
+                        {
+                          h1: {
+                            fontSize: '32px',
+                            lineHeight: '36px',
+                          },
+                          h2: {
+                            fontSize: '24px',
+                            lineHeight: '28px',
+                          },
+                          img: {
+                            borderRadius: '12px',
+                          },
                         },
-                        h2: {
-                          fontSize: '24px',
-                          lineHeight: '28px',
-                        },
-                        img: {
-                          borderRadius: '12px',
-                        },
-                      },
+                      ],
                     },
                   },
                 },

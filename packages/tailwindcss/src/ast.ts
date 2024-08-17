@@ -44,22 +44,28 @@ export function comment(value: string): Comment {
 
 export type CssInJs = { [key: string]: string | CssInJs }
 
-export function objectToAst(obj: CssInJs): AstNode[] {
+export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let ast: AstNode[] = []
 
-  for (let [name, value] of Object.entries(obj)) {
-    if (typeof value !== 'object') {
-      if (!name.startsWith('--') && value === '@slot') {
-        ast.push(rule(name, [rule('@slot', [])]))
-      } else {
-        // Convert camelCase to kebab-case:
-        // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
-        name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+  if (!Array.isArray(rules)) {
+    rules = [rules]
+  }
 
-        ast.push(decl(name, String(value)))
+  for (let obj of rules) {
+    for (let [name, value] of Object.entries(obj)) {
+      if (typeof value !== 'object') {
+        if (!name.startsWith('--') && value === '@slot') {
+          ast.push(rule(name, [rule('@slot', [])]))
+        } else {
+          // Convert camelCase to kebab-case:
+          // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
+          name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+
+          ast.push(decl(name, String(value)))
+        }
+      } else if (value !== null) {
+        ast.push(rule(name, objectToAst(value)))
       }
-    } else if (value !== null) {
-      ast.push(rule(name, objectToAst(value)))
     }
   }
 
