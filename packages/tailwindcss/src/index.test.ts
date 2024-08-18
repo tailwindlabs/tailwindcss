@@ -545,7 +545,7 @@ describe('sorting', () => {
     `)
   })
 
-  it('should sort based on amount of properties', async () => {
+  it('should sort based on amount of unique properties', async () => {
     expect(await run(['text-clip', 'truncate', 'overflow-scroll'])).toMatchInlineSnapshot(`
       ".truncate {
         text-overflow: ellipsis;
@@ -559,6 +559,69 @@ describe('sorting', () => {
 
       .text-clip {
         text-overflow: clip;
+      }"
+    `)
+  })
+
+  it('should sort based on amount of each unique property', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+
+          @utility max-w-responsive {
+            @media (min-width: 640px) {
+              max-width: 640px;
+            }
+            @media (min-width: 768px) {
+              max-width: 768px;
+            }
+            @media (min-width: 1024px) {
+              max-width: 1024px;
+            }
+            @media (min-width: 1280px) {
+              max-width: 1280px;
+            }
+            @media (min-width: 1536px) {
+              max-width: 1536px;
+            }
+          }
+        `,
+        ['max-w-responsive', 'max-w-full'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@media (width >= 640px) {
+        .max-w-responsive {
+          max-width: 640px;
+        }
+      }
+
+      @media (width >= 768px) {
+        .max-w-responsive {
+          max-width: 768px;
+        }
+      }
+
+      @media (width >= 1024px) {
+        .max-w-responsive {
+          max-width: 1024px;
+        }
+      }
+
+      @media (width >= 1280px) {
+        .max-w-responsive {
+          max-width: 1280px;
+        }
+      }
+
+      @media (width >= 1536px) {
+        .max-w-responsive {
+          max-width: 1536px;
+        }
+      }
+
+      .max-w-full {
+        max-width: 100%;
       }"
     `)
   })
