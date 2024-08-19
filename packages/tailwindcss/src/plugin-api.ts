@@ -10,6 +10,7 @@ import { withAlpha, withNegative } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import { toKeyPath } from './utils/to-key-path'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -213,7 +214,8 @@ function buildPluginApi(
       }
     },
     theme(path) {
-      let cssValue = readFromCss(designSystem.theme, path)
+      let keypath = toKeyPath(path)
+      let cssValue = readFromCss(designSystem.theme, keypath)
 
       // If we get a single non-null value back from the CSS theme, return it
       // Otherwise, we need to merge the CSS theme with the one resolved from
@@ -224,24 +226,19 @@ function buildPluginApi(
 
       let result = resolvedConfig.theme ?? {}
 
-      // 1. Convert `path` to an array of parts (segment)
-      // 2. Find the "object" that corresponds to the path
-      // 3. Deep merge the object with the resolved theme
-      let parts = segment(path, '.')
-
-      let obj = get(result, parts) ?? {}
+      let obj = get(result, keypath) ?? {}
 
       if (typeof obj === 'object') {
         deepMerge(obj, [cssValue], (a, b) => b)
-        set(result, parts, obj)
+        set(result, keypath, obj)
       } else {
         // This case happens when the CSS theme produces an object for a given
         // keypath but the v3-style config does not. However we still want the
         // CSS to "win" in this case so we overwrite the v3-style config value.
-        set(result, parts, cssValue)
+        set(result, keypath, cssValue)
       }
 
-      for (let part of parts) {
+      for (let part of keypath) {
         result = result?.[part]
       }
 
@@ -285,21 +282,23 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   }
 }
 
-function readFromCss(theme: Theme, path: string) {
+function readFromCss(theme: Theme, path: string[]) {
   type ThemeValue =
     // A normal string value
     | string
 
     // A nested tuple with additional data
     | [main: string, extra: Record<string, string>]
-  // This only supports reading from the CSS Theme:…
+
   let original = path
-    // Escape dots used inside square brackets
-    .replace(/\[(.*?)\]/g, (_, value) => `-${value.replace('.', '_')}`)
-    // Replace dots with dashes
-    .replace(/\./g, '-')
-    // Replace camelCase with dashes
-    .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+    .map((part) => {
+      // Escape dots used inside square brackets
+      // Replace camelCase with dashes
+      return part
+        .replaceAll('.', '_')
+        .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+    })
+    .join('-')
 
   // Perform an "upgrade" on the path so that, for example, a request for
   // accentColor merges values from --color-* and --accent-color-*
@@ -376,7 +375,7 @@ function readFromCss(theme: Theme, path: string) {
     set(obj, path, value)
   }
 
-  if (path.endsWith('.DEFAULT') && 'DEFAULT' in obj) {
+  if (path[path.length - 1] === 'DEFAULT' && 'DEFAULT' in obj) {
     return obj.DEFAULT ?? null
   }
 
