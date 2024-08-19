@@ -3,7 +3,8 @@ import { segment } from './segment'
 /**
  * Parse a path string into an array of path segments
  *
- * Square bracket notation `a[b]` may be used to "escape" dots that would otherwise be interpreted as path separators.
+ * Square bracket notation `a[b]` may be used to "escape" dots that would
+ * otherwise be interpreted as path separators.
  *
  * Example:
  * a -> ['a']
@@ -15,8 +16,6 @@ import { segment } from './segment'
  * @param {string} path
  **/
 export function toKeyPath(path: string) {
-  // Handle `[]` blocks as segments in addition to `.` separators.
-  // This is used to extract floating point keys like `spacing[2.5]`.
   let keypath: string[] = []
 
   for (let part of segment(path, '.')) {
