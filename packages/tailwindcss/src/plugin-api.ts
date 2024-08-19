@@ -222,7 +222,7 @@ function buildPluginApi(
       let result = resolvedConfig.theme ?? {}
 
       // 1. Convert `path` to an array of parts (segment)
-      // 2. Find the "obeject" that corresponds to the path
+      // 2. Find the "object" that corresponds to the path
       // 3. Deep merge the object with the resolved theme
       let parts = segment(path, '.')
 
