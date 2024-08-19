@@ -25,21 +25,29 @@ export function toKeyPath(path: string) {
       continue
     }
 
-    let matches = part.matchAll(/\[([^\]]+)\]/g)
-    let i = 0
-    for (let match of matches) {
-      // Add anything between the last match and the current match
-      if (match.index > i) {
-        keypath.push(part.slice(i, match.index))
-        i = match.index
+    let currentIndex = 0
+
+    while (true) {
+      let bracketL = part.indexOf('[', currentIndex)
+      let bracketR = part.indexOf(']', bracketL)
+
+      if (bracketL === -1 || bracketR === -1) {
+        break
       }
 
-      keypath.push(match[1])
-      i += match[0].length
+      // Add the part before the bracket as a key
+      if (bracketL > currentIndex) {
+        keypath.push(part.slice(currentIndex, bracketL))
+      }
+
+      // Add the part inside the bracket as a key
+      keypath.push(part.slice(bracketL + 1, bracketR))
+      currentIndex = bracketR + 1
     }
-    // Add anything after the last segment
-    if (i < part.length - 1) {
-      keypath.push(part.slice(i))
+
+    // Add the part after the last bracket as a key
+    if (currentIndex <= part.length - 1) {
+      keypath.push(part.slice(currentIndex))
     }
   }
 
