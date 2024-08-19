@@ -16,6 +16,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "bun": "^1.1.22",
