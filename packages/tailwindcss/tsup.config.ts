@@ -16,6 +16,7 @@ export default defineConfig([
     dts: true,
     entry: {
       plugin: 'src/plugin.ts',
+      colors: 'src/compat/colors.ts',
     },
   },
   {
@@ -24,6 +25,7 @@ export default defineConfig([
     dts: true,
     entry: {
       plugin: 'src/plugin.cts',
+      colors: 'src/compat/colors.cts',
     },
   },
 ])

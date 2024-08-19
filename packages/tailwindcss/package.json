@@ -23,6 +23,10 @@
       "require": "./dist/lib.js",
       "import": "./src/index.ts"
     },
+    "./colors": {
+      "require": "./src/compat/colors.cts",
+      "import": "./src/compat/colors.ts"
+    },
     "./plugin": {
       "require": "./src/plugin.cts",
       "import": "./src/plugin.ts"
@@ -50,6 +54,10 @@
       "./plugin": {
         "require": "./dist/plugin.js",
         "import": "./dist/plugin.mjs"
+      },
+      "./colors": {
+        "require": "./dist/colors.js",
+        "import": "./dist/colors.mjs"
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
