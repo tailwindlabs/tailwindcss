@@ -79,7 +79,7 @@ function createThemeFn(ctx: ResolutionContext, resolveValue: (value: any) => any
       }
 
       // The path contains a key that doesn't exist
-      if (!(key in value)) {
+      if (!Object.hasOwn(value, key)) {
         return null
       }
 
