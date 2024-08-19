@@ -1,4 +1,5 @@
-import { segment } from '../../utils/segment'
+import type { DesignSystem } from '../../design-system'
+import { createThemeFn } from '../../theme-fn'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
   type ResolvedConfig,
@@ -8,6 +9,7 @@ import {
 } from './types'
 
 interface ResolutionContext {
+  design: DesignSystem
   configs: UserConfig[]
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
@@ -18,8 +20,9 @@ let minimal: ResolvedConfig = {
   theme: {},
 }
 
-export function resolveConfig(configs: UserConfig[]): ResolvedConfig {
+export function resolveConfig(design: DesignSystem, configs: UserConfig[]): ResolvedConfig {
   let ctx: ResolutionContext = {
+    design,
     configs,
     theme: {},
     extend: {},
@@ -67,32 +70,9 @@ export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
 }
 
-function createThemeFn(ctx: ResolutionContext, resolveValue: (value: any) => any) {
-  return function theme(path: string): any {
-    let parts = segment(path, '.')
-    let value: any = ctx.theme
-
-    for (let key of parts) {
-      // The value isn't an object which means we can't traverse it
-      if (typeof value !== 'object' || value === null) {
-        return null
-      }
-
-      // The path contains a key that doesn't exist
-      if (!Object.hasOwn(value, key)) {
-        return null
-      }
-
-      value = value[key]
-    }
-
-    return resolveValue(value)
-  }
-}
-
 function mergeTheme(ctx: ResolutionContext) {
   let api: PluginUtils = {
-    theme: createThemeFn(ctx, resolveValue),
+    theme: createThemeFn(ctx.design, () => ctx.theme, resolveValue),
   }
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {

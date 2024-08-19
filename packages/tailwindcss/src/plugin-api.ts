@@ -2,15 +2,12 @@ import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
 import type { NamedUtilityValue } from './candidate'
 import { createCompatConfig } from './compat/config/create-compat-config'
-import { deepMerge } from './compat/config/deep-merge'
 import { resolveConfig } from './compat/config/resolve-config'
 import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
-import type { Theme } from './theme'
+import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
-import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
-import { toKeyPath } from './utils/to-key-path'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -213,37 +210,12 @@ function buildPluginApi(
         })
       }
     },
-    theme(path) {
-      let keypath = toKeyPath(path)
-      let cssValue = readFromCss(designSystem.theme, keypath)
 
-      // If we get a single non-null value back from the CSS theme, return it
-      // Otherwise, we need to merge the CSS theme with the one resolved from
-      // all registered plugins.
-      if (cssValue === null || typeof cssValue !== 'object') {
-        return cssValue
-      }
-
-      let result = resolvedConfig.theme ?? {}
-
-      let obj = get(result, keypath) ?? {}
-
-      if (typeof obj === 'object') {
-        deepMerge(obj, [cssValue], (a, b) => b)
-        set(result, keypath, obj)
-      } else {
-        // This case happens when the CSS theme produces an object for a given
-        // keypath but the v3-style config does not. However we still want the
-        // CSS to "win" in this case so we overwrite the v3-style config value.
-        set(result, keypath, cssValue)
-      }
-
-      for (let part of keypath) {
-        result = result?.[part]
-      }
-
-      return result
-    },
+    theme: createThemeFn(
+      designSystem,
+      () => resolvedConfig.theme ?? {},
+      (value) => value,
+    ),
   }
 }
 
@@ -269,7 +241,7 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   }
 
   // Now merge all the configs and make all that crap work
-  let resolvedConfig = resolveConfig([
+  let resolvedConfig = resolveConfig(designSystem, [
     createCompatConfig(designSystem.theme),
     ...pluginObjects.map(({ config }) => config ?? {}),
   ])
@@ -280,138 +252,6 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   for (let { handler } of pluginObjects) {
     handler(pluginApi)
   }
-}
-
-function readFromCss(theme: Theme, path: string[]) {
-  type ThemeValue =
-    // A normal string value
-    | string
-
-    // A nested tuple with additional data
-    | [main: string, extra: Record<string, string>]
-
-  let original = path
-    .map((part) => {
-      // Escape dots used inside square brackets
-      // Replace camelCase with dashes
-      return part
-        .replaceAll('.', '_')
-        .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
-    })
-    .join('-')
-
-  // Perform an "upgrade" on the path so that, for example, a request for
-  // accentColor merges values from --color-* and --accent-color-*
-  let paths: string[] = []
-
-  for (let prefix in themeUpgradeMap) {
-    if (!original.startsWith(prefix)) continue
-
-    // This makes sure that:
-    // `accent-color` is turned into `color`; AND
-    // `accent-color-foo` is turned into `color-foo`
-    let suffix = original.slice(prefix.length)
-
-    for (let upgrade of themeUpgradeMap[prefix]) {
-      paths.push(upgrade + suffix)
-    }
-  }
-
-  // Make sure the original path is included last because it should take precedence
-  paths.push(original)
-
-  let map = new Map<string | null, ThemeValue>()
-  let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
-
-  for (let path of paths) {
-    path = path.replace('-DEFAULT', '')
-
-    let ns = theme.resolveNamespace(`--${path}` as any)
-
-    for (let [key, value] of ns) {
-      // Non-nested values can be set directly
-      if (!key || !key.includes('--')) {
-        map.set(key, value)
-        continue
-      }
-
-      // Nested values are stored separately
-      let nestedIndex = key.indexOf('--')
-
-      let mainKey = key.slice(0, nestedIndex)
-      let nestedKey = key.slice(nestedIndex + 2)
-
-      // Make `nestedKey` camel case:
-      nestedKey = nestedKey.replace(/-([a-z])/g, (_, a) => a.toUpperCase())
-
-      nested.get(mainKey === '' ? null : mainKey).set(nestedKey, value)
-    }
-  }
-
-  for (let [key, extra] of nested) {
-    let value = map.get(key)
-    if (typeof value !== 'string') continue
-
-    map.set(key, [value, Object.fromEntries(extra)])
-  }
-
-  // We have to turn the map into object-like structure for v3 compatibility
-  let obj = {}
-  let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
-
-  for (let [key, value] of map) {
-    key = key ?? 'DEFAULT'
-
-    let path: string[] = []
-    let splitIndex = key.indexOf('-')
-
-    if (useNestedObjects && splitIndex !== -1) {
-      path.push(key.slice(0, splitIndex))
-      path.push(key.slice(splitIndex + 1))
-    } else {
-      path.push(key)
-    }
-
-    set(obj, path, value)
-  }
-
-  if (path[path.length - 1] === 'DEFAULT' && 'DEFAULT' in obj) {
-    return obj.DEFAULT ?? null
-  }
-
-  if (Object.keys(obj).length === 1 && 'DEFAULT' in obj) {
-    return obj.DEFAULT
-  }
-
-  return obj
-}
-
-function get(obj: any, path: string[]) {
-  for (let key of path) {
-    if (obj[key] === undefined) {
-      return undefined
-    }
-
-    obj = obj[key]
-  }
-
-  return obj
-}
-
-function set(obj: any, path: string[], value: any) {
-  for (let key of path.slice(0, -1)) {
-    if (obj[key] === undefined) {
-      obj[key] = {}
-    }
-
-    obj = obj[key]
-  }
-
-  obj[path[path.length - 1]] = value
-}
-
-let themeUpgradeMap: Record<string, string[]> = {
-  colors: ['color'],
 }
 
 export type CssInJs = { [key: string]: string | CssInJs }

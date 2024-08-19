@@ -45,6 +45,7 @@ let bareDegrees = bareValues((value: NamedUtilityValue) => {
 export function createCompatConfig(theme: Theme): UserConfig {
   return {
     theme: {
+      colors: ({ theme }) => theme('color'),
       accentColor: ({ theme }) => theme('colors'),
       aspectRatio: bareValues((value) => {
         if (value.fraction === null) return

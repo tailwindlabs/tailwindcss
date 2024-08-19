@@ -1,8 +1,12 @@
 import { test } from 'vitest'
+import { buildDesignSystem } from '../../design-system'
+import { Theme } from '../../theme'
 import { resolveConfig } from './resolve-config'
 
 test('top level theme keys are replaced', ({ expect }) => {
-  let config = resolveConfig([
+  let design = buildDesignSystem(new Theme())
+
+  let config = resolveConfig(design, [
     {
       theme: {
         colors: {
@@ -43,7 +47,9 @@ test('top level theme keys are replaced', ({ expect }) => {
 })
 
 test('theme can be extended', ({ expect }) => {
-  let config = resolveConfig([
+  let design = buildDesignSystem(new Theme())
+
+  let config = resolveConfig(design, [
     {
       theme: {
         colors: {
@@ -82,7 +88,9 @@ test('theme can be extended', ({ expect }) => {
 test('theme keys can reference other theme keys using the theme function regardless of order', ({
   expect,
 }) => {
-  let config = resolveConfig([
+  let design = buildDesignSystem(new Theme())
+
+  let config = resolveConfig(design, [
     {
       theme: {
         colors: {

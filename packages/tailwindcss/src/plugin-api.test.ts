@@ -720,4 +720,41 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('theme keys can derive from other theme keys', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme {
+        --color-primary: red;
+        --color-secondary: blue;
+      }
+    `
+
+    let fn = vi.fn()
+
+    await compile(input, {
+      loadPlugin: async () => {
+        return plugin(
+          ({ theme }) => {
+            // The compatability config specifies that `accentColor` spreads in `colors`
+            fn(theme('accentColor.primary'))
+
+            // This should even work for theme keys specified in plugin configs
+            fn(theme('myAccentColor.secondary'))
+          },
+          {
+            theme: {
+              extend: {
+                myAccentColor: ({ theme }) => theme('accentColor'),
+              },
+            },
+          },
+        )
+      },
+    })
+
+    expect(fn).toHaveBeenCalledWith('var(--color-primary, red)')
+    expect(fn).toHaveBeenCalledWith('var(--color-secondary, blue)')
+  })
 })
