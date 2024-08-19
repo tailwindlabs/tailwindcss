@@ -326,37 +326,19 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   return ast
 }
 
-export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
-  let pluginObjects = []
-
-  for (let plugin of plugins) {
-    if ('__isOptionsFunction' in plugin) {
-      // Happens with `plugin.withOptions()` when no options were passed:
-      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      pluginObjects.push(plugin())
-    } else if ('handler' in plugin) {
-      // Happens with `plugin(…)`:
-      // e.g. `require("my-plugin")`
-      //
-      // or with `plugin.withOptions()` when the user passed options:
-      // e.g. `require("my-plugin")(options)`
-      pluginObjects.push(plugin)
-    } else {
-      // Just a plain function without using the plugin(…) API
-      pluginObjects.push({ handler: plugin, config: {} as UserConfig })
-    }
-  }
-
-  // Now merge all the configs and make all that crap work
+export function registerPlugins(
+  plugins: Plugin[],
+  designSystem: DesignSystem,
+  ast: AstNode[],
+) {
   let resolvedConfig = resolveConfig(designSystem, [
     createCompatConfig(designSystem.theme),
-    ...pluginObjects.map(({ config }) => config ?? {}),
+    { plugins },
   ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
-  // Loop over the handlers and run them all with the resolved config + CSS theme probably somehow
-  for (let { handler } of pluginObjects) {
+  for (let { handler } of resolvedConfig.plugins) {
     handler(pluginApi)
   }
 

@@ -1,4 +1,5 @@
 import type { DesignSystem } from '../../design-system'
+import type { PluginWithConfig } from '../../plugin-api'
 import { createThemeFn } from '../../theme-fn'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
@@ -11,6 +12,7 @@ import {
 interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
+  plugins: PluginWithConfig[]
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
   result: ResolvedConfig
@@ -18,12 +20,14 @@ interface ResolutionContext {
 
 let minimal: ResolvedConfig = {
   theme: {},
+  plugins: [],
 }
 
 export function resolveConfig(design: DesignSystem, configs: UserConfig[]): ResolvedConfig {
   let ctx: ResolutionContext = {
     design,
-    configs,
+    configs: [],
+    plugins: [],
     theme: {},
     extend: {},
 
@@ -31,11 +35,16 @@ export function resolveConfig(design: DesignSystem, configs: UserConfig[]): Reso
     result: structuredClone(minimal),
   }
 
+  for (let config of configs) {
+    resolveInternal(ctx, config)
+  }
+
   // Merge themes
   mergeTheme(ctx)
 
   return {
     theme: ctx.theme as ResolvedConfig['theme'],
+    plugins: ctx.plugins,
   }
 }
 
@@ -69,6 +78,41 @@ function mergeThemeExtension(
 
 export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
+}
+
+function resolveInternal(ctx: ResolutionContext, user: UserConfig): void {
+  let plugins: PluginWithConfig[] = []
+
+  // Normalize plugins so they share the same shape
+  for (let plugin of user.plugins ?? []) {
+    if ('__isOptionsFunction' in plugin) {
+      // Happens with `plugin.withOptions()` when no options were passed:
+      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
+      plugins.push(plugin())
+    } else if ('handler' in plugin) {
+      // Happens with `plugin(…)`:
+      // e.g. `require("my-plugin")`
+      //
+      // or with `plugin.withOptions()` when the user passed options:
+      // e.g. `require("my-plugin")(options)`
+      plugins.push(plugin)
+    } else {
+      // Just a plain function without using the plugin(…) API
+      plugins.push({ handler: plugin })
+    }
+  }
+
+  // Apply configs from plugins
+  for (let plugin of plugins) {
+    ctx.plugins.push(plugin)
+
+    if (plugin.config) {
+      resolveInternal(ctx, plugin.config)
+    }
+  }
+
+  // Then apply the "user" config
+  ctx.configs.push(user)
 }
 
 function mergeTheme(ctx: ResolutionContext) {
