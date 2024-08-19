@@ -147,3 +147,50 @@ test('theme keys can reference other theme keys using the theme function regardl
     },
   })
 })
+
+test('theme keys can read from the CSS theme', ({ expect }) => {
+  let theme = new Theme()
+  theme.add('--color-green', 'green')
+
+  let design = buildDesignSystem(theme)
+
+  let config = resolveConfig(design, [
+    {
+      theme: {
+        colors: ({ theme }) => ({
+          // Reads from the --color-* namespace
+          ...theme('color'),
+          red: 'red',
+        }),
+        accentColor: ({ theme }) => ({
+          // Reads from the --color-* namespace through `colors`
+          ...theme('colors'),
+        }),
+        placeholderColor: ({ theme }) => ({
+          // Reads from the --color-* namespace through `colors`
+          primary: theme('colors.green'),
+
+          // Reads from the --color-* namespace directly
+          secondary: theme('color.green'),
+        }),
+      },
+    },
+  ])
+
+  expect(config).toMatchObject({
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'var(--color-green, green)',
+      },
+      accentColor: {
+        red: 'red',
+        green: 'var(--color-green, green)',
+      },
+      placeholderColor: {
+        primary: 'var(--color-green, green)',
+        secondary: 'var(--color-green, green)',
+      },
+    },
+  })
+})
