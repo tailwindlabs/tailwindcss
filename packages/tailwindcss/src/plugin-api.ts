@@ -50,6 +50,7 @@ export type PluginAPI = {
   ): void
 
   theme(path: string, defaultValue?: any): any
+  prefix(className: string): string
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -242,6 +243,10 @@ function buildPluginApi(
       () => resolvedConfig.theme ?? {},
       (value) => value,
     ),
+
+    prefix(className) {
+      return className
+    },
   }
 
   // Bind these functions so they can use `this`
