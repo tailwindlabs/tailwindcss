@@ -9,4 +9,5 @@ it('can convert key paths to arrays', () => {
   expect(toKeyPath('colors[red].[500]')).toEqual(['colors', 'red', '500'])
   expect(toKeyPath('colors[red]500')).toEqual(['colors', 'red', '500'])
   expect(toKeyPath('colors[red][500]')).toEqual(['colors', 'red', '500'])
+  expect(toKeyPath('colors[red]500[50]5')).toEqual(['colors', 'red', '500', '50', '5'])
 })
