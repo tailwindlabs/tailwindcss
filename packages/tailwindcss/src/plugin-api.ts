@@ -215,7 +215,10 @@ function buildPluginApi(
     theme(path) {
       let cssValue = readFromCss(designSystem.theme, path)
 
-      if (typeof cssValue !== 'object') {
+      // If we get a single non-null value back from the CSS theme, return it
+      // Otherwise, we need to merge the CSS theme with the one resolved from
+      // all registered plugins.
+      if (cssValue === null || typeof cssValue !== 'object') {
         return cssValue
       }
 
