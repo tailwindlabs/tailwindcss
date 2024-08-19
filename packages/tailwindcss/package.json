@@ -49,7 +49,7 @@
       },
       "./plugin": {
         "require": "./dist/plugin.js",
-        "import": "./src/plugin.mjs"
+        "import": "./dist/plugin.mjs"
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
