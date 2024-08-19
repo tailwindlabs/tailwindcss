@@ -218,12 +218,16 @@ function buildPluginApi(
   }
 }
 
-export type CssInJs = { [key: string]: string | CssInJs }
+export type CssInJs = { [key: string]: string | CssInJs | CssInJs[] }
 
-function objectToAst(obj: CssInJs): AstNode[] {
+function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let ast: AstNode[] = []
 
-  for (let [name, value] of Object.entries(obj)) {
+  rules = Array.isArray(rules) ? rules : [rules]
+
+  let entries = rules.flatMap((rule) => Object.entries(rule))
+
+  for (let [name, value] of entries) {
     if (typeof value !== 'object') {
       if (!name.startsWith('--') && value === '@slot') {
         ast.push(rule(name, [rule('@slot', [])]))
