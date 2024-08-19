@@ -102,6 +102,15 @@ function resolveInternal(ctx: ResolutionContext, user: UserConfig): void {
     }
   }
 
+  // Apply configs from presets
+  if (Array.isArray(user.presets) && user.presets.length === 0) {
+    throw new Error('The empty preset `[]` is not supported')
+  }
+
+  for (let preset of user.presets ?? []) {
+    resolveInternal(ctx, preset)
+  }
+
   // Apply configs from plugins
   for (let plugin of plugins) {
     ctx.plugins.push(plugin)

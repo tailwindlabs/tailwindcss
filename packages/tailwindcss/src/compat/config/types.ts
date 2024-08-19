@@ -4,6 +4,7 @@ import type { PluginUtils } from './resolve-config'
 export type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
 
 export interface UserConfig {
+  presets?: UserConfig[]
   theme?: ThemeConfig
   plugins?: Plugin[]
 }
