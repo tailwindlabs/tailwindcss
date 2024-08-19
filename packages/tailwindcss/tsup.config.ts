@@ -3,7 +3,6 @@ import { defineConfig } from 'tsup'
 export default defineConfig([
   {
     format: ['esm', 'cjs'],
-    clean: true,
     minify: true,
     dts: true,
     entry: {
@@ -17,6 +16,7 @@ export default defineConfig([
     entry: {
       plugin: 'src/plugin.ts',
       colors: 'src/compat/colors.ts',
+      'default-theme': 'src/compat/default-theme.ts',
     },
   },
   {
@@ -26,6 +26,7 @@ export default defineConfig([
     entry: {
       plugin: 'src/plugin.cts',
       colors: 'src/compat/colors.cts',
+      'default-theme': 'src/compat/default-theme.cts',
     },
   },
 ])
