@@ -22,7 +22,8 @@ export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 export type PluginAPI = {
   addBase(base: CssInJs): void
   addVariant(name: string, variant: string | string[] | CssInJs): void
-  addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
+
+  addUtilities(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
   matchUtilities(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
@@ -71,7 +72,11 @@ function buildPluginApi(
     },
 
     addUtilities(utilities) {
-      for (let [name, css] of Object.entries(utilities)) {
+      utilities = Array.isArray(utilities) ? utilities : [utilities]
+
+      let entries = utilities.flatMap((u) => Object.entries(u))
+
+      for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
           ast.push(rule(name, objectToAst(css)))
           continue
