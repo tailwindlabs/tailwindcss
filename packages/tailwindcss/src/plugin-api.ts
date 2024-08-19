@@ -35,6 +35,20 @@ export type PluginAPI = {
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
+
+  addComponents(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
+  matchComponents(
+    utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
+    options?: Partial<{
+      type: string | string[]
+      supportsNegativeValues: boolean
+      values: Record<string, string> & {
+        __BARE_VALUE__?: (value: NamedUtilityValue) => string | undefined
+      }
+      modifiers: 'any' | Record<string, string>
+    }>,
+  ): void
+
   theme(path: string, defaultValue?: any): any
 }
 
@@ -45,7 +59,7 @@ function buildPluginApi(
   ast: AstNode[],
   resolvedConfig: { theme?: Record<string, any> },
 ): PluginAPI {
-  return {
+  let api: PluginAPI = {
     addBase(css) {
       ast.push(rule('@layer base', objectToAst(css)))
     },
@@ -215,12 +229,26 @@ function buildPluginApi(
       }
     },
 
+    addComponents(components, options) {
+      this.addUtilities(components)
+    },
+
+    matchComponents(components, options) {
+      this.matchUtilities(components)
+    },
+
     theme: createThemeFn(
       designSystem,
       () => resolvedConfig.theme ?? {},
       (value) => value,
     ),
   }
+
+  // Bind these functions so they can use `this`
+  api.addComponents = api.addComponents.bind(api)
+  api.matchComponents = api.matchComponents.bind(api)
+
+  return api
 }
 
 export type CssInJs = { [key: string]: string | CssInJs | CssInJs[] }
