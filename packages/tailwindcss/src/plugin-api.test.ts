@@ -785,4 +785,31 @@ describe('theme', async () => {
     expect(fn).toHaveBeenCalledWith('var(--color-red-200, orangered)')
     expect(fn).toHaveBeenCalledWith('var(--color-red-300, darkred)')
   })
+
+  test('keys that do not exist return the default value (or undefined if none)', async ({
+    expect,
+  }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let fn = vi.fn()
+
+    await compile(input, {
+      loadPlugin: async () => {
+        return plugin(({ theme }) => {
+          fn(theme('i.do.not.exist'))
+          fn(theme('color'))
+          fn(theme('color', 'magenta'))
+          fn(theme('colors'))
+        })
+      },
+    })
+
+    expect(fn).toHaveBeenCalledWith(undefined) // Not present in CSS or resolved config
+    expect(fn).toHaveBeenCalledWith(undefined) // Not present in CSS or resolved config
+    expect(fn).toHaveBeenCalledWith('magenta') // Not present in CSS or resolved config
+    expect(fn).toHaveBeenCalledWith({}) // Present in the resolved config
+  })
 })

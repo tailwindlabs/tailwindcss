@@ -34,7 +34,7 @@ export type PluginAPI = {
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
-  theme(path: string): any
+  theme(path: string, defaultValue?: any): any
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/

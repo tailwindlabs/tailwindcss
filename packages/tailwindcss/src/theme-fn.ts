@@ -10,35 +10,22 @@ export function createThemeFn(
   configTheme: () => UserConfig['theme'],
   resolveValue: (value: any) => any,
 ) {
-  return function theme(path: string) {
+  return function theme(path: string, defaultValue?: any) {
     let keypath = toKeyPath(path)
     let cssValue = readFromCss(designSystem.theme, keypath)
 
-    // If we get a single non-null value back from the CSS theme, return it
-    // Otherwise, we need to merge the CSS theme with the one resolved from
-    // all registered plugins.
-    if (cssValue === null || typeof cssValue !== 'object') {
+    if (typeof cssValue !== 'object') {
       return cssValue
     }
 
-    let result: Record<string, any> = configTheme() ?? {}
+    let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
-    let configValue = resolveValue(get(result, keypath) ?? {})
-
-    if (typeof configValue === 'object') {
+    if (configValue !== null && typeof configValue === 'object') {
       return deepMerge({}, [configValue, cssValue], (_, b) => b)
     }
 
-    // If the CSS theme has no values defined for this
-    // keypath then we should return the config value.
-    if (Object.keys(cssValue).length === 0) {
-      return configValue
-    }
-
-    // This case happens when the CSS theme produces an object for a given
-    // keypath but the v3-style config does not. However we still want the
-    // CSS to "win" in this case so we overwrite the v3-style config value.
-    return cssValue
+    // Values from CSS take precedence over values from the config
+    return cssValue ?? configValue ?? defaultValue
   }
 }
 
@@ -66,6 +53,10 @@ function readFromCss(theme: Theme, path: string[]) {
   let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
 
   let ns = theme.resolveNamespace(`--${themeKey}` as any)
+
+  if (ns.size === 0) {
+    return null
+  }
 
   for (let [key, value] of ns) {
     // Non-nested values can be set directly
@@ -113,12 +104,20 @@ function readFromCss(theme: Theme, path: string[]) {
     set(obj, path, value)
   }
 
-  if (path[path.length - 1] === 'DEFAULT' && 'DEFAULT' in obj) {
-    return obj.DEFAULT ?? null
-  }
+  if ('DEFAULT' in obj) {
+    // The request looked like `theme('animation.DEFAULT')` and was turned into
+    // a lookup for `--animation-*` and we should extract the value for the
+    // `DEFAULT` key from the list of possible values
+    if (path[path.length - 1] === 'DEFAULT') {
+      return obj.DEFAULT
+    }
 
-  if (Object.keys(obj).length === 1 && 'DEFAULT' in obj) {
-    return obj.DEFAULT
+    // The request looked like `theme('animation.spin')` and was turned into a
+    // lookup for `--animation-spin-*` which had only one entry which means it
+    // should be returned directly
+    if (Object.keys(obj).length === 1) {
+      return obj.DEFAULT
+    }
   }
 
   return obj
