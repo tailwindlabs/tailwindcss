@@ -36,24 +36,27 @@ export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI):
   walkValues(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) {
-        // TODO: Update wording
-        throw new Error('Expected theme() function to have at least one argument.')
+        throw new Error(
+          'Expected `theme()` function call to have a path. For example: `theme(colors.red.500)`.',
+        )
       }
 
       let pathNode = node.nodes[0]
       if (pathNode.kind !== 'word') {
-        // TODO: Update wording
-        throw new Error('Expected the first argument of the theme() function to be a word.')
+        throw new Error(
+          `Expected \`theme()\` function to start with a path, but instead found ${pathNode.value}.`,
+        )
       }
       let path = pathNode.value
 
-      // For the theme function arguments, we require all separators to contain comma (`,`), spaces
-      // alone should be merged into the previous word to avoid splitting in this case:
+      // For the theme function arguments, we require all separators to contain
+      // comma (`,`), spaces alone should be merged into the previous word to
+      // avoid splitting in this case:
       //
-      // theme(colors.red.500 / 75%)
-      // theme(colors.red.500 / 75%, foo, bar)
+      // theme(colors.red.500 / 75%) theme(colors.red.500 / 75%, foo, bar)
       //
-      // We only need to do this for the first node
+      // We only need to do this for the first node, as the fallback values are
+      // passed through as-is.
       let skipUntilIndex = 1
       for (let i = skipUntilIndex; i < node.nodes.length; i++) {
         if (node.nodes[i].value.includes(',')) {
@@ -78,10 +81,8 @@ function cssThemeFn(
   path: string,
   fallbackValues: ValueAstNode[],
 ): ValueAstNode[] {
-  let inputPath = path
   let modifier: string | null = null
   // Extract an eventual modifier from the path. e.g.:
-  //
   // - "colors.red.500 / 50%" -> "50%"
   // - "foo/bar/baz/50%"      -> "50%"
   let lastSlash = path.lastIndexOf('/')
@@ -91,17 +92,33 @@ function cssThemeFn(
   }
 
   let resolvedValue: string | null = null
-
   let themeValue = pluginApi.theme(path)
 
   if (Array.isArray(themeValue)) {
     // When a tuple is returned, return the first element
     resolvedValue = themeValue[0]
+    // We otherwise only ignore string values here, objects (and namespace maps)
+    // are treated as non-resolved values for the CSS `theme()` function.
   } else if (typeof themeValue === 'string') {
     resolvedValue = themeValue
   }
 
-  // TODO: Explain this
+  // The plugin `theme()` function currently returns resolved values (so values
+  // that are wrapped in `var()` and the CSS variable name. The CSS theme
+  // function should instead return the raw values though, this is because it
+  // can be used in positions where `var()` is not supported like
+  // `@media (min-width: theme(--breakpoint-sm))`.
+  //
+  // Since the Plugin `theme()` function operates on the resolved config object
+  // provided by plugins though, the values would already be read from the CSS
+  // theme before we even get here. Subsequently, we can only read resolved
+  // values here unless we would create a separate resolved config object
+  // containing unresolved CSS values only for use with the CSS `theme()`
+  // function.
+  //
+  // Since this is overkill, we instead introspect the string and try to unwrap
+  // the `var()` call for now. This works because we always define a fallback
+  // value that points to the raw CSS variable value.
   if (typeof resolvedValue === 'string') {
     if (resolvedValue.startsWith('var(')) {
       const firstComma = resolvedValue.indexOf(',')
@@ -118,9 +135,8 @@ function cssThemeFn(
   }
 
   if (!resolvedValue) {
-    // TODO: Update wording
     throw new Error(
-      `Could not resolve value for theme function: \`theme(${path}${modifier ? ` / ${modifier}` : ''})\``,
+      `Could not resolve value for theme function: \`theme(${path}${modifier ? ` / ${modifier}` : ''})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
     )
   }
 
@@ -128,9 +144,8 @@ function cssThemeFn(
     resolvedValue = withAlpha(resolvedValue, modifier)
   }
 
-  // We need to parse the value here since this can resolve with
-  // another theme() function definition in case the @theme defines it as
-  // theme()
+  // We need to parse the values recursively since this can resolve with another
+  // `theme()` function definition.
   return ValueParser.parse(resolvedValue)
 }
 
