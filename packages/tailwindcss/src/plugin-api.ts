@@ -1,13 +1,17 @@
 import { substituteAtApply } from './apply'
-import { objectToAst, rule, type AstNode, type CssInJs } from './ast'
+import { decl, rule, type AstNode } from './ast'
+import type { NamedUtilityValue } from './candidate'
+import { createCompatConfig } from './compat/config/create-compat-config'
+import { resolveConfig } from './compat/config/resolve-config'
+import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
+import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 
-export type Config = Record<string, any>
-
+export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
-export type PluginWithConfig = { handler: PluginFn; config?: Partial<Config> }
+export type PluginWithConfig = { handler: PluginFn; config?: UserConfig }
 export type PluginWithOptions<T> = {
   (options?: T): PluginWithConfig
   __isOptionsFunction: true
@@ -24,15 +28,22 @@ export type PluginAPI = {
     options?: Partial<{
       type: string | string[]
       supportsNegativeValues: boolean
-      values: Record<string, string>
+      values: Record<string, string> & {
+        __BARE_VALUE__?: (value: NamedUtilityValue) => string | undefined
+      }
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
+  theme(path: string, defaultValue?: any): any
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): PluginAPI {
+function buildPluginApi(
+  designSystem: DesignSystem,
+  ast: AstNode[],
+  resolvedConfig: { theme?: Record<string, any> },
+): PluginAPI {
   return {
     addBase(css) {
       ast.push(rule('@layer base', objectToAst(css)))
@@ -61,6 +72,11 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
 
     addUtilities(utilities) {
       for (let [name, css] of Object.entries(utilities)) {
+        if (name.startsWith('@keyframes ')) {
+          ast.push(rule(name, objectToAst(css)))
+          continue
+        }
+
         if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
           throw new Error(
             `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
@@ -120,7 +136,8 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
           let isColor = types.includes('color')
 
           // Resolve the candidate value
-          let value: string | null
+          let value: string | null = null
+          let isFraction = false
 
           {
             let values = options?.values ?? {}
@@ -128,24 +145,30 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
             if (isColor) {
               // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
               // for backwards compatibility but still allow them to be overridden
-              values = {
-                inherit: 'inherit',
-                transparent: 'transparent',
-                current: 'currentColor',
-                ...values,
-              }
+              values = Object.assign(
+                {
+                  inherit: 'inherit',
+                  transparent: 'transparent',
+                  current: 'currentColor',
+                },
+                values,
+              )
             }
 
             if (!candidate.value) {
               value = values.DEFAULT ?? null
             } else if (candidate.value.kind === 'arbitrary') {
               value = candidate.value.value
-            } else {
-              value = values[candidate.value.value] ?? null
+            } else if (values[candidate.value.value]) {
+              value = values[candidate.value.value]
+            } else if (values.__BARE_VALUE__) {
+              value = values.__BARE_VALUE__(candidate.value) ?? null
+
+              isFraction = (candidate.value.fraction !== null && value?.includes('/')) ?? false
             }
           }
 
-          if (!value) return
+          if (value === null) return
 
           // Resolve the modifier value
           let modifier: string | null
@@ -167,12 +190,12 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
           }
 
           // A modifier was provided but is invalid
-          if (candidate.modifier && !modifier) {
+          if (candidate.modifier && modifier === null && !isFraction) {
             // For arbitrary values, return `null` to avoid falling through to the next utility
             return candidate.value?.kind === 'arbitrary' ? null : undefined
           }
 
-          if (isColor && modifier) {
+          if (isColor && modifier !== null) {
             value = withAlpha(value, modifier)
           }
 
@@ -186,27 +209,70 @@ export function buildPluginApi(designSystem: DesignSystem, ast: AstNode[]): Plug
         })
       }
     },
+
+    theme: createThemeFn(
+      designSystem,
+      () => resolvedConfig.theme ?? {},
+      (value) => value,
+    ),
   }
 }
 
+export type CssInJs = { [key: string]: string | CssInJs }
+
+function objectToAst(obj: CssInJs): AstNode[] {
+  let ast: AstNode[] = []
+
+  for (let [name, value] of Object.entries(obj)) {
+    if (typeof value !== 'object') {
+      if (!name.startsWith('--') && value === '@slot') {
+        ast.push(rule(name, [rule('@slot', [])]))
+      } else {
+        // Convert camelCase to kebab-case:
+        // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
+        name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+
+        ast.push(decl(name, String(value)))
+      }
+    } else if (value !== null) {
+      ast.push(rule(name, objectToAst(value)))
+    }
+  }
+
+  return ast
+}
+
 export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
-  let pluginApi = buildPluginApi(designSystem, ast)
+  let pluginObjects = []
 
   for (let plugin of plugins) {
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugin().handler(pluginApi)
+      pluginObjects.push(plugin())
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugin.handler(pluginApi)
+      pluginObjects.push(plugin)
     } else {
       // Just a plain function without using the plugin(…) API
-      plugin(pluginApi)
+      pluginObjects.push({ handler: plugin, config: {} as UserConfig })
     }
+  }
+
+  // Now merge all the configs and make all that crap work
+  let resolvedConfig = resolveConfig(designSystem, [
+    createCompatConfig(designSystem.theme),
+    ...pluginObjects.map(({ config }) => config ?? {}),
+  ])
+
+  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
+
+  // Loop over the handlers and run them all with the resolved config + CSS theme probably somehow
+  for (let { handler } of pluginObjects) {
+    handler(pluginApi)
   }
 }
