@@ -128,9 +128,17 @@ function readFromCss(theme: Theme, path: string[]) {
 }
 
 function get(obj: any, path: string[]) {
-  for (let key of path) {
+  for (let i = 0; i < path.length; ++i) {
+    let key = path[i]
+
+    // The key does not exist so concatenate it with the next key
     if (obj[key] === undefined) {
-      return undefined
+      if (path[i + 1] === undefined) {
+        return undefined
+      }
+
+      path[i + 1] = `${key}-${path[i + 1]}`
+      continue
     }
 
     obj = obj[key]
