@@ -26,10 +26,7 @@ export function createThemeFn(
     let configValue = resolveValue(get(result, keypath) ?? {})
 
     if (typeof configValue === 'object') {
-      deepMerge(configValue, [cssValue], (_, b) => b)
-      set(result, keypath, configValue)
-
-      return get(result, keypath)
+      return deepMerge({}, [configValue, cssValue], (_, b) => b)
     }
 
     // If the CSS theme has no values defined for this
