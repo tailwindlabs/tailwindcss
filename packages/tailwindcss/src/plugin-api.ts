@@ -347,4 +347,6 @@ export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, a
   for (let { handler } of pluginObjects) {
     handler(pluginApi)
   }
+
+  return pluginApi
 }

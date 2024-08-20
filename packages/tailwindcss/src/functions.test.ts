@@ -432,23 +432,23 @@ describe('theme function', () => {
     })
 
     describe('resolving --default lookups', () => {
-      test('theme(font.family)', async () => {
+      test('theme(blur.DEFAULT)', async () => {
         expect(
           await compileCss(css`
             @theme {
-              --default-font-family: Helvetica Neue, Helvetica, sans-serif;
+              --blur: 8px;
             }
-            .sans {
-              font-family: theme(font.family);
+            .blur {
+              filter: blur(theme(blur));
             }
           `),
         ).toMatchInlineSnapshot(`
           ":root {
-            --default-font-family: Helvetica Neue, Helvetica, sans-serif;
+            --blur: 8px;
           }
 
-          .sans {
-            font-family: Helvetica Neue, Helvetica, sans-serif;
+          .blur {
+            filter: blur(8px);
           }"
         `)
       })

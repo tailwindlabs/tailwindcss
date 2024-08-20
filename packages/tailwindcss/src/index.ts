@@ -282,7 +282,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   let plugins = await Promise.all(pluginPaths.map(loadPlugin))
 
-  registerPlugins(plugins, designSystem, ast)
+  let pluginApi = registerPlugins(plugins, designSystem, ast)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
@@ -291,7 +291,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   // Replace `theme()` function calls with the actual theme variables.
   if (css.includes(THEME_FUNCTION_INVOCATION)) {
-    substituteFunctions(ast, designSystem)
+    substituteFunctions(ast, designSystem, pluginApi)
   }
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
@@ -310,6 +310,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   return {
     designSystem,
+    pluginApi,
     ast,
     globs,
   }
@@ -322,7 +323,7 @@ export async function compile(
   globs: string[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, opts)
+  let { designSystem, ast, globs, pluginApi } = await parseCss(css, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -388,7 +389,7 @@ export async function compile(
           return compiledCss
         }
 
-        substituteFunctions(newNodes, designSystem)
+        substituteFunctions(newNodes, designSystem, pluginApi)
 
         previousAstNodeCount = newNodes.length
 

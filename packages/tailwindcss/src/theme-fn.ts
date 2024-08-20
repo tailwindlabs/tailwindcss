@@ -40,6 +40,11 @@ function readFromCss(theme: Theme, path: string[]) {
   let themeKey = path
     // Escape dots used inside square brackets
     // Replace camelCase with dashes
+    .map((part, index) =>
+      index === 0 && (part.endsWith('colors') || part.endsWith('Colors'))
+        ? part.slice(0, -1)
+        : part,
+    )
     .map((part) =>
       part.replaceAll('.', '_').replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
     )

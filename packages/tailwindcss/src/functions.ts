@@ -1,8 +1,8 @@
 import { walk, type AstNode } from './ast'
 import type { DesignSystem } from './design-system'
+import type { PluginAPI } from './plugin-api'
 import type { ThemeKey } from './theme'
 import { withAlpha } from './utilities'
-import { segment } from './utils/segment'
 import {
   toCss as toValueCss,
   walk as walkValues,
@@ -12,11 +12,15 @@ import * as ValueParser from './value-parser/parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
-export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) {
+export function substituteFunctions(
+  ast: AstNode[],
+  designSystem: DesignSystem,
+  pluginApi: PluginAPI,
+) {
   walk(ast, (node) => {
     // Find all declaration values
     if (node.kind === 'declaration' && node.value.includes(THEME_FUNCTION_INVOCATION)) {
-      node.value = substituteFunctionsInValue(node.value, designSystem)
+      node.value = substituteFunctionsInValue(node.value, designSystem, pluginApi)
       return
     }
 
@@ -27,13 +31,17 @@ export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) 
         node.selector.startsWith('@media ') &&
         node.selector.includes(THEME_FUNCTION_INVOCATION)
       ) {
-        node.selector = substituteFunctionsInValue(node.selector, designSystem)
+        node.selector = substituteFunctionsInValue(node.selector, designSystem, pluginApi)
       }
     }
   })
 }
 
-export function substituteFunctionsInValue(value: string, designSystem: DesignSystem): string {
+export function substituteFunctionsInValue(
+  value: string,
+  designSystem: DesignSystem,
+  pluginApi: PluginAPI,
+): string {
   let ast = ValueParser.parse(value)
   walkValues(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
@@ -68,15 +76,16 @@ export function substituteFunctionsInValue(value: string, designSystem: DesignSy
       path = eventuallyUnquote(path)
       let fallbackValues = node.nodes.slice(skipUntilIndex + 2)
 
-      replaceWith(theme(designSystem, path, fallbackValues))
+      replaceWith(cssThemeFn(designSystem, pluginApi, path, fallbackValues))
     }
   })
 
   return toValueCss(ast)
 }
 
-function theme(
+function cssThemeFn(
   designSystem: DesignSystem,
+  pluginApi: PluginAPI,
   path: string,
   fallbackValues: ValueAstNode[],
 ): ValueAstNode[] {
@@ -98,75 +107,15 @@ function theme(
   if (path.startsWith('--')) {
     resolvedValue = designSystem.theme.get([path as ThemeKey])
   } else {
-    // Handle `[]` blocks as segments in addition to `.` separators.
-    // This is used to extract floating point keys like `spacing[2.5]`.
-    let segmented: string[] = []
-    for (let candidate of segment(path, '.')) {
-      if (!candidate.includes('[')) {
-        segmented.push(candidate)
-        continue
-      }
-
-      let matches = candidate.matchAll(/\[([^\]]+)\]/g)
-      let i = 0
-      for (let match of matches) {
-        // Add anything between the last match and the current match
-        if (match.index > i) {
-          segmented.push(candidate.slice(i, match.index))
-          i = match.index
-        }
-
-        segmented.push(match[1])
-        i += match[0].length
-      }
-      // Add anything after the last segment
-      if (i < candidate.length - 1) {
-        segmented.push(candidate.slice(i))
+    let themeValue = pluginApi.theme(path)
+    if (typeof themeValue === 'string') {
+      if (themeValue.startsWith('var(')) {
+        const firstComma = themeValue.indexOf(',')
+        resolvedValue = themeValue.slice(firstComma + 1, -1).trim()
+      } else {
+        resolvedValue = themeValue
       }
     }
-
-    // Handle tuple resolve syntax:
-    //
-    // - fontSize.sm.1.lineHeight
-    // - fontSize.sm[1].lineHeight
-    //
-    // In V4, these are nested with a `--` separator, e.g.:
-    // ` --font-size-xs--line-height`. We can resolve those by adding an empty
-    // string part that will `.join('-')` to the two minuses.
-    for (let i = 0; i < segmented.length; i++) {
-      if (segmented[i] === '1') {
-        segmented[i] = ''
-      }
-    }
-
-    let [namespaceCandidate, ...remainder] = segmented
-    let namespaces = [
-      `--${namespaceCandidate}` as ThemeKey,
-      `--default-${namespaceCandidate}` as ThemeKey,
-    ]
-
-    // Resolve legacy namespaces to their V4 equivalent if possible.
-    // TODO: Should this warn so the user migrates to the CSS var based syntax?
-    if (Object.hasOwn(LEGACY_NAMESPACE_MAP, namespaceCandidate)) {
-      namespaces = LEGACY_NAMESPACE_MAP[namespaceCandidate]
-    }
-
-    // .DEFAULT lookups from v3 now point to either:
-    //
-    // 1. The raw key (e.g. `blur.DEFAULT` => `--blur`)
-    // 2. The `--default` prefixed key (e.g. `transitionDuration` =>
-    //    `--default-transition-duration`)
-    //
-    // 1) is handled by dropping the `DEFAULT` access and 2) is handled in the
-    // legacy namespace map.
-    if (remainder.length > 0 && remainder[remainder.length - 1] === 'DEFAULT') {
-      remainder.pop()
-    }
-
-    let candidateValue =
-      remainder.length > 0 ? remainder.map((p) => p.replace('.', '_')).join('-') : null
-
-    resolvedValue = designSystem.theme.resolveValue(candidateValue, namespaces)
   }
 
   if (!resolvedValue && fallbackValues.length > 0) {
