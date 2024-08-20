@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
+import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import path from 'path'
 import { compile } from '../src'
@@ -291,6 +291,7 @@ test('content-none persists when conditionally styling a pseudo-element', async 
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
+
 async function render(page: Page, content: string) {
   let { build } = await compile(css`
     @layer theme, base, components, utilities;
@@ -314,10 +315,12 @@ async function render(page: Page, content: string) {
   content = `<div id="mouse-park" class="size-12"></div>${content}`
 
   await page.setContent(content)
+
+  let scanner = new Scanner({})
+  let candidates = scanner.scanFiles([{ content, extension: 'html' }])
+
   await page.addStyleTag({
-    content: optimizeCss(
-      build(scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential)),
-    ),
+    content: optimizeCss(build(candidates)),
   })
 
   await page.locator('#mouse-park').hover()

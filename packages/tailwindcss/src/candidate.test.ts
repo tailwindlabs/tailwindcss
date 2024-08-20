@@ -146,6 +146,7 @@ it('should parse a simple utility with an arbitrary variant', () => {
         {
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "& p",
         },
       ],
@@ -207,6 +208,7 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
           "variant": {
             "compounds": true,
             "kind": "arbitrary",
+            "relative": false,
             "selector": "& p",
           },
         },
@@ -316,6 +318,7 @@ it('should parse a simple utility with an arbitrary media variant', () => {
         {
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "@media(width>=123px)",
         },
       ],
@@ -1102,11 +1105,13 @@ it('should parse arbitrary properties that are important and using stacked arbit
         {
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "& p",
         },
         {
           "compounds": true,
           "kind": "arbitrary",
+          "relative": false,
           "selector": "@media(width>=123px)",
         },
       ],

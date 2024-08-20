@@ -134,8 +134,19 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
   }
 }
 
-export function applyVariant(node: Rule, variant: Variant, variants: Variants): null | void {
+export function applyVariant(
+  node: Rule,
+  variant: Variant,
+  variants: Variants,
+  depth: number = 0,
+): null | void {
   if (variant.kind === 'arbitrary') {
+    // Relative selectors are not valid as an entire arbitrary variant, only as
+    // an arbitrary variant that is part of another compound variant.
+    //
+    // E.g. `[>img]:flex` is not valid, but `has-[>img]:flex` is
+    if (variant.relative && depth === 0) return null
+
     node.nodes = [rule(variant.selector, node.nodes)]
     return
   }
@@ -162,7 +173,7 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
     // affecting the original node.
     let isolatedNode = rule('@slot', [])
 
-    let result = applyVariant(isolatedNode, variant.variant, variants)
+    let result = applyVariant(isolatedNode, variant.variant, variants, depth + 1)
     if (result === null) return null
 
     for (let child of isolatedNode.nodes) {

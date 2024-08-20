@@ -1,4 +1,4 @@
-import { scanDir } from '@tailwindcss/oxide'
+import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -9,9 +9,9 @@ import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let config: ResolvedConfig | null = null
-  let candidates = new Set<string>()
-  let scanDirResult: ReturnType<typeof scanDir> | null = null
+  let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
+  let candidates: string[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -63,21 +63,18 @@ export default function tailwindcss(): Plugin[] {
   function scan(src: string, extension: string) {
     let updated = false
 
-    if (scanDirResult === null) {
+    if (scanner === null) {
       changedContent.push({ content: src, extension })
       return updated
     }
 
     // Parse all candidates given the resolved files
-    for (let candidate of scanDirResult?.scanFiles([{ content: src, extension }]) ?? []) {
-      // On an initial or full build, updated becomes true immediately so we
-      // won't be making extra checks.
-      if (!updated) {
-        if (candidates.has(candidate)) continue
-        updated = true
-      }
-      candidates.add(candidate)
+    let newCandidates = scanner.scanFiles([{ content: src, extension }])
+    for (let candidate of newCandidates) {
+      updated = true
+      candidates.push(candidate)
     }
+
     return updated
   }
 
@@ -93,28 +90,31 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
-    scanDirResult = scanDir({
+    scanner = new Scanner({
       sources: globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
         pattern,
       })),
     })
 
-    if (changedContent.length > 0) {
-      scanDirResult.candidates = scanDirResult.scanFiles(changedContent.splice(0))
-    }
+    // This should not be here, but right now the Vite plugin is setup where we
+    // setup a new scanner and compiler every time we request the CSS file
+    // (regardless whether it actually changed or not).
+    let initialCandidates = scanner.scan()
 
-    for (let candidate of scanDirResult.candidates) {
-      candidates.add(candidate)
+    if (changedContent.length > 0) {
+      for (let candidate of scanner.scanFiles(changedContent.splice(0))) {
+        initialCandidates.push(candidate)
+      }
     }
 
     // Watch individual files
-    for (let file of scanDirResult.files) {
+    for (let file of scanner.files) {
       addWatchFile(file)
     }
 
     // Watch globs
-    for (let glob of scanDirResult.globs) {
+    for (let glob of scanner.globs) {
       if (glob.pattern[0] === '!') continue
 
       let relative = path.relative(config!.root, glob.base)
@@ -128,7 +128,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(Array.from(candidates))
+    return build(candidates.splice(0).concat(initialCandidates))
   }
 
   async function generateOptimizedCss(

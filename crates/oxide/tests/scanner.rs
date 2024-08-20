@@ -1,6 +1,6 @@
 #[cfg(test)]
-mod scan_dir {
-    use serial_test::serial;
+mod scanner {
+    use scanner::detect_sources::DetectSources;
     use std::process::Command;
     use std::{fs, path};
 
@@ -11,9 +11,6 @@ mod scan_dir {
         paths_with_content: &[(&str, Option<&str>)],
         globs: Vec<&str>,
     ) -> (Vec<String>, Vec<String>) {
-        // Ensure that every test truly runs in isolation without any cache
-        clear_cache();
-
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
 
@@ -38,24 +35,28 @@ mod scan_dir {
         let base = format!("{}", dir.display());
 
         // Resolve all content paths for the (temporary) current working directory
-        let result = scan_dir(ScanOptions {
-            base: Some(base.clone()),
-            sources: globs
-                .iter()
-                .map(|x| GlobEntry {
-                    base: base.clone(),
-                    pattern: x.to_string(),
-                })
-                .collect(),
-        });
+        let mut scanner = Scanner::new(
+            Some(DetectSources::new(base.clone().into())),
+            Some(
+                globs
+                    .iter()
+                    .map(|x| GlobEntry {
+                        base: base.clone(),
+                        pattern: x.to_string(),
+                    })
+                    .collect(),
+            ),
+        );
 
-        let mut paths: Vec<_> = result
-            .files
+        let candidates = scanner.scan();
+
+        let mut paths: Vec<_> = scanner
+            .get_files()
             .into_iter()
             .map(|x| x.replace(&format!("{}{}", &base, path::MAIN_SEPARATOR), ""))
             .collect();
 
-        for glob in result.globs {
+        for glob in scanner.get_globs() {
             paths.push(format!(
                 "{}{}{}",
                 glob.base,
@@ -78,7 +79,7 @@ mod scan_dir {
         // _could_ be random)
         paths.sort();
 
-        (paths, result.candidates)
+        (paths, candidates)
     }
 
     fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
@@ -90,7 +91,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_work_with_a_set_of_root_files() {
         let globs = test(&[
             ("index.html", None),
@@ -102,7 +102,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("b.html")),
@@ -115,7 +114,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
             ("index.html", None),
@@ -135,7 +133,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
         let globs = test(&[
             ("index.html", None),
@@ -165,7 +162,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("public/b.html\na.html")),
@@ -178,7 +174,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_use_a_glob_for_top_level_folders() {
         let globs = test(&[
             ("index.html", None),
@@ -188,7 +183,7 @@ mod scan_dir {
         ]);
         assert_eq!(globs, vec![
             "index.html",
-            "src/**/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+            "src/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
             "src/a.html",
             "src/b.html",
             "src/c.html"
@@ -196,7 +191,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
             ("index.html", None),
@@ -208,7 +202,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
             ("index.html", None),
@@ -220,7 +213,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_known_files() {
         let globs = test(&[
             ("index.html", None),
@@ -231,7 +223,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_and_expand_nested_ignored_folders() {
         let globs = test(&[
             // Explicitly listed root files
@@ -282,43 +273,42 @@ mod scan_dir {
                 "bar.html",
                 "baz.html",
                 "foo.html",
-                "nested-a/**/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-a/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-a/bar.html",
                 "nested-a/baz.html",
                 "nested-a/foo.html",
-                "nested-b/**/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-b/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-b/deeply-nested/bar.html",
                 "nested-b/deeply-nested/baz.html",
                 "nested-b/deeply-nested/foo.html",
-                "nested-c/*/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-c/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-c/bar.html",
                 "nested-c/baz.html",
                 "nested-c/foo.html",
-                "nested-c/sibling-folder/**/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-c/sibling-folder/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-c/sibling-folder/bar.html",
                 "nested-c/sibling-folder/baz.html",
                 "nested-c/sibling-folder/foo.html",
-                "nested-d/*/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-d/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-d/bar.html",
                 "nested-d/baz.html",
                 "nested-d/foo.html",
-                "nested-d/very/*/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
-                "nested-d/very/deeply/*/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
-                "nested-d/very/deeply/nested/*/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-d/very/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "nested-d/very/deeply/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "nested-d/very/deeply/nested/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-d/very/deeply/nested/bar.html",
                 "nested-d/very/deeply/nested/baz.html",
-                "nested-d/very/deeply/nested/directory/**/*.{py,tpl,js,vue,php,mjs,cts,jsx,tsx,rhtml,slim,handlebars,twig,rs,njk,svelte,liquid,pug,md,ts,heex,mts,astro,nunjucks,rb,eex,haml,cjs,html,hbs,jade,aspx,razor,erb,mustache,mdx}",
+                "nested-d/very/deeply/nested/directory/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
                 "nested-d/very/deeply/nested/directory/again/foo.html",
                 "nested-d/very/deeply/nested/directory/bar.html",
                 "nested-d/very/deeply/nested/directory/baz.html",
                 "nested-d/very/deeply/nested/directory/foo.html",
-                "nested-d/very/deeply/nested/foo.html"
+                "nested-d/very/deeply/nested/foo.html",
             ]
         );
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_for_utilities() {
         let mut ignores = String::new();
         ignores.push_str("# md:font-bold\n");
@@ -345,7 +335,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_content_paths() {
         let candidates = scan_with_globs(
             &[
@@ -361,7 +350,6 @@ mod scan_dir {
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
         let candidates = scan_with_globs(
             &[

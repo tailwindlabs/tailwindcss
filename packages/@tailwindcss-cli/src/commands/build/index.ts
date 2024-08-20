@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { clearCache, scanDir, type ChangedContent } from '@tailwindcss/oxide'
+import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
@@ -145,8 +145,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Compile the input
   let compiler = await compile(input)
-  let scanDirResult = scanDir({
-    base, // Root directory, mainly used for auto content detection
+  let scanner = new Scanner({
+    detectSources: { base },
     sources: compiler.globs.map((pattern) => ({
       base: inputBasePath, // Globs are relative to the input.css file
       pattern,
@@ -156,7 +156,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
-      watchDirectories(base, scanDirResult),
+      watchDirectories(base, scanner),
       async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
@@ -195,9 +195,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Clear all watchers
             cleanupWatchers()
 
-            // Clear cached candidates
-            clearCache()
-
             // Collect the new `input` and `cssImportPaths`.
             ;[input, cssImportPaths] = await handleImports(
               args['--input']
@@ -212,30 +209,33 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             compiler = await compile(input)
 
             // Re-scan the directory to get the new `candidates`
-            scanDirResult = scanDir({
-              base, // Root directory, mainly used for auto content detection
+            scanner = new Scanner({
+              detectSources: { base },
               sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
                 pattern,
               })),
             })
 
+            // Scan the directory for candidates
+            let candidates = scanner.scan()
+
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(base, scanDirResult), handle)
+            cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
 
             // Re-compile the CSS
-            compiledCss = compiler.build(scanDirResult.candidates)
+            compiledCss = compiler.build(candidates)
           }
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
-            let candidates = scanDirResult.scanFiles(changedFiles)
+            let newCandidates = scanner.scanFiles(changedFiles)
 
             // No candidates found which means we don't need to rebuild. This can
             // happen if a file is detected but doesn't match any of the globs.
-            if (candidates.length === 0) return
+            if (newCandidates.length <= 0) return
 
-            compiledCss = compiler.build(candidates)
+            compiledCss = compiler.build(newCandidates)
           }
 
           await write(compiledCss, args)
@@ -265,7 +265,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  await write(compiler.build(scanDirResult.candidates), args)
+  await write(compiler.build(scanner.scan()), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -273,9 +273,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir>) {
+function watchDirectories(base: string, scanner: Scanner) {
   return [base].concat(
-    scanDirResult.globs.flatMap((globEntry) => {
+    scanner.globs.flatMap((globEntry) => {
       // We don't want a watcher for negated globs.
       if (globEntry.pattern[0] === '!') return []
 

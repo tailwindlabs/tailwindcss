@@ -101,6 +101,10 @@ export type Variant =
 
       // If true, it can be applied as a child of a compound variant
       compounds: boolean
+
+      // Whether or not the selector is a relative selector
+      // @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#relative_selector
+      relative: boolean
     }
 
   /**
@@ -510,21 +514,23 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
     let selector = decodeArbitraryValue(variant.slice(1, -1))
 
-    if (selector[0] !== '@') {
-      // Ensure `&` is always present by wrapping the selector in `&:is(…)`
-      //
-      // E.g.:
-      //
-      // - `[p]:flex`
-      if (!selector.includes('&')) {
-        selector = `&:is(${selector})`
-      }
+    let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
+
+    // Ensure `&` is always present by wrapping the selector in `&:is(…)`,
+    // unless it's a relative selector like `> img`.
+    //
+    // E.g.:
+    //
+    // - `[p]:flex`
+    if (!relative && selector[0] !== '@' && !selector.includes('&')) {
+      selector = `&:is(${selector})`
     }
 
     return {
       kind: 'arbitrary',
       selector,
       compounds: true,
+      relative,
     }
   }
 

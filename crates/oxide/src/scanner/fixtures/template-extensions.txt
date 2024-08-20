@@ -2,6 +2,10 @@
 html
 pug
 
+# Glimmer
+gjs
+gts
+
 # JS
 astro
 cjs
