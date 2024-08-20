@@ -7,7 +7,7 @@ export type Rule = {
 export type Declaration = {
   kind: 'declaration'
   property: string
-  value: string
+  value: string | undefined
   important: boolean
 }
 

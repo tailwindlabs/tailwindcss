@@ -1,7 +1,7 @@
 import { deepMerge } from './compat/config/deep-merge'
 import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
-import type { Theme } from './theme'
+import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { toKeyPath } from './utils/to-key-path'
 
@@ -30,6 +30,12 @@ export function createThemeFn(
 }
 
 function readFromCss(theme: Theme, path: string[]) {
+  // `--color-red-500` should resolve to the theme variable directly, no look up
+  // and handling of nested objects is required.
+  if (path.length === 1 && path[0].startsWith('--')) {
+    return theme.get([path[0] as ThemeKey])
+  }
+
   type ThemeValue =
     // A normal string value
     | string
@@ -38,13 +44,12 @@ function readFromCss(theme: Theme, path: string[]) {
     | [main: string, extra: Record<string, string>]
 
   let themeKey = path
-    // Escape dots used inside square brackets
-    // Replace camelCase with dashes
-    .map((part, index) =>
-      index === 0 && (part.endsWith('colors') || part.endsWith('Colors'))
-        ? part.slice(0, -1)
-        : part,
-    )
+    // [1] should move into the nested object tuple. To create the CSS variable
+    // name for this, we replace it with an empty string that will result in two
+    // subsequent dashes when joined.
+    .map((path) => (path === '1' ? '' : path))
+
+    // Resolve the key path to a CSS variable segment
     .map((part) =>
       part.replaceAll('.', '_').replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
     )

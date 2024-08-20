@@ -208,7 +208,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value, { isReference, isInline })
+        theme.add(child.property, child.value ?? '', { isReference, isInline })
         return
       }
 
@@ -291,7 +291,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   // Replace `theme()` function calls with the actual theme variables.
   if (css.includes(THEME_FUNCTION_INVOCATION)) {
-    substituteFunctions(ast, designSystem, pluginApi)
+    substituteFunctions(ast, pluginApi)
   }
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
@@ -389,7 +389,7 @@ export async function compile(
           return compiledCss
         }
 
-        substituteFunctions(newNodes, designSystem, pluginApi)
+        substituteFunctions(newNodes, pluginApi)
 
         previousAstNodeCount = newNodes.length
 

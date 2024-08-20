@@ -1,7 +1,5 @@
 import { walk, type AstNode } from './ast'
-import type { DesignSystem } from './design-system'
 import type { PluginAPI } from './plugin-api'
-import type { ThemeKey } from './theme'
 import { withAlpha } from './utilities'
 import {
   toCss as toValueCss,
@@ -12,15 +10,11 @@ import * as ValueParser from './value-parser/parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
-export function substituteFunctions(
-  ast: AstNode[],
-  designSystem: DesignSystem,
-  pluginApi: PluginAPI,
-) {
+export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
   walk(ast, (node) => {
     // Find all declaration values
-    if (node.kind === 'declaration' && node.value.includes(THEME_FUNCTION_INVOCATION)) {
-      node.value = substituteFunctionsInValue(node.value, designSystem, pluginApi)
+    if (node.kind === 'declaration' && node.value?.includes(THEME_FUNCTION_INVOCATION)) {
+      node.value = substituteFunctionsInValue(node.value, pluginApi)
       return
     }
 
@@ -31,17 +25,13 @@ export function substituteFunctions(
         node.selector.startsWith('@media ') &&
         node.selector.includes(THEME_FUNCTION_INVOCATION)
       ) {
-        node.selector = substituteFunctionsInValue(node.selector, designSystem, pluginApi)
+        node.selector = substituteFunctionsInValue(node.selector, pluginApi)
       }
     }
   })
 }
 
-export function substituteFunctionsInValue(
-  value: string,
-  designSystem: DesignSystem,
-  pluginApi: PluginAPI,
-): string {
+export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI): string {
   let ast = ValueParser.parse(value)
   walkValues(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
@@ -76,7 +66,7 @@ export function substituteFunctionsInValue(
       path = eventuallyUnquote(path)
       let fallbackValues = node.nodes.slice(skipUntilIndex + 2)
 
-      replaceWith(cssThemeFn(designSystem, pluginApi, path, fallbackValues))
+      replaceWith(cssThemeFn(pluginApi, path, fallbackValues))
     }
   })
 
@@ -84,7 +74,6 @@ export function substituteFunctionsInValue(
 }
 
 function cssThemeFn(
-  designSystem: DesignSystem,
   pluginApi: PluginAPI,
   path: string,
   fallbackValues: ValueAstNode[],
@@ -103,18 +92,24 @@ function cssThemeFn(
 
   let resolvedValue: string | null = null
 
-  // Lookup CSS variables without attempting any normalization
-  if (path.startsWith('--')) {
-    resolvedValue = designSystem.theme.get([path as ThemeKey])
-  } else {
-    let themeValue = pluginApi.theme(path)
-    if (typeof themeValue === 'string') {
-      if (themeValue.startsWith('var(')) {
-        const firstComma = themeValue.indexOf(',')
-        resolvedValue = themeValue.slice(firstComma + 1, -1).trim()
-      } else {
-        resolvedValue = themeValue
+  let themeValue = pluginApi.theme(path)
+
+  if (Array.isArray(themeValue)) {
+    // When a tuple is returned, return the first element
+    resolvedValue = themeValue[0]
+  } else if (typeof themeValue === 'string') {
+    resolvedValue = themeValue
+  }
+
+  // TODO: Explain this
+  if (typeof resolvedValue === 'string') {
+    if (resolvedValue.startsWith('var(')) {
+      const firstComma = resolvedValue.indexOf(',')
+      if (firstComma !== -1) {
+        resolvedValue = resolvedValue.slice(firstComma + 1, -1).trim()
       }
+    } else {
+      resolvedValue = resolvedValue
     }
   }
 
@@ -157,34 +152,4 @@ function eventuallyUnquote(value: string) {
   }
 
   return unquoted
-}
-
-// @see https://github.com/tailwindlabs/tailwindcss/blob/main/stubs/config.full.js
-const LEGACY_NAMESPACE_MAP: {
-  [key: string]: ThemeKey[]
-} = {
-  colors: ['--color'],
-  backgroundColors: ['--background-color', '--color'],
-  accentColor: ['--accent-color', '--color'],
-  borderColor: ['--border-color', '--color'],
-  boxShadowColor: ['--box-shadow-color', '--color'],
-  caretColor: ['--caret-color', '--color'],
-  divedColor: ['--divide-color', '--color'],
-  fill: ['--fill', '--color'],
-  // This matches the lookup in the gradientStopUtility implementation
-  gradientColorStops: ['--background-color', '--color'],
-  outlineColor: ['--outline-color', '--color'],
-  placeholderColor: ['--placeholder-color', '--color'],
-  ringColor: ['--ring-color', '--color'],
-  ringOffsetColor: ['--ring-offset-color', '--color'],
-  stroke: ['--stroke', '--color'],
-  textColor: ['--text-color', '--color'],
-  textDecorationColor: ['--text-decoration-color', '--color'],
-
-  fontFamily: ['--font-family'],
-  fontSize: ['--font-size'],
-
-  transitionDuration: ['--transition-duration', '--default-transition-duration'],
-
-  // TODO: Add many more
 }

@@ -261,7 +261,7 @@ describe('theme function', () => {
         `)
         })
 
-        test.skip('theme(fontSize.xs[1].lineHeight)', async () => {
+        test('theme(fontSize.xs[1].lineHeight)', async () => {
           expect(
             await compileCss(css`
               @theme {
@@ -273,7 +273,17 @@ describe('theme function', () => {
                 line-height: theme(fontSize.xs[1].lineHeight);
               }
             `),
-          ).toMatchInlineSnapshot()
+          ).toMatchInlineSnapshot(`
+            ":root {
+              --font-size-xs: .75rem;
+              --font-size-xs--line-height: 1rem;
+            }
+
+            .text {
+              font-size: .75rem;
+              line-height: 1rem;
+            }"
+          `)
         })
       })
 
@@ -462,7 +472,7 @@ describe('theme function', () => {
         ],
         ['width.xs', '20rem'],
         ['transition.timing.function.in.out', 'cubic-bezier(.4, 0, .2, 1)'],
-        ['backgroundColors.red.500', '#ef4444'],
+        ['backgroundColor.red.500', '#ef4444'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
 
