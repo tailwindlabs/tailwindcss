@@ -295,7 +295,7 @@ describe('theme function', () => {
             }
           `),
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `[Error: Could not resolve value for theme function: \`theme(colors.unknown.500)\`]`,
+          `[Error: Could not resolve value for theme function: \`theme(colors.unknown.500)\`. Consider checking if the path is correct or provide a fallback value to silence this error.]`,
         ))
     })
 
