@@ -48,7 +48,8 @@ function mergeThemeExtension(
     return themeValue.concat(extensionValue)
   }
 
-  // When the incoming value is an array, and the existing config is an object, prepend the existing object
+  // When the incoming value is an array, and the existing config is an object,
+  // prepend the existing object
   if (
     Array.isArray(extensionValue) &&
     isPlainObject(extensionValue[0]) &&
@@ -98,9 +99,8 @@ function mergeTheme(ctx: ResolutionContext) {
     }
   }
 
-  // Remove the `extend` key from the theme
-  // It's only used for merging and should
-  // not be present in the resolved theme
+  // Remove the `extend` key from the theme It's only used for merging and
+  // should not be present in the resolved theme
   delete ctx.theme.extend
 
   // Deep merge every `extend` key into the theme
