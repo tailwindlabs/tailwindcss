@@ -757,4 +757,32 @@ describe('theme', async () => {
     expect(fn).toHaveBeenCalledWith('var(--color-primary, red)')
     expect(fn).toHaveBeenCalledWith('var(--color-secondary, blue)')
   })
+
+  test('nested theme key lookups work even for flattened keys', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme {
+        --color-red-100: red;
+        --color-red-200: orangered;
+        --color-red-300: darkred;
+      }
+    `
+
+    let fn = vi.fn()
+
+    await compile(input, {
+      loadPlugin: async () => {
+        return plugin(({ theme }) => {
+          fn(theme('color.red.100'))
+          fn(theme('colors.red.200'))
+          fn(theme('backgroundColor.red.300'))
+        })
+      },
+    })
+
+    expect(fn).toHaveBeenCalledWith('var(--color-red-100, red)')
+    expect(fn).toHaveBeenCalledWith('var(--color-red-200, orangered)')
+    expect(fn).toHaveBeenCalledWith('var(--color-red-300, darkred)')
+  })
 })
