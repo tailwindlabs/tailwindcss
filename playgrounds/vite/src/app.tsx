@@ -9,9 +9,9 @@ export function App() {
         <button className="hocus:underline">Click me</button>
         <Foo />
       </div>
-      <div class="mt-8 prose prose-slate mx-auto lg:prose-lg">
+      <div className="mt-8 prose prose-slate mx-auto lg:prose-lg">
         <h1>Headline</h1>
-        <p class="lead">
+        <p className="lead">
           Until now, trying to style an article, document, or blog post with Tailwind has been a
           tedious task that required a keen eye for typography and a lot of complex custom CSS.
         </p>
