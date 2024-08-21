@@ -2445,9 +2445,6 @@ export function createUtilities(theme: Theme) {
     }
   }
 
-  staticUtility('bg-inherit', [['background-color', 'inherit']])
-  staticUtility('bg-transparent', [['background-color', 'transparent']])
-
   staticUtility('bg-auto', [['background-size', 'auto']])
   staticUtility('bg-cover', [['background-size', 'cover']])
   staticUtility('bg-contain', [['background-size', 'contain']])
