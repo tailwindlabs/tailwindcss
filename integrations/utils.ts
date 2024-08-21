@@ -500,8 +500,8 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStylesFromIndex(port: number): Promise<string> {
-  let index = await fetch(`http://localhost:${port}`)
+export async function fetchStyles(port: number, path = '/'): Promise<string> {
+  let index = await fetch(`http://localhost:${port}${path}`)
   let html = await index.text()
 
   let regex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/g
