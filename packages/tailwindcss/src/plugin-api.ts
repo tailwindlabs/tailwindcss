@@ -8,6 +8,7 @@ import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
+import { segment } from './utils/segment'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -90,6 +91,11 @@ function buildPluginApi(
       utilities = Array.isArray(utilities) ? utilities : [utilities]
 
       let entries = utilities.flatMap((u) => Object.entries(u))
+
+      // Split multi-selector utilities into individual utilities
+      entries = entries.flatMap(([name, css]) =>
+        segment(name, ',').map((selector) => [selector.trim(), css] as [string, CssInJs]),
+      )
 
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
