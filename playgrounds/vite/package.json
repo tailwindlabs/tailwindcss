@@ -19,6 +19,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "bun": "^1.1.22",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "catalog:",
     "vite-plugin-handlebars": "^2.0.0"
   }
