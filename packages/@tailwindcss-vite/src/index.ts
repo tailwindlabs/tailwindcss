@@ -4,9 +4,11 @@ import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import fs from 'node:fs/promises'
 import { pathToFileURL } from 'node:url'
 import path from 'path'
-import postcssrc from 'postcss-load-config'
+import postcss from 'postcss'
+import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
@@ -16,23 +18,19 @@ export default function tailwindcss(): Plugin[] {
   let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
   let candidates = new Set<string>()
-  let fullRebuildPaths: string[] = []
+  let fullRebuildPaths = new Set<string>()
+  let rebuildStrategy: 'full' | 'incremental' = 'full'
+  let compiler: null | Awaited<ReturnType<typeof compile>> = null
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
-  let cssModules: Record<
-    string,
-    {
-      content: string
-      handled: boolean
-    }
-  > = {}
+  let cssModules: Record<string, { content: string; handled: boolean }> = {}
   let isSSR = false
   let minify = false
   let cssPlugins: readonly Plugin[] = []
 
   // Trigger update to all CSS modules
-  function updateCssModules(isSSR: boolean) {
+  function queueRebuild(isSSR: boolean) {
     // If we're building then we don't need to update anything
     if (!server) return
 
@@ -82,56 +80,85 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
+  function onFileChange(src: string) {
+    if (fullRebuildPaths.has(idToPath(src))) {
+      rebuildStrategy = 'full'
+      return
+    }
+  }
+
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     await import('@tailwindcss/node/esm-cache-hook')
 
     let inputBasePath = path.dirname(path.resolve(inputPath))
-    clearRequireCache(fullRebuildPaths)
-    fullRebuildPaths = []
-    let { build, globs } = await compile(css, {
-      loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] !== '.') {
-          return import(pluginPath).then((m) => m.default ?? m)
-        }
 
-        let resolvedPath = path.resolve(inputBasePath, pluginPath)
-        let [module, moduleDependencies] = await Promise.all([
-          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-          getModuleDependencies(resolvedPath),
-        ])
+    if (compiler === null || rebuildStrategy === 'full') {
+      rebuildStrategy = 'incremental'
+      clearRequireCache(Array.from(fullRebuildPaths))
+      fullRebuildPaths.clear()
+      fullRebuildPaths.add(idToPath(inputPath))
 
-        addWatchFile(resolvedPath)
-        fullRebuildPaths.push(resolvedPath)
-        for (let file of moduleDependencies) {
-          addWatchFile(file)
-          fullRebuildPaths.push(file)
-        }
-        return module.default ?? module
-      },
+      // Resolve `@import`s
+      let postcssCompiled = await postcss([
+        postcssImport({
+          load(path) {
+            fullRebuildPaths.add(path)
+            addWatchFile(path)
+            return fs.readFile(path, 'utf8')
+          },
+        }),
+        fixRelativePathsPlugin(),
+      ]).process(css, {
+        from: inputPath,
+        to: inputPath,
+      })
+      css = postcssCompiled.css
 
-      loadConfig: async (configPath) => {
-        if (configPath[0] !== '.') {
-          return import(configPath).then((m) => m.default ?? m)
-        }
+      compiler = await compile(css, {
+        loadPlugin: async (pluginPath) => {
+          if (pluginPath[0] !== '.') {
+            return import(pluginPath).then((m) => m.default ?? m)
+          }
 
-        let resolvedPath = path.resolve(inputBasePath, configPath)
-        let [module, moduleDependencies] = await Promise.all([
-          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-          getModuleDependencies(resolvedPath),
-        ])
+          let resolvedPath = path.resolve(inputBasePath, pluginPath)
+          let [module, moduleDependencies] = await Promise.all([
+            import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+            getModuleDependencies(resolvedPath),
+          ])
 
-        addWatchFile(resolvedPath)
-        fullRebuildPaths.push(resolvedPath)
-        for (let file of moduleDependencies) {
-          addWatchFile(file)
-          fullRebuildPaths.push(file)
-        }
-        return module.default ?? module
-      },
-    })
+          addWatchFile(resolvedPath)
+          fullRebuildPaths.add(resolvedPath)
+          for (let file of moduleDependencies) {
+            addWatchFile(file)
+            fullRebuildPaths.add(file)
+          }
+          return module.default ?? module
+        },
+
+        loadConfig: async (configPath) => {
+          if (configPath[0] !== '.') {
+            return import(configPath).then((m) => m.default ?? m)
+          }
+
+          let resolvedPath = path.resolve(inputBasePath, configPath)
+          let [module, moduleDependencies] = await Promise.all([
+            import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+            getModuleDependencies(resolvedPath),
+          ])
+
+          addWatchFile(resolvedPath)
+          fullRebuildPaths.add(resolvedPath)
+          for (let file of moduleDependencies) {
+            addWatchFile(file)
+            fullRebuildPaths.add(file)
+          }
+          return module.default ?? module
+        },
+      })
+    }
 
     scanner = new Scanner({
-      sources: globs.map((pattern) => ({
+      sources: compiler.globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
         pattern,
       })),
@@ -170,7 +197,7 @@ export default function tailwindcss(): Plugin[] {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return build(Array.from(candidates))
+    return compiler.build(Array.from(candidates))
   }
 
   async function generateOptimizedCss(
@@ -239,106 +266,57 @@ export default function tailwindcss(): Plugin[] {
           ...(config.command === 'build' ? ['vite:css-post'] : []),
         ]
 
+        console.log('plugins')
+        console.log(config.plugins)
         cssPlugins = config.plugins.filter((plugin) => {
           return allowedPlugins.includes(plugin.name)
         })
       },
 
-      // Append the postcss-fix-relative-paths plugin
-      async config(config) {
-        let postcssConfig = config.css?.postcss
-
-        if (typeof postcssConfig === 'string') {
-          // We expand string configs to their PostCSS config object similar to
-          // how Vite does it.
-          // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
-          let searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
-          let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
-            if (!e.message.includes('No PostCSS Config found')) {
-              if (e instanceof Error) {
-                let { name, message, stack } = e
-                e.name = 'Failed to load PostCSS config'
-                e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
-                e.stack = '' // add stack to message to retain stack
-                throw e
-              } else {
-                throw new Error(`Failed to load PostCSS config: ${e}`)
-              }
-            }
-            return null
-          })
-          if (parsedConfig !== null) {
-            postcssConfig = {
-              options: parsedConfig.options,
-              plugins: parsedConfig.plugins,
-            } as any
-          } else {
-            postcssConfig = {}
-          }
-          config.css = { postcss: postcssConfig }
-        }
-
-        // postcssConfig is no longer a string after the above. This test is to
-        // avoid TypeScript errors below.
-        if (typeof postcssConfig === 'string') {
-          return
-        }
-
-        if (!postcssConfig || !postcssConfig?.plugins) {
-          config.css = config.css || {}
-          config.css.postcss = postcssConfig || {}
-          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
-        } else {
-          postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
-        }
-      },
-
       // Scan index.html for candidates
-      transformIndexHtml(html) {
-        let updated = scan(html, 'html')
+      transformIndexHtml(html, context) {
+        onFileChange(context.filename)
 
-        // In serve mode, if the generated CSS contains a URL that causes the
-        // browser to load a page (e.g. an URL to a missing image), triggering a
-        // CSS update will cause an infinite loop. We only trigger if the
-        // candidates have been updated.
+        let updated = scan(html, 'html')
         if (updated) {
-          updateCssModules(isSSR)
+          queueRebuild(isSSR)
         }
       },
 
       // Scan all non-CSS files for candidates
       transform(src, id, options) {
+        onFileChange(id)
+
         if (id.includes('/.vite/')) return
         let extension = getExtension(id)
         if (extension === '' || extension === 'css') return
 
-        scan(src, extension)
-        updateCssModules(options?.ssr ?? false)
+        let updated = scan(src, extension)
+        if (updated) {
+          queueRebuild(options?.ssr ?? false)
+        }
       },
     },
-
-    /*
-     * The plugins that generate CSS must run after 'enforce: pre' so @imports
-     * are expanded in transform.
-     */
 
     {
       // Step 2 (serve mode): Generate CSS
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
+      enforce: 'pre',
 
       async transform(src, id, options) {
         if (!isTailwindCssFile(id, src)) return
+        onFileChange(id)
 
         // In serve mode, we treat cssModules as a set, ignoring the value.
         cssModules[id] = { content: '', handled: true }
 
-        if (!options?.ssr) {
-          // Wait until all other files have been processed, so we can extract
-          // all candidates before generating CSS. This must not be called
-          // during SSR or it will block the server.
-          await server?.waitForRequestsIdle?.(id)
-        }
+        // if (!options?.ssr) {
+        //   // Wait until all other files have been processed, so we can extract
+        //   // all candidates before generating CSS. This must not be called
+        //   // during SSR or it will block the server.
+        //   await server?.waitForRequestsIdle?.(id)
+        // }
 
         let code = await transformWithPlugins(
           this,
@@ -353,10 +331,23 @@ export default function tailwindcss(): Plugin[] {
       // Step 2 (full build): Generate CSS
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
+      enforce: 'pre',
 
-      transform(src, id) {
+      async transform(src, id) {
         if (!isTailwindCssFile(id, src)) return
+        onFileChange(id)
+
         cssModules[id] = { content: src, handled: false }
+
+        // We do a first pass to generate valid CSS for the downstream plugins.
+        // However, it's likely that we need to regenerate this later once all
+        // candidates have been extracted.
+        let code = await transformWithPlugins(
+          this,
+          id,
+          await generateCss(src, id, (file) => this.addWatchFile(file)),
+        )
+        return { code }
       },
 
       // renderChunk runs in the bundle generation stage after all transforms.
@@ -390,7 +381,7 @@ function getExtension(id: string) {
 function isTailwindCssFile(id: string, src: string) {
   let extension = getExtension(id)
   let isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
-  return isCssFile && src.includes('@tailwind')
+  return isCssFile
 }
 
 function optimizeCss(
@@ -415,4 +406,8 @@ function optimizeCss(
     },
     errorRecovery: true,
   }).code.toString()
+}
+
+function idToPath(id: string) {
+  return path.resolve(id.replace(/\?.*$/, ''))
 }
