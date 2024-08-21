@@ -220,8 +220,6 @@ export type Candidate =
     }
 
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
-  let candidates: Candidate[] = []
-
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -631,8 +629,6 @@ type Root = [
 ]
 
 function* findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
-  let matches: Root[] = []
-
   // If there is an exact match, then that's the root.
   if (exists(input)) {
     yield [input, null]
