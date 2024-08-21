@@ -112,7 +112,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
   if (asts.length === 0) return []
 
   let rules: {
-    node: AstNode,
+    node: AstNode
     propertySort: number[]
   }[] = []
 
@@ -247,7 +247,7 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
   let asts: AstNode[][] = []
 
-  let normalUtilities = utilities.filter(u => !isFallbackUtility(u))
+  let normalUtilities = utilities.filter((u) => !isFallbackUtility(u))
   for (let utility of normalUtilities) {
     if (utility.kind !== candidate.kind) continue
 
@@ -259,7 +259,7 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
   if (asts.length > 0) return asts
 
-  let fallbackUtilities = utilities.filter(u => isFallbackUtility(u))
+  let fallbackUtilities = utilities.filter((u) => isFallbackUtility(u))
   for (let utility of fallbackUtilities) {
     if (utility.kind !== candidate.kind) continue
 

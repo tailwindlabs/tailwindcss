@@ -219,7 +219,7 @@ export type Candidate =
       raw: string
     }
 
-export function *parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
+export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
   let candidates: Candidate[] = []
 
   // hover:focus:underline
@@ -630,7 +630,7 @@ type Root = [
   value: string | null,
 ]
 
-function *findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
+function* findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
   let matches: Root[] = []
 
   // If there is an exact match, then that's the root.

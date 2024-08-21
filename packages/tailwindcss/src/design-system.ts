@@ -30,7 +30,9 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   let variants = createVariants(theme)
 
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
-  let parsedCandidates = new DefaultMap((candidate) => Array.from(parseCandidate(candidate, designSystem)))
+  let parsedCandidates = new DefaultMap((candidate) =>
+    Array.from(parseCandidate(candidate, designSystem)),
+  )
   let compiledAstNodes = new DefaultMap<Candidate>((candidate) =>
     compileAstNodes(candidate, designSystem),
   )
