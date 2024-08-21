@@ -97,7 +97,25 @@ function buildPluginApi(
         segment(name, ',').map((selector) => [selector.trim(), css] as [string, CssInJs]),
       )
 
+      // Merge entries for the same class
+      let utils: Record<string, CssInJs[]> = {}
+
       for (let [name, css] of entries) {
+        let [className, ...parts] = segment(name, ':')
+
+        // Modify classes using pseudo-classes or pseudo-elements to use nested rules
+        if (parts.length > 0) {
+          let pseudos = parts.map((p) => `:${p.trim()}`).join('')
+          css = {
+            [`&${pseudos}`]: css,
+          }
+        }
+
+        utils[className] ??= []
+        utils[className].push(css)
+      }
+
+      for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
           ast.push(rule(name, objectToAst(css)))
           continue
