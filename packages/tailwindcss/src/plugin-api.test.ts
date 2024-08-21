@@ -830,6 +830,20 @@ describe('theme', async () => {
             },
           })
 
+          matchUtilities(
+            {
+              foo: (value) => ({
+                '--my-prop': value,
+              }),
+            },
+            {
+              values: {
+                bar: 'bar-valuer',
+                baz: 'bar-valuer',
+              },
+            },
+          )
+
           addUtilities({
             '.foo-bar': {
               backgroundColor: 'red',
@@ -841,8 +855,13 @@ describe('theme', async () => {
 
     expect(build(['foo-bar'])).toMatchInlineSnapshot(`
       ".foo-bar {
-        color: red;
         background-color: red;
+      }
+      .foo-bar {
+        color: red;
+      }
+      .foo-bar {
+        --my-prop: bar-valuer;
       }
       "
     `)
