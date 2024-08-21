@@ -13,6 +13,11 @@ const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
 
 const css = String.raw
 
+beforeEach(async () => {
+  let { clearCache } = await import('@tailwindcss/oxide')
+  clearCache()
+})
+
 test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
