@@ -1,3 +1,4 @@
 @import 'tailwindcss';
 @plugin "./plugin.js";
 @plugin "./typography.js";
+@plugin "./forms.js";
