@@ -1,6 +1,4 @@
-use fxhash::{FxHashMap, FxHashSet};
-use std::fs::{self};
-use std::{path::PathBuf, time::SystemTime};
+use fxhash::FxHashSet;
 
 /// A cache to manage the list of candidates in the project.
 #[derive(Default)]
