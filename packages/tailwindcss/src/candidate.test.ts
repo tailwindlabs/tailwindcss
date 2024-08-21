@@ -16,7 +16,7 @@ function run(
   designSystem.utilities = utilities
   designSystem.variants = variants
 
-  return designSystem.parseCandidate(candidate)
+  return Array.from(designSystem.parseCandidate(candidate))
 }
 
 it('should skip unknown utilities', () => {

@@ -2,7 +2,7 @@ import { decl, rule, walk, WalkAction, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
-import { asColor } from './utilities'
+import { asColor, type Utility } from './utilities'
 import { compare } from './utils/compare'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
@@ -17,16 +17,17 @@ export function compileCandidates(
     { properties: number[]; variants: bigint; candidate: string }
   >()
   let astNodes: AstNode[] = []
-  let candidates = new Map<Candidate, string>()
+  let matches = new Map<string, Candidate[]>()
 
   // Parse candidates and variants
   for (let rawCandidate of rawCandidates) {
-    let candidate = designSystem.parseCandidate(rawCandidate)
-    if (candidate === null) {
+    let candidates = designSystem.parseCandidate(rawCandidate)
+    if (candidates.length === 0) {
       onInvalidCandidate?.(rawCandidate)
       continue // Bail, invalid candidate
     }
-    candidates.set(candidate, rawCandidate)
+
+    matches.set(rawCandidate, candidates)
   }
 
   // Sort the variants
@@ -35,29 +36,36 @@ export function compileCandidates(
   })
 
   // Create the AST
-  next: for (let [candidate, rawCandidate] of candidates) {
-    let astNode = designSystem.compileAstNodes(rawCandidate)
-    if (astNode === null) {
+  for (let [rawCandidate, candidates] of matches) {
+    let found = false
+
+    for (let candidate of candidates) {
+      let rules = designSystem.compileAstNodes(candidate)
+      if (rules.length === 0) continue
+
+      found = true
+
+      for (let { node, propertySort } of rules) {
+        // Track the variant order which is a number with each bit representing a
+        // variant. This allows us to sort the rules based on the order of
+        // variants used.
+        let variantOrder = 0n
+        for (let variant of candidate.variants) {
+          variantOrder |= 1n << BigInt(variants.indexOf(variant))
+        }
+
+        nodeSorting.set(node, {
+          properties: propertySort,
+          variants: variantOrder,
+          candidate: rawCandidate,
+        })
+        astNodes.push(node)
+      }
+    }
+
+    if (!found) {
       onInvalidCandidate?.(rawCandidate)
-      continue next
     }
-
-    let { node, propertySort } = astNode
-
-    // Track the variant order which is a number with each bit representing a
-    // variant. This allows us to sort the rules based on the order of
-    // variants used.
-    let variantOrder = 0n
-    for (let variant of candidate.variants) {
-      variantOrder |= 1n << BigInt(variants.indexOf(variant))
-    }
-
-    nodeSorting.set(node, {
-      properties: propertySort,
-      variants: variantOrder,
-      candidate: rawCandidate,
-    })
-    astNodes.push(node)
   }
 
   astNodes.sort((a, z) => {
@@ -99,39 +107,46 @@ export function compileCandidates(
   }
 }
 
-export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem) {
-  let candidate = designSystem.parseCandidate(rawCandidate)
-  if (candidate === null) return null
+export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem) {
+  let asts = compileBaseUtility(candidate, designSystem)
+  if (asts.length === 0) return []
 
-  let nodes = compileBaseUtility(candidate, designSystem)
+  let rules: {
+    node: AstNode,
+    propertySort: number[]
+  }[] = []
 
-  if (!nodes) return null
+  let selector = `.${escape(candidate.raw)}`
 
-  let propertySort = getPropertySort(nodes)
+  for (let nodes of asts) {
+    let propertySort = getPropertySort(nodes)
 
-  if (candidate.important) {
-    applyImportant(nodes)
+    if (candidate.important) {
+      applyImportant(nodes)
+    }
+
+    let node: Rule = {
+      kind: 'rule',
+      selector,
+      nodes,
+    }
+
+    for (let variant of candidate.variants) {
+      let result = applyVariant(node, variant, designSystem.variants)
+
+      // When the variant results in `null`, it means that the variant cannot be
+      // applied to the rule. Discard the candidate and continue to the next
+      // one.
+      if (result === null) return []
+    }
+
+    rules.push({
+      node,
+      propertySort,
+    })
   }
 
-  let node: Rule = {
-    kind: 'rule',
-    selector: `.${escape(rawCandidate)}`,
-    nodes,
-  }
-
-  for (let variant of candidate.variants) {
-    let result = applyVariant(node, variant, designSystem.variants)
-
-    // When the variant results in `null`, it means that the variant cannot be
-    // applied to the rule. Discard the candidate and continue to the next
-    // one.
-    if (result === null) return null
-  }
-
-  return {
-    node,
-    propertySort,
-  }
+  return rules
 }
 
 export function applyVariant(
@@ -208,6 +223,11 @@ export function applyVariant(
   if (result === null) return null
 }
 
+function isFallbackUtility(utility: Utility) {
+  let types = utility.options?.types ?? []
+  return types.length > 1 && types.includes('any')
+}
+
 function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
   if (candidate.kind === 'arbitrary') {
     let value: string | null = candidate.value
@@ -218,51 +238,38 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
       value = asColor(value, candidate.modifier, designSystem.theme)
     }
 
-    if (value === null) return
+    if (value === null) return []
 
-    return [decl(candidate.property, value)]
+    return [[decl(candidate.property, value)]]
   }
 
   let utilities = designSystem.utilities.get(candidate.root) ?? []
 
-  let fallbackUtilities: typeof utilities = []
+  let asts: AstNode[][] = []
 
-  let ast: AstNode[] = []
-
-  for (let i = 0; i < utilities.length; i++) {
-    let utility = utilities[i]
-
-    if (utility.options?.types.includes('any')) {
-      fallbackUtilities.push(utility)
-      continue
-    }
-
-    if (candidate.kind !== utility.kind) continue
+  let normalUtilities = utilities.filter(u => !isFallbackUtility(u))
+  for (let utility of normalUtilities) {
+    if (utility.kind !== candidate.kind) continue
 
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
-    if (compiledNodes === null) return ast
-    ast.push(...compiledNodes)
+    if (compiledNodes === null) return asts
+    asts.push(compiledNodes)
   }
 
-  if (ast.length === 0) {
-    for (let i = 0; i < fallbackUtilities.length; i++) {
-      let utility = utilities[i]
+  if (asts.length > 0) return asts
 
-      if (candidate.kind !== utility.kind) continue
+  let fallbackUtilities = utilities.filter(u => isFallbackUtility(u))
+  for (let utility of fallbackUtilities) {
+    if (utility.kind !== candidate.kind) continue
 
-      let compiledNodes = utility.compileFn(candidate)
-      if (compiledNodes === undefined) continue
-      if (compiledNodes === null) return ast
-      ast.push(...compiledNodes)
-    }
+    let compiledNodes = utility.compileFn(candidate)
+    if (compiledNodes === undefined) continue
+    if (compiledNodes === null) return asts
+    asts.push(compiledNodes)
   }
 
-  if (ast.length === 0) {
-    return null
-  }
-
-  return ast
+  return asts
 }
 
 function applyImportant(ast: AstNode[]): void {

@@ -1,5 +1,5 @@
 import { toCss } from './ast'
-import { parseCandidate, parseVariant } from './candidate'
+import { parseCandidate, parseVariant, type Candidate } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
@@ -18,9 +18,9 @@ export type DesignSystem = {
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
 
-  parseCandidate(candidate: string): ReturnType<typeof parseCandidate>
+  parseCandidate(candidate: string): Candidate[]
   parseVariant(variant: string): ReturnType<typeof parseVariant>
-  compileAstNodes(candidate: string): ReturnType<typeof compileAstNodes>
+  compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
 }
@@ -30,8 +30,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   let variants = createVariants(theme)
 
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
-  let parsedCandidates = new DefaultMap((candidate) => parseCandidate(candidate, designSystem))
-  let compiledAstNodes = new DefaultMap((candidate) => compileAstNodes(candidate, designSystem))
+  let parsedCandidates = new DefaultMap((candidate) => Array.from(parseCandidate(candidate, designSystem)))
+  let compiledAstNodes = new DefaultMap<Candidate>((candidate) =>
+    compileAstNodes(candidate, designSystem),
+  )
 
   let designSystem: DesignSystem = {
     theme,
@@ -69,7 +71,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     parseVariant(variant: string) {
       return parsedVariants.get(variant)
     },
-    compileAstNodes(candidate: string) {
+    compileAstNodes(candidate: Candidate) {
       return compiledAstNodes.get(candidate)
     },
     getUsedVariants() {

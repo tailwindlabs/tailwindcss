@@ -179,6 +179,7 @@ export type Candidate =
       modifier: ArbitraryModifier | NamedModifier | null
       variants: Variant[]
       important: boolean
+      raw: string
     }
 
   /**
@@ -195,6 +196,7 @@ export type Candidate =
       variants: Variant[]
       negative: boolean
       important: boolean
+      raw: string
     }
 
   /**
@@ -214,9 +216,12 @@ export type Candidate =
       variants: Variant[]
       negative: boolean
       important: boolean
+      raw: string
     }
 
-export function parseCandidate(input: string, designSystem: DesignSystem): Candidate | null {
+export function *parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
+  let candidates: Candidate[] = []
+
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -232,7 +237,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
   for (let i = rawVariants.length - 1; i >= 0; --i) {
     let parsedVariant = designSystem.parseVariant(rawVariants[i])
-    if (parsedVariant === null) return null
+    if (parsedVariant === null) return
 
     parsedCandidateVariants.push(parsedVariant)
   }
@@ -263,12 +268,13 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // Check for an exact match of a static utility first as long as it does not
   // look like an arbitrary value.
   if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
-    return {
+    yield {
       kind: 'static',
       root: base,
       variants: parsedCandidateVariants,
       negative,
       important,
+      raw: input,
     }
   }
 
@@ -288,12 +294,12 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // E.g.:
   //
   // - `bg-red-500/50/50`
-  if (additionalModifier) return null
+  if (additionalModifier) return
 
   // Arbitrary properties
   if (baseWithoutModifier[0] === '[') {
     // Arbitrary properties should end with a `]`.
-    if (baseWithoutModifier[baseWithoutModifier.length - 1] !== ']') return null
+    if (baseWithoutModifier[baseWithoutModifier.length - 1] !== ']') return
 
     // The property part of the arbitrary property can only start with a-z
     // lowercase or a dash `-` in case of vendor prefixes such as `-webkit-`
@@ -302,7 +308,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     // Otherwise, it is an invalid candidate, and skip continue parsing.
     let charCode = baseWithoutModifier.charCodeAt(1)
     if (charCode !== DASH && !(charCode >= LOWER_A && charCode <= LOWER_Z)) {
-      return null
+      return
     }
 
     baseWithoutModifier = baseWithoutModifier.slice(1, -1)
@@ -315,28 +321,27 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     // also verify that the colon is not the first or last character in the
     // candidate, because that would make it invalid as well.
     let idx = baseWithoutModifier.indexOf(':')
-    if (idx === -1 || idx === 0 || idx === baseWithoutModifier.length - 1) return null
+    if (idx === -1 || idx === 0 || idx === baseWithoutModifier.length - 1) return
 
     let property = baseWithoutModifier.slice(0, idx)
     let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
-    return {
+    yield {
       kind: 'arbitrary',
       property,
       value,
       modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
       variants: parsedCandidateVariants,
       important,
+      raw: input,
     }
+
+    return
   }
 
-  // The root of the utility, e.g.: `bg-red-500`
-  //                                 ^^
-  let root: string | null = null
-
-  // The value of the utility, e.g.: `bg-red-500`
-  //                                     ^^^^^^^
-  let value: string | null = null
+  // The different "versions"" of a candidate that are utilities
+  // e.g. `['bg', 'red-500']` and `['bg-red', '500']`
+  let roots: Iterable<Root>
 
   // If the base of the utility ends with a `]`, then we know it's an arbitrary
   // value. This also means that everything before the `[…]` part should be the
@@ -355,111 +360,111 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // ```
   if (baseWithoutModifier[baseWithoutModifier.length - 1] === ']') {
     let idx = baseWithoutModifier.indexOf('-[')
-    if (idx === -1) return null
+    if (idx === -1) return
 
-    root = baseWithoutModifier.slice(0, idx)
+    let root = baseWithoutModifier.slice(0, idx)
 
     // The root of the utility should exist as-is in the utilities map. If not,
     // it's an invalid utility and we can skip continue parsing.
-    if (!designSystem.utilities.has(root, 'functional')) return null
+    if (!designSystem.utilities.has(root, 'functional')) return
 
-    value = baseWithoutModifier.slice(idx + 1)
+    let value = baseWithoutModifier.slice(idx + 1)
+
+    roots = [[root, value]]
   }
 
   // Not an arbitrary value
   else {
-    ;[root, value] = findRoot(baseWithoutModifier, (root: string) => {
+    roots = findRoots(baseWithoutModifier, (root: string) => {
       return designSystem.utilities.has(root, 'functional')
     })
   }
 
-  // If there's no root, the candidate isn't a valid class and can be discarded.
-  if (root === null) return null
+  for (let [root, value] of roots) {
+    let candidate: Candidate = {
+      kind: 'functional',
+      root: root,
+      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      value: null,
+      variants: parsedCandidateVariants,
+      negative,
+      important,
+      raw: input,
+    }
 
-  // If the leftover value is an empty string, it means that the value is an
-  // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
-  // can skip any further parsing.
-  if (value === '') return null
+    if (value === null) {
+      yield candidate
+      continue
+    }
 
-  let candidate: Candidate = {
-    kind: 'functional',
-    root,
-    modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
-    value: null,
-    variants: parsedCandidateVariants,
-    negative,
-    important,
-  }
+    {
+      let startArbitraryIdx = value.indexOf('[')
+      let valueIsArbitrary = startArbitraryIdx !== -1
 
-  if (value === null) return candidate
+      if (valueIsArbitrary) {
+        let arbitraryValue = value.slice(startArbitraryIdx + 1, -1)
 
-  {
-    let startArbitraryIdx = value.indexOf('[')
-    let valueIsArbitrary = startArbitraryIdx !== -1
+        // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
+        let typehint = ''
+        for (let i = 0; i < arbitraryValue.length; i++) {
+          let code = arbitraryValue.charCodeAt(i)
 
-    if (valueIsArbitrary) {
-      let arbitraryValue = value.slice(startArbitraryIdx + 1, -1)
+          // If we hit a ":", we're at the end of a typehint.
+          if (code === COLON) {
+            typehint = arbitraryValue.slice(0, i)
+            arbitraryValue = arbitraryValue.slice(i + 1)
+            break
+          }
 
-      // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
-      let typehint = ''
-      for (let i = 0; i < arbitraryValue.length; i++) {
-        let code = arbitraryValue.charCodeAt(i)
+          // Keep iterating as long as we've only seen valid typehint characters.
+          if (code === DASH || (code >= LOWER_A && code <= LOWER_Z)) {
+            continue
+          }
 
-        // If we hit a ":", we're at the end of a typehint.
-        if (code === COLON) {
-          typehint = arbitraryValue.slice(0, i)
-          arbitraryValue = arbitraryValue.slice(i + 1)
+          // If we see any other character, there's no typehint so break early.
           break
         }
 
-        // Keep iterating as long as we've only seen valid typehint characters.
-        if (code === DASH || (code >= LOWER_A && code <= LOWER_Z)) {
-          continue
+        // If an arbitrary value looks like a CSS variable, we automatically wrap
+        // it with `var(...)`.
+        //
+        // But since some CSS properties accept a `<dashed-ident>` as a value
+        // directly (e.g. `scroll-timeline-name`), we also store the original
+        // value in case the utility matcher is interested in it without
+        // `var(...)`.
+        let dashedIdent: string | null = null
+        if (arbitraryValue[0] === '-' && arbitraryValue[1] === '-') {
+          dashedIdent = arbitraryValue
+          arbitraryValue = `var(${arbitraryValue})`
+        } else {
+          arbitraryValue = decodeArbitraryValue(arbitraryValue)
         }
 
-        // If we see any other character, there's no typehint so break early.
-        break
-      }
-
-      // If an arbitrary value looks like a CSS variable, we automatically wrap
-      // it with `var(...)`.
-      //
-      // But since some CSS properties accept a `<dashed-ident>` as a value
-      // directly (e.g. `scroll-timeline-name`), we also store the original
-      // value in case the utility matcher is interested in it without
-      // `var(...)`.
-      let dashedIdent: string | null = null
-      if (arbitraryValue[0] === '-' && arbitraryValue[1] === '-') {
-        dashedIdent = arbitraryValue
-        arbitraryValue = `var(${arbitraryValue})`
+        candidate.value = {
+          kind: 'arbitrary',
+          dataType: typehint || null,
+          value: arbitraryValue,
+          dashedIdent,
+        }
       } else {
-        arbitraryValue = decodeArbitraryValue(arbitraryValue)
-      }
+        // Some utilities support fractions as values, e.g. `w-1/2`. Since it's
+        // ambiguous whether the slash signals a modifier or not, we store the
+        // fraction separately in case the utility matcher is interested in it.
+        let fraction =
+          modifierSegment === null || candidate.modifier?.kind === 'arbitrary'
+            ? null
+            : `${value}/${modifierSegment}`
 
-      candidate.value = {
-        kind: 'arbitrary',
-        dataType: typehint || null,
-        value: arbitraryValue,
-        dashedIdent,
-      }
-    } else {
-      // Some utilities support fractions as values, e.g. `w-1/2`. Since it's
-      // ambiguous whether the slash signals a modifier or not, we store the
-      // fraction separately in case the utility matcher is interested in it.
-      let fraction =
-        modifierSegment === null || candidate.modifier?.kind === 'arbitrary'
-          ? null
-          : `${value.slice(value.lastIndexOf('-') + 1)}/${modifierSegment}`
-
-      candidate.value = {
-        kind: 'named',
-        value,
-        fraction,
+        candidate.value = {
+          kind: 'named',
+          value,
+          fraction,
+        }
       }
     }
-  }
 
-  return candidate
+    yield candidate
+  }
 }
 
 function parseModifier(modifier: string): CandidateModifier {
@@ -548,67 +553,65 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // - `group-hover/foo/bar`
     if (additionalModifier) return null
 
-    let [root, value] = findRoot(variantWithoutModifier, (root) => {
+    let roots = findRoots(variantWithoutModifier, (root) => {
       return designSystem.variants.has(root)
     })
 
-    // Variant is invalid, therefore the candidate is invalid and we can skip
-    // continue parsing it.
-    if (root === null) return null
+    for (let [root, value] of roots) {
+      switch (designSystem.variants.kind(root)) {
+        case 'static': {
+          // Static variants do not have a value
+          if (value !== null) return null
 
-    switch (designSystem.variants.kind(root)) {
-      case 'static': {
-        // Static variants do not have a value
-        if (value !== null) return null
+          // Static variants do not have a modifier
+          if (modifier !== null) return null
 
-        // Static variants do not have a modifier
-        if (modifier !== null) return null
-
-        return {
-          kind: 'static',
-          root,
-          compounds: designSystem.variants.compounds(root),
-        }
-      }
-
-      case 'functional': {
-        if (value === null) return null
-
-        if (value[0] === '[' && value[value.length - 1] === ']') {
           return {
-            kind: 'functional',
+            kind: 'static',
             root,
-            modifier: modifier === null ? null : parseModifier(modifier),
-            value: {
-              kind: 'arbitrary',
-              value: decodeArbitraryValue(value.slice(1, -1)),
-            },
             compounds: designSystem.variants.compounds(root),
           }
         }
 
-        return {
-          kind: 'functional',
-          root,
-          modifier: modifier === null ? null : parseModifier(modifier),
-          value: { kind: 'named', value },
-          compounds: designSystem.variants.compounds(root),
+        case 'functional': {
+          if (value === null) return null
+
+          if (value[0] === '[' && value[value.length - 1] === ']') {
+            return {
+              kind: 'functional',
+              root,
+              modifier: modifier === null ? null : parseModifier(modifier),
+              value: {
+                kind: 'arbitrary',
+                value: decodeArbitraryValue(value.slice(1, -1)),
+              },
+              compounds: designSystem.variants.compounds(root),
+            }
+          }
+
+          return {
+            kind: 'functional',
+            root,
+            modifier: modifier === null ? null : parseModifier(modifier),
+            value: { kind: 'named', value },
+            compounds: designSystem.variants.compounds(root),
+          }
         }
-      }
 
-      case 'compound': {
-        if (value === null) return null
+        case 'compound': {
+          if (value === null) return null
 
-        let subVariant = designSystem.parseVariant(value)
-        if (subVariant === null) return null
-        if (subVariant.compounds === false) return null
+          let subVariant = designSystem.parseVariant(value)
+          if (subVariant === null) return null
+          if (subVariant.compounds === false) return null
 
-        return {
-          kind: 'compound',
-          root,
-          modifier: modifier === null ? null : { kind: 'named', value: modifier },
-          variant: subVariant,
-          compounds: designSystem.variants.compounds(root),
+          return {
+            kind: 'compound',
+            root,
+            modifier: modifier === null ? null : { kind: 'named', value: modifier },
+            variant: subVariant,
+            compounds: designSystem.variants.compounds(root),
+          }
         }
       }
     }
@@ -617,12 +620,23 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
   return null
 }
 
-function findRoot(
-  input: string,
-  exists: (input: string) => boolean,
-): [string | null, string | null] {
+type Root = [
+  // The root of the utility, e.g.: `bg-red-500`
+  //                                 ^^
+  root: string,
+
+  // The value of the utility, e.g.: `bg-red-500`
+  //                                     ^^^^^^^
+  value: string | null,
+]
+
+function *findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
+  let matches: Root[] = []
+
   // If there is an exact match, then that's the root.
-  if (exists(input)) return [input, null]
+  if (exists(input)) {
+    yield [input, null]
+  }
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
@@ -631,10 +645,8 @@ function findRoot(
     // Variants starting with `@` are special because they don't need a `-`
     // after the `@` (E.g.: `@-lg` should be written as `@lg`).
     if (input[0] === '@' && exists('@')) {
-      return ['@', input.slice(1)]
+      yield ['@', input.slice(1)]
     }
-
-    return [null, null]
   }
 
   // Determine the root and value by testing permutations of the incoming input.
@@ -648,11 +660,16 @@ function findRoot(
     let maybeRoot = input.slice(0, idx)
 
     if (exists(maybeRoot)) {
-      return [maybeRoot, input.slice(idx + 1)]
+      let root: Root = [maybeRoot, input.slice(idx + 1)]
+
+      // If the leftover value is an empty string, it means that the value is an
+      // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
+      // can skip any further parsing.
+      if (root[1] === '') break
+
+      yield root
     }
 
     idx = input.lastIndexOf('-', idx - 1)
   } while (idx > 0)
-
-  return [null, null]
 }

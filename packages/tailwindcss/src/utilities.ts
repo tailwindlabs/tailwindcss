@@ -31,15 +31,14 @@ export type UtilityOptions = {
   types: string[]
 }
 
+export type Utility = {
+  kind: 'static' | 'functional'
+  compileFn: CompileFn<any>
+  options?: UtilityOptions
+}
+
 export class Utilities {
-  private utilities = new DefaultMap<
-    string,
-    {
-      kind: 'static' | 'functional'
-      compileFn: CompileFn<any>
-      options?: UtilityOptions
-    }[]
-  >(() => [])
+  private utilities = new DefaultMap<string, Utility[]>(() => [])
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
