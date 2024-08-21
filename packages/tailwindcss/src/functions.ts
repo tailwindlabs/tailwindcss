@@ -119,14 +119,10 @@ function cssThemeFn(
   // Since this is overkill, we instead introspect the string and try to unwrap
   // the `var()` call for now. This works because we always define a fallback
   // value that points to the raw CSS variable value.
-  if (typeof resolvedValue === 'string') {
-    if (resolvedValue.startsWith('var(')) {
-      const firstComma = resolvedValue.indexOf(',')
-      if (firstComma !== -1) {
-        resolvedValue = resolvedValue.slice(firstComma + 1, -1).trim()
-      }
-    } else {
-      resolvedValue = resolvedValue
+  if (typeof resolvedValue === 'string' && resolvedValue.startsWith('var(')) {
+    const firstComma = resolvedValue.indexOf(',')
+    if (firstComma !== -1) {
+      resolvedValue = resolvedValue.slice(firstComma + 1, -1).trim()
     }
   }
 
