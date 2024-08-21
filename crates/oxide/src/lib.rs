@@ -1,7 +1,7 @@
 use crate::parser::Extractor;
 use crate::scanner::detect_sources::DetectSources;
 use bstr::ByteSlice;
-use fxhash::{FxHashMap, FxHashSet};
+use fxhash::FxHashMap;
 use glob::fast_glob;
 use glob::get_fast_patterns;
 use rayon::prelude::*;
@@ -11,6 +11,7 @@ use std::sync;
 use std::time::SystemTime;
 use tracing::event;
 
+pub mod cache;
 pub mod cursor;
 pub mod fast_skip;
 pub mod glob;
@@ -20,6 +21,9 @@ pub mod scanner;
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
     || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind")),
 );
+
+static GLOBAL_CACHE: sync::LazyLock<sync::Mutex<cache::Cache>> =
+    sync::LazyLock::new(|| sync::Mutex::new(cache::Cache::default()));
 
 fn init_tracing() {
     if !*SHOULD_TRACE {
@@ -48,13 +52,6 @@ pub struct ScanOptions {
 }
 
 #[derive(Debug, Clone)]
-pub struct ScanResult {
-    pub candidates: Vec<String>,
-    pub files: Vec<String>,
-    pub globs: Vec<GlobEntry>,
-}
-
-#[derive(Debug, Clone)]
 pub struct GlobEntry {
     pub base: String,
     pub pattern: String,
@@ -80,9 +77,6 @@ pub struct Scanner {
 
     /// Track file modification times
     mtimes: FxHashMap<PathBuf, SystemTime>,
-
-    /// Track unique set of candidates
-    candidates: FxHashSet<String>,
 }
 
 impl Scanner {
@@ -100,11 +94,7 @@ impl Scanner {
 
         self.compute_candidates();
 
-        let mut candidates: Vec<String> = self.candidates.clone().into_iter().collect();
-
-        candidates.sort();
-
-        candidates
+        GLOBAL_CACHE.lock().unwrap().get_candidates()
     }
 
     #[tracing::instrument(skip_all)]
@@ -113,11 +103,12 @@ impl Scanner {
         let candidates = parse_all_blobs(read_all_files(changed_content));
 
         let mut new_candidates = vec![];
+        let mut cache = GLOBAL_CACHE.lock().unwrap();
         for candidate in candidates {
-            if self.candidates.contains(&candidate) {
+            if cache.contains_candidate(&candidate) {
                 continue;
             }
-            self.candidates.insert(candidate.clone());
+            cache.add_candidates(vec![candidate.clone()]);
             new_candidates.push(candidate);
         }
 
@@ -173,7 +164,7 @@ impl Scanner {
 
         if !changed_content.is_empty() {
             let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.extend(candidates);
+            GLOBAL_CACHE.lock().unwrap().add_candidates(candidates);
         }
     }
 
@@ -250,6 +241,11 @@ impl Scanner {
             })
             .collect::<Vec<GlobEntry>>();
     }
+}
+
+pub fn clear_cache() {
+    let mut cache = GLOBAL_CACHE.lock().unwrap();
+    cache.clear();
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {

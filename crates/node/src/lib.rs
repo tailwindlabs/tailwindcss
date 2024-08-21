@@ -123,3 +123,8 @@ impl Scanner {
       .collect()
   }
 }
+
+#[napi]
+pub fn clear_cache() {
+  tailwindcss_oxide::clear_cache();
+}
