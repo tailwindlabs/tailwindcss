@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, fetchStylesFromIndex, js, json, retryAssertion, test } from '../utils'
+import { candidate, css, fetchStyles, js, json, retryAssertion, test } from '../utils'
 
 test(
   'production build',
@@ -131,7 +131,7 @@ test(
       await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
 
       await retryAssertion(async () => {
-        let css = await fetchStylesFromIndex(port)
+        let css = await fetchStyles(port)
         expect(css).toContain(candidate`underline`)
       })
 
@@ -145,7 +145,7 @@ test(
       )
 
       await retryAssertion(async () => {
-        let css = await fetchStylesFromIndex(port)
+        let css = await fetchStyles(port)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
       })

@@ -1,6 +1,17 @@
 import path from 'node:path'
 import { expect } from 'vitest'
-import { candidate, css, fetchStylesFromIndex, html, js, json, test, ts, yaml } from '../utils'
+import {
+  candidate,
+  css,
+  fetchStyles,
+  html,
+  js,
+  json,
+  retryAssertion,
+  test,
+  ts,
+  yaml,
+} from '../utils'
 
 test(
   'production build',
@@ -106,6 +117,14 @@ test(
           <div class="underline">Hello, world!</div>
         </body>
       `,
+      'project-a/about.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="font-bold	">Tailwind Labs</div>
+        </body>
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
@@ -119,15 +138,27 @@ test(
   },
   async ({ root, spawn, getFreePort, fs }) => {
     let port = await getFreePort()
-    let process = await spawn(`pnpm vite dev --port ${port}`, {
+    await spawn(`pnpm vite dev --port ${port}`, {
       cwd: path.join(root, 'project-a'),
     })
 
-    await process.onStdout((message) => message.includes('ready in'))
+    // Candidates are resolved lazily, so the first visit of index.html
+    // will only have candidates from this file.
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port, '/index.html')
+      expect(css).toContain(candidate`underline`)
+      expect(css).not.toContain(candidate`font-bold`)
+    })
 
-    let css = await fetchStylesFromIndex(port)
-    expect(css).toContain(candidate`underline`)
+    // Going to about.html will extend the candidate list to include
+    // candidates from about.html.
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port, '/about.html')
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+    })
 
+    // Updates are additive and cause new candidates to be added.
     await fs.write(
       'project-a/index.html',
       html`
@@ -139,11 +170,14 @@ test(
         </body>
       `,
     )
-    await process.onStdout((message) => message.includes('page reload'))
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port)
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+      expect(css).toContain(candidate`m-2`)
+    })
 
-    css = await fetchStylesFromIndex(port)
-    expect(css).toContain(candidate`m-2`)
-
+    // Manually added `@source`s are watched and trigger a rebuild
     await fs.write(
       'project-b/src/index.js',
       js`
@@ -151,9 +185,33 @@ test(
         module.exports = { className }
       `,
     )
-    await process.onStdout((message) => message.includes('page reload'))
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port)
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+      expect(css).toContain(candidate`m-2`)
+      expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+    })
 
-    css = await fetchStylesFromIndex(port)
-    expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+    // After updates to the CSS file, all previous candidates should still be in
+    // the generated CSS
+    await fs.write(
+      'project-a/src/index.css',
+      css`
+        ${await fs.read('project-a/src/index.css')}
+
+        .red {
+          color: red;
+        }
+      `,
+    )
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port)
+      expect(css).toContain(candidate`red`)
+      expect(css).toContain(candidate`m-2`)
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+      expect(css).toContain(candidate`font-bold`)
+    })
   },
 )

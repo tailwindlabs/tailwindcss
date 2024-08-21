@@ -262,8 +262,15 @@ export function test(
             await fs.mkdir(dir, { recursive: true })
             await fs.writeFile(full, content)
           },
-          read(filePath: string) {
-            return fs.readFile(path.resolve(root, filePath), 'utf8')
+          async read(filePath: string) {
+            let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
+
+            // Ensure that files read on Windows have \r\n line endings removed
+            if (IS_WINDOWS) {
+              content = content.replace(/\r\n/g, '\n')
+            }
+
+            return content
           },
           async glob(pattern: string) {
             let files = await fastGlob(pattern, { cwd: root })
@@ -500,8 +507,8 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStylesFromIndex(port: number): Promise<string> {
-  let index = await fetch(`http://localhost:${port}`)
+export async function fetchStyles(port: number, path = '/'): Promise<string> {
+  let index = await fetch(`http://localhost:${port}${path}`)
   let html = await index.text()
 
   let regex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/g
