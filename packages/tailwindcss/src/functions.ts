@@ -104,17 +104,17 @@ function cssThemeFn(
   }
 
   // The plugin `theme()` function currently returns resolved values (so values
-  // that are wrapped in `var()` and the CSS variable name. The CSS theme
-  // function should instead return the raw values though, this is because it
-  // can be used in positions where `var()` is not supported like
-  // `@media (min-width: theme(--breakpoint-sm))`.
+  // that are wrapped in `var()` and the CSS variable name). This `theme()`
+  // function should, however, instead return the raw values. Raw values are
+  // necessary because they might be used in positions where `var()` is not
+  // supported like `@media (min-width: theme(--breakpoint-sm))`.
   //
-  // Since the Plugin `theme()` function operates on the resolved config object
-  // provided by plugins though, the values would already be read from the CSS
-  // theme before we even get here. Subsequently, we can only read resolved
-  // values here unless we would create a separate resolved config object
-  // containing unresolved CSS values only for use with the CSS `theme()`
-  // function.
+  // Since the plugin `theme()` function operates on a materialized config
+  // object provided by plugins, the values would already be read from the CSS
+  // theme before we even get here (the config object is initialized together
+  // with the plugins). Subsequently, we can only read resolved values here
+  // unless we create a separate config object containing unresolved CSS values
+  // that is only for use with the CSS `theme()` function.
   //
   // Since this is overkill, we instead introspect the string and try to unwrap
   // the `var()` call for now. This works because we always define a fallback
