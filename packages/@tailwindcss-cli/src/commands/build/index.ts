@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { clearCache, Scanner, type ChangedContent } from '@tailwindcss/oxide'
+import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
@@ -192,9 +192,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
-            // Clear cached candidates
-            clearCache()
-
             // Clear all watchers
             cleanupWatchers()
 

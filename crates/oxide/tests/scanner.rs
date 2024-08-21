@@ -1,7 +1,6 @@
 #[cfg(test)]
 mod scanner {
     use scanner::detect_sources::DetectSources;
-    use serial_test::serial;
     use std::process::Command;
     use std::{fs, path};
 
@@ -12,9 +11,6 @@ mod scanner {
         paths_with_content: &[(&str, Option<&str>)],
         globs: Vec<&str>,
     ) -> (Vec<String>, Vec<String>) {
-        // Ensure that every test truly runs in isolation without any cache
-        clear_cache();
-
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
 
@@ -95,7 +91,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_work_with_a_set_of_root_files() {
         let globs = test(&[
             ("index.html", None),
@@ -107,7 +102,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("b.html")),
@@ -120,7 +114,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
             ("index.html", None),
@@ -140,7 +133,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
         let globs = test(&[
             ("index.html", None),
@@ -170,7 +162,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("public/b.html\na.html")),
@@ -183,7 +174,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_use_a_glob_for_top_level_folders() {
         let globs = test(&[
             ("index.html", None),
@@ -201,7 +191,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
             ("index.html", None),
@@ -213,7 +202,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
             ("index.html", None),
@@ -225,7 +213,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_known_files() {
         let globs = test(&[
             ("index.html", None),
@@ -236,7 +223,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_ignore_and_expand_nested_ignored_folders() {
         let globs = test(&[
             // Explicitly listed root files
@@ -323,7 +309,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_for_utilities() {
         let mut ignores = String::new();
         ignores.push_str("# md:font-bold\n");
@@ -350,7 +335,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_content_paths() {
         let candidates = scan_with_globs(
             &[
@@ -366,7 +350,6 @@ mod scanner {
     }
 
     #[test]
-    #[serial]
     fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
         let candidates = scan_with_globs(
             &[
