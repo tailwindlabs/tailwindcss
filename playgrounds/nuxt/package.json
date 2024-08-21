@@ -1,0 +1,17 @@
+{
+  "name": "nuxt-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "workspace:^",
+    "nuxt": "^3.13.0",
+    "tailwindcss": "workspace:^",
+    "vue": "latest"
+  }
+}

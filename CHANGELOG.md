@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support JavaScript configuration files using `@config` ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
 - Support plugin options in `@plugin` ([#14264](https://github.com/tailwindlabs/tailwindcss/pull/14264))
 
+### Added
+
+- Add support for `@config` to load V3 JavaScript config files ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
+- Add support for using the Vite extension with `css.transformer` set to `lightningcss` ([#14269](https://github.com/tailwindlabs/tailwindcss/pull/14269))
+
 ### Fixed
 
 - Bring back type exports for the cjs build of `@tailwindcss/postcss` ([#14256](https://github.com/tailwindlabs/tailwindcss/pull/14256))
@@ -27,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix fallback values when using the CSS `theme()` function ([#14262](https://github.com/tailwindlabs/tailwindcss/pull/14262))
 - Fix support for declaration fallbacks in plugins ([#14265](https://github.com/tailwindlabs/tailwindcss/pull/14265))
 - Support bare values when using `tailwindcss/defaultTheme` ([#14257](https://github.com/tailwindlabs/tailwindcss/pull/14257))
+- Correctly update builds when using the Vite extension with `build --watch` ([#14269](https://github.com/tailwindlabs/tailwindcss/pull/14269))
 
 ### Changed
 

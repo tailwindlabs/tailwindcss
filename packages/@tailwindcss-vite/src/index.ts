@@ -4,56 +4,83 @@ import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import fs from 'node:fs/promises'
 import path from 'path'
-import postcssrc from 'postcss-load-config'
+import postcss from 'postcss'
+import postcssImport from 'postcss-import'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let config: ResolvedConfig | null = null
-  let scanner: Scanner | null = null
-  let changedContent: { content: string; extension: string }[] = []
-  let candidates = new Set<string>()
-  let fullRebuildPaths: string[] = []
 
-  // In serve mode this is treated as a set — the content doesn't matter.
-  // In build mode, we store file contents to use them in renderChunk.
-  let cssModules: Record<
-    string,
-    {
-      content: string
-      handled: boolean
-    }
-  > = {}
   let isSSR = false
   let minify = false
+
+  // A list of css plugins defined in the Vite config. We need to retain these
+  // so that we can rerun the right transformations in build mode where we have
+  // to manually rebuild the css file after the compilation is done.
   let cssPlugins: readonly Plugin[] = []
 
-  // Trigger update to all CSS modules
-  function updateCssModules(isSSR: boolean) {
+  // The Vite extension has two types of sources for candidates:
+  //
+  // 1. The module graph: These are all modules that vite transforms and we want
+  //    them to be automatically scanned for candidates.
+  // 2. Root defined `@source`s
+  //
+  // Module graph candidates are global to the Vite extension since we do not
+  // know which CSS roots will be used for the modules. We are using a custom
+  // scanner instance with auto source discovery disabled to parse these.
+  //
+  // For candidates coming from custom `@source` directives of the CSS roots, we
+  // create an individual scanner for each root.
+  //
+  // Note: To improve performance, we do not remove candidates from this set.
+  // This means a longer-ongoing dev mode session might contain candidates that
+  // are no longer referenced in code.
+  let moduleGraphCandidates = new Set<string>()
+  let moduleGraphScanner = new Scanner({})
+
+  let roots: DefaultMap<string, Root> = new DefaultMap(
+    (id) => new Root(id, () => moduleGraphCandidates, config!.base),
+  )
+
+  function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
+    let updated = false
+    for (let candidate of moduleGraphScanner.scanFiles([{ content, extension }])) {
+      updated = true
+      moduleGraphCandidates.add(candidate)
+    }
+
+    if (updated) {
+      invalidateAllRoots(isSSR)
+    }
+  }
+
+  function invalidateAllRoots(isSSR: boolean) {
     // If we're building then we don't need to update anything
     if (!server) return
 
     let updates: Update[] = []
-    for (let id of Object.keys(cssModules)) {
-      let cssModule = server.moduleGraph.getModuleById(id)
-      if (!cssModule) {
+    for (let id of roots.keys()) {
+      let module = server.moduleGraph.getModuleById(id)
+      if (!module) {
         // Note: Removing this during SSR is not safe and will produce
         // inconsistent results based on the timing of the removal and
         // the order / timing of transforms.
         if (!isSSR) {
           // It is safe to remove the item here since we're iterating on a copy
           // of the keys.
-          delete cssModules[id]
+          roots.delete(id)
         }
         continue
       }
 
-      server.moduleGraph.invalidateModule(cssModule)
+      server.moduleGraph.invalidateModule(module)
       updates.push({
-        type: `${cssModule.type}-update`,
-        path: cssModule.url,
-        acceptedPath: cssModule.url,
+        type: `${module.type}-update`,
+        path: module.url,
+        acceptedPath: module.url,
         timestamp: Date.now(),
       })
     }
@@ -63,86 +90,13 @@ export default function tailwindcss(): Plugin[] {
     }
   }
 
-  function scan(src: string, extension: string) {
-    let updated = false
-
-    if (scanner === null) {
-      changedContent.push({ content: src, extension })
-      return updated
+  async function regenerateOptimizedCss(root: Root, addWatchFile: (file: string) => void) {
+    let content = root.lastContent
+    let generated = await root.generate(content, addWatchFile)
+    if (generated === false) {
+      return
     }
-
-    // Parse all candidates given the resolved files
-    for (let candidate of scanner.scanFiles([{ content: src, extension }])) {
-      updated = true
-      candidates.add(candidate)
-    }
-
-    return updated
-  }
-
-  async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
-    let inputBasePath = path.dirname(path.resolve(inputPath))
-    clearRequireCache(fullRebuildPaths)
-    fullRebuildPaths = []
-    let { build, globs } = await compile(css, {
-      base: inputBasePath,
-      onDependency(path) {
-        addWatchFile(path)
-        fullRebuildPaths.push(path)
-      },
-    })
-
-    scanner = new Scanner({
-      sources: globs.map(({ origin, pattern }) => ({
-        // Ensure the glob is relative to the input CSS file or the config file
-        // where it is specified.
-        base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
-        pattern,
-      })),
-    })
-
-    // This should not be here, but right now the Vite plugin is setup where we
-    // setup a new scanner and compiler every time we request the CSS file
-    // (regardless whether it actually changed or not).
-    for (let candidate of scanner.scan()) {
-      candidates.add(candidate)
-    }
-
-    if (changedContent.length > 0) {
-      for (let candidate of scanner.scanFiles(changedContent.splice(0))) {
-        candidates.add(candidate)
-      }
-    }
-
-    // Watch individual files
-    for (let file of scanner.files) {
-      addWatchFile(file)
-    }
-
-    // Watch globs
-    for (let glob of scanner.globs) {
-      if (glob.pattern[0] === '!') continue
-
-      let relative = path.relative(config!.root, glob.base)
-      if (relative[0] !== '.') {
-        relative = './' + relative
-      }
-      // Ensure relative is a posix style path since we will merge it with
-      // the glob.
-      relative = normalizePath(relative)
-
-      addWatchFile(path.posix.join(relative, glob.pattern))
-    }
-
-    return build(Array.from(candidates))
-  }
-
-  async function generateOptimizedCss(
-    css: string,
-    inputPath: string,
-    addWatchFile: (file: string) => void,
-  ) {
-    return optimizeCss(await generateCss(css, inputPath, addWatchFile), { minify })
+    return optimizeCss(generated, { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -208,108 +162,46 @@ export default function tailwindcss(): Plugin[] {
         })
       },
 
-      // Append the postcss-fix-relative-paths plugin
-      async config(config) {
-        let postcssConfig = config.css?.postcss
-
-        if (typeof postcssConfig === 'string') {
-          // We expand string configs to their PostCSS config object similar to
-          // how Vite does it.
-          // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
-          let searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
-          let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
-            if (!e.message.includes('No PostCSS Config found')) {
-              if (e instanceof Error) {
-                let { name, message, stack } = e
-                e.name = 'Failed to load PostCSS config'
-                e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
-                e.stack = '' // add stack to message to retain stack
-                throw e
-              } else {
-                throw new Error(`Failed to load PostCSS config: ${e}`)
-              }
-            }
-            return null
-          })
-          if (parsedConfig !== null) {
-            postcssConfig = {
-              options: parsedConfig.options,
-              plugins: parsedConfig.plugins,
-            } as any
-          } else {
-            postcssConfig = {}
-          }
-          config.css = { postcss: postcssConfig }
-        }
-
-        // postcssConfig is no longer a string after the above. This test is to
-        // avoid TypeScript errors below.
-        if (typeof postcssConfig === 'string') {
-          return
-        }
-
-        if (!postcssConfig || !postcssConfig?.plugins) {
-          config.css = config.css || {}
-          config.css.postcss = postcssConfig || {}
-          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
-        } else {
-          postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
-        }
-      },
-
-      // Scan index.html for candidates
-      transformIndexHtml(html) {
-        let updated = scan(html, 'html')
-
-        // In serve mode, if the generated CSS contains a URL that causes the
-        // browser to load a page (e.g. an URL to a missing image), triggering a
-        // CSS update will cause an infinite loop. We only trigger if the
-        // candidates have been updated.
-        if (updated) {
-          updateCssModules(isSSR)
-        }
-      },
-
       // Scan all non-CSS files for candidates
+      transformIndexHtml(html, { path }) {
+        scanFile(path, html, 'html', isSSR)
+      },
       transform(src, id, options) {
-        if (id.includes('/.vite/')) return
         let extension = getExtension(id)
         if (extension === '' || extension === 'css') return
-
-        scan(src, extension)
-        updateCssModules(options?.ssr ?? false)
+        scanFile(id, src, extension, options?.ssr ?? false)
       },
     },
-
-    /*
-     * The plugins that generate CSS must run after 'enforce: pre' so @imports
-     * are expanded in transform.
-     */
 
     {
       // Step 2 (serve mode): Generate CSS
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
+      enforce: 'pre',
 
       async transform(src, id, options) {
-        if (!isTailwindCssFile(id, src)) return
+        if (!isPotentialCssRootFile(id)) return
 
-        // In serve mode, we treat cssModules as a set, ignoring the value.
-        cssModules[id] = { content: '', handled: true }
+        let root = roots.get(id)
+        root.invalidate()
 
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
           // all candidates before generating CSS. This must not be called
           // during SSR or it will block the server.
+          //
+          // The reason why we can not rely on the invalidation here is that the
+          // users would otherwise see a flicker in the styles as the CSS might
+          // be loaded with an invalid set of candidates first.
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(
-          this,
-          id,
-          await generateCss(src, id, (file) => this.addWatchFile(file)),
-        )
-        return { code }
+        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        if (!generated) {
+          roots.delete(id)
+          return src
+        }
+        return { code: generated }
       },
     },
 
@@ -317,29 +209,48 @@ export default function tailwindcss(): Plugin[] {
       // Step 2 (full build): Generate CSS
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
+      enforce: 'pre',
 
-      transform(src, id) {
-        if (!isTailwindCssFile(id, src)) return
-        cssModules[id] = { content: src, handled: false }
+      async transform(src, id) {
+        if (!isPotentialCssRootFile(id)) return
+
+        let root = roots.get(id)
+        root.invalidate()
+
+        // We do a first pass to generate valid CSS for the downstream plugins.
+        // However, since not all candidates are guaranteed to be extracted by
+        // this time, we have to re-run a transform for the root later.
+        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        if (!generated) {
+          roots.delete(id)
+          return src
+        }
+        return { code: generated }
       },
 
-      // renderChunk runs in the bundle generation stage after all transforms.
+      // `renderStart` runs in the bundle generation stage after all transforms.
       // We must run before `enforce: post` so the updated chunks are picked up
       // by vite:css-post.
-      async renderChunk(_code, _chunk) {
-        for (let [id, file] of Object.entries(cssModules)) {
-          if (file.handled) {
+      async renderStart() {
+        for (let [id, root] of roots.entries()) {
+          let generated = await regenerateOptimizedCss(
+            root,
+            // During the renderStart phase, we can not add watch files since
+            // those would not be causing a refresh of the right CSS file. This
+            // should not be an issue since we did already process the CSS file
+            // before and the dependencies should not be changed (only the
+            // candidate list might have)
+            () => {},
+          )
+          if (!generated) {
+            roots.delete(id)
             continue
           }
-
-          let css = await generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure
           // the CSS is written before the bundle is generated.
-          await transformWithPlugins(this, id, css)
-
-          file.handled = true
+          await transformWithPlugins(this, id, generated)
         }
       },
     },
@@ -351,10 +262,22 @@ function getExtension(id: string) {
   return path.extname(filename).slice(1)
 }
 
-function isTailwindCssFile(id: string, src: string) {
+function isPotentialCssRootFile(id: string) {
   let extension = getExtension(id)
   let isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
-  return isCssFile && src.includes('@tailwind')
+  return isCssFile
+}
+
+function isCssRootFile(content: string) {
+  return (
+    content.includes('@tailwind') ||
+    content.includes('@config') ||
+    content.includes('@plugin') ||
+    content.includes('@apply') ||
+    content.includes('@theme') ||
+    content.includes('@variant') ||
+    content.includes('@utility')
+  )
 }
 
 function optimizeCss(
@@ -379,4 +302,154 @@ function optimizeCss(
     },
     errorRecovery: true,
   }).code.toString()
+}
+
+function idToPath(id: string) {
+  return path.resolve(id.replace(/\?.*$/, ''))
+}
+
+/**
+ * A Map that can generate default values for keys that don't exist.
+ * Generated default values are added to the map to avoid recomputation.
+ */
+class DefaultMap<K, V> extends Map<K, V> {
+  constructor(private factory: (key: K, self: DefaultMap<K, V>) => V) {
+    super()
+  }
+
+  get(key: K): V {
+    let value = super.get(key)
+
+    if (value === undefined) {
+      value = this.factory(key, this)
+      this.set(key, value)
+    }
+
+    return value
+  }
+}
+
+class Root {
+  // Content is only used in serve mode where we need to capture the initial
+  // contents of the root file so that we can restore it during the
+  // `renderStart` hook.
+  public lastContent: string = ''
+
+  // The lazily-initialized Tailwind compiler components. These are persisted
+  // throughout rebuilds but will be re-initialized if the rebuild strategy is
+  // set to `full`.
+  private compiler?: Awaited<ReturnType<typeof compile>>
+
+  private rebuildStrategy: 'full' | 'incremental' = 'full'
+
+  // This is the compiler-specific scanner instance that is used only to scan
+  // files for custom @source paths. All other modules we scan for candidates
+  // will use the shared moduleGraphScanner instance.
+  private scanner?: Scanner
+
+  // List of all candidates that were being returned by the root scanner during
+  // the lifetime of the root.
+  private candidates: Set<string> = new Set<string>()
+
+  // List of all file dependencies that were captured while generating the root.
+  // These are retained so we can clear the require cache when we rebuild the
+  // root.
+  private dependencies = new Set<string>()
+
+  constructor(
+    private id: string,
+    private getSharedCandidates: () => Set<string>,
+    private base: string,
+  ) {}
+
+  // Generate the CSS for the root file. This can return false if the file is
+  // not considered a Tailwind root. When this happened, the root can be GCed.
+  public async generate(
+    content: string,
+    addWatchFile: (file: string) => void,
+  ): Promise<string | false> {
+    this.lastContent = content
+
+    let inputPath = idToPath(this.id)
+    let inputBase = path.dirname(path.resolve(inputPath))
+
+    if (!this.compiler || !this.scanner || this.rebuildStrategy === 'full') {
+      this.rebuildStrategy = 'incremental'
+      clearRequireCache(Array.from(this.dependencies))
+      this.dependencies = new Set([idToPath(inputPath)])
+
+      let postcssCompiled = await postcss([
+        postcssImport({
+          load: (path) => {
+            this.dependencies.add(path)
+            addWatchFile(path)
+            return fs.readFile(path, 'utf8')
+          },
+        }),
+        fixRelativePathsPlugin(),
+      ]).process(content, {
+        from: inputPath,
+        to: inputPath,
+      })
+      let css = postcssCompiled.css
+
+      // This is done inside the Root#generate() method so that we can later use
+      // information from the Tailwind compiler to determine if the file is a
+      // CSS root (necessary because we will probably inline the `@import`
+      // resolution at some point).
+      if (!isCssRootFile(css)) {
+        return false
+      }
+
+      this.compiler = await compile(css, {
+        base: inputBase,
+        onDependency: (path) => {
+          addWatchFile(path)
+          this.dependencies.add(path)
+        },
+      })
+
+      this.scanner = new Scanner({
+        sources: this.compiler.globs.map(({ origin, pattern }) => ({
+          // Ensure the glob is relative to the input CSS file or the config
+          // file where it is specified.
+          base: origin ? path.dirname(path.resolve(inputBase, origin)) : inputBase,
+          pattern,
+        })),
+      })
+    }
+
+    // This should not be here, but right now the Vite plugin is setup where we
+    // setup a new scanner and compiler every time we request the CSS file
+    // (regardless whether it actually changed or not).
+    for (let candidate of this.scanner.scan()) {
+      this.candidates.add(candidate)
+    }
+
+    // Watch individual files found via custom `@source` paths
+    for (let file of this.scanner.files) {
+      addWatchFile(file)
+    }
+
+    // Watch globs found via custom `@source` paths
+    for (let glob of this.scanner.globs) {
+      if (glob.pattern[0] === '!') continue
+
+      let relative = path.relative(this.base, glob.base)
+      if (relative[0] !== '.') {
+        relative = './' + relative
+      }
+      // Ensure relative is a posix style path since we will merge it with the
+      // glob.
+      relative = normalizePath(relative)
+
+      addWatchFile(path.posix.join(relative, glob.pattern))
+    }
+
+    return this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+  }
+
+  public invalidate() {
+    this.rebuildStrategy = 'full'
+  }
 }
