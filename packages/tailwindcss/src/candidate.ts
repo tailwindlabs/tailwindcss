@@ -645,6 +645,8 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
     }
   }
 
+  if (idx === -1) return
+
   // Determine the root and value by testing permutations of the incoming input.
   //
   // In case of a candidate like `bg-red-500`, this looks like:
