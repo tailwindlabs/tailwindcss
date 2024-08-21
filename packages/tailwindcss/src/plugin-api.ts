@@ -1,6 +1,6 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
-import type { NamedUtilityValue } from './candidate'
+import type { Candidate, NamedUtilityValue } from './candidate'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig } from './compat/config/resolve-config'
 import type { UserConfig } from './compat/config/types'
@@ -157,7 +157,7 @@ function buildPluginApi(
           )
         }
 
-        designSystem.utilities.functional(name, (candidate) => {
+        function compileFn(candidate: Extract<Candidate, { kind: 'functional' }>) {
           // A negative utility was provided but is unsupported
           if (!options?.supportsNegativeValues && candidate.negative) return
 
@@ -256,6 +256,10 @@ function buildPluginApi(
           let ast = objectToAst(fn(value, { modifier }))
           substituteAtApply(ast, designSystem)
           return ast
+        }
+
+        designSystem.utilities.functional(name, compileFn, {
+          types,
         })
       }
     },

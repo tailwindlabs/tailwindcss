@@ -15096,7 +15096,7 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('The later version of a static utility is used', async () => {
+  test('Multiple static utilities are merged', async () => {
     let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
@@ -15116,6 +15116,7 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .really-round {
+          --custom-prop: hi;
           border-radius: 30rem;
         }
       }"

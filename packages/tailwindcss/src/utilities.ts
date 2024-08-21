@@ -27,12 +27,17 @@ type SuggestionDefinition =
       hasDefaultValue?: boolean
     }
 
+export type UtilityOptions = {
+  types: string[]
+}
+
 export class Utilities {
   private utilities = new DefaultMap<
     string,
     {
       kind: 'static' | 'functional'
       compileFn: CompileFn<any>
+      options?: UtilityOptions
     }[]
   >(() => [])
 
@@ -42,8 +47,8 @@ export class Utilities {
     this.utilities.get(name).push({ kind: 'static', compileFn })
   }
 
-  functional(name: string, compileFn: CompileFn<'functional'>) {
-    this.utilities.get(name).push({ kind: 'functional', compileFn })
+  functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {
+    this.utilities.get(name).push({ kind: 'functional', compileFn, options })
   }
 
   has(name: string, kind: 'static' | 'functional') {

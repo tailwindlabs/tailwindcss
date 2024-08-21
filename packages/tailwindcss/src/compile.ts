@@ -1,4 +1,4 @@
-import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
+import { decl, rule, walk, WalkAction, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
@@ -225,17 +225,44 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
   let utilities = designSystem.utilities.get(candidate.root) ?? []
 
-  for (let i = utilities.length - 1; i >= 0; i--) {
+  let fallbackUtilities: typeof utilities = []
+
+  let ast: AstNode[] = []
+
+  for (let i = 0; i < utilities.length; i++) {
     let utility = utilities[i]
+
+    if (utility.options?.types.includes('any')) {
+      fallbackUtilities.push(utility)
+      continue
+    }
 
     if (candidate.kind !== utility.kind) continue
 
     let compiledNodes = utility.compileFn(candidate)
-    if (compiledNodes === null) return null
-    if (compiledNodes) return compiledNodes
+    if (compiledNodes === undefined) continue
+    if (compiledNodes === null) return ast
+    ast.push(...compiledNodes)
   }
 
-  return null
+  if (ast.length === 0) {
+    for (let i = 0; i < fallbackUtilities.length; i++) {
+      let utility = utilities[i]
+
+      if (candidate.kind !== utility.kind) continue
+
+      let compiledNodes = utility.compileFn(candidate)
+      if (compiledNodes === undefined) continue
+      if (compiledNodes === null) return ast
+      ast.push(...compiledNodes)
+    }
+  }
+
+  if (ast.length === 0) {
+    return null
+  }
+
+  return ast
 }
 
 function applyImportant(ast: AstNode[]): void {
