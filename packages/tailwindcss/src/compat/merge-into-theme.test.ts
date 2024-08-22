@@ -32,9 +32,14 @@ test('Config values can be merged into the theme', ({ expect }) => {
     },
   ])
 
-  expect(theme.resolve('primary', ['--colors'] as any[])).toEqual('#c0ffee')
-  expect(theme.resolve('red-500', ['--colors'] as any[])).toEqual('red')
-  expect(theme.resolve('sm', ['--font-size'] as any[])).toEqual('0.875rem')
-  expect(theme.resolve('base', ['--font-size'] as any[])).toEqual('1rem')
-  expect(theme.get(['--font-size-base--line-height'] as any[])).toEqual('1.5')
+  expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
+  expect(theme.resolve('red-500', ['--color'])).toEqual('red')
+  expect(theme.resolve('sm', ['--font-size'])).toEqual('0.875rem')
+  expect(theme.resolve('base', ['--font-size'])).toEqual('1rem')
+  expect(theme.resolveWith('base', ['--font-size'], ['--line-height'])).toEqual([
+    'var(--font-size-base, 1rem)',
+    {
+      '--line-height': 'var(--font-size-base--line-height, 1.5)',
+    },
+  ])
 })
