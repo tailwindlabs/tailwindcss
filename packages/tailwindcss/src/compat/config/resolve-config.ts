@@ -4,6 +4,7 @@ import { createThemeFn } from '../../theme-fn'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
   type ResolvedConfig,
+  type ResolvedContentConfig,
   type ResolvedThemeValue,
   type ThemeValue,
   type UserConfig,
@@ -18,6 +19,7 @@ interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
   plugins: PluginWithConfig[]
+  content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
   result: ResolvedConfig
@@ -26,6 +28,9 @@ interface ResolutionContext {
 let minimal: ResolvedConfig = {
   theme: {},
   plugins: [],
+  content: {
+    files: [],
+  },
 }
 
 export function resolveConfig(design: DesignSystem, files: ConfigFile[]): ResolvedConfig {
@@ -33,6 +38,9 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
     design,
     configs: [],
     plugins: [],
+    content: {
+      files: [],
+    },
     theme: {},
     extend: {},
 
@@ -48,6 +56,7 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
   mergeTheme(ctx)
 
   return {
+    content: ctx.content,
     theme: ctx.theme as ResolvedConfig['theme'],
     plugins: ctx.plugins,
   }
@@ -123,6 +132,18 @@ function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): 
     if (plugin.config) {
       resolveInternal(ctx, { path, config: plugin.config })
     }
+  }
+
+  // Merge in content paths from multiple configs
+  let content = config.content ?? []
+  let files = Array.isArray(content) ? content : content.files
+
+  for (let file of files) {
+    ctx.content.files.push(
+      typeof file === 'object'
+        ? file
+        : { base: path!, pattern: file }
+    )
   }
 
   // Then apply the "user" config
