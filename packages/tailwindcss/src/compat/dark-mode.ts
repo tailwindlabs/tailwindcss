@@ -1,5 +1,5 @@
-import type { PluginAPI } from "../plugin-api"
-import type { ResolvedConfig } from "./config/types"
+import type { PluginAPI } from '../plugin-api'
+import type { ResolvedConfig } from './config/types'
 
 export function darkModePlugin({ addVariant, config }: PluginAPI) {
   let darkMode = config('darkMode', null) as ResolvedConfig['darkMode']

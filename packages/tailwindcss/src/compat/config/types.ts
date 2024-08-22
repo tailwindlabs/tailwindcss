@@ -28,12 +28,10 @@ export interface UserConfig {
   content?: ContentFile[] | { files: ContentFile[] }
 }
 
-type ResolvedContent =
-  | { base: string, pattern: string }
-  | { raw: string; extension?: string }
+type ResolvedContent = { base: string; pattern: string } | { raw: string; extension?: string }
 
 export interface ResolvedContentConfig {
-  files: ResolvedContent[],
+  files: ResolvedContent[]
 }
 
 export interface ResolvedConfig {
