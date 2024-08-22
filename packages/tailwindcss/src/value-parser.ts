@@ -1,4 +1,107 @@
-import { fun, separator, word, type AstNode, type FunctionNode } from './ast'
+export type ValueWordNode = {
+  kind: 'word'
+  value: string
+}
+
+export type ValueFunctionNode = {
+  kind: 'function'
+  value: string
+  nodes: ValueAstNode[]
+}
+
+export type ValueSeparatorNode = {
+  kind: 'separator'
+  value: string
+}
+
+export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
+
+export function word(value: string): ValueWordNode {
+  return {
+    kind: 'word',
+    value,
+  }
+}
+
+export function fun(value: string, nodes: ValueAstNode[]): ValueFunctionNode {
+  return {
+    kind: 'function',
+    value: value,
+    nodes,
+  }
+}
+
+export function separator(value: string): ValueSeparatorNode {
+  return {
+    kind: 'separator',
+    value,
+  }
+}
+
+export enum ValueWalkAction {
+  /** Continue walking, which is the default */
+  Continue,
+
+  /** Skip visiting the children of this node */
+  Skip,
+
+  /** Stop the walk entirely */
+  Stop,
+}
+
+export function walk(
+  ast: ValueAstNode[],
+  visit: (
+    node: ValueAstNode,
+    utils: {
+      parent: ValueAstNode | null
+      replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
+    },
+  ) => void | ValueWalkAction,
+  parent: ValueAstNode | null = null,
+) {
+  for (let i = 0; i < ast.length; i++) {
+    let node = ast[i]
+    let status =
+      visit(node, {
+        parent,
+        replaceWith(newNode) {
+          ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
+          // We want to visit the newly replaced node(s), which start at the
+          // current index (i). By decrementing the index here, the next loop
+          // will process this position (containing the replaced node) again.
+          i--
+        },
+      }) ?? ValueWalkAction.Continue
+
+    // Stop the walk entirely
+    if (status === ValueWalkAction.Stop) return
+
+    // Skip visiting the children of this node
+    if (status === ValueWalkAction.Skip) continue
+
+    if (node.kind === 'function') {
+      walk(node.nodes, visit, node)
+    }
+  }
+}
+
+export function toCss(ast: ValueAstNode[]) {
+  let css = ''
+  for (const node of ast) {
+    switch (node.kind) {
+      case 'word':
+      case 'separator': {
+        css += node.value
+        break
+      }
+      case 'function': {
+        css += node.value + '(' + toCss(node.nodes) + ')'
+      }
+    }
+  }
+  return css
+}
 
 const BACKSLASH = 0x5c
 const CLOSE_PAREN = 0x29
@@ -12,11 +115,11 @@ const SPACE = 0x20
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
 
-  let ast: AstNode[] = []
+  let ast: ValueAstNode[] = []
 
-  let stack: (FunctionNode | null)[] = []
+  let stack: (ValueFunctionNode | null)[] = []
 
-  let parent = null as FunctionNode | null
+  let parent = null as ValueFunctionNode | null
 
   let buffer = ''
 

@@ -2,11 +2,11 @@ import { walk, type AstNode } from './ast'
 import type { PluginAPI } from './plugin-api'
 import { withAlpha } from './utilities'
 import {
+  parse as parseValue,
   toCss as toValueCss,
   walk as walkValues,
-  type AstNode as ValueAstNode,
-} from './value-parser/ast'
-import * as ValueParser from './value-parser/parser'
+  type ValueAstNode,
+} from './value-parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
@@ -32,7 +32,7 @@ export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
 }
 
 export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI): string {
-  let ast = ValueParser.parse(value)
+  let ast = parseValue(value)
   walkValues(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) {
@@ -119,7 +119,7 @@ function cssThemeFn(
 
   // We need to parse the values recursively since this can resolve with another
   // `theme()` function definition.
-  return ValueParser.parse(resolvedValue)
+  return parseValue(resolvedValue)
 }
 
 function eventuallyUnquote(value: string) {
