@@ -121,10 +121,21 @@ export class Theme {
 
     let extra = {} as Record<string, string>
     for (let name of nestedKeys) {
-      let nestedValue = this.#var(`${themeKey}${name}`)
-      if (nestedValue) {
-        extra[name] = nestedValue
+      let nestedKey = `${themeKey}${name}`
+      let nestedValue = this.values.get(nestedKey)!
+      if (!nestedValue) continue
+
+      if (nestedValue.isInline) {
+        extra[name] = nestedValue.value
+      } else {
+        extra[name] = this.#var(nestedKey)!
       }
+    }
+
+    let value = this.values.get(themeKey)!
+
+    if (value.isInline) {
+      return [value.value, extra]
     }
 
     return [this.#var(themeKey)!, extra]
