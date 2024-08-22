@@ -16,14 +16,14 @@ export type ValueSeparatorNode = {
 
 export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
 
-export function word(value: string): ValueWordNode {
+function word(value: string): ValueWordNode {
   return {
     kind: 'word',
     value,
   }
 }
 
-export function fun(value: string, nodes: ValueAstNode[]): ValueFunctionNode {
+function fun(value: string, nodes: ValueAstNode[]): ValueFunctionNode {
   return {
     kind: 'function',
     value: value,
@@ -31,14 +31,14 @@ export function fun(value: string, nodes: ValueAstNode[]): ValueFunctionNode {
   }
 }
 
-export function separator(value: string): ValueSeparatorNode {
+function separator(value: string): ValueSeparatorNode {
   return {
     kind: 'separator',
     value,
   }
 }
 
-export enum ValueWalkAction {
+enum ValueWalkAction {
   /** Continue walking, which is the default */
   Continue,
 

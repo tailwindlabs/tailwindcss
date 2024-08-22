@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parse, toCss, walk, word } from './value-parser'
+import { parse, toCss, walk } from './value-parser'
 
 describe('parse', () => {
   it('should parse a value', () => {
@@ -145,7 +145,7 @@ describe('walk', () => {
 
     walk(ast, (node, { replaceWith }) => {
       if (node.kind === 'function' && node.value === 'theme') {
-        replaceWith(word('64rem'))
+        replaceWith({ kind: 'word', value: '64rem' })
       }
     })
 
