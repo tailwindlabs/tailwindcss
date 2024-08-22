@@ -46,10 +46,7 @@ export function createCompatConfig(theme: Theme): UserConfig {
   return {
     theme: {
       colors: ({ theme }) => theme('color', {}),
-      accentColor: ({ theme }) => ({
-        ...theme('colors'),
-        auto: 'auto',
-      }),
+      accentColor: ({ theme }) => theme('colors'),
       aspectRatio: bareValues((value) => {
         if (value.fraction === null) return
         let [lhs, rhs] = segment(value.fraction, '/')
@@ -106,10 +103,7 @@ export function createCompatConfig(theme: Theme): UserConfig {
         ...theme('borderWidth'),
         ...barePixels,
       }),
-      fill: ({ theme }) => ({
-        none: 'none',
-        ...theme('colors'),
-      }),
+      fill: ({ theme }) => theme('colors'),
       flexBasis: ({ theme }) => theme('spacing'),
       flexGrow: bareIntegers,
       flexShrink: bareIntegers,
