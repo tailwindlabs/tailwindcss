@@ -62,7 +62,7 @@ function readFromCss(theme: Theme, path: string[]) {
   let map = new Map<string | null, ThemeValue>()
   let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
 
-  let ns = theme.resolveNamespace(`--${themeKey}` as any)
+  let ns = theme.namespace(`--${themeKey}` as any)
 
   if (ns.size === 0) {
     return null

@@ -181,15 +181,15 @@ test('theme keys can read from the CSS theme', ({ expect }) => {
     theme: {
       colors: {
         red: 'red',
-        green: 'var(--color-green, green)',
+        green: 'green',
       },
       accentColor: {
         red: 'red',
-        green: 'var(--color-green, green)',
+        green: 'green',
       },
       placeholderColor: {
-        primary: 'var(--color-green, green)',
-        secondary: 'var(--color-green, green)',
+        primary: 'green',
+        secondary: 'green',
       },
     },
   })

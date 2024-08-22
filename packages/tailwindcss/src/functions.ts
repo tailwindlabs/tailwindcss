@@ -103,29 +103,6 @@ function cssThemeFn(
     resolvedValue = themeValue
   }
 
-  // The plugin `theme()` function currently returns resolved values (so values
-  // that are wrapped in `var()` and the CSS variable name). This `theme()`
-  // function should, however, instead return the raw values. Raw values are
-  // necessary because they might be used in positions where `var()` is not
-  // supported like `@media (min-width: theme(--breakpoint-sm))`.
-  //
-  // Since the plugin `theme()` function operates on a materialized config
-  // object provided by plugins, the values would already be read from the CSS
-  // theme before we even get here (the config object is initialized together
-  // with the plugins). Subsequently, we can only read resolved values here
-  // unless we create a separate config object containing unresolved CSS values
-  // that is only for use with the CSS `theme()` function.
-  //
-  // Since this is overkill, we instead introspect the string and try to unwrap
-  // the `var()` call for now. This works because we always define a fallback
-  // value that points to the raw CSS variable value.
-  if (typeof resolvedValue === 'string' && resolvedValue.startsWith('var(')) {
-    const firstComma = resolvedValue.indexOf(',')
-    if (firstComma !== -1) {
-      resolvedValue = resolvedValue.slice(firstComma + 1, -1).trim()
-    }
-  }
-
   if (!resolvedValue && fallbackValues.length > 0) {
     return fallbackValues
   }
