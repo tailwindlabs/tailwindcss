@@ -1800,3 +1800,23 @@ describe('addComponents()', () => {
     `)
   })
 })
+
+describe('prefix()', () => {
+  test('is an identity function', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadPlugin() {
+          return ({ prefix }: PluginAPI) => {
+            fn(prefix('btn'))
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith('btn')
+  })
+})
