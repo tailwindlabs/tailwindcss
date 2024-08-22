@@ -3,12 +3,13 @@ import { decl, rule, type AstNode } from './ast'
 import type { Candidate, NamedUtilityValue } from './candidate'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig } from './compat/config/resolve-config'
-import type { UserConfig } from './compat/config/types'
+import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import { toKeyPath } from './utils/to-key-path'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -57,6 +58,7 @@ export type PluginAPI = {
   ): void
 
   theme(path: string, defaultValue?: any): any
+  config(path: string, defaultValue?: any): any
   prefix(className: string): string
 }
 
@@ -65,7 +67,7 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 function buildPluginApi(
   designSystem: DesignSystem,
   ast: AstNode[],
-  resolvedConfig: { theme?: Record<string, any> },
+  resolvedConfig: ResolvedConfig,
 ): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
@@ -280,6 +282,22 @@ function buildPluginApi(
 
     prefix(className) {
       return className
+    },
+
+    config(path, defaultValue) {
+      let obj: Record<any, any> = resolvedConfig
+
+      let keypath = toKeyPath(path)
+
+      for (let i = 0; i < keypath.length; ++i) {
+        let key = keypath[i]
+
+        if (obj[key] === undefined) return defaultValue
+
+        obj = obj[key]
+      }
+
+      return obj ?? defaultValue
     },
   }
 
