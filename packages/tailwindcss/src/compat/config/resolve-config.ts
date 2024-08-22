@@ -148,11 +148,7 @@ function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): 
   let files = Array.isArray(content) ? content : content.files
 
   for (let file of files) {
-    ctx.content.files.push(
-      typeof file === 'object'
-        ? file
-        : { base: path!, pattern: file }
-    )
+    ctx.content.files.push(typeof file === 'object' ? file : { base: path!, pattern: file })
   }
 
   // Then apply the "user" config
