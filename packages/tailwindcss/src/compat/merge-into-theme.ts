@@ -42,6 +42,10 @@ function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][]
 }
 
 function keyPathToCssProperty(path: string[]) {
+  if (path[0] === 'colors') {
+    path[0] = 'color'
+  }
+
   return (
     path
       // [1] should move into the nested object tuple. To create the CSS variable
