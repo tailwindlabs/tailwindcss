@@ -1,11 +1,12 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
 import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import type { UserConfig } from './compat/config/types'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
-import { registerPlugins, type Plugin } from './plugin-api'
+import { registerPlugins, type ConfigFile, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
@@ -13,10 +14,15 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Promise<Plugin>
+  loadConfig?: (path: string) => Promise<UserConfig>
 }
 
 function throwOnPlugin(): never {
   throw new Error('No `loadPlugin` function provided to `compile`')
+}
+
+function throwOnConfig(): never {
+  throw new Error('No `loadConfig` function provided to `compile`')
 }
 
 function parseThemeOptions(selector: string) {
@@ -34,12 +40,16 @@ function parseThemeOptions(selector: string) {
   return { isReference, isInline }
 }
 
-async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOptions = {}) {
+async function parseCss(
+  css: string,
+  { loadPlugin = throwOnPlugin, loadConfig = throwOnConfig }: CompileOptions = {},
+) {
   let ast = CSS.parse(css)
 
   // Find all `@theme` declarations
   let theme = new Theme()
   let pluginPaths: string[] = []
+  let configPaths: string[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
@@ -60,6 +70,21 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
       }
 
       pluginPaths.push(node.selector.slice(9, -1))
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@config` at-rules
+    if (node.selector === '@config' || node.selector.startsWith('@config ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@config` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@config` cannot be nested.')
+      }
+
+      configPaths.push(node.selector.slice(9, -1))
       replaceWith([])
       return
     }
@@ -280,9 +305,14 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
     customUtility(designSystem)
   }
 
+  let configs = await Promise.all(configPaths.map(async configPath => ({
+    path: configPath,
+    config: await loadConfig(configPath),
+  })))
+
   let plugins = await Promise.all(pluginPaths.map(loadPlugin))
 
-  let pluginApi = registerPlugins(plugins, designSystem, ast)
+  let pluginApi = registerPlugins(plugins, designSystem, ast, configs)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {

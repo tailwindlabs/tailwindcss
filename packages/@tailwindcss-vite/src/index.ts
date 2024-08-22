@@ -87,6 +87,14 @@ export default function tailwindcss(): Plugin[] {
 
         return import(pluginPath).then((m) => m.default ?? m)
       },
+
+      loadConfig: async (configPath) => {
+        if (configPath[0] === '.') {
+          return import(path.resolve(inputBasePath, configPath)).then((m) => m.default ?? m)
+        }
+
+        return import(configPath).then((m) => m.default ?? m)
+      },
     })
 
     scanner = new Scanner({
