@@ -6,7 +6,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
-import { registerPlugins, type Plugin } from './plugin-api'
+import { registerPlugins, type CssPluginOptions, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
@@ -48,7 +48,7 @@ async function parseCss(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let pluginPaths: string[] = []
+  let pluginPaths: [string, CssPluginOptions | null][] = []
   let configPaths: string[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -61,15 +61,49 @@ async function parseCss(
 
     // Collect paths from `@plugin` at-rules
     if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
-      if (node.nodes.length > 0) {
-        throw new Error('`@plugin` cannot have a body.')
-      }
-
       if (parent !== null) {
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      pluginPaths.push(node.selector.slice(9, -1))
+      let options: CssPluginOptions = {}
+
+      for (let decl of node.nodes ?? []) {
+        if (decl.kind !== 'declaration') {
+          throw new Error('`@plugin` can only contain declarations.')
+        }
+
+        if (decl.value === undefined) continue
+
+        // Parse the declaration value as a primitive type
+        // These are the same primitive values supported by JSON
+        let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
+
+        if (value === 'null') {
+          value = null
+        } else if (value === 'true') {
+          value = true
+        } else if (value === 'false') {
+          value = false
+        } else if (!Number.isNaN(Number(value))) {
+          value = Number(value)
+        } else if (value[0] === '"' && value[value.length - 1] === '"') {
+          value = value.slice(1, -1)
+        } else if (value[0] === "'" && value[value.length - 1] === "'") {
+          value = value.slice(1, -1)
+        } else if (value[0] === '[' && value[value.length - 1] === ']') {
+          throw new Error('Arrays are not supported in `@plugin` options.')
+        } else if (value[0] === '{' && value[value.length - 1] === '}') {
+          throw new Error('Objects are not supported in `@plugin` options.')
+        }
+
+        options[decl.property] = value
+      }
+
+      pluginPaths.push([
+        node.selector.slice(9, -1),
+        Object.keys(options).length > 0 ? options : null,
+      ])
+
       replaceWith([])
       return
     }
@@ -304,7 +338,13 @@ async function parseCss(
     })),
   )
 
-  let plugins = await Promise.all(pluginPaths.map(loadPlugin))
+  let plugins = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
 
   let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
 

@@ -346,12 +346,32 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   return ast
 }
 
+export type CssPluginOptions = Record<string, string | number | boolean | null>
+
+interface PluginDetail {
+  path: string
+  plugin: Plugin
+  options: CssPluginOptions | null
+}
+
 export function registerPlugins(
-  plugins: Plugin[],
+  pluginDetails: PluginDetail[],
   designSystem: DesignSystem,
   ast: AstNode[],
   configs: ConfigFile[],
 ) {
+  let plugins = pluginDetails.map((detail) => {
+    if (!detail.options) {
+      return detail.plugin
+    }
+
+    if ('__isOptionsFunction' in detail.plugin) {
+      return detail.plugin(detail.options)
+    }
+
+    throw new Error(`The plugin "${detail.path}" does not accept options`)
+  })
+
   let userConfig = [{ config: { plugins } }, ...configs]
 
   let resolvedConfig = resolveConfig(designSystem, [
