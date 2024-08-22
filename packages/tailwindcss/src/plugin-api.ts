@@ -4,6 +4,7 @@ import type { Candidate, NamedUtilityValue } from './candidate'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
+import { darkModePlugin } from './compat/dark-mode'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
@@ -354,6 +355,7 @@ export function registerPlugins(
     { config: createCompatConfig(designSystem.theme) },
     ...configs,
     { config: { plugins } },
+    { config: { plugins: [darkModePlugin] } },
   ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)

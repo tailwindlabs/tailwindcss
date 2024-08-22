@@ -26,6 +26,7 @@ interface ResolutionContext {
 }
 
 let minimal: ResolvedConfig = {
+  darkMode: null,
   theme: {},
   plugins: [],
   content: {
@@ -52,10 +53,18 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
     resolveInternal(ctx, file)
   }
 
+  // Merge dark mode
+  for (let config of ctx.configs) {
+    if ('darkMode' in config && config.darkMode !== undefined) {
+      ctx.result.darkMode = config.darkMode ?? null
+    }
+  }
+
   // Merge themes
   mergeTheme(ctx)
 
   return {
+    ...ctx.result,
     content: ctx.content,
     theme: ctx.theme as ResolvedConfig['theme'],
     plugins: ctx.plugins,
