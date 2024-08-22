@@ -77,7 +77,7 @@ test(
   },
 )
 
-test.only(
+test(
   'builds the `tailwindcss-animate` plugin utilities',
   {
     fs: {
