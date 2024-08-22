@@ -381,7 +381,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   for (let [root, value] of roots) {
     let candidate: Candidate = {
       kind: 'functional',
-      root: root,
+      root,
       modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
       value: null,
       variants: parsedCandidateVariants,
@@ -643,9 +643,8 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
     if (input[0] === '@' && exists('@')) {
       yield ['@', input.slice(1)]
     }
+    return
   }
-
-  if (idx === -1) return
 
   // Determine the root and value by testing permutations of the incoming input.
   //
