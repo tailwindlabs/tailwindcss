@@ -26,7 +26,10 @@ export type PluginAPI = {
 
   addUtilities(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
   matchUtilities(
-    utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
+    utilities: Record<
+      string,
+      (value: string, extra: { modifier: string | null }) => CssInJs | CssInJs[]
+    >,
     options?: Partial<{
       type: string | string[]
       supportsNegativeValues: boolean
@@ -129,7 +132,6 @@ function buildPluginApi(
 
         designSystem.utilities.static(name.slice(1), (candidate) => {
           if (candidate.negative) return
-
           let ast = objectToAst(css)
           substituteAtApply(ast, designSystem)
           return ast
