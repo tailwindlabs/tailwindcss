@@ -24,7 +24,10 @@ export type PluginAPI = {
   addBase(base: CssInJs): void
   addVariant(name: string, variant: string | string[] | CssInJs): void
 
-  addUtilities(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
+  addUtilities(
+    utilities: Record<string, CssInJs | CssInJs[]> | Record<string, CssInJs | CssInJs[]>[],
+    options?: {},
+  ): void
   matchUtilities(
     utilities: Record<
       string,
@@ -115,7 +118,8 @@ function buildPluginApi(
         }
 
         utils[className] ??= []
-        utils[className].push(css)
+        css = Array.isArray(css) ? css : [css]
+        utils[className].push(...css)
       }
 
       for (let [name, css] of Object.entries(utils)) {

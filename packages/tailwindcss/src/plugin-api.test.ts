@@ -861,6 +861,33 @@ describe('addUtilities()', () => {
     `)
   })
 
+  test('return multiple rule objects from a custom utility', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }: PluginAPI) => {
+            addUtilities([
+              {
+                '.text-trim': [{ 'text-box-trim': 'both' }, { 'text-box-edge': 'cap alphabetic' }],
+              },
+            ])
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['text-trim'])).trim()).toMatchInlineSnapshot(`
+      ".text-trim {
+        text-box-trim: both;
+        text-box-edge: cap alphabetic;
+      }"
+    `)
+  })
+
   test('define multiple utilities with array syntax', async () => {
     let compiled = await compile(
       css`
