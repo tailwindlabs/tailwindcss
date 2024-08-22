@@ -6,7 +6,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
-import { registerPlugins, type ConfigFile, type Plugin } from './plugin-api'
+import { registerPlugins, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
@@ -297,6 +297,17 @@ async function parseCss(
 
   let designSystem = buildDesignSystem(theme)
 
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+
+  let plugins = await Promise.all(pluginPaths.map(loadPlugin))
+
+  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+
   for (let customVariant of customVariants) {
     customVariant(designSystem)
   }
@@ -304,15 +315,6 @@ async function parseCss(
   for (let customUtility of customUtilities) {
     customUtility(designSystem)
   }
-
-  let configs = await Promise.all(configPaths.map(async configPath => ({
-    path: configPath,
-    config: await loadConfig(configPath),
-  })))
-
-  let plugins = await Promise.all(pluginPaths.map(loadPlugin))
-
-  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
