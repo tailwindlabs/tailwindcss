@@ -2,7 +2,7 @@ import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
 import type { Candidate, NamedUtilityValue } from './candidate'
 import { createCompatConfig } from './compat/config/create-compat-config'
-import { resolveConfig } from './compat/config/resolve-config'
+import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
@@ -348,9 +348,11 @@ export function registerPlugins(
   plugins: Plugin[],
   designSystem: DesignSystem,
   ast: AstNode[],
+  configs: ConfigFile[],
 ) {
   let resolvedConfig = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme) },
+    ...configs,
     { config: { plugins } },
   ])
 

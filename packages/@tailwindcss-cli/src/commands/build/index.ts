@@ -140,6 +140,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         return import(pluginPath).then((m) => m.default ?? m)
       },
+
+      loadConfig: async (configPath) => {
+        if (configPath[0] === '.') {
+          return import(pathToFileURL(path.resolve(inputBasePath, configPath)).href).then(
+            (m) => m.default ?? m,
+          )
+        }
+
+        return import(configPath).then((m) => m.default ?? m)
+      },
     })
   }
 
