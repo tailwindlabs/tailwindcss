@@ -1011,6 +1011,87 @@ describe('addUtilities()', () => {
       )
     }).rejects.toThrowError(/invalid utility selector/)
   })
+
+  test('supports multiple selector names', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }: PluginAPI) => {
+            addUtilities({
+              '.form-input, .form-textarea': {
+                appearance: 'none',
+                'background-color': '#fff',
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
+      .toMatchInlineSnapshot(`
+        ".form-input {
+          appearance: none;
+          background-color: #fff;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:form-textarea {
+            appearance: none;
+            background-color: #fff;
+          }
+        }"
+      `)
+  })
+
+  test('supports pseudo classes and pseudo elements', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }: PluginAPI) => {
+            addUtilities({
+              '.form-input, .form-input::placeholder, .form-textarea:hover:focus': {
+                'background-color': 'red',
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
+      .toMatchInlineSnapshot(`
+        ".form-input {
+          background-color: red;
+        }
+
+        .form-input::placeholder {
+          background-color: red;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:form-textarea:hover:focus {
+            background-color: red;
+          }
+        }"
+      `)
+  })
 })
 
 describe('matchUtilities()', () => {
