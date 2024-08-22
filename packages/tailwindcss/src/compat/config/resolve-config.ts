@@ -9,6 +9,11 @@ import {
   type UserConfig,
 } from './types'
 
+export interface ConfigFile {
+  path?: string
+  config: UserConfig
+}
+
 interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
@@ -23,7 +28,7 @@ let minimal: ResolvedConfig = {
   plugins: [],
 }
 
-export function resolveConfig(design: DesignSystem, configs: UserConfig[]): ResolvedConfig {
+export function resolveConfig(design: DesignSystem, files: ConfigFile[]): ResolvedConfig {
   let ctx: ResolutionContext = {
     design,
     configs: [],
@@ -35,8 +40,8 @@ export function resolveConfig(design: DesignSystem, configs: UserConfig[]): Reso
     result: structuredClone(minimal),
   }
 
-  for (let config of configs) {
-    resolveInternal(ctx, config)
+  for (let file of files) {
+    resolveInternal(ctx, file)
   }
 
   // Merge themes
@@ -80,11 +85,11 @@ export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
 }
 
-function resolveInternal(ctx: ResolutionContext, user: UserConfig): void {
+function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): void {
   let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
-  for (let plugin of user.plugins ?? []) {
+  for (let plugin of config.plugins ?? []) {
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
@@ -103,12 +108,12 @@ function resolveInternal(ctx: ResolutionContext, user: UserConfig): void {
   }
 
   // Apply configs from presets
-  if (Array.isArray(user.presets) && user.presets.length === 0) {
+  if (Array.isArray(config.presets) && config.presets.length === 0) {
     throw new Error('The empty preset `[]` is not supported')
   }
 
-  for (let preset of user.presets ?? []) {
-    resolveInternal(ctx, preset)
+  for (let preset of config.presets ?? []) {
+    resolveInternal(ctx, { path, config: preset })
   }
 
   // Apply configs from plugins
@@ -116,12 +121,12 @@ function resolveInternal(ctx: ResolutionContext, user: UserConfig): void {
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      resolveInternal(ctx, plugin.config)
+      resolveInternal(ctx, { path, config: plugin.config })
     }
   }
 
   // Then apply the "user" config
-  ctx.configs.push(user)
+  ctx.configs.push(config)
 }
 
 function mergeTheme(ctx: ResolutionContext) {

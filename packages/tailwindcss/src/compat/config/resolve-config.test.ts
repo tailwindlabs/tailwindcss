@@ -8,27 +8,33 @@ test('top level theme keys are replaced', ({ expect }) => {
 
   let config = resolveConfig(design, [
     {
-      theme: {
-        colors: {
-          red: 'red',
-        },
+      config: {
+        theme: {
+          colors: {
+            red: 'red',
+          },
 
-        fontFamily: {
-          sans: 'SF Pro Display',
+          fontFamily: {
+            sans: 'SF Pro Display',
+          },
         },
       },
     },
     {
-      theme: {
-        colors: {
-          green: 'green',
+      config: {
+        theme: {
+          colors: {
+            green: 'green',
+          },
         },
       },
     },
     {
-      theme: {
-        colors: {
-          blue: 'blue',
+      config: {
+        theme: {
+          colors: {
+            blue: 'blue',
+          },
         },
       },
     },
@@ -51,21 +57,25 @@ test('theme can be extended', ({ expect }) => {
 
   let config = resolveConfig(design, [
     {
-      theme: {
-        colors: {
-          red: 'red',
-        },
+      config: {
+        theme: {
+          colors: {
+            red: 'red',
+          },
 
-        fontFamily: {
-          sans: 'SF Pro Display',
+          fontFamily: {
+            sans: 'SF Pro Display',
+          },
         },
       },
     },
     {
-      theme: {
-        extend: {
-          colors: {
-            blue: 'blue',
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              blue: 'blue',
+            },
           },
         },
       },
@@ -92,31 +102,37 @@ test('theme keys can reference other theme keys using the theme function regardl
 
   let config = resolveConfig(design, [
     {
-      theme: {
-        colors: {
-          red: 'red',
-        },
-        placeholderColor: {
-          green: 'green',
-        },
-      },
-    },
-    {
-      theme: {
-        extend: {
-          colors: ({ theme }) => ({
-            ...theme('placeholderColor'),
-            blue: 'blue',
-          }),
+      config: {
+        theme: {
+          colors: {
+            red: 'red',
+          },
+          placeholderColor: {
+            green: 'green',
+          },
         },
       },
     },
     {
-      theme: {
-        extend: {
-          caretColor: ({ theme }) => theme('accentColor'),
-          accentColor: ({ theme }) => theme('backgroundColor'),
-          backgroundColor: ({ theme }) => theme('colors'),
+      config: {
+        theme: {
+          extend: {
+            colors: ({ theme }) => ({
+              ...theme('placeholderColor'),
+              blue: 'blue',
+            }),
+          },
+        },
+      },
+    },
+    {
+      config: {
+        theme: {
+          extend: {
+            caretColor: ({ theme }) => theme('accentColor'),
+            accentColor: ({ theme }) => theme('backgroundColor'),
+            backgroundColor: ({ theme }) => theme('colors'),
+          },
         },
       },
     },
@@ -156,23 +172,25 @@ test('theme keys can read from the CSS theme', ({ expect }) => {
 
   let config = resolveConfig(design, [
     {
-      theme: {
-        colors: ({ theme }) => ({
-          // Reads from the --color-* namespace
-          ...theme('color'),
-          red: 'red',
-        }),
-        accentColor: ({ theme }) => ({
-          // Reads from the --color-* namespace through `colors`
-          ...theme('colors'),
-        }),
-        placeholderColor: ({ theme }) => ({
-          // Reads from the --color-* namespace through `colors`
-          primary: theme('colors.green'),
+      config: {
+        theme: {
+          colors: ({ theme }) => ({
+            // Reads from the --color-* namespace
+            ...theme('color'),
+            red: 'red',
+          }),
+          accentColor: ({ theme }) => ({
+            // Reads from the --color-* namespace through `colors`
+            ...theme('colors'),
+          }),
+          placeholderColor: ({ theme }) => ({
+            // Reads from the --color-* namespace through `colors`
+            primary: theme('colors.green'),
 
-          // Reads from the --color-* namespace directly
-          secondary: theme('color.green'),
-        }),
+            // Reads from the --color-* namespace directly
+            secondary: theme('color.green'),
+          }),
+        },
       },
     },
   ])
