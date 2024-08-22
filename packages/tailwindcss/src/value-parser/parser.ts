@@ -154,8 +154,9 @@ export function parse(input: string) {
       }
 
       // Everything else will be collected in the buffer
-      default:
+      default: {
         buffer += String.fromCharCode(currentChar)
+      }
     }
   }
 
