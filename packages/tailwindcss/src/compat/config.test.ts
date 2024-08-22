@@ -195,3 +195,37 @@ test('Config files can affect the theme', async ({ expect }) => {
     "
   `)
 })
+
+test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+    @variant dark (&:is(.my-dark));
+    @variant light (&:is(.my-light));
+  `
+
+  let compiler = await compile(input, {
+    loadConfig: async () => ({
+      darkMode: ['variant', '&:is(.dark)'],
+      plugins: [
+        plugin(function ({ addVariant }) {
+          addVariant('light', '&:is(.light)')
+        }),
+      ],
+    }),
+  })
+
+  expect(compiler.build(['dark:underline', 'light:underline'])).toMatchInlineSnapshot(`
+    ".dark\\:underline {
+      &:is(.my-dark) {
+        text-decoration-line: underline;
+      }
+    }
+    .light\\:underline {
+      &:is(.my-light) {
+        text-decoration-line: underline;
+      }
+    }
+    "
+  `)
+})
