@@ -20,3 +20,22 @@ export interface ResolvedConfig {
   theme: Record<string, Record<string, unknown>>
   plugins: PluginWithConfig[]
 }
+
+// Content support
+type ContentFile = string | { raw: string; extension?: string }
+
+export interface UserConfig {
+  content?: ContentFile[] | { files: ContentFile[] }
+}
+
+type ResolvedContent =
+  | { base: string, pattern: string }
+  | { raw: string; extension?: string }
+
+export interface ResolvedContentConfig {
+  files: ResolvedContent[],
+}
+
+export interface ResolvedConfig {
+  content: ResolvedContentConfig
+}

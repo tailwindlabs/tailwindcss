@@ -312,7 +312,7 @@ async function parseCss(
 
   let plugins = await Promise.all(pluginPaths.map(loadPlugin))
 
-  let pluginApi = registerPlugins(plugins, designSystem, ast, configs)
+  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
@@ -337,6 +337,14 @@ async function parseCss(
     // into nested trees.
     return WalkAction.Skip
   })
+
+  for (let file of resolvedConfig.content.files) {
+    if ('raw' in file) {
+      throw new Error('raw content is not currently supported')
+    }
+
+    globs.push(file.pattern)
+  }
 
   return {
     designSystem,
