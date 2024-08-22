@@ -8,6 +8,7 @@ import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
+import { segment } from './utils/segment'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -22,8 +23,28 @@ export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 export type PluginAPI = {
   addBase(base: CssInJs): void
   addVariant(name: string, variant: string | string[] | CssInJs): void
-  addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
+
+  addUtilities(
+    utilities: Record<string, CssInJs | CssInJs[]> | Record<string, CssInJs | CssInJs[]>[],
+    options?: {},
+  ): void
   matchUtilities(
+    utilities: Record<
+      string,
+      (value: string, extra: { modifier: string | null }) => CssInJs | CssInJs[]
+    >,
+    options?: Partial<{
+      type: string | string[]
+      supportsNegativeValues: boolean
+      values: Record<string, string> & {
+        __BARE_VALUE__?: (value: NamedUtilityValue) => string | undefined
+      }
+      modifiers: 'any' | Record<string, string>
+    }>,
+  ): void
+
+  addComponents(utilities: Record<string, CssInJs> | Record<string, CssInJs>[], options?: {}): void
+  matchComponents(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
       type: string | string[]
@@ -34,7 +55,9 @@ export type PluginAPI = {
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
+
   theme(path: string, defaultValue?: any): any
+  prefix(className: string): string
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -44,7 +67,7 @@ function buildPluginApi(
   ast: AstNode[],
   resolvedConfig: { theme?: Record<string, any> },
 ): PluginAPI {
-  return {
+  let api: PluginAPI = {
     addBase(css) {
       ast.push(rule('@layer base', objectToAst(css)))
     },
@@ -71,7 +94,35 @@ function buildPluginApi(
     },
 
     addUtilities(utilities) {
-      for (let [name, css] of Object.entries(utilities)) {
+      utilities = Array.isArray(utilities) ? utilities : [utilities]
+
+      let entries = utilities.flatMap((u) => Object.entries(u))
+
+      // Split multi-selector utilities into individual utilities
+      entries = entries.flatMap(([name, css]) =>
+        segment(name, ',').map((selector) => [selector.trim(), css] as [string, CssInJs]),
+      )
+
+      // Merge entries for the same class
+      let utils: Record<string, CssInJs[]> = {}
+
+      for (let [name, css] of entries) {
+        let [className, ...parts] = segment(name, ':')
+
+        // Modify classes using pseudo-classes or pseudo-elements to use nested rules
+        if (parts.length > 0) {
+          let pseudos = parts.map((p) => `:${p.trim()}`).join('')
+          css = {
+            [`&${pseudos}`]: css,
+          }
+        }
+
+        utils[className] ??= []
+        css = Array.isArray(css) ? css : [css]
+        utils[className].push(...css)
+      }
+
+      for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
           ast.push(rule(name, objectToAst(css)))
           continue
@@ -85,7 +136,6 @@ function buildPluginApi(
 
         designSystem.utilities.static(name.slice(1), (candidate) => {
           if (candidate.negative) return
-
           let ast = objectToAst(css)
           substituteAtApply(ast, designSystem)
           return ast
@@ -210,20 +260,42 @@ function buildPluginApi(
       }
     },
 
+    addComponents(components, options) {
+      this.addUtilities(components)
+    },
+
+    matchComponents(components, options) {
+      this.matchUtilities(components)
+    },
+
     theme: createThemeFn(
       designSystem,
       () => resolvedConfig.theme ?? {},
       (value) => value,
     ),
+
+    prefix(className) {
+      return className
+    },
   }
+
+  // Bind these functions so they can use `this`
+  api.addComponents = api.addComponents.bind(api)
+  api.matchComponents = api.matchComponents.bind(api)
+
+  return api
 }
 
-export type CssInJs = { [key: string]: string | CssInJs }
+export type CssInJs = { [key: string]: string | CssInJs | CssInJs[] }
 
-function objectToAst(obj: CssInJs): AstNode[] {
+function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let ast: AstNode[] = []
 
-  for (let [name, value] of Object.entries(obj)) {
+  rules = Array.isArray(rules) ? rules : [rules]
+
+  let entries = rules.flatMap((rule) => Object.entries(rule))
+
+  for (let [name, value] of entries) {
     if (typeof value !== 'object') {
       if (!name.startsWith('--') && value === '@slot') {
         ast.push(rule(name, [rule('@slot', [])]))

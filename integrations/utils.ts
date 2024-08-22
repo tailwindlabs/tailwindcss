@@ -38,6 +38,7 @@ interface TestContext {
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
     expectFileToContain(filePath: string, contents: string | string[]): Promise<void>
+    expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -289,8 +290,20 @@ export function test(
               }
             })
           },
+          async expectFileNotToContain(filePath, contents) {
+            return retryAssertion(async () => {
+              let fileContent = await this.read(filePath)
+              for (let content of contents) {
+                expect(fileContent).not.toContain(content)
+              }
+            })
+          },
         },
       } satisfies TestContext
+
+      config.fs['.gitignore'] ??= txt`
+        node_modules/
+      `
 
       for (let [filename, content] of Object.entries(config.fs)) {
         await context.fs.write(filename, content)

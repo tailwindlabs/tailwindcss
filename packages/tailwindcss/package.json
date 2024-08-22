@@ -23,6 +23,14 @@
       "require": "./dist/lib.js",
       "import": "./src/index.ts"
     },
+    "./colors": {
+      "require": "./src/compat/colors.cts",
+      "import": "./src/compat/colors.ts"
+    },
+    "./defaultTheme": {
+      "require": "./src/compat/default-theme.cts",
+      "import": "./src/compat/default-theme.ts"
+    },
     "./plugin": {
       "require": "./src/plugin.cts",
       "import": "./src/plugin.ts"
@@ -49,7 +57,15 @@
       },
       "./plugin": {
         "require": "./dist/plugin.js",
-        "import": "./src/plugin.mjs"
+        "import": "./dist/plugin.mjs"
+      },
+      "./defaultTheme": {
+        "require": "./dist/default-theme.js",
+        "import": "./dist/default-theme.mjs"
+      },
+      "./colors": {
+        "require": "./dist/colors.js",
+        "import": "./dist/colors.mjs"
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
