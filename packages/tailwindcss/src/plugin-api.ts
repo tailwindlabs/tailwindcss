@@ -5,6 +5,7 @@ import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
+import { mergeIntoTheme } from './compat/merge-into-theme'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
@@ -351,10 +352,11 @@ export function registerPlugins(
   ast: AstNode[],
   configs: ConfigFile[],
 ) {
+  let userConfig = [{ config: { plugins } }, ...configs]
+
   let resolvedConfig = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme) },
-    ...configs,
-    { config: { plugins } },
+    ...userConfig,
     { config: { plugins: [darkModePlugin] } },
   ])
 
@@ -363,6 +365,10 @@ export function registerPlugins(
   for (let { handler } of resolvedConfig.plugins) {
     handler(pluginApi)
   }
+
+  // Theme keys don't need to read from the compat config because core plugins
+  // _already_ look through "fallback" theme keys
+  mergeIntoTheme(designSystem, userConfig)
 
   return {
     pluginApi,
