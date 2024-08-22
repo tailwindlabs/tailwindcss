@@ -265,7 +265,7 @@ function getPropertySort(nodes: AstNode[]) {
     let node = q.shift()!
     if (node.kind === 'declaration') {
       if (node.property === '--tw-sort') {
-        let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value)
+        let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value ?? '')
         if (idx !== -1) {
           propertySort.add(idx)
           break

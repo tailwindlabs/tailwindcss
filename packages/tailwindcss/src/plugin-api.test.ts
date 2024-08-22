@@ -104,7 +104,7 @@ describe('theme', async () => {
 
     expect(compiler.build(['scrollbar-red-500', 'scrollbar-russet-700'])).toMatchInlineSnapshot(`
       ".scrollbar-red-500 {
-        scrollbar-color: var(--color-red-500, #ef4444);
+        scrollbar-color: #ef4444;
       }
       .scrollbar-russet-700 {
         scrollbar-color: #7a4724;
@@ -338,16 +338,16 @@ describe('theme', async () => {
     expect(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']))
       .toMatchInlineSnapshot(`
         ".animation {
-          animation: var(--animation, pulse 1s linear infinite);
+          animation: pulse 1s linear infinite;
         }
         .animation-spin {
-          animation: var(--animation-spin, spin 1s linear infinite);
+          animation: spin 1s linear infinite;
         }
         .animation2 {
-          animation: var(--animation, pulse 1s linear infinite);
+          animation: pulse 1s linear infinite;
         }
         .animation2-twist {
-          animation: var(--animation-spin, spin 1s linear infinite);
+          animation: spin 1s linear infinite;
         }
         "
       `)
@@ -392,13 +392,13 @@ describe('theme', async () => {
     expect(compiler.build(['animation', 'animation-spin', 'animation-bounce']))
       .toMatchInlineSnapshot(`
         ".animation {
-          --animation: var(--animation, pulse 1s linear infinite);
+          --animation: pulse 1s linear infinite;
         }
         .animation-bounce {
           --animation: bounce 1s linear infinite;
         }
         .animation-spin {
-          --animation: var(--animation-spin, spin 1s linear infinite);
+          --animation: spin 1s linear infinite;
         }
         "
       `)
@@ -442,7 +442,7 @@ describe('theme', async () => {
 
     expect(compiler.build(['animation'])).toMatchInlineSnapshot(`
       ".animation {
-        --animation: var(--animation, pulse 1s linear infinite);
+        --animation: pulse 1s linear infinite;
       }
       "
     `)
@@ -480,8 +480,8 @@ describe('theme', async () => {
     })
 
     expect(fn).toHaveBeenCalledWith({
-      spin: 'var(--animation-simple-spin, spin 1s linear infinite)',
-      bounce: 'var(--animation-simple-bounce, bounce 1s linear infinite)',
+      spin: 'spin 1s linear infinite',
+      bounce: 'bounce 1s linear infinite',
     })
   })
 
@@ -739,7 +739,7 @@ describe('theme', async () => {
       loadPlugin: async () => {
         return plugin(
           ({ theme }) => {
-            // The compatability config specifies that `accentColor` spreads in `colors`
+            // The compatibility config specifies that `accentColor` spreads in `colors`
             fn(theme('accentColor.primary'))
 
             // This should even work for theme keys specified in plugin configs
@@ -756,8 +756,8 @@ describe('theme', async () => {
       },
     })
 
-    expect(fn).toHaveBeenCalledWith('var(--color-primary, red)')
-    expect(fn).toHaveBeenCalledWith('var(--color-secondary, blue)')
+    expect(fn).toHaveBeenCalledWith('red')
+    expect(fn).toHaveBeenCalledWith('blue')
   })
 
   test('nested theme key lookups work even for flattened keys', async ({ expect }) => {
@@ -783,9 +783,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(fn).toHaveBeenCalledWith('var(--color-red-100, red)')
-    expect(fn).toHaveBeenCalledWith('var(--color-red-200, orangered)')
-    expect(fn).toHaveBeenCalledWith('var(--color-red-300, darkred)')
+    expect(fn).toHaveBeenCalledWith('red')
+    expect(fn).toHaveBeenCalledWith('orangered')
+    expect(fn).toHaveBeenCalledWith('darkred')
   })
 
   test('keys that do not exist return the default value (or undefined if none)', async ({

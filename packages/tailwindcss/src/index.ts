@@ -1,9 +1,10 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
-import { WalkAction, comment, decl, rule, toCss, walk, type Rule } from './ast'
+import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
 import { registerPlugins, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
@@ -207,7 +208,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value, { isReference, isInline })
+        theme.add(child.property, child.value ?? '', { isReference, isInline })
         return
       }
 
@@ -281,11 +282,16 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   let plugins = await Promise.all(pluginPaths.map(loadPlugin))
 
-  registerPlugins(plugins, designSystem, ast)
+  let pluginApi = registerPlugins(plugins, designSystem, ast)
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
     substituteAtApply(ast, designSystem)
+  }
+
+  // Replace `theme()` function calls with the actual theme variables.
+  if (css.includes(THEME_FUNCTION_INVOCATION)) {
+    substituteFunctions(ast, pluginApi)
   }
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
@@ -304,6 +310,7 @@ async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOpti
 
   return {
     designSystem,
+    pluginApi,
     ast,
     globs,
   }
@@ -316,7 +323,7 @@ export async function compile(
   globs: string[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, opts)
+  let { designSystem, ast, globs, pluginApi } = await parseCss(css, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -381,6 +388,8 @@ export async function compile(
         if (previousAstNodeCount === newNodes.length) {
           return compiledCss
         }
+
+        substituteFunctions(newNodes, pluginApi)
 
         previousAstNodeCount = newNodes.length
 
