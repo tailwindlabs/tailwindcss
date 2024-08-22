@@ -148,25 +148,6 @@ export class Theme {
 
     return values
   }
-
-  resolveNamespace(namespace: string) {
-    let values = new Map<string | null, string>()
-    let prefix = `${namespace}-`
-
-    for (let [key, value] of this.values) {
-      if (key === namespace) {
-        values.set(null, value.isInline ? value.value : this.#var(key)!)
-      } else if (key.startsWith(`${prefix}-`)) {
-        // Preserve `--` prefix for sub-variables
-        // e.g. `--font-size-sm--line-height`
-        values.set(key.slice(namespace.length), value.value)
-      } else if (key.startsWith(prefix)) {
-        values.set(key.slice(prefix.length), value.isInline ? value.value : this.#var(key)!)
-      }
-    }
-
-    return values
-  }
 }
 
 export type ThemeKey =
