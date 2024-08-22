@@ -1,12 +1,8 @@
 import { walk, type AstNode } from './ast'
 import type { PluginAPI } from './plugin-api'
 import { withAlpha } from './utilities'
-import {
-  toCss as toValueCss,
-  walk as walkValues,
-  type AstNode as ValueAstNode,
-} from './value-parser/ast'
-import * as ValueParser from './value-parser/parser'
+import * as ValueParser from './value-parser'
+import { type ValueAstNode } from './value-parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
@@ -33,7 +29,7 @@ export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
 
 export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI): string {
   let ast = ValueParser.parse(value)
-  walkValues(ast, (node, { replaceWith }) => {
+  ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) {
         throw new Error(
@@ -73,7 +69,7 @@ export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI):
     }
   })
 
-  return toValueCss(ast)
+  return ValueParser.toCss(ast)
 }
 
 function cssThemeFn(
