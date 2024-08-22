@@ -37,9 +37,7 @@ test('Config values can be merged into the theme', ({ expect }) => {
   expect(theme.resolve('sm', ['--font-size'])).toEqual('0.875rem')
   expect(theme.resolve('base', ['--font-size'])).toEqual('1rem')
   expect(theme.resolveWith('base', ['--font-size'], ['--line-height'])).toEqual([
-    'var(--font-size-base, 1rem)',
-    {
-      '--line-height': 'var(--font-size-base--line-height, 1.5)',
-    },
+    '1rem',
+    { '--line-height': '1.5' },
   ])
 })
