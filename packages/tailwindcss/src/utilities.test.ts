@@ -8109,13 +8109,13 @@ test('rounded-s', async () => {
     }
 
     .rounded-s-full {
-      border-start-start-radius: 3.40282e38px;
-      border-end-start-radius: 3.40282e38px;
+      border-start-start-radius: var(--radius-full, 9999px);
+      border-end-start-radius: var(--radius-full, 9999px);
     }
 
     .rounded-s-none {
-      border-start-start-radius: 0;
-      border-end-start-radius: 0;
+      border-start-start-radius: var(--radius-none, 0px);
+      border-end-start-radius: var(--radius-none, 0px);
     }
 
     .rounded-s-sm {
@@ -8172,13 +8172,13 @@ test('rounded-e', async () => {
     }
 
     .rounded-e-full {
-      border-start-end-radius: 3.40282e38px;
-      border-end-end-radius: 3.40282e38px;
+      border-start-end-radius: var(--radius-full, 9999px);
+      border-end-end-radius: var(--radius-full, 9999px);
     }
 
     .rounded-e-none {
-      border-start-end-radius: 0;
-      border-end-end-radius: 0;
+      border-start-end-radius: var(--radius-none, 0px);
+      border-end-end-radius: var(--radius-none, 0px);
     }
 
     .rounded-e-sm {
@@ -8237,11 +8237,15 @@ test('rounded-t', async () => {
     .rounded-t-full {
       border-top-left-radius: 3.40282e38px;
       border-top-right-radius: 3.40282e38px;
+      border-top-left-radius: var(--radius-full, 9999px);
+      border-top-right-radius: var(--radius-full, 9999px);
     }
 
     .rounded-t-none {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
+      border-top-left-radius: var(--radius-none, 0px);
+      border-top-right-radius: var(--radius-none, 0px);
     }
 
     .rounded-t-sm {
@@ -8300,11 +8304,15 @@ test('rounded-r', async () => {
     .rounded-r-full {
       border-top-right-radius: 3.40282e38px;
       border-bottom-right-radius: 3.40282e38px;
+      border-top-right-radius: var(--radius-full, 9999px);
+      border-bottom-right-radius: var(--radius-full, 9999px);
     }
 
     .rounded-r-none {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+      border-top-right-radius: var(--radius-none, 0px);
+      border-bottom-right-radius: var(--radius-none, 0px);
     }
 
     .rounded-r-sm {
@@ -8363,11 +8371,15 @@ test('rounded-b', async () => {
     .rounded-b-full {
       border-bottom-right-radius: 3.40282e38px;
       border-bottom-left-radius: 3.40282e38px;
+      border-bottom-right-radius: var(--radius-full, 9999px);
+      border-bottom-left-radius: var(--radius-full, 9999px);
     }
 
     .rounded-b-none {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
+      border-bottom-right-radius: var(--radius-none, 0px);
+      border-bottom-left-radius: var(--radius-none, 0px);
     }
 
     .rounded-b-sm {
@@ -8426,11 +8438,15 @@ test('rounded-l', async () => {
     .rounded-l-full {
       border-top-left-radius: 3.40282e38px;
       border-bottom-left-radius: 3.40282e38px;
+      border-top-left-radius: var(--radius-full, 9999px);
+      border-bottom-left-radius: var(--radius-full, 9999px);
     }
 
     .rounded-l-none {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+      border-top-left-radius: var(--radius-none, 0px);
+      border-bottom-left-radius: var(--radius-none, 0px);
     }
 
     .rounded-l-sm {
@@ -8485,11 +8501,11 @@ test('rounded-ss', async () => {
     }
 
     .rounded-ss-full {
-      border-start-start-radius: 3.40282e38px;
+      border-start-start-radius: var(--radius-full, 9999px);
     }
 
     .rounded-ss-none {
-      border-start-start-radius: 0;
+      border-start-start-radius: var(--radius-none, 0px);
     }
 
     .rounded-ss-sm {
@@ -8543,11 +8559,11 @@ test('rounded-se', async () => {
     }
 
     .rounded-se-full {
-      border-start-end-radius: 3.40282e38px;
+      border-start-end-radius: var(--radius-full, 9999px);
     }
 
     .rounded-se-none {
-      border-start-end-radius: 0;
+      border-start-end-radius: var(--radius-none, 0px);
     }
 
     .rounded-se-sm {
@@ -8601,11 +8617,11 @@ test('rounded-ee', async () => {
     }
 
     .rounded-ee-full {
-      border-end-end-radius: 3.40282e38px;
+      border-end-end-radius: var(--radius-full, 9999px);
     }
 
     .rounded-ee-none {
-      border-end-end-radius: 0;
+      border-end-end-radius: var(--radius-none, 0px);
     }
 
     .rounded-ee-sm {
@@ -8659,11 +8675,11 @@ test('rounded-es', async () => {
     }
 
     .rounded-es-full {
-      border-end-start-radius: 3.40282e38px;
+      border-end-start-radius: var(--radius-full, 9999px);
     }
 
     .rounded-es-none {
-      border-end-start-radius: 0;
+      border-end-start-radius: var(--radius-none, 0px);
     }
 
     .rounded-es-sm {
@@ -8718,10 +8734,12 @@ test('rounded-tl', async () => {
 
     .rounded-tl-full {
       border-top-left-radius: 3.40282e38px;
+      border-top-left-radius: var(--radius-full, 9999px);
     }
 
     .rounded-tl-none {
       border-top-left-radius: 0;
+      border-top-left-radius: var(--radius-none, 0px);
     }
 
     .rounded-tl-sm {
@@ -8776,10 +8794,12 @@ test('rounded-tr', async () => {
 
     .rounded-tr-full {
       border-top-right-radius: 3.40282e38px;
+      border-top-right-radius: var(--radius-full, 9999px);
     }
 
     .rounded-tr-none {
       border-top-right-radius: 0;
+      border-top-right-radius: var(--radius-none, 0px);
     }
 
     .rounded-tr-sm {
@@ -8834,10 +8854,12 @@ test('rounded-br', async () => {
 
     .rounded-br-full {
       border-bottom-right-radius: 3.40282e38px;
+      border-bottom-right-radius: var(--radius-full, 9999px);
     }
 
     .rounded-br-none {
       border-bottom-right-radius: 0;
+      border-bottom-right-radius: var(--radius-none, 0px);
     }
 
     .rounded-br-sm {
@@ -8892,10 +8914,12 @@ test('rounded-bl', async () => {
 
     .rounded-bl-full {
       border-bottom-left-radius: 3.40282e38px;
+      border-bottom-left-radius: var(--radius-full, 9999px);
     }
 
     .rounded-bl-none {
       border-bottom-left-radius: 0;
+      border-bottom-left-radius: var(--radius-none, 0px);
     }
 
     .rounded-bl-sm {
@@ -12688,6 +12712,9 @@ test('transition', async () => {
       transition-property: opacity;
       transition-duration: .1s;
       transition-timing-function: ease;
+      transition-property: var(--transition-property-opacity, opacity);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-shadow {
@@ -14130,6 +14157,14 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow {
+      inset: var(--inset-shadow, inset 0 2px 4px #0000000d);
+    }
+
+    .inset-shadow-sm {
+      inset: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
+    }
+
+    .inset-shadow {
       --tw-inset-shadow: inset 0 2px 4px #0000000d;
       --tw-inset-shadow-colored: inset 0 2px 4px var(--tw-inset-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -15096,7 +15131,7 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('The later version of a static utility is used', async () => {
+  test('Multiple static utilities are merged', async () => {
     let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
@@ -15116,6 +15151,7 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .really-round {
+          --custom-prop: hi;
           border-radius: 30rem;
         }
       }"
@@ -15159,8 +15195,8 @@ describe('custom utilities', () => {
       }
 
       @utility text-sm {
-        font-size: var(--font-size-sm, 0.875rem);
-        line-height: var(--font-size-sm--line-height, 1.25rem);
+        font-size: var(--font-size-sm, 0.8755rem);
+        line-height: var(--font-size-sm--line-height, 1.255rem);
         text-rendering: optimizeLegibility;
       }
     `)
@@ -15171,6 +15207,8 @@ describe('custom utilities', () => {
         .text-sm {
           font-size: var(--font-size-sm, .875rem);
           line-height: var(--font-size-sm--line-height, 1.25rem);
+          font-size: var(--font-size-sm, .8755rem);
+          line-height: var(--font-size-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
         }
       }"

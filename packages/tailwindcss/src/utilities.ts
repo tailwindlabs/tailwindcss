@@ -27,14 +27,18 @@ type SuggestionDefinition =
       hasDefaultValue?: boolean
     }
 
+export type UtilityOptions = {
+  types: string[]
+}
+
+export type Utility = {
+  kind: 'static' | 'functional'
+  compileFn: CompileFn<any>
+  options?: UtilityOptions
+}
+
 export class Utilities {
-  private utilities = new DefaultMap<
-    string,
-    {
-      kind: 'static' | 'functional'
-      compileFn: CompileFn<any>
-    }[]
-  >(() => [])
+  private utilities = new DefaultMap<string, Utility[]>(() => [])
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
@@ -42,8 +46,8 @@ export class Utilities {
     this.utilities.get(name).push({ kind: 'static', compileFn })
   }
 
-  functional(name: string, compileFn: CompileFn<'functional'>) {
-    this.utilities.get(name).push({ kind: 'functional', compileFn })
+  functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {
+    this.utilities.get(name).push({ kind: 'functional', compileFn, options })
   }
 
   has(name: string, kind: 'static' | 'functional') {
@@ -2440,9 +2444,6 @@ export function createUtilities(theme: Theme) {
       ])
     }
   }
-
-  staticUtility('bg-inherit', [['background-color', 'inherit']])
-  staticUtility('bg-transparent', [['background-color', 'transparent']])
 
   staticUtility('bg-auto', [['background-size', 'auto']])
   staticUtility('bg-cover', [['background-size', 'cover']])

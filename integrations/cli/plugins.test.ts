@@ -1,7 +1,7 @@
 import { candidate, css, html, json, test } from '../utils'
 
 test(
-  'builds the typography plugin utilities',
+  'builds the `@tailwindcss/typography` plugin utilities',
   {
     fs: {
       'package.json': json`
@@ -40,7 +40,7 @@ test(
 )
 
 test(
-  'builds the forms plugin utilities',
+  'builds the `@tailwindcss/forms` plugin utilities',
   {
     fs: {
       'package.json': json`
@@ -73,6 +73,42 @@ test(
     await fs.expectFileNotToContain('dist/out.css', [
       //
       candidate`form-radio`,
+    ])
+  },
+)
+
+test(
+  'builds the `tailwindcss-animate` plugin utilities',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss-animate": "^1.0.7",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div class="animate-in fade-in zoom-in duration-350"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin 'tailwindcss-animate';
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`animate-in`,
+      candidate`fade-in`,
+      candidate`zoom-in`,
+      candidate`duration-350`,
+      'transition-duration: 350ms',
+      'animation-duration: 350ms',
     ])
   },
 )

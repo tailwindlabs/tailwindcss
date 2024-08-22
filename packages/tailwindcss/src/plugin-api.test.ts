@@ -814,6 +814,58 @@ describe('theme', async () => {
     expect(fn).toHaveBeenCalledWith('magenta') // Not present in CSS or resolved config
     expect(fn).toHaveBeenCalledWith({}) // Present in the resolved config
   })
+
+  test('Candidates can match multiple utility definitions', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let { build } = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(({ addUtilities, matchUtilities }) => {
+          addUtilities({
+            '.foo-bar': {
+              color: 'red',
+            },
+          })
+
+          matchUtilities(
+            {
+              foo: (value) => ({
+                '--my-prop': value,
+              }),
+            },
+            {
+              values: {
+                bar: 'bar-valuer',
+                baz: 'bar-valuer',
+              },
+            },
+          )
+
+          addUtilities({
+            '.foo-bar': {
+              backgroundColor: 'red',
+            },
+          })
+        })
+      },
+    })
+
+    expect(build(['foo-bar'])).toMatchInlineSnapshot(`
+      ".foo-bar {
+        background-color: red;
+      }
+      .foo-bar {
+        color: red;
+      }
+      .foo-bar {
+        --my-prop: bar-valuer;
+      }
+      "
+    `)
+  })
 })
 
 describe('addUtilities()', () => {

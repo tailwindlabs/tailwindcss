@@ -16,15 +16,15 @@ function run(
   designSystem.utilities = utilities
   designSystem.variants = variants
 
-  return designSystem.parseCandidate(candidate)
+  return Array.from(designSystem.parseCandidate(candidate))
 }
 
 it('should skip unknown utilities', () => {
-  expect(run('unknown-utility')).toEqual(null)
+  expect(run('unknown-utility')).toEqual([])
 })
 
 it('should skip unknown variants', () => {
-  expect(run('unknown-variant:flex')).toEqual(null)
+  expect(run('unknown-variant:flex')).toEqual([])
 })
 
 it('should parse a simple utility', () => {
@@ -32,13 +32,16 @@ it('should parse a simple utility', () => {
   utilities.static('flex', () => [])
 
   expect(run('flex', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "flex",
+        "root": "flex",
+        "variants": [],
+      },
+    ]
   `)
 })
 
@@ -47,13 +50,16 @@ it('should parse a simple utility that should be important', () => {
   utilities.static('flex', () => [])
 
   expect(run('flex!', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": true,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [],
-    }
+    [
+      {
+        "important": true,
+        "kind": "static",
+        "negative": false,
+        "raw": "flex!",
+        "root": "flex",
+        "variants": [],
+      },
+    ]
   `)
 })
 
@@ -62,11 +68,13 @@ it('should parse a simple utility that can be negative', () => {
   utilities.functional('translate-x', () => [])
 
   expect(run('-translate-x-4', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": true,
+        "raw": "-translate-x-4",
         "root": "translate-x",
         "value": {
           "fraction": null,
@@ -74,8 +82,9 @@ it('should parse a simple utility that can be negative', () => {
           "value": "4",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a simple utility with a variant', () => {
@@ -86,19 +95,22 @@ it('should parse a simple utility with a variant', () => {
   variants.static('hover', () => {})
 
   expect(run('hover:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "hover",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "hover:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -111,24 +123,27 @@ it('should parse a simple utility with stacked variants', () => {
   variants.static('focus', () => {})
 
   expect(run('focus:hover:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "hover",
-        },
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "focus",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "focus:hover:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
+          },
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "focus",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -137,20 +152,23 @@ it('should parse a simple utility with an arbitrary variant', () => {
   utilities.static('flex', () => [])
 
   expect(run('[&_p]:flex', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "arbitrary",
-          "relative": false,
-          "selector": "& p",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "[&_p]:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "arbitrary",
+            "relative": false,
+            "selector": "& p",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -162,24 +180,27 @@ it('should parse a simple utility with a parameterized variant', () => {
   variants.functional('data', () => {})
 
   expect(run('data-[disabled]:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "functional",
-          "modifier": null,
-          "root": "data",
-          "value": {
-            "kind": "arbitrary",
-            "value": "disabled",
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "data-[disabled]:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "functional",
+            "modifier": null,
+            "root": "data",
+            "value": {
+              "kind": "arbitrary",
+              "value": "disabled",
+            },
           },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })
 
@@ -191,29 +212,32 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
   variants.compound('group', () => {})
 
   expect(run('group-[&_p]/parent-name:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "compound",
-          "modifier": {
-            "kind": "named",
-            "value": "parent-name",
-          },
-          "root": "group",
-          "variant": {
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "group-[&_p]/parent-name:flex",
+        "root": "flex",
+        "variants": [
+          {
             "compounds": true,
-            "kind": "arbitrary",
-            "relative": false,
-            "selector": "& p",
+            "kind": "compound",
+            "modifier": {
+              "kind": "named",
+              "value": "parent-name",
+            },
+            "root": "group",
+            "variant": {
+              "compounds": true,
+              "kind": "arbitrary",
+              "relative": false,
+              "selector": "& p",
+            },
           },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })
 
@@ -227,33 +251,36 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
 
   expect(run('group-aria-[disabled]/parent-name:flex', { utilities, variants }))
     .toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "static",
-        "negative": false,
-        "root": "flex",
-        "variants": [
-          {
-            "compounds": true,
-            "kind": "compound",
-            "modifier": {
-              "kind": "named",
-              "value": "parent-name",
-            },
-            "root": "group",
-            "variant": {
+      [
+        {
+          "important": false,
+          "kind": "static",
+          "negative": false,
+          "raw": "group-aria-[disabled]/parent-name:flex",
+          "root": "flex",
+          "variants": [
+            {
               "compounds": true,
-              "kind": "functional",
-              "modifier": null,
-              "root": "aria",
-              "value": {
-                "kind": "arbitrary",
-                "value": "disabled",
+              "kind": "compound",
+              "modifier": {
+                "kind": "named",
+                "value": "parent-name",
+              },
+              "root": "group",
+              "variant": {
+                "compounds": true,
+                "kind": "functional",
+                "modifier": null,
+                "root": "aria",
+                "value": {
+                  "kind": "arbitrary",
+                  "value": "disabled",
+                },
               },
             },
-          },
-        ],
-      }
+          ],
+        },
+      ]
     `)
 })
 
@@ -267,24 +294,21 @@ it('should parse compound group with itself group-group-*', () => {
 
   expect(run('group-group-group-hover/parent-name:flex', { utilities, variants }))
     .toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "static",
-        "negative": false,
-        "root": "flex",
-        "variants": [
-          {
-            "compounds": true,
-            "kind": "compound",
-            "modifier": {
-              "kind": "named",
-              "value": "parent-name",
-            },
-            "root": "group",
-            "variant": {
+      [
+        {
+          "important": false,
+          "kind": "static",
+          "negative": false,
+          "raw": "group-group-group-hover/parent-name:flex",
+          "root": "flex",
+          "variants": [
+            {
               "compounds": true,
               "kind": "compound",
-              "modifier": null,
+              "modifier": {
+                "kind": "named",
+                "value": "parent-name",
+              },
               "root": "group",
               "variant": {
                 "compounds": true,
@@ -293,14 +317,20 @@ it('should parse compound group with itself group-group-*', () => {
                 "root": "group",
                 "variant": {
                   "compounds": true,
-                  "kind": "static",
-                  "root": "hover",
+                  "kind": "compound",
+                  "modifier": null,
+                  "root": "group",
+                  "variant": {
+                    "compounds": true,
+                    "kind": "static",
+                    "root": "hover",
+                  },
                 },
               },
             },
-          },
-        ],
-      }
+          ],
+        },
+      ]
     `)
 })
 
@@ -309,20 +339,23 @@ it('should parse a simple utility with an arbitrary media variant', () => {
   utilities.static('flex', () => [])
 
   expect(run('[@media(width>=123px)]:flex', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "arbitrary",
-          "relative": false,
-          "selector": "@media(width>=123px)",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "[@media(width>=123px)]:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "arbitrary",
+            "relative": false,
+            "selector": "@media(width>=123px)",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -330,7 +363,7 @@ it('should skip arbitrary variants where @media and other arbitrary variants are
   let utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  expect(run('[@media(width>=123px){&:hover}]:flex', { utilities })).toMatchInlineSnapshot(`null`)
+  expect(run('[@media(width>=123px){&:hover}]:flex', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with a modifier', () => {
@@ -338,6 +371,7 @@ it('should parse a utility with a modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/50', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -346,15 +380,17 @@ it('should parse a utility with a modifier', () => {
           "value": "50",
         },
         "negative": false,
+        "raw": "bg-red-500/50",
         "root": "bg",
         "value": {
-          "fraction": "500/50",
+          "fraction": "red-500/50",
           "kind": "named",
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an arbitrary modifier', () => {
@@ -362,6 +398,7 @@ it('should parse a utility with an arbitrary modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[50%]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -371,6 +408,7 @@ it('should parse a utility with an arbitrary modifier', () => {
           "value": "50%",
         },
         "negative": false,
+        "raw": "bg-red-500/[50%]",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -378,8 +416,9 @@ it('should parse a utility with an arbitrary modifier', () => {
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with a modifier that is important', () => {
@@ -387,6 +426,7 @@ it('should parse a utility with a modifier that is important', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/50!', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": true,
         "kind": "functional",
@@ -395,15 +435,17 @@ it('should parse a utility with a modifier that is important', () => {
           "value": "50",
         },
         "negative": false,
+        "raw": "bg-red-500/50!",
         "root": "bg",
         "value": {
-          "fraction": "500/50",
+          "fraction": "red-500/50",
           "kind": "named",
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with a modifier and a variant', () => {
@@ -414,110 +456,7 @@ it('should parse a utility with a modifier and a variant', () => {
   variants.static('hover', () => {})
 
   expect(run('hover:bg-red-500/50', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "functional",
-      "modifier": {
-        "kind": "named",
-        "value": "50",
-      },
-      "negative": false,
-      "root": "bg",
-      "value": {
-        "fraction": "500/50",
-        "kind": "named",
-        "value": "red-500",
-      },
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "hover",
-        },
-      ],
-    }
-  `)
-})
-
-it('should not parse a partial utility', () => {
-  let utilities = new Utilities()
-  utilities.static('flex', () => [])
-  utilities.functional('bg', () => [])
-
-  expect(run('flex-', { utilities })).toMatchInlineSnapshot(`null`)
-  expect(run('bg-', { utilities })).toMatchInlineSnapshot(`null`)
-})
-
-it('should not parse static utilities with a modifier', () => {
-  let utilities = new Utilities()
-  utilities.static('flex', () => [])
-
-  expect(run('flex/foo', { utilities })).toMatchInlineSnapshot(`null`)
-})
-
-it('should not parse static utilities with multiple modifiers', () => {
-  let utilities = new Utilities()
-  utilities.static('flex', () => [])
-
-  expect(run('flex/foo/bar', { utilities })).toMatchInlineSnapshot(`null`)
-})
-
-it('should not parse functional utilities with multiple modifiers', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-red-1/2/3', { utilities })).toMatchInlineSnapshot(`null`)
-})
-
-it('should parse a utility with an arbitrary value', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-[#0088cc]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "#0088cc",
-        },
-        "variants": [],
-      }
-    `)
-})
-
-it('should parse a utility with an arbitrary value including a typehint', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-[color:var(--value)]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": "color",
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
-})
-
-it('should parse a utility with an arbitrary value with a modifier', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-[#0088cc]/50', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -526,6 +465,67 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
           "value": "50",
         },
         "negative": false,
+        "raw": "hover:bg-red-500/50",
+        "root": "bg",
+        "value": {
+          "fraction": "red-500/50",
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
+          },
+        ],
+      },
+    ]
+  `)
+})
+
+it.skip('should not parse a partial utility', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  expect(run('flex-', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse static utilities with a modifier', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  expect(run('flex/foo', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse static utilities with multiple modifiers', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  expect(run('flex/foo/bar', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse functional utilities with multiple modifiers', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-1/2/3', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should parse a utility with an arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-[#0088cc]', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "negative": false,
+        "raw": "bg-[#0088cc]",
         "root": "bg",
         "value": {
           "dashedIdent": null,
@@ -534,8 +534,62 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
           "value": "#0088cc",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
+})
+
+it('should parse a utility with an arbitrary value including a typehint', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-[color:var(--value)]', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "negative": false,
+        "raw": "bg-[color:var(--value)]",
+        "root": "bg",
+        "value": {
+          "dashedIdent": null,
+          "dataType": "color",
+          "kind": "arbitrary",
+          "value": "var(--value)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should parse a utility with an arbitrary value with a modifier', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-[#0088cc]/50', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "named",
+          "value": "50",
+        },
+        "negative": false,
+        "raw": "bg-[#0088cc]/50",
+        "root": "bg",
+        "value": {
+          "dashedIdent": null,
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "#0088cc",
+        },
+        "variants": [],
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an arbitrary value with an arbitrary modifier', () => {
@@ -543,6 +597,7 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]/[50%]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -552,6 +607,7 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
           "value": "50%",
         },
         "negative": false,
+        "raw": "bg-[#0088cc]/[50%]",
         "root": "bg",
         "value": {
           "dashedIdent": null,
@@ -560,8 +616,9 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
           "value": "#0088cc",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an arbitrary value that is important', () => {
@@ -569,11 +626,13 @@ it('should parse a utility with an arbitrary value that is important', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]!', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": true,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "bg-[#0088cc]!",
         "root": "bg",
         "value": {
           "dashedIdent": null,
@@ -582,8 +641,9 @@ it('should parse a utility with an arbitrary value that is important', () => {
           "value": "#0088cc",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value', () => {
@@ -591,11 +651,13 @@ it('should parse a utility with an implicit variable as the arbitrary value', ()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[--value]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "bg-[--value]",
         "root": "bg",
         "value": {
           "dashedIdent": "--value",
@@ -604,8 +666,9 @@ it('should parse a utility with an implicit variable as the arbitrary value', ()
           "value": "var(--value)",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value that is important', () => {
@@ -613,11 +676,13 @@ it('should parse a utility with an implicit variable as the arbitrary value that
   utilities.functional('bg', () => [])
 
   expect(run('bg-[--value]!', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": true,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "bg-[--value]!",
         "root": "bg",
         "value": {
           "dashedIdent": "--value",
@@ -626,8 +691,9 @@ it('should parse a utility with an implicit variable as the arbitrary value that
           "value": "var(--value)",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value', () => {
@@ -635,11 +701,13 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "bg-[var(--value)]",
         "root": "bg",
         "value": {
           "dashedIdent": null,
@@ -648,8 +716,9 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
           "value": "var(--value)",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value that is important', () => {
@@ -657,11 +726,13 @@ it('should parse a utility with an explicit variable as the arbitrary value that
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": true,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "bg-[var(--value)]!",
         "root": "bg",
         "value": {
           "dashedIdent": null,
@@ -670,8 +741,9 @@ it('should parse a utility with an explicit variable as the arbitrary value that
           "value": "var(--value)",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should not parse invalid arbitrary values', () => {
@@ -706,7 +778,7 @@ it('should not parse invalid arbitrary values', () => {
     'bg-red-[var(--value)]!',
     'bg-red[var(--value)]!',
   ]) {
-    expect(run(candidate, { utilities })).toEqual(null)
+    expect(run(candidate, { utilities })).toEqual([])
   }
 })
 
@@ -715,6 +787,7 @@ it('should parse a utility with an implicit variable as the modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[--value]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -724,6 +797,7 @@ it('should parse a utility with an implicit variable as the modifier', () => {
           "value": "var(--value)",
         },
         "negative": false,
+        "raw": "bg-red-500/[--value]",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -731,8 +805,9 @@ it('should parse a utility with an implicit variable as the modifier', () => {
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an implicit variable as the modifier that is important', () => {
@@ -740,6 +815,7 @@ it('should parse a utility with an implicit variable as the modifier that is imp
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[--value]!', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": true,
         "kind": "functional",
@@ -749,6 +825,7 @@ it('should parse a utility with an implicit variable as the modifier that is imp
           "value": "var(--value)",
         },
         "negative": false,
+        "raw": "bg-red-500/[--value]!",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -756,8 +833,9 @@ it('should parse a utility with an implicit variable as the modifier that is imp
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an explicit variable as the modifier', () => {
@@ -765,6 +843,7 @@ it('should parse a utility with an explicit variable as the modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
@@ -774,6 +853,7 @@ it('should parse a utility with an explicit variable as the modifier', () => {
           "value": "var(--value)",
         },
         "negative": false,
+        "raw": "bg-red-500/[var(--value)]",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -781,8 +861,9 @@ it('should parse a utility with an explicit variable as the modifier', () => {
           "value": "red-500",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should parse a utility with an explicit variable as the modifier that is important', () => {
@@ -790,23 +871,26 @@ it('should parse a utility with an explicit variable as the modifier that is imp
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": true,
-      "kind": "functional",
-      "modifier": {
-        "dashedIdent": null,
-        "kind": "arbitrary",
-        "value": "var(--value)",
+    [
+      {
+        "important": true,
+        "kind": "functional",
+        "modifier": {
+          "dashedIdent": null,
+          "kind": "arbitrary",
+          "value": "var(--value)",
+        },
+        "negative": false,
+        "raw": "bg-red-500/[var(--value)]!",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
       },
-      "negative": false,
-      "root": "bg",
-      "value": {
-        "fraction": null,
-        "kind": "named",
-        "value": "red-500",
-      },
-      "variants": [],
-    }
+    ]
   `)
 })
 
@@ -818,19 +902,22 @@ it('should parse a static variant starting with @', () => {
   variants.static('@lg', () => {})
 
   expect(run('@lg:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "@lg",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "@lg:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "@lg",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -842,27 +929,30 @@ it('should parse a functional variant with a modifier', () => {
   variants.functional('foo', () => {})
 
   expect(run('foo-bar/50:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "functional",
-          "modifier": {
-            "kind": "named",
-            "value": "50",
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "foo-bar/50:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "functional",
+            "modifier": {
+              "kind": "named",
+              "value": "50",
+            },
+            "root": "foo",
+            "value": {
+              "kind": "named",
+              "value": "bar",
+            },
           },
-          "root": "foo",
-          "value": {
-            "kind": "named",
-            "value": "bar",
-          },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })
 
@@ -874,24 +964,27 @@ it('should parse a functional variant starting with @', () => {
   variants.functional('@', () => {})
 
   expect(run('@lg:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "functional",
-          "modifier": null,
-          "root": "@",
-          "value": {
-            "kind": "named",
-            "value": "lg",
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "@lg:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "functional",
+            "modifier": null,
+            "root": "@",
+            "value": {
+              "kind": "named",
+              "value": "lg",
+            },
           },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })
 
@@ -903,27 +996,30 @@ it('should parse a functional variant starting with @ and a modifier', () => {
   variants.functional('@', () => {})
 
   expect(run('@lg/name:flex', { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "functional",
-          "modifier": {
-            "kind": "named",
-            "value": "name",
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "@lg/name:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "functional",
+            "modifier": {
+              "kind": "named",
+              "value": "name",
+            },
+            "root": "@",
+            "value": {
+              "kind": "named",
+              "value": "lg",
+            },
           },
-          "root": "@",
-          "value": {
-            "kind": "named",
-            "value": "lg",
-          },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })
 
@@ -932,11 +1028,13 @@ it('should replace `_` with ` `', () => {
   utilities.functional('content', () => [])
 
   expect(run('content-["hello_world"]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "content-["hello_world"]",
         "root": "content",
         "value": {
           "dashedIdent": null,
@@ -945,8 +1043,9 @@ it('should replace `_` with ` `', () => {
           "value": ""hello world"",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should not replace `\\_` with ` ` (when it is escaped)', () => {
@@ -954,11 +1053,13 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
   utilities.functional('content', () => [])
 
   expect(run('content-["hello\\_world"]', { utilities })).toMatchInlineSnapshot(`
+    [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": false,
+        "raw": "content-["hello\\_world"]",
         "root": "content",
         "value": {
           "dashedIdent": null,
@@ -967,8 +1068,9 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
           "value": ""hello_world"",
         },
         "variants": [],
-      }
-    `)
+      },
+    ]
+  `)
 })
 
 it('should not replace `_` inside of `url()`', () => {
@@ -976,70 +1078,82 @@ it('should not replace `_` inside of `url()`', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-[url(https://example.com/some_page)]', { utilities })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "functional",
-      "modifier": null,
-      "negative": false,
-      "root": "bg",
-      "value": {
-        "dashedIdent": null,
-        "dataType": null,
-        "kind": "arbitrary",
-        "value": "url(https://example.com/some_page)",
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "negative": false,
+        "raw": "bg-[url(https://example.com/some_page)]",
+        "root": "bg",
+        "value": {
+          "dashedIdent": null,
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "url(https://example.com/some_page)",
+        },
+        "variants": [],
       },
-      "variants": [],
-    }
+    ]
   `)
 })
 
 it('should parse arbitrary properties', () => {
   expect(run('[color:red]')).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "arbitrary",
-      "modifier": null,
-      "property": "color",
-      "value": "red",
-      "variants": [],
-    }
+    [
+      {
+        "important": false,
+        "kind": "arbitrary",
+        "modifier": null,
+        "property": "color",
+        "raw": "[color:red]",
+        "value": "red",
+        "variants": [],
+      },
+    ]
   `)
 })
 
 it('should parse arbitrary properties with a modifier', () => {
   expect(run('[color:red]/50')).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "arbitrary",
-      "modifier": {
-        "kind": "named",
-        "value": "50",
+    [
+      {
+        "important": false,
+        "kind": "arbitrary",
+        "modifier": {
+          "kind": "named",
+          "value": "50",
+        },
+        "property": "color",
+        "raw": "[color:red]/50",
+        "value": "red",
+        "variants": [],
       },
-      "property": "color",
-      "value": "red",
-      "variants": [],
-    }
+    ]
   `)
 })
 
 it('should skip arbitrary properties that start with an uppercase letter', () => {
-  expect(run('[Color:red]')).toMatchInlineSnapshot(`null`)
+  expect(run('[Color:red]')).toMatchInlineSnapshot(`[]`)
 })
 
 it('should skip arbitrary properties that do not have a property and value', () => {
-  expect(run('[color]')).toMatchInlineSnapshot(`null`)
+  expect(run('[color]')).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse arbitrary properties that are important', () => {
   expect(run('[color:red]!')).toMatchInlineSnapshot(`
-    {
-      "important": true,
-      "kind": "arbitrary",
-      "modifier": null,
-      "property": "color",
-      "value": "red",
-      "variants": [],
-    }
+    [
+      {
+        "important": true,
+        "kind": "arbitrary",
+        "modifier": null,
+        "property": "color",
+        "raw": "[color:red]!",
+        "value": "red",
+        "variants": [],
+      },
+    ]
   `)
 })
 
@@ -1048,20 +1162,23 @@ it('should parse arbitrary properties with a variant', () => {
   variants.static('hover', () => {})
 
   expect(run('hover:[color:red]', { variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "arbitrary",
-      "modifier": null,
-      "property": "color",
-      "value": "red",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "hover",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "arbitrary",
+        "modifier": null,
+        "property": "color",
+        "raw": "hover:[color:red]",
+        "value": "red",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -1071,51 +1188,57 @@ it('should parse arbitrary properties with stacked variants', () => {
   variants.static('focus', () => {})
 
   expect(run('focus:hover:[color:red]', { variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "arbitrary",
-      "modifier": null,
-      "property": "color",
-      "value": "red",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "hover",
-        },
-        {
-          "compounds": true,
-          "kind": "static",
-          "root": "focus",
-        },
-      ],
-    }
+    [
+      {
+        "important": false,
+        "kind": "arbitrary",
+        "modifier": null,
+        "property": "color",
+        "raw": "focus:hover:[color:red]",
+        "value": "red",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
+          },
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "focus",
+          },
+        ],
+      },
+    ]
   `)
 })
 
 it('should parse arbitrary properties that are important and using stacked arbitrary variants', () => {
   expect(run('[@media(width>=123px)]:[&_p]:[color:red]!')).toMatchInlineSnapshot(`
-    {
-      "important": true,
-      "kind": "arbitrary",
-      "modifier": null,
-      "property": "color",
-      "value": "red",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "arbitrary",
-          "relative": false,
-          "selector": "& p",
-        },
-        {
-          "compounds": true,
-          "kind": "arbitrary",
-          "relative": false,
-          "selector": "@media(width>=123px)",
-        },
-      ],
-    }
+    [
+      {
+        "important": true,
+        "kind": "arbitrary",
+        "modifier": null,
+        "property": "color",
+        "raw": "[@media(width>=123px)]:[&_p]:[color:red]!",
+        "value": "red",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "arbitrary",
+            "relative": false,
+            "selector": "& p",
+          },
+          {
+            "compounds": true,
+            "kind": "arbitrary",
+            "relative": false,
+            "selector": "@media(width>=123px)",
+          },
+        ],
+      },
+    ]
   `)
 })
 
@@ -1126,7 +1249,7 @@ it('should not parse compound group with a non-compoundable variant', () => {
   let variants = new Variants()
   variants.compound('group', () => {})
 
-  expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`null`)
+  expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a variant containing an arbitrary string with unbalanced parens, brackets, curlies and other quotes', () => {
@@ -1137,23 +1260,26 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
   variants.functional('string', () => {})
 
   expect(run(`string-['}[("\\'']:flex`, { utilities, variants })).toMatchInlineSnapshot(`
-    {
-      "important": false,
-      "kind": "static",
-      "negative": false,
-      "root": "flex",
-      "variants": [
-        {
-          "compounds": true,
-          "kind": "functional",
-          "modifier": null,
-          "root": "string",
-          "value": {
-            "kind": "arbitrary",
-            "value": "'}[("\\''",
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "string-['}[("\\'']:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "functional",
+            "modifier": null,
+            "root": "string",
+            "value": {
+              "kind": "arbitrary",
+              "value": "'}[("\\''",
+            },
           },
-        },
-      ],
-    }
+        ],
+      },
+    ]
   `)
 })

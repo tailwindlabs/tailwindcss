@@ -15,6 +15,6 @@ const designSystem = buildDesignSystem(new Theme())
 
 bench('parseCandidate', () => {
   for (let candidate of candidates) {
-    parseCandidate(candidate, designSystem)
+    Array.from(parseCandidate(candidate, designSystem))
   }
 })
