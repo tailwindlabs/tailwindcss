@@ -1,5 +1,4 @@
 import { getModuleDependencies } from '@tailwindcss/node'
-import '@tailwindcss/node/esm-cache-hook'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
@@ -79,6 +78,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
         },
         async OnceExit(root, { result }) {
+          await import('@tailwindcss/node/esm-cache-hook')
+
           let inputFile = result.opts.from ?? ''
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))

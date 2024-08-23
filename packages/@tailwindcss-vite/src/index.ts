@@ -1,5 +1,4 @@
 import { getModuleDependencies } from '@tailwindcss/node'
-import '@tailwindcss/node/esm-cache-hook'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 
 import { Scanner } from '@tailwindcss/oxide'
@@ -84,6 +83,8 @@ export default function tailwindcss(): Plugin[] {
   }
 
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
+    await import('@tailwindcss/node/esm-cache-hook')
+
     let inputBasePath = path.dirname(path.resolve(inputPath))
     clearRequireCache(fullRebuildPaths)
     fullRebuildPaths = []
