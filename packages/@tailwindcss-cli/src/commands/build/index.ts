@@ -192,7 +192,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // config/plugin files, then we need to do a full rebuild because
             // the theme might have changed.
             if (fullRebuildPaths.includes(file)) {
-              console.log('#############')
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we

@@ -33,7 +33,8 @@
     },
     "./esm-cache-hook": {
       "types": "./dist/esm-cache.hook.d.mts",
-      "default": "./dist/esm-cache.hook.mjs"
+      "import": "./dist/esm-cache.hook.mjs",
+      "require": "./dist/esm-cache.hook.js"
     },
     "./esm-cache-loader": {
       "types": "./dist/esm-cache.loader.d.mts",
