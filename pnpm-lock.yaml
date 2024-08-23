@@ -275,6 +275,9 @@ importers:
 
   packages/@tailwindcss-vite:
     dependencies:
+      '@tailwindcss/node':
+        specifier: workspace:^
+        version: link:../@tailwindcss-node
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
