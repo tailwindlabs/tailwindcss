@@ -226,6 +226,14 @@ test(
       'color: blue',
     ])
 
+    // While working on this test we noticed that it was failing in about 1-2%
+    // of the runs. We tracked this down to being a proper reset of ESM imports
+    // for the `my-color.js` file but for some reason reading it will result in
+    // the previous contents.
+    //
+    // To work around this, we give postcss some time to stabilize.
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     await fs.write('my-color.mjs', js`export default 'red'`)
 
     await fs.expectFileToContain('dist/out.css', [
