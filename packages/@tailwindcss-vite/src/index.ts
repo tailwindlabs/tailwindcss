@@ -1,6 +1,11 @@
+import { getModuleDependencies } from '@tailwindcss/node'
+import '@tailwindcss/node/esm-cache-hook'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
+
 import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
@@ -79,21 +84,36 @@ export default function tailwindcss(): Plugin[] {
 
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
+    clearRequireCache()
     let { build, globs } = await compile(css, {
       loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] === '.') {
-          return import(path.resolve(inputBasePath, pluginPath)).then((m) => m.default ?? m)
+        if (pluginPath[0] !== '.') {
+          return import(pluginPath).then((m) => m.default ?? m)
         }
 
-        return import(pluginPath).then((m) => m.default ?? m)
+        let resolvedPath = path.resolve(inputBasePath, pluginPath)
+        addWatchFile(resolvedPath)
+        for (let file of getModuleDependencies(resolvedPath)) {
+          addWatchFile(file)
+        }
+        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+          (m) => m.default ?? m,
+        )
       },
 
       loadConfig: async (configPath) => {
-        if (configPath[0] === '.') {
-          return import(path.resolve(inputBasePath, configPath)).then((m) => m.default ?? m)
+        if (configPath[0] !== '.') {
+          return import(configPath).then((m) => m.default ?? m)
         }
 
-        return import(configPath).then((m) => m.default ?? m)
+        let resolvedPath = path.resolve(inputBasePath, configPath)
+        addWatchFile(resolvedPath)
+        for (let file of getModuleDependencies(resolvedPath)) {
+          addWatchFile(file)
+        }
+        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+          (m) => m.default ?? m,
+        )
       },
     })
 
