@@ -257,11 +257,9 @@ test(
     },
   },
   async ({ root, fs, spawn }) => {
-    let process = await spawn(
-      'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
-      { cwd: path.join(root, 'project-a') },
-    )
-    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+    await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose', {
+      cwd: path.join(root, 'project-a'),
+    })
 
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`underline`,

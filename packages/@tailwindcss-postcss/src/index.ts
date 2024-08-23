@@ -1,3 +1,5 @@
+import { getModuleDependencies } from '@tailwindcss/node'
+// import '@tailwindcss/node/esm-cache-hook'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
@@ -47,6 +49,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       compiler: null as null | Awaited<ReturnType<typeof compile>>,
       css: '',
       optimizedCss: '',
+      fullRebuildPaths: [] as string[],
     }
   })
 
@@ -80,25 +83,32 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           function createCompiler() {
+            context.fullRebuildPaths = []
             return compile(root.toString(), {
               loadPlugin: async (pluginPath) => {
-                if (pluginPath[0] === '.') {
-                  return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
-                    (m) => m.default ?? m,
-                  )
+                if (pluginPath[0] !== '.') {
+                  return import(pluginPath).then((m) => m.default ?? m)
                 }
 
-                return import(pluginPath).then((m) => m.default ?? m)
+                let resolvedPath = path.resolve(inputBasePath, pluginPath)
+                context.fullRebuildPaths.push(resolvedPath)
+                context.fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+                return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+                  (m) => m.default ?? m,
+                )
               },
 
               loadConfig: async (configPath) => {
-                if (configPath[0] === '.') {
-                  return import(pathToFileURL(path.resolve(inputBasePath, configPath)).href).then(
-                    (m) => m.default ?? m,
-                  )
+                if (configPath[0] !== '.') {
+                  return import(configPath).then((m) => m.default ?? m)
                 }
 
-                return import(configPath).then((m) => m.default ?? m)
+                let resolvedPath = path.resolve(inputBasePath, configPath)
+                context.fullRebuildPaths.push(resolvedPath)
+                context.fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+                return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+                  (m) => m.default ?? m,
+                )
               },
             })
           }
@@ -111,11 +121,23 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
+            // console.log({ fullRebuildPaths: context.fullRebuildPaths })
+            for (let file of context.fullRebuildPaths) {
+              result.messages.push({
+                type: 'dependency',
+                plugin: '@tailwindcss/postcss',
+                file,
+                parent: result.opts.from,
+              })
+            }
+
             let files = result.messages.flatMap((message) => {
               if (message.type !== 'dependency') return []
               return message.file
             })
             files.push(inputFile)
+            // console.log({ files })
+
             for (let file of files) {
               let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
               if (changedTime === null) {

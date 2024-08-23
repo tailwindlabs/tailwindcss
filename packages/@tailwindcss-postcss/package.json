@@ -30,6 +30,7 @@
     }
   },
   "dependencies": {
+    "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
     "postcss-import": "^16.1.0",
