@@ -143,7 +143,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         let resolvedPath = path.resolve(inputBasePath, pluginPath)
         fullRebuildPaths.push(resolvedPath)
-        fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+        fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
         )
@@ -156,7 +156,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         let resolvedPath = path.resolve(inputBasePath, configPath)
         fullRebuildPaths.push(resolvedPath)
-        fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+        fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
         )

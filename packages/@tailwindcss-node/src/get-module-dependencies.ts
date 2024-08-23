@@ -1,7 +1,13 @@
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 
-let jsExtensions = ['.js', '.cjs', '.mjs']
+// Patterns we use to match dependencies in a file whether in CJS, ESM, or TypeScript
+const DEPENDENCY_PATTERNS = [
+  /import[\s\S]*?['"](.{3,}?)['"]/gi,
+  /import[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi,
+  /export[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi,
+  /require\(['"`](.+)['"`]\)/gi,
+]
 
 // Given the current file `a.ts`, we want to make sure that when importing `b` that we resolve
 // `b.ts` before `b.js`
@@ -13,23 +19,28 @@ let jsExtensions = ['.js', '.cjs', '.mjs']
 //   c // .ts
 // a.js
 //   b // .js or .ts
-
+let jsExtensions = ['.js', '.cjs', '.mjs']
 let jsResolutionOrder = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.jsx', '.tsx']
 let tsResolutionOrder = ['', '.ts', '.cts', '.mts', '.tsx', '.js', '.cjs', '.mjs', '.jsx']
 
-function resolveWithExtension(file: string, extensions: string[]) {
+async function resolveWithExtension(file: string, extensions: string[]) {
   // Try to find `./a.ts`, `./a.cts`, ... from `./a`
   for (let ext of extensions) {
     let full = `${file}${ext}`
-    if (fs.existsSync(full) && fs.statSync(full).isFile()) {
-      return full
-    }
+
+    let stats = await fs.stat(full).catch(() => null)
+    if (stats?.isFile()) return full
   }
 
   // Try to find `./a/index.js` from `./a`
   for (let ext of extensions) {
     let full = `${file}/index${ext}`
-    if (fs.existsSync(full)) {
+
+    let exists = await fs.access(full).then(
+      () => true,
+      () => false,
+    )
+    if (exists) {
       return full
     }
   }
@@ -37,49 +48,59 @@ function resolveWithExtension(file: string, extensions: string[]) {
   return null
 }
 
-function* _getModuleDependencies(
+async function traceDependencies(
+  seen: Set<string>,
   filename: string,
   base: string,
-  seen: Set<string>,
-  ext = path.extname(filename),
-): Iterable<string> {
+  ext: string,
+): Promise<void> {
   // Try to find the file
-  let absoluteFile = resolveWithExtension(
-    path.resolve(base, filename),
-    jsExtensions.includes(ext) ? jsResolutionOrder : tsResolutionOrder,
-  )
+  let extensions = jsExtensions.includes(ext) ? jsResolutionOrder : tsResolutionOrder
+  let absoluteFile = await resolveWithExtension(path.resolve(base, filename), extensions)
   if (absoluteFile === null) return // File doesn't exist
 
   // Prevent infinite loops when there are circular dependencies
   if (seen.has(absoluteFile)) return // Already seen
-  seen.add(absoluteFile)
 
   // Mark the file as a dependency
-  yield absoluteFile
+  seen.add(absoluteFile)
 
   // Resolve new base for new imports/requires
   base = path.dirname(absoluteFile)
   ext = path.extname(absoluteFile)
 
-  let contents = fs.readFileSync(absoluteFile, 'utf-8')
+  let contents = await fs.readFile(absoluteFile, 'utf-8')
 
-  // Find imports/requires
-  for (let match of [
-    ...contents.matchAll(/import[\s\S]*?['"](.{3,}?)['"]/gi),
-    ...contents.matchAll(/import[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi),
-    ...contents.matchAll(/export[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi),
-    ...contents.matchAll(/require\(['"`](.+)['"`]\)/gi),
-  ]) {
-    // Bail out if it's not a relative file
-    if (!match[1].startsWith('.')) continue
+  // Recursively trace dependencies in parallel
+  let promises = []
 
-    yield* _getModuleDependencies(match[1], base, seen, ext)
+  for (let pattern of DEPENDENCY_PATTERNS) {
+    for (let match of contents.matchAll(pattern)) {
+      // Bail out if it's not a relative file
+      if (!match[1].startsWith('.')) continue
+
+      promises.push(traceDependencies(seen, match[1], base, ext))
+    }
   }
+
+  await Promise.all(promises)
 }
 
-export function getModuleDependencies(absoluteFilePath: string) {
-  if (absoluteFilePath === null) return new Set<string>()
-  return new Set(
-    _getModuleDependencies(absoluteFilePath, path.dirname(absoluteFilePath), new Set()),
+/**
+ * Trace all dependencies of a module recursively
+ *
+ * The result in an unordered set of absolute file paths. Meaning that the order
+ * is not guaranteed to be equal to source order or across runs.
+ **/
+export async function getModuleDependencies(absoluteFilePath: string) {
+  let seen = new Set<string>()
+
+  await traceDependencies(
+    seen,
+    absoluteFilePath,
+    path.dirname(absoluteFilePath),
+    path.extname(absoluteFilePath),
   )
+
+  return seen
 }
