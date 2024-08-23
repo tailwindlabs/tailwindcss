@@ -17,6 +17,6 @@ export default defineConfig([
     format: ['cjs'],
     minify: true,
     dts: true,
-    entry: ['src/esm-cache.hook.cts', 'src/require-cache.cts'],
+    entry: ['src/require-cache.cts'],
   },
 ])

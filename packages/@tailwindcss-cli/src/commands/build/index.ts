@@ -1,5 +1,3 @@
-import '@tailwindcss/node/esm-cache-hook'
-
 import watcher from '@parcel/watcher'
 import { getModuleDependencies } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
@@ -63,6 +61,8 @@ export function options() {
 }
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
+  await import('@tailwindcss/node/esm-cache-hook')
+
   let base = path.resolve(args['--cwd'])
 
   // Resolve the output as an absolute path.
