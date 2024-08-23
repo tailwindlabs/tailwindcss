@@ -19,10 +19,14 @@
     "tailwindcss": "./dist/index.mjs"
   },
   "exports": {
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./esm-hook": "./hook/esm.hook.mjs",
+    "./esm-loader": "./hook/esm.loader.mjs",
+    "./require-cache": "./hook/require-cache.cjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "hook"
   ],
   "publishConfig": {
     "provenance": true,
