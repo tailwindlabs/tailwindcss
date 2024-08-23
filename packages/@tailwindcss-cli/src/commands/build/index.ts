@@ -226,8 +226,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   `,
               args['--input'] ?? base,
             )
+            clearRequireCache(fullRebuildPaths)
             fullRebuildPaths = cssImportPaths
-            clearRequireCache()
 
             // Create a new compiler, given the new `input`
             compiler = await compile(input)

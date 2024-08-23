@@ -17,6 +17,7 @@ export default function tailwindcss(): Plugin[] {
   let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
   let candidates = new Set<string>()
+  let fullRebuildPaths: string[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -84,7 +85,8 @@ export default function tailwindcss(): Plugin[] {
 
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
-    clearRequireCache()
+    clearRequireCache(fullRebuildPaths)
+    fullRebuildPaths = []
     let { build, globs } = await compile(css, {
       loadPlugin: async (pluginPath) => {
         if (pluginPath[0] !== '.') {
@@ -93,8 +95,10 @@ export default function tailwindcss(): Plugin[] {
 
         let resolvedPath = path.resolve(inputBasePath, pluginPath)
         addWatchFile(resolvedPath)
+        fullRebuildPaths.push(resolvedPath)
         for (let file of getModuleDependencies(resolvedPath)) {
           addWatchFile(file)
+          fullRebuildPaths.push(file)
         }
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
@@ -108,8 +112,10 @@ export default function tailwindcss(): Plugin[] {
 
         let resolvedPath = path.resolve(inputBasePath, configPath)
         addWatchFile(resolvedPath)
+        fullRebuildPaths.push(resolvedPath)
         for (let file of getModuleDependencies(resolvedPath)) {
           addWatchFile(file)
+          fullRebuildPaths.push(file)
         }
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
