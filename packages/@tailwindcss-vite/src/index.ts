@@ -96,7 +96,7 @@ export default function tailwindcss(): Plugin[] {
         let resolvedPath = path.resolve(inputBasePath, pluginPath)
         addWatchFile(resolvedPath)
         fullRebuildPaths.push(resolvedPath)
-        for (let file of getModuleDependencies(resolvedPath)) {
+        for (let file of await getModuleDependencies(resolvedPath)) {
           addWatchFile(file)
           fullRebuildPaths.push(file)
         }
@@ -113,7 +113,7 @@ export default function tailwindcss(): Plugin[] {
         let resolvedPath = path.resolve(inputBasePath, configPath)
         addWatchFile(resolvedPath)
         fullRebuildPaths.push(resolvedPath)
-        for (let file of getModuleDependencies(resolvedPath)) {
+        for (let file of await getModuleDependencies(resolvedPath)) {
           addWatchFile(file)
           fullRebuildPaths.push(file)
         }

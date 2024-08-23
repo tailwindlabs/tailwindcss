@@ -94,7 +94,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
                 let resolvedPath = path.resolve(inputBasePath, pluginPath)
                 context.fullRebuildPaths.push(resolvedPath)
-                context.fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+                context.fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
                 return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
                   (m) => m.default ?? m,
                 )
@@ -107,7 +107,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
                 let resolvedPath = path.resolve(inputBasePath, configPath)
                 context.fullRebuildPaths.push(resolvedPath)
-                context.fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+                context.fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
                 return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
                   (m) => m.default ?? m,
                 )
