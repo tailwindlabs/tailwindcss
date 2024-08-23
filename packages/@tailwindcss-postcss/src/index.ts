@@ -1,5 +1,6 @@
 import { getModuleDependencies } from '@tailwindcss/node'
-// import '@tailwindcss/node/esm-cache-hook'
+import '@tailwindcss/node/esm-cache-hook'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
@@ -83,6 +84,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           function createCompiler() {
+            clearRequireCache()
             context.fullRebuildPaths = []
             return compile(root.toString(), {
               loadPlugin: async (pluginPath) => {
@@ -121,7 +123,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
-            // console.log({ fullRebuildPaths: context.fullRebuildPaths })
             for (let file of context.fullRebuildPaths) {
               result.messages.push({
                 type: 'dependency',
@@ -136,7 +137,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               return message.file
             })
             files.push(inputFile)
-            // console.log({ files })
 
             for (let file of files) {
               let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
