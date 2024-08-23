@@ -84,7 +84,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           function createCompiler() {
-            clearRequireCache()
+            clearRequireCache(context.fullRebuildPaths)
             context.fullRebuildPaths = []
             return compile(root.toString(), {
               loadPlugin: async (pluginPath) => {
