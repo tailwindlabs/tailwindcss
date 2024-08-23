@@ -138,6 +138,9 @@ importers:
       '@parcel/watcher':
         specifier: ^2.4.1
         version: 2.4.1(patch_hash=pnjyuz76kbyy7yxsvyvmenfmha)
+      '@tailwindcss/node':
+        specifier: workspace:^
+        version: link:../@tailwindcss-node
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
@@ -170,8 +173,13 @@ importers:
         specifier: workspace:^
         version: link:../internal-postcss-fix-relative-paths
 
+  packages/@tailwindcss-node: {}
+
   packages/@tailwindcss-postcss:
     dependencies:
+      '@tailwindcss/node':
+        specifier: workspace:^
+        version: link:../@tailwindcss-node
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node

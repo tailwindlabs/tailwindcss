@@ -1,0 +1,43 @@
+{
+  "name": "@tailwindcss/node",
+  "version": "4.0.0-alpha.19",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-node"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mjs",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./require-cache": {
+      "types": "./dist/require-cache.d.ts",
+      "default": "./dist/require-cache.js"
+    },
+    "./esm-cache-hook": {
+      "types": "./dist/esm-cache.hook.d.mts",
+      "default": "./dist/esm-cache.hook.mjs"
+    },
+    "./esm-cache-loader": {
+      "types": "./dist/esm-cache.loader.d.mts",
+      "default": "./dist/esm-cache.loader.mjs"
+    }
+  }
+}

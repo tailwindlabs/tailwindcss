@@ -1,4 +1,8 @@
+import '@tailwindcss/node/esm-cache-hook'
+
 import watcher from '@parcel/watcher'
+import { getModuleDependencies } from '@tailwindcss/node'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
@@ -11,7 +15,6 @@ import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
-import { getModuleDependencies } from '../../utils/get-module-dependencies'
 import {
   eprintln,
   formatDuration,
@@ -22,10 +25,6 @@ import {
 } from '../../utils/renderer'
 import { resolveCssId } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
-
-import '@tailwindcss/cli/esm-hook'
-// @ts-ignore
-import clearRequireCache from '@tailwindcss/cli/require-cache'
 
 const css = String.raw
 
@@ -155,7 +154,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           return import(configPath).then((m) => m.default ?? m)
         }
 
-        console.log('RELOAD')
         let resolvedPath = path.resolve(inputBasePath, configPath)
         fullRebuildPaths.push(resolvedPath)
         fullRebuildPaths.push(...getModuleDependencies(resolvedPath))

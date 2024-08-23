@@ -1,6 +1,6 @@
-import { isBuiltin } from 'node:module'
+import { isBuiltin, type ResolveHook } from 'node:module'
 
-export async function resolve(specifier, context, nextResolve) {
+export let resolve: ResolveHook = async (specifier, context, nextResolve) => {
   const result = await nextResolve(specifier, context)
 
   if (result.url === import.meta.url) return result
@@ -14,8 +14,6 @@ export async function resolve(specifier, context, nextResolve) {
 
   let url = new URL(result.url)
   url.searchParams.set('id', id)
-
-  console.log({ url })
 
   return {
     ...result,
