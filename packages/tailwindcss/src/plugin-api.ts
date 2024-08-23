@@ -366,8 +366,9 @@ export function registerPlugins(
     handler(pluginApi)
   }
 
-  // Theme keys don't need to read from the compat config because core plugins
-  // _already_ look through "fallback" theme keys
+  // Merge the user-configured theme keys into the design system. The compat
+  // config would otherwise expand into namespaces like `background-color` which
+  // core utilities already read from.
   mergeIntoTheme(designSystem, userConfig)
 
   return {

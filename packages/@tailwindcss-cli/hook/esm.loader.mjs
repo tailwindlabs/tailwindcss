@@ -13,8 +13,9 @@ export async function resolve(specifier, context, nextResolve) {
   if (id === null) return result
 
   let url = new URL(result.url)
-
   url.searchParams.set('id', id)
+
+  console.log({ url })
 
   return {
     ...result,

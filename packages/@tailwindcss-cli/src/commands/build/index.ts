@@ -11,6 +11,7 @@ import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
+import { getModuleDependencies } from '../../utils/get-module-dependencies'
 import {
   eprintln,
   formatDuration,
@@ -21,6 +22,10 @@ import {
 } from '../../utils/renderer'
 import { resolveCssId } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
+
+import '@tailwindcss/cli/esm-hook'
+// @ts-ignore
+import clearRequireCache from '@tailwindcss/cli/require-cache'
 
 const css = String.raw
 
@@ -128,27 +133,35 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
   let inputBasePath = path.dirname(path.resolve(inputFile))
+  let fullRebuildPaths = [...cssImportPaths]
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
       loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] === '.') {
-          return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
-            (m) => m.default ?? m,
-          )
+        if (pluginPath[0] !== '.') {
+          return import(pluginPath).then((m) => m.default ?? m)
         }
 
-        return import(pluginPath).then((m) => m.default ?? m)
+        let resolvedPath = path.resolve(inputBasePath, pluginPath)
+        fullRebuildPaths.push(resolvedPath)
+        fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+          (m) => m.default ?? m,
+        )
       },
 
       loadConfig: async (configPath) => {
-        if (configPath[0] === '.') {
-          return import(pathToFileURL(path.resolve(inputBasePath, configPath)).href).then(
-            (m) => m.default ?? m,
-          )
+        if (configPath[0] !== '.') {
+          return import(configPath).then((m) => m.default ?? m)
         }
 
-        return import(configPath).then((m) => m.default ?? m)
+        console.log('RELOAD')
+        let resolvedPath = path.resolve(inputBasePath, configPath)
+        fullRebuildPaths.push(resolvedPath)
+        fullRebuildPaths.push(...getModuleDependencies(resolvedPath))
+        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
+          (m) => m.default ?? m,
+        )
       },
     })
   }
@@ -177,9 +190,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
           for (let file of files) {
-            // If one of the changed files is related to the input CSS files, then
-            // we need to do a full rebuild because the theme might have changed.
-            if (cssImportPaths.includes(file)) {
+            // If one of the changed files is related to the input CSS or JS
+            // config/plugin files, then we need to do a full rebuild because
+            // the theme might have changed.
+            if (fullRebuildPaths.includes(file)) {
+              console.log('#############')
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we
@@ -214,6 +229,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   `,
               args['--input'] ?? base,
             )
+            fullRebuildPaths = cssImportPaths
+            clearRequireCache()
 
             // Create a new compiler, given the new `input`
             compiler = await compile(input)
