@@ -342,7 +342,9 @@ async function parseCss(
 
   for (let file of resolvedConfig.content.files) {
     if ('raw' in file) {
-      throw new Error('raw content is not currently supported')
+      throw new Error(
+        `Error in the config file/plugin/preset. The \`content\` key contains a \`raw\` entry:\n\n${JSON.stringify(file, null, 2)}\n\nThis feature is not currently supported.`,
+      )
     }
 
     globs.push(file.pattern)

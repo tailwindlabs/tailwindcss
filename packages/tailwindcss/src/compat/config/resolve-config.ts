@@ -127,7 +127,9 @@ function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): v
 
   // Apply configs from presets
   if (Array.isArray(config.presets) && config.presets.length === 0) {
-    throw new Error('The empty preset `[]` is not supported')
+    throw new Error(
+      'Error in the config file/plugin/preset. An empty preset (`preset: []`) is not currently supported.',
+    )
   }
 
   for (let preset of config.presets ?? []) {
