@@ -335,16 +335,16 @@ describe('theme function', () => {
         `)
       })
 
-      test('theme(fontFamily.sans, Helvetica Neue, Helvetica, sans-serif)', async () => {
+      test('theme(fontFamily.unknown, Helvetica Neue, Helvetica, sans-serif)', async () => {
         expect(
           await compileCss(css`
             .fam {
-              font-family: theme(fontFamily.sans, Helvetica Neue, Helvetica, sans-serif);
+              font-family: theme(fontFamily.unknown, Helvetica Neue, Helvetica, sans-serif);
             }
           `),
         ).toMatchInlineSnapshot(`
           ".fam {
-            font-family: Neue, Helvetica, sans-serif;
+            font-family: Helvetica Neue, Helvetica, sans-serif;
           }"
         `)
       })

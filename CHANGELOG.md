@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bring back type exports for the cjs build of `@tailwindcss/postcss`. ([#14256](https://github.com/tailwindlabs/tailwindcss/pull/14256))
 - Correctly merge tuple values when using the plugin API ([#14260](https://github.com/tailwindlabs/tailwindcss/pull/14260))
+- Handle arrays in the CSS `theme()` function when using plugins ([#14262](https://github.com/tailwindlabs/tailwindcss/pull/14262))
+- Fix fallback values when using the CSS `theme()` function ([#14262](https://github.com/tailwindlabs/tailwindcss/pull/14262))
 
 ## [4.0.0-alpha.20] - 2024-08-23
 
