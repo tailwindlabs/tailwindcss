@@ -132,7 +132,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
   let inputBasePath = path.dirname(path.resolve(inputFile))
-  let fullRebuildPaths = [...cssImportPaths]
+  let fullRebuildPaths: Promise<string[]>[] = [Promise.resolve(cssImportPaths)]
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
@@ -142,8 +142,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         }
 
         let resolvedPath = path.resolve(inputBasePath, pluginPath)
-        fullRebuildPaths.push(resolvedPath)
-        fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
+        fullRebuildPaths.push(Promise.resolve([resolvedPath]))
+        fullRebuildPaths.push(getModuleDependencies(resolvedPath))
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
         )
@@ -155,8 +155,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         }
 
         let resolvedPath = path.resolve(inputBasePath, configPath)
-        fullRebuildPaths.push(resolvedPath)
-        fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
+        fullRebuildPaths.push(Promise.resolve([resolvedPath]))
+        fullRebuildPaths.push(getModuleDependencies(resolvedPath))
         return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
           (m) => m.default ?? m,
         )
@@ -187,11 +187,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let changedFiles: ChangedContent[] = []
           let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
+          let resolvedFullRebuildPaths = (await Promise.all(fullRebuildPaths)).flat()
+
           for (let file of files) {
             // If one of the changed files is related to the input CSS or JS
             // config/plugin files, then we need to do a full rebuild because
             // the theme might have changed.
-            if (fullRebuildPaths.includes(file)) {
+            if (resolvedFullRebuildPaths.includes(file)) {
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we
@@ -226,8 +228,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   `,
               args['--input'] ?? base,
             )
-            clearRequireCache(fullRebuildPaths)
-            fullRebuildPaths = cssImportPaths
+            clearRequireCache(resolvedFullRebuildPaths)
+            fullRebuildPaths = [Promise.resolve(cssImportPaths)]
 
             // Create a new compiler, given the new `input`
             compiler = await compile(input)

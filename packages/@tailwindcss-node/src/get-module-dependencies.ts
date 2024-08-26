@@ -102,5 +102,5 @@ export async function getModuleDependencies(absoluteFilePath: string) {
     path.extname(absoluteFilePath),
   )
 
-  return seen
+  return Array.from(seen)
 }

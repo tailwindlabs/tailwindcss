@@ -49,7 +49,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       compiler: null as null | Awaited<ReturnType<typeof compile>>,
       css: '',
       optimizedCss: '',
-      fullRebuildPaths: [] as string[],
+      fullRebuildPaths: [] as Promise<string[]>[],
     }
   })
 
@@ -84,8 +84,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
-          function createCompiler() {
-            clearRequireCache(context.fullRebuildPaths)
+          async function createCompiler() {
+            for (let files of await Promise.all(context.fullRebuildPaths)) {
+              clearRequireCache(files)
+            }
             context.fullRebuildPaths = []
             return compile(root.toString(), {
               loadPlugin: async (pluginPath) => {
@@ -94,8 +96,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 }
 
                 let resolvedPath = path.resolve(inputBasePath, pluginPath)
-                context.fullRebuildPaths.push(resolvedPath)
-                context.fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
+                context.fullRebuildPaths.push(Promise.resolve([resolvedPath]))
+                context.fullRebuildPaths.push(getModuleDependencies(resolvedPath))
                 return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
                   (m) => m.default ?? m,
                 )
@@ -107,8 +109,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 }
 
                 let resolvedPath = path.resolve(inputBasePath, configPath)
-                context.fullRebuildPaths.push(resolvedPath)
-                context.fullRebuildPaths.push(...(await getModuleDependencies(resolvedPath)))
+                context.fullRebuildPaths.push(Promise.resolve([resolvedPath]))
+                context.fullRebuildPaths.push(getModuleDependencies(resolvedPath))
                 return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
                   (m) => m.default ?? m,
                 )
@@ -124,13 +126,15 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
-            for (let file of context.fullRebuildPaths) {
-              result.messages.push({
-                type: 'dependency',
-                plugin: '@tailwindcss/postcss',
-                file,
-                parent: result.opts.from,
-              })
+            for (let files of await Promise.all(context.fullRebuildPaths)) {
+              for (let file of files) {
+                result.messages.push({
+                  type: 'dependency',
+                  plugin: '@tailwindcss/postcss',
+                  file,
+                  parent: result.opts.from,
+                })
+              }
             }
 
             let files = result.messages.flatMap((message) => {

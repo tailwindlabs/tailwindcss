@@ -95,15 +95,18 @@ export default function tailwindcss(): Plugin[] {
         }
 
         let resolvedPath = path.resolve(inputBasePath, pluginPath)
+        let [module, moduleDependencies] = await Promise.all([
+          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+          getModuleDependencies(resolvedPath),
+        ])
+
         addWatchFile(resolvedPath)
         fullRebuildPaths.push(resolvedPath)
-        for (let file of await getModuleDependencies(resolvedPath)) {
+        for (let file of moduleDependencies) {
           addWatchFile(file)
           fullRebuildPaths.push(file)
         }
-        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-          (m) => m.default ?? m,
-        )
+        return module.default ?? module
       },
 
       loadConfig: async (configPath) => {
@@ -112,15 +115,18 @@ export default function tailwindcss(): Plugin[] {
         }
 
         let resolvedPath = path.resolve(inputBasePath, configPath)
+        let [module, moduleDependencies] = await Promise.all([
+          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+          getModuleDependencies(resolvedPath),
+        ])
+
         addWatchFile(resolvedPath)
         fullRebuildPaths.push(resolvedPath)
-        for (let file of await getModuleDependencies(resolvedPath)) {
+        for (let file of moduleDependencies) {
           addWatchFile(file)
           fullRebuildPaths.push(file)
         }
-        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-          (m) => m.default ?? m,
-        )
+        return module.default ?? module
       },
     })
 
