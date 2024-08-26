@@ -50,7 +50,7 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
   }
 
   for (let file of files) {
-    resolveInternal(ctx, file)
+    extractConfigs(ctx, file)
   }
 
   // Merge dark mode
@@ -95,7 +95,7 @@ function mergeThemeExtension(
     return extensionValue
   }
 
-  // Execute default behaviour
+  // Execute default behavior
   return undefined
 }
 
@@ -103,7 +103,7 @@ export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
 }
 
-function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): void {
+function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): void {
   let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
@@ -131,7 +131,7 @@ function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): 
   }
 
   for (let preset of config.presets ?? []) {
-    resolveInternal(ctx, { path, config: preset })
+    extractConfigs(ctx, { path, config: preset })
   }
 
   // Apply configs from plugins
@@ -139,7 +139,7 @@ function resolveInternal(ctx: ResolutionContext, { config, path }: ConfigFile): 
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      resolveInternal(ctx, { path, config: plugin.config })
+      extractConfigs(ctx, { path, config: plugin.config })
     }
   }
 
@@ -175,8 +175,7 @@ function mergeTheme(ctx: ResolutionContext) {
     // Shallow merge themes so latest "group" wins
     Object.assign(ctx.theme, theme)
 
-    // Collect extensions by key so each
-    // group can be lazily deep merged
+    // Collect extensions by key so each group can be lazily deep merged
     for (let key in extend) {
       ctx.extend[key] ??= []
       ctx.extend[key].push(extend[key])
