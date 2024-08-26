@@ -1,13 +1,13 @@
 import { test } from 'vitest'
 import { buildDesignSystem } from '../design-system'
 import { Theme } from '../theme'
-import { mergeIntoTheme } from './merge-into-theme'
+import { applyConfigToTheme } from './apply-config-to-theme'
 
 test('Config values can be merged into the theme', ({ expect }) => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  mergeIntoTheme(design, [
+  applyConfigToTheme(design, [
     {
       config: {
         theme: {
