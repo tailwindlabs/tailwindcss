@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Brings back type exports for `@tailwindcss/postcss`. ([#14256](https://github.com/tailwindlabs/tailwindcss/pull/14256))
 
 ## [4.0.0-alpha.20] - 2024-08-23
 
