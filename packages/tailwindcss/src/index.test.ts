@@ -1474,7 +1474,9 @@ describe('plugins', () => {
           loadPlugin: async () => plugin(() => {}),
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Objects are not supported in \`@plugin\` options.]`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Objects are not supported in \`@plugin\` options.]`,
+    )
   })
 
   test('addVariant with string selector', async () => {
