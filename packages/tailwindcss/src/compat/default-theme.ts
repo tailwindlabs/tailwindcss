@@ -1,5 +1,14 @@
 import { Theme } from '../theme'
-import { createCompatConfig } from './config/create-compat-config'
+import {
+  bareAspectRatio,
+  bareDegrees,
+  bareIntegers,
+  bareMilliseconds,
+  barePercentages,
+  barePixels,
+  bareRepeatValues,
+  createCompatConfig,
+} from './config/create-compat-config'
 
 let theme = new Theme()
 
@@ -24,6 +33,7 @@ export default {
     selected: 'selected="true"',
   },
   aspectRatio: {
+    ...bareAspectRatio,
     auto: 'auto',
     square: '1 / 1',
     video: '16 / 9',
@@ -95,6 +105,7 @@ export default {
     none: 'none',
   },
   brightness: {
+    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -108,6 +119,7 @@ export default {
     200: '2',
   },
   columns: {
+    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -140,6 +152,7 @@ export default {
     none: 'none',
   },
   contrast: {
+    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -202,10 +215,12 @@ export default {
     none: 'none',
   },
   flexGrow: {
+    ...bareIntegers,
     0: '0',
     DEFAULT: '1',
   },
   flexShrink: {
+    ...bareIntegers,
     0: '0',
     DEFAULT: '1',
   },
@@ -258,6 +273,7 @@ export default {
     black: '900',
   },
   gradientColorStopPositions: {
+    ...barePercentages,
     '0%': '0%',
     '5%': '5%',
     '10%': '10%',
@@ -281,6 +297,7 @@ export default {
     '100%': '100%',
   },
   grayscale: {
+    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
   },
@@ -361,6 +378,7 @@ export default {
     'span-full': '1 / -1',
   },
   gridRowEnd: {
+    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -377,6 +395,7 @@ export default {
     13: '13',
   },
   gridRowStart: {
+    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -393,6 +412,7 @@ export default {
     13: '13',
   },
   gridTemplateColumns: {
+    ...bareRepeatValues,
     none: 'none',
     subgrid: 'subgrid',
     1: 'repeat(1, minmax(0, 1fr))',
@@ -409,6 +429,7 @@ export default {
     12: 'repeat(12, minmax(0, 1fr))',
   },
   gridTemplateRows: {
+    ...bareRepeatValues,
     none: 'none',
     subgrid: 'subgrid',
     1: 'repeat(1, minmax(0, 1fr))',
@@ -425,6 +446,7 @@ export default {
     12: 'repeat(12, minmax(0, 1fr))',
   },
   hueRotate: {
+    ...bareDegrees,
     0: '0deg',
     15: '15deg',
     30: '30deg',
@@ -433,6 +455,7 @@ export default {
     180: '180deg',
   },
   invert: {
+    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
   },
@@ -497,6 +520,7 @@ export default {
     none: 'none',
   },
   lineClamp: {
+    ...bareIntegers,
     1: '1',
     2: '2',
     3: '3',
@@ -516,6 +540,7 @@ export default {
     top: 'top',
   },
   opacity: {
+    ...barePercentages,
     0: '0',
     5: '0.05',
     10: '0.1',
@@ -539,6 +564,7 @@ export default {
     100: '1',
   },
   order: {
+    ...bareIntegers,
     first: '-9999',
     last: '9999',
     none: '0',
@@ -556,6 +582,7 @@ export default {
     12: '12',
   },
   outlineOffset: {
+    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
@@ -563,6 +590,7 @@ export default {
     8: '8px',
   },
   outlineWidth: {
+    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
@@ -570,6 +598,7 @@ export default {
     8: '8px',
   },
   ringOffsetWidth: {
+    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
@@ -577,6 +606,7 @@ export default {
     8: '8px',
   },
   ringWidth: {
+    ...barePixels,
     DEFAULT: '3px',
     0: '0px',
     1: '1px',
@@ -585,6 +615,7 @@ export default {
     8: '8px',
   },
   rotate: {
+    ...bareDegrees,
     0: '0deg',
     1: '1deg',
     2: '2deg',
@@ -596,6 +627,7 @@ export default {
     180: '180deg',
   },
   saturate: {
+    ...barePercentages,
     0: '0',
     50: '.5',
     100: '1',
@@ -603,6 +635,7 @@ export default {
     200: '2',
   },
   scale: {
+    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -622,10 +655,12 @@ export default {
     '2xl': '1536px',
   },
   sepia: {
+    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
   },
   skew: {
+    ...bareDegrees,
     0: '0deg',
     1: '1deg',
     2: '2deg',
@@ -671,6 +706,7 @@ export default {
     96: '24rem',
   },
   strokeWidth: {
+    ...bareIntegers,
     0: '0',
     1: '1',
     2: '2',
@@ -678,6 +714,7 @@ export default {
   supports: {},
   data: {},
   textDecorationThickness: {
+    ...barePixels,
     auto: 'auto',
     'from-font': 'from-font',
     0: '0px',
@@ -687,6 +724,7 @@ export default {
     8: '8px',
   },
   textUnderlineOffset: {
+    ...barePixels,
     auto: 'auto',
     0: '0px',
     1: '1px',
@@ -706,6 +744,7 @@ export default {
     'top-left': 'top left',
   },
   transitionDelay: {
+    ...bareMilliseconds,
     0: '0s',
     75: '75ms',
     100: '100ms',
@@ -717,6 +756,7 @@ export default {
     1000: '1000ms',
   },
   transitionDuration: {
+    ...bareMilliseconds,
     DEFAULT: '150ms',
     0: '0s',
     75: '75ms',
@@ -752,6 +792,7 @@ export default {
     transform: 'transform',
   },
   zIndex: {
+    ...bareIntegers,
     auto: 'auto',
     0: '0',
     10: '10',

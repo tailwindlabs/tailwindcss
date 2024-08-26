@@ -12,33 +12,46 @@ function bareValues(fn: (value: NamedUtilityValue) => string | undefined) {
   }
 }
 
-let bareIntegers = bareValues((value) => {
+export let bareIntegers = bareValues((value) => {
   if (!Number.isNaN(Number(value.value))) {
     return value.value
   }
 })
 
-let barePercentages = bareValues((value: NamedUtilityValue) => {
+export let barePercentages = bareValues((value: NamedUtilityValue) => {
   if (!Number.isNaN(Number(value.value))) {
     return `${value.value}%`
   }
 })
 
-let barePixels = bareValues((value: NamedUtilityValue) => {
+export let barePixels = bareValues((value: NamedUtilityValue) => {
   if (!Number.isNaN(Number(value.value))) {
     return `${value.value}px`
   }
 })
 
-let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
+export let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
   if (!Number.isNaN(Number(value.value))) {
     return `${value.value}ms`
   }
 })
 
-let bareDegrees = bareValues((value: NamedUtilityValue) => {
+export let bareDegrees = bareValues((value: NamedUtilityValue) => {
   if (!Number.isNaN(Number(value.value))) {
     return `${value.value}deg`
+  }
+})
+
+export let bareAspectRatio = bareValues((value) => {
+  if (value.fraction === null) return
+  let [lhs, rhs] = segment(value.fraction, '/')
+  if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+  return value.fraction
+})
+
+export let bareRepeatValues = bareValues((value) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `repeat(${value.value}, minmax(0, 1fr))`
   }
 })
 
@@ -47,12 +60,7 @@ export function createCompatConfig(theme: Theme): UserConfig {
     theme: {
       colors: ({ theme }) => theme('color', {}),
       accentColor: ({ theme }) => theme('colors'),
-      aspectRatio: bareValues((value) => {
-        if (value.fraction === null) return
-        let [lhs, rhs] = segment(value.fraction, '/')
-        if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
-        return value.fraction
-      }),
+      aspectRatio: bareAspectRatio,
       backdropBlur: ({ theme }) => theme('blur'),
       backdropBrightness: ({ theme }) => ({
         ...theme('brightness'),
@@ -113,16 +121,8 @@ export function createCompatConfig(theme: Theme): UserConfig {
       grayscale: barePercentages,
       gridRowEnd: bareIntegers,
       gridRowStart: bareIntegers,
-      gridTemplateColumns: bareValues((value) => {
-        if (!Number.isNaN(Number(value.value))) {
-          return `repeat(${value.value}, minmax(0, 1fr))`
-        }
-      }),
-      gridTemplateRows: bareValues((value) => {
-        if (!Number.isNaN(Number(value.value))) {
-          return `repeat(${value.value}, minmax(0, 1fr))`
-        }
-      }),
+      gridTemplateColumns: bareRepeatValues,
+      gridTemplateRows: bareRepeatValues,
       height: ({ theme }) => theme('spacing'),
       hueRotate: bareDegrees,
       inset: ({ theme }) => theme('spacing'),
@@ -156,7 +156,7 @@ export function createCompatConfig(theme: Theme): UserConfig {
       skew: bareDegrees,
       space: ({ theme }) => theme('spacing'),
       stroke: ({ theme }) => theme('colors'),
-      strokeWidth: barePixels,
+      strokeWidth: bareIntegers,
       textColor: ({ theme }) => theme('colors'),
       textDecorationColor: ({ theme }) => theme('colors'),
       textDecorationThickness: barePixels,
