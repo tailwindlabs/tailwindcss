@@ -1,11 +1,11 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
 import type { Candidate, NamedUtilityValue } from './candidate'
+import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
-import { mergeIntoTheme } from './compat/merge-into-theme'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
@@ -369,7 +369,7 @@ export function registerPlugins(
   // Merge the user-configured theme keys into the design system. The compat
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
-  mergeIntoTheme(designSystem, userConfig)
+  applyConfigToTheme(designSystem, userConfig)
 
   return {
     pluginApi,

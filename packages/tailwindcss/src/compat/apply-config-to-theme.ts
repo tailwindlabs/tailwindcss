@@ -2,7 +2,7 @@ import type { DesignSystem } from '../design-system'
 import { resolveConfig, type ConfigFile } from './config/resolve-config'
 import type { ResolvedConfig } from './config/types'
 
-export function mergeIntoTheme(designSystem: DesignSystem, configs: ConfigFile[]) {
+export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFile[]) {
   let theme = resolveConfig(designSystem, configs).theme
 
   for (let [path, value] of themeableValues(theme)) {
