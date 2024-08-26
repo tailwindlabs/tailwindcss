@@ -290,7 +290,7 @@ function buildPluginApi(
   return api
 }
 
-export type CssInJs = { [key: string]: string | CssInJs | CssInJs[] }
+export type CssInJs = { [key: string]: string | string[] | CssInJs | CssInJs[] }
 
 function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let ast: AstNode[] = []
@@ -309,6 +309,14 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
         name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
 
         ast.push(decl(name, String(value)))
+      }
+    } else if (Array.isArray(value)) {
+      for (let item of value) {
+        if (typeof item === 'string') {
+          ast.push(decl(name, item))
+        } else {
+          ast.push(rule(name, objectToAst(item)))
+        }
       }
     } else if (value !== null) {
       ast.push(rule(name, objectToAst(value)))

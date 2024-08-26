@@ -976,6 +976,35 @@ describe('addUtilities()', () => {
     `)
   })
 
+  test('utilities can use arrays for fallback declaration values', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }: PluginAPI) => {
+            addUtilities([
+              {
+                '.outlined': {
+                  outline: ['1px solid ButtonText', '1px auto -webkit-focus-ring-color'],
+                },
+              },
+            ])
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['outlined'])).trim()).toMatchInlineSnapshot(`
+      ".outlined {
+        outline: 1px solid buttontext;
+        outline: 1px auto -webkit-focus-ring-color;
+      }"
+    `)
+  })
+
   test('camel case properties are converted to kebab-case', async () => {
     let compiled = await compile(
       css`
