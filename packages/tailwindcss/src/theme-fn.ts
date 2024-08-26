@@ -20,7 +20,7 @@ export function createThemeFn(
 
     let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
-    if (configValue !== null && typeof configValue === 'object') {
+    if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
       return deepMerge({}, [configValue, cssValue], (_, b) => b)
     }
 
