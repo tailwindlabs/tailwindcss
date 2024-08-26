@@ -1,4 +1,4 @@
-import { $ } from 'bun'
+import { $, Glob } from 'bun'
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import * as path from 'node:path'
@@ -6,11 +6,15 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
+let embedded = new Glob('../tailwindcss/**/*.{css,json}')
+
 async function buildForPlatform(triple: string, outfile: string) {
+  let files = Array.from(embedded.scanSync(__dirname))
+
   // We wrap this in a retry because occasionally the atomic rename fails for some reason
   for (let i = 0; i < 5; ++i) {
     try {
-      return await $`bun build --compile --target=${triple} ./src/index.ts --outfile=${outfile}`
+      return await $`bun build --compile --target=${triple} ./src/index.ts --outfile=${outfile} ${{ raw: files.join(' ') }}`
     } catch (err) {
       if (i < 5) continue
 
