@@ -1,1 +1,4 @@
-module.exports = require('./colors.ts').default
+import colors from './colors.ts'
+
+// @ts-ignore
+export = colors

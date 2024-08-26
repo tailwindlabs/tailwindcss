@@ -29,7 +29,7 @@ class DefaultMap<T = string, V = any> extends Map<T, V> {
   }
 }
 
-type PluginOptions = {
+export type PluginOptions = {
   // The base directory to scan for class candidates.
   base?: string
 
@@ -209,7 +209,4 @@ function optimizeCss(
   }).code.toString()
 }
 
-// This is used instead of `export default` to work around a bug in `postcss-load-config`
-module.exports = Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
-// Ensure types are still generated for the plugin
-export type { tailwindcss as default }
+export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
