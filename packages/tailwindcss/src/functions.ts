@@ -59,11 +59,11 @@ export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI):
           break
         }
         path += node.nodes[i].value
-        skipUntilIndex = i
+        skipUntilIndex = i + 1
       }
 
       path = eventuallyUnquote(path)
-      let fallbackValues = node.nodes.slice(skipUntilIndex + 2)
+      let fallbackValues = node.nodes.slice(skipUntilIndex + 1)
 
       replaceWith(cssThemeFn(pluginApi, path, fallbackValues))
     }
