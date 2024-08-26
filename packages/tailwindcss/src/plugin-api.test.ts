@@ -511,7 +511,7 @@ describe('theme', async () => {
           utility('my-backdrop-opacity', 'backdropOpacity')
           utility('my-backdrop-saturate', 'backdropSaturate')
           utility('my-backdrop-sepia', 'backdropSepia')
-          utility('my-border', 'border')
+          utility('my-border-width', 'borderWidth')
           utility('my-brightness', 'brightness')
           utility('my-columns', 'columns')
           utility('my-contrast', 'contrast')
@@ -558,7 +558,7 @@ describe('theme', async () => {
       'my-backdrop-opacity-1',
       'my-backdrop-saturate-1',
       'my-backdrop-sepia-1',
-      'my-border-1',
+      'my-border-width-1',
       'my-brightness-1',
       'my-columns-1',
       'my-contrast-1',
@@ -621,7 +621,7 @@ describe('theme', async () => {
       .my-backdrop-sepia-1 {
         --value: 1%;
       }
-      .my-border-1 {
+      .my-border-width-1 {
         --value: 1px;
       }
       .my-brightness-1 {
@@ -868,7 +868,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('spreading `tailwindcss/defaultTheme`` exports keeps bare values', async () => {
+  test('spreading `tailwindcss/defaultTheme` exports keeps bare values', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -898,7 +898,7 @@ describe('theme', async () => {
           // utility('my-backdrop-saturate', 'backdropSaturate')
           // utility('my-backdrop-sepia', 'backdropSepia')
           // utility('my-divide-width', 'divideWidth')
-          utility('my-border', 'border')
+          utility('my-border-width', 'borderWidth')
           utility('my-brightness', 'brightness')
           utility('my-columns', 'columns')
           utility('my-contrast', 'contrast')
@@ -945,7 +945,7 @@ describe('theme', async () => {
       // 'my-backdrop-saturate-1',
       // 'my-backdrop-sepia-1',
       // 'my-divide-width-1',
-      'my-border-1',
+      'my-border-width-1',
       'my-brightness-1',
       'my-columns-1',
       'my-contrast-1',
@@ -983,7 +983,7 @@ describe('theme', async () => {
       ".my-aspect-2\\/5 {
         --value: 2/5;
       }
-      .my-border-1 {
+      .my-border-width-1 {
         --value: 1px;
       }
       .my-brightness-1 {

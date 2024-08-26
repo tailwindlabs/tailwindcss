@@ -1,19 +1,62 @@
-import { Theme } from '../theme'
-import {
-  bareAspectRatio,
-  bareDegrees,
-  bareIntegers,
-  bareMilliseconds,
-  barePercentages,
-  barePixels,
-  bareRepeatValues,
-  createCompatConfig,
-} from './config/create-compat-config'
+import type { NamedUtilityValue } from '../candidate'
+import { segment } from '../utils/segment'
+import colors from './colors'
+import type { UserConfig } from './config/types'
 
-let theme = new Theme()
+function bareValues(fn: (value: NamedUtilityValue) => string | undefined) {
+  return {
+    // Ideally this would be a Symbol but some of the ecosystem assumes object with
+    // string / number keys for example by using `Object.entries()` which means that
+    // the function that handles the bare value would be lost
+    __BARE_VALUE__: fn,
+  }
+}
+
+let bareIntegers = bareValues((value) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return value.value
+  }
+})
+
+let barePercentages = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}%`
+  }
+})
+
+let barePixels = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}px`
+  }
+})
+
+let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}ms`
+  }
+})
+
+let bareDegrees = bareValues((value: NamedUtilityValue) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `${value.value}deg`
+  }
+})
+
+let bareAspectRatio = bareValues((value) => {
+  if (value.fraction === null) return
+  let [lhs, rhs] = segment(value.fraction, '/')
+  if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+  return value.fraction
+})
+
+let bareRepeatValues = bareValues((value) => {
+  if (!Number.isNaN(Number(value.value))) {
+    return `repeat(${value.value}, minmax(0, 1fr))`
+  }
+})
 
 export default {
-  ...createCompatConfig(theme).theme,
+  accentColor: ({ theme }) => theme('colors'),
   animation: {
     none: 'none',
     spin: 'spin 1s linear infinite',
@@ -33,11 +76,45 @@ export default {
     selected: 'selected="true"',
   },
   aspectRatio: {
-    ...bareAspectRatio,
     auto: 'auto',
     square: '1 / 1',
     video: '16 / 9',
+    ...bareAspectRatio,
   },
+  backdropBlur: ({ theme }) => theme('blur'),
+  backdropBrightness: ({ theme }) => ({
+    ...theme('brightness'),
+    ...barePercentages,
+  }),
+  backdropContrast: ({ theme }) => ({
+    ...theme('contrast'),
+    ...barePercentages,
+  }),
+  backdropGrayscale: ({ theme }) => ({
+    ...theme('grayscale'),
+    ...barePercentages,
+  }),
+  backdropHueRotate: ({ theme }) => ({
+    ...theme('hueRotate'),
+    ...bareDegrees,
+  }),
+  backdropInvert: ({ theme }) => ({
+    ...theme('invert'),
+    ...barePercentages,
+  }),
+  backdropOpacity: ({ theme }) => ({
+    ...theme('opacity'),
+    ...barePercentages,
+  }),
+  backdropSaturate: ({ theme }) => ({
+    ...theme('saturate'),
+    ...barePercentages,
+  }),
+  backdropSepia: ({ theme }) => ({
+    ...theme('sepia'),
+    ...barePercentages,
+  }),
+  backgroundColor: ({ theme }) => theme('colors'),
   backgroundImage: {
     none: 'none',
     'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
@@ -49,6 +126,7 @@ export default {
     'gradient-to-l': 'linear-gradient(to left, var(--tw-gradient-stops))',
     'gradient-to-tl': 'linear-gradient(to top left, var(--tw-gradient-stops))',
   },
+  backgroundOpacity: ({ theme }) => theme('opacity'),
   backgroundPosition: {
     bottom: 'bottom',
     center: 'center',
@@ -76,6 +154,11 @@ export default {
     '2xl': '40px',
     '3xl': '64px',
   },
+  borderColor: ({ theme }) => ({
+    DEFAULT: 'currentColor',
+    ...theme('colors'),
+  }),
+  borderOpacity: ({ theme }) => theme('opacity'),
   borderRadius: {
     none: '0px',
     sm: '0.125rem',
@@ -87,12 +170,14 @@ export default {
     '3xl': '1.5rem',
     full: '9999px',
   },
+  borderSpacing: ({ theme }) => theme('spacing'),
   borderWidth: {
     DEFAULT: '1px',
     0: '0px',
     2: '2px',
     4: '4px',
     8: '8px',
+    ...barePixels,
   },
   boxShadow: {
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
@@ -104,8 +189,8 @@ export default {
     inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
     none: 'none',
   },
+  boxShadowColor: ({ theme }) => theme('colors'),
   brightness: {
-    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -117,9 +202,11 @@ export default {
     125: '1.25',
     150: '1.5',
     200: '2',
+    ...barePercentages,
   },
+  caretColor: ({ theme }) => theme('colors'),
+  colors: () => ({ ...colors }),
   columns: {
-    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -146,13 +233,13 @@ export default {
     '5xl': '64rem',
     '6xl': '72rem',
     '7xl': '80rem',
+    ...bareIntegers,
   },
   container: {},
   content: {
     none: 'none',
   },
   contrast: {
-    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -160,6 +247,7 @@ export default {
     125: '1.25',
     150: '1.5',
     200: '2',
+    ...barePercentages,
   },
   cursor: {
     auto: 'auto',
@@ -199,6 +287,12 @@ export default {
     'zoom-in': 'zoom-in',
     'zoom-out': 'zoom-out',
   },
+  divideColor: ({ theme }) => theme('borderColor'),
+  divideOpacity: ({ theme }) => theme('borderOpacity'),
+  divideWidth: ({ theme }) => ({
+    ...theme('borderWidth'),
+    ...barePixels,
+  }),
   dropShadow: {
     sm: '0 1px 1px rgb(0 0 0 / 0.05)',
     DEFAULT: ['0 1px 2px rgb(0 0 0 / 0.1)', '0 1px 1px rgb(0 0 0 / 0.06)'],
@@ -208,21 +302,53 @@ export default {
     '2xl': '0 25px 25px rgb(0 0 0 / 0.15)',
     none: '0 0 #0000',
   },
+  fill: ({ theme }) => theme('colors'),
   flex: {
     1: '1 1 0%',
     auto: '1 1 auto',
     initial: '0 1 auto',
     none: 'none',
   },
+  flexBasis: ({ theme }) => ({
+    auto: 'auto',
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    '1/5': '20%',
+    '2/5': '40%',
+    '3/5': '60%',
+    '4/5': '80%',
+    '1/6': '16.666667%',
+    '2/6': '33.333333%',
+    '3/6': '50%',
+    '4/6': '66.666667%',
+    '5/6': '83.333333%',
+    '1/12': '8.333333%',
+    '2/12': '16.666667%',
+    '3/12': '25%',
+    '4/12': '33.333333%',
+    '5/12': '41.666667%',
+    '6/12': '50%',
+    '7/12': '58.333333%',
+    '8/12': '66.666667%',
+    '9/12': '75%',
+    '10/12': '83.333333%',
+    '11/12': '91.666667%',
+    full: '100%',
+    ...theme('spacing'),
+  }),
   flexGrow: {
-    ...bareIntegers,
     0: '0',
     DEFAULT: '1',
+    ...bareIntegers,
   },
   flexShrink: {
-    ...bareIntegers,
     0: '0',
     DEFAULT: '1',
+    ...bareIntegers,
   },
   fontFamily: {
     sans: [
@@ -272,8 +398,9 @@ export default {
     extrabold: '800',
     black: '900',
   },
+  gap: ({ theme }) => theme('spacing'),
+  gradientColorStops: ({ theme }) => theme('colors'),
   gradientColorStopPositions: {
-    ...barePercentages,
     '0%': '0%',
     '5%': '5%',
     '10%': '10%',
@@ -295,11 +422,12 @@ export default {
     '90%': '90%',
     '95%': '95%',
     '100%': '100%',
+    ...barePercentages,
   },
   grayscale: {
-    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
+    ...barePercentages,
   },
   gridAutoColumns: {
     auto: 'auto',
@@ -344,6 +472,7 @@ export default {
     11: '11',
     12: '12',
     13: '13',
+    ...bareIntegers,
   },
   gridColumnStart: {
     auto: 'auto',
@@ -360,6 +489,7 @@ export default {
     11: '11',
     12: '12',
     13: '13',
+    ...bareIntegers,
   },
   gridRow: {
     auto: 'auto',
@@ -378,7 +508,6 @@ export default {
     'span-full': '1 / -1',
   },
   gridRowEnd: {
-    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -393,9 +522,9 @@ export default {
     11: '11',
     12: '12',
     13: '13',
+    ...bareIntegers,
   },
   gridRowStart: {
-    ...bareIntegers,
     auto: 'auto',
     1: '1',
     2: '2',
@@ -410,9 +539,9 @@ export default {
     11: '11',
     12: '12',
     13: '13',
+    ...bareIntegers,
   },
   gridTemplateColumns: {
-    ...bareRepeatValues,
     none: 'none',
     subgrid: 'subgrid',
     1: 'repeat(1, minmax(0, 1fr))',
@@ -427,9 +556,9 @@ export default {
     10: 'repeat(10, minmax(0, 1fr))',
     11: 'repeat(11, minmax(0, 1fr))',
     12: 'repeat(12, minmax(0, 1fr))',
+    ...bareRepeatValues,
   },
   gridTemplateRows: {
-    ...bareRepeatValues,
     none: 'none',
     subgrid: 'subgrid',
     1: 'repeat(1, minmax(0, 1fr))',
@@ -444,20 +573,59 @@ export default {
     10: 'repeat(10, minmax(0, 1fr))',
     11: 'repeat(11, minmax(0, 1fr))',
     12: 'repeat(12, minmax(0, 1fr))',
+    ...bareRepeatValues,
   },
+  height: ({ theme }) => ({
+    auto: 'auto',
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    '1/5': '20%',
+    '2/5': '40%',
+    '3/5': '60%',
+    '4/5': '80%',
+    '1/6': '16.666667%',
+    '2/6': '33.333333%',
+    '3/6': '50%',
+    '4/6': '66.666667%',
+    '5/6': '83.333333%',
+    full: '100%',
+    screen: '100vh',
+    svh: '100svh',
+    lvh: '100lvh',
+    dvh: '100dvh',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
   hueRotate: {
-    ...bareDegrees,
     0: '0deg',
     15: '15deg',
     30: '30deg',
     60: '60deg',
     90: '90deg',
     180: '180deg',
+    ...bareDegrees,
   },
+  inset: ({ theme }) => ({
+    auto: 'auto',
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    full: '100%',
+    ...theme('spacing'),
+  }),
   invert: {
-    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
+    ...barePercentages,
   },
   keyframes: {
     spin: {
@@ -519,15 +687,69 @@ export default {
   listStyleImage: {
     none: 'none',
   },
+  margin: ({ theme }) => ({
+    auto: 'auto',
+    ...theme('spacing'),
+  }),
   lineClamp: {
-    ...bareIntegers,
     1: '1',
     2: '2',
     3: '3',
     4: '4',
     5: '5',
     6: '6',
+    ...bareIntegers,
   },
+  maxHeight: ({ theme }) => ({
+    none: 'none',
+    full: '100%',
+    screen: '100vh',
+    svh: '100svh',
+    lvh: '100lvh',
+    dvh: '100dvh',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
+  maxWidth: ({ theme }) => ({
+    none: 'none',
+    xs: '20rem',
+    sm: '24rem',
+    md: '28rem',
+    lg: '32rem',
+    xl: '36rem',
+    '2xl': '42rem',
+    '3xl': '48rem',
+    '4xl': '56rem',
+    '5xl': '64rem',
+    '6xl': '72rem',
+    '7xl': '80rem',
+    full: '100%',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    prose: '65ch',
+    ...theme('spacing'),
+  }),
+  minHeight: ({ theme }) => ({
+    full: '100%',
+    screen: '100vh',
+    svh: '100svh',
+    lvh: '100lvh',
+    dvh: '100dvh',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
+  minWidth: ({ theme }) => ({
+    full: '100%',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
   objectPosition: {
     bottom: 'bottom',
     center: 'center',
@@ -540,7 +762,6 @@ export default {
     top: 'top',
   },
   opacity: {
-    ...barePercentages,
     0: '0',
     5: '0.05',
     10: '0.1',
@@ -562,9 +783,9 @@ export default {
     90: '0.9',
     95: '0.95',
     100: '1',
+    ...barePercentages,
   },
   order: {
-    ...bareIntegers,
     first: '-9999',
     last: '9999',
     none: '0',
@@ -580,42 +801,55 @@ export default {
     10: '10',
     11: '11',
     12: '12',
+    ...bareIntegers,
   },
+  outlineColor: ({ theme }) => theme('colors'),
   outlineOffset: {
-    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
     4: '4px',
     8: '8px',
+    ...barePixels,
   },
   outlineWidth: {
-    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
     4: '4px',
     8: '8px',
+    ...barePixels,
   },
+  padding: ({ theme }) => theme('spacing'),
+  placeholderColor: ({ theme }) => theme('colors'),
+  placeholderOpacity: ({ theme }) => theme('opacity'),
+  ringColor: ({ theme }) => ({
+    DEFAULT: 'currentColor',
+    ...theme('colors'),
+  }),
+  ringOffsetColor: ({ theme }) => theme('colors'),
   ringOffsetWidth: {
-    ...barePixels,
     0: '0px',
     1: '1px',
     2: '2px',
     4: '4px',
     8: '8px',
-  },
-  ringWidth: {
     ...barePixels,
+  },
+  ringOpacity: ({ theme }) => ({
+    DEFAULT: '0.5',
+    ...theme('opacity'),
+  }),
+  ringWidth: {
     DEFAULT: '3px',
     0: '0px',
     1: '1px',
     2: '2px',
     4: '4px',
     8: '8px',
+    ...barePixels,
   },
   rotate: {
-    ...bareDegrees,
     0: '0deg',
     1: '1deg',
     2: '2deg',
@@ -625,17 +859,17 @@ export default {
     45: '45deg',
     90: '90deg',
     180: '180deg',
+    ...bareDegrees,
   },
   saturate: {
-    ...barePercentages,
     0: '0',
     50: '.5',
     100: '1',
     150: '1.5',
     200: '2',
+    ...barePercentages,
   },
   scale: {
-    ...barePercentages,
     0: '0',
     50: '.5',
     75: '.75',
@@ -646,6 +880,7 @@ export default {
     110: '1.1',
     125: '1.25',
     150: '1.5',
+    ...barePercentages,
   },
   screens: {
     sm: '640px',
@@ -654,20 +889,23 @@ export default {
     xl: '1280px',
     '2xl': '1536px',
   },
+  scrollMargin: ({ theme }) => theme('spacing'),
+  scrollPadding: ({ theme }) => theme('spacing'),
   sepia: {
-    ...barePercentages,
     0: '0',
     DEFAULT: '100%',
+    ...barePercentages,
   },
   skew: {
-    ...bareDegrees,
     0: '0deg',
     1: '1deg',
     2: '2deg',
     3: '3deg',
     6: '6deg',
     12: '12deg',
+    ...bareDegrees,
   },
+  space: ({ theme }) => theme('spacing'),
   spacing: {
     px: '1px',
     0: '0px',
@@ -705,16 +943,21 @@ export default {
     80: '20rem',
     96: '24rem',
   },
+  stroke: ({ theme }) => ({
+    none: 'none',
+    ...theme('colors'),
+  }),
   strokeWidth: {
-    ...bareIntegers,
     0: '0',
     1: '1',
     2: '2',
+    ...bareIntegers,
   },
   supports: {},
   data: {},
+  textColor: ({ theme }) => theme('colors'),
+  textDecorationColor: ({ theme }) => theme('colors'),
   textDecorationThickness: {
-    ...barePixels,
     auto: 'auto',
     'from-font': 'from-font',
     0: '0px',
@@ -722,15 +965,18 @@ export default {
     2: '2px',
     4: '4px',
     8: '8px',
-  },
-  textUnderlineOffset: {
     ...barePixels,
+  },
+  textIndent: ({ theme }) => theme('spacing'),
+  textOpacity: ({ theme }) => theme('opacity'),
+  textUnderlineOffset: {
     auto: 'auto',
     0: '0px',
     1: '1px',
     2: '2px',
     4: '4px',
     8: '8px',
+    ...barePixels,
   },
   transformOrigin: {
     center: 'center',
@@ -744,7 +990,6 @@ export default {
     'top-left': 'top left',
   },
   transitionDelay: {
-    ...bareMilliseconds,
     0: '0s',
     75: '75ms',
     100: '100ms',
@@ -754,9 +999,9 @@ export default {
     500: '500ms',
     700: '700ms',
     1000: '1000ms',
+    ...bareMilliseconds,
   },
   transitionDuration: {
-    ...bareMilliseconds,
     DEFAULT: '150ms',
     0: '0s',
     75: '75ms',
@@ -767,6 +1012,7 @@ export default {
     500: '500ms',
     700: '700ms',
     1000: '1000ms',
+    ...bareMilliseconds,
   },
   transitionProperty: {
     none: 'none',
@@ -785,6 +1031,89 @@ export default {
     out: 'cubic-bezier(0, 0, 0.2, 1)',
     'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
   },
+  translate: ({ theme }) => ({
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    full: '100%',
+    ...theme('spacing'),
+  }),
+  size: ({ theme }) => ({
+    auto: 'auto',
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    '1/5': '20%',
+    '2/5': '40%',
+    '3/5': '60%',
+    '4/5': '80%',
+    '1/6': '16.666667%',
+    '2/6': '33.333333%',
+    '3/6': '50%',
+    '4/6': '66.666667%',
+    '5/6': '83.333333%',
+    '1/12': '8.333333%',
+    '2/12': '16.666667%',
+    '3/12': '25%',
+    '4/12': '33.333333%',
+    '5/12': '41.666667%',
+    '6/12': '50%',
+    '7/12': '58.333333%',
+    '8/12': '66.666667%',
+    '9/12': '75%',
+    '10/12': '83.333333%',
+    '11/12': '91.666667%',
+    full: '100%',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
+  width: ({ theme }) => ({
+    auto: 'auto',
+
+    '1/2': '50%',
+    '1/3': '33.333333%',
+    '2/3': '66.666667%',
+    '1/4': '25%',
+    '2/4': '50%',
+    '3/4': '75%',
+    '1/5': '20%',
+    '2/5': '40%',
+    '3/5': '60%',
+    '4/5': '80%',
+    '1/6': '16.666667%',
+    '2/6': '33.333333%',
+    '3/6': '50%',
+    '4/6': '66.666667%',
+    '5/6': '83.333333%',
+    '1/12': '8.333333%',
+    '2/12': '16.666667%',
+    '3/12': '25%',
+    '4/12': '33.333333%',
+    '5/12': '41.666667%',
+    '6/12': '50%',
+    '7/12': '58.333333%',
+    '8/12': '66.666667%',
+    '9/12': '75%',
+    '10/12': '83.333333%',
+    '11/12': '91.666667%',
+    full: '100%',
+    screen: '100vw',
+    svw: '100svw',
+    lvw: '100lvw',
+    dvw: '100dvw',
+    min: 'min-content',
+    max: 'max-content',
+    fit: 'fit-content',
+    ...theme('spacing'),
+  }),
   willChange: {
     auto: 'auto',
     scroll: 'scroll-position',
@@ -792,7 +1121,6 @@ export default {
     transform: 'transform',
   },
   zIndex: {
-    ...bareIntegers,
     auto: 'auto',
     0: '0',
     10: '10',
@@ -800,5 +1128,6 @@ export default {
     30: '30',
     40: '40',
     50: '50',
+    ...bareIntegers,
   },
-}
+} satisfies UserConfig['theme']
