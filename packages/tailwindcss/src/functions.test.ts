@@ -265,8 +265,8 @@ describe('theme function', () => {
           expect(
             await compileCss(css`
               @theme {
-                --font-size-xs: 0.75rem;
-                --font-size-xs--line-height: 1rem;
+                --font-size-xs: 1337.75rem;
+                --font-size-xs--line-height: 1337rem;
               }
               .text {
                 font-size: theme(fontSize.xs);
@@ -275,13 +275,13 @@ describe('theme function', () => {
             `),
           ).toMatchInlineSnapshot(`
             ":root {
-              --font-size-xs: .75rem;
-              --font-size-xs--line-height: 1rem;
+              --font-size-xs: 1337.75rem;
+              --font-size-xs--line-height: 1337rem;
             }
 
             .text {
-              font-size: .75rem;
-              line-height: 1rem;
+              font-size: 1337.75rem;
+              line-height: 1337rem;
             }"
           `)
         })
