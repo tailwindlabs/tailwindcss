@@ -1,1 +1,4 @@
-module.exports = require('./default-theme.ts').default
+import defaultTheme from './default-theme.ts'
+
+// @ts-ignore
+export = defaultTheme
