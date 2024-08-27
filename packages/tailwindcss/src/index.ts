@@ -65,11 +65,18 @@ async function parseCss(
         throw new Error('`@plugin` cannot be nested.')
       }
 
+      let pluginPath = node.selector.slice(9, -1)
+      if (pluginPath.length === 0) {
+        throw new Error('`@plugin` must have a path.')
+      }
+
       let options: CssPluginOptions = {}
 
       for (let decl of node.nodes ?? []) {
         if (decl.kind !== 'declaration') {
-          throw new Error('`@plugin` can only contain declarations.')
+          throw new Error(
+            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\nPlugins can only contain a flat list of declarations.`,
+          )
         }
 
         if (decl.value === undefined) continue
@@ -86,23 +93,26 @@ async function parseCss(
           value = false
         } else if (!Number.isNaN(Number(value))) {
           value = Number(value)
-        } else if (value[0] === '"' && value[value.length - 1] === '"') {
+        } else if (
+          (value[0] === '"' && value[value.length - 1] === '"') ||
+          (value[0] === "'" && value[value.length - 1] === "'")
+        ) {
           value = value.slice(1, -1)
-        } else if (value[0] === "'" && value[value.length - 1] === "'") {
-          value = value.slice(1, -1)
-        } else if (value[0] === '[' && value[value.length - 1] === ']') {
-          throw new Error('Arrays are not supported in `@plugin` options.')
-        } else if (value[0] === '{' && value[value.length - 1] === '}') {
-          throw new Error('Objects are not supported in `@plugin` options.')
+        } else if (
+          (value[0] === '[' && value[value.length - 1] === ']') ||
+          (value[0] === '{' && value[value.length - 1] === '}')
+        ) {
+          throw new Error(
+            `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nIt looks like you want to pass an ${
+              value[0] === '[' ? 'array' : 'object'
+            } to plugin options. This is not supported in CSS.`,
+          )
         }
 
         options[decl.property] = value
       }
 
-      pluginPaths.push([
-        node.selector.slice(9, -1),
-        Object.keys(options).length > 0 ? options : null,
-      ])
+      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
 
       replaceWith([])
       return

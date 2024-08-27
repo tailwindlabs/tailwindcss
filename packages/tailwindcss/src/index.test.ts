@@ -1319,7 +1319,7 @@ describe('plugins', () => {
     let { build } = await compile(
       css`
         @tailwind utilities;
-        @plugin {
+        @plugin "my-plugin" {
           color: red;
         }
       `,
@@ -1357,13 +1357,19 @@ describe('plugins', () => {
     await compile(
       css`
         @tailwind utilities;
-        @plugin {
+        @plugin "my-plugin" {
           is-null: null;
           is-true: true;
           is-false: false;
           is-int: 1234567;
           is-float: 1.35;
           is-sci: 1.35e-5;
+          is-str-null: 'null';
+          is-str-true: 'true';
+          is-str-false: 'false';
+          is-str-int: '1234567';
+          is-str-float: '1.35';
+          is-str-sci: '1.35e-5';
         }
       `,
       {
@@ -1376,6 +1382,12 @@ describe('plugins', () => {
               'is-int': 1234567,
               'is-float': 1.35,
               'is-sci': 1.35e-5,
+              'is-str-null': 'null',
+              'is-str-true': 'true',
+              'is-str-false': 'false',
+              'is-str-int': '1234567',
+              'is-str-float': '1.35',
+              'is-str-sci': '1.35e-5',
             })
 
             return () => {}
@@ -1389,7 +1401,7 @@ describe('plugins', () => {
     expect(
       compile(
         css`
-          @plugin {
+          @plugin "my-plugin" {
             color: red;
             sizes {
               sm: 1rem;
@@ -1412,7 +1424,17 @@ describe('plugins', () => {
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@plugin\` can only contain declarations.]`,
+      `
+      [Error: Unexpected \`@plugin\` option:
+
+      sizes {
+        sm: 1rem;
+        md: 2rem;
+      }
+
+
+      Plugins can only contain a flat list of declarations.]
+    `,
     )
   })
 
@@ -1454,7 +1476,11 @@ describe('plugins', () => {
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Arrays are not supported in \`@plugin\` options.]`,
+      `
+      [Error: Unexpected \`@plugin\` option: Value of declaration \`--color: [ 'red', 'green', 'blue'];\` is not supported.
+
+      It looks like you want to pass an array to plugin options. This is not supported in CSS.]
+    `,
     )
   })
 
@@ -1475,7 +1501,15 @@ describe('plugins', () => {
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Objects are not supported in \`@plugin\` options.]`,
+      `
+      [Error: Unexpected \`@plugin\` option: Value of declaration \`--color: {
+                    red: 100;
+                    green: 200;
+                    blue: 300;
+                  };\` is not supported.
+
+      It looks like you want to pass an object to plugin options. This is not supported in CSS.]
+    `,
     )
   })
 
