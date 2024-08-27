@@ -19,7 +19,7 @@ import {
   println,
   relative,
 } from '../../utils/renderer'
-import { resolve } from '../../utils/resolve'
+import { resolveCssId } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
@@ -90,7 +90,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         ? await drainStdin()
         : await fs.readFile(args['--input'], 'utf-8')
       : css`
-          @import '${resolve('tailwindcss/index.css')}';
+          @import '${await resolveCssId('tailwindcss/index.css')}';
         `,
     args['--input'] ?? base,
   )
@@ -200,7 +200,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               args['--input']
                 ? await fs.readFile(args['--input'], 'utf-8')
                 : css`
-                    @import '${resolve('tailwindcss/index.css')}';
+                    @import '${await resolveCssId('tailwindcss/index.css')}';
                   `,
               args['--input'] ?? base,
             )
@@ -375,7 +375,7 @@ function handleImports(
     .use(
       atImport({
         resolve(id, basedir) {
-          return resolve(id, basedir)
+          return resolveCssId(id, basedir)
         },
         load(id) {
           // We need to synchronously read the file here because when bundled
