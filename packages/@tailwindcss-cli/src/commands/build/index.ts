@@ -2,7 +2,7 @@ import watcher from '@parcel/watcher'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -372,7 +372,20 @@ function handleImports(
   }
 
   return postcss()
-    .use(atImport())
+    .use(
+      atImport({
+        resolve(id, basedir) {
+          return resolve(id, basedir)
+        },
+        load(id) {
+          // We need to synchronously read the file here because when bundled
+          // with bun, some of the ids might resolve to files inside the bun
+          // embedded files root which can only be read by `node:fs` and not
+          // `node:fs/promises`.
+          return readFileSync(id, 'utf-8')
+        },
+      }),
+    )
     .use(fixRelativePathsPlugin())
     .process(input, { from: file })
     .then((result) => [

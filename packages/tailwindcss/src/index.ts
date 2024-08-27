@@ -341,7 +341,9 @@ export async function compile(
   })
 
   if (process.env.NODE_ENV !== 'test') {
-    ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
+    ast.unshift(
+      comment(`! tailwindcss v${await getVersion()} | MIT License | https://tailwindcss.com `),
+    )
   }
 
   // Track all invalid candidates
@@ -405,4 +407,12 @@ export async function compile(
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
   let result = await parseCss(css, opts)
   return result.designSystem
+}
+
+async function getVersion() {
+  if (process.env.VERSION) {
+    return process.env.VERSION
+  } else {
+    return version
+  }
 }
