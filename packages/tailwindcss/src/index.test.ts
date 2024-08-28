@@ -1295,6 +1295,38 @@ describe('Parsing themes values from CSS', () => {
 })
 
 describe('plugins', () => {
+  test('@plugin need a path', () =>
+    expect(
+      compile(
+        css`
+          @plugin;
+        `,
+        {
+          loadPlugin: async () => {
+            return ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', '&:hover, &:focus')
+            }
+          },
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
+
+  test('@plugin can not have an empty path', () =>
+    expect(
+      compile(
+        css`
+          @plugin '';
+        `,
+        {
+          loadPlugin: async () => {
+            return ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', '&:hover, &:focus')
+            }
+          },
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
+
   test('@plugin cannot be nested.', () =>
     expect(
       compile(
