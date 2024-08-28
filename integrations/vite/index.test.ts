@@ -219,7 +219,7 @@ import {
       },
     )
 
-    test.only(
+    test(
       'watch mode',
       {
         fs: {

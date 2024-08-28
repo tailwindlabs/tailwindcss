@@ -266,8 +266,6 @@ export default function tailwindcss(): Plugin[] {
           ...(config.command === 'build' ? ['vite:css-post'] : []),
         ]
 
-        console.log('plugins')
-        console.log(config.plugins)
         cssPlugins = config.plugins.filter((plugin) => {
           return allowedPlugins.includes(plugin.name)
         })
@@ -275,8 +273,6 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan index.html for candidates
       transformIndexHtml(html, context) {
-        onFileChange(context.filename)
-
         let updated = scan(html, 'html')
         if (updated) {
           queueRebuild(isSSR)
@@ -285,8 +281,6 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan all non-CSS files for candidates
       transform(src, id, options) {
-        onFileChange(id)
-
         if (id.includes('/.vite/')) return
         let extension = getExtension(id)
         if (extension === '' || extension === 'css') return
@@ -311,12 +305,12 @@ export default function tailwindcss(): Plugin[] {
         // In serve mode, we treat cssModules as a set, ignoring the value.
         cssModules[id] = { content: '', handled: true }
 
-        // if (!options?.ssr) {
-        //   // Wait until all other files have been processed, so we can extract
-        //   // all candidates before generating CSS. This must not be called
-        //   // during SSR or it will block the server.
-        //   await server?.waitForRequestsIdle?.(id)
-        // }
+        if (!options?.ssr) {
+          // Wait until all other files have been processed, so we can extract
+          // all candidates before generating CSS. This must not be called
+          // during SSR or it will block the server.
+          await server?.waitForRequestsIdle?.(id)
+        }
 
         let code = await transformWithPlugins(
           this,
