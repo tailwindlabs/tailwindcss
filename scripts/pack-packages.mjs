@@ -44,7 +44,7 @@ Promise.all(
     function pack() {
       return new Promise((resolve) => {
         exec(
-          `pnpm pack --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"`,
+          `pnpm pack --pack-gzip-level=0 --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"`,
           { cwd: dir },
           (err, stdout, stderr) => {
             if (err) {

@@ -90,7 +90,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         ? await drainStdin()
         : await fs.readFile(args['--input'], 'utf-8')
       : css`
-          @import '${await resolveCssId('tailwindcss/index.css')}';
+          @import 'tailwindcss';
         `,
     args['--input'] ?? base,
   )
@@ -200,7 +200,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               args['--input']
                 ? await fs.readFile(args['--input'], 'utf-8')
                 : css`
-                    @import '${await resolveCssId('tailwindcss/index.css')}';
+                    @import 'tailwindcss';
                   `,
               args['--input'] ?? base,
             )
@@ -375,7 +375,11 @@ function handleImports(
     .use(
       atImport({
         resolve(id, basedir) {
-          return resolveCssId(id, basedir)
+          let resolved = resolveCssId(id, basedir)
+          if (!resolved) {
+            throw new Error(`Could not resolve ${id} from ${basedir}`)
+          }
+          return resolved
         },
         load(id) {
           // We need to synchronously read the file here because when bundled

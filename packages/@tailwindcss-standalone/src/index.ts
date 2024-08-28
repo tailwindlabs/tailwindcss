@@ -14,7 +14,7 @@ globalThis.__tw_resolve = (id, baseDir) => {
     id === 'tailwindcss' || id.startsWith('tailwindcss/') || isEmbeddedFileBase
 
   if (!likelyEmbeddedFile) {
-    return localResolve(id, baseDir ? { paths: [baseDir] } : undefined)
+    return false
   }
 
   id = id.startsWith('tailwindcss/')
@@ -24,17 +24,21 @@ globalThis.__tw_resolve = (id, baseDir) => {
       : id
 
   switch (id) {
-    case '':
+    case 'index':
     case 'index.css':
+    case 'tailwindcss':
       return localResolve(indexCss)
+    case 'theme':
     case 'theme.css':
       return localResolve(themeCss)
+    case 'preflight':
     case 'preflight.css':
       return localResolve(preflightCss)
+    case 'utilities':
     case 'utilities.css':
       return localResolve(utilitiesCss)
     default:
-      return localResolve(id, baseDir ? { paths: [baseDir] } : undefined)
+      return false
   }
 }
 globalThis.__tw_version = packageJson.version
