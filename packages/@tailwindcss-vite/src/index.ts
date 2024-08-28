@@ -333,6 +333,12 @@ export default function tailwindcss(): Plugin[] {
       apply: 'build',
       enforce: 'pre',
 
+      buildStart() {
+        for (let [, file] of Object.entries(cssModules)) {
+          file.handled = false
+        }
+      },
+
       async transform(src, id) {
         if (!isTailwindCssFile(id, src)) return
         onFileChange(id)
