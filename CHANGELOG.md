@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix fallback values when using the CSS `theme()` function ([#14262](https://github.com/tailwindlabs/tailwindcss/pull/14262))
 - Fix support for declaration fallbacks in plugins ([#14265](https://github.com/tailwindlabs/tailwindcss/pull/14265))
 
+## Changed
+
+- Remove named opacity support for color opacity modifiers ([#14278](https://github.com/tailwindlabs/tailwindcss/pull/14278))
+
 ## [4.0.0-alpha.20] - 2024-08-23
 
 ### Added
