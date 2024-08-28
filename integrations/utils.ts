@@ -64,290 +64,293 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false }: TestFlags = {},
 ) {
-  return (
-    only || (!process.env.CI && debug) ? defaultTest.only.concurrent : defaultTest.concurrent
-  )(name, { timeout: TEST_TIMEOUT }, async (options) => {
-    let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
-    await fs.mkdir(rootDir, { recursive: true })
+  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
+    name,
+    { timeout: TEST_TIMEOUT },
+    async (options) => {
+      let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
+      await fs.mkdir(rootDir, { recursive: true })
 
-    let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
+      let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
 
-    if (debug) {
-      console.log('Running test in debug mode. File system will be written to:')
-      console.log(root)
-      console.log()
-    }
+      if (debug) {
+        console.log('Running test in debug mode. File system will be written to:')
+        console.log(root)
+        console.log()
+      }
 
-    let context = {
-      root,
-      async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
-        let cwd = childProcessOptions.cwd ?? root
-        if (debug && cwd !== root) {
-          let relative = path.relative(root, cwd)
-          if (relative[0] !== '.') relative = `./${relative}`
-          console.log(`> cd ${relative}`)
-        }
-        if (debug) console.log(`> ${command}`)
-        return new Promise((resolve, reject) => {
-          exec(
-            command,
-            {
-              cwd,
-              ...childProcessOptions,
+      let context = {
+        root,
+        async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
+          if (debug) console.log(`> ${command}`)
+          return new Promise((resolve, reject) => {
+            exec(
+              command,
+              {
+                cwd,
+                ...childProcessOptions,
+              },
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(stderr)
+                  reject(error)
+                } else {
+                  resolve(stdout.toString())
+                }
+              },
+            )
+          })
+        },
+        async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          let resolveDisposal: (() => void) | undefined
+          let rejectDisposal: ((error: Error) => void) | undefined
+          let disposePromise = new Promise<void>((resolve, reject) => {
+            resolveDisposal = resolve
+            rejectDisposal = reject
+          })
+
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
+          if (debug) console.log(`>& ${command}`)
+          let child = spawn(command, {
+            cwd,
+            shell: true,
+            env: {
+              ...process.env,
             },
-            (error, stdout, stderr) => {
-              if (error) {
-                console.error(stderr)
-                reject(error)
-              } else {
-                resolve(stdout.toString())
+            ...childProcessOptions,
+          })
+
+          function dispose() {
+            child.kill()
+
+            let timer = setTimeout(
+              () =>
+                rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
+              ASSERTION_TIMEOUT,
+            )
+            disposePromise.finally(() => {
+              clearTimeout(timer)
+            })
+            return disposePromise
+          }
+          disposables.push(dispose)
+          function onExit() {
+            resolveDisposal?.()
+          }
+
+          let stdoutMessages: string[] = []
+          let stderrMessages: string[] = []
+
+          let stdoutActors: SpawnActor[] = []
+          let stderrActors: SpawnActor[] = []
+
+          function notifyNext(actors: SpawnActor[], messages: string[]) {
+            if (actors.length <= 0) return
+            let [next] = actors
+
+            for (let [idx, message] of messages.entries()) {
+              if (next.predicate(message)) {
+                messages.splice(0, idx + 1)
+                let actorIdx = actors.indexOf(next)
+                actors.splice(actorIdx, 1)
+                next.resolve()
+                break
               }
+            }
+          }
+
+          let combined: ['stdout' | 'stderr', string][] = []
+
+          child.stdout.on('data', (result) => {
+            let content = result.toString()
+            if (debug) console.log(content)
+            combined.push(['stdout', content])
+            stdoutMessages.push(content)
+            notifyNext(stdoutActors, stdoutMessages)
+          })
+          child.stderr.on('data', (result) => {
+            let content = result.toString()
+            if (debug) console.error(content)
+            combined.push(['stderr', content])
+            stderrMessages.push(content)
+            notifyNext(stderrActors, stderrMessages)
+          })
+          child.on('exit', onExit)
+          child.on('error', (error) => {
+            if (error.name !== 'AbortError') {
+              throw error
+            }
+          })
+
+          options.onTestFailed(() => {
+            // In debug mode, messages are logged to the console immediately
+            if (debug) return
+
+            for (let [type, message] of combined) {
+              if (type === 'stdout') {
+                console.log(message)
+              } else {
+                console.error(message)
+              }
+            }
+          })
+
+          return {
+            dispose,
+            onStdout(predicate: (message: string) => boolean) {
+              return new Promise<void>((resolve) => {
+                stdoutActors.push({ predicate, resolve })
+                notifyNext(stdoutActors, stdoutMessages)
+              })
             },
-          )
-        })
-      },
-      async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
-        let resolveDisposal: (() => void) | undefined
-        let rejectDisposal: ((error: Error) => void) | undefined
-        let disposePromise = new Promise<void>((resolve, reject) => {
-          resolveDisposal = resolve
-          rejectDisposal = reject
-        })
+            onStderr(predicate: (message: string) => boolean) {
+              return new Promise<void>((resolve) => {
+                stderrActors.push({ predicate, resolve })
+                notifyNext(stderrActors, stderrMessages)
+              })
+            },
+          }
+        },
+        async getFreePort(): Promise<number> {
+          return new Promise((resolve, reject) => {
+            let server = net.createServer()
+            server.listen(0, () => {
+              let address = server.address()
+              let port = address === null || typeof address === 'string' ? null : address.port
 
-        let cwd = childProcessOptions.cwd ?? root
-        if (debug && cwd !== root) {
-          let relative = path.relative(root, cwd)
-          if (relative[0] !== '.') relative = `./${relative}`
-          console.log(`> cd ${relative}`)
-        }
-        if (debug) console.log(`>& ${command}`)
-        let child = spawn(command, {
-          cwd,
-          shell: true,
-          env: {
-            ...process.env,
-          },
-          ...childProcessOptions,
-        })
+              server.close(() => {
+                if (port === null) {
+                  reject(new Error(`Failed to get a free port: address is ${address}`))
+                } else {
+                  disposables.push(async () => {
+                    // Wait for 10ms in case the process was just killed
+                    await new Promise((resolve) => setTimeout(resolve, 10))
 
-        function dispose() {
-          child.kill()
+                    // kill-port uses `lsof` on macOS which is expensive and can
+                    // block for multiple seconds. In order to avoid that for a
+                    // server that is no longer running, we check if the port is
+                    // still in use first.
+                    let isPortTaken = await testIfPortTaken(port)
+                    if (!isPortTaken) {
+                      return
+                    }
 
-          let timer = setTimeout(
-            () => rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
-            ASSERTION_TIMEOUT,
-          )
-          disposePromise.finally(() => {
-            clearTimeout(timer)
+                    try {
+                      await killPort(port)
+                    } catch {
+                      // If the process can not be killed, we can't do anything
+                    }
+                  })
+                  resolve(port)
+                }
+              })
+            })
           })
-          return disposePromise
-        }
-        disposables.push(dispose)
-        function onExit() {
-          resolveDisposal?.()
-        }
+        },
+        fs: {
+          async write(filename: string, content: string): Promise<void> {
+            let full = path.join(root, filename)
 
-        let stdoutMessages: string[] = []
-        let stderrMessages: string[] = []
-
-        let stdoutActors: SpawnActor[] = []
-        let stderrActors: SpawnActor[] = []
-
-        function notifyNext(actors: SpawnActor[], messages: string[]) {
-          if (actors.length <= 0) return
-          let [next] = actors
-
-          for (let [idx, message] of messages.entries()) {
-            if (next.predicate(message)) {
-              messages.splice(0, idx + 1)
-              let actorIdx = actors.indexOf(next)
-              actors.splice(actorIdx, 1)
-              next.resolve()
-              break
+            if (filename.endsWith('package.json')) {
+              content = await overwriteVersionsInPackageJson(content)
             }
-          }
-        }
 
-        let combined: ['stdout' | 'stderr', string][] = []
-
-        child.stdout.on('data', (result) => {
-          let content = result.toString()
-          if (debug) console.log(content)
-          combined.push(['stdout', content])
-          stdoutMessages.push(content)
-          notifyNext(stdoutActors, stdoutMessages)
-        })
-        child.stderr.on('data', (result) => {
-          let content = result.toString()
-          if (debug) console.error(content)
-          combined.push(['stderr', content])
-          stderrMessages.push(content)
-          notifyNext(stderrActors, stderrMessages)
-        })
-        child.on('exit', onExit)
-        child.on('error', (error) => {
-          if (error.name !== 'AbortError') {
-            throw error
-          }
-        })
-
-        options.onTestFailed(() => {
-          // In debug mode, messages are logged to the console immediately
-          if (debug) return
-
-          for (let [type, message] of combined) {
-            if (type === 'stdout') {
-              console.log(message)
-            } else {
-              console.error(message)
+            // Ensure that files written on Windows use \r\n line ending
+            if (IS_WINDOWS) {
+              content = content.replace(/\n/g, '\r\n')
             }
-          }
-        })
 
-        return {
-          dispose,
-          onStdout(predicate: (message: string) => boolean) {
-            return new Promise<void>((resolve) => {
-              stdoutActors.push({ predicate, resolve })
-              notifyNext(stdoutActors, stdoutMessages)
-            })
+            let dir = path.dirname(full)
+            await fs.mkdir(dir, { recursive: true })
+            await fs.writeFile(full, content)
           },
-          onStderr(predicate: (message: string) => boolean) {
-            return new Promise<void>((resolve) => {
-              stderrActors.push({ predicate, resolve })
-              notifyNext(stderrActors, stderrMessages)
-            })
+          async read(filePath: string) {
+            let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
+
+            // Ensure that files read on Windows have \r\n line endings removed
+            if (IS_WINDOWS) {
+              content = content.replace(/\r\n/g, '\n')
+            }
+
+            return content
           },
-        }
-      },
-      async getFreePort(): Promise<number> {
-        return new Promise((resolve, reject) => {
-          let server = net.createServer()
-          server.listen(0, () => {
-            let address = server.address()
-            let port = address === null || typeof address === 'string' ? null : address.port
-
-            server.close(() => {
-              if (port === null) {
-                reject(new Error(`Failed to get a free port: address is ${address}`))
-              } else {
-                disposables.push(async () => {
-                  // Wait for 10ms in case the process was just killed
-                  await new Promise((resolve) => setTimeout(resolve, 10))
-
-                  // kill-port uses `lsof` on macOS which is expensive and can
-                  // block for multiple seconds. In order to avoid that for a
-                  // server that is no longer running, we check if the port is
-                  // still in use first.
-                  let isPortTaken = await testIfPortTaken(port)
-                  if (!isPortTaken) {
-                    return
-                  }
-
-                  try {
-                    await killPort(port)
-                  } catch {
-                    // If the process can not be killed, we can't do anything
-                  }
-                })
-                resolve(port)
+          async glob(pattern: string) {
+            let files = await fastGlob(pattern, { cwd: root })
+            return Promise.all(
+              files.map(async (file) => {
+                let content = await fs.readFile(path.join(root, file), 'utf8')
+                return [file, content]
+              }),
+            )
+          },
+          async expectFileToContain(filePath, contents) {
+            return retryAssertion(async () => {
+              let fileContent = await this.read(filePath)
+              for (let content of contents) {
+                expect(fileContent).toContain(content)
               }
             })
-          })
-        })
-      },
-      fs: {
-        async write(filename: string, content: string): Promise<void> {
-          let full = path.join(root, filename)
-
-          if (filename.endsWith('package.json')) {
-            content = await overwriteVersionsInPackageJson(content)
-          }
-
-          // Ensure that files written on Windows use \r\n line ending
-          if (IS_WINDOWS) {
-            content = content.replace(/\n/g, '\r\n')
-          }
-
-          let dir = path.dirname(full)
-          await fs.mkdir(dir, { recursive: true })
-          await fs.writeFile(full, content)
+          },
+          async expectFileNotToContain(filePath, contents) {
+            return retryAssertion(async () => {
+              let fileContent = await this.read(filePath)
+              for (let content of contents) {
+                expect(fileContent).not.toContain(content)
+              }
+            })
+          },
         },
-        async read(filePath: string) {
-          let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
+      } satisfies TestContext
 
-          // Ensure that files read on Windows have \r\n line endings removed
-          if (IS_WINDOWS) {
-            content = content.replace(/\r\n/g, '\n')
-          }
-
-          return content
-        },
-        async glob(pattern: string) {
-          let files = await fastGlob(pattern, { cwd: root })
-          return Promise.all(
-            files.map(async (file) => {
-              let content = await fs.readFile(path.join(root, file), 'utf8')
-              return [file, content]
-            }),
-          )
-        },
-        async expectFileToContain(filePath, contents) {
-          return retryAssertion(async () => {
-            let fileContent = await this.read(filePath)
-            for (let content of contents) {
-              expect(fileContent).toContain(content)
-            }
-          })
-        },
-        async expectFileNotToContain(filePath, contents) {
-          return retryAssertion(async () => {
-            let fileContent = await this.read(filePath)
-            for (let content of contents) {
-              expect(fileContent).not.toContain(content)
-            }
-          })
-        },
-      },
-    } satisfies TestContext
-
-    config.fs['.gitignore'] ??= txt`
+      config.fs['.gitignore'] ??= txt`
         node_modules/
       `
 
-    for (let [filename, content] of Object.entries(config.fs)) {
-      await context.fs.write(filename, content)
-    }
-
-    try {
-      // In debug mode, the directory is going to be inside the pnpm workspace
-      // of the tailwindcss package. This means that `pnpm install` will run
-      // pnpm install on the workspace instead (expect if the root dir defines
-      // a separate workspace). We work around this by using the
-      // `--ignore-workspace` flag.
-      let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-      await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
-    } catch (error: any) {
-      console.error(error)
-      console.error(error.stdout?.toString())
-      console.error(error.stderr?.toString())
-      throw error
-    }
-
-    let disposables: (() => Promise<void>)[] = []
-
-    async function dispose() {
-      await Promise.all(disposables.map((dispose) => dispose()))
-
-      if (!debug) {
-        await gracefullyRemove(root)
+      for (let [filename, content] of Object.entries(config.fs)) {
+        await context.fs.write(filename, content)
       }
-    }
 
-    options.onTestFinished(dispose)
+      try {
+        // In debug mode, the directory is going to be inside the pnpm workspace
+        // of the tailwindcss package. This means that `pnpm install` will run
+        // pnpm install on the workspace instead (expect if the root dir defines
+        // a separate workspace). We work around this by using the
+        // `--ignore-workspace` flag.
+        let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
+        await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+      } catch (error: any) {
+        console.error(error)
+        console.error(error.stdout?.toString())
+        console.error(error.stderr?.toString())
+        throw error
+      }
 
-    return await testCallback(context)
-  })
+      let disposables: (() => Promise<void>)[] = []
+
+      async function dispose() {
+        await Promise.all(disposables.map((dispose) => dispose()))
+
+        if (!debug) {
+          await gracefullyRemove(root)
+        }
+      }
+
+      options.onTestFinished(dispose)
+
+      return await testCallback(context)
+    },
+  )
 }
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })

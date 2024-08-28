@@ -13,7 +13,7 @@ import {
   yaml,
 } from '../utils'
 ;['postcss', 'lightningcss'].forEach((transformer) => {
-  describe.concurrent(transformer, () => {
+  describe(transformer, () => {
     test(
       `production build`,
       {
