@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { replaceIconForBinary } from './replace-windows-icon'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -22,9 +23,13 @@ async function buildForPlatform(triple: string, outfile: string) {
 async function build(triple: string, file: string) {
   let start = process.hrtime.bigint()
 
-  let outfile = path.resolve(__dirname, `dist/${file}`)
+  let outfile = path.resolve(__dirname, '..', 'dist', file)
 
   await buildForPlatform(triple, outfile)
+
+  if (triple.includes('windows') && process.env.CI && process.platform === 'win32') {
+    await replaceIconForBinary(outfile, path.resolve(__dirname, '..', 'assets', 'icon.ico'))
+  }
 
   await new Promise((resolve) => setTimeout(resolve, 100))
 
@@ -41,7 +46,7 @@ async function build(triple: string, file: string) {
   }
 }
 
-await mkdir(path.resolve(__dirname, 'dist'), { recursive: true })
+await mkdir(path.resolve(__dirname, '..', 'dist'), { recursive: true })
 
 // Build platform binaries and checksum them
 let results = await Promise.all([
@@ -55,7 +60,7 @@ let results = await Promise.all([
 ])
 
 // Write the checksums to a file
-let sumsFile = path.resolve(__dirname, 'dist/sha256sums.txt')
+let sumsFile = path.resolve(__dirname, '../dist/sha256sums.txt')
 let sums = results.map(({ file, sum }) => `${sum}  ${file}`)
 
 console.table(
