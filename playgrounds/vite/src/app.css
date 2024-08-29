@@ -1,3 +1,2 @@
 @import 'tailwindcss';
-@import './bar.css';
 @plugin "./plugin.js";

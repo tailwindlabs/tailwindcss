@@ -1,7 +1,7 @@
 export function Bar() {
   return (
     <div>
-      <h2 className="text-red-500 underline red">Bar</h2>
+      <h2 className="text-red-500 underline">Bar</h2>
     </div>
   )
 }
