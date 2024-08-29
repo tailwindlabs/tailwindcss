@@ -12,7 +12,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "bun ./scripts/build.ts"
+    "build": "bun ./build.ts"
   },
   "bin": {
     "tailwindcss": "./dist/index.mjs"
@@ -30,7 +30,6 @@
   "dependencies": {
     "@tailwindcss/cli": "workspace:^",
     "enhanced-resolve": "^5.17.1",
-    "@lorki97/node-resourcehacker": "^1.3.1",
     "tailwindcss": "workspace:^"
   },
   "__notes": "These binary packages must be included so Bun can build the CLI for all supported platforms. We also rely on Lightning CSS and Parcel being patched so Bun can statically analyze the executables.",
