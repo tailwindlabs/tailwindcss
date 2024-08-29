@@ -285,6 +285,20 @@ describe('theme function', () => {
             }"
           `)
         })
+
+        test('theme(fontFamily.sans)', async () => {
+          expect(
+            await compileCss(css`
+              .fam {
+                font-family: theme(fontFamily.sans);
+              }
+            `),
+          ).toMatchInlineSnapshot(`
+          ".fam {
+            font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+          }"
+        `)
+        })
       })
 
       test('theme(colors.unknown.500)', async () =>
