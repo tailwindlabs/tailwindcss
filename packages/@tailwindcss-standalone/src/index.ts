@@ -9,7 +9,7 @@ import utilitiesCss from 'tailwindcss/utilities.css' with { type: 'file' }
 const localResolve = createRequire(import.meta.url).resolve
 
 globalThis.__tw_resolve = (id, baseDir) => {
-  let isEmbeddedFileBase = baseDir === '/$bunfs/root'
+  let isEmbeddedFileBase = baseDir === '/$bunfs/root' || baseDir?.includes(':/~BUN/root')
   const likelyEmbeddedFile =
     id === 'tailwindcss' || id.startsWith('tailwindcss/') || isEmbeddedFileBase
 
