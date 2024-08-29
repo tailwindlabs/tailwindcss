@@ -22,7 +22,7 @@ async function buildForPlatform(triple: string, outfile: string) {
 async function build(triple: string, file: string) {
   let start = process.hrtime.bigint()
 
-  let outfile = path.resolve(__dirname, `dist/${file}`)
+  let outfile = path.resolve(__dirname, `../dist/${file}`)
 
   await buildForPlatform(triple, outfile)
 
@@ -41,7 +41,7 @@ async function build(triple: string, file: string) {
   }
 }
 
-await mkdir(path.resolve(__dirname, 'dist'), { recursive: true })
+await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
 // Build platform binaries and checksum them
 let results = await Promise.all([
@@ -50,12 +50,12 @@ let results = await Promise.all([
   // build('linux-armv7', 'tailwindcss-linux-armv7'),
   build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
   build('bun-darwin-x64', './tailwindcss-macos-x64'),
-  build('bun-windows-x64', './tailwindcss-windows-x64.exe'),
+  build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
   // buildForPlatform('win32-arm64', 'tailwindcss-windows-arm64'),
 ])
 
 // Write the checksums to a file
-let sumsFile = path.resolve(__dirname, 'dist/sha256sums.txt')
+let sumsFile = path.resolve(__dirname, '../dist/sha256sums.txt')
 let sums = results.map(({ file, sum }) => `${sum}  ${file}`)
 
 console.table(

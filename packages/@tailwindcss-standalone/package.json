@@ -12,7 +12,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "bun ./build.ts"
+    "build": "bun ./scripts/build.ts"
   },
   "bin": {
     "tailwindcss": "./dist/index.mjs"
