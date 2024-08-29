@@ -50,7 +50,7 @@ let results = await Promise.all([
   // build('linux-armv7', 'tailwindcss-linux-armv7'),
   build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
   build('bun-darwin-x64', './tailwindcss-macos-x64'),
-  // The Windows x65 build uses `bun-baseline` instead of the regular bun build/
+  // The Windows x64 build uses `bun-baseline` instead of the regular bun build.
   // This enables support for running inside the ARM emulation mode.
   build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
   // buildForPlatform('win32-arm64', 'tailwindcss-windows-arm64'),
