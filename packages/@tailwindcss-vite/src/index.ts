@@ -93,10 +93,7 @@ export default function tailwindcss(): Plugin[] {
       let inputPath = idToPath(this.id)
       let inputBase = path.dirname(path.resolve(inputPath))
 
-      let compiler = this.compiler
-      let scanner = this.scanner
-
-      if (compiler === null || scanner === null || this.rebuildStrategy === 'full') {
+      if (this.compiler === null || this.scanner === null || this.rebuildStrategy === 'full') {
         this.rebuildStrategy = 'incremental'
         clearRequireCache(Array.from(this.dependencies))
         this.dependencies = new Set([idToPath(inputPath)])
@@ -124,7 +121,7 @@ export default function tailwindcss(): Plugin[] {
           return false
         }
 
-        compiler = await compile(css, {
+        this.compiler = await compile(css, {
           loadPlugin: async (pluginPath) => {
             if (pluginPath[0] !== '.') {
               return import(pluginPath).then((m) => m.default ?? m)
@@ -164,15 +161,12 @@ export default function tailwindcss(): Plugin[] {
             return module.default ?? module
           },
         })
-        this.compiler = compiler
-
-        scanner = new Scanner({
+        this.scanner = new Scanner({
           sources: this.compiler.globs.map((pattern) => ({
             base: inputBase, // Globs are relative to the input.css file
             pattern,
           })),
         })
-        this.scanner
       }
 
       if (!this.scanner || !this.compiler) {
