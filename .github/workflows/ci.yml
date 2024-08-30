@@ -53,7 +53,7 @@ jobs:
           key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --ignore-scripts
 
       - name: Build
         run: pnpm run build
