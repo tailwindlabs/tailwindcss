@@ -47,13 +47,13 @@ import {
             })
           `,
           'project-a/index.html': html`
-        <head>
+            <head>
               <link rel="stylesheet" href="./src/index.css" />
             </head>
             <body>
               <div class="underline m-2">Hello, world!</div>
             </body>
-      `,
+          `,
           'project-a/src/index.css': css`
             @import 'tailwindcss/theme' theme(reference);
             @import 'tailwindcss/utilities';
@@ -113,21 +113,21 @@ import {
             })
           `,
           'project-a/index.html': html`
-          <head>
+            <head>
               <link rel="stylesheet" href="./src/index.css" />
             </head>
             <body>
               <div class="underline">Hello, world!</div>
             </body>
-      `,
+          `,
           'project-a/about.html': html`
-          <head>
+            <head>
               <link rel="stylesheet" href="./src/index.css" />
             </head>
             <body>
               <div class="font-bold">Tailwind Labs</div>
             </body>
-      `,
+          `,
           'project-a/src/index.css': css`
             @import 'tailwindcss/theme' theme(reference);
             @import 'tailwindcss/utilities';
@@ -165,13 +165,13 @@ import {
         await fs.write(
           'project-a/index.html',
           html`
-        <head>
+            <head>
               <link rel="stylesheet" href="./src/index.css" />
             </head>
             <body>
               <div class="underline m-2">Hello, world!</div>
             </body>
-      `,
+          `,
         )
         await retryAssertion(async () => {
           let css = await fetchStyles(port)
@@ -347,3 +347,77 @@ import {
     )
   })
 })
+
+test(
+  `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^5.3.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'about.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="font-bold">Tailwind Labs</div>
+        </body>
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ spawn, getFreePort, fs }) => {
+    let port = await getFreePort()
+    await spawn(`pnpm vite dev --port ${port}`)
+
+    // Candidates are resolved lazily, so the first visit of index.html
+    // will only have candidates from this file.
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port, '/index.html')
+      expect(css).toContain(candidate`underline`)
+      expect(css).not.toContain(candidate`font-bold`)
+    })
+
+    // Going to about.html will extend the candidate list to include
+    // candidates from about.html.
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port, '/about.html')
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+    })
+
+    // We change the CSS file so it is no longer a valid Tailwind root.
+    await fs.write('src/index.css', css`@import 'tailwindcss';`)
+    await retryAssertion(async () => {
+      let css = await fetchStyles(port)
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+    })
+  },
+)

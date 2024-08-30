@@ -80,7 +80,12 @@ export default function tailwindcss(): Plugin[] {
 
     constructor(private id: string) {}
 
-    public async generate(content: string, addWatchFile: (file: string) => void) {
+    // Generate the CSS for the root file. This can return false if the file is
+    // not considered a Tailwind root. When this happened, the root can be GCed.
+    public async generate(
+      content: string,
+      addWatchFile: (file: string) => void,
+    ): Promise<string | false> {
       await import('@tailwindcss/node/esm-cache-hook')
 
       this.lastContent = content
@@ -88,13 +93,14 @@ export default function tailwindcss(): Plugin[] {
       let inputPath = idToPath(this.id)
       let inputBase = path.dirname(path.resolve(inputPath))
 
-      if (this.compiler === null || this.scanner === null || this.rebuildStrategy === 'full') {
+      let compiler = this.compiler
+      let scanner = this.scanner
+
+      if (compiler === null || scanner === null || this.rebuildStrategy === 'full') {
         this.rebuildStrategy = 'incremental'
         clearRequireCache(Array.from(this.dependencies))
         this.dependencies = new Set([idToPath(inputPath)])
 
-        // TODO: Move this out of here, we need to check wether something is a
-        // valid root on the flattened file
         let postcssCompiled = await postcss([
           postcssImport({
             load: (path) => {
@@ -110,7 +116,15 @@ export default function tailwindcss(): Plugin[] {
         })
         let css = postcssCompiled.css
 
-        this.compiler = await compile(css, {
+        // This is done inside the Root#generate() method so that we can later
+        // use information from the Tailwind compiler to determine if the file
+        // is a CSS root (necessary because we will probably inline the
+        // `@import` resolution at some point).
+        if (!isCssRootFile(css)) {
+          return false
+        }
+
+        compiler = await compile(css, {
           loadPlugin: async (pluginPath) => {
             if (pluginPath[0] !== '.') {
               return import(pluginPath).then((m) => m.default ?? m)
@@ -150,17 +164,20 @@ export default function tailwindcss(): Plugin[] {
             return module.default ?? module
           },
         })
+        this.compiler = compiler
 
-        this.scanner = new Scanner({
+        scanner = new Scanner({
           sources: this.compiler.globs.map((pattern) => ({
             base: inputBase, // Globs are relative to the input.css file
             pattern,
           })),
         })
+        this.scanner
       }
 
       if (!this.scanner || !this.compiler) {
-        // TODO: This is only here for TypeScript
+        // TypeScript does not properly refine the scanner and compiler
+        // properties (even when extracted into a variable)
         throw new Error('Tailwind CSS compiler is not initialized.')
       }
 
@@ -253,7 +270,11 @@ export default function tailwindcss(): Plugin[] {
 
   async function regenerateOptimizedCss(root: Root, addWatchFile: (file: string) => void) {
     let content = root.lastContent
-    return optimizeCss(await root.generate(content, addWatchFile), { minify })
+    let generated = await root.generate(content, addWatchFile)
+    if (generated === false) {
+      return
+    }
+    return optimizeCss(generated, { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -337,7 +358,7 @@ export default function tailwindcss(): Plugin[] {
       enforce: 'pre',
 
       async transform(src, id, options) {
-        if (!isTailwindCssFile(id, src)) return
+        if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
         if (!root) {
@@ -358,9 +379,13 @@ export default function tailwindcss(): Plugin[] {
         }
 
         // TODO: This had a call to `transformWithPlugins`. Since we're now in
-        // pre, we might not need it
-        let code = await root.generate(src, (file) => this.addWatchFile(file))
-        return { code }
+        // pre, we might not need it. Validate this.
+        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        if (!generated) {
+          roots.delete(id)
+          return src
+        }
+        return { code: generated }
       },
     },
 
@@ -371,7 +396,7 @@ export default function tailwindcss(): Plugin[] {
       enforce: 'pre',
 
       async transform(src, id) {
-        if (!isTailwindCssFile(id, src)) return
+        if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
         if (!root) {
@@ -387,8 +412,12 @@ export default function tailwindcss(): Plugin[] {
         // TODO: This had a call to `transformWithPlugins`. Since we always do
         // a transform step in the renderStart for all roots anyways, this might
         // not be necessary
-        let code = await root.generate(src, (file) => this.addWatchFile(file))
-        return { code }
+        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        if (!generated) {
+          roots.delete(id)
+          return src
+        }
+        return { code: generated }
       },
 
       // `renderStart` runs in the bundle generation stage after all transforms.
@@ -396,12 +425,16 @@ export default function tailwindcss(): Plugin[] {
       // by vite:css-post.
       async renderStart() {
         for (let [id, root] of roots.entries()) {
-          let css = await regenerateOptimizedCss(root, (file) => this.addWatchFile(file))
+          let generated = await regenerateOptimizedCss(root, (file) => this.addWatchFile(file))
+          if (!generated) {
+            roots.delete(id)
+            continue
+          }
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure
           // the CSS is written before the bundle is generated.
-          await transformWithPlugins(this, id, css)
+          await transformWithPlugins(this, id, generated)
         }
       },
     },
@@ -413,11 +446,19 @@ function getExtension(id: string) {
   return path.extname(filename).slice(1)
 }
 
-// TODO: This needs to run on the `@import`-flattened file
-function isTailwindCssFile(id: string, src: string) {
+function isPotentialCssRootFile(id: string) {
   let extension = getExtension(id)
   let isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
   return isCssFile
+}
+
+function isCssRootFile(content: string) {
+  return (
+    content.includes('@tailwind') ||
+    content.includes('@config') ||
+    content.includes('@plugin') ||
+    content.includes('@apply')
+  )
 }
 
 function optimizeCss(
