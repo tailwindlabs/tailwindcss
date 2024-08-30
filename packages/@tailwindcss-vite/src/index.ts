@@ -26,12 +26,6 @@ export default function tailwindcss(): Plugin[] {
 
   let roots: Map<string, Root> = new Map()
 
-  // Since new roots can be added at any time, we need to keep track of every
-  // potential candidate file that was referenced before a root was created. To
-  // save memory, this will store the path so we can read the latest version
-  // from the disk and don't need to keep it in memory.
-  let candidatePaths = new Set<string>()
-
   // The Vite extension has two types of sources for candidates:
   //
   // 1. The module graph: These are all modules that vite transforms and we want
@@ -179,13 +173,6 @@ export default function tailwindcss(): Plugin[] {
       // we setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
       for (let candidate of this.scanner.scan()) {
-        this.candidates.add(candidate)
-      }
-
-      // Seed the candidate cache with candidates from all known candidate paths
-      for (let candidate of this.scanner.scanFiles(
-        [...candidatePaths.values()].map((path) => ({ file: path, extension: getExtension(path) })),
-      )) {
         this.candidates.add(candidate)
       }
 
@@ -354,6 +341,7 @@ export default function tailwindcss(): Plugin[] {
       async transform(src, id, options) {
         if (!isPotentialCssRootFile(id)) return
 
+        // TODO: Use DefaultMap
         let root = roots.get(id)
         if (!root) {
           root = new Root(id)
@@ -392,6 +380,7 @@ export default function tailwindcss(): Plugin[] {
       async transform(src, id) {
         if (!isPotentialCssRootFile(id)) return
 
+        // TODO: Use DefaultMap
         let root = roots.get(id)
         if (!root) {
           root = new Root(id)
@@ -459,7 +448,10 @@ function isCssRootFile(content: string) {
     content.includes('@tailwind') ||
     content.includes('@config') ||
     content.includes('@plugin') ||
-    content.includes('@apply')
+    content.includes('@apply') ||
+    content.includes('@theme') ||
+    content.includes('@variant') ||
+    content.includes('@utility')
   )
 }
 
