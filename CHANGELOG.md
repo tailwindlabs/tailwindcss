@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for `@config` to load V3 JavaScript config files ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
 
+### Added
+
+- Add support for `@config` to load V3 JavaScript config files ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
+
 ### Fixed
 
 - Bring back type exports for the cjs build of `@tailwindcss/postcss` ([#14256](https://github.com/tailwindlabs/tailwindcss/pull/14256))
