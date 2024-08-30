@@ -44,6 +44,7 @@
     "bench": "vitest bench",
     "version-packages": "node ./scripts/version-packages.mjs",
     "vite": "pnpm run --filter=vite-playground dev",
+    "nuxt": "pnpm run --filter=nuxt-playground dev",
     "nextjs": "pnpm run --filter=nextjs-playground dev"
   },
   "license": "MIT",
