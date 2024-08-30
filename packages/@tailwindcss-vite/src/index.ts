@@ -360,8 +360,6 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        // TODO: This had a call to `transformWithPlugins`. Since we're now in
-        // pre, we might not need it. Validate this.
         let generated = await root.generate(src, (file) => this.addWatchFile(file))
         if (!generated) {
           roots.delete(id)
@@ -391,10 +389,6 @@ export default function tailwindcss(): Plugin[] {
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
         // this time, we have to re-run a transform for the root later.
-        //
-        // TODO: This had a call to `transformWithPlugins`. Since we always do
-        // a transform step in the renderStart for all roots anyways, this might
-        // not be necessary
         let generated = await root.generate(src, (file) => this.addWatchFile(file))
         if (!generated) {
           roots.delete(id)
