@@ -24,7 +24,7 @@ export default function tailwindcss(): Plugin[] {
   // to manually rebuild the css file after the compilation is done.
   let cssPlugins: readonly Plugin[] = []
 
-  let roots: Map<string, Root> = new Map()
+  let roots: DefaultMap<string, Root> = new DefaultMap((id) => new Root(id))
 
   // The Vite extension has two types of sources for candidates:
   //
@@ -341,12 +341,7 @@ export default function tailwindcss(): Plugin[] {
       async transform(src, id, options) {
         if (!isPotentialCssRootFile(id)) return
 
-        // TODO: Use DefaultMap
         let root = roots.get(id)
-        if (!root) {
-          root = new Root(id)
-          roots.set(id, root)
-        }
         root.invalidate()
 
         if (!options?.ssr) {
@@ -378,12 +373,7 @@ export default function tailwindcss(): Plugin[] {
       async transform(src, id) {
         if (!isPotentialCssRootFile(id)) return
 
-        // TODO: Use DefaultMap
         let root = roots.get(id)
-        if (!root) {
-          root = new Root(id)
-          roots.set(id, root)
-        }
         root.invalidate()
 
         // We do a first pass to generate valid CSS for the downstream plugins.
@@ -475,4 +465,25 @@ function optimizeCss(
 
 function idToPath(id: string) {
   return path.resolve(id.replace(/\?.*$/, ''))
+}
+
+/**
+ * A Map that can generate default values for keys that don't exist.
+ * Generated default values are added to the map to avoid recomputation.
+ */
+class DefaultMap<K, V> extends Map<K, V> {
+  constructor(private factory: (key: K, self: DefaultMap<K, V>) => V) {
+    super()
+  }
+
+  get(key: K): V {
+    let value = super.get(key)
+
+    if (value === undefined) {
+      value = this.factory(key, this)
+      this.set(key, value)
+    }
+
+    return value
+  }
 }
