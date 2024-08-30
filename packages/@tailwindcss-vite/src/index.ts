@@ -32,6 +32,25 @@ export default function tailwindcss(): Plugin[] {
   // from the disk and don't need to keep it in memory.
   let candidatePaths = new Set<string>()
 
+  // The Vite extension has two types of sources for candidates:
+  //
+  // 1. The module graph: These are all modules that vite transforms and we want
+  //    them to be automatically scanned for candidates.
+  // 2. Root defined `@source`s
+  //
+  // Module graph candidates are global to the Vite extension since we do not
+  // know which CSS roots will be used for the modules. We are using a custom
+  // scanner instance with auto source discovery disabled to parse these.
+  //
+  // For candidates coming from custom `@source` directives of the CSS roots, we
+  // create an individual scanner for each root.
+  //
+  // Note: To improve performance, we do not remove candidates from this set.
+  // This means a longer-ongoing dev mode session might contain candidates that
+  // are no longer referenced in code.
+  let moduleGraphCandidates = new Set<string>()
+  let moduleGraphScanner = new Scanner({})
+
   class Root {
     // Content is only used in serve mode where we need to capture the initial
     // contents of the root file so that we can restore it during the
@@ -42,38 +61,24 @@ export default function tailwindcss(): Plugin[] {
     // throughout rebuilds but will be re-initialized if the rebuild strategy is
     // set to `full`.
     private compiler?: Awaited<ReturnType<typeof compile>>
-    private scanner?: Scanner
 
     private rebuildStrategy: 'full' | 'incremental' = 'full'
 
-    // List of all candidates that were being returned by the scanner during the
-    // lifetime of the root.
-    //
-    // Note: To improve performance, we do not remove candidates from this set.
-    // This means a longer-ongoing dev mode session might contain candidates
-    // that are no longer referenced in code.
+    // This is the compiler-specific scanner instance that is used only to scan
+    // files for custom @source paths. All other modules we scan for candidates
+    // will use the shared moduleGraphScanner instance.
+    private scanner?: Scanner
+
+    // List of all candidates that were being returned by the root scanner
+    // during the lifetime of the root.
     private candidates: Set<string> = new Set<string>()
 
     // List of all file dependencies that were captured while generating the
-    // root
+    // root. These are retained so we can clear the require cache when we
+    // rebuild the root.
     private dependencies = new Set<string>()
 
     constructor(private id: string) {}
-
-    public scanFile(content: string, extension: string) {
-      let updated = false
-
-      if (!this.scanner) {
-        return updated
-      }
-
-      for (let candidate of this.scanner.scanFiles([{ content, extension }])) {
-        updated = true
-        this.candidates.add(candidate)
-      }
-
-      return updated
-    }
 
     public async generate(content: string, addWatchFile: (file: string) => void) {
       await import('@tailwindcss/node/esm-cache-hook')
@@ -173,12 +178,12 @@ export default function tailwindcss(): Plugin[] {
         this.candidates.add(candidate)
       }
 
-      // Watch individual files
+      // Watch individual files found via custom `@source` paths
       for (let file of this.scanner.files) {
         addWatchFile(file)
       }
 
-      // Watch globs
+      // Watch globs found via custom `@source` paths
       for (let glob of this.scanner.globs) {
         if (glob.pattern[0] === '!') continue
 
@@ -193,16 +198,32 @@ export default function tailwindcss(): Plugin[] {
         addWatchFile(path.posix.join(relative, glob.pattern))
       }
 
-      return this.compiler.build(Array.from(this.candidates))
+      return this.compiler.build([...moduleGraphCandidates, ...this.candidates])
+    }
+
+    public invalidate() {
+      this.rebuildStrategy = 'full'
     }
   }
 
-  function invalidateRoots(ids: string[], isSSR: boolean) {
+  function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
+    let updated = false
+    for (let candidate of moduleGraphScanner.scanFiles([{ content, extension }])) {
+      updated = true
+      moduleGraphCandidates.add(candidate)
+    }
+
+    if (updated) {
+      invalidateAllRoots(isSSR)
+    }
+  }
+
+  function invalidateAllRoots(isSSR: boolean) {
     // If we're building then we don't need to update anything
     if (!server) return
 
     let updates: Update[] = []
-    for (let id of ids) {
+    for (let id of roots.keys()) {
       let module = server.moduleGraph.getModuleById(id)
       if (!module) {
         // Note: Removing this during SSR is not safe and will produce
@@ -227,21 +248,6 @@ export default function tailwindcss(): Plugin[] {
 
     if (updates.length > 0) {
       server.hot.send({ type: 'update', updates })
-    }
-  }
-
-  function scanFile(id: string, src: string, extension: string, isSSR: boolean) {
-    candidatePaths.add(idToPath(id))
-
-    let updatedRootIds: string[] = []
-    for (let [id, root] of roots.entries()) {
-      if (root.scanFile(src, extension)) {
-        updatedRootIds.push(id)
-      }
-    }
-
-    if (updatedRootIds.length > 0) {
-      invalidateRoots(updatedRootIds, isSSR)
     }
   }
 
@@ -338,6 +344,7 @@ export default function tailwindcss(): Plugin[] {
           root = new Root(id)
           roots.set(id, root)
         }
+        root.invalidate()
 
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
@@ -371,6 +378,7 @@ export default function tailwindcss(): Plugin[] {
           root = new Root(id)
           roots.set(id, root)
         }
+        root.invalidate()
 
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
