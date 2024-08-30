@@ -419,7 +419,15 @@ export default function tailwindcss(): Plugin[] {
       // by vite:css-post.
       async renderStart() {
         for (let [id, root] of roots.entries()) {
-          let generated = await regenerateOptimizedCss(root, (file) => this.addWatchFile(file))
+          let generated = await regenerateOptimizedCss(
+            root,
+            // During the renderStart phase, we can not add watch files since
+            // those would not be causing a refresh of the right CSS file. This
+            // should not be an issue since we did already process the CSS file
+            // before and the dependencies should not be changed (only the
+            // candidate list might have)
+            () => {},
+          )
           if (!generated) {
             roots.delete(id)
             continue
