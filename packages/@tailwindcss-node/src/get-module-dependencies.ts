@@ -89,7 +89,7 @@ async function traceDependencies(
 /**
  * Trace all dependencies of a module recursively
  *
- * The result in an unordered set of absolute file paths. Meaning that the order
+ * The result is an unordered set of absolute file paths. Meaning that the order
  * is not guaranteed to be equal to source order or across runs.
  **/
 export async function getModuleDependencies(absoluteFilePath: string) {
