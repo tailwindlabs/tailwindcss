@@ -2,7 +2,13 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig([
   {
-    format: ['cjs', 'esm'],
+    format: ['cjs'],
+    minify: true,
+    dts: true,
+    entry: ['src/index.cts'],
+  },
+  {
+    format: ['esm'],
     minify: true,
     dts: true,
     entry: ['src/index.ts'],
@@ -11,7 +17,7 @@ export default defineConfig([
     format: ['esm'],
     minify: true,
     dts: true,
-    entry: ['src/esm-cache.hook.mts', 'src/esm-cache.loader.mts'],
+    entry: ['src/esm-cache.loader.mts'],
   },
   {
     format: ['cjs'],

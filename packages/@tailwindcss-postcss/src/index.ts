@@ -76,8 +76,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
         },
         async OnceExit(root, { result }) {
-          await import('@tailwindcss/node/esm-cache-hook')
-
           let inputFile = result.opts.from ?? ''
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))

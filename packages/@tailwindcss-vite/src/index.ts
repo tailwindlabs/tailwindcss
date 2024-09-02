@@ -81,8 +81,6 @@ export default function tailwindcss(): Plugin[] {
   }
 
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
-    await import('@tailwindcss/node/esm-cache-hook')
-
     let inputBasePath = path.dirname(path.resolve(inputPath))
     clearRequireCache(fullRebuildPaths)
     fullRebuildPaths = []

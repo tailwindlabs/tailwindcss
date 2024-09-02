@@ -31,11 +31,6 @@
       "types": "./dist/require-cache.d.ts",
       "default": "./dist/require-cache.js"
     },
-    "./esm-cache-hook": {
-      "types": "./dist/esm-cache.hook.d.mts",
-      "import": "./dist/esm-cache.hook.mjs",
-      "require": "./dist/esm-cache.hook.js"
-    },
     "./esm-cache-loader": {
       "types": "./dist/esm-cache.loader.d.mts",
       "default": "./dist/esm-cache.loader.mjs"
