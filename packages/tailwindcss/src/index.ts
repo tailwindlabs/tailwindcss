@@ -86,6 +86,8 @@ async function parseCss(
         let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
 
         let parts = segment(value, ',').map((part) => {
+          part = part.trim()
+
           if (part === 'null') {
             return null
           } else if (part === 'true') {
@@ -110,7 +112,7 @@ async function parseCss(
             )
           }
 
-          return value
+          return part
         })
 
         options[decl.property] = parts.length === 1 ? parts[0] : parts
