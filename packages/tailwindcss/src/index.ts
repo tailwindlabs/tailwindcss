@@ -101,14 +101,9 @@ async function parseCss(
             (part[0] === "'" && part[part.length - 1] === "'")
           ) {
             return part.slice(1, -1)
-          } else if (
-            (part[0] === '[' && part[part.length - 1] === ']') ||
-            (part[0] === '{' && part[part.length - 1] === '}')
-          ) {
+          } else if (part[0] === '{' && part[part.length - 1] === '}') {
             throw new Error(
-              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nIt looks like you want to pass an ${
-                part[0] === '[' ? 'array' : 'object'
-              } to plugin options. This is not supported in CSS.`,
+              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nUsing an object as a plugin option is currently only supported in JavaScript configuration files.`,
             )
           }
 

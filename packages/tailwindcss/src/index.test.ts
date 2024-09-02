@@ -1512,11 +1512,7 @@ describe('plugins', () => {
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `
-      [Error: Unexpected \`@plugin\` option: Value of declaration \`--color: [ 'red', 'green', 'blue'];\` is not supported.
-
-      It looks like you want to pass an array to plugin options. This is not supported in CSS.]
-    `,
+      `[Error: The plugin "my-plugin" does not accept options]`,
     )
   })
 
@@ -1544,7 +1540,7 @@ describe('plugins', () => {
                     blue: 300;
                   };\` is not supported.
 
-      It looks like you want to pass an object to plugin options. This is not supported in CSS.]
+      Using an object as a plugin option is currently only supported in JavaScript configuration files.]
     `,
     )
   })
