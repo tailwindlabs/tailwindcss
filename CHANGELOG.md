@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add support for `@config` to load V3 JavaScript config files ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
+- Support JavaScript configuration files using `@config` ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
 
 ### Fixed
 
