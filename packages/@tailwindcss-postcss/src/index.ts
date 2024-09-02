@@ -101,15 +101,13 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
-            for (let files of context.fullRebuildPaths) {
-              for (let file of files) {
-                result.messages.push({
-                  type: 'dependency',
-                  plugin: '@tailwindcss/postcss',
-                  file,
-                  parent: result.opts.from,
-                })
-              }
+            for (let file of context.fullRebuildPaths) {
+              result.messages.push({
+                type: 'dependency',
+                plugin: '@tailwindcss/postcss',
+                file,
+                parent: result.opts.from,
+              })
             }
 
             let files = result.messages.flatMap((message) => {
