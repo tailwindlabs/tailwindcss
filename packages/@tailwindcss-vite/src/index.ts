@@ -24,8 +24,6 @@ export default function tailwindcss(): Plugin[] {
   // to manually rebuild the css file after the compilation is done.
   let cssPlugins: readonly Plugin[] = []
 
-  let roots: DefaultMap<string, Root> = new DefaultMap((id) => new Root(id))
-
   // The Vite extension has two types of sources for candidates:
   //
   // 1. The module graph: These are all modules that vite transforms and we want
@@ -45,164 +43,9 @@ export default function tailwindcss(): Plugin[] {
   let moduleGraphCandidates = new Set<string>()
   let moduleGraphScanner = new Scanner({})
 
-  class Root {
-    // Content is only used in serve mode where we need to capture the initial
-    // contents of the root file so that we can restore it during the
-    // `renderStart` hook.
-    public lastContent: string = ''
-
-    // The lazily-initialized Tailwind compiler components. These are persisted
-    // throughout rebuilds but will be re-initialized if the rebuild strategy is
-    // set to `full`.
-    private compiler?: Awaited<ReturnType<typeof compile>>
-
-    private rebuildStrategy: 'full' | 'incremental' = 'full'
-
-    // This is the compiler-specific scanner instance that is used only to scan
-    // files for custom @source paths. All other modules we scan for candidates
-    // will use the shared moduleGraphScanner instance.
-    private scanner?: Scanner
-
-    // List of all candidates that were being returned by the root scanner
-    // during the lifetime of the root.
-    private candidates: Set<string> = new Set<string>()
-
-    // List of all file dependencies that were captured while generating the
-    // root. These are retained so we can clear the require cache when we
-    // rebuild the root.
-    private dependencies = new Set<string>()
-
-    constructor(private id: string) {}
-
-    // Generate the CSS for the root file. This can return false if the file is
-    // not considered a Tailwind root. When this happened, the root can be GCed.
-    public async generate(
-      content: string,
-      addWatchFile: (file: string) => void,
-    ): Promise<string | false> {
-      await import('@tailwindcss/node/esm-cache-hook')
-
-      this.lastContent = content
-
-      let inputPath = idToPath(this.id)
-      let inputBase = path.dirname(path.resolve(inputPath))
-
-      if (this.compiler === null || this.scanner === null || this.rebuildStrategy === 'full') {
-        this.rebuildStrategy = 'incremental'
-        clearRequireCache(Array.from(this.dependencies))
-        this.dependencies = new Set([idToPath(inputPath)])
-
-        let postcssCompiled = await postcss([
-          postcssImport({
-            load: (path) => {
-              this.dependencies.add(path)
-              addWatchFile(path)
-              return fs.readFile(path, 'utf8')
-            },
-          }),
-          fixRelativePathsPlugin(),
-        ]).process(content, {
-          from: inputPath,
-          to: inputPath,
-        })
-        let css = postcssCompiled.css
-
-        // This is done inside the Root#generate() method so that we can later
-        // use information from the Tailwind compiler to determine if the file
-        // is a CSS root (necessary because we will probably inline the
-        // `@import` resolution at some point).
-        if (!isCssRootFile(css)) {
-          return false
-        }
-
-        this.compiler = await compile(css, {
-          loadPlugin: async (pluginPath) => {
-            if (pluginPath[0] !== '.') {
-              return import(pluginPath).then((m) => m.default ?? m)
-            }
-
-            let resolvedPath = path.resolve(inputBase, pluginPath)
-            let [module, moduleDependencies] = await Promise.all([
-              import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-              getModuleDependencies(resolvedPath),
-            ])
-            addWatchFile(resolvedPath)
-            this.dependencies.add(resolvedPath)
-            for (let file of moduleDependencies) {
-              addWatchFile(file)
-              this.dependencies.add(file)
-            }
-            return module.default ?? module
-          },
-
-          loadConfig: async (configPath) => {
-            if (configPath[0] !== '.') {
-              return import(configPath).then((m) => m.default ?? m)
-            }
-
-            let resolvedPath = path.resolve(inputBase, configPath)
-            let [module, moduleDependencies] = await Promise.all([
-              import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-              getModuleDependencies(resolvedPath),
-            ])
-
-            addWatchFile(resolvedPath)
-            this.dependencies.add(resolvedPath)
-            for (let file of moduleDependencies) {
-              addWatchFile(file)
-              this.dependencies.add(file)
-            }
-            return module.default ?? module
-          },
-        })
-        this.scanner = new Scanner({
-          sources: this.compiler.globs.map((pattern) => ({
-            base: inputBase, // Globs are relative to the input.css file
-            pattern,
-          })),
-        })
-      }
-
-      if (!this.scanner || !this.compiler) {
-        // TypeScript does not properly refine the scanner and compiler
-        // properties (even when extracted into a variable)
-        throw new Error('Tailwind CSS compiler is not initialized.')
-      }
-
-      // This should not be here, but right now the Vite plugin is setup where
-      // we setup a new scanner and compiler every time we request the CSS file
-      // (regardless whether it actually changed or not).
-      for (let candidate of this.scanner.scan()) {
-        this.candidates.add(candidate)
-      }
-
-      // Watch individual files found via custom `@source` paths
-      for (let file of this.scanner.files) {
-        addWatchFile(file)
-      }
-
-      // Watch globs found via custom `@source` paths
-      for (let glob of this.scanner.globs) {
-        if (glob.pattern[0] === '!') continue
-
-        let relative = path.relative(config!.base, glob.base)
-        if (relative[0] !== '.') {
-          relative = './' + relative
-        }
-        // Ensure relative is a posix style path since we will merge it with the
-        // glob.
-        relative = normalizePath(relative)
-
-        addWatchFile(path.posix.join(relative, glob.pattern))
-      }
-
-      return this.compiler.build([...moduleGraphCandidates, ...this.candidates])
-    }
-
-    public invalidate() {
-      this.rebuildStrategy = 'full'
-    }
-  }
+  let roots: DefaultMap<string, Root> = new DefaultMap(
+    (id) => new Root(id, () => moduleGraphCandidates, config!.base),
+  )
 
   function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
     let updated = false
@@ -485,5 +328,168 @@ class DefaultMap<K, V> extends Map<K, V> {
     }
 
     return value
+  }
+}
+
+class Root {
+  // Content is only used in serve mode where we need to capture the initial
+  // contents of the root file so that we can restore it during the
+  // `renderStart` hook.
+  public lastContent: string = ''
+
+  // The lazily-initialized Tailwind compiler components. These are persisted
+  // throughout rebuilds but will be re-initialized if the rebuild strategy is
+  // set to `full`.
+  private compiler?: Awaited<ReturnType<typeof compile>>
+
+  private rebuildStrategy: 'full' | 'incremental' = 'full'
+
+  // This is the compiler-specific scanner instance that is used only to scan
+  // files for custom @source paths. All other modules we scan for candidates
+  // will use the shared moduleGraphScanner instance.
+  private scanner?: Scanner
+
+  // List of all candidates that were being returned by the root scanner during
+  // the lifetime of the root.
+  private candidates: Set<string> = new Set<string>()
+
+  // List of all file dependencies that were captured while generating the root.
+  // These are retained so we can clear the require cache when we rebuild the
+  // root.
+  private dependencies = new Set<string>()
+
+  constructor(
+    private id: string,
+    private getSharedCandidates: () => Set<string>,
+    private base: string,
+  ) {}
+
+  // Generate the CSS for the root file. This can return false if the file is
+  // not considered a Tailwind root. When this happened, the root can be GCed.
+  public async generate(
+    content: string,
+    addWatchFile: (file: string) => void,
+  ): Promise<string | false> {
+    await import('@tailwindcss/node/esm-cache-hook')
+
+    this.lastContent = content
+
+    let inputPath = idToPath(this.id)
+    let inputBase = path.dirname(path.resolve(inputPath))
+
+    if (this.compiler === null || this.scanner === null || this.rebuildStrategy === 'full') {
+      this.rebuildStrategy = 'incremental'
+      clearRequireCache(Array.from(this.dependencies))
+      this.dependencies = new Set([idToPath(inputPath)])
+
+      let postcssCompiled = await postcss([
+        postcssImport({
+          load: (path) => {
+            this.dependencies.add(path)
+            addWatchFile(path)
+            return fs.readFile(path, 'utf8')
+          },
+        }),
+        fixRelativePathsPlugin(),
+      ]).process(content, {
+        from: inputPath,
+        to: inputPath,
+      })
+      let css = postcssCompiled.css
+
+      // This is done inside the Root#generate() method so that we can later use
+      // information from the Tailwind compiler to determine if the file is a
+      // CSS root (necessary because we will probably inline the `@import`
+      // resolution at some point).
+      if (!isCssRootFile(css)) {
+        return false
+      }
+
+      this.compiler = await compile(css, {
+        loadPlugin: async (pluginPath) => {
+          if (pluginPath[0] !== '.') {
+            return import(pluginPath).then((m) => m.default ?? m)
+          }
+
+          let resolvedPath = path.resolve(inputBase, pluginPath)
+          let [module, moduleDependencies] = await Promise.all([
+            import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+            getModuleDependencies(resolvedPath),
+          ])
+          addWatchFile(resolvedPath)
+          this.dependencies.add(resolvedPath)
+          for (let file of moduleDependencies) {
+            addWatchFile(file)
+            this.dependencies.add(file)
+          }
+          return module.default ?? module
+        },
+
+        loadConfig: async (configPath) => {
+          if (configPath[0] !== '.') {
+            return import(configPath).then((m) => m.default ?? m)
+          }
+
+          let resolvedPath = path.resolve(inputBase, configPath)
+          let [module, moduleDependencies] = await Promise.all([
+            import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+            getModuleDependencies(resolvedPath),
+          ])
+
+          addWatchFile(resolvedPath)
+          this.dependencies.add(resolvedPath)
+          for (let file of moduleDependencies) {
+            addWatchFile(file)
+            this.dependencies.add(file)
+          }
+          return module.default ?? module
+        },
+      })
+      this.scanner = new Scanner({
+        sources: this.compiler.globs.map((pattern) => ({
+          base: inputBase, // Globs are relative to the input.css file
+          pattern,
+        })),
+      })
+    }
+
+    if (!this.scanner || !this.compiler) {
+      // TypeScript does not properly refine the scanner and compiler properties
+      // (even when extracted into a variable)
+      throw new Error('Tailwind CSS compiler is not initialized.')
+    }
+
+    // This should not be here, but right now the Vite plugin is setup where we
+    // setup a new scanner and compiler every time we request the CSS file
+    // (regardless whether it actually changed or not).
+    for (let candidate of this.scanner.scan()) {
+      this.candidates.add(candidate)
+    }
+
+    // Watch individual files found via custom `@source` paths
+    for (let file of this.scanner.files) {
+      addWatchFile(file)
+    }
+
+    // Watch globs found via custom `@source` paths
+    for (let glob of this.scanner.globs) {
+      if (glob.pattern[0] === '!') continue
+
+      let relative = path.relative(this.base, glob.base)
+      if (relative[0] !== '.') {
+        relative = './' + relative
+      }
+      // Ensure relative is a posix style path since we will merge it with the
+      // glob.
+      relative = normalizePath(relative)
+
+      addWatchFile(path.posix.join(relative, glob.pattern))
+    }
+
+    return this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+  }
+
+  public invalidate() {
+    this.rebuildStrategy = 'full'
   }
 }
