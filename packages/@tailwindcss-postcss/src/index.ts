@@ -1,14 +1,12 @@
-import { getModuleDependencies } from '@tailwindcss/node'
+import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
-import { compile } from 'tailwindcss'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -49,7 +47,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       compiler: null as null | Awaited<ReturnType<typeof compile>>,
       css: '',
       optimizedCss: '',
-      fullRebuildPaths: [] as Promise<string[]>[],
+      fullRebuildPaths: [] as string[],
     }
   })
 
@@ -85,35 +83,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           async function createCompiler() {
-            for (let files of await Promise.all(context.fullRebuildPaths)) {
-              clearRequireCache(files)
-            }
+            clearRequireCache(context.fullRebuildPaths)
+
             context.fullRebuildPaths = []
+
             return compile(root.toString(), {
-              loadPlugin: async (pluginPath) => {
-                if (pluginPath[0] !== '.') {
-                  return import(pluginPath).then((m) => m.default ?? m)
-                }
-
-                let resolvedPath = path.resolve(inputBasePath, pluginPath)
-                context.fullRebuildPaths.push(Promise.resolve([resolvedPath]))
-                context.fullRebuildPaths.push(getModuleDependencies(resolvedPath))
-                return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-                  (m) => m.default ?? m,
-                )
-              },
-
-              loadConfig: async (configPath) => {
-                if (configPath[0] !== '.') {
-                  return import(configPath).then((m) => m.default ?? m)
-                }
-
-                let resolvedPath = path.resolve(inputBasePath, configPath)
-                context.fullRebuildPaths.push(Promise.resolve([resolvedPath]))
-                context.fullRebuildPaths.push(getModuleDependencies(resolvedPath))
-                return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-                  (m) => m.default ?? m,
-                )
+              base: inputBasePath,
+              onDependency: (path) => {
+                context.fullRebuildPaths.push(path)
               },
             })
           }
@@ -126,7 +103,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
-            for (let files of await Promise.all(context.fullRebuildPaths)) {
+            for (let files of context.fullRebuildPaths) {
               for (let file of files) {
                 result.messages.push({
                   type: 'dependency',

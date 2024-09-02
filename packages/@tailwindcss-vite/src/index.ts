@@ -1,13 +1,11 @@
-import { getModuleDependencies } from '@tailwindcss/node'
+import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 
 import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
-import { compile } from 'tailwindcss'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -89,44 +87,10 @@ export default function tailwindcss(): Plugin[] {
     clearRequireCache(fullRebuildPaths)
     fullRebuildPaths = []
     let { build, globs } = await compile(css, {
-      loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] !== '.') {
-          return import(pluginPath).then((m) => m.default ?? m)
-        }
-
-        let resolvedPath = path.resolve(inputBasePath, pluginPath)
-        let [module, moduleDependencies] = await Promise.all([
-          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-          getModuleDependencies(resolvedPath),
-        ])
-
-        addWatchFile(resolvedPath)
-        fullRebuildPaths.push(resolvedPath)
-        for (let file of moduleDependencies) {
-          addWatchFile(file)
-          fullRebuildPaths.push(file)
-        }
-        return module.default ?? module
-      },
-
-      loadConfig: async (configPath) => {
-        if (configPath[0] !== '.') {
-          return import(configPath).then((m) => m.default ?? m)
-        }
-
-        let resolvedPath = path.resolve(inputBasePath, configPath)
-        let [module, moduleDependencies] = await Promise.all([
-          import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-          getModuleDependencies(resolvedPath),
-        ])
-
-        addWatchFile(resolvedPath)
-        fullRebuildPaths.push(resolvedPath)
-        for (let file of moduleDependencies) {
-          addWatchFile(file)
-          fullRebuildPaths.push(file)
-        }
-        return module.default ?? module
+      base: inputBasePath,
+      onDependency(path) {
+        addWatchFile(path)
+        fullRebuildPaths.push(path)
       },
     })
 

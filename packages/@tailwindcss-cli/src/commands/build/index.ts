@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { getModuleDependencies } from '@tailwindcss/node'
+import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
@@ -7,10 +7,8 @@ import { Features, transform } from 'lightningcss'
 import { existsSync, readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
-import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
 import {
@@ -132,40 +130,19 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
   let inputBasePath = path.dirname(path.resolve(inputFile))
-  let fullRebuildPaths: Promise<string[]>[] = [Promise.resolve(cssImportPaths)]
+  let fullRebuildPaths: string[] = cssImportPaths.slice()
 
-  function compile(css: string) {
-    return tailwindcss.compile(css, {
-      loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] !== '.') {
-          return import(pluginPath).then((m) => m.default ?? m)
-        }
-
-        let resolvedPath = path.resolve(inputBasePath, pluginPath)
-        fullRebuildPaths.push(Promise.resolve([resolvedPath]))
-        fullRebuildPaths.push(getModuleDependencies(resolvedPath))
-        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-          (m) => m.default ?? m,
-        )
-      },
-
-      loadConfig: async (configPath) => {
-        if (configPath[0] !== '.') {
-          return import(configPath).then((m) => m.default ?? m)
-        }
-
-        let resolvedPath = path.resolve(inputBasePath, configPath)
-        fullRebuildPaths.push(Promise.resolve([resolvedPath]))
-        fullRebuildPaths.push(getModuleDependencies(resolvedPath))
-        return import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()).then(
-          (m) => m.default ?? m,
-        )
+  function createCompiler(css: string) {
+    return compile(css, {
+      base: inputBasePath,
+      onDependency(path) {
+        fullRebuildPaths.push(path)
       },
     })
   }
 
   // Compile the input
-  let compiler = await compile(input)
+  let compiler = await createCompiler(input)
   let scanner = new Scanner({
     detectSources: { base },
     sources: compiler.globs.map((pattern) => ({
@@ -187,7 +164,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let changedFiles: ChangedContent[] = []
           let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
-          let resolvedFullRebuildPaths = (await Promise.all(fullRebuildPaths)).flat()
+          let resolvedFullRebuildPaths = fullRebuildPaths
 
           for (let file of files) {
             // If one of the changed files is related to the input CSS or JS
@@ -229,10 +206,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               args['--input'] ?? base,
             )
             clearRequireCache(resolvedFullRebuildPaths)
-            fullRebuildPaths = [Promise.resolve(cssImportPaths)]
+            fullRebuildPaths = cssImportPaths.slice()
 
             // Create a new compiler, given the new `input`
-            compiler = await compile(input)
+            compiler = await createCompiler(input)
 
             // Re-scan the directory to get the new `candidates`
             scanner = new Scanner({

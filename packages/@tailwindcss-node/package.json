@@ -40,5 +40,8 @@
       "types": "./dist/esm-cache.loader.d.mts",
       "default": "./dist/esm-cache.loader.mjs"
     }
+  },
+  "devDependencies": {
+    "tailwindcss": "workspace:^"
   }
 }

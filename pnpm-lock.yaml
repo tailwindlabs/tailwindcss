@@ -51,7 +51,7 @@ importers:
         version: 4.0.0(prettier@3.3.3)(typescript@5.5.4)
       tsup:
         specifier: ^8.2.4
-        version: 8.2.4(postcss@8.4.41)(typescript@5.5.4)
+        version: 8.2.4(jiti@1.21.6)(postcss@8.4.41)(typescript@5.5.4)(yaml@2.5.0)
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -173,7 +173,11 @@ importers:
         specifier: workspace:^
         version: link:../internal-postcss-fix-relative-paths
 
-  packages/@tailwindcss-node: {}
+  packages/@tailwindcss-node:
+    devDependencies:
+      tailwindcss:
+        specifier: workspace:^
+        version: link:../tailwindcss
 
   packages/@tailwindcss-postcss:
     dependencies:
@@ -286,7 +290,7 @@ importers:
         version: 1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4)
       postcss-load-config:
         specifier: ^6.0.1
-        version: 6.0.1(postcss@8.4.41)
+        version: 6.0.1(jiti@1.21.6)(postcss@8.4.41)(yaml@2.5.0)
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
@@ -2119,6 +2123,10 @@ packages:
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
 
+  jiti@1.21.6:
+    resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
+    hasBin: true
+
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
@@ -3085,6 +3093,11 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
+
+  yaml@2.5.0:
+    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
+    engines: {node: '>= 14'}
+    hasBin: true
 
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
@@ -4876,6 +4889,9 @@ snapshots:
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
 
+  jiti@1.21.6:
+    optional: true
+
   joycon@3.1.1: {}
 
   js-tokens@4.0.0: {}
@@ -5211,11 +5227,13 @@ snapshots:
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-load-config@6.0.1(postcss@8.4.41):
+  postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.41)(yaml@2.5.0):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
+      jiti: 1.21.6
       postcss: 8.4.41
+      yaml: 2.5.0
 
   postcss-value-parser@4.2.0: {}
 
@@ -5574,7 +5592,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.2.4(postcss@8.4.41)(typescript@5.5.4):
+  tsup@8.2.4(jiti@1.21.6)(postcss@8.4.41)(typescript@5.5.4)(yaml@2.5.0):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -5586,7 +5604,7 @@ snapshots:
       globby: 11.1.0
       joycon: 3.1.1
       picocolors: 1.0.1
-      postcss-load-config: 6.0.1(postcss@8.4.41)
+      postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.41)(yaml@2.5.0)
       resolve-from: 5.0.0
       rollup: 4.20.0
       source-map: 0.8.0-beta.0
@@ -5841,5 +5859,8 @@ snapshots:
   wrappy@1.0.2: {}
 
   yallist@3.1.1: {}
+
+  yaml@2.5.0:
+    optional: true
 
   yocto-queue@0.1.0: {}
