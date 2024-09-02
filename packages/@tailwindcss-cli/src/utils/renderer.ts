@@ -8,10 +8,8 @@ import { formatNanoseconds } from './format-ns'
 export const UI = {
   indent: 2,
 }
-
 export function header() {
-  let { version } = JSON.parse(fs.readFileSync(resolve('tailwindcss/package.json'), 'utf-8'))
-  return `${pc.italic(pc.bold(pc.blue('\u2248')))} tailwindcss ${pc.blue(`v${version}`)}`
+  return `${pc.italic(pc.bold(pc.blue('\u2248')))} tailwindcss ${pc.blue(`v${getVersion()}`)}`
 }
 
 export function highlight(file: string) {
@@ -93,4 +91,12 @@ export function eprintln(value = '') {
 
 export function println(value = '') {
   process.stdout.write(`${value}\n`)
+}
+
+function getVersion(): string {
+  if (typeof globalThis.__tw_version === 'string') {
+    return globalThis.__tw_version
+  }
+  let { version } = JSON.parse(fs.readFileSync(resolve('tailwindcss/package.json'), 'utf-8'))
+  return version
 }

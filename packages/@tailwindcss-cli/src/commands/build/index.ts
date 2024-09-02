@@ -2,7 +2,7 @@ import watcher from '@parcel/watcher'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -19,7 +19,7 @@ import {
   println,
   relative,
 } from '../../utils/renderer'
-import { resolve } from '../../utils/resolve'
+import { resolveCssId } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
@@ -90,7 +90,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         ? await drainStdin()
         : await fs.readFile(args['--input'], 'utf-8')
       : css`
-          @import '${resolve('tailwindcss/index.css')}';
+          @import 'tailwindcss';
         `,
     args['--input'] ?? base,
   )
@@ -200,7 +200,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               args['--input']
                 ? await fs.readFile(args['--input'], 'utf-8')
                 : css`
-                    @import '${resolve('tailwindcss/index.css')}';
+                    @import 'tailwindcss';
                   `,
               args['--input'] ?? base,
             )
@@ -372,7 +372,24 @@ function handleImports(
   }
 
   return postcss()
-    .use(atImport())
+    .use(
+      atImport({
+        resolve(id, basedir) {
+          let resolved = resolveCssId(id, basedir)
+          if (!resolved) {
+            throw new Error(`Could not resolve ${id} from ${basedir}`)
+          }
+          return resolved
+        },
+        load(id) {
+          // We need to synchronously read the file here because when bundled
+          // with bun, some of the ids might resolve to files inside the bun
+          // embedded files root which can only be read by `node:fs` and not
+          // `node:fs/promises`.
+          return readFileSync(id, 'utf-8')
+        },
+      }),
+    )
     .use(fixRelativePathsPlugin())
     .process(input, { from: file })
     .then((result) => [

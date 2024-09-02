@@ -188,9 +188,6 @@ jobs:
       - name: Install dependencies
         run: pnpm --filter=!./playgrounds/* install --ignore-scripts
 
-      - name: Build Tailwind CSS
-        run: pnpm run build
-
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -210,6 +207,9 @@ jobs:
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
 
+      - name: Build Tailwind CSS
+        run: pnpm run build
+
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
 
@@ -220,3 +220,9 @@ jobs:
         run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Upload Standalone Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tailwindcss-standalone
+          path: packages/@tailwindcss-standalone/dist/
