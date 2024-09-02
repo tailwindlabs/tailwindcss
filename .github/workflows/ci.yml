@@ -66,11 +66,6 @@ jobs:
       - name: Test
         run: pnpm run test
 
-      - name: Debug
-        run: |
-          ldd --version
-          ldd ./packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-
       - name: Integration Tests
         run: pnpm run test:integrations
 
