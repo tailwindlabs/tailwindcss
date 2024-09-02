@@ -1402,6 +1402,8 @@ describe('plugins', () => {
           is-str-int: '1234567';
           is-str-float: '1.35';
           is-str-sci: '1.35e-5';
+          is-arr: foo, bar;
+          is-arr-mixed: null, true, false, 1234567, 1.35, foo, 'bar', 'true';
         }
       `,
       {
@@ -1420,6 +1422,8 @@ describe('plugins', () => {
               'is-str-int': '1234567',
               'is-str-float': '1.35',
               'is-str-sci': '1.35e-5',
+              'is-arr': ['foo', 'bar'],
+              'is-arr-mixed': [null, true, false, 1234567, 1.35, 'foo', 'bar', 'true'],
             })
 
             return () => {}
