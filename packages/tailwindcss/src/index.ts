@@ -75,7 +75,7 @@ async function parseCss(
       for (let decl of node.nodes ?? []) {
         if (decl.kind !== 'declaration') {
           throw new Error(
-            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\nPlugins can only contain a flat list of declarations.`,
+            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\n\`@plugin\` options must be a flat list of declarations.`,
           )
         }
 
