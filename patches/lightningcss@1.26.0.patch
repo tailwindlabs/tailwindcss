@@ -1,8 +1,8 @@
 diff --git a/node/index.js b/node/index.js
-index a9f2f6d5f3394329fcf8bc06af549030c01167a5..724ad9f3932d59d21b29c3d09cf1883c6175ee7e 100644
+index a9f2f6d5f3394329fcf8bc06af549030c01167a5..b92cc804adb694dbb17ee48368f13a03dd729267 100644
 --- a/node/index.js
 +++ b/node/index.js
-@@ -1,27 +1,35 @@
+@@ -1,27 +1,32 @@
 -let parts = [process.platform, process.arch];
 -if (process.platform === 'linux') {
 -  const { MUSL, family } = require('detect-libc');
@@ -23,9 +23,6 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..724ad9f3932d59d21b29c3d09cf1883c
 +    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
 +    // there is a `familySync` function that we can use instead.
 +    if (typeof familySync === 'function') family = familySync()
-+    console.log({
-+      MUSL, GLIBC, family
-+    })
  
 -if (process.env.CSS_TRANSFORMER_WASM) {
 -  module.exports = require(`../pkg`);
