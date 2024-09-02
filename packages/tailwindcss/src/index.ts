@@ -85,31 +85,35 @@ async function parseCss(
         // These are the same primitive values supported by JSON
         let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
 
-        if (value === 'null') {
-          value = null
-        } else if (value === 'true') {
-          value = true
-        } else if (value === 'false') {
-          value = false
-        } else if (!Number.isNaN(Number(value))) {
-          value = Number(value)
-        } else if (
-          (value[0] === '"' && value[value.length - 1] === '"') ||
-          (value[0] === "'" && value[value.length - 1] === "'")
-        ) {
-          value = value.slice(1, -1)
-        } else if (
-          (value[0] === '[' && value[value.length - 1] === ']') ||
-          (value[0] === '{' && value[value.length - 1] === '}')
-        ) {
-          throw new Error(
-            `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nIt looks like you want to pass an ${
-              value[0] === '[' ? 'array' : 'object'
-            } to plugin options. This is not supported in CSS.`,
-          )
-        }
+        let parts = segment(value, ',').map((part) => {
+          if (part === 'null') {
+            return null
+          } else if (part === 'true') {
+            return true
+          } else if (part === 'false') {
+            return false
+          } else if (!Number.isNaN(Number(part))) {
+            return Number(part)
+          } else if (
+            (part[0] === '"' && part[part.length - 1] === '"') ||
+            (part[0] === "'" && part[part.length - 1] === "'")
+          ) {
+            return part.slice(1, -1)
+          } else if (
+            (part[0] === '[' && part[part.length - 1] === ']') ||
+            (part[0] === '{' && part[part.length - 1] === '}')
+          ) {
+            throw new Error(
+              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nIt looks like you want to pass an ${
+                part[0] === '[' ? 'array' : 'object'
+              } to plugin options. This is not supported in CSS.`,
+            )
+          }
 
-        options[decl.property] = value
+          return value
+        })
+
+        options[decl.property] = parts.length === 1 ? parts[0] : parts
       }
 
       pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])

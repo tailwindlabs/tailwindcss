@@ -346,7 +346,8 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   return ast
 }
 
-export type CssPluginOptions = Record<string, string | number | boolean | null>
+type Primitive = string | number | boolean | null
+export type CssPluginOptions = Record<string, Primitive | Primitive[]>
 
 interface PluginDetail {
   path: string
