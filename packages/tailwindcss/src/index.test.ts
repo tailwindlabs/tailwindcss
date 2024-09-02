@@ -1469,7 +1469,7 @@ describe('plugins', () => {
       }
 
 
-      Plugins can only contain a flat list of declarations.]
+      \`@plugin\` options must be a flat list of declarations.]
     `,
     )
   })
