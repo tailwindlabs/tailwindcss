@@ -1,5 +1,5 @@
 export function clearRequireCache(files: string[]) {
-  for (const key of files) {
+  for (let key of files) {
     delete require.cache[key]
   }
 }

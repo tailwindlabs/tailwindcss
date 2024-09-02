@@ -19,9 +19,9 @@ const DEPENDENCY_PATTERNS = [
 //   c // .ts
 // a.js
 //   b // .js or .ts
-let jsExtensions = ['.js', '.cjs', '.mjs']
-let jsResolutionOrder = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.jsx', '.tsx']
-let tsResolutionOrder = ['', '.ts', '.cts', '.mts', '.tsx', '.js', '.cjs', '.mjs', '.jsx']
+const JS_EXTENSIONS = ['.js', '.cjs', '.mjs']
+const JS_RESOLUTION_ORDER = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.jsx', '.tsx']
+const TS_RESOLUTION_ORDER = ['', '.ts', '.cts', '.mts', '.tsx', '.js', '.cjs', '.mjs', '.jsx']
 
 async function resolveWithExtension(file: string, extensions: string[]) {
   // Try to find `./a.ts`, `./a.cts`, ... from `./a`
@@ -55,7 +55,7 @@ async function traceDependencies(
   ext: string,
 ): Promise<void> {
   // Try to find the file
-  let extensions = jsExtensions.includes(ext) ? jsResolutionOrder : tsResolutionOrder
+  let extensions = JS_EXTENSIONS.includes(ext) ? JS_RESOLUTION_ORDER : TS_RESOLUTION_ORDER
   let absoluteFile = await resolveWithExtension(path.resolve(base, filename), extensions)
   if (absoluteFile === null) return // File doesn't exist
 

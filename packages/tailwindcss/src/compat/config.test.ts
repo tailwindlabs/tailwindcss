@@ -185,11 +185,11 @@ test('Config files can affect the theme', async ({ expect }) => {
     }),
   })
 
-  // TODO: This does not work yet but should
-  // expect(compiler.build(['bg-primary'])).toMatchInlineSnapshot()
-
-  expect(compiler.build(['scrollbar-primary'])).toMatchInlineSnapshot(`
-    ".scrollbar-primary {
+  expect(compiler.build(['bg-primary', 'scrollbar-primary'])).toMatchInlineSnapshot(`
+    ".bg-primary {
+      background-color: #c0ffee;
+    }
+    .scrollbar-primary {
       scrollbar-color: #c0ffee;
     }
     "

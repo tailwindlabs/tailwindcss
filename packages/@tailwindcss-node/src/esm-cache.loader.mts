@@ -1,7 +1,7 @@
 import { isBuiltin, type ResolveHook } from 'node:module'
 
 export let resolve: ResolveHook = async (specifier, context, nextResolve) => {
-  const result = await nextResolve(specifier, context)
+  let result = await nextResolve(specifier, context)
 
   if (result.url === import.meta.url) return result
   if (isBuiltin(result.url)) return result

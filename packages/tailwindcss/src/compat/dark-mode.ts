@@ -20,16 +20,14 @@ export function darkModePlugin({ addVariant, config }: PluginAPI) {
       for (let format of formats) {
         if (format === '.dark') {
           mode = false
-          console.warn('darkmode-variant-without-selector', [
-            'When using `variant` for `darkMode`, you must provide a selector.',
-            'Example: `darkMode: ["variant", ".your-selector &"]`',
-          ])
+          console.warn(
+            'When using `variant` for `darkMode`, you must provide a selector.\nExample: `darkMode: ["variant", ".your-selector &"]`',
+          )
         } else if (!format.includes('&')) {
           mode = false
-          console.warn('darkmode-variant-without-ampersand', [
-            'When using `variant` for `darkMode`, your selector must contain `&`.',
-            'Example `darkMode: ["variant", ".your-selector &"]`',
-          ])
+          console.warn(
+            'When using `variant` for `darkMode`, your selector must contain `&`.\nExample `darkMode: ["variant", ".your-selector &"]`',
+          )
         }
       }
     }
