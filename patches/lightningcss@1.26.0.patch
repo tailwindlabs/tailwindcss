@@ -1,8 +1,8 @@
 diff --git a/node/index.js b/node/index.js
-index a9f2f6d5f3394329fcf8bc06af549030c01167a5..1a7a6dd3612f786495e214090ab943a677a3a612 100644
+index a9f2f6d5f3394329fcf8bc06af549030c01167a5..d30d034bf3bd431abf12d49d5c18245549dab01b 100644
 --- a/node/index.js
 +++ b/node/index.js
-@@ -1,27 +1,28 @@
+@@ -1,27 +1,32 @@
 -let parts = [process.platform, process.arch];
 -if (process.platform === 'linux') {
 -  const { MUSL, family } = require('detect-libc');
@@ -19,6 +19,10 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..1a7a6dd3612f786495e214090ab943a6
 +function loadPackage() {
 +  if (process.platform === "linux") {
 +    const { MUSL, GLIBC, family } = require("detect-libc");
++    // Bun polyfills `detect-libc` in compiled binaries. We rely on
++    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
++    // there is a `familySync` function that we can use instead.
++    if (typeof familySync === 'function') family = familySync()
  
 -if (process.env.CSS_TRANSFORMER_WASM) {
 -  module.exports = require(`../pkg`);

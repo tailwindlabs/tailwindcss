@@ -1,8 +1,8 @@
 diff --git a/index.js b/index.js
-index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..7fbad855f50c24eba29a1d447e1321ce181ab61a 100644
+index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..97975cf342ff8c204b5731840a89b8ea88b0dbbc 100644
 --- a/index.js
 +++ b/index.js
-@@ -1,40 +1,23 @@
+@@ -1,40 +1,26 @@
  const {createWrapper} = require('./wrapper');
  
 -let name = `@parcel/watcher-${process.platform}-${process.arch}`;
@@ -16,8 +16,11 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..7fbad855f50c24eba29a1d447e1321ce
 -}
 +function loadPackage() {
 +  if (process.platform === 'linux') {
-+    const { MUSL, GLIBC, family } = require("detect-libc");
-+    console.log({ MUSL, GLIBC, family })
++    let { MUSL, GLIBC, family, familySync } = require("detect-libc");
++    // Bun polyfills `detect-libc` in compiled binaries. We rely on
++    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
++    // there is a `familySync` function that we can use instead.
++    if (typeof familySync === 'function') family = familySync()
  
 -let binding;
 -try {
