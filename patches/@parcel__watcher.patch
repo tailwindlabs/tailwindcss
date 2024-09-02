@@ -1,8 +1,8 @@
 diff --git a/index.js b/index.js
-index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..15d3b2ffa11f8999ab95d8306f789f2a4613bae3 100644
+index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..25608326b5c4687a035765060a8a01bf9ac4e994 100644
 --- a/index.js
 +++ b/index.js
-@@ -1,40 +1,22 @@
+@@ -1,40 +1,25 @@
  const {createWrapper} = require('./wrapper');
  
 -let name = `@parcel/watcher-${process.platform}-${process.arch}`;
@@ -17,6 +17,9 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..15d3b2ffa11f8999ab95d8306f789f2a
 +function loadPackage() {
 +  if (process.platform === 'linux') {
 +    const { MUSL, GLIBC, family } = require("detect-libc");
++    console.log(
++      {MUSL, GLIBC, family}
++    )
  
 -let binding;
 -try {
