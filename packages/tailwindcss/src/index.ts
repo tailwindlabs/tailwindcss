@@ -6,7 +6,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './functions'
-import { registerPlugins, type Plugin } from './plugin-api'
+import { registerPlugins, type CssPluginOptions, type Plugin } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
@@ -48,7 +48,7 @@ async function parseCss(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let pluginPaths: string[] = []
+  let pluginPaths: [string, CssPluginOptions | null][] = []
   let configPaths: string[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -61,15 +61,60 @@ async function parseCss(
 
     // Collect paths from `@plugin` at-rules
     if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
-      if (node.nodes.length > 0) {
-        throw new Error('`@plugin` cannot have a body.')
-      }
-
       if (parent !== null) {
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      pluginPaths.push(node.selector.slice(9, -1))
+      let pluginPath = node.selector.slice(9, -1)
+      if (pluginPath.length === 0) {
+        throw new Error('`@plugin` must have a path.')
+      }
+
+      let options: CssPluginOptions = {}
+
+      for (let decl of node.nodes ?? []) {
+        if (decl.kind !== 'declaration') {
+          throw new Error(
+            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\n\`@plugin\` options must be a flat list of declarations.`,
+          )
+        }
+
+        if (decl.value === undefined) continue
+
+        // Parse the declaration value as a primitive type
+        // These are the same primitive values supported by JSON
+        let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
+
+        let parts = segment(value, ',').map((part) => {
+          part = part.trim()
+
+          if (part === 'null') {
+            return null
+          } else if (part === 'true') {
+            return true
+          } else if (part === 'false') {
+            return false
+          } else if (!Number.isNaN(Number(part))) {
+            return Number(part)
+          } else if (
+            (part[0] === '"' && part[part.length - 1] === '"') ||
+            (part[0] === "'" && part[part.length - 1] === "'")
+          ) {
+            return part.slice(1, -1)
+          } else if (part[0] === '{' && part[part.length - 1] === '}') {
+            throw new Error(
+              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nUsing an object as a plugin option is currently only supported in JavaScript configuration files.`,
+            )
+          }
+
+          return part
+        })
+
+        options[decl.property] = parts.length === 1 ? parts[0] : parts
+      }
+
+      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
+
       replaceWith([])
       return
     }
@@ -304,7 +349,13 @@ async function parseCss(
     })),
   )
 
-  let plugins = await Promise.all(pluginPaths.map(loadPlugin))
+  let plugins = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
 
   let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
 

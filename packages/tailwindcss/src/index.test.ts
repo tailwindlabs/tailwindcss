@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile } from '.'
+import plugin from './plugin'
 import type { PluginAPI } from './plugin-api'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
@@ -1294,13 +1295,11 @@ describe('Parsing themes values from CSS', () => {
 })
 
 describe('plugins', () => {
-  test('@plugin can not have a body.', async () =>
+  test('@plugin need a path', () =>
     expect(
       compile(
         css`
-          @plugin {
-            color: red;
-          }
+          @plugin;
         `,
         {
           loadPlugin: async () => {
@@ -1310,7 +1309,23 @@ describe('plugins', () => {
           },
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot have a body.]`))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
+
+  test('@plugin can not have an empty path', () =>
+    expect(
+      compile(
+        css`
+          @plugin '';
+        `,
+        {
+          loadPlugin: async () => {
+            return ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', '&:hover, &:focus')
+            }
+          },
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
 
   test('@plugin cannot be nested.', () =>
     expect(
@@ -1329,6 +1344,206 @@ describe('plugins', () => {
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`))
+
+  test('@plugin can accept options', async () => {
+    expect.hasAssertions()
+
+    let { build } = await compile(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin" {
+          color: red;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return plugin.withOptions((options) => {
+            expect(options).toEqual({
+              color: 'red',
+            })
+
+            return ({ addUtilities }) => {
+              addUtilities({
+                '.text-primary': {
+                  color: options.color,
+                },
+              })
+            }
+          })
+        },
+      },
+    )
+
+    let compiled = build(['text-primary'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ".text-primary {
+        color: red;
+      }"
+    `)
+  })
+
+  test('@plugin options can be null, booleans, string, numbers, or arrays including those types', async () => {
+    expect.hasAssertions()
+
+    await compile(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin" {
+          is-null: null;
+          is-true: true;
+          is-false: false;
+          is-int: 1234567;
+          is-float: 1.35;
+          is-sci: 1.35e-5;
+          is-str-null: 'null';
+          is-str-true: 'true';
+          is-str-false: 'false';
+          is-str-int: '1234567';
+          is-str-float: '1.35';
+          is-str-sci: '1.35e-5';
+          is-arr: foo, bar;
+          is-arr-mixed: null, true, false, 1234567, 1.35, foo, 'bar', 'true';
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return plugin.withOptions((options) => {
+            expect(options).toEqual({
+              'is-null': null,
+              'is-true': true,
+              'is-false': false,
+              'is-int': 1234567,
+              'is-float': 1.35,
+              'is-sci': 1.35e-5,
+              'is-str-null': 'null',
+              'is-str-true': 'true',
+              'is-str-false': 'false',
+              'is-str-int': '1234567',
+              'is-str-float': '1.35',
+              'is-str-sci': '1.35e-5',
+              'is-arr': ['foo', 'bar'],
+              'is-arr-mixed': [null, true, false, 1234567, 1.35, 'foo', 'bar', 'true'],
+            })
+
+            return () => {}
+          })
+        },
+      },
+    )
+  })
+
+  test('@plugin options can only be simple key/value pairs', () => {
+    expect(
+      compile(
+        css`
+          @plugin "my-plugin" {
+            color: red;
+            sizes {
+              sm: 1rem;
+              md: 2rem;
+            }
+          }
+        `,
+        {
+          loadPlugin: async () => {
+            return plugin.withOptions((options) => {
+              return ({ addUtilities }) => {
+                addUtilities({
+                  '.text-primary': {
+                    color: options.color,
+                  },
+                })
+              }
+            })
+          },
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `
+      [Error: Unexpected \`@plugin\` option:
+
+      sizes {
+        sm: 1rem;
+        md: 2rem;
+      }
+
+
+      \`@plugin\` options must be a flat list of declarations.]
+    `,
+    )
+  })
+
+  test('@plugin options can only be provided to plugins using withOptions', () => {
+    expect(
+      compile(
+        css`
+          @plugin "my-plugin" {
+            color: red;
+          }
+        `,
+        {
+          loadPlugin: async () => {
+            return plugin(({ addUtilities }) => {
+              addUtilities({
+                '.text-primary': {
+                  color: 'red',
+                },
+              })
+            })
+          },
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The plugin "my-plugin" does not accept options]`,
+    )
+  })
+
+  test('@plugin errors on array-like syntax', () => {
+    expect(
+      compile(
+        css`
+          @plugin "my-plugin" {
+            --color: [ 'red', 'green', 'blue'];
+          }
+        `,
+        {
+          loadPlugin: async () => plugin(() => {}),
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The plugin "my-plugin" does not accept options]`,
+    )
+  })
+
+  test('@plugin errors on object-like syntax', () => {
+    expect(
+      compile(
+        css`
+          @plugin "my-plugin" {
+            --color: {
+              red: 100;
+              green: 200;
+              blue: 300;
+            };
+          }
+        `,
+        {
+          loadPlugin: async () => plugin(() => {}),
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `
+      [Error: Unexpected \`@plugin\` option: Value of declaration \`--color: {
+                    red: 100;
+                    green: 200;
+                    blue: 300;
+                  };\` is not supported.
+
+      Using an object as a plugin option is currently only supported in JavaScript configuration files.]
+    `,
+    )
+  })
 
   test('addVariant with string selector', async () => {
     let { build } = await compile(

@@ -78,6 +78,51 @@ test(
 )
 
 test(
+  'builds the `@tailwindcss/forms` plugin utilities (with options)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/forms": "^0.5.7",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <input type="text" class="form-input" />
+        <textarea class="form-textarea"></textarea>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin '@tailwindcss/forms' {
+          strategy: base;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      `::-webkit-date-and-time-value`,
+      `[type='checkbox']:indeterminate`,
+    ])
+
+    // No classes are included even though they are used in the HTML
+    // because the `base` strategy is used
+    await fs.expectFileNotToContain('dist/out.css', [
+      //
+      candidate`form-input`,
+      candidate`form-textarea`,
+      candidate`form-radio`,
+    ])
+  },
+)
+
+test(
   'builds the `tailwindcss-animate` plugin utilities',
   {
     fs: {
