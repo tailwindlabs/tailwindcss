@@ -9610,28 +9610,15 @@ test('bg', async () => {
   expect(
     await compileCss(
       css`
-        @theme {
+        @theme reference {
           --opacity-half: 0.5;
           --opacity-custom: var(--custom-opacity);
         }
         @tailwind utilities;
       `,
-      ['bg-current/half', 'bg-current/custom'],
+      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
-  ).toMatchInlineSnapshot(`
-    ":root {
-      --opacity-half: .5;
-      --opacity-custom: var(--custom-opacity);
-    }
-
-    .bg-current\\/custom {
-      background-color: color-mix(in srgb, currentColor calc(var(--opacity-custom, var(--custom-opacity)) * 100%), transparent);
-    }
-
-    .bg-current\\/half {
-      background-color: color-mix(in srgb, currentColor calc(var(--opacity-half, .5) * 100%), transparent);
-    }"
-  `)
+  ).toEqual('')
 })
 
 test('from', async () => {
