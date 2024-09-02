@@ -30,13 +30,14 @@
   },
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
+    "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "enhanced-resolve": "^5.17.1",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
     "picocolors": "^1.0.1",
-    "postcss": "^8.4.41",
     "postcss-import": "^16.1.0",
+    "postcss": "^8.4.41",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {

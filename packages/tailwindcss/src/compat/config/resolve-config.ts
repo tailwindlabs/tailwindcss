@@ -1,29 +1,47 @@
 import type { DesignSystem } from '../../design-system'
+import type { PluginWithConfig } from '../../plugin-api'
 import { createThemeFn } from '../../theme-fn'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
   type ResolvedConfig,
+  type ResolvedContentConfig,
   type ResolvedThemeValue,
   type ThemeValue,
   type UserConfig,
 } from './types'
 
+export interface ConfigFile {
+  path?: string
+  config: UserConfig
+}
+
 interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
+  plugins: PluginWithConfig[]
+  content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
   result: ResolvedConfig
 }
 
 let minimal: ResolvedConfig = {
+  darkMode: null,
   theme: {},
+  plugins: [],
+  content: {
+    files: [],
+  },
 }
 
-export function resolveConfig(design: DesignSystem, configs: UserConfig[]): ResolvedConfig {
+export function resolveConfig(design: DesignSystem, files: ConfigFile[]): ResolvedConfig {
   let ctx: ResolutionContext = {
     design,
-    configs,
+    configs: [],
+    plugins: [],
+    content: {
+      files: [],
+    },
     theme: {},
     extend: {},
 
@@ -31,11 +49,25 @@ export function resolveConfig(design: DesignSystem, configs: UserConfig[]): Reso
     result: structuredClone(minimal),
   }
 
+  for (let file of files) {
+    extractConfigs(ctx, file)
+  }
+
+  // Merge dark mode
+  for (let config of ctx.configs) {
+    if ('darkMode' in config && config.darkMode !== undefined) {
+      ctx.result.darkMode = config.darkMode ?? null
+    }
+  }
+
   // Merge themes
   mergeTheme(ctx)
 
   return {
+    ...ctx.result,
+    content: ctx.content,
     theme: ctx.theme as ResolvedConfig['theme'],
+    plugins: ctx.plugins,
   }
 }
 
@@ -63,12 +95,66 @@ function mergeThemeExtension(
     return extensionValue
   }
 
-  // Execute default behaviour
+  // Execute default behavior
   return undefined
 }
 
 export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
+}
+
+function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): void {
+  let plugins: PluginWithConfig[] = []
+
+  // Normalize plugins so they share the same shape
+  for (let plugin of config.plugins ?? []) {
+    if ('__isOptionsFunction' in plugin) {
+      // Happens with `plugin.withOptions()` when no options were passed:
+      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
+      plugins.push(plugin())
+    } else if ('handler' in plugin) {
+      // Happens with `plugin(…)`:
+      // e.g. `require("my-plugin")`
+      //
+      // or with `plugin.withOptions()` when the user passed options:
+      // e.g. `require("my-plugin")(options)`
+      plugins.push(plugin)
+    } else {
+      // Just a plain function without using the plugin(…) API
+      plugins.push({ handler: plugin })
+    }
+  }
+
+  // Apply configs from presets
+  if (Array.isArray(config.presets) && config.presets.length === 0) {
+    throw new Error(
+      'Error in the config file/plugin/preset. An empty preset (`preset: []`) is not currently supported.',
+    )
+  }
+
+  for (let preset of config.presets ?? []) {
+    extractConfigs(ctx, { path, config: preset })
+  }
+
+  // Apply configs from plugins
+  for (let plugin of plugins) {
+    ctx.plugins.push(plugin)
+
+    if (plugin.config) {
+      extractConfigs(ctx, { path, config: plugin.config })
+    }
+  }
+
+  // Merge in content paths from multiple configs
+  let content = config.content ?? []
+  let files = Array.isArray(content) ? content : content.files
+
+  for (let file of files) {
+    ctx.content.files.push(typeof file === 'object' ? file : { base: path!, pattern: file })
+  }
+
+  // Then apply the "user" config
+  ctx.configs.push(config)
 }
 
 function mergeTheme(ctx: ResolutionContext) {
@@ -91,8 +177,7 @@ function mergeTheme(ctx: ResolutionContext) {
     // Shallow merge themes so latest "group" wins
     Object.assign(ctx.theme, theme)
 
-    // Collect extensions by key so each
-    // group can be lazily deep merged
+    // Collect extensions by key so each group can be lazily deep merged
     for (let key in extend) {
       ctx.extend[key] ??= []
       ctx.extend[key].push(extend[key])

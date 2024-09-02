@@ -1,14 +1,14 @@
 import watcher from '@parcel/watcher'
+import { compile } from '@tailwindcss/node'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync, readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
-import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
 import {
@@ -128,23 +128,19 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
   let inputBasePath = path.dirname(path.resolve(inputFile))
+  let fullRebuildPaths: string[] = cssImportPaths.slice()
 
-  function compile(css: string) {
-    return tailwindcss.compile(css, {
-      loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] === '.') {
-          return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
-            (m) => m.default ?? m,
-          )
-        }
-
-        return import(pluginPath).then((m) => m.default ?? m)
+  function createCompiler(css: string) {
+    return compile(css, {
+      base: inputBasePath,
+      onDependency(path) {
+        fullRebuildPaths.push(path)
       },
     })
   }
 
   // Compile the input
-  let compiler = await compile(input)
+  let compiler = await createCompiler(input)
   let scanner = new Scanner({
     detectSources: { base },
     sources: compiler.globs.map((pattern) => ({
@@ -166,10 +162,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let changedFiles: ChangedContent[] = []
           let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
+          let resolvedFullRebuildPaths = fullRebuildPaths
+
           for (let file of files) {
-            // If one of the changed files is related to the input CSS files, then
-            // we need to do a full rebuild because the theme might have changed.
-            if (cssImportPaths.includes(file)) {
+            // If one of the changed files is related to the input CSS or JS
+            // config/plugin files, then we need to do a full rebuild because
+            // the theme might have changed.
+            if (resolvedFullRebuildPaths.includes(file)) {
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we
@@ -204,9 +203,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   `,
               args['--input'] ?? base,
             )
+            clearRequireCache(resolvedFullRebuildPaths)
+            fullRebuildPaths = cssImportPaths.slice()
 
             // Create a new compiler, given the new `input`
-            compiler = await compile(input)
+            compiler = await createCompiler(input)
 
             // Re-scan the directory to get the new `candidates`
             scanner = new Scanner({

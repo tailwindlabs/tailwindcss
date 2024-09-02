@@ -72,6 +72,7 @@ export default function fixRelativePathsPlugin(): Plugin {
     AtRule: {
       source: fixRelativePath,
       plugin: fixRelativePath,
+      config: fixRelativePath,
     },
   }
 }

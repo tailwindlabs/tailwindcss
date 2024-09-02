@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add new standalone builds of Tailwind CSS v4 ([#14270](https://github.com/tailwindlabs/tailwindcss/pull/14270))
+- Support JavaScript configuration files using `@config` ([#14239](https://github.com/tailwindlabs/tailwindcss/pull/14239))
 
 ### Fixed
 

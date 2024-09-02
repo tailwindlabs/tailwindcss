@@ -1,9 +1,11 @@
+import { compile } from '@tailwindcss/node'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
+
 import { Scanner } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
-import { compile } from 'tailwindcss'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -12,6 +14,7 @@ export default function tailwindcss(): Plugin[] {
   let scanner: Scanner | null = null
   let changedContent: { content: string; extension: string }[] = []
   let candidates = new Set<string>()
+  let fullRebuildPaths: string[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -79,13 +82,13 @@ export default function tailwindcss(): Plugin[] {
 
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
+    clearRequireCache(fullRebuildPaths)
+    fullRebuildPaths = []
     let { build, globs } = await compile(css, {
-      loadPlugin: async (pluginPath) => {
-        if (pluginPath[0] === '.') {
-          return import(path.resolve(inputBasePath, pluginPath)).then((m) => m.default ?? m)
-        }
-
-        return import(pluginPath).then((m) => m.default ?? m)
+      base: inputBasePath,
+      onDependency(path) {
+        addWatchFile(path)
+        fullRebuildPaths.push(path)
       },
     })
 

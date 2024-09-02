@@ -1,14 +1,17 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
 import type { Candidate, NamedUtilityValue } from './candidate'
+import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
-import { resolveConfig } from './compat/config/resolve-config'
-import type { UserConfig } from './compat/config/types'
+import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
+import type { ResolvedConfig, UserConfig } from './compat/config/types'
+import { darkModePlugin } from './compat/dark-mode'
 import type { DesignSystem } from './design-system'
 import { createThemeFn } from './theme-fn'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import { toKeyPath } from './utils/to-key-path'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -57,6 +60,7 @@ export type PluginAPI = {
   ): void
 
   theme(path: string, defaultValue?: any): any
+  config(path: string, defaultValue?: any): any
   prefix(className: string): string
 }
 
@@ -65,7 +69,7 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 function buildPluginApi(
   designSystem: DesignSystem,
   ast: AstNode[],
-  resolvedConfig: { theme?: Record<string, any> },
+  resolvedConfig: ResolvedConfig,
 ): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
@@ -281,6 +285,22 @@ function buildPluginApi(
     prefix(className) {
       return className
     },
+
+    config(path, defaultValue) {
+      let obj: Record<any, any> = resolvedConfig
+
+      let keypath = toKeyPath(path)
+
+      for (let i = 0; i < keypath.length; ++i) {
+        let key = keypath[i]
+
+        if (obj[key] === undefined) return defaultValue
+
+        obj = obj[key]
+      }
+
+      return obj ?? defaultValue
+    },
   }
 
   // Bind these functions so they can use `this`
@@ -326,39 +346,33 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   return ast
 }
 
-export function registerPlugins(plugins: Plugin[], designSystem: DesignSystem, ast: AstNode[]) {
-  let pluginObjects = []
+export function registerPlugins(
+  plugins: Plugin[],
+  designSystem: DesignSystem,
+  ast: AstNode[],
+  configs: ConfigFile[],
+) {
+  let userConfig = [{ config: { plugins } }, ...configs]
 
-  for (let plugin of plugins) {
-    if ('__isOptionsFunction' in plugin) {
-      // Happens with `plugin.withOptions()` when no options were passed:
-      // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      pluginObjects.push(plugin())
-    } else if ('handler' in plugin) {
-      // Happens with `plugin(…)`:
-      // e.g. `require("my-plugin")`
-      //
-      // or with `plugin.withOptions()` when the user passed options:
-      // e.g. `require("my-plugin")(options)`
-      pluginObjects.push(plugin)
-    } else {
-      // Just a plain function without using the plugin(…) API
-      pluginObjects.push({ handler: plugin, config: {} as UserConfig })
-    }
-  }
-
-  // Now merge all the configs and make all that crap work
   let resolvedConfig = resolveConfig(designSystem, [
-    createCompatConfig(designSystem.theme),
-    ...pluginObjects.map(({ config }) => config ?? {}),
+    { config: createCompatConfig(designSystem.theme) },
+    ...userConfig,
+    { config: { plugins: [darkModePlugin] } },
   ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
-  // Loop over the handlers and run them all with the resolved config + CSS theme probably somehow
-  for (let { handler } of pluginObjects) {
+  for (let { handler } of resolvedConfig.plugins) {
     handler(pluginApi)
   }
 
-  return pluginApi
+  // Merge the user-configured theme keys into the design system. The compat
+  // config would otherwise expand into namespaces like `background-color` which
+  // core utilities already read from.
+  applyConfigToTheme(designSystem, userConfig)
+
+  return {
+    pluginApi,
+    resolvedConfig,
+  }
 }

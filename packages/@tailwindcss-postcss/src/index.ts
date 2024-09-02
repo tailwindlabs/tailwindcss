@@ -1,12 +1,12 @@
+import { compile } from '@tailwindcss/node'
+import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
-import { compile } from 'tailwindcss'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -47,6 +47,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       compiler: null as null | Awaited<ReturnType<typeof compile>>,
       css: '',
       optimizedCss: '',
+      fullRebuildPaths: [] as string[],
     }
   })
 
@@ -79,16 +80,15 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
-          function createCompiler() {
-            return compile(root.toString(), {
-              loadPlugin: async (pluginPath) => {
-                if (pluginPath[0] === '.') {
-                  return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
-                    (m) => m.default ?? m,
-                  )
-                }
+          async function createCompiler() {
+            clearRequireCache(context.fullRebuildPaths)
 
-                return import(pluginPath).then((m) => m.default ?? m)
+            context.fullRebuildPaths = []
+
+            return compile(root.toString(), {
+              base: inputBasePath,
+              onDependency: (path) => {
+                context.fullRebuildPaths.push(path)
               },
             })
           }
@@ -101,11 +101,21 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Track file modification times to CSS files
           {
+            for (let file of context.fullRebuildPaths) {
+              result.messages.push({
+                type: 'dependency',
+                plugin: '@tailwindcss/postcss',
+                file,
+                parent: result.opts.from,
+              })
+            }
+
             let files = result.messages.flatMap((message) => {
               if (message.type !== 'dependency') return []
               return message.file
             })
             files.push(inputFile)
+
             for (let file of files) {
               let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
               if (changedTime === null) {
