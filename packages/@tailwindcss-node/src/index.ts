@@ -7,6 +7,7 @@ export async function compile(
   css: string,
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
+  // @ts-ignore
   await import('@tailwindcss/node/esm-cache-hook')
 
   return await _compile(css, {
