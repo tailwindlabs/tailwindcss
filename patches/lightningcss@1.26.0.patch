@@ -1,5 +1,5 @@
 diff --git a/node/index.js b/node/index.js
-index a9f2f6d5f3394329fcf8bc06af549030c01167a5..40430a373d95d0e37d806a218a52ad49f1945b07 100644
+index a9f2f6d5f3394329fcf8bc06af549030c01167a5..724ad9f3932d59d21b29c3d09cf1883c6175ee7e 100644
 --- a/node/index.js
 +++ b/node/index.js
 @@ -1,27 +1,35 @@
@@ -18,7 +18,7 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..40430a373d95d0e37d806a218a52ad49
 -}
 +function loadPackage() {
 +  if (process.platform === "linux") {
-+    let { MUSL, GLIBC, family } = require("detect-libc");
++    let { MUSL, GLIBC, family, familySync } = require("detect-libc");
 +    // Bun polyfills `detect-libc` in compiled binaries. We rely on
 +    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
 +    // there is a `familySync` function that we can use instead.
