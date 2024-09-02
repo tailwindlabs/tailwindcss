@@ -1,8 +1,8 @@
 diff --git a/index.js b/index.js
-index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..97975cf342ff8c204b5731840a89b8ea88b0dbbc 100644
+index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..7ee1a77cf5b9c0a359d2bc19781947a3e8d2a60e 100644
 --- a/index.js
 +++ b/index.js
-@@ -1,40 +1,26 @@
+@@ -1,40 +1,29 @@
  const {createWrapper} = require('./wrapper');
  
 -let name = `@parcel/watcher-${process.platform}-${process.arch}`;
@@ -21,6 +21,9 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..97975cf342ff8c204b5731840a89b8ea
 +    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
 +    // there is a `familySync` function that we can use instead.
 +    if (typeof familySync === 'function') family = familySync()
++    console.log({
++      MUSL, GLIBC, family
++    })
  
 -let binding;
 -try {

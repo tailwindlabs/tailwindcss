@@ -18,10 +18,10 @@ catalogs:
 
 patchedDependencies:
   '@parcel/watcher@2.4.1':
-    hash: pnjyuz76kbyy7yxsvyvmenfmha
+    hash: bngibfcffr6josmibgkhfwfpzi
     path: patches/@parcel__watcher@2.4.1.patch
   lightningcss@1.26.0:
-    hash: wwgzabzdcqrrxsr44piwvhiks4
+    hash: bj3glyikietkuhe77vvirpx2sa
     path: patches/lightningcss@1.26.0.patch
 
 importers:
@@ -60,7 +60,7 @@ importers:
         version: 5.5.4
       vitest:
         specifier: ^2.0.5
-        version: 2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+        version: 2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
 
   crates/node:
     optionalDependencies:
@@ -137,7 +137,7 @@ importers:
     dependencies:
       '@parcel/watcher':
         specifier: ^2.4.1
-        version: 2.4.1(patch_hash=pnjyuz76kbyy7yxsvyvmenfmha)
+        version: 2.4.1(patch_hash=bngibfcffr6josmibgkhfwfpzi)
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
@@ -146,7 +146,7 @@ importers:
         version: 5.17.1
       lightningcss:
         specifier: 'catalog:'
-        version: 1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)
+        version: 1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -177,7 +177,7 @@ importers:
         version: link:../../crates/node
       lightningcss:
         specifier: 'catalog:'
-        version: 1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)
+        version: 1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.41)
@@ -272,7 +272,7 @@ importers:
         version: link:../../crates/node
       lightningcss:
         specifier: 'catalog:'
-        version: 1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)
+        version: 1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)
       postcss-load-config:
         specifier: ^6.0.1
         version: 6.0.1(postcss@8.4.41)
@@ -288,7 +288,7 @@ importers:
         version: link:../internal-postcss-fix-relative-paths
       vite:
         specifier: 'catalog:'
-        version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+        version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
 
   packages/internal-example-plugin: {}
 
@@ -317,7 +317,7 @@ importers:
         version: 20.14.13
       lightningcss:
         specifier: 'catalog:'
-        version: 1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)
+        version: 1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)
 
   playgrounds/nextjs:
     dependencies:
@@ -366,7 +366,7 @@ importers:
         version: link:../../packages/@tailwindcss-vite
       '@vitejs/plugin-react':
         specifier: ^4.3.1
-        version: 4.3.1(vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)))
+        version: 4.3.1(vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)))
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -388,10 +388,10 @@ importers:
         version: 1.1.22
       vite:
         specifier: 'catalog:'
-        version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+        version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
       vite-plugin-handlebars:
         specifier: ^2.0.0
-        version: 2.0.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+        version: 2.0.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
 
 packages:
 
@@ -3557,7 +3557,7 @@ snapshots:
 
   '@parcel/watcher-win32-x64@2.4.2-alpha.0': {}
 
-  '@parcel/watcher@2.4.1(patch_hash=pnjyuz76kbyy7yxsvyvmenfmha)':
+  '@parcel/watcher@2.4.1(patch_hash=bngibfcffr6josmibgkhfwfpzi)':
     dependencies:
       detect-libc: 1.0.3
       is-glob: 4.0.3
@@ -3736,14 +3736,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)))':
+  '@vitejs/plugin-react@4.3.1(vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
     transitivePeerDependencies:
       - supports-color
 
@@ -4937,7 +4937,7 @@ snapshots:
 
   lightningcss-win32-x64-msvc@1.26.0: {}
 
-  lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4):
+  lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa):
     dependencies:
       detect-libc: 1.0.3
     optionalDependencies:
@@ -5681,13 +5681,13 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite-node@2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)):
+  vite-node@2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)):
     dependencies:
       cac: 6.7.14
       debug: 4.3.6
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5699,10 +5699,10 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-handlebars@2.0.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)):
+  vite-plugin-handlebars@2.0.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)):
     dependencies:
       handlebars: 4.7.8
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5713,7 +5713,7 @@ snapshots:
       - sugarss
       - terser
 
-  vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)):
+  vite@5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.41
@@ -5721,9 +5721,9 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.13
       fsevents: 2.3.3
-      lightningcss: 1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)
+      lightningcss: 1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)
 
-  vitest@2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4)):
+  vitest@2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa)):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -5741,8 +5741,8 @@ snapshots:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
-      vite-node: 2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=wwgzabzdcqrrxsr44piwvhiks4))
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
+      vite-node: 2.0.5(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=bj3glyikietkuhe77vvirpx2sa))
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.14.13
