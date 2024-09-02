@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "workspace:^",
+    "detect-libc": "1.0.3",
     "enhanced-resolve": "^5.17.1",
     "tailwindcss": "workspace:^"
   },
