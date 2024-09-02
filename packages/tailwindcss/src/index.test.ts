@@ -1383,7 +1383,7 @@ describe('plugins', () => {
     `)
   })
 
-  test('@plugin options can specify null, booleans, or numbers', async () => {
+  test('@plugin options can be null, booleans, string, numbers, or arrays including those types', async () => {
     expect.hasAssertions()
 
     await compile(
