@@ -1345,7 +1345,7 @@ describe('plugins', () => {
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`))
 
-  test('@plugin can provide options', async () => {
+  test('@plugin can accept options', async () => {
     expect.hasAssertions()
 
     let { build } = await compile(
