@@ -32,6 +32,7 @@ import {
                 "tailwindcss": "workspace:^"
               },
               "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "vite": "^5.3.5"
               }
             }
