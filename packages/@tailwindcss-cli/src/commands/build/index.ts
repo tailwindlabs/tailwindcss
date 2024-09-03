@@ -145,7 +145,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     detectSources: { base },
     sources: compiler.globs.map(({ origin, pattern }) => ({
       // Ensure the glob is relative to the input CSS file or the config file
-      // where they are specified.
+      // where it is specified.
       base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
       pattern,
     })),
