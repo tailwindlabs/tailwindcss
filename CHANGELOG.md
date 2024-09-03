@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support TypeScript for `@plugin` and `@config` files ([#14317](https://github.com/tailwindlabs/tailwindcss/pull/14317))
+
 ### Fixed
 
 - Ensure content globs defined in `@config` files are relative to that file ([#14314](https://github.com/tailwindlabs/tailwindcss/pull/14314))

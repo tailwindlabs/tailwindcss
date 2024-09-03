@@ -38,5 +38,8 @@
   },
   "devDependencies": {
     "tailwindcss": "workspace:^"
+  },
+  "dependencies": {
+    "jiti": "^2.0.0-beta.3"
   }
 }
