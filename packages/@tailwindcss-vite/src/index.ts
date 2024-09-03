@@ -76,6 +76,7 @@ export default function tailwindcss(): Plugin[] {
         continue
       }
 
+      roots.get(id).requiresRebuild = false
       server.moduleGraph.invalidateModule(module)
       updates.push({
         type: `${module.type}-update`,
@@ -183,7 +184,6 @@ export default function tailwindcss(): Plugin[] {
         if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
-        root.invalidate()
 
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
@@ -216,7 +216,6 @@ export default function tailwindcss(): Plugin[] {
         if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
-        root.invalidate()
 
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
@@ -341,7 +340,7 @@ class Root {
   // set to `full`.
   private compiler?: Awaited<ReturnType<typeof compile>>
 
-  private rebuildStrategy: 'full' | 'incremental' = 'full'
+  public requiresRebuild: boolean = true
 
   // This is the compiler-specific scanner instance that is used only to scan
   // files for custom @source paths. All other modules we scan for candidates
@@ -374,8 +373,7 @@ class Root {
     let inputPath = idToPath(this.id)
     let inputBase = path.dirname(path.resolve(inputPath))
 
-    if (!this.compiler || !this.scanner || this.rebuildStrategy === 'full') {
-      this.rebuildStrategy = 'incremental'
+    if (!this.compiler || !this.scanner || this.requiresRebuild) {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
@@ -447,10 +445,8 @@ class Root {
       addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
-    return this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
-  }
+    this.requiresRebuild = true
 
-  public invalidate() {
-    this.rebuildStrategy = 'full'
+    return this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
   }
 }
