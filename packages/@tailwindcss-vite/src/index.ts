@@ -212,6 +212,7 @@ export default function tailwindcss(): Plugin[] {
       enforce: 'pre',
 
       async transform(src, id) {
+        // TODO: Check if this is also triggered by invalidateModule
         if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
