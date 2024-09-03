@@ -85,6 +85,48 @@ test(
 )
 
 test(
+  'Config files (TS)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div class="text-primary"></div>
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          theme: {
+            extend: {
+              colors: {
+                primary: 'blue',
+              },
+            },
+          },
+        } satisfies { theme: { extend: { colors: { primary: string } } } }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`text-primary`,
+    ])
+  },
+)
+
+test(
   'Config files (CJS, watch mode)',
   {
     fs: {
@@ -138,7 +180,7 @@ test(
 )
 
 test(
-  'Config files (MJS, watch mode)',
+  'Config files (ESM, watch mode)',
   {
     fs: {
       'package.json': json`
@@ -181,6 +223,59 @@ test(
     ])
 
     await fs.write('my-color.mjs', js`export default 'red'`)
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`text-primary`,
+      'color: red',
+    ])
+  },
+)
+
+test(
+  'Config files (TS, watch mode)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div class="text-primary"></div>
+      `,
+      'tailwind.config.ts': js`
+        import myColor from './my-color.ts'
+        export default {
+          theme: {
+            extend: {
+              colors: {
+                primary: myColor,
+              },
+            },
+          },
+        }
+      `,
+      'my-color.ts': js`export default 'blue'`,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ fs, spawn }) => {
+    await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch')
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`text-primary`,
+      'color: blue',
+    ])
+
+    await fs.write('my-color.ts', js`export default 'red'`)
 
     await fs.expectFileToContain('dist/out.css', [
       //

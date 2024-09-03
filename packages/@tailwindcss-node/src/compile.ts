@@ -1,3 +1,4 @@
+import { createJiti, type Jiti } from 'jiti'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { compile as _compile } from 'tailwindcss'
@@ -10,12 +11,12 @@ export async function compile(
   return await _compile(css, {
     loadPlugin: async (pluginPath) => {
       if (pluginPath[0] !== '.') {
-        return import(pluginPath).then((m) => m.default ?? m)
+        return importNativeAndJiti(pluginPath).then((m: any) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, pluginPath)
       let [module, moduleDependencies] = await Promise.all([
-        import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+        importNativeAndJiti(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),
       ])
 
@@ -28,12 +29,12 @@ export async function compile(
 
     loadConfig: async (configPath) => {
       if (configPath[0] !== '.') {
-        return import(configPath).then((m) => m.default ?? m)
+        return importNativeAndJiti(configPath).then((m: any) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, configPath)
       let [module, moduleDependencies] = await Promise.all([
-        import(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+        importNativeAndJiti(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),
       ])
 
@@ -44,4 +45,19 @@ export async function compile(
       return module.default ?? module
     },
   })
+}
+
+let jiti: null | Jiti = null
+async function importNativeAndJiti(path: string): Promise<any> {
+  try {
+    return await import(path)
+  } catch (error) {
+    try {
+      if (!jiti) {
+        jiti = createJiti(import.meta.url)
+      }
+      return await jiti.import(path)
+    } catch {}
+    throw error
+  }
 }
