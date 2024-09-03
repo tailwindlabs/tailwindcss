@@ -93,7 +93,11 @@ describe('parse', () => {
   })
 
   it('should handle media query params with functions', () => {
-    expect(parse('(min-width: 600px) and (max-width:theme(colors.red.500))')).toEqual([
+    expect(
+      parse(
+        '(min-width: 600px) and (max-width:theme(colors.red.500)) and (theme(--breakpoint-sm)<width<=theme(--breakpoint-md))',
+      ),
+    ).toEqual([
       {
         kind: 'function',
         value: '',
@@ -113,6 +117,20 @@ describe('parse', () => {
           { kind: 'word', value: 'max-width' },
           { kind: 'separator', value: ':' },
           { kind: 'function', value: 'theme', nodes: [{ kind: 'word', value: 'colors.red.500' }] },
+        ],
+      },
+      { kind: 'separator', value: ' ' },
+      { kind: 'word', value: 'and' },
+      { kind: 'separator', value: ' ' },
+      {
+        kind: 'function',
+        value: '',
+        nodes: [
+          { kind: 'function', value: 'theme', nodes: [{ kind: 'word', value: '--breakpoint-sm' }] },
+          { kind: 'separator', value: '<' },
+          { kind: 'word', value: 'width' },
+          { kind: 'separator', value: '<=' },
+          { kind: 'function', value: 'theme', nodes: [{ kind: 'word', value: '--breakpoint-md' }] },
         ],
       },
     ])

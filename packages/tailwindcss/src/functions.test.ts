@@ -540,14 +540,15 @@ describe('theme function', () => {
   })
 
   describe('in @media queries', () => {
-    test('@media (min-width: theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg))', async () => {
+    test('@media (min-width:theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg))', async () => {
       expect(
         await compileCss(css`
           @theme {
             --breakpoint-md: 48rem;
             --breakpoint-lg: 64rem;
           }
-          @media (min-width: theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg)) {
+          /* prettier-ignore */
+          @media (min-width:theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg)) {
             .red {
               color: red;
             }
@@ -560,6 +561,33 @@ describe('theme function', () => {
         }
 
         @media (width >= 48rem) and (width <= 64rem) {
+          .red {
+            color: red;
+          }
+        }"
+      `)
+    })
+
+    test('@media (width >= theme(breakpoint.md)) and (width<theme(--breakpoint-lg))', async () => {
+      expect(
+        await compileCss(css`
+          @theme {
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+          }
+          @media (width >= theme(breakpoint.md)) and (width<theme(--breakpoint-lg)) {
+            .red {
+              color: red;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        ":root {
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+        }
+
+        @media (width >= 48rem) and (width < 64rem) {
           .red {
             color: red;
           }
