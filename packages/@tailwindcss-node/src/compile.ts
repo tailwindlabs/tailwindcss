@@ -11,7 +11,7 @@ export async function compile(
   return await _compile(css, {
     loadPlugin: async (pluginPath) => {
       if (pluginPath[0] !== '.') {
-        return importModule(pluginPath).then((m: any) => m.default ?? m)
+        return importModule(pluginPath).then((m) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, pluginPath)
@@ -29,7 +29,7 @@ export async function compile(
 
     loadConfig: async (configPath) => {
       if (configPath[0] !== '.') {
-        return importModule(configPath).then((m: any) => m.default ?? m)
+        return importModule(configPath).then((m) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, configPath)
