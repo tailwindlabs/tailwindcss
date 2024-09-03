@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support TypeScript for `@plugin` and `@config` files ([#14317](https://github.com/tailwindlabs/tailwindcss/pull/14317))
+
 ### Fixed
 
 - Ensure content globs defined in `@config` files are relative to that file ([#14314](https://github.com/tailwindlabs/tailwindcss/pull/14314))
 - Ensure CSS `theme()` functions are evaluated in media query ranges with collapsed whitespace ((#14321)[https://github.com/tailwindlabs/tailwindcss/pull/14321])
-### Added
-
-- Allow `@plugin` and `@config` to point to TypeScript files ([#14317](https://github.com/tailwindlabs/tailwindcss/pull/14317))
 
 ## [4.0.0-alpha.21] - 2024-09-02
 
