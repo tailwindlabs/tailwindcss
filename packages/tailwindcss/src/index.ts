@@ -54,7 +54,7 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
-  let globs: string[] = []
+  let globs: { base?: string; pattern: string }[] = []
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
@@ -178,7 +178,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push(path.slice(1, -1))
+      globs.push({ pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }
@@ -398,7 +398,7 @@ async function parseCss(
       )
     }
 
-    globs.push(file.pattern)
+    globs.push(file)
   }
 
   return {
@@ -413,7 +413,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: string[]
+  globs: { base?: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
   let { designSystem, ast, globs, pluginApi } = await parseCss(css, opts)

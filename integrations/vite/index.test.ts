@@ -52,10 +52,15 @@ test(
           <div class="underline m-2">Hello, world!</div>
         </body>
       `,
+      'project-a/tailwind.config.js': js`
+        export default {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"
@@ -125,10 +130,15 @@ test(
           <div class="font-bold	">Tailwind Labs</div>
         </body>
       `,
+      'project-a/tailwind.config.js': js`
+        export default {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"

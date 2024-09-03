@@ -39,9 +39,14 @@ test(
           addVariant('hocus', ['&:focus', '&:hover'])
         }
       `,
+      'project-a/tailwind.config.js': js`
+        module.exports = {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
@@ -106,9 +111,14 @@ test(
           addVariant('hocus', ['&:focus', '&:hover'])
         }
       `,
+      'project-a/tailwind.config.js': js`
+        module.exports = {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
@@ -173,9 +183,14 @@ test(
           addVariant('hocus', ['&:focus', '&:hover'])
         }
       `,
+      'project-a/tailwind.config.js': js`
+        module.exports = {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
@@ -241,9 +256,14 @@ test(
           addVariant('hocus', ['&:focus', '&:hover'])
         }
       `,
+      'project-a/tailwind.config.js': js`
+        module.exports = {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @source '../../project-b/src/**/*.js';
+        @config '../tailwind.config.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
