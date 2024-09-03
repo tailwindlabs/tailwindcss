@@ -52,14 +52,23 @@ describe.each([
             addVariant('hocus', ['&:focus', '&:hover'])
           }
         `,
+        'project-a/tailwind.config.js': js`
+          module.exports = {
+            content: ['../project-b/src/**/*.js'],
+          }
+        `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/utilities';
-          @source '../../project-b/src/**/*.js';
+          @config '../tailwind.config.js';
+          @source '../../project-b/src/**/*.html';
           @plugin '../plugin.js';
         `,
         'project-a/src/index.js': js`
           const className = "content-['project-a/src/index.js']"
           module.exports = { className }
+        `,
+        'project-b/src/index.html': html`
+          <div class="flex" />
         `,
         'project-b/src/index.js': js`
           const className = "content-['project-b/src/index.js']"
@@ -74,6 +83,7 @@ describe.each([
 
       await fs.expectFileToContain('project-a/dist/out.css', [
         candidate`underline`,
+        candidate`flex`,
         candidate`content-['project-a/src/index.js']`,
         candidate`content-['project-b/src/index.js']`,
         candidate`inverted:flex`,
@@ -111,14 +121,23 @@ describe.each([
             addVariant('hocus', ['&:focus', '&:hover'])
           }
         `,
+        'project-a/tailwind.config.js': js`
+          module.exports = {
+            content: ['../project-b/src/**/*.js'],
+          }
+        `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/utilities';
-          @source '../../project-b/src/**/*.js';
+          @config '../tailwind.config.js';
+          @source '../../project-b/src/**/*.html';
           @plugin '../plugin.js';
         `,
         'project-a/src/index.js': js`
           const className = "content-['project-a/src/index.js']"
           module.exports = { className }
+        `,
+        'project-b/src/index.html': html`
+          <div class="flex" />
         `,
         'project-b/src/index.js': js`
           const className = "content-['project-b/src/index.js']"
@@ -133,6 +152,7 @@ describe.each([
 
       await fs.expectFileToContain('project-a/dist/out.css', [
         candidate`underline`,
+        candidate`flex`,
         candidate`content-['project-a/src/index.js']`,
         candidate`content-['project-b/src/index.js']`,
         candidate`inverted:flex`,

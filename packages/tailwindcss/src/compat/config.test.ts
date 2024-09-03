@@ -14,7 +14,7 @@ test('Config files can add content', async ({ expect }) => {
     loadConfig: async () => ({ content: ['./file.txt'] }),
   })
 
-  expect(compiler.globs).toEqual(['./file.txt'])
+  expect(compiler.globs).toEqual([{ origin: './config.js', pattern: './file.txt' }])
 })
 
 test('Config files can change dark mode (media)', async ({ expect }) => {

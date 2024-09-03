@@ -143,8 +143,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = await createCompiler(input)
   let scanner = new Scanner({
     detectSources: { base },
-    sources: compiler.globs.map((pattern) => ({
-      base: inputBasePath, // Globs are relative to the input.css file
+    sources: compiler.globs.map(({ origin, pattern }) => ({
+      // Ensure the glob is relative to the input CSS file or the config file
+      // where it is specified.
+      base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
       pattern,
     })),
   })
@@ -212,8 +214,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanner = new Scanner({
               detectSources: { base },
-              sources: compiler.globs.map((pattern) => ({
-                base: inputBasePath, // Globs are relative to the input.css file
+              sources: compiler.globs.map(({ origin, pattern }) => ({
+                // Ensure the glob is relative to the input CSS file or the
+                // config file where it is specified.
+                base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
                 pattern,
               })),
             })

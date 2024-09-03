@@ -1776,7 +1776,7 @@ describe('@source', () => {
       @source "./foo/bar/*.ts";
     `)
 
-    expect(globs).toEqual(['./foo/bar/*.ts'])
+    expect(globs).toEqual([{ pattern: './foo/bar/*.ts' }])
   })
 
   test('emits multiple @source files', async () => {
@@ -1785,7 +1785,7 @@ describe('@source', () => {
       @source "./php/secr3t/smarty.php";
     `)
 
-    expect(globs).toEqual(['./foo/**/*.ts', './php/secr3t/smarty.php'])
+    expect(globs).toEqual([{ pattern: './foo/**/*.ts' }, { pattern: './php/secr3t/smarty.php' }])
   })
 })
 
