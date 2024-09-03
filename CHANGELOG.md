@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Correctly apply CSS `theme()` functions inside `@media` range contexts ((#14321)[https://github.com/tailwindlabs/tailwindcss/pull/14321])
+- Ensure CSS `theme()` functions are evaluated in media query ranges with collapsed whitespace ((#14321)[https://github.com/tailwindlabs/tailwindcss/pull/14321])
 
 ## [4.0.0-alpha.21] - 2024-09-02
 
