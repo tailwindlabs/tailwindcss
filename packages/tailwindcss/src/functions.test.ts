@@ -433,6 +433,28 @@ describe('theme function', () => {
           }"
         `)
       })
+
+      test('theme(--color-red-500 / 50%)', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              color: theme(--color-red-500 / 50%);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: #ff000080;
+          }"
+        `)
+      })
+
       test('theme("--color-red-500")', async () => {
         expect(
           await compileCss(css`
