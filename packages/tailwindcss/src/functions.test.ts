@@ -1,7 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { compileCss } from './test-utils/run'
+import { compile } from '.'
+import plugin from './plugin'
+import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
@@ -616,5 +618,93 @@ describe('theme function', () => {
         }"
       `)
     })
+  })
+})
+
+describe('in plugins', () => {
+  test('CSS theme functions in plugins are properly evaluated', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+
+        @theme reference {
+          --color-red: red;
+          --color-orange: orange;
+          --color-blue: blue;
+          --color-pink: pink;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return plugin(({ addBase }) => {
+            addBase({
+              '.my-base-rule': {
+                color: 'theme(colors.red)',
+                'outline-color': 'theme(colors.orange / 15%)',
+                'background-color': 'theme(--color-blue)',
+                'border-color': 'theme(--color-pink / 10%)',
+              },
+            })
+          })
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
+      "@layer base {
+        .my-base-rule {
+          color: red;
+          background-color: #00f;
+          border-color: #ffc0cb1a;
+          outline-color: #ffa50026;
+        }
+      }"
+    `)
+  })
+})
+
+describe('in JS config files', () => {
+  test('CSS theme functions in config files are properly evaluated', async () => {
+    let compiled = await compile(
+      css`
+        @config "./my-config.js";
+
+        @theme reference {
+          --color-red: red;
+          --color-orange: orange;
+        }
+      `,
+      {
+        loadConfig: async () => ({
+          theme: {
+            extend: {
+              colors: {
+                primary: 'theme(colors.red)',
+                secondary: 'theme(--color-orange)',
+              },
+            },
+          },
+          plugins: [
+            plugin(({ addBase }) => {
+              addBase({
+                '.my-rule': {
+                  background: 'theme(colors.primary)',
+                  color: 'theme(colors.secondary)',
+                },
+              })
+            }),
+          ],
+        }),
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['my-rule'])).trim()).toMatchInlineSnapshot(`
+      "@layer base {
+        .my-rule {
+          color: orange;
+          background: red;
+        }
+      }"
+    `)
   })
 })
