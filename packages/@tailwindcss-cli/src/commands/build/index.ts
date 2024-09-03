@@ -144,7 +144,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let scanner = new Scanner({
     detectSources: { base },
     sources: compiler.globs.map(({ origin, pattern }) => ({
-      // Globs are relative to the input.css file
+      // Ensure the glob is relative to the input CSS file or the config file
+      // where they are specified.
       base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
       pattern,
     })),
@@ -214,7 +215,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             scanner = new Scanner({
               detectSources: { base },
               sources: compiler.globs.map(({ origin, pattern }) => ({
-                // Globs are relative to the input.css file
+                // Ensure the glob is relative to the input CSS file or the
+                // config file where they are specified.
                 base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
                 pattern,
               })),

@@ -61,6 +61,10 @@ test(
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
         @config '../tailwind.config.js';
+        @source '../../project-b/src/**/*.html';
+      `,
+      'project-b/src/index.html': html`
+        <div class="flex" />
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"
@@ -77,6 +81,7 @@ test(
 
     await fs.expectFileToContain(filename, [
       candidate`underline`,
+      candidate`flex`,
       candidate`m-2`,
       candidate`content-['project-b/src/index.js']`,
     ])
@@ -139,6 +144,10 @@ test(
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
         @config '../tailwind.config.js';
+        @source '../../project-b/src/**/*.html';
+      `,
+      'project-b/src/index.html': html`
+        <div class="flex" />
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"
@@ -157,6 +166,7 @@ test(
     await retryAssertion(async () => {
       let css = await fetchStyles(port, '/index.html')
       expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`flex`)
       expect(css).not.toContain(candidate`font-bold`)
     })
 
@@ -165,6 +175,7 @@ test(
     await retryAssertion(async () => {
       let css = await fetchStyles(port, '/about.html')
       expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`flex`)
       expect(css).toContain(candidate`font-bold`)
     })
 
