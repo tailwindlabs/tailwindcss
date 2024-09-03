@@ -57,7 +57,7 @@ async function importModule(path: string): Promise<any> {
   } catch (error) {
     try {
       if (!jiti) {
-        jiti = createJiti(import.meta.url)
+        jiti = createJiti(import.meta.url, { moduleCache: false, fsCache: false })
       }
       return await jiti.import(path)
     } catch {}
