@@ -14,6 +14,122 @@ export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFi
     })
   }
 
+  // if theme has fontFamily.sans, set --default-font-family to that inline value
+
+  if (Object.hasOwn(theme, 'fontFamily')) {
+    if (Object.hasOwn(theme.fontFamily, 'sans')) {
+      // TODO: Add an empty `@theme` to the AST
+
+      designSystem.theme.add('--default-font-family', 'theme(fontFamily.sans)', {
+        isInline: true,
+        isReference: false,
+      })
+
+      designSystem.theme.add(
+        '--default-font-feature-settings',
+        'theme(fontFamily.sans[1].fontFeatureSettings)',
+        {
+          isInline: true,
+          isReference: false,
+        },
+      )
+
+      designSystem.theme.add(
+        '--default-font-variation-settings',
+        'theme(fontFamily.sans[1].fontVariationSettings)',
+        {
+          isInline: true,
+          isReference: false,
+        },
+      )
+
+      // if (Array.isArray(defaultFontFamily)) {
+      //   if (typeof defaultFontFamily[1] === 'object') {
+      //     defaultFontFeatureSettings = defaultFontFamily[1]?.fontFeatureSettings
+      //     defaultFontVariationSettings = defaultFontFamily[1]?.fontVariationSettings
+      //     defaultFontFamily = defaultFontFamily[0]
+      //   } else {
+      //     defaultFontFamily = defaultFontFamily.join(', ')
+      //   }
+      // }
+
+      // designSystem.theme.add(`--default-font-family`, defaultFontFamily as string, {
+      //   isInline: true,
+      //   isReference: false,
+      // })
+
+      // if (defaultFontFeatureSettings) {
+      //   designSystem.theme.add(
+      //     `--default-font-feature-settings`,
+      //     defaultFontFeatureSettings as string,
+      //     {
+      //       isInline: true,
+      //       isReference: false,
+      //     },
+      //   )
+      // }
+
+      // if (defaultFontVariationSettings) {
+      //   designSystem.theme.add(
+      //     `--default-font-variation-settings`,
+      //     defaultFontVariationSettings as string,
+      //     {
+      //       isInline: true,
+      //       isReference: false,
+      //     },
+      //   )
+      // }
+    }
+
+    // if (Object.hasOwn(theme.fontFamily, 'mono')) {
+    //   // let defaultMonoFontFamily = theme.fontFamily.sans
+    //   // let defaultMonoFontFeatureSettings = null
+    //   // let defaultMonoFontVariationSettings = null
+
+    //   // designSystem.theme.add('--default-font-family', 'theme(fontFamily.sans)', {
+    //   //   isInline: true,
+    //   //   isReference: false,
+    //   // })
+
+    //   if (Array.isArray(defaultMonoFontFamily)) {
+    //     if (typeof defaultMonoFontFamily[1] === 'object') {
+    //       defaultMonoFontFeatureSettings = defaultMonoFontFamily[1]?.fontFeatureSettings
+    //       defaultMonoFontVariationSettings = defaultMonoFontFamily[1]?.fontVariationSettings
+    //       defaultMonoFontFamily = defaultMonoFontFamily[0]
+    //     } else {
+    //       defaultMonoFontFamily = defaultMonoFontFamily.join(', ')
+    //     }
+    //   }
+
+    //   designSystem.theme.add(`--default-font-family`, defaultMonoFontFamily as string, {
+    //     isInline: true,
+    //     isReference: false,
+    //   })
+
+    //   if (defaultMonoFontFeatureSettings) {
+    //     designSystem.theme.add(
+    //       `--default-font-feature-settings`,
+    //       defaultMonoFontFeatureSettings as string,
+    //       {
+    //         isInline: true,
+    //         isReference: false,
+    //       },
+    //     )
+    //   }
+
+    //   if (defaultMonoFontVariationSettings) {
+    //     designSystem.theme.add(
+    //       `--default-font-variation-settings`,
+    //       defaultMonoFontVariationSettings as string,
+    //       {
+    //         isInline: true,
+    //         isReference: false,
+    //       },
+    //     )
+    //   }
+    // }
+  }
+
   return theme
 }
 

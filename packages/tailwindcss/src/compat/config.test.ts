@@ -229,3 +229,44 @@ test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
     "
   `)
 })
+
+test.only('i dont even know yet', async ({ expect }) => {
+  let input = css`
+    @config "./config.js";
+    @theme {
+      --color-banana: yellow;
+    }
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadConfig: async () => ({
+      theme: {
+        fontFamily: {
+          sans: [
+            'Potato Sans',
+            { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
+          ],
+        },
+      },
+    }),
+  })
+
+  expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+    ":root {
+      --color-banana: yellow;
+      --font-family-sans: Potato Sans;
+      --font-family-sans--font-feature-settings: "cv06";
+      --font-family-sans--font-variation-settings: "XHGT" 0.7;
+      --default-font-family: Potato Sans;
+      --default-font-feature-settings: "cv06";
+      --default-font-variation-settings: "XHGT" 0.7;
+    }
+    .font-sans {
+      font-family: Potato Sans;
+      font-feature-settings: "cv06";
+      font-variation-settings: "XHGT" 0.7;
+    }
+    "
+  `)
+})

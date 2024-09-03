@@ -302,9 +302,38 @@ async function parseCss(
     return WalkAction.Skip
   })
 
+  let designSystem = buildDesignSystem(theme)
+
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+
+  let plugins = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
+
+  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+
+  for (let customVariant of customVariants) {
+    customVariant(designSystem)
+  }
+
+  for (let customUtility of customUtilities) {
+    customUtility(designSystem)
+  }
+
   // Output final set of theme variables at the position of the first `@theme`
   // rule.
-  if (firstThemeRule) {
+  if (
+    firstThemeRule /* TODO: The JS config should add a theme rule to the AST actually, if needed */
+  ) {
     firstThemeRule = firstThemeRule as Rule
     firstThemeRule.selector = ':root'
 
@@ -340,40 +369,13 @@ async function parseCss(
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme)
-
-  let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
-    })),
-  )
-
-  let plugins = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
-      options: pluginOptions,
-    })),
-  )
-
-  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
-
-  for (let customVariant of customVariants) {
-    customVariant(designSystem)
-  }
-
-  for (let customUtility of customUtilities) {
-    customUtility(designSystem)
-  }
-
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
     substituteAtApply(ast, designSystem)
   }
 
   // Replace `theme()` function calls with the actual theme variables.
-  if (css.includes(THEME_FUNCTION_INVOCATION)) {
+  if (css.includes(THEME_FUNCTION_INVOCATION) /* TODO: or has any plugins or has a JS config */) {
     substituteFunctions(ast, pluginApi)
   }
 
