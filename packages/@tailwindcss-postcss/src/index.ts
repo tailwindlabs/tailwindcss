@@ -141,9 +141,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Look for candidates used to generate the CSS
           let scanner = new Scanner({
             detectSources: { base },
-            sources: context.compiler.globs.map(({ base, pattern }) => ({
+            sources: context.compiler.globs.map(({ origin, pattern }) => ({
               // Globs are relative to the input.css file
-              base: base ? path.dirname(path.resolve(inputBasePath, base)) : inputBasePath,
+              base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
               pattern,
             })),
           })

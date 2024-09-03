@@ -93,9 +93,9 @@ export default function tailwindcss(): Plugin[] {
     })
 
     scanner = new Scanner({
-      sources: globs.map(({ base, pattern }) => ({
+      sources: globs.map(({ origin, pattern }) => ({
         // Globs are relative to the input.css file
-        base: base ? path.dirname(path.resolve(inputBasePath, base)) : inputBasePath,
+        base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
         pattern,
       })),
     })

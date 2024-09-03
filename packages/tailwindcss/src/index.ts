@@ -54,7 +54,7 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
-  let globs: { base?: string; pattern: string }[] = []
+  let globs: { origin?: string; pattern: string }[] = []
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
@@ -398,7 +398,7 @@ async function parseCss(
       )
     }
 
-    globs.push(file)
+    globs.push({ origin: file.base, pattern: file.pattern })
   }
 
   return {
@@ -413,7 +413,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base?: string; pattern: string }[]
+  globs: { origin?: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
   let { designSystem, ast, globs, pluginApi } = await parseCss(css, opts)
