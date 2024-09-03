@@ -11,12 +11,12 @@ export async function compile(
   return await _compile(css, {
     loadPlugin: async (pluginPath) => {
       if (pluginPath[0] !== '.') {
-        return importNativeAndJiti(pluginPath).then((m: any) => m.default ?? m)
+        return importModule(pluginPath).then((m: any) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, pluginPath)
       let [module, moduleDependencies] = await Promise.all([
-        importNativeAndJiti(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+        importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),
       ])
 
@@ -29,12 +29,12 @@ export async function compile(
 
     loadConfig: async (configPath) => {
       if (configPath[0] !== '.') {
-        return importNativeAndJiti(configPath).then((m: any) => m.default ?? m)
+        return importModule(configPath).then((m: any) => m.default ?? m)
       }
 
       let resolvedPath = path.resolve(base, configPath)
       let [module, moduleDependencies] = await Promise.all([
-        importNativeAndJiti(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+        importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),
       ])
 
@@ -47,8 +47,11 @@ export async function compile(
   })
 }
 
+// Attempts to import the module using the native `import()` function. If this
+// fails, it sets up `jiti` and attempts to import this way so that `.ts` files
+// can be resolved properly.
 let jiti: null | Jiti = null
-async function importNativeAndJiti(path: string): Promise<any> {
+async function importModule(path: string): Promise<any> {
   try {
     return await import(path)
   } catch (error) {
