@@ -1979,7 +1979,7 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:dir(rtl), :dir(rtl) *, [dir="rtl"], [dir="rtl"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
           display: flex;
         }
 
