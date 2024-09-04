@@ -18,6 +18,11 @@ test('Config values can be merged into the theme', ({ expect }) => {
             },
           },
 
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['Potato Mono', { fontVariationSettings: '"XHGT" 0.7' }],
+          },
+
           fontSize: {
             sm: '0.875rem',
             base: [
@@ -34,6 +39,11 @@ test('Config values can be merged into the theme', ({ expect }) => {
 
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
+  expect(theme.resolve('sans', ['--font-family'])).toEqual('Inter, system-ui, sans-serif')
+  expect(theme.resolveWith('mono', ['--font-family'], ['--font-variation-settings'])).toEqual([
+    'Potato Mono',
+    { '--font-variation-settings': '"XHGT" 0.7' },
+  ])
   expect(theme.resolve('sm', ['--font-size'])).toEqual('0.875rem')
   expect(theme.resolve('base', ['--font-size'])).toEqual('1rem')
   expect(theme.resolveWith('base', ['--font-size'], ['--line-height'])).toEqual([
