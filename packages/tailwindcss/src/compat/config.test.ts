@@ -1,5 +1,4 @@
-import { describe } from 'node:test'
-import { test } from 'vitest'
+import { describe, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
 
