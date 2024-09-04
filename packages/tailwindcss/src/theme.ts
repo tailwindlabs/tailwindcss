@@ -67,6 +67,10 @@ export class Theme {
     return null
   }
 
+  hasDefault(key: string): boolean {
+    return this.values.get(key)?.isDefault ?? false
+  }
+
   entries() {
     return this.values.entries()
   }

@@ -2,17 +2,83 @@ import type { DesignSystem } from '../design-system'
 import { resolveConfig, type ConfigFile } from './config/resolve-config'
 import type { ResolvedConfig } from './config/types'
 
+function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
+  if (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    typeof value[1] === 'object' &&
+    typeof value[1] !== null
+  ) {
+    return subValue ? (value[1][subValue] ?? null) : value[0]
+  } else if (Array.isArray(value) && subValue === null) {
+    return value.join(', ')
+  } else if (typeof value === 'string' && subValue === null) {
+    return value
+  }
+
+  return null
+}
+
 export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFile[]) {
   let theme = resolveConfig(designSystem, configs).theme
 
   for (let [path, value] of themeableValues(theme)) {
     let name = keyPathToCssProperty(path)
-
     designSystem.theme.add(`--${name}`, value as any, {
       isInline: true,
       isReference: true,
       isDefault: true,
     })
+  }
+
+  // If someone has updated `fontFamily.sans` or `fontFamily.mono` in a JS
+  // config, we need to make sure variables like `--default-font-family` and
+  // `--default-font-feature-settings` are updated to match those explicit
+  // values, because variables like `--font-family-sans` and
+  // `--font-family-sans--feature-settings` (which the `--default-font-*`
+  // variables reference) won't exist in the generated CSS.
+  if (Object.hasOwn(theme, 'fontFamily')) {
+    let options = {
+      isInline: true,
+      isReference: false,
+      isDefault: true,
+    }
+
+    // Replace `--default-font-*` with `fontFamily.sans` values
+    {
+      let fontFamily = resolveThemeValue(theme.fontFamily.sans)
+      if (fontFamily && designSystem.theme.hasDefault('--font-family-sans')) {
+        designSystem.theme.add('--default-font-family', fontFamily, options)
+        designSystem.theme.add(
+          '--default-font-feature-settings',
+          resolveThemeValue(theme.fontFamily.sans, 'fontFeatureSettings') ?? 'normal',
+          options,
+        )
+        designSystem.theme.add(
+          '--default-font-variation-settings',
+          resolveThemeValue(theme.fontFamily.sans, 'fontVariationSettings') ?? 'normal',
+          options,
+        )
+      }
+    }
+
+    // Replace `--default-mono-font-*` with `fontFamily.mono` values
+    {
+      let fontFamily = resolveThemeValue(theme.fontFamily.mono)
+      if (fontFamily && designSystem.theme.hasDefault('--font-family-mono')) {
+        designSystem.theme.add('--default-mono-font-family', 'theme(fontFamily.mono)', options)
+        designSystem.theme.add(
+          '--default-mono-font-feature-settings',
+          resolveThemeValue(theme.fontFamily.mono, 'fontFeatureSettings') ?? 'normal',
+          options,
+        )
+        designSystem.theme.add(
+          '--default-mono-font-variation-settings',
+          resolveThemeValue(theme.fontFamily.mono, 'fontVariationSettings') ?? 'normal',
+          options,
+        )
+      }
+    }
   }
 
   return theme
