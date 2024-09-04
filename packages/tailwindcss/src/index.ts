@@ -28,16 +28,19 @@ function throwOnConfig(): never {
 function parseThemeOptions(selector: string) {
   let isReference = false
   let isInline = false
+  let isDefault = false
 
   for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
     if (option === 'reference') {
       isReference = true
     } else if (option === 'inline') {
       isInline = true
+    } else if (option === 'default') {
+      isDefault = true
     }
   }
 
-  return { isReference, isInline }
+  return { isReference, isInline, isDefault }
 }
 
 async function parseCss(
@@ -253,8 +256,8 @@ async function parseCss(
             'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
           )
         }
-        if (child.selector === '@theme') {
-          child.selector = '@theme ' + themeParams
+        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+          child.selector += ' ' + themeParams
           return WalkAction.Skip
         }
       })
@@ -264,7 +267,7 @@ async function parseCss(
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let { isReference, isInline } = parseThemeOptions(node.selector)
+    let { isReference, isInline, isDefault } = parseThemeOptions(node.selector)
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -278,7 +281,7 @@ async function parseCss(
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', { isReference, isInline })
+        theme.add(child.property, child.value ?? '', { isReference, isInline, isDefault })
         return
       }
 
@@ -301,6 +304,33 @@ async function parseCss(
     }
     return WalkAction.Skip
   })
+
+  let designSystem = buildDesignSystem(theme)
+
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+
+  let plugins = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
+
+  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+
+  for (let customVariant of customVariants) {
+    customVariant(designSystem)
+  }
+
+  for (let customUtility of customUtilities) {
+    customUtility(designSystem)
+  }
 
   // Output final set of theme variables at the position of the first `@theme`
   // rule.
@@ -340,40 +370,16 @@ async function parseCss(
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme)
-
-  let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
-    })),
-  )
-
-  let plugins = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
-      options: pluginOptions,
-    })),
-  )
-
-  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
-
-  for (let customVariant of customVariants) {
-    customVariant(designSystem)
-  }
-
-  for (let customUtility of customUtilities) {
-    customUtility(designSystem)
-  }
-
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
     substituteAtApply(ast, designSystem)
   }
 
-  // Replace `theme()` function calls with the actual theme variables.
-  if (css.includes(THEME_FUNCTION_INVOCATION)) {
+  // Replace `theme()` function calls with the actual theme variables. Plugins
+  // could register new rules that include functions, and JS config files could
+  // also contain functions or plugins that use functions so we need to evaluate
+  // functions if either of those are present.
+  if (plugins.length > 0 || configs.length > 0 || css.includes(THEME_FUNCTION_INVOCATION)) {
     substituteFunctions(ast, pluginApi)
   }
 
@@ -482,6 +488,10 @@ export async function compile(
           return compiledCss
         }
 
+        // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+        // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+        // calls so we need evaluate any functions we find there that weren't in
+        // the source CSS.
         substituteFunctions(newNodes, pluginApi)
 
         previousAstNodeCount = newNodes.length
