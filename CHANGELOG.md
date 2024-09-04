@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t suggest named opacity modifiers in intellisense ([#14339](https://github.com/tailwindlabs/tailwindcss/pull/14339))
 - Fix a crash with older Node.js versions ([#14342](https://github.com/tailwindlabs/tailwindcss/pull/14342))
 - Support defining theme values as arrays of strings in JS config files ([#14343](https://github.com/tailwindlabs/tailwindcss/pull/14343))
+- Ensure `--default-font-*` and `--default-mono-font-*` variables respect theme customizations in JS config files ([#14344](https://github.com/tailwindlabs/tailwindcss/pull/14344))
 
 ## [4.0.0-alpha.21] - 2024-09-02
 
