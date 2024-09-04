@@ -192,9 +192,7 @@ export default function tailwindcss(): Plugin[] {
           // The reason why we can not rely on the invalidation here is that the
           // users would otherwise see a flicker in the styles as the CSS might
           // be loaded with an invalid set of candidates first.
-          for (let server of servers) {
-            await server.waitForRequestsIdle(id)
-          }
+          await Promise.all(servers.map((server) => server.waitForRequestsIdle(id)))
         }
 
         let generated = await root.generate(src, (file) => this.addWatchFile(file))
