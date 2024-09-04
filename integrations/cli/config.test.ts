@@ -1,4 +1,4 @@
-import { candidate, css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
   'Config files (CJS)',
@@ -99,7 +99,7 @@ test(
       'index.html': html`
         <div class="text-primary"></div>
       `,
-      'tailwind.config.ts': js`
+      'tailwind.config.ts': ts`
         export default {
           theme: {
             extend: {
