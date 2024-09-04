@@ -6,5 +6,10 @@ export * from './compile'
 // not necessary.
 if (!process.versions.bun) {
   let localRequire = Module.createRequire(import.meta.url)
-  Module.register(pathToFileURL(localRequire.resolve('@tailwindcss/node/esm-cache-loader')))
+
+  // `Module#register` was added in Node v18.19.0 and v20.6.0
+  //
+  // Not calling it means that while ESM dependencies don't get reloaded, the
+  // actual included files will because they cache bust directly via `?id=…`
+  Module.register?.(pathToFileURL(localRequire.resolve('@tailwindcss/node/esm-cache-loader')))
 }
