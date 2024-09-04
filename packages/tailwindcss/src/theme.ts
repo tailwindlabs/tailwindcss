@@ -24,7 +24,7 @@ export class Theme {
 
     if (options & ThemeOptions.DEFAULT) {
       let existing = this.values.get(key)
-      if (existing && (existing.options & ThemeOptions.DEFAULT) !== ThemeOptions.DEFAULT) return
+      if (existing && !(existing.options & ThemeOptions.DEFAULT)) return
     }
 
     if (value === 'initial') {
