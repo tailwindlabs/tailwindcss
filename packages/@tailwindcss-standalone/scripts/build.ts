@@ -28,7 +28,7 @@ interface BuildResult {
   elapsed: bigint
 }
 
-async function build(triple: string, file: string): BuildResult {
+async function build(triple: string, file: string): Promise<BuildResult> {
   let start = process.hrtime.bigint()
 
   let outfile = path.resolve(__dirname, `../dist/${file}`)
