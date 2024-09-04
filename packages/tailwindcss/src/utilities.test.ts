@@ -13067,15 +13067,18 @@ test('leading', async () => {
     }
 
     .leading-6 {
-      line-height: var(--line-height-6, 1.5rem);
+      --tw-line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--tw-line-height);
     }
 
     .leading-\\[--value\\] {
-      line-height: var(--value);
+      --tw-line-height: var(--value);
+      line-height: var(--tw-line-height);
     }
 
     .leading-none {
-      line-height: var(--line-height-none, 1);
+      --tw-line-height: var(--line-height-none, 1);
+      line-height: var(--tw-line-height);
     }"
   `)
   expect(
@@ -13700,29 +13703,69 @@ test('text', async () => {
       line-height: var(--font-size-sm--line-height, 1.25rem);
     }
 
+    .text-\\[12px\\] {
+      font-size: 12px;
+      line-height: var(--tw-line-height, var(--line-height-normal));
+    }
+
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--tw-line-height, var(--line-height-6, 1.5rem));
+    }
+
+    .text-\\[50\\%\\] {
+      font-size: 50%;
+      line-height: var(--tw-line-height, var(--line-height-normal));
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--tw-line-height, var(--line-height-6, 1.5rem));
+    }
+
+    .text-\\[absolute-size\\:--my-size\\] {
+      font-size: var(--my-size);
+      line-height: var(--tw-line-height, var(--line-height-normal));
+    }
+
+    .text-\\[clamp\\(1rem\\,2rem\\,3rem\\)\\] {
+      font-size: 2rem;
+      line-height: var(--tw-line-height, var(--line-height-normal));
+    }
+
+    .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\] {
+      font-size: clamp(1rem, var(--size), 3rem);
+      line-height: var(--tw-line-height, var(--line-height-normal));
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: var(--line-height-9, 2.25rem);
+      line-height: var(--tw-line-height, var(--line-height-9, 2.25rem));
+    }
+
+    .text-\\[larger\\] {
+      font-size: larger;
+      line-height: var(--tw-line-height, var(--line-height-normal));
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--tw-line-height, var(--line-height-6, 1.5rem));
+    }
+
+    .text-\\[length\\:--my-size\\], .text-\\[percentage\\:--my-size\\], .text-\\[relative-size\\:--my-size\\] {
+      font-size: var(--my-size);
+      line-height: var(--tw-line-height, var(--line-height-normal));
+    }
+
+    .text-\\[xx-large\\] {
+      font-size: xx-large;
+      line-height: var(--tw-line-height, var(--line-height-normal));
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--tw-line-height, var(--line-height-6, 1.5rem));
     }
 
     .text-sm\\/6 {
@@ -13733,38 +13776,6 @@ test('text', async () => {
     .text-sm\\/\\[4px\\] {
       font-size: var(--font-size-sm, .875rem);
       line-height: 4px;
-    }
-
-    .text-\\[12px\\] {
-      font-size: 12px;
-    }
-
-    .text-\\[50\\%\\] {
-      font-size: 50%;
-    }
-
-    .text-\\[absolute-size\\:--my-size\\] {
-      font-size: var(--my-size);
-    }
-
-    .text-\\[clamp\\(1rem\\,2rem\\,3rem\\)\\] {
-      font-size: 2rem;
-    }
-
-    .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\] {
-      font-size: clamp(1rem, var(--size), 3rem);
-    }
-
-    .text-\\[larger\\] {
-      font-size: larger;
-    }
-
-    .text-\\[length\\:--my-size\\], .text-\\[percentage\\:--my-size\\], .text-\\[relative-size\\:--my-size\\] {
-      font-size: var(--my-size);
-    }
-
-    .text-\\[xx-large\\] {
-      font-size: xx-large;
     }
 
     .text-\\[\\#0088cc\\] {

@@ -27,7 +27,7 @@
 
 html,
 :host {
-  line-height: 1.5; /* 1 */
+  line-height: var(--line-height-normal, 1.5); /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
   tab-size: 4; /* 3 */
   font-family: var(
@@ -140,6 +140,7 @@ pre {
 
 small {
   font-size: 80%;
+  line-height: var(--tw-line-height, var(--line-height-normal, 1.5));
 }
 
 /*

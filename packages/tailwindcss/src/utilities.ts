@@ -3782,7 +3782,10 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('leading', {
     themeKeys: ['--line-height'],
-    handle: (value) => [decl('line-height', value)],
+    handle: (value) => [
+      decl('--tw-line-height', value),
+      decl('line-height', 'var(--tw-line-height)'),
+    ],
   })
 
   functionalUtility('tracking', {
@@ -4050,11 +4053,17 @@ export function createUtilities(theme: Theme) {
                 : theme.resolve(candidate.modifier.value, ['--line-height'])
 
             if (modifier) {
-              return [decl('font-size', value), decl('line-height', modifier)]
+              return [
+                decl('font-size', value),
+                decl('line-height', `var(--tw-line-height, ${modifier})`),
+              ]
             }
           }
 
-          return [decl('font-size', value)]
+          return [
+            decl('font-size', value),
+            decl('line-height', 'var(--tw-line-height, var(--line-height-normal))'),
+          ]
         }
         default: {
           value = asColor(value, candidate.modifier)
