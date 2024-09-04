@@ -175,6 +175,7 @@ textarea {
   font-size: 100%; /* 1 */
   font-weight: inherit; /* 1 */
   line-height: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
   color: inherit; /* 1 */
   margin: 0; /* 2 */
   padding: 0; /* 3 */
@@ -195,9 +196,9 @@ select {
 */
 
 button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
   -webkit-appearance: button; /* 1 */
   background-color: transparent; /* 2 */
   background-image: none; /* 2 */

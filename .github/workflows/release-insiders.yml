@@ -1,0 +1,75 @@
+name: Release Insiders
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: stable
+  NODE_VERSION: 16
+  RELEASE_CHANNEL: insiders
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npm run build
+
+      - name: Test
+        run: |
+          npm run test || \
+          npm run test || \
+          npm run test || exit 1
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }} --force --no-git-tag-version
+
+      - name: Publish
+        run: npm publish --provenance --tag ${{ env.RELEASE_CHANNEL }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Trigger Tailwind Play update
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml',
+              inputs: {
+                insidersVersion: '0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+              }
+            })

@@ -124,7 +124,7 @@ export function parseColorFormat(value) {
   if (typeof value === 'string' && value.includes('<alpha-value>')) {
     let oldValue = value
 
-    return ({ opacityValue = 1 }) => oldValue.replace('<alpha-value>', opacityValue)
+    return ({ opacityValue = 1 }) => oldValue.replace(/<alpha-value>/g, opacityValue)
   }
 
   return value

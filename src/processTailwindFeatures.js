@@ -7,15 +7,12 @@ import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import collapseDuplicateDeclarations from './lib/collapseDuplicateDeclarations'
 import partitionApplyAtRules from './lib/partitionApplyAtRules'
-import detectNesting from './lib/detectNesting'
 import { createContext } from './lib/setupContextUtils'
 import { issueFlagNotices } from './featureFlags'
 
 export default function processTailwindFeatures(setupContext) {
   return async function (root, result) {
     let { tailwindDirectives, applyDirectives } = normalizeTailwindDirectives(root)
-
-    detectNesting()(root, result)
 
     // Partition apply rules that are found in the css
     // itself.

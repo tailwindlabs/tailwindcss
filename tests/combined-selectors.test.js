@@ -1,76 +1,74 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
-crosscheck(() => {
-  it('should generate the partial selector, if only a partial is used (base layer)', () => {
-    let config = {
-      content: [{ raw: html`<div></div>` }],
-      corePlugins: { preflight: false },
-    }
+it('should generate the partial selector, if only a partial is used (base layer)', () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    corePlugins: { preflight: false },
+  }
 
-    let input = css`
-      @tailwind base;
+  let input = css`
+    @tailwind base;
 
-      @layer base {
-        :root {
-          font-weight: bold;
-        }
-
-        /* --- */
-
-        :root,
-        .a {
-          color: black;
-        }
+    @layer base {
+      :root {
+        font-weight: bold;
       }
-    `
 
-    return run(input, config).then((result) => {
-      return expect(result.css).toMatchFormattedCss(css`
-        :root {
-          font-weight: bold;
-        }
-        :root,
-        .a {
-          color: #000;
-        }
-        ${defaults}
-      `)
-    })
+      /* --- */
+
+      :root,
+      .a {
+        color: black;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      :root {
+        font-weight: bold;
+      }
+      :root,
+      .a {
+        color: #000;
+      }
+      ${defaults}
+    `)
   })
+})
 
-  it('should generate the partial selector, if only a partial is used (utilities layer)', () => {
-    let config = {
-      content: [{ raw: html`<div class="a"></div>` }],
-      corePlugins: { preflight: false },
-    }
+it('should generate the partial selector, if only a partial is used (utilities layer)', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    corePlugins: { preflight: false },
+  }
 
-    let input = css`
-      @tailwind utilities;
+  let input = css`
+    @tailwind utilities;
 
-      @layer utilities {
-        :root {
-          font-weight: bold;
-        }
-
-        /* --- */
-
-        :root,
-        .a {
-          color: black;
-        }
+    @layer utilities {
+      :root {
+        font-weight: bold;
       }
-    `
 
-    return run(input, config).then((result) => {
-      return expect(result.css).toMatchFormattedCss(css`
-        :root {
-          font-weight: bold;
-        }
-        :root,
-        .a {
-          color: #000;
-        }
-      `)
-    })
+      /* --- */
+
+      :root,
+      .a {
+        color: black;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      :root {
+        font-weight: bold;
+      }
+      :root,
+      .a {
+        color: #000;
+      }
+    `)
   })
 })

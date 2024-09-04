@@ -1,0 +1,79 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [main, 3.3, 3.4]
+  pull_request:
+    branches: [main, 3.3, 3.4]
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: stable
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        integration:
+          - content-resolution
+          - parcel
+          - postcss-cli
+          - rollup
+          - rollup-sass
+          - tailwindcss-cli
+          - vite
+          - webpack-4
+          - webpack-5
+        node-version: [18]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Cache node_modules (tailwindcss)
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache node_modules (integrations)
+        uses: actions/cache@v3
+        with:
+          path: ./integrations/node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-integrations-${{ hashFiles('./integrations/package-lock.json') }}
+
+      - name: Cache node_modules (integration)
+        uses: actions/cache@v3
+        with:
+          path: ./integrations/${{ matrix.integration }}/node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-integrations-${{ matrix.integration }}-${{ hashFiles('./integrations/${{ matrix.integration }}/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install dependencies (shared integrations)
+        run: npm install --prefix ./integrations
+
+      - name: Install dependencies (integration)
+        run: npm install --prefix ./integrations/${{ matrix.integration }}
+
+      - name: Build Tailwind CSS
+        run: npm run build
+
+      - name: Test ${{ matrix.integration }}
+        run: |
+          npm run test --prefix ./integrations/${{ matrix.integration }} || \
+          npm run test --prefix ./integrations/${{ matrix.integration }} || \
+          npm run test --prefix ./integrations/${{ matrix.integration }} || exit 1

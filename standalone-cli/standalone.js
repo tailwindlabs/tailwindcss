@@ -33,6 +33,11 @@ useCustomJiti(() =>
     interopDefault: true,
     nativeModules: Object.keys(localModules),
     transform: (opts) => {
+      // Sucrase can't transform import.meta so we have to use Babel
+      if (opts.source.includes('import.meta')) {
+        return require('jiti/dist/babel.js')(opts)
+      }
+
       return transform(opts.source, {
         transforms: ['typescript', 'imports'],
       })

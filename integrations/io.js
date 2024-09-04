@@ -134,7 +134,8 @@ module.exports = function ({
         }
       }
 
-      return fs.writeFile(path.resolve(absoluteInputFolder, file), contents, 'utf8')
+      await fs.mkdir(path.dirname(filePath), { recursive: true })
+      return fs.writeFile(filePath, contents, 'utf8')
     },
     async waitForOutputFileCreation(file) {
       if (file instanceof RegExp) {

@@ -512,11 +512,11 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
-  let sort = context.offsets.arbitraryProperty()
+  let sort = context.offsets.arbitraryProperty(classCandidate)
 
   return [
     [
-      { sort, layer: 'utilities' },
+      { sort, layer: 'utilities', options: { respectImportant: true } },
       () => ({
         [asClass(classCandidate)]: {
           [property]: normalized,

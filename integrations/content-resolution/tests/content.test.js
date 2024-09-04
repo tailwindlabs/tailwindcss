@@ -1,12 +1,13 @@
 let fs = require('fs')
 let path = require('path')
+let { stripVTControlCharacters } = require('util')
 let { cwd } = require('./cwd.js')
 let { writeConfigs, destroyConfigs } = require('./config.js')
 
 let $ = require('../../execute')
 let { css } = require('../../syntax')
 
-let { readOutputFile } = require('../../io')({
+let { writeInputFile, readOutputFile } = require('../../io')({
   output: 'dist',
   input: '.',
 })
@@ -37,14 +38,22 @@ async function build({ cwd: cwdPath } = {}) {
 
   await cwd.switch(cwdPath)
 
+  // Hide console.log and console.error output
+  let consoleLogMock = jest.spyOn(console, 'log').mockImplementation(() => {})
+  let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {})
+
   // Note that ./tailwind.config.js is hardcoded on purpose here
   // It represents a config but one that could be in different places
-  await $(`postcss ${inputPath} -o ${outputPath}`, {
-    env: { NODE_ENV: 'production' },
+  let result = await $(`postcss ${inputPath} -o ${outputPath}`, {
+    env: { NODE_ENV: 'production', JEST_WORKER_ID: undefined },
     cwd: cwdPath,
   })
 
+  consoleLogMock.mockRestore()
+  consoleErrorMock.mockRestore()
+
   return {
+    ...result,
     css: await readOutputFile('main.css'),
   }
 }
@@ -158,6 +167,206 @@ it('it handles ignored globs correctly when not relative to the config', async (
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
   expect(result.css).toMatchCss(``)
+})
+
+it('warns when globs are too broad and match node_modules', async () => {
+  await writeConfigs({
+    both: {
+      content: {
+        files: ['./**/*.html'],
+      },
+    },
+  })
+
+  let result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // No issues yet, because we don't have a file that resolves inside `node_modules`
+  expect(result.stderr).toEqual('')
+
+  // We didn't scan any node_modules files yet
+  expect(result.css).not.toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // Write a file that resolves inside `node_modules`
+  await writeInputFile(
+    'node_modules/bad.html',
+    String.raw`<div class="content-['node\_modules/bad.html']">Bad</div>`
+  )
+
+  result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // We still expect the node_modules file to be processed
+  expect(result.css).toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // We didn't list `node_modules` in the glob explicitly, so we should see a
+  // warning.
+  expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
+    "
+    warn - Your \`content\` configuration includes a pattern which looks like it's accidentally matching all of \`node_modules\` and can cause serious performance issues.
+    warn - Pattern: \`./**/*.html\`
+    warn - See our documentation for recommendations:
+    warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
+    "
+  `)
+})
+
+it('should not warn when glob contains node_modules explicitly', async () => {
+  await writeConfigs({
+    both: {
+      content: {
+        files: ['./node_modules/**/*.html'],
+      },
+    },
+  })
+
+  let result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // Write a file that resolves inside `node_modules`
+  await writeInputFile(
+    'node_modules/bad.html',
+    String.raw`<div class="content-['node\_modules/bad.html']">Bad</div>`
+  )
+
+  result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // We still expect the node_modules file to be processed
+  expect(result.css).toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // We explicitly listed `node_modules` in the glob, so we shouldn't see a
+  // warning.
+  expect(result.stderr).toEqual('')
+})
+
+it('should not warn when globs are too broad if other glob match node_modules explicitly', async () => {
+  await writeConfigs({
+    both: {
+      content: {
+        files: ['./**/*.html', './node_modules/bad.html'],
+      },
+    },
+  })
+
+  let result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // No issues yet, because we don't have a file that resolves inside `node_modules`
+  expect(result.stderr).toEqual('')
+
+  // We didn't scan any node_modules files yet
+  expect(result.css).not.toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // Write a file that resolves inside `node_modules`
+  await writeInputFile(
+    'node_modules/bad.html',
+    String.raw`<div class="content-['node\_modules/bad.html']">Bad</div>`
+  )
+
+  result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // We still expect the node_modules file to be processed
+  expect(result.css).toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // We explicitly listed `node_modules` in the glob, so we shouldn't see a
+  // warning.
+  expect(result.stderr).toEqual('')
+
+  // Write a file that resolves inside `node_modules` but is not covered by the
+  // explicit glob patterns.
+  await writeInputFile(
+    'node_modules/very-very-bad.html',
+    String.raw`<div class="content-['node\_modules/very-very-bad.html']">Bad</div>`
+  )
+
+  result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // We still expect the node_modules file to be processed
+  expect(result.css).toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/very-very-bad\.html\'\] {
+        --tw-content: 'node_modules/very-very-bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // The very-very-bad.html file is not covered by the explicit glob patterns,
+  // so we should see a warning.
+  expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
+    "
+    warn - Your \`content\` configuration includes a pattern which looks like it's accidentally matching all of \`node_modules\` and can cause serious performance issues.
+    warn - Pattern: \`./**/*.html\`
+    warn - See our documentation for recommendations:
+    warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
+    "
+  `)
+})
+
+it('should not warn when a negative glob is used', async () => {
+  await writeConfigs({
+    both: {
+      content: {
+        files: ['./**/*.html', '!./node_modules/**/*.html'],
+      },
+    },
+  })
+
+  // Write a file that resolves inside `node_modules`
+  await writeInputFile(
+    'node_modules/bad.html',
+    String.raw`<div class="content-['node\_modules/bad.html']">Bad</div>`
+  )
+
+  let result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  // The initial glob resolving shouldn't use the node_modules file
+  // in the first place.
+
+  // We still expect the node_modules file to be processed
+  expect(result.css).not.toIncludeCss(
+    css`
+      .content-\[\'node\\_modules\/bad\.html\'\] {
+        --tw-content: 'node_modules/bad.html';
+        content: var(--tw-content);
+      }
+    `
+  )
+
+  // The node_modules file shouldn't have been processed at all because it was
+  // ignored by the negative glob.
+  expect(result.stderr).toEqual('')
 })
 
 it('it handles ignored globs correctly when relative to the config', async () => {

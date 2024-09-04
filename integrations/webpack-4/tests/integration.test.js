@@ -1,6 +1,5 @@
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
-let { env } = require('../../../lib/lib/sharedState')
 
 let {
   appendToInputFile,
@@ -58,26 +57,14 @@ describe('static build', () => {
 
     await $('webpack --mode=production')
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-primary {
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 
   it('can use a tailwind.config.ts configuration file', async () => {
@@ -114,26 +101,14 @@ describe('static build', () => {
 
     await $('webpack --mode=production')
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-primary {
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 })
 
@@ -172,38 +147,20 @@ describe('watcher', () => {
       await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -242,38 +199,20 @@ describe('watcher', () => {
       await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -401,39 +340,22 @@ describe('watcher', () => {
       )
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .btn {
-            border-radius: 0.25rem;
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .btn {
-            background-color: #ef4444;
-            border-radius: 0.25rem;
-            padding: 0.25rem 0.5rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .btn {
+          border-radius: 0.25rem;
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })

@@ -104,8 +104,12 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
             // we consider them separately because merging the declarations into
             // a single rule will cause browsers that do not understand the
             // vendor prefix to throw out the whole rule
+            // Additionally if a selector contains `:has` we also consider
+            // it separately because FF only recently gained support for it
             let selectorGroupName =
-              selector.includes(':-') || selector.includes('::-') ? selector : '__DEFAULT__'
+              selector.includes(':-') || selector.includes('::-') || selector.includes(':has')
+                ? selector
+                : '__DEFAULT__'
 
             let selectors = selectorGroups.get(selectorGroupName) ?? new Set()
             selectorGroups.set(selectorGroupName, selectors)

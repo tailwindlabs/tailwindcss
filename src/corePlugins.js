@@ -21,7 +21,7 @@ import {
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
-import { normalize } from './util/dataTypes'
+import { normalize, normalizeAttributeSelectors } from './util/dataTypes'
 import { INTERNAL_FEATURES } from './lib/setupContextUtils'
 
 export let variantPlugins = {
@@ -270,7 +270,7 @@ export let variantPlugins = {
       addVariant('dark', selector)
     } else if (mode === 'class') {
       // Old behavior
-      addVariant('dark', `:is(${selector} &)`)
+      addVariant('dark', `&:is(${selector} *)`)
     }
   },
 
@@ -412,7 +412,7 @@ export let variantPlugins = {
         let check = normalize(value)
         let isRaw = /^\w*\s*\(/.test(check)
 
-        // Chrome has a bug where `(condtion1)or(condition2)` is not valid
+        // Chrome has a bug where `(condition1)or(condition2)` is not valid
         // But `(condition1) or (condition2)` is supported.
         check = isRaw ? check.replace(/\b(and|or|not)\b/g, ' $1 ') : check
 
@@ -434,62 +434,83 @@ export let variantPlugins = {
     )
   },
 
-  hasVariants: ({ matchVariant }) => {
-    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: {} })
+  hasVariants: ({ matchVariant, prefix }) => {
+    matchVariant('has', (value) => `&:has(${normalize(value)})`, {
+      values: {},
+      [INTERNAL_FEATURES]: {
+        respectPrefix: false,
+      },
+    })
+
     matchVariant(
       'group-has',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier}):has(${normalize(value)}) &`
-          : `:merge(.group):has(${normalize(value)}) &`,
-      { values: {} }
+          ? `:merge(${prefix('.group')}\\/${modifier}):has(${normalize(value)}) &`
+          : `:merge(${prefix('.group')}):has(${normalize(value)}) &`,
+      {
+        values: {},
+        [INTERNAL_FEATURES]: {
+          respectPrefix: false,
+        },
+      }
     )
+
     matchVariant(
       'peer-has',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier}):has(${normalize(value)}) ~ &`
-          : `:merge(.peer):has(${normalize(value)}) ~ &`,
-      { values: {} }
+          ? `:merge(${prefix('.peer')}\\/${modifier}):has(${normalize(value)}) ~ &`
+          : `:merge(${prefix('.peer')}):has(${normalize(value)}) ~ &`,
+      {
+        values: {},
+        [INTERNAL_FEATURES]: {
+          respectPrefix: false,
+        },
+      }
     )
   },
 
   ariaVariants: ({ matchVariant, theme }) => {
-    matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
+    matchVariant('aria', (value) => `&[aria-${normalizeAttributeSelectors(normalize(value))}]`, {
+      values: theme('aria') ?? {},
+    })
     matchVariant(
       'group-aria',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier})[aria-${normalize(value)}] &`
-          : `:merge(.group)[aria-${normalize(value)}] &`,
+          ? `:merge(.group\\/${modifier})[aria-${normalizeAttributeSelectors(normalize(value))}] &`
+          : `:merge(.group)[aria-${normalizeAttributeSelectors(normalize(value))}] &`,
       { values: theme('aria') ?? {} }
     )
     matchVariant(
       'peer-aria',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] ~ &`
-          : `:merge(.peer)[aria-${normalize(value)}] ~ &`,
+          ? `:merge(.peer\\/${modifier})[aria-${normalizeAttributeSelectors(normalize(value))}] ~ &`
+          : `:merge(.peer)[aria-${normalizeAttributeSelectors(normalize(value))}] ~ &`,
       { values: theme('aria') ?? {} }
     )
   },
 
   dataVariants: ({ matchVariant, theme }) => {
-    matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
+    matchVariant('data', (value) => `&[data-${normalizeAttributeSelectors(normalize(value))}]`, {
+      values: theme('data') ?? {},
+    })
     matchVariant(
       'group-data',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier})[data-${normalize(value)}] &`
-          : `:merge(.group)[data-${normalize(value)}] &`,
+          ? `:merge(.group\\/${modifier})[data-${normalizeAttributeSelectors(normalize(value))}] &`
+          : `:merge(.group)[data-${normalizeAttributeSelectors(normalize(value))}] &`,
       { values: theme('data') ?? {} }
     )
     matchVariant(
       'peer-data',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier})[data-${normalize(value)}] ~ &`
-          : `:merge(.peer)[data-${normalize(value)}] ~ &`,
+          ? `:merge(.peer\\/${modifier})[data-${normalizeAttributeSelectors(normalize(value))}] ~ &`
+          : `:merge(.peer)[data-${normalizeAttributeSelectors(normalize(value))}] ~ &`,
       { values: theme('data') ?? {} }
     )
   },
@@ -724,11 +745,19 @@ export let corePlugins = {
   zIndex: createUtilityPlugin('zIndex', [['z', ['zIndex']]], { supportsNegativeValues: true }),
   order: createUtilityPlugin('order', undefined, { supportsNegativeValues: true }),
   gridColumn: createUtilityPlugin('gridColumn', [['col', ['gridColumn']]]),
-  gridColumnStart: createUtilityPlugin('gridColumnStart', [['col-start', ['gridColumnStart']]]),
-  gridColumnEnd: createUtilityPlugin('gridColumnEnd', [['col-end', ['gridColumnEnd']]]),
+  gridColumnStart: createUtilityPlugin('gridColumnStart', [['col-start', ['gridColumnStart']]], {
+    supportsNegativeValues: true,
+  }),
+  gridColumnEnd: createUtilityPlugin('gridColumnEnd', [['col-end', ['gridColumnEnd']]], {
+    supportsNegativeValues: true,
+  }),
   gridRow: createUtilityPlugin('gridRow', [['row', ['gridRow']]]),
-  gridRowStart: createUtilityPlugin('gridRowStart', [['row-start', ['gridRowStart']]]),
-  gridRowEnd: createUtilityPlugin('gridRowEnd', [['row-end', ['gridRowEnd']]]),
+  gridRowStart: createUtilityPlugin('gridRowStart', [['row-start', ['gridRowStart']]], {
+    supportsNegativeValues: true,
+  }),
+  gridRowEnd: createUtilityPlugin('gridRowEnd', [['row-end', ['gridRowEnd']]], {
+    supportsNegativeValues: true,
+  }),
 
   float: ({ addUtilities }) => {
     addUtilities({
@@ -1340,16 +1369,6 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '--tw-space-x-reverse': '0',
-                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
-                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
-              },
-            }
-          }
-
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1384,17 +1403,6 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
-
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '@defaults border-width': {},
-                '--tw-divide-x-reverse': '0',
-                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
-                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-              },
-            }
-          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
@@ -2384,6 +2392,7 @@ export let corePlugins = {
       '.mix-blend-saturation': { 'mix-blend-mode': 'saturation' },
       '.mix-blend-color': { 'mix-blend-mode': 'color' },
       '.mix-blend-luminosity': { 'mix-blend-mode': 'luminosity' },
+      '.mix-blend-plus-darker': { 'mix-blend-mode': 'plus-darker' },
       '.mix-blend-plus-lighter': { 'mix-blend-mode': 'plus-lighter' },
     })
   },
@@ -2397,7 +2406,7 @@ export let corePlugins = {
     ].join(', ')
 
     return function ({ matchUtilities, addDefaults, theme }) {
-      addDefaults(' box-shadow', {
+      addDefaults('box-shadow', {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',
@@ -2591,7 +2600,7 @@ export let corePlugins = {
       {
         blur: (value) => {
           return {
-            '--tw-blur': `blur(${value})`,
+            '--tw-blur': value.trim() === '' ? ' ' : `blur(${value})`,
             '@defaults filter': {},
             filter: cssFilterValue,
           }
@@ -2746,8 +2755,9 @@ export let corePlugins = {
       {
         'backdrop-blur': (value) => {
           return {
-            '--tw-backdrop-blur': `blur(${value})`,
+            '--tw-backdrop-blur': value.trim() === '' ? ' ' : `blur(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2763,6 +2773,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-brightness': `brightness(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2778,6 +2789,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-contrast': `contrast(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2793,6 +2805,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-grayscale': `grayscale(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2808,6 +2821,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-hue-rotate': `hue-rotate(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2823,6 +2837,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-invert': `invert(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2838,6 +2853,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-opacity': `opacity(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2853,6 +2869,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-saturate': `saturate(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2868,6 +2885,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-sepia': `sepia(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2891,9 +2909,13 @@ export let corePlugins = {
     addUtilities({
       '.backdrop-filter': {
         '@defaults backdrop-filter': {},
+        '-webkit-backdrop-filter': cssBackdropFilterValue,
         'backdrop-filter': cssBackdropFilterValue,
       },
-      '.backdrop-filter-none': { 'backdrop-filter': 'none' },
+      '.backdrop-filter-none': {
+        '-webkit-backdrop-filter': 'none',
+        'backdrop-filter': 'none',
+      },
     })
   },
 
@@ -2931,6 +2953,48 @@ export let corePlugins = {
     { filterDefault: true }
   ),
   willChange: createUtilityPlugin('willChange', [['will-change', ['will-change']]]),
+  contain: ({ addDefaults, addUtilities }) => {
+    let cssContainValue =
+      'var(--tw-contain-size) var(--tw-contain-layout) var(--tw-contain-paint) var(--tw-contain-style)'
+
+    addDefaults('contain', {
+      '--tw-contain-size': ' ',
+      '--tw-contain-layout': ' ',
+      '--tw-contain-paint': ' ',
+      '--tw-contain-style': ' ',
+    })
+
+    addUtilities({
+      '.contain-none': { contain: 'none' },
+      '.contain-content': { contain: 'content' },
+      '.contain-strict': { contain: 'strict' },
+      '.contain-size': {
+        '@defaults contain': {},
+        '--tw-contain-size': 'size',
+        contain: cssContainValue,
+      },
+      '.contain-inline-size': {
+        '@defaults contain': {},
+        '--tw-contain-size': 'inline-size',
+        contain: cssContainValue,
+      },
+      '.contain-layout': {
+        '@defaults contain': {},
+        '--tw-contain-layout': 'layout',
+        contain: cssContainValue,
+      },
+      '.contain-paint': {
+        '@defaults contain': {},
+        '--tw-contain-paint': 'paint',
+        contain: cssContainValue,
+      },
+      '.contain-style': {
+        '@defaults contain': {},
+        '--tw-contain-style': 'style',
+        contain: cssContainValue,
+      },
+    })
+  },
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),

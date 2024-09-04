@@ -19,6 +19,7 @@ function isCSSFunction(value) {
 // More info:
 // - https://drafts.csswg.org/scroll-animations/#propdef-timeline-scope
 // - https://developer.mozilla.org/en-US/docs/Web/CSS/timeline-scope#dashed-ident
+// - https://www.w3.org/TR/css-anchor-position-1
 //
 const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   // Concrete properties
@@ -26,11 +27,16 @@ const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   'timeline-scope',
   'view-timeline-name',
   'font-palette',
+  'anchor-name',
+  'anchor-scope',
+  'position-anchor',
+  'position-try-options',
 
   // Shorthand properties
   'scroll-timeline',
   'animation-timeline',
   'view-timeline',
+  'position-try',
 ])
 
 // This is not a data type, but rather a function that can normalize the
@@ -72,6 +78,34 @@ export function normalize(value, context = null, isRoot = true) {
 
   value = normalizeMathOperatorSpacing(value)
 
+  return value
+}
+
+export function normalizeAttributeSelectors(value) {
+  // Wrap values in attribute selectors with quotes
+  if (value.includes('=')) {
+    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      if (match[1] === "'" || match[1] === '"') {
+        return match
+      }
+
+      // Handle regex flags on unescaped values
+      if (match.length > 2) {
+        let trailingCharacter = match[match.length - 1]
+        if (
+          match[match.length - 2] === ' ' &&
+          (trailingCharacter === 'i' ||
+            trailingCharacter === 'I' ||
+            trailingCharacter === 's' ||
+            trailingCharacter === 'S')
+        ) {
+          return `="${match.slice(1, -2)}" ${match[match.length - 1]}`
+        }
+      }
+
+      return `="${match.slice(1)}"`
+    })
+  }
   return value
 }
 
@@ -393,7 +427,7 @@ let absoluteSizes = new Set([
   'medium',
   'large',
   'x-large',
-  'x-large',
+  'xx-large',
   'xxx-large',
 ])
 export function absoluteSize(value) {

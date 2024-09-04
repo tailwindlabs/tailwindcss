@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Calculate environment variables
+        run: |
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
+          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
+
+      - name: Publish
+        run: npm publish --provenance --tag ${{ env.RELEASE_CHANNEL }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Trigger Tailwind Play update
+        if: env.RELEASE_CHANNEL == 'latest'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml',
+              inputs: {
+                version: '${{ env.TAILWINDCSS_VERSION }}'
+              }
+            })

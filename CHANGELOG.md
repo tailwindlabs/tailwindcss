@@ -9,13 +9,93 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
-## [3.4.1] - 2014-01-05
+## [3.4.10] - 2024-08-13
+
+### Fixed
+
+- Bump versions of plugins in the Standalone CLI ([#14185](https://github.com/tailwindlabs/tailwindcss/pull/14185))
+
+## [3.4.9] - 2024-08-08
+
+### Fixed
+
+- No longer warns when broad glob patterns are detecting `vendor` folders
+
+## [3.4.8] - 2024-08-07
+
+### Fixed
+
+- Fix minification when using nested CSS ([#14105](https://github.com/tailwindlabs/tailwindcss/pull/14105))
+- Warn when broad glob patterns are used in the content configuration ([#14140](https://github.com/tailwindlabs/tailwindcss/pull/14140))
+
+## [3.4.7] - 2024-07-25
+
+### Fixed
+
+- Fix class detection in Slim templates with attached attributes and ID ([#14019](https://github.com/tailwindlabs/tailwindcss/pull/14019))
+- Ensure attribute values in `data-*` and `aria-*` modifiers are always quoted in the generated CSS ([#14037](https://github.com/tailwindlabs/tailwindcss/pull/14037))
+
+## [3.4.6] - 2024-07-16
+
+### Fixed
+
+- Fix detection of some utilities in Slim/Pug templates ([#14006](https://github.com/tailwindlabs/tailwindcss/pull/14006))
+
+### Changed
+
+- Loosen `:is()` wrapping rules when using an important selector ([#13900](https://github.com/tailwindlabs/tailwindcss/pull/13900))
+
+## [3.4.5] - 2024-07-15
+
+### Fixed
+
+- Disable automatic `var()` injection for anchor properties ([#13826](https://github.com/tailwindlabs/tailwindcss/pull/13826))
+- Use no value instead of `blur(0px)` for `backdrop-blur-none` and `blur-none` utilities ([#13830](https://github.com/tailwindlabs/tailwindcss/pull/13830))
+- Add `.mts` and `.cts` config file detection ([#13940](https://github.com/tailwindlabs/tailwindcss/pull/13940))
+- Don't generate utilities like `px-1` unnecessarily when using utilities like `px-1.5` ([#13959](https://github.com/tailwindlabs/tailwindcss/pull/13959))
+- Always generate `-webkit-backdrop-filter` for `backdrop-*` utilities ([#13997](https://github.com/tailwindlabs/tailwindcss/pull/13997))
+
+## [3.4.4] - 2024-06-05
+
+### Fixed
+
+- Make it possible to use multiple `<alpha-value>` placeholders in a single color definition ([#13740](https://github.com/tailwindlabs/tailwindcss/pull/13740))
+- Don't prefix classes in arbitrary values of `has-*`, `group-has-*`, and `peer-has-*` variants ([#13770](https://github.com/tailwindlabs/tailwindcss/pull/13770))
+- Support negative values for `{col,row}-{start,end}` utilities ([#13781](https://github.com/tailwindlabs/tailwindcss/pull/13781))
+- Update embedded browserslist database ([#13792](https://github.com/tailwindlabs/tailwindcss/pull/13792))
+
+## [3.4.3] - 2024-03-27
+
+### Fixed
+
+- Revert changes to glob handling ([#13384](https://github.com/tailwindlabs/tailwindcss/pull/13384))
+
+## [3.4.2] - 2024-03-27
+
+### Fixed
+
+- Ensure max specificity of `0,0,1` for button and input Preflight rules ([#12735](https://github.com/tailwindlabs/tailwindcss/pull/12735))
+- Improve glob handling for folders with `(`, `)`, `[` or `]` in the file path ([#12715](https://github.com/tailwindlabs/tailwindcss/pull/12715))
+- Split `:has` rules when using `experimental.optimizeUniversalDefaults` ([#12736](https://github.com/tailwindlabs/tailwindcss/pull/12736))
+- Sort arbitrary properties alphabetically across multiple class lists ([#12911](https://github.com/tailwindlabs/tailwindcss/pull/12911))
+- Add `mix-blend-plus-darker` utility ([#12923](https://github.com/tailwindlabs/tailwindcss/pull/12923))
+- Ensure dashes are allowed in variant modifiers ([#13303](https://github.com/tailwindlabs/tailwindcss/pull/13303))
+- Fix crash showing completions in Intellisense when using a custom separator ([#13306](https://github.com/tailwindlabs/tailwindcss/pull/13306))
+- Transpile `import.meta.url` in config files ([#13322](https://github.com/tailwindlabs/tailwindcss/pull/13322))
+- Reset letter spacing for form elements ([#13150](https://github.com/tailwindlabs/tailwindcss/pull/13150))
+- Fix missing `xx-large` and remove double `x-large` absolute size ([#13324](https://github.com/tailwindlabs/tailwindcss/pull/13324))
+- Don't error when encountering nested CSS unless trying to `@apply` a class that uses nesting ([#13325](https://github.com/tailwindlabs/tailwindcss/pull/13325))
+- Ensure that arbitrary properties respect `important` configuration ([#13353](https://github.com/tailwindlabs/tailwindcss/pull/13353))
+- Change dark mode selector so `@apply` works correctly with pseudo elements ([#13379](https://github.com/tailwindlabs/tailwindcss/pull/13379))
+
+## [3.4.1] - 2024-01-05
 
 ### Fixed
 
 - Don't remove keyframe stops when using important utilities ([#12639](https://github.com/tailwindlabs/tailwindcss/pull/12639))
 - Don't add spaces to gradients and grid track names when followed by `calc()` ([#12704](https://github.com/tailwindlabs/tailwindcss/pull/12704))
 - Restore old behavior for `class` dark mode strategy ([#12717](https://github.com/tailwindlabs/tailwindcss/pull/12717))
+- Improve glob handling for folders with `(`, `)`, `[` or `]` in the file path ([#12715](https://github.com/tailwindlabs/tailwindcss/pull/12715))
 
 ### Added
 
@@ -2351,7 +2431,16 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...HEAD
+[3.4.10]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.9...v3.4.10
+[3.4.9]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...v3.4.9
+[3.4.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...v3.4.8
+[3.4.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.6...v3.4.7
+[3.4.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.5...v3.4.6
+[3.4.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.4...v3.4.5
+[3.4.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.3...v3.4.4
+[3.4.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.2...v3.4.3
+[3.4.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.7...v3.4.0
 [3.3.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.6...v3.3.7
