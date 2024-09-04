@@ -1293,14 +1293,140 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('plugin theme values can override CSS theme values and behave as inline reference', async () => {
+  test('`default` theme values can be overridden by regular theme values`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --color-potato: #ac855b;
+          }
+          @theme default {
+            --color-potato: #efb46b;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-potato: #ac855b;
+      }
+
+      .bg-potato {
+        background-color: var(--color-potato, #ac855b);
+      }"
+    `)
+  })
+
+  test('`default` and `inline` can be used together', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme default inline {
+            --color-potato: #efb46b;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-potato: #efb46b;
+      }
+
+      .bg-potato {
+        background-color: #efb46b;
+      }"
+    `)
+  })
+
+  test('`default` and `reference` can be used together', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme default reference {
+            --color-potato: #efb46b;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: var(--color-potato, #efb46b);
+      }"
+    `)
+  })
+
+  test('`default`, `inline`, and `reference` can be used together', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme default reference inline {
+            --color-potato: #efb46b;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: #efb46b;
+      }"
+    `)
+  })
+
+  test('`default` can be used in `media(…)`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @media theme() {
+            @theme {
+              --color-potato: #ac855b;
+            }
+          }
+          @media theme(default) {
+            @theme {
+              --color-potato: #efb46b;
+              --color-tomato: tomato;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-potato', 'bg-tomato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-potato: #ac855b;
+        --color-tomato: tomato;
+      }
+
+      .bg-potato {
+        background-color: var(--color-potato, #ac855b);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato, tomato);
+      }"
+    `)
+  })
+
+  test('`default` theme values can be overridden by plugin theme values', async () => {
     let { build } = await compile(
       css`
-        @theme {
+        @theme default {
           --color-red: red;
+        }
+        @theme {
           --color-orange: orange;
         }
         @plugin "my-plugin";
+        @tailwind utilities;
       `,
       {
         loadPlugin: async () => {
@@ -1308,6 +1434,7 @@ describe('Parsing themes values from CSS', () => {
             theme: {
               extend: {
                 colors: {
+                  red: 'tomato',
                   orange: '#f28500',
                 },
               },
@@ -1317,21 +1444,32 @@ describe('Parsing themes values from CSS', () => {
       },
     )
 
-    expect(optimizeCss(build([])).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
       ":root {
-        --color-red: red;
+        --color-orange: orange;
+      }
+
+      .text-orange {
+        color: var(--color-orange, orange);
+      }
+
+      .text-red {
+        color: tomato;
       }"
     `)
   })
 
-  test('config theme values can override CSS theme values and behave as inline reference', async () => {
+  test('`default` theme values can be overridden by config theme values', async () => {
     let { build } = await compile(
       css`
-        @theme {
+        @theme default {
           --color-red: red;
+        }
+        @theme {
           --color-orange: orange;
         }
         @config "./my-config.js";
+        @tailwind utilities;
       `,
       {
         loadConfig: async () => {
@@ -1339,6 +1477,7 @@ describe('Parsing themes values from CSS', () => {
             theme: {
               extend: {
                 colors: {
+                  red: 'tomato',
                   orange: '#f28500',
                 },
               },
@@ -1348,9 +1487,17 @@ describe('Parsing themes values from CSS', () => {
       },
     )
 
-    expect(optimizeCss(build([])).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
       ":root {
-        --color-red: red;
+        --color-orange: orange;
+      }
+
+      .text-orange {
+        color: var(--color-orange, orange);
+      }
+
+      .text-red {
+        color: tomato;
       }"
     `)
   })

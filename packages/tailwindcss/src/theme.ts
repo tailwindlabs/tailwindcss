@@ -2,10 +2,17 @@ import { escape } from './utils/escape'
 
 export class Theme {
   constructor(
-    private values = new Map<string, { value: string; isReference: boolean; isInline: boolean }>(),
+    private values = new Map<
+      string,
+      { value: string; isReference: boolean; isInline: boolean; isDefault: boolean }
+    >(),
   ) {}
 
-  add(key: string, value: string, { isReference = false, isInline = false } = {}): void {
+  add(
+    key: string,
+    value: string,
+    { isReference = false, isInline = false, isDefault = false } = {},
+  ): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -17,10 +24,15 @@ export class Theme {
       }
     }
 
+    if (isDefault) {
+      let existing = this.values.get(key)
+      if (existing && !existing.isDefault) return
+    }
+
     if (value === 'initial') {
       this.values.delete(key)
     } else {
-      this.values.set(key, { value, isReference, isInline })
+      this.values.set(key, { value, isReference, isInline, isDefault })
     }
   }
 

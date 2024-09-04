@@ -11,6 +11,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFi
     designSystem.theme.add(`--${name}`, value as any, {
       isInline: true,
       isReference: true,
+      isDefault: true,
     })
   }
 

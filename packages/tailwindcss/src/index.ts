@@ -28,16 +28,19 @@ function throwOnConfig(): never {
 function parseThemeOptions(selector: string) {
   let isReference = false
   let isInline = false
+  let isDefault = false
 
   for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
     if (option === 'reference') {
       isReference = true
     } else if (option === 'inline') {
       isInline = true
+    } else if (option === 'default') {
+      isDefault = true
     }
   }
 
-  return { isReference, isInline }
+  return { isReference, isInline, isDefault }
 }
 
 async function parseCss(
@@ -253,8 +256,8 @@ async function parseCss(
             'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
           )
         }
-        if (child.selector === '@theme') {
-          child.selector = '@theme ' + themeParams
+        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+          child.selector += ' ' + themeParams
           return WalkAction.Skip
         }
       })
@@ -264,7 +267,7 @@ async function parseCss(
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let { isReference, isInline } = parseThemeOptions(node.selector)
+    let { isReference, isInline, isDefault } = parseThemeOptions(node.selector)
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -278,7 +281,7 @@ async function parseCss(
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', { isReference, isInline })
+        theme.add(child.property, child.value ?? '', { isReference, isInline, isDefault })
         return
       }
 
