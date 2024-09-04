@@ -10,6 +10,7 @@ import {
   retryAssertion,
   test,
   ts,
+  txt,
   yaml,
 } from '../utils'
 ;['postcss', 'lightningcss'].forEach((transformer) => {
@@ -24,7 +25,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
