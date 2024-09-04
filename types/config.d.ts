@@ -12,7 +12,7 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
   [key: string]: V | RecursiveKeyValuePair<K, V>
 }
 export type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
-type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[]>
+type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[] | CSSRuleObject[]>
 
 interface PluginUtils {
   colors: DefaultColors
