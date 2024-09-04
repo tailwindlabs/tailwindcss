@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
 import killPort from 'kill-port'
-import { execSync, spawn } from 'node:child_process'
+import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
@@ -89,11 +89,23 @@ export function test(
             console.log(`> cd ${relative}`)
           }
           if (debug) console.log(`> ${command}`)
-          return execSync(command, {
-            cwd,
-            stdio: 'pipe',
-            ...childProcessOptions,
-          }).toString()
+          return new Promise((resolve, reject) => {
+            exec(
+              command,
+              {
+                cwd,
+                ...childProcessOptions,
+              },
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(stderr)
+                  reject(error)
+                } else {
+                  resolve(stdout.toString())
+                }
+              },
+            )
+          })
         },
         async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
           let resolveDisposal: (() => void) | undefined
