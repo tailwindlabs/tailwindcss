@@ -543,7 +543,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
 
   let paths: string[] = []
   let match
-  while ((match = linkRegex.exec(html)) !== null) {
+  for (let match of html.matchAll(linkRegex)) {
     let path: string = match[1]
     if (path.startsWith('./')) {
       path = path.slice(1)
@@ -563,7 +563,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
     )),
   )
 
-  while ((match = styleRegex.exec(html)) !== null) {
+  for (let match of html.matchAll(styleRegex)) {
     stylesheets.push(match[1])
   }
 
