@@ -11,7 +11,7 @@ import postcssImport from 'postcss-import'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
-  let server: ViteDevServer | null = null
+  let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
 
   let isSSR = false
@@ -58,36 +58,35 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function invalidateAllRoots(isSSR: boolean) {
-    // If we're building then we don't need to update anything
-    if (!server) return
-
-    let updates: Update[] = []
-    for (let id of roots.keys()) {
-      let module = server.moduleGraph.getModuleById(id)
-      if (!module) {
-        // Note: Removing this during SSR is not safe and will produce
-        // inconsistent results based on the timing of the removal and
-        // the order / timing of transforms.
-        if (!isSSR) {
-          // It is safe to remove the item here since we're iterating on a copy
-          // of the keys.
-          roots.delete(id)
+    for (let server of servers) {
+      let updates: Update[] = []
+      for (let id of roots.keys()) {
+        let module = server.moduleGraph.getModuleById(id)
+        if (!module) {
+          // Note: Removing this during SSR is not safe and will produce
+          // inconsistent results based on the timing of the removal and
+          // the order / timing of transforms.
+          if (!isSSR) {
+            // It is safe to remove the item here since we're iterating on a copy
+            // of the keys.
+            roots.delete(id)
+          }
+          continue
         }
-        continue
+
+        roots.get(id).requiresRebuild = false
+        server.moduleGraph.invalidateModule(module)
+        updates.push({
+          type: `${module.type}-update`,
+          path: module.url,
+          acceptedPath: module.url,
+          timestamp: Date.now(),
+        })
       }
 
-      roots.get(id).requiresRebuild = false
-      server.moduleGraph.invalidateModule(module)
-      updates.push({
-        type: `${module.type}-update`,
-        path: module.url,
-        acceptedPath: module.url,
-        timestamp: Date.now(),
-      })
-    }
-
-    if (updates.length > 0) {
-      server.hot.send({ type: 'update', updates })
+      if (updates.length > 0) {
+        server.hot.send({ type: 'update', updates })
+      }
     }
   }
 
@@ -139,8 +138,8 @@ export default function tailwindcss(): Plugin[] {
       name: '@tailwindcss/vite:scan',
       enforce: 'pre',
 
-      configureServer(_server) {
-        server = _server
+      configureServer(server) {
+        servers.push(server)
       },
 
       async configResolved(_config) {
@@ -169,7 +168,7 @@ export default function tailwindcss(): Plugin[] {
       },
       transform(src, id, options) {
         let extension = getExtension(id)
-        if (extension === '' || extension === 'css') return
+        if (isPotentialCssRootFile(id)) return
         scanFile(id, src, extension, options?.ssr ?? false)
       },
     },
@@ -193,7 +192,9 @@ export default function tailwindcss(): Plugin[] {
           // The reason why we can not rely on the invalidation here is that the
           // users would otherwise see a flicker in the styles as the CSS might
           // be loaded with an invalid set of candidates first.
-          await server?.waitForRequestsIdle?.(id)
+          for (let server of servers) {
+            await server.waitForRequestsIdle(id)
+          }
         }
 
         let generated = await root.generate(src, (file) => this.addWatchFile(file))
