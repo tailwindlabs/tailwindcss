@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support TypeScript for `@plugin` and `@config` files ([#14317](https://github.com/tailwindlabs/tailwindcss/pull/14317))
 - Add `default` option to `@theme` to support overriding default theme values from plugins/JS config files ([#14327](https://github.com/tailwindlabs/tailwindcss/pull/14327))
-- Add support for `<style>` tags in Astro files to the Vite plugin ([#14158](https://github.com/tailwindlabs/tailwindcss/pull/14158))
+- Add support for `<style>` tags in Astro files to the Vite plugin ([#14340](https://github.com/tailwindlabs/tailwindcss/pull/14340))
 
 ### Fixed
 
