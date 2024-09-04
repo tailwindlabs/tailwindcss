@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Evaluate theme functions in plugins and JS config files ([#14326](https://github.com/tailwindlabs/tailwindcss/pull/14326))
 - Ensure theme values overridden with `reference` values don't generate stale CSS variables ([#14327](https://github.com/tailwindlabs/tailwindcss/pull/14327))
 - Don’t suggest named opacity modifiers in intellisense ([#14339](https://github.com/tailwindlabs/tailwindcss/pull/14339))
-- Fix a crash with older Node.js versions
 - Fix a crash with older Node.js versions ([#14342](https://github.com/tailwindlabs/tailwindcss/pull/14342))
 
 ## [4.0.0-alpha.21] - 2024-09-02
