@@ -22,7 +22,10 @@ function loadDesignSystem() {
 test('getClassList', () => {
   let design = loadDesignSystem()
   let classList = design.getClassList()
-  let classNames = classList.map(([name]) => name)
+  let classNames = classList.flatMap(([name, meta]) => [
+    name,
+    ...meta.modifiers.map((m) => `${name}/${m}`),
+  ])
 
   expect(classNames).toMatchSnapshot()
 })
