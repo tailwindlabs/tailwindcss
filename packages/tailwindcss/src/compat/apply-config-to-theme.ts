@@ -37,6 +37,11 @@ function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][]
 
       return WalkAction.Skip
     }
+
+    if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
+      toAdd.push([path, value.join(', ')])
+      return WalkAction.Skip
+    }
   })
 
   return toAdd
