@@ -317,21 +317,20 @@ import {
 
         await fs.expectFileToContain(filename, [candidate`underline`, candidate`flex`])
 
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        // Updates are additive and cause new candidates to be added.
-        await fs.write(
-          'project-a/index.html',
-          html`
-            <head>
-              <link rel="stylesheet" href="./src/index.css" />
-            </head>
-            <body>
-              <div class="underline m-2">Hello, world!</div>
-            </body>
-          `,
-        )
         await retryAssertion(async () => {
+          // Updates are additive and cause new candidates to be added.
+          await fs.write(
+            'project-a/index.html',
+            html`
+              <head>
+                <link rel="stylesheet" href="./src/index.css" />
+              </head>
+              <body>
+                <div class="underline m-2">Hello, world!</div>
+              </body>
+            `,
+          )
+
           let files = await fs.glob('project-a/dist/**/*.css')
           expect(files).toHaveLength(1)
           let [, css] = files[0]
