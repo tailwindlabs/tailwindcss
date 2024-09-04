@@ -216,13 +216,29 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
+      - name: Get release notes
+        run: |
+          RELEASE_NOTES=$(node ./scripts/release-notes.mjs)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Publish
         run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Upload Standalone Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: tailwindcss-standalone
-          path: packages/@tailwindcss-standalone/dist/
+          draft: true
+          tag_name: ${{ env.TAG_NAME }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
+          files: |
+            packages/@tailwindcss-standalone/dist/sha256sums.txt
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
