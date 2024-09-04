@@ -16,6 +16,7 @@ function loadDesignSystem() {
   theme.add('--font-size-xs--line-height', '1rem')
   theme.add('--perspective-dramatic', '100px')
   theme.add('--perspective-normal', '500px')
+  theme.add('--opacity-background', '0.3')
   return buildDesignSystem(theme)
 }
 
