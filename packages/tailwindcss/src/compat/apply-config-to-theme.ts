@@ -1,4 +1,5 @@
 import type { DesignSystem } from '../design-system'
+import { ThemeOptions } from '../theme'
 import { resolveConfig, type ConfigFile } from './config/resolve-config'
 import type { ResolvedConfig } from './config/types'
 
@@ -24,11 +25,11 @@ export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFi
 
   for (let [path, value] of themeableValues(theme)) {
     let name = keyPathToCssProperty(path)
-    designSystem.theme.add(`--${name}`, value as any, {
-      isInline: true,
-      isReference: true,
-      isDefault: true,
-    })
+    designSystem.theme.add(
+      `--${name}`,
+      value as any,
+      ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
+    )
   }
 
   // If someone has updated `fontFamily.sans` or `fontFamily.mono` in a JS
@@ -38,11 +39,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFi
   // `--font-family-sans--feature-settings` (which the `--default-font-*`
   // variables reference) won't exist in the generated CSS.
   if (Object.hasOwn(theme, 'fontFamily')) {
-    let options = {
-      isInline: true,
-      isReference: false,
-      isDefault: true,
-    }
+    let options = ThemeOptions.INLINE | ThemeOptions.DEFAULT
 
     // Replace `--default-font-*` with `fontFamily.sans` values
     {
