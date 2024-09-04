@@ -262,7 +262,10 @@ function getExtension(id: string) {
 
 function isPotentialCssRootFile(id: string) {
   let extension = getExtension(id)
-  let isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
+  let isCssFile =
+    extension === 'css' ||
+    (extension === 'vue' && id.includes('&lang.css')) ||
+    (extension === 'astro' && id.includes('&lang.css'))
   return isCssFile
 }
 
