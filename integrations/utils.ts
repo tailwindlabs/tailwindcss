@@ -536,32 +536,40 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   let index = await fetch(`http://localhost:${port}${path}`)
   let html = await index.text()
 
-  let regex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/g
+  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
+
+  let stylesheets: string[] = []
 
   let paths: string[] = []
   let match
-  while ((match = regex.exec(html)) !== null) {
+  while ((match = linkRegex.exec(html)) !== null) {
     let path: string = match[1]
     if (path.startsWith('./')) {
       path = path.slice(1)
     }
     paths.push(path)
   }
-
-  let stylesheets = await Promise.all(
-    paths.map(async (path) => {
-      let css = await fetch(`http://localhost:${port}${path}`, {
-        headers: {
-          Accept: 'text/css',
-        },
-      })
-      return await css.text()
-    }),
+  stylesheets.push(
+    ...(await Promise.all(
+      paths.map(async (path) => {
+        let css = await fetch(`http://localhost:${port}${path}`, {
+          headers: {
+            Accept: 'text/css',
+          },
+        })
+        return await css.text()
+      }),
+    )),
   )
+
+  while ((match = styleRegex.exec(html)) !== null) {
+    stylesheets.push(match[1])
+  }
 
   return stylesheets.reduce((acc, css) => {
     return acc + '\n' + css
-  })
+  }, '')
 }
 
 async function gracefullyRemove(dir: string) {
