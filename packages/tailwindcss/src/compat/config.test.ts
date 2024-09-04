@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { describe, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
 
@@ -228,4 +228,486 @@ test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
     }
     "
   `)
+})
+
+describe('default font family compatibility', () => {
+  test('overriding `fontFamily.sans` sets `--default-font-family`', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: 'Potato Sans',
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: Potato Sans;
+        --default-font-feature-settings: normal;
+        --default-font-variation-settings: normal;
+      }
+      .font-sans {
+        font-family: Potato Sans;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.sans[1].fontFeatureSettings` sets `--default-font-feature-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: ['Potato Sans', { fontFeatureSettings: '"cv06"' }],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: Potato Sans;
+        --default-font-feature-settings: "cv06";
+        --default-font-variation-settings: normal;
+      }
+      .font-sans {
+        font-family: Potato Sans;
+        font-feature-settings: "cv06";
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.sans[1].fontVariationSettings` sets `--default-font-variation-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: ['Potato Sans', { fontVariationSettings: '"XHGT" 0.7' }],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: Potato Sans;
+        --default-font-feature-settings: normal;
+        --default-font-variation-settings: "XHGT" 0.7;
+      }
+      .font-sans {
+        font-family: Potato Sans;
+        font-variation-settings: "XHGT" 0.7;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFeatureSettings` and `fontVariationSettings` for `fontFamily.sans` sets `--default-font-feature-settings` and `--default-font-variation-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: [
+              'Potato Sans',
+              { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
+            ],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: Potato Sans;
+        --default-font-feature-settings: "cv06";
+        --default-font-variation-settings: "XHGT" 0.7;
+      }
+      .font-sans {
+        font-family: Potato Sans;
+        font-feature-settings: "cv06";
+        font-variation-settings: "XHGT" 0.7;
+      }
+      "
+    `)
+  })
+
+  test('overriding `--font-family-sans` in `@theme` without `default` preserves the original `--default-font-*` values', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @theme {
+        --font-family-sans: Sandwich Sans;
+      }
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: 'Potato Sans',
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+        --font-family-sans: Sandwich Sans;
+      }
+      .font-sans {
+        font-family: var(--font-family-sans, Sandwich Sans);
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.sans` in a config file with an array sets `--default-font-family`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: Inter, system-ui, sans-serif;
+        --default-font-feature-settings: normal;
+        --default-font-variation-settings: normal;
+      }
+      .font-sans {
+        font-family: Inter, system-ui, sans-serif;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.sans` in a config file with an unexpected type is ignored', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            sans: { foo: 'bar', banana: 'sandwich' },
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: 'Potato Mono',
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: Potato Mono;
+        --default-mono-font-feature-settings: normal;
+        --default-mono-font-variation-settings: normal;
+      }
+      .font-mono {
+        font-family: Potato Mono;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.mono[1].fontFeatureSettings` sets `--default-mono-font-feature-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: ['Potato Mono', { fontFeatureSettings: '"cv06"' }],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: Potato Mono;
+        --default-mono-font-feature-settings: "cv06";
+        --default-mono-font-variation-settings: normal;
+      }
+      .font-mono {
+        font-family: Potato Mono;
+        font-feature-settings: "cv06";
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.mono[1].fontVariationSettings` sets `--default-mono-font-variation-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: ['Potato Mono', { fontVariationSettings: '"XHGT" 0.7' }],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: Potato Mono;
+        --default-mono-font-feature-settings: normal;
+        --default-mono-font-variation-settings: "XHGT" 0.7;
+      }
+      .font-mono {
+        font-family: Potato Mono;
+        font-variation-settings: "XHGT" 0.7;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFeatureSettings` and `fontVariationSettings` for `fontFamily.mono` sets `--default-mono-font-feature-settings` and `--default-mono-font-variation-settings`', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: [
+              'Potato Mono',
+              { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
+            ],
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: Potato Mono;
+        --default-mono-font-feature-settings: "cv06";
+        --default-mono-font-variation-settings: "XHGT" 0.7;
+      }
+      .font-mono {
+        font-family: Potato Mono;
+        font-feature-settings: "cv06";
+        font-variation-settings: "XHGT" 0.7;
+      }
+      "
+    `)
+  })
+
+  test('overriding `--font-family-mono` in `@theme` without `default` preserves the original `--default-mono-font-*` values', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @theme {
+        --font-family-mono: Sandwich Mono;
+      }
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: 'Potato Mono',
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+        --font-family-mono: Sandwich Mono;
+      }
+      .font-mono {
+        font-family: var(--font-family-mono, Sandwich Mono);
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.mono` in a config file with an unexpected type is ignored', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          fontFamily: {
+            mono: { foo: 'bar', banana: 'sandwich' },
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ":root {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      "
+    `)
+  })
 })
