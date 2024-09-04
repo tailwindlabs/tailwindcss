@@ -375,8 +375,11 @@ async function parseCss(
     substituteAtApply(ast, designSystem)
   }
 
-  // Replace `theme()` function calls with the actual theme variables.
-  if (css.includes(THEME_FUNCTION_INVOCATION)) {
+  // Replace `theme()` function calls with the actual theme variables. Plugins
+  // could register new rules that include functions, and JS config files could
+  // also contain functions or plugins that use functions so we need to evaluate
+  // functions if either of those are present.
+  if (plugins.length > 0 || configs.length > 0 || css.includes(THEME_FUNCTION_INVOCATION)) {
     substituteFunctions(ast, pluginApi)
   }
 
@@ -485,6 +488,10 @@ export async function compile(
           return compiledCss
         }
 
+        // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+        // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+        // calls so we need evaluate any functions we find there that weren't in
+        // the source CSS.
         substituteFunctions(newNodes, pluginApi)
 
         previousAstNodeCount = newNodes.length
