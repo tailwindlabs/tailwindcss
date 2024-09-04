@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix support for Nuxt projects in the Vite plugin (requires Nuxt 3.13.1+) ([#14319](https://github.com/tailwindlabs/tailwindcss/pull/14319))
 - Evaluate theme functions in plugins and JS config files ([#14326](https://github.com/tailwindlabs/tailwindcss/pull/14326))
 - Ensure theme values overridden with `reference` values don't generate stale CSS variables ([#14327](https://github.com/tailwindlabs/tailwindcss/pull/14327))
-- Don’t suggest named opacity modifiers in intellisense ([#14339](https://github.com/tailwindlabs/tailwindcss/pull/14339))
+- Don’t suggest named opacity modifiers in IntelliSense ([#14339](https://github.com/tailwindlabs/tailwindcss/pull/14339))
 - Fix a crash with older Node.js versions ([#14342](https://github.com/tailwindlabs/tailwindcss/pull/14342))
 - Support defining theme values as arrays of strings in JS config files ([#14343](https://github.com/tailwindlabs/tailwindcss/pull/14343))
 - Ensure `--default-font-*` and `--default-mono-font-*` variables respect theme customizations in JS config files ([#14344](https://github.com/tailwindlabs/tailwindcss/pull/14344))
