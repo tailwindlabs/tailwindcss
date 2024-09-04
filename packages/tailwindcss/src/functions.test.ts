@@ -625,24 +625,33 @@ describe('in plugins', () => {
   test('CSS theme functions in plugins are properly evaluated', async () => {
     let compiled = await compile(
       css`
+        @layer base, utilities;
         @plugin "my-plugin";
-
         @theme reference {
           --color-red: red;
           --color-orange: orange;
           --color-blue: blue;
           --color-pink: pink;
         }
+        @layer utilities {
+          @tailwind utilities;
+        }
       `,
       {
         async loadPlugin() {
-          return plugin(({ addBase }) => {
+          return plugin(({ addBase, addUtilities }) => {
             addBase({
               '.my-base-rule': {
                 color: 'theme(colors.red)',
                 'outline-color': 'theme(colors.orange / 15%)',
                 'background-color': 'theme(--color-blue)',
                 'border-color': 'theme(--color-pink / 10%)',
+              },
+            })
+
+            addUtilities({
+              '.my-utility': {
+                color: 'theme(colors.red)',
               },
             })
           })
@@ -658,6 +667,12 @@ describe('in plugins', () => {
           border-color: #ffc0cb1a;
           outline-color: #ffa50026;
         }
+      }
+
+      @layer utilities {
+        .my-utility {
+          color: red;
+        }
       }"
     `)
   })
@@ -667,11 +682,14 @@ describe('in JS config files', () => {
   test('CSS theme functions in config files are properly evaluated', async () => {
     let compiled = await compile(
       css`
+        @layer base, utilities;
         @config "./my-config.js";
-
         @theme reference {
           --color-red: red;
           --color-orange: orange;
+        }
+        @layer utilities {
+          @tailwind utilities;
         }
       `,
       {
@@ -685,11 +703,17 @@ describe('in JS config files', () => {
             },
           },
           plugins: [
-            plugin(({ addBase }) => {
+            plugin(({ addBase, addUtilities }) => {
               addBase({
-                '.my-rule': {
+                '.my-base-rule': {
                   background: 'theme(colors.primary)',
                   color: 'theme(colors.secondary)',
+                },
+              })
+
+              addUtilities({
+                '.my-utility': {
+                  color: 'theme(colors.red)',
                 },
               })
             }),
@@ -698,11 +722,17 @@ describe('in JS config files', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['my-rule'])).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
       "@layer base {
-        .my-rule {
+        .my-base-rule {
           color: orange;
           background: red;
+        }
+      }
+
+      @layer utilities {
+        .my-utility {
+          color: red;
         }
       }"
     `)
