@@ -6,5 +6,5 @@ export * from './compile'
 // not necessary.
 if (!process.versions.bun) {
   let localRequire = Module.createRequire(import.meta.url)
-  Module.register(pathToFileURL(localRequire.resolve('@tailwindcss/node/esm-cache-loader')))
+  Module.register?.(pathToFileURL(localRequire.resolve('@tailwindcss/node/esm-cache-loader')))
 }
