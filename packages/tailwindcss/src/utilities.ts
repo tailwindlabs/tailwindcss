@@ -366,7 +366,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: desc.themeKeys,
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
     ])
   }
@@ -2269,7 +2268,6 @@ export function createUtilities(theme: Theme) {
           values: ['current', 'inherit', 'transparent'],
           valueThemeKeys: ['--border-color', '--color'],
           modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-          modifierThemeKeys: ['--opacity'],
           hasDefaultValue: true,
         },
         {
@@ -2569,7 +2567,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--background-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
     {
       values: [],
@@ -2650,7 +2647,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--background-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
       {
         values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
@@ -2768,7 +2764,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--fill', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
   ])
 
@@ -2820,7 +2815,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--stroke', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
     {
       values: ['0', '1', '2', '3'],
@@ -3124,7 +3118,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--text-decoration-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
     {
       values: ['0', '1', '2'],
@@ -3966,7 +3959,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--outline-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
         hasDefaultValue: true,
       },
       {
@@ -4113,7 +4105,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--text-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
     {
       values: [],
@@ -4236,7 +4227,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--box-shadow-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
       {
         values: [],
@@ -4339,7 +4329,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--box-shadow-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
       {
         values: [],
@@ -4419,7 +4408,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--ring-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
       {
         values: ['0', '1', '2', '4', '8'],
@@ -4495,7 +4483,6 @@ export function createUtilities(theme: Theme) {
         values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--ring-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        modifierThemeKeys: ['--opacity'],
       },
       {
         values: ['0', '1', '2', '4', '8'],
@@ -4563,7 +4550,6 @@ export function createUtilities(theme: Theme) {
       values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--ring-offset-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      modifierThemeKeys: ['--opacity'],
     },
     {
       values: ['0', '1', '2', '4', '8'],
