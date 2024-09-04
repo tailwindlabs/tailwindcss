@@ -302,6 +302,33 @@ async function parseCss(
     return WalkAction.Skip
   })
 
+  let designSystem = buildDesignSystem(theme)
+
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+
+  let plugins = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
+
+  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+
+  for (let customVariant of customVariants) {
+    customVariant(designSystem)
+  }
+
+  for (let customUtility of customUtilities) {
+    customUtility(designSystem)
+  }
+
   // Output final set of theme variables at the position of the first `@theme`
   // rule.
   if (firstThemeRule) {
@@ -338,33 +365,6 @@ async function parseCss(
       }
     }
     firstThemeRule.nodes = nodes
-  }
-
-  let designSystem = buildDesignSystem(theme)
-
-  let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
-    })),
-  )
-
-  let plugins = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
-      options: pluginOptions,
-    })),
-  )
-
-  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
-
-  for (let customVariant of customVariants) {
-    customVariant(designSystem)
-  }
-
-  for (let customUtility of customUtilities) {
-    customUtility(designSystem)
   }
 
   // Replace `@apply` rules with the actual utility classes.

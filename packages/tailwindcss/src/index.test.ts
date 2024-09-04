@@ -1292,6 +1292,68 @@ describe('Parsing themes values from CSS', () => {
       }"
     `)
   })
+
+  test('plugin theme values can override CSS theme values and behave as inline reference', async () => {
+    let { build } = await compile(
+      css`
+        @theme {
+          --color-red: red;
+          --color-orange: orange;
+        }
+        @plugin "my-plugin";
+      `,
+      {
+        loadPlugin: async () => {
+          return plugin(({}) => {}, {
+            theme: {
+              extend: {
+                colors: {
+                  orange: '#f28500',
+                },
+              },
+            },
+          })
+        },
+      },
+    )
+
+    expect(optimizeCss(build([])).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --color-red: red;
+      }"
+    `)
+  })
+
+  test('config theme values can override CSS theme values and behave as inline reference', async () => {
+    let { build } = await compile(
+      css`
+        @theme {
+          --color-red: red;
+          --color-orange: orange;
+        }
+        @config "./my-config.js";
+      `,
+      {
+        loadConfig: async () => {
+          return {
+            theme: {
+              extend: {
+                colors: {
+                  orange: '#f28500',
+                },
+              },
+            },
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(build([])).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --color-red: red;
+      }"
+    `)
+  })
 })
 
 describe('plugins', () => {
