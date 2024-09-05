@@ -83,11 +83,12 @@ function cssThemeFn(
   if (isArray && themeValue.length === 2) {
     // When a tuple is returned, return the first element
     resolvedValue = themeValue[0]
-    // We otherwise only ignore string values here, objects (and namespace maps)
-    // are treated as non-resolved values for the CSS `theme()` function.
   } else if (isArray) {
+    // Arrays get serialized into a comma-separated lists
     resolvedValue = themeValue.join(', ')
   } else if (typeof themeValue === 'string') {
+    // Otherwise only allow string values here, objects (and namespace maps)
+    // are treated as non-resolved values for the CSS `theme()` function.
     resolvedValue = themeValue
   }
 
