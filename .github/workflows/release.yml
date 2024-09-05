@@ -164,7 +164,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -190,7 +189,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install dependencies
-        run: pnpm --filter=!./playgrounds/* install --ignore-scripts
+        run: pnpm --filter=!./playgrounds/* install
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
