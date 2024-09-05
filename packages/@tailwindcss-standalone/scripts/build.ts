@@ -4,8 +4,6 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-console.log('Standalone Build: Starting…')
-
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 async function buildForPlatform(triple: string, outfile: string) {
@@ -21,14 +19,7 @@ async function buildForPlatform(triple: string, outfile: string) {
   }
 }
 
-interface BuildResult {
-  triple: string
-  file: string
-  sum: string
-  elapsed: bigint
-}
-
-async function build(triple: string, file: string): Promise<BuildResult> {
+async function build(triple: string, file: string) {
   let start = process.hrtime.bigint()
 
   let outfile = path.resolve(__dirname, `../dist/${file}`)
@@ -50,35 +41,22 @@ async function build(triple: string, file: string): Promise<BuildResult> {
   }
 }
 
-console.log('Standalone Build: Creating dist directory')
 await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
 // Build platform binaries and checksum them
-console.log('Standalone Build: Building binaries')
-
-let results: BuildResult[] = []
-
-try {
-  results = await Promise.all([
-    build('bun-linux-arm64', './tailwindcss-linux-arm64'),
-    build('bun-linux-x64', './tailwindcss-linux-x64'),
-    // build('linux-armv7', 'tailwindcss-linux-armv7'),
-    build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
-    build('bun-darwin-x64', './tailwindcss-macos-x64'),
-    // The Windows x64 build uses `bun-baseline` instead of the regular bun build.
-    // This enables support for running inside the ARM emulation mode.
-    build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
-    // buildForPlatform('win32-arm64', 'tailwindcss-windows-arm64'),
-  ])
-} catch (err) {
-  console.log(err)
-
-  process.exit(1)
-}
+let results = await Promise.all([
+  build('bun-linux-arm64', './tailwindcss-linux-arm64'),
+  build('bun-linux-x64', './tailwindcss-linux-x64'),
+  // build('linux-armv7', 'tailwindcss-linux-armv7'),
+  build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
+  build('bun-darwin-x64', './tailwindcss-macos-x64'),
+  // The Windows x64 build uses `bun-baseline` instead of the regular bun build.
+  // This enables support for running inside the ARM emulation mode.
+  build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
+  // buildForPlatform('win32-arm64', 'tailwindcss-windows-arm64'),
+])
 
 // Write the checksums to a file
-console.log('Standalone Build: Computing checksums')
-
 let sumsFile = path.resolve(__dirname, '../dist/sha256sums.txt')
 let sums = results.map(({ file, sum }) => `${sum}  ${file}`)
 
@@ -91,5 +69,3 @@ console.table(
 )
 
 await writeFile(sumsFile, sums.join('\n') + '\n')
-
-console.log('Standalone Build: Done')
