@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  tests:
     strategy:
       fail-fast: false
       matrix:
