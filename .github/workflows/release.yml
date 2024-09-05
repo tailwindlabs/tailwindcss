@@ -112,6 +112,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install Bun
+      - uses: oven-sh/setup-bun@v2
+
       - name: Install Rust (Stable)
         if: ${{ matrix.download }}
         run: |
