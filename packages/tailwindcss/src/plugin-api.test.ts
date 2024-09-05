@@ -208,6 +208,49 @@ describe('theme', async () => {
     `)
   })
 
+  test('plugin theme can have opacity modifiers', async ({ expect }) => {
+    let input = css`
+      @tailwind utilities;
+      @theme {
+        --color-red-500: #ef4444;
+      }
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadPlugin: async () => {
+        return plugin(function ({ addUtilities, theme }) {
+          addUtilities({
+            '.percentage': {
+              color: theme('colors.red.500 / 50%'),
+            },
+            '.fraction': {
+              color: theme('colors.red.500 / 0.5'),
+            },
+            '.variable': {
+              color: theme('colors.red.500 / var(--opacity)'),
+            },
+          })
+        })
+      },
+    })
+
+    expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
+      ".fraction {
+        color: color-mix(in srgb, #ef4444 50%, transparent);
+      }
+      .percentage {
+        color: color-mix(in srgb, #ef4444 50%, transparent);
+      }
+      .variable {
+        color: color-mix(in srgb, #ef4444 calc(var(--opacity) * 100%), transparent);
+      }
+      :root {
+        --color-red-500: #ef4444;
+      }
+      "
+    `)
+  })
   test('theme value functions are resolved correctly regardless of order', async ({ expect }) => {
     let input = css`
       @tailwind utilities;
@@ -354,7 +397,7 @@ describe('theme', async () => {
       `)
   })
 
-  test('CSS theme values are mreged with JS theme values', async ({ expect }) => {
+  test('CSS theme values are merged with JS theme values', async ({ expect }) => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
