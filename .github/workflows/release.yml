@@ -2,8 +2,6 @@ name: Release
 
 on:
   pull_request:
-  push:
-    branches: [feat/v4-gh-releases]
   workflow_dispatch:
     inputs:
       release_channel:
@@ -114,9 +112,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install Bun
-      - uses: oven-sh/setup-bun@v2
-
       - name: Install Rust (Stable)
         if: ${{ matrix.download }}
         run: |
@@ -152,7 +147,7 @@ jobs:
     permissions:
       contents: read
       # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-      # id-token: write
+      id-token: write
 
     needs:
       - build
