@@ -1,6 +1,7 @@
 name: Release
 
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       release_channel:
@@ -146,7 +147,7 @@ jobs:
     permissions:
       contents: read
       # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-      id-token: write
+      # id-token: write
 
     needs:
       - build
