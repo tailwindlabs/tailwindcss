@@ -79,12 +79,13 @@ function cssThemeFn(
   let resolvedValue: string | null = null
   let themeValue = pluginApi.theme(path)
 
-  if (Array.isArray(themeValue) && themeValue.length === 2) {
+  let isArray = Array.isArray(themeValue)
+  if (isArray && themeValue.length === 2) {
     // When a tuple is returned, return the first element
     resolvedValue = themeValue[0]
     // We otherwise only ignore string values here, objects (and namespace maps)
     // are treated as non-resolved values for the CSS `theme()` function.
-  } else if (Array.isArray(themeValue)) {
+  } else if (isArray) {
     resolvedValue = themeValue.join(', ')
   } else if (typeof themeValue === 'string') {
     resolvedValue = themeValue
