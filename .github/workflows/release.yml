@@ -139,7 +139,7 @@ jobs:
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     timeout-minutes: 15
     name: Build and release Tailwind CSS
 
@@ -160,7 +160,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -186,7 +185,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install dependencies
-        run: pnpm --filter=!./playgrounds/* install --ignore-scripts
+        run: pnpm --filter=!./playgrounds/* install
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -216,13 +215,35 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Publish
-        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Get release notes
+        run: |
+          RELEASE_NOTES=$(node ./scripts/release-notes.mjs)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Upload Standalone Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
+
+      - name: Publish
+        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ env.TAG_NAME }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
+          files: |
+            packages/@tailwindcss-standalone/dist/sha256sums.txt
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe

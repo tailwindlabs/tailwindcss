@@ -30,6 +30,7 @@ const syncedWorkspaces = new Map([
       'crates/node/npm/win32-x64-msvc',
     ],
   ],
+  ['@tailwindcss/cli', ['packages/@tailwindcss-standalone']],
 ])
 
 const inverseSyncedWorkspaces = new Map()

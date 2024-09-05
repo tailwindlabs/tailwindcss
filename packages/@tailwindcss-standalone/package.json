@@ -1,6 +1,7 @@
 {
   "name": "@tailwindcss/standalone",
   "version": "4.0.0-alpha.22",
+  "private": true,
   "description": "Standalone CLI for Tailwind CSS",
   "license": "MIT",
   "repository": {
@@ -23,10 +24,6 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "provenance": true,
-    "access": "public"
-  },
   "dependencies": {
     "@tailwindcss/cli": "workspace:^",
     "detect-libc": "1.0.3",
