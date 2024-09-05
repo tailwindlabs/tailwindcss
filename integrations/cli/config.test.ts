@@ -99,7 +99,7 @@ test(
       'index.html': html`
         <div class="text-primary"></div>
       `,
-      'tailwind.config.ts': js`
+      'tailwind.config.ts': ts`
         export default {
           theme: {
             extend: {

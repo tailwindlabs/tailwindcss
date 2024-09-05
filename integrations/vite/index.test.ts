@@ -10,6 +10,7 @@ import {
   retryAssertion,
   test,
   ts,
+  txt,
   yaml,
 } from '../utils'
 ;['postcss', 'lightningcss'].forEach((transformer) => {
@@ -24,7 +25,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -101,7 +102,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -109,6 +110,7 @@ import {
                 "tailwindcss": "workspace:^"
               },
               "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "vite": "^5.3.5"
               }
             }
@@ -254,7 +256,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -262,6 +264,7 @@ import {
                 "tailwindcss": "workspace:^"
               },
               "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "vite": "^5.3.5"
               }
             }
