@@ -1,10 +1,10 @@
-import { deepMerge } from './compat/config/deep-merge'
-import type { UserConfig } from './compat/config/types'
-import type { DesignSystem } from './design-system'
-import type { Theme, ThemeKey } from './theme'
-import { withAlpha } from './utilities'
-import { DefaultMap } from './utils/default-map'
-import { toKeyPath } from './utils/to-key-path'
+import type { DesignSystem } from '../design-system'
+import type { Theme, ThemeKey } from '../theme'
+import { withAlpha } from '../utilities'
+import { DefaultMap } from '../utils/default-map'
+import { toKeyPath } from '../utils/to-key-path'
+import { deepMerge } from './config/deep-merge'
+import type { UserConfig } from './config/types'
 
 export function createThemeFn(
   designSystem: DesignSystem,
