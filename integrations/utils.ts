@@ -37,7 +37,10 @@ interface TestContext {
     write(filePath: string, content: string): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
-    expectFileToContain(filePath: string, contents: string | string[]): Promise<void>
+    expectFileToContain(
+      filePath: string,
+      contents: string | string[] | RegExp | RegExp[],
+    ): Promise<void>
     expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
   }
 }
@@ -297,8 +300,12 @@ export function test(
           async expectFileToContain(filePath, contents) {
             return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
-              for (let content of contents) {
-                expect(fileContent).toContain(content)
+              for (let content of Array.isArray(contents) ? contents : [contents]) {
+                if (content instanceof RegExp) {
+                  expect(fileContent).toMatch(content)
+                } else {
+                  expect(fileContent).toContain(content)
+                }
               }
             })
           },
@@ -542,7 +549,6 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   let stylesheets: string[] = []
 
   let paths: string[] = []
-  let match
   for (let match of html.matchAll(linkRegex)) {
     let path: string = match[1]
     if (path.startsWith('./')) {

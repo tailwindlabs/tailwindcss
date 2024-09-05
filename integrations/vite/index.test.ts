@@ -10,9 +10,11 @@ import {
   retryAssertion,
   test,
   ts,
+  txt,
   yaml,
 } from '../utils'
-;['postcss', 'lightningcss'].forEach((transformer) => {
+
+for (let transformer of ['postcss', 'lightningcss']) {
   describe(transformer, () => {
     test(
       `production build`,
@@ -24,7 +26,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -101,7 +103,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -109,6 +111,7 @@ import {
                 "tailwindcss": "workspace:^"
               },
               "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "vite": "^5.3.5"
               }
             }
@@ -254,7 +257,7 @@ import {
             packages:
               - project-a
           `,
-          'project-a/package.json': json`
+          'project-a/package.json': txt`
             {
               "type": "module",
               "dependencies": {
@@ -262,6 +265,7 @@ import {
                 "tailwindcss": "workspace:^"
               },
               "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "vite": "^5.3.5"
               }
             }
@@ -382,7 +386,7 @@ import {
       },
     )
   })
-})
+}
 
 test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
