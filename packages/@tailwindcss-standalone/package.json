@@ -24,9 +24,6 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "provenance": true
-  },
   "dependencies": {
     "@tailwindcss/cli": "workspace:^",
     "detect-libc": "1.0.3",
