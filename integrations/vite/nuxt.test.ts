@@ -47,15 +47,16 @@ test(
       expect(css).toContain(candidate`underline`)
     })
 
-    await fs.write(
-      'app.vue',
-      html`
-        <template>
-          <div class="underline font-bold">Hello world!</div>
-        </template>
-      `,
-    )
     await retryAssertion(async () => {
+      await fs.write(
+        'app.vue',
+        html`
+          <template>
+            <div class="underline font-bold">Hello world!</div>
+          </template>
+        `,
+      )
+
       let css = await fetchStyles(port)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`font-bold`)

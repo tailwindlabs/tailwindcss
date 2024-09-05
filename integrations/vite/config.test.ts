@@ -191,8 +191,9 @@ test(
       expect(css).toContain('color: blue')
     })
 
-    await fs.write('my-color.cjs', js`module.exports = 'red'`)
     await retryAssertion(async () => {
+      await fs.write('my-color.cjs', js`module.exports = 'red'`)
+
       let css = await fetchStyles(port, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
@@ -262,8 +263,9 @@ test(
       expect(css).toContain('color: blue')
     })
 
-    await fs.write('my-color.mjs', js`export default 'red'`)
     await retryAssertion(async () => {
+      await fs.write('my-color.mjs', js`export default 'red'`)
+
       let css = await fetchStyles(port, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')

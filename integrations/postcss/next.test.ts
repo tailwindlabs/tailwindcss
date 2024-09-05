@@ -135,16 +135,16 @@ test(
         expect(css).toContain(candidate`underline`)
       })
 
-      await fs.write(
-        'app/page.js',
-        js`
-          export default function Page() {
-            return <h1 className="underline text-red-500">Hello, Next.js!</h1>
-          }
-        `,
-      )
-
       await retryAssertion(async () => {
+        await fs.write(
+          'app/page.js',
+          js`
+            export default function Page() {
+              return <h1 className="underline text-red-500">Hello, Next.js!</h1>
+            }
+          `,
+        )
+
         let css = await fetchStyles(port)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
