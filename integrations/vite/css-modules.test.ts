@@ -1,6 +1,7 @@
 import { describe, expect } from 'vitest'
 import { css, html, test, ts, txt } from '../utils'
-;['postcss', 'lightningcss'].forEach((transformer) => {
+
+for (let transformer of ['postcss', 'lightningcss']) {
   describe(transformer, () => {
     test(
       `dev mode`,
@@ -65,4 +66,4 @@ import { css, html, test, ts, txt } from '../utils'
       },
     )
   })
-})
+}

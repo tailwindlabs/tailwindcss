@@ -13,7 +13,8 @@ import {
   txt,
   yaml,
 } from '../utils'
-;['postcss', 'lightningcss'].forEach((transformer) => {
+
+for (let transformer of ['postcss', 'lightningcss']) {
   describe(transformer, () => {
     test(
       `production build`,
@@ -385,7 +386,7 @@ import {
       },
     )
   })
-})
+}
 
 test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
