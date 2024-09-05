@@ -2,6 +2,8 @@ name: Release
 
 on:
   pull_request:
+  push:
+    branches: [feat/v4-gh-releases]
   workflow_dispatch:
     inputs:
       release_channel:
