@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Improve the CLI output when no new classes were found ([#14351](https://github.com/tailwindlabs/tailwindcss/pull/14351))
+- Ensure there is always CLI feedback on save even when no new classes were found ([#14351](https://github.com/tailwindlabs/tailwindcss/pull/14351))
 
 ## [4.0.0-alpha.23] - 2024-09-05
 
