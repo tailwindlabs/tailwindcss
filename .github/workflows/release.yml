@@ -144,7 +144,7 @@ jobs:
     name: Build and release Tailwind CSS
 
     permissions:
-      contents: read
+      contents: write # for softprops/action-gh-release to create GitHub release
       # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
       id-token: write
 
@@ -153,6 +153,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - run: git fetch --tags -f
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
