@@ -140,7 +140,7 @@ jobs:
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     timeout-minutes: 15
     name: Build and release Tailwind CSS
 
