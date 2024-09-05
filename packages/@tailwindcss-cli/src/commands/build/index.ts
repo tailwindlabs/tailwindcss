@@ -236,9 +236,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           else if (rebuildStrategy === 'incremental') {
             let newCandidates = scanner.scanFiles(changedFiles)
 
-            // No candidates found which means we don't need to rebuild. This can
-            // happen if a file is detected but doesn't match any of the globs.
-            if (newCandidates.length <= 0) return
+            // No new candidates found which means we don't need to write to
+            // disk, and can return early.
+            if (newCandidates.length <= 0) {
+              let end = process.hrtime.bigint()
+              eprintln(`Done in ${formatDuration(end - start)}`)
+              return
+            }
 
             compiledCss = compiler.build(newCandidates)
           }
