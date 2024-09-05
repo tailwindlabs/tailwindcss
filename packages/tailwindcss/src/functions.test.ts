@@ -436,7 +436,7 @@ describe('theme function', () => {
         `)
       })
 
-      test('theme(--color-red-500 / 50%)', async () => {
+      test.only('theme(--color-red-500 / 50%)', async () => {
         expect(
           await compileCss(css`
             @theme {

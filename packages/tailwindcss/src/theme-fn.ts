@@ -2,6 +2,7 @@ import { deepMerge } from './compat/config/deep-merge'
 import type { UserConfig } from './compat/config/types'
 import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
+import { withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { toKeyPath } from './utils/to-key-path'
 
@@ -11,21 +12,40 @@ export function createThemeFn(
   resolveValue: (value: any) => any,
 ) {
   return function theme(path: string, defaultValue?: any) {
-    let keypath = toKeyPath(path)
-    let cssValue = readFromCss(designSystem.theme, keypath)
-
-    if (typeof cssValue !== 'object') {
-      return cssValue
+    // Extract an eventual modifier from the path. e.g.:
+    // - "colors.red.500 / 50%" -> "50%"
+    // - "foo/bar/baz/50%"      -> "50%"
+    let lastSlash = path.lastIndexOf('/')
+    let modifier: string | null = null
+    if (lastSlash !== -1) {
+      modifier = path.slice(lastSlash + 1).trim()
+      path = path.slice(0, lastSlash).trim()
     }
 
-    let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
+    let resolvedValue = (() => {
+      let keypath = toKeyPath(path)
+      let cssValue = readFromCss(designSystem.theme, keypath)
 
-    if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
-      return deepMerge({}, [configValue, cssValue], (_, b) => b)
+      if (typeof cssValue !== 'object') {
+        return cssValue
+      }
+
+      let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
+
+      if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
+        return deepMerge({}, [configValue, cssValue], (_, b) => b)
+      }
+
+      // Values from CSS take precedence over values from the config
+      return cssValue ?? configValue
+    })()
+
+    // Apply the opacity modifier if present
+    if (modifier && typeof resolvedValue === 'string') {
+      resolvedValue = withAlpha(resolvedValue, modifier)
     }
 
-    // Values from CSS take precedence over values from the config
-    return cssValue ?? configValue ?? defaultValue
+    return resolvedValue ?? defaultValue
   }
 }
 

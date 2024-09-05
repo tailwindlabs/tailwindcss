@@ -1,6 +1,5 @@
 import { walk, type AstNode } from './ast'
 import type { PluginAPI } from './plugin-api'
-import { withAlpha } from './utilities'
 import * as ValueParser from './value-parser'
 import { type ValueAstNode } from './value-parser'
 
@@ -77,16 +76,6 @@ function cssThemeFn(
   path: string,
   fallbackValues: ValueAstNode[],
 ): ValueAstNode[] {
-  let modifier: string | null = null
-  // Extract an eventual modifier from the path. e.g.:
-  // - "colors.red.500 / 50%" -> "50%"
-  // - "foo/bar/baz/50%"      -> "50%"
-  let lastSlash = path.lastIndexOf('/')
-  if (lastSlash !== -1) {
-    modifier = path.slice(lastSlash + 1).trim()
-    path = path.slice(0, lastSlash).trim()
-  }
-
   let resolvedValue: string | null = null
   let themeValue = pluginApi.theme(path)
 
@@ -107,12 +96,8 @@ function cssThemeFn(
 
   if (!resolvedValue) {
     throw new Error(
-      `Could not resolve value for theme function: \`theme(${path}${modifier ? ` / ${modifier}` : ''})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
+      `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
     )
-  }
-
-  if (modifier) {
-    resolvedValue = withAlpha(resolvedValue, modifier)
   }
 
   // We need to parse the values recursively since this can resolve with another
