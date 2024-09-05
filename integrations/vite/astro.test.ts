@@ -1,7 +1,7 @@
 import { expect } from 'vitest'
 import { candidate, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
-test.debug(
+test(
   'dev mode',
   {
     fs: {
