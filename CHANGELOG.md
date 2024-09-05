@@ -7,17 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+- Nothing yet!
 
-- Add opacity modifier support to the `theme()` function in plugins ([#14348](https://github.com/tailwindlabs/tailwindcss/pull/14348))
-
-## [4.0.0-alpha.22] - 2024-09-04
+## [4.0.0-alpha.22] - 2024-09-05
 
 ### Added
 
 - Support TypeScript for `@plugin` and `@config` files ([#14317](https://github.com/tailwindlabs/tailwindcss/pull/14317))
 - Add `default` option to `@theme` to support overriding default theme values from plugins/JS config files ([#14327](https://github.com/tailwindlabs/tailwindcss/pull/14327))
 - Add support for `<style>` tags in Astro files to the Vite plugin ([#14340](https://github.com/tailwindlabs/tailwindcss/pull/14340))
+- Add opacity modifier support to the `theme()` function in plugins ([#14348](https://github.com/tailwindlabs/tailwindcss/pull/14348))
 
 ### Fixed
 
