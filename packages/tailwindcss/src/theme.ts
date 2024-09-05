@@ -1,18 +1,16 @@
 import { escape } from './utils/escape'
 
-export class Theme {
-  constructor(
-    private values = new Map<
-      string,
-      { value: string; isReference: boolean; isInline: boolean; isDefault: boolean }
-    >(),
-  ) {}
+export const enum ThemeOptions {
+  NONE = 0,
+  INLINE = 1 << 0,
+  REFERENCE = 1 << 1,
+  DEFAULT = 1 << 2,
+}
 
-  add(
-    key: string,
-    value: string,
-    { isReference = false, isInline = false, isDefault = false } = {},
-  ): void {
+export class Theme {
+  constructor(private values = new Map<string, { value: string; options: number }>()) {}
+
+  add(key: string, value: string, options = ThemeOptions.NONE): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -24,15 +22,15 @@ export class Theme {
       }
     }
 
-    if (isDefault) {
+    if (options & ThemeOptions.DEFAULT) {
       let existing = this.values.get(key)
-      if (existing && !existing.isDefault) return
+      if (existing && !(existing.options & ThemeOptions.DEFAULT)) return
     }
 
     if (value === 'initial') {
       this.values.delete(key)
     } else {
-      this.values.set(key, { value, isReference, isInline, isDefault })
+      this.values.set(key, { value, options })
     }
   }
 
@@ -68,7 +66,7 @@ export class Theme {
   }
 
   hasDefault(key: string): boolean {
-    return this.values.get(key)?.isDefault ?? false
+    return ((this.values.get(key)?.options ?? 0) & ThemeOptions.DEFAULT) === ThemeOptions.DEFAULT
   }
 
   entries() {
@@ -111,7 +109,7 @@ export class Theme {
 
     let value = this.values.get(themeKey)!
 
-    if (value.isInline) {
+    if (value.options & ThemeOptions.INLINE) {
       return value.value
     }
 
@@ -141,7 +139,7 @@ export class Theme {
       let nestedValue = this.values.get(nestedKey)!
       if (!nestedValue) continue
 
-      if (nestedValue.isInline) {
+      if (nestedValue.options & ThemeOptions.INLINE) {
         extra[name] = nestedValue.value
       } else {
         extra[name] = this.#var(nestedKey)!
@@ -150,7 +148,7 @@ export class Theme {
 
     let value = this.values.get(themeKey)!
 
-    if (value.isInline) {
+    if (value.options & ThemeOptions.INLINE) {
       return [value.value, extra]
     }
 

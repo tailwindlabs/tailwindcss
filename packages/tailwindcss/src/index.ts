@@ -7,7 +7,7 @@ import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { registerPlugins, type CssPluginOptions, type Plugin } from './plugin-api'
-import { Theme } from './theme'
+import { Theme, ThemeOptions } from './theme'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -26,21 +26,19 @@ function throwOnConfig(): never {
 }
 
 function parseThemeOptions(selector: string) {
-  let isReference = false
-  let isInline = false
-  let isDefault = false
+  let options = ThemeOptions.NONE
 
   for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
     if (option === 'reference') {
-      isReference = true
+      options |= ThemeOptions.REFERENCE
     } else if (option === 'inline') {
-      isInline = true
+      options |= ThemeOptions.INLINE
     } else if (option === 'default') {
-      isDefault = true
+      options |= ThemeOptions.DEFAULT
     }
   }
 
-  return { isReference, isInline, isDefault }
+  return options
 }
 
 async function parseCss(
@@ -267,7 +265,7 @@ async function parseCss(
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let { isReference, isInline, isDefault } = parseThemeOptions(node.selector)
+    let themeOptions = parseThemeOptions(node.selector)
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -281,7 +279,7 @@ async function parseCss(
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', { isReference, isInline, isDefault })
+        theme.add(child.property, child.value ?? '', themeOptions)
         return
       }
 
@@ -297,7 +295,7 @@ async function parseCss(
 
     // Keep a reference to the first `@theme` rule to update with the full theme
     // later, and delete any other `@theme` rules.
-    if (!firstThemeRule && !isReference) {
+    if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
       firstThemeRule = node
     } else {
       replaceWith([])
@@ -341,7 +339,7 @@ async function parseCss(
     let nodes = []
 
     for (let [key, value] of theme.entries()) {
-      if (value.isReference) continue
+      if (value.options & ThemeOptions.REFERENCE) continue
       nodes.push(decl(key, value.value))
     }
 
