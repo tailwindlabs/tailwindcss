@@ -25,8 +25,7 @@
     "dist"
   ],
   "publishConfig": {
-    "provenance": true,
-    "access": "restricted"
+    "provenance": true
   },
   "dependencies": {
     "@tailwindcss/cli": "workspace:^",
