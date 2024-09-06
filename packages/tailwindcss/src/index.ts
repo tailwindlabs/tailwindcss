@@ -321,7 +321,7 @@ async function parseCss(
     })),
   )
 
-  let { resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+  registerPlugins(plugins, designSystem, ast, configs, globs)
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -395,16 +395,6 @@ async function parseCss(
     // into nested trees.
     return WalkAction.Skip
   })
-
-  for (let file of resolvedConfig.content.files) {
-    if ('raw' in file) {
-      throw new Error(
-        `Error in the config file/plugin/preset. The \`content\` key contains a \`raw\` entry:\n\n${JSON.stringify(file, null, 2)}\n\nThis feature is not currently supported.`,
-      )
-    }
-
-    globs.push({ origin: file.base, pattern: file.pattern })
-  }
 
   return {
     designSystem,
