@@ -392,8 +392,11 @@ export function registerPlugins(
   // core utilities already read from.
   applyConfigToTheme(designSystem, userConfig)
 
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: any) {
+    return pluginApi.theme(path, defaultValue)
+  }
+
   return {
-    pluginApi,
     resolvedConfig,
   }
 }

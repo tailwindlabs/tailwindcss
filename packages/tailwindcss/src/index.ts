@@ -321,7 +321,7 @@ async function parseCss(
     })),
   )
 
-  let { pluginApi, resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
+  let { resolvedConfig } = registerPlugins(plugins, designSystem, ast, configs)
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -379,7 +379,7 @@ async function parseCss(
   // also contain functions or plugins that use functions so we need to evaluate
   // functions if either of those are present.
   if (plugins.length > 0 || configs.length > 0 || css.includes(THEME_FUNCTION_INVOCATION)) {
-    substituteFunctions(ast, pluginApi.theme)
+    substituteFunctions(ast, designSystem.resolveThemeValue)
   }
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
@@ -408,7 +408,6 @@ async function parseCss(
 
   return {
     designSystem,
-    pluginApi,
     ast,
     globs,
   }
@@ -421,7 +420,7 @@ export async function compile(
   globs: { origin?: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs, pluginApi } = await parseCss(css, opts)
+  let { designSystem, ast, globs } = await parseCss(css, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -491,7 +490,7 @@ export async function compile(
         // properties (`[--my-var:theme(--color-red-500)]`) can contain function
         // calls so we need evaluate any functions we find there that weren't in
         // the source CSS.
-        substituteFunctions(newNodes, pluginApi.theme)
+        substituteFunctions(newNodes, designSystem.resolveThemeValue)
 
         previousAstNodeCount = newNodes.length
 

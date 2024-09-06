@@ -23,6 +23,7 @@ export type DesignSystem = {
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
+  resolveThemeValue(path: string, defaultValue?: string): string
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -78,6 +79,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     getUsedVariants() {
       return Array.from(parsedVariants.values())
+    },
+
+    resolveThemeValue(path: string, defaultValue?: string) {
+      throw new Error('unimplemented')
     },
   }
 
