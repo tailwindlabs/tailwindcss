@@ -288,9 +288,28 @@ describe('theme function', () => {
           `)
         })
 
-        test('theme(fontFamily.sans)', async () => {
+        test('theme(fontFamily.sans) (css)', async () => {
           expect(
             await compileCss(css`
+              @theme default reference {
+                --font-family-sans: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
+                  Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+              }
+              .fam {
+                font-family: theme(fontFamily.sans);
+              }
+            `),
+          ).toMatchInlineSnapshot(`
+          ".fam {
+            font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+          }"
+        `)
+        })
+
+        test('theme(fontFamily.sans) (config)', async () => {
+          expect(
+            await compileCss(css`
+              @config "default.config.js";
               .fam {
                 font-family: theme(fontFamily.sans);
               }
@@ -516,6 +535,7 @@ describe('theme function', () => {
 
         let compiled = await compileCss(css`
           ${defaultTheme}
+          @config "default.config.js";
           .custom {
             --custom-value: theme(${value});
           }
