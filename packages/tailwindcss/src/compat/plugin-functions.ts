@@ -76,6 +76,25 @@ export function createThemeFn(
         return configValueCopy
       }
 
+      // Handle the tuple case
+      if (Array.isArray(cssValue) && Array.isArray(options) && Array.isArray(configValue)) {
+        let base = cssValue[0]
+        let extra = cssValue[1]
+
+        // Values from the config overwrite any default values from the CSS theme
+        if (options[0] & ThemeOptions.DEFAULT) {
+          base = configValue[0] ?? base
+        }
+
+        for (let key of Object.keys(extra)) {
+          if (options[1][key] & ThemeOptions.DEFAULT) {
+            extra[key] = configValue[1][key] ?? extra[key]
+          }
+        }
+
+        return [base, extra]
+      }
+
       // Values from CSS take precedence over values from the config
       return cssValue ?? configValue
     })()
@@ -125,17 +144,22 @@ function readFromCss(
     .join('-')
 
   let map = new Map<string | null, ThemeValue>()
-  let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
+  let nested = new DefaultMap<string | null, Map<string, [value: string, options: number]>>(
+    () => new Map(),
+  )
 
   let ns = theme.namespace(`--${themeKey}` as any)
   if (ns.size === 0) {
     return [null, ThemeOptions.NONE]
   }
 
+  let options = new Map()
+
   for (let [key, value] of ns) {
     // Non-nested values can be set directly
     if (!key || !key.includes('--')) {
       map.set(key, value)
+      options.set(key, theme.getOptions(!key ? `--${themeKey}` : `--${themeKey}-${key}`))
       continue
     }
 
@@ -148,25 +172,32 @@ function readFromCss(
     // Make `nestedKey` camel case:
     nestedKey = nestedKey.replace(/-([a-z])/g, (_, a) => a.toUpperCase())
 
-    nested.get(mainKey === '' ? null : mainKey).set(nestedKey, value)
+    nested
+      .get(mainKey === '' ? null : mainKey)
+      .set(nestedKey, [value, theme.getOptions(`--${themeKey}${key}`)])
   }
 
+  let baseOptions = theme.getOptions(`--${themeKey}`)
   for (let [key, extra] of nested) {
     let value = map.get(key)
     if (typeof value !== 'string') continue
 
-    map.set(key, [value, Object.fromEntries(extra)])
+    let extraObj: Record<string, string> = {}
+    let extraOptionsObj: Record<string, number> = {}
+
+    for (let [nestedKey, [nestedValue, nestedOptions]] of extra) {
+      extraObj[nestedKey] = nestedValue
+      extraOptionsObj[nestedKey] = nestedOptions
+    }
+
+    map.set(key, [value, extraObj])
+    options.set(key, [baseOptions, extraOptionsObj])
   }
 
   // We have to turn the map into object-like structure for v3 compatibility
   let obj: Record<string, unknown> = {}
+  let optionsObj: Record<string, number> = {}
   let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
-  let options = Object.fromEntries(
-    Array.from(ns.entries()).map(([key]) => {
-      let fullKey = key === null ? `--${themeKey}` : `--${themeKey}-${key}`
-      return [key ?? 'DEFAULT', theme.getOptions(fullKey)]
-    }),
-  )
 
   for (let [key, value] of map) {
     key = key ?? 'DEFAULT'
@@ -184,26 +215,30 @@ function readFromCss(
     set(obj, path, value)
   }
 
+  for (let [key, value] of options) {
+    set(optionsObj, [key ?? 'DEFAULT'], value)
+  }
+
   // If the request looked like `theme('animation.DEFAULT')` it would have been
   // turned into a lookup for `--animation-*` so we should extract the value for
   // the `DEFAULT` key from the list of possible values. If there is no
   // `DEFAULT` in the list, there is no match so return `null`.
   if (path[path.length - 1] === 'DEFAULT') {
-    return [(obj?.DEFAULT ?? null) as any, options.DEFAULT ?? 0] as const
+    return [(obj?.DEFAULT ?? null) as any, optionsObj.DEFAULT ?? 0] as const
   }
 
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
-    return [obj.DEFAULT as string, options.DEFAULT ?? 0] as const
+    return [obj.DEFAULT as any, optionsObj.DEFAULT ?? 0] as const
   }
 
   // Attach the CSS values to the object for later use. This object could be
   // mutated by the user so we want to keep the original CSS values around.
-  obj.__CSS_VALUES__ = options
+  obj.__CSS_VALUES__ = optionsObj
 
-  return [obj, options] as const
+  return [obj, optionsObj] as const
 }
 
 function get(obj: any, path: string[]) {

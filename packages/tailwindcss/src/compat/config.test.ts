@@ -232,13 +232,21 @@ test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
 })
 
 describe('theme callbacks', () => {
-  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values', async ({
+  test('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
     expect,
   }) => {
     let input = css`
       @theme default {
-        --font-size-xl: 1.25rem;
-        --font-size-xl--line-height: 1.5rem;
+        --font-size-base: 0rem;
+        --font-size-base--line-height: 1rem;
+        --font-size-md: 0rem;
+        --font-size-md--line-height: 1rem;
+        --font-size-xl: 0rem;
+        --font-size-xl--line-height: 1rem;
+      }
+      @theme {
+        --font-size-base: 100rem;
+        --font-size-md--line-height: 101rem;
       }
       @tailwind utilities;
       @config "./config.js";
@@ -249,20 +257,76 @@ describe('theme callbacks', () => {
         theme: {
           extend: {
             fontSize: {
-              xl: ['1.25rem', { lineHeight: '1.75rem' }],
+              base: ['200rem', { lineHeight: '201rem' }],
+              md: ['200rem', { lineHeight: '201rem' }],
+              xl: ['200rem', { lineHeight: '201rem' }],
             },
+
+            // Direct access
             lineHeight: ({ theme }) => ({
+              base: theme('fontSize.base[1].lineHeight'),
+              md: theme('fontSize.md[1].lineHeight'),
               xl: theme('fontSize.xl[1].lineHeight'),
+            }),
+
+            // Tuple access
+            typography: ({ theme }) => ({
+              '[class~=lead-base]': {
+                fontSize: theme('fontSize.base')[0],
+                ...theme('fontSize.base')[1],
+              },
+              '[class~=lead-md]': {
+                fontSize: theme('fontSize.md')[0],
+                ...theme('fontSize.md')[1],
+              },
+              '[class~=lead-xl]': {
+                fontSize: theme('fontSize.xl')[0],
+                ...theme('fontSize.xl')[1],
+              },
             }),
           },
         },
+
+        plugins: [
+          plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '.prose': {
+                ...theme('typography'),
+              },
+            })
+          }),
+        ],
       }),
     })
-    expect(compiler.build(['leading-xl'])).toMatchInlineSnapshot(`
+
+    expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
+      .toMatchInlineSnapshot(`
       ":root {
+        --font-size-base: 100rem;
+        --font-size-md--line-height: 101rem;
+      }
+      .prose {
+        [class~=lead-base] {
+          font-size: 100rem;
+          line-height: 201rem;
+        }
+        [class~=lead-md] {
+          font-size: 200rem;
+          line-height: 101rem;
+        }
+        [class~=lead-xl] {
+          font-size: 200rem;
+          line-height: 201rem;
+        }
+      }
+      .leading-base {
+        line-height: 201rem;
+      }
+      .leading-md {
+        line-height: 101rem;
       }
       .leading-xl {
-        line-height: 1.75rem;
+        line-height: 201rem;
       }
       "
     `)
