@@ -321,7 +321,9 @@ async function parseCss(
     })),
   )
 
-  registerPlugins(plugins, designSystem, ast, configs, globs)
+  if (plugins.length || configs.length) {
+    registerPlugins(plugins, designSystem, ast, configs, globs)
+  }
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
