@@ -197,22 +197,9 @@ function readFromCss(
   // We have to turn the map into object-like structure for v3 compatibility
   let obj: Record<string, unknown> = {}
   let optionsObj: Record<string, number> = {}
-  let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
 
   for (let [key, value] of map) {
-    key = key ?? 'DEFAULT'
-
-    let path: string[] = []
-    let splitIndex = key.indexOf('-')
-
-    if (useNestedObjects && splitIndex !== -1) {
-      path.push(key.slice(0, splitIndex))
-      path.push(key.slice(splitIndex + 1))
-    } else {
-      path.push(key)
-    }
-
-    set(obj, path, value)
+    set(obj, [key ?? 'DEFAULT'], value)
   }
 
   for (let [key, value] of options) {
