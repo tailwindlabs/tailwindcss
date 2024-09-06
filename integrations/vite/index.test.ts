@@ -171,78 +171,81 @@ for (let transformer of ['postcss', 'lightningcss']) {
         // Candidates are resolved lazily, so the first visit of index.html
         // will only have candidates from this file.
         await retryAssertion(async () => {
-          let css = await fetchStyles(port, '/index.html')
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).not.toContain(candidate`font-bold`)
+          let styles = await fetchStyles(port, '/index.html')
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).not.toContain(candidate`font-bold`)
         })
 
         // Going to about.html will extend the candidate list to include
         // candidates from about.html.
         await retryAssertion(async () => {
-          let css = await fetchStyles(port, '/about.html')
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`font-bold`)
+          let styles = await fetchStyles(port, '/about.html')
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
         })
 
-        // Updates are additive and cause new candidates to be added.
-        await fs.write(
-          'project-a/index.html',
-          html`
-            <head>
-              <link rel="stylesheet" href="./src/index.css" />
-            </head>
-            <body>
-              <div class="underline m-2">Hello, world!</div>
-            </body>
-          `,
-        )
         await retryAssertion(async () => {
-          let css = await fetchStyles(port)
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`font-bold`)
-          expect(css).toContain(candidate`m-2`)
+          // Updates are additive and cause new candidates to be added.
+          await fs.write(
+            'project-a/index.html',
+            html`
+              <head>
+                <link rel="stylesheet" href="./src/index.css" />
+              </head>
+              <body>
+                <div class="underline m-2">Hello, world!</div>
+              </body>
+            `,
+          )
+
+          let styles = await fetchStyles(port)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
+          expect(styles).toContain(candidate`m-2`)
         })
 
-        // Manually added `@source`s are watched and trigger a rebuild
-        await fs.write(
-          'project-b/src/index.js',
-          js`
-            const className = "[.changed_&]:content-['project-b/src/index.js']"
-            module.exports = { className }
-          `,
-        )
         await retryAssertion(async () => {
-          let css = await fetchStyles(port)
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`font-bold`)
-          expect(css).toContain(candidate`m-2`)
-          expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+          // Manually added `@source`s are watched and trigger a rebuild
+          await fs.write(
+            'project-b/src/index.js',
+            js`
+              const className = "[.changed_&]:content-['project-b/src/index.js']"
+              module.exports = { className }
+            `,
+          )
+
+          let styles = await fetchStyles(port)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
         })
 
-        // After updates to the CSS file, all previous candidates should still be in
-        // the generated CSS
-        await fs.write(
-          'project-a/src/index.css',
-          css`
-            ${await fs.read('project-a/src/index.css')}
-
-            .red {
-              color: red;
-            }
-          `,
-        )
         await retryAssertion(async () => {
-          let css = await fetchStyles(port)
-          expect(css).toContain(candidate`red`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`m-2`)
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
-          expect(css).toContain(candidate`font-bold`)
+          // After updates to the CSS file, all previous candidates should still be in
+          // the generated CSS
+          await fs.write(
+            'project-a/src/index.css',
+            css`
+              ${await fs.read('project-a/src/index.css')}
+
+              .red {
+                color: red;
+              }
+            `,
+          )
+
+          let styles = await fetchStyles(port)
+          expect(styles).toContain(candidate`red`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+          expect(styles).toContain(candidate`font-bold`)
         })
       },
     )
@@ -337,51 +340,53 @@ for (let transformer of ['postcss', 'lightningcss']) {
 
           let files = await fs.glob('project-a/dist/**/*.css')
           expect(files).toHaveLength(1)
-          let [, css] = files[0]
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`m-2`)
+          let [, styles] = files[0]
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
         })
 
-        // Manually added `@source`s are watched and trigger a rebuild
-        await fs.write(
-          'project-b/src/index.js',
-          js`
-            const className = "[.changed_&]:content-['project-b/src/index.js']"
-            module.exports = { className }
-          `,
-        )
         await retryAssertion(async () => {
+          // Manually added `@source`s are watched and trigger a rebuild
+          await fs.write(
+            'project-b/src/index.js',
+            js`
+              const className = "[.changed_&]:content-['project-b/src/index.js']"
+              module.exports = { className }
+            `,
+          )
+
           let files = await fs.glob('project-a/dist/**/*.css')
           expect(files).toHaveLength(1)
-          let [, css] = files[0]
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`m-2`)
-          expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+          let [, styles] = files[0]
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
         })
 
-        // After updates to the CSS file, all previous candidates should still be in
-        // the generated CSS
-        await fs.write(
-          'project-a/src/index.css',
-          css`
-            ${await fs.read('project-a/src/index.css')}
-
-            .red {
-              color: red;
-            }
-          `,
-        )
         await retryAssertion(async () => {
+          // After updates to the CSS file, all previous candidates should still be in
+          // the generated CSS
+          await fs.write(
+            'project-a/src/index.css',
+            css`
+              ${await fs.read('project-a/src/index.css')}
+
+              .red {
+                color: red;
+              }
+            `,
+          )
+
           let files = await fs.glob('project-a/dist/**/*.css')
           expect(files).toHaveLength(1)
-          let [, css] = files[0]
-          expect(css).toContain(candidate`underline`)
-          expect(css).toContain(candidate`flex`)
-          expect(css).toContain(candidate`m-2`)
-          expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
-          expect(css).toContain(candidate`red`)
+          let [, styles] = files[0]
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+          expect(styles).toContain(candidate`red`)
         })
       },
     )
@@ -439,25 +444,26 @@ test(
     // Candidates are resolved lazily, so the first visit of index.html
     // will only have candidates from this file.
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/index.html')
-      expect(css).toContain(candidate`underline`)
-      expect(css).not.toContain(candidate`font-bold`)
+      let styles = await fetchStyles(port, '/index.html')
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).not.toContain(candidate`font-bold`)
     })
 
     // Going to about.html will extend the candidate list to include
     // candidates from about.html.
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/about.html')
-      expect(css).toContain(candidate`underline`)
-      expect(css).toContain(candidate`font-bold`)
+      let styles = await fetchStyles(port, '/about.html')
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain(candidate`font-bold`)
     })
 
-    // We change the CSS file so it is no longer a valid Tailwind root.
-    await fs.write('src/index.css', css`@import 'tailwindcss';`)
     await retryAssertion(async () => {
-      let css = await fetchStyles(port)
-      expect(css).toContain(candidate`underline`)
-      expect(css).toContain(candidate`font-bold`)
+      // We change the CSS file so it is no longer a valid Tailwind root.
+      await fs.write('src/index.css', css`@import 'tailwindcss';`)
+
+      let styles = await fetchStyles(port)
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain(candidate`font-bold`)
     })
   },
 )

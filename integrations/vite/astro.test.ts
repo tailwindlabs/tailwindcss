@@ -44,17 +44,18 @@ test(
       expect(css).toContain(candidate`underline`)
     })
 
-    await fs.write(
-      'src/pages/index.astro',
-      html`
-        <div class="underline font-bold">Hello, world!</div>
-
-        <style is:global>
-          @import 'tailwindcss';
-        </style>
-      `,
-    )
     await retryAssertion(async () => {
+      await fs.write(
+        'src/pages/index.astro',
+        html`
+          <div class="underline font-bold">Hello, world!</div>
+
+          <style is:global>
+            @import 'tailwindcss';
+          </style>
+      `,
+      )
+
       let css = await fetchStyles(port)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`font-bold`)
