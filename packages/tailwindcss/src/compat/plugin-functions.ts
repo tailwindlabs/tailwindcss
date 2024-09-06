@@ -26,40 +26,51 @@ export function createThemeFn(
       let keypath = toKeyPath(path)
       let [cssValue, options] = readFromCss(designSystem.theme, keypath)
 
+      //
       if (typeof cssValue === 'object' && cssValue !== null) {
-        cssValue.__CSS_VALUES__ ??= options
+        cssValue.__CSS_VALUES__ = options
       }
 
       let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
+      //
       if (
         cssValue === null &&
         typeof configValue === 'object' &&
         configValue !== null &&
         Object.hasOwn(configValue, '__CSS_VALUES__')
       ) {
-        cssValue = {}
+        let localCssValue: Record<string, unknown> = {}
         for (let key in configValue.__CSS_VALUES__) {
-          cssValue[key] = configValue[key]
+          localCssValue[key] = configValue[key]
         }
         configValue = Object.fromEntries(
-          Object.entries(configValue).filter(([key]) => !(key in cssValue)),
+          Object.entries(configValue).filter(([key]) => !(key in localCssValue)),
         )
+        cssValue = localCssValue
         options = Object.assign({}, configValue.__CSS_VALUES__)
       }
 
+      //
       if (typeof cssValue !== 'object') {
-        if (options & ThemeOptions.DEFAULT) {
+        if (typeof options !== 'object' && options & ThemeOptions.DEFAULT) {
           return configValue ?? cssValue
         }
 
         return cssValue
       }
 
-      if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
-        let configValueCopy = deepMerge({}, [configValue], (_, b) => {
-          return b
-        })
+      //
+      if (
+        configValue !== null &&
+        typeof configValue === 'object' &&
+        typeof options === 'object' &&
+        !Array.isArray(configValue)
+      ) {
+        let configValueCopy: Record<string, unknown> & { __CSS_VALUES__?: Record<string, number> } =
+          deepMerge({}, [configValue], (_, b) => {
+            return b
+          })
 
         for (let key in cssValue) {
           if (key === '__CSS_VALUES__') continue
@@ -69,11 +80,7 @@ export function createThemeFn(
             continue
           }
 
-          // if (typeof cssValue[key] === 'object' && cssValue[key] !== null) {
-          //   // configValueCopy[key] = { ...cssValue[key] }
-          // } else {
           configValueCopy[key] = cssValue[key]
-          // }
 
           configValueCopy.__CSS_VALUES__ ??= {}
           configValueCopy.__CSS_VALUES__[key] = options[key]
@@ -98,11 +105,13 @@ export function createThemeFn(
 function readFromCss(
   theme: Theme,
   path: string[],
-): [value: string | null, options: number] | [value: object, options: Map<string, number>] {
+):
+  | [value: string | null | Record<string, unknown>, options: number]
+  | [value: Record<string, unknown>, options: Record<string, number>] {
   // `--color-red-500` should resolve to the theme variable directly, no look up
   // and handling of nested objects is required.
   if (path.length === 1 && path[0].startsWith('--')) {
-    return [theme.get([path[0] as ThemeKey]), theme.getOptions(path[0])]
+    return [theme.get([path[0] as ThemeKey]), theme.getOptions(path[0])] as const
   }
 
   type ThemeValue =
@@ -193,17 +202,17 @@ function readFromCss(
   // the `DEFAULT` key from the list of possible values. If there is no
   // `DEFAULT` in the list, there is no match so return `null`.
   if (path[path.length - 1] === 'DEFAULT') {
-    return [obj?.DEFAULT ?? null, options.DEFAULT ?? 0]
+    return [(obj?.DEFAULT ?? null) as any, options.DEFAULT ?? 0] as const
   }
 
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
-    return [obj.DEFAULT, options.DEFAULT ?? 0]
+    return [obj.DEFAULT as string, options.DEFAULT ?? 0] as const
   }
 
-  return [obj, options]
+  return [obj, options] as const
 }
 
 function get(obj: any, path: string[]) {
