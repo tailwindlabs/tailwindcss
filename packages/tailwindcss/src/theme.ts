@@ -69,6 +69,10 @@ export class Theme {
     return ((this.values.get(key)?.options ?? 0) & ThemeOptions.DEFAULT) === ThemeOptions.DEFAULT
   }
 
+  getOptions(key: string) {
+    return this.values.get(key)?.options ?? 0
+  }
+
   entries() {
     return this.values.entries()
   }

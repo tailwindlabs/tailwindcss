@@ -1,5 +1,5 @@
 import type { DesignSystem } from '../design-system'
-import type { Theme, ThemeKey } from '../theme'
+import { ThemeOptions, type Theme, type ThemeKey } from '../theme'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
 import { toKeyPath } from '../utils/to-key-path'
@@ -24,16 +24,63 @@ export function createThemeFn(
 
     let resolvedValue = (() => {
       let keypath = toKeyPath(path)
-      let cssValue = readFromCss(designSystem.theme, keypath)
-
-      if (typeof cssValue !== 'object') {
-        return cssValue
-      }
+      let [cssValue, options] = readFromCss(designSystem.theme, keypath)
 
       let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
+      if (typeof cssValue !== 'object') {
+        if (options & ThemeOptions.DEFAULT) {
+          return configValue ?? cssValue
+        }
+
+        return cssValue
+      }
+
       if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
-        return deepMerge({}, [configValue, cssValue], (_, b) => b)
+        let configValueCopy = deepMerge({}, [configValue], (_, b) => {
+          return b
+        })
+
+        for (let key in cssValue) {
+          let configLeafValue = get(configValueCopy, key.split('-'))
+          if (configLeafValue && options.get(key) & ThemeOptions.DEFAULT) {
+            continue
+          }
+
+          configValueCopy[key] = cssValue[key]
+        }
+
+        console.dir({ configValueCopy }, { depth: null })
+
+        return configValueCopy
+        // console.dir({ abc }, { depth: null })
+        return deepMerge({}, [configValue, cssValue], (a, b, path) => {
+          // console.log({
+          //   a,
+          //   b,
+          //   path,
+          //   cssValue,
+          //   options: cssValue === null ? options : options.get(path.join('-')),
+          // })
+          // let fullKey = path.join('-')
+          // // console.log({ fullKey, options, configValue })
+          // if (
+          //   configValue[fullKey] &&
+          //   options.get(fullKey.slice('--color-'.length) & ThemeOptions.DEFAULT)
+          // ) {
+          //   return configValue[fullKey]
+          // }
+          //
+          // console.log({ a, b })
+          // if (typeof a === 'string' && typeof b === 'string') {
+          //   let key = path.join('-')
+          //   console.log({ a, b, key })
+          //   if (options.get(key.slice('--color-'.length)) & ThemeOptions.DEFAULT) {
+          //     return a
+          //   }
+          // }
+          return b
+        })
       }
 
       // Values from CSS take precedence over values from the config
@@ -49,11 +96,14 @@ export function createThemeFn(
   }
 }
 
-function readFromCss(theme: Theme, path: string[]) {
+function readFromCss(
+  theme: Theme,
+  path: string[],
+): [value: string | null, options: number] | [value: object, options: Map<string, number>] {
   // `--color-red-500` should resolve to the theme variable directly, no look up
   // and handling of nested objects is required.
   if (path.length === 1 && path[0].startsWith('--')) {
-    return theme.get([path[0] as ThemeKey])
+    return [theme.get([path[0] as ThemeKey]), theme.getOptions(path[0])]
   }
 
   type ThemeValue =
@@ -82,10 +132,13 @@ function readFromCss(theme: Theme, path: string[]) {
   let map = new Map<string | null, ThemeValue>()
   let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
 
-  let ns = theme.namespace(`--${themeKey}` as any)
+  // TODO: Bad Robin
+  if (themeKey === 'colors') themeKey = 'color'
 
+  let ns = theme.namespace(`--${themeKey}` as any)
   if (ns.size === 0) {
-    return null
+    console.log({ themeKey })
+    return [null, ThemeOptions.NONE]
   }
 
   for (let [key, value] of ns) {
@@ -117,6 +170,12 @@ function readFromCss(theme: Theme, path: string[]) {
   // We have to turn the map into object-like structure for v3 compatibility
   let obj: Record<string, unknown> = {}
   let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
+  let options = new Map(
+    Array.from(ns.entries()).map(([key]) => {
+      let fullKey = key === null ? `--${themeKey}` : `--${themeKey}-${key}`
+      return [key, theme.getOptions(fullKey)]
+    }),
+  )
 
   for (let [key, value] of map) {
     key = key ?? 'DEFAULT'
@@ -139,17 +198,17 @@ function readFromCss(theme: Theme, path: string[]) {
   // the `DEFAULT` key from the list of possible values. If there is no
   // `DEFAULT` in the list, there is no match so return `null`.
   if (path[path.length - 1] === 'DEFAULT') {
-    return obj?.DEFAULT ?? null
+    return [obj?.DEFAULT ?? null, options.get(null) ?? 0]
   }
 
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
-    return obj.DEFAULT
+    return [obj.DEFAULT, options.get(null) ?? 0]
   }
 
-  return obj
+  return [obj, options]
 }
 
 function get(obj: any, path: string[]) {

@@ -258,13 +258,135 @@ describe('theme callbacks', () => {
       }),
     })
     expect(compiler.build(['leading-xl'])).toMatchInlineSnapshot(`
-    ":root {
-    }
-    .leading-xl {
-      line-height: 1.75rem;
-    }
-    "
-  `)
+      ":root {
+      }
+      .leading-xl {
+        line-height: 1.75rem;
+      }
+      "
+    `)
+  })
+
+  test.only('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (2)', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --color-slate-100: #000100;
+        --color-slate-200: #000200;
+        --color-slate-300: #000300;
+      }
+      @theme {
+        --color-slate-400: #100400;
+        --color-slate-500: #100500;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+      @plugin "./plugin.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                200: '#200200',
+                400: '#200400',
+                600: '#200600',
+              },
+            },
+            hoverColors: ({ theme }) => theme('colors'),
+          },
+        },
+      }),
+
+      loadPlugin: async () => {
+        return plugin(({ matchUtilities, theme }) => {
+          matchUtilities(
+            {
+              'hover-bg': (value) => {
+                return {
+                  '&:hover': {
+                    backgroundColor: value,
+                  },
+                }
+              },
+            },
+            {
+              values: theme('hoverColors'),
+            },
+          )
+        })
+      },
+    })
+    expect(
+      compiler.build([
+        'bg-slate-100',
+        'bg-slate-200',
+        'bg-slate-300',
+        'bg-slate-400',
+        'bg-slate-500',
+        'bg-slate-600',
+        'hover-bg-slate-100',
+        'hover-bg-slate-200',
+        'hover-bg-slate-300',
+        'hover-bg-slate-400',
+        'hover-bg-slate-500',
+        'hover-bg-slate-600',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-slate-100: #000100;
+        --color-slate-300: #000300;
+        --color-slate-400: #100400;
+        --color-slate-500: #100500;
+      }
+      .bg-slate-100 {
+        background-color: var(--color-slate-100, #000100);
+      }
+      .bg-slate-200 {
+        background-color: #200200;
+      }
+      .bg-slate-300 {
+        background-color: var(--color-slate-300, #000300);
+      }
+      .bg-slate-400 {
+        background-color: var(--color-slate-400, #100400);
+      }
+      .bg-slate-500 {
+        background-color: var(--color-slate-500, #100500);
+      }
+      .bg-slate-600 {
+        background-color: #200600;
+      }
+      .hover-bg-slate-100 {
+        &:hover {
+          background-color: #000100;
+        }
+      }
+      .hover-bg-slate-200 {
+        &:hover {
+          background-color: #200200;
+        }
+      }
+      .hover-bg-slate-300 {
+        &:hover {
+          background-color: #000300;
+        }
+      }
+      .hover-bg-slate-400 {
+        &:hover {
+          background-color: #100400;
+        }
+      }
+      .hover-bg-slate-500 {
+        &:hover {
+          background-color: #100500;
+        }
+      }
+      "
+    `)
   })
 })
 
