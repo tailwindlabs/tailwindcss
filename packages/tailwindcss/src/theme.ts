@@ -66,7 +66,11 @@ export class Theme {
   }
 
   hasDefault(key: string): boolean {
-    return ((this.values.get(key)?.options ?? 0) & ThemeOptions.DEFAULT) === ThemeOptions.DEFAULT
+    return (this.getOptions(key) & ThemeOptions.DEFAULT) === ThemeOptions.DEFAULT
+  }
+
+  getOptions(key: string) {
+    return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
   entries() {

@@ -1,6 +1,7 @@
 import { describe, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
+import { flattenColorPalette } from './flatten-color-palette'
 
 const css = String.raw
 
@@ -228,6 +229,272 @@ test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
     }
     "
   `)
+})
+
+describe('theme callbacks', () => {
+  test('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --font-size-base: 0rem;
+        --font-size-base--line-height: 1rem;
+        --font-size-md: 0rem;
+        --font-size-md--line-height: 1rem;
+        --font-size-xl: 0rem;
+        --font-size-xl--line-height: 1rem;
+      }
+      @theme {
+        --font-size-base: 100rem;
+        --font-size-md--line-height: 101rem;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            fontSize: {
+              base: ['200rem', { lineHeight: '201rem' }],
+              md: ['200rem', { lineHeight: '201rem' }],
+              xl: ['200rem', { lineHeight: '201rem' }],
+            },
+
+            // Direct access
+            lineHeight: ({ theme }) => ({
+              base: theme('fontSize.base[1].lineHeight'),
+              md: theme('fontSize.md[1].lineHeight'),
+              xl: theme('fontSize.xl[1].lineHeight'),
+            }),
+
+            // Tuple access
+            typography: ({ theme }) => ({
+              '[class~=lead-base]': {
+                fontSize: theme('fontSize.base')[0],
+                ...theme('fontSize.base')[1],
+              },
+              '[class~=lead-md]': {
+                fontSize: theme('fontSize.md')[0],
+                ...theme('fontSize.md')[1],
+              },
+              '[class~=lead-xl]': {
+                fontSize: theme('fontSize.xl')[0],
+                ...theme('fontSize.xl')[1],
+              },
+            }),
+          },
+        },
+
+        plugins: [
+          plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '.prose': {
+                ...theme('typography'),
+              },
+            })
+          }),
+        ],
+      }),
+    })
+
+    expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
+      .toMatchInlineSnapshot(`
+      ":root {
+        --font-size-base: 100rem;
+        --font-size-md--line-height: 101rem;
+      }
+      .prose {
+        [class~=lead-base] {
+          font-size: 100rem;
+          line-height: 201rem;
+        }
+        [class~=lead-md] {
+          font-size: 200rem;
+          line-height: 101rem;
+        }
+        [class~=lead-xl] {
+          font-size: 200rem;
+          line-height: 201rem;
+        }
+      }
+      .leading-base {
+        line-height: 201rem;
+      }
+      .leading-md {
+        line-height: 101rem;
+      }
+      .leading-xl {
+        line-height: 201rem;
+      }
+      "
+    `)
+  })
+})
+
+describe('theme overrides order', () => {
+  test('user theme > js config > default theme', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --color-red: red;
+      }
+      @theme {
+        --color-blue: blue;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            colors: {
+              red: 'very-red',
+              blue: 'very-blue',
+            },
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
+      ":root {
+        --color-blue: blue;
+      }
+      .bg-blue {
+        background-color: var(--color-blue, blue);
+      }
+      .bg-red {
+        background-color: very-red;
+      }
+      "
+    `)
+  })
+
+  test('user theme > js config > default theme (with nested object)', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --color-slate-100: #000100;
+        --color-slate-200: #000200;
+        --color-slate-300: #000300;
+      }
+      @theme {
+        --color-slate-400: #100400;
+        --color-slate-500: #100500;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+      @plugin "./plugin.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                200: '#200200',
+                400: '#200400',
+                600: '#200600',
+              },
+            },
+          },
+        },
+      }),
+
+      loadPlugin: async () => {
+        return plugin(({ matchUtilities, theme }) => {
+          matchUtilities(
+            {
+              'hover-bg': (value) => {
+                return {
+                  '&:hover': {
+                    backgroundColor: value,
+                  },
+                }
+              },
+            },
+            { values: flattenColorPalette(theme('colors')) },
+          )
+        })
+      },
+    })
+
+    expect(
+      compiler.build([
+        'bg-slate-100',
+        'bg-slate-200',
+        'bg-slate-300',
+        'bg-slate-400',
+        'bg-slate-500',
+        'bg-slate-600',
+        'hover-bg-slate-100',
+        'hover-bg-slate-200',
+        'hover-bg-slate-300',
+        'hover-bg-slate-400',
+        'hover-bg-slate-500',
+        'hover-bg-slate-600',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-slate-100: #000100;
+        --color-slate-300: #000300;
+        --color-slate-400: #100400;
+        --color-slate-500: #100500;
+      }
+      .bg-slate-100 {
+        background-color: var(--color-slate-100, #000100);
+      }
+      .bg-slate-200 {
+        background-color: #200200;
+      }
+      .bg-slate-300 {
+        background-color: var(--color-slate-300, #000300);
+      }
+      .bg-slate-400 {
+        background-color: var(--color-slate-400, #100400);
+      }
+      .bg-slate-500 {
+        background-color: var(--color-slate-500, #100500);
+      }
+      .bg-slate-600 {
+        background-color: #200600;
+      }
+      .hover-bg-slate-100 {
+        &:hover {
+          background-color: #000100;
+        }
+      }
+      .hover-bg-slate-200 {
+        &:hover {
+          background-color: #200200;
+        }
+      }
+      .hover-bg-slate-300 {
+        &:hover {
+          background-color: #000300;
+        }
+      }
+      .hover-bg-slate-400 {
+        &:hover {
+          background-color: #100400;
+        }
+      }
+      .hover-bg-slate-500 {
+        &:hover {
+          background-color: #100500;
+        }
+      }
+      .hover-bg-slate-600 {
+        &:hover {
+          background-color: #200600;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('default font family compatibility', () => {
