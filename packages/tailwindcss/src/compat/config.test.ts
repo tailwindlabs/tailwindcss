@@ -1,6 +1,7 @@
 import { describe, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
+import { flattenColorPalette } from './flatten-color-palette'
 
 const css = String.raw
 
@@ -267,7 +268,7 @@ describe('theme callbacks', () => {
     `)
   })
 
-  test.only('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (2)', async ({
+  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (2)', async ({
     expect,
   }) => {
     let input = css`
@@ -296,7 +297,6 @@ describe('theme callbacks', () => {
                 600: '#200600',
               },
             },
-            hoverColors: ({ theme }) => theme('colors'),
           },
         },
       }),
@@ -313,13 +313,12 @@ describe('theme callbacks', () => {
                 }
               },
             },
-            {
-              values: theme('hoverColors'),
-            },
+            { values: flattenColorPalette(theme('colors')) },
           )
         })
       },
     })
+
     expect(
       compiler.build([
         'bg-slate-100',
@@ -384,6 +383,52 @@ describe('theme callbacks', () => {
         &:hover {
           background-color: #100500;
         }
+      }
+      .hover-bg-slate-600 {
+        &:hover {
+          background-color: #200600;
+        }
+      }
+      "
+    `)
+  })
+
+  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (3)', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --color-red: red;
+      }
+      @theme {
+        --color-blue: blue;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            colors: {
+              red: 'very-red',
+              blue: 'very-blue',
+            },
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
+      ":root {
+        --color-blue: blue;
+      }
+      .bg-blue {
+        background-color: var(--color-blue, blue);
+      }
+      .bg-red {
+        background-color: very-red;
       }
       "
     `)

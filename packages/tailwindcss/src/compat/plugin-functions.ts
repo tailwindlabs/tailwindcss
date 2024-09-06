@@ -26,7 +26,27 @@ export function createThemeFn(
       let keypath = toKeyPath(path)
       let [cssValue, options] = readFromCss(designSystem.theme, keypath)
 
+      if (typeof cssValue === 'object' && cssValue !== null) {
+        cssValue.__CSS_VALUES__ ??= options
+      }
+
       let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
+
+      if (
+        cssValue === null &&
+        typeof configValue === 'object' &&
+        configValue !== null &&
+        Object.hasOwn(configValue, '__CSS_VALUES__')
+      ) {
+        cssValue = {}
+        for (let key in configValue.__CSS_VALUES__) {
+          cssValue[key] = configValue[key]
+        }
+        configValue = Object.fromEntries(
+          Object.entries(configValue).filter(([key]) => !(key in cssValue)),
+        )
+        options = Object.assign({}, configValue.__CSS_VALUES__)
+      }
 
       if (typeof cssValue !== 'object') {
         if (options & ThemeOptions.DEFAULT) {
@@ -42,45 +62,24 @@ export function createThemeFn(
         })
 
         for (let key in cssValue) {
+          if (key === '__CSS_VALUES__') continue
+
           let configLeafValue = get(configValueCopy, key.split('-'))
-          if (configLeafValue && options.get(key) & ThemeOptions.DEFAULT) {
+          if (configLeafValue && options[key] & ThemeOptions.DEFAULT) {
             continue
           }
 
+          // if (typeof cssValue[key] === 'object' && cssValue[key] !== null) {
+          //   // configValueCopy[key] = { ...cssValue[key] }
+          // } else {
           configValueCopy[key] = cssValue[key]
+          // }
+
+          configValueCopy.__CSS_VALUES__ ??= {}
+          configValueCopy.__CSS_VALUES__[key] = options[key]
         }
 
-        console.dir({ configValueCopy }, { depth: null })
-
         return configValueCopy
-        // console.dir({ abc }, { depth: null })
-        return deepMerge({}, [configValue, cssValue], (a, b, path) => {
-          // console.log({
-          //   a,
-          //   b,
-          //   path,
-          //   cssValue,
-          //   options: cssValue === null ? options : options.get(path.join('-')),
-          // })
-          // let fullKey = path.join('-')
-          // // console.log({ fullKey, options, configValue })
-          // if (
-          //   configValue[fullKey] &&
-          //   options.get(fullKey.slice('--color-'.length) & ThemeOptions.DEFAULT)
-          // ) {
-          //   return configValue[fullKey]
-          // }
-          //
-          // console.log({ a, b })
-          // if (typeof a === 'string' && typeof b === 'string') {
-          //   let key = path.join('-')
-          //   console.log({ a, b, key })
-          //   if (options.get(key.slice('--color-'.length)) & ThemeOptions.DEFAULT) {
-          //     return a
-          //   }
-          // }
-          return b
-        })
       }
 
       // Values from CSS take precedence over values from the config
@@ -132,12 +131,8 @@ function readFromCss(
   let map = new Map<string | null, ThemeValue>()
   let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
 
-  // TODO: Bad Robin
-  if (themeKey === 'colors') themeKey = 'color'
-
   let ns = theme.namespace(`--${themeKey}` as any)
   if (ns.size === 0) {
-    console.log({ themeKey })
     return [null, ThemeOptions.NONE]
   }
 
@@ -170,10 +165,10 @@ function readFromCss(
   // We have to turn the map into object-like structure for v3 compatibility
   let obj: Record<string, unknown> = {}
   let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
-  let options = new Map(
+  let options = Object.fromEntries(
     Array.from(ns.entries()).map(([key]) => {
       let fullKey = key === null ? `--${themeKey}` : `--${themeKey}-${key}`
-      return [key, theme.getOptions(fullKey)]
+      return [key ?? 'DEFAULT', theme.getOptions(fullKey)]
     }),
   )
 
@@ -198,14 +193,14 @@ function readFromCss(
   // the `DEFAULT` key from the list of possible values. If there is no
   // `DEFAULT` in the list, there is no match so return `null`.
   if (path[path.length - 1] === 'DEFAULT') {
-    return [obj?.DEFAULT ?? null, options.get(null) ?? 0]
+    return [obj?.DEFAULT ?? null, options.DEFAULT ?? 0]
   }
 
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
-    return [obj.DEFAULT, options.get(null) ?? 0]
+    return [obj.DEFAULT, options.DEFAULT ?? 0]
   }
 
   return [obj, options]
