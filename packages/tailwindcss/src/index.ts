@@ -9,6 +9,7 @@ import { buildDesignSystem, type DesignSystem } from './design-system'
 import { registerPlugins, type CssPluginOptions, type Plugin } from './plugin-api'
 import { Theme, ThemeOptions } from './theme'
 import { segment } from './utils/segment'
+export type Config = UserConfig
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
