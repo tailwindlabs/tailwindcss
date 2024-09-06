@@ -307,14 +307,19 @@ describe('theme function', () => {
         })
 
         test('theme(fontFamily.sans) (config)', async () => {
-          expect(
-            await compileCss(css`
-              @config "default.config.js";
+          let compiled = await compile(
+            css`
+              @config "./my-config.js";
               .fam {
                 font-family: theme(fontFamily.sans);
               }
-            `),
-          ).toMatchInlineSnapshot(`
+            `,
+            {
+              loadConfig: async () => ({}),
+            },
+          )
+
+          expect(optimizeCss(compiled.build([])).trim()).toMatchInlineSnapshot(`
           ".fam {
             font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
           }"

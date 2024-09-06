@@ -2,15 +2,7 @@ import { Features, transform } from 'lightningcss'
 import { compile } from '..'
 
 export async function compileCss(css: string, candidates: string[] = []) {
-  let { build } = await compile(css, {
-    loadConfig: async (path) => {
-      if (path === 'default.config.js') {
-        return {}
-      }
-
-      throw new Error(`Config file not found: ${path}`)
-    },
-  })
+  let { build } = await compile(css)
   return optimizeCss(build(candidates)).trim()
 }
 
