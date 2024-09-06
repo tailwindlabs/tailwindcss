@@ -267,10 +267,49 @@ describe('theme callbacks', () => {
       "
     `)
   })
+})
 
-  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (2)', async ({
-    expect,
-  }) => {
+describe('theme overrides order', () => {
+  test('user theme > js config > default theme', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --color-red: red;
+      }
+      @theme {
+        --color-blue: blue;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            colors: {
+              red: 'very-red',
+              blue: 'very-blue',
+            },
+          },
+        },
+      }),
+    })
+
+    expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
+      ":root {
+        --color-blue: blue;
+      }
+      .bg-blue {
+        background-color: var(--color-blue, blue);
+      }
+      .bg-red {
+        background-color: very-red;
+      }
+      "
+    `)
+  })
+
+  test('user theme > js config > default theme (with nested object)', async ({ expect }) => {
     let input = css`
       @theme default {
         --color-slate-100: #000100;
@@ -388,47 +427,6 @@ describe('theme callbacks', () => {
         &:hover {
           background-color: #200600;
         }
-      }
-      "
-    `)
-  })
-
-  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values (3)', async ({
-    expect,
-  }) => {
-    let input = css`
-      @theme default {
-        --color-red: red;
-      }
-      @theme {
-        --color-blue: blue;
-      }
-      @tailwind utilities;
-      @config "./config.js";
-    `
-
-    let compiler = await compile(input, {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            colors: {
-              red: 'very-red',
-              blue: 'very-blue',
-            },
-          },
-        },
-      }),
-    })
-
-    expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
-      ":root {
-        --color-blue: blue;
-      }
-      .bg-blue {
-        background-color: var(--color-blue, blue);
-      }
-      .bg-red {
-        background-color: very-red;
       }
       "
     `)
