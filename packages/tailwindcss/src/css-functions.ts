@@ -1,15 +1,16 @@
 import { walk, type AstNode } from './ast'
-import type { PluginAPI } from './plugin-api'
 import * as ValueParser from './value-parser'
 import { type ValueAstNode } from './value-parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
-export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
+type ResolveThemeValue = (path: string, defaultValue?: any) => any
+
+export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
   walk(ast, (node) => {
     // Find all declaration values
     if (node.kind === 'declaration' && node.value?.includes(THEME_FUNCTION_INVOCATION)) {
-      node.value = substituteFunctionsInValue(node.value, pluginApi)
+      node.value = substituteFunctionsInValue(node.value, resolveThemeValue)
       return
     }
 
@@ -23,13 +24,16 @@ export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
           node.selector.startsWith('@supports ')) &&
         node.selector.includes(THEME_FUNCTION_INVOCATION)
       ) {
-        node.selector = substituteFunctionsInValue(node.selector, pluginApi)
+        node.selector = substituteFunctionsInValue(node.selector, resolveThemeValue)
       }
     }
   })
 }
 
-export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI): string {
+export function substituteFunctionsInValue(
+  value: string,
+  resolveThemeValue: ResolveThemeValue,
+): string {
   let ast = ValueParser.parse(value)
   ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
@@ -67,7 +71,7 @@ export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI):
       path = eventuallyUnquote(path)
       let fallbackValues = node.nodes.slice(skipUntilIndex + 1)
 
-      replaceWith(cssThemeFn(pluginApi, path, fallbackValues))
+      replaceWith(cssThemeFn(resolveThemeValue, path, fallbackValues))
     }
   })
 
@@ -75,12 +79,12 @@ export function substituteFunctionsInValue(value: string, pluginApi: PluginAPI):
 }
 
 function cssThemeFn(
-  pluginApi: PluginAPI,
+  resolveThemeValue: ResolveThemeValue,
   path: string,
   fallbackValues: ValueAstNode[],
 ): ValueAstNode[] {
   let resolvedValue: string | null = null
-  let themeValue = pluginApi.theme(path)
+  let themeValue = resolveThemeValue(path)
 
   let isArray = Array.isArray(themeValue)
   if (isArray && themeValue.length === 2) {
