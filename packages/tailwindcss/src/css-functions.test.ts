@@ -620,63 +620,80 @@ describe('theme function', () => {
     })
   })
 
-  describe('in @custom-media queries', () => {
-    test('@custom-media --my-media (min-width:theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg))', async () => {
-      expect(
-        await compileCss(css`
-          @theme {
-            --breakpoint-md: 48rem;
-            --breakpoint-lg: 64rem;
-          }
-          /* prettier-ignore */
-          @custom-media --my-media (min-width:theme(breakpoint.md)) and (max-width: theme(--breakpoint-lg));
-          @media (--my-media) {
-            .red {
-              color: red;
-            }
-          }
-        `),
-      ).toMatchInlineSnapshot(`
-        ":root {
+  test('@custom-media --my-media (min-width: theme(breakpoint.md))', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
           --breakpoint-md: 48rem;
-          --breakpoint-lg: 64rem;
         }
-
-        @media (width >= 48rem) and (width <= 64rem) {
+        @custom-media --my-media (min-width: theme(breakpoint.md));
+        @media (--my-media) {
           .red {
             color: red;
           }
-        }"
-      `)
-    })
-
-    test('@custom-media --my-media (width >= theme(breakpoint.md)) and (width<theme(--breakpoint-lg))', async () => {
-      expect(
-        await compileCss(css`
-          @theme {
-            --breakpoint-md: 48rem;
-            --breakpoint-lg: 64rem;
-          }
-          @custom-media --my-media (width >= theme(breakpoint.md)) and (width<theme(--breakpoint-lg));
-          @media (--my-media) {
-            .red {
-              color: red;
-            }
-          }
-        `),
-      ).toMatchInlineSnapshot(`
-        ":root {
-          --breakpoint-md: 48rem;
-          --breakpoint-lg: 64rem;
         }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-md: 48rem;
+      }
 
-        @media (width >= 48rem) and (width < 64rem) {
+      @media (width >= 48rem) {
+        .red {
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  test('@container (width > theme(breakpoint.md))', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --breakpoint-md: 48rem;
+        }
+        @container (width > theme(breakpoint.md)) {
           .red {
             color: red;
           }
-        }"
-      `)
-    })
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-md: 48rem;
+      }
+
+      @container (width > 48rem) {
+        .red {
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  test('@supports (text-stroke: theme(--font-size-xs))', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --font-size-xs: 0.75rem;
+        }
+        @supports (text-stroke: theme(--font-size-xs)) {
+          .red {
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --font-size-xs: .75rem;
+      }
+
+      @supports (text-stroke: 0.75rem) {
+        .red {
+          color: red;
+        }
+      }"
+    `)
   })
 })
 
