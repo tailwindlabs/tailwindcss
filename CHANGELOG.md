@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Support CSS `theme()` functions inside `@custom-media` rules
+- Support CSS `theme()` functions inside `@custom-media` rules ([#14358])(https://github.com/tailwindlabs/tailwindcss/pull/14358)
 
 ### Fixed
 
