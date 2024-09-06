@@ -115,7 +115,7 @@ function readFromCss(theme: Theme, path: string[]) {
   }
 
   // We have to turn the map into object-like structure for v3 compatibility
-  let obj = {}
+  let obj: Record<string, unknown> = {}
   let useNestedObjects = false // paths.some((path) => nestedKeys.has(path))
 
   for (let [key, value] of map) {
@@ -134,20 +134,19 @@ function readFromCss(theme: Theme, path: string[]) {
     set(obj, path, value)
   }
 
-  if ('DEFAULT' in obj) {
-    // The request looked like `theme('animation.DEFAULT')` and was turned into
-    // a lookup for `--animation-*` and we should extract the value for the
-    // `DEFAULT` key from the list of possible values
-    if (path[path.length - 1] === 'DEFAULT') {
-      return obj.DEFAULT
-    }
+  // If the request looked like `theme('animation.DEFAULT')` it would have been
+  // turned into a lookup for `--animation-*` so we should extract the value for
+  // the `DEFAULT` key from the list of possible values. If there is no
+  // `DEFAULT` in the list, there is no match so return `null`.
+  if (path[path.length - 1] === 'DEFAULT') {
+    return obj?.DEFAULT ?? null
+  }
 
-    // The request looked like `theme('animation.spin')` and was turned into a
-    // lookup for `--animation-spin-*` which had only one entry which means it
-    // should be returned directly
-    if (Object.keys(obj).length === 1) {
-      return obj.DEFAULT
-    }
+  // The request looked like `theme('animation.spin')` and was turned into a
+  // lookup for `--animation-spin-*` which had only one entry which means it
+  // should be returned directly.
+  if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
+    return obj.DEFAULT
   }
 
   return obj

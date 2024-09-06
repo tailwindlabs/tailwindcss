@@ -804,6 +804,35 @@ describe('theme', async () => {
     expect(fn).toHaveBeenCalledWith('blue')
   })
 
+  test("`theme('*.DEFAULT')` resolves to `undefined` when all theme keys in that namespace have a suffix", async ({
+    expect,
+  }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+      @theme {
+        --transition-timing-function-in: ease-in;
+        --transition-timing-function-out: ease-out;
+      }
+    `
+
+    let fn = vi.fn()
+
+    await compile(input, {
+      loadPlugin: async () => {
+        return plugin(({ theme }) => {
+          fn(theme('transitionTimingFunction.DEFAULT'))
+          fn(theme('transitionTimingFunction.in'))
+          fn(theme('transitionTimingFunction.out'))
+        })
+      },
+    })
+
+    expect(fn).toHaveBeenNthCalledWith(1, undefined)
+    expect(fn).toHaveBeenNthCalledWith(2, 'ease-in')
+    expect(fn).toHaveBeenNthCalledWith(3, 'ease-out')
+  })
+
   test('nested theme key lookups work even for flattened keys', async ({ expect }) => {
     let input = css`
       @tailwind utilities;
