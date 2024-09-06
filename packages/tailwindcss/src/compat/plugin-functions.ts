@@ -26,32 +26,9 @@ export function createThemeFn(
       let keypath = toKeyPath(path)
       let [cssValue, options] = readFromCss(designSystem.theme, keypath)
 
-      //
-      if (typeof cssValue === 'object' && cssValue !== null) {
-        cssValue.__CSS_VALUES__ = options
-      }
-
       let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
-      //
-      if (
-        cssValue === null &&
-        typeof configValue === 'object' &&
-        configValue !== null &&
-        Object.hasOwn(configValue, '__CSS_VALUES__')
-      ) {
-        let localCssValue: Record<string, unknown> = {}
-        for (let key in configValue.__CSS_VALUES__) {
-          localCssValue[key] = configValue[key]
-        }
-        configValue = Object.fromEntries(
-          Object.entries(configValue).filter(([key]) => !(key in localCssValue)),
-        )
-        cssValue = localCssValue
-        options = Object.assign({}, configValue.__CSS_VALUES__)
-      }
-
-      //
+      // Resolved to a primitive value.
       if (typeof cssValue !== 'object') {
         if (typeof options !== 'object' && options & ThemeOptions.DEFAULT) {
           return configValue ?? cssValue
@@ -61,29 +38,35 @@ export function createThemeFn(
       }
 
       //
-      if (
-        configValue !== null &&
-        typeof configValue === 'object' &&
-        typeof options === 'object' &&
-        !Array.isArray(configValue)
-      ) {
+      if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
         let configValueCopy: Record<string, unknown> & { __CSS_VALUES__?: Record<string, number> } =
-          deepMerge({}, [configValue], (_, b) => {
-            return b
-          })
+          // We want to make sure that we don't mutate the original config
+          // value. Ideally we use `structuredClone` here, but it's not possible
+          // because it can contain functions.
+          deepMerge({}, [configValue], (_, b) => b)
+
+        // There is no `cssValue`, which means we can back-fill it with values
+        // from the `configValue`.
+        if (cssValue === null && Object.hasOwn(configValue, '__CSS_VALUES__')) {
+          let localCssValue: Record<string, unknown> = {}
+          for (let key in configValue.__CSS_VALUES__) {
+            localCssValue[key] = configValue[key]
+            delete configValueCopy[key]
+          }
+          cssValue = localCssValue
+        }
 
         for (let key in cssValue) {
           if (key === '__CSS_VALUES__') continue
 
-          let configLeafValue = get(configValueCopy, key.split('-'))
-          if (configLeafValue && options[key] & ThemeOptions.DEFAULT) {
+          if (
+            configValue?.__CSS_VALUES__?.[key] & ThemeOptions.DEFAULT &&
+            get(configValueCopy, key.split('-')) !== undefined
+          ) {
             continue
           }
 
           configValueCopy[key] = cssValue[key]
-
-          configValueCopy.__CSS_VALUES__ ??= {}
-          configValueCopy.__CSS_VALUES__[key] = options[key]
         }
 
         return configValueCopy
@@ -211,6 +194,9 @@ function readFromCss(
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
     return [obj.DEFAULT as string, options.DEFAULT ?? 0] as const
   }
+
+  //
+  obj.__CSS_VALUES__ = options
 
   return [obj, options] as const
 }
