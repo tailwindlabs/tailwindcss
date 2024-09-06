@@ -59,6 +59,9 @@ export function createThemeFn(
         for (let key in cssValue) {
           if (key === '__CSS_VALUES__') continue
 
+          // If the value is coming from a default source (`@theme default`),
+          // then we keep the value from the js config (which is also a
+          // default source, but wins from the built in defaults).
           if (
             configValue?.__CSS_VALUES__?.[key] & ThemeOptions.DEFAULT &&
             get(configValueCopy, key.split('-')) !== undefined
@@ -66,6 +69,7 @@ export function createThemeFn(
             continue
           }
 
+          // CSS values from `@theme` win over values from the config
           configValueCopy[key] = cssValue[key]
         }
 
@@ -195,7 +199,8 @@ function readFromCss(
     return [obj.DEFAULT as string, options.DEFAULT ?? 0] as const
   }
 
-  //
+  // Attach the CSS values to the object for later use. This object could be
+  // mutated by the user so we want to keep the original CSS values around.
   obj.__CSS_VALUES__ = options
 
   return [obj, options] as const
