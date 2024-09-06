@@ -60,8 +60,8 @@ export function createThemeFn(
           if (key === '__CSS_VALUES__') continue
 
           // If the value is coming from a default source (`@theme default`),
-          // then we keep the value from the js config (which is also a
-          // default source, but wins from the built in defaults).
+          // then we keep the value from the JS config (which is also a
+          // default source, but wins over the built-in defaults).
           if (
             configValue?.__CSS_VALUES__?.[key] & ThemeOptions.DEFAULT &&
             get(configValueCopy, key.split('-')) !== undefined
