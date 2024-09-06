@@ -211,14 +211,14 @@ function readFromCss(
   // the `DEFAULT` key from the list of possible values. If there is no
   // `DEFAULT` in the list, there is no match so return `null`.
   if (path[path.length - 1] === 'DEFAULT') {
-    return [(obj?.DEFAULT ?? null) as any, optionsObj.DEFAULT ?? 0] as const
+    return [(obj?.DEFAULT ?? null) as any, optionsObj.DEFAULT ?? ThemeOptions.NONE] as const
   }
 
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
   if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
-    return [obj.DEFAULT as any, optionsObj.DEFAULT ?? 0] as const
+    return [obj.DEFAULT as any, optionsObj.DEFAULT ?? ThemeOptions.NONE] as const
   }
 
   // Attach the CSS values to the object for later use. This object could be
