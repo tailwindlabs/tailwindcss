@@ -230,6 +230,44 @@ test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
   `)
 })
 
+describe('theme callbacks', () => {
+  test('line-heights defined in fontSize tuples in a config take precedence over `@theme default` CSS values', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --font-size-xl: 1.25rem;
+        --font-size-xl--line-height: 1.5rem;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            fontSize: {
+              xl: ['1.25rem', { lineHeight: '1.75rem' }],
+            },
+            lineHeight: ({ theme }) => ({
+              xl: theme('fontSize.xl[1].lineHeight'),
+            }),
+          },
+        },
+      }),
+    })
+    expect(compiler.build(['leading-xl'])).toMatchInlineSnapshot(`
+    ":root {
+    }
+    .leading-xl {
+      line-height: 1.75rem;
+    }
+    "
+  `)
+  })
+})
+
 describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans` sets `--default-font-family`', async ({ expect }) => {
     let input = css`
