@@ -17,7 +17,7 @@ export function substituteFunctions(ast: AstNode[], pluginApi: PluginAPI) {
     if (node.kind === 'rule') {
       if (
         node.selector[0] === '@' &&
-        node.selector.startsWith('@media ') &&
+        (node.selector.startsWith('@media ') || node.selector.startsWith('@custom-media ')) &&
         node.selector.includes(THEME_FUNCTION_INVOCATION)
       ) {
         node.selector = substituteFunctionsInValue(node.selector, pluginApi)
