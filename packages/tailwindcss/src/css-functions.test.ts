@@ -535,7 +535,6 @@ describe('theme function', () => {
 
         let compiled = await compileCss(css`
           ${defaultTheme}
-          @config "default.config.js";
           .custom {
             --custom-value: theme(${value});
           }
