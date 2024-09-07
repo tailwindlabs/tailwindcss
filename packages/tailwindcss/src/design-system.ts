@@ -23,7 +23,7 @@ export type DesignSystem = {
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
-  resolveThemeValue(path: string, defaultValue?: string): string | undefined
+  resolveThemeValue(path: string): string | undefined
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -81,7 +81,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       return Array.from(parsedVariants.values())
     },
 
-    resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`, defaultValue?: string) {
+    resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`) {
       // Extract an eventual modifier from the path. e.g.:
       // - "--color-red-500 / 50%" -> "50%"
       let lastSlash = path.lastIndexOf('/')
@@ -91,10 +91,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
         path = path.slice(0, lastSlash).trim() as ThemeKey
       }
 
-      let themeValue = theme.get([path]) ?? defaultValue
+      let themeValue = theme.get([path]) ?? undefined
 
       // Apply the opacity modifier if present
-      if (modifier && typeof themeValue === 'string') {
+      if (modifier && themeValue) {
         return withAlpha(themeValue, modifier)
       }
 

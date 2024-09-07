@@ -368,7 +368,7 @@ export async function applyCompatibilityHooks(
   // compatibility concerns localized to our compatability layer.
   let resolveThemeVariableValue = designSystem.resolveThemeValue
 
-  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string) {
     if (path.startsWith('--')) {
       return resolveThemeVariableValue(path)
     }
@@ -382,7 +382,7 @@ export async function applyCompatibilityHooks(
       path = path.slice(0, lastSlash).trim() as ThemeKey
     }
 
-    let themeValue = lookupThemeValue(designSystem.theme, path, defaultValue)
+    let themeValue = lookupThemeValue(designSystem.theme, path)
 
     // Apply the opacity modifier if present
     if (modifier && typeof themeValue === 'string') {
@@ -497,7 +497,7 @@ function toThemeKey(keypath: string[]) {
   )
 }
 
-function lookupThemeValue(theme: Theme, path: string, defaultValue?: string) {
+function lookupThemeValue(theme: Theme, path: string) {
   let baseThemeKey = '--' + toThemeKey(toKeyPath(path))
 
   let resolvedValue = theme.get([baseThemeKey as ThemeKey])
@@ -516,8 +516,6 @@ function lookupThemeValue(theme: Theme, path: string, defaultValue?: string) {
       return resolvedValue
     }
   }
-
-  return defaultValue
 }
 
 let themeUpgradeKeys = {
