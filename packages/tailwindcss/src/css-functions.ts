@@ -4,7 +4,7 @@ import { type ValueAstNode } from './value-parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
-type ResolveThemeValue = (path: string, defaultValue?: any) => any
+type ResolveThemeValue = (path: string) => unknown
 
 export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
   walk(ast, (node) => {
@@ -86,11 +86,10 @@ function cssThemeFn(
   let resolvedValue: string | null = null
   let themeValue = resolveThemeValue(path)
 
-  let isArray = Array.isArray(themeValue)
-  if (isArray && themeValue.length === 2) {
+  if (Array.isArray(themeValue) && themeValue.length === 2) {
     // When a tuple is returned, return the first element
     resolvedValue = themeValue[0]
-  } else if (isArray) {
+  } else if (Array.isArray(themeValue)) {
     // Arrays get serialized into a comma-separated lists
     resolvedValue = themeValue.join(', ')
   } else if (typeof themeValue === 'string') {
