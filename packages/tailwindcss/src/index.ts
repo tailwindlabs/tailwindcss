@@ -6,7 +6,7 @@ import { compileCandidates } from './compile'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { registerPlugins, type CssPluginOptions, type Plugin } from './plugin-api'
+import { applyCompatibilityHooks, type CssPluginOptions, type Plugin } from './plugin-api'
 import { Theme, ThemeOptions } from './theme'
 import { segment } from './utils/segment'
 export type Config = UserConfig
@@ -306,24 +306,19 @@ async function parseCss(
 
   let designSystem = buildDesignSystem(theme)
 
-  let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
-    })),
+  // Apply hooks from backwards compatibility layer. This function takes a lot
+  // of random arguments because it really just needs access to "the world" to
+  // do whatever ungodly things it needs to do to make things backwards
+  // compatible without polluting core.
+  await applyCompatibilityHooks(
+    designSystem,
+    ast,
+    pluginPaths,
+    loadPlugin,
+    configPaths,
+    loadConfig,
+    globs,
   )
-
-  let plugins = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
-      options: pluginOptions,
-    })),
-  )
-
-  if (plugins.length || configs.length) {
-    registerPlugins(plugins, designSystem, ast, configs, globs)
-  }
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)

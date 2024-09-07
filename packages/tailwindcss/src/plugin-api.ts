@@ -3,7 +3,7 @@ import { decl, rule, type AstNode } from './ast'
 import type { Candidate, NamedUtilityValue } from './candidate'
 import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
-import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
+import { resolveConfig } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
 import { createThemeFn } from './compat/plugin-functions'
@@ -353,17 +353,13 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
 type Primitive = string | number | boolean | null
 export type CssPluginOptions = Record<string, Primitive | Primitive[]>
 
-interface PluginDetail {
-  path: string
-  plugin: Plugin
-  options: CssPluginOptions | null
-}
-
-export function registerPlugins(
-  pluginDetails: PluginDetail[],
+export async function applyCompatibilityHooks(
   designSystem: DesignSystem,
   ast: AstNode[],
-  configs: ConfigFile[],
+  pluginPaths: [string, CssPluginOptions | null][],
+  loadPlugin: (path: string) => Promise<Plugin>,
+  configPaths: string[],
+  loadConfig: (path: string) => Promise<UserConfig>,
   globs: { origin?: string; pattern: string }[],
 ) {
   // Override `resolveThemeValue` with a version that is backwards compatible
@@ -395,6 +391,25 @@ export function registerPlugins(
 
     return themeValue
   }
+
+  // If there are no plugins or configs registered, we don't need to register
+  // any additional backwards compatibility hooks.
+  if (!pluginPaths.length && !configPaths.length) return
+
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+  let pluginDetails = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
+
   let plugins = pluginDetails.map((detail) => {
     if (!detail.options) {
       return detail.plugin
