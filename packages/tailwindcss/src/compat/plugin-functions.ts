@@ -11,7 +11,7 @@ export function createThemeFn(
   configTheme: () => UserConfig['theme'],
   resolveValue: (value: any) => any,
 ) {
-  return function theme(path: string, defaultValue?: any) {
+  return function theme(path: string, defaultValue?: unknown) {
     // Extract an eventual modifier from the path. e.g.:
     // - "colors.red.500 / 50%" -> "50%"
     // - "foo/bar/baz/50%"      -> "50%"
@@ -148,7 +148,7 @@ function readFromCss(
     () => new Map(),
   )
 
-  let ns = theme.namespace(`--${themeKey}` as any)
+  let ns = theme.namespace(`--${themeKey}`)
   if (ns.size === 0) {
     return [null, ThemeOptions.NONE]
   }

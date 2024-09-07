@@ -360,6 +360,7 @@ export function registerPlugins(
   designSystem: DesignSystem,
   ast: AstNode[],
   configs: ConfigFile[],
+  globs: { origin?: string; pattern: string }[],
 ) {
   let plugins = pluginDetails.map((detail) => {
     if (!detail.options) {
@@ -392,8 +393,17 @@ export function registerPlugins(
   // core utilities already read from.
   applyConfigToTheme(designSystem, userConfig)
 
-  return {
-    pluginApi,
-    resolvedConfig,
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
+    return pluginApi.theme(path, defaultValue)
+  }
+
+  for (let file of resolvedConfig.content.files) {
+    if ('raw' in file) {
+      throw new Error(
+        `Error in the config file/plugin/preset. The \`content\` key contains a \`raw\` entry:\n\n${JSON.stringify(file, null, 2)}\n\nThis feature is not currently supported.`,
+      )
+    }
+
+    globs.push({ origin: file.base, pattern: file.pattern })
   }
 }

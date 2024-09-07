@@ -4,6 +4,7 @@ import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme } from './theme'
+import { resolveThemeValue } from './theme-fn'
 import { Utilities, createUtilities } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { Variants, createVariants } from './variants'
@@ -23,6 +24,7 @@ export type DesignSystem = {
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
+  resolveThemeValue(path: string, defaultValue?: string): string | undefined
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -78,6 +80,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     getUsedVariants() {
       return Array.from(parsedVariants.values())
+    },
+
+    resolveThemeValue(path: string, defaultValue?: string) {
+      return resolveThemeValue(theme, path, defaultValue)
     },
   }
 
