@@ -376,11 +376,7 @@ async function parseCss(
     substituteAtApply(ast, designSystem)
   }
 
-  // Replace `theme()` function calls with the actual theme variables. Plugins
-  // could register new rules that include functions, and JS config files could
-  // also contain functions or plugins that use functions so we need to evaluate
-  // functions if either of those are present.
-  if (plugins.length > 0 || configs.length > 0 || css.includes(THEME_FUNCTION_INVOCATION)) {
+  if (css.includes(THEME_FUNCTION_INVOCATION)) {
     substituteFunctions(ast, designSystem.resolveThemeValue)
   }
 

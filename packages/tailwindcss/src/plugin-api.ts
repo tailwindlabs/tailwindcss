@@ -7,6 +7,7 @@ import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
 import { createThemeFn } from './compat/plugin-functions'
+import { substituteFunctions } from './css-functions'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
@@ -73,7 +74,9 @@ function buildPluginApi(
 ): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
-      ast.push(rule('@layer base', objectToAst(css)))
+      let baseNodes = objectToAst(css)
+      substituteFunctions(baseNodes, api.theme)
+      ast.push(rule('@layer base', baseNodes))
     },
 
     addVariant(name, variant) {
