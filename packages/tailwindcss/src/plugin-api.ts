@@ -9,6 +9,7 @@ import { darkModePlugin } from './compat/dark-mode'
 import { createThemeFn } from './compat/plugin-functions'
 import { substituteFunctions } from './css-functions'
 import type { DesignSystem } from './design-system'
+import type { Theme, ThemeKey } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
@@ -365,6 +366,35 @@ export function registerPlugins(
   configs: ConfigFile[],
   globs: { origin?: string; pattern: string }[],
 ) {
+  // Override `resolveThemeValue` with a version that is backwards compatible
+  // with dot notation paths like `colors.red.500`. We could do this by default
+  // in `resolveThemeValue` but handling it here keeps all backwards
+  // compatibility concerns localized to our compatability layer.
+  let resolveThemeVariableValue = designSystem.resolveThemeValue
+
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
+    if (path.startsWith('--')) {
+      return resolveThemeVariableValue(path)
+    }
+
+    // Extract an eventual modifier from the path. e.g.:
+    // - "--color-red-500 / 50%" -> "50%"
+    let lastSlash = path.lastIndexOf('/')
+    let modifier: string | null = null
+    if (lastSlash !== -1) {
+      modifier = path.slice(lastSlash + 1).trim()
+      path = path.slice(0, lastSlash).trim() as ThemeKey
+    }
+
+    let themeValue = lookupThemeValue(designSystem.theme, path, defaultValue)
+
+    // Apply the opacity modifier if present
+    if (modifier && typeof themeValue === 'string') {
+      return withAlpha(themeValue, modifier)
+    }
+
+    return themeValue
+  }
   let plugins = pluginDetails.map((detail) => {
     if (!detail.options) {
       return detail.plugin
@@ -396,8 +426,27 @@ export function registerPlugins(
   // core utilities already read from.
   applyConfigToTheme(designSystem, userConfig)
 
+  // Replace `resolveThemeValue` with a version that is backwards compatible
+  // with dot-notation but also aware of any JS theme configurations registered
+  // by plugins or JS config files. This is significantly slower than just
+  // upgrading dot-notation keys so we only use this version if plugins or
+  // config files are actually being used. In the future we may want to optimize
+  // this further by only doing this if plugins or config files _actually_
+  // registered JS config objects.
   designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
-    return pluginApi.theme(path, defaultValue)
+    let resolvedValue = pluginApi.theme(path, defaultValue)
+
+    if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
+      // When a tuple is returned, return the first element
+      return resolvedValue[0]
+    } else if (Array.isArray(resolvedValue)) {
+      // Arrays get serialized into a comma-separated lists
+      return resolvedValue.join(', ')
+    } else if (typeof resolvedValue === 'string') {
+      // Otherwise only allow string values here, objects (and namespace maps)
+      // are treated as non-resolved values for the CSS `theme()` function.
+      return resolvedValue
+    }
   }
 
   for (let file of resolvedConfig.content.files) {
@@ -409,4 +458,102 @@ export function registerPlugins(
 
     globs.push({ origin: file.base, pattern: file.pattern })
   }
+}
+
+function toThemeKey(keypath: string[]) {
+  return (
+    keypath
+      // [1] should move into the nested object tuple. To create the CSS variable
+      // name for this, we replace it with an empty string that will result in two
+      // subsequent dashes when joined.
+      .map((path) => (path === '1' ? '' : path))
+
+      // Resolve the key path to a CSS variable segment
+      .map((part) =>
+        part
+          .replaceAll('.', '_')
+          .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
+      )
+
+      // Remove the `DEFAULT` key at the end of a path
+      // We're reading from CSS anyway so it'll be a string
+      .filter((part, index) => part !== 'DEFAULT' || index !== keypath.length - 1)
+      .join('-')
+  )
+}
+
+function lookupThemeValue(theme: Theme, path: string, defaultValue?: string) {
+  let baseThemeKey = '--' + toThemeKey(toKeyPath(path))
+
+  let resolvedValue = theme.get([baseThemeKey as ThemeKey])
+
+  if (resolvedValue !== null) {
+    return resolvedValue
+  }
+
+  for (let [givenKey, upgradeKey] of Object.entries(themeUpgradeKeys)) {
+    if (!baseThemeKey.startsWith(givenKey)) continue
+
+    let upgradedKey = upgradeKey + baseThemeKey.slice(givenKey.length)
+    let resolvedValue = theme.get([upgradedKey as ThemeKey])
+
+    if (resolvedValue !== null) {
+      return resolvedValue
+    }
+  }
+
+  return defaultValue
+}
+
+let themeUpgradeKeys = {
+  '--colors': '--color',
+  '--accent-color': '--color',
+  '--backdrop-blur': '--blur',
+  '--backdrop-brightness': '--brightness',
+  '--backdrop-contrast': '--contrast',
+  '--backdrop-grayscale': '--grayscale',
+  '--backdrop-hue-rotate': '--hueRotate',
+  '--backdrop-invert': '--invert',
+  '--backdrop-opacity': '--opacity',
+  '--backdrop-saturate': '--saturate',
+  '--backdrop-sepia': '--sepia',
+  '--background-color': '--color',
+  '--background-opacity': '--opacity',
+  '--border-color': '--color',
+  '--border-opacity': '--opacity',
+  '--border-spacing': '--spacing',
+  '--box-shadow-color': '--color',
+  '--caret-color': '--color',
+  '--divide-color': '--borderColor',
+  '--divide-opacity': '--borderOpacity',
+  '--divide-width': '--borderWidth',
+  '--fill': '--color',
+  '--flex-basis': '--spacing',
+  '--gap': '--spacing',
+  '--gradient-color-stops': '--color',
+  '--height': '--spacing',
+  '--inset': '--spacing',
+  '--margin': '--spacing',
+  '--max-height': '--spacing',
+  '--max-width': '--spacing',
+  '--min-height': '--spacing',
+  '--min-width': '--spacing',
+  '--outline-color': '--color',
+  '--padding': '--spacing',
+  '--placeholder-color': '--color',
+  '--placeholder-opacity': '--opacity',
+  '--ring-color': '--color',
+  '--ring-offset-color': '--color',
+  '--ring-opacity': '--opacity',
+  '--scroll-margin': '--spacing',
+  '--scroll-padding': '--spacing',
+  '--space': '--spacing',
+  '--stroke': '--color',
+  '--text-color': '--color',
+  '--text-decoration-color': '--color',
+  '--text-indent': '--spacing',
+  '--text-opacity': '--opacity',
+  '--translate': '--spacing',
+  '--size': '--spacing',
+  '--width': '--spacing',
 }

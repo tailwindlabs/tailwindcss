@@ -4,7 +4,7 @@ import { type ValueAstNode } from './value-parser'
 
 export const THEME_FUNCTION_INVOCATION = 'theme('
 
-type ResolveThemeValue = (path: string) => unknown
+type ResolveThemeValue = (path: string) => string | undefined
 
 export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
   walk(ast, (node) => {
@@ -39,7 +39,7 @@ export function substituteFunctionsInValue(
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) {
         throw new Error(
-          'Expected `theme()` function call to have a path. For example: `theme(colors.red.500)`.',
+          'Expected `theme()` function call to have a path. For example: `theme(--color-red-500)`.',
         )
       }
 
@@ -55,7 +55,7 @@ export function substituteFunctionsInValue(
       // comma (`,`), spaces alone should be merged into the previous word to
       // avoid splitting in this case:
       //
-      // theme(colors.red.500 / 75%) theme(colors.red.500 / 75%, foo, bar)
+      // theme(--color-red-500 / 75%) theme(--color-red-500 / 75%, foo, bar)
       //
       // We only need to do this for the first node, as the fallback values are
       // passed through as-is.
@@ -83,20 +83,7 @@ function cssThemeFn(
   path: string,
   fallbackValues: ValueAstNode[],
 ): ValueAstNode[] {
-  let resolvedValue: string | null = null
-  let themeValue = resolveThemeValue(path)
-
-  if (Array.isArray(themeValue) && themeValue.length === 2) {
-    // When a tuple is returned, return the first element
-    resolvedValue = themeValue[0]
-  } else if (Array.isArray(themeValue)) {
-    // Arrays get serialized into a comma-separated lists
-    resolvedValue = themeValue.join(', ')
-  } else if (typeof themeValue === 'string') {
-    // Otherwise only allow string values here, objects (and namespace maps)
-    // are treated as non-resolved values for the CSS `theme()` function.
-    resolvedValue = themeValue
-  }
+  let resolvedValue = resolveThemeValue(path)
 
   if (!resolvedValue && fallbackValues.length > 0) {
     return fallbackValues

@@ -3,9 +3,8 @@ import { parseCandidate, parseVariant, type Candidate } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
-import type { Theme } from './theme'
-import { resolveThemeValue } from './theme-fn'
-import { Utilities, createUtilities } from './utilities'
+import type { Theme, ThemeKey } from './theme'
+import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { Variants, createVariants } from './variants'
 
@@ -82,8 +81,24 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       return Array.from(parsedVariants.values())
     },
 
-    resolveThemeValue(path: string, defaultValue?: string) {
-      return resolveThemeValue(theme, path, defaultValue)
+    resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`, defaultValue?: string) {
+      // Extract an eventual modifier from the path. e.g.:
+      // - "--color-red-500 / 50%" -> "50%"
+      let lastSlash = path.lastIndexOf('/')
+      let modifier: string | null = null
+      if (lastSlash !== -1) {
+        modifier = path.slice(lastSlash + 1).trim()
+        path = path.slice(0, lastSlash).trim() as ThemeKey
+      }
+
+      let themeValue = theme.get([path]) ?? defaultValue
+
+      // Apply the opacity modifier if present
+      if (modifier && typeof themeValue === 'string') {
+        return withAlpha(themeValue, modifier)
+      }
+
+      return themeValue
     },
   }
 
