@@ -385,7 +385,7 @@ export async function applyCompatibilityHooks(
     let themeValue = lookupThemeValue(designSystem.theme, path)
 
     // Apply the opacity modifier if present
-    if (modifier && typeof themeValue === 'string') {
+    if (modifier && themeValue) {
       return withAlpha(themeValue, modifier)
     }
 
