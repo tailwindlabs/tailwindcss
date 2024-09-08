@@ -1220,7 +1220,7 @@ test('sorting stacked min-* and max-* variants', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-sm:max-xl:flex', 'min-md:max-xl:flex', 'min-xs:max-xl:flex'],
+      ['min-sm:max-xl:flex', 'min-md:max-xl:flex', 'min-xs:max-xl:flex', 'min-h-xs:max-xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
@@ -1250,6 +1250,14 @@ test('sorting stacked min-* and max-* variants', async () => {
     @media (width >= 768px) {
       @media (width < 1280px) {
         .min-md\\:max-xl\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width < 1280px) {
+      @media (height >= 280px) {
+        .min-h-xs\\:max-xl\\:flex {
           display: flex;
         }
       }
@@ -1284,6 +1292,21 @@ test('min, max and unprefixed breakpoints', async () => {
         'min-sm:flex',
         'sm:flex',
         'lg:flex',
+        'h-sm:flex',
+        'h-lg:flex',
+        'min-h-lg:flex',
+        'max-h-lg:flex',
+        'h-sm:md:flex',
+        'h-lg:min-md:flex',
+        'h-lg:max-lg:flex',
+        'min-h-lg:md:flex',
+        'max-h-lg:lg:flex',
+        'min-h-lg:max-md:flex',
+        'max-h-lg:min-lg:flex',
+        'min-lg:max-h-md:flex',
+        'max-lg:min-h-lg:flex',
+        'min-[900px]:max-h-[700px]:flex',
+        'max-[700px]:min-h-[900px]:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -1313,6 +1336,12 @@ test('min, max and unprefixed breakpoints', async () => {
 
     @media (width < 640px) {
       .max-sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (height < 1024px) {
+      .max-h-lg\\:flex {
         display: flex;
       }
     }
@@ -1347,6 +1376,14 @@ test('min, max and unprefixed breakpoints', async () => {
       }
     }
 
+    @media (height < 700px) {
+      @media (width >= 900px) {
+        .min-\\[900px\\]\\:max-h-\\[700px\\]\\:flex {
+          display: flex;
+        }
+      }
+    }
+
     @media (width >= 1024px) {
       .lg\\:flex {
         display: flex;
@@ -1354,8 +1391,106 @@ test('min, max and unprefixed breakpoints', async () => {
     }
 
     @media (width >= 1024px) {
+      @media (height < 1024px) {
+        .max-h-lg\\:lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width >= 1024px) {
       .min-lg\\:flex {
         display: flex;
+      }
+    }
+
+    @media (width >= 1024px) {
+      @media (height < 1024px) {
+        .max-h-lg\\:min-lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (height < 768px) {
+      @media (width >= 1024px) {
+        .min-lg\\:max-h-md\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (height >= 1024px) {
+      .h-lg\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (width < 1024px) {
+      @media (height >= 1024px) {
+        .h-lg\\:max-lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width >= 768px) {
+      @media (height >= 1024px) {
+        .h-lg\\:min-md\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (height >= 640px) {
+      .h-sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (width >= 768px) {
+      @media (height >= 640px) {
+        .h-sm\\:md\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (height >= 900px) {
+      @media (width < 700px) {
+        .max-\\[700px\\]\\:min-h-\\[900px\\]\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (height >= 1024px) {
+      .min-h-lg\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (height >= 1024px) {
+      @media (width < 1024px) {
+        .max-lg\\:min-h-lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width < 768px) {
+      @media (height >= 1024px) {
+        .min-h-lg\\:max-md\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width >= 768px) {
+      @media (height >= 1024px) {
+        .min-h-lg\\:md\\:flex {
+          display: flex;
+        }
       }
     }"
   `)
@@ -2231,6 +2366,21 @@ test('container queries', async () => {
         '@max-lg/name:flex',
         '@max-[123px]:flex',
         '@max-[456px]/name:flex',
+
+        '@h-lg:flex',
+        '@h-lg/name:flex',
+        '@h-[123px]:flex',
+        '@h-[456px]/name:flex',
+
+        '@min-h-lg:flex',
+        '@min-h-lg/name:flex',
+        '@min-h-[123px]:flex',
+        '@min-h-[456px]/name:flex',
+
+        '@max-h-lg:flex',
+        '@max-h-lg/name:flex',
+        '@max-h-[123px]:flex',
+        '@max-h-[456px]/name:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -2306,6 +2456,30 @@ test('container queries', async () => {
 
     @container name (width >= 1024px) {
       .\\@min-lg\\/name\\:flex {
+        display: flex;
+      }
+    }
+
+    @container name (height < 456px) {
+      .\\@max-h-\\[456px\\]\\/name\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (height < 123px) {
+      .\\@max-h-\\[123px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (height >= 123px) {
+      .\\@min-h-\\[123px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container name (height >= 456px) {
+      .\\@min-h-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }"
