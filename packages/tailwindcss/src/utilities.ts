@@ -2271,7 +2271,7 @@ export function createUtilities(theme: Theme) {
           hasDefaultValue: true,
         },
         {
-          values: [],
+          values: ['0', '2', '4', '8'],
           valueThemeKeys: ['--border-width'],
         },
       ])
