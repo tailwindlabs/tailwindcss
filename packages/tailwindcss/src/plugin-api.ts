@@ -1,6 +1,6 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, walk, type AstNode } from './ast'
-import type { Candidate, NamedUtilityValue } from './candidate'
+import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig } from './compat/config/resolve-config'
@@ -114,12 +114,12 @@ function buildPluginApi(
       }
     },
     matchVariant(name, fn, options) {
-      function resolveVariantValue(
-        value: string,
-        modifier: string | null,
+      function resolveVariantValue<T extends Parameters<typeof fn>[0]>(
+        value: T,
+        modifier: CandidateModifier | null,
         nodes: AstNode[],
       ): AstNode[] {
-        let resolved = fn(value, { modifier })
+        let resolved = fn(value, { modifier: modifier?.value ?? null })
         return (typeof resolved === 'string' ? [resolved] : resolved).flatMap((r) => {
           if (r.includes('{')) {
             let ast = CSS.parse(r)
@@ -143,11 +143,7 @@ function buildPluginApi(
           designSystem.variants.functional(name, (ruleNodes, variant) => {
             if (!variant.value || variant.modifier) {
               if (options?.values && 'DEFAULT' in options.values) {
-                ruleNodes.nodes = resolveVariantValue(
-                  options.values.DEFAULT as string,
-                  null,
-                  ruleNodes.nodes,
-                )
+                ruleNodes.nodes = resolveVariantValue(options.values.DEFAULT, null, ruleNodes.nodes)
                 return
               }
               return null
@@ -182,8 +178,8 @@ function buildPluginApi(
             let zValue = options?.values?.[z.value.value] ?? z.value.value
 
             return options.sort(
-              { value: aValue, modifier: a.modifier as string | null },
-              { value: zValue, modifier: z.modifier as string | null },
+              { value: aValue, modifier: a.modifier?.value ?? null },
+              { value: zValue, modifier: z.modifier?.value ?? null },
             )
           }
 
