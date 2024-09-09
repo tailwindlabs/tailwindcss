@@ -1226,3 +1226,55 @@ test('* is matched by the parser as the children variant', async () => {
     }
   `)
 })
+
+test('CLI --classes-output switch', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="bg-red-500 text-center"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config, { '--classes-output': 'detected-classes.txt' })
+
+  expect(result.css).toMatchFormattedCss(css`
+    .bg-red-500 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+    }
+    .text-center {
+      text-align: center;
+    }
+  `)
+
+  const detectedClasses = fs.readFileSync('detected-classes.txt', 'utf8')
+  expect(detectedClasses).toBe('bg-red-500\ntext-center\n')
+})
+
+test('CLI --classes-output switch with no detected classes', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="non-existent-class"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config, { '--classes-output': 'detected-classes.txt' })
+
+  expect(result.css).toBe('')
+
+  const detectedClasses = fs.readFileSync('detected-classes.txt', 'utf8')
+  expect(detectedClasses).toBe('')
+})
