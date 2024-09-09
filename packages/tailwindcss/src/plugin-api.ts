@@ -137,7 +137,6 @@ function buildPluginApi(
       }
 
       let defaultOptionKeys = Object.keys(options?.values ?? {})
-
       designSystem.variants.group(
         () => {
           designSystem.variants.functional(name, (ruleNodes, variant) => {
@@ -166,6 +165,8 @@ function buildPluginApi(
           })
         },
         (a, z) => {
+          // Since we only define a functional variant in the group, the `kind`
+          // has to be `functional`.
           if (a.kind !== 'functional' || z.kind !== 'functional') {
             return 0
           }
