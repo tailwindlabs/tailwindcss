@@ -1655,21 +1655,6 @@ describe('matchVariant', () => {
         }
       }"
     `)
-
-    // return run(input, config).then((result) => {
-    //   expect(result.css).toMatchFormattedCss(css`
-    //     @media (min-width: 500px) {
-    //       .testmin-\[500px\]\:underline {
-    //         text-decoration-line: underline;
-    //       }
-    //     }
-    //     @media (min-width: 700px) {
-    //       .testmin-\[700px\]\:italic {
-    //         font-style: italic;
-    //       }
-    //     }
-    //   `)
-    // })
   })
 
   test('should be possible to compare arbitrary variants and hardcoded variants', async () => {
@@ -1722,26 +1707,6 @@ describe('matchVariant', () => {
         }
       }"
     `)
-
-    // return run(input, config).then((result) => {
-    //   expect(result.css).toMatchFormattedCss(css`
-    //     @media (min-width: 500px) {
-    //       .testmin-\[500px\]\:italic {
-    //         font-style: italic;
-    //       }
-    //     }
-    //     @media (min-width: 600px) {
-    //       .testmin-example\:italic {
-    //         font-style: italic;
-    //       }
-    //     }
-    //     @media (min-width: 700px) {
-    //       .testmin-\[700px\]\:italic {
-    //         font-style: italic;
-    //       }
-    //     }
-    //   `)
-    // })
   })
 
   test('should be possible to sort stacked arbitrary variants correctly', async () => {
