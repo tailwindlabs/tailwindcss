@@ -1695,8 +1695,7 @@ describe('matchVariant', () => {
     // })
   })
 
-  // TODO: How do we make this test pass?
-  test.skip('should be possible to sort stacked arbitrary variants correctly', async () => {
+  test('should be possible to sort stacked arbitrary variants correctly', async () => {
     let { build } = await compile(
       css`
         @plugin "my-plugin";
@@ -1722,78 +1721,49 @@ describe('matchVariant', () => {
         },
       },
     )
-    // TODO: the comments here do not match the actual order in the test assertion
+
     let compiled = build([
-      'testmin-[150px]:testmax-[400px]:italic', // 4
-      'testmin-[100px]:testmax-[350px]:flex', // 2
-      'testmin-[100px]:testmax-[300px]:underline', // 1
-      'testmin-[100px]:testmax-[400px]:font-bold', // 3
+      'testmin-[150px]:testmax-[400px]:order-2',
+      'testmin-[100px]:testmax-[350px]:order-3',
+      'testmin-[100px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
     ])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (width >= 100px) {
           @media (width <= 400px) {
-            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:font-bold {
-              font-weight: 700;
-            }
-          }
-        }
-
-        @media (width >= 100px) {
-          @media (width <= 350px) {
-            .testmin-\\[100px\\]\\:testmax-\\[350px\\]\\:flex {
-              display: flex;
-            }
-          }
-        }
-
-        @media (width >= 100px) {
-          @media (width <= 300px) {
-            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
             }
           }
         }
 
         @media (width >= 150px) {
           @media (width <= 400px) {
-            .testmin-\\[150px\\]\\:testmax-\\[400px\\]\\:italic {
-              font-style: italic;
+            .testmin-\\[150px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 350px) {
+            .testmin-\\[100px\\]\\:testmax-\\[350px\\]\\:order-3 {
+              order: 3;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
             }
           }
         }
       }"
     `)
-
-    // return run(input, config).then((result) => {
-    //   expect(result.css).toMatchFormattedCss(css`
-    //     @media (min-width: 100px) {
-    //       @media (max-width: 400px) {
-    //         .testmin-\[100px\]\:testmax-\[400px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //       @media (max-width: 350px) {
-    //         .testmin-\[100px\]\:testmax-\[350px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //       @media (max-width: 300px) {
-    //         .testmin-\[100px\]\:testmax-\[300px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //     }
-    //     @media (min-width: 150px) {
-    //       @media (max-width: 400px) {
-    //         .testmin-\[150px\]\:testmax-\[400px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //     }
-    //   `)
-    // })
   })
 
   test('should maintain sort from other variants, if sort functions of arbitrary variants return 0', async () => {
@@ -1849,8 +1819,7 @@ describe('matchVariant', () => {
     `)
   })
 
-  // TODO: How do we make this test pass?
-  test.skip('should sort arbitrary variants left to right (1)', async () => {
+  test('should sort arbitrary variants left to right (1)', async () => {
     let { build } = await compile(
       css`
         @plugin "my-plugin";
@@ -1876,76 +1845,47 @@ describe('matchVariant', () => {
       },
     )
     let compiled = build([
-      'testmin-[200px]:testmax-[400px]:underline',
-      'testmin-[200px]:testmax-[300px]:underline',
-      'testmin-[100px]:testmax-[400px]:underline',
-      'testmin-[100px]:testmax-[300px]:underline',
+      'testmin-[200px]:testmax-[400px]:order-2',
+      'testmin-[200px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
+      'testmin-[100px]:testmax-[300px]:order-3',
     ])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (width >= 100px) {
           @media (width <= 400px) {
-            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:underline {
-              text-decoration-line: underline;
-            }
-          }
-        }
-
-        @media (width >= 100px) {
-          @media (width <= 300px) {
-            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
             }
           }
         }
 
         @media (width >= 200px) {
           @media (width <= 400px) {
-            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
+              order: 3;
             }
           }
         }
 
         @media (width >= 200px) {
           @media (width <= 300px) {
-            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
             }
           }
         }
       }"
     `)
-
-    // return run(input, config).then((result) => {
-    //   expect(result.css).toMatchFormattedCss(css`
-    //     @media (min-width: 100px) {
-    //       @media (max-width: 400px) {
-    //         .testmin-\[100px\]\:testmax-\[400px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //       @media (max-width: 300px) {
-    //         .testmin-\[100px\]\:testmax-\[300px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //     }
-    //     @media (min-width: 200px) {
-    //       @media (max-width: 400px) {
-    //         .testmin-\[200px\]\:testmax-\[400px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //       @media (max-width: 300px) {
-    //         .testmin-\[200px\]\:testmax-\[300px\]\:underline {
-    //           text-decoration-line: underline;
-    //         }
-    //       }
-    //     }
-    //   `)
-    // })
   })
 
   test('should sort arbitrary variants left to right (2)', async () => {
@@ -2017,8 +1957,7 @@ describe('matchVariant', () => {
     `)
   })
 
-  // TODO: How do we make this test pass?
-  test.skip('should guarantee that we are not passing values from other variants to the wrong function', async () => {
+  test('should guarantee that we are not passing values from other variants to the wrong function', async () => {
     let { build } = await compile(
       css`
         @plugin "my-plugin";
@@ -2052,42 +1991,42 @@ describe('matchVariant', () => {
       },
     )
     let compiled = build([
-      'testmin-[200px]:testmax-[400px]:underline',
-      'testmin-[200px]:testmax-[300px]:underline',
-      'testmin-[100px]:testmax-[400px]:underline',
-      'testmin-[100px]:testmax-[300px]:underline',
+      'testmin-[200px]:testmax-[400px]:order-2',
+      'testmin-[200px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
+      'testmin-[100px]:testmax-[300px]:order-3',
     ])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (width >= 100px) {
           @media (width <= 400px) {
-            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:underline {
-              text-decoration-line: underline;
-            }
-          }
-        }
-
-        @media (width >= 100px) {
-          @media (width <= 300px) {
-            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
             }
           }
         }
 
         @media (width >= 200px) {
           @media (width <= 400px) {
-            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
+              order: 3;
             }
           }
         }
 
         @media (width >= 200px) {
           @media (width <= 300px) {
-            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:underline {
-              text-decoration-line: underline;
+            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
             }
           }
         }
