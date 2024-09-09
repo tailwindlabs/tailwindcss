@@ -1303,6 +1303,48 @@ describe('addVariant', () => {
     `)
   })
 
+  test('addVariant with at-rules and placeholder', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant(
+              'potato',
+              '@media (max-width: 400px) { @supports (font:bold) { &:large-potato } }',
+            )
+          }
+        },
+      },
+    )
+    let compiled = build(['potato:underline', 'potato:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width <= 400px) {
+          @supports (font: bold) {
+            .potato\\:flex:large-potato {
+              display: flex;
+            }
+          }
+        }
+
+        @media (width <= 400px) {
+          @supports (font: bold) {
+            .potato\\:underline:large-potato {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
   test('@slot is preserved when used as a custom property value', async () => {
     let { build } = await compile(
       css`
@@ -1419,7 +1461,10 @@ describe('matchVariant', () => {
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
-            matchVariant('potato', (flavor) => `@media (potato: ${flavor}) { &:potato }`)
+            matchVariant(
+              'potato',
+              (flavor) => `@media (potato: ${flavor}) { @supports (font:bold) { &:large-potato } }`,
+            )
           }
         },
       },
@@ -1429,14 +1474,18 @@ describe('matchVariant', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (potato: yellow) {
-          .potato-\\[yellow\\]\\:underline:potato {
-            text-decoration-line: underline;
+          @supports (font: bold) {
+            .potato-\\[yellow\\]\\:underline:large-potato {
+              text-decoration-line: underline;
+            }
           }
         }
 
         @media (potato: baked) {
-          .potato-\\[baked\\]\\:flex:potato {
-            display: flex;
+          @supports (font: bold) {
+            .potato-\\[baked\\]\\:flex:large-potato {
+              display: flex;
+            }
           }
         }
       }"

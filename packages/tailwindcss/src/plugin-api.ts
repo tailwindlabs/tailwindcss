@@ -1,5 +1,5 @@
 import { substituteAtApply } from './apply'
-import { decl, rule, walk, type AstNode } from './ast'
+import { decl, rule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
@@ -15,6 +15,7 @@ import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
+import { substituteAtSlot } from './variants'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -94,17 +95,10 @@ function buildPluginApi(
     },
 
     addVariant(name, variant) {
-      // Single selector
-      if (typeof variant === 'string') {
+      // Single selector or multiple parallel selectors
+      if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(name, (r) => {
-          r.nodes = [rule(variant, r.nodes)]
-        })
-      }
-
-      // Multiple parallel selectors
-      else if (Array.isArray(variant)) {
-        designSystem.variants.static(name, (r) => {
-          r.nodes = variant.map((selector) => rule(selector, r.nodes))
+          r.nodes = parseVariantValue(variant, r.nodes)
         })
       }
 
@@ -120,20 +114,7 @@ function buildPluginApi(
         nodes: AstNode[],
       ): AstNode[] {
         let resolved = fn(value, { modifier: modifier?.value ?? null })
-        return (typeof resolved === 'string' ? [resolved] : resolved).flatMap((r) => {
-          if (r.includes('{')) {
-            let ast = CSS.parse(r)
-            walk(ast, (node, { replaceWith }) => {
-              if (node.kind === 'declaration' && node.property === '&' && node.value === name) {
-                replaceWith(rule(`&:${name}`, nodes))
-                return
-              }
-            })
-            return ast
-          } else {
-            return rule(r, nodes)
-          }
-        })
+        return parseVariantValue(resolved, nodes)
       }
 
       let defaultOptionKeys = Object.keys(options?.values ?? {})
@@ -439,6 +420,20 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   }
 
   return ast
+}
+
+function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNode[] {
+  let resolvedArray = typeof resolved === 'string' ? [resolved] : resolved
+  return resolvedArray.flatMap((r) => {
+    if (r.trim().endsWith('}')) {
+      let updatedCSS = r.replace('}', '{@slot}}')
+      let ast = CSS.parse(updatedCSS)
+      substituteAtSlot(ast, nodes)
+      return ast
+    } else {
+      return rule(r, nodes)
+    }
+  })
 }
 
 type Primitive = string | number | boolean | null
