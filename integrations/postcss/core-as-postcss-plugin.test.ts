@@ -1,5 +1,4 @@
-import { afterEach, beforeEach } from 'node:test'
-import { expect, vi } from 'vitest'
+import { expect } from 'vitest'
 import { css, js, json, test } from '../utils'
 
 const variantConfig = {
@@ -30,16 +29,7 @@ const variantConfig = {
   },
 }
 
-let originalConsoleError: typeof console.error
-beforeEach(() => {
-  originalConsoleError = console.error
-  console.error = vi.fn()
-})
-afterEach(() => {
-  console.error = originalConsoleError
-})
-
-for (let variant of ['string', 'ESM', 'CJS']) {
+for (let variant of Object.keys(variantConfig)) {
   test(
     `can not use \`tailwindcss\` as a postcss module (${variant})`,
     {
