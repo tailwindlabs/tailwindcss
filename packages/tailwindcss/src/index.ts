@@ -1,6 +1,7 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
 import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
@@ -17,6 +18,7 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 type CompileOptions = {
   loadPlugin?: (path: string) => Promise<Plugin>
   loadConfig?: (path: string) => Promise<UserConfig>
+  resolveImport?: (id: string, basedir: string) => Promise<{ content: string; basedir: string }>
 }
 
 function throwOnPlugin(): never {
@@ -25,6 +27,10 @@ function throwOnPlugin(): never {
 
 function throwOnConfig(): never {
   throw new Error('No `loadConfig` function provided to `compile`')
+}
+
+function throwOnResolveImport(): never {
+  throw new Error('No `resolveImport` function provided to `compile`')
 }
 
 function parseThemeOptions(selector: string) {
@@ -45,9 +51,16 @@ function parseThemeOptions(selector: string) {
 
 async function parseCss(
   css: string,
-  { loadPlugin = throwOnPlugin, loadConfig = throwOnConfig }: CompileOptions = {},
+  basedir: string,
+  {
+    loadPlugin = throwOnPlugin,
+    loadConfig = throwOnConfig,
+    resolveImport = throwOnResolveImport,
+  }: CompileOptions = {},
 ) {
   let ast = CSS.parse(css)
+
+  await substituteAtImports(ast, basedir, resolveImport)
 
   // Find all `@theme` declarations
   let theme = new Theme()
@@ -314,12 +327,13 @@ async function parseCss(
 
 export async function compile(
   css: string,
+  basedir: string,
   opts: CompileOptions = {},
 ): Promise<{
   globs: { origin?: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, opts)
+  let { designSystem, ast, globs } = await parseCss(css, basedir, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -397,7 +411,7 @@ export async function compile(
 }
 
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
-  let result = await parseCss(css, opts)
+  let result = await parseCss(css, '', opts)
   return result.designSystem
 }
 
