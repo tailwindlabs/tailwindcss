@@ -1,6 +1,6 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
-import type { Candidate, NamedUtilityValue } from './candidate'
+import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
 import { resolveConfig } from './compat/config/resolve-config'
@@ -8,12 +8,14 @@ import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
 import { createThemeFn } from './compat/plugin-functions'
 import { substituteFunctions } from './css-functions'
+import * as CSS from './css-parser'
 import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
+import { substituteAtSlot } from './variants'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -27,7 +29,19 @@ export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 
 export type PluginAPI = {
   addBase(base: CssInJs): void
+
   addVariant(name: string, variant: string | string[] | CssInJs): void
+  matchVariant<T = string>(
+    name: string,
+    cb: (value: T | string, extra: { modifier: string | null }) => string | string[],
+    options?: {
+      values?: Record<string, T>
+      sort?(
+        a: { value: T | string; modifier: string | null },
+        b: { value: T | string; modifier: string | null },
+      ): number
+    },
+  ): void
 
   addUtilities(
     utilities: Record<string, CssInJs | CssInJs[]> | Record<string, CssInJs | CssInJs[]>[],
@@ -81,17 +95,10 @@ function buildPluginApi(
     },
 
     addVariant(name, variant) {
-      // Single selector
-      if (typeof variant === 'string') {
+      // Single selector or multiple parallel selectors
+      if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(name, (r) => {
-          r.nodes = [rule(variant, r.nodes)]
-        })
-      }
-
-      // Multiple parallel selectors
-      else if (Array.isArray(variant)) {
-        designSystem.variants.static(name, (r) => {
-          r.nodes = variant.map((selector) => rule(selector, r.nodes))
+          r.nodes = parseVariantValue(variant, r.nodes)
         })
       }
 
@@ -99,6 +106,71 @@ function buildPluginApi(
       else if (typeof variant === 'object') {
         designSystem.variants.fromAst(name, objectToAst(variant))
       }
+    },
+    matchVariant(name, fn, options) {
+      function resolveVariantValue<T extends Parameters<typeof fn>[0]>(
+        value: T,
+        modifier: CandidateModifier | null,
+        nodes: AstNode[],
+      ): AstNode[] {
+        let resolved = fn(value, { modifier: modifier?.value ?? null })
+        return parseVariantValue(resolved, nodes)
+      }
+
+      let defaultOptionKeys = Object.keys(options?.values ?? {})
+      designSystem.variants.group(
+        () => {
+          designSystem.variants.functional(name, (ruleNodes, variant) => {
+            if (!variant.value || variant.modifier) {
+              if (options?.values && 'DEFAULT' in options.values) {
+                ruleNodes.nodes = resolveVariantValue(options.values.DEFAULT, null, ruleNodes.nodes)
+                return
+              }
+              return null
+            }
+
+            if (variant.value.kind === 'arbitrary') {
+              ruleNodes.nodes = resolveVariantValue(
+                variant.value.value,
+                variant.modifier,
+                ruleNodes.nodes,
+              )
+            } else if (variant.value.kind === 'named' && options?.values) {
+              let defaultValue = options.values[variant.value.value]
+              if (typeof defaultValue !== 'string') {
+                return
+              }
+
+              ruleNodes.nodes = resolveVariantValue(defaultValue, null, ruleNodes.nodes)
+            }
+          })
+        },
+        (a, z) => {
+          // Since we only define a functional variant in the group, the `kind`
+          // has to be `functional`.
+          if (a.kind !== 'functional' || z.kind !== 'functional') {
+            return 0
+          }
+          if (!a.value || !z.value) {
+            return 0
+          }
+
+          if (options && typeof options.sort === 'function') {
+            let aValue = options.values?.[a.value.value] ?? a.value.value
+            let zValue = options.values?.[z.value.value] ?? z.value.value
+
+            return options.sort(
+              { value: aValue, modifier: a.modifier?.value ?? null },
+              { value: zValue, modifier: z.modifier?.value ?? null },
+            )
+          }
+
+          let aOrder = defaultOptionKeys.indexOf(a.value.value)
+          let zOrder = defaultOptionKeys.indexOf(z.value.value)
+
+          return aOrder - zOrder
+        },
+      )
     },
 
     addUtilities(utilities) {
@@ -348,6 +420,20 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   }
 
   return ast
+}
+
+function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNode[] {
+  let resolvedArray = typeof resolved === 'string' ? [resolved] : resolved
+  return resolvedArray.flatMap((r) => {
+    if (r.trim().endsWith('}')) {
+      let updatedCSS = r.replace('}', '{@slot}}')
+      let ast = CSS.parse(updatedCSS)
+      substituteAtSlot(ast, nodes)
+      return ast
+    } else {
+      return rule(r, nodes)
+    }
+  })
 }
 
 type Primitive = string | number | boolean | null

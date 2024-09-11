@@ -45,27 +45,7 @@ export class Variants {
   fromAst(name: string, ast: AstNode[]) {
     this.static(name, (r) => {
       let body = structuredClone(ast)
-
-      walk(body, (node, { replaceWith }) => {
-        // Replace `@slot` with rule nodes
-        if (node.kind === 'rule' && node.selector === '@slot') {
-          replaceWith(r.nodes)
-        }
-
-        // Wrap `@keyframes` and `@property` in `@at-root`
-        else if (
-          node.kind === 'rule' &&
-          node.selector[0] === '@' &&
-          (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
-        ) {
-          Object.assign(node, {
-            selector: '@at-root',
-            nodes: [rule(node.selector, node.nodes)],
-          })
-          return WalkAction.Skip
-        }
-      })
-
+      substituteAtSlot(body, r.nodes)
       r.nodes = body
     })
   }
@@ -939,4 +919,26 @@ function quoteAttributeValue(value: string) {
     })
   }
   return value
+}
+
+export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
+  walk(ast, (node, { replaceWith }) => {
+    // Replace `@slot` with rule nodes
+    if (node.kind === 'rule' && node.selector === '@slot') {
+      replaceWith(nodes)
+    }
+
+    // Wrap `@keyframes` and `@property` in `@at-root`
+    else if (
+      node.kind === 'rule' &&
+      node.selector[0] === '@' &&
+      (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
+    ) {
+      Object.assign(node, {
+        selector: '@at-root',
+        nodes: [rule(node.selector, node.nodes)],
+      })
+      return WalkAction.Skip
+    }
+  })
 }

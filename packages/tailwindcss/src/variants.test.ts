@@ -1220,7 +1220,7 @@ test('sorting stacked min-* and max-* variants', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-sm:max-xl:flex', 'min-md:max-xl:flex', 'min-xs:max-xl:flex'],
+      ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
@@ -1232,8 +1232,8 @@ test('sorting stacked min-* and max-* variants', async () => {
     }
 
     @media (width >= 280px) {
-      @media (width < 1280px) {
-        .min-xs\\:max-xl\\:flex {
+      @media (width < 640px) {
+        .min-xs\\:max-sm\\:flex {
           display: flex;
         }
       }
@@ -1247,9 +1247,17 @@ test('sorting stacked min-* and max-* variants', async () => {
       }
     }
 
+    @media (width >= 640px) {
+      @media (width < 1024px) {
+        .min-sm\\:max-lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
     @media (width >= 768px) {
-      @media (width < 1280px) {
-        .min-md\\:max-xl\\:flex {
+      @media (width < 1024px) {
+        .min-md\\:max-lg\\:flex {
           display: flex;
         }
       }
