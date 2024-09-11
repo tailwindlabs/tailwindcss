@@ -603,6 +603,9 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `grid-column`
    */
+
+  let gridColumnProperties = () => atRoot([property('--tw-col-start'), property('--tw-col-end')])
+
   staticUtility('col-auto', [['grid-column', 'auto']])
   functionalUtility('col', {
     themeKeys: ['--grid-column'],
@@ -614,13 +617,19 @@ export function createUtilities(theme: Theme) {
       if (!Number.isInteger(Number(value))) return null
       return value
     },
-    handle: (value) => [decl('grid-column', `span ${value} / span ${value}`)],
+    handle: (value) => [
+      gridColumnProperties(),
+      decl('grid-column', `var(--tw-col-start, span ${value}) / var(--tw-col-end, span ${value})`),
+    ],
   })
 
   /**
    * @css `grid-column-start`
    */
-  staticUtility('col-start-auto', [['grid-column-start', 'auto']])
+  staticUtility('col-start-auto', [
+    ['--tw-col-start', 'auto'],
+    ['grid-column-start', 'auto'],
+  ])
   functionalUtility('col-start', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
@@ -628,13 +637,16 @@ export function createUtilities(theme: Theme) {
       return value
     },
     themeKeys: ['--grid-column-start'],
-    handle: (value) => [decl('grid-column-start', value)],
+    handle: (value) => [decl('--tw-col-start', value), decl('grid-column-start', value)],
   })
 
   /**
    * @css `grid-column-end`
    */
-  staticUtility('col-end-auto', [['grid-column-end', 'auto']])
+  staticUtility('col-end-auto', [
+    // ['--tw-col-end', 'auto'],
+    ['grid-column-end', 'auto'],
+  ])
   functionalUtility('col-end', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
@@ -642,7 +654,10 @@ export function createUtilities(theme: Theme) {
       return value
     },
     themeKeys: ['--grid-column-end'],
-    handle: (value) => [decl('grid-column-end', value)],
+    handle: (value) => [
+      // decl('--tw-col-end', value),
+      decl('grid-column-end', value),
+    ],
   })
 
   suggest('col-span', () => [

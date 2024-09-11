@@ -287,6 +287,21 @@ test('content-none persists when conditionally styling a pseudo-element', async 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 })
 
+test('col-start/end are preserved when overriding col-span', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<div class="grid grid-cols-12">
+      <div id="x" class="col-start-3 col-end-7 hover:col-span-7 hover:col-start-4">Hello world</div>
+    </div>`,
+  )
+
+  expect(await getPropertyValue('#x', 'grid-column')).toEqual('3 / 7')
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue('#x', 'grid-column')).toEqual('3 / 7')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
