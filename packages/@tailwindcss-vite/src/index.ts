@@ -6,8 +6,6 @@ import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-rela
 import { Features, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'path'
-import postcss from 'postcss'
-import postcssImport from 'postcss-import'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -330,7 +328,7 @@ class DefaultMap<K, V> extends Map<K, V> {
   }
 }
 
-class Root {
+export class Root {
   // Content is only used in serve mode where we need to capture the initial
   // contents of the root file so that we can restore it during the
   // `renderStart` hook.
@@ -361,6 +359,7 @@ class Root {
     private id: string,
     private getSharedCandidates: () => Set<string>,
     private base: string,
+    private atImportResolver: 'postcss' | 'tailwindcss' = 'postcss',
   ) {}
 
   // Generate the CSS for the root file. This can return false if the file is
@@ -378,28 +377,37 @@ class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
-      let postcssCompiled = await postcss([
-        postcssImport({
-          load: (path) => {
-            this.dependencies.add(path)
-            addWatchFile(path)
-            return fs.readFile(path, 'utf8')
-          },
-        }),
-        fixRelativePathsPlugin(),
-      ]).process(content, {
-        from: inputPath,
-        to: inputPath,
-      })
-      let css = postcssCompiled.css
+      let css = content
+      if (this.atImportResolver === 'postcss') {
+        const [{ default: postcss }, { default: postcssImport }] = await Promise.all([
+          import('postcss'),
+          import('postcss-import'),
+        ])
+
+        let postcssCompiled = await postcss([
+          postcssImport({
+            load: (path) => {
+              this.dependencies.add(path)
+              addWatchFile(path)
+              return fs.readFile(path, 'utf8')
+            },
+          }),
+          fixRelativePathsPlugin(),
+        ]).process(content, {
+          from: inputPath,
+          to: inputPath,
+        })
+
+        css = postcssCompiled.css
+      }
 
       // This is done inside the Root#generate() method so that we can later use
       // information from the Tailwind compiler to determine if the file is a
       // CSS root (necessary because we will probably inline the `@import`
       // resolution at some point).
-      if (!isCssRootFile(css)) {
-        return false
-      }
+      // if (!isCssRootFile(css)) {
+      //   return false
+      // }
 
       this.compiler = await compile(css, {
         base: inputBase,
