@@ -382,7 +382,7 @@ export async function applyCompatibilityHooks({
     }
 
     // Extract an eventual modifier from the path. e.g.:
-    // - "--color-red-500 / 50%" -> "50%"
+    // - "colors.red.500 / 50%" -> "50%"
     let lastSlash = path.lastIndexOf('/')
     let modifier: string | null = null
     if (lastSlash !== -1) {
