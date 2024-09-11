@@ -20,6 +20,8 @@ const MATH_FUNCTIONS = [
   'round',
 ]
 
+const KNOWN_DASHED_FUNCTIONS = ['anchor-size']
+
 export function hasMathFn(input: string) {
   return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
 }
@@ -34,6 +36,13 @@ export function addWhitespaceAroundMathOperators(input: string) {
   if (!MATH_FUNCTIONS.some((fn) => input.includes(fn))) {
     return input
   }
+
+  // Replace known functions with a placeholder
+  let hasKnownFunctions = false
+  input = input.replace(new RegExp(`(${KNOWN_DASHED_FUNCTIONS.join('|')})\\(`, 'g'), (_, fn) => {
+    hasKnownFunctions = true
+    return `$${KNOWN_DASHED_FUNCTIONS.indexOf(fn)}$(`
+  })
 
   let result = ''
   let formattable: boolean[] = []
@@ -148,6 +157,10 @@ export function addWhitespaceAroundMathOperators(input: string) {
     else {
       result += char
     }
+  }
+
+  if (hasKnownFunctions) {
+    return result.replace(/\$(\d+)\$/g, (_, idx) => KNOWN_DASHED_FUNCTIONS[idx])
   }
 
   return result
