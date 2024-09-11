@@ -23,6 +23,10 @@ interface ChildProcessOptions {
   cwd?: string
 }
 
+interface ExecOptions {
+  ignoreStdErr?: boolean
+}
+
 interface TestConfig {
   fs: {
     [filePath: string]: string
@@ -30,7 +34,7 @@ interface TestConfig {
 }
 interface TestContext {
   root: string
-  exec(command: string, options?: ChildProcessOptions): Promise<string>
+  exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   getFreePort(): Promise<number>
   fs: {
@@ -84,7 +88,11 @@ export function test(
 
       let context = {
         root,
-        async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+        async exec(
+          command: string,
+          childProcessOptions: ChildProcessOptions = {},
+          execOptions: ExecOptions = {},
+        ) {
           let cwd = childProcessOptions.cwd ?? root
           if (debug && cwd !== root) {
             let relative = path.relative(root, cwd)
@@ -101,7 +109,7 @@ export function test(
               },
               (error, stdout, stderr) => {
                 if (error) {
-                  console.error(stderr)
+                  if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   reject(error)
                 } else {
                   resolve(stdout.toString())
