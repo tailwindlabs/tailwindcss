@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure there is always CLI feedback on save even when no new classes were found ([#14351](https://github.com/tailwindlabs/tailwindcss/pull/14351))
 - Properly resolve `theme('someKey.DEFAULT')` when all `--some-key-*` keys have a suffix ([#14354](https://github.com/tailwindlabs/tailwindcss/pull/14354))
 - Make sure tuple theme values in JS configs take precedence over `@theme default` values ([#14359](https://github.com/tailwindlabs/tailwindcss/pull/14359))
+- Improve IntelliSense completions for `border` utilities ([#14370](https://github.com/tailwindlabs/tailwindcss/pull/14370))
 
 ## [4.0.0-alpha.23] - 2024-09-05
 
