@@ -156,8 +156,8 @@ function buildPluginApi(
           }
 
           if (options && typeof options.sort === 'function') {
-            let aValue = options?.values?.[a.value.value] ?? a.value.value
-            let zValue = options?.values?.[z.value.value] ?? z.value.value
+            let aValue = options.values?.[a.value.value] ?? a.value.value
+            let zValue = options.values?.[z.value.value] ?? z.value.value
 
             return options.sort(
               { value: aValue, modifier: a.modifier?.value ?? null },
