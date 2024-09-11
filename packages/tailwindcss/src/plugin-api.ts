@@ -165,8 +165,8 @@ function buildPluginApi(
             )
           }
 
-          let aOrder = defaultOptionKeys.indexOf(a.value.value) ?? 0
-          let zOrder = defaultOptionKeys.indexOf(z.value.value) ?? 0
+          let aOrder = defaultOptionKeys.indexOf(a.value.value)
+          let zOrder = defaultOptionKeys.indexOf(z.value.value)
 
           return aOrder - zOrder
         },
