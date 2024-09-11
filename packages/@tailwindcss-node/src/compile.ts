@@ -1,4 +1,7 @@
+import EnhancedResolve from 'enhanced-resolve'
 import { createJiti, type Jiti } from 'jiti'
+import fs from 'node:fs'
+import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { compile as _compile } from 'tailwindcss'
@@ -8,7 +11,7 @@ export async function compile(
   css: string,
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
-  return await _compile(css, {
+  return await _compile(css, base, {
     loadPlugin: async (pluginPath) => {
       if (pluginPath[0] !== '.') {
         return importModule(pluginPath).then((m) => m.default ?? m)
@@ -44,6 +47,16 @@ export async function compile(
       }
       return module.default ?? module
     },
+
+    async resolveImport(id, basedir) {
+      let full = await resolveCssId(id, basedir)
+      if (!full) throw new Error(`Could not resolve '${id}' from '${basedir}'`)
+      let file = await fsPromises.readFile(full, 'utf-8')
+      return {
+        content: file,
+        basedir: path.dirname(full),
+      }
+    },
   })
 }
 
@@ -61,4 +74,22 @@ async function importModule(path: string): Promise<any> {
     } catch {}
     throw error
   }
+}
+
+const resolver = EnhancedResolve.ResolverFactory.createResolver({
+  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  useSyncFileSystemCalls: true,
+  extensions: ['.css'],
+  mainFields: ['style'],
+  conditionNames: ['style'],
+})
+export function resolveCssId(id: string, base: string) {
+  if (typeof globalThis.__tw_resolve === 'function') {
+    let resolved = globalThis.__tw_resolve(id, base)
+    if (resolved) {
+      return resolved
+    }
+  }
+
+  return resolver.resolveSync({}, base, id)
 }

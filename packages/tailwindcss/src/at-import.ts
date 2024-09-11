@@ -1,5 +1,6 @@
-import { walk, WalkAction, type AstNode } from './ast'
+import { rule, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
+import * as ValueParser from './value-parser'
 
 type ResolveImport = (id: string, basedir: string) => Promise<{ content: string; basedir: string }>
 
@@ -13,8 +14,14 @@ export async function substituteAtImports(
   walk(ast, (node) => {
     // Find @import rules and start resolving them
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
-      let id = node.selector.slice('@import "'.length, -1)
-      promises.set(key(id, basedir), resolveAtImport(id, basedir, resolveImport))
+      let { uri } = parseImportParams(ValueParser.parse(node.selector.slice(8)))
+
+      // Skip `@import`ing data URIs
+      if (uri.startsWith('data:')) {
+        return
+      }
+
+      promises.set(key(uri, basedir), resolveAtImport(uri, basedir, resolveImport))
     }
   })
 
@@ -26,10 +33,12 @@ export async function substituteAtImports(
   walk(ast, (node, { replaceWith }) => {
     // Replace all @import rules
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
-      let id = node.selector.slice('@import "'.length, -1)
-      let result = unwrapped.get(key(id, basedir))
-      if (result) {
-        replaceWith(result)
+      let { uri, layer, media, supports } = parseImportParams(
+        ValueParser.parse(node.selector.slice(8)),
+      )
+      let importedAst = unwrapped.get(key(uri, basedir))
+      if (importedAst) {
+        replaceWith(buildImportNodes(importedAst, layer, media, supports))
         return WalkAction.Skip
       }
     }
@@ -49,4 +58,87 @@ async function resolveAtImport(
 
 function key(id: string, basedir: string): string {
   return `${id}:${basedir}`
+}
+
+// c.f. https://github.com/postcss/postcss-import/blob/master/lib/parse-statements.js
+function parseImportParams(params: ValueParser.ValueAstNode[]) {
+  let uri
+  let layer: string | null = null
+  let media: string | null = null
+  let supports: string | null = null
+
+  for (let i = 0; i < params.length; i++) {
+    const node = params[i]
+
+    if (node.kind === 'separator') continue
+
+    if (node.kind === 'word' && !uri) {
+      if (!node.value) throw new Error(`Unable to find uri`)
+      if (node.value[0] !== '"' && node.value[0] !== "'") throw new Error('Unable to find uri')
+
+      uri = node.value.slice(1, -1)
+      continue
+    }
+
+    if (node.kind === 'function' && /^url$/i.test(node.value)) {
+      if (uri) throw new Error("Multiple url's")
+      if (!node.nodes?.[0]?.value) throw new Error('Unable to find uri')
+      if (node.nodes[0].value[0] !== '"' && node.nodes[0].value[0] !== "'")
+        throw new Error('Unable to find uri')
+
+      uri = node.nodes[0].value.slice(1, -1)
+      continue
+    }
+
+    if (!uri) throw new Error('Unable to find uri')
+
+    if ((node.kind === 'word' || node.kind === 'function') && /^layer$/i.test(node.value)) {
+      if (layer) throw new Error('Multiple layers')
+      if (supports) throw new Error('layers must be defined before support conditions')
+
+      if ('nodes' in node) {
+        layer = ValueParser.toCss(node.nodes)
+      } else {
+        layer = ''
+      }
+
+      continue
+    }
+
+    if (node.kind === 'function' && /^supports$/i.test(node.value)) {
+      if (supports) throw new Error('Multiple support conditions')
+      supports = ValueParser.toCss(node.nodes)
+      continue
+    }
+
+    media = ValueParser.toCss(params.slice(i))
+    break
+  }
+
+  if (!uri) throw new Error('Unable to find uri')
+
+  return { uri, layer, media, supports }
+}
+
+function buildImportNodes(
+  importedAst: AstNode[],
+  layer: string | null,
+  media: string | null,
+  supports: string | null,
+): AstNode[] {
+  let root = importedAst
+
+  if (layer !== null) {
+    root = [rule('@layer ' + layer, root)]
+  }
+
+  if (media !== null) {
+    root = [rule('@media ' + media, root)]
+  }
+
+  if (supports !== null) {
+    root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
+  }
+
+  return root
 }

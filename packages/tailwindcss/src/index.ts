@@ -60,7 +60,9 @@ async function parseCss(
 ) {
   let ast = CSS.parse(css)
 
-  await substituteAtImports(ast, basedir, resolveImport)
+  if (css.includes('@import')) {
+    await substituteAtImports(ast, basedir, resolveImport)
+  }
 
   // Find all `@theme` declarations
   let theme = new Theme()
