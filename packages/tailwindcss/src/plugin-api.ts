@@ -365,7 +365,7 @@ export async function applyCompatibilityHooks(
   // Override `resolveThemeValue` with a version that is backwards compatible
   // with dot notation paths like `colors.red.500`. We could do this by default
   // in `resolveThemeValue` but handling it here keeps all backwards
-  // compatibility concerns localized to our compatability layer.
+  // compatibility concerns localized to our compatibility layer.
   let resolveThemeVariableValue = designSystem.resolveThemeValue
 
   designSystem.resolveThemeValue = function resolveThemeValue(path: string) {
