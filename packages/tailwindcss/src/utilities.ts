@@ -1,6 +1,6 @@
 import { decl, rule, type AstNode, type Rule } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
-import type { ColorThemeKey, Theme, ThemeKey } from './theme'
+import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
@@ -161,7 +161,7 @@ export function withNegative(
  * The values `inherit`, `transparent` and `current` are special-cased as they
  * are universal and don't need to be resolved from the theme.
  */
-function resolveThemeColor<T extends ColorThemeKey>(
+function resolveThemeColor<T extends ThemeKey>(
   candidate: Extract<Candidate, { kind: 'functional' }>,
   theme: Theme,
   themeKeys: T[],
@@ -324,7 +324,7 @@ export function createUtilities(theme: Theme) {
   }
 
   type ColorUtilityDescription = {
-    themeKeys: ColorThemeKey[]
+    themeKeys: ThemeKey[]
     handle: (value: string) => AstNode[] | undefined
   }
 
