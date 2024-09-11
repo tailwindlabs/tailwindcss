@@ -63,7 +63,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFi
     {
       let fontFamily = resolveThemeValue(theme.fontFamily.mono)
       if (fontFamily && designSystem.theme.hasDefault('--font-family-mono')) {
-        designSystem.theme.add('--default-mono-font-family', 'theme(fontFamily.mono)', options)
+        designSystem.theme.add('--default-mono-font-family', fontFamily, options)
         designSystem.theme.add(
           '--default-mono-font-feature-settings',
           resolveThemeValue(theme.fontFamily.mono, 'fontFeatureSettings') ?? 'normal',

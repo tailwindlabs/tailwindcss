@@ -1,17 +1,21 @@
 import { substituteAtApply } from './apply'
 import { decl, rule, type AstNode } from './ast'
-import type { Candidate, NamedUtilityValue } from './candidate'
+import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import { applyConfigToTheme } from './compat/apply-config-to-theme'
 import { createCompatConfig } from './compat/config/create-compat-config'
-import { resolveConfig, type ConfigFile } from './compat/config/resolve-config'
+import { resolveConfig } from './compat/config/resolve-config'
 import type { ResolvedConfig, UserConfig } from './compat/config/types'
 import { darkModePlugin } from './compat/dark-mode'
 import { createThemeFn } from './compat/plugin-functions'
+import { substituteFunctions } from './css-functions'
+import * as CSS from './css-parser'
 import type { DesignSystem } from './design-system'
+import type { Theme, ThemeKey } from './theme'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
+import { substituteAtSlot } from './variants'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -25,7 +29,19 @@ export type Plugin = PluginFn | PluginWithConfig | PluginWithOptions<any>
 
 export type PluginAPI = {
   addBase(base: CssInJs): void
+
   addVariant(name: string, variant: string | string[] | CssInJs): void
+  matchVariant<T = string>(
+    name: string,
+    cb: (value: T | string, extra: { modifier: string | null }) => string | string[],
+    options?: {
+      values?: Record<string, T>
+      sort?(
+        a: { value: T | string; modifier: string | null },
+        b: { value: T | string; modifier: string | null },
+      ): number
+    },
+  ): void
 
   addUtilities(
     utilities: Record<string, CssInJs | CssInJs[]> | Record<string, CssInJs | CssInJs[]>[],
@@ -73,21 +89,16 @@ function buildPluginApi(
 ): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
-      ast.push(rule('@layer base', objectToAst(css)))
+      let baseNodes = objectToAst(css)
+      substituteFunctions(baseNodes, api.theme)
+      ast.push(rule('@layer base', baseNodes))
     },
 
     addVariant(name, variant) {
-      // Single selector
-      if (typeof variant === 'string') {
+      // Single selector or multiple parallel selectors
+      if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(name, (r) => {
-          r.nodes = [rule(variant, r.nodes)]
-        })
-      }
-
-      // Multiple parallel selectors
-      else if (Array.isArray(variant)) {
-        designSystem.variants.static(name, (r) => {
-          r.nodes = variant.map((selector) => rule(selector, r.nodes))
+          r.nodes = parseVariantValue(variant, r.nodes)
         })
       }
 
@@ -95,6 +106,71 @@ function buildPluginApi(
       else if (typeof variant === 'object') {
         designSystem.variants.fromAst(name, objectToAst(variant))
       }
+    },
+    matchVariant(name, fn, options) {
+      function resolveVariantValue<T extends Parameters<typeof fn>[0]>(
+        value: T,
+        modifier: CandidateModifier | null,
+        nodes: AstNode[],
+      ): AstNode[] {
+        let resolved = fn(value, { modifier: modifier?.value ?? null })
+        return parseVariantValue(resolved, nodes)
+      }
+
+      let defaultOptionKeys = Object.keys(options?.values ?? {})
+      designSystem.variants.group(
+        () => {
+          designSystem.variants.functional(name, (ruleNodes, variant) => {
+            if (!variant.value || variant.modifier) {
+              if (options?.values && 'DEFAULT' in options.values) {
+                ruleNodes.nodes = resolveVariantValue(options.values.DEFAULT, null, ruleNodes.nodes)
+                return
+              }
+              return null
+            }
+
+            if (variant.value.kind === 'arbitrary') {
+              ruleNodes.nodes = resolveVariantValue(
+                variant.value.value,
+                variant.modifier,
+                ruleNodes.nodes,
+              )
+            } else if (variant.value.kind === 'named' && options?.values) {
+              let defaultValue = options.values[variant.value.value]
+              if (typeof defaultValue !== 'string') {
+                return
+              }
+
+              ruleNodes.nodes = resolveVariantValue(defaultValue, null, ruleNodes.nodes)
+            }
+          })
+        },
+        (a, z) => {
+          // Since we only define a functional variant in the group, the `kind`
+          // has to be `functional`.
+          if (a.kind !== 'functional' || z.kind !== 'functional') {
+            return 0
+          }
+          if (!a.value || !z.value) {
+            return 0
+          }
+
+          if (options && typeof options.sort === 'function') {
+            let aValue = options.values?.[a.value.value] ?? a.value.value
+            let zValue = options.values?.[z.value.value] ?? z.value.value
+
+            return options.sort(
+              { value: aValue, modifier: a.modifier?.value ?? null },
+              { value: zValue, modifier: z.modifier?.value ?? null },
+            )
+          }
+
+          let aOrder = defaultOptionKeys.indexOf(a.value.value)
+          let zOrder = defaultOptionKeys.indexOf(z.value.value)
+
+          return aOrder - zOrder
+        },
+      )
     },
 
     addUtilities(utilities) {
@@ -346,22 +422,88 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   return ast
 }
 
+function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNode[] {
+  let resolvedArray = typeof resolved === 'string' ? [resolved] : resolved
+  return resolvedArray.flatMap((r) => {
+    if (r.trim().endsWith('}')) {
+      let updatedCSS = r.replace('}', '{@slot}}')
+      let ast = CSS.parse(updatedCSS)
+      substituteAtSlot(ast, nodes)
+      return ast
+    } else {
+      return rule(r, nodes)
+    }
+  })
+}
+
 type Primitive = string | number | boolean | null
 export type CssPluginOptions = Record<string, Primitive | Primitive[]>
 
-interface PluginDetail {
-  path: string
-  plugin: Plugin
-  options: CssPluginOptions | null
-}
+export async function applyCompatibilityHooks({
+  designSystem,
+  ast,
+  pluginPaths,
+  loadPlugin,
+  configPaths,
+  loadConfig,
+  globs,
+}: {
+  designSystem: DesignSystem
+  ast: AstNode[]
+  pluginPaths: [string, CssPluginOptions | null][]
+  loadPlugin: (path: string) => Promise<Plugin>
+  configPaths: string[]
+  loadConfig: (path: string) => Promise<UserConfig>
+  globs: { origin?: string; pattern: string }[]
+}) {
+  // Override `resolveThemeValue` with a version that is backwards compatible
+  // with dot notation paths like `colors.red.500`. We could do this by default
+  // in `resolveThemeValue` but handling it here keeps all backwards
+  // compatibility concerns localized to our compatibility layer.
+  let resolveThemeVariableValue = designSystem.resolveThemeValue
 
-export function registerPlugins(
-  pluginDetails: PluginDetail[],
-  designSystem: DesignSystem,
-  ast: AstNode[],
-  configs: ConfigFile[],
-  globs: { origin?: string; pattern: string }[],
-) {
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string) {
+    if (path.startsWith('--')) {
+      return resolveThemeVariableValue(path)
+    }
+
+    // Extract an eventual modifier from the path. e.g.:
+    // - "colors.red.500 / 50%" -> "50%"
+    let lastSlash = path.lastIndexOf('/')
+    let modifier: string | null = null
+    if (lastSlash !== -1) {
+      modifier = path.slice(lastSlash + 1).trim()
+      path = path.slice(0, lastSlash).trim() as ThemeKey
+    }
+
+    let themeValue = lookupThemeValue(designSystem.theme, path)
+
+    // Apply the opacity modifier if present
+    if (modifier && themeValue) {
+      return withAlpha(themeValue, modifier)
+    }
+
+    return themeValue
+  }
+
+  // If there are no plugins or configs registered, we don't need to register
+  // any additional backwards compatibility hooks.
+  if (!pluginPaths.length && !configPaths.length) return
+
+  let configs = await Promise.all(
+    configPaths.map(async (configPath) => ({
+      path: configPath,
+      config: await loadConfig(configPath),
+    })),
+  )
+  let pluginDetails = await Promise.all(
+    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
+      path: pluginPath,
+      plugin: await loadPlugin(pluginPath),
+      options: pluginOptions,
+    })),
+  )
+
   let plugins = pluginDetails.map((detail) => {
     if (!detail.options) {
       return detail.plugin
@@ -393,8 +535,27 @@ export function registerPlugins(
   // core utilities already read from.
   applyConfigToTheme(designSystem, userConfig)
 
+  // Replace `resolveThemeValue` with a version that is backwards compatible
+  // with dot-notation but also aware of any JS theme configurations registered
+  // by plugins or JS config files. This is significantly slower than just
+  // upgrading dot-notation keys so we only use this version if plugins or
+  // config files are actually being used. In the future we may want to optimize
+  // this further by only doing this if plugins or config files _actually_
+  // registered JS config objects.
   designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
-    return pluginApi.theme(path, defaultValue)
+    let resolvedValue = pluginApi.theme(path, defaultValue)
+
+    if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
+      // When a tuple is returned, return the first element
+      return resolvedValue[0]
+    } else if (Array.isArray(resolvedValue)) {
+      // Arrays get serialized into a comma-separated lists
+      return resolvedValue.join(', ')
+    } else if (typeof resolvedValue === 'string') {
+      // Otherwise only allow string values here, objects (and namespace maps)
+      // are treated as non-resolved values for the CSS `theme()` function.
+      return resolvedValue
+    }
   }
 
   for (let file of resolvedConfig.content.files) {
@@ -406,4 +567,100 @@ export function registerPlugins(
 
     globs.push({ origin: file.base, pattern: file.pattern })
   }
+}
+
+function toThemeKey(keypath: string[]) {
+  return (
+    keypath
+      // [1] should move into the nested object tuple. To create the CSS variable
+      // name for this, we replace it with an empty string that will result in two
+      // subsequent dashes when joined.
+      .map((path) => (path === '1' ? '' : path))
+
+      // Resolve the key path to a CSS variable segment
+      .map((part) =>
+        part
+          .replaceAll('.', '_')
+          .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
+      )
+
+      // Remove the `DEFAULT` key at the end of a path
+      // We're reading from CSS anyway so it'll be a string
+      .filter((part, index) => part !== 'DEFAULT' || index !== keypath.length - 1)
+      .join('-')
+  )
+}
+
+function lookupThemeValue(theme: Theme, path: string) {
+  let baseThemeKey = '--' + toThemeKey(toKeyPath(path))
+
+  let resolvedValue = theme.get([baseThemeKey as ThemeKey])
+
+  if (resolvedValue !== null) {
+    return resolvedValue
+  }
+
+  for (let [givenKey, upgradeKey] of Object.entries(themeUpgradeKeys)) {
+    if (!baseThemeKey.startsWith(givenKey)) continue
+
+    let upgradedKey = upgradeKey + baseThemeKey.slice(givenKey.length)
+    let resolvedValue = theme.get([upgradedKey as ThemeKey])
+
+    if (resolvedValue !== null) {
+      return resolvedValue
+    }
+  }
+}
+
+let themeUpgradeKeys = {
+  '--colors': '--color',
+  '--accent-color': '--color',
+  '--backdrop-blur': '--blur',
+  '--backdrop-brightness': '--brightness',
+  '--backdrop-contrast': '--contrast',
+  '--backdrop-grayscale': '--grayscale',
+  '--backdrop-hue-rotate': '--hueRotate',
+  '--backdrop-invert': '--invert',
+  '--backdrop-opacity': '--opacity',
+  '--backdrop-saturate': '--saturate',
+  '--backdrop-sepia': '--sepia',
+  '--background-color': '--color',
+  '--background-opacity': '--opacity',
+  '--border-color': '--color',
+  '--border-opacity': '--opacity',
+  '--border-spacing': '--spacing',
+  '--box-shadow-color': '--color',
+  '--caret-color': '--color',
+  '--divide-color': '--borderColor',
+  '--divide-opacity': '--borderOpacity',
+  '--divide-width': '--borderWidth',
+  '--fill': '--color',
+  '--flex-basis': '--spacing',
+  '--gap': '--spacing',
+  '--gradient-color-stops': '--color',
+  '--height': '--spacing',
+  '--inset': '--spacing',
+  '--margin': '--spacing',
+  '--max-height': '--spacing',
+  '--max-width': '--spacing',
+  '--min-height': '--spacing',
+  '--min-width': '--spacing',
+  '--outline-color': '--color',
+  '--padding': '--spacing',
+  '--placeholder-color': '--color',
+  '--placeholder-opacity': '--opacity',
+  '--ring-color': '--color',
+  '--ring-offset-color': '--color',
+  '--ring-opacity': '--opacity',
+  '--scroll-margin': '--spacing',
+  '--scroll-padding': '--spacing',
+  '--space': '--spacing',
+  '--stroke': '--color',
+  '--text-color': '--color',
+  '--text-decoration-color': '--color',
+  '--text-indent': '--spacing',
+  '--text-opacity': '--opacity',
+  '--translate': '--spacing',
+  '--size': '--spacing',
+  '--width': '--spacing',
 }

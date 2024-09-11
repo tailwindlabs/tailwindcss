@@ -1157,6 +1157,1008 @@ describe('theme', async () => {
   })
 })
 
+describe('addVariant', () => {
+  test('addVariant with string selector', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant('hocus', '&:hover, &:focus')
+          }
+        },
+      },
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          display: flex;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with array of selectors', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant('hocus', ['&:hover', '&:focus'])
+          }
+        },
+      },
+    )
+
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with object syntax and @slot', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant('hocus', {
+              '&:hover': '@slot',
+              '&:focus': '@slot',
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant('hocus', {
+              '@media (hover: hover)': {
+                '&:hover': '@slot',
+              },
+              '&:focus': '@slot',
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (hover: hover) {
+          .group-hocus\\:flex:is(:where(.group):hover *) {
+            display: flex;
+          }
+        }
+
+        .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        @media (hover: hover) {
+          .hocus\\:underline:hover {
+            text-decoration-line: underline;
+          }
+        }
+
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with at-rules and placeholder', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant(
+              'potato',
+              '@media (max-width: 400px) { @supports (font:bold) { &:large-potato } }',
+            )
+          }
+        },
+      },
+    )
+    let compiled = build(['potato:underline', 'potato:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width <= 400px) {
+          @supports (font: bold) {
+            .potato\\:flex:large-potato {
+              display: flex;
+            }
+          }
+        }
+
+        @media (width <= 400px) {
+          @supports (font: bold) {
+            .potato\\:underline:large-potato {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('@slot is preserved when used as a custom property value', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ addVariant }: PluginAPI) => {
+            addVariant('hocus', {
+              '&': {
+                '--custom-property': '@slot',
+                '&:hover': '@slot',
+                '&:focus': '@slot',
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['hocus:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .hocus\\:underline {
+          --custom-property: @slot;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+})
+
+describe('matchVariant', () => {
+  test('partial arbitrary variants', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('potato', (flavor) => `.potato-${flavor} &`)
+          }
+        },
+      },
+    )
+    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .potato-yellow .potato-\\[yellow\\]\\:underline {
+          text-decoration-line: underline;
+        }
+
+        .potato-baked .potato-\\[baked\\]\\:flex {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('partial arbitrary variants with at-rules', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('potato', (flavor) => `@media (potato: ${flavor})`)
+          }
+        },
+      },
+    )
+    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (potato: yellow) {
+          .potato-\\[yellow\\]\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+
+        @media (potato: baked) {
+          .potato-\\[baked\\]\\:flex {
+            display: flex;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('partial arbitrary variants with at-rules and placeholder', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant(
+              'potato',
+              (flavor) => `@media (potato: ${flavor}) { @supports (font:bold) { &:large-potato } }`,
+            )
+          }
+        },
+      },
+    )
+    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (potato: yellow) {
+          @supports (font: bold) {
+            .potato-\\[yellow\\]\\:underline:large-potato {
+              text-decoration-line: underline;
+            }
+          }
+        }
+
+        @media (potato: baked) {
+          @supports (font: bold) {
+            .potato-\\[baked\\]\\:flex:large-potato {
+              display: flex;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('partial arbitrary variants with default values', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('tooltip', (side) => `&${side}`, {
+              values: {
+                bottom: '[data-location="bottom"]',
+                top: '[data-location="top"]',
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['tooltip-bottom:underline', 'tooltip-top:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .tooltip-bottom\\:underline[data-location="bottom"] {
+          text-decoration-line: underline;
+        }
+
+        .tooltip-top\\:flex[data-location="top"] {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('matched variant values maintain the sort order they are registered in', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('alphabet', (side) => `&${side}`, {
+              values: {
+                a: '[data-value="a"]',
+                b: '[data-value="b"]',
+                c: '[data-value="c"]',
+                d: '[data-value="d"]',
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'alphabet-c:underline',
+      'alphabet-a:underline',
+      'alphabet-d:underline',
+      'alphabet-b:underline',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .alphabet-a\\:underline[data-value="a"] {
+          text-decoration-line: underline;
+        }
+
+        .alphabet-b\\:underline[data-value="b"] {
+          text-decoration-line: underline;
+        }
+
+        .alphabet-c\\:underline[data-value="c"] {
+          text-decoration-line: underline;
+        }
+
+        .alphabet-d\\:underline[data-value="d"] {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('matchVariant can return an array of format strings from the function', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('test', (selector) =>
+              selector.split(',').map((selector) => `&.${selector} > *`),
+            )
+          }
+        },
+      },
+    )
+    let compiled = build(['test-[a,b,c]:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .test-\\[a\\,b\\,c\\]\\:underline.a > *, .test-\\[a\\,b\\,c\\]\\:underline.b > *, .test-\\[a\\,b\\,c\\]\\:underline.c > * {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('should be possible to sort variants', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmin-[600px]:flex',
+      'testmin-[500px]:underline',
+      'testmin-[700px]:italic',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 500px) {
+          .testmin-\\[500px\\]\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+
+        @media (width >= 600px) {
+          .testmin-\\[600px\\]\\:flex {
+            display: flex;
+          }
+        }
+
+        @media (width >= 700px) {
+          .testmin-\\[700px\\]\\:italic {
+            font-style: italic;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should be possible to compare arbitrary variants and hardcoded variants', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              values: {
+                example: '600px',
+              },
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmin-[700px]:italic',
+      'testmin-example:italic',
+      'testmin-[500px]:italic',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 500px) {
+          .testmin-\\[500px\\]\\:italic {
+            font-style: italic;
+          }
+        }
+
+        @media (width >= 600px) {
+          .testmin-example\\:italic {
+            font-style: italic;
+          }
+        }
+
+        @media (width >= 700px) {
+          .testmin-\\[700px\\]\\:italic {
+            font-style: italic;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should be possible to sort stacked arbitrary variants correctly', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+
+            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(z.value) - parseInt(a.value)
+              },
+            })
+          }
+        },
+      },
+    )
+
+    let compiled = build([
+      'testmin-[150px]:testmax-[400px]:order-2',
+      'testmin-[100px]:testmax-[350px]:order-3',
+      'testmin-[100px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 100px) {
+          @media (width <= 400px) {
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
+            }
+          }
+        }
+
+        @media (width >= 150px) {
+          @media (width <= 400px) {
+            .testmin-\\[150px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 350px) {
+            .testmin-\\[100px\\]\\:testmax-\\[350px\\]\\:order-3 {
+              order: 3;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should maintain sort from other variants, if sort functions of arbitrary variants return 0', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+
+            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(z.value) - parseInt(a.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmin-[100px]:testmax-[200px]:focus:underline',
+      'testmin-[100px]:testmax-[200px]:hover:underline',
+    ])
+
+    // Expect :focus to come after :hover
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 100px) {
+          @media (width <= 200px) {
+            .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:hover\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 200px) {
+            .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:focus\\:underline:focus {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should sort arbitrary variants left to right (1)', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(z.value) - parseInt(a.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmin-[200px]:testmax-[400px]:order-2',
+      'testmin-[200px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
+      'testmin-[100px]:testmax-[300px]:order-3',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 100px) {
+          @media (width <= 400px) {
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
+            }
+          }
+        }
+
+        @media (width >= 200px) {
+          @media (width <= 400px) {
+            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
+              order: 3;
+            }
+          }
+        }
+
+        @media (width >= 200px) {
+          @media (width <= 300px) {
+            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should sort arbitrary variants left to right (2)', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(a.value) - parseInt(z.value)
+              },
+            })
+            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+              sort(a, z) {
+                return parseInt(z.value) - parseInt(a.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmax-[400px]:testmin-[200px]:underline',
+      'testmax-[300px]:testmin-[200px]:underline',
+      'testmax-[400px]:testmin-[100px]:underline',
+      'testmax-[300px]:testmin-[100px]:underline',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width <= 400px) {
+          @media (width >= 100px) {
+            .testmax-\\[400px\\]\\:testmin-\\[100px\\]\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+
+        @media (width <= 400px) {
+          @media (width >= 200px) {
+            .testmax-\\[400px\\]\\:testmin-\\[200px\\]\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+
+        @media (width <= 300px) {
+          @media (width >= 100px) {
+            .testmax-\\[300px\\]\\:testmin-\\[100px\\]\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+
+        @media (width <= 300px) {
+          @media (width >= 200px) {
+            .testmax-\\[300px\\]\\:testmin-\\[200px\\]\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should guarantee that we are not passing values from other variants to the wrong function', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+              sort(a, z) {
+                let lookup = ['100px', '200px']
+                if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
+                  throw new Error('We are seeing values that should not be there!')
+                }
+                return lookup.indexOf(a.value) - lookup.indexOf(z.value)
+              },
+            })
+            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+              sort(a, z) {
+                let lookup = ['300px', '400px']
+                if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
+                  throw new Error('We are seeing values that should not be there!')
+                }
+                return lookup.indexOf(z.value) - lookup.indexOf(a.value)
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'testmin-[200px]:testmax-[400px]:order-2',
+      'testmin-[200px]:testmax-[300px]:order-4',
+      'testmin-[100px]:testmax-[400px]:order-1',
+      'testmin-[100px]:testmax-[300px]:order-3',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (width >= 100px) {
+          @media (width <= 400px) {
+            .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
+              order: 1;
+            }
+          }
+        }
+
+        @media (width >= 200px) {
+          @media (width <= 400px) {
+            .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
+              order: 2;
+            }
+          }
+        }
+
+        @media (width >= 100px) {
+          @media (width <= 300px) {
+            .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
+              order: 3;
+            }
+          }
+        }
+
+        @media (width >= 200px) {
+          @media (width <= 300px) {
+            .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
+              order: 4;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
+  test('should default to the DEFAULT value for variants', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('foo', (value) => `.foo${value} &`, {
+              values: {
+                DEFAULT: '.bar',
+              },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['foo:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo.bar .foo\\:underline {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('should not generate anything if the matchVariant does not have a DEFAULT value configured', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('foo', (value) => `.foo${value} &`)
+          }
+        },
+      },
+    )
+    let compiled = build(['foo:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+  })
+
+  test('should be possible to use `null` as a DEFAULT value', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('foo', (value) => `.foo${value === null ? '-good' : '-bad'} &`, {
+              values: { DEFAULT: null },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['foo:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-good .foo\\:underline {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('should be possible to use `undefined` as a DEFAULT value', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: async () => {
+          return ({ matchVariant }: PluginAPI) => {
+            matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
+              values: { DEFAULT: undefined },
+            })
+          }
+        },
+      },
+    )
+    let compiled = build(['foo:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-good .foo\\:underline {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+})
+
 describe('addUtilities()', () => {
   test('custom static utility', async () => {
     let compiled = await compile(

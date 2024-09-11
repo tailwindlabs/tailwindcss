@@ -572,7 +572,15 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         }
 
         case 'functional': {
-          if (value === null) return null
+          if (value === null) {
+            return {
+              kind: 'functional',
+              root,
+              modifier: modifier === null ? null : parseModifier(modifier),
+              value: null,
+              compounds: designSystem.variants.compounds(root),
+            }
+          }
 
           if (value[0] === '[' && value[value.length - 1] === ']') {
             return {
