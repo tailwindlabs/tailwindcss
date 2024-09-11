@@ -50,7 +50,7 @@
   "devDependencies": {
     "@playwright/test": "^1.46.0",
     "@types/node": "catalog:",
-    "postcss": "8.4.41",
+    "postcss": "8.4.45",
     "postcss-import": "^16.1.0",
     "prettier": "^3.3.3",
     "prettier-plugin-embed": "^0.4.15",
