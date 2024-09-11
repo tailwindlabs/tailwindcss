@@ -310,7 +310,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks(
+  await applyCompatibilityHooks({
     designSystem,
     ast,
     pluginPaths,
@@ -318,7 +318,7 @@ async function parseCss(
     configPaths,
     loadConfig,
     globs,
-  )
+  })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)

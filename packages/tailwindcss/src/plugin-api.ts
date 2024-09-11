@@ -353,15 +353,23 @@ function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
 type Primitive = string | number | boolean | null
 export type CssPluginOptions = Record<string, Primitive | Primitive[]>
 
-export async function applyCompatibilityHooks(
-  designSystem: DesignSystem,
-  ast: AstNode[],
-  pluginPaths: [string, CssPluginOptions | null][],
-  loadPlugin: (path: string) => Promise<Plugin>,
-  configPaths: string[],
-  loadConfig: (path: string) => Promise<UserConfig>,
-  globs: { origin?: string; pattern: string }[],
-) {
+export async function applyCompatibilityHooks({
+  designSystem,
+  ast,
+  pluginPaths,
+  loadPlugin,
+  configPaths,
+  loadConfig,
+  globs,
+}: {
+  designSystem: DesignSystem
+  ast: AstNode[]
+  pluginPaths: [string, CssPluginOptions | null][]
+  loadPlugin: (path: string) => Promise<Plugin>
+  configPaths: string[]
+  loadConfig: (path: string) => Promise<UserConfig>
+  globs: { origin?: string; pattern: string }[]
+}) {
   // Override `resolveThemeValue` with a version that is backwards compatible
   // with dot notation paths like `colors.red.500`. We could do this by default
   // in `resolveThemeValue` but handling it here keeps all backwards
