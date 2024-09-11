@@ -1,4 +1,4 @@
-const mathFunctions = [
+const MATH_FUNCTIONS = [
   'calc',
   'min',
   'max',
@@ -21,7 +21,7 @@ const mathFunctions = [
 ]
 
 export function hasMathFn(input: string) {
-  return input.indexOf('(') !== -1 && mathFunctions.some((fn) => input.includes(`${fn}(`))
+  return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
 }
 
 export function addWhitespaceAroundMathOperators(input: string) {
@@ -31,7 +31,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
   }
 
   // Bail early if there are no math functions in the input
-  if (!mathFunctions.some((fn) => input.includes(fn))) {
+  if (!MATH_FUNCTIONS.some((fn) => input.includes(fn))) {
     return input
   }
 
@@ -64,7 +64,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
       let fn = input.slice(start, i)
 
       // This is a known math function so start formatting
-      if (mathFunctions.includes(fn)) {
+      if (MATH_FUNCTIONS.includes(fn)) {
         formattable.unshift(true)
         continue
       }
