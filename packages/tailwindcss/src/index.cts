@@ -1,4 +1,4 @@
-import tailwindcss from './index.ts'
+import * as tailwindcss from './index.ts'
 
 // This file exists so that `index.ts` can be written one time but be
 // compatible with both CJS and ESM. Without it we get a `.default` export when
