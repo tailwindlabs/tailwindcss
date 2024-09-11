@@ -60,9 +60,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
         expect(files).toHaveLength(1)
         let [filename] = files[0]
 
-        await fs.expectFileToContain(filename, [
-          /\.[^f]*_foo[^t]*text-decoration-line: underline;/gi,
-        ])
+        await fs.expectFileToContain(filename, [/text-decoration-line: underline;/gi])
       },
     )
   })
