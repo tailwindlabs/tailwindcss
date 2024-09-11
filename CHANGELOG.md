@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.24] - 2024-09-11
+
 ### Added
 
-- Support CSS `theme()` functions inside other `@custom-media`, `@container`, and `@supports` rules ([#14358])(https://github.com/tailwindlabs/tailwindcss/pull/14358)
-- Export `Config` type from `tailwindcss` for JS config files ([#14360])(https://github.com/tailwindlabs/tailwindcss/pull/14360)
+- Support CSS `theme()` functions inside other `@custom-media`, `@container`, and `@supports` rules ([#14358](https://github.com/tailwindlabs/tailwindcss/pull/14358))
+- Export `Config` type from `tailwindcss` for JS config files ([#14360](https://github.com/tailwindlabs/tailwindcss/pull/14360))
 - Add support for `matchVariant` plugins using the `@plugin` directive ([#14371](https://github.com/tailwindlabs/tailwindcss/pull/14371))
 
 ### Fixed
