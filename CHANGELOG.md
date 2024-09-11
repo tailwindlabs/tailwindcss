@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.11] - 2024-09-11
+
 ### Fixed
 
 - Allow `anchor-size(…)` in arbitrary values ([#14393](https://github.com/tailwindlabs/tailwindcss/pull/14393))
@@ -2433,7 +2437,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...HEAD
+[3.4.11]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...v3.4.11
 [3.4.10]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.9...v3.4.10
 [3.4.9]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...v3.4.9
 [3.4.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...v3.4.8
