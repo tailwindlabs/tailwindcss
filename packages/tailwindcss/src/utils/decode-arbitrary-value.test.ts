@@ -93,6 +93,7 @@ describe('adds spaces around math operators', () => {
       'radial-gradient(calc(1+2)),radial-gradient(calc(1+2))',
       'radial-gradient(calc(1 + 2)),radial-gradient(calc(1 + 2))',
     ],
+    ['w-[calc(anchor-size(width)+8px)]', 'w-[calc(anchor-size(width) + 8px)]'],
 
     [
       '[content-start]_calc(100%-1px)_[content-end]_minmax(1rem,1fr)',
