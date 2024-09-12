@@ -979,7 +979,7 @@ describe('default font family compatibility', () => {
   })
 })
 
-test('creates variants for `data`, `supports`, and `aria` theme options', async () => {
+test('creates variants for `data`, `supports`, and `aria` theme options at the same level as the core utility ', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -1008,6 +1008,14 @@ test('creates variants for `data`, `supports`, and `aria` theme options', async 
       'aria-polite:underline',
       'supports-child-combinator:underline',
       'data-checked:underline',
+
+      // Ensure core utility still works
+      'aria-hidden:flex',
+      'supports-grid:flex',
+      'data-foo:flex',
+
+      // print variants should be at the end, like it is in the core utility
+      'print:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".aria-polite\\:underline {
@@ -1015,14 +1023,34 @@ test('creates variants for `data`, `supports`, and `aria` theme options', async 
         text-decoration-line: underline;
       }
     }
-    .supports-child-combinator\\:underline {
-      @supports (h2 > p) {
-        text-decoration-line: underline;
+    .aria-hidden\\:flex {
+      &[aria-hidden="true"] {
+        display: flex;
       }
     }
     .data-checked\\:underline {
       &[data-ui~="checked"] {
         text-decoration-line: underline;
+      }
+    }
+    .data-foo\\:flex {
+      &[data-foo] {
+        display: flex;
+      }
+    }
+    .supports-child-combinator\\:underline {
+      @supports (h2 > p) {
+        text-decoration-line: underline;
+      }
+    }
+    .supports-grid\\:flex {
+      @supports (grid: var(--tw)) {
+        display: flex;
+      }
+    }
+    .print\\:flex {
+      @media print {
+        display: flex;
       }
     }
     "

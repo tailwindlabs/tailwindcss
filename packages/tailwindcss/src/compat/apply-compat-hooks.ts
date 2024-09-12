@@ -10,7 +10,7 @@ import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
 import { darkModePlugin } from './dark-mode'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
-import { themeVariantsPlugin } from './theme-variants'
+import { registerThemeVariantOverrides } from './theme-variants'
 
 export async function applyCompatibilityHooks({
   designSystem,
@@ -172,7 +172,7 @@ export async function applyCompatibilityHooks({
   let resolvedConfig = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme) },
     ...userConfig,
-    { config: { plugins: [darkModePlugin, themeVariantsPlugin] } },
+    { config: { plugins: [darkModePlugin] } },
   ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
@@ -185,6 +185,8 @@ export async function applyCompatibilityHooks({
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
   applyConfigToTheme(designSystem, userConfig)
+
+  registerThemeVariantOverrides(resolvedConfig, designSystem)
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
