@@ -96,6 +96,9 @@ let table = [
     '[content-start] calc(100% - 1px) [content-end] minmax(1rem,1fr)',
   ],
 
+  // Prevent formatting functions that are not math functions
+  ['w-[calc(anchor-size(width)+8px)]', 'w-[calc(anchor-size(width) + 8px)]'],
+
   // Misc
   ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
   ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
