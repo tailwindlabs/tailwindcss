@@ -287,12 +287,135 @@ test('content-none persists when conditionally styling a pseudo-element', async 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 })
 
+test('explicit leading utilities are respected when overriding font-size', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm leading-tight hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm leading-[10px] hover:text-xl">Hello world</div>
+    `,
+    css`
+      @theme {
+        --font-size-sm: 14px;
+        --font-size-sm--line-height: 16px;
+        --font-size-xl: 20px;
+        --font-size-xl--line-height: 24px;
+        --line-height-tight: 8px;
+      }
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'line-height')).toEqual('16px')
+  await page.locator('#x').hover()
+  expect(await getPropertyValue('#x', 'line-height')).toEqual('24px')
+
+  expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
+  await page.locator('#y').hover()
+  expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
+
+  expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
+  await page.locator('#z').hover()
+  expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
+})
+
+test('explicit leading utilities are overridden by line-height modifiers', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="x" class="text-sm hover:text-xl/[100px]">Hello world</div>
+      <div id="y" class="text-sm leading-tight hover:text-xl/[100px]">Hello world</div>
+      <div id="z" class="text-sm leading-[10px] hover:text-xl/[100px]">Hello world</div>
+    `,
+    css`
+      @theme {
+        --font-size-sm: 14px;
+        --font-size-sm--line-height: 16px;
+        --font-size-xl: 20px;
+        --font-size-xl--line-height: 24px;
+        --line-height-tight: 8px;
+      }
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'line-height')).toEqual('16px')
+  await page.locator('#x').hover()
+  expect(await getPropertyValue('#x', 'line-height')).toEqual('100px')
+
+  expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
+  await page.locator('#y').hover()
+  expect(await getPropertyValue('#y', 'line-height')).toEqual('100px')
+
+  expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
+  await page.locator('#z').hover()
+  expect(await getPropertyValue('#z', 'line-height')).toEqual('100px')
+})
+
+test('explicit tracking utilities are respected when overriding font-size', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm tracking-tight hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm tracking-[3px] hover:text-xl">Hello world</div>
+    `,
+    css`
+      @theme {
+        --font-size-sm--letter-spacing: 5px;
+        --font-size-xl--letter-spacing: 10px;
+        --letter-spacing-tight: 1px;
+      }
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'letter-spacing')).toEqual('5px')
+  await page.locator('#x').hover()
+  expect(await getPropertyValue('#x', 'letter-spacing')).toEqual('10px')
+
+  expect(await getPropertyValue('#y', 'letter-spacing')).toEqual('1px')
+  await page.locator('#y').hover()
+  expect(await getPropertyValue('#y', 'letter-spacing')).toEqual('1px')
+
+  expect(await getPropertyValue('#z', 'letter-spacing')).toEqual('3px')
+  await page.locator('#z').hover()
+  expect(await getPropertyValue('#z', 'letter-spacing')).toEqual('3px')
+})
+
+test('explicit font-weight utilities are respected when overriding font-size', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm font-bold hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm font-[900] hover:text-xl">Hello world</div>
+    `,
+    css`
+      @theme {
+        --font-size-sm--font-weight: 100;
+        --font-size-xl--font-weight: 200;
+      }
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'font-weight')).toEqual('100')
+  await page.locator('#x').hover()
+  expect(await getPropertyValue('#x', 'font-weight')).toEqual('200')
+
+  expect(await getPropertyValue('#y', 'font-weight')).toEqual('700')
+  await page.locator('#y').hover()
+  expect(await getPropertyValue('#y', 'font-weight')).toEqual('700')
+
+  expect(await getPropertyValue('#z', 'font-weight')).toEqual('900')
+  await page.locator('#z').hover()
+  expect(await getPropertyValue('#z', 'font-weight')).toEqual('900')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
-async function render(page: Page, content: string) {
+async function render(page: Page, content: string, extraCss: string = '') {
   let { build } = await compile(css`
     @layer theme, base, components, utilities;
     @layer theme {
@@ -304,6 +427,7 @@ async function render(page: Page, content: string) {
     @layer utilities {
       @tailwind utilities;
     }
+    ${extraCss}
   `)
 
   // We noticed that some of the tests depending on the `hover:` variant were

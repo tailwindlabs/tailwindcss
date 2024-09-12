@@ -26,7 +26,7 @@ export function rule(selector: string, nodes: AstNode[]): Rule {
   }
 }
 
-export function decl(property: string, value: string): Declaration {
+export function decl(property: string, value: string | undefined): Declaration {
   return {
     kind: 'declaration',
     property,
