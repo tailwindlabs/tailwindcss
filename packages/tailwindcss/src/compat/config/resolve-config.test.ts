@@ -1,9 +1,9 @@
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { buildDesignSystem } from '../../design-system'
 import { Theme } from '../../theme'
 import { resolveConfig } from './resolve-config'
 
-test('top level theme keys are replaced', ({ expect }) => {
+test('top level theme keys are replaced', () => {
   let design = buildDesignSystem(new Theme())
 
   let config = resolveConfig(design, [
@@ -52,7 +52,7 @@ test('top level theme keys are replaced', ({ expect }) => {
   })
 })
 
-test('theme can be extended', ({ expect }) => {
+test('theme can be extended', () => {
   let design = buildDesignSystem(new Theme())
 
   let config = resolveConfig(design, [
@@ -164,7 +164,7 @@ test('theme keys can reference other theme keys using the theme function regardl
   })
 })
 
-test('theme keys can read from the CSS theme', ({ expect }) => {
+test('theme keys can read from the CSS theme', () => {
   let theme = new Theme()
   theme.add('--color-green', 'green')
 

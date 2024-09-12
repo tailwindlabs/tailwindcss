@@ -1,10 +1,10 @@
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
 
 const css = String.raw
 
-test('plugin', async ({ expect }) => {
+test('plugin', async () => {
   let input = css`
     @plugin "my-plugin";
   `
@@ -31,7 +31,7 @@ test('plugin', async ({ expect }) => {
   `)
 })
 
-test('plugin.withOptions', async ({ expect }) => {
+test('plugin.withOptions', async () => {
   let input = css`
     @plugin "my-plugin";
   `

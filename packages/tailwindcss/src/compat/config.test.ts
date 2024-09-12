@@ -1,11 +1,11 @@
-import { describe, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
 import { flattenColorPalette } from './flatten-color-palette'
 
 const css = String.raw
 
-test('Config files can add content', async ({ expect }) => {
+test('Config files can add content', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -18,7 +18,7 @@ test('Config files can add content', async ({ expect }) => {
   expect(compiler.globs).toEqual([{ origin: './config.js', pattern: './file.txt' }])
 })
 
-test('Config files can change dark mode (media)', async ({ expect }) => {
+test('Config files can change dark mode (media)', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -38,7 +38,7 @@ test('Config files can change dark mode (media)', async ({ expect }) => {
   `)
 })
 
-test('Config files can change dark mode (selector)', async ({ expect }) => {
+test('Config files can change dark mode (selector)', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -58,7 +58,7 @@ test('Config files can change dark mode (selector)', async ({ expect }) => {
   `)
 })
 
-test('Config files can change dark mode (variant)', async ({ expect }) => {
+test('Config files can change dark mode (variant)', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -78,7 +78,7 @@ test('Config files can change dark mode (variant)', async ({ expect }) => {
   `)
 })
 
-test('Config files can add plugins', async ({ expect }) => {
+test('Config files can add plugins', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -106,7 +106,7 @@ test('Config files can add plugins', async ({ expect }) => {
   `)
 })
 
-test('Plugins loaded from config files can contribute to the config', async ({ expect }) => {
+test('Plugins loaded from config files can contribute to the config', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -132,7 +132,7 @@ test('Plugins loaded from config files can contribute to the config', async ({ e
   `)
 })
 
-test('Config file presets can contribute to the config', async ({ expect }) => {
+test('Config file presets can contribute to the config', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -158,7 +158,7 @@ test('Config file presets can contribute to the config', async ({ expect }) => {
   `)
 })
 
-test('Config files can affect the theme', async ({ expect }) => {
+test('Config files can affect the theme', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -197,7 +197,7 @@ test('Config files can affect the theme', async ({ expect }) => {
   `)
 })
 
-test('Variants in CSS overwrite variants from plugins', async ({ expect }) => {
+test('Variants in CSS overwrite variants from plugins', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
@@ -334,7 +334,7 @@ describe('theme callbacks', () => {
 })
 
 describe('theme overrides order', () => {
-  test('user theme > js config > default theme', async ({ expect }) => {
+  test('user theme > js config > default theme', async () => {
     let input = css`
       @theme default {
         --color-red: red;
@@ -373,7 +373,7 @@ describe('theme overrides order', () => {
     `)
   })
 
-  test('user theme > js config > default theme (with nested object)', async ({ expect }) => {
+  test('user theme > js config > default theme (with nested object)', async () => {
     let input = css`
       @theme default {
         --color-slate-100: #000100;
@@ -498,7 +498,7 @@ describe('theme overrides order', () => {
 })
 
 describe('default font family compatibility', () => {
-  test('overriding `fontFamily.sans` sets `--default-font-family`', async ({ expect }) => {
+  test('overriding `fontFamily.sans` sets `--default-font-family`', async () => {
     let input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
@@ -756,7 +756,7 @@ describe('default font family compatibility', () => {
     `)
   })
 
-  test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async ({ expect }) => {
+  test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
     let input = css`
       @theme default {
         --default-mono-font-family: var(--font-family-mono);
@@ -977,4 +977,54 @@ describe('default font family compatibility', () => {
       "
     `)
   })
+})
+
+test.only('creates variants for `data`, `supports`, and `aria` theme options', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+  `
+
+  let compiler = await compile(input, {
+    loadConfig: async () => ({
+      theme: {
+        extend: {
+          aria: {
+            polite: 'live="polite"',
+          },
+          supports: {
+            'child-combinator': 'h2 > p',
+          },
+          data: {
+            checked: 'ui~="checked"',
+          },
+        },
+      },
+    }),
+  })
+
+  expect(
+    compiler.build([
+      'aria-polite:underline',
+      'supports-child-combinator:underline',
+      'data-checked:underline',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".aria-polite\\:underline {
+      &[aria-live="polite"] {
+        text-decoration-line: underline;
+      }
+    }
+    .supports-child-combinator\\:underline {
+      @supports (h2 > p) {
+        text-decoration-line: underline;
+      }
+    }
+    .data-checked\\:underline {
+      &[data-ui~="checked"] {
+        text-decoration-line: underline;
+      }
+    }
+    "
+  `)
 })

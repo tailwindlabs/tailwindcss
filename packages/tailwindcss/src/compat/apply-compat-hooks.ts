@@ -10,6 +10,7 @@ import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
 import { darkModePlugin } from './dark-mode'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
+import { themeVariantsPlugin } from './theme-variants'
 
 export async function applyCompatibilityHooks({
   designSystem,
@@ -171,7 +172,7 @@ export async function applyCompatibilityHooks({
   let resolvedConfig = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme) },
     ...userConfig,
-    { config: { plugins: [darkModePlugin] } },
+    { config: { plugins: [darkModePlugin, themeVariantsPlugin] } },
   ])
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
