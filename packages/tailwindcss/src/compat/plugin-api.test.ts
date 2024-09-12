@@ -1,9 +1,9 @@
 import { describe, expect, test, vi } from 'vitest'
-import { compile } from '.'
-import defaultTheme from './compat/default-theme'
-import plugin from './plugin'
+import { compile } from '..'
+import plugin from '../plugin'
+import { optimizeCss } from '../test-utils/run'
+import defaultTheme from './default-theme'
 import type { CssInJs, PluginAPI } from './plugin-api'
-import { optimizeCss } from './test-utils/run'
 
 const css = String.raw
 

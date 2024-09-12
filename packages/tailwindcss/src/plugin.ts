@@ -1,4 +1,4 @@
-import type { Config, PluginFn, PluginWithConfig, PluginWithOptions } from './plugin-api'
+import type { Config, PluginFn, PluginWithConfig, PluginWithOptions } from './compat/plugin-api'
 
 function createPlugin(handler: PluginFn, config?: Partial<Config>): PluginWithConfig {
   return {
