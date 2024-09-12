@@ -979,7 +979,7 @@ describe('default font family compatibility', () => {
   })
 })
 
-test.only('creates variants for `data`, `supports`, and `aria` theme options', async () => {
+test('creates variants for `data`, `supports`, and `aria` theme options', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
