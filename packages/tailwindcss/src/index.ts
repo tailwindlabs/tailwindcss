@@ -60,7 +60,7 @@ async function parseCss(
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
 
-    // Collect custom `@utility` atrules
+    // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
       let name = node.selector.slice(9).trim()
 
@@ -86,7 +86,7 @@ async function parseCss(
       return
     }
 
-    // Collect paths from `@source` atrules
+    // Collect paths from `@source` at-rules
     if (node.selector.startsWith('@source ')) {
       if (node.nodes.length > 0) {
         throw new Error('`@source` cannot have a body.')
