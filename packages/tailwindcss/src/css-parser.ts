@@ -19,6 +19,7 @@ const CLOSE_BRACKET = 0x5d
 const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
+const HASH = 0x23
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -52,6 +53,37 @@ export function parse(input: string) {
     if (currentChar === BACKSLASH) {
       buffer += input.slice(i, i + 2)
       i += 1
+    }
+
+    // Parse scss-like hash interpolation.
+    //
+    // E.g.:
+    // ```css
+    // .btn {
+    //   @apply font-bold py-2 px-4 rounded #{!important};
+    //                                      ^^^^^^^^^^^^^
+    // }
+    // ```
+    // TODO: Do we want to support this? It currently helps with codemods.
+    else if (currentChar === HASH && input.charCodeAt(i + 1) === OPEN_CURLY) {
+      let start = i
+
+      for (let j = i + 2; j < input.length; j++) {
+        peekChar = input.charCodeAt(j)
+
+        // Current character is a `\` therefore the next character is escaped.
+        if (peekChar === BACKSLASH) {
+          j += 1
+        }
+
+        // End of the block.
+        else if (peekChar === CLOSE_CURLY) {
+          i = j
+          break
+        }
+      }
+
+      buffer += input.slice(start, i + 1)
     }
 
     // Start of a comment.
