@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export `Config` type from `tailwindcss` for JS config files ([#14360](https://github.com/tailwindlabs/tailwindcss/pull/14360))
 - Add support for `matchVariant` plugins using the `@plugin` directive ([#14371](https://github.com/tailwindlabs/tailwindcss/pull/14371))
 - Warn when the `tailwindcss` package is used as a PostCSS plugin ([#14378](https://github.com/tailwindlabs/tailwindcss/pull/14378))
+- Add support for `aria`, `supports`, and `data` variants defined in JS config files
 
 ### Fixed
 
