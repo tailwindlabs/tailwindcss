@@ -1,7 +1,8 @@
-import type { AstNode } from '../ast'
+import { toCss, walk, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { Theme, ThemeKey } from '../theme'
 import { withAlpha } from '../utilities'
+import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
 import { applyConfigToTheme } from './apply-config-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
@@ -13,20 +14,98 @@ import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api
 export async function applyCompatibilityHooks({
   designSystem,
   ast,
-  pluginPaths,
   loadPlugin,
-  configPaths,
   loadConfig,
   globs,
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
-  pluginPaths: [string, CssPluginOptions | null][]
   loadPlugin: (path: string) => Promise<Plugin>
-  configPaths: string[]
   loadConfig: (path: string) => Promise<UserConfig>
   globs: { origin?: string; pattern: string }[]
 }) {
+  let pluginPaths: [string, CssPluginOptions | null][] = []
+  let configPaths: string[] = []
+
+  walk(ast, (node, { parent, replaceWith }) => {
+    if (node.kind !== 'rule' || node.selector[0] !== '@') return
+
+    // Collect paths from `@plugin` at-rules
+    if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
+      if (parent !== null) {
+        throw new Error('`@plugin` cannot be nested.')
+      }
+
+      let pluginPath = node.selector.slice(9, -1)
+      if (pluginPath.length === 0) {
+        throw new Error('`@plugin` must have a path.')
+      }
+
+      let options: CssPluginOptions = {}
+
+      for (let decl of node.nodes ?? []) {
+        if (decl.kind !== 'declaration') {
+          throw new Error(
+            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\n\`@plugin\` options must be a flat list of declarations.`,
+          )
+        }
+
+        if (decl.value === undefined) continue
+
+        // Parse the declaration value as a primitive type
+        // These are the same primitive values supported by JSON
+        let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
+
+        let parts = segment(value, ',').map((part) => {
+          part = part.trim()
+
+          if (part === 'null') {
+            return null
+          } else if (part === 'true') {
+            return true
+          } else if (part === 'false') {
+            return false
+          } else if (!Number.isNaN(Number(part))) {
+            return Number(part)
+          } else if (
+            (part[0] === '"' && part[part.length - 1] === '"') ||
+            (part[0] === "'" && part[part.length - 1] === "'")
+          ) {
+            return part.slice(1, -1)
+          } else if (part[0] === '{' && part[part.length - 1] === '}') {
+            throw new Error(
+              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nUsing an object as a plugin option is currently only supported in JavaScript configuration files.`,
+            )
+          }
+
+          return part
+        })
+
+        options[decl.property] = parts.length === 1 ? parts[0] : parts
+      }
+
+      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
+
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@config` at-rules
+    if (node.selector === '@config' || node.selector.startsWith('@config ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@config` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@config` cannot be nested.')
+      }
+
+      configPaths.push(node.selector.slice(9, -1))
+      replaceWith([])
+      return
+    }
+  })
+
   // Override `resolveThemeValue` with a version that is backwards compatible
   // with dot notation paths like `colors.red.500`. We could do this by default
   // in `resolveThemeValue` but handling it here keeps all backwards
