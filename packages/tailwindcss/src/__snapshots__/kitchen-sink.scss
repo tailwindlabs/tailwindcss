@@ -1,0 +1,22 @@
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    -#{$prefix}-#{$property}: $value;
+  }
+  #{$property}: $value;
+}
+.gray {
+  @include prefix(filter, grayscale(50%), moz webkit);
+}
+%toolbelt {
+  box-sizing: border-box;
+  border-top: 1px rgba(#000, 0.12) solid;
+  padding: 16px 0;
+  width: 100%;
+  &:hover {
+    border: 2px rgba(#000, 0.5) solid;
+  }
+}
+.action-buttons {
+  @extend %toolbelt;
+  color: #4285f4;
+}

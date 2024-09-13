@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { toCss } from './ast'
 import * as CSS from './css-parser'
 
 const css = String.raw
@@ -977,6 +978,118 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
         },
       ])
+    })
+  })
+
+  describe('SCSS', () => {
+    it('should be possible to parse single line comments', () => {
+      expect(
+        parse(css`
+          .foo {
+            // Variables:
+            --color: red;
+
+            // Declarations:
+            color: red; // This is a comment
+          }
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          nodes: [
+            {
+              important: false,
+              kind: 'declaration',
+              property: '--color',
+              value: 'red',
+            },
+            {
+              important: false,
+              kind: 'declaration',
+              property: 'color',
+              value: 'red',
+            },
+          ],
+          selector: '.foo',
+        },
+      ])
+    })
+
+    it('should be possible to parse interpolation syntax', () => {
+      expect(
+        parse(css`
+          $name: lightbulb;
+
+          .icon-#{$name} {
+            color: red #{!important};
+          }
+
+          .image {
+            background-color: url(##{$url});
+          }
+        `),
+      ).toEqual([
+        { important: false, kind: 'declaration', property: '$name', value: 'lightbulb' },
+        {
+          kind: 'rule',
+          nodes: [
+            {
+              important: false,
+              kind: 'declaration',
+              property: 'color',
+              value: 'red #{!important}',
+            },
+          ],
+          selector: '.icon-#{$name}',
+        },
+        {
+          kind: 'rule',
+          nodes: [
+            {
+              important: false,
+              kind: 'declaration',
+              property: 'background-color',
+              value: 'url(##{$url})',
+            },
+          ],
+          selector: '.image',
+        },
+      ])
+    })
+
+    it('should parse generic SCSS syntax with variables, mixins and functions', () => {
+      expect(
+        toCss(
+          parse(css`
+            @mixin prefix($property, $value, $prefixes) {
+              @each $prefix in $prefixes {
+                -#{$prefix}-#{$property}: $value;
+              }
+              #{$property}: $value;
+            }
+
+            .gray {
+              @include prefix(filter, grayscale(50%), moz webkit);
+            }
+
+            %toolbelt {
+              box-sizing: border-box;
+              border-top: 1px rgba(#000, 0.12) solid;
+              padding: 16px 0;
+              width: 100%;
+
+              &:hover {
+                border: 2px rgba(#000, 0.5) solid;
+              }
+            }
+
+            .action-buttons {
+              @extend %toolbelt;
+              color: #4285f4;
+            }
+          `),
+        ).trim(),
+      ).toMatchFileSnapshot('./__snapshots__/kitchen-sink.scss')
     })
   })
 
