@@ -416,15 +416,7 @@ export function parse(input: string) {
 
           // Attach the declaration to the parent.
           if (parent) {
-            let importantIdx = buffer.indexOf('!important', colonIdx + 1)
-            parent.nodes.push({
-              kind: 'declaration',
-              property: buffer.slice(0, colonIdx).trim(),
-              value: buffer
-                .slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx)
-                .trim(),
-              important: importantIdx !== -1,
-            } satisfies Declaration)
+            parent.nodes.push(parseDeclaration(buffer, colonIdx))
           }
         }
       }
