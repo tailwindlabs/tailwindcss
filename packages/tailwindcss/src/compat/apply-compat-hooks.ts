@@ -10,6 +10,7 @@ import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
 import { darkModePlugin } from './dark-mode'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
+import { registerScreensConfig } from './screens-config'
 import { registerThemeVariantOverrides } from './theme-variants'
 
 export async function applyCompatibilityHooks({
@@ -187,6 +188,7 @@ export async function applyCompatibilityHooks({
   applyConfigToTheme(designSystem, userConfig)
 
   registerThemeVariantOverrides(resolvedConfig, designSystem)
+  registerScreensConfig(resolvedConfig, designSystem)
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
