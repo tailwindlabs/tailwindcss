@@ -281,6 +281,19 @@ importers:
         specifier: ^1.25.1
         version: 1.26.0
 
+  packages/@tailwindcss-upgrade:
+    dependencies:
+      postcss:
+        specifier: ^8.4.41
+        version: 8.4.41
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.41)
+    devDependencies:
+      '@types/postcss-import':
+        specifier: ^14.0.3
+        version: 14.0.3
+
   packages/@tailwindcss-vite:
     dependencies:
       '@tailwindcss/node':
