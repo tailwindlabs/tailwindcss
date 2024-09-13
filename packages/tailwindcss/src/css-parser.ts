@@ -55,7 +55,7 @@ export function parse(input: string) {
       i += 1
     }
 
-    // Parse scss one-line comments.
+    // Parse SCSS one-line comments.
     //
     // E.g.:
     //
@@ -80,7 +80,7 @@ export function parse(input: string) {
       }
     }
 
-    // Parse scss-like hash interpolation.
+    // Parse SCSS-like hash interpolation.
     //
     // E.g.:
     // ```css
