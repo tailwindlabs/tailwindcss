@@ -709,7 +709,7 @@ export function createVariants(theme: Theme): Variants {
       let resolvedBreakpoints = new DefaultMap((variant: Variant) => {
         switch (variant.kind) {
           case 'static': {
-            return breakpoints.get(variant.root) ?? null
+            return theme.resolveValue(variant.root, ['--breakpoint']) ?? null
           }
 
           case 'functional': {
