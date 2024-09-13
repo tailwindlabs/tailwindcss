@@ -1,4 +1,4 @@
-import type { Plugin, PluginWithConfig } from '../../plugin-api'
+import type { Plugin, PluginWithConfig } from '../plugin-api'
 import type { PluginUtils } from './resolve-config'
 
 export type ResolvableTo<T> = T | ((utils: PluginUtils) => T)

@@ -2,8 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile } from '.'
+import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
-import type { PluginAPI } from './plugin-api'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw

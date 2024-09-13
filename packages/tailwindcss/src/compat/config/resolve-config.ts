@@ -1,5 +1,5 @@
 import type { DesignSystem } from '../../design-system'
-import type { PluginWithConfig } from '../../plugin-api'
+import type { PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {

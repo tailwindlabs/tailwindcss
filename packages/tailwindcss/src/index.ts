@@ -1,12 +1,13 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
 import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
+import { type Plugin } from './compat/plugin-api'
 import { compileCandidates } from './compile'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { applyCompatibilityHooks, type CssPluginOptions, type Plugin } from './plugin-api'
 import { Theme, ThemeOptions } from './theme'
 import { segment } from './utils/segment'
 export type Config = UserConfig
@@ -50,8 +51,6 @@ async function parseCss(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let pluginPaths: [string, CssPluginOptions | null][] = []
-  let configPaths: string[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
@@ -60,81 +59,6 @@ async function parseCss(
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
-
-    // Collect paths from `@plugin` at-rules
-    if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
-      if (parent !== null) {
-        throw new Error('`@plugin` cannot be nested.')
-      }
-
-      let pluginPath = node.selector.slice(9, -1)
-      if (pluginPath.length === 0) {
-        throw new Error('`@plugin` must have a path.')
-      }
-
-      let options: CssPluginOptions = {}
-
-      for (let decl of node.nodes ?? []) {
-        if (decl.kind !== 'declaration') {
-          throw new Error(
-            `Unexpected \`@plugin\` option:\n\n${toCss([decl])}\n\n\`@plugin\` options must be a flat list of declarations.`,
-          )
-        }
-
-        if (decl.value === undefined) continue
-
-        // Parse the declaration value as a primitive type
-        // These are the same primitive values supported by JSON
-        let value: CssPluginOptions[keyof CssPluginOptions] = decl.value
-
-        let parts = segment(value, ',').map((part) => {
-          part = part.trim()
-
-          if (part === 'null') {
-            return null
-          } else if (part === 'true') {
-            return true
-          } else if (part === 'false') {
-            return false
-          } else if (!Number.isNaN(Number(part))) {
-            return Number(part)
-          } else if (
-            (part[0] === '"' && part[part.length - 1] === '"') ||
-            (part[0] === "'" && part[part.length - 1] === "'")
-          ) {
-            return part.slice(1, -1)
-          } else if (part[0] === '{' && part[part.length - 1] === '}') {
-            throw new Error(
-              `Unexpected \`@plugin\` option: Value of declaration \`${toCss([decl]).trim()}\` is not supported.\n\nUsing an object as a plugin option is currently only supported in JavaScript configuration files.`,
-            )
-          }
-
-          return part
-        })
-
-        options[decl.property] = parts.length === 1 ? parts[0] : parts
-      }
-
-      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
-
-      replaceWith([])
-      return
-    }
-
-    // Collect paths from `@config` at-rules
-    if (node.selector === '@config' || node.selector.startsWith('@config ')) {
-      if (node.nodes.length > 0) {
-        throw new Error('`@config` cannot have a body.')
-      }
-
-      if (parent !== null) {
-        throw new Error('`@config` cannot be nested.')
-      }
-
-      configPaths.push(node.selector.slice(9, -1))
-      replaceWith([])
-      return
-    }
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
@@ -310,15 +234,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({
-    designSystem,
-    ast,
-    pluginPaths,
-    loadPlugin,
-    configPaths,
-    loadConfig,
-    globs,
-  })
+  await applyCompatibilityHooks({ designSystem, ast, loadPlugin, loadConfig, globs })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
