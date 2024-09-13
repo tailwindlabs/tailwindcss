@@ -1,27 +1,11 @@
 import { rule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { ResolvedConfig } from './config/types'
-import DefaultTheme from './default-theme'
 
 export function registerThemeVariantOverrides(config: ResolvedConfig, designSystem: DesignSystem) {
   let ariaVariants = config.theme.aria || {}
   let supportsVariants = config.theme.supports || {}
   let dataVariants = config.theme.data || {}
-
-  for (let [name, rule] of Object.entries(DefaultTheme.aria)) {
-    // `theme.aria` contains values from the default theme. We don't
-    // want to create variants for these values as these are already
-    // handled by the core utility.
-    if (ariaVariants[name] === rule) {
-      delete ariaVariants[name]
-    }
-  }
-
-  for (let [name, rule] of Object.entries(DefaultTheme.aria)) {
-    if (ariaVariants[name] === rule) {
-      delete ariaVariants[name]
-    }
-  }
 
   if (Object.keys(ariaVariants).length > 0) {
     let coreAria = designSystem.variants.get('aria')
