@@ -19,6 +19,7 @@ const CLOSE_BRACKET = 0x5d
 const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
+const HASH = 0x23
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -52,6 +53,61 @@ export function parse(input: string) {
     if (currentChar === BACKSLASH) {
       buffer += input.slice(i, i + 2)
       i += 1
+    }
+
+    // Parse scss one-line comments.
+    //
+    // E.g.:
+    //
+    // ```css
+    // // This is a comment
+    // ^^^^^^^^^^^^^^^^^^^^
+    //
+    // .btn {
+    //   color: red; // This is a comment
+    //               ^^^^^^^^^^^^^^^^^^^^
+    // }
+    // ```
+    else if (currentChar == SLASH && input.charCodeAt(i + 1) === SLASH) {
+      for (let j = i + 2; j < input.length; j++) {
+        peekChar = input.charCodeAt(j)
+
+        // End of the comment
+        if (peekChar === LINE_BREAK) {
+          i = j
+          break
+        }
+      }
+    }
+
+    // Parse scss-like hash interpolation.
+    //
+    // E.g.:
+    // ```css
+    // .btn {
+    //   @apply font-bold py-2 px-4 rounded #{!important};
+    //                                      ^^^^^^^^^^^^^
+    // }
+    // ```
+    else if (currentChar === HASH && input.charCodeAt(i + 1) === OPEN_CURLY) {
+      let start = i
+
+      for (let j = i + 2; j < input.length; j++) {
+        peekChar = input.charCodeAt(j)
+
+        // Current character is a `\` therefore the next character is escaped.
+        if (peekChar === BACKSLASH) {
+          j += 1
+        }
+
+        // End of the block.
+        else if (peekChar === CLOSE_CURLY) {
+          i = j
+          break
+        }
+      }
+
+      buffer += input.slice(start, i + 1)
     }
 
     // Start of a comment.
@@ -474,7 +530,12 @@ export function parse(input: string) {
 }
 
 function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {
-  let importantIdx = buffer.indexOf('!important', colonIdx + 1)
+  // The `!important` modifier might not be at the end of the declaration in
+  // case there is additional whitespace. Additionally, in SCSS the `!important`
+  // could be wrapped inside of `#{…}` e.g.: `#{!important}`. In this case we
+  // don't want to mark it as important but rather make it part of the value.
+  let importantIdx = buffer.trimEnd().endsWith('!important') ? buffer.lastIndexOf('!important') : -1
+
   return {
     kind: 'declaration',
     property: buffer.slice(0, colonIdx).trim(),
