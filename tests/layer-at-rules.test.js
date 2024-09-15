@@ -90,10 +90,10 @@ test('comments can be used inside layers without crashing', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       div {
         background-color: #bada55;
       }
-      ${defaults}
       .important-component,
         .important-utility {
         text-align: banana;
@@ -144,10 +144,10 @@ test('comments can be used inside layers (with important) without crashing', () 
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       div {
         background-color: #bada55;
       }
-      ${defaults}
       .important-component {
         text-align: banana;
       }
@@ -245,6 +245,7 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
           font-weight: medium;
         }
       }
+      ${defaults}
       body {
         margin: 0;
       }
@@ -254,7 +255,6 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
       p {
         font-weight: normal;
       }
-      ${defaults}
       .input {
         background: #fff;
       }
