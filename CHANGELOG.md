@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Insert `@defaults` at start of stylesheet ([#14427](https://github.com/tailwindlabs/tailwindcss/pull/14427))
 
 ## [3.4.11] - 2024-09-11
 
