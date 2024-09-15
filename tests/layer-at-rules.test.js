@@ -95,7 +95,7 @@ test('comments can be used inside layers without crashing', () => {
         background-color: #bada55;
       }
       .important-component,
-        .important-utility {
+      .important-utility {
         text-align: banana;
       }
     `)
