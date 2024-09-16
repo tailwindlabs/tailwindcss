@@ -3,8 +3,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import pc from 'picocolors'
 import postcss from 'postcss'
-import { eprintln, wordWrap } from '../../@tailwindcss-cli/src/utils/renderer'
 import { migrateAtApply } from './codemods/migrate-at-apply'
+import { eprintln, wordWrap } from './utils/renderer'
 
 export async function migrateContents(contents: string, file?: string) {
   return postcss()
