@@ -385,12 +385,6 @@ export async function compile(
           return compiledCss
         }
 
-        // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
-        // properties (`[--my-var:theme(--color-red-500)]`) can contain function
-        // calls so we need evaluate any functions we find there that weren't in
-        // the source CSS.
-        substituteFunctions(newNodes, designSystem.resolveThemeValue)
-
         previousAstNodeCount = newNodes.length
 
         tailwindUtilitiesNode.nodes = newNodes

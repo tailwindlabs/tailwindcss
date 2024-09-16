@@ -606,6 +606,17 @@ describe('theme function', () => {
         }"
       `)
     })
+
+    test('values that dont exist dont produce candidates', async () => {
+      expect(
+        await compileCss(
+          css`
+            @tailwind utilities;
+          `,
+          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
+        ),
+      ).toEqual('')
+    })
   })
 
   describe('in @media queries', () => {
