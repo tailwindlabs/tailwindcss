@@ -281,6 +281,40 @@ importers:
         specifier: ^1.25.1
         version: 1.26.0
 
+  packages/@tailwindcss-upgrade:
+    dependencies:
+      enhanced-resolve:
+        specifier: ^5.17.1
+        version: 5.17.1
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
+      mri:
+        specifier: ^1.2.0
+        version: 1.2.0
+      picocolors:
+        specifier: ^1.0.1
+        version: 1.0.1
+      postcss:
+        specifier: ^8.4.41
+        version: 8.4.41
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.41)
+      tailwindcss:
+        specifier: workspace:^
+        version: link:../tailwindcss
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.14.13
+      '@types/postcss-import':
+        specifier: ^14.0.3
+        version: 14.0.3
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
+
   packages/@tailwindcss-vite:
     dependencies:
       '@tailwindcss/node':
