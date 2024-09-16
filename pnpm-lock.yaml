@@ -286,6 +286,9 @@ importers:
       enhanced-resolve:
         specifier: ^5.17.1
         version: 5.17.1
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -298,6 +301,9 @@ importers:
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.41)
+      tailwindcss:
+        specifier: workspace:^
+        version: link:../tailwindcss
     devDependencies:
       '@types/node':
         specifier: 'catalog:'

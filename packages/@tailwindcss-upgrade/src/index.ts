@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import fastGlob from 'fast-glob'
 import { execSync } from 'node:child_process'
 import path from 'node:path'
 import pc from 'picocolors'
@@ -23,8 +24,6 @@ if (flags['--help']) {
   process.exit(0)
 }
 
-const file = flags._[0]
-
 async function run() {
   eprintln(header())
   eprintln()
@@ -45,9 +44,49 @@ async function run() {
     }
   }
 
-  await migrate(path.resolve(process.cwd(), file))
+  // Use provided files
+  let files = flags._.map((file) => path.resolve(process.cwd(), file))
+
+  // Discover CSS files in case no files were provided
+  if (files.length === 0) {
+    wordWrap(
+      'No files provided. Searching for CSS files in the current directory and its subdirectories…',
+      process.stderr.columns - 5 - 4,
+    ).map((line) => eprintln(`${pc.blue('\u2502')} ${line}`))
+    eprintln()
+
+    files = await fastGlob(['**/*.css'], {
+      absolute: true,
+      ignore: ['**/node_modules', '**/vendor'],
+    })
+  }
+
+  // Ensure we are only dealing with CSS files
+  files = files.filter((file) => file.endsWith('.css'))
+
+  // Migrate each file
+  await Promise.allSettled(files.map((file) => migrate(file)))
+
+  // Figure out if we made any changes
+  let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
+  if (stdout.trim()) {
+    wordWrap(
+      'Migration complete. Verify the changes and commit them to your repository.',
+      process.stderr.columns - 5 - 4,
+    ).map((line) => eprintln(`${pc.green('\u2502')} ${line}`))
+    eprintln()
+  } else {
+    wordWrap(
+      'Migration complete. No changes were made to your repository.',
+      process.stderr.columns - 5 - 4,
+    ).map((line) => eprintln(`${pc.green('\u2502')} ${line}`))
+    eprintln()
+  }
 }
 
 run()
   .then(() => process.exit(0))
-  .catch(() => process.exit(1))
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
