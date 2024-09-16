@@ -325,41 +325,35 @@ function getPropertySort(nodes: AstNode[]) {
 
 /**
  * Sort an array of entries into an array-of-sets. Similar entries (where the
- * sort function returns 0) are grouped together. The sort function is stable.
+ * sort function returns 0) are grouped together. The sort function is stable
+ * and uses bubble-sort
  *
  * Example:
  *
- *   [1, 4, 3, 1]
+ *   [a, c, b, A]
  *
  * Becomes:
  *
  *  [
- *    Set[1, 1],
- *    Set[3],
- *    Set[4],
+ *    Set[a, A],
+ *    Set[b],
+ *    Set[c],
  *  ]
- *
- * TODO: Make this faster.
  */
 function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): Set<T>[] {
   let groups: Set<T>[] = []
-  let sorted = entries.slice().sort(comparator)
+  let sorted = entries.sort(comparator)
+  let prevEntry: T | undefined = undefined
 
   for (let entry of sorted) {
-    let prevGroup = groups[groups.length - 1]
-    if (prevGroup && comparator(first(prevGroup)!, entry) === 0) {
-      prevGroup.add(entry)
+    let prevSet = groups[groups.length - 1]
+    if (prevSet && prevEntry !== undefined && comparator(prevEntry, entry) === 0) {
+      prevSet.add(entry)
     } else {
+      prevEntry = entry
       groups.push(new Set([entry]))
     }
   }
 
   return groups
-}
-
-function first<T>(set: Set<T>): T | null {
-  for (let value of set) {
-    return value
-  }
-  return null
 }

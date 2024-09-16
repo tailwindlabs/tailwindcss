@@ -13,7 +13,6 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
-  candidatesToCss(classes: string[]): (string | null)[]
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
@@ -24,6 +23,9 @@ export type DesignSystem = {
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
   resolveThemeValue(path: string): string | undefined
+
+  // Used by IntelliSense
+  candidatesToCss(classes: string[]): (string | null)[]
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
