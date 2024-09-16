@@ -1265,6 +1265,57 @@ test('sorting stacked min-* and max-* variants', async () => {
   `)
 })
 
+test('stacked min-* and max-* variants should come after unprefixed variants', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          /* Explicitly ordered in a strange way */
+          --breakpoint-sm: 640px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
+      ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 640px;
+      --breakpoint-lg: 1024px;
+      --breakpoint-md: 768px;
+    }
+
+    @media (width >= 640px) {
+      .sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (width >= 640px) {
+      @media (width < 1024px) {
+        .min-sm\\:max-lg\\:flex {
+          display: flex;
+        }
+      }
+    }
+
+    @media (width >= 768px) {
+      .md\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (width >= 768px) {
+      @media (width < 1024px) {
+        .min-md\\:max-lg\\:flex {
+          display: flex;
+        }
+      }
+    }"
+  `)
+})
+
 test('min, max and unprefixed breakpoints', async () => {
   expect(
     await compileCss(
