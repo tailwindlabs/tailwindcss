@@ -51,7 +51,7 @@ export function compileCandidates(
         // variants used.
         let variantOrder = 0n
         for (let variant of candidate.variants) {
-          let index = variants.findIndex((g) => g.findIndex((v) => v === variant) !== -1)
+          let index = variants.findIndex((inner) => inner.has(variant))
           variantOrder |= 1n << BigInt(index)
         }
 
@@ -324,7 +324,7 @@ function getPropertySort(nodes: AstNode[]) {
 }
 
 /**
- * Sort an array of entries into arrays-of-arrays. Similar entries (where the
+ * Sort an array of entries into an array-of-sets. Similar entries (where the
  * sort function returns 0) are grouped together. The sort function is stable.
  *
  * Example:
@@ -334,25 +334,32 @@ function getPropertySort(nodes: AstNode[]) {
  * Becomes:
  *
  *  [
- *   [1, 1],
- *   [3],
- *   [4],
+ *    Set[1, 1],
+ *    Set[3],
+ *    Set[4],
  *  ]
  *
  * TODO: Make this faster.
  */
-function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): T[][] {
-  let groups: T[][] = []
+function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): Set<T>[] {
+  let groups: Set<T>[] = []
   let sorted = entries.slice().sort(comparator)
 
   for (let entry of sorted) {
     let prevGroup = groups[groups.length - 1]
-    if (prevGroup && comparator(prevGroup[0], entry) === 0) {
-      prevGroup.push(entry)
+    if (prevGroup && comparator(first(prevGroup)!, entry) === 0) {
+      prevGroup.add(entry)
     } else {
-      groups.push([entry])
+      groups.push(new Set([entry]))
     }
   }
 
   return groups
+}
+
+function first<T>(set: Set<T>): T | null {
+  for (let value of set) {
+    return value
+  }
+  return null
 }
