@@ -1,20 +1,20 @@
 import dedent from 'dedent'
+import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import { toCss } from '../../ast'
-import * as CSS from '../../css-parser'
 import { migrateTailwindDirectives } from './migrate-tailwind-directives'
 
 const css = dedent
 
 function migrate(input: string) {
-  let ast = CSS.parse(input)
-  migrateTailwindDirectives(ast)
-  return toCss(ast).trim()
+  return postcss()
+    .use(migrateTailwindDirectives())
+    .process(input, { from: expect.getState().testPath })
+    .then((result) => result.css)
 }
 
-it("should not migrate `@import 'tailwindcss'`", () => {
+it("should not migrate `@import 'tailwindcss'`", async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @import 'tailwindcss';
     `),
   ).toEqual(css`
@@ -22,9 +22,9 @@ it("should not migrate `@import 'tailwindcss'`", () => {
   `)
 })
 
-it('should migrate the default @tailwind directives to a single import', () => {
+it('should migrate the default @tailwind directives to a single import', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind base;
       @tailwind components;
       @tailwind utilities;
@@ -34,9 +34,9 @@ it('should migrate the default @tailwind directives to a single import', () => {
   `)
 })
 
-it('should migrate the default @tailwind directives as imports to a single import', () => {
+it('should migrate the default @tailwind directives as imports to a single import', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @import 'tailwindcss/base';
       @import 'tailwindcss/components';
       @import 'tailwindcss/utilities';
@@ -77,16 +77,16 @@ it.each([
   ],
 ])(
   'should migrate the default directives (but in different order) to a single import, order %#',
-  (input) => {
-    expect(migrate(input)).toEqual(css`
+  async (input) => {
+    expect(await migrate(input)).toEqual(css`
       @import 'tailwindcss';
     `)
   },
 )
 
-it('should migrate `@tailwind base` to theme and preflight imports', () => {
+it('should migrate `@tailwind base` to theme and preflight imports', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind base;
     `),
   ).toEqual(css`
@@ -95,9 +95,9 @@ it('should migrate `@tailwind base` to theme and preflight imports', () => {
   `)
 })
 
-it('should migrate `@import "tailwindcss/base"` to theme and preflight imports', () => {
+it('should migrate `@import "tailwindcss/base"` to theme and preflight imports', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @import 'tailwindcss/base';
     `),
   ).toEqual(css`
@@ -106,9 +106,9 @@ it('should migrate `@import "tailwindcss/base"` to theme and preflight imports',
   `)
 })
 
-it('should migrate `@tailwind utilities` to an import', () => {
+it('should migrate `@tailwind utilities` to an import', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind utilities;
     `),
   ).toEqual(css`
@@ -116,9 +116,9 @@ it('should migrate `@tailwind utilities` to an import', () => {
   `)
 })
 
-it('should migrate `@import "tailwindcss/utilities"` to an import', () => {
+it('should migrate `@import "tailwindcss/utilities"` to an import', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @import 'tailwindcss/utilities';
     `),
   ).toEqual(css`
@@ -126,9 +126,9 @@ it('should migrate `@import "tailwindcss/utilities"` to an import', () => {
   `)
 })
 
-it('should not migrate existing imports using a custom layer', () => {
+it('should not migrate existing imports using a custom layer', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @import 'tailwindcss/utilities' layer(my-utilities);
     `),
   ).toEqual(css`
@@ -144,9 +144,9 @@ it('should not migrate existing imports using a custom layer', () => {
 // @import 'tailwindcss/preflight' layer(base);
 // @import 'tailwindcss/utilities' layer(utilities);
 // ```
-it('should migrate `@tailwind base` and `@tailwind utilities` to a single import', () => {
+it('should migrate `@tailwind base` and `@tailwind utilities` to a single import', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind base;
       @tailwind utilities;
     `),
@@ -155,17 +155,17 @@ it('should migrate `@tailwind base` and `@tailwind utilities` to a single import
   `)
 })
 
-it('should drop `@tailwind screens;`', () => {
+it('should drop `@tailwind screens;`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind screens;
     `),
   ).toEqual('')
 })
 
-it('should drop `@tailwind variants;`', () => {
+it('should drop `@tailwind variants;`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @tailwind variants;
     `),
   ).toEqual('')
