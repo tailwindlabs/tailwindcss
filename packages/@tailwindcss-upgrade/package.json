@@ -15,6 +15,9 @@
     "build": "tsup-node",
     "dev": "pnpm run build -- --watch"
   },
+  "bin": {
+    "tailwindcss-upgrade": "./dist/index.mjs"
+  },
   "exports": {
     "./package.json": "./package.json"
   },
@@ -26,10 +29,13 @@
     "access": "public"
   },
   "dependencies": {
-    "postcss-import": "^16.1.0",
-    "postcss": "^8.4.41"
+    "picocolors": "^1.0.1",
+    "postcss": "^8.4.41",
+    "postcss-import": "^16.1.0"
   },
   "devDependencies": {
-    "@types/postcss-import": "^14.0.3"
+    "@types/node": "catalog:",
+    "@types/postcss-import": "^14.0.3",
+    "dedent": "1.5.3"
   }
 }
