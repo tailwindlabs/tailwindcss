@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import fastGlob from 'fast-glob'
-import { execSync } from 'node:child_process'
 import path from 'node:path'
 import { help } from './commands/help'
 import { migrate } from './migrate'
 import { args, type Arg } from './utils/args'
+import { isRepoDirty } from './utils/git'
 import { eprintln, error, header, highlight, info, success } from './utils/renderer'
 
 const options = {
@@ -28,8 +28,7 @@ async function run() {
   eprintln()
 
   if (!flags['--force']) {
-    let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
-    if (stdout.trim()) {
+    if (isRepoDirty()) {
       error('Git directory is not clean. Please stash or commit your changes before migrating.')
       info(
         `You may use the ${highlight('--force')} flag to silence this warning and perform the migration.`,
@@ -60,8 +59,7 @@ async function run() {
   await Promise.allSettled(files.map((file) => migrate(file)))
 
   // Figure out if we made any changes
-  let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
-  if (stdout.trim()) {
+  if (isRepoDirty()) {
     success('Migration complete. Verify the changes and commit them to your repository.')
   } else {
     success('Migration complete. No changes were made to your repository.')
