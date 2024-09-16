@@ -117,7 +117,17 @@ export class Variants {
     if (orderedByVariant !== 0) return orderedByVariant
 
     if (a.kind === 'compound' && z.kind === 'compound') {
-      return this.compare(a.variant, z.variant)
+      let order = this.compare(a.variant, z.variant)
+      if (order === 0) {
+        if (a.modifier && z.modifier) {
+          return a.modifier.value < z.modifier.value ? -1 : 1
+        } else if (a.modifier) {
+          return 1
+        } else if (z.modifier) {
+          return -1
+        }
+      }
+      return order
     }
 
     let compareFn = this.compareFns.get(aOrder)
