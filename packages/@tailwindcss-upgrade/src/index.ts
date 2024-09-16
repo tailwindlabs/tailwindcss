@@ -3,11 +3,10 @@
 import fastGlob from 'fast-glob'
 import { execSync } from 'node:child_process'
 import path from 'node:path'
-import pc from 'picocolors'
 import { help } from './commands/help'
 import { migrate } from './migrate'
 import { args, type Arg } from './utils/args'
-import { eprintln, header, highlight, wordWrap } from './utils/renderer'
+import { eprintln, error, header, highlight, info, success } from './utils/renderer'
 
 const options = {
   '--help': { type: 'boolean', description: 'Display usage information', alias: '-h' },
@@ -31,15 +30,10 @@ async function run() {
   if (!flags['--force']) {
     let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
     if (stdout.trim()) {
-      wordWrap(
-        'Git directory is not clean. Please stash or commit your changes before migrating.',
-        process.stderr.columns - 5 - 4,
-      ).map((line) => eprintln(`${pc.red('\u2502')} ${line}`))
-      wordWrap(
+      error('Git directory is not clean. Please stash or commit your changes before migrating.')
+      info(
         `You may use the ${highlight('--force')} flag to silence this warning and perform the migration.`,
-        process.stderr.columns - 2 - 4,
-      ).map((line) => eprintln(`${pc.red('\u2502')} ${line}`))
-      eprintln()
+      )
       process.exit(1)
     }
   }
@@ -49,11 +43,9 @@ async function run() {
 
   // Discover CSS files in case no files were provided
   if (files.length === 0) {
-    wordWrap(
+    info(
       'No files provided. Searching for CSS files in the current directory and its subdirectories…',
-      process.stderr.columns - 5 - 4,
-    ).map((line) => eprintln(`${pc.blue('\u2502')} ${line}`))
-    eprintln()
+    )
 
     files = await fastGlob(['**/*.css'], {
       absolute: true,
@@ -70,17 +62,9 @@ async function run() {
   // Figure out if we made any changes
   let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
   if (stdout.trim()) {
-    wordWrap(
-      'Migration complete. Verify the changes and commit them to your repository.',
-      process.stderr.columns - 5 - 4,
-    ).map((line) => eprintln(`${pc.green('\u2502')} ${line}`))
-    eprintln()
+    success('Migration complete. Verify the changes and commit them to your repository.')
   } else {
-    wordWrap(
-      'Migration complete. No changes were made to your repository.',
-      process.stderr.columns - 5 - 4,
-    ).map((line) => eprintln(`${pc.green('\u2502')} ${line}`))
-    eprintln()
+    success('Migration complete. No changes were made to your repository.')
   }
 }
 

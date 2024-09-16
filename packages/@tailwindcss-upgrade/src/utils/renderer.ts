@@ -83,6 +83,34 @@ export function indent(value: string, offset = 0) {
   return `${' '.repeat(offset + UI.indent)}${value}`
 }
 
+export function success(message: string, print = eprintln) {
+  wordWrap(message, process.stderr.columns - 3).map((line) => {
+    return print(`${pc.green('\u2502')} ${line}`)
+  })
+  print()
+}
+
+export function info(message: string, print = eprintln) {
+  wordWrap(message, process.stderr.columns - 3).map((line) => {
+    return print(`${pc.blue('\u2502')} ${line}`)
+  })
+  print()
+}
+
+export function error(message: string, print = eprintln) {
+  wordWrap(message, process.stderr.columns - 3).map((line) => {
+    return print(`${pc.red('\u2502')} ${line}`)
+  })
+  print()
+}
+
+export function warn(message: string, print = eprintln) {
+  wordWrap(message, process.stderr.columns - 3).map((line) => {
+    return print(`${pc.yellow('\u2502')} ${line}`)
+  })
+  print()
+}
+
 // Rust inspired functions to print to the console:
 
 export function eprintln(value = '') {
