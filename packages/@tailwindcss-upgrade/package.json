@@ -15,9 +15,7 @@
     "build": "tsup-node",
     "dev": "pnpm run build -- --watch"
   },
-  "bin": {
-    "tailwindcss-upgrade": "./dist/index.mjs"
-  },
+  "bin": "./dist/index.mjs",
   "exports": {
     "./package.json": "./package.json"
   },
