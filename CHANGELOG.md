@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Insert `@defaults` at start of stylesheet ([#14427](https://github.com/tailwindlabs/tailwindcss/pull/14427))
+- Ensure using `@apply` with utilities that use `@defaults` works with rules defined in the base layer when using `optimizeUniversalDefaults` ([#14427](https://github.com/tailwindlabs/tailwindcss/pull/14427))
 
 ## [3.4.11] - 2024-09-11
 
