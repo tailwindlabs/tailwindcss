@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Resolve `borderRadius` when using dot notation inside the `theme()` function.
 
 ## [4.0.0-alpha.24] - 2024-09-11
 

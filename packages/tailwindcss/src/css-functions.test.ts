@@ -241,6 +241,27 @@ describe('theme function', () => {
         `)
       })
 
+      test('theme(borderRadius.lg)', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --radius-lg: 0.5rem;
+            }
+            .radius {
+              border-radius: theme(borderRadius.lg);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root {
+            --radius-lg: .5rem;
+          }
+
+          .radius {
+            border-radius: .5rem;
+          }"
+        `)
+      })
+
       describe('for v3 compatibility', () => {
         test('theme(blur.DEFAULT)', async () => {
           expect(
