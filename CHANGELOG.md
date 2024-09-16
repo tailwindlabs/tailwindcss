@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Support `borderRadius.*` as an alias for `--radius-*` when using dot notation inside the `theme()` function ([#14436](https://github.com/tailwindlabs/tailwindcss/pull/14436))
+### Fixed
+
+- Fix an issue with the CSS order when stacking variants. ([#14431](https://github.com/tailwindlabs/tailwindcss/pull/14431))
 
 ## [4.0.0-alpha.24] - 2024-09-11
 
