@@ -3,10 +3,10 @@
 import { execSync } from 'node:child_process'
 import path from 'node:path'
 import pc from 'picocolors'
-import { help } from '../../@tailwindcss-cli/src/commands/help'
-import { args, type Arg } from '../../@tailwindcss-cli/src/utils/args'
-import { eprintln, header, highlight, wordWrap } from '../../@tailwindcss-cli/src/utils/renderer'
+import { help } from './commands/help'
 import { migrate } from './migrate'
+import { args, type Arg } from './utils/args'
+import { eprintln, header, highlight, wordWrap } from './utils/renderer'
 
 const options = {
   '--help': { type: 'boolean', description: 'Display usage information', alias: '-h' },

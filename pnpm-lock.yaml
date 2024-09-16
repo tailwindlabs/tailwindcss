@@ -283,6 +283,12 @@ importers:
 
   packages/@tailwindcss-upgrade:
     dependencies:
+      enhanced-resolve:
+        specifier: ^5.17.1
+        version: 5.17.1
+      mri:
+        specifier: ^1.2.0
+        version: 1.2.0
       picocolors:
         specifier: ^1.0.1
         version: 1.0.1
