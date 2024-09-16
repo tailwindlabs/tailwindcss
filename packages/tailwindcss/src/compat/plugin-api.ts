@@ -150,10 +150,10 @@ export function buildPluginApi(
             return 0
           }
 
-          if (options && typeof options.sort === 'function') {
-            let aValue = options.values?.[a.value.value] ?? a.value.value
-            let zValue = options.values?.[z.value.value] ?? z.value.value
+          let aValue = options?.values?.[a.value.value] ?? a.value.value
+          let zValue = options?.values?.[z.value.value] ?? z.value.value
 
+          if (options && typeof options.sort === 'function') {
             return options.sort(
               { value: aValue, modifier: a.modifier?.value ?? null },
               { value: zValue, modifier: z.modifier?.value ?? null },
@@ -163,6 +163,7 @@ export function buildPluginApi(
           let aOrder = defaultOptionKeys.indexOf(a.value.value)
           let zOrder = defaultOptionKeys.indexOf(z.value.value)
 
+          if (aOrder - zOrder === 0) return aValue < zValue ? -1 : 1
           return aOrder - zOrder
         },
       )

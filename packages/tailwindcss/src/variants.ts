@@ -121,9 +121,8 @@ export class Variants {
     }
 
     let compareFn = this.compareFns.get(aOrder)
-    if (compareFn === undefined) return 0
-
-    return compareFn(a, z) || (a.root < z.root ? -1 : 1)
+    if (compareFn === undefined) return a.root < z.root ? -1 : 1
+    return compareFn(a, z)
   }
 
   keys() {

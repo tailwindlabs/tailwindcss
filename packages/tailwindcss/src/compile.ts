@@ -31,9 +31,9 @@ export function compileCandidates(
   }
 
   // Sort the variants
-  let variants = designSystem.getUsedVariants().sort((a, z) => {
-    return designSystem.variants.compare(a, z)
-  })
+  let variants = sortAndGroup(designSystem.getUsedVariants(), (a, z) =>
+    designSystem.variants.compare(a, z),
+  )
 
   // Create the AST
   for (let [rawCandidate, candidates] of matches) {
@@ -51,7 +51,8 @@ export function compileCandidates(
         // variants used.
         let variantOrder = 0n
         for (let variant of candidate.variants) {
-          variantOrder |= 1n << BigInt(variants.indexOf(variant))
+          let index = variants.findIndex((g) => g.findIndex((v) => v === variant) !== -1)
+          variantOrder |= 1n << BigInt(index)
         }
 
         nodeSorting.set(node, {
@@ -320,4 +321,38 @@ function getPropertySort(nodes: AstNode[]) {
   }
 
   return Array.from(propertySort).sort((a, z) => a - z)
+}
+
+/**
+ * Sort an array of entries into arrays-of-arrays. Similar entries (where the
+ * sort function returns 0) are grouped together. The sort function is stable.
+ *
+ * Example:
+ *
+ *   [1, 4, 3, 1]
+ *
+ * Becomes:
+ *
+ *  [
+ *   [1, 1],
+ *   [3],
+ *   [4],
+ *  ]
+ *
+ * TODO: Make this faster.
+ */
+function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): T[][] {
+  let groups: T[][] = []
+  let sorted = entries.slice().sort(comparator)
+
+  for (let entry of sorted) {
+    let prevGroup = groups[groups.length - 1]
+    if (prevGroup && comparator(prevGroup[0], entry) === 0) {
+      prevGroup.push(entry)
+    } else {
+      groups.push([entry])
+    }
+  }
+
+  return groups
 }

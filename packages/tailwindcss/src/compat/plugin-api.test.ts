@@ -1404,12 +1404,12 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .potato-yellow .potato-\\[yellow\\]\\:underline {
-          text-decoration-line: underline;
-        }
-
         .potato-baked .potato-\\[baked\\]\\:flex {
           display: flex;
+        }
+
+        .potato-yellow .potato-\\[yellow\\]\\:underline {
+          text-decoration-line: underline;
         }
       }"
     `)
@@ -1435,15 +1435,15 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (potato: yellow) {
-          .potato-\\[yellow\\]\\:underline {
-            text-decoration-line: underline;
-          }
-        }
-
         @media (potato: baked) {
           .potato-\\[baked\\]\\:flex {
             display: flex;
+          }
+        }
+
+        @media (potato: yellow) {
+          .potato-\\[yellow\\]\\:underline {
+            text-decoration-line: underline;
           }
         }
       }"
@@ -1473,18 +1473,18 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (potato: yellow) {
-          @supports (font: bold) {
-            .potato-\\[yellow\\]\\:underline:large-potato {
-              text-decoration-line: underline;
-            }
-          }
-        }
-
         @media (potato: baked) {
           @supports (font: bold) {
             .potato-\\[baked\\]\\:flex:large-potato {
               display: flex;
+            }
+          }
+        }
+
+        @media (potato: yellow) {
+          @supports (font: bold) {
+            .potato-\\[yellow\\]\\:underline:large-potato {
+              text-decoration-line: underline;
             }
           }
         }
