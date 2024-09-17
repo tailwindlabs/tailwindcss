@@ -10,7 +10,7 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
   // variant are registered inside a group. Since all the variants within a
   // group share the same order, we can use the always-defined `min-*` variant
   // as the order.
-  let order = designSystem.variants.get('min')?.order ?? undefined
+  let coreOrder = designSystem.variants.get('min')?.order ?? undefined
 
   // Register static breakpoint variants for everything that comes from the user
   // theme config.
@@ -29,31 +29,30 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
       continue
     }
 
-    // min-${breakpoint} and max-${breakpoint} rules do not need to be
-    // reconfigured, as they are using functional utilities and will not eagerly
-    // capture the breakpoints before the compat layer runs.
     let query: string | undefined
     let insertOrder: number | undefined
     if (typeof value === 'string') {
       query = `(width >= ${value})`
-      insertOrder = order
+      insertOrder = coreOrder
     } else if (typeof value === 'object' && value !== null) {
       if (Array.isArray(value)) {
         query = value.map(ruleForComplexScreenValue).join(', ')
       } else {
         query = ruleForComplexScreenValue(value) ?? ''
         if ('min' in value && !('max' in value)) {
-          insertOrder = order
+          insertOrder = coreOrder
         }
       }
     } else {
       continue
     }
 
-    if (order && insertOrder === undefined) {
-      insertOrder = allocateOrderAfter(designSystem, order)
+    if (coreOrder && insertOrder === undefined) {
+      insertOrder = allocateOrderAfter(designSystem, coreOrder)
     }
 
+    // `min-*` and `max-*` rules do not need to be reconfigured, as they are
+    // reading the latest values from the theme.
     designSystem.variants.static(
       name,
       (ruleNode) => {
@@ -84,12 +83,8 @@ function ruleForComplexScreenValue(value: object): string | null {
   } else {
     let rules: string[] = []
 
-    if ('min' in value && typeof value.min === 'string') {
-      rules.push(`min-width: ${value.min}`)
-    }
-    if ('max' in value && typeof value.max === 'string') {
-      rules.push(`max-width: ${value.max}`)
-    }
+    if ('min' in value) rules.push(`min-width: ${value.min}`)
+    if ('max' in value) rules.push(`max-width: ${value.max}`)
 
     if (rules.length !== 0) {
       query = `(${rules.join(' and ')})`
