@@ -606,6 +606,42 @@ describe('theme function', () => {
         }"
       `)
     })
+
+    test("values that don't exist don't produce candidates", async () => {
+      // This guarantees that valid candidates still make it through when some are invalid
+      expect(
+        await compileCss(
+          css`
+            @tailwind utilities;
+            @theme reference {
+              --radius-sm: 2rem;
+            }
+          `,
+          [
+            'rounded-[theme(--radius-sm)]',
+            'rounded-[theme(i.do.not.exist)]',
+            'rounded-[theme(--i-do-not-exist)]',
+          ],
+        ),
+      ).toMatchInlineSnapshot(`
+        ".rounded-\\[theme\\(--radius-sm\\)\\] {
+          border-radius: 2rem;
+        }"
+      `)
+
+      // This guarantees no output for the following candidates
+      expect(
+        await compileCss(
+          css`
+            @tailwind utilities;
+            @theme reference {
+              --radius-sm: 2rem;
+            }
+          `,
+          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
+        ),
+      ).toEqual('')
+    })
   })
 
   describe('in @media queries', () => {

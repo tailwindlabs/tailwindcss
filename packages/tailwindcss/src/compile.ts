@@ -1,5 +1,6 @@
 import { decl, rule, walk, WalkAction, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
+import { substituteFunctions } from './css-functions'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
 import { asColor, type Utility } from './utilities'
@@ -39,6 +40,22 @@ export function compileCandidates(
     for (let candidate of candidates) {
       let rules = designSystem.compileAstNodes(candidate)
       if (rules.length === 0) continue
+
+      // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+      // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+      // calls so we need evaluate any functions we find there that weren't in
+      // the source CSS.
+      try {
+        substituteFunctions(
+          rules.map(({ node }) => node),
+          designSystem.resolveThemeValue,
+        )
+      } catch (err) {
+        // If substitution fails then the candidate likely contains a call to
+        // `theme()` that is invalid which may be because of incorrect usage,
+        // invalid arguments, or a theme key that does not exist.
+        continue
+      }
 
       found = true
 
