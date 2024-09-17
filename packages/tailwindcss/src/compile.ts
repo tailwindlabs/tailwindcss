@@ -30,10 +30,7 @@ export function compileCandidates(
     matches.set(rawCandidate, candidates)
   }
 
-  // Sort the variants
-  let variants = sortAndGroup(designSystem.getUsedVariants(), (a, z) =>
-    designSystem.variants.compare(a, z),
-  )
+  let variants = designSystem.getUsedVariantGroups()
 
   // Create the AST
   for (let [rawCandidate, candidates] of matches) {
@@ -321,30 +318,4 @@ function getPropertySort(nodes: AstNode[]) {
   }
 
   return Array.from(propertySort).sort((a, z) => a - z)
-}
-
-/**
- * Sort an array of entries into an array-of-sets. Similar entries (where the
- * sort function returns 0) are grouped together.
- *
- * Example: [a, c, b, A]
- *
- * Becomes: [Set[a, A], Set[b], Set[c]]
- */
-function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): Set<T>[] {
-  let groups: Set<T>[] = []
-  let sorted = entries.sort(comparator)
-  let prevEntry: T | undefined = undefined
-
-  for (let entry of sorted) {
-    let prevSet = groups[groups.length - 1]
-    if (prevSet && prevEntry !== undefined && comparator(prevEntry, entry) === 0) {
-      prevSet.add(entry)
-    } else {
-      prevEntry = entry
-      groups.push(new Set([entry]))
-    }
-  }
-
-  return groups
 }

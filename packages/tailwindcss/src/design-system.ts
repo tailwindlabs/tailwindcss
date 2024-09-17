@@ -21,7 +21,7 @@ export type DesignSystem = {
   parseVariant(variant: string): ReturnType<typeof parseVariant>
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
-  getUsedVariants(): ReturnType<typeof parseVariant>[]
+  getUsedVariantGroups(): Set<ReturnType<typeof parseVariant>>[]
   resolveThemeValue(path: string): string | undefined
 
   // Used by IntelliSense
@@ -79,8 +79,9 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     compileAstNodes(candidate: Candidate) {
       return compiledAstNodes.get(candidate)
     },
-    getUsedVariants() {
-      return Array.from(parsedVariants.values())
+    getUsedVariantGroups() {
+      let variants = Array.from(parsedVariants.values())
+      return sortAndGroup(variants, (a, z) => this.variants.compare(a, z))
     },
 
     resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`) {
@@ -105,4 +106,30 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   }
 
   return designSystem
+}
+
+/**
+ * Sort an array of entries into an array-of-sets. Similar entries (where the
+ * sort function returns 0) are grouped together.
+ *
+ * Example: [a, c, b, A]
+ *
+ * Becomes: [Set[a, A], Set[b], Set[c]]
+ */
+function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): Set<T>[] {
+  let groups: Set<T>[] = []
+  let sorted = entries.sort(comparator)
+  let prevEntry: T | undefined = undefined
+
+  for (let entry of sorted) {
+    let prevSet = groups[groups.length - 1]
+    if (prevSet && prevEntry !== undefined && comparator(prevEntry, entry) === 0) {
+      prevSet.add(entry)
+    } else {
+      prevEntry = entry
+      groups.push(new Set([entry]))
+    }
+  }
+
+  return groups
 }
