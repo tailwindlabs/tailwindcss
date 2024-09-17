@@ -13,11 +13,8 @@ export function registerScreensConfig(config: ResolvedConfig, designSystem: Desi
   // as the order.
   let order = designSystem.variants.get('min')?.order ?? undefined
 
-  // Case A: All theme config are simple (non-nested-object) values. This means
-  // all breakpoints are used as `min` values, like we do in the core.
-
-  // Step 1: Register static breakpoint variants for everything that comes from
-  // the user theme config.
+  // Register static breakpoint variants for everything that comes from the user
+  // theme config.
   for (let [name, value] of Object.entries(screens)) {
     let coreVariant = designSystem.variants.get(name)
 
