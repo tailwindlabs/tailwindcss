@@ -8,7 +8,7 @@ import type { CssInJs, PluginAPI } from './plugin-api'
 const css = String.raw
 
 describe('theme', async () => {
-  test('plugin theme can contain objects', async ({ expect }) => {
+  test('plugin theme can contain objects', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -68,7 +68,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('plugin theme can extend colors', async ({ expect }) => {
+  test('plugin theme can extend colors', async () => {
     let input = css`
       @theme reference {
         --color-red-500: #ef4444;
@@ -208,7 +208,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('plugin theme can have opacity modifiers', async ({ expect }) => {
+  test('plugin theme can have opacity modifiers', async () => {
     let input = css`
       @tailwind utilities;
       @theme {
@@ -251,7 +251,7 @@ describe('theme', async () => {
       "
     `)
   })
-  test('theme value functions are resolved correctly regardless of order', async ({ expect }) => {
+  test('theme value functions are resolved correctly regardless of order', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -302,7 +302,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('plugins can override the default key', async ({ expect }) => {
+  test('plugins can override the default key', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -342,7 +342,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('plugins can read CSS theme keys using the old theme key notation', async ({ expect }) => {
+  test('plugins can read CSS theme keys using the old theme key notation', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -397,7 +397,7 @@ describe('theme', async () => {
       `)
   })
 
-  test('CSS theme values are merged with JS theme values', async ({ expect }) => {
+  test('CSS theme values are merged with JS theme values', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -448,7 +448,7 @@ describe('theme', async () => {
       `)
   })
 
-  test('CSS theme defaults take precedence over JS theme defaults', async ({ expect }) => {
+  test('CSS theme defaults take precedence over JS theme defaults', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -492,7 +492,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('CSS theme values take precedence even over non-object JS values', async ({ expect }) => {
+  test('CSS theme values take precedence even over non-object JS values', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -530,7 +530,7 @@ describe('theme', async () => {
     })
   })
 
-  test('all necessary theme keys support bare values', async ({ expect }) => {
+  test('all necessary theme keys support bare values', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -768,7 +768,7 @@ describe('theme', async () => {
     `)
   })
 
-  test('theme keys can derive from other theme keys', async ({ expect }) => {
+  test('theme keys can derive from other theme keys', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -834,7 +834,7 @@ describe('theme', async () => {
     expect(fn).toHaveBeenNthCalledWith(3, 'ease-out')
   })
 
-  test('nested theme key lookups work even for flattened keys', async ({ expect }) => {
+  test('nested theme key lookups work even for flattened keys', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
@@ -889,7 +889,7 @@ describe('theme', async () => {
     expect(fn).toHaveBeenCalledWith({}) // Present in the resolved config
   })
 
-  test('Candidates can match multiple utility definitions', async ({ expect }) => {
+  test('Candidates can match multiple utility definitions', async () => {
     let input = css`
       @tailwind utilities;
       @plugin "my-plugin";
