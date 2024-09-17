@@ -278,6 +278,7 @@ let themeUpgradeKeys = {
   '--background-opacity': '--opacity',
   '--border-color': '--color',
   '--border-opacity': '--opacity',
+  '--border-radius': '--radius',
   '--border-spacing': '--spacing',
   '--box-shadow-color': '--color',
   '--caret-color': '--color',
