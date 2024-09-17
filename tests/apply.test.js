@@ -1640,6 +1640,7 @@ it('apply partitioning works with media queries', async () => {
   const result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
+    ${defaults}
     html,
     body {
       --tw-text-opacity: 1;
@@ -1654,7 +1655,6 @@ it('apply partitioning works with media queries', async () => {
         font-size: 2rem;
       }
     }
-    ${defaults}
   `)
 })
 

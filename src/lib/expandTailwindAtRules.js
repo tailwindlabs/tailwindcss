@@ -192,7 +192,7 @@ export default function expandTailwindAtRules(context) {
 
     if (layerNodes.base) {
       layerNodes.base.before(
-        cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source, {
+        cloneNodes([...defaultNodes, ...baseNodes], layerNodes.base.source, {
           layer: 'base',
         })
       )

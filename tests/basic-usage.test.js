@@ -460,11 +460,11 @@ it('does not produce duplicate output when seeing variants preceding a wildcard 
       * {
         color: #00f;
       }
+      ${defaults}
       .combined,
       * {
         color: red;
       }
-      ${defaults}
       .underline {
         text-decoration-line: underline;
       }

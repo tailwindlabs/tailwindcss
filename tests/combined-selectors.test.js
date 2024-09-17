@@ -25,6 +25,7 @@ it('should generate the partial selector, if only a partial is used (base layer)
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       :root {
         font-weight: bold;
       }
@@ -32,7 +33,6 @@ it('should generate the partial selector, if only a partial is used (base layer)
       .a {
         color: #000;
       }
-      ${defaults}
     `)
   })
 })
