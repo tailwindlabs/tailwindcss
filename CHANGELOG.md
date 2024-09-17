@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.12] - 2024-09-17
+
 ### Fixed
 
 - Ensure using `@apply` with utilities that use `@defaults` works with rules defined in the base layer when using `optimizeUniversalDefaults` ([#14427](https://github.com/tailwindlabs/tailwindcss/pull/14427))
@@ -2439,7 +2443,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...HEAD
+[3.4.12]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...v3.4.12
 [3.4.11]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...v3.4.11
 [3.4.10]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.9...v3.4.10
 [3.4.9]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...v3.4.9
