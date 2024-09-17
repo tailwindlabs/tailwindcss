@@ -69,3 +69,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   darkMode: DarkModeStrategy | null
 }
+
+// `prefix` support
+export interface UserConfig {
+  prefix?: string
+}
+
+export interface ResolvedConfig {
+  prefix: string
+}

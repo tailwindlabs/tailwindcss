@@ -208,6 +208,11 @@ export async function applyCompatibilityHooks({
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
 
+  // If a prefix has already been set in CSS don't override it
+  if (designSystem.theme.prefix === '') {
+    designSystem.theme.prefix = resolvedConfig.prefix
+  }
+
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
   // by plugins or JS config files. This is significantly slower than just

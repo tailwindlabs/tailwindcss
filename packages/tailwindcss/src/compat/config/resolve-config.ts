@@ -27,6 +27,7 @@ interface ResolutionContext {
 }
 
 let minimal: ResolvedConfig = {
+  prefix: '',
   darkMode: null,
   theme: {},
   plugins: [],
@@ -54,10 +55,14 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
     extractConfigs(ctx, file)
   }
 
-  // Merge dark mode
+  // Merge top level keys
   for (let config of ctx.configs) {
     if ('darkMode' in config && config.darkMode !== undefined) {
       ctx.result.darkMode = config.darkMode ?? null
+    }
+
+    if ('prefix' in config && config.prefix !== undefined) {
+      ctx.result.prefix = config.prefix ?? ''
     }
   }
 
