@@ -993,7 +993,8 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
             polite: 'live="polite"',
           },
           supports: {
-            'child-combinator': 'h2 > p',
+            'child-combinator': 'selector(h2 > p)',
+            foo: 'bar',
           },
           data: {
             checked: 'ui~="checked"',
@@ -1007,6 +1008,7 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
     compiler.build([
       'aria-polite:underline',
       'supports-child-combinator:underline',
+      'supports-foo:underline',
       'data-checked:underline',
 
       // Ensure core variants still work
@@ -1040,7 +1042,12 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
       }
     }
     .supports-child-combinator\\:underline {
-      @supports (h2 > p) {
+      @supports selector(h2 > p) {
+        text-decoration-line: underline;
+      }
+    }
+    .supports-foo\\:underline {
+      @supports (bar: var(--tw)) {
         text-decoration-line: underline;
       }
     }

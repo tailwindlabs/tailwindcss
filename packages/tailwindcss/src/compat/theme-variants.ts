@@ -1,4 +1,3 @@
-import { rule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { ResolvedConfig } from './config/types'
 
@@ -9,55 +8,61 @@ export function registerThemeVariantOverrides(config: ResolvedConfig, designSyst
 
   if (Object.keys(ariaVariants).length > 0) {
     let coreAria = designSystem.variants.get('aria')
-    let coreApplyFn = coreAria?.applyFn
-    let coreCompounds = coreAria?.compounds
+    let applyFn = coreAria?.applyFn
+    let compounds = coreAria?.compounds
     designSystem.variants.functional(
       'aria',
       (ruleNode, variant) => {
         let value = variant.value
         if (value && value.kind === 'named' && value.value in ariaVariants) {
-          ruleNode.nodes = [rule(`&[aria-${ariaVariants[value.value]}]`, ruleNode.nodes)]
-          return
+          return applyFn?.(ruleNode, {
+            ...variant,
+            value: { kind: 'arbitrary', value: ariaVariants[value.value] as string },
+          })
         }
-        return coreApplyFn?.(ruleNode, variant)
+        return applyFn?.(ruleNode, variant)
       },
-      { compounds: coreCompounds },
+      { compounds },
     )
   }
 
   if (Object.keys(supportsVariants).length > 0) {
     let coreSupports = designSystem.variants.get('supports')
-    let coreApplyFn = coreSupports?.applyFn
-    let coreCompounds = coreSupports?.compounds
+    let applyFn = coreSupports?.applyFn
+    let compounds = coreSupports?.compounds
     designSystem.variants.functional(
       'supports',
       (ruleNode, variant) => {
         let value = variant.value
         if (value && value.kind === 'named' && value.value in supportsVariants) {
-          ruleNode.nodes = [rule(`@supports (${supportsVariants[value.value]})`, ruleNode.nodes)]
-          return
+          return applyFn?.(ruleNode, {
+            ...variant,
+            value: { kind: 'arbitrary', value: supportsVariants[value.value] as string },
+          })
         }
-        return coreApplyFn?.(ruleNode, variant)
+        return applyFn?.(ruleNode, variant)
       },
-      { compounds: coreCompounds },
+      { compounds },
     )
   }
 
   if (Object.keys(dataVariants).length > 0) {
     let coreData = designSystem.variants.get('data')
-    let coreApplyFn = coreData?.applyFn
-    let coreCompounds = coreData?.compounds
+    let applyFn = coreData?.applyFn
+    let compounds = coreData?.compounds
     designSystem.variants.functional(
       'data',
       (ruleNode, variant) => {
         let value = variant.value
         if (value && value.kind === 'named' && value.value in dataVariants) {
-          ruleNode.nodes = [rule(`&[data-${dataVariants[value.value]}]`, ruleNode.nodes)]
-          return
+          return applyFn?.(ruleNode, {
+            ...variant,
+            value: { kind: 'arbitrary', value: dataVariants[value.value] as string },
+          })
         }
-        return coreApplyFn?.(ruleNode, variant)
+        return applyFn?.(ruleNode, variant)
       },
-      { compounds: coreCompounds },
+      { compounds },
     )
   }
 }
