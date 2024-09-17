@@ -30,10 +30,7 @@ export function compileCandidates(
     matches.set(rawCandidate, candidates)
   }
 
-  // Sort the variants
-  let variants = designSystem.getUsedVariants().sort((a, z) => {
-    return designSystem.variants.compare(a, z)
-  })
+  let variantOrderMap = designSystem.getVariantOrder()
 
   // Create the AST
   for (let [rawCandidate, candidates] of matches) {
@@ -51,7 +48,7 @@ export function compileCandidates(
         // variants used.
         let variantOrder = 0n
         for (let variant of candidate.variants) {
-          variantOrder |= 1n << BigInt(variants.indexOf(variant))
+          variantOrder |= 1n << BigInt(variantOrderMap.get(variant)!)
         }
 
         nodeSorting.set(node, {

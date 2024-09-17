@@ -1404,12 +1404,12 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .potato-yellow .potato-\\[yellow\\]\\:underline {
-          text-decoration-line: underline;
-        }
-
         .potato-baked .potato-\\[baked\\]\\:flex {
           display: flex;
+        }
+
+        .potato-yellow .potato-\\[yellow\\]\\:underline {
+          text-decoration-line: underline;
         }
       }"
     `)
@@ -1435,15 +1435,15 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (potato: yellow) {
-          .potato-\\[yellow\\]\\:underline {
-            text-decoration-line: underline;
-          }
-        }
-
         @media (potato: baked) {
           .potato-\\[baked\\]\\:flex {
             display: flex;
+          }
+        }
+
+        @media (potato: yellow) {
+          .potato-\\[yellow\\]\\:underline {
+            text-decoration-line: underline;
           }
         }
       }"
@@ -1473,18 +1473,18 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (potato: yellow) {
-          @supports (font: bold) {
-            .potato-\\[yellow\\]\\:underline:large-potato {
-              text-decoration-line: underline;
-            }
-          }
-        }
-
         @media (potato: baked) {
           @supports (font: bold) {
             .potato-\\[baked\\]\\:flex:large-potato {
               display: flex;
+            }
+          }
+        }
+
+        @media (potato: yellow) {
+          @supports (font: bold) {
+            .potato-\\[yellow\\]\\:underline:large-potato {
+              text-decoration-line: underline;
             }
           }
         }
@@ -1541,10 +1541,10 @@ describe('matchVariant', () => {
           return ({ matchVariant }: PluginAPI) => {
             matchVariant('alphabet', (side) => `&${side}`, {
               values: {
-                a: '[data-value="a"]',
-                b: '[data-value="b"]',
-                c: '[data-value="c"]',
-                d: '[data-value="d"]',
+                d: '[data-order="1"]',
+                a: '[data-order="2"]',
+                c: '[data-order="3"]',
+                b: '[data-order="4"]',
               },
             })
           }
@@ -1560,19 +1560,19 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .alphabet-a\\:underline[data-value="a"] {
+        .alphabet-d\\:underline[data-order="1"] {
           text-decoration-line: underline;
         }
 
-        .alphabet-b\\:underline[data-value="b"] {
+        .alphabet-a\\:underline[data-order="2"] {
           text-decoration-line: underline;
         }
 
-        .alphabet-c\\:underline[data-value="c"] {
+        .alphabet-c\\:underline[data-order="3"] {
           text-decoration-line: underline;
         }
 
-        .alphabet-d\\:underline[data-value="d"] {
+        .alphabet-b\\:underline[data-order="4"] {
           text-decoration-line: underline;
         }
       }"

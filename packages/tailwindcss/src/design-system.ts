@@ -1,5 +1,5 @@
 import { toCss } from './ast'
-import { parseCandidate, parseVariant, type Candidate } from './candidate'
+import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
@@ -13,17 +13,19 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
-  candidatesToCss(classes: string[]): (string | null)[]
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
 
   parseCandidate(candidate: string): Candidate[]
-  parseVariant(variant: string): ReturnType<typeof parseVariant>
+  parseVariant(variant: string): Variant | null
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
-  getUsedVariants(): ReturnType<typeof parseVariant>[]
+  getVariantOrder(): Map<Variant, number>
   resolveThemeValue(path: string): string | undefined
+
+  // Used by IntelliSense
+  candidatesToCss(classes: string[]): (string | null)[]
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -77,8 +79,29 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     compileAstNodes(candidate: Candidate) {
       return compiledAstNodes.get(candidate)
     },
-    getUsedVariants() {
-      return Array.from(parsedVariants.values())
+    getVariantOrder() {
+      let variants = Array.from(parsedVariants.values())
+      variants.sort((a, z) => this.variants.compare(a, z))
+
+      let order = new Map<Variant, number>()
+      let prevVariant: Variant | undefined = undefined
+      let index: number = 0
+
+      for (let variant of variants) {
+        if (variant === null) {
+          continue
+        }
+        // This variant is not the same order as the previous one
+        // so it goes into a new group
+        if (prevVariant !== undefined && this.variants.compare(prevVariant, variant) !== 0) {
+          index++
+        }
+
+        order.set(variant, index)
+        prevVariant = variant
+      }
+
+      return order
     },
 
     resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`) {
