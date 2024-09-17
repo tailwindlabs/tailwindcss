@@ -48,16 +48,16 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
     }
+    .sm\\:flex {
+      @media (width >= 44rem) {
+        display: flex;
+      }
+    }
     .min-sm\\:max-md\\:underline {
       @media (width >= 44rem) {
         @media (width < 50rem) {
           text-decoration-line: underline;
         }
-      }
-    }
-    .sm\\:flex {
-      @media (width >= 44rem) {
-        display: flex;
       }
     }
     .md\\:flex {
@@ -138,20 +138,13 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
         display: flex;
       }
     }
-    .min-xs\\:max-md\\:underline {
-      @media (width >= 30rem) {
-        @media (width < 50rem) {
-          text-decoration-line: underline;
-        }
-      }
-    }
     .xs\\:flex {
       @media (width >= 30rem) {
         display: flex;
       }
     }
-    .min-sm\\:max-md\\:underline {
-      @media (width >= 40rem) {
+    .min-xs\\:max-md\\:underline {
+      @media (width >= 30rem) {
         @media (width < 50rem) {
           text-decoration-line: underline;
         }
@@ -160,6 +153,13 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
     .sm\\:flex {
       @media (width >= 40rem) {
         display: flex;
+      }
+    }
+    .min-sm\\:max-md\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 50rem) {
+          text-decoration-line: underline;
+        }
       }
     }
     .md\\:flex {
@@ -219,16 +219,16 @@ test('JS config `screens` only setup, even if those match the default-theme expo
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ".min-sm\\:max-md\\:underline {
+    ".sm\\:flex {
+      @media (width >= 40rem) {
+        display: flex;
+      }
+    }
+    .min-sm\\:max-md\\:underline {
       @media (width >= 40rem) {
         @media (width < 48rem) {
           text-decoration-line: underline;
         }
-      }
-    }
-    .sm\\:flex {
-      @media (width >= 40rem) {
-        display: flex;
       }
     }
     .md\\:flex {
@@ -305,11 +305,14 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
     }
-    .min-sm\\:max-md\\:underline {
+    .mini\\:flex {
       @media (width >= 40rem) {
-        @media (width < 48rem) {
-          text-decoration-line: underline;
-        }
+        display: flex;
+      }
+    }
+    .sm\\:flex {
+      @media (width >= 40rem) {
+        display: flex;
       }
     }
     .min-mini\\:max-midi\\:underline {
@@ -319,14 +322,11 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
         }
       }
     }
-    .mini\\:flex {
+    .min-sm\\:max-md\\:underline {
       @media (width >= 40rem) {
-        display: flex;
-      }
-    }
-    .sm\\:flex {
-      @media (width >= 40rem) {
-        display: flex;
+        @media (width < 48rem) {
+          text-decoration-line: underline;
+        }
       }
     }
     .md\\:flex {
@@ -403,16 +403,16 @@ test('JS config with `theme: { extends }` should not include the `default-config
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ".min-mini\\:max-midi\\:underline {
+    ".mini\\:flex {
+      @media (width >= 40rem) {
+        display: flex;
+      }
+    }
+    .min-mini\\:max-midi\\:underline {
       @media (width >= 40rem) {
         @media (width < 48rem) {
           text-decoration-line: underline;
         }
-      }
-    }
-    .mini\\:flex {
-      @media (width >= 40rem) {
-        display: flex;
       }
     }
     .midi\\:flex {
