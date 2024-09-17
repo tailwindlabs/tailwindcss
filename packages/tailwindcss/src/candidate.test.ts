@@ -483,7 +483,7 @@ it('should parse a utility with a modifier and a variant', () => {
   `)
 })
 
-it.skip('should not parse a partial utility', () => {
+it('should not parse a partial utility', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
   utilities.functional('bg', () => [])
