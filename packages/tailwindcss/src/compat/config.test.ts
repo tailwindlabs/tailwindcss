@@ -1,4 +1,4 @@
-import { describe, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
 import { flattenColorPalette } from './flatten-color-palette'

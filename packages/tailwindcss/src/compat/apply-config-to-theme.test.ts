@@ -2,12 +2,13 @@ import { expect, test } from 'vitest'
 import { buildDesignSystem } from '../design-system'
 import { Theme } from '../theme'
 import { applyConfigToTheme } from './apply-config-to-theme'
+import { resolveConfig } from './config/resolve-config'
 
 test('Config values can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  applyConfigToTheme(design, [
+  let resolvedUserConfig = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -36,6 +37,7 @@ test('Config values can be merged into the theme', () => {
       },
     },
   ])
+  applyConfigToTheme(design, resolvedUserConfig)
 
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
