@@ -16,10 +16,8 @@ export async function substituteAtImports(
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
       let { uri } = parseImportParams(ValueParser.parse(node.selector.slice(8)))
 
-      // Skip `@import`ing data URIs
-      if (uri.startsWith('data:')) {
-        return
-      }
+      // Skip importing data URIs
+      if (uri.startsWith('data:')) return
 
       promises.set(key(uri, basedir), resolveAtImport(uri, basedir, resolveImport))
     }

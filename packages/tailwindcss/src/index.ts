@@ -413,7 +413,7 @@ export async function compile(
 }
 
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
-  let result = await parseCss(css, '', opts)
+  let result = await parseCss(css, '/* @TODO */', opts)
   return result.designSystem
 }
 

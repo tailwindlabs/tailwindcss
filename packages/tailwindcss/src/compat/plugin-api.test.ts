@@ -14,7 +14,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ addBase, theme }) {
@@ -77,7 +77,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -122,7 +122,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -166,7 +166,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -217,7 +217,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(function ({ addUtilities, theme }) {
           addUtilities({
@@ -257,7 +257,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -308,7 +308,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -352,7 +352,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(function ({ matchUtilities, theme }) {
           matchUtilities(
@@ -407,7 +407,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -458,7 +458,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    let compiler = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ matchUtilities, theme }) {
@@ -504,7 +504,7 @@ describe('theme', async () => {
 
     let fn = vi.fn()
 
-    await compile(input, {
+    await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           function ({ theme }) {
@@ -536,7 +536,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    let { build } = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(function ({ matchUtilities, theme }) {
           function utility(name: string, themeKey: string) {
@@ -780,7 +780,7 @@ describe('theme', async () => {
 
     let fn = vi.fn()
 
-    await compile(input, {
+    await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(
           ({ theme }) => {
@@ -819,7 +819,7 @@ describe('theme', async () => {
 
     let fn = vi.fn()
 
-    await compile(input, {
+    await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(({ theme }) => {
           fn(theme('transitionTimingFunction.DEFAULT'))
@@ -847,7 +847,7 @@ describe('theme', async () => {
 
     let fn = vi.fn()
 
-    await compile(input, {
+    await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(({ theme }) => {
           fn(theme('color.red.100'))
@@ -872,7 +872,7 @@ describe('theme', async () => {
 
     let fn = vi.fn()
 
-    await compile(input, {
+    await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(({ theme }) => {
           fn(theme('i.do.not.exist'))
@@ -895,7 +895,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    let { build } = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(({ addUtilities, matchUtilities }) => {
           addUtilities({
@@ -947,7 +947,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    let { build } = await compile(input, '/root', {
       loadPlugin: async () => {
         return plugin(function ({ matchUtilities }) {
           function utility(name: string, themeKey: string) {
@@ -1166,6 +1166,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1197,6 +1198,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1229,6 +1231,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1263,6 +1266,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1311,6 +1315,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1353,6 +1358,7 @@ describe('addVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ addVariant }: PluginAPI) => {
@@ -1392,6 +1398,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1423,6 +1430,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1458,6 +1466,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1500,6 +1509,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1536,6 +1546,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1587,6 +1598,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1616,6 +1628,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1665,6 +1678,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1717,6 +1731,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1788,6 +1803,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1841,6 +1857,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1910,6 +1927,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -1979,6 +1997,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -2056,6 +2075,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -2087,6 +2107,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -2108,6 +2129,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -2137,6 +2159,7 @@ describe('matchVariant', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadPlugin: async () => {
           return ({ matchVariant }: PluginAPI) => {
@@ -2172,6 +2195,7 @@ describe('addUtilities()', () => {
           --breakpoint-lg: 1024px;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2210,6 +2234,7 @@ describe('addUtilities()', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2237,6 +2262,7 @@ describe('addUtilities()', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2273,6 +2299,7 @@ describe('addUtilities()', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2304,6 +2331,7 @@ describe('addUtilities()', () => {
           @tailwind utilities;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2342,6 +2370,7 @@ describe('addUtilities()', () => {
           --breakpoint-lg: 1024px;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2395,6 +2424,7 @@ describe('addUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/base',
         {
           async loadPlugin() {
             return ({ addUtilities }: PluginAPI) => {
@@ -2421,6 +2451,7 @@ describe('addUtilities()', () => {
           --breakpoint-lg: 1024px;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2461,6 +2492,7 @@ describe('addUtilities()', () => {
           --breakpoint-lg: 1024px;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addUtilities }: PluginAPI) => {
@@ -2581,6 +2613,7 @@ describe('matchUtilities()', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ matchUtilities }: PluginAPI) => {
@@ -3134,6 +3167,7 @@ describe('matchUtilities()', () => {
           --breakpoint-lg: 1024px;
         }
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ matchUtilities }: PluginAPI) => {
@@ -3223,6 +3257,7 @@ describe('addComponents()', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ addComponents }: PluginAPI) => {
@@ -3288,6 +3323,7 @@ describe('prefix()', () => {
       css`
         @plugin "my-plugin";
       `,
+      '/base',
       {
         async loadPlugin() {
           return ({ prefix }: PluginAPI) => {
