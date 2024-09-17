@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support `borderRadius.*` as an alias for `--radius-*` when using dot notation inside the `theme()` function ([#14436](https://github.com/tailwindlabs/tailwindcss/pull/14436))
 - Ensure individual variants from groups are always sorted earlier than stacked variants from the same groups ([#14431](https://github.com/tailwindlabs/tailwindcss/pull/14431))
+- Allow `anchor-size(…)` in arbitrary values ([#14394](https://github.com/tailwindlabs/tailwindcss/pull/14394))
 
 ## [4.0.0-alpha.24] - 2024-09-11
 
