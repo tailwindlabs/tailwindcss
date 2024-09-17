@@ -21,6 +21,7 @@ const MATH_FUNCTIONS = [
 ]
 
 const KNOWN_DASHED_FUNCTIONS = ['anchor-size']
+const DASHED_FUNCTIONS_REGEX = new RegExp(`(${KNOWN_DASHED_FUNCTIONS.join('|')})\\(`, 'g')
 
 export function hasMathFn(input: string) {
   return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
@@ -39,10 +40,13 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
   // Replace known functions with a placeholder
   let hasKnownFunctions = false
-  input = input.replace(new RegExp(`(${KNOWN_DASHED_FUNCTIONS.join('|')})\\(`, 'g'), (_, fn) => {
-    hasKnownFunctions = true
-    return `$${KNOWN_DASHED_FUNCTIONS.indexOf(fn)}$(`
-  })
+  if (KNOWN_DASHED_FUNCTIONS.some((fn) => input.includes(fn))) {
+    DASHED_FUNCTIONS_REGEX.lastIndex = 0
+    input = input.replace(DASHED_FUNCTIONS_REGEX, (_, fn) => {
+      hasKnownFunctions = true
+      return `$${KNOWN_DASHED_FUNCTIONS.indexOf(fn)}$(`
+    })
+  }
 
   let result = ''
   let formattable: boolean[] = []
@@ -160,7 +164,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
   }
 
   if (hasKnownFunctions) {
-    return result.replace(/\$(\d+)\$/g, (_, idx) => KNOWN_DASHED_FUNCTIONS[idx])
+    return result.replace(/\$(\d+)\$/g, (fn, idx) => KNOWN_DASHED_FUNCTIONS[idx] ?? fn)
   }
 
   return result
