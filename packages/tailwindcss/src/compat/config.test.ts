@@ -1009,12 +1009,13 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
       'supports-child-combinator:underline',
       'data-checked:underline',
 
-      // Ensure core utility still works
+      // Ensure core variants still work
       'aria-hidden:flex',
       'supports-grid:flex',
       'data-foo:flex',
 
-      // print variants should be at the end, like it is in the core utility
+      // The `print` variant should still be sorted last, even after registering
+      // the other custom variants.
       'print:flex',
     ]),
   ).toMatchInlineSnapshot(`
