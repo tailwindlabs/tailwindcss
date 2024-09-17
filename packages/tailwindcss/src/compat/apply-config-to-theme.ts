@@ -21,6 +21,9 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
 
 export function applyConfigToTheme(designSystem: DesignSystem, { theme }: ResolvedConfig) {
   for (let [path, value] of themeableValues(theme)) {
+    if (typeof value !== 'string' && typeof value !== 'number') {
+      continue
+    }
     let name = keyPathToCssProperty(path)
     designSystem.theme.add(
       `--${name}`,

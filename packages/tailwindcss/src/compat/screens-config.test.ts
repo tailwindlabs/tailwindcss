@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { compile } from '..'
 
 const css = String.raw
@@ -439,4 +439,154 @@ test('JS config with `theme: { extends }` should not include the `default-config
     }
     "
   `)
+})
+
+describe('complex screen configs', () => {
+  test('generates utilities', async () => {
+    let input = css`
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            screens: {
+              sm: { max: '639px' },
+              md: [
+                //
+                { min: '668px', max: '767px' },
+                { min: '868px' },
+              ],
+              lg: { min: '868px' },
+              xl: { min: '1024px', max: '1279px' },
+              tall: { raw: '(min-height: 800px)' },
+            },
+          },
+        },
+      }),
+    })
+
+    expect(
+      compiler.build([
+        'sm:flex',
+        'md:flex',
+        'lg:flex',
+        'xl:flex',
+        'tall:flex',
+        'min-sm:flex',
+        'min-md:flex',
+        'min-lg:flex',
+        'min-xl:flex',
+        'min-tall:flex',
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ".lg\\:flex {
+        @media (min-width: 868px) {
+          display: flex;
+        }
+      }
+      .tall\\:flex {
+        @media (min-height: 800px) {
+          display: flex;
+        }
+      }
+      .xl\\:flex {
+        @media (min-width: 1024px and max-width: 1279px) {
+          display: flex;
+        }
+      }
+      .md\\:flex {
+        @media (min-width: 668px and max-width: 767px), (min-width: 868px) {
+          display: flex;
+        }
+      }
+      .sm\\:flex {
+        @media (max-width: 639px) {
+          display: flex;
+        }
+      }
+      .print\\:items-end {
+        @media print {
+          align-items: flex-end;
+        }
+      }
+      "
+    `)
+  })
+
+  test("don't interfere with `min-*` and `max-*` variants of non-complex screen configs", async () => {
+    let input = css`
+      @theme default {
+        --breakpoint-sm: 39rem;
+        --breakpoint-md: 48rem;
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadConfig: async () => ({
+        theme: {
+          extend: {
+            screens: {
+              sm: '40rem',
+              portrait: { raw: 'screen and (orientation: portrait)' },
+            },
+          },
+        },
+      }),
+    })
+
+    expect(
+      compiler.build([
+        'sm:flex',
+        'md:flex',
+        'portrait:flex',
+        'min-sm:flex',
+        'min-md:flex',
+        'min-portrait:flex',
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-md: 48rem;
+      }
+      .min-sm\\:flex {
+        @media (width >= 40rem) {
+          display: flex;
+        }
+      }
+      .sm\\:flex {
+        @media (width >= 40rem) {
+          display: flex;
+        }
+      }
+      .md\\:flex {
+        @media (width >= 48rem) {
+          display: flex;
+        }
+      }
+      .min-md\\:flex {
+        @media (width >= 48rem) {
+          display: flex;
+        }
+      }
+      .portrait\\:flex {
+        @media screen and (orientation: portrait) {
+          display: flex;
+        }
+      }
+      .print\\:items-end {
+        @media print {
+          align-items: flex-end;
+        }
+      }
+      "
+    `)
+  })
 })

@@ -12,8 +12,8 @@ type VariantFn<T extends Variant['kind']> = (
 type CompareFn = (a: Variant, z: Variant) => number
 
 export class Variants {
-  private compareFns = new Map<number, CompareFn>()
-  private variants = new Map<
+  public compareFns = new Map<number, CompareFn>()
+  public variants = new Map<
     string,
     {
       kind: Variant['kind']

@@ -1,10 +1,9 @@
 import { rule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { ResolvedConfig } from './config/types'
-import DefaultTheme from './default-theme'
 
-export function registerScreensConfig(config: ResolvedConfig, designSystem: DesignSystem) {
-  let screens = config.theme.screens || {}
+export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: DesignSystem) {
+  let screens = userConfig.theme.screens || {}
 
   // We want to insert the breakpoints in the right order as best we can. In the
   // core utility, all static breakpoint variants and the `min-*` functional
@@ -18,16 +17,6 @@ export function registerScreensConfig(config: ResolvedConfig, designSystem: Desi
   for (let [name, value] of Object.entries(screens)) {
     let coreVariant = designSystem.variants.get(name)
 
-    // Ignore defaults if they are already registered
-    //
-    // Note: We can't rely on the `designSystem.theme` for this, as it has the
-    // JS config values applied already. However, the DefaultTheme might not
-    // match what is actually already set in the designSystem since the @theme
-    // is set at runtime.
-    if (coreVariant && DefaultTheme.screens[name as 'sm'] === screens[name]) {
-      continue
-    }
-
     // Ignore it if there's a CSS value that takes precedence over the JS config
     // and the static utilities are already registered.
     //
@@ -36,19 +25,75 @@ export function registerScreensConfig(config: ResolvedConfig, designSystem: Desi
     // resolving this. If Theme has a different value, we know that this is not
     // coming from the JS plugin and thus we don't need to handle it explicitly.
     let cssValue = designSystem.theme.resolveValue(name, ['--breakpoint'])
-    if (coreVariant && cssValue && cssValue !== value) {
+    if (coreVariant && cssValue && !designSystem.theme.hasDefault(`--breakpoint-${name}`)) {
       continue
     }
 
     // min-${breakpoint} and max-${breakpoint} rules do not need to be
     // reconfigured, as they are using functional utilities and will not eagerly
     // capture the breakpoints before the compat layer runs.
+    let query: string | undefined
+    let insertOrder: number | undefined
+    if (typeof value === 'string') {
+      query = `(width >= ${value})`
+      insertOrder = order
+    } else if (typeof value === 'object' && value !== null) {
+      if (Array.isArray(value)) {
+        query = value.map(ruleForComplexScreenValue).join(', ')
+      } else {
+        query = ruleForComplexScreenValue(value) ?? ''
+        if ('min' in value && !('max' in value)) {
+          insertOrder = order
+        }
+      }
+    } else {
+      continue
+    }
+
+    if (order && insertOrder === undefined) {
+      insertOrder = allocateOrderAfter(designSystem, order)
+    }
+
     designSystem.variants.static(
       name,
       (ruleNode) => {
-        ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
+        ruleNode.nodes = [rule(`@media ${query}`, ruleNode.nodes)]
       },
-      { order },
+      { order: insertOrder },
     )
   }
+}
+
+function allocateOrderAfter(designSystem: DesignSystem, order: number): number {
+  for (let [, variant] of designSystem.variants.variants) {
+    if (variant.order > order) variant.order++
+  }
+  designSystem.variants.compareFns = new Map(
+    Array.from(designSystem.variants.compareFns).map(([key, value]) => {
+      if (key > order) key++
+      return [key, value]
+    }),
+  )
+  return order + 1
+}
+
+function ruleForComplexScreenValue(value: object): string | null {
+  let query = null
+  if ('raw' in value && typeof value.raw === 'string') {
+    query = value.raw
+  } else {
+    let rules: string[] = []
+
+    if ('min' in value && typeof value.min === 'string') {
+      rules.push(`min-width: ${value.min}`)
+    }
+    if ('max' in value && typeof value.max === 'string') {
+      rules.push(`max-width: ${value.max}`)
+    }
+
+    if (rules.length !== 0) {
+      query = `(${rules.join(' and ')})`
+    }
+  }
+  return query
 }
