@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, test } from 'vitest'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 import { Utilities } from './utilities'
@@ -1279,6 +1279,31 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
             },
           },
         ],
+      },
+    ]
+  `)
+})
+
+test('more specific roots take precedence over less specific roots', () => {
+  let utilities = new Utilities()
+  utilities.functional('foo', () => [])
+  utilities.functional('foo-bar', () => [])
+
+  expect(run('foo-bar-2', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "negative": false,
+        "raw": "foo-bar-2",
+        "root": "foo-bar",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "2",
+        },
+        "variants": [],
       },
     ]
   `)
