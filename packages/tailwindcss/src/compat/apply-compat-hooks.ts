@@ -188,7 +188,7 @@ export async function applyCompatibilityHooks({
   // core utilities already read from.
   applyConfigToTheme(designSystem, resolvedUserConfig)
 
-  registerThemeVariantOverrides(resolvedConfig, designSystem)
+  registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
