@@ -1217,3 +1217,138 @@ test('merges css breakpoints with js config screens', async () => {
       "
     `)
 })
+
+test('utilities must be prefixed', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (id, base) => ({
+      base,
+      module: { prefix: 'tw' },
+    }),
+  })
+
+  // Prefixed utilities are generated
+  expect(
+    compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']),
+  ).toMatchInlineSnapshot(`
+    ".tw\\:custom {
+      color: red;
+    }
+    .tw\\:underline {
+      text-decoration-line: underline;
+    }
+    .tw\\:hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
+      }
+    }
+    "
+  `)
+
+  // Non-prefixed utilities are ignored
+  compiler = await compile(input, {
+    loadModule: async (id, base) => ({
+      base,
+      module: { prefix: 'tw' },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+})
+
+test('utilities used in @apply must be prefixed', async () => {
+  let compiler = await compile(
+    css`
+      @config "./config.js";
+
+      .my-underline {
+        @apply tw:underline;
+      }
+    `,
+    {
+      loadModule: async (id, base) => ({
+        base,
+        module: { prefix: 'tw' },
+      }),
+    },
+  )
+
+  // Prefixed utilities are generated
+  expect(compiler.build([])).toMatchInlineSnapshot(`
+    ".my-underline {
+      text-decoration-line: underline;
+    }
+    "
+  `)
+
+  // Non-prefixed utilities cause an error
+  expect(() =>
+    compile(
+      css`
+        @config "./config.js";
+
+        .my-underline {
+          @apply underline;
+        }
+      `,
+      {
+        loadModule: async (id, base) => ({
+          base,
+          module: { prefix: 'tw' },
+        }),
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: Cannot apply unknown utility class: underline]`,
+  )
+})
+
+test('Prefixes configured in CSS take precedence over those defined in JS configs', async () => {
+  let compiler = await compile(
+    css`
+      @theme prefix(wat) {
+        --color-red: #f00;
+        --color-green: #0f0;
+        --breakpoint-sm: 640px;
+      }
+
+      @config "./plugin.js";
+
+      @tailwind utilities;
+
+      @utility custom {
+        color: red;
+      }
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: { prefix: 'tw' },
+        }
+      },
+    },
+  )
+
+  expect(compiler.build(['wat:custom'])).toMatchInlineSnapshot(`
+    ":root {
+      --wat-color-red: #f00;
+      --wat-color-green: #0f0;
+      --wat-breakpoint-sm: 640px;
+    }
+    .wat\\:custom {
+      color: red;
+    }
+    "
+  `)
+})
