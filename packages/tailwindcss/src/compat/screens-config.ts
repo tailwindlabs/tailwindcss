@@ -4,7 +4,6 @@ import type { ResolvedConfig } from './config/types'
 import DefaultTheme from './default-theme'
 
 export function registerScreensConfig(config: ResolvedConfig, designSystem: DesignSystem) {
-  return
   let screens = config.theme.screens || {}
 
   // We want to insert the breakpoints in the right order as best we can. In the

@@ -139,13 +139,6 @@ export class Variants {
     return compareFn(a, z)
   }
 
-  getOrders(a: Variant): number[] {
-    if (a.kind === 'compound') {
-      return [this.variants.get(a.root)!.order, ...this.getOrders(a.variant)]
-    }
-    return [this.variants.get(a.root)!.order]
-  }
-
   keys() {
     return this.variants.keys()
   }

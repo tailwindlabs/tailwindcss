@@ -1416,7 +1416,7 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test.only('`default` theme values can be overridden by plugin theme values', async () => {
+  test('`default` theme values can be overridden by plugin theme values', async () => {
     let { build } = await compile(
       css`
         @theme default {

@@ -32,23 +32,6 @@ export function compileCandidates(
 
   let variantOrderMap = designSystem.getVariantOrder()
 
-  // max-sm 0 => 1
-  // min-sm 1 => 2
-  // sm     2 => 4
-
-  //
-  // max-sm // [1]
-  // max-md // [1]
-  //
-
-  // [
-  //  [max-sm, max-md],
-  //  [[&:foo]],
-  //  [[&:bar]],
-  // ]
-
-  // To do this, variantOrder needs to be an array and the inner sorting needs to work
-
   // Create the AST
   for (let [rawCandidate, candidates] of matches) {
     let found = false
@@ -64,19 +47,9 @@ export function compileCandidates(
         // variant. This allows us to sort the rules based on the order of
         // variants used.
         let variantOrder = 0n
-        console.log(candidate.variants)
-
         for (let variant of candidate.variants) {
-<<<<<<< HEAD
           variantOrder |= 1n << BigInt(variantOrderMap.get(variant)!)
-||||||| parent of 8345e050 (WIP next steps, check compile.ts,make something that returns a nested array)
-          variantOrder |= 1n << BigInt(variants.indexOf(variant))
-=======
-          console.log(designSystem.variants.getOrders(variant))
-          variantOrder |= 1n << BigInt(variants.indexOf(variant))
->>>>>>> 8345e050 (WIP next steps, check compile.ts,make something that returns a nested array)
         }
-        console.log({ variantOrder })
 
         nodeSorting.set(node, {
           properties: propertySort,
