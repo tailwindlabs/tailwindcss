@@ -1,3 +1,4 @@
+import dedent from 'dedent'
 import { css, json, test } from '../utils'
 
 test(
@@ -74,5 +75,51 @@ test(
     await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.css', css` @import 'tailwindcss'; `)
+  },
+)
+
+test(
+  'migrate @layer utilities',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+
+        @layer utilities {
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    await fs.expectFileToContain(
+      'src/index.css',
+      dedent`
+        @utility no-scrollbar {
+          &::-webkit-scrollbar {
+            display: none;
+          }
+          -ms-overflow-style: none;
+          scrollbar-width: none
+        }
+      `,
+    )
   },
 )
