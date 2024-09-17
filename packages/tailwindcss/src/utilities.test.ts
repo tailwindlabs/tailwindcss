@@ -14144,14 +14144,6 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow {
-      inset: var(--inset-shadow, inset 0 2px 4px #0000000d);
-    }
-
-    .inset-shadow-sm {
-      inset: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
-    }
-
-    .inset-shadow {
       --tw-inset-shadow: inset 0 2px 4px #0000000d;
       --tw-inset-shadow-colored: inset 0 2px 4px var(--tw-inset-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
