@@ -1,5 +1,5 @@
 import { toCss } from './ast'
-import { parseCandidate, parseVariant, type Candidate } from './candidate'
+import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
@@ -18,10 +18,10 @@ export type DesignSystem = {
   getVariants(): VariantEntry[]
 
   parseCandidate(candidate: string): Candidate[]
-  parseVariant(variant: string): ReturnType<typeof parseVariant>
+  parseVariant(variant: string): Variant | null
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
-  getUsedVariantGroups(): Set<ReturnType<typeof parseVariant>>[]
+  getVariantOrder(): Map<Variant, number>
   resolveThemeValue(path: string): string | undefined
 
   // Used by IntelliSense
@@ -79,9 +79,29 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     compileAstNodes(candidate: Candidate) {
       return compiledAstNodes.get(candidate)
     },
-    getUsedVariantGroups() {
+    getVariantOrder() {
       let variants = Array.from(parsedVariants.values())
-      return sortAndGroup(variants, (a, z) => this.variants.compare(a, z))
+      variants.sort((a, z) => this.variants.compare(a, z))
+
+      let order = new Map<Variant, number>()
+      let prevVariant: Variant | undefined = undefined
+      let index: number = 0
+
+      for (let variant of variants) {
+        if (variant === null) {
+          continue
+        }
+        // This variant is not the same order as the previous one
+        // so it goes into a new group
+        if (prevVariant !== undefined && this.variants.compare(prevVariant, variant) !== 0) {
+          index++
+        }
+
+        order.set(variant, index)
+        prevVariant = variant
+      }
+
+      return order
     },
 
     resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`) {
@@ -106,30 +126,4 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   }
 
   return designSystem
-}
-
-/**
- * Sort an array of entries into an array-of-sets. Similar entries (where the
- * sort function returns 0) are grouped together.
- *
- * Example: [a, c, b, A]
- *
- * Becomes: [Set[a, A], Set[b], Set[c]]
- */
-function sortAndGroup<T>(entries: T[], comparator: (a: T, z: T) => number): Set<T>[] {
-  let groups: Set<T>[] = []
-  let sorted = entries.sort(comparator)
-  let prevEntry: T | undefined = undefined
-
-  for (let entry of sorted) {
-    let prevSet = groups[groups.length - 1]
-    if (prevSet && prevEntry !== undefined && comparator(prevEntry, entry) === 0) {
-      prevSet.add(entry)
-    } else {
-      prevEntry = entry
-      groups.push(new Set([entry]))
-    }
-  }
-
-  return groups
 }
