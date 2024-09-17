@@ -3798,7 +3798,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     themeKeys: ['--letter-spacing'],
     handle: (value) => [
-      atRoot([property('--tw-leading')]),
+      atRoot([property('--tw-tracking')]),
       decl('--tw-tracking', value),
       decl('letter-spacing', value),
     ],
