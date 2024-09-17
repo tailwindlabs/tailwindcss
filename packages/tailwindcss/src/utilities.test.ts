@@ -14614,6 +14614,7 @@ test('inset-ring', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
@@ -14648,6 +14649,7 @@ test('inset-ring', async () => {
         'inset-ring-1',
         'inset-ring-2',
         'inset-ring-4',
+        'inset-ring-thick',
         'inset-ring-[12px]',
         'inset-ring-[length:--my-width]',
       ],
@@ -14655,6 +14657,7 @@ test('inset-ring', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
+      --inset-ring-thick: 100px;
     }
 
     .inset-ring {

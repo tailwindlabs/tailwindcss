@@ -436,7 +436,15 @@ export function createUtilities(theme: Theme) {
       if (candidate.modifier) return
       value = candidate.value.value
     } else {
-      if (candidate.value.value.startsWith('shadow')) {
+      // We need to make sure variables like `--inset-shadow-sm` and
+      // `--inset-ring-thick` don't mistakenly generate utilities for the
+      // `inset` property.
+      if (
+        candidate.value.value === 'ring' ||
+        candidate.value.value === 'shadow' ||
+        candidate.value.value.startsWith('ring-') ||
+        candidate.value.value.startsWith('shadow-')
+      ) {
         value = theme.resolve(candidate.value.fraction ?? candidate.value.value, ['--spacing'])
       } else {
         value = theme.resolve(candidate.value.fraction ?? candidate.value.value, [
