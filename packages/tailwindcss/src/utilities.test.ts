@@ -13165,12 +13165,12 @@ test('tracking', async () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-leading: initial;
+          --tw-tracking: initial;
         }
       }
     }
 
-    @property --tw-leading {
+    @property --tw-tracking {
       syntax: "*";
       inherits: false
     }"
