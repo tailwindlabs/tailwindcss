@@ -48,9 +48,7 @@ export function compileCandidates(
         // variants used.
         let variantOrder = 0n
         for (let variant of candidate.variants) {
-          let order = variantOrderMap.get(variant)
-          if (order === undefined) continue
-          variantOrder |= 1n << BigInt(order)
+          variantOrder |= 1n << BigInt(variantOrderMap.get(variant)!)
         }
 
         nodeSorting.set(node, {
