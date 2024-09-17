@@ -1,163 +1,235 @@
-import { rule, walk, WalkAction, type AstNode, type Rule } from '../../ast'
-import { parse, toCss, type ValueWordNode } from '../../value-parser'
+import { AtRule, Container, parse, Rule, type Plugin } from 'postcss'
+import SelectorParser from 'postcss-selector-parser'
+import { format } from 'prettier'
 
-export function migrateAtLayerUtilities(ast: AstNode[]) {
-  walk(ast, (node, { replaceWith }) => {
-    if (
-      node.kind !== 'rule' ||
-      node.selector[0] !== '@' ||
-      !node.selector.startsWith('@layer utilities')
-    ) {
-      return
+enum WalkAction {
+  // Continue walking the tree. Default behavior.
+  Continue,
+
+  // Skip walking into the current node.
+  Skip,
+
+  // Stop walking the tree entirely.
+  Stop,
+}
+
+interface Walkable<T> {
+  each(cb: (node: T, index: number) => void): void
+}
+
+// Custom walk implementation where we can skip going into nodes when we don't
+// need to process them.
+function walk<T>(rule: Walkable<T>, cb: (rule: T) => void | WalkAction): undefined | false {
+  let result: undefined | false = undefined
+
+  rule.each?.((node) => {
+    let action = cb(node) ?? WalkAction.Continue
+    if (action === WalkAction.Stop) {
+      result = false
+      return result
     }
-
-    // Upgrade `@layer utilities` to `@utility`
-    let max = 5
-    let repeat = true
-    while (repeat && max-- > 0) {
-      repeat = false
-      walk(node.nodes, (child, { replaceWith }) => {
-        if (child.kind !== 'rule') return WalkAction.Continue
-
-        // Invert at-rules, by hoisting the rules with normal selectors to the
-        // top.
-        //
-        // ```css
-        // @media (min-width: 640px) {
-        //   .foo {
-        //     color: red;
-        //   }
-        // }
-        // ```
-        //
-        // Becomes:
-        // ```css
-        // .foo {
-        //   @media (min-width: 640px) {
-        //     color: red;
-        //   }
-        // }
-        // ```
-        if (child.selector[0] === '@' && !child.selector.startsWith('@utility')) {
-          // At-rule with multiple children need to be split into multiple
-          // rules.
-          if (child.nodes.length > 1) {
-            replaceWith(child.nodes.map((grandChild) => rule(child.selector, [grandChild])))
-            repeat = true
-            return WalkAction.Skip
-          }
-
-          // At-rule with a single child can be upgraded directly
-          else {
-            // Hoist the child rule (with a proper selector instead of at-rule) up to the parent
-            walk(child.nodes, (grandChild, { replaceWith }) => {
-              if (grandChild.kind === 'rule' && grandChild.selector[0] !== '@') {
-                let atRule = child.selector
-                child.selector = grandChild.selector
-                replaceWith(rule(atRule, grandChild.nodes))
-                repeat = true
-                return WalkAction.Skip
-              }
-            })
-            return WalkAction.Skip
-          }
-        }
-
-        if (child.selector[0] !== '@') {
-          let parts = parse(child.selector)
-
-          // Split `.foo.bar` into `['.foo', '.bar']`
-          // Split `.foo#bar` into `['.foo', '#bar']`
-          for (let idx = parts.length - 1; idx > 0; idx--) {
-            if (parts[idx].kind === 'word') {
-              console.log(parts[idx].value)
-            }
-          }
-
-          // Fan out each utility into its own rule. E.g.:
-          //
-          // ```css
-          // .foo .bar:hover .baz {
-          //   color: red;
-          // }
-          // ```
-          //
-          // Becomes:
-          // ```css
-          // @utility foo {
-          //   & .bar:hover .baz {
-          //     color: red;
-          //   }
-          // }
-          // @utility bar {
-          //   .foo &:hover .baz {
-          //     color: red;
-          //   }
-          // }
-          // @utility baz {
-          //   .foo .bar:hover & {
-          //     color: red;
-          //   }
-          // }
-          // ```
-          let variations = []
-          for (let [idx, part] of parts.entries()) {
-            if (part.kind === 'word' && part.value[0] === '.') {
-              variations.push([
-                // Name of the utility
-                part.value.slice(1),
-
-                // The new selector with the utility replaced by `&`
-                toCss([
-                  ...parts.slice(0, idx),
-                  { kind: 'word', value: '&' } satisfies ValueWordNode,
-                  ...parts.slice(idx + 1),
-                ]),
-              ] as const)
-            }
-          }
-
-          let newRules = []
-          for (let [name, selector] of variations) {
-            if (selector === '&') {
-              newRules.push(rule(`@utility ${name}`, child.nodes))
-            } else {
-              newRules.push(rule(`@utility ${name}`, [rule(selector, child.nodes)]))
-            }
-          }
-
-          replaceWith(newRules)
-          return WalkAction.Skip
-        } else {
-          return WalkAction.Skip
-        }
-      })
+    if (action !== WalkAction.Skip) {
+      result = walk(node as Walkable<T>, cb)
+      return result
     }
-
-    // Replace `@layer utilities` with its children, eliminating the `@layer
-    // utilities` node itself.
-    replaceWith(node.nodes)
-    return WalkAction.Skip
   })
 
-  // Merge `@utility` definitions with the same name.
-  {
-    let map = new Map<string, Rule>()
+  return result
+}
 
-    walk(ast, (node, { replaceWith }) => {
-      if (node.kind !== 'rule') return
-      if (node.selector[0] !== '@' || !node.selector.startsWith('@utility')) return
+export function migrateAtLayerUtilities(): Plugin {
+  async function migrate(atRule: AtRule) {
+    if (atRule.params !== 'utilities') return
 
-      let existing = map.get(node.selector)
-      if (existing) {
-        for (let child of node.nodes) {
-          existing.nodes.push(child)
+    // Upgrade every Rule in `@layer utilities` to an `@utility` at-rule.
+    walk(atRule, (node) => {
+      if (!(node instanceof Rule)) return
+
+      // Fan out each utility into its own rule.
+      //
+      // E.g.:
+      // ```css
+      // .foo .bar:hover .baz {
+      //   color: red;
+      // }
+      // ```
+      //
+      // Becomes:
+      // ```css
+      // @utility foo {
+      //   & .bar:hover .baz {
+      //     color: red;
+      //   }
+      // }
+      //
+      // @utility bar {
+      //   .foo &:hover .baz {
+      //     color: red;
+      //   }
+      // }
+      //
+      // @utility baz {
+      //   .foo .bar:hover & {
+      //     color: red;
+      //   }
+      // }
+      // ```
+      let utilitySelectors: [name: string, selector: string][] = []
+      SelectorParser((selectors) => {
+        selectors.each((selector) => {
+          walk(selector, (node) => {
+            // Ignore everything in `:not(…)`
+            if (node.type === 'pseudo' && node.value === ':not') {
+              return WalkAction.Skip
+            }
+
+            // Replace the class with `&` and track the new selector
+            if (node.type === 'class') {
+              // Work on a clone of the selector, so we can safely manipulate
+              // it without affecting the original.
+              let clone = selector.clone()
+
+              // Find the node in the clone based on the position of the
+              // original node.
+              let target = clone.atPosition(node.source!.start!.line, node.source!.start!.column)
+
+              // Keep moving the target to the front until we hit the start or
+              // find a combinator. This is to prevent `.foo.bar` from becoming
+              // `.bar&`. Instead we want `&.bar`.
+              let parent = target.parent!
+              let idx = (target.parent?.index(target) ?? 0) - 1
+              while (idx >= 0 && parent.at(idx)?.type !== 'combinator') {
+                let current = parent.at(idx + 1)
+                let previous = parent.at(idx)
+                parent.at(idx + 1).replaceWith(previous)
+                parent.at(idx).replaceWith(current)
+
+                idx--
+              }
+
+              // Replace the class with `&`
+              target.replaceWith(SelectorParser.nesting())
+
+              // Track the new selector
+              utilitySelectors.push([node.value, clone.toString()])
+            }
+          })
+        })
+      }).processSync(node.selector, { updateSelector: false })
+
+      // Wrap the new rules in `@utility` at-rules
+      let newRules: AtRule[] = []
+      for (let [name, selector] of utilitySelectors) {
+        if (selector === '&') {
+          newRules.push(new AtRule({ name: 'utility', params: name, nodes: node.nodes }))
+        } else {
+          newRules.push(
+            new AtRule({
+              name: 'utility',
+              params: name,
+              nodes: [new Rule({ selector, nodes: node.nodes })],
+            }),
+          )
         }
-        replaceWith([])
-        return WalkAction.Skip
       }
 
-      map.set(node.selector, node)
+      node.replaceWith(newRules)
+
+      return WalkAction.Skip
     })
+
+    // Hoist all `@utility` at-rules to the top. It could be that these were
+    // (deeply) nested in other at-rules like `@media`.
+    //
+    // ```css
+    // @media (min-width: 640px) {
+    //   @utility foo {
+    //     color: red;
+    //   }
+    // }
+    // ```
+    //
+    // Becomes:
+    // ```css
+    // @utility foo {
+    //   @media (min-width: 640px) {
+    //     color: red;
+    //   }
+    // }
+    // ```
+    let trees: AtRule[] = []
+    walk(atRule, (node) => {
+      if (node.type !== 'atrule' || node.name !== 'utility') return
+
+      // Track the parents of the node, so we can reconstruct the tree later.
+      let parents = []
+      let parent: Container | null = node.parent ?? null
+
+      while (
+        parent &&
+        !(parent instanceof AtRule && parent.name === 'layer' && parent.params === 'utilities')
+      ) {
+        parents.push(parent.clone({ nodes: [] }))
+
+        // Move up the tree
+        // @ts-expect-error
+        parent = parent.parent ?? null
+      }
+
+      // Work on a clone of the node, so we can safely manipulate it.
+      let nodeClone = node.clone()
+
+      // Reconstruct the tree
+      for (let parent of parents) {
+        let children = nodeClone.nodes ?? []
+        // Inject _my_ children into the parent
+        parent.append(children)
+
+        // Inject the parent into the node
+        nodeClone.removeAll()
+        nodeClone.append(parent)
+      }
+
+      // Collect the newly new tree (which is the manipulated node)
+      trees.push(nodeClone)
+
+      // Already handled the `@utility` at-rule, no need to go deeper.
+      return WalkAction.Skip
+    })
+
+    // Replace `@layer utilities` with the newly constructed trees.
+    //
+    // Prettier is used to generate cleaner output, but it's only used on the
+    // nodes that we migrated.
+    atRule.replaceWith(
+      await Promise.all(
+        trees.map(async (tree) => {
+          return parse(await format(tree.toString(), { parser: 'css', semi: true }))
+        }),
+      ),
+    )
+  }
+
+  return {
+    postcssPlugin: '@tailwindcss/upgrade/migrate-at-layer-utilities',
+    AtRule: {
+      layer: migrate,
+    },
+    OnceExit: (root) => {
+      // Merge `@utility` definitions with the same name.
+      let nameToAtRule = new Map<string, AtRule>()
+
+      root.walkAtRules('utility', (node) => {
+        let existing = nameToAtRule.get(node.params)
+        if (existing) {
+          node.each((child) => {
+            existing.append(child)
+          })
+          node.remove()
+        } else {
+          nameToAtRule.set(node.params, node)
+        }
+      })
+    },
   }
 }

@@ -1,20 +1,20 @@
 import dedent from 'dedent'
+import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import { toCss } from '../../ast'
-import * as CSS from '../../css-parser'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
 
 function migrate(input: string) {
-  let ast = CSS.parse(input)
-  migrateAtLayerUtilities(ast)
-  return toCss(ast).trim()
+  return postcss()
+    .use(migrateAtLayerUtilities())
+    .process(input, { from: expect.getState().testPath })
+    .then((result) => result.css)
 }
 
-it('should migrate simple `@layer utilities` to `@utility`', () => {
+it('should migrate simple `@layer utilities` to `@utility`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .foo {
           color: red;
@@ -24,13 +24,14 @@ it('should migrate simple `@layer utilities` to `@utility`', () => {
   ).toMatchInlineSnapshot(`
     "@utility foo {
       color: red;
-    }"
+    }
+    "
   `)
 })
 
-it('should migrate simple `@layer utilities` with nesting to `@utility`', () => {
+it('should migrate simple `@layer utilities` with nesting to `@utility`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .foo {
           color: red;
@@ -48,19 +49,22 @@ it('should migrate simple `@layer utilities` with nesting to `@utility`', () => 
   ).toMatchInlineSnapshot(`
     "@utility foo {
       color: red;
+
       &:hover {
         color: blue;
       }
+
       &:focus {
         color: green;
       }
-    }"
+    }
+    "
   `)
 })
 
-it('should migrate multiple simple `@layer utilities` to `@utility`', () => {
+it('should migrate multiple simple `@layer utilities` to `@utility`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .foo {
           color: red;
@@ -77,13 +81,46 @@ it('should migrate multiple simple `@layer utilities` to `@utility`', () => {
     }
     @utility bar {
       color: blue;
-    }"
+    }
+    "
   `)
 })
 
-it('should invert at-rules to make them migrate-able', () => {
+it('should not migrate Rules inside of Rules to a `@utility`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
+      @layer utilities {
+        .foo {
+          color: red;
+        }
+
+        .bar {
+          color: blue;
+
+          .baz {
+            color: green;
+          }
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@utility foo {
+      color: red;
+    }
+    @utility bar {
+      color: blue;
+
+      .baz {
+        color: green;
+      }
+    }
+    "
+  `)
+})
+
+it('should invert at-rules to make them migrate-able', async () => {
+  expect(
+    await migrate(css`
       @layer utilities {
         @media (min-width: 640px) {
           .foo {
@@ -97,19 +134,24 @@ it('should invert at-rules to make them migrate-able', () => {
       @media (min-width: 640px) {
         color: red;
       }
-    }"
+    }
+    "
   `)
 })
 
-it('should migrate at-rules with multiple utilities and invert them', () => {
+it('should migrate at-rules with multiple utilities and invert them', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         @media (min-width: 640px) {
           .foo {
             color: red;
           }
+        }
+      }
 
+      @layer utilities {
+        @media (min-width: 640px) {
           .bar {
             color: blue;
           }
@@ -122,17 +164,20 @@ it('should migrate at-rules with multiple utilities and invert them', () => {
         color: red;
       }
     }
+
+
     @utility bar {
       @media (min-width: 640px) {
         color: blue;
       }
-    }"
+    }
+    "
   `)
 })
 
-it.skip('should migrate deeply nested at-rules with multiple utilities and invert them', () => {
+it('should migrate deeply nested at-rules with multiple utilities and invert them', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         @media (min-width: 640px) {
           .foo {
@@ -169,9 +214,18 @@ it.skip('should migrate deeply nested at-rules with multiple utilities and inver
       }
     }
     @utility baz {
-      @media (min-width: 1024px) {
-        @media (min-width: 640px) {
+      @media (min-width: 640px) {
+        @media (min-width: 1024px) {
           color: green;
+        }
+      }
+    }
+    @utility qux {
+      @media (min-width: 640px) {
+        @media (min-width: 1024px) {
+          @media (min-width: 1280px) {
+            color: yellow;
+          }
         }
       }
     }
@@ -179,9 +233,9 @@ it.skip('should migrate deeply nested at-rules with multiple utilities and inver
   `)
 })
 
-it('should migrate classes with pseudo elements', () => {
+it('should migrate classes with pseudo elements', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .no-scrollbar::-webkit-scrollbar {
           display: none;
@@ -193,13 +247,14 @@ it('should migrate classes with pseudo elements', () => {
       &::-webkit-scrollbar {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
-it.skip('should migrate classes with attribute selectors', () => {
+it('should migrate classes with attribute selectors', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .no-scrollbar[data-checked=''] {
           display: none;
@@ -208,16 +263,17 @@ it.skip('should migrate classes with attribute selectors', () => {
     `),
   ).toMatchInlineSnapshot(`
     "@utility no-scrollbar {
-      &[data-checked=''] {
+      &[data-checked=""] {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
-it.skip('should migrate classes with element selectors', () => {
+it('should migrate classes with element selectors', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .no-scrollbar main {
           display: none;
@@ -229,13 +285,14 @@ it.skip('should migrate classes with element selectors', () => {
       & main {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
-it.skip('should migrate classes with id selectors', () => {
+it('should migrate classes with id selectors', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .no-scrollbar#main {
           display: none;
@@ -247,13 +304,14 @@ it.skip('should migrate classes with id selectors', () => {
       &#main {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
-it.skip('should migrate classes with another attached class', () => {
+it('should migrate classes with another attached class', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .no-scrollbar.main {
           display: none;
@@ -265,13 +323,19 @@ it.skip('should migrate classes with another attached class', () => {
       &.main {
         display: none;
       }
-    }"
+    }
+    @utility main {
+      &.no-scrollbar {
+        display: none;
+      }
+    }
+    "
   `)
 })
 
-it('should migrate a selector with multiple classes to multiple @utility definitions', () => {
+it('should migrate a selector with multiple classes to multiple @utility definitions', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .foo .bar:hover .baz:focus {
           display: none;
@@ -293,13 +357,14 @@ it('should migrate a selector with multiple classes to multiple @utility definit
       .foo .bar:hover &:focus {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
-it('should merge `@utility` definitions with the same name', () => {
+it('should merge `@utility` definitions with the same name', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
         .step {
           counter-increment: step;
@@ -320,29 +385,37 @@ it('should merge `@utility` definitions with the same name', () => {
         @apply ml-[-41px];
         content: counter(step);
       }
-    }"
+    }
+
+    "
   `)
 })
 
-it('should not migrate nested classes inside a selector (e.g.: `:has(…)`)', () => {
+it('should not migrate nested classes inside a `:not(…)`', async () => {
   expect(
-    migrate(css`
+    await migrate(css`
       @layer utilities {
-        .foo .bar:has(.baz) {
+        .foo .bar:not(.qux):has(.baz) {
           display: none;
         }
       }
     `),
   ).toMatchInlineSnapshot(`
     "@utility foo {
-      & .bar:has(.baz) {
+      & .bar:not(.qux):has(.baz) {
         display: none;
       }
     }
     @utility bar {
-      .foo &:has(.baz) {
+      .foo &:not(.qux):has(.baz) {
         display: none;
       }
-    }"
+    }
+    @utility baz {
+      .foo .bar:not(.qux):has(&) {
+        display: none;
+      }
+    }
+    "
   `)
 })
