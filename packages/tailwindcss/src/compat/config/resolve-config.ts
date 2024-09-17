@@ -28,6 +28,7 @@ interface ResolutionContext {
 
 let minimal: ResolvedConfig = {
   prefix: '',
+  important: false,
   darkMode: null,
   theme: {},
   plugins: [],
@@ -63,6 +64,10 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
 
     if ('prefix' in config && config.prefix !== undefined) {
       ctx.result.prefix = config.prefix ?? ''
+    }
+
+    if ('important' in config && config.important !== undefined) {
+      ctx.result.important = config.important ?? false
     }
   }
 

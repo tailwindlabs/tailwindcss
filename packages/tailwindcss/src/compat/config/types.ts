@@ -78,3 +78,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   prefix: string
 }
+
+// `important` support
+export interface UserConfig {
+  important?: boolean | string
+}
+
+export interface ResolvedConfig {
+  important: boolean | string
+}
