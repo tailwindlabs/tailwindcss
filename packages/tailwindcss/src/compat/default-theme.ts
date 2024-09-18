@@ -1,4 +1,5 @@
 import type { NamedUtilityValue } from '../candidate'
+import { isPositiveInteger } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import colors from './colors'
 import type { UserConfig } from './config/types'
@@ -13,31 +14,31 @@ function bareValues(fn: (value: NamedUtilityValue) => string | undefined) {
 }
 
 let bareIntegers = bareValues((value) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return value.value
   }
 })
 
 let barePercentages = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}%`
   }
 })
 
 let barePixels = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}px`
   }
 })
 
 let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}ms`
   }
 })
 
 let bareDegrees = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}deg`
   }
 })
@@ -45,12 +46,12 @@ let bareDegrees = bareValues((value: NamedUtilityValue) => {
 let bareAspectRatio = bareValues((value) => {
   if (value.fraction === null) return
   let [lhs, rhs] = segment(value.fraction, '/')
-  if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+  if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
   return value.fraction
 })
 
 let bareRepeatValues = bareValues((value) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(Number(value.value))) {
     return `repeat(${value.value}, minmax(0, 1fr))`
   }
 })

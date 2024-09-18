@@ -2252,14 +2252,18 @@ test('nth', async () => {
   ).toEqual('')
   expect(
     await run([
+      'nth--3:flex',
       'nth-3/foo:flex',
       'nth-[2n+1]/foo:flex',
       'nth-[2n+1_of_.foo]/foo:flex',
+      'nth-last--3:flex',
       'nth-last-3/foo:flex',
       'nth-last-[2n+1]/foo:flex',
       'nth-last-[2n+1_of_.foo]/foo:flex',
+      'nth-of-type--3:flex',
       'nth-of-type-3/foo:flex',
       'nth-of-type-[2n+1]/foo:flex',
+      'nth-last-of-type--3:flex',
       'nth-last-of-type-3/foo:flex',
       'nth-last-of-type-[2n+1]/foo:flex',
     ]),

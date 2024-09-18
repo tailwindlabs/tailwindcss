@@ -2,6 +2,7 @@ import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
@@ -538,7 +539,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
-    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+    if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
     ruleNode.nodes = [rule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
   })
@@ -547,7 +548,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
-    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+    if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
     ruleNode.nodes = [rule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
   })
@@ -556,7 +557,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
-    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+    if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
     ruleNode.nodes = [rule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
   })
@@ -565,7 +566,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
-    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+    if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
     ruleNode.nodes = [rule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
   })

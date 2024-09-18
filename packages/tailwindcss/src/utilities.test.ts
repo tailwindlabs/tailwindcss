@@ -176,6 +176,10 @@ test('inset', async () => {
   expect(
     await run([
       'inset',
+      'inset--1',
+      'inset--1/2',
+      'inset--1/-2',
+      'inset-1/-2',
       'inset-auto/foo',
       '-inset-full/foo',
       'inset-full/foo',
@@ -249,6 +253,10 @@ test('inset-x', async () => {
   expect(
     await run([
       'inset-x',
+      'inset-x--1',
+      'inset-x--1/2',
+      'inset-x--1/-2',
+      'inset-x-1/-2',
       'inset-x-auto/foo',
       'inset-x-full/foo',
       '-inset-x-full/foo',
@@ -322,6 +330,10 @@ test('inset-y', async () => {
   expect(
     await run([
       'inset-y',
+      'inset-y--1',
+      'inset-y--1/2',
+      'inset-y--1/-2',
+      'inset-1/-2',
       'inset-y-auto/foo',
       'inset-y-full/foo',
       '-inset-y-full/foo',
@@ -388,6 +400,10 @@ test('start', async () => {
   expect(
     await run([
       'start',
+      'start--1',
+      'start--1/2',
+      'start--1/-2',
+      'start-1/-2',
       'start-auto/foo',
       '-start-full/foo',
       'start-full/foo',
@@ -446,6 +462,10 @@ test('end', async () => {
   expect(
     await run([
       'end',
+      'end--1',
+      'end--1/2',
+      'end--1/-2',
+      'end-1/-2',
       'end-auto/foo',
       '-end-full/foo',
       'end-full/foo',
@@ -505,6 +525,10 @@ test('top', async () => {
   expect(
     await run([
       'top',
+      'top--1',
+      'top--1/2',
+      'top--1/-2',
+      'top-1/-2',
       'top-auto/foo',
       '-top-full/foo',
       'top-full/foo',
@@ -571,6 +595,10 @@ test('right', async () => {
   expect(
     await run([
       'right',
+      'right--1',
+      'right--1/2',
+      'right--1/-2',
+      'right-1/-2',
       'right-auto/foo',
       '-right-full/foo',
       'right-full/foo',
@@ -637,6 +665,10 @@ test('bottom', async () => {
   expect(
     await run([
       'bottom',
+      'bottom--1',
+      'bottom--1/2',
+      'bottom--1/-2',
+      'bottom-1/-2',
       'bottom-auto/foo',
       '-bottom-full/foo',
       'bottom-full/foo',
@@ -695,6 +727,10 @@ test('left', async () => {
   expect(
     await run([
       'left',
+      'left--1',
+      'left--1/2',
+      'left--1/-2',
+      'left-1/-2',
       'left-auto/foo',
       '-left-full/foo',
       'left-full/foo',
@@ -746,6 +782,7 @@ test('z-index', async () => {
   expect(
     await run([
       'z',
+      'z--1',
       '-z-auto',
       'z-unknown',
       'z-123.5',
@@ -801,6 +838,7 @@ test('order', async () => {
   expect(
     await run([
       'order',
+      'order--4',
       '-order-first',
       '-order-last',
       '-order-none',
@@ -856,6 +894,7 @@ test('col', async () => {
     await run([
       'col',
       'col-span',
+      'col-span--1',
       '-col-span-4',
       'col-span-unknown',
       'col-auto/foo',
@@ -895,6 +934,7 @@ test('col-start', async () => {
   expect(
     await run([
       'col-start',
+      'col-start--1',
       'col-start-unknown',
       'col-start-auto/foo',
       'col-start-4/foo',
@@ -931,6 +971,7 @@ test('col-end', async () => {
   expect(
     await run([
       'col-end',
+      'col-end--1',
       'col-end-unknown',
       'col-end-auto/foo',
       'col-end-4/foo',
@@ -980,6 +1021,7 @@ test('row', async () => {
     await run([
       'row',
       'row-span',
+      'row-span--1',
       '-row-span-4',
       'row-span-unknown',
       'row-auto/foo',
@@ -1019,6 +1061,7 @@ test('row-start', async () => {
   expect(
     await run([
       'row-start',
+      'row-start--1',
       'row-start-unknown',
       'row-start-auto/foo',
       'row-start-4/foo',
@@ -1055,6 +1098,7 @@ test('row-end', async () => {
   expect(
     await run([
       'row-end',
+      'row-end--1',
       'row-end-unknown',
       'row-end-auto/foo',
       'row-end-4/foo',
@@ -1657,6 +1701,7 @@ test('line-clamp', async () => {
   expect(
     await run([
       'line-clamp',
+      'line-clamp--4',
       '-line-clamp-4',
       '-line-clamp-[123]',
       '-line-clamp-none',
@@ -1852,6 +1897,9 @@ test('aspect-ratio', async () => {
       'aspect-video/foo',
       'aspect-[10/9]/foo',
       'aspect-4/3/foo',
+      'aspect--4/3',
+      'aspect--4/-3',
+      'aspect-4/-3',
     ]),
   ).toEqual('')
 })
@@ -1924,6 +1972,10 @@ test('size', async () => {
   expect(
     await run([
       'size',
+      'size--1',
+      'size--1/2',
+      'size--1/-2',
+      'size-1/-2',
       '-size-4',
       '-size-1/2',
       '-size-[4px]',
@@ -2026,6 +2078,10 @@ test('width', async () => {
   expect(
     await run([
       'w',
+      'w--1',
+      'w--1/2',
+      'w--1/-2',
+      'w-1/-2',
       '-w-4',
       '-w-1/2',
       '-w-[4px]',
@@ -2275,6 +2331,10 @@ test('height', async () => {
     await run([
       'h',
       '-h-4',
+      'h--1',
+      'h--1/2',
+      'h--1/-2',
+      'h-1/-2',
       '-h-1/2',
       '-h-[4px]',
       'h-full/foo',
@@ -2520,6 +2580,7 @@ test('flex', async () => {
   expect(
     await run([
       '-flex-1',
+      'flex--1',
       '-flex-auto',
       '-flex-initial',
       '-flex-none',
@@ -2527,6 +2588,9 @@ test('flex', async () => {
       'flex-unknown',
       'flex-1/foo',
       'flex-99/foo',
+      'flex--1/2',
+      'flex--1/-2',
+      'flex-1/-2',
       'flex-1/2/foo',
       'flex-auto/foo',
       'flex-initial/foo',
@@ -2553,6 +2617,8 @@ test('flex-shrink', async () => {
   expect(
     await run([
       '-shrink',
+      'shrink--1',
+      'shrink-1.5',
       '-shrink-0',
       '-shrink-[123]',
       'shrink-unknown',
@@ -2580,6 +2646,8 @@ test('flex-grow', async () => {
   expect(
     await run([
       '-grow',
+      'grow--1',
+      'grow-1.5',
       '-grow-0',
       '-grow-[123]',
       'grow-unknown',
@@ -2629,6 +2697,10 @@ test('flex-basis', async () => {
   expect(
     await run([
       'basis',
+      'basis--1',
+      'basis--1/2',
+      'basis--1/-2',
+      'basis-1/-2',
       '-basis-full',
       '-basis-[123px]',
       'basis-auto/foo',
@@ -3100,6 +3172,10 @@ test('translate', async () => {
   expect(
     await run([
       'translate',
+      'translate--1',
+      'translate--1/2',
+      'translate--1/-2',
+      'translate-1/-2',
       'translate-1/2/foo',
       'translate-full/foo',
       '-translate-full/foo',
@@ -3169,6 +3245,10 @@ test('translate-x', async () => {
   expect(
     await run([
       'translate-x',
+      'translate-x--1',
+      'translate-x--1/2',
+      'translate-x--1/-2',
+      'translate-x-1/-2',
       'translate-x-full/foo',
       '-translate-x-full/foo',
       'translate-x-px/foo',
@@ -3237,6 +3317,10 @@ test('translate-y', async () => {
   expect(
     await run([
       'translate-y',
+      'translate-y--1',
+      'translate-y--1/2',
+      'translate-y--1/-2',
+      'translate-y-1/-2',
       'translate-y-full/foo',
       '-translate-y-full/foo',
       'translate-y-px/foo',
@@ -3288,6 +3372,10 @@ test('translate-z', async () => {
   expect(
     await run([
       'translate-z',
+      'translate-z--1',
+      'translate-z--1/2',
+      'translate-z--1/-2',
+      'translate-z-1/-2',
       'translate-z-full',
       '-translate-z-full',
       'translate-z-1/2',
@@ -3357,6 +3445,7 @@ test('rotate', async () => {
     await run([
       'rotate',
       'rotate-z',
+      'rotate--2',
       'rotate-unknown',
       'rotate-45/foo',
       '-rotate-45/foo',
@@ -3428,6 +3517,7 @@ test('rotate-x', async () => {
   expect(
     await run([
       'rotate-x',
+      'rotate-x--1',
       '-rotate-x',
       'rotate-x-potato',
       'rotate-x-45/foo',
@@ -3499,6 +3589,7 @@ test('rotate-y', async () => {
   expect(
     await run([
       'rotate-y',
+      'rotate-y--1',
       '-rotate-y',
       'rotate-y-potato',
       'rotate-y-45/foo',
@@ -3571,7 +3662,14 @@ test('skew', async () => {
     }"
   `)
   expect(
-    await run(['skew', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo']),
+    await run([
+      'skew',
+      'skew--1',
+      'skew-unknown',
+      'skew-6/foo',
+      '-skew-6/foo',
+      'skew-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3635,7 +3733,14 @@ test('skew-x', async () => {
     }"
   `)
   expect(
-    await run(['skew-x', 'skew-x-unknown', 'skew-x-6/foo', '-skew-x-6/foo', 'skew-x-[123deg]/foo']),
+    await run([
+      'skew-x',
+      'skew-x--1',
+      'skew-x-unknown',
+      'skew-x-6/foo',
+      '-skew-x-6/foo',
+      'skew-x-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3699,7 +3804,14 @@ test('skew-y', async () => {
     }"
   `)
   expect(
-    await run(['skew-y', 'skew-y-unknown', 'skew-y-6/foo', '-skew-y-6/foo', 'skew-y-[123deg]/foo']),
+    await run([
+      'skew-y',
+      'skew-y--1',
+      'skew-y-unknown',
+      'skew-y-6/foo',
+      '-skew-y-6/foo',
+      'skew-y-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3759,6 +3871,8 @@ test('scale', async () => {
   expect(
     await run([
       'scale',
+      'scale--50',
+      'scale-1.5',
       'scale-unknown',
       'scale-50/foo',
       '-scale-50/foo',
@@ -3894,6 +4008,8 @@ test('scale-x', async () => {
   expect(
     await run([
       'scale-x',
+      'scale-x--1',
+      'scale-x-1.5',
       'scale-x-unknown',
       'scale-200/foo',
       'scale-x-400/foo',
@@ -3952,6 +4068,8 @@ test('scale-y', async () => {
   expect(
     await run([
       'scale-y',
+      'scale-y--1',
+      'scale-y-1.5',
       'scale-y-unknown',
       'scale-y-50/foo',
       '-scale-y-50/foo',
@@ -4006,7 +4124,14 @@ test('scale-z', async () => {
     }"
   `)
   expect(
-    await run(['scale-z', 'scale-z-50/foo', '-scale-z-50/foo', 'scale-z-[123deg]/foo']),
+    await run([
+      'scale-z',
+      'scale-z--1',
+      'scale-z-1.5',
+      'scale-z-50/foo',
+      '-scale-z-50/foo',
+      'scale-z-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -5767,6 +5892,7 @@ test('columns', async () => {
   expect(
     await run([
       'columns',
+      'columns--4',
       '-columns-4',
       '-columns-[123]',
       '-columns-[--value]',
@@ -6128,6 +6254,7 @@ test('grid-cols', async () => {
       'grid-cols',
       '-grid-cols-none',
       '-grid-cols-subgrid',
+      'grid-cols--12',
       '-grid-cols-12',
       '-grid-cols-[123]',
       'grid-cols-unknown',
@@ -6175,6 +6302,7 @@ test('grid-rows', async () => {
       'grid-rows',
       '-grid-rows-none',
       '-grid-rows-subgrid',
+      'grid-rows--12',
       '-grid-rows-12',
       '-grid-rows-[123]',
       'grid-rows-unknown',
@@ -6868,6 +6996,7 @@ test('divide-x', async () => {
   expect(
     await run([
       '-divide-x',
+      'divide-x--4',
       '-divide-x-4',
       '-divide-x-123',
       'divide-x-unknown',
@@ -6986,6 +7115,7 @@ test('divide-y', async () => {
   expect(
     await run([
       '-divide-y',
+      'divide-y--4',
       '-divide-y-4',
       '-divide-y-123',
       'divide-y-unknown',
@@ -7203,6 +7333,7 @@ test('accent', async () => {
     await run([
       'accent',
       '-accent-red-500',
+      'accent-red-500/-50',
       '-accent-red-500/50',
       '-accent-red-500/[0.5]',
       '-accent-red-500/[50%]',
@@ -7212,6 +7343,7 @@ test('accent', async () => {
       '-accent-current/[50%]',
       '-accent-inherit',
       '-accent-transparent',
+      'accent-[#0088cc]/-50',
       '-accent-[#0088cc]',
       '-accent-[#0088cc]/50',
       '-accent-[#0088cc]/[0.5]',
@@ -9819,6 +9951,8 @@ test('from', async () => {
     await run([
       'from',
       'from-123',
+      'from--123',
+      'from--5%',
       'from-unknown',
       'from-unknown%',
 
@@ -10056,6 +10190,8 @@ test('via', async () => {
     await run([
       'via',
       'via-123',
+      'via--123',
+      'via--5%',
       'via-unknown',
       'via-unknown%',
 
@@ -10281,6 +10417,8 @@ test('to', async () => {
     await run([
       'to',
       'to-123',
+      'to--123',
+      'to--5%',
       'to-unknown',
       'to-unknown%',
 
@@ -10895,6 +11033,7 @@ test('stroke', async () => {
 
       // Width
       '-stroke-0',
+      'stroke--1',
     ]),
   ).toEqual('')
 })
@@ -11917,6 +12056,7 @@ test('decoration', async () => {
       '-decoration-wavy',
 
       // text-decoration-thickness
+      'decoration--2',
       '-decoration-auto',
       '-decoration-from-font',
       '-decoration-0',
@@ -12248,28 +12388,35 @@ test('filter', async () => {
       '-filter-[--value]',
       '-blur-xl',
       '-blur-[4px]',
+      'brightness--50',
       '-brightness-50',
       '-brightness-[1.23]',
       'brightness-unknown',
+      'contrast--50',
       '-contrast-50',
       '-contrast-[1.23]',
       'contrast-unknown',
       '-grayscale',
       '-grayscale-0',
+      'grayscale--1',
       '-grayscale-[--value]',
       'grayscale-unknown',
+      'hue-rotate--5',
       'hue-rotate-unknown',
       '-invert',
+      'invert--5',
       '-invert-0',
       '-invert-[--value]',
       'invert-unknown',
       '-drop-shadow-xl',
       '-drop-shadow-[0_0_red]',
       '-saturate-0',
+      'saturate--5',
       '-saturate-[1.75]',
       '-saturate-[--value]',
       'saturate-saturate',
       '-sepia',
+      'sepia--50',
       '-sepia-0',
       '-sepia-[50%]',
       '-sepia-[--value]',
@@ -12597,29 +12744,36 @@ test('backdrop-filter', async () => {
       '-backdrop-filter-[--value]',
       '-backdrop-blur-xl',
       '-backdrop-blur-[4px]',
+      'backdrop-brightness--50',
       '-backdrop-brightness-50',
       '-backdrop-brightness-[1.23]',
       'backdrop-brightness-unknown',
+      'backdrop-contrast--50',
       '-backdrop-contrast-50',
       '-backdrop-contrast-[1.23]',
       'backdrop-contrast-unknown',
       '-backdrop-grayscale',
+      'backdrop-grayscale--1',
       '-backdrop-grayscale-0',
       '-backdrop-grayscale-[--value]',
       'backdrop-grayscale-unknown',
       'backdrop-hue-rotate-unknown',
       '-backdrop-invert',
+      'backdrop-invert--1',
       '-backdrop-invert-0',
       '-backdrop-invert-[--value]',
       'backdrop-invert-unknown',
+      'backdrop-opacity--50',
       '-backdrop-opacity-50',
       '-backdrop-opacity-[0.5]',
       'backdrop-opacity-unknown',
       '-backdrop-saturate-0',
+      'backdrop-saturate--50',
       '-backdrop-saturate-[1.75]',
       '-backdrop-saturate-[--value]',
       'backdrop-saturate-unknown',
       '-backdrop-sepia',
+      'backdrop-sepia--50',
       '-backdrop-sepia-0',
       '-backdrop-sepia-[50%]',
       '-backdrop-sepia-[--value]',
@@ -12637,6 +12791,7 @@ test('backdrop-filter', async () => {
       'backdrop-grayscale/foo',
       'backdrop-grayscale-0/foo',
       'backdrop-grayscale-[--value]/foo',
+      'backdrop-hue-rotate--15',
       'backdrop-hue-rotate-15/foo',
       'backdrop-hue-rotate-[45deg]/foo',
       'backdrop-invert/foo',
@@ -12789,6 +12944,7 @@ test('delay', async () => {
   expect(
     await run([
       'delay',
+      'delay--200',
       '-delay-200',
       '-delay-[300ms]',
       'delay-unknown',
@@ -12816,6 +12972,7 @@ test('duration', async () => {
   expect(
     await run([
       'duration',
+      'duration--200',
       '-duration-200',
       '-duration-[300ms]',
       'duration-123/foo',
@@ -13543,6 +13700,7 @@ test('outline', async () => {
 
       // outline-width
       '-outline-0',
+      'outline--10',
 
       'outline/foo',
       'outline-none/foo',
@@ -13582,6 +13740,7 @@ test('outline-offset', async () => {
   expect(
     await run([
       'outline-offset',
+      'outline-offset--4',
       'outline-offset-unknown',
       'outline-offset-4/foo',
       '-outline-offset-4/foo',
@@ -13604,6 +13763,7 @@ test('opacity', async () => {
   expect(
     await run([
       'opacity',
+      'opacity--15',
       '-opacity-15',
       '-opacity-[--value]',
       'opacity-unknown',
@@ -13663,6 +13823,7 @@ test('underline-offset', async () => {
   expect(
     await run([
       'underline-offset',
+      'underline-offset--4',
       '-underline-offset-auto',
       'underline-offset-unknown',
       'underline-offset-auto/foo',
@@ -14642,6 +14803,7 @@ test('ring', async () => {
 
       // ring width
       '-ring',
+      'ring--1',
       '-ring-0',
       '-ring-1',
       '-ring-2',
@@ -14901,6 +15063,7 @@ test('inset-ring', async () => {
 
       // ring width
       '-inset-ring',
+      'inset-ring--1',
       '-inset-ring-0',
       '-inset-ring-1',
       '-inset-ring-2',
@@ -15066,6 +15229,7 @@ test('ring-offset', async () => {
       '-ring-offset-[#0088cc]/[50%]',
 
       // ring width
+      'ring-offset--1',
       '-ring-offset-0',
       '-ring-offset-1',
       '-ring-offset-2',

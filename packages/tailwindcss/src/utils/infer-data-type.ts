@@ -320,3 +320,11 @@ const IS_VECTOR = new RegExp(`^${HAS_NUMBER.source} +${HAS_NUMBER.source} +${HAS
 function isVector(value: string) {
   return IS_VECTOR.test(value)
 }
+
+/**
+ * Returns true of the value can be parsed as a positive whole number.
+ */
+export function isPositiveInteger(value: any) {
+  let num = Number(value)
+  return Number.isInteger(num) && num >= 0
+}
