@@ -136,7 +136,7 @@ test('parse', () => {
   `)
 })
 
-test.only('flat variant', () => {
+test('flat variant', () => {
   let ast = parse(css`
     &:hover {
       &:focus {

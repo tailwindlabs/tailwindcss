@@ -1282,10 +1282,6 @@ describe('addVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
-          display: flex;
-        }
-
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1319,10 +1315,6 @@ describe('addVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
-          display: flex;
-        }
-
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1359,12 +1351,12 @@ describe('addVariant', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (hover: hover) {
-          .group-hocus\\:flex:is(:where(.group):hover *) {
+          .group-hocus\\:flex:is(:where(.group) *):hover {
             display: flex;
           }
         }
 
-        .group-hocus\\:flex:is(:where(.group):focus *) {
+        .group-hocus\\:flex:is(:where(.group) *):is(:where(.group):focus *) {
           display: flex;
         }
 

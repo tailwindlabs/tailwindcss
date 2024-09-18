@@ -2896,7 +2896,7 @@ test.only('not selector inversion creation thing', async () => {
   `
 
   expect(await compileCss(input, ['omg:flex', 'not-omg:flex'])).toMatchInlineSnapshot(`
-    ".not-omg\\:flex:not(:hover:focus:hover:focus:active, :hover:focus:hover:focus[data-whatever], :hover[data-foo]), .not-omg\\:flex:not(:visited) {
+    ".not-omg\\:flex:not(:hover:hover:focus:hover:focus:active, :hover:hover:focus:hover:focus[data-whatever], :hover:hover[data-foo], :visited) {
       display: flex;
     }
 
