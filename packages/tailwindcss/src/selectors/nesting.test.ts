@@ -135,3 +135,43 @@ test('parse', () => {
     "
   `)
 })
+
+test.only('flat variant', () => {
+  let ast = parse(css`
+    &:hover {
+      &:focus {
+        &:active {
+          @slot;
+        }
+
+        &[data-whatever] {
+          @slot;
+        }
+      }
+
+      &[data-foo] {
+        @slot;
+      }
+    }
+
+    &:visited {
+      @slot;
+    }
+  `)
+
+  expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
+    "&:hover:focus:hover:focus:active {
+      @slot;
+    }
+    &:hover:focus:hover:focus[data-whatever] {
+      @slot;
+    }
+    &:hover[data-foo] {
+      @slot;
+    }
+    &:visited {
+      @slot;
+    }
+    "
+  `)
+})
