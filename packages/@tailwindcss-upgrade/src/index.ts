@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import fastGlob from 'fast-glob'
+import { globby } from 'globby'
 import path from 'node:path'
 import { help } from './commands/help'
 import { migrate } from './migrate'
@@ -46,9 +46,9 @@ async function run() {
       'No files provided. Searching for CSS files in the current directory and its subdirectories…',
     )
 
-    files = await fastGlob(['**/*.css'], {
+    files = await globby(['**/*.css'], {
       absolute: true,
-      ignore: ['**/node_modules', '**/vendor'],
+      gitignore: true,
     })
   }
 

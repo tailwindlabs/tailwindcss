@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "enhanced-resolve": "^5.17.1",
-    "fast-glob": "^3.3.2",
+    "globby": "^14.0.2",
     "mri": "^1.2.0",
     "picocolors": "^1.0.1",
     "postcss": "^8.4.41",
