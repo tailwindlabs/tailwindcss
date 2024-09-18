@@ -233,6 +233,8 @@ export function createVariants(theme: Theme): Variants {
       selector = selector.slice(4, -1)
     }
 
+    console.log({ selector })
+
     ruleNode.selector = `&:not(${selector})`
     ruleNode.nodes = []
   })

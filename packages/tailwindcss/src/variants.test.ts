@@ -2868,3 +2868,48 @@ test('variant order', async () => {
     }"
   `)
 })
+
+test.only('not selector inversion creation thing', async () => {
+  let input = css`
+    @variant omg {
+      &:hover {
+        &:focus {
+          &:active {
+            @slot;
+          }
+
+          &[data-whatever] {
+            @slot;
+          }
+        }
+
+        &[data-foo] {
+          @slot;
+        }
+      }
+
+      &:visited {
+        @slot;
+      }
+    }
+    @tailwind utilities;
+  `
+
+  expect(await compileCss(input, ['omg:flex', 'not-omg:flex'])).toMatchInlineSnapshot(`
+    ".not-omg\\:flex:not(:hover:focus:hover:focus:active, :hover:focus:hover:focus[data-whatever], :hover[data-foo]), .not-omg\\:flex:not(:visited) {
+      display: flex;
+    }
+
+    .omg\\:flex:hover:focus:active, .omg\\:flex:hover:focus[data-whatever] {
+      display: flex;
+    }
+
+    .omg\\:flex:hover[data-foo] {
+      display: flex;
+    }
+
+    .omg\\:flex:visited {
+      display: flex;
+    }"
+  `)
+})
