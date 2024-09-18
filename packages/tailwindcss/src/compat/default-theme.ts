@@ -1,4 +1,5 @@
 import type { NamedUtilityValue } from '../candidate'
+import { isPositiveInteger } from '../utilities'
 import { segment } from '../utils/segment'
 import colors from './colors'
 import type { UserConfig } from './config/types'
@@ -45,7 +46,7 @@ let bareDegrees = bareValues((value: NamedUtilityValue) => {
 let bareAspectRatio = bareValues((value) => {
   if (value.fraction === null) return
   let [lhs, rhs] = segment(value.fraction, '/')
-  if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+  if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
   return value.fraction
 })
 

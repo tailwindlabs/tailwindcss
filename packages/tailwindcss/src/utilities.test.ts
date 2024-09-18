@@ -176,6 +176,10 @@ test('inset', async () => {
   expect(
     await run([
       'inset',
+      'inset--1',
+      'inset--1/2',
+      'inset--1/-2',
+      'inset-1/-2',
       'inset-auto/foo',
       '-inset-full/foo',
       'inset-full/foo',
@@ -249,6 +253,10 @@ test('inset-x', async () => {
   expect(
     await run([
       'inset-x',
+      'inset-x--1',
+      'inset-x--1/2',
+      'inset-x--1/-2',
+      'inset-x-1/-2',
       'inset-x-auto/foo',
       'inset-x-full/foo',
       '-inset-x-full/foo',
@@ -322,6 +330,10 @@ test('inset-y', async () => {
   expect(
     await run([
       'inset-y',
+      'inset-y--1',
+      'inset-y--1/2',
+      'inset-y--1/-2',
+      'inset-1/-2',
       'inset-y-auto/foo',
       'inset-y-full/foo',
       '-inset-y-full/foo',
@@ -388,6 +400,10 @@ test('start', async () => {
   expect(
     await run([
       'start',
+      'start--1',
+      'start--1/2',
+      'start--1/-2',
+      'start-1/-2',
       'start-auto/foo',
       '-start-full/foo',
       'start-full/foo',
@@ -446,6 +462,10 @@ test('end', async () => {
   expect(
     await run([
       'end',
+      'end--1',
+      'end--1/2',
+      'end--1/-2',
+      'end-1/-2',
       'end-auto/foo',
       '-end-full/foo',
       'end-full/foo',
@@ -505,6 +525,10 @@ test('top', async () => {
   expect(
     await run([
       'top',
+      'top--1',
+      'top--1/2',
+      'top--1/-2',
+      'top-1/-2',
       'top-auto/foo',
       '-top-full/foo',
       'top-full/foo',
@@ -571,6 +595,10 @@ test('right', async () => {
   expect(
     await run([
       'right',
+      'right--1',
+      'right--1/2',
+      'right--1/-2',
+      'right-1/-2',
       'right-auto/foo',
       '-right-full/foo',
       'right-full/foo',
@@ -637,6 +665,10 @@ test('bottom', async () => {
   expect(
     await run([
       'bottom',
+      'bottom--1',
+      'bottom--1/2',
+      'bottom--1/-2',
+      'bottom-1/-2',
       'bottom-auto/foo',
       '-bottom-full/foo',
       'bottom-full/foo',
@@ -695,6 +727,10 @@ test('left', async () => {
   expect(
     await run([
       'left',
+      'left--1',
+      'left--1/2',
+      'left--1/-2',
+      'left-1/-2',
       'left-auto/foo',
       '-left-full/foo',
       'left-full/foo',
@@ -746,6 +782,7 @@ test('z-index', async () => {
   expect(
     await run([
       'z',
+      'z--1',
       '-z-auto',
       'z-unknown',
       'z-123.5',
@@ -801,6 +838,7 @@ test('order', async () => {
   expect(
     await run([
       'order',
+      'order--4',
       '-order-first',
       '-order-last',
       '-order-none',
@@ -856,6 +894,7 @@ test('col', async () => {
     await run([
       'col',
       'col-span',
+      'col-span--1',
       '-col-span-4',
       'col-span-unknown',
       'col-auto/foo',
@@ -895,6 +934,7 @@ test('col-start', async () => {
   expect(
     await run([
       'col-start',
+      'col-start--1',
       'col-start-unknown',
       'col-start-auto/foo',
       'col-start-4/foo',
@@ -931,6 +971,7 @@ test('col-end', async () => {
   expect(
     await run([
       'col-end',
+      'col-end--1',
       'col-end-unknown',
       'col-end-auto/foo',
       'col-end-4/foo',
@@ -980,6 +1021,7 @@ test('row', async () => {
     await run([
       'row',
       'row-span',
+      'row-span--1',
       '-row-span-4',
       'row-span-unknown',
       'row-auto/foo',
@@ -1019,6 +1061,7 @@ test('row-start', async () => {
   expect(
     await run([
       'row-start',
+      'row-start--1',
       'row-start-unknown',
       'row-start-auto/foo',
       'row-start-4/foo',
@@ -1055,6 +1098,7 @@ test('row-end', async () => {
   expect(
     await run([
       'row-end',
+      'row-end--1',
       'row-end-unknown',
       'row-end-auto/foo',
       'row-end-4/foo',
@@ -1657,6 +1701,7 @@ test('line-clamp', async () => {
   expect(
     await run([
       'line-clamp',
+      'line-clamp--4',
       '-line-clamp-4',
       '-line-clamp-[123]',
       '-line-clamp-none',
@@ -1852,6 +1897,9 @@ test('aspect-ratio', async () => {
       'aspect-video/foo',
       'aspect-[10/9]/foo',
       'aspect-4/3/foo',
+      'aspect--4/3',
+      'aspect--4/-3',
+      'aspect-4/-3',
     ]),
   ).toEqual('')
 })
@@ -1924,6 +1972,10 @@ test('size', async () => {
   expect(
     await run([
       'size',
+      'size--1',
+      'size--1/2',
+      'size--1/-2',
+      'size-1/-2',
       '-size-4',
       '-size-1/2',
       '-size-[4px]',
@@ -2026,6 +2078,10 @@ test('width', async () => {
   expect(
     await run([
       'w',
+      'w--1',
+      'w--1/2',
+      'w--1/-2',
+      'w-1/-2',
       '-w-4',
       '-w-1/2',
       '-w-[4px]',
@@ -2275,6 +2331,10 @@ test('height', async () => {
     await run([
       'h',
       '-h-4',
+      'h--1',
+      'h--1/2',
+      'h--1/-2',
+      'h-1/-2',
       '-h-1/2',
       '-h-[4px]',
       'h-full/foo',
@@ -2520,6 +2580,7 @@ test('flex', async () => {
   expect(
     await run([
       '-flex-1',
+      'flex--1',
       '-flex-auto',
       '-flex-initial',
       '-flex-none',
@@ -2527,6 +2588,9 @@ test('flex', async () => {
       'flex-unknown',
       'flex-1/foo',
       'flex-99/foo',
+      'flex--1/2',
+      'flex--1/-2',
+      'flex-1/-2',
       'flex-1/2/foo',
       'flex-auto/foo',
       'flex-initial/foo',
@@ -2629,6 +2693,10 @@ test('flex-basis', async () => {
   expect(
     await run([
       'basis',
+      'basis--1',
+      'basis--1/2',
+      'basis--1/-2',
+      'basis-1/-2',
       '-basis-full',
       '-basis-[123px]',
       'basis-auto/foo',
@@ -3100,6 +3168,10 @@ test('translate', async () => {
   expect(
     await run([
       'translate',
+      'translate--1',
+      'translate--1/2',
+      'translate--1/-2',
+      'translate-1/-2',
       'translate-1/2/foo',
       'translate-full/foo',
       '-translate-full/foo',
@@ -3169,6 +3241,10 @@ test('translate-x', async () => {
   expect(
     await run([
       'translate-x',
+      'translate-x--1',
+      'translate-x--1/2',
+      'translate-x--1/-2',
+      'translate-x-1/-2',
       'translate-x-full/foo',
       '-translate-x-full/foo',
       'translate-x-px/foo',
@@ -3237,6 +3313,10 @@ test('translate-y', async () => {
   expect(
     await run([
       'translate-y',
+      'translate-y--1',
+      'translate-y--1/2',
+      'translate-y--1/-2',
+      'translate-y-1/-2',
       'translate-y-full/foo',
       '-translate-y-full/foo',
       'translate-y-px/foo',
@@ -3288,6 +3368,10 @@ test('translate-z', async () => {
   expect(
     await run([
       'translate-z',
+      'translate-z--1',
+      'translate-z--1/2',
+      'translate-z--1/-2',
+      'translate-z-1/-2',
       'translate-z-full',
       '-translate-z-full',
       'translate-z-1/2',
@@ -5767,6 +5851,7 @@ test('columns', async () => {
   expect(
     await run([
       'columns',
+      'columns--4',
       '-columns-4',
       '-columns-[123]',
       '-columns-[--value]',
@@ -6128,6 +6213,7 @@ test('grid-cols', async () => {
       'grid-cols',
       '-grid-cols-none',
       '-grid-cols-subgrid',
+      'grid-cols--12',
       '-grid-cols-12',
       '-grid-cols-[123]',
       'grid-cols-unknown',
@@ -6175,6 +6261,7 @@ test('grid-rows', async () => {
       'grid-rows',
       '-grid-rows-none',
       '-grid-rows-subgrid',
+      'grid-rows--12',
       '-grid-rows-12',
       '-grid-rows-[123]',
       'grid-rows-unknown',

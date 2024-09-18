@@ -295,7 +295,7 @@ export function createUtilities(theme: Theme) {
         // exist as a theme value.
         if (value === null && desc.supportsFractions && candidate.value.fraction) {
           let [lhs, rhs] = segment(candidate.value.fraction, '/')
-          if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+          if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
           value = `calc(${candidate.value.fraction} * 100%)`
         }
 
@@ -598,7 +598,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('z', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--z-index'],
@@ -622,7 +622,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('order', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--order'],
@@ -648,7 +648,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('col-span-full', [['grid-column', '1 / -1']])
   functionalUtility('col-span', {
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [decl('grid-column', `span ${value} / span ${value}`)],
@@ -661,7 +661,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('col-start', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--grid-column-start'],
@@ -675,7 +675,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('col-end', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--grid-column-end'],
@@ -717,7 +717,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('row-span', {
     themeKeys: [],
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [decl('grid-row', `span ${value} / span ${value}`)],
@@ -730,7 +730,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('row-start', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--grid-row-start'],
@@ -744,7 +744,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('row-end', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     themeKeys: ['--grid-row-end'],
@@ -839,7 +839,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('line-clamp', {
     themeKeys: ['--line-clamp'],
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [
@@ -893,7 +893,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return null
+      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -1068,11 +1068,11 @@ export function createUtilities(theme: Theme) {
 
     if (candidate.value.fraction) {
       let [lhs, rhs] = segment(candidate.value.fraction, '/')
-      if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
       return [decl('flex', `calc(${candidate.value.fraction} * 100%)`)]
     }
 
-    if (Number.isInteger(Number(candidate.value.value))) {
+    if (isPositiveInteger(candidate.value.value)) {
       if (candidate.modifier) return
       return [decl('flex', candidate.value.value)]
     }
@@ -1872,7 +1872,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('columns', {
     themeKeys: ['--columns', '--width'],
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [decl('columns', value)],
@@ -1926,7 +1926,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-columns', value)],
@@ -1937,7 +1937,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-rows', {
     themeKeys: ['--grid-template-rows'],
     handleBareValue: ({ value }) => {
-      if (!Number.isInteger(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-rows', value)],
@@ -4657,4 +4657,9 @@ export function createUtilities(theme: Theme) {
   ])
 
   return utilities
+}
+
+export function isPositiveInteger(value: any) {
+  let num = Number(value)
+  return Number.isInteger(num) && num >= 0
 }
