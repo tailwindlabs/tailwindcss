@@ -290,6 +290,25 @@ it('should migrate classes with element selectors', async () => {
   `)
 })
 
+it('should migrate classes attached to an element selector', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        main.no-scrollbar {
+          display: none;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@utility no-scrollbar {
+      &main {
+        display: none;
+      }
+    }
+    "
+  `)
+})
+
 it('should migrate classes with id selectors', async () => {
   expect(
     await migrate(css`
