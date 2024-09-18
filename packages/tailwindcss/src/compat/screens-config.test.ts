@@ -388,14 +388,14 @@ test('JS config with `theme: { extends }` should not include the `default-config
   })
 
   expect(
+    compiler.build(['sm:flex', 'md:flex', 'min-md:max-lg:underline', 'min-sm:max-md:underline']),
+  ).toBe('')
+
+  expect(
     compiler.build([
-      'sm:flex',
-      'md:flex',
       'mini:flex',
       'midi:flex',
       'maxi:flex',
-      'min-md:max-lg:underline',
-      'min-sm:max-md:underline',
       'min-midi:max-maxi:underline',
       'min-mini:max-midi:underline',
 
@@ -469,17 +469,17 @@ describe('complex screen configs', () => {
     })
 
     expect(
+      compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-tall:flex']),
+    ).toBe('')
+
+    expect(
       compiler.build([
         'sm:flex',
         'md:flex',
         'lg:flex',
         'xl:flex',
         'tall:flex',
-        'min-sm:flex',
-        'min-md:flex',
-        'min-lg:flex',
-        'min-xl:flex',
-        'min-tall:flex',
+
         // Ensure other core variants appear at the end
         'print:items-end',
       ]),
