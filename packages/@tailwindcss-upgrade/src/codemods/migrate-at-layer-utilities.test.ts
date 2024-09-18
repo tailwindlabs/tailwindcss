@@ -419,3 +419,78 @@ it('should not migrate nested classes inside a `:not(…)`', async () => {
     "
   `)
 })
+
+it('should migrate advanced combinations', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        @media (width >= 100px) {
+          @supports (display: none) {
+            .foo .bar:not(.qux):has(.baz) {
+              display: none;
+            }
+          }
+
+          .bar {
+            color: red;
+          }
+        }
+
+        @media (width >= 200px) {
+          .foo {
+            &:hover {
+              @apply bg-red-500;
+
+              .bar {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@utility foo {
+      @media (width >= 100px) {
+        @supports (display: none) {
+          & .bar:not(.qux):has(.baz) {
+            display: none;
+          }
+        }
+      }
+      @media (width >= 200px) {
+        &:hover {
+          @apply bg-red-500;
+
+          .bar {
+            color: red;
+          }
+        }
+      }
+    }
+    @utility bar {
+      @media (width >= 100px) {
+        @supports (display: none) {
+          .foo &:not(.qux):has(.baz) {
+            display: none;
+          }
+        }
+      }
+      @media (width >= 100px) {
+        color: red;
+      }
+    }
+    @utility baz {
+      @media (width >= 100px) {
+        @supports (display: none) {
+          .foo .bar:not(.qux):has(&) {
+            display: none;
+          }
+        }
+      }
+    }
+
+
+    "
+  `)
+})
