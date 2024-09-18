@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for `aria`, `supports`, and `data` variants defined in JS config files ([#14407](https://github.com/tailwindlabs/tailwindcss/pull/14407))
 - Add `@tailwindcss/upgrade` tooling ([#14434](https://github.com/tailwindlabs/tailwindcss/pull/14434))
 
+### Added
+
+- Support `screens` in JS config files ([#14415](https://github.com/tailwindlabs/tailwindcss/pull/14415))
+
 ### Fixed
 
 - Support `borderRadius.*` as an alias for `--radius-*` when using dot notation inside the `theme()` function ([#14436](https://github.com/tailwindlabs/tailwindcss/pull/14436))

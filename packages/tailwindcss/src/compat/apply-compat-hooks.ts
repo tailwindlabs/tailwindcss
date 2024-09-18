@@ -10,6 +10,7 @@ import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
 import { darkModePlugin } from './dark-mode'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
+import { registerScreensConfig } from './screens-config'
 import { registerThemeVariantOverrides } from './theme-variants'
 
 export async function applyCompatibilityHooks({
@@ -174,6 +175,7 @@ export async function applyCompatibilityHooks({
     ...userConfig,
     { config: { plugins: [darkModePlugin] } },
   ])
+  let resolvedUserConfig = resolveConfig(designSystem, userConfig)
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
@@ -184,9 +186,10 @@ export async function applyCompatibilityHooks({
   // Merge the user-configured theme keys into the design system. The compat
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
-  applyConfigToTheme(designSystem, userConfig)
+  applyConfigToTheme(designSystem, resolvedUserConfig)
 
-  registerThemeVariantOverrides(resolvedConfig, designSystem)
+  registerThemeVariantOverrides(resolvedUserConfig, designSystem)
+  registerScreensConfig(resolvedUserConfig, designSystem)
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered

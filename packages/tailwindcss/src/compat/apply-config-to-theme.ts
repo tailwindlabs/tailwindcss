@@ -1,6 +1,5 @@
 import type { DesignSystem } from '../design-system'
 import { ThemeOptions } from '../theme'
-import { resolveConfig, type ConfigFile } from './config/resolve-config'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
@@ -20,10 +19,11 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
   return null
 }
 
-export function applyConfigToTheme(designSystem: DesignSystem, configs: ConfigFile[]) {
-  let theme = resolveConfig(designSystem, configs).theme
-
+export function applyConfigToTheme(designSystem: DesignSystem, { theme }: ResolvedConfig) {
   for (let [path, value] of themeableValues(theme)) {
+    if (typeof value !== 'string' && typeof value !== 'number') {
+      continue
+    }
     let name = keyPathToCssProperty(path)
     designSystem.theme.add(
       `--${name}`,
@@ -111,9 +111,8 @@ function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][]
 }
 
 function keyPathToCssProperty(path: string[]) {
-  if (path[0] === 'colors') {
-    path[0] = 'color'
-  }
+  if (path[0] === 'colors') path[0] = 'color'
+  if (path[0] === 'screens') path[0] = 'breakpoint'
 
   return (
     path

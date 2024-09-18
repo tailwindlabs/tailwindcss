@@ -13,8 +13,8 @@ type VariantFn<T extends Variant['kind']> = (
 type CompareFn = (a: Variant, z: Variant) => number
 
 export class Variants {
-  private compareFns = new Map<number, CompareFn>()
-  private variants = new Map<
+  public compareFns = new Map<number, CompareFn>()
+  public variants = new Map<
     string,
     {
       kind: Variant['kind']
@@ -39,8 +39,12 @@ export class Variants {
    */
   private lastOrder = 0
 
-  static(name: string, applyFn: VariantFn<'static'>, { compounds }: { compounds?: boolean } = {}) {
-    this.set(name, { kind: 'static', applyFn, compounds: compounds ?? true })
+  static(
+    name: string,
+    applyFn: VariantFn<'static'>,
+    { compounds, order }: { compounds?: boolean; order?: number } = {},
+  ) {
+    this.set(name, { kind: 'static', applyFn, compounds: compounds ?? true, order })
   }
 
   fromAst(name: string, ast: AstNode[]) {
@@ -54,17 +58,17 @@ export class Variants {
   functional(
     name: string,
     applyFn: VariantFn<'functional'>,
-    { compounds }: { compounds?: boolean } = {},
+    { compounds, order }: { compounds?: boolean; order?: number } = {},
   ) {
-    this.set(name, { kind: 'functional', applyFn, compounds: compounds ?? true })
+    this.set(name, { kind: 'functional', applyFn, compounds: compounds ?? true, order })
   }
 
   compound(
     name: string,
     applyFn: VariantFn<'compound'>,
-    { compounds }: { compounds?: boolean } = {},
+    { compounds, order }: { compounds?: boolean; order?: number } = {},
   ) {
-    this.set(name, { kind: 'compound', applyFn, compounds: compounds ?? true })
+    this.set(name, { kind: 'compound', applyFn, compounds: compounds ?? true, order })
   }
 
   group(fn: () => void, compareFn?: CompareFn) {
@@ -146,17 +150,25 @@ export class Variants {
 
   private set<T extends Variant['kind']>(
     name: string,
-    { kind, applyFn, compounds }: { kind: T; applyFn: VariantFn<T>; compounds: boolean },
+    {
+      kind,
+      applyFn,
+      compounds,
+      order,
+    }: { kind: T; applyFn: VariantFn<T>; compounds: boolean; order?: number },
   ) {
     let existing = this.variants.get(name)
     if (existing) {
       Object.assign(existing, { kind, applyFn, compounds })
     } else {
-      this.lastOrder = this.nextOrder()
+      if (order === undefined) {
+        this.lastOrder = this.nextOrder()
+        order = this.lastOrder
+      }
       this.variants.set(name, {
         kind,
         applyFn,
-        order: this.lastOrder,
+        order,
         compounds,
       })
     }
@@ -698,7 +710,7 @@ export function createVariants(theme: Theme): Variants {
       let resolvedBreakpoints = new DefaultMap((variant: Variant) => {
         switch (variant.kind) {
           case 'static': {
-            return breakpoints.get(variant.root) ?? null
+            return theme.resolveValue(variant.root, ['--breakpoint']) ?? null
           }
 
           case 'functional': {
