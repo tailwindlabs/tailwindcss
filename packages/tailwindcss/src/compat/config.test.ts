@@ -999,7 +999,7 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  let compiler = await compile(input, '/root', {
     loadConfig: async () => ({
       theme: {
         extend: {

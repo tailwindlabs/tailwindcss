@@ -2538,6 +2538,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -2659,6 +2660,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -2725,6 +2727,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -2795,6 +2798,7 @@ describe('matchUtilities()', () => {
             @tailwind utilities;
             @plugin "my-plugin";
           `,
+          '/root',
           {
             async loadPlugin() {
               return ({ matchUtilities }: PluginAPI) => {
@@ -2846,6 +2850,7 @@ describe('matchUtilities()', () => {
             @tailwind utilities;
             @plugin "my-plugin";
           `,
+          '/root',
           {
             async loadPlugin() {
               return ({ matchUtilities }: PluginAPI) => {
@@ -2880,6 +2885,7 @@ describe('matchUtilities()', () => {
             @tailwind utilities;
             @plugin "my-plugin";
           `,
+          '/root',
           {
             async loadPlugin() {
               return ({ matchUtilities }: PluginAPI) => {
@@ -2920,6 +2926,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -3039,6 +3046,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -3112,6 +3120,7 @@ describe('matchUtilities()', () => {
             --opacity-my-opacity: 0.5;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {
@@ -3233,6 +3242,7 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
+        '/root',
         {
           async loadPlugin() {
             return ({ matchUtilities }: PluginAPI) => {

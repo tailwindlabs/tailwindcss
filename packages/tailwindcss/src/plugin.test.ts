@@ -9,7 +9,7 @@ test('plugin', async () => {
     @plugin "my-plugin";
   `
 
-  let compiler = await compile(input, {
+  let compiler = await compile(input, '/root', {
     loadPlugin: async () => {
       return plugin(function ({ addBase }) {
         addBase({
@@ -36,7 +36,7 @@ test('plugin.withOptions', async () => {
     @plugin "my-plugin";
   `
 
-  let compiler = await compile(input, {
+  let compiler = await compile(input, '/root', {
     loadPlugin: async () => {
       return plugin.withOptions(function (opts = { foo: '1px' }) {
         return function ({ addBase }) {

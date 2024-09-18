@@ -335,6 +335,7 @@ describe('theme function', () => {
                 font-family: theme(fontFamily.sans);
               }
             `,
+            '/root',
             {
               loadConfig: async () => ({}),
             },
@@ -794,6 +795,7 @@ describe('in plugins', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         async loadPlugin() {
           return plugin(({ addBase, addUtilities }) => {
@@ -849,6 +851,7 @@ describe('in JS config files', () => {
           @tailwind utilities;
         }
       `,
+      '/root',
       {
         loadConfig: async () => ({
           theme: {
