@@ -14144,14 +14144,6 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow {
-      inset: var(--inset-shadow, inset 0 2px 4px #0000000d);
-    }
-
-    .inset-shadow-sm {
-      inset: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
-    }
-
-    .inset-shadow {
       --tw-inset-shadow: inset 0 2px 4px #0000000d;
       --tw-inset-shadow-colored: inset 0 2px 4px var(--tw-inset-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -14622,6 +14614,7 @@ test('inset-ring', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
@@ -14656,6 +14649,7 @@ test('inset-ring', async () => {
         'inset-ring-1',
         'inset-ring-2',
         'inset-ring-4',
+        'inset-ring-thick',
         'inset-ring-[12px]',
         'inset-ring-[length:--my-width]',
       ],
@@ -14663,6 +14657,7 @@ test('inset-ring', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
+      --inset-ring-thick: 100px;
     }
 
     .inset-ring {

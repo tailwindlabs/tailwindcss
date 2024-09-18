@@ -428,12 +428,49 @@ export function createUtilities(theme: Theme) {
     let value = candidate.negative ? '-100%' : '100%'
     return [decl('inset', value)]
   })
-  functionalUtility('inset', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    handle: (value) => [decl('inset', value)],
+  utilities.functional('inset', (candidate) => {
+    if (!candidate.value) return
+
+    let value
+    if (candidate.value.kind === 'arbitrary') {
+      if (candidate.modifier) return
+      value = candidate.value.value
+    } else {
+      // We need to make sure variables like `--inset-shadow-sm` and
+      // `--inset-ring-thick` don't mistakenly generate utilities for the
+      // `inset` property.
+      if (
+        candidate.value.value === 'ring' ||
+        candidate.value.value === 'shadow' ||
+        candidate.value.value.startsWith('ring-') ||
+        candidate.value.value.startsWith('shadow-')
+      ) {
+        value = theme.resolve(candidate.value.fraction ?? candidate.value.value, ['--spacing'])
+      } else {
+        value = theme.resolve(candidate.value.fraction ?? candidate.value.value, [
+          '--inset',
+          '--spacing',
+        ])
+      }
+
+      if (!value && candidate.value.fraction) {
+        let [lhs, rhs] = segment(candidate.value.fraction, '/')
+        if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+        value = `calc(${candidate.value.fraction} * 100%)`
+      }
+
+      if (!value) return
+    }
+    value = withNegative(value, candidate)
+    return [decl('inset', value)]
   })
+  suggest('inset', () => [
+    {
+      supportsNegative: true,
+      valueThemeKeys: ['--inset', '--spacing'],
+      hasDefaultValue: false,
+    },
+  ])
 
   staticUtility('inset-x-auto', [
     ['--tw-sort', 'inset-inline'],
