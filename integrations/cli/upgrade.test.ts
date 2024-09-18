@@ -50,3 +50,29 @@ test(
     )
   },
 )
+
+test(
+  'migrate @tailwind directives',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    await fs.expectFileToContain('src/index.css', css` @import 'tailwindcss'; `)
+  },
+)
