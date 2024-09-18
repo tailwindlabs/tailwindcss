@@ -16,7 +16,14 @@ export type Comment = {
   value: string
 }
 
-export type AstNode = Rule | Declaration | Comment
+export type Context = {
+  kind: 'context'
+  context: Record<string, unknown>
+  nodes: AstNode[]
+}
+
+export type AstNode = Rule | Declaration | Comment | Context
+type VisitableAstNode = Exclude<AstNode, Context>
 
 export function rule(selector: string, nodes: AstNode[]): Rule {
   return {
@@ -42,6 +49,14 @@ export function comment(value: string): Comment {
   }
 }
 
+export function context(context: Record<string, unknown>, nodes: AstNode[]): Context {
+  return {
+    kind: 'context',
+    context,
+    nodes,
+  }
+}
+
 export enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
@@ -59,13 +74,21 @@ export function walk(
     node: AstNode,
     utils: {
       parent: AstNode | null
-      replaceWith(newNode: AstNode | AstNode[]): void
+      replaceWith(newNode: VisitableAstNode | VisitableAstNode[]): void
+      context: Record<string, unknown>
     },
   ) => void | WalkAction,
   parent: AstNode | null = null,
+  context: Record<string, unknown> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+
+    if (node.kind === 'context') {
+      walk(node.nodes, visit, node, { ...context, ...node.context })
+      continue
+    }
+
     let status =
       visit(node, {
         parent,
@@ -76,6 +99,7 @@ export function walk(
           // will process this position (containing the replaced node) again.
           i--
         },
+        context,
       }) ?? WalkAction.Continue
 
     // Stop the walk entirely
@@ -85,7 +109,7 @@ export function walk(
     if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule') {
-      walk(node.nodes, visit, node)
+      walk(node.nodes, visit, node, context)
     }
   }
 }
@@ -169,6 +193,13 @@ export function toCss(ast: AstNode[]) {
     // Comment
     else if (node.kind === 'comment') {
       css += `${indent}/*${node.value}*/\n`
+    }
+
+    // Context Node
+    else if (node.kind === 'context') {
+      for (let child of node.nodes) {
+        css += stringify(child, depth)
+      }
     }
 
     // Declaration
