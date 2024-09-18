@@ -53,7 +53,7 @@ test(
 )
 
 test(
-  'migrate @tailwind directives',
+  'migrate `@tailwind` directives',
   {
     fs: {
       'package.json': json`
@@ -79,7 +79,7 @@ test(
 )
 
 test(
-  'migrate @layer utilities',
+  'migrate `@layer utilities` and `@layer components`',
   {
     fs: {
       'package.json': json`
@@ -92,6 +92,12 @@ test(
       `,
       'src/index.css': css`
         @import 'tailwindcss';
+
+        @layer components {
+          .btn {
+            @apply rounded-md px-2 py-1 bg-blue-500 text-white;
+          }
+        }
 
         @layer utilities {
           .no-scrollbar::-webkit-scrollbar {
@@ -112,6 +118,10 @@ test(
     await fs.expectFileToContain(
       'src/index.css',
       dedent`
+        @utility btn {
+          @apply rounded-md px-2 py-1 bg-blue-500 text-white;
+        }
+
         @utility no-scrollbar {
           &::-webkit-scrollbar {
             display: none;

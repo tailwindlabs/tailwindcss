@@ -39,7 +39,7 @@ function walk<T>(rule: Walkable<T>, cb: (rule: T) => void | WalkAction): undefin
 
 export function migrateAtLayerUtilities(): Plugin {
   async function migrate(atRule: AtRule) {
-    if (atRule.params !== 'utilities') return
+    if (atRule.params !== 'utilities' && atRule.params !== 'components') return
 
     // Upgrade every Rule in `@layer utilities` to an `@utility` at-rule.
     walk(atRule, (node) => {
@@ -167,7 +167,11 @@ export function migrateAtLayerUtilities(): Plugin {
 
       while (
         parent &&
-        !(parent instanceof AtRule && parent.name === 'layer' && parent.params === 'utilities')
+        !(
+          parent instanceof AtRule &&
+          parent.name === 'layer' &&
+          (parent.params === 'utilities' || parent.params === 'components')
+        )
       ) {
         parents.push(parent.clone({ nodes: [] }))
 
