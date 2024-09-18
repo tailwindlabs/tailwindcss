@@ -136,7 +136,7 @@ export function asColor(value: string, modifier: CandidateModifier | null): stri
     return withAlpha(value, modifier.value)
   }
 
-  if (Number.isNaN(Number(modifier.value))) {
+  if (!isPositiveInteger(modifier.value)) {
     return null
   }
 
@@ -1084,7 +1084,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('shrink', {
     defaultValue: '1',
     handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [decl('flex-shrink', value)],
@@ -1096,7 +1096,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grow', {
     defaultValue: '1',
     handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return value
     },
     handle: (value) => [decl('flex-grow', value)],
@@ -1337,7 +1337,7 @@ export function createUtilities(theme: Theme) {
       return [decl('scale', value)]
     } else {
       value = theme.resolve(candidate.value.value, ['--scale'])
-      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+      if (!value && isPositiveInteger(candidate.value.value)) {
         value = `${candidate.value.value}%`
       }
       if (!value) return
@@ -1368,7 +1368,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--scale'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -1420,7 +1420,7 @@ export function createUtilities(theme: Theme) {
       }
     } else {
       value = theme.resolve(candidate.value.value, ['--rotate'])
-      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+      if (!value && isPositiveInteger(candidate.value.value)) {
         value = `${candidate.value.value}deg`
       }
       if (!value) return
@@ -1460,7 +1460,7 @@ export function createUtilities(theme: Theme) {
         supportsNegative: true,
         themeKeys: ['--rotate'],
         handleBareValue: ({ value }) => {
-          if (Number.isNaN(Number(value))) return null
+          if (!isPositiveInteger(value)) return null
           return `rotate${axis.toUpperCase()}(${value}deg)`
         },
         handle: (value) => [
@@ -1487,7 +1487,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--skew'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}deg`
       },
       handle: (value) => [
@@ -1506,7 +1506,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--skew'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}deg`
       },
       handle: (value) => [
@@ -1524,7 +1524,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--skew'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}deg`
       },
       handle: (value) => [
@@ -2292,7 +2292,7 @@ export function createUtilities(theme: Theme) {
             return [borderProperties(), ...decls]
           }
 
-          if (!Number.isNaN(Number(candidate.value.value))) {
+          if (isPositiveInteger(candidate.value.value)) {
             let decls = desc.width(`${candidate.value.value}px`)
             if (!decls) return
             return [borderProperties(), ...decls]
@@ -2394,7 +2394,7 @@ export function createUtilities(theme: Theme) {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
       themeKeys: ['--divide-width', '--border-width'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}px`
       },
       handle: (value) => [
@@ -2414,7 +2414,7 @@ export function createUtilities(theme: Theme) {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
       themeKeys: ['--divide-width', '--border-width'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}px`
       },
       handle: (value) => [
@@ -2672,7 +2672,7 @@ export function createUtilities(theme: Theme) {
           return desc.position(value)
         } else if (
           candidate.value.value[candidate.value.value.length - 1] === '%' &&
-          !Number.isNaN(Number(candidate.value.value.slice(0, -1)))
+          isPositiveInteger(candidate.value.value.slice(0, -1))
         ) {
           return desc.position(candidate.value.value)
         }
@@ -2841,7 +2841,7 @@ export function createUtilities(theme: Theme) {
       let value = theme.resolve(candidate.value.value, ['--stroke-width'])
       if (value) {
         return [decl('stroke-width', value)]
-      } else if (!Number.isNaN(Number(candidate.value.value))) {
+      } else if (isPositiveInteger(candidate.value.value)) {
         return [decl('stroke-width', candidate.value.value)]
       }
     }
@@ -3147,7 +3147,7 @@ export function createUtilities(theme: Theme) {
         return [decl('text-decoration-thickness', value)]
       }
 
-      if (!Number.isNaN(Number(candidate.value.value))) {
+      if (isPositiveInteger(candidate.value.value)) {
         if (candidate.modifier) return
         return [decl('text-decoration-thickness', `${candidate.value.value}px`)]
       }
@@ -3305,7 +3305,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3318,7 +3318,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-brightness', {
       themeKeys: ['--backdrop-brightness', '--brightness'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3346,7 +3346,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('contrast', {
       themeKeys: ['--contrast'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3359,7 +3359,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-contrast', {
       themeKeys: ['--backdrop-contrast', '--contrast'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3387,7 +3387,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('grayscale', {
       themeKeys: ['--grayscale'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3401,7 +3401,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-grayscale', {
       themeKeys: ['--backdrop-grayscale', '--grayscale'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3433,7 +3433,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--hue-rotate'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}deg`
       },
       handle: (value) => [
@@ -3447,7 +3447,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--backdrop-hue-rotate', '--hue-rotate'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}deg`
       },
       handle: (value) => [
@@ -3475,7 +3475,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('invert', {
       themeKeys: ['--invert'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3489,7 +3489,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-invert', {
       themeKeys: ['--backdrop-invert', '--invert'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3520,7 +3520,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('saturate', {
       themeKeys: ['--saturate'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3533,7 +3533,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-saturate', {
       themeKeys: ['--backdrop-saturate', '--saturate'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3561,7 +3561,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('sepia', {
       themeKeys: ['--sepia'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3575,7 +3575,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-sepia', {
       themeKeys: ['--backdrop-sepia', '--sepia'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       defaultValue: '100%',
@@ -3620,7 +3620,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3686,7 +3686,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('delay', {
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}ms`
       },
       themeKeys: ['--transition-delay'],
@@ -3713,7 +3713,7 @@ export function createUtilities(theme: Theme) {
           '--transition-duration',
         ])
 
-        if (value === null && !Number.isNaN(Number(candidate.value.value))) {
+        if (value === null && isPositiveInteger(candidate.value.value)) {
           value = `${candidate.value.value}ms`
         }
       }
@@ -4001,7 +4001,7 @@ export function createUtilities(theme: Theme) {
             decl('outline-style', 'var(--tw-outline-style)'),
             decl('outline-width', value),
           ]
-        } else if (!Number.isNaN(Number(candidate.value.value))) {
+        } else if (isPositiveInteger(candidate.value.value)) {
           return [
             outlineProperties(),
             decl('outline-style', 'var(--tw-outline-style)'),
@@ -4028,7 +4028,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--outline-offset'],
       handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
+        if (!isPositiveInteger(value)) return null
         return `${value}px`
       },
       handle: (value) => [decl('outline-offset', value)],
@@ -4045,7 +4045,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('opacity', {
     themeKeys: ['--opacity'],
     handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return `${value}%`
     },
     handle: (value) => [decl('opacity', value)],
@@ -4063,7 +4063,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     themeKeys: ['--text-underline-offset'],
     handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
+      if (!isPositiveInteger(value)) return null
       return `${value}px`
     },
     handle: (value) => [decl('text-underline-offset', value)],
@@ -4460,7 +4460,7 @@ export function createUtilities(theme: Theme) {
       {
         if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--ring-width'])
-        if (value === null && !Number.isNaN(Number(candidate.value.value))) {
+        if (value === null && isPositiveInteger(candidate.value.value)) {
           value = `${candidate.value.value}px`
         }
         if (value) {
@@ -4535,7 +4535,7 @@ export function createUtilities(theme: Theme) {
       {
         if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--ring-width'])
-        if (value === null && !Number.isNaN(Number(candidate.value.value))) {
+        if (value === null && isPositiveInteger(candidate.value.value)) {
           value = `${candidate.value.value}px`
         }
         if (value) {
@@ -4596,7 +4596,7 @@ export function createUtilities(theme: Theme) {
             decl('--tw-ring-offset-width', value),
             decl('--tw-ring-offset-shadow', ringOffsetShadowValue),
           ]
-        } else if (!Number.isNaN(Number(candidate.value.value))) {
+        } else if (isPositiveInteger(candidate.value.value)) {
           if (candidate.modifier) return
           return [
             decl('--tw-ring-offset-width', `${candidate.value.value}px`),

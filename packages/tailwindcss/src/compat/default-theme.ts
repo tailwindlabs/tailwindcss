@@ -14,31 +14,31 @@ function bareValues(fn: (value: NamedUtilityValue) => string | undefined) {
 }
 
 let bareIntegers = bareValues((value) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return value.value
   }
 })
 
 let barePercentages = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}%`
   }
 })
 
 let barePixels = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}px`
   }
 })
 
 let bareMilliseconds = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}ms`
   }
 })
 
 let bareDegrees = bareValues((value: NamedUtilityValue) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(value.value)) {
     return `${value.value}deg`
   }
 })
@@ -51,7 +51,7 @@ let bareAspectRatio = bareValues((value) => {
 })
 
 let bareRepeatValues = bareValues((value) => {
-  if (!Number.isNaN(Number(value.value))) {
+  if (isPositiveInteger(Number(value.value))) {
     return `repeat(${value.value}, minmax(0, 1fr))`
   }
 })

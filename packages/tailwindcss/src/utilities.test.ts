@@ -2617,6 +2617,8 @@ test('flex-shrink', async () => {
   expect(
     await run([
       '-shrink',
+      'shrink--1',
+      'shrink-1.5',
       '-shrink-0',
       '-shrink-[123]',
       'shrink-unknown',
@@ -2644,6 +2646,8 @@ test('flex-grow', async () => {
   expect(
     await run([
       '-grow',
+      'grow--1',
+      'grow-1.5',
       '-grow-0',
       '-grow-[123]',
       'grow-unknown',
@@ -3441,6 +3445,7 @@ test('rotate', async () => {
     await run([
       'rotate',
       'rotate-z',
+      'rotate--2',
       'rotate-unknown',
       'rotate-45/foo',
       '-rotate-45/foo',
@@ -3512,6 +3517,7 @@ test('rotate-x', async () => {
   expect(
     await run([
       'rotate-x',
+      'rotate-x--1',
       '-rotate-x',
       'rotate-x-potato',
       'rotate-x-45/foo',
@@ -3583,6 +3589,7 @@ test('rotate-y', async () => {
   expect(
     await run([
       'rotate-y',
+      'rotate-y--1',
       '-rotate-y',
       'rotate-y-potato',
       'rotate-y-45/foo',
@@ -3655,7 +3662,14 @@ test('skew', async () => {
     }"
   `)
   expect(
-    await run(['skew', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo']),
+    await run([
+      'skew',
+      'skew--1',
+      'skew-unknown',
+      'skew-6/foo',
+      '-skew-6/foo',
+      'skew-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3719,7 +3733,14 @@ test('skew-x', async () => {
     }"
   `)
   expect(
-    await run(['skew-x', 'skew-x-unknown', 'skew-x-6/foo', '-skew-x-6/foo', 'skew-x-[123deg]/foo']),
+    await run([
+      'skew-x',
+      'skew-x--1',
+      'skew-x-unknown',
+      'skew-x-6/foo',
+      '-skew-x-6/foo',
+      'skew-x-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3783,7 +3804,14 @@ test('skew-y', async () => {
     }"
   `)
   expect(
-    await run(['skew-y', 'skew-y-unknown', 'skew-y-6/foo', '-skew-y-6/foo', 'skew-y-[123deg]/foo']),
+    await run([
+      'skew-y',
+      'skew-y--1',
+      'skew-y-unknown',
+      'skew-y-6/foo',
+      '-skew-y-6/foo',
+      'skew-y-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -3843,6 +3871,8 @@ test('scale', async () => {
   expect(
     await run([
       'scale',
+      'scale--50',
+      'scale-1.5',
       'scale-unknown',
       'scale-50/foo',
       '-scale-50/foo',
@@ -3978,6 +4008,8 @@ test('scale-x', async () => {
   expect(
     await run([
       'scale-x',
+      'scale-x--1',
+      'scale-x-1.5',
       'scale-x-unknown',
       'scale-200/foo',
       'scale-x-400/foo',
@@ -4036,6 +4068,8 @@ test('scale-y', async () => {
   expect(
     await run([
       'scale-y',
+      'scale-y--1',
+      'scale-y-1.5',
       'scale-y-unknown',
       'scale-y-50/foo',
       '-scale-y-50/foo',
@@ -4090,7 +4124,14 @@ test('scale-z', async () => {
     }"
   `)
   expect(
-    await run(['scale-z', 'scale-z-50/foo', '-scale-z-50/foo', 'scale-z-[123deg]/foo']),
+    await run([
+      'scale-z',
+      'scale-z--1',
+      'scale-z-1.5',
+      'scale-z-50/foo',
+      '-scale-z-50/foo',
+      'scale-z-[123deg]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6955,6 +6996,7 @@ test('divide-x', async () => {
   expect(
     await run([
       '-divide-x',
+      'divide-x--4',
       '-divide-x-4',
       '-divide-x-123',
       'divide-x-unknown',
@@ -7073,6 +7115,7 @@ test('divide-y', async () => {
   expect(
     await run([
       '-divide-y',
+      'divide-y--4',
       '-divide-y-4',
       '-divide-y-123',
       'divide-y-unknown',
@@ -7290,6 +7333,7 @@ test('accent', async () => {
     await run([
       'accent',
       '-accent-red-500',
+      'accent-red-500/-50',
       '-accent-red-500/50',
       '-accent-red-500/[0.5]',
       '-accent-red-500/[50%]',
@@ -7299,6 +7343,7 @@ test('accent', async () => {
       '-accent-current/[50%]',
       '-accent-inherit',
       '-accent-transparent',
+      'accent-[#0088cc]/-50',
       '-accent-[#0088cc]',
       '-accent-[#0088cc]/50',
       '-accent-[#0088cc]/[0.5]',
@@ -9906,6 +9951,8 @@ test('from', async () => {
     await run([
       'from',
       'from-123',
+      'from--123',
+      'from--5%',
       'from-unknown',
       'from-unknown%',
 
@@ -10143,6 +10190,8 @@ test('via', async () => {
     await run([
       'via',
       'via-123',
+      'via--123',
+      'via--5%',
       'via-unknown',
       'via-unknown%',
 
@@ -10368,6 +10417,8 @@ test('to', async () => {
     await run([
       'to',
       'to-123',
+      'to--123',
+      'to--5%',
       'to-unknown',
       'to-unknown%',
 
@@ -10982,6 +11033,7 @@ test('stroke', async () => {
 
       // Width
       '-stroke-0',
+      'stroke--1',
     ]),
   ).toEqual('')
 })
@@ -12004,6 +12056,7 @@ test('decoration', async () => {
       '-decoration-wavy',
 
       // text-decoration-thickness
+      'decoration--2',
       '-decoration-auto',
       '-decoration-from-font',
       '-decoration-0',
@@ -12335,28 +12388,35 @@ test('filter', async () => {
       '-filter-[--value]',
       '-blur-xl',
       '-blur-[4px]',
+      'brightness--50',
       '-brightness-50',
       '-brightness-[1.23]',
       'brightness-unknown',
+      'contrast--50',
       '-contrast-50',
       '-contrast-[1.23]',
       'contrast-unknown',
       '-grayscale',
       '-grayscale-0',
+      'grayscale--1',
       '-grayscale-[--value]',
       'grayscale-unknown',
+      'hue-rotate--5',
       'hue-rotate-unknown',
       '-invert',
+      'invert--5',
       '-invert-0',
       '-invert-[--value]',
       'invert-unknown',
       '-drop-shadow-xl',
       '-drop-shadow-[0_0_red]',
       '-saturate-0',
+      'saturate--5',
       '-saturate-[1.75]',
       '-saturate-[--value]',
       'saturate-saturate',
       '-sepia',
+      'sepia--50',
       '-sepia-0',
       '-sepia-[50%]',
       '-sepia-[--value]',
@@ -12684,29 +12744,36 @@ test('backdrop-filter', async () => {
       '-backdrop-filter-[--value]',
       '-backdrop-blur-xl',
       '-backdrop-blur-[4px]',
+      'backdrop-brightness--50',
       '-backdrop-brightness-50',
       '-backdrop-brightness-[1.23]',
       'backdrop-brightness-unknown',
+      'backdrop-contrast--50',
       '-backdrop-contrast-50',
       '-backdrop-contrast-[1.23]',
       'backdrop-contrast-unknown',
       '-backdrop-grayscale',
+      'backdrop-grayscale--1',
       '-backdrop-grayscale-0',
       '-backdrop-grayscale-[--value]',
       'backdrop-grayscale-unknown',
       'backdrop-hue-rotate-unknown',
       '-backdrop-invert',
+      'backdrop-invert--1',
       '-backdrop-invert-0',
       '-backdrop-invert-[--value]',
       'backdrop-invert-unknown',
+      'backdrop-opacity--50',
       '-backdrop-opacity-50',
       '-backdrop-opacity-[0.5]',
       'backdrop-opacity-unknown',
       '-backdrop-saturate-0',
+      'backdrop-saturate--50',
       '-backdrop-saturate-[1.75]',
       '-backdrop-saturate-[--value]',
       'backdrop-saturate-unknown',
       '-backdrop-sepia',
+      'backdrop-sepia--50',
       '-backdrop-sepia-0',
       '-backdrop-sepia-[50%]',
       '-backdrop-sepia-[--value]',
@@ -12724,6 +12791,7 @@ test('backdrop-filter', async () => {
       'backdrop-grayscale/foo',
       'backdrop-grayscale-0/foo',
       'backdrop-grayscale-[--value]/foo',
+      'backdrop-hue-rotate--15',
       'backdrop-hue-rotate-15/foo',
       'backdrop-hue-rotate-[45deg]/foo',
       'backdrop-invert/foo',
@@ -12876,6 +12944,7 @@ test('delay', async () => {
   expect(
     await run([
       'delay',
+      'delay--200',
       '-delay-200',
       '-delay-[300ms]',
       'delay-unknown',
@@ -12903,6 +12972,7 @@ test('duration', async () => {
   expect(
     await run([
       'duration',
+      'duration--200',
       '-duration-200',
       '-duration-[300ms]',
       'duration-123/foo',
@@ -13630,6 +13700,7 @@ test('outline', async () => {
 
       // outline-width
       '-outline-0',
+      'outline--10',
 
       'outline/foo',
       'outline-none/foo',
@@ -13669,6 +13740,7 @@ test('outline-offset', async () => {
   expect(
     await run([
       'outline-offset',
+      'outline-offset--4',
       'outline-offset-unknown',
       'outline-offset-4/foo',
       '-outline-offset-4/foo',
@@ -13691,6 +13763,7 @@ test('opacity', async () => {
   expect(
     await run([
       'opacity',
+      'opacity--15',
       '-opacity-15',
       '-opacity-[--value]',
       'opacity-unknown',
@@ -13750,6 +13823,7 @@ test('underline-offset', async () => {
   expect(
     await run([
       'underline-offset',
+      'underline-offset--4',
       '-underline-offset-auto',
       'underline-offset-unknown',
       'underline-offset-auto/foo',
@@ -14729,6 +14803,7 @@ test('ring', async () => {
 
       // ring width
       '-ring',
+      'ring--1',
       '-ring-0',
       '-ring-1',
       '-ring-2',
@@ -14988,6 +15063,7 @@ test('inset-ring', async () => {
 
       // ring width
       '-inset-ring',
+      'inset-ring--1',
       '-inset-ring-0',
       '-inset-ring-1',
       '-inset-ring-2',
@@ -15153,6 +15229,7 @@ test('ring-offset', async () => {
       '-ring-offset-[#0088cc]/[50%]',
 
       // ring width
+      'ring-offset--1',
       '-ring-offset-0',
       '-ring-offset-1',
       '-ring-offset-2',
