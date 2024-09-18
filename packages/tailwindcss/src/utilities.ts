@@ -455,7 +455,7 @@ export function createUtilities(theme: Theme) {
 
       if (!value && candidate.value.fraction) {
         let [lhs, rhs] = segment(candidate.value.fraction, '/')
-        if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
+        if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
         value = `calc(${candidate.value.fraction} * 100%)`
       }
 
