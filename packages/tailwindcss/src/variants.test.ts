@@ -1687,11 +1687,19 @@ test('not', async () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
         'not-[:checked]:flex',
         'not-hocus:flex',
+        'not-nested-selectors:flex',
 
         'group-not-[:checked]:flex',
         'group-not-[:checked]/parent-name:flex',
@@ -1708,6 +1716,10 @@ test('not', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".not-hocus\\:flex:not(:hover, :focus) {
+      display: flex;
+    }
+
+    .not-nested-selectors\\:flex:not(:hover:focus) {
       display: flex;
     }
 
@@ -1760,9 +1772,9 @@ test('not', async () => {
     await compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
+        @variant nested-at-rules {
           &:hover {
-            &:focus {
+            @media print {
               @slot;
             }
           }
@@ -1776,7 +1788,7 @@ test('not', async () => {
         'not-[:checked]/foo:flex',
         'not-[@media_print]:flex',
         'not-custom-at-rule:flex',
-        'not-nested-selectors:flex',
+        'not-nested-at-rules:flex',
       ],
     ),
   ).toEqual('')

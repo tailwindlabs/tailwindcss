@@ -1,5 +1,6 @@
 import { WalkAction, atRoot, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
+import { flattenNesting } from './selectors/nesting'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
@@ -210,39 +211,30 @@ export function createVariants(theme: Theme): Variants {
 
     if (variant.modifier) return null
 
-    let didApply = false
+    // 1. Flatten the AST
+    // 2. Drop any at rules (we can't necessarily negate them)
+    let rules: Rule[] = []
 
-    walk([ruleNode], (node) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
-
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
-
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
-
-          didApply = false
-          return WalkAction.Stop
-        })
-
-        return didApply ? WalkAction.Skip : WalkAction.Stop
+    for (let node of flattenNesting([ruleNode])) {
+      if (node.kind !== 'rule') continue
+      if (node.selector[0] === '@') {
+        // Don't allow not to be used with variants that use at-rules
+        return null
       }
 
-      // Replace `&` in target variant with `*`, so variants like `&:hover`
-      // become `&:not(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:not(${node.selector.replaceAll('&', '*')})`
-
-      // Track that the variant was actually applied
-      didApply = true
-    })
-
-    // If the node wasn't modified, this variant is not compatible with
-    // `not-*` so discard the candidate.
-    if (!didApply) {
-      return null
+      rules.push(node)
     }
+
+    // 3. Merge selectors from all rules into a single selector
+    let selector = rules.map((rule) => rule.selector.replaceAll('&', '*')).join(', ')
+
+    // We can remove the immediate `:is()` wrapper
+    if (selector.startsWith(':is(') && selector.endsWith(')')) {
+      selector = selector.slice(4, -1)
+    }
+
+    ruleNode.selector = `&:not(${selector})`
+    ruleNode.nodes = []
   })
 
   variants.compound('group', (ruleNode, variant) => {
