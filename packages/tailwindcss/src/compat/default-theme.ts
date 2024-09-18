@@ -1,5 +1,5 @@
 import type { NamedUtilityValue } from '../candidate'
-import { isPositiveInteger } from '../utilities'
+import { isPositiveInteger } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import colors from './colors'
 import type { UserConfig } from './config/types'

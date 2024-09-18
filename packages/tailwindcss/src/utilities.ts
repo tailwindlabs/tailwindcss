@@ -2,7 +2,7 @@ import { decl, rule, type AstNode, type Rule } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
-import { inferDataType } from './utils/infer-data-type'
+import { inferDataType, isPositiveInteger } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
@@ -4657,9 +4657,4 @@ export function createUtilities(theme: Theme) {
   ])
 
   return utilities
-}
-
-export function isPositiveInteger(value: any) {
-  let num = Number(value)
-  return Number.isInteger(num) && num >= 0
 }

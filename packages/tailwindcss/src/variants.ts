@@ -1,8 +1,8 @@
 import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
-import { isPositiveInteger } from './utilities'
 import { DefaultMap } from './utils/default-map'
+import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
