@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip candidates with invalid `theme()` calls ([#14437](https://github.com/tailwindlabs/tailwindcss/pull/14437))
 - Don't generate `inset-*` utilities for `--inset-shadow-*` and `--inset-ring-*` theme values ([#14447](https://github.com/tailwindlabs/tailwindcss/pull/14447))
 
+### Changed
+
+- Don't override explicit `leading-*`, `tracking-*`, or `font-{weight}` utilities with font-size utility defaults ([#14403](https://github.com/tailwindlabs/tailwindcss/pull/14403))
+
 ## [4.0.0-alpha.24] - 2024-09-11
 
 ### Added

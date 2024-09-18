@@ -301,35 +301,49 @@ describe('theme callbacks', () => {
 
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
-      ":root {
-        --font-size-base: 100rem;
-        --font-size-md--line-height: 101rem;
-      }
-      .prose {
-        [class~=lead-base] {
-          font-size: 100rem;
+        ":root {
+          --font-size-base: 100rem;
+          --font-size-md--line-height: 101rem;
+        }
+        .prose {
+          [class~=lead-base] {
+            font-size: 100rem;
+            line-height: 201rem;
+          }
+          [class~=lead-md] {
+            font-size: 200rem;
+            line-height: 101rem;
+          }
+          [class~=lead-xl] {
+            font-size: 200rem;
+            line-height: 201rem;
+          }
+        }
+        .leading-base {
+          --tw-leading: 201rem;
           line-height: 201rem;
         }
-        [class~=lead-md] {
-          font-size: 200rem;
+        .leading-md {
+          --tw-leading: 101rem;
           line-height: 101rem;
         }
-        [class~=lead-xl] {
-          font-size: 200rem;
+        .leading-xl {
+          --tw-leading: 201rem;
           line-height: 201rem;
         }
-      }
-      .leading-base {
-        line-height: 201rem;
-      }
-      .leading-md {
-        line-height: 101rem;
-      }
-      .leading-xl {
-        line-height: 201rem;
-      }
-      "
-    `)
+        @supports (-moz-orient: inline) {
+          @layer base {
+            *, ::before, ::after, ::backdrop {
+              --tw-leading: initial;
+            }
+          }
+        }
+        @property --tw-leading {
+          syntax: "*";
+          inherits: false;
+        }
+        "
+      `)
   })
 })
 

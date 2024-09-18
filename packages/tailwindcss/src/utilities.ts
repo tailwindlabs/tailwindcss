@@ -2960,7 +2960,11 @@ export function createUtilities(theme: Theme) {
           return [decl('font-family', value)]
         }
         default: {
-          return [decl('font-weight', value)]
+          return [
+            atRoot([property('--tw-font-weight')]),
+            decl('--tw-font-weight', value),
+            decl('font-weight', value),
+          ]
         }
       }
     }
@@ -2985,7 +2989,11 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolve(candidate.value.value, ['--font-weight'])
       if (value) {
-        return [decl('font-weight', value)]
+        return [
+          atRoot([property('--tw-font-weight')]),
+          decl('--tw-font-weight', value),
+          decl('font-weight', value),
+        ]
       }
 
       switch (candidate.value.value) {
@@ -3019,7 +3027,11 @@ export function createUtilities(theme: Theme) {
       }
 
       if (value) {
-        return [decl('font-weight', value)]
+        return [
+          atRoot([property('--tw-font-weight')]),
+          decl('--tw-font-weight', value),
+          decl('font-weight', value),
+        ]
       }
     }
   })
@@ -3812,13 +3824,21 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('leading', {
     themeKeys: ['--line-height'],
-    handle: (value) => [decl('line-height', value)],
+    handle: (value) => [
+      atRoot([property('--tw-leading')]),
+      decl('--tw-leading', value),
+      decl('line-height', value),
+    ],
   })
 
   functionalUtility('tracking', {
     supportsNegative: true,
     themeKeys: ['--letter-spacing'],
-    handle: (value) => [decl('letter-spacing', value)],
+    handle: (value) => [
+      atRoot([property('--tw-tracking')]),
+      decl('--tw-tracking', value),
+      decl('letter-spacing', value),
+    ],
   })
 
   staticUtility('antialiased', [
@@ -4129,9 +4149,22 @@ export function createUtilities(theme: Theme) {
 
         return [
           decl('font-size', fontSize),
-          decl('line-height', options['--line-height']),
-          decl('letter-spacing', options['--letter-spacing']),
-          decl('font-weight', options['--font-weight']),
+          decl(
+            'line-height',
+            options['--line-height'] ? `var(--tw-leading, ${options['--line-height']})` : undefined,
+          ),
+          decl(
+            'letter-spacing',
+            options['--letter-spacing']
+              ? `var(--tw-tracking, ${options['--letter-spacing']})`
+              : undefined,
+          ),
+          decl(
+            'font-weight',
+            options['--font-weight']
+              ? `var(--tw-font-weight, ${options['--font-weight']})`
+              : undefined,
+          ),
         ]
       }
     }

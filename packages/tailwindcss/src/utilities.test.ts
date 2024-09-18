@@ -872,26 +872,26 @@ test('col-start', async () => {
   expect(
     await run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]', '-col-start-4']),
   ).toMatchInlineSnapshot(`
-      ".-col-start-4 {
-        grid-column-start: calc(4 * -1);
-      }
+    ".-col-start-4 {
+      grid-column-start: calc(4 * -1);
+    }
 
-      .col-start-4 {
-        grid-column-start: 4;
-      }
+    .col-start-4 {
+      grid-column-start: 4;
+    }
 
-      .col-start-99 {
-        grid-column-start: 99;
-      }
+    .col-start-99 {
+      grid-column-start: 99;
+    }
 
-      .col-start-\\[123\\] {
-        grid-column-start: 123;
-      }
+    .col-start-\\[123\\] {
+      grid-column-start: 123;
+    }
 
-      .col-start-auto {
-        grid-column-start: auto;
-      }"
-    `)
+    .col-start-auto {
+      grid-column-start: auto;
+    }"
+  `)
   expect(
     await run([
       'col-start',
@@ -11446,19 +11446,36 @@ test('font', async () => {
     }
 
     .font-\\[--my-family\\] {
+      --tw-font-weight: var(--my-family);
       font-weight: var(--my-family);
     }
 
     .font-\\[100\\] {
+      --tw-font-weight: 100;
       font-weight: 100;
     }
 
     .font-\\[number\\:--my-weight\\] {
+      --tw-font-weight: var(--my-weight);
       font-weight: var(--my-weight);
     }
 
     .font-bold {
+      --tw-font-weight: 700;
       font-weight: 700;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-font-weight: initial;
+        }
+      }
+    }
+
+    @property --tw-font-weight {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13067,15 +13084,31 @@ test('leading', async () => {
     }
 
     .leading-6 {
+      --tw-leading: var(--line-height-6, 1.5rem);
       line-height: var(--line-height-6, 1.5rem);
     }
 
     .leading-\\[--value\\] {
+      --tw-leading: var(--value);
       line-height: var(--value);
     }
 
     .leading-none {
+      --tw-leading: var(--line-height-none, 1);
       line-height: var(--line-height-none, 1);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13110,19 +13143,36 @@ test('tracking', async () => {
     }
 
     .-tracking-\\[--value\\] {
+      --tw-tracking: calc(var(--value) * -1);
       letter-spacing: calc(var(--value) * -1);
     }
 
     .tracking-\\[--value\\] {
+      --tw-tracking: var(--value);
       letter-spacing: var(--value);
     }
 
     .tracking-normal {
+      --tw-tracking: var(--letter-spacing-normal, 0em);
       letter-spacing: var(--letter-spacing-normal, 0em);
     }
 
     .tracking-wide {
+      --tw-tracking: var(--letter-spacing-wide, .025em);
       letter-spacing: var(--letter-spacing-wide, .025em);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-tracking: initial;
+        }
+      }
+    }
+
+    @property --tw-tracking {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13697,7 +13747,7 @@ test('text', async () => {
 
     .text-sm {
       font-size: var(--font-size-sm, .875rem);
-      line-height: var(--font-size-sm--line-height, 1.25rem);
+      line-height: var(--tw-leading, var(--font-size-sm--line-height, 1.25rem));
     }
 
     .text-\\[12px\\]\\/6 {
@@ -15188,7 +15238,7 @@ describe('custom utilities', () => {
       "@layer utilities {
         .text-sm {
           font-size: var(--font-size-sm, .875rem);
-          line-height: var(--font-size-sm--line-height, 1.25rem);
+          line-height: var(--tw-leading, var(--font-size-sm--line-height, 1.25rem));
           font-size: var(--font-size-sm, .8755rem);
           line-height: var(--font-size-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
@@ -15350,6 +15400,7 @@ describe('custom utilities', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bar {
+        --tw-font-weight: 700;
         font-weight: 700;
       }
 
@@ -15359,6 +15410,19 @@ describe('custom utilities', () => {
           text-decoration-line: underline;
           display: flex;
         }
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-font-weight: initial;
+          }
+        }
+      }
+
+      @property --tw-font-weight {
+        syntax: "*";
+        inherits: false
       }"
     `)
   })
