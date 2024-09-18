@@ -399,6 +399,7 @@ it('should merge `@utility` definitions with the same name', async () => {
   ).toMatchInlineSnapshot(`
     "@utility step {
       counter-increment: step;
+
       &:before {
         @apply absolute w-7 h-7 bg-default-100 rounded-full font-medium text-center text-base inline-flex items-center justify-center -indent-px;
         @apply ml-[-41px];
@@ -477,6 +478,7 @@ it('should migrate advanced combinations', async () => {
           }
         }
       }
+
       @media (width >= 200px) {
         &:hover {
           @apply bg-red-500;
@@ -495,6 +497,7 @@ it('should migrate advanced combinations', async () => {
           }
         }
       }
+
       @media (width >= 100px) {
         color: red;
       }

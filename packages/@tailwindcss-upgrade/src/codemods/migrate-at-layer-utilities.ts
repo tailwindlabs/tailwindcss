@@ -222,9 +222,11 @@ export function migrateAtLayerUtilities(): Plugin {
       root.walkAtRules('utility', (node) => {
         let existing = nameToAtRule.get(node.params)
         if (existing) {
-          node.each((child) => {
-            existing.append(child)
-          })
+          // Add a newline between each `@utility` at-rule
+          if (node.first) {
+            node.first.raws.before = `\n${node.first?.raws.before ?? ''}`
+          }
+          existing.append(node.nodes ?? [])
           node.remove()
         } else {
           nameToAtRule.set(node.params, node)
