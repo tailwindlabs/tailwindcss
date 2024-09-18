@@ -4,7 +4,6 @@ import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
 import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
-import { type Plugin } from './compat/plugin-api'
 import { compileCandidates } from './compile'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
 import * as CSS from './css-parser'
@@ -16,17 +15,12 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  loadPlugin?: (path: string) => Promise<Plugin>
-  loadConfig?: (path: string) => Promise<UserConfig>
-  resolveImport?: (id: string, basedir: string) => Promise<{ content: string; basedir: string }>
+  resolveModule?: (id: string, base: string) => Promise<{ base: string; module: unknown }>
+  resolveImport?: (id: string, base: string) => Promise<{ content: string; base: string }>
 }
 
-function throwOnPlugin(): never {
-  throw new Error('No `loadPlugin` function provided to `compile`')
-}
-
-function throwOnConfig(): never {
-  throw new Error('No `loadConfig` function provided to `compile`')
+function throwOnResolveModule(): never {
+  throw new Error('No `resolveModule` function provided to `compile`')
 }
 
 function throwOnResolveImport(): never {
@@ -51,17 +45,16 @@ function parseThemeOptions(selector: string) {
 
 async function parseCss(
   css: string,
-  basedir: string,
+  base: string,
   {
-    loadPlugin = throwOnPlugin,
-    loadConfig = throwOnConfig,
+    resolveModule = throwOnResolveModule,
     resolveImport = throwOnResolveImport,
   }: CompileOptions = {},
 ) {
   let ast = CSS.parse(css)
 
   if (css.includes('@import')) {
-    await substituteAtImports(ast, basedir, resolveImport)
+    await substituteAtImports(ast, base, resolveImport)
   }
 
   // Find all `@theme` declarations
@@ -249,7 +242,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, ast, loadPlugin, loadConfig, globs })
+  await applyCompatibilityHooks({ designSystem, ast, resolveModule, globs })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -329,13 +322,13 @@ async function parseCss(
 
 export async function compile(
   css: string,
-  basedir: string,
+  base: string,
   opts: CompileOptions = {},
 ): Promise<{
   globs: { origin?: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, basedir, opts)
+  let { designSystem, ast, globs } = await parseCss(css, base, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 

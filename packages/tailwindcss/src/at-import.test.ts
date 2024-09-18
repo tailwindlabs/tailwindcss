@@ -6,7 +6,7 @@ let css = String.raw
 
 async function run(
   css: string,
-  resolveImport: (id: string, basedir: string) => Promise<{ content: string; basedir: string }>,
+  resolveImport: (id: string, base: string) => Promise<{ content: string; base: string }>,
   candidates: string[] = [],
 ) {
   let compiler = await compile(css, '/root', { resolveImport })
@@ -14,8 +14,8 @@ async function run(
 }
 
 test('can resolve relative @imports', async () => {
-  let resolver = async (id: string, basedir: string) => {
-    expect(basedir).toBe('/root')
+  let resolver = async (id: string, base: string) => {
+    expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
       content: css`
@@ -23,7 +23,7 @@ test('can resolve relative @imports', async () => {
           color: red;
         }
       `,
-      basedir: '/root/foo',
+      base: '/root/foo',
     }
   }
 
@@ -43,22 +43,22 @@ test('can resolve relative @imports', async () => {
 })
 
 test('can recursively resolve relative @imports', async () => {
-  let resolver = async (id: string, basedir: string) => {
-    if (basedir === '/root' && id === './foo/bar.css') {
+  let resolver = async (id: string, base: string) => {
+    if (base === '/root' && id === './foo/bar.css') {
       return {
         content: css`
           @import './bar/baz.css';
         `,
-        basedir: '/root/foo',
+        base: '/root/foo',
       }
-    } else if (basedir === '/root/foo' && id === './bar/baz.css') {
+    } else if (base === '/root/foo' && id === './bar/baz.css') {
       return {
         content: css`
           .baz {
             color: blue;
           }
         `,
-        basedir: '/root/foo/bar',
+        base: '/root/foo/bar',
       }
     }
 
@@ -85,10 +85,10 @@ let exampleCSS = css`
     color: red;
   }
 `
-let resolver = async (id: string) => {
+let resolver = async () => {
   return {
     content: exampleCSS,
-    basedir: '/root',
+    base: '/root',
   }
 }
 
@@ -214,7 +214,7 @@ test('supports theme(reference) imports', async () => {
               --color-red-500: red;
             }
           `,
-          basedir: '',
+          base: '',
         }),
       ['text-red-500'],
     ),

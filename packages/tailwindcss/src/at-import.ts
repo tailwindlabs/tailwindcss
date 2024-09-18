@@ -2,11 +2,11 @@ import { rule, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
-type ResolveImport = (id: string, basedir: string) => Promise<{ content: string; basedir: string }>
+type ResolveImport = (id: string, basedir: string) => Promise<{ base: string; content: string }>
 
 export async function substituteAtImports(
   ast: AstNode[],
-  basedir: string,
+  base: string,
   resolveImport: ResolveImport,
 ) {
   let promises: Map<string, Promise<AstNode[]>> = new Map()
@@ -19,7 +19,7 @@ export async function substituteAtImports(
       // Skip importing data URIs
       if (uri.startsWith('data:')) return
 
-      promises.set(key(uri, basedir), resolveAtImport(uri, basedir, resolveImport))
+      promises.set(key(uri, base), resolveAtImport(uri, base, resolveImport))
     }
   })
 
@@ -34,7 +34,7 @@ export async function substituteAtImports(
       let { uri, layer, media, supports } = parseImportParams(
         ValueParser.parse(node.selector.slice(8)),
       )
-      let importedAst = unwrapped.get(key(uri, basedir))
+      let importedAst = unwrapped.get(key(uri, base))
       if (importedAst) {
         replaceWith(buildImportNodes(importedAst, layer, media, supports))
         return WalkAction.Skip
@@ -45,12 +45,12 @@ export async function substituteAtImports(
 
 async function resolveAtImport(
   id: string,
-  basedir: string,
+  base: string,
   resolveImport: ResolveImport,
 ): Promise<AstNode[]> {
-  const { content, basedir: nestedBaseDir } = await resolveImport(id, basedir)
+  const { content, base: nestedBase } = await resolveImport(id, base)
   let ast = CSS.parse(content)
-  await substituteAtImports(ast, nestedBaseDir, resolveImport)
+  await substituteAtImports(ast, nestedBase, resolveImport)
   return ast
 }
 

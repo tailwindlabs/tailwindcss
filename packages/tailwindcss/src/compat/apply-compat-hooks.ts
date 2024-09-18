@@ -16,20 +16,18 @@ import { registerThemeVariantOverrides } from './theme-variants'
 export async function applyCompatibilityHooks({
   designSystem,
   ast,
-  loadPlugin,
-  loadConfig,
+  resolveModule,
   globs,
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
-  loadPlugin: (path: string) => Promise<Plugin>
-  loadConfig: (path: string) => Promise<UserConfig>
+  resolveModule: (path: string, base: string) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
-  let pluginPaths: [string, CssPluginOptions | null][] = []
-  let configPaths: string[] = []
+  let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
+  let configPaths: { id: string; base: string }[] = []
 
-  walk(ast, (node, { parent, replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule' || node.selector[0] !== '@') return
 
     // Collect paths from `@plugin` at-rules
@@ -86,7 +84,10 @@ export async function applyCompatibilityHooks({
         options[decl.property] = parts.length === 1 ? parts[0] : parts
       }
 
-      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
+      pluginPaths.push([
+        { id: pluginPath, base: (context as any).base },
+        Object.keys(options).length > 0 ? options : null,
+      ])
 
       replaceWith([])
       return
@@ -102,7 +103,7 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot be nested.')
       }
 
-      configPaths.push(node.selector.slice(9, -1))
+      configPaths.push({ id: node.selector.slice(9, -1), base: (context as any).base })
       replaceWith([])
       return
     }
@@ -143,15 +144,15 @@ export async function applyCompatibilityHooks({
   if (!pluginPaths.length && !configPaths.length) return
 
   let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
+    configPaths.map(async ({ id, base }) => ({
+      path: id,
+      config: (await resolveModule(id, base)).module as UserConfig,
     })),
   )
   let pluginDetails = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
+    pluginPaths.map(async ([{ id, base }, pluginOptions]) => ({
+      path: id,
+      plugin: (await resolveModule(id, base)).module as Plugin,
       options: pluginOptions,
     })),
   )
