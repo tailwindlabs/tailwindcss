@@ -489,13 +489,8 @@ describe('complex screen configs', () => {
           display: flex;
         }
       }
-      .tall\\:flex {
-        @media (min-height: 800px) {
-          display: flex;
-        }
-      }
-      .xl\\:flex {
-        @media (min-width: 1024px and max-width: 1279px) {
+      .sm\\:flex {
+        @media (max-width: 639px) {
           display: flex;
         }
       }
@@ -504,8 +499,13 @@ describe('complex screen configs', () => {
           display: flex;
         }
       }
-      .sm\\:flex {
-        @media (max-width: 639px) {
+      .xl\\:flex {
+        @media (min-width: 1024px and max-width: 1279px) {
+          display: flex;
+        }
+      }
+      .tall\\:flex {
+        @media (min-height: 800px) {
           display: flex;
         }
       }

@@ -14,7 +14,12 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
 
   // Register static breakpoint variants for everything that comes from the user
   // theme config.
-  for (let [name, value] of Object.entries(screens)) {
+  //
+  // We loop over the entries in reverse order since we always add complex
+  // variants directly after the `min-*` group.
+  let entries = Object.entries(screens)
+  for (let i = entries.length - 1; i >= 0; i--) {
+    let [name, value] = entries[i]
     let coreVariant = designSystem.variants.get(name)
 
     // Ignore it if there's a CSS value that takes precedence over the JS config
