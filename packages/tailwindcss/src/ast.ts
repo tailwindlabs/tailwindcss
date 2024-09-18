@@ -128,6 +128,41 @@ export function walk(
   }
 }
 
+// This is a depth-first traversal of the AST
+export function walkDepth(
+  ast: AstNode[],
+  visit: (
+    node: AstNode,
+    utils: {
+      parent: AstNode | null
+      path: AstNode[]
+      replaceWith(newNode: AstNode[]): void
+    },
+  ) => void,
+  parent: AstNode | null = null,
+  parentPath: AstNode[] = [],
+) {
+  for (let i = 0; i < ast.length; i++) {
+    let node = ast[i]
+    let path = [node, ...parentPath]
+
+    if (node.kind === 'rule') {
+      walkDepth(node.nodes, visit, node, path)
+    }
+
+    visit(node, {
+      parent,
+      path,
+      replaceWith(newNode) {
+        ast.splice(i, 1, ...newNode)
+
+        // Skip over the newly inserted nodes (being depth-first it doesn't make sense to visit them)
+        i += newNode.length - 1
+      },
+    })
+  }
+}
+
 export function toCss(ast: AstNode[]) {
   let atRoots: string = ''
   let seenAtProperties = new Set<string>()
