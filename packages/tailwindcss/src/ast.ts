@@ -23,7 +23,6 @@ export type Context = {
 }
 
 export type AstNode = Rule | Declaration | Comment | Context
-type VisitableAstNode = Exclude<AstNode, Context>
 
 export function rule(selector: string, nodes: AstNode[]): Rule {
   return {
@@ -74,7 +73,7 @@ export function walk(
     node: AstNode,
     utils: {
       parent: AstNode | null
-      replaceWith(newNode: VisitableAstNode | VisitableAstNode[]): void
+      replaceWith(newNode: AstNode | AstNode[]): void
       context: Record<string, unknown>
     },
   ) => void | WalkAction,
@@ -83,11 +82,6 @@ export function walk(
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
-
-    if (node.kind === 'context') {
-      walk(node.nodes, visit, node, { ...context, ...node.context })
-      continue
-    }
 
     let status =
       visit(node, {
@@ -110,6 +104,8 @@ export function walk(
 
     if (node.kind === 'rule') {
       walk(node.nodes, visit, node, context)
+    } else if (node.kind === 'context') {
+      walk(node.nodes, visit, node, { ...context, ...node.context })
     }
   }
 }

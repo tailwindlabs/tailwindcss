@@ -32,7 +32,7 @@ export async function applyCompatibilityHooks({
 
     // Collect paths from `@plugin` at-rules
     if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
-      if (parent !== null) {
+      if (parent !== null && parent.kind !== 'context') {
         throw new Error('`@plugin` cannot be nested.')
       }
 
@@ -99,7 +99,7 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot have a body.')
       }
 
-      if (parent !== null) {
+      if (parent !== null && parent.kind !== 'context') {
         throw new Error('`@config` cannot be nested.')
       }
 

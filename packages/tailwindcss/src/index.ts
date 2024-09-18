@@ -1,6 +1,6 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
-import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import { comment, context, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
 import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
@@ -51,7 +51,7 @@ async function parseCss(
     resolveImport = throwOnResolveImport,
   }: CompileOptions = {},
 ) {
-  let ast = CSS.parse(css)
+  let ast = [context({ base }, CSS.parse(css))]
 
   if (css.includes('@import')) {
     await substituteAtImports(ast, base, resolveImport)

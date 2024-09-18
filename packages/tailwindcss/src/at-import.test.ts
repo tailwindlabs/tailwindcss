@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { compile } from './index'
 import { optimizeCss } from './test-utils/run'
 
@@ -7,9 +7,11 @@ let css = String.raw
 async function run(
   css: string,
   resolveImport: (id: string, base: string) => Promise<{ content: string; base: string }>,
+  resolveModule: (id: string, base: string) => Promise<{ module: unknown; base: string }> = () =>
+    Promise.reject(new Error('Unexpected module')),
   candidates: string[] = [],
 ) {
-  let compiler = await compile(css, '/root', { resolveImport })
+  let compiler = await compile(css, '/root', { resolveImport, resolveModule })
   return optimizeCss(compiler.build(candidates))
 }
 
@@ -216,6 +218,7 @@ test('supports theme(reference) imports', async () => {
           `,
           base: '',
         }),
+      () => Promise.reject(new Error('Unexpected module')),
       ['text-red-500'],
     ),
   ).resolves.toBe(
@@ -225,4 +228,35 @@ test('supports theme(reference) imports', async () => {
       }
     `),
   )
+})
+
+test('updates the base when loading modules inside nested files', async () => {
+  let resolveImport = () =>
+    Promise.resolve({
+      content: css`
+        @config './nested-config.js';
+        @plugin './nested-plugin.js';
+      `,
+      base: '/root/foo',
+    })
+  let resolveModule = vi.fn().mockResolvedValue({ base: '', module: () => {} })
+
+  expect(
+    (
+      await run(
+        css`
+          @import './foo/bar.css';
+          @config './root-config.js';
+          @plugin './root-plugin.js';
+        `,
+        resolveImport,
+        resolveModule,
+      )
+    ).trim(),
+  ).toBe('')
+
+  expect(resolveModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo')
+  expect(resolveModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root')
+  expect(resolveModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo')
+  expect(resolveModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root')
 })

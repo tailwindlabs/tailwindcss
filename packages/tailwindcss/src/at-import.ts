@@ -1,4 +1,4 @@
-import { rule, walk, WalkAction, type AstNode } from './ast'
+import { context, rule, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
@@ -9,7 +9,7 @@ export async function substituteAtImports(
   base: string,
   resolveImport: ResolveImport,
 ) {
-  let promises: Map<string, Promise<AstNode[]>> = new Map()
+  let promises: Map<string, Promise<{ ast: AstNode[]; base: string }>> = new Map()
 
   walk(ast, (node) => {
     // Find @import rules and start resolving them
@@ -34,9 +34,9 @@ export async function substituteAtImports(
       let { uri, layer, media, supports } = parseImportParams(
         ValueParser.parse(node.selector.slice(8)),
       )
-      let importedAst = unwrapped.get(key(uri, base))
-      if (importedAst) {
-        replaceWith(buildImportNodes(importedAst, layer, media, supports))
+      let imported = unwrapped.get(key(uri, base))
+      if (imported) {
+        replaceWith(buildImportNodes(imported.ast, imported.base, layer, media, supports))
         return WalkAction.Skip
       }
     }
@@ -47,11 +47,11 @@ async function resolveAtImport(
   id: string,
   base: string,
   resolveImport: ResolveImport,
-): Promise<AstNode[]> {
+): Promise<{ ast: AstNode[]; base: string }> {
   const { content, base: nestedBase } = await resolveImport(id, base)
   let ast = CSS.parse(content)
   await substituteAtImports(ast, nestedBase, resolveImport)
-  return ast
+  return { ast, base: nestedBase }
 }
 
 function key(id: string, basedir: string): string {
@@ -120,6 +120,7 @@ function parseImportParams(params: ValueParser.ValueAstNode[]) {
 
 function buildImportNodes(
   importedAst: AstNode[],
+  base: string,
   layer: string | null,
   media: string | null,
   supports: string | null,
@@ -138,5 +139,5 @@ function buildImportNodes(
     root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
   }
 
-  return root
+  return [context({ base }, root)]
 }
