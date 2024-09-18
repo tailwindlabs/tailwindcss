@@ -1,5 +1,7 @@
 import { AtRule, type Plugin, type Root } from 'postcss'
 
+const DEFAULT_LAYER_ORDER = ['theme', 'base', 'components', 'utilities']
+
 export function migrateTailwindDirectives(): Plugin {
   function migrate(root: Root) {
     let baseNode: AtRule | null = null
@@ -10,18 +12,22 @@ export function migrateTailwindDirectives(): Plugin {
     let preflightImportNode: AtRule | null = null
     let themeImportNode: AtRule | null = null
 
+    let layerOrder: string[] = []
+
     root.walkAtRules((node) => {
       // Track old imports and directives
       if (
         (node.name === 'tailwind' && node.params === 'base') ||
         (node.name === 'import' && node.params.match(/^["']tailwindcss\/base["']$/))
       ) {
+        layerOrder.push('base')
         baseNode = node
         node.remove()
       } else if (
         (node.name === 'tailwind' && node.params === 'utilities') ||
         (node.name === 'import' && node.params.match(/^["']tailwindcss\/utilities["']$/))
       ) {
+        layerOrder.push('utilities')
         utilitiesNode = node
         node.remove()
       }
@@ -57,6 +63,23 @@ export function migrateTailwindDirectives(): Plugin {
       }
       if (!themeImportNode) {
         root.prepend(new AtRule({ name: 'import', params: "'tailwindcss/theme' layer(theme)" }))
+      }
+    }
+
+    // Insert `@layer …;` at the top when the order in the CSS was different
+    // from the default.
+    {
+      // Determine if the order is different from the default.
+      let sortedLayerOrder = layerOrder.toSorted((a, z) => {
+        return DEFAULT_LAYER_ORDER.indexOf(a) - DEFAULT_LAYER_ORDER.indexOf(z)
+      })
+
+      if (layerOrder.some((layer, index) => layer !== sortedLayerOrder[index])) {
+        // Create a new `@layer` rule with the sorted order.
+        let newLayerOrder = DEFAULT_LAYER_ORDER.toSorted((a, z) => {
+          return layerOrder.indexOf(a) - layerOrder.indexOf(z)
+        })
+        root.prepend({ name: 'layer', params: newLayerOrder.join(', ') })
       }
     }
   }

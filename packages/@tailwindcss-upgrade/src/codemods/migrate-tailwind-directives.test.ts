@@ -48,18 +48,54 @@ it('should migrate the default @tailwind directives as imports to a single impor
 
 it.each([
   [
+    // The default order
+    css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `,
+    css`
+      @import 'tailwindcss';
+    `,
+  ],
+
+  // @tailwind components moved, but has no effect in v4. Therefore `base` and
+  // `utilities` are still in the correct order.
+  [
+    css`
+      @tailwind base;
+      @tailwind utilities;
+      @tailwind components;
+    `,
+    css`
+      @import 'tailwindcss';
+    `,
+  ],
+
+  // Same as previous comment
+  [
     css`
       @tailwind components;
       @tailwind base;
       @tailwind utilities;
     `,
+    css`
+      @import 'tailwindcss';
+    `,
   ],
+
+  // `base` and `utilities` swapped order, thus the `@layer` directives are
+  // needed. The `components` directive is still ignored.
   [
     css`
       @tailwind components;
       @tailwind utilities;
       @tailwind base;
     `,
+    css`
+      @layer theme, components, utilities, base;
+      @import 'tailwindcss';
+    `,
   ],
   [
     css`
@@ -67,20 +103,26 @@ it.each([
       @tailwind base;
       @tailwind components;
     `,
+    css`
+      @layer theme, components, utilities, base;
+      @import 'tailwindcss';
+    `,
   ],
   [
     css`
       @tailwind utilities;
       @tailwind components;
       @tailwind base;
+    `,
+    css`
+      @layer theme, components, utilities, base;
+      @import 'tailwindcss';
     `,
   ],
 ])(
   'should migrate the default directives (but in different order) to a single import, order %#',
-  async (input) => {
-    expect(await migrate(input)).toEqual(css`
-      @import 'tailwindcss';
-    `)
+  async (input, expected) => {
+    expect(await migrate(input)).toEqual(expected)
   },
 )
 
