@@ -10,16 +10,13 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
   // variant are registered inside a group. Since all the variants within a
   // group share the same order, we can use the always-defined `min-*` variant
   // as the order.
-  let coreOrder = designSystem.variants.get('min')?.order ?? undefined
+  let coreOrder = designSystem.variants.get('min')?.order ?? 0
+
+  let additionalVariants: ((order: number) => void)[] = []
 
   // Register static breakpoint variants for everything that comes from the user
   // theme config.
-  //
-  // We loop over the entries in reverse order since we always add complex
-  // variants directly after the `min-*` group.
-  let entries = Object.entries(screens)
-  for (let i = entries.length - 1; i >= 0; i--) {
-    let [name, value] = entries[i]
+  for (let [name, value] of Object.entries(screens)) {
     let coreVariant = designSystem.variants.get(name)
 
     // Ignore it if there's a CSS value that takes precedence over the JS config
@@ -35,50 +32,59 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
     }
 
     let query: string | undefined
-    let insertOrder: number | undefined
+    let deferInsert = true
     if (typeof value === 'string') {
       query = `(width >= ${value})`
-      insertOrder = coreOrder
+      deferInsert = false
     } else if (typeof value === 'object' && value !== null) {
       if (Array.isArray(value)) {
         query = value.map(ruleForComplexScreenValue).join(', ')
       } else {
         query = ruleForComplexScreenValue(value) ?? ''
         if ('min' in value && !('max' in value)) {
-          insertOrder = coreOrder
+          deferInsert = false
         }
       }
     } else {
       continue
     }
 
-    if (coreOrder && insertOrder === undefined) {
-      insertOrder = allocateOrderAfter(designSystem, coreOrder)
+    function insert(order: number) {
+      // `min-*` and `max-*` rules do not need to be reconfigured, as they are
+      // reading the latest values from the theme.
+      designSystem.variants.static(
+        name,
+        (ruleNode) => {
+          ruleNode.nodes = [rule(`@media ${query}`, ruleNode.nodes)]
+        },
+        { order },
+      )
     }
 
-    // `min-*` and `max-*` rules do not need to be reconfigured, as they are
-    // reading the latest values from the theme.
-    designSystem.variants.static(
-      name,
-      (ruleNode) => {
-        ruleNode.nodes = [rule(`@media ${query}`, ruleNode.nodes)]
-      },
-      { order: insertOrder },
-    )
+    if (deferInsert) {
+      additionalVariants.push(insert)
+    } else {
+      insert(coreOrder)
+    }
   }
-}
 
-function allocateOrderAfter(designSystem: DesignSystem, order: number): number {
+  // Reserve and insert slots for the additional variants
+  if (additionalVariants.length === 0) return
+
   for (let [, variant] of designSystem.variants.variants) {
-    if (variant.order > order) variant.order++
+    if (variant.order > coreOrder) variant.order += additionalVariants.length
   }
+
   designSystem.variants.compareFns = new Map(
     Array.from(designSystem.variants.compareFns).map(([key, value]) => {
-      if (key > order) key++
+      if (key > coreOrder) key += additionalVariants.length
       return [key, value]
     }),
   )
-  return order + 1
+
+  for (let [index, callback] of additionalVariants.entries()) {
+    callback(coreOrder + index + 1)
+  }
 }
 
 function ruleForComplexScreenValue(value: object): string | null {
