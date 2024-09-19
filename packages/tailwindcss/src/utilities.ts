@@ -4213,6 +4213,8 @@ export function createUtilities(theme: Theme) {
       ])
     }
 
+    staticUtility('shadow-initial', [boxShadowProperties, ['--tw-shadow-color', 'initial']])
+
     utilities.functional('shadow', (candidate) => {
       if (candidate.negative) return
 
@@ -4300,6 +4302,11 @@ export function createUtilities(theme: Theme) {
         valueThemeKeys: ['--shadow'],
         hasDefaultValue: true,
       },
+    ])
+
+    staticUtility('inset-shadow-initial', [
+      boxShadowProperties,
+      ['--tw-inset-shadow-color', 'initial'],
     ])
 
     utilities.functional('inset-shadow', (candidate) => {
