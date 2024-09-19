@@ -6,12 +6,12 @@ let css = String.raw
 
 async function run(
   css: string,
-  resolveImport: (id: string, base: string) => Promise<{ content: string; base: string }>,
-  resolveModule: (id: string, base: string) => Promise<{ module: unknown; base: string }> = () =>
+  loadStylesheet: (id: string, base: string) => Promise<{ content: string; base: string }>,
+  loadModule: (id: string, base: string) => Promise<{ module: unknown; base: string }> = () =>
     Promise.reject(new Error('Unexpected module')),
   candidates: string[] = [],
 ) {
-  let compiler = await compile(css, '/root', { resolveImport, resolveModule })
+  let compiler = await compile(css, '/root', { loadStylesheet, loadModule })
   return optimizeCss(compiler.build(candidates))
 }
 
@@ -231,7 +231,7 @@ test('supports theme(reference) imports', async () => {
 })
 
 test('updates the base when loading modules inside nested files', async () => {
-  let resolveImport = () =>
+  let loadStylesheet = () =>
     Promise.resolve({
       content: css`
         @config './nested-config.js';
@@ -239,7 +239,7 @@ test('updates the base when loading modules inside nested files', async () => {
       `,
       base: '/root/foo',
     })
-  let resolveModule = vi.fn().mockResolvedValue({ base: '', module: () => {} })
+  let loadModule = vi.fn().mockResolvedValue({ base: '', module: () => {} })
 
   expect(
     (
@@ -249,14 +249,14 @@ test('updates the base when loading modules inside nested files', async () => {
           @config './root-config.js';
           @plugin './root-plugin.js';
         `,
-        resolveImport,
-        resolveModule,
+        loadStylesheet,
+        loadModule,
       )
     ).trim(),
   ).toBe('')
 
-  expect(resolveModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo')
-  expect(resolveModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root')
-  expect(resolveModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo')
-  expect(resolveModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root')
+  expect(loadModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo')
+  expect(loadModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root')
+  expect(loadModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo')
+  expect(loadModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root')
 })

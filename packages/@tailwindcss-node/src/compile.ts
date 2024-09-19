@@ -12,7 +12,7 @@ export async function compile(
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
   return await _compile(css, base, {
-    async resolveModule(id, base) {
+    async loadModule(id, base) {
       if (id[0] !== '.') {
         let resolvedPath = path.resolve(base, id)
         return {
@@ -37,7 +37,7 @@ export async function compile(
       }
     },
 
-    async resolveImport(id, basedir) {
+    async loadStylesheet(id, basedir) {
       let resolvedPath = await resolveCssId(id, basedir)
       if (!resolvedPath) throw new Error(`Could not resolve '${id}' from '${basedir}'`)
       let file = await fsPromises.readFile(resolvedPath, 'utf-8')

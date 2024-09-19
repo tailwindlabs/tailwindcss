@@ -16,12 +16,12 @@ import { registerThemeVariantOverrides } from './theme-variants'
 export async function applyCompatibilityHooks({
   designSystem,
   ast,
-  resolveModule,
+  loadModule,
   globs,
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
-  resolveModule: (path: string, base: string) => Promise<{ module: any; base: string }>
+  loadModule: (path: string, base: string) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
   let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
@@ -146,13 +146,13 @@ export async function applyCompatibilityHooks({
   let configs = await Promise.all(
     configPaths.map(async ({ id, base }) => ({
       path: id,
-      config: (await resolveModule(id, base)).module as UserConfig,
+      config: (await loadModule(id, base)).module as UserConfig,
     })),
   )
   let pluginDetails = await Promise.all(
     pluginPaths.map(async ([{ id, base }, pluginOptions]) => ({
       path: id,
-      plugin: (await resolveModule(id, base)).module as Plugin,
+      plugin: (await loadModule(id, base)).module as Plugin,
       options: pluginOptions,
     })),
   )

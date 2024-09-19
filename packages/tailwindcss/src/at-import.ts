@@ -2,12 +2,12 @@ import { context, rule, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
-type ResolveImport = (id: string, basedir: string) => Promise<{ base: string; content: string }>
+type LoadStylesheet = (id: string, basedir: string) => Promise<{ base: string; content: string }>
 
 export async function substituteAtImports(
   ast: AstNode[],
   base: string,
-  resolveImport: ResolveImport,
+  loadStylesheet: LoadStylesheet,
 ) {
   let promises: Map<string, Promise<{ ast: AstNode[]; base: string }>> = new Map()
 
@@ -19,7 +19,7 @@ export async function substituteAtImports(
       // Skip importing data URIs
       if (uri.startsWith('data:')) return
 
-      promises.set(key(uri, base), resolveAtImport(uri, base, resolveImport))
+      promises.set(key(uri, base), resolveAtImport(uri, base, loadStylesheet))
     }
   })
 
@@ -46,11 +46,11 @@ export async function substituteAtImports(
 async function resolveAtImport(
   id: string,
   base: string,
-  resolveImport: ResolveImport,
+  loadStylesheet: LoadStylesheet,
 ): Promise<{ ast: AstNode[]; base: string }> {
-  const { content, base: nestedBase } = await resolveImport(id, base)
+  const { content, base: nestedBase } = await loadStylesheet(id, base)
   let ast = CSS.parse(content)
-  await substituteAtImports(ast, nestedBase, resolveImport)
+  await substituteAtImports(ast, nestedBase, loadStylesheet)
   return { ast, base: nestedBase }
 }
 

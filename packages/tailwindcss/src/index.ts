@@ -15,16 +15,16 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  resolveModule?: (id: string, base: string) => Promise<{ base: string; module: unknown }>
-  resolveImport?: (id: string, base: string) => Promise<{ content: string; base: string }>
+  loadModule?: (id: string, base: string) => Promise<{ module: unknown; base: string }>
+  loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
 }
 
-function throwOnResolveModule(): never {
-  throw new Error('No `resolveModule` function provided to `compile`')
+function throwOnLoadModule(): never {
+  throw new Error('No `loadModule` function provided to `compile`')
 }
 
-function throwOnResolveImport(): never {
-  throw new Error('No `resolveImport` function provided to `compile`')
+function throwOnLoadStylesheet(): never {
+  throw new Error('No `loadStylesheet` function provided to `compile`')
 }
 
 function parseThemeOptions(selector: string) {
@@ -46,15 +46,12 @@ function parseThemeOptions(selector: string) {
 async function parseCss(
   css: string,
   base: string,
-  {
-    resolveModule = throwOnResolveModule,
-    resolveImport = throwOnResolveImport,
-  }: CompileOptions = {},
+  { loadModule = throwOnLoadModule, loadStylesheet = throwOnLoadStylesheet }: CompileOptions = {},
 ) {
   let ast = [context({ base }, CSS.parse(css))]
 
   if (css.includes('@import')) {
-    await substituteAtImports(ast, base, resolveImport)
+    await substituteAtImports(ast, base, loadStylesheet)
   }
 
   // Find all `@theme` declarations
@@ -242,7 +239,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, ast, resolveModule, globs })
+  await applyCompatibilityHooks({ designSystem, ast, loadModule, globs })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
