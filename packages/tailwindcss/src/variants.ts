@@ -4,7 +4,6 @@ import { flattenNesting } from './selectors/nesting'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
-import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
@@ -211,16 +210,13 @@ export function createVariants(theme: Theme): Variants {
 
     if (variant.modifier) return null
 
-    // 1. Flatten the AST
-    // 2. Drop any at rules (we can't necessarily negate them)
     let rules: Rule[] = []
 
     for (let node of flattenNesting([ruleNode])) {
       if (node.kind !== 'rule') continue
-      if (node.selector[0] === '@') {
-        // Don't allow not to be used with variants that use at-rules
-        return null
-      }
+
+      // Don't allow not to be used with variants that use at-rules
+      if (node.selector[0] === '@') return null
 
       rules.push(node)
     }
@@ -228,12 +224,10 @@ export function createVariants(theme: Theme): Variants {
     // 3. Merge selectors from all rules into a single selector
     let selector = rules.map((rule) => rule.selector.replaceAll('&', '*')).join(', ')
 
-    // We can remove the immediate `:is()` wrapper
+    // 4. Remove wrapping :is() if present
     if (selector.startsWith(':is(') && selector.endsWith(')')) {
       selector = selector.slice(4, -1)
     }
-
-    console.log({ selector })
 
     ruleNode.selector = `&:not(${selector})`
     ruleNode.nodes = []
@@ -248,50 +242,30 @@ export function createVariants(theme: Theme): Variants {
       ? `:where(.group\\/${variant.modifier.value})`
       : ':where(.group)'
 
-    let didApply = false
+    let rules: Rule[] = []
 
-    walk([ruleNode], (node) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+    for (let node of flattenNesting(structuredClone([ruleNode]))) {
+      if (node.kind !== 'rule') continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
+      // Don't allow not to be used with variants that use at-rules
+      if (node.selector[0] === '@') return null
 
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+      rules.push(node)
+    }
 
-          didApply = false
-          return WalkAction.Stop
-        })
+    if (rules.length === 0) return null
 
-        return didApply ? WalkAction.Skip : WalkAction.Stop
-      }
-
+    for (let node of rules) {
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
       // just the `.group` class the way we'd need to for these variants, so we
       // need to replace it in the selector ourselves.
       node.selector = node.selector.replaceAll('&', groupSelector)
-
-      // When the selector is a selector _list_ we need to wrap it in `:is`
-      // to make sure the matching behavior is consistent with the original
-      // variant / selector.
-      if (segment(node.selector, ',').length > 1) {
-        node.selector = `:is(${node.selector})`
-      }
-
       node.selector = `&:is(${node.selector} *)`
-
-      // Track that the variant was actually applied
-      didApply = true
-    })
-
-    // If the node wasn't modified, this variant is not compatible with
-    // `group-*` so discard the candidate.
-    if (!didApply) {
-      return null
     }
+
+    ruleNode.selector = '&'
+    ruleNode.nodes = rules
   })
 
   variants.suggest('group', () => {
@@ -309,50 +283,30 @@ export function createVariants(theme: Theme): Variants {
       ? `:where(.peer\\/${variant.modifier.value})`
       : ':where(.peer)'
 
-    let didApply = false
+    let rules: Rule[] = []
 
-    walk([ruleNode], (node) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+    for (let node of flattenNesting(structuredClone([ruleNode]))) {
+      if (node.kind !== 'rule') continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
+      // Don't allow not to be used with variants that use at-rules
+      if (node.selector[0] === '@') return null
 
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+      rules.push(node)
+    }
 
-          didApply = false
-          return WalkAction.Stop
-        })
+    if (rules.length === 0) return null
 
-        return didApply ? WalkAction.Skip : WalkAction.Stop
-      }
-
+    for (let node of rules) {
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
       // just the `.group` class the way we'd need to for these variants, so we
       // need to replace it in the selector ourselves.
       node.selector = node.selector.replaceAll('&', peerSelector)
-
-      // When the selector is a selector _list_ we need to wrap it in `:is`
-      // to make sure the matching behavior is consistent with the original
-      // variant / selector.
-      if (segment(node.selector, ',').length > 1) {
-        node.selector = `:is(${node.selector})`
-      }
-
       node.selector = `&:is(${node.selector} ~ *)`
-
-      // Track that the variant was actually applied
-      didApply = true
-    })
-
-    // If the node wasn't modified, this variant is not compatible with
-    // `peer-*` so discard the candidate.
-    if (!didApply) {
-      return null
     }
+
+    ruleNode.selector = '&'
+    ruleNode.nodes = rules
   })
 
   variants.suggest('peer', () => {
@@ -455,39 +409,30 @@ export function createVariants(theme: Theme): Variants {
   variants.compound('has', (ruleNode, variant) => {
     if (variant.modifier) return null
 
-    let didApply = false
+    let rules: Rule[] = []
 
-    walk([ruleNode], (node) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+    for (let node of flattenNesting(structuredClone([ruleNode]))) {
+      if (node.kind !== 'rule') continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
+      // Don't allow not to be used with variants that use at-rules
+      if (node.selector[0] === '@') return null
 
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+      rules.push(node)
+    }
 
-          didApply = false
-          return WalkAction.Stop
-        })
+    if (rules.length === 0) return null
 
-        return didApply ? WalkAction.Skip : WalkAction.Stop
+    for (let node of rules) {
+      let selector = node.selector.replaceAll('&', '*')
+      if (selector.startsWith(':is(') && selector.endsWith(')')) {
+        selector = selector.slice(4, -1)
       }
 
-      // Replace `&` in target variant with `*`, so variants like `&:hover`
-      // become `&:has(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:has(${node.selector.replaceAll('&', '*')})`
-
-      // Track that the variant was actually applied
-      didApply = true
-    })
-
-    // If the node wasn't modified, this variant is not compatible with
-    // `has-*` so discard the candidate.
-    if (!didApply) {
-      return null
+      node.selector = `&:has(${selector})`
     }
+
+    ruleNode.selector = '&'
+    ruleNode.nodes = rules
   })
 
   variants.suggest('has', () => {

@@ -792,12 +792,20 @@ test('group-*', async () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
         'group-hover:flex',
         'group-focus:flex',
         'group-hocus:flex',
+        'group-nested-selectors:flex',
 
         'group-hover:group-focus:flex',
         'group-focus:group-hover:flex',
@@ -828,6 +836,10 @@ test('group-*', async () => {
 
     .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
       display: flex;
+    }
+
+    .group-nested-selectors\\:flex:is(:where(.group):hover:focus *) {
+      display: flex;
     }"
   `)
 
@@ -835,16 +847,9 @@ test('group-*', async () => {
     await compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
-          &:hover {
-            &:focus {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
-      ['group-custom-at-rule:flex', 'group-nested-selectors:flex'],
+      ['group-custom-at-rule:flex'],
     ),
   ).toEqual('')
 })
@@ -912,6 +917,7 @@ test('peer-*', async () => {
         'peer-hover:flex',
         'peer-focus:flex',
         'peer-hocus:flex',
+        'peer-nested-selectors:flex',
         'peer-hover:peer-focus:flex',
         'peer-focus:peer-hover:flex',
       ],
@@ -948,16 +954,9 @@ test('peer-*', async () => {
     await compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
-          &:hover {
-            &:focus {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
-      ['peer-custom-at-rule:flex', 'peer-nested-selectors:flex'],
+      ['peer-custom-at-rule:flex'],
     ),
   ).toEqual('')
 })
@@ -1804,6 +1803,26 @@ test('has', async () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
+        @variant complex-selectors {
+          &:hover,
+          &[data-hovered] {
+            &:focus {
+              @slot;
+            }
+
+            &:active,
+            &[data-active] {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -1814,6 +1833,8 @@ test('has', async () => {
         'has-[~img]:flex',
         'has-[&>img]:flex',
         'has-hocus:flex',
+        'has-nested-selectors:flex',
+        'has-complex-selectors:flex',
 
         'group-has-[:checked]:flex',
         'group-has-[:checked]/parent-name:flex',
@@ -1827,6 +1848,10 @@ test('has', async () => {
         'group-has-[&>img]/parent-name:flex',
         'group-has-hocus:flex',
         'group-has-hocus/parent-name:flex',
+        'group-has-nested-selectors:flex',
+        'group-has-nested-selectors/parent-name:flex',
+        'group-has-complex-selectors/parent-name:flex',
+        'group-has-complex-selectors/parent-name:flex',
 
         'peer-has-[:checked]:flex',
         'peer-has-[:checked]/sibling-name:flex',
@@ -1840,6 +1865,10 @@ test('has', async () => {
         'peer-has-[&>img]/sibling-name:flex',
         'peer-has-hocus:flex',
         'peer-has-hocus/sibling-name:flex',
+        'peer-has-nested-selectors:flex',
+        'peer-has-nested-selectors/sibling-name:flex',
+        'peer-has-complex-selectors/sibling-name:flex',
+        'peer-has-complex-selectors/sibling-name:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -1856,6 +1885,18 @@ test('has', async () => {
     }
 
     .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *) {
+      display: flex;
+    }
+
+    .group-has-nested-selectors\\:flex:is(:where(.group):has(:hover:focus) *) {
+      display: flex;
+    }
+
+    .group-has-nested-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover:focus) *) {
+      display: flex;
+    }
+
+    .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):focus) *), .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
       display: flex;
     }
 
@@ -1907,6 +1948,18 @@ test('has', async () => {
       display: flex;
     }
 
+    .peer-has-nested-selectors\\:flex:is(:where(.peer):has(:hover:focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-nested-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover:focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):focus) ~ *), .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
+      display: flex;
+    }
+
     .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *) {
       display: flex;
     }
@@ -1947,6 +2000,14 @@ test('has', async () => {
       display: flex;
     }
 
+    .has-nested-selectors\\:flex:has(:hover:focus) {
+      display: flex;
+    }
+
+    .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):focus), .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) {
+      display: flex;
+    }
+
     .has-\\[\\:checked\\]\\:flex:has(:checked) {
       display: flex;
     }
@@ -1972,21 +2033,9 @@ test('has', async () => {
     await compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
-          &:hover {
-            &:focus {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
-      [
-        'has-[:checked]/foo:flex',
-        'has-[@media_print]:flex',
-        'has-custom-at-rule:flex',
-        'has-nested-selectors:flex',
-      ],
+      ['has-[:checked]/foo:flex', 'has-[@media_print]:flex', 'has-custom-at-rule:flex'],
     ),
   ).toEqual('')
 })
@@ -2869,7 +2918,7 @@ test('variant order', async () => {
   `)
 })
 
-test.only('not selector inversion creation thing', async () => {
+test('not selector inversion creation thing', async () => {
   let input = css`
     @variant omg {
       &:hover {
@@ -2896,7 +2945,7 @@ test.only('not selector inversion creation thing', async () => {
   `
 
   expect(await compileCss(input, ['omg:flex', 'not-omg:flex'])).toMatchInlineSnapshot(`
-    ".not-omg\\:flex:not(:hover:hover:focus:hover:focus:active, :hover:hover:focus:hover:focus[data-whatever], :hover:hover[data-foo], :visited) {
+    ".not-omg\\:flex:not(:hover:focus:active, :hover:focus[data-whatever], :hover[data-foo], :visited) {
       display: flex;
     }
 

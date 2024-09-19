@@ -13,11 +13,11 @@ let nestableAtRules = [
 export function flattenNesting(ast: AstNode[]) {
   // Step 1: Sorting and selector preparation
   //
-  // - Declarations must be sorted before nested rules:
-  // https://www.w3.org/TR/css-nesting-1/#mixing
-  //
   // - Selectors have their implicit `&` inserted to make selector manipulation
   // simpler in future steps.
+  //
+  // - Declarations must be sorted before nested rules:
+  // https://www.w3.org/TR/css-nesting-1/#mixing
   //
   // - Rules are split into multiple groups such that each group has either
   // a list of declarations OR at most one rule inside. This means the split
