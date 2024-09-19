@@ -191,15 +191,18 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
+      '@types/postcss-import':
+        specifier: 14.0.3
+        version: 14.0.3
       internal-example-plugin:
         specifier: workspace:*
         version: link:../internal-example-plugin
-      internal-postcss-fix-relative-paths:
-        specifier: workspace:^
-        version: link:../internal-postcss-fix-relative-paths
       postcss:
         specifier: ^8.4.41
         version: 8.4.41
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.41)
 
   packages/@tailwindcss-standalone:
     dependencies:
@@ -322,21 +325,6 @@ importers:
         version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4))(terser@5.31.6)
 
   packages/internal-example-plugin: {}
-
-  packages/internal-postcss-fix-relative-paths:
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 20.14.13
-      '@types/postcss-import':
-        specifier: ^14.0.3
-        version: 14.0.3
-      postcss:
-        specifier: 8.4.41
-        version: 8.4.41
-      postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.41)
 
   packages/tailwindcss:
     devDependencies:
