@@ -1,6 +1,6 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
-import { expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
@@ -24,8 +24,135 @@ it('should migrate simple `@layer utilities` to `@utility`', async () => {
   ).toMatchInlineSnapshot(`
     "@utility foo {
       color: red;
+    }"
+  `)
+})
+
+it('should split multiple selectors in separate utilities', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        .foo,
+        .bar {
+          color: red;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@utility foo {
+      color: red;
     }
-    "
+
+    @utility bar {
+      color: red;
+    }"
+  `)
+})
+
+it('should merge `@utility` with the same name', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        .foo {
+          color: red;
+        }
+      }
+
+      .bar {
+        color: blue;
+      }
+
+      @layer utilities {
+        .foo {
+          font-weight: bold;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@utility foo {
+      color: red;
+      font-weight: bold;
+    }
+
+    .bar {
+      color: blue;
+    }"
+  `)
+})
+
+it('should leave non-class utilities alone', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        /* 1. */
+        #before {
+          /* 1.1. */
+          color: red;
+          /* 1.2. */
+          .bar {
+            /* 1.2.1. */
+            font-weight: bold;
+          }
+        }
+
+        /* 2. */
+        .foo {
+          /* 2.1. */
+          color: red;
+          /* 2.2. */
+          .bar {
+            /* 2.2.1. */
+            font-weight: bold;
+          }
+        }
+
+        /* 3. */
+        #after {
+          /* 3.1. */
+          color: blue;
+          /* 3.2. */
+          .bar {
+            /* 3.2.1. */
+            font-weight: bold;
+          }
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@layer utilities {
+      /* 1. */
+      #before {
+        /* 1.1. */
+        color: red;
+        /* 1.2. */
+        .bar {
+          /* 1.2.1. */
+          font-weight: bold;
+        }
+      }
+
+      /* 3. */
+      #after {
+        /* 3.1. */
+        color: blue;
+        /* 3.2. */
+        .bar {
+          /* 3.2.1. */
+          font-weight: bold;
+        }
+      }
+    }
+
+    @utility foo {
+      /* 2. */
+      /* 2.1. */
+      color: red;
+      /* 2.2. */
+      .bar {
+        /* 2.2.1. */
+        font-weight: bold;
+      }
+    }"
   `)
 })
 
@@ -57,8 +184,7 @@ it('should migrate simple `@layer utilities` with nesting to `@utility`', async 
       &:focus {
         color: green;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -79,10 +205,10 @@ it('should migrate multiple simple `@layer utilities` to `@utility`', async () =
     "@utility foo {
       color: red;
     }
+
     @utility bar {
       color: blue;
-    }
-    "
+    }"
   `)
 })
 
@@ -107,14 +233,14 @@ it('should not migrate Rules inside of Rules to a `@utility`', async () => {
     "@utility foo {
       color: red;
     }
+
     @utility bar {
       color: blue;
 
       .baz {
         color: green;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -134,8 +260,7 @@ it('should invert at-rules to make them migrate-able', async () => {
       @media (min-width: 640px) {
         color: red;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -165,13 +290,11 @@ it('should migrate at-rules with multiple utilities and invert them', async () =
       }
     }
 
-
     @utility bar {
       @media (min-width: 640px) {
         color: blue;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -208,11 +331,13 @@ it('should migrate deeply nested at-rules with multiple utilities and invert the
         color: red;
       }
     }
+
     @utility bar {
       @media (min-width: 640px) {
         color: blue;
       }
     }
+
     @utility baz {
       @media (min-width: 640px) {
         @media (min-width: 1024px) {
@@ -220,6 +345,7 @@ it('should migrate deeply nested at-rules with multiple utilities and invert the
         }
       }
     }
+
     @utility qux {
       @media (min-width: 640px) {
         @media (min-width: 1024px) {
@@ -228,8 +354,7 @@ it('should migrate deeply nested at-rules with multiple utilities and invert the
           }
         }
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -247,8 +372,7 @@ it('should migrate classes with pseudo elements', async () => {
       &::-webkit-scrollbar {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -266,8 +390,7 @@ it('should migrate classes with attribute selectors', async () => {
       &[data-checked=""] {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -285,8 +408,7 @@ it('should migrate classes with element selectors', async () => {
       & main {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -304,8 +426,7 @@ it('should migrate classes attached to an element selector', async () => {
       &main {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -323,8 +444,7 @@ it('should migrate classes with id selectors', async () => {
       &#main {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -343,12 +463,12 @@ it('should migrate classes with another attached class', async () => {
         display: none;
       }
     }
+
     @utility main {
       &.no-scrollbar {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -367,17 +487,18 @@ it('should migrate a selector with multiple classes to multiple @utility definit
         display: none;
       }
     }
+
     @utility bar {
       .foo &:hover .baz:focus {
         display: none;
       }
     }
+
     @utility baz {
       .foo .bar:hover &:focus {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -405,9 +526,7 @@ it('should merge `@utility` definitions with the same name', async () => {
         @apply ml-[-41px];
         content: counter(step);
       }
-    }
-
-    "
+    }"
   `)
 })
 
@@ -426,17 +545,18 @@ it('should not migrate nested classes inside a `:not(…)`', async () => {
         display: none;
       }
     }
+
     @utility bar {
       .foo &:not(.qux):has(.baz) {
         display: none;
       }
     }
+
     @utility baz {
       .foo .bar:not(.qux):has(&) {
         display: none;
       }
-    }
-    "
+    }"
   `)
 })
 
@@ -489,6 +609,7 @@ it('should migrate advanced combinations', async () => {
         }
       }
     }
+
     @utility bar {
       @media (width >= 100px) {
         @supports (display: none) {
@@ -496,12 +617,10 @@ it('should migrate advanced combinations', async () => {
             display: none;
           }
         }
-      }
-
-      @media (width >= 100px) {
         color: red;
       }
     }
+
     @utility baz {
       @media (width >= 100px) {
         @supports (display: none) {
@@ -510,9 +629,155 @@ it('should migrate advanced combinations', async () => {
           }
         }
       }
-    }
-
-
-    "
+    }"
   `)
+})
+
+describe('comments', () => {
+  it('should preserve comment location for a simple utility', async () => {
+    expect(
+      await migrate(css`
+        /* Start of utilities: */
+        @layer utilities {
+          /* Utility #1 */
+          .foo {
+            /* Declarations: */
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "/* Start of utilities: */
+      @utility foo {
+        /* Utility #1 */
+        /* Declarations: */
+        color: red;
+      }"
+    `)
+  })
+
+  it('should copy comments when creating multiple utilities from a single selector', async () => {
+    expect(
+      await migrate(css`
+        /* Start of utilities: */
+        @layer utilities {
+          /* Foo & Bar */
+          .foo .bar {
+            /* Declarations: */
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "/* Start of utilities: */
+      @utility foo {
+        /* Foo & Bar */
+        & .bar {
+          /* Declarations: */
+          color: red;
+        }
+      }
+      @utility bar {
+        /* Foo & Bar */
+        .foo & {
+          /* Declarations: */
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  it('should preserve comments for utilities wrapped in at-rules', async () => {
+    expect(
+      await migrate(css`
+        /* Start of utilities: */
+        @layer utilities {
+          /* Mobile only */
+          @media (width <= 640px) {
+            /* Utility #1 */
+            .foo {
+              /* Declarations: */
+              color: red;
+            }
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "/* Start of utilities: */
+      @utility foo {
+        /* Mobile only */
+        @media (width <= 640px) {
+          /* Utility #1 */
+          /* Declarations: */
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  it('should preserve comment locations as best as possible', async () => {
+    expect(
+      await migrate(css`
+        /* Above */
+        .before {
+          /* Inside */
+        }
+        /* After */
+
+        /* Tailwind Utilities: */
+        @layer utilities {
+          /* Chrome, Safari and Opera */
+          /* Second comment */
+          @media (min-width: 640px) {
+            /* Foobar */
+            .no-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
+          }
+
+          /* Firefox, IE and Edge */
+          /* Second comment */
+          .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+          }
+        }
+
+        /* Above */
+        .after {
+          /* Inside */
+        }
+        /* After */
+      `),
+    ).toMatchInlineSnapshot(`
+      "/* Above */
+      .before {
+        /* Inside */
+      }
+      /* After */
+
+      /* Tailwind Utilities: */
+      @utility no-scrollbar {
+        /* Chrome, Safari and Opera */
+        /* Second comment */
+        @media (min-width: 640px) {
+          /* Foobar */
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+
+        /* Firefox, IE and Edge */
+        /* Second comment */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+
+      /* Above */
+      .after {
+        /* Inside */
+      }
+      /* After */"
+    `)
+  })
 })
