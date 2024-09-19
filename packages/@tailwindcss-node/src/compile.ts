@@ -48,6 +48,17 @@ export async function compile(
     async loadStylesheet(id, basedir) {
       let resolvedPath = await resolveCssId(id, basedir)
       if (!resolvedPath) throw new Error(`Could not resolve '${id}' from '${basedir}'`)
+
+      if (typeof globalThis.__tw_readFile === 'function') {
+        let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
+        if (file) {
+          return {
+            base: path.dirname(resolvedPath),
+            content: file,
+          }
+        }
+      }
+
       let file = await fsPromises.readFile(resolvedPath, 'utf-8')
       return {
         base: path.dirname(resolvedPath),

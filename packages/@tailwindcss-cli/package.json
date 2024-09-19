@@ -36,12 +36,6 @@
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
     "picocolors": "^1.0.1",
-    "postcss-import": "^16.1.0",
-    "postcss": "^8.4.41",
     "tailwindcss": "workspace:^"
-  },
-  "devDependencies": {
-    "@types/postcss-import": "^14.0.3",
-    "internal-postcss-fix-relative-paths": "workspace:^"
   }
 }

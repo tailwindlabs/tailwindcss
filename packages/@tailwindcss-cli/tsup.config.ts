@@ -5,5 +5,4 @@ export default defineConfig({
   clean: true,
   minify: true,
   entry: ['src/index.ts'],
-  noExternal: ['internal-postcss-fix-relative-paths'],
 })

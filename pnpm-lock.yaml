@@ -156,22 +156,9 @@ importers:
       picocolors:
         specifier: ^1.0.1
         version: 1.0.1
-      postcss:
-        specifier: ^8.4.41
-        version: 8.4.41
-      postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.41)
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
-    devDependencies:
-      '@types/postcss-import':
-        specifier: ^14.0.3
-        version: 14.0.3
-      internal-postcss-fix-relative-paths:
-        specifier: workspace:^
-        version: link:../internal-postcss-fix-relative-paths
 
   packages/@tailwindcss-node:
     dependencies:
@@ -330,9 +317,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
-      internal-postcss-fix-relative-paths:
-        specifier: workspace:^
-        version: link:../internal-postcss-fix-relative-paths
       vite:
         specifier: 'catalog:'
         version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4))(terser@5.31.6)

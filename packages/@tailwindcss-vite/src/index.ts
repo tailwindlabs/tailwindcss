@@ -2,10 +2,10 @@ import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 
 import { Scanner } from '@tailwindcss/oxide'
-import { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
+import { normalizePath } from './normalize-path'
 
 export default function tailwindcss(): Plugin[] {
   let servers: ViteDevServer[] = []
