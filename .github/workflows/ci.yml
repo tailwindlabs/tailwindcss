@@ -14,10 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        runner: [ubuntu-latest, windows-latest, macos-14]
+        runner: [ubuntu-latest, macos-14]
 
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -79,3 +79,86 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:ui
+
+  tests-windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20]
+        runner: [windows-latest]
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+
+    steps:
+      - name: Create Dev Drive using ReFS
+        run: |
+          $Volume = New-VHD -Path C:/tw_dev_drive.vhdx -SizeBytes 10GB |
+                    Mount-VHD -Passthru |
+                    Initialize-Disk -Passthru |
+                    New-Partition -AssignDriveLetter -UseMaximumSize |
+                    Format-Volume -FileSystem ReFS -Confirm:$false -Force
+          Write-Output $Volume
+          Write-Output "DEV_DRIVE=$($Volume.DriveLetter):" >> $env:GITHUB_ENV
+
+      - uses: actions/checkout@v4
+
+      # actions/checkout does not let us clone into anywhere outside ${{ github.workspace }}, so we have to copy the clone...
+      - name: Copy Git Repo to Dev Drive
+        run: |
+          Copy-Item -Path "${{ github.workspace }}" -Destination "${{ env.DEV_DRIVE }}/tw" -Recurse
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `oxide` Rust build
+      - name: Cache oxide build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./target/
+            ./crates/node/*.node
+            ./crates/node/index.js
+            ./crates/node/index.d.ts
+          key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.DEV_DRIVE }}/tw
+
+      - name: Build
+        run: pnpm run build
+        working-directory: ${{ env.DEV_DRIVE }}/tw
+
+      - name: Test
+        run: pnpm run test
+        working-directory: ${{ env.DEV_DRIVE }}/tw
+
+      - name: Integration Tests
+        run: pnpm run test:integrations
+        working-directory: ${{ env.DEV_DRIVE }}/tw
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        working-directory: ${{ env.DEV_DRIVE }}/tw
+
+      - name: Run Playwright tests
+        run: npm run test:ui
+        working-directory: ${{ env.DEV_DRIVE }}/tw
