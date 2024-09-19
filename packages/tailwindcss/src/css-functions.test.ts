@@ -337,7 +337,7 @@ describe('theme function', () => {
             `,
             '/root',
             {
-              loadConfig: async () => ({}),
+              loadModule: async () => ({ module: {}, base: '/root' }),
             },
           )
 
@@ -797,23 +797,26 @@ describe('in plugins', () => {
       `,
       '/root',
       {
-        async loadPlugin() {
-          return plugin(({ addBase, addUtilities }) => {
-            addBase({
-              '.my-base-rule': {
-                color: 'theme(colors.red)',
-                'outline-color': 'theme(colors.orange / 15%)',
-                'background-color': 'theme(--color-blue)',
-                'border-color': 'theme(--color-pink / 10%)',
-              },
-            })
+        async loadModule() {
+          return {
+            module: plugin(({ addBase, addUtilities }) => {
+              addBase({
+                '.my-base-rule': {
+                  color: 'theme(colors.red)',
+                  'outline-color': 'theme(colors.orange / 15%)',
+                  'background-color': 'theme(--color-blue)',
+                  'border-color': 'theme(--color-pink / 10%)',
+                },
+              })
 
-            addUtilities({
-              '.my-utility': {
-                color: 'theme(colors.red)',
-              },
-            })
-          })
+              addUtilities({
+                '.my-utility': {
+                  color: 'theme(colors.red)',
+                },
+              })
+            }),
+            base: '/root',
+          }
         },
       },
     )
@@ -853,31 +856,34 @@ describe('in JS config files', () => {
       `,
       '/root',
       {
-        loadConfig: async () => ({
-          theme: {
-            extend: {
-              colors: {
-                primary: 'theme(colors.red)',
-                secondary: 'theme(--color-orange)',
+        loadModule: async () => ({
+          module: {
+            theme: {
+              extend: {
+                colors: {
+                  primary: 'theme(colors.red)',
+                  secondary: 'theme(--color-orange)',
+                },
               },
             },
-          },
-          plugins: [
-            plugin(({ addBase, addUtilities }) => {
-              addBase({
-                '.my-base-rule': {
-                  background: 'theme(colors.primary)',
-                  color: 'theme(colors.secondary)',
-                },
-              })
+            plugins: [
+              plugin(({ addBase, addUtilities }) => {
+                addBase({
+                  '.my-base-rule': {
+                    background: 'theme(colors.primary)',
+                    color: 'theme(colors.secondary)',
+                  },
+                })
 
-              addUtilities({
-                '.my-utility': {
-                  color: 'theme(colors.red)',
-                },
-              })
-            }),
-          ],
+                addUtilities({
+                  '.my-utility': {
+                    color: 'theme(colors.red)',
+                  },
+                })
+              }),
+            ],
+          },
+          base: '/root',
         }),
       },
     )
