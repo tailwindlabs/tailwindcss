@@ -14,7 +14,7 @@ export async function compile(
   return await _compile(css, base, {
     async loadModule(id, base) {
       if (id[0] !== '.') {
-        let resolvedPath = resolveJsId(id, base)
+        let resolvedPath = await resolveJsId(id, base)
         if (!resolvedPath) {
           throw new Error(`Could not resolve '${id}' from '${base}'`)
         }
@@ -26,7 +26,7 @@ export async function compile(
         }
       }
 
-      let resolvedPath = resolveJsId(id, base)
+      let resolvedPath = await resolveJsId(id, base)
       if (!resolvedPath) {
         throw new Error(`Could not resolve '${id}' from '${base}'`)
       }
@@ -91,21 +91,31 @@ const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
   mainFields: ['style'],
   conditionNames: ['style'],
 })
-function resolveCssId(id: string, base: string) {
+function resolveCssId(id: string, base: string): Promise<string | false | undefined> {
   if (typeof globalThis.__tw_resolve === 'function') {
     let resolved = globalThis.__tw_resolve(id, base)
     if (resolved) {
-      return resolved
+      return Promise.resolve(resolved)
     }
   }
 
-  return cssResolver.resolveSync({}, base, id)
+  return new Promise((resolve, reject) =>
+    cssResolver.resolve({}, base, id, {}, (err, result) => {
+      if (err) return reject(err)
+      resolve(result)
+    }),
+  )
 }
 
 const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
 })
-function resolveJsId(id: string, base: string) {
-  return jsResolver.resolveSync({}, base, id)
+function resolveJsId(id: string, base: string): Promise<string | false | undefined> {
+  return new Promise((resolve, reject) =>
+    jsResolver.resolve({}, base, id, {}, (err, result) => {
+      if (err) return reject(err)
+      resolve(result)
+    }),
+  )
 }
