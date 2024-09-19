@@ -1,11 +1,25 @@
 import { describe, expect, test, vi } from 'vitest'
-import { compile } from '..'
+import { compile as coreCompile } from '..'
 import plugin from '../plugin'
 import { optimizeCss } from '../test-utils/run'
 import defaultTheme from './default-theme'
-import type { CssInJs, PluginAPI } from './plugin-api'
+import type { CssInJs, PluginAPI, PluginWithConfig } from './plugin-api'
 
 const css = String.raw
+
+// TODO: Expand the API changes into the tests below
+function compile(
+  css: string,
+  base: string,
+  { loadPlugin }: { loadPlugin: () => Promise<PluginWithConfig> },
+) {
+  return coreCompile(css, base, {
+    async loadModule(id, base) {
+      let plugin = await loadPlugin()
+      return { module: plugin, base }
+    },
+  })
+}
 
 describe('theme', async () => {
   test('plugin theme can contain objects', async () => {
