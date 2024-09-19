@@ -4197,9 +4197,9 @@ export function createUtilities(theme: Theme) {
     let boxShadowProperties = () => {
       return atRoot([
         property('--tw-shadow', nullShadow),
-        property('--tw-shadow-colored', nullShadow),
+        property('--tw-shadow-color'),
         property('--tw-inset-shadow', nullShadow),
-        property('--tw-inset-shadow-colored', nullShadow),
+        property('--tw-inset-shadow-color'),
         property('--tw-ring-color'),
         property('--tw-ring-shadow', nullShadow),
         property('--tw-inset-ring-color'),
@@ -4222,8 +4222,10 @@ export function createUtilities(theme: Theme) {
 
         return [
           boxShadowProperties(),
-          decl('--tw-shadow', value),
-          decl('--tw-shadow-colored', replaceShadowColors(value, 'var(--tw-shadow-color)')),
+          decl(
+            '--tw-shadow',
+            replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+          ),
           decl('box-shadow', cssBoxShadowValue),
         ]
       }
@@ -4237,17 +4239,15 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier)
             if (value === null) return
 
-            return [
-              boxShadowProperties(),
-              decl('--tw-shadow-color', value),
-              decl('--tw-shadow', 'var(--tw-shadow-colored)'),
-            ]
+            return [boxShadowProperties(), decl('--tw-shadow-color', value)]
           }
           default: {
             return [
               boxShadowProperties(),
-              decl('--tw-shadow', value),
-              decl('--tw-shadow-colored', replaceShadowColors(value, 'var(--tw-shadow-color)')),
+              decl(
+                '--tw-shadow',
+                replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+              ),
               decl('box-shadow', cssBoxShadowValue),
             ]
           }
@@ -4260,7 +4260,6 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-shadow', nullShadow),
-            decl('--tw-shadow-colored', nullShadow),
             decl('box-shadow', cssBoxShadowValue),
           ]
       }
@@ -4272,8 +4271,10 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           return [
             boxShadowProperties(),
-            decl('--tw-shadow', value),
-            decl('--tw-shadow-colored', replaceShadowColors(value, 'var(--tw-shadow-color)')),
+            decl(
+              '--tw-shadow',
+              replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+            ),
             decl('box-shadow', cssBoxShadowValue),
           ]
         }
@@ -4283,11 +4284,7 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [
-            boxShadowProperties(),
-            decl('--tw-shadow-color', value),
-            decl('--tw-shadow', 'var(--tw-shadow-colored)'),
-          ]
+          return [boxShadowProperties(), decl('--tw-shadow-color', value)]
         }
       }
     })
@@ -4314,10 +4311,9 @@ export function createUtilities(theme: Theme) {
 
         return [
           boxShadowProperties(),
-          decl('--tw-inset-shadow', value),
           decl(
-            '--tw-inset-shadow-colored',
-            replaceShadowColors(value, 'var(--tw-inset-shadow-color)'),
+            '--tw-inset-shadow',
+            replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -4332,19 +4328,14 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier)
             if (value === null) return
 
-            return [
-              boxShadowProperties(),
-              decl('--tw-inset-shadow-color', value),
-              decl('--tw-inset-shadow', 'var(--tw-inset-shadow-colored)'),
-            ]
+            return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
           }
           default: {
             return [
               boxShadowProperties(),
-              decl('--tw-inset-shadow', `inset ${value}`),
               decl(
-                '--tw-inset-shadow-colored',
-                replaceShadowColors(`inset ${value}`, 'var(--tw-inset-shadow-color)'),
+                '--tw-inset-shadow',
+                `inset ${replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`)}`,
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4358,7 +4349,6 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow', nullShadow),
-            decl('--tw-inset-shadow-colored', nullShadow),
             decl('box-shadow', cssBoxShadowValue),
           ]
       }
@@ -4371,10 +4361,9 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           return [
             boxShadowProperties(),
-            decl('--tw-inset-shadow', value),
             decl(
-              '--tw-inset-shadow-colored',
-              replaceShadowColors(value, 'var(--tw-inset-shadow-color)'),
+              '--tw-inset-shadow',
+              replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -4385,11 +4374,7 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [
-            boxShadowProperties(),
-            decl('--tw-inset-shadow-color', value),
-            decl('--tw-inset-shadow', 'var(--tw-inset-shadow-colored)'),
-          ]
+          return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
         }
       }
     })

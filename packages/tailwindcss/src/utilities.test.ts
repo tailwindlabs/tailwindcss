@@ -14103,104 +14103,87 @@ test('shadow', async () => {
     }
 
     .shadow {
-      --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-      --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[--value\\] {
       --tw-shadow: var(--value);
-      --tw-shadow-colored: var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[10px_10px\\] {
-      --tw-shadow: 10px 10px;
-      --tw-shadow-colored: 10px 10px var(--tw-shadow-color);
+      --tw-shadow: 10px 10px var(--tw-shadow-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[12px_12px_\\#0088cc\\] {
-      --tw-shadow: 12px 12px #08c;
-      --tw-shadow-colored: 12px 12px var(--tw-shadow-color);
+      --tw-shadow: 12px 12px var(--tw-shadow-color, #08c);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[shadow\\:--value\\] {
       --tw-shadow: var(--value);
-      --tw-shadow-colored: var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-none {
       --tw-shadow: 0 0 #0000;
-      --tw-shadow-colored: 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-xl {
-      --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
-      --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+      --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, #0000001a), 0 8px 10px -6px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[\\#0088cc\\] {
       --tw-shadow-color: #08c;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-shadow-color: #0088cc80;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[color\\:--value\\] {
       --tw-shadow-color: var(--value);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[color\\:--value\\]\\/50, .shadow-\\[color\\:--value\\]\\/\\[0\\.5\\], .shadow-\\[color\\:--value\\]\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, var(--value) 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-current {
       --tw-shadow-color: currentColor;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-inherit {
       --tw-shadow-color: inherit;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-red-500 {
       --tw-shadow-color: var(--color-red-500, #ef4444);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-transparent {
       --tw-shadow-color: transparent;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14219,10 +14202,9 @@ test('shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14231,10 +14213,9 @@ test('shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14355,104 +14336,87 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow {
-      --tw-inset-shadow: inset 0 2px 4px #0000000d;
-      --tw-inset-shadow-colored: inset 0 2px 4px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, #0000000d);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[--value\\] {
       --tw-inset-shadow: inset var(--value);
-      --tw-inset-shadow-colored: inset var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[10px_10px\\] {
-      --tw-inset-shadow: inset 10px 10px;
-      --tw-inset-shadow-colored: inset 10px 10px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[12px_12px_\\#0088cc\\] {
-      --tw-inset-shadow: inset 12px 12px #08c;
-      --tw-inset-shadow-colored: inset 12px 12px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #08c);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[shadow\\:--value\\] {
       --tw-inset-shadow: inset var(--value);
-      --tw-inset-shadow-colored: inset var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-none {
       --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-colored: 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-sm {
-      --tw-inset-shadow: inset 0 1px 1px #0000000d;
-      --tw-inset-shadow-colored: inset 0 1px 1px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, #0000000d);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[\\#0088cc\\] {
       --tw-inset-shadow-color: #08c;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: #0088cc80;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[color\\:--value\\] {
       --tw-inset-shadow-color: var(--value);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[color\\:--value\\]\\/50, .inset-shadow-\\[color\\:--value\\]\\/\\[0\\.5\\], .inset-shadow-\\[color\\:--value\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, var(--value) 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-current {
       --tw-inset-shadow-color: currentColor;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-inherit {
       --tw-inset-shadow-color: inherit;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: var(--color-red-500, #ef4444);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-transparent {
       --tw-inset-shadow-color: transparent;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14471,10 +14435,9 @@ test('inset-shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14483,10 +14446,9 @@ test('inset-shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14698,9 +14660,9 @@ test('ring', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14719,10 +14681,9 @@ test('ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14731,10 +14692,9 @@ test('ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14959,9 +14919,9 @@ test('inset-ring', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14980,10 +14940,9 @@ test('inset-ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14992,10 +14951,9 @@ test('inset-ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {

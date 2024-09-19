@@ -27,8 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Don't override explicit `leading-*`, `tracking-*`, or `font-{weight}` utilities with font-size utility defaults ([#14403](https://github.com/tailwindlabs/tailwindcss/pull/14403))
+- Preserve explicit `leading-*`, `tracking-*`, and `font-{weight}` value when overriding font-size ([#14403](https://github.com/tailwindlabs/tailwindcss/pull/14403))
 - Disallow negative bare values in core utilities and variants ([#14453](https://github.com/tailwindlabs/tailwindcss/pull/14453))
+- Preserve explicit shadow color when overriding shadow size ([#14458](https://github.com/tailwindlabs/tailwindcss/pull/14458))
 
 ## [4.0.0-alpha.24] - 2024-09-11
 
