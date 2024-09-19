@@ -11,50 +11,59 @@ export async function substituteAtImports(
 ) {
   let promises: Map<string, Promise<{ ast: AstNode[]; base: string }>> = new Map()
 
+  // Step 1: Find @import rules and start loading them in parallel
   walk(ast, (node) => {
-    // Find @import rules and start resolving them
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
       let { uri } = parseImportParams(ValueParser.parse(node.selector.slice(8)))
 
       // Skip importing data URIs
       if (uri.startsWith('data:')) return
 
-      promises.set(key(uri, base), resolveAtImport(uri, base, loadStylesheet))
+      let key = createKey(uri, base)
+      if (promises.has(key)) return
+      promises.set(key, atImport(uri, base, loadStylesheet))
     }
   })
 
-  let entries = [...promises.entries()]
-  let resolvers = entries.map(async ([id, promise]) => [id, await promise] as const)
-  let resolved = await Promise.all(resolvers)
-  let unwrapped = new Map(resolved)
+  if (promises.size === 0) return
 
+  let resolved = new Map(
+    await Promise.all(
+      Array.from(promises.entries()).map(async ([id, promise]) => [id, await promise] as const),
+    ),
+  )
+
+  // Step 2: Replace all @import rules with their resolved stylesheets
   walk(ast, (node, { replaceWith }) => {
-    // Replace all @import rules
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
       let { uri, layer, media, supports } = parseImportParams(
         ValueParser.parse(node.selector.slice(8)),
       )
-      let imported = unwrapped.get(key(uri, base))
+      let key = createKey(uri, base)
+      let imported = resolved.get(key)
       if (imported) {
         replaceWith(buildImportNodes(imported.ast, imported.base, layer, media, supports))
+
+        // The resolved Stylesheets already have their transitive @imports
+        // resolved, so we can skip walking them.
         return WalkAction.Skip
       }
     }
   })
 }
 
-async function resolveAtImport(
+async function atImport(
   id: string,
-  base: string,
+  parentBase: string,
   loadStylesheet: LoadStylesheet,
 ): Promise<{ ast: AstNode[]; base: string }> {
-  const { content, base: nestedBase } = await loadStylesheet(id, base)
+  const { content, base } = await loadStylesheet(id, parentBase)
   let ast = CSS.parse(content)
-  await substituteAtImports(ast, nestedBase, loadStylesheet)
-  return { ast, base: nestedBase }
+  await substituteAtImports(ast, base, loadStylesheet)
+  return { ast: [context({ base }, ast)], base }
 }
 
-function key(id: string, basedir: string): string {
+function createKey(id: string, basedir: string): string {
   return `${id}:${basedir}`
 }
 
@@ -139,5 +148,5 @@ function buildImportNodes(
     root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
   }
 
-  return [context({ base }, root)]
+  return root
 }
