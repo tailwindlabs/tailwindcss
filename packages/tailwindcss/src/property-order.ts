@@ -216,6 +216,7 @@ export default [
   '--tw-bg-opacity',
 
   'background-image',
+  '--tw-gradient-position',
   '--tw-gradient-stops',
   '--tw-gradient-via-stops',
   '--tw-gradient-from',
