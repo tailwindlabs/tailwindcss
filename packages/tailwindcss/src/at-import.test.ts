@@ -1,4 +1,5 @@
 import { expect, test, vi } from 'vitest'
+import type { Plugin } from './compat/plugin-api'
 import { compile, type Config } from './index'
 import plugin from './plugin'
 import { optimizeCss } from './test-utils/run'
@@ -8,7 +9,10 @@ let css = String.raw
 async function run(
   css: string,
   loadStylesheet: (id: string, base: string) => Promise<{ content: string; base: string }>,
-  loadModule: (id: string, base: string) => Promise<{ module: unknown; base: string }> = () =>
+  loadModule: (
+    id: string,
+    base: string,
+  ) => Promise<{ module: Config | Plugin; base: string }> = () =>
     Promise.reject(new Error('Unexpected module')),
   candidates: string[] = [],
 ) {
