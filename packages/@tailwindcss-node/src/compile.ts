@@ -2,7 +2,7 @@ import EnhancedResolve from 'enhanced-resolve'
 import { createJiti, type Jiti } from 'jiti'
 import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
-import path, { basename } from 'node:path'
+import path, { dirname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { compile as _compile } from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
@@ -14,16 +14,22 @@ export async function compile(
   return await _compile(css, base, {
     async loadModule(id, base) {
       if (id[0] !== '.') {
-        let resolvedPath = require.resolve(id, { paths: [base] })
+        let resolvedPath = resolveJsId(id, base)
+        if (!resolvedPath) {
+          throw new Error(`Could not resolve '${id}' from '${base}'`)
+        }
 
         let module = await importModule(pathToFileURL(resolvedPath).href)
         return {
-          base: basename(resolvedPath),
+          base: dirname(resolvedPath),
           module: module.default ?? module,
         }
       }
 
-      let resolvedPath = require.resolve(id, { paths: [base] })
+      let resolvedPath = resolveJsId(id, base)
+      if (!resolvedPath) {
+        throw new Error(`Could not resolve '${id}' from '${base}'`)
+      }
       let [module, moduleDependencies] = await Promise.all([
         importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),
@@ -34,7 +40,7 @@ export async function compile(
         onDependency(file)
       }
       return {
-        base: basename(resolvedPath),
+        base: dirname(resolvedPath),
         module: module.default ?? module,
       }
     },
@@ -67,14 +73,14 @@ async function importModule(path: string): Promise<any> {
   }
 }
 
-const resolver = EnhancedResolve.ResolverFactory.createResolver({
+const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
   extensions: ['.css'],
   mainFields: ['style'],
   conditionNames: ['style'],
 })
-export function resolveCssId(id: string, base: string) {
+function resolveCssId(id: string, base: string) {
   if (typeof globalThis.__tw_resolve === 'function') {
     let resolved = globalThis.__tw_resolve(id, base)
     if (resolved) {
@@ -82,5 +88,13 @@ export function resolveCssId(id: string, base: string) {
     }
   }
 
-  return resolver.resolveSync({}, base, id)
+  return cssResolver.resolveSync({}, base, id)
+}
+
+const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
+  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  useSyncFileSystemCalls: true,
+})
+function resolveJsId(id: string, base: string) {
+  return jsResolver.resolveSync({}, base, id)
 }

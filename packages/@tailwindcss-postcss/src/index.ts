@@ -5,8 +5,7 @@ import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
-import postcssImport from 'postcss-import'
+import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -51,30 +50,16 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
     }
   })
 
-  let hasApply: boolean, hasTailwind: boolean
-
   return {
     postcssPlugin: '@tailwindcss/postcss',
     plugins: [
-      // We need to run `postcss-import` first to handle `@import` rules.
-      postcssImport(),
+      // We need to handle the case where `postcss-import` might have run before the Tailwind CSS
+      // plugin is run. In this case, we need to manually fix relative paths before processing it
+      // in core.
       fixRelativePathsPlugin(),
 
       {
         postcssPlugin: 'tailwindcss',
-        Once() {
-          // Reset some state between builds
-          hasApply = false
-          hasTailwind = false
-        },
-        AtRule(rule: AtRule) {
-          if (rule.name === 'apply') {
-            hasApply = true
-          } else if (rule.name === 'tailwind') {
-            hasApply = true
-            hasTailwind = true
-          }
-        },
         async OnceExit(root, { result }) {
           let inputFile = result.opts.from ?? ''
           let context = cache.get(inputFile)
@@ -133,9 +118,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
-          // Do nothing if neither `@tailwind` nor `@apply` is used
-          if (!hasTailwind && !hasApply) return
-
           let css = ''
 
           // Look for candidates used to generate the CSS
@@ -144,7 +126,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             sources: context.compiler.globs,
           })
 
-          //
           let candidates = scanner.scan()
 
           // Add all found files as direct dependencies
@@ -172,10 +153,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           if (rebuildStrategy === 'full') {
             context.compiler = await createCompiler()
-            css = context.compiler.build(hasTailwind ? candidates : [])
-          } else if (rebuildStrategy === 'incremental') {
-            css = context.compiler.build!(candidates)
           }
+          css = context.compiler.build(candidates)
 
           // Replace CSS
           if (css !== context.css && optimize) {

@@ -197,9 +197,7 @@ describe('plugins', () => {
         }
       }
 
-      .foo {
-        color: var(--color-red-500, #ef4444);
-      }
+      @apply text-red-500;
 
       @supports (-moz-orient: inline) {
         @layer base {
