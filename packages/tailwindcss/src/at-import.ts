@@ -60,7 +60,7 @@ async function atImport(
   const { content, base } = await loadStylesheet(id, parentBase)
   let ast = CSS.parse(content)
   await substituteAtImports(ast, base, loadStylesheet)
-  return { ast: [context({ base }, ast)], base }
+  return { ast, base }
 }
 
 function createKey(id: string, basedir: string): string {
@@ -148,5 +148,5 @@ function buildImportNodes(
     root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
   }
 
-  return root
+  return [context({ base }, root)]
 }
