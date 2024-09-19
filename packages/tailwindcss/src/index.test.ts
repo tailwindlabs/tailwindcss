@@ -2489,7 +2489,7 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
           display: flex;
         }
 
