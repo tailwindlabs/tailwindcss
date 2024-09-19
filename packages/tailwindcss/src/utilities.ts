@@ -883,6 +883,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('list-item', [['display', 'list-item']])
 
   /**
+   * @css `field-sizing`
+   */
+  staticUtility('field-sizing-content', [['field-sizing', 'content']])
+  staticUtility('field-sizing-fixed', [['field-sizing', 'fixed']])
+
+  /**
    * @css `aspect-ratio`
    */
   staticUtility('aspect-auto', [['aspect-ratio', 'auto']])
