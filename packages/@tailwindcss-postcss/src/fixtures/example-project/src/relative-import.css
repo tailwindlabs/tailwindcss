@@ -1,4 +1,4 @@
 /* @plugin '../plugin.js'; */
 .foo {
-  @apply text-red-500
+  @apply text-red-500;
 }
