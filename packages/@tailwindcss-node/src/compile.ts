@@ -14,14 +14,16 @@ export async function compile(
   return await _compile(css, base, {
     async loadModule(id, base) {
       if (id[0] !== '.') {
-        let resolvedPath = path.resolve(base, id)
+        let resolvedPath = require.resolve(id, { paths: [base] })
+
+        let module = await importModule(pathToFileURL(resolvedPath).href)
         return {
           base: basename(resolvedPath),
-          module: importModule(pathToFileURL(resolvedPath).href).then((m) => m.default ?? m),
+          module: module.default ?? module,
         }
       }
 
-      let resolvedPath = path.resolve(base, id)
+      let resolvedPath = require.resolve(id, { paths: [base] })
       let [module, moduleDependencies] = await Promise.all([
         importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
         getModuleDependencies(resolvedPath),

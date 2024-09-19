@@ -179,7 +179,7 @@ describe('plugins', () => {
     expect(result.css.trim()).toMatchInlineSnapshot(`
       ".text-2xl {
         font-size: var(--font-size-2xl, 1.5rem);
-        line-height: var(--font-size-2xl--line-height, 2rem);
+        line-height: var(--tw-leading, var(--font-size-2xl--line-height, 2rem));
       }
 
       .text-black\\/50 {
@@ -192,12 +192,26 @@ describe('plugins', () => {
 
       @media (width >= 96rem) {
         .\\32 xl\\:font-bold {
+          --tw-font-weight: 700;
           font-weight: 700;
         }
       }
 
       .foo {
         color: var(--color-red-500, #ef4444);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-font-weight: initial;
+          }
+        }
+      }
+
+      @property --tw-font-weight {
+        syntax: "*";
+        inherits: false
       }"
     `)
   })

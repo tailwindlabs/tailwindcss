@@ -333,7 +333,7 @@ export async function compile(
   base: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { origin?: string; pattern: string }[]
+  globs: { base: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
   let { designSystem, ast, globs } = await parseCss(css, base, opts)
