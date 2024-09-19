@@ -3,16 +3,12 @@ import { compile as coreCompile } from '..'
 import plugin from '../plugin'
 import { optimizeCss } from '../test-utils/run'
 import defaultTheme from './default-theme'
-import type { CssInJs, PluginAPI, PluginWithConfig } from './plugin-api'
+import type { CssInJs, Plugin, PluginAPI } from './plugin-api'
 
 const css = String.raw
 
 // TODO: Expand the API changes into the tests below
-function compile(
-  css: string,
-  base: string,
-  { loadPlugin }: { loadPlugin: () => Promise<PluginWithConfig> },
-) {
+function compile(css: string, base: string, { loadPlugin }: { loadPlugin: () => Promise<Plugin> }) {
   return coreCompile(css, base, {
     async loadModule(id, base) {
       let plugin = await loadPlugin()
