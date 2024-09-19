@@ -12,6 +12,7 @@ import {
 
 export interface ConfigFile {
   path?: string
+  base: string
   config: UserConfig
 }
 
@@ -103,7 +104,7 @@ export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
 }
 
-function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): void {
+function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFile): void {
   let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
@@ -133,7 +134,7 @@ function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): v
   }
 
   for (let preset of config.presets ?? []) {
-    extractConfigs(ctx, { path, config: preset })
+    extractConfigs(ctx, { path, base, config: preset })
   }
 
   // Apply configs from plugins
@@ -141,7 +142,7 @@ function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): v
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      extractConfigs(ctx, { path, config: plugin.config })
+      extractConfigs(ctx, { path, base, config: plugin.config })
     }
   }
 
@@ -150,7 +151,7 @@ function extractConfigs(ctx: ResolutionContext, { config, path }: ConfigFile): v
   let files = Array.isArray(content) ? content : content.files
 
   for (let file of files) {
-    ctx.content.files.push(typeof file === 'object' ? file : { base: path!, pattern: file })
+    ctx.content.files.push(typeof file === 'object' ? file : { base, pattern: file })
   }
 
   // Then apply the "user" config

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { compile } from '..'
+import { compile, type Config } from '..'
 import plugin from '../plugin'
 import { flattenColorPalette } from './flatten-color-palette'
 
@@ -12,7 +12,7 @@ test('Config files can add content', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({ content: ['./file.txt'] }),
+    loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root' }),
   })
 
   expect(compiler.globs).toEqual([{ origin: './config.js', pattern: './file.txt' }])
@@ -25,7 +25,7 @@ test('Config files can change dark mode (media)', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({ darkMode: 'media' }),
+    loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root' }),
   })
 
   expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
@@ -45,7 +45,7 @@ test('Config files can change dark mode (selector)', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({ darkMode: 'selector' }),
+    loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root' }),
   })
 
   expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
@@ -65,7 +65,10 @@ test('Config files can change dark mode (variant)', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({ darkMode: ['variant', '&:where(:not(.light))'] }),
+    loadModule: async () => ({
+      module: { darkMode: ['variant', '&:where(:not(.light))'] },
+      base: '/root',
+    }),
   })
 
   expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
@@ -85,16 +88,19 @@ test('Config files can add plugins', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      plugins: [
-        plugin(function ({ addUtilities }) {
-          addUtilities({
-            '.no-scrollbar': {
-              'scrollbar-width': 'none',
-            },
-          })
-        }),
-      ],
+    loadModule: async () => ({
+      module: {
+        plugins: [
+          plugin(function ({ addUtilities }) {
+            addUtilities({
+              '.no-scrollbar': {
+                'scrollbar-width': 'none',
+              },
+            })
+          }),
+        ],
+      },
+      base: '/root',
     }),
   })
 
@@ -113,12 +119,15 @@ test('Plugins loaded from config files can contribute to the config', async () =
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      plugins: [
-        plugin(() => {}, {
-          darkMode: ['variant', '&:where(:not(.light))'],
-        }),
-      ],
+    loadModule: async () => ({
+      module: {
+        plugins: [
+          plugin(() => {}, {
+            darkMode: ['variant', '&:where(:not(.light))'],
+          }),
+        ],
+      },
+      base: '/root',
     }),
   })
 
@@ -139,12 +148,15 @@ test('Config file presets can contribute to the config', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      presets: [
-        {
-          darkMode: ['variant', '&:where(:not(.light))'],
-        },
-      ],
+    loadModule: async () => ({
+      module: {
+        presets: [
+          {
+            darkMode: ['variant', '&:where(:not(.light))'],
+          },
+        ],
+      },
+      base: '/root',
     }),
   })
 
@@ -165,24 +177,27 @@ test('Config files can affect the theme', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          colors: {
-            primary: '#c0ffee',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#c0ffee',
+            },
           },
         },
-      },
 
-      plugins: [
-        plugin(function ({ addUtilities, theme }) {
-          addUtilities({
-            '.scrollbar-primary': {
-              scrollbarColor: theme('colors.primary'),
-            },
-          })
-        }),
-      ],
+        plugins: [
+          plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '.scrollbar-primary': {
+                scrollbarColor: theme('colors.primary'),
+              },
+            })
+          }),
+        ],
+      },
+      base: '/root',
     }),
   })
 
@@ -206,13 +221,16 @@ test('Variants in CSS overwrite variants from plugins', async () => {
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      darkMode: ['variant', '&:is(.dark)'],
-      plugins: [
-        plugin(function ({ addVariant }) {
-          addVariant('light', '&:is(.light)')
-        }),
-      ],
+    loadModule: async () => ({
+      module: {
+        darkMode: ['variant', '&:is(.dark)'],
+        plugins: [
+          plugin(function ({ addVariant }) {
+            addVariant('light', '&:is(.light)')
+          }),
+        ],
+      },
+      base: '/root',
     }),
   })
 
@@ -253,49 +271,52 @@ describe('theme callbacks', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            fontSize: {
-              base: ['200rem', { lineHeight: '201rem' }],
-              md: ['200rem', { lineHeight: '201rem' }],
-              xl: ['200rem', { lineHeight: '201rem' }],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            extend: {
+              fontSize: {
+                base: ['200rem', { lineHeight: '201rem' }],
+                md: ['200rem', { lineHeight: '201rem' }],
+                xl: ['200rem', { lineHeight: '201rem' }],
+              },
+
+              // Direct access
+              lineHeight: ({ theme }) => ({
+                base: theme('fontSize.base[1].lineHeight'),
+                md: theme('fontSize.md[1].lineHeight'),
+                xl: theme('fontSize.xl[1].lineHeight'),
+              }),
+
+              // Tuple access
+              typography: ({ theme }) => ({
+                '[class~=lead-base]': {
+                  fontSize: theme('fontSize.base')[0],
+                  ...theme('fontSize.base')[1],
+                },
+                '[class~=lead-md]': {
+                  fontSize: theme('fontSize.md')[0],
+                  ...theme('fontSize.md')[1],
+                },
+                '[class~=lead-xl]': {
+                  fontSize: theme('fontSize.xl')[0],
+                  ...theme('fontSize.xl')[1],
+                },
+              }),
             },
-
-            // Direct access
-            lineHeight: ({ theme }) => ({
-              base: theme('fontSize.base[1].lineHeight'),
-              md: theme('fontSize.md[1].lineHeight'),
-              xl: theme('fontSize.xl[1].lineHeight'),
-            }),
-
-            // Tuple access
-            typography: ({ theme }) => ({
-              '[class~=lead-base]': {
-                fontSize: theme('fontSize.base')[0],
-                ...theme('fontSize.base')[1],
-              },
-              '[class~=lead-md]': {
-                fontSize: theme('fontSize.md')[0],
-                ...theme('fontSize.md')[1],
-              },
-              '[class~=lead-xl]': {
-                fontSize: theme('fontSize.xl')[0],
-                ...theme('fontSize.xl')[1],
-              },
-            }),
           },
-        },
 
-        plugins: [
-          plugin(function ({ addUtilities, theme }) {
-            addUtilities({
-              '.prose': {
-                ...theme('typography'),
-              },
-            })
-          }),
-        ],
+          plugins: [
+            plugin(function ({ addUtilities, theme }) {
+              addUtilities({
+                '.prose': {
+                  ...theme('typography'),
+                },
+              })
+            }),
+          ],
+        } satisfies Config,
+        base: '/root',
       }),
     })
 
@@ -361,15 +382,18 @@ describe('theme overrides order', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            colors: {
-              red: 'very-red',
-              blue: 'very-blue',
+      loadModule: async () => ({
+        module: {
+          theme: {
+            extend: {
+              colors: {
+                red: 'very-red',
+                blue: 'very-blue',
+              },
             },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -404,35 +428,43 @@ describe('theme overrides order', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            colors: {
-              slate: {
-                200: '#200200',
-                400: '#200400',
-                600: '#200600',
-              },
-            },
-          },
-        },
-      }),
-
-      loadPlugin: async () => {
-        return plugin(({ matchUtilities, theme }) => {
-          matchUtilities(
-            {
-              'hover-bg': (value) => {
-                return {
-                  '&:hover': {
-                    backgroundColor: value,
+      loadModule: async (id) => {
+        if (id.includes('config.js')) {
+          return {
+            module: {
+              theme: {
+                extend: {
+                  colors: {
+                    slate: {
+                      200: '#200200',
+                      400: '#200400',
+                      600: '#200600',
+                    },
                   },
-                }
+                },
               },
-            },
-            { values: flattenColorPalette(theme('colors')) },
-          )
-        })
+            } satisfies Config,
+            base: '/root',
+          }
+        } else {
+          return {
+            module: plugin(({ matchUtilities, theme }) => {
+              matchUtilities(
+                {
+                  'hover-bg': (value) => {
+                    return {
+                      '&:hover': {
+                        backgroundColor: value,
+                      },
+                    }
+                  },
+                },
+                { values: flattenColorPalette(theme('colors')) },
+              )
+            }),
+            base: '/root',
+          }
+        }
       },
     })
 
@@ -524,12 +556,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: 'Potato Sans',
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: 'Potato Sans',
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -560,12 +595,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: ['Potato Sans', { fontFeatureSettings: '"cv06"' }],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: ['Potato Sans', { fontFeatureSettings: '"cv06"' }],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -597,12 +635,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: ['Potato Sans', { fontVariationSettings: '"XHGT" 0.7' }],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: ['Potato Sans', { fontVariationSettings: '"XHGT" 0.7' }],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -634,15 +675,18 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: [
-              'Potato Sans',
-              { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
-            ],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: [
+                'Potato Sans',
+                { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
+              ],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -678,12 +722,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: 'Potato Sans',
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: 'Potato Sans',
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -715,12 +762,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -751,12 +801,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            sans: { foo: 'bar', banana: 'sandwich' },
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: { foo: 'bar', banana: 'sandwich' },
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -782,12 +835,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: 'Potato Mono',
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: 'Potato Mono',
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -818,12 +874,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: ['Potato Mono', { fontFeatureSettings: '"cv06"' }],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: ['Potato Mono', { fontFeatureSettings: '"cv06"' }],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -855,12 +914,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: ['Potato Mono', { fontVariationSettings: '"XHGT" 0.7' }],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: ['Potato Mono', { fontVariationSettings: '"XHGT" 0.7' }],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -892,15 +954,18 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: [
-              'Potato Mono',
-              { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
-            ],
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: [
+                'Potato Mono',
+                { fontFeatureSettings: '"cv06"', fontVariationSettings: '"XHGT" 0.7' },
+              ],
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -936,12 +1001,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: 'Potato Mono',
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: 'Potato Mono',
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -973,12 +1041,15 @@ describe('default font family compatibility', () => {
     `
 
     let compiler = await compile(input, '/root', {
-      loadConfig: async () => ({
-        theme: {
-          fontFamily: {
-            mono: { foo: 'bar', banana: 'sandwich' },
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: { foo: 'bar', banana: 'sandwich' },
+            },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -1000,21 +1071,24 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
   `
 
   let compiler = await compile(input, '/root', {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          aria: {
-            polite: 'live="polite"',
-          },
-          supports: {
-            'child-combinator': 'selector(h2 > p)',
-            foo: 'bar',
-          },
-          data: {
-            checked: 'ui~="checked"',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            aria: {
+              polite: 'live="polite"',
+            },
+            supports: {
+              'child-combinator': 'selector(h2 > p)',
+              foo: 'bar',
+            },
+            data: {
+              checked: 'ui~="checked"',
+            },
           },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -1095,15 +1169,18 @@ test('merges css breakpoints with js config screens', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          screens: {
-            sm: '44rem',
+  let compiler = await compile(input, '/root', {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            screens: {
+              sm: '44rem',
+            },
           },
         },
       },
+      base: '/root',
     }),
   })
 

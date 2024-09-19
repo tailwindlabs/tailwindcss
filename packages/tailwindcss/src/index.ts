@@ -1,6 +1,16 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
-import { comment, context, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import {
+  comment,
+  context,
+  decl,
+  rule,
+  toCss,
+  walk,
+  WalkAction,
+  type AstNode,
+  type Rule,
+} from './ast'
 import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
@@ -48,7 +58,7 @@ async function parseCss(
   base: string,
   { loadModule = throwOnLoadModule, loadStylesheet = throwOnLoadStylesheet }: CompileOptions = {},
 ) {
-  let ast = [context({ base }, CSS.parse(css))]
+  let ast = [context({ base }, CSS.parse(css))] as AstNode[]
 
   if (css.includes('@import')) {
     await substituteAtImports(ast, base, loadStylesheet)
@@ -60,9 +70,9 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
-  let globs: { origin?: string; pattern: string }[] = []
+  let globs: { base: string; pattern: string }[] = []
 
-  walk(ast, (node, { parent, replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule') return
 
     // Collect custom `@utility` at-rules
@@ -97,7 +107,7 @@ async function parseCss(
         throw new Error('`@source` cannot have a body.')
       }
 
-      if (parent !== null) {
+      if (parent !== null && parent.kind !== 'context') {
         throw new Error('`@source` cannot be nested.')
       }
 
@@ -109,14 +119,14 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ pattern: path.slice(1, -1) })
+      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }
 
     // Register custom variants from `@variant` at-rules
     if (node.selector.startsWith('@variant ')) {
-      if (parent !== null) {
+      if (parent !== null && parent.kind !== 'context') {
         throw new Error('`@variant` cannot be nested.')
       }
 

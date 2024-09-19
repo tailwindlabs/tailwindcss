@@ -19,6 +19,7 @@ test('top level theme keys are replaced', () => {
           },
         },
       },
+      base: '/root',
     },
     {
       config: {
@@ -28,6 +29,7 @@ test('top level theme keys are replaced', () => {
           },
         },
       },
+      base: '/root',
     },
     {
       config: {
@@ -37,6 +39,7 @@ test('top level theme keys are replaced', () => {
           },
         },
       },
+      base: '/root',
     },
   ])
 
@@ -68,6 +71,7 @@ test('theme can be extended', () => {
           },
         },
       },
+      base: '/root',
     },
     {
       config: {
@@ -79,6 +83,7 @@ test('theme can be extended', () => {
           },
         },
       },
+      base: '/root',
     },
   ])
 
@@ -112,6 +117,7 @@ test('theme keys can reference other theme keys using the theme function regardl
           },
         },
       },
+      base: '/root',
     },
     {
       config: {
@@ -124,6 +130,7 @@ test('theme keys can reference other theme keys using the theme function regardl
           },
         },
       },
+      base: '/root',
     },
     {
       config: {
@@ -135,6 +142,7 @@ test('theme keys can reference other theme keys using the theme function regardl
           },
         },
       },
+      base: '/root',
     },
   ])
 
@@ -192,6 +200,7 @@ test('theme keys can read from the CSS theme', () => {
           }),
         },
       },
+      base: '/root',
     },
   ])
 

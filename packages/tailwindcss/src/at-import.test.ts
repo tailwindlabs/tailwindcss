@@ -1,5 +1,6 @@
 import { expect, test, vi } from 'vitest'
-import { compile } from './index'
+import { compile, type Config } from './index'
+import plugin from './plugin'
 import { optimizeCss } from './test-utils/run'
 
 let css = String.raw
@@ -259,4 +260,84 @@ test('updates the base when loading modules inside nested files', async () => {
   expect(loadModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root')
   expect(loadModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo')
   expect(loadModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root')
+})
+
+test('emits the right base for @source directives inside nested files', async () => {
+  let loadStylesheet = () =>
+    Promise.resolve({
+      content: css`
+        @source './nested/**/*.css';
+      `,
+      base: '/root/foo',
+    })
+
+  let compiler = await compile(
+    css`
+      @import './foo/bar.css';
+      @source './root/**/*.css';
+    `,
+    '/root',
+    { loadStylesheet },
+  )
+
+  expect(compiler.globs).toEqual([
+    //
+    { pattern: './nested/**/*.css', base: '/root/foo' },
+    { pattern: './root/**/*.css', base: '/root' },
+  ])
+})
+
+test('emits the right base for @source found inside JS configs and plugins from nested imports', async () => {
+  let loadStylesheet = () =>
+    Promise.resolve({
+      content: css`
+        @config './nested-config.js';
+        @plugin './nested-plugin.js';
+      `,
+      base: '/root/foo',
+    })
+  let loadModule = vi.fn().mockImplementation((id: string) => {
+    let base = id.includes('nested') ? '/root/foo' : '/root'
+    if (id.includes('config')) {
+      let glob = id.includes('nested') ? './nested-config/*.html' : './root-config/*.html'
+      let pluginGlob = id.includes('nested')
+        ? './nested-config-plugin/*.html'
+        : './root-config-plugin/*.html'
+      return {
+        module: {
+          content: [glob],
+          plugins: [plugin(() => {}, { content: [pluginGlob] })],
+        } satisfies Config,
+        base: base + '-config',
+      }
+    } else {
+      let glob = id.includes('nested') ? './nested-plugin/*.html' : './root-plugin/*.html'
+      return {
+        module: plugin(() => {}, { content: [glob] }),
+        base: base + '-plugin',
+      }
+    }
+  })
+
+  let compiler = await compile(
+    css`
+      @import './foo/bar.css';
+      @config './root-config.js';
+      @plugin './root-plugin.js';
+    `,
+    '/root',
+    { loadStylesheet, loadModule },
+  )
+
+  expect(compiler.globs).toEqual([
+    //
+    { pattern: './nested-plugin/*.html', base: '/root/foo-plugin' },
+    { pattern: './root-plugin/*.html', base: '/root-plugin' },
+
+    { pattern: './nested-config-plugin/*.html', base: '/root/foo-config' },
+    { pattern: './nested-config/*.html', base: '/root/foo-config' },
+
+    { pattern: './root-config-plugin/*.html', base: '/root-config' },
+    { pattern: './root-config/*.html', base: '/root-config' },
+  ])
 })
