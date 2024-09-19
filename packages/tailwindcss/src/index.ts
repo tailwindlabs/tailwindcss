@@ -14,6 +14,7 @@ import {
 import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
+import { type Plugin } from './compat/plugin-api'
 import { compileCandidates } from './compile'
 import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
 import * as CSS from './css-parser'
@@ -25,7 +26,7 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  loadModule?: (id: string, base: string) => Promise<{ module: unknown; base: string }>
+  loadModule?: (id: string, base: string) => Promise<{ module: Plugin | Config; base: string }>
   loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
 }
 

@@ -1430,17 +1430,20 @@ describe('Parsing themes values from CSS', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return plugin(({}) => {}, {
-            theme: {
-              extend: {
-                colors: {
-                  red: 'tomato',
-                  orange: '#f28500',
+        loadModule: async () => {
+          return {
+            module: plugin(({}) => {}, {
+              theme: {
+                extend: {
+                  colors: {
+                    red: 'tomato',
+                    orange: '#f28500',
+                  },
                 },
               },
-            },
-          })
+            }),
+            base: '/root',
+          }
         },
       },
     )
@@ -1474,16 +1477,19 @@ describe('Parsing themes values from CSS', () => {
       `,
       '/root',
       {
-        loadConfig: async () => {
+        loadModule: async () => {
           return {
-            theme: {
-              extend: {
-                colors: {
-                  red: 'tomato',
-                  orange: '#f28500',
+            module: {
+              theme: {
+                extend: {
+                  colors: {
+                    red: 'tomato',
+                    orange: '#f28500',
+                  },
                 },
               },
             },
+            base: '/root',
           }
         },
       },
@@ -1514,11 +1520,12 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => {
-            return ({ addVariant }: PluginAPI) => {
+          loadModule: async () => ({
+            module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
-            }
-          },
+            },
+            base: '/root',
+          }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
@@ -1531,11 +1538,12 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => {
-            return ({ addVariant }: PluginAPI) => {
+          loadModule: async () => ({
+            module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
-            }
-          },
+            },
+            base: '/root',
+          }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
@@ -1550,11 +1558,12 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => {
-            return ({ addVariant }: PluginAPI) => {
+          loadModule: async () => ({
+            module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
-            }
-          },
+            },
+            base: '/root',
+          }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`))
@@ -1571,8 +1580,8 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return plugin.withOptions((options) => {
+        loadModule: async () => ({
+          module: plugin.withOptions((options) => {
             expect(options).toEqual({
               color: 'red',
             })
@@ -1584,8 +1593,9 @@ describe('plugins', () => {
                 },
               })
             }
-          })
-        },
+          }),
+          base: '/root',
+        }),
       },
     )
 
@@ -1623,8 +1633,8 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return plugin.withOptions((options) => {
+        loadModule: async () => ({
+          module: plugin.withOptions((options) => {
             expect(options).toEqual({
               'is-null': null,
               'is-true': true,
@@ -1643,8 +1653,9 @@ describe('plugins', () => {
             })
 
             return () => {}
-          })
-        },
+          }),
+          base: '/root',
+        }),
       },
     )
   })
@@ -1663,8 +1674,8 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => {
-            return plugin.withOptions((options) => {
+          loadModule: async () => ({
+            module: plugin.withOptions((options) => {
               return ({ addUtilities }) => {
                 addUtilities({
                   '.text-primary': {
@@ -1672,8 +1683,9 @@ describe('plugins', () => {
                   },
                 })
               }
-            })
-          },
+            }),
+            base: '/root',
+          }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -1701,15 +1713,16 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => {
-            return plugin(({ addUtilities }) => {
+          loadModule: async () => ({
+            module: plugin(({ addUtilities }) => {
               addUtilities({
                 '.text-primary': {
                   color: 'red',
                 },
               })
-            })
-          },
+            }),
+            base: '/root',
+          }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -1727,7 +1740,7 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => plugin(() => {}),
+          loadModule: async () => ({ module: plugin(() => {}), base: '/root' }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -1749,7 +1762,7 @@ describe('plugins', () => {
         `,
         '/root',
         {
-          loadPlugin: async () => plugin(() => {}),
+          loadModule: async () => ({ module: plugin(() => {}), base: '/root' }),
         },
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -1775,11 +1788,12 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', '&:hover, &:focus')
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
@@ -1807,11 +1821,12 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', ['&:hover', '&:focus'])
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
 
@@ -1840,14 +1855,15 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '&:hover': '@slot',
               '&:focus': '@slot',
             })
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
@@ -1875,16 +1891,17 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '@media (hover: hover)': {
                 '&:hover': '@slot',
               },
               '&:focus': '@slot',
             })
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
@@ -1924,8 +1941,8 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
               '&': {
                 '--custom-property': '@slot',
@@ -1933,8 +1950,9 @@ describe('plugins', () => {
                 '&:focus': '@slot',
               },
             })
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
     let compiled = build(['hocus:underline'])
@@ -1962,11 +1980,12 @@ describe('plugins', () => {
       `,
       '/root',
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
+        loadModule: async () => ({
+          module: ({ addVariant }: PluginAPI) => {
             addVariant('dark', '&:is([data-theme=dark] *)')
-          }
-        },
+          },
+          base: '/root',
+        }),
       },
     )
     let compiled = build(
@@ -2004,7 +2023,7 @@ describe('@source', () => {
       '/root',
     )
 
-    expect(globs).toEqual([{ pattern: './foo/bar/*.ts' }])
+    expect(globs).toEqual([{ pattern: './foo/bar/*.ts', base: '/root' }])
   })
 
   test('emits multiple @source files', async () => {
@@ -2016,7 +2035,10 @@ describe('@source', () => {
       '/root',
     )
 
-    expect(globs).toEqual([{ pattern: './foo/**/*.ts' }, { pattern: './php/secr3t/smarty.php' }])
+    expect(globs).toEqual([
+      { pattern: './foo/**/*.ts', base: '/root' },
+      { pattern: './php/secr3t/smarty.php', base: '/root' },
+    ])
   })
 })
 
@@ -2576,15 +2598,16 @@ test('addBase', async () => {
     `,
     '/root',
     {
-      loadPlugin: async () => {
-        return ({ addBase }: PluginAPI) => {
+      loadModule: async () => ({
+        module: ({ addBase }: PluginAPI) => {
           addBase({
             body: {
               'font-feature-settings': '"tnum"',
             },
           })
-        }
-      },
+        },
+        base: '/root',
+      }),
     },
   )
 
