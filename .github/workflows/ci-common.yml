@@ -70,6 +70,8 @@ jobs:
             packages/**/dist/
 
   lint:
+    # Only lint on linux to avoid \r\n line ending errors
+    if: inputs.runner == 'ubuntu-latest'
     needs: build
     runs-on: ${{ inputs.runner }}
     steps:
@@ -92,8 +94,6 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
-        # Only lint on linux to avoid \r\n line ending errors
-        if: inputs.runner == 'ubuntu-latest'
 
   test:
     needs: build
