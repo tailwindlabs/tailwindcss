@@ -50,8 +50,10 @@ test('parse', () => {
       }
     }
     @layer thing {
-      .a .b .d {
-        color: green;
+      @supports (color: green) {
+        .a .b .d {
+          color: green;
+        }
       }
     }
     .a .e {
@@ -126,10 +128,10 @@ test('parse', () => {
     }
   `)
   expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
-    ":is(.a, .b) {
+    ".a, .b {
       color: red;
     }
-    :is(:is(:is(:is(.a, .b) .c, :is(.a, .b) .d) .e, :is(:is(.a, .b) .c, :is(.a, .b) .d) .f) .g, :is(:is(:is(.a, .b) .c, :is(.a, .b) .d) .e, :is(:is(.a, .b) .c, :is(.a, .b) .d) .f) .h) {
+    :is(:is(:is(.a, .b) .c, :is(.a, .b) .d) .e, :is(:is(.a, .b) .c, :is(.a, .b) .d) .f) .g, :is(:is(:is(.a, .b) .c, :is(.a, .b) .d) .e, :is(:is(.a, .b) .c, :is(.a, .b) .d) .f) .h {
       color: green;
     }
     "
@@ -160,10 +162,10 @@ test('flat variant', () => {
   `)
 
   expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
-    "&:hover:focus:hover:focus:active {
+    "&:hover:focus:active {
       @slot;
     }
-    &:hover:focus:hover:focus[data-whatever] {
+    &:hover:focus[data-whatever] {
       @slot;
     }
     &:hover[data-foo] {
