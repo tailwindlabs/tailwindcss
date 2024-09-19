@@ -122,6 +122,27 @@ jobs:
   integration-tests:
     needs: build
     runs-on: ${{ inputs.runner }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        integration:
+          - cli/index
+          - cli/config
+          - cli/plugins
+          - cli/upgrade
+
+          - postcss/index
+          - postcss/config
+          - postcss/core-as-postcss-plugin
+          - postcss/next
+          - vite/index
+          - vite/config
+          - vite/astro
+          - vite/vue
+          - vite/nuxt
+          - vite/css-modules
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -145,7 +166,7 @@ jobs:
         run: pnpm install
 
       - name: Integration Tests
-        run: pnpm run test:integrations
+        run: pnpm run test:integrations ${{ matrix.integration }}
 
   playwright:
     needs: build
