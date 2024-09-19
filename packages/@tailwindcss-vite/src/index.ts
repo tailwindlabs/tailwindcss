@@ -2,9 +2,8 @@ import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 
 import { Scanner } from '@tailwindcss/oxide'
-import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
+import { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import fs from 'node:fs/promises'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
@@ -267,18 +266,6 @@ function isPotentialCssRootFile(id: string) {
   return isCssFile
 }
 
-function isCssRootFile(content: string) {
-  return (
-    content.includes('@tailwind') ||
-    content.includes('@config') ||
-    content.includes('@plugin') ||
-    content.includes('@apply') ||
-    content.includes('@theme') ||
-    content.includes('@variant') ||
-    content.includes('@utility')
-  )
-}
-
 function optimizeCss(
   input: string,
   { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
@@ -359,7 +346,6 @@ export class Root {
     private id: string,
     private getSharedCandidates: () => Set<string>,
     private base: string,
-    private atImportResolver: 'postcss' | 'tailwindcss' = 'postcss',
   ) {}
 
   // Generate the CSS for the root file. This can return false if the file is
@@ -377,39 +363,7 @@ export class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
-      let css = content
-      if (this.atImportResolver === 'postcss') {
-        const [{ default: postcss }, { default: postcssImport }] = await Promise.all([
-          import('postcss'),
-          import('postcss-import'),
-        ])
-
-        let postcssCompiled = await postcss([
-          postcssImport({
-            load: (path) => {
-              this.dependencies.add(path)
-              addWatchFile(path)
-              return fs.readFile(path, 'utf8')
-            },
-          }),
-          fixRelativePathsPlugin(),
-        ]).process(content, {
-          from: inputPath,
-          to: inputPath,
-        })
-
-        css = postcssCompiled.css
-      }
-
-      // This is done inside the Root#generate() method so that we can later use
-      // information from the Tailwind compiler to determine if the file is a
-      // CSS root (necessary because we will probably inline the `@import`
-      // resolution at some point).
-      // if (!isCssRootFile(css)) {
-      //   return false
-      // }
-
-      this.compiler = await compile(css, {
+      this.compiler = await compile(content, {
         base: inputBase,
         onDependency: (path) => {
           addWatchFile(path)
