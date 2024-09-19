@@ -10471,10 +10471,21 @@ test('box-decoration', async () => {
 })
 
 test('bg-clip', async () => {
-  expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
-    .toMatchInlineSnapshot(`
+  expect(
+    await run([
+      'bg-clip-border',
+      'bg-clip-padding',
+      'bg-clip-content',
+      'bg-clip-text',
+      'bg-clip-border-area',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".bg-clip-border {
       background-clip: border-box;
+    }
+
+    .bg-clip-border-area {
+      background-clip: border-area;
     }
 
     .bg-clip-content {
@@ -10496,10 +10507,12 @@ test('bg-clip', async () => {
       '-bg-clip-padding',
       '-bg-clip-content',
       '-bg-clip-text',
+      '-bg-clip-border-area',
       'bg-clip-border/foo',
       'bg-clip-padding/foo',
       'bg-clip-content/foo',
       'bg-clip-text/foo',
+      'bg-clip-border-area/foo',
     ]),
   ).toEqual('')
 })

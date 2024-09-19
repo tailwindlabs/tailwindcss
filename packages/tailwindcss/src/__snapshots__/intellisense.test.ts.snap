@@ -536,6 +536,7 @@ exports[`getClassList 1`] = `
   "bg-bottom",
   "bg-center",
   "bg-clip-border",
+  "bg-clip-border-area",
   "bg-clip-content",
   "bg-clip-padding",
   "bg-clip-text",

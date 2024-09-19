@@ -2750,6 +2750,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-clip-border', [['background-clip', 'border-box']])
   staticUtility('bg-clip-padding', [['background-clip', 'padding-box']])
   staticUtility('bg-clip-content', [['background-clip', 'content-box']])
+  staticUtility('bg-clip-border-area', [['background-clip', 'border-area']])
 
   staticUtility('bg-origin-border', [['background-origin', 'border-box']])
   staticUtility('bg-origin-padding', [['background-origin', 'padding-box']])
