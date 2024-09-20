@@ -1,4 +1,3 @@
-import dedent from 'dedent'
 import { css, json, test } from '../utils'
 
 test(
@@ -117,7 +116,7 @@ test(
 
     await fs.expectFileToContain(
       'src/index.css',
-      dedent`
+      css`
         @utility btn {
           @apply rounded-md px-2 py-1 bg-blue-500 text-white;
         }
@@ -126,9 +125,8 @@ test(
           &::-webkit-scrollbar {
             display: none;
           }
-
           -ms-overflow-style: none;
-          scrollbar-width: none
+          scrollbar-width: none;
         }
       `,
     )
