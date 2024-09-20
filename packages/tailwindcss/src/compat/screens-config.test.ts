@@ -457,7 +457,7 @@ describe('complex screen configs', () => {
               md: [
                 //
                 { min: '668px', max: '767px' },
-                { min: '868px' },
+                '868px',
               ],
               lg: { min: '868px' },
               xl: { min: '1024px', max: '1279px' },
@@ -468,15 +468,14 @@ describe('complex screen configs', () => {
       }),
     })
 
-    expect(
-      compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-tall:flex']),
-    ).toBe('')
+    expect(compiler.build(['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'])).toBe('')
 
     expect(
       compiler.build([
         'sm:flex',
         'md:flex',
         'lg:flex',
+        'min-lg:flex',
         'xl:flex',
         'tall:flex',
 
@@ -485,22 +484,27 @@ describe('complex screen configs', () => {
       ]),
     ).toMatchInlineSnapshot(`
       ".lg\\:flex {
-        @media (min-width: 868px) {
+        @media (width >= 868px) {
+          display: flex;
+        }
+      }
+      .min-lg\\:flex {
+        @media (width >= 868px) {
           display: flex;
         }
       }
       .sm\\:flex {
-        @media (max-width: 639px) {
+        @media (639px >= width) {
           display: flex;
         }
       }
       .md\\:flex {
-        @media (min-width: 668px and max-width: 767px), (min-width: 868px) {
+        @media (767px >= width >= 668px), (width >= 868px) {
           display: flex;
         }
       }
       .xl\\:flex {
-        @media (min-width: 1024px and max-width: 1279px) {
+        @media (1279px >= width >= 1024px) {
           display: flex;
         }
       }
