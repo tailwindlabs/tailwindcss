@@ -9,47 +9,35 @@ export async function substituteAtImports(
   base: string,
   loadStylesheet: LoadStylesheet,
 ) {
-  let promises: Map<string, Promise<{ ast: AstNode[]; base: string }>> = new Map()
+  let promises: Promise<void>[] = []
 
-  // Step 1: Find @import rules and start loading them in parallel
-  walk(ast, (node) => {
-    if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
-      let { uri } = parseImportParams(ValueParser.parse(node.selector.slice(8)))
-
-      // Skip importing data URIs
-      if (uri.startsWith('data:')) return
-
-      let key = createKey(uri, base)
-      if (promises.has(key)) return
-      promises.set(key, atImport(uri, base, loadStylesheet))
-    }
-  })
-
-  if (promises.size === 0) return
-
-  let resolved = new Map(
-    await Promise.all(
-      Array.from(promises.entries()).map(async ([id, promise]) => [id, await promise] as const),
-    ),
-  )
-
-  // Step 2: Replace all @import rules with their resolved stylesheets
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@import ')) {
       let { uri, layer, media, supports } = parseImportParams(
         ValueParser.parse(node.selector.slice(8)),
       )
-      let key = createKey(uri, base)
-      let imported = resolved.get(key)
-      if (imported) {
-        replaceWith(buildImportNodes(imported.ast, imported.base, layer, media, supports))
 
-        // The resolved Stylesheets already have their transitive @imports
-        // resolved, so we can skip walking them.
-        return WalkAction.Skip
-      }
+      // Skip importing data URIs
+      if (uri.startsWith('data:')) return
+
+      let contextNode = context({}, [])
+
+      promises.push(
+        (async () => {
+          let imported = await atImport(uri, base, loadStylesheet)
+          contextNode.nodes = buildImportNodes(imported.ast, imported.base, layer, media, supports)
+          contextNode.context.base = imported.base
+        })(),
+      )
+
+      replaceWith(contextNode)
+      // The resolved Stylesheets already have their transitive @imports
+      // resolved, so we can skip walking them.
+      return WalkAction.Skip
     }
   })
+
+  await Promise.all(promises)
 }
 
 async function atImport(
@@ -61,10 +49,6 @@ async function atImport(
   let ast = CSS.parse(content)
   await substituteAtImports(ast, base, loadStylesheet)
   return { ast, base }
-}
-
-function createKey(id: string, basedir: string): string {
-  return `${id}:${basedir}`
 }
 
 // c.f. https://github.com/postcss/postcss-import/blob/master/lib/parse-statements.js
