@@ -132,5 +132,5 @@ function buildImportNodes(
     root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
   }
 
-  return [context({ base }, root)]
+  return root
 }
