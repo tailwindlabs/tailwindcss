@@ -1,0 +1,59 @@
+name: 'Build'
+description: 'Runs the main build step'
+inputs:
+  node-version:
+    description: 'Version of node to use'
+    required: true
+  os:
+    description: 'Host OS'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'pnpm'
+
+    # Cargo already skips downloading dependencies if they already exist
+    - name: Cache cargo
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ inputs.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Cache turbo build
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: ${{ inputs.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ inputs.os }}-turbo-
+
+    # Cache the `oxide` Rust build
+    - name: Cache oxide build
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./target/
+          ./crates/node/*.node
+          ./crates/node/index.js
+          ./crates/node/index.d.ts
+        key: ${{ inputs.os }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
+
+    - name: Build
+      shell: bash
+      run: pnpm run build

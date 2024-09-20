@@ -9,6 +9,28 @@ permissions:
   contents: read
 
 jobs:
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20]
+        # Only lint on linux to avoid \r\n line ending errors
+        runner: [ubuntu-latest]
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          os: ${{ runner.os }}
+          node-version: ${{ matrix.node-version }}
+
+      - name: Lint
+        run: pnpm run lint
+        if: matrix.runner == 'ubuntu-latest'
+
   tests:
     strategy:
       fail-fast: false
@@ -21,53 +43,56 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./target/
-            ./crates/node/*.node
-            ./crates/node/index.js
-            ./crates/node/index.d.ts
-          key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Build
-        run: pnpm run build
-
-      - name: Lint
-        run: pnpm run lint
-        # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner == 'ubuntu-latest'
+        uses: ./.github/actions/build
+        with:
+          os: ${{ runner.os }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Test
         run: pnpm run test
 
+  integration-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20]
+        runner: [ubuntu-latest, windows-latest, macos-14]
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          os: ${{ runner.os }}
+          node-version: ${{ matrix.node-version }}
+
       - name: Integration Tests
         run: pnpm run test:integrations
+
+  e2e-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20]
+        runner: [ubuntu-latest, windows-latest, macos-14]
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          os: ${{ runner.os }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
