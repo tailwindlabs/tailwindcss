@@ -169,7 +169,6 @@ describe('plugins', () => {
 
     let result = await processor.process(
       css`
-        @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
         @import '../example-project/src/relative-import.css';
       `,
@@ -177,39 +176,18 @@ describe('plugins', () => {
     )
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
-      ".text-2xl {
-        font-size: var(--font-size-2xl, 1.5rem);
-        line-height: var(--tw-leading, var(--font-size-2xl--line-height, 2rem));
-      }
-
-      .text-black\\/50 {
-        color: color-mix(in srgb, var(--color-black, #000) 50%, transparent);
-      }
-
-      .underline {
+      ".underline {
         text-decoration-line: underline;
       }
 
-      @media (width >= 96rem) {
-        .\\32 xl\\:font-bold {
-          --tw-font-weight: 700;
-          font-weight: 700;
+      @media (inverted-colors: inverted) {
+        .inverted\\:flex {
+          display: flex;
         }
       }
 
-      @apply text-red-500;
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-font-weight: initial;
-          }
-        }
-      }
-
-      @property --tw-font-weight {
-        syntax: "*";
-        inherits: false
+      .hocus\\:underline:focus, .hocus\\:underline:hover {
+        text-decoration-line: underline;
       }"
     `)
   })
