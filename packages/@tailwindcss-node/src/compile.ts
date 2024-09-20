@@ -91,7 +91,7 @@ const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
   mainFields: ['style'],
   conditionNames: ['style'],
 })
-function resolveCssId(id: string, base: string): Promise<string | false | undefined> {
+async function resolveCssId(id: string, base: string): Promise<string | false | undefined> {
   if (typeof globalThis.__tw_resolve === 'function') {
     let resolved = globalThis.__tw_resolve(id, base)
     if (resolved) {
@@ -99,9 +99,13 @@ function resolveCssId(id: string, base: string): Promise<string | false | undefi
     }
   }
 
-  let dotResolved = runResolver(cssResolver, `./${id}`, base)
-  if (!dotResolved) return runResolver(cssResolver, id, base)
-  return dotResolved
+  try {
+    let dotResolved = await runResolver(cssResolver, `./${id}`, base)
+    if (!dotResolved) throw new Error()
+    return dotResolved
+  } catch {
+    return runResolver(cssResolver, id, base)
+  }
 }
 
 const jsResolver = EnhancedResolve.ResolverFactory.createResolver({

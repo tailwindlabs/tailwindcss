@@ -93,7 +93,8 @@ let exampleCSS = css`
     color: red;
   }
 `
-let resolver = async () => {
+let resolver = async (id: string) => {
+  if (!id.endsWith('example.css')) throw new Error('Unexpected import: ' + id)
   return {
     content: exampleCSS,
     base: '/root',
@@ -101,7 +102,52 @@ let resolver = async () => {
 }
 
 // Examples from https://developer.mozilla.org/en-US/docs/Web/CSS/@import
-test.each([
+test.only.each([
+  // url extraction
+  [
+    css`
+      @import url('example.css');
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import url('./example.css');
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import url(example.css);
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import url(./example.css);
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+
+  // handles case-insensitive `@import` directive
+  [
+    // prettier-ignore
+    css`
+      @ImPoRt url('example.css');
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+
   // @media
   [
     css`
@@ -202,6 +248,25 @@ test.each([
       @layer {
         ${exampleCSS}
       }
+    `),
+  ],
+
+  // unknown syntax is ignored
+  [
+    css`
+      @import url(example.css) does-not-exist(foo);
+    `,
+    optimizeCss(css`
+      @import url(example.css) does-not-exist(foo);
+    `),
+  ],
+  // prettier-ignore
+  [
+    css`
+      @import url('example.css' url-mod);
+    `,
+    optimizeCss(css`
+      @import url('example.css' url-mod);
     `),
   ],
 ])('resolves %s', async (input, output) => {
