@@ -28,29 +28,39 @@ test('touch action', async ({ page }) => {
 })
 
 for (let [classes, expected] of [
-  ['from-red-500', 'linear-gradient(to right, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
   [
-    'via-red-500',
+    'bg-linear-to-r from-red-500',
+    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-linear-to-r via-red-500',
     'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 50%, rgba(0, 0, 0, 0) 100%)',
   ],
-  ['to-red-500', 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 100%)'],
   [
-    'from-red-500 to-blue-500',
+    'bg-linear-to-r to-red-500',
+    'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 100%)',
+  ],
+  [
+    'bg-linear-to-r from-red-500 to-blue-500',
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
   ],
   [
-    'via-red-500 to-blue-500',
+    'bg-linear-to-r via-red-500 to-blue-500',
     'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 50%, rgb(59, 130, 246) 100%)',
   ],
   [
-    'from-red-500 via-green-500 to-blue-500',
+    'bg-linear-to-r from-red-500 via-green-500 to-blue-500',
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
+  ],
+  [
+    'bg-linear-[to_right,var(--color-red-500),var(--color-green-500),var(--color-blue-500)]',
+    'linear-gradient(to right, rgb(239, 68, 68), rgb(34, 197, 94), rgb(59, 130, 246))',
   ],
 ]) {
   test(`background gradient, "${classes}"`, async ({ page }) => {
     let { getPropertyValue } = await render(
       page,
-      html`<div id="x" class="bg-gradient-to-r ${classes}">Hello world</div>`,
+      html`<div id="x" class="${classes}">Hello world</div>`,
     )
 
     expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
@@ -98,6 +108,52 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
   )
 })
+
+for (let [classes, expected] of [
+  ['bg-conic from-red-500', 'conic-gradient(rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
+  [
+    'bg-conic-45 from-red-500',
+    'conic-gradient(from 45deg, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-conic-[from_45deg] from-red-500',
+    'conic-gradient(from 45deg, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-conic-[from_45deg,var(--color-red-500),transparent]',
+    'conic-gradient(from 45deg, rgb(239, 68, 68), rgba(0, 0, 0, 0))',
+  ],
+]) {
+  test(`conic gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+  })
+}
+
+for (let [classes, expected] of [
+  ['bg-radial from-red-500', 'radial-gradient(rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
+  [
+    'bg-radial-[at_0%_0%] from-red-500',
+    'radial-gradient(at 0% 0%, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-radial-[at_0%_0%,var(--color-red-500),transparent]',
+    'radial-gradient(at 0% 0%, rgb(239, 68, 68), rgba(0, 0, 0, 0))',
+  ],
+]) {
+  test(`radial gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+  })
+}
 
 test("::backdrop can receive a border with just the 'border' utility", async ({ page }) => {
   let { getPropertyValue } = await render(
@@ -164,13 +220,17 @@ test('shadow colors', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="shadow shadow-red-500"></div>
-      <div id="y" class="shadow-xl shadow-red-500"></div>
-      <div id="z" class="shadow-[0px_2px_4px] shadow-red-500"></div>
+      <div id="a" class="shadow shadow-red-500"></div>
+      <div id="b" class="shadow-xl shadow-red-500"></div>
+      <div id="c" class="shadow-[0px_2px_4px] shadow-red-500"></div>
+      <div id="d" class="shadow shadow-red-500 hover:shadow-xl">Hello world</div>
+      <div id="e" class="shadow shadow-red-500 hover:shadow-xl hover:shadow-initial">
+        Hello world
+      </div>
     `,
   )
 
-  expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
+  expect(await getPropertyValue('#a', 'box-shadow')).toEqual(
     [
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
@@ -179,7 +239,7 @@ test('shadow colors', async ({ page }) => {
       'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
     ].join(', '),
   )
-  expect(await getPropertyValue('#y', 'box-shadow')).toEqual(
+  expect(await getPropertyValue('#b', 'box-shadow')).toEqual(
     [
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
@@ -188,13 +248,147 @@ test('shadow colors', async ({ page }) => {
       'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
     ].join(', '),
   )
-  expect(await getPropertyValue('#z', 'box-shadow')).toEqual(
+  expect(await getPropertyValue('#c', 'box-shadow')).toEqual(
     [
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgb(239, 68, 68) 0px 2px 4px 0px',
+    ].join(', '),
+  )
+
+  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
+    ].join(', '),
+  )
+
+  await page.locator('#d').hover()
+
+  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
+    ].join(', '),
+  )
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
+    ].join(', '),
+  )
+
+  await page.locator('#e').hover()
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px',
+    ].join(', '),
+  )
+})
+
+test('inset shadow colors', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="a" class="inset-shadow-sm inset-shadow-red-500"></div>
+      <div id="b" class="inset-shadow inset-shadow-red-500"></div>
+      <div id="c" class="inset-shadow-[0px_3px_6px] inset-shadow-red-500"></div>
+      <div id="d" class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow">Hello world</div>
+      <div
+        id="e"
+        class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow hover:inset-shadow-initial"
+      >
+        Hello world
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#a', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 1px 1px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+  expect(await getPropertyValue('#b', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 2px 4px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+  expect(await getPropertyValue('#c', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 3px 6px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 1px 1px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  await page.locator('#d').hover()
+
+  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 2px 4px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 1px 1px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  await page.locator('#e').hover()
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
     ].join(', '),
   )
 })

@@ -414,8 +414,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 }
 
 .shadow {
-  --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
@@ -429,9 +428,9 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   @layer base {
     *, :before, :after, ::backdrop {
       --tw-shadow: 0 0 #0000;
-      --tw-shadow-colored: 0 0 #0000;
+      --tw-shadow-color: initial;
       --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-colored: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
       --tw-ring-color: initial;
       --tw-ring-shadow: 0 0 #0000;
       --tw-inset-ring-color: initial;
@@ -481,10 +480,9 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   initial-value: 0 0 #0000;
 }
 
-@property --tw-shadow-colored {
+@property --tw-shadow-color {
   syntax: "*";
-  inherits: false;
-  initial-value: 0 0 #0000;
+  inherits: false
 }
 
 @property --tw-inset-shadow {
@@ -493,10 +491,9 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   initial-value: 0 0 #0000;
 }
 
-@property --tw-inset-shadow-colored {
+@property --tw-inset-shadow-color {
   syntax: "*";
-  inherits: false;
-  initial-value: 0 0 #0000;
+  inherits: false
 }
 
 @property --tw-ring-color {

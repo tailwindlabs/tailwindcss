@@ -1873,6 +1873,21 @@ test('display', async () => {
   ).toEqual('')
 })
 
+test('field-sizing', async () => {
+  expect(await run(['field-sizing-content', 'field-sizing-fixed'])).toMatchInlineSnapshot(`
+    ".field-sizing-content {
+      field-sizing: content;
+    }
+
+    .field-sizing-fixed {
+      field-sizing: fixed;
+    }"
+  `)
+  expect(
+    await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed']),
+  ).toEqual('')
+})
+
 test('aspect-ratio', async () => {
   expect(await run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
     ".aspect-4\\/3 {
@@ -9423,11 +9438,103 @@ test('bg', async () => {
     }
 
     .-bg-linear-\\[1\\.3rad\\] {
-      background-image: linear-gradient(calc(74.4845deg * -1), var(--tw-gradient-stops, ));
+      --tw-gradient-position: calc(74.4845deg * -1), ;
+      background-image: linear-gradient(var(--tw-gradient-stops, calc(74.4845deg * -1)));
     }
 
     .-bg-linear-\\[125deg\\] {
-      background-image: linear-gradient(calc(125deg * -1), var(--tw-gradient-stops, ));
+      --tw-gradient-position: calc(125deg * -1), ;
+      background-image: linear-gradient(var(--tw-gradient-stops, calc(125deg * -1)));
+    }
+
+    .bg-gradient-to-b {
+      --tw-gradient-position: to bottom, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
+    }
+
+    .bg-gradient-to-bl {
+      --tw-gradient-position: to bottom left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom left));
+    }
+
+    .bg-gradient-to-br {
+      --tw-gradient-position: to bottom right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom right));
+    }
+
+    .bg-gradient-to-l {
+      --tw-gradient-position: to left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to left));
+    }
+
+    .bg-gradient-to-r {
+      --tw-gradient-position: to right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to right));
+    }
+
+    .bg-gradient-to-t {
+      --tw-gradient-position: to top, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top));
+    }
+
+    .bg-gradient-to-tl {
+      --tw-gradient-position: to top left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top left));
+    }
+
+    .bg-gradient-to-tr {
+      --tw-gradient-position: to top right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top right));
+    }
+
+    .bg-linear-\\[1\\.3rad\\] {
+      --tw-gradient-position: 74.4845deg, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, 74.4845deg));
+    }
+
+    .bg-linear-\\[125deg\\] {
+      --tw-gradient-position: 125deg, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, 125deg));
+    }
+
+    .bg-linear-\\[to_bottom\\], .bg-linear-to-b {
+      --tw-gradient-position: to bottom, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
+    }
+
+    .bg-linear-to-bl {
+      --tw-gradient-position: to bottom left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom left));
+    }
+
+    .bg-linear-to-br {
+      --tw-gradient-position: to bottom right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to bottom right));
+    }
+
+    .bg-linear-to-l {
+      --tw-gradient-position: to left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to left));
+    }
+
+    .bg-linear-to-r {
+      --tw-gradient-position: to right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to right));
+    }
+
+    .bg-linear-to-t {
+      --tw-gradient-position: to top, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top));
+    }
+
+    .bg-linear-to-tl {
+      --tw-gradient-position: to top left, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top left));
+    }
+
+    .bg-linear-to-tr {
+      --tw-gradient-position: to top right, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, to top right));
     }
 
     .bg-\\[image\\:--my-gradient\\] {
@@ -9444,78 +9551,6 @@ test('bg', async () => {
 
     .bg-\\[url\\:--my-url\\] {
       background-image: var(--my-url);
-    }
-
-    .bg-gradient-to-b {
-      background-image: linear-gradient(to bottom, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-bl {
-      background-image: linear-gradient(to bottom left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-br {
-      background-image: linear-gradient(to bottom right, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-l {
-      background-image: linear-gradient(to left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-r {
-      background-image: linear-gradient(to right, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-t {
-      background-image: linear-gradient(to top, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-tl {
-      background-image: linear-gradient(to top left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-gradient-to-tr {
-      background-image: linear-gradient(to top right, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-\\[1\\.3rad\\] {
-      background-image: linear-gradient(74.4845deg, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-\\[125deg\\] {
-      background-image: linear-gradient(125deg, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-\\[to_bottom\\], .bg-linear-to-b {
-      background-image: linear-gradient(to bottom, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-bl {
-      background-image: linear-gradient(to bottom left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-br {
-      background-image: linear-gradient(to bottom right, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-l {
-      background-image: linear-gradient(to left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-r {
-      background-image: linear-gradient(to right, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-t {
-      background-image: linear-gradient(to top, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-tl {
-      background-image: linear-gradient(to top left, var(--tw-gradient-stops, ));
-    }
-
-    .bg-linear-to-tr {
-      background-image: linear-gradient(to top right, var(--tw-gradient-stops, ));
     }
 
     .bg-none {
@@ -9804,62 +9839,62 @@ test('from', async () => {
 
     .from-\\[\\#0088cc\\] {
       --tw-gradient-from: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-from: #0088cc80;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[--my-color\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[--my-color\\]\\/50, .from-\\[--my-color\\]\\/\\[0\\.5\\], .from-\\[--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:--my-color\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:--my-color\\]\\/50, .from-\\[color\\:--my-color\\]\\/\\[0\\.5\\], .from-\\[color\\:--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current {
       --tw-gradient-from: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-inherit {
       --tw-gradient-from: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500 {
       --tw-gradient-from: var(--color-red-500, #ef4444);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-transparent {
       --tw-gradient-from: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-0\\% {
@@ -9889,6 +9924,7 @@ test('from', async () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
@@ -9899,6 +9935,11 @@ test('from', async () => {
           --tw-gradient-to-position: 100%;
         }
       }
+    }
+
+    @property --tw-gradient-position {
+      syntax: "*";
+      inherits: false
     }
 
     @property --tw-gradient-from {
@@ -10031,73 +10072,73 @@ test('via', async () => {
 
     .via-\\[\\#0088cc\\] {
       --tw-gradient-via: #08c;
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-via: #0088cc80;
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[--my-color\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[--my-color\\]\\/50, .via-\\[--my-color\\]\\/\\[0\\.5\\], .via-\\[--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:--my-color\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:--my-color\\]\\/50, .via-\\[color\\:--my-color\\]\\/\\[0\\.5\\], .via-\\[color\\:--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current {
       --tw-gradient-via: currentColor;
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-inherit {
       --tw-gradient-via: inherit;
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500 {
       --tw-gradient-via: var(--color-red-500, #ef4444);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-transparent {
       --tw-gradient-via: transparent;
-      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
@@ -10128,6 +10169,7 @@ test('via', async () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
@@ -10138,6 +10180,11 @@ test('via', async () => {
           --tw-gradient-to-position: 100%;
         }
       }
+    }
+
+    @property --tw-gradient-position {
+      syntax: "*";
+      inherits: false
     }
 
     @property --tw-gradient-from {
@@ -10270,62 +10317,62 @@ test('to', async () => {
 
     .to-\\[\\#0088cc\\] {
       --tw-gradient-to: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-to: #0088cc80;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[--my-color\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[--my-color\\]\\/50, .to-\\[--my-color\\]\\/\\[0\\.5\\], .to-\\[--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:--my-color\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:--my-color\\]\\/50, .to-\\[color\\:--my-color\\]\\/\\[0\\.5\\], .to-\\[color\\:--my-color\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current {
       --tw-gradient-to: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-inherit {
       --tw-gradient-to: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500 {
       --tw-gradient-to: var(--color-red-500, #ef4444);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-transparent {
       --tw-gradient-to: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-0\\% {
@@ -10355,6 +10402,7 @@ test('to', async () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
@@ -10365,6 +10413,11 @@ test('to', async () => {
           --tw-gradient-to-position: 100%;
         }
       }
+    }
+
+    @property --tw-gradient-position {
+      syntax: "*";
+      inherits: false
     }
 
     @property --tw-gradient-from {
@@ -12845,12 +12898,73 @@ test('transition', async () => {
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-duration: .1s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
     }
 
     .transition-\\[--value\\] {
       transition-property: var(--value);
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-all {
+      transition-property: all;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-colors {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-opacity {
+      transition-property: opacity;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+      transition-property: var(--transition-property-opacity, opacity);
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-shadow {
+      transition-property: box-shadow;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-transform {
+      transition-property: transform, translate, scale, rotate;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-none {
+      transition-property: none;
+    }"
+  `)
+
+  expect(
+    await compileCss(
+      css`
+        @theme inline {
+          --default-transition-timing-function: ease;
+          --default-transition-duration: 100ms;
+        }
+        @tailwind utilities;
+      `,
+      ['transition', 'transition-all', 'transition-colors'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --default-transition-timing-function: ease;
+      --default-transition-duration: .1s;
+    }
+
+    .transition {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-duration: .1s;
       transition-timing-function: ease;
     }
@@ -12865,31 +12979,6 @@ test('transition', async () => {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
       transition-duration: .1s;
       transition-timing-function: ease;
-    }
-
-    .transition-opacity {
-      transition-property: opacity;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-      transition-property: var(--transition-property-opacity, opacity);
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-shadow {
-      transition-property: box-shadow;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-transform {
-      transition-property: transform, translate, scale, rotate;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-none {
-      transition-property: none;
     }"
   `)
 
@@ -14103,104 +14192,87 @@ test('shadow', async () => {
     }
 
     .shadow {
-      --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-      --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[--value\\] {
       --tw-shadow: var(--value);
-      --tw-shadow-colored: var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[10px_10px\\] {
-      --tw-shadow: 10px 10px;
-      --tw-shadow-colored: 10px 10px var(--tw-shadow-color);
+      --tw-shadow: 10px 10px var(--tw-shadow-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[12px_12px_\\#0088cc\\] {
-      --tw-shadow: 12px 12px #08c;
-      --tw-shadow-colored: 12px 12px var(--tw-shadow-color);
+      --tw-shadow: 12px 12px var(--tw-shadow-color, #08c);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[shadow\\:--value\\] {
       --tw-shadow: var(--value);
-      --tw-shadow-colored: var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-none {
       --tw-shadow: 0 0 #0000;
-      --tw-shadow-colored: 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-xl {
-      --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
-      --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+      --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, #0000001a), 0 8px 10px -6px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[\\#0088cc\\] {
       --tw-shadow-color: #08c;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-shadow-color: #0088cc80;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[color\\:--value\\] {
       --tw-shadow-color: var(--value);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-\\[color\\:--value\\]\\/50, .shadow-\\[color\\:--value\\]\\/\\[0\\.5\\], .shadow-\\[color\\:--value\\]\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, var(--value) 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-current {
       --tw-shadow-color: currentColor;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-inherit {
       --tw-shadow-color: inherit;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-red-500 {
       --tw-shadow-color: var(--color-red-500, #ef4444);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-transparent {
       --tw-shadow-color: transparent;
-      --tw-shadow: var(--tw-shadow-colored);
     }
 
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14219,10 +14291,9 @@ test('shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14231,10 +14302,9 @@ test('shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14355,104 +14425,87 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow {
-      --tw-inset-shadow: inset 0 2px 4px #0000000d;
-      --tw-inset-shadow-colored: inset 0 2px 4px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, #0000000d);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[--value\\] {
       --tw-inset-shadow: inset var(--value);
-      --tw-inset-shadow-colored: inset var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[10px_10px\\] {
-      --tw-inset-shadow: inset 10px 10px;
-      --tw-inset-shadow-colored: inset 10px 10px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[12px_12px_\\#0088cc\\] {
-      --tw-inset-shadow: inset 12px 12px #08c;
-      --tw-inset-shadow-colored: inset 12px 12px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #08c);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[shadow\\:--value\\] {
       --tw-inset-shadow: inset var(--value);
-      --tw-inset-shadow-colored: inset var(--value);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-none {
       --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-colored: 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-sm {
-      --tw-inset-shadow: inset 0 1px 1px #0000000d;
-      --tw-inset-shadow-colored: inset 0 1px 1px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, #0000000d);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow-\\[\\#0088cc\\] {
       --tw-inset-shadow-color: #08c;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: #0088cc80;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[color\\:--value\\] {
       --tw-inset-shadow-color: var(--value);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-\\[color\\:--value\\]\\/50, .inset-shadow-\\[color\\:--value\\]\\/\\[0\\.5\\], .inset-shadow-\\[color\\:--value\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, var(--value) 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-current {
       --tw-inset-shadow-color: currentColor;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-inherit {
       --tw-inset-shadow-color: inherit;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: var(--color-red-500, #ef4444);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-transparent {
       --tw-inset-shadow-color: transparent;
-      --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14471,10 +14524,9 @@ test('inset-shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14483,10 +14535,9 @@ test('inset-shadow', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14698,9 +14749,9 @@ test('ring', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14719,10 +14770,9 @@ test('ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14731,10 +14781,9 @@ test('ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
@@ -14959,9 +15008,9 @@ test('inset-ring', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
+          --tw-shadow-color: initial;
           --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
           --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
           --tw-inset-ring-color: initial;
@@ -14980,10 +15029,9 @@ test('inset-ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-shadow-colored {
+    @property --tw-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-inset-shadow {
@@ -14992,10 +15040,9 @@ test('inset-ring', async () => {
       initial-value: 0 0 #0000;
     }
 
-    @property --tw-inset-shadow-colored {
+    @property --tw-inset-shadow-color {
       syntax: "*";
-      inherits: false;
-      initial-value: 0 0 #0000;
+      inherits: false
     }
 
     @property --tw-ring-color {
