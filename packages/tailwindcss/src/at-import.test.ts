@@ -122,6 +122,14 @@ test.only.each([
   ],
   [
     css`
+      @import url('/example.css');
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
       @import url(example.css);
     `,
     optimizeCss(css`
@@ -131,6 +139,14 @@ test.only.each([
   [
     css`
       @import url(./example.css);
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import url(/example.css);
     `,
     optimizeCss(css`
       ${exampleCSS}
