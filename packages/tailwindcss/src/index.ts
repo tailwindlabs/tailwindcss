@@ -106,7 +106,7 @@ async function parseCss(
         throw new Error('`@source` cannot have a body.')
       }
 
-      if (parent !== null && parent.kind !== 'context') {
+      if (parent !== null) {
         throw new Error('`@source` cannot be nested.')
       }
 
@@ -125,7 +125,7 @@ async function parseCss(
 
     // Register custom variants from `@variant` at-rules
     if (node.selector.startsWith('@variant ')) {
-      if (parent !== null && parent.kind !== 'context') {
+      if (parent !== null) {
         throw new Error('`@variant` cannot be nested.')
       }
 

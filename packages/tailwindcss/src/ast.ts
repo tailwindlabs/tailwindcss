@@ -1,4 +1,5 @@
 export type Rule = {
+  replaceWith(contextNode: Context): unknown
   kind: 'rule'
   selector: string
   nodes: AstNode[]
@@ -83,6 +84,14 @@ export function walk(
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
 
+    // We want context nodes to be transparent in walks. This means that
+    // whenever we encounter one, we immediately walk through its children and
+    // furthermore we also don't update the parent.
+    if (node.kind === 'context') {
+      walk(node.nodes, visit, parent, { ...context, ...node.context })
+      continue
+    }
+
     let status =
       visit(node, {
         parent,
@@ -104,8 +113,6 @@ export function walk(
 
     if (node.kind === 'rule') {
       walk(node.nodes, visit, node, context)
-    } else if (node.kind === 'context') {
-      walk(node.nodes, visit, node, { ...context, ...node.context })
     }
   }
 }
