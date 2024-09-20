@@ -1,5 +1,4 @@
 export type Rule = {
-  replaceWith(contextNode: Context): unknown
   kind: 'rule'
   selector: string
   nodes: AstNode[]
