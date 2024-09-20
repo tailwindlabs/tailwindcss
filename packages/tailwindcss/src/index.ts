@@ -26,6 +26,7 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
+  base?: string
   loadModule?: (
     id: string,
     base: string,
@@ -60,8 +61,11 @@ function parseThemeOptions(selector: string) {
 
 async function parseCss(
   css: string,
-  base: string,
-  { loadModule = throwOnLoadModule, loadStylesheet = throwOnLoadStylesheet }: CompileOptions = {},
+  {
+    base = '',
+    loadModule = throwOnLoadModule,
+    loadStylesheet = throwOnLoadStylesheet,
+  }: CompileOptions = {},
 ) {
   let ast = [context({ base }, CSS.parse(css))] as AstNode[]
 
@@ -332,13 +336,12 @@ async function parseCss(
 
 export async function compile(
   css: string,
-  base: string,
   opts: CompileOptions = {},
 ): Promise<{
   globs: { base: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, base, opts)
+  let { designSystem, ast, globs } = await parseCss(css, opts)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -416,7 +419,7 @@ export async function compile(
 }
 
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
-  let result = await parseCss(css, '/* @TODO */', opts)
+  let result = await parseCss(css, opts)
   return result.designSystem
 }
 

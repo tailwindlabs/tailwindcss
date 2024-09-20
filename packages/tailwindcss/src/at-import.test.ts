@@ -17,7 +17,7 @@ async function run(
     Promise.reject(new Error('Unexpected module')),
   candidates: string[] = [],
 ) {
-  let compiler = await compile(css, '/root', { loadStylesheet, loadModule })
+  let compiler = await compile(css, { base: '/root', loadStylesheet, loadModule })
   return optimizeCss(compiler.build(candidates))
 }
 
@@ -362,8 +362,7 @@ test('emits the right base for @source directives inside nested files', async ()
       @import './foo/bar.css';
       @source './root/**/*.css';
     `,
-    '/root',
-    { loadStylesheet },
+    { base: '/root', loadStylesheet },
   )
 
   expect(compiler.globs).toEqual([
@@ -411,8 +410,7 @@ test('emits the right base for @source found inside JS configs and plugins from 
       @config './root-config.js';
       @plugin './root-plugin.js';
     `,
-    '/root',
-    { loadStylesheet, loadModule },
+    { base: '/root', loadStylesheet, loadModule },
   )
 
   expect(compiler.globs).toEqual([

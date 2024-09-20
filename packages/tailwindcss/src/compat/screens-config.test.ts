@@ -19,7 +19,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -102,7 +102,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -200,7 +200,7 @@ test('JS config `screens` only setup, even if those match the default-theme expo
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -279,7 +279,7 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -385,7 +385,7 @@ test('JS config with `theme: { extends }` should not include the `default-config
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -463,7 +463,7 @@ describe('complex screen configs', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -550,7 +550,7 @@ describe('complex screen configs', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {

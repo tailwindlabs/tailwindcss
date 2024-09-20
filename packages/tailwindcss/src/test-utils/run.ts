@@ -2,12 +2,12 @@ import { Features, transform } from 'lightningcss'
 import { compile } from '..'
 
 export async function compileCss(css: string, candidates: string[] = []) {
-  let { build } = await compile(css, '/root')
+  let { build } = await compile(css)
   return optimizeCss(build(candidates)).trim()
 }
 
 export async function run(candidates: string[]) {
-  let { build } = await compile('@tailwind utilities;', '/root')
+  let { build } = await compile('@tailwind utilities;')
   return optimizeCss(build(candidates)).trim()
 }
 

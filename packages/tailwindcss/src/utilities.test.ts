@@ -15373,23 +15373,20 @@ test('@container', async () => {
 
 describe('custom utilities', () => {
   test('custom static utility', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @theme reference {
-          --breakpoint-lg: 1024px;
-        }
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
 
-        @utility text-trim {
-          text-box-trim: both;
-          text-box-edge: cap alphabetic;
-        }
-      `,
-      '/root',
-    )
+      @utility text-trim {
+        text-box-trim: both;
+        text-box-edge: cap alphabetic;
+      }
+    `)
     let compiled = build(['text-trim', 'lg:text-trim'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15410,23 +15407,20 @@ describe('custom utilities', () => {
   })
 
   test('Multiple static utilities are merged', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @utility really-round {
-          --custom-prop: hi;
-          border-radius: 50rem;
-        }
+      @utility really-round {
+        --custom-prop: hi;
+        border-radius: 50rem;
+      }
 
-        @utility really-round {
-          border-radius: 30rem;
-        }
-      `,
-      '/root',
-    )
+      @utility really-round {
+        border-radius: 30rem;
+      }
+    `)
     let compiled = build(['really-round'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15440,22 +15434,19 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities support some special characters', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @utility push-1/2 {
-          right: 50%;
-        }
+      @utility push-1/2 {
+        right: 50%;
+      }
 
-        @utility push-50% {
-          right: 50%;
-        }
-      `,
-      '/root',
-    )
+      @utility push-50% {
+        right: 50%;
+      }
+    `)
     let compiled = build(['push-1/2', 'push-50%'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15468,25 +15459,22 @@ describe('custom utilities', () => {
   })
 
   test('can override specific versions of a functional utility with a static utility', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @theme reference {
-          --font-size-sm: 0.875rem;
-          --font-size-sm--line-height: 1.25rem;
-        }
+      @theme reference {
+        --font-size-sm: 0.875rem;
+        --font-size-sm--line-height: 1.25rem;
+      }
 
-        @utility text-sm {
-          font-size: var(--font-size-sm, 0.8755rem);
-          line-height: var(--font-size-sm--line-height, 1.255rem);
-          text-rendering: optimizeLegibility;
-        }
-      `,
-      '/root',
-    )
+      @utility text-sm {
+        font-size: var(--font-size-sm, 0.8755rem);
+        line-height: var(--font-size-sm--line-height, 1.255rem);
+        text-rendering: optimizeLegibility;
+      }
+    `)
     let compiled = build(['text-sm'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15503,22 +15491,19 @@ describe('custom utilities', () => {
   })
 
   test('can override the default value of a functional utility', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @theme reference {
-          --radius-xl: 16px;
-        }
+      @theme reference {
+        --radius-xl: 16px;
+      }
 
-        @utility rounded {
-          border-radius: 50rem;
-        }
-      `,
-      '/root',
-    )
+      @utility rounded {
+        border-radius: 50rem;
+      }
+    `)
     let compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15539,18 +15524,15 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities are sorted by used properties', async () => {
-    let { build } = await compile(
-      css`
-        @layer utilities {
-          @tailwind utilities;
-        }
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
 
-        @utility push-left {
-          right: 100%;
-        }
-      `,
-      '/root',
-    )
+      @utility push-left {
+        right: 100%;
+      }
+    `)
     let compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -15576,36 +15558,27 @@ describe('custom utilities', () => {
 
   test('custom utilities must use a valid name definitions', async () => {
     await expect(() =>
-      compile(
-        css`
-          @utility push-* {
-            right: 100%;
-          }
-        `,
-        '/root',
-      ),
+      compile(css`
+        @utility push-* {
+          right: 100%;
+        }
+      `),
     ).rejects.toThrowError(/should be alphanumeric/)
 
     await expect(() =>
-      compile(
-        css`
-          @utility ~push {
-            right: 100%;
-          }
-        `,
-        '/root',
-      ),
+      compile(css`
+        @utility ~push {
+          right: 100%;
+        }
+      `),
     ).rejects.toThrowError(/should be alphanumeric/)
 
     await expect(() =>
-      compile(
-        css`
-          @utility @push {
-            right: 100%;
-          }
-        `,
-        '/root',
-      ),
+      compile(css`
+        @utility @push {
+          right: 100%;
+        }
+      `),
     ).rejects.toThrowError(/should be alphanumeric/)
   })
 

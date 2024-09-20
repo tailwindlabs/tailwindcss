@@ -11,7 +11,7 @@ test('Config files can add content', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root' }),
   })
 
@@ -24,7 +24,7 @@ test('Config files can change dark mode (media)', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root' }),
   })
 
@@ -44,7 +44,7 @@ test('Config files can change dark mode (selector)', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root' }),
   })
 
@@ -64,7 +64,7 @@ test('Config files can change dark mode (variant)', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: { darkMode: ['variant', '&:where(:not(.light))'] },
       base: '/root',
@@ -87,7 +87,7 @@ test('Config files can add plugins', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         plugins: [
@@ -118,7 +118,7 @@ test('Plugins loaded from config files can contribute to the config', async () =
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         plugins: [
@@ -147,7 +147,7 @@ test('Config file presets can contribute to the config', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         presets: [
@@ -176,7 +176,7 @@ test('Config files can affect the theme', async () => {
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -220,7 +220,7 @@ test('Variants in CSS overwrite variants from plugins', async () => {
     @variant light (&:is(.my-light));
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         darkMode: ['variant', '&:is(.dark)'],
@@ -270,7 +270,7 @@ describe('theme callbacks', () => {
       @config "./config.js";
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -381,7 +381,7 @@ describe('theme overrides order', () => {
       @config "./config.js";
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -427,7 +427,7 @@ describe('theme overrides order', () => {
       @plugin "./plugin.js";
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async (id) => {
         if (id.includes('config.js')) {
           return {
@@ -555,7 +555,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -594,7 +594,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -634,7 +634,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -674,7 +674,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -721,7 +721,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -761,7 +761,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -800,7 +800,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -834,7 +834,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -873,7 +873,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -913,7 +913,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -953,7 +953,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -1000,7 +1000,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -1040,7 +1040,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, '/root', {
+    let compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -1070,7 +1070,7 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
     @config "./config.js";
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -1169,7 +1169,7 @@ test('merges css breakpoints with js config screens', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, '/root', {
+  let compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {

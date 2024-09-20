@@ -10,12 +10,9 @@ bench('compile', async () => {
   let scanner = new Scanner({ detectSources: { base: root } })
   let candidates = scanner.scan()
 
-  let { build } = await compile(
-    css`
-      @tailwind utilities;
-    `,
-    root,
-  )
+  let { build } = await compile(css`
+    @tailwind utilities;
+  `)
 
   build(candidates)
 })

@@ -632,22 +632,19 @@ const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
 async function render(page: Page, content: string, extraCss: string = '') {
-  let { build } = await compile(
-    css`
-      @layer theme, base, components, utilities;
-      @layer theme {
-        ${defaultTheme}
-      }
-      @layer base {
-        ${preflight}
-      }
-      @layer utilities {
-        @tailwind utilities;
-      }
-      ${extraCss}
-    `,
-    '',
-  )
+  let { build } = await compile(css`
+    @layer theme, base, components, utilities;
+    @layer theme {
+      ${defaultTheme}
+    }
+    @layer base {
+      ${preflight}
+    }
+    @layer utilities {
+      @tailwind utilities;
+    }
+    ${extraCss}
+  `)
 
   // We noticed that some of the tests depending on the `hover:` variant were
   // flaky. After some investigation, we found that injected elements had the

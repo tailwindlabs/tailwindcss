@@ -1428,7 +1428,6 @@ describe('Parsing themes values from CSS', () => {
         @plugin "my-plugin";
         @tailwind utilities;
       `,
-      '/root',
       {
         loadModule: async () => {
           return {
@@ -1475,7 +1474,6 @@ describe('Parsing themes values from CSS', () => {
         @config "./my-config.js";
         @tailwind utilities;
       `,
-      '/root',
       {
         loadModule: async () => {
           return {
@@ -1518,7 +1516,6 @@ describe('plugins', () => {
         css`
           @plugin;
         `,
-        '/root',
         {
           loadModule: async () => ({
             module: ({ addVariant }: PluginAPI) => {
@@ -1536,7 +1533,6 @@ describe('plugins', () => {
         css`
           @plugin '';
         `,
-        '/root',
         {
           loadModule: async () => ({
             module: ({ addVariant }: PluginAPI) => {
@@ -1556,7 +1552,6 @@ describe('plugins', () => {
             @plugin "my-plugin";
           }
         `,
-        '/root',
         {
           loadModule: async () => ({
             module: ({ addVariant }: PluginAPI) => {
@@ -1578,7 +1573,6 @@ describe('plugins', () => {
           color: red;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: plugin.withOptions((options) => {
@@ -1631,7 +1625,6 @@ describe('plugins', () => {
           is-arr-mixed: null, true, false, 1234567, 1.35, foo, 'bar', 'true';
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: plugin.withOptions((options) => {
@@ -1672,7 +1665,6 @@ describe('plugins', () => {
             }
           }
         `,
-        '/root',
         {
           loadModule: async () => ({
             module: plugin.withOptions((options) => {
@@ -1711,7 +1703,6 @@ describe('plugins', () => {
             color: red;
           }
         `,
-        '/root',
         {
           loadModule: async () => ({
             module: plugin(({ addUtilities }) => {
@@ -1738,7 +1729,6 @@ describe('plugins', () => {
             --color: [ 'red', 'green', 'blue'];
           }
         `,
-        '/root',
         {
           loadModule: async () => ({ module: plugin(() => {}), base: '/root' }),
         },
@@ -1760,7 +1750,6 @@ describe('plugins', () => {
             };
           }
         `,
-        '/root',
         {
           loadModule: async () => ({ module: plugin(() => {}), base: '/root' }),
         },
@@ -1786,7 +1775,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -1819,7 +1807,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -1853,7 +1840,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -1889,7 +1875,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -1939,7 +1924,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -1978,7 +1962,6 @@ describe('plugins', () => {
           @tailwind utilities;
         }
       `,
-      '/root',
       {
         loadModule: async () => ({
           module: ({ addVariant }: PluginAPI) => {
@@ -2020,7 +2003,7 @@ describe('@source', () => {
       css`
         @source "./foo/bar/*.ts";
       `,
-      '/root',
+      { base: '/root' },
     )
 
     expect(globs).toEqual([{ pattern: './foo/bar/*.ts', base: '/root' }])
@@ -2032,7 +2015,7 @@ describe('@source', () => {
         @source "./foo/**/*.ts";
         @source "./php/secr3t/smarty.php";
       `,
-      '/root',
+      { base: '/root' },
     )
 
     expect(globs).toEqual([
@@ -2086,16 +2069,13 @@ describe('@variant', () => {
 
   describe('body-less syntax', () => {
     test('selector variant', async () => {
-      let { build } = await compile(
-        css`
-          @variant hocus (&:hover, &:focus);
+      let { build } = await compile(css`
+        @variant hocus (&:hover, &:focus);
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2112,16 +2092,13 @@ describe('@variant', () => {
     })
 
     test('at-rule variant', async () => {
-      let { build } = await compile(
-        css`
-          @variant any-hover (@media (any-hover: hover));
+      let { build } = await compile(css`
+        @variant any-hover (@media (any-hover: hover));
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['any-hover:hover:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2138,20 +2115,17 @@ describe('@variant', () => {
 
   describe('body with @slot syntax', () => {
     test('selector with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant selected {
-            &[data-selected] {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant selected {
+          &[data-selected] {
+            @slot;
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['selected:underline', 'group-selected:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2168,21 +2142,18 @@ describe('@variant', () => {
     })
 
     test('grouped selectors with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant hocus {
-            &:hover,
-            &:focus {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2199,24 +2170,21 @@ describe('@variant', () => {
     })
 
     test('multiple selectors with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant hocus {
-            &:hover {
-              @slot;
-            }
-
-            &:focus {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant hocus {
+          &:hover {
+            @slot;
           }
 
-          @layer utilities {
-            @tailwind utilities;
+          &:focus {
+            @slot;
           }
-        `,
-        '/root',
-      )
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2233,23 +2201,20 @@ describe('@variant', () => {
     })
 
     test('nested selector with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant custom-before {
-            & {
-              --has-before: 1;
-              &::before {
-                @slot;
-              }
+      let { build } = await compile(css`
+        @variant custom-before {
+          & {
+            --has-before: 1;
+            &::before {
+              @slot;
             }
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['custom-before:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2266,26 +2231,23 @@ describe('@variant', () => {
     })
 
     test('grouped nested selectors with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant custom-before {
-            & {
-              --has-before: 1;
-              &::before {
-                &:hover,
-                &:focus {
-                  @slot;
-                }
+      let { build } = await compile(css`
+        @variant custom-before {
+          & {
+            --has-before: 1;
+            &::before {
+              &:hover,
+              &:focus {
+                @slot;
               }
             }
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['custom-before:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2302,26 +2264,23 @@ describe('@variant', () => {
     })
 
     test('nested multiple selectors with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant hocus {
-            &:hover {
-              @media (hover: hover) {
-                @slot;
-              }
-            }
-
-            &:focus {
+      let { build } = await compile(css`
+        @variant hocus {
+          &:hover {
+            @media (hover: hover) {
               @slot;
             }
           }
 
-          @layer utilities {
-            @tailwind utilities;
+          &:focus {
+            @slot;
           }
-        `,
-        '/root',
-      )
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2350,22 +2309,19 @@ describe('@variant', () => {
     })
 
     test('selector nested under at-rule with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant hocus {
-            @media (hover: hover) {
-              &:hover {
-                @slot;
-              }
+      let { build } = await compile(css`
+        @variant hocus {
+          @media (hover: hover) {
+            &:hover {
+              @slot;
             }
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2386,20 +2342,17 @@ describe('@variant', () => {
     })
 
     test('at-rule with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant any-hover {
-            @media (any-hover: hover) {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant any-hover {
+          @media (any-hover: hover) {
+            @slot;
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['any-hover:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2414,24 +2367,21 @@ describe('@variant', () => {
     })
 
     test('multiple at-rules with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant desktop {
-            @media (any-hover: hover) {
-              @slot;
-            }
-
-            @media (pointer: fine) {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant desktop {
+          @media (any-hover: hover) {
+            @slot;
           }
 
-          @layer utilities {
-            @tailwind utilities;
+          @media (pointer: fine) {
+            @slot;
           }
-        `,
-        '/root',
-      )
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['desktop:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2452,26 +2402,23 @@ describe('@variant', () => {
     })
 
     test('nested at-rules with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant custom-variant {
-            @media (orientation: landscape) {
-              @media screen {
-                @slot;
-              }
+      let { build } = await compile(css`
+        @variant custom-variant {
+          @media (orientation: landscape) {
+            @media screen {
+              @slot;
+            }
 
-              @media print {
-                display: none;
-              }
+            @media print {
+              display: none;
             }
           }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['custom-variant:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2494,23 +2441,20 @@ describe('@variant', () => {
     })
 
     test('at-rule and selector with @slot', async () => {
-      let { build } = await compile(
-        css`
-          @variant custom-dark {
-            @media (prefers-color-scheme: dark) {
-              @slot;
-            }
-            &:is(.dark *) {
-              @slot;
-            }
+      let { build } = await compile(css`
+        @variant custom-dark {
+          @media (prefers-color-scheme: dark) {
+            @slot;
           }
+          &:is(.dark *) {
+            @slot;
+          }
+        }
 
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        '/root',
-      )
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
       let compiled = build(['custom-dark:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
@@ -2596,7 +2540,6 @@ test('addBase', async () => {
         @tailwind utilities;
       }
     `,
-    '/root',
     {
       loadModule: async () => ({
         module: ({ addBase }: PluginAPI) => {

@@ -11,7 +11,8 @@ export async function compile(
   css: string,
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
-  return await _compile(css, base, {
+  return await _compile(css, {
+    base,
     async loadModule(id, base) {
       if (id[0] !== '.') {
         let resolvedPath = await resolveJsId(id, base)
