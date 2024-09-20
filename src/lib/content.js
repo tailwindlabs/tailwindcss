@@ -210,9 +210,12 @@ export function createBroadPatternCheck(paths) {
     return () => {}
   }
 
+  const pathsMatcher = paths.map((path) => micromatch.matcher(path))
   // All globs that explicitly contain any of the known large directories (e.g.:
   // node_modules).
-  let explicitGlobs = paths.filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
+  let explicitGlobsMatcher = paths
+    .filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
+    .map((path) => micromatch.matcher(path))
 
   // Keep track of whether we already warned about the broad pattern issue or
   // not. The `log.warn` function already does something similar where we only
@@ -225,11 +228,12 @@ export function createBroadPatternCheck(paths) {
    */
   return (file) => {
     if (warned) return // Already warned about the broad pattern
-    if (micromatch.isMatch(file, explicitGlobs)) return // Explicitly included, so we can skip further checks
+    if (explicitGlobsMatcher.some((matcher) => matcher(file))) return // Explicitly included, so we can skip further checks
 
     // When a broad pattern is used, we have to double check that the file was
     // not explicitly included in the globs.
-    let matchingGlob = paths.find((path) => micromatch.isMatch(file, path))
+    let matchingGlobIndex = pathsMatcher.findIndex((matcher) => matcher(file))
+    let matchingGlob = paths[matchingGlobIndex]
     if (!matchingGlob) return // This should never happen
 
     // Create relative paths to make the output a bit more readable.
