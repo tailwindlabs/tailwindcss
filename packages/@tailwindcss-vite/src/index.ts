@@ -315,7 +315,7 @@ class DefaultMap<K, V> extends Map<K, V> {
   }
 }
 
-export class Root {
+class Root {
   // Content is only used in serve mode where we need to capture the initial
   // contents of the root file so that we can restore it during the
   // `renderStart` hook.
