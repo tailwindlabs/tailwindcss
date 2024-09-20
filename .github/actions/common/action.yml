@@ -56,6 +56,9 @@ runs:
       shell: bash
       run: pnpm run build
       if: inputs.isBuild == 'true'
+      env:
+        CARGO_PROFILE_RELEASE_LTO: 'off'
+        CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

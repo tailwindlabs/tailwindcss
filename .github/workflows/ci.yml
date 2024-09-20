@@ -100,6 +100,8 @@ jobs:
 
       - name: Integration Tests
         run: pnpm run test:integrations ${{ matrix.integration }}
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
   playwright:
     needs: build
