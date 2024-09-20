@@ -21,7 +21,11 @@ export async function applyCompatibilityHooks({
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
-  loadModule: (path: string, base: string) => Promise<{ module: any; base: string }>
+  loadModule: (
+    path: string,
+    base: string,
+    resourceHint: 'plugin' | 'config',
+  ) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
   let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
@@ -146,7 +150,7 @@ export async function applyCompatibilityHooks({
   let [configs, pluginDetails] = await Promise.all([
     Promise.all(
       configPaths.map(async ({ id, base }) => {
-        let loaded = await loadModule(id, base)
+        let loaded = await loadModule(id, base, 'config')
         return {
           path: id,
           base: loaded.base,
@@ -156,7 +160,7 @@ export async function applyCompatibilityHooks({
     ),
     Promise.all(
       pluginPaths.map(async ([{ id, base }, pluginOptions]) => {
-        let loaded = await loadModule(id, base)
+        let loaded = await loadModule(id, base, 'plugin')
         return {
           path: id,
           base: loaded.base,

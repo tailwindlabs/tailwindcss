@@ -26,7 +26,11 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  loadModule?: (id: string, base: string) => Promise<{ module: Plugin | Config; base: string }>
+  loadModule?: (
+    id: string,
+    base: string,
+    resourceHint: 'plugin' | 'config',
+  ) => Promise<{ module: Plugin | Config; base: string }>
   loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
 }
 

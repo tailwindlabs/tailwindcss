@@ -12,6 +12,7 @@ async function run(
   loadModule: (
     id: string,
     base: string,
+    resourceHint: 'plugin' | 'config',
   ) => Promise<{ module: Config | Plugin; base: string }> = () =>
     Promise.reject(new Error('Unexpected module')),
   candidates: string[] = [],
