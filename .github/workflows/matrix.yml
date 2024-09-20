@@ -1,0 +1,22 @@
+name: Matrix
+
+on:
+  push:
+    branches: [next]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  version-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20]
+        runner: [ubuntu-latest, windows-latest, macos-14]
+    uses: ./.github/workflows/ci.yml
+    with:
+      node-version: ${{ matrix.node-version }}
+      runner: ${{ matrix.runner }}
+    secrets: inherit

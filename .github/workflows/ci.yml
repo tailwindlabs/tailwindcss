@@ -1,22 +1,120 @@
 name: CI
 
 on:
-  push:
-    branches: [next]
-  pull_request:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version'
+        required: true
+        default: '20'
+        type: string
+      runner:
+        description: 'Runner'
+        required: true
+        default: 'ubuntu-latest'
+        type: string
 
 permissions:
   contents: read
 
 jobs:
-  version-matrix:
+  build:
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Common
+        uses: ./.github/actions/common
+        with:
+          runner: ${{ inputs.runner }}
+          node-version: ${{ inputs.node-version }}
+          isBuild: true
+
+  lint:
+    # Only lint on linux to avoid \r\n line ending errors
+    if: inputs.runner == 'ubuntu-latest'
+    needs: build
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Common
+        uses: ./.github/actions/common
+        with:
+          runner: ${{ inputs.runner }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Lint
+        run: pnpm run lint
+
+  test:
+    needs: build
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Common
+        uses: ./.github/actions/common
+        with:
+          runner: ${{ inputs.runner }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Test
+        run: pnpm run test
+
+  integration-tests:
+    needs: build
+    runs-on: ${{ inputs.runner }}
+
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20]
-        runner: [ubuntu-latest, windows-latest, macos-14]
-    uses: ./.github/workflows/ci-common.yml
-    with:
-      node-version: ${{ matrix.node-version }}
-      runner: ${{ matrix.runner }}
-    secrets: inherit
+        integration:
+          - cli/index
+          - cli/config
+          - cli/plugins
+          - cli/upgrade
+          - postcss/index
+          - postcss/config
+          - postcss/core-as-postcss-plugin
+          - postcss/next
+          - vite/index
+          - vite/config
+          - vite/astro
+          - vite/vue
+          - vite/nuxt
+          - vite/css-modules
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Common
+        uses: ./.github/actions/common
+        with:
+          runner: ${{ inputs.runner }}
+          node-version: ${{ inputs.node-version }}
+
+      # https://github.com/actions/download-artifact/issues/14
+      - name: Fix permissions for executable files in packages/@tailwindcss-standalone/dist/
+        run: chmod +x packages/@tailwindcss-standalone/dist/*
+
+      - name: Integration Tests
+        run: pnpm run test:integrations ${{ matrix.integration }}
+
+  playwright:
+    needs: build
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Common
+        uses: ./.github/actions/common
+        with:
+          runner: ${{ inputs.runner }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npm run test:ui

@@ -1,0 +1,75 @@
+name: 'Common'
+description: 'Run the common steps'
+inputs:
+  node-version:
+    description: 'Node.js version'
+    required: true
+    type: string
+  runner:
+    description: 'Runner'
+    required: true
+    type: string
+  isBuild:
+    description: 'Whether to build the project'
+    required: false
+    default: 'false'
+    type: boolean
+runs:
+  using: 'composite'
+  steps:
+    - uses: pnpm/action-setup@v4
+
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'pnpm'
+
+    # Cargo already skips downloading dependencies if they already exist
+    - name: Cache cargo
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    # Cache the `oxide` Rust build
+    - name: Cache oxide build
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./target/
+          ./crates/node/*.node
+          ./crates/node/index.js
+          ./crates/node/index.d.ts
+        key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
+
+    - name: Build
+      shell: bash
+      run: pnpm run build
+      if: inputs.isBuild == 'true'
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: inputs.isBuild == 'true'
+      with:
+        name: build-artifacts-${{ inputs.runner }}-${{ inputs.node-version }}
+        path: |
+          target/
+          crates/
+          dist/
+          packages/**/dist/
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      if: inputs.isBuild == 'false'
+      with:
+        name: build-artifacts-${{ inputs.runner }}-${{ inputs.node-version }}
