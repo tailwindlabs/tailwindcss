@@ -1,21 +1,11 @@
 import { describe, expect, test, vi } from 'vitest'
-import { compile as coreCompile } from '..'
+import { compile } from '..'
 import plugin from '../plugin'
 import { optimizeCss } from '../test-utils/run'
 import defaultTheme from './default-theme'
-import type { CssInJs, Plugin, PluginAPI } from './plugin-api'
+import type { CssInJs, PluginAPI } from './plugin-api'
 
 const css = String.raw
-
-// TODO: Expand the API changes into the tests below
-function compile(css: string, { loadPlugin }: { loadPlugin: () => Promise<Plugin> }) {
-  return coreCompile(css, {
-    async loadModule(id, base) {
-      let plugin = await loadPlugin()
-      return { module: plugin, base }
-    },
-  })
-}
 
 describe('theme', async () => {
   test('plugin theme can contain objects', async () => {
@@ -25,37 +15,40 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ addBase, theme }) {
-            addBase({
-              '@keyframes enter': theme('keyframes.enter'),
-              '@keyframes exit': theme('keyframes.exit'),
-            })
-          },
-          {
-            theme: {
-              extend: {
-                keyframes: {
-                  enter: {
-                    from: {
-                      opacity: 'var(--tw-enter-opacity, 1)',
-                      transform:
-                        'translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0))',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ addBase, theme }) {
+              addBase({
+                '@keyframes enter': theme('keyframes.enter'),
+                '@keyframes exit': theme('keyframes.exit'),
+              })
+            },
+            {
+              theme: {
+                extend: {
+                  keyframes: {
+                    enter: {
+                      from: {
+                        opacity: 'var(--tw-enter-opacity, 1)',
+                        transform:
+                          'translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0))',
+                      },
                     },
-                  },
-                  exit: {
-                    to: {
-                      opacity: 'var(--tw-exit-opacity, 1)',
-                      transform:
-                        'translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0))',
+                    exit: {
+                      to: {
+                        opacity: 'var(--tw-exit-opacity, 1)',
+                        transform:
+                          'translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0))',
+                      },
                     },
                   },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -88,28 +81,31 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                scrollbar: (value) => ({ 'scrollbar-color': value }),
-              },
-              {
-                values: theme('colors'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                colors: {
-                  'russet-700': '#7a4724',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  scrollbar: (value) => ({ 'scrollbar-color': value }),
+                },
+                {
+                  values: theme('colors'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  colors: {
+                    'russet-700': '#7a4724',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -133,30 +129,33 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                'animate-duration': (value) => ({ 'animation-duration': value }),
-              },
-              {
-                values: theme('animationDuration'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                animationDuration: ({ theme }: { theme: (path: string) => any }) => {
-                  return {
-                    ...theme('transitionDuration'),
-                  }
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  'animate-duration': (value) => ({ 'animation-duration': value }),
+                },
+                {
+                  values: theme('animationDuration'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  animationDuration: ({ theme }: { theme: (path: string) => any }) => {
+                    return {
+                      ...theme('transitionDuration'),
+                    }
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -177,32 +176,35 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                'animate-duration': (value) => ({ 'animation-duration': value }),
-              },
-              {
-                values: theme('animationDuration'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                transitionDuration: {
-                  slow: '800ms',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  'animate-duration': (value) => ({ 'animation-duration': value }),
                 },
+                {
+                  values: theme('animationDuration'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  transitionDuration: {
+                    slow: '800ms',
+                  },
 
-                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
-                  ...theme('transitionDuration'),
-                }),
+                  animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                    ...theme('transitionDuration'),
+                  }),
+                },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -228,20 +230,23 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(function ({ addUtilities, theme }) {
-          addUtilities({
-            '.percentage': {
-              color: theme('colors.red.500 / 50%'),
-            },
-            '.fraction': {
-              color: theme('colors.red.500 / 0.5'),
-            },
-            '.variable': {
-              color: theme('colors.red.500 / var(--opacity)'),
-            },
-          })
-        })
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '.percentage': {
+                color: theme('colors.red.500 / 50%'),
+              },
+              '.fraction': {
+                color: theme('colors.red.500 / 0.5'),
+              },
+              '.variable': {
+                color: theme('colors.red.500 / var(--opacity)'),
+              },
+            })
+          }),
+        }
       },
     })
 
@@ -268,36 +273,39 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                'animate-delay': (value) => ({ 'animation-delay': value }),
-              },
-              {
-                values: theme('animationDelay'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
-                  ...theme('transitionDuration'),
-                }),
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  'animate-delay': (value) => ({ 'animation-delay': value }),
+                },
+                {
+                  values: theme('animationDelay'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  animationDuration: ({ theme }: { theme: (path: string) => any }) => ({
+                    ...theme('transitionDuration'),
+                  }),
 
-                animationDelay: ({ theme }: { theme: (path: string) => any }) => ({
-                  ...theme('animationDuration'),
-                }),
+                  animationDelay: ({ theme }: { theme: (path: string) => any }) => ({
+                    ...theme('animationDuration'),
+                  }),
 
-                transitionDuration: {
-                  slow: '800ms',
+                  transitionDuration: {
+                    slow: '800ms',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -319,28 +327,31 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                'animate-duration': (value) => ({ 'animation-delay': value }),
-              },
-              {
-                values: theme('transitionDuration'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                transitionDuration: {
-                  DEFAULT: '1500ms',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  'animate-duration': (value) => ({ 'animation-delay': value }),
+                },
+                {
+                  values: theme('transitionDuration'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  transitionDuration: {
+                    DEFAULT: '1500ms',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -363,29 +374,32 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(function ({ matchUtilities, theme }) {
-          matchUtilities(
-            {
-              animation: (value) => ({ animation: value }),
-            },
-            {
-              values: theme('animation'),
-            },
-          )
-
-          matchUtilities(
-            {
-              animation2: (value) => ({ animation: value }),
-            },
-            {
-              values: {
-                DEFAULT: theme('animation.DEFAULT'),
-                twist: theme('animation.spin'),
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                animation: (value) => ({ animation: value }),
               },
-            },
-          )
-        })
+              {
+                values: theme('animation'),
+              },
+            )
+
+            matchUtilities(
+              {
+                animation2: (value) => ({ animation: value }),
+              },
+              {
+                values: {
+                  DEFAULT: theme('animation.DEFAULT'),
+                  twist: theme('animation.spin'),
+                },
+              },
+            )
+          }),
+        }
       },
     })
 
@@ -418,28 +432,31 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                animation: (value) => ({ '--animation': value }),
-              },
-              {
-                values: theme('animation'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                animation: {
-                  bounce: 'bounce 1s linear infinite',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  animation: (value) => ({ '--animation': value }),
+                },
+                {
+                  values: theme('animation'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  animation: {
+                    bounce: 'bounce 1s linear infinite',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -469,28 +486,31 @@ describe('theme', async () => {
     `
 
     let compiler = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ matchUtilities, theme }) {
-            matchUtilities(
-              {
-                animation: (value) => ({ '--animation': value }),
-              },
-              {
-                values: theme('animation'),
-              },
-            )
-          },
-          {
-            theme: {
-              extend: {
-                animation: {
-                  DEFAULT: 'twist 1s linear infinite',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                {
+                  animation: (value) => ({ '--animation': value }),
+                },
+                {
+                  values: theme('animation'),
+                },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  animation: {
+                    DEFAULT: 'twist 1s linear infinite',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -515,21 +535,24 @@ describe('theme', async () => {
     let fn = vi.fn()
 
     await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          function ({ theme }) {
-            fn(theme('animation.simple'))
-          },
-          {
-            theme: {
-              extend: {
-                animation: {
-                  simple: 'simple 1s linear',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ theme }) {
+              fn(theme('animation.simple'))
+            },
+            {
+              theme: {
+                extend: {
+                  animation: {
+                    simple: 'simple 1s linear',
+                  },
                 },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -547,58 +570,61 @@ describe('theme', async () => {
     `
 
     let { build } = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(function ({ matchUtilities, theme }) {
-          function utility(name: string, themeKey: string) {
-            matchUtilities(
-              { [name]: (value) => ({ '--value': value }) },
-              { values: theme(themeKey) },
-            )
-          }
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ matchUtilities, theme }) {
+            function utility(name: string, themeKey: string) {
+              matchUtilities(
+                { [name]: (value) => ({ '--value': value }) },
+                { values: theme(themeKey) },
+              )
+            }
 
-          utility('my-aspect', 'aspectRatio')
-          utility('my-backdrop-brightness', 'backdropBrightness')
-          utility('my-backdrop-contrast', 'backdropContrast')
-          utility('my-backdrop-grayscale', 'backdropGrayscale')
-          utility('my-backdrop-hue-rotate', 'backdropHueRotate')
-          utility('my-backdrop-invert', 'backdropInvert')
-          utility('my-backdrop-opacity', 'backdropOpacity')
-          utility('my-backdrop-saturate', 'backdropSaturate')
-          utility('my-backdrop-sepia', 'backdropSepia')
-          utility('my-border-width', 'borderWidth')
-          utility('my-brightness', 'brightness')
-          utility('my-columns', 'columns')
-          utility('my-contrast', 'contrast')
-          utility('my-divide-width', 'divideWidth')
-          utility('my-flex-grow', 'flexGrow')
-          utility('my-flex-shrink', 'flexShrink')
-          utility('my-gradient-color-stop-positions', 'gradientColorStopPositions')
-          utility('my-grayscale', 'grayscale')
-          utility('my-grid-row-end', 'gridRowEnd')
-          utility('my-grid-row-start', 'gridRowStart')
-          utility('my-grid-template-columns', 'gridTemplateColumns')
-          utility('my-grid-template-rows', 'gridTemplateRows')
-          utility('my-hue-rotate', 'hueRotate')
-          utility('my-invert', 'invert')
-          utility('my-line-clamp', 'lineClamp')
-          utility('my-opacity', 'opacity')
-          utility('my-order', 'order')
-          utility('my-outline-offset', 'outlineOffset')
-          utility('my-outline-width', 'outlineWidth')
-          utility('my-ring-offset-width', 'ringOffsetWidth')
-          utility('my-ring-width', 'ringWidth')
-          utility('my-rotate', 'rotate')
-          utility('my-saturate', 'saturate')
-          utility('my-scale', 'scale')
-          utility('my-sepia', 'sepia')
-          utility('my-skew', 'skew')
-          utility('my-stroke-width', 'strokeWidth')
-          utility('my-text-decoration-thickness', 'textDecorationThickness')
-          utility('my-text-underline-offset', 'textUnderlineOffset')
-          utility('my-transition-delay', 'transitionDelay')
-          utility('my-transition-duration', 'transitionDuration')
-          utility('my-z-index', 'zIndex')
-        })
+            utility('my-aspect', 'aspectRatio')
+            utility('my-backdrop-brightness', 'backdropBrightness')
+            utility('my-backdrop-contrast', 'backdropContrast')
+            utility('my-backdrop-grayscale', 'backdropGrayscale')
+            utility('my-backdrop-hue-rotate', 'backdropHueRotate')
+            utility('my-backdrop-invert', 'backdropInvert')
+            utility('my-backdrop-opacity', 'backdropOpacity')
+            utility('my-backdrop-saturate', 'backdropSaturate')
+            utility('my-backdrop-sepia', 'backdropSepia')
+            utility('my-border-width', 'borderWidth')
+            utility('my-brightness', 'brightness')
+            utility('my-columns', 'columns')
+            utility('my-contrast', 'contrast')
+            utility('my-divide-width', 'divideWidth')
+            utility('my-flex-grow', 'flexGrow')
+            utility('my-flex-shrink', 'flexShrink')
+            utility('my-gradient-color-stop-positions', 'gradientColorStopPositions')
+            utility('my-grayscale', 'grayscale')
+            utility('my-grid-row-end', 'gridRowEnd')
+            utility('my-grid-row-start', 'gridRowStart')
+            utility('my-grid-template-columns', 'gridTemplateColumns')
+            utility('my-grid-template-rows', 'gridTemplateRows')
+            utility('my-hue-rotate', 'hueRotate')
+            utility('my-invert', 'invert')
+            utility('my-line-clamp', 'lineClamp')
+            utility('my-opacity', 'opacity')
+            utility('my-order', 'order')
+            utility('my-outline-offset', 'outlineOffset')
+            utility('my-outline-width', 'outlineWidth')
+            utility('my-ring-offset-width', 'ringOffsetWidth')
+            utility('my-ring-width', 'ringWidth')
+            utility('my-rotate', 'rotate')
+            utility('my-saturate', 'saturate')
+            utility('my-scale', 'scale')
+            utility('my-sepia', 'sepia')
+            utility('my-skew', 'skew')
+            utility('my-stroke-width', 'strokeWidth')
+            utility('my-text-decoration-thickness', 'textDecorationThickness')
+            utility('my-text-underline-offset', 'textUnderlineOffset')
+            utility('my-transition-delay', 'transitionDelay')
+            utility('my-transition-duration', 'transitionDuration')
+            utility('my-z-index', 'zIndex')
+          }),
+        }
       },
     })
 
@@ -791,23 +817,26 @@ describe('theme', async () => {
     let fn = vi.fn()
 
     await compile(input, {
-      loadPlugin: async () => {
-        return plugin(
-          ({ theme }) => {
-            // The compatibility config specifies that `accentColor` spreads in `colors`
-            fn(theme('accentColor.primary'))
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            ({ theme }) => {
+              // The compatibility config specifies that `accentColor` spreads in `colors`
+              fn(theme('accentColor.primary'))
 
-            // This should even work for theme keys specified in plugin configs
-            fn(theme('myAccentColor.secondary'))
-          },
-          {
-            theme: {
-              extend: {
-                myAccentColor: ({ theme }) => theme('accentColor'),
+              // This should even work for theme keys specified in plugin configs
+              fn(theme('myAccentColor.secondary'))
+            },
+            {
+              theme: {
+                extend: {
+                  myAccentColor: ({ theme }) => theme('accentColor'),
+                },
               },
             },
-          },
-        )
+          ),
+        }
       },
     })
 
@@ -830,12 +859,15 @@ describe('theme', async () => {
     let fn = vi.fn()
 
     await compile(input, {
-      loadPlugin: async () => {
-        return plugin(({ theme }) => {
-          fn(theme('transitionTimingFunction.DEFAULT'))
-          fn(theme('transitionTimingFunction.in'))
-          fn(theme('transitionTimingFunction.out'))
-        })
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(({ theme }) => {
+            fn(theme('transitionTimingFunction.DEFAULT'))
+            fn(theme('transitionTimingFunction.in'))
+            fn(theme('transitionTimingFunction.out'))
+          }),
+        }
       },
     })
 
@@ -858,12 +890,15 @@ describe('theme', async () => {
     let fn = vi.fn()
 
     await compile(input, {
-      loadPlugin: async () => {
-        return plugin(({ theme }) => {
-          fn(theme('color.red.100'))
-          fn(theme('colors.red.200'))
-          fn(theme('backgroundColor.red.300'))
-        })
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(({ theme }) => {
+            fn(theme('color.red.100'))
+            fn(theme('colors.red.200'))
+            fn(theme('backgroundColor.red.300'))
+          }),
+        }
       },
     })
 
@@ -883,13 +918,16 @@ describe('theme', async () => {
     let fn = vi.fn()
 
     await compile(input, {
-      loadPlugin: async () => {
-        return plugin(({ theme }) => {
-          fn(theme('i.do.not.exist'))
-          fn(theme('color'))
-          fn(theme('color', 'magenta'))
-          fn(theme('colors'))
-        })
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(({ theme }) => {
+            fn(theme('i.do.not.exist'))
+            fn(theme('color'))
+            fn(theme('color', 'magenta'))
+            fn(theme('colors'))
+          }),
+        }
       },
     })
 
@@ -906,34 +944,37 @@ describe('theme', async () => {
     `
 
     let { build } = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(({ addUtilities, matchUtilities }) => {
-          addUtilities({
-            '.foo-bar': {
-              color: 'red',
-            },
-          })
-
-          matchUtilities(
-            {
-              foo: (value) => ({
-                '--my-prop': value,
-              }),
-            },
-            {
-              values: {
-                bar: 'bar-valuer',
-                baz: 'bar-valuer',
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(({ addUtilities, matchUtilities }) => {
+            addUtilities({
+              '.foo-bar': {
+                color: 'red',
               },
-            },
-          )
+            })
 
-          addUtilities({
-            '.foo-bar': {
-              backgroundColor: 'red',
-            },
-          })
-        })
+            matchUtilities(
+              {
+                foo: (value) => ({
+                  '--my-prop': value,
+                }),
+              },
+              {
+                values: {
+                  bar: 'bar-valuer',
+                  baz: 'bar-valuer',
+                },
+              },
+            )
+
+            addUtilities({
+              '.foo-bar': {
+                backgroundColor: 'red',
+              },
+            })
+          }),
+        }
       },
     })
 
@@ -958,62 +999,65 @@ describe('theme', async () => {
     `
 
     let { build } = await compile(input, {
-      loadPlugin: async () => {
-        return plugin(function ({ matchUtilities }) {
-          function utility(name: string, themeKey: string) {
-            matchUtilities(
-              { [name]: (value) => ({ '--value': value }) },
-              // @ts-ignore
-              { values: defaultTheme[themeKey] },
-            )
-          }
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ matchUtilities }) {
+            function utility(name: string, themeKey: string) {
+              matchUtilities(
+                { [name]: (value) => ({ '--value': value }) },
+                // @ts-ignore
+                { values: defaultTheme[themeKey] },
+              )
+            }
 
-          utility('my-aspect', 'aspectRatio')
-          // The following keys deliberately doesn't work as these are exported
-          // as functions from the compat config.
-          //
-          // utility('my-backdrop-brightness', 'backdropBrightness')
-          // utility('my-backdrop-contrast', 'backdropContrast')
-          // utility('my-backdrop-grayscale', 'backdropGrayscale')
-          // utility('my-backdrop-hue-rotate', 'backdropHueRotate')
-          // utility('my-backdrop-invert', 'backdropInvert')
-          // utility('my-backdrop-opacity', 'backdropOpacity')
-          // utility('my-backdrop-saturate', 'backdropSaturate')
-          // utility('my-backdrop-sepia', 'backdropSepia')
-          // utility('my-divide-width', 'divideWidth')
-          utility('my-border-width', 'borderWidth')
-          utility('my-brightness', 'brightness')
-          utility('my-columns', 'columns')
-          utility('my-contrast', 'contrast')
-          utility('my-flex-grow', 'flexGrow')
-          utility('my-flex-shrink', 'flexShrink')
-          utility('my-gradient-color-stop-positions', 'gradientColorStopPositions')
-          utility('my-grayscale', 'grayscale')
-          utility('my-grid-row-end', 'gridRowEnd')
-          utility('my-grid-row-start', 'gridRowStart')
-          utility('my-grid-template-columns', 'gridTemplateColumns')
-          utility('my-grid-template-rows', 'gridTemplateRows')
-          utility('my-hue-rotate', 'hueRotate')
-          utility('my-invert', 'invert')
-          utility('my-line-clamp', 'lineClamp')
-          utility('my-opacity', 'opacity')
-          utility('my-order', 'order')
-          utility('my-outline-offset', 'outlineOffset')
-          utility('my-outline-width', 'outlineWidth')
-          utility('my-ring-offset-width', 'ringOffsetWidth')
-          utility('my-ring-width', 'ringWidth')
-          utility('my-rotate', 'rotate')
-          utility('my-saturate', 'saturate')
-          utility('my-scale', 'scale')
-          utility('my-sepia', 'sepia')
-          utility('my-skew', 'skew')
-          utility('my-stroke-width', 'strokeWidth')
-          utility('my-text-decoration-thickness', 'textDecorationThickness')
-          utility('my-text-underline-offset', 'textUnderlineOffset')
-          utility('my-transition-delay', 'transitionDelay')
-          utility('my-transition-duration', 'transitionDuration')
-          utility('my-z-index', 'zIndex')
-        })
+            utility('my-aspect', 'aspectRatio')
+            // The following keys deliberately doesn't work as these are exported
+            // as functions from the compat config.
+            //
+            // utility('my-backdrop-brightness', 'backdropBrightness')
+            // utility('my-backdrop-contrast', 'backdropContrast')
+            // utility('my-backdrop-grayscale', 'backdropGrayscale')
+            // utility('my-backdrop-hue-rotate', 'backdropHueRotate')
+            // utility('my-backdrop-invert', 'backdropInvert')
+            // utility('my-backdrop-opacity', 'backdropOpacity')
+            // utility('my-backdrop-saturate', 'backdropSaturate')
+            // utility('my-backdrop-sepia', 'backdropSepia')
+            // utility('my-divide-width', 'divideWidth')
+            utility('my-border-width', 'borderWidth')
+            utility('my-brightness', 'brightness')
+            utility('my-columns', 'columns')
+            utility('my-contrast', 'contrast')
+            utility('my-flex-grow', 'flexGrow')
+            utility('my-flex-shrink', 'flexShrink')
+            utility('my-gradient-color-stop-positions', 'gradientColorStopPositions')
+            utility('my-grayscale', 'grayscale')
+            utility('my-grid-row-end', 'gridRowEnd')
+            utility('my-grid-row-start', 'gridRowStart')
+            utility('my-grid-template-columns', 'gridTemplateColumns')
+            utility('my-grid-template-rows', 'gridTemplateRows')
+            utility('my-hue-rotate', 'hueRotate')
+            utility('my-invert', 'invert')
+            utility('my-line-clamp', 'lineClamp')
+            utility('my-opacity', 'opacity')
+            utility('my-order', 'order')
+            utility('my-outline-offset', 'outlineOffset')
+            utility('my-outline-width', 'outlineWidth')
+            utility('my-ring-offset-width', 'ringOffsetWidth')
+            utility('my-ring-width', 'ringWidth')
+            utility('my-rotate', 'rotate')
+            utility('my-saturate', 'saturate')
+            utility('my-scale', 'scale')
+            utility('my-sepia', 'sepia')
+            utility('my-skew', 'skew')
+            utility('my-stroke-width', 'strokeWidth')
+            utility('my-text-decoration-thickness', 'textDecorationThickness')
+            utility('my-text-underline-offset', 'textUnderlineOffset')
+            utility('my-transition-delay', 'transitionDelay')
+            utility('my-transition-duration', 'transitionDuration')
+            utility('my-z-index', 'zIndex')
+          }),
+        }
       },
     })
 
@@ -1177,9 +1221,12 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', '&:hover, &:focus')
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', '&:hover, &:focus')
+            },
           }
         },
       },
@@ -1208,9 +1255,12 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', ['&:hover', '&:focus'])
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', ['&:hover', '&:focus'])
+            },
           }
         },
       },
@@ -1240,12 +1290,15 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '&:hover': '@slot',
-              '&:focus': '@slot',
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '&:hover': '@slot',
+                '&:focus': '@slot',
+              })
+            },
           }
         },
       },
@@ -1274,14 +1327,17 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '@media (hover: hover)': {
-                '&:hover': '@slot',
-              },
-              '&:focus': '@slot',
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '@media (hover: hover)': {
+                  '&:hover': '@slot',
+                },
+                '&:focus': '@slot',
+              })
+            },
           }
         },
       },
@@ -1322,12 +1378,15 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant(
-              'potato',
-              '@media (max-width: 400px) { @supports (font:bold) { &:large-potato } }',
-            )
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant(
+                'potato',
+                '@media (max-width: 400px) { @supports (font:bold) { &:large-potato } }',
+              )
+            },
           }
         },
       },
@@ -1364,15 +1423,18 @@ describe('addVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '&': {
-                '--custom-property': '@slot',
-                '&:hover': '@slot',
-                '&:focus': '@slot',
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '&': {
+                  '--custom-property': '@slot',
+                  '&:hover': '@slot',
+                  '&:focus': '@slot',
+                },
+              })
+            },
           }
         },
       },
@@ -1403,9 +1465,12 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('potato', (flavor) => `.potato-${flavor} &`)
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('potato', (flavor) => `.potato-${flavor} &`)
+            },
           }
         },
       },
@@ -1434,9 +1499,12 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('potato', (flavor) => `@media (potato: ${flavor})`)
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('potato', (flavor) => `@media (potato: ${flavor})`)
+            },
           }
         },
       },
@@ -1469,12 +1537,16 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant(
-              'potato',
-              (flavor) => `@media (potato: ${flavor}) { @supports (font:bold) { &:large-potato } }`,
-            )
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant(
+                'potato',
+                (flavor) =>
+                  `@media (potato: ${flavor}) { @supports (font:bold) { &:large-potato } }`,
+              )
+            },
           }
         },
       },
@@ -1511,14 +1583,17 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('tooltip', (side) => `&${side}`, {
-              values: {
-                bottom: '[data-location="bottom"]',
-                top: '[data-location="top"]',
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('tooltip', (side) => `&${side}`, {
+                values: {
+                  bottom: '[data-location="bottom"]',
+                  top: '[data-location="top"]',
+                },
+              })
+            },
           }
         },
       },
@@ -1547,16 +1622,19 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('alphabet', (side) => `&${side}`, {
-              values: {
-                d: '[data-order="1"]',
-                a: '[data-order="2"]',
-                c: '[data-order="3"]',
-                b: '[data-order="4"]',
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('alphabet', (side) => `&${side}`, {
+                values: {
+                  d: '[data-order="1"]',
+                  a: '[data-order="2"]',
+                  c: '[data-order="3"]',
+                  b: '[data-order="4"]',
+                },
+              })
+            },
           }
         },
       },
@@ -1598,11 +1676,14 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('test', (selector) =>
-              selector.split(',').map((selector) => `&.${selector} > *`),
-            )
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('test', (selector) =>
+                selector.split(',').map((selector) => `&.${selector} > *`),
+              )
+            },
           }
         },
       },
@@ -1627,13 +1708,16 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1676,16 +1760,19 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              values: {
-                example: '600px',
-              },
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                values: {
+                  example: '600px',
+                },
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1728,19 +1815,22 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
 
-            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(z.value) - parseInt(a.value)
-              },
-            })
+              matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(z.value) - parseInt(a.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1799,19 +1889,22 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
 
-            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(z.value) - parseInt(a.value)
-              },
-            })
+              matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(z.value) - parseInt(a.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1852,18 +1945,21 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
-            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(z.value) - parseInt(a.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
+              matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(z.value) - parseInt(a.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1921,18 +2017,21 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(a.value) - parseInt(z.value)
-              },
-            })
-            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
-              sort(a, z) {
-                return parseInt(z.value) - parseInt(a.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(a.value) - parseInt(z.value)
+                },
+              })
+              matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+                sort(a, z) {
+                  return parseInt(z.value) - parseInt(a.value)
+                },
+              })
+            },
           }
         },
       },
@@ -1990,26 +2089,29 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
-              sort(a, z) {
-                let lookup = ['100px', '200px']
-                if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
-                  throw new Error('We are seeing values that should not be there!')
-                }
-                return lookup.indexOf(a.value) - lookup.indexOf(z.value)
-              },
-            })
-            matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
-              sort(a, z) {
-                let lookup = ['300px', '400px']
-                if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
-                  throw new Error('We are seeing values that should not be there!')
-                }
-                return lookup.indexOf(z.value) - lookup.indexOf(a.value)
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
+                sort(a, z) {
+                  let lookup = ['100px', '200px']
+                  if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
+                    throw new Error('We are seeing values that should not be there!')
+                  }
+                  return lookup.indexOf(a.value) - lookup.indexOf(z.value)
+                },
+              })
+              matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
+                sort(a, z) {
+                  let lookup = ['300px', '400px']
+                  if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
+                    throw new Error('We are seeing values that should not be there!')
+                  }
+                  return lookup.indexOf(z.value) - lookup.indexOf(a.value)
+                },
+              })
+            },
           }
         },
       },
@@ -2067,13 +2169,16 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('foo', (value) => `.foo${value} &`, {
-              values: {
-                DEFAULT: '.bar',
-              },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (value) => `.foo${value} &`, {
+                values: {
+                  DEFAULT: '.bar',
+                },
+              })
+            },
           }
         },
       },
@@ -2098,9 +2203,12 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('foo', (value) => `.foo${value} &`)
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (value) => `.foo${value} &`)
+            },
           }
         },
       },
@@ -2119,11 +2227,14 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('foo', (value) => `.foo${value === null ? '-good' : '-bad'} &`, {
-              values: { DEFAULT: null },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (value) => `.foo${value === null ? '-good' : '-bad'} &`, {
+                values: { DEFAULT: null },
+              })
+            },
           }
         },
       },
@@ -2148,11 +2259,14 @@ describe('matchVariant', () => {
         }
       `,
       {
-        loadPlugin: async () => {
-          return ({ matchVariant }: PluginAPI) => {
-            matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
-              values: { DEFAULT: undefined },
-            })
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
+                values: { DEFAULT: undefined },
+              })
+            },
           }
         },
       },
@@ -2183,14 +2297,17 @@ describe('addUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities({
-              '.text-trim': {
-                'text-box-trim': 'both',
-                'text-box-edge': 'cap alphabetic',
-              },
-            })
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.text-trim': {
+                  'text-box-trim': 'both',
+                  'text-box-edge': 'cap alphabetic',
+                },
+              })
+            },
           }
         },
       },
@@ -2221,13 +2338,19 @@ describe('addUtilities()', () => {
         @tailwind utilities;
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities([
-              {
-                '.text-trim': [{ 'text-box-trim': 'both' }, { 'text-box-edge': 'cap alphabetic' }],
-              },
-            ])
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities([
+                {
+                  '.text-trim': [
+                    { 'text-box-trim': 'both' },
+                    { 'text-box-edge': 'cap alphabetic' },
+                  ],
+                },
+              ])
+            },
           }
         },
       },
@@ -2248,22 +2371,25 @@ describe('addUtilities()', () => {
         @tailwind utilities;
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities([
-              {
-                '.text-trim': {
-                  'text-box-trim': 'both',
-                  'text-box-edge': 'cap alphabetic',
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities([
+                {
+                  '.text-trim': {
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  },
                 },
-              },
-              {
-                '.text-trim-2': {
-                  'text-box-trim': 'both',
-                  'text-box-edge': 'cap alphabetic',
+                {
+                  '.text-trim-2': {
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  },
                 },
-              },
-            ])
+              ])
+            },
           }
         },
       },
@@ -2284,15 +2410,18 @@ describe('addUtilities()', () => {
         @tailwind utilities;
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities([
-              {
-                '.outlined': {
-                  outline: ['1px solid ButtonText', '1px auto -webkit-focus-ring-color'],
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities([
+                {
+                  '.outlined': {
+                    outline: ['1px solid ButtonText', '1px auto -webkit-focus-ring-color'],
+                  },
                 },
-              },
-            ])
+              ])
+            },
           }
         },
       },
@@ -2315,15 +2444,18 @@ describe('addUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities({
-              '.text-trim': {
-                WebkitAppearance: 'none',
-                textBoxTrim: 'both',
-                textBoxEdge: 'cap alphabetic',
-              },
-            })
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.text-trim': {
+                  WebkitAppearance: 'none',
+                  textBoxTrim: 'both',
+                  textBoxEdge: 'cap alphabetic',
+                },
+              })
+            },
           }
         },
       },
@@ -2353,13 +2485,16 @@ describe('addUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities({
-              '.foo': {
-                '@apply flex dark:underline': {},
-              },
-            })
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.foo': {
+                  '@apply flex dark:underline': {},
+                },
+              })
+            },
           }
         },
       },
@@ -2406,14 +2541,17 @@ describe('addUtilities()', () => {
           }
         `,
         {
-          async loadPlugin() {
-            return ({ addUtilities }: PluginAPI) => {
-              addUtilities({
-                '.text-trim > *': {
-                  'text-box-trim': 'both',
-                  'text-box-edge': 'cap alphabetic',
-                },
-              })
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ addUtilities }: PluginAPI) => {
+                addUtilities({
+                  '.text-trim > *': {
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  },
+                })
+              },
             }
           },
         },
@@ -2432,14 +2570,17 @@ describe('addUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities({
-              '.form-input, .form-textarea': {
-                appearance: 'none',
-                'background-color': '#fff',
-              },
-            })
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.form-input, .form-textarea': {
+                  appearance: 'none',
+                  'background-color': '#fff',
+                },
+              })
+            },
           }
         },
       },
@@ -2472,13 +2613,16 @@ describe('addUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ addUtilities }: PluginAPI) => {
-            addUtilities({
-              '.form-input, .form-input::placeholder, .form-textarea:hover:focus': {
-                'background-color': 'red',
-              },
-            })
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.form-input, .form-input::placeholder, .form-textarea:hover:focus': {
+                  'background-color': 'red',
+                },
+              })
+            },
           }
         },
       },
@@ -2518,19 +2662,22 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  'border-block': (value) => ({ 'border-block-width': value }),
-                },
-                {
-                  values: {
-                    DEFAULT: '1px',
-                    '2': '2px',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    'border-block': (value) => ({ 'border-block-width': value }),
                   },
-                },
-              )
+                  {
+                    values: {
+                      DEFAULT: '1px',
+                      '2': '2px',
+                    },
+                  },
+                )
+              },
             }
           },
         },
@@ -2593,23 +2740,26 @@ describe('matchUtilities()', () => {
         @tailwind utilities;
       `,
       {
-        async loadPlugin() {
-          return ({ matchUtilities }: PluginAPI) => {
-            matchUtilities(
-              {
-                'all-but-order-bottom-left-radius': (value) =>
-                  [
-                    { 'border-top-left-radius': value },
-                    { 'border-top-right-radius': value },
-                    { 'border-bottom-right-radius': value },
-                  ] as CssInJs[],
-              },
-              {
-                values: {
-                  DEFAULT: '1px',
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ matchUtilities }: PluginAPI) => {
+              matchUtilities(
+                {
+                  'all-but-order-bottom-left-radius': (value) =>
+                    [
+                      { 'border-top-left-radius': value },
+                      { 'border-top-right-radius': value },
+                      { 'border-bottom-right-radius': value },
+                    ] as CssInJs[],
                 },
-              },
-            )
+                {
+                  values: {
+                    DEFAULT: '1px',
+                  },
+                },
+              )
+            },
           }
         },
       },
@@ -2639,24 +2789,27 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  'border-block': (value, { modifier }) => ({
-                    '--my-modifier': modifier ?? 'none',
-                    'border-block-width': value,
-                  }),
-                },
-                {
-                  values: {
-                    DEFAULT: '1px',
-                    '2': '2px',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    'border-block': (value, { modifier }) => ({
+                      '--my-modifier': modifier ?? 'none',
+                      'border-block-width': value,
+                    }),
                   },
+                  {
+                    values: {
+                      DEFAULT: '1px',
+                      '2': '2px',
+                    },
 
-                  modifiers: 'any',
-                },
-              )
+                    modifiers: 'any',
+                  },
+                )
+              },
             }
           },
         },
@@ -2706,26 +2859,29 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  'border-block': (value, { modifier }) => ({
-                    '--my-modifier': modifier ?? 'none',
-                    'border-block-width': value,
-                  }),
-                },
-                {
-                  values: {
-                    DEFAULT: '1px',
-                    '2': '2px',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    'border-block': (value, { modifier }) => ({
+                      '--my-modifier': modifier ?? 'none',
+                      'border-block-width': value,
+                    }),
                   },
+                  {
+                    values: {
+                      DEFAULT: '1px',
+                      '2': '2px',
+                    },
 
-                  modifiers: {
-                    foo: 'foo',
+                    modifiers: {
+                      foo: 'foo',
+                    },
                   },
-                },
-              )
+                )
+              },
             }
           },
         },
@@ -2777,21 +2933,24 @@ describe('matchUtilities()', () => {
           `,
 
           {
-            async loadPlugin() {
-              return ({ matchUtilities }: PluginAPI) => {
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ 'scrollbar-color': value }),
-                  },
-                  { type: ['color', 'any'] },
-                )
+            async loadModule(id, base) {
+              return {
+                base,
+                module: ({ matchUtilities }: PluginAPI) => {
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ 'scrollbar-color': value }),
+                    },
+                    { type: ['color', 'any'] },
+                  )
 
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ 'scrollbar-width': value }),
-                  },
-                  { type: ['length'] },
-                )
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ 'scrollbar-width': value }),
+                    },
+                    { type: ['length'] },
+                  )
+                },
               }
             },
           },
@@ -2829,21 +2988,24 @@ describe('matchUtilities()', () => {
           `,
 
           {
-            async loadPlugin() {
-              return ({ matchUtilities }: PluginAPI) => {
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ '--scrollbar-angle': value }),
-                  },
-                  { type: ['angle', 'any'] },
-                )
+            async loadModule(id, base) {
+              return {
+                base,
+                module: ({ matchUtilities }: PluginAPI) => {
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ '--scrollbar-angle': value }),
+                    },
+                    { type: ['angle', 'any'] },
+                  )
 
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ '--scrollbar-width': value }),
-                  },
-                  { type: ['length'] },
-                )
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ '--scrollbar-width': value }),
+                    },
+                    { type: ['length'] },
+                  )
+                },
               }
             },
           },
@@ -2864,21 +3026,24 @@ describe('matchUtilities()', () => {
           `,
 
           {
-            async loadPlugin() {
-              return ({ matchUtilities }: PluginAPI) => {
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ 'scrollbar-color': value }),
-                  },
-                  { type: ['color', 'any'], modifiers: { foo: 'foo' } },
-                )
+            async loadModule(id, base) {
+              return {
+                base,
+                module: ({ matchUtilities }: PluginAPI) => {
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ 'scrollbar-color': value }),
+                    },
+                    { type: ['color', 'any'], modifiers: { foo: 'foo' } },
+                  )
 
-                matchUtilities(
-                  {
-                    scrollbar: (value) => ({ 'scrollbar-width': value }),
-                  },
-                  { type: ['length'], modifiers: { bar: 'bar' } },
-                )
+                  matchUtilities(
+                    {
+                      scrollbar: (value) => ({ 'scrollbar-width': value }),
+                    },
+                    { type: ['length'], modifiers: { bar: 'bar' } },
+                  )
+                },
               }
             },
           },
@@ -2905,31 +3070,34 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  scrollbar: (value) => ({ 'scrollbar-color': value }),
-                },
-                {
-                  type: ['color', 'any'],
-                  values: {
-                    black: 'black',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
                   },
-                },
-              )
+                  {
+                    type: ['color', 'any'],
+                    values: {
+                      black: 'black',
+                    },
+                  },
+                )
 
-              matchUtilities(
-                {
-                  scrollbar: (value) => ({ 'scrollbar-width': value }),
-                },
-                {
-                  type: ['length'],
-                  values: {
-                    2: '2px',
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-width': value }),
                   },
-                },
-              )
+                  {
+                    type: ['length'],
+                    values: {
+                      2: '2px',
+                    },
+                  },
+                )
+              },
             }
           },
         },
@@ -3025,19 +3193,22 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  scrollbar: (value) => ({ 'scrollbar-color': value }),
-                },
-                {
-                  type: ['color', 'any'],
-                  values: {
-                    black: 'black',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
                   },
-                },
-              )
+                  {
+                    type: ['color', 'any'],
+                    values: {
+                      black: 'black',
+                    },
+                  },
+                )
+              },
             }
           },
         },
@@ -3099,23 +3270,26 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities(
-                {
-                  scrollbar: (value, { modifier }) => ({
-                    '--modifier': modifier ?? 'none',
-                    'scrollbar-width': value,
-                  }),
-                },
-                {
-                  type: ['any'],
-                  values: {},
-                  modifiers: {
-                    foo: 'foo',
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value, { modifier }) => ({
+                      '--modifier': modifier ?? 'none',
+                      'scrollbar-width': value,
+                    }),
                   },
-                },
-              )
+                  {
+                    type: ['any'],
+                    values: {},
+                    modifiers: {
+                      foo: 'foo',
+                    },
+                  },
+                )
+              },
             }
           },
         },
@@ -3154,21 +3328,24 @@ describe('matchUtilities()', () => {
         }
       `,
       {
-        async loadPlugin() {
-          return ({ matchUtilities }: PluginAPI) => {
-            matchUtilities(
-              {
-                foo: (value) => ({
-                  '--foo': value,
-                  [`@apply flex`]: {},
-                }),
-              },
-              {
-                values: {
-                  bar: 'bar',
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ matchUtilities }: PluginAPI) => {
+              matchUtilities(
+                {
+                  foo: (value) => ({
+                    '--foo': value,
+                    [`@apply flex`]: {},
+                  }),
                 },
-              },
-            )
+                {
+                  values: {
+                    bar: 'bar',
+                  },
+                },
+              )
+            },
           }
         },
       },
@@ -3220,14 +3397,17 @@ describe('matchUtilities()', () => {
         `,
 
         {
-          async loadPlugin() {
-            return ({ matchUtilities }: PluginAPI) => {
-              matchUtilities({
-                '.text-trim > *': () => ({
-                  'text-box-trim': 'both',
-                  'text-box-edge': 'cap alphabetic',
-                }),
-              })
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities({
+                  '.text-trim > *': () => ({
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  }),
+                })
+              },
             }
           },
         },
@@ -3244,29 +3424,32 @@ describe('addComponents()', () => {
         @tailwind utilities;
       `,
       {
-        async loadPlugin() {
-          return ({ addComponents }: PluginAPI) => {
-            addComponents({
-              '.btn': {
-                padding: '.5rem 1rem',
-                borderRadius: '.25rem',
-                fontWeight: '600',
-              },
-              '.btn-blue': {
-                backgroundColor: '#3490dc',
-                color: '#fff',
-                '&:hover': {
-                  backgroundColor: '#2779bd',
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addComponents }: PluginAPI) => {
+              addComponents({
+                '.btn': {
+                  padding: '.5rem 1rem',
+                  borderRadius: '.25rem',
+                  fontWeight: '600',
                 },
-              },
-              '.btn-red': {
-                backgroundColor: '#e3342f',
-                color: '#fff',
-                '&:hover': {
-                  backgroundColor: '#cc1f1a',
+                '.btn-blue': {
+                  backgroundColor: '#3490dc',
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: '#2779bd',
+                  },
                 },
-              },
-            })
+                '.btn-red': {
+                  backgroundColor: '#e3342f',
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: '#cc1f1a',
+                  },
+                },
+              })
+            },
           }
         },
       },
@@ -3309,9 +3492,12 @@ describe('prefix()', () => {
         @plugin "my-plugin";
       `,
       {
-        async loadPlugin() {
-          return ({ prefix }: PluginAPI) => {
-            fn(prefix('btn'))
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ prefix }: PluginAPI) => {
+              fn(prefix('btn'))
+            },
           }
         },
       },
