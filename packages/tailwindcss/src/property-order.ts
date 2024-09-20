@@ -42,8 +42,8 @@ export default [
 
   'box-sizing',
   'display',
-  'field-sizing',
 
+  'field-sizing',
   'aspect-ratio',
   'height',
   'max-height',
