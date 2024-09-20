@@ -12898,12 +12898,73 @@ test('transition', async () => {
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-duration: .1s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
     }
 
     .transition-\\[--value\\] {
       transition-property: var(--value);
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-all {
+      transition-property: all;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-colors {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-opacity {
+      transition-property: opacity;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+      transition-property: var(--transition-property-opacity, opacity);
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-shadow {
+      transition-property: box-shadow;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-transform {
+      transition-property: transform, translate, scale, rotate;
+      transition-timing-function: var(--default-transition-timing-function, ease);
+      transition-duration: var(--default-transition-duration, .1s);
+    }
+
+    .transition-none {
+      transition-property: none;
+    }"
+  `)
+
+  expect(
+    await compileCss(
+      css`
+        @theme inline {
+          --default-transition-timing-function: ease;
+          --default-transition-duration: 100ms;
+        }
+        @tailwind utilities;
+      `,
+      ['transition', 'transition-all', 'transition-colors'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --default-transition-timing-function: ease;
+      --default-transition-duration: .1s;
+    }
+
+    .transition {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-duration: .1s;
       transition-timing-function: ease;
     }
@@ -12918,31 +12979,6 @@ test('transition', async () => {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
       transition-duration: .1s;
       transition-timing-function: ease;
-    }
-
-    .transition-opacity {
-      transition-property: opacity;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-      transition-property: var(--transition-property-opacity, opacity);
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-shadow {
-      transition-property: box-shadow;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-transform {
-      transition-property: transform, translate, scale, rotate;
-      transition-duration: .1s;
-      transition-timing-function: ease;
-    }
-
-    .transition-none {
-      transition-property: none;
     }"
   `)
 

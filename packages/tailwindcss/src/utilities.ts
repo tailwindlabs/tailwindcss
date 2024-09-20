@@ -3703,8 +3703,9 @@ export function createUtilities(theme: Theme) {
   }
 
   {
-    let defaultTimingFunction = theme.get(['--default-transition-timing-function']) ?? 'ease'
-    let defaultDuration = theme.get(['--default-transition-duration']) ?? '0s'
+    let defaultTimingFunction =
+      theme.resolve(null, ['--default-transition-timing-function']) ?? 'ease'
+    let defaultDuration = theme.resolve(null, ['--default-transition-duration']) ?? '0s'
 
     staticUtility('transition-none', [['transition-property', 'none']])
     staticUtility('transition-all', [
