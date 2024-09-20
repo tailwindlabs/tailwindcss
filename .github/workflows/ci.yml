@@ -57,6 +57,9 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        env:
+          CARGO_PROFILE_RELEASE_LTO: 'off'
+          CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
       - name: Lint
         run: pnpm run lint
@@ -68,6 +71,8 @@ jobs:
 
       - name: Integration Tests
         run: pnpm run test:integrations
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
