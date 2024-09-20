@@ -28,29 +28,39 @@ test('touch action', async ({ page }) => {
 })
 
 for (let [classes, expected] of [
-  ['from-red-500', 'linear-gradient(to right, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
   [
-    'via-red-500',
+    'bg-linear-to-r from-red-500',
+    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-linear-to-r via-red-500',
     'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 50%, rgba(0, 0, 0, 0) 100%)',
   ],
-  ['to-red-500', 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 100%)'],
   [
-    'from-red-500 to-blue-500',
+    'bg-linear-to-r to-red-500',
+    'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 100%)',
+  ],
+  [
+    'bg-linear-to-r from-red-500 to-blue-500',
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
   ],
   [
-    'via-red-500 to-blue-500',
+    'bg-linear-to-r via-red-500 to-blue-500',
     'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(239, 68, 68) 50%, rgb(59, 130, 246) 100%)',
   ],
   [
-    'from-red-500 via-green-500 to-blue-500',
+    'bg-linear-to-r from-red-500 via-green-500 to-blue-500',
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
+  ],
+  [
+    'bg-linear-[to_right,var(--color-red-500),var(--color-green-500),var(--color-blue-500)]',
+    'linear-gradient(to right, rgb(239, 68, 68), rgb(34, 197, 94), rgb(59, 130, 246))',
   ],
 ]) {
   test(`background gradient, "${classes}"`, async ({ page }) => {
     let { getPropertyValue } = await render(
       page,
-      html`<div id="x" class="bg-gradient-to-r ${classes}">Hello world</div>`,
+      html`<div id="x" class="${classes}">Hello world</div>`,
     )
 
     expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
@@ -98,6 +108,52 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
   )
 })
+
+for (let [classes, expected] of [
+  ['bg-conic from-red-500', 'conic-gradient(rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
+  [
+    'bg-conic-45 from-red-500',
+    'conic-gradient(from 45deg, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-conic-[from_45deg] from-red-500',
+    'conic-gradient(from 45deg, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-conic-[from_45deg,var(--color-red-500),transparent]',
+    'conic-gradient(from 45deg, rgb(239, 68, 68), rgba(0, 0, 0, 0))',
+  ],
+]) {
+  test(`conic gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+  })
+}
+
+for (let [classes, expected] of [
+  ['bg-radial from-red-500', 'radial-gradient(rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)'],
+  [
+    'bg-radial-[at_0%_0%] from-red-500',
+    'radial-gradient(at 0% 0%, rgb(239, 68, 68) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'bg-radial-[at_0%_0%,var(--color-red-500),transparent]',
+    'radial-gradient(at 0% 0%, rgb(239, 68, 68), rgba(0, 0, 0, 0))',
+  ],
+]) {
+  test(`radial gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+  })
+}
 
 test("::backdrop can receive a border with just the 'border' utility", async ({ page }) => {
   let { getPropertyValue } = await render(

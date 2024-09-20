@@ -31,23 +31,13 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
       continue
     }
 
-    let query: string | undefined
     let deferInsert = true
+
     if (typeof value === 'string') {
-      query = `(width >= ${value})`
       deferInsert = false
-    } else if (typeof value === 'object' && value !== null) {
-      if (Array.isArray(value)) {
-        query = value.map(ruleForComplexScreenValue).join(', ')
-      } else {
-        query = ruleForComplexScreenValue(value) ?? ''
-        if ('min' in value && !('max' in value)) {
-          deferInsert = false
-        }
-      }
-    } else {
-      continue
     }
+
+    let query = buildMediaQuery(value)
 
     function insert(order: number) {
       // `min-*` and `max-*` rules do not need to be reconfigured, as they are
@@ -87,19 +77,47 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
   }
 }
 
-function ruleForComplexScreenValue(value: object): string | null {
-  let query = null
-  if ('raw' in value && typeof value.raw === 'string') {
-    query = value.raw
-  } else {
-    let rules: string[] = []
-
-    if ('min' in value) rules.push(`min-width: ${value.min}`)
-    if ('max' in value) rules.push(`max-width: ${value.max}`)
-
-    if (rules.length !== 0) {
-      query = `(${rules.join(' and ')})`
-    }
+export function buildMediaQuery(values: unknown) {
+  type ScreenDescriptor = {
+    min?: string
+    max?: string
+    raw?: string
   }
-  return query
+
+  let list: unknown[] = Array.isArray(values) ? values : [values]
+  return list
+    .map((value): ScreenDescriptor | null => {
+      if (typeof value === 'string') {
+        return { min: value }
+      }
+
+      if (value && typeof value === 'object') {
+        return value
+      }
+
+      return null
+    })
+    .map((screen) => {
+      if (screen === null) return null
+
+      if ('raw' in screen) {
+        return screen.raw
+      }
+
+      let query = ''
+
+      if (screen.max !== undefined) {
+        query += `${screen.max} >= `
+      }
+
+      query += 'width'
+
+      if (screen.min !== undefined) {
+        query += ` >= ${screen.min}`
+      }
+
+      return `(${query})`
+    })
+    .filter(Boolean)
+    .join(', ')
 }

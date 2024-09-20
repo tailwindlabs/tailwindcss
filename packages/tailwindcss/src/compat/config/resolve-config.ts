@@ -203,4 +203,19 @@ function mergeTheme(ctx: ResolutionContext) {
   for (let key in ctx.theme) {
     ctx.theme[key] = resolveValue(ctx.theme[key])
   }
+
+  // Turn {min: '123px'} into '123px' in screens
+  if (ctx.theme.screens && typeof ctx.theme.screens === 'object') {
+    for (let key of Object.keys(ctx.theme.screens)) {
+      let screen = ctx.theme.screens[key]
+      if (!screen) continue
+      if (typeof screen !== 'object') continue
+
+      if ('raw' in screen) continue
+      if ('max' in screen) continue
+      if (!('min' in screen)) continue
+
+      ctx.theme.screens[key] = screen.min
+    }
+  }
 }
