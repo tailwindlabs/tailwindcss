@@ -286,6 +286,7 @@
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
   --radius-4xl: 2rem;
+  --radius-full: calc(infinity * 1px);
 
   /* Shadows */
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -371,6 +372,17 @@
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 
+  /* Font weight */
+  --font-weight-black: 900;
+  --font-weight-extrabold: 800;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --font-weight-light: 300;
+  --font-weight-extralight: 200;
+  --font-weight-thin: 100;
+
   /* Type scale */
   --font-size-xs: 0.75rem;
   --font-size-xs--line-height: 1rem;
@@ -429,6 +441,13 @@
   --perspective-normal: 500px;
   --perspective-midrange: 800px;
   --perspective-distant: 1200px;
+
+  /* Z indexes */
+  --z-index-10: 10;
+  --z-index-20: 20;
+  --z-index-30: 30;
+  --z-index-40: 40;
+  --z-index-50: 50;
 
   /* Transition timing functions */
   --transition-timing-function-linear: linear;
