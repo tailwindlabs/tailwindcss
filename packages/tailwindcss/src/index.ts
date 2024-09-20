@@ -61,9 +61,7 @@ async function parseCss(
 ) {
   let ast = [context({ base }, CSS.parse(css))] as AstNode[]
 
-  if (css.includes('@import')) {
-    await substituteAtImports(ast, base, loadStylesheet)
-  }
+  await substituteAtImports(ast, base, loadStylesheet)
 
   // Find all `@theme` declarations
   let theme = new Theme()
