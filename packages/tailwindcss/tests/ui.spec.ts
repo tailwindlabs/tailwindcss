@@ -224,6 +224,9 @@ test('shadow colors', async ({ page }) => {
       <div id="b" class="shadow-xl shadow-red-500"></div>
       <div id="c" class="shadow-[0px_2px_4px] shadow-red-500"></div>
       <div id="d" class="shadow shadow-red-500 hover:shadow-xl">Hello world</div>
+      <div id="e" class="shadow shadow-red-500 hover:shadow-xl hover:shadow-initial">
+        Hello world
+      </div>
     `,
   )
 
@@ -276,6 +279,28 @@ test('shadow colors', async ({ page }) => {
       'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
     ].join(', '),
   )
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
+    ].join(', '),
+  )
+
+  await page.locator('#e').hover()
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px',
+    ].join(', '),
+  )
 })
 
 test('inset shadow colors', async ({ page }) => {
@@ -286,6 +311,12 @@ test('inset shadow colors', async ({ page }) => {
       <div id="b" class="inset-shadow inset-shadow-red-500"></div>
       <div id="c" class="inset-shadow-[0px_3px_6px] inset-shadow-red-500"></div>
       <div id="d" class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow">Hello world</div>
+      <div
+        id="e"
+        class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow hover:inset-shadow-initial"
+      >
+        Hello world
+      </div>
     `,
   )
 
@@ -332,6 +363,28 @@ test('inset shadow colors', async ({ page }) => {
   expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
     [
       'rgb(239, 68, 68) 0px 2px 4px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgb(239, 68, 68) 0px 1px 1px 0px inset',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    ].join(', '),
+  )
+
+  await page.locator('#e').hover()
+
+  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
