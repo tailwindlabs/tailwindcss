@@ -47,7 +47,7 @@ function walkDepth<T>(rule: Walkable<T>, cb: (rule: T) => void) {
 }
 
 export function migrateAtLayerUtilities(): Plugin {
-  async function migrate(atRule: AtRule) {
+  function migrate(atRule: AtRule) {
     // Only migrate `@layer utilities` and `@layer components`.
     if (atRule.params !== 'utilities' && atRule.params !== 'components') return
 
@@ -312,10 +312,12 @@ export function migrateAtLayerUtilities(): Plugin {
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-layer-utilities',
-    AtRule: {
-      layer: migrate,
-    },
     OnceExit: async (root) => {
+      // Migrate `@layer utilities` and `@layer components` into `@utility`.
+      // Using this instead of the visitor API in case we want to use
+      // postcss-nesting in the future.
+      root.walkAtRules('layer', migrate)
+
       // Prettier is used to generate cleaner output, but it's only used on the
       // nodes that were marked as `pretty` during the migration.
       {
