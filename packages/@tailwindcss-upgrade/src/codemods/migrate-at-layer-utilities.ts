@@ -280,7 +280,23 @@ export function migrateAtLayerUtilities(): Plugin {
 
         // Replace `&` selectors with its children
         else if (node.type === 'rule' && node.selector === '&') {
-          node.replaceWith(node.nodes)
+          interface PostCSSNode {
+            type: string
+            parent?: PostCSSNode
+          }
+
+          let parent: PostCSSNode | undefined = node.parent
+          let skip = false
+          while (parent) {
+            if (parent.type === 'rule') {
+              skip = true
+              break
+            }
+
+            parent = parent.parent
+          }
+
+          if (!skip) node.replaceWith(node.nodes)
         }
       })
 
