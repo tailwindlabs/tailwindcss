@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disallow negative bare values in core utilities and variants ([#14453](https://github.com/tailwindlabs/tailwindcss/pull/14453))
 - Preserve explicit shadow color when overriding shadow size ([#14458](https://github.com/tailwindlabs/tailwindcss/pull/14458))
 - Preserve explicit transition duration and timing function when overriding transition property ([#14490](https://github.com/tailwindlabs/tailwindcss/pull/14490))
+- Change the implementation for `@import` resolution to speed up initial builds ([#14446](https://github.com/tailwindlabs/tailwindcss/pull/14446))
 
 ## [4.0.0-alpha.24] - 2024-09-11
 
