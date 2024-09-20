@@ -1914,6 +1914,8 @@ exports[`getClassList 1`] = `
   "end-4",
   "end-auto",
   "end-full",
+  "field-sizing-content",
+  "field-sizing-fixed",
   "fill-current",
   "fill-current/0",
   "fill-current/5",

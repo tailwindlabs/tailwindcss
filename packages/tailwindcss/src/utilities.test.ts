@@ -1873,6 +1873,21 @@ test('display', async () => {
   ).toEqual('')
 })
 
+test('field-sizing', async () => {
+  expect(await run(['field-sizing-content', 'field-sizing-fixed'])).toMatchInlineSnapshot(`
+    ".field-sizing-content {
+      field-sizing: content;
+    }
+
+    .field-sizing-fixed {
+      field-sizing: fixed;
+    }"
+  `)
+  expect(
+    await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed']),
+  ).toEqual('')
+})
+
 test('aspect-ratio', async () => {
   expect(await run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
     ".aspect-4\\/3 {
