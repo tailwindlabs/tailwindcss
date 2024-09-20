@@ -102,7 +102,7 @@ let resolver = async (id: string) => {
 }
 
 // Examples from https://developer.mozilla.org/en-US/docs/Web/CSS/@import
-test.only.each([
+test.each([
   // url extraction
   [
     css`
