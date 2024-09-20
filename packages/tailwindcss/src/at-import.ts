@@ -8,6 +8,7 @@ export async function substituteAtImports(
   ast: AstNode[],
   base: string,
   loadStylesheet: LoadStylesheet,
+  recurseCount = 0,
 ) {
   let promises: Promise<void>[] = []
 
@@ -24,9 +25,18 @@ export async function substituteAtImports(
 
       promises.push(
         (async () => {
-          let imported = await atImport(uri, base, loadStylesheet)
-          contextNode.nodes = buildImportNodes(imported.ast, imported.base, layer, media, supports)
-          contextNode.context.base = imported.base
+          if (recurseCount > 50) {
+            throw new Error(
+              `Exceeded maximum recursion depth while resolving \`${uri}\` in \`${base}\`)`,
+            )
+          }
+
+          const loaded = await loadStylesheet(uri, base)
+          let ast = CSS.parse(loaded.content)
+          await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
+
+          contextNode.nodes = buildImportNodes(ast, loaded.base, layer, media, supports)
+          contextNode.context.base = loaded.base
         })(),
       )
 
@@ -38,17 +48,6 @@ export async function substituteAtImports(
   })
 
   await Promise.all(promises)
-}
-
-async function atImport(
-  id: string,
-  parentBase: string,
-  loadStylesheet: LoadStylesheet,
-): Promise<{ ast: AstNode[]; base: string }> {
-  const { content, base } = await loadStylesheet(id, parentBase)
-  let ast = CSS.parse(content)
-  await substituteAtImports(ast, base, loadStylesheet)
-  return { ast, base }
 }
 
 // c.f. https://github.com/postcss/postcss-import/blob/master/lib/parse-statements.js

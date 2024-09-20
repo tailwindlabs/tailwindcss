@@ -261,10 +261,10 @@ test('updates the base when loading modules inside nested files', async () => {
     ).trim(),
   ).toBe('')
 
-  expect(loadModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo')
-  expect(loadModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root')
-  expect(loadModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo')
-  expect(loadModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root')
+  expect(loadModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo', 'config')
+  expect(loadModule).toHaveBeenNthCalledWith(2, './root-config.js', '/root', 'config')
+  expect(loadModule).toHaveBeenNthCalledWith(3, './nested-plugin.js', '/root/foo', 'plugin')
+  expect(loadModule).toHaveBeenNthCalledWith(4, './root-plugin.js', '/root', 'plugin')
 })
 
 test('emits the right base for @source directives inside nested files', async () => {
@@ -345,4 +345,25 @@ test('emits the right base for @source found inside JS configs and plugins from 
     { pattern: './root-config-plugin/*.html', base: '/root-config' },
     { pattern: './root-config/*.html', base: '/root-config' },
   ])
+})
+
+test('it crashes when inside a cycle', async () => {
+  let loadStylesheet = () =>
+    Promise.resolve({
+      content: css`
+        @import url('foo.css');
+      `,
+      base: '/root',
+    })
+
+  expect(
+    run(
+      css`
+        @import url('foo.css');
+      `,
+      loadStylesheet,
+    ),
+  ).rejects.toMatchInlineSnapshot(
+    `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
+  )
 })

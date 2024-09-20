@@ -99,21 +99,27 @@ function resolveCssId(id: string, base: string): Promise<string | false | undefi
     }
   }
 
-  return new Promise((resolve, reject) =>
-    cssResolver.resolve({}, base, id, {}, (err, result) => {
-      if (err) return reject(err)
-      resolve(result)
-    }),
-  )
+  let dotResolved = runResolver(cssResolver, `./${id}`, base)
+  if (!dotResolved) return runResolver(cssResolver, id, base)
+  return dotResolved
 }
 
 const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
 })
+
 function resolveJsId(id: string, base: string): Promise<string | false | undefined> {
+  return runResolver(jsResolver, id, base)
+}
+
+function runResolver(
+  resolver: EnhancedResolve.Resolver,
+  id: string,
+  base: string,
+): Promise<string | false | undefined> {
   return new Promise((resolve, reject) =>
-    jsResolver.resolve({}, base, id, {}, (err, result) => {
+    resolver.resolve({}, base, id, {}, (err, result) => {
       if (err) return reject(err)
       resolve(result)
     }),
