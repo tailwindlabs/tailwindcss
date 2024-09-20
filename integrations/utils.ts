@@ -4,7 +4,7 @@ import killPort from 'kill-port'
 import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import net from 'node:net'
-import { homedir, platform, tmpdir } from 'node:os'
+import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { test as defaultTest, expect } from 'vitest'
 
@@ -63,7 +63,8 @@ const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
 // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
 // apparently causes the vite builds to not work.
-const TMP_ROOT = process.env.CI && IS_WINDOWS ? homedir() : tmpdir()
+const TMP_ROOT =
+  process.env.CI && IS_WINDOWS ? path.dirname(process.env.GITHUB_WORKSPACE!) : tmpdir()
 
 export function test(
   name: string,
