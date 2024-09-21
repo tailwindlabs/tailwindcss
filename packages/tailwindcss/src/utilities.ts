@@ -2676,8 +2676,6 @@ export function createUtilities(theme: Theme) {
   let gradientStopProperties = () => {
     return atRoot([
       property('--tw-gradient-position'),
-      property('--tw-gradient-from', '#0000', '<color>'),
-      property('--tw-gradient-to', '#0000', '<color>'),
       property('--tw-gradient-from', 'transparent', '<color>'),
       property('--tw-gradient-via', 'transparent', '<color>'),
       property('--tw-gradient-to', 'transparent', '<color>'),
@@ -3716,7 +3714,7 @@ export function createUtilities(theme: Theme) {
     staticUtility('transition-colors', [
       [
         'transition-property',
-        'color, background-color, border-color, text-decoration-color, fill, stroke',
+        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
       ],
       ['transition-timing-function', defaultTimingFunction],
       ['transition-duration', defaultDuration],
@@ -3739,7 +3737,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('transition', {
       defaultValue:
-        'color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
+        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
       themeKeys: ['--transition-property'],
       handle: (value) => [
         decl('transition-property', value),

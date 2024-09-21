@@ -9925,9 +9925,9 @@ test('from', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: #0000;
-          --tw-gradient-to: #0000;
+          --tw-gradient-from: transparent;
           --tw-gradient-via: transparent;
+          --tw-gradient-to: transparent;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
@@ -9948,13 +9948,13 @@ test('from', async () => {
       initial-value: #0000;
     }
 
-    @property --tw-gradient-to {
+    @property --tw-gradient-via {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
     }
 
-    @property --tw-gradient-via {
+    @property --tw-gradient-to {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
@@ -10170,9 +10170,9 @@ test('via', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: #0000;
-          --tw-gradient-to: #0000;
+          --tw-gradient-from: transparent;
           --tw-gradient-via: transparent;
+          --tw-gradient-to: transparent;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
@@ -10193,13 +10193,13 @@ test('via', async () => {
       initial-value: #0000;
     }
 
-    @property --tw-gradient-to {
+    @property --tw-gradient-via {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
     }
 
-    @property --tw-gradient-via {
+    @property --tw-gradient-to {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
@@ -10403,9 +10403,9 @@ test('to', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: #0000;
-          --tw-gradient-to: #0000;
+          --tw-gradient-from: transparent;
           --tw-gradient-via: transparent;
+          --tw-gradient-to: transparent;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
@@ -10426,13 +10426,13 @@ test('to', async () => {
       initial-value: #0000;
     }
 
-    @property --tw-gradient-to {
+    @property --tw-gradient-via {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
     }
 
-    @property --tw-gradient-via {
+    @property --tw-gradient-to {
       syntax: "<color>";
       inherits: false;
       initial-value: #0000;
@@ -12897,7 +12897,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--default-transition-timing-function, ease);
       transition-duration: var(--default-transition-duration, .1s);
     }
@@ -12915,7 +12915,7 @@ test('transition', async () => {
     }
 
     .transition-colors {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
       transition-timing-function: var(--default-transition-timing-function, ease);
       transition-duration: var(--default-transition-duration, .1s);
     }
@@ -12964,7 +12964,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-duration: .1s;
       transition-timing-function: ease;
     }
@@ -12976,7 +12976,7 @@ test('transition', async () => {
     }
 
     .transition-colors {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
       transition-duration: .1s;
       transition-timing-function: ease;
     }"
