@@ -3701,9 +3701,8 @@ export function createUtilities(theme: Theme) {
   }
 
   {
-    let defaultTimingFunction =
-      theme.resolve(null, ['--default-transition-timing-function']) ?? 'ease'
-    let defaultDuration = theme.resolve(null, ['--default-transition-duration']) ?? '0s'
+    let defaultTimingFunction = `var(--tw-ease, ${theme.resolve(null, ['--default-transition-timing-function']) ?? 'ease'})`
+    let defaultDuration = `var(--tw-duration, ${theme.resolve(null, ['--default-transition-duration']) ?? '0s'})`
 
     staticUtility('transition-none', [['transition-property', 'none']])
     staticUtility('transition-all', [
@@ -3755,37 +3754,46 @@ export function createUtilities(theme: Theme) {
       handle: (value) => [decl('transition-delay', value)],
     })
 
-    utilities.functional('duration', (candidate) => {
-      // This utility doesn't support negative values.
-      if (candidate.negative) return
-
-      // This utility doesn't support modifiers.
-      if (candidate.modifier) return
-
-      // This utility doesn't support `DEFAULT` values.
-      if (!candidate.value) return
-
-      // Find the actual CSS value that the candidate value maps to.
-      let value: string | null = null
-
-      if (candidate.value.kind === 'arbitrary') {
-        value = candidate.value.value
-      } else {
-        value = theme.resolve(candidate.value.fraction ?? candidate.value.value, [
-          '--transition-duration',
-        ])
-
-        if (value === null && isPositiveInteger(candidate.value.value)) {
-          value = `${candidate.value.value}ms`
-        }
+    {
+      let transitionDurationProperty = () => {
+        return atRoot([property('--tw-duration')])
       }
+      utilities.functional('duration', (candidate) => {
+        // This utility doesn't support negative values.
+        if (candidate.negative) return
 
-      // If the candidate value (like the `sm` in `max-w-sm`) doesn't resolve to
-      // an actual value, don't generate any rules.
-      if (value === null) return
+        // This utility doesn't support modifiers.
+        if (candidate.modifier) return
 
-      return [decl('transition-duration', value)]
-    })
+        // This utility doesn't support `DEFAULT` values.
+        if (!candidate.value) return
+
+        // Find the actual CSS value that the candidate value maps to.
+        let value: string | null = null
+
+        if (candidate.value.kind === 'arbitrary') {
+          value = candidate.value.value
+        } else {
+          value = theme.resolve(candidate.value.fraction ?? candidate.value.value, [
+            '--transition-duration',
+          ])
+
+          if (value === null && isPositiveInteger(candidate.value.value)) {
+            value = `${candidate.value.value}ms`
+          }
+        }
+
+        // If the candidate value (like the `sm` in `max-w-sm`) doesn't resolve to
+        // an actual value, don't generate any rules.
+        if (value === null) return
+
+        return [
+          transitionDurationProperty(),
+          decl('--tw-duration', value),
+          decl('transition-duration', value),
+        ]
+      })
+    }
 
     suggest('delay', () => [
       {
@@ -3802,10 +3810,19 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
-  functionalUtility('ease', {
-    themeKeys: ['--transition-timing-function'],
-    handle: (value) => [decl('transition-timing-function', value)],
-  })
+  {
+    let transitionTimingFunctionProperty = () => {
+      return atRoot([property('--tw-ease')])
+    }
+    functionalUtility('ease', {
+      themeKeys: ['--transition-timing-function'],
+      handle: (value) => [
+        transitionTimingFunctionProperty(),
+        decl('--tw-ease', value),
+        decl('transition-timing-function', value),
+      ],
+    })
+  }
 
   staticUtility('will-change-auto', [['will-change', 'auto']])
   staticUtility('will-change-scroll', [['will-change', 'scroll-position']])

@@ -604,6 +604,28 @@ test('explicit font-weight utilities are respected when overriding font-size', a
   expect(await getPropertyValue('#z', 'font-weight')).toEqual('900')
 })
 
+test('explicit duration and ease utilities are respected when overriding transition-property', async ({
+  page,
+}) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div
+        id="x"
+        class="ease-[linear] duration-500 transition-[opacity] hover:transition-[background-color]"
+      >
+        Hello world
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'transition-timing-function')).toEqual('linear')
+  expect(await getPropertyValue('#x', 'transition-duration')).toEqual('0.5s')
+  await page.locator('#x').hover()
+  expect(await getPropertyValue('#x', 'transition-timing-function')).toEqual('linear')
+  expect(await getPropertyValue('#x', 'transition-duration')).toEqual('0.5s')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
