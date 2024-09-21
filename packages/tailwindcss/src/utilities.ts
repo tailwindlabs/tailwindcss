@@ -3758,6 +3758,9 @@ export function createUtilities(theme: Theme) {
       let transitionDurationProperty = () => {
         return atRoot([property('--tw-duration')])
       }
+
+      staticUtility('duration-initial', [transitionDurationProperty, ['--tw-duration', 'initial']])
+
       utilities.functional('duration', (candidate) => {
         // This utility doesn't support negative values.
         if (candidate.negative) return
@@ -3814,6 +3817,9 @@ export function createUtilities(theme: Theme) {
     let transitionTimingFunctionProperty = () => {
       return atRoot([property('--tw-ease')])
     }
+
+    staticUtility('ease-initial', [transitionTimingFunctionProperty, ['--tw-ease', 'initial']])
+
     functionalUtility('ease', {
       themeKeys: ['--transition-timing-function'],
       handle: (value) => [

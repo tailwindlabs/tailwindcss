@@ -1908,6 +1908,8 @@ exports[`getClassList 1`] = `
   "duration-500",
   "duration-700",
   "duration-75",
+  "duration-initial",
+  "ease-initial",
   "end-0.5",
   "end-1",
   "end-3",
