@@ -9925,9 +9925,9 @@ test('from', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: transparent;
-          --tw-gradient-via: transparent;
-          --tw-gradient-to: transparent;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
@@ -10170,9 +10170,9 @@ test('via', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: transparent;
-          --tw-gradient-via: transparent;
-          --tw-gradient-to: transparent;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
@@ -10403,9 +10403,9 @@ test('to', async () => {
       @layer base {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
-          --tw-gradient-from: transparent;
-          --tw-gradient-via: transparent;
-          --tw-gradient-to: transparent;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
           --tw-gradient-stops: initial;
           --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;

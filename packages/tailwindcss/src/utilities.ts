@@ -2676,9 +2676,9 @@ export function createUtilities(theme: Theme) {
   let gradientStopProperties = () => {
     return atRoot([
       property('--tw-gradient-position'),
-      property('--tw-gradient-from', 'transparent', '<color>'),
-      property('--tw-gradient-via', 'transparent', '<color>'),
-      property('--tw-gradient-to', 'transparent', '<color>'),
+      property('--tw-gradient-from', '#0000', '<color>'),
+      property('--tw-gradient-via', '#0000', '<color>'),
+      property('--tw-gradient-to', '#0000', '<color>'),
       property('--tw-gradient-stops'),
       property('--tw-gradient-via-stops'),
       property('--tw-gradient-from-position', '0%', '<length> | <percentage>'),
