@@ -45,6 +45,7 @@ function throwOnLoadStylesheet(): never {
 
 function parseThemeOptions(selector: string) {
   let options = ThemeOptions.NONE
+  let prefix = null
 
   for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
     if (option === 'reference') {
@@ -53,10 +54,12 @@ function parseThemeOptions(selector: string) {
       options |= ThemeOptions.INLINE
     } else if (option === 'default') {
       options |= ThemeOptions.DEFAULT
+    } else if (option.startsWith('prefix(') && option.endsWith(')')) {
+      prefix = option.slice(7, -1)
     }
   }
 
-  return options
+  return { options, prefix }
 }
 
 async function parseCss(
@@ -210,9 +213,31 @@ async function parseCss(
       return WalkAction.Skip
     }
 
+    // Drop instances of `@media prefix(…)`
+    //
+    // We support `@import "tailwindcss" prefix(ident)` as a way to
+    // configure a theme prefix for variables and utilities.
+    if (node.selector.startsWith('@media prefix(')) {
+      let themeParams = node.selector.slice(7)
+
+      walk(node.nodes, (child) => {
+        if (child.kind !== 'rule') return
+        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+          child.selector += ' ' + themeParams
+          return WalkAction.Skip
+        }
+      })
+      replaceWith(node.nodes)
+      return WalkAction.Skip
+    }
+
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
     let themeOptions = parseThemeOptions(node.selector)
+
+    if (themeOptions.prefix) {
+      theme.prefix = themeOptions.prefix + '-'
+    }
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -226,7 +251,7 @@ async function parseCss(
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', themeOptions)
+        theme.add(child.property, child.value ?? '', themeOptions.options)
         return
       }
 
@@ -242,7 +267,7 @@ async function parseCss(
 
     // Keep a reference to the first `@theme` rule to update with the full theme
     // later, and delete any other `@theme` rules.
-    if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
+    if (!firstThemeRule && !(themeOptions.options & ThemeOptions.REFERENCE)) {
       firstThemeRule = node
     } else {
       replaceWith([])

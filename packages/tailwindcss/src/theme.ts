@@ -8,6 +8,8 @@ export const enum ThemeOptions {
 }
 
 export class Theme {
+  public prefix: string = ''
+
   constructor(private values = new Map<string, { value: string; options: number }>()) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
