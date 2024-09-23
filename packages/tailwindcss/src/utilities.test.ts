@@ -12898,47 +12898,47 @@ test('transition', async () => {
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-\\[--value\\] {
       transition-property: var(--value);
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-all {
       transition-property: all;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-colors {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-opacity {
       transition-property: opacity;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
       transition-property: var(--transition-property-opacity, opacity);
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-shadow {
       transition-property: box-shadow;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-transform {
       transition-property: transform, translate, scale, rotate;
-      transition-timing-function: var(--default-transition-timing-function, ease);
-      transition-duration: var(--default-transition-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
+      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
     }
 
     .transition-none {
@@ -12965,20 +12965,20 @@ test('transition', async () => {
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-duration: .1s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--tw-ease, ease);
+      transition-duration: var(--tw-duration, .1s);
     }
 
     .transition-all {
       transition-property: all;
-      transition-duration: .1s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--tw-ease, ease);
+      transition-duration: var(--tw-duration, .1s);
     }
 
     .transition-colors {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-      transition-duration: .1s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--tw-ease, ease);
+      transition-duration: var(--tw-duration, .1s);
     }"
   `)
 
@@ -12992,8 +12992,8 @@ test('transition', async () => {
   ).toMatchInlineSnapshot(`
     ".transition-all {
       transition-property: all;
-      transition-duration: 0s;
-      transition-timing-function: ease;
+      transition-timing-function: var(--tw-ease, ease);
+      transition-duration: var(--tw-duration, 0s);
     }"
   `)
 
@@ -13047,15 +13047,31 @@ test('delay', async () => {
 test('duration', async () => {
   expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
     ".duration-123 {
+      --tw-duration: .123s;
       transition-duration: .123s;
     }
 
     .duration-200 {
+      --tw-duration: .2s;
       transition-duration: .2s;
     }
 
     .duration-\\[300ms\\] {
+      --tw-duration: .3s;
       transition-duration: .3s;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-duration: initial;
+        }
+      }
+    }
+
+    @property --tw-duration {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13090,15 +13106,31 @@ test('ease', async () => {
     }
 
     .ease-\\[--value\\] {
+      --tw-ease: var(--value);
       transition-timing-function: var(--value);
     }
 
     .ease-in {
+      --tw-ease: var(--transition-timing-function-in, cubic-bezier(.4, 0, 1, 1));
       transition-timing-function: var(--transition-timing-function-in, cubic-bezier(.4, 0, 1, 1));
     }
 
     .ease-out {
+      --tw-ease: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
       transition-timing-function: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
+      }
+    }
+
+    @property --tw-ease {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
