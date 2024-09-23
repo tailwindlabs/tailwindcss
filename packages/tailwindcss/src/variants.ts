@@ -901,8 +901,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })
   staticVariant('landscape', ['@media (orientation: landscape)'], { compounds: false })
 
-  staticVariant('ltr', ['&:where([dir="ltr"], [dir="ltr"] *)'])
-  staticVariant('rtl', ['&:where([dir="rtl"], [dir="rtl"] *)'])
+  staticVariant('ltr', ['&:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)'])
+  staticVariant('rtl', ['&:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)'])
 
   staticVariant('dark', ['@media (prefers-color-scheme: dark)'], { compounds: false })
 
