@@ -126,7 +126,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
+      globs.push({ base: context.base, pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }

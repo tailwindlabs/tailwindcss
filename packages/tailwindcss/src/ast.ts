@@ -18,7 +18,7 @@ export type Comment = {
 
 export type Context = {
   kind: 'context'
-  context: Record<string, unknown>
+  context: Record<string, string>
   nodes: AstNode[]
 }
 
@@ -48,7 +48,7 @@ export function comment(value: string): Comment {
   }
 }
 
-export function context(context: Record<string, unknown>, nodes: AstNode[]): Context {
+export function context(context: Record<string, string>, nodes: AstNode[]): Context {
   return {
     kind: 'context',
     context,
@@ -74,11 +74,11 @@ export function walk(
     utils: {
       parent: AstNode | null
       replaceWith(newNode: AstNode | AstNode[]): void
-      context: Record<string, unknown>
+      context: Record<string, string>
     },
   ) => void | WalkAction,
   parent: AstNode | null = null,
-  context: Record<string, unknown> = {},
+  context: Record<string, string> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]

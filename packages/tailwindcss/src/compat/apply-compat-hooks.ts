@@ -89,7 +89,7 @@ export async function applyCompatibilityHooks({
       }
 
       pluginPaths.push([
-        { id: pluginPath, base: (context as any).base },
+        { id: pluginPath, base: context.base },
         Object.keys(options).length > 0 ? options : null,
       ])
 
@@ -107,7 +107,7 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot be nested.')
       }
 
-      configPaths.push({ id: node.selector.slice(9, -1), base: (context as any).base })
+      configPaths.push({ id: node.selector.slice(9, -1), base: context.base })
       replaceWith([])
       return
     }
