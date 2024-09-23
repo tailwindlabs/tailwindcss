@@ -23,8 +23,9 @@ export async function substituteAtImports(
           ValueParser.parse(node.selector.slice(8)),
         )
 
-        // Skip importing data URIs
+        // Skip importing data or remote URIs
         if (uri.startsWith('data:')) return
+        if (uri.startsWith('http://') || uri.startsWith('https://')) return
 
         let contextNode = context({}, [])
 
