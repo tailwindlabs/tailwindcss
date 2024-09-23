@@ -89,6 +89,7 @@
   "devDependencies": {
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
-    "lightningcss": "catalog:"
+    "lightningcss": "catalog:",
+    "dedent": "1.5.3"
   }
 }

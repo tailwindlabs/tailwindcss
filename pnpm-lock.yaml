@@ -334,6 +334,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
       lightningcss:
         specifier: 'catalog:'
         version: 1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4)

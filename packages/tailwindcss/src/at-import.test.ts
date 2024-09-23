@@ -8,21 +8,29 @@ let css = String.raw
 
 async function run(
   css: string,
-  loadStylesheet: (id: string, base: string) => Promise<{ content: string; base: string }>,
-  loadModule: (
-    id: string,
-    base: string,
-    resourceHint: 'plugin' | 'config',
-  ) => Promise<{ module: Config | Plugin; base: string }> = () =>
-    Promise.reject(new Error('Unexpected module')),
-  candidates: string[] = [],
+  {
+    loadStylesheet = () => Promise.reject(new Error('Unexpected stylesheet')),
+    loadModule = () => Promise.reject(new Error('Unexpected module')),
+    candidates = [],
+    optimize = true,
+  }: {
+    loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
+    loadModule?: (
+      id: string,
+      base: string,
+      resourceHint: 'plugin' | 'config',
+    ) => Promise<{ module: Config | Plugin; base: string }>
+    candidates?: string[]
+    optimize?: boolean
+  },
 ) {
   let compiler = await compile(css, { base: '/root', loadStylesheet, loadModule })
-  return optimizeCss(compiler.build(candidates))
+  let result = compiler.build(candidates)
+  return optimize ? optimizeCss(result) : result
 }
 
 test('can resolve relative @imports', async () => {
-  let resolver = async (id: string, base: string) => {
+  let loadStylesheet = async (id: string, base: string) => {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -40,7 +48,7 @@ test('can resolve relative @imports', async () => {
       css`
         @import './foo/bar.css';
       `,
-      resolver,
+      { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
     ".foo {
@@ -51,7 +59,7 @@ test('can resolve relative @imports', async () => {
 })
 
 test('can recursively resolve relative @imports', async () => {
-  let resolver = async (id: string, base: string) => {
+  let loadStylesheet = async (id: string, base: string) => {
     if (base === '/root' && id === './foo/bar.css') {
       return {
         content: css`
@@ -78,7 +86,7 @@ test('can recursively resolve relative @imports', async () => {
       css`
         @import './foo/bar.css';
       `,
-      resolver,
+      { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
     ".baz {
@@ -93,7 +101,7 @@ let exampleCSS = css`
     color: red;
   }
 `
-let resolver = async (id: string) => {
+let loadStylesheet = async (id: string) => {
   if (!id.endsWith('example.css')) throw new Error('Unexpected import: ' + id)
   return {
     content: exampleCSS,
@@ -101,209 +109,311 @@ let resolver = async (id: string) => {
   }
 }
 
-// Examples from https://developer.mozilla.org/en-US/docs/Web/CSS/@import
-test.each([
-  // path extraction
-  [
-    css`
-      @import 'example.css';
-    `,
-    optimizeCss(css`
-      ${exampleCSS}
-    `),
-  ],
-  [
-    css`
-      @import './example.css';
-    `,
-    optimizeCss(css`
-      ${exampleCSS}
-    `),
-  ],
-  [
-    css`
-      @import '/example.css';
-    `,
-    optimizeCss(css`
-      ${exampleCSS}
-    `),
-  ],
+test('extracts path from @import nodes', async () => {
+  await expect(
+    run(
+      css`
+        @import 'example.css';
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "a {
+      color: red;
+    }
+    "
+  `)
 
-  // url() imports are ignored
-  [
-    css`
-      @import url('example.css');
-    `,
-    optimizeCss(css`
-      @import url('example.css');
-    `),
-  ],
-  [
-    css`
-      @import url('./example.css');
-    `,
-    optimizeCss(css`
-      @import url('./example.css');
-    `),
-  ],
-  [
-    css`
-      @import url('/example.css');
-    `,
-    optimizeCss(css`
-      @import url('/example.css');
-    `),
-  ],
-  [
-    css`
-      @import url(example.css);
-    `,
-    optimizeCss(css`
-      @import url(example.css);
-    `),
-  ],
-  [
-    css`
-      @import url(./example.css);
-    `,
-    optimizeCss(css`
-      @import url(./example.css);
-    `),
-  ],
-  [
-    css`
-      @import url(/example.css);
-    `,
-    optimizeCss(css`
-      @import url(/example.css);
-    `),
-  ],
+  await expect(
+    run(
+      css`
+        @import './example.css';
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "a {
+      color: red;
+    }
+    "
+  `)
 
-  // handles case-insensitive `@import` directive
-  [
-    // prettier-ignore
-    css`
-      @ImPoRt 'example.css';
-    `,
-    optimizeCss(css`
-      ${exampleCSS}
-    `),
-  ],
+  await expect(
+    run(
+      css`
+        @import '/example.css';
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "a {
+      color: red;
+    }
+    "
+  `)
+})
 
-  // @media
-  [
-    css`
-      @import 'example.css' print;
-    `,
-    optimizeCss(css`
-      @media print {
-        ${exampleCSS}
-      }
-    `),
-  ],
-  [
-    css`
-      @import 'example.css' print, screen;
-    `,
-    optimizeCss(css`
-      @media print, screen {
-        ${exampleCSS}
-      }
-    `),
-  ],
-  [
-    css`
-      @import 'example.css' screen;
-    `,
-    optimizeCss(css`
-      @media screen {
-        ${exampleCSS}
-      }
-    `),
-  ],
-  [
-    css`
-      @import 'example.css' screen and (orientation: landscape);
-    `,
-    optimizeCss(css`
-      @media screen and (orientation: landscape) {
-        ${exampleCSS}
-      }
-    `),
-  ],
+test('url() imports are passed-through', async () => {
+  await expect(
+    run(
+      css`
+        @import url('example.css');
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url('example.css');
+    "
+  `)
 
-  // @supports
-  [
-    css`
-      @import 'example.css' supports(display: grid) screen and (max-width: 400px);
-    `,
-    optimizeCss(css`
-      @supports (display: grid) {
-        @media screen and (max-width: 400px) {
-          ${exampleCSS}
+  await expect(
+    run(
+      css`
+        @import url('./example.css');
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url('./example.css');
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import url('/example.css');
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url('/example.css');
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import url(example.css);
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url(example.css);
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import url(./example.css);
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url(./example.css);
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import url(/example.css);
+      `,
+      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@import url(/example.css);
+    "
+  `)
+})
+
+test('handles case-insensitive @import directive', async () => {
+  await expect(
+    run(
+      css`
+        @import 'example.css';
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "a {
+      color: red;
+    }
+    "
+  `)
+})
+
+test('@media', async () => {
+  await expect(
+    run(
+      css`
+        @import 'example.css' print;
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@media print {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' print, screen;
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@media print, screen {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' screen and (orientation: landscape);
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@media screen and (orientation: landscape) {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' foo(bar);
+      `,
+      { loadStylesheet, optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@media foo(bar) {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+})
+
+test('@supports', async () => {
+  await expect(
+    run(
+      css`
+        @import 'example.css' supports(display: grid);
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@supports (display: grid) {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' supports(display: grid) screen and (max-width: 400px);
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@supports (display: grid) {
+      @media screen and (width <= 400px) {
+        a {
+          color: red;
         }
       }
-    `),
-  ],
-  [
-    css`
-      @import 'example.css' supports((not (display: grid)) and (display: flex)) screen and
-        (max-width: 400px);
-    `,
-    optimizeCss(css`
-      @supports (not (display: grid)) and (display: flex) {
-        @media screen and (max-width: 400px) {
-          ${exampleCSS}
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' supports((not (display: grid)) and (display: flex)) screen and
+          (max-width: 400px);
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@supports (not (display: grid)) and (display: flex) {
+      @media screen and (width <= 400px) {
+        a {
+          color: red;
         }
       }
-    `),
-  ],
-  [
-    // prettier-ignore
-    css`
-      @import 'example.css'
-      supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
-    `,
-    optimizeCss(css`
-      @supports (selector(h2 > p)) and (font-tech(color-COLRv1)) {
-        ${exampleCSS}
-      }
-    `),
-  ],
+    }
+    "
+  `)
 
-  // @layer
-  [
-    css`
-      @import 'example.css' layer(utilities);
-    `,
-    optimizeCss(css`
-      @layer utilities {
-        ${exampleCSS}
+  await expect(
+    run(
+      // prettier-ignore
+      css`
+        @import 'example.css'
+        supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@supports selector(h2 > p) and font-tech(color-COLRv1) {
+      a {
+        color: red;
       }
-    `),
-  ],
-  [
-    css`
-      @import 'example.css' layer();
-    `,
-    optimizeCss(css`
-      @layer {
-        ${exampleCSS}
-      }
-    `),
-  ],
+    }
+    "
+  `)
+})
 
-  // unknown syntax is ignored
-  [
-    css`
-      @import 'example.css' does-not-exist(foo);
-    `,
-    optimizeCss(css`
-      @import 'example.css' does-not-exist(foo);
-    `),
-  ],
-])('resolves %s', async (input, output) => {
-  await expect(run(input, resolver)).resolves.toBe(output)
+test('@layer', async () => {
+  await expect(
+    run(
+      css`
+        @import 'example.css' layer(utilities);
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@layer utilities {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' layer();
+      `,
+      { loadStylesheet },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@layer {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
 })
 
 test('supports theme(reference) imports', async () => {
@@ -313,25 +423,25 @@ test('supports theme(reference) imports', async () => {
         @tailwind utilities;
         @import 'example.css' theme(reference);
       `,
-      () =>
-        Promise.resolve({
-          content: css`
-            @theme {
-              --color-red-500: red;
-            }
-          `,
-          base: '',
-        }),
-      () => Promise.reject(new Error('Unexpected module')),
-      ['text-red-500'],
+      {
+        loadStylesheet: () =>
+          Promise.resolve({
+            content: css`
+              @theme {
+                --color-red-500: red;
+              }
+            `,
+            base: '',
+          }),
+        candidates: ['text-red-500'],
+      },
     ),
-  ).resolves.toBe(
-    optimizeCss(css`
-      .text-red-500 {
-        color: var(--color-red-500, red);
-      }
-    `),
-  )
+  ).resolves.toMatchInlineSnapshot(`
+    ".text-red-500 {
+      color: var(--color-red-500, red);
+    }
+    "
+  `)
 })
 
 test('updates the base when loading modules inside nested files', async () => {
@@ -353,8 +463,7 @@ test('updates the base when loading modules inside nested files', async () => {
           @config './root-config.js';
           @plugin './root-plugin.js';
         `,
-        loadStylesheet,
-        loadModule,
+        { loadStylesheet, loadModule },
       )
     ).trim(),
   ).toBe('')
@@ -457,9 +566,7 @@ test('it crashes when inside a cycle', async () => {
       css`
         @import 'foo.css';
       `,
-      loadStylesheet,
+      { loadStylesheet },
     ),
-  ).rejects.toMatchInlineSnapshot(
-    `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
-  )
+  ).rejects.toMatchInlineSnapshot(`[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`)
 })
