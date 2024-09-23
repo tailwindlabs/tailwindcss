@@ -1576,6 +1576,7 @@ test('supports', async () => {
       'supports-[font-format(opentype)]:grid',
       'supports-[(display:grid)_and_font-format(opentype)]:grid',
       'supports-[font-tech(color-COLRv1)]:flex',
+      'supports-[var(--test)]:flex',
       'supports-[--test]:flex',
     ]),
   ).toMatchInlineSnapshot(`
@@ -1615,6 +1616,12 @@ test('supports', async () => {
       }
     }
 
+    @supports var(--test) {
+      .supports-\\[var\\(--test\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
     @supports (--test: var(--tw)) {
       .supports-\\[--test\\]\\:flex {
         display: flex;
@@ -1629,7 +1636,7 @@ test('supports', async () => {
       'supports-[font-format(opentype)]/foo:grid',
       'supports-[(display:grid)_and_font-format(opentype)]/foo:grid',
       'supports-[font-tech(color-COLRv1)]/foo:flex',
-      'supports-[--test]/foo:flex',
+      'supports-[var(--test)]/foo:flex',
     ]),
   ).toEqual('')
 })
