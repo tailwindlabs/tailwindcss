@@ -146,6 +146,9 @@ jobs:
       - name: Build
         run: pnpm run build
         working-directory: ${{ env.DEV_DRIVE }}/tw
+        env:
+          CARGO_PROFILE_RELEASE_LTO: 'off'
+          CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
       - name: Test
         run: pnpm run test
@@ -154,6 +157,8 @@ jobs:
       - name: Integration Tests
         run: pnpm run test:integrations
         working-directory: ${{ env.DEV_DRIVE }}/tw
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
