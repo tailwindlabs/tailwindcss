@@ -76,7 +76,12 @@ export class Theme {
   }
 
   entries() {
-    return this.values.entries()
+    if (this.prefix === '') return this.values.entries()
+
+    return Array.from(this.values, (entry) => {
+      entry[0] = `--${this.prefix}${entry[0].slice(2)}`
+      return entry
+    })
   }
 
   #clearNamespace(namespace: string) {
