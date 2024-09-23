@@ -221,6 +221,8 @@ export type Candidate =
     }
 
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
+  let prefix = designSystem.theme.prefix
+
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -262,6 +264,15 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   if (base[0] === '-') {
     negative = true
     base = base.slice(1)
+  }
+
+  // The candidate does not start with the configured prefix so it's not valid
+  // Arbitrary properties are an exception to this rule
+  if (base[0] !== '[') {
+    if (!base.startsWith(prefix)) return null
+
+    // Remove the prefix from the base
+    base = base.slice(prefix.length)
   }
 
   // Check for an exact match of a static utility first as long as it does not
