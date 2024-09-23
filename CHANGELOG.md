@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
+- Add support wrapping utilities in a selector ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
+- Add support marking all utilities as `!important` ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
 
 ### Fixed
 
