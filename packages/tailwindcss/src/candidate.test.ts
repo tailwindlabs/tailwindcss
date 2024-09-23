@@ -403,7 +403,6 @@ it('should parse a utility with an arbitrary modifier', () => {
         "important": false,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": null,
           "kind": "arbitrary",
           "value": "50%",
         },
@@ -528,7 +527,6 @@ it('should parse a utility with an arbitrary value', () => {
         "raw": "bg-[#0088cc]",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "#0088cc",
@@ -553,7 +551,6 @@ it('should parse a utility with an arbitrary value including a typehint', () => 
         "raw": "bg-[color:var(--value)]",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": "color",
           "kind": "arbitrary",
           "value": "var(--value)",
@@ -581,7 +578,6 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
         "raw": "bg-[#0088cc]/50",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "#0088cc",
@@ -602,7 +598,6 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
         "important": false,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": null,
           "kind": "arbitrary",
           "value": "50%",
         },
@@ -610,7 +605,6 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
         "raw": "bg-[#0088cc]/[50%]",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "#0088cc",
@@ -635,7 +629,6 @@ it('should parse a utility with an arbitrary value that is important', () => {
         "raw": "bg-[#0088cc]!",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "#0088cc",
@@ -650,17 +643,16 @@ it('should parse a utility with an implicit variable as the arbitrary value', ()
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[--value]', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
         "negative": false,
-        "raw": "bg-[--value]",
+        "raw": "bg-[var(--value)]",
         "root": "bg",
         "value": {
-          "dashedIdent": "--value",
           "dataType": null,
           "kind": "arbitrary",
           "value": "var(--value)",
@@ -675,17 +667,16 @@ it('should parse a utility with an implicit variable as the arbitrary value that
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[--value]!', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": true,
         "kind": "functional",
         "modifier": null,
         "negative": false,
-        "raw": "bg-[--value]!",
+        "raw": "bg-[var(--value)]!",
         "root": "bg",
         "value": {
-          "dashedIdent": "--value",
           "dataType": null,
           "kind": "arbitrary",
           "value": "var(--value)",
@@ -710,7 +701,6 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
         "raw": "bg-[var(--value)]",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "var(--value)",
@@ -735,7 +725,6 @@ it('should parse a utility with an explicit variable as the arbitrary value that
         "raw": "bg-[var(--value)]!",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "var(--value)",
@@ -766,12 +755,6 @@ it('should not parse invalid arbitrary values', () => {
     'bg-red-[#0088cc]!',
     'bg-red[#0088cc]!',
 
-    'bg-red-[--value]',
-    'bg-red[--value]',
-
-    'bg-red-[--value]!',
-    'bg-red[--value]!',
-
     'bg-red-[var(--value)]',
     'bg-red[var(--value)]',
 
@@ -786,18 +769,17 @@ it('should parse a utility with an implicit variable as the modifier', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-red-500/[--value]', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": false,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": "--value",
           "kind": "arbitrary",
           "value": "var(--value)",
         },
         "negative": false,
-        "raw": "bg-red-500/[--value]",
+        "raw": "bg-red-500/[var(--value)]",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -814,18 +796,17 @@ it('should parse a utility with an implicit variable as the modifier that is imp
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-red-500/[--value]!', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": true,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": "--value",
           "kind": "arbitrary",
           "value": "var(--value)",
         },
         "negative": false,
-        "raw": "bg-red-500/[--value]!",
+        "raw": "bg-red-500/[var(--value)]!",
         "root": "bg",
         "value": {
           "fraction": null,
@@ -848,7 +829,6 @@ it('should parse a utility with an explicit variable as the modifier', () => {
         "important": false,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": null,
           "kind": "arbitrary",
           "value": "var(--value)",
         },
@@ -876,7 +856,6 @@ it('should parse a utility with an explicit variable as the modifier that is imp
         "important": true,
         "kind": "functional",
         "modifier": {
-          "dashedIdent": null,
           "kind": "arbitrary",
           "value": "var(--value)",
         },
@@ -1037,7 +1016,6 @@ it('should replace `_` with ` `', () => {
         "raw": "content-["hello_world"]",
         "root": "content",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": ""hello world"",
@@ -1062,7 +1040,6 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
         "raw": "content-["hello\\_world"]",
         "root": "content",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": ""hello_world"",
@@ -1087,7 +1064,6 @@ it('should not replace `_` inside of `url()`', () => {
         "raw": "bg-[url(https://example.com/some_page)]",
         "root": "bg",
         "value": {
-          "dashedIdent": null,
           "dataType": null,
           "kind": "arbitrary",
           "value": "url(https://example.com/some_page)",
