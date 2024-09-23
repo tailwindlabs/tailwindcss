@@ -63,7 +63,10 @@ export async function substituteAtImports(
   await Promise.all(promises)
 }
 
-// c.f. https://github.com/postcss/postcss-import/blob/master/lib/parse-statements.js
+// Modified and inlined version of `parse-statements` from
+// `postcss-import` <https://github.com/postcss/postcss-import>
+// Copyright (c) 2014 Maxime Thirouin, Jason Campbell & Kevin Mårtensson
+// Released under the MIT License.
 function parseImportParams(params: ValueParser.ValueAstNode[]) {
   let uri
   let layer: string | null = null
@@ -84,21 +87,7 @@ function parseImportParams(params: ValueParser.ValueAstNode[]) {
     }
 
     if (node.kind === 'function' && /^url$/i.test(node.value)) {
-      if (uri) throw new Error("Multiple url's")
-
-      if (!node.nodes?.[0]?.value) throw new Error('Unable to find uri')
-      if (node.nodes.length > 1) throw new Error('Unable to find uri')
-
-      let uriCandidate = node.nodes[0].value
-      if (
-        (uriCandidate.at(0) === '"' && uriCandidate.at(-1) === '"') ||
-        (uriCandidate.at(0) === "'" && uriCandidate.at(-1) === "'")
-      ) {
-        uri = node.nodes[0].value.slice(1, -1)
-      } else {
-        uri = node.nodes[0].value
-      }
-      continue
+      throw new Error('url functions are not supported')
     }
 
     if (!uri) throw new Error('Unable to find uri')

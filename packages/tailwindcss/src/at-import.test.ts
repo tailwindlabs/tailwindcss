@@ -103,13 +103,39 @@ let resolver = async (id: string) => {
 
 // Examples from https://developer.mozilla.org/en-US/docs/Web/CSS/@import
 test.each([
-  // url extraction
+  // path extraction
+  [
+    css`
+      @import 'example.css';
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import './example.css';
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+  [
+    css`
+      @import '/example.css';
+    `,
+    optimizeCss(css`
+      ${exampleCSS}
+    `),
+  ],
+
+  // url() imports are ignored
   [
     css`
       @import url('example.css');
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url('example.css');
     `),
   ],
   [
@@ -117,7 +143,7 @@ test.each([
       @import url('./example.css');
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url('./example.css');
     `),
   ],
   [
@@ -125,7 +151,7 @@ test.each([
       @import url('/example.css');
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url('/example.css');
     `),
   ],
   [
@@ -133,7 +159,7 @@ test.each([
       @import url(example.css);
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url(example.css);
     `),
   ],
   [
@@ -141,7 +167,7 @@ test.each([
       @import url(./example.css);
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url(./example.css);
     `),
   ],
   [
@@ -149,7 +175,7 @@ test.each([
       @import url(/example.css);
     `,
     optimizeCss(css`
-      ${exampleCSS}
+      @import url(/example.css);
     `),
   ],
 
@@ -157,7 +183,7 @@ test.each([
   [
     // prettier-ignore
     css`
-      @ImPoRt url('example.css');
+      @ImPoRt 'example.css';
     `,
     optimizeCss(css`
       ${exampleCSS}
@@ -167,7 +193,7 @@ test.each([
   // @media
   [
     css`
-      @import url('example.css') print;
+      @import 'example.css' print;
     `,
     optimizeCss(css`
       @media print {
@@ -177,7 +203,7 @@ test.each([
   ],
   [
     css`
-      @import url('example.css') print, screen;
+      @import 'example.css' print, screen;
     `,
     optimizeCss(css`
       @media print, screen {
@@ -197,7 +223,7 @@ test.each([
   ],
   [
     css`
-      @import url('example.css') screen and (orientation: landscape);
+      @import 'example.css' screen and (orientation: landscape);
     `,
     optimizeCss(css`
       @media screen and (orientation: landscape) {
@@ -209,7 +235,7 @@ test.each([
   // @supports
   [
     css`
-      @import url('example.css') supports(display: grid) screen and (max-width: 400px);
+      @import 'example.css' supports(display: grid) screen and (max-width: 400px);
     `,
     optimizeCss(css`
       @supports (display: grid) {
@@ -221,7 +247,7 @@ test.each([
   ],
   [
     css`
-      @import url('example.css') supports((not (display: grid)) and (display: flex)) screen and
+      @import 'example.css' supports((not (display: grid)) and (display: flex)) screen and
         (max-width: 400px);
     `,
     optimizeCss(css`
@@ -235,7 +261,7 @@ test.each([
   [
     // prettier-ignore
     css`
-      @import url('example.css')
+      @import 'example.css'
       supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
     `,
     optimizeCss(css`
@@ -270,19 +296,10 @@ test.each([
   // unknown syntax is ignored
   [
     css`
-      @import url(example.css) does-not-exist(foo);
+      @import 'example.css' does-not-exist(foo);
     `,
     optimizeCss(css`
-      @import url(example.css) does-not-exist(foo);
-    `),
-  ],
-  // prettier-ignore
-  [
-    css`
-      @import url('example.css' url-mod);
-    `,
-    optimizeCss(css`
-      @import url('example.css' url-mod);
+      @import 'example.css' does-not-exist(foo);
     `),
   ],
 ])('resolves %s', async (input, output) => {
@@ -430,7 +447,7 @@ test('it crashes when inside a cycle', async () => {
   let loadStylesheet = () =>
     Promise.resolve({
       content: css`
-        @import url('foo.css');
+        @import 'foo.css';
       `,
       base: '/root',
     })
@@ -438,7 +455,7 @@ test('it crashes when inside a cycle', async () => {
   expect(
     run(
       css`
-        @import url('foo.css');
+        @import 'foo.css';
       `,
       loadStylesheet,
     ),
