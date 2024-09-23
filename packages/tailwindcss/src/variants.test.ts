@@ -2762,11 +2762,11 @@ test('variant order', async () => {
       }
     }
 
-    .ltr\\:flex:where([dir="ltr"], [dir="ltr"] *) {
+    .ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
       display: flex;
     }
 
-    .rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
+    .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
       display: flex;
     }
 
