@@ -13,6 +13,8 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
+  important: string | boolean
+
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
@@ -44,6 +46,11 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     theme,
     utilities,
     variants,
+
+    // How to mark important utilities
+    // - wrap with a selector (any string)
+    // - do nothing (false)
+    important: false,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []

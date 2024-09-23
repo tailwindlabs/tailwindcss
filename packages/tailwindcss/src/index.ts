@@ -76,6 +76,7 @@ async function parseCss(
   await substituteAtImports(ast, base, loadStylesheet)
 
   // Find all `@theme` declarations
+  let important: string | true | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -232,6 +233,20 @@ async function parseCss(
       return WalkAction.Skip
     }
 
+    // Drop instances of `@media selector(…)`
+    //
+    // We support `@import "tailwindcss" selector(…)` as a way to
+    // nest utilities under a custom selector.
+    if (node.selector.startsWith('@media selector(')) {
+      let themeParams = node.selector.slice(16, -1)
+
+      important = `${themeParams} &`
+
+      replaceWith(node.nodes)
+
+      return WalkAction.Skip
+    }
+
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
     let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
@@ -283,6 +298,10 @@ async function parseCss(
   })
 
   let designSystem = buildDesignSystem(theme)
+
+  if (important) {
+    designSystem.important = important
+  }
 
   // Apply hooks from backwards compatibility layer. This function takes a lot
   // of random arguments because it really just needs access to "the world" to

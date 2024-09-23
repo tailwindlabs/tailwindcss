@@ -154,6 +154,10 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       if (result === null) return []
     }
 
+    if (typeof designSystem.important === 'string') {
+      node.nodes = [rule(designSystem.important, node.nodes)]
+    }
+
     rules.push({
       node,
       propertySort,

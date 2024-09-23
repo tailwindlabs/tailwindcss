@@ -1,6 +1,9 @@
 import { expect, test } from 'vitest'
+import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
+
+const css = String.raw
 
 function loadDesignSystem() {
   let theme = new Theme()
@@ -82,4 +85,38 @@ test('The variant `has-force` does not crash', () => {
   let has = variants.find((v) => v.name === 'has')!
 
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
+})
+
+test('Utilities show when nested in a selector in intellisense', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities' selector(#app);
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      #app & {
+        text-decoration-line: underline;
+      }
+    }
+    ",
+      ".hover\\:line-through {
+      #app & {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
+        }
+      }
+    }
+    ",
+    ]
+  `)
 })
