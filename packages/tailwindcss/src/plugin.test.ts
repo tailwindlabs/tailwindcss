@@ -10,15 +10,16 @@ test('plugin', async () => {
   `
 
   let compiler = await compile(input, {
-    loadPlugin: async () => {
-      return plugin(function ({ addBase }) {
+    loadModule: async () => ({
+      module: plugin(function ({ addBase }) {
         addBase({
           body: {
             margin: '0',
           },
         })
-      })
-    },
+      }),
+      base: '/root',
+    }),
   })
 
   expect(compiler.build([])).toMatchInlineSnapshot(`
@@ -37,8 +38,8 @@ test('plugin.withOptions', async () => {
   `
 
   let compiler = await compile(input, {
-    loadPlugin: async () => {
-      return plugin.withOptions(function (opts = { foo: '1px' }) {
+    loadModule: async () => ({
+      module: plugin.withOptions(function (opts = { foo: '1px' }) {
         return function ({ addBase }) {
           addBase({
             body: {
@@ -46,8 +47,9 @@ test('plugin.withOptions', async () => {
             },
           })
         }
-      })
-    },
+      }),
+      base: '/root',
+    }),
   })
 
   expect(compiler.build([])).toMatchInlineSnapshot(`

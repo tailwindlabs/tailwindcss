@@ -15,21 +15,25 @@ import { registerThemeVariantOverrides } from './theme-variants'
 
 export async function applyCompatibilityHooks({
   designSystem,
+  base,
   ast,
-  loadPlugin,
-  loadConfig,
+  loadModule,
   globs,
 }: {
   designSystem: DesignSystem
+  base: string
   ast: AstNode[]
-  loadPlugin: (path: string) => Promise<Plugin>
-  loadConfig: (path: string) => Promise<UserConfig>
+  loadModule: (
+    path: string,
+    base: string,
+    resourceHint: 'plugin' | 'config',
+  ) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
-  let pluginPaths: [string, CssPluginOptions | null][] = []
-  let configPaths: string[] = []
+  let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
+  let configPaths: { id: string; base: string }[] = []
 
-  walk(ast, (node, { parent, replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule' || node.selector[0] !== '@') return
 
     // Collect paths from `@plugin` at-rules
@@ -86,7 +90,10 @@ export async function applyCompatibilityHooks({
         options[decl.property] = parts.length === 1 ? parts[0] : parts
       }
 
-      pluginPaths.push([pluginPath, Object.keys(options).length > 0 ? options : null])
+      pluginPaths.push([
+        { id: pluginPath, base: context.base },
+        Object.keys(options).length > 0 ? options : null,
+      ])
 
       replaceWith([])
       return
@@ -102,7 +109,7 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot be nested.')
       }
 
-      configPaths.push(node.selector.slice(9, -1))
+      configPaths.push({ id: node.selector.slice(9, -1), base: context.base })
       replaceWith([])
       return
     }
@@ -142,38 +149,48 @@ export async function applyCompatibilityHooks({
   // any additional backwards compatibility hooks.
   if (!pluginPaths.length && !configPaths.length) return
 
-  let configs = await Promise.all(
-    configPaths.map(async (configPath) => ({
-      path: configPath,
-      config: await loadConfig(configPath),
-    })),
-  )
-  let pluginDetails = await Promise.all(
-    pluginPaths.map(async ([pluginPath, pluginOptions]) => ({
-      path: pluginPath,
-      plugin: await loadPlugin(pluginPath),
-      options: pluginOptions,
-    })),
-  )
+  let [configs, pluginDetails] = await Promise.all([
+    Promise.all(
+      configPaths.map(async ({ id, base }) => {
+        let loaded = await loadModule(id, base, 'config')
+        return {
+          path: id,
+          base: loaded.base,
+          config: loaded.module as UserConfig,
+        }
+      }),
+    ),
+    Promise.all(
+      pluginPaths.map(async ([{ id, base }, pluginOptions]) => {
+        let loaded = await loadModule(id, base, 'plugin')
+        return {
+          path: id,
+          base: loaded.base,
+          plugin: loaded.module as Plugin,
+          options: pluginOptions,
+        }
+      }),
+    ),
+  ])
 
-  let plugins = pluginDetails.map((detail) => {
+  let pluginConfigs = pluginDetails.map((detail) => {
     if (!detail.options) {
-      return detail.plugin
+      return { config: { plugins: [detail.plugin] }, base: detail.base }
     }
 
     if ('__isOptionsFunction' in detail.plugin) {
-      return detail.plugin(detail.options)
+      return { config: { plugins: [detail.plugin(detail.options)] }, base: detail.base }
     }
 
     throw new Error(`The plugin "${detail.path}" does not accept options`)
   })
 
-  let userConfig = [{ config: { plugins } }, ...configs]
+  let userConfig = [...pluginConfigs, ...configs]
 
   let resolvedConfig = resolveConfig(designSystem, [
-    { config: createCompatConfig(designSystem.theme) },
+    { config: createCompatConfig(designSystem.theme), base },
     ...userConfig,
-    { config: { plugins: [darkModePlugin] } },
+    { config: { plugins: [darkModePlugin] }, base },
   ])
   let resolvedUserConfig = resolveConfig(designSystem, userConfig)
 
@@ -221,7 +238,7 @@ export async function applyCompatibilityHooks({
       )
     }
 
-    globs.push({ origin: file.base, pattern: file.pattern })
+    globs.push(file)
   }
 }
 

@@ -1,11 +1,9 @@
+import { normalizePath } from '@tailwindcss/node'
 import path from 'node:path'
 import type { AtRule, Plugin } from 'postcss'
-import { normalizePath } from './normalize-path'
 
 const SINGLE_QUOTE = "'"
 const DOUBLE_QUOTE = '"'
-
-export { normalizePath }
 
 export default function fixRelativePathsPlugin(): Plugin {
   // Retain a list of touched at-rules to avoid infinite loops

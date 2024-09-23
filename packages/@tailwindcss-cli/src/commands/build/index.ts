@@ -2,13 +2,10 @@ import watcher from '@parcel/watcher'
 import { compile } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
-import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import postcss from 'postcss'
-import atImport from 'postcss-import'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
 import {
@@ -19,7 +16,6 @@ import {
   println,
   relative,
 } from '../../utils/renderer'
-import { resolveCssId } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
@@ -83,17 +79,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let start = process.hrtime.bigint()
 
-  // Resolve the input
-  let [input, cssImportPaths] = await handleImports(
-    args['--input']
-      ? args['--input'] === '-'
-        ? await drainStdin()
-        : await fs.readFile(args['--input'], 'utf-8')
-      : css`
-          @import 'tailwindcss';
-        `,
-    args['--input'] ?? base,
-  )
+  let input = args['--input']
+    ? args['--input'] === '-'
+      ? await drainStdin()
+      : await fs.readFile(args['--input'], 'utf-8')
+    : css`
+        @import 'tailwindcss';
+      `
 
   let previous = {
     css: '',
@@ -128,7 +120,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
   let inputBasePath = path.dirname(path.resolve(inputFile))
-  let fullRebuildPaths: string[] = cssImportPaths.slice()
+  let fullRebuildPaths: string[] = []
 
   function createCompiler(css: string) {
     return compile(css, {
@@ -143,12 +135,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = await createCompiler(input)
   let scanner = new Scanner({
     detectSources: { base },
-    sources: compiler.globs.map(({ origin, pattern }) => ({
-      // Ensure the glob is relative to the input CSS file or the config file
-      // where it is specified.
-      base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
-      pattern,
-    })),
+    sources: compiler.globs,
   })
 
   // Watch for changes
@@ -196,17 +183,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Clear all watchers
             cleanupWatchers()
 
-            // Collect the new `input` and `cssImportPaths`.
-            ;[input, cssImportPaths] = await handleImports(
-              args['--input']
-                ? await fs.readFile(args['--input'], 'utf-8')
-                : css`
-                    @import 'tailwindcss';
-                  `,
-              args['--input'] ?? base,
-            )
+            // Read the new `input`.
+            let input = args['--input']
+              ? args['--input'] === '-'
+                ? await drainStdin()
+                : await fs.readFile(args['--input'], 'utf-8')
+              : css`
+                  @import 'tailwindcss';
+                `
             clearRequireCache(resolvedFullRebuildPaths)
-            fullRebuildPaths = cssImportPaths.slice()
+            fullRebuildPaths = []
 
             // Create a new compiler, given the new `input`
             compiler = await createCompiler(input)
@@ -214,12 +200,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanner = new Scanner({
               detectSources: { base },
-              sources: compiler.globs.map(({ origin, pattern }) => ({
-                // Ensure the glob is relative to the input CSS file or the
-                // config file where it is specified.
-                base: origin ? path.dirname(path.resolve(inputBasePath, origin)) : inputBasePath,
-                pattern,
-              })),
+              sources: compiler.globs,
             })
 
             // Scan the directory for candidates
@@ -365,51 +346,6 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
     watchers.dispose()
     debounceQueue.dispose()
   }
-}
-
-function handleImports(
-  input: string,
-  file: string,
-): [css: string, paths: string[]] | Promise<[css: string, paths: string[]]> {
-  // TODO: Should we implement this ourselves instead of relying on PostCSS?
-  //
-  // Relevant specification:
-  //   - CSS Import Resolve: https://csstools.github.io/css-import-resolve/
-
-  if (!input.includes('@import')) {
-    return [input, [file]]
-  }
-
-  return postcss()
-    .use(
-      atImport({
-        resolve(id, basedir) {
-          let resolved = resolveCssId(id, basedir)
-          if (!resolved) {
-            throw new Error(`Could not resolve ${id} from ${basedir}`)
-          }
-          return resolved
-        },
-        load(id) {
-          // We need to synchronously read the file here because when bundled
-          // with bun, some of the ids might resolve to files inside the bun
-          // embedded files root which can only be read by `node:fs` and not
-          // `node:fs/promises`.
-          return readFileSync(id, 'utf-8')
-        },
-      }),
-    )
-    .use(fixRelativePathsPlugin())
-    .process(input, { from: file })
-    .then((result) => [
-      result.css,
-
-      // Use `result.messages` to get the imported files. This also includes the
-      // current file itself.
-      [file].concat(
-        result.messages.filter((msg) => msg.type === 'dependency').map((msg) => msg.file),
-      ),
-    ])
 }
 
 function optimizeCss(

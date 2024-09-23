@@ -7,7 +7,6 @@ export default defineConfig([
     cjsInterop: true,
     dts: true,
     entry: ['src/index.ts'],
-    noExternal: ['internal-postcss-fix-relative-paths'],
   },
   {
     format: ['cjs'],
@@ -15,6 +14,5 @@ export default defineConfig([
     cjsInterop: true,
     dts: true,
     entry: ['src/index.cts'],
-    noExternal: ['internal-postcss-fix-relative-paths'],
   },
 ])

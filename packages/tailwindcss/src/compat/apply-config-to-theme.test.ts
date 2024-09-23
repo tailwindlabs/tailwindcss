@@ -35,6 +35,7 @@ test('Config values can be merged into the theme', () => {
           },
         },
       },
+      base: '/root',
     },
   ])
   applyConfigToTheme(design, resolvedUserConfig)

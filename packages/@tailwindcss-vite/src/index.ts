@@ -1,13 +1,9 @@
-import { compile } from '@tailwindcss/node'
+import { compile, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 
 import { Scanner } from '@tailwindcss/oxide'
-import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import fs from 'node:fs/promises'
 import path from 'path'
-import postcss from 'postcss'
-import postcssImport from 'postcss-import'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -269,18 +265,6 @@ function isPotentialCssRootFile(id: string) {
   return isCssFile
 }
 
-function isCssRootFile(content: string) {
-  return (
-    content.includes('@tailwind') ||
-    content.includes('@config') ||
-    content.includes('@plugin') ||
-    content.includes('@apply') ||
-    content.includes('@theme') ||
-    content.includes('@variant') ||
-    content.includes('@utility')
-  )
-}
-
 function optimizeCss(
   input: string,
   { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
@@ -378,30 +362,7 @@ class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
-      let postcssCompiled = await postcss([
-        postcssImport({
-          load: (path) => {
-            this.dependencies.add(path)
-            addWatchFile(path)
-            return fs.readFile(path, 'utf8')
-          },
-        }),
-        fixRelativePathsPlugin(),
-      ]).process(content, {
-        from: inputPath,
-        to: inputPath,
-      })
-      let css = postcssCompiled.css
-
-      // This is done inside the Root#generate() method so that we can later use
-      // information from the Tailwind compiler to determine if the file is a
-      // CSS root (necessary because we will probably inline the `@import`
-      // resolution at some point).
-      if (!isCssRootFile(css)) {
-        return false
-      }
-
-      this.compiler = await compile(css, {
+      this.compiler = await compile(content, {
         base: inputBase,
         onDependency: (path) => {
           addWatchFile(path)
@@ -410,12 +371,7 @@ class Root {
       })
 
       this.scanner = new Scanner({
-        sources: this.compiler.globs.map(({ origin, pattern }) => ({
-          // Ensure the glob is relative to the input CSS file or the config
-          // file where it is specified.
-          base: origin ? path.dirname(path.resolve(inputBase, origin)) : inputBase,
-          pattern,
-        })),
+        sources: this.compiler.globs,
       })
     }
 

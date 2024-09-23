@@ -16,7 +16,13 @@ export type Comment = {
   value: string
 }
 
-export type AstNode = Rule | Declaration | Comment
+export type Context = {
+  kind: 'context'
+  context: Record<string, string>
+  nodes: AstNode[]
+}
+
+export type AstNode = Rule | Declaration | Comment | Context
 
 export function rule(selector: string, nodes: AstNode[]): Rule {
   return {
@@ -42,6 +48,14 @@ export function comment(value: string): Comment {
   }
 }
 
+export function context(context: Record<string, string>, nodes: AstNode[]): Context {
+  return {
+    kind: 'context',
+    context,
+    nodes,
+  }
+}
+
 export enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
@@ -60,12 +74,23 @@ export function walk(
     utils: {
       parent: AstNode | null
       replaceWith(newNode: AstNode | AstNode[]): void
+      context: Record<string, string>
     },
   ) => void | WalkAction,
   parent: AstNode | null = null,
+  context: Record<string, string> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+
+    // We want context nodes to be transparent in walks. This means that
+    // whenever we encounter one, we immediately walk through its children and
+    // furthermore we also don't update the parent.
+    if (node.kind === 'context') {
+      walk(node.nodes, visit, parent, { ...context, ...node.context })
+      continue
+    }
+
     let status =
       visit(node, {
         parent,
@@ -76,6 +101,7 @@ export function walk(
           // will process this position (containing the replaced node) again.
           i--
         },
+        context,
       }) ?? WalkAction.Continue
 
     // Stop the walk entirely
@@ -85,7 +111,7 @@ export function walk(
     if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule') {
-      walk(node.nodes, visit, node)
+      walk(node.nodes, visit, node, context)
     }
   }
 }
@@ -169,6 +195,13 @@ export function toCss(ast: AstNode[]) {
     // Comment
     else if (node.kind === 'comment') {
       css += `${indent}/*${node.value}*/\n`
+    }
+
+    // Context Node
+    else if (node.kind === 'context') {
+      for (let child of node.nodes) {
+        css += stringify(child, depth)
+      }
     }
 
     // Declaration

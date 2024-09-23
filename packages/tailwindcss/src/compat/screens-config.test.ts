@@ -20,14 +20,17 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
   `
 
   let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          screens: {
-            sm: '44rem',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            screens: {
+              sm: '44rem',
+            },
           },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -100,17 +103,20 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
   `
 
   let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          screens: {
-            xs: '30rem',
-            sm: '40rem',
-            md: '48rem',
-            lg: '60rem',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            screens: {
+              xs: '30rem',
+              sm: '40rem',
+              md: '48rem',
+              lg: '60rem',
+            },
           },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -195,14 +201,17 @@ test('JS config `screens` only setup, even if those match the default-theme expo
   `
 
   let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        screens: {
-          sm: '40rem',
-          md: '48rem',
-          lg: '64rem',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          screens: {
+            sm: '40rem',
+            md: '48rem',
+            lg: '64rem',
+          },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -271,14 +280,17 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
   `
 
   let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        screens: {
-          mini: '40rem',
-          midi: '48rem',
-          maxi: '64rem',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          screens: {
+            mini: '40rem',
+            midi: '48rem',
+            maxi: '64rem',
+          },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -374,16 +386,19 @@ test('JS config with `theme: { extends }` should not include the `default-config
   `
 
   let compiler = await compile(input, {
-    loadConfig: async () => ({
-      theme: {
-        extend: {
-          screens: {
-            mini: '40rem',
-            midi: '48rem',
-            maxi: '64rem',
+    loadModule: async () => ({
+      module: {
+        theme: {
+          extend: {
+            screens: {
+              mini: '40rem',
+              midi: '48rem',
+              maxi: '64rem',
+            },
           },
         },
       },
+      base: '/root',
     }),
   })
 
@@ -449,22 +464,25 @@ describe('complex screen configs', () => {
     `
 
     let compiler = await compile(input, {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            screens: {
-              sm: { max: '639px' },
-              md: [
-                //
-                { min: '668px', max: '767px' },
-                '868px',
-              ],
-              lg: { min: '868px' },
-              xl: { min: '1024px', max: '1279px' },
-              tall: { raw: '(min-height: 800px)' },
+      loadModule: async () => ({
+        module: {
+          theme: {
+            extend: {
+              screens: {
+                sm: { max: '639px' },
+                md: [
+                  //
+                  { min: '668px', max: '767px' },
+                  '868px',
+                ],
+                lg: { min: '868px' },
+                xl: { min: '1024px', max: '1279px' },
+                tall: { raw: '(min-height: 800px)' },
+              },
             },
           },
         },
+        base: '/root',
       }),
     })
 
@@ -533,15 +551,18 @@ describe('complex screen configs', () => {
     `
 
     let compiler = await compile(input, {
-      loadConfig: async () => ({
-        theme: {
-          extend: {
-            screens: {
-              sm: '40rem',
-              portrait: { raw: 'screen and (orientation: portrait)' },
+      loadModule: async () => ({
+        module: {
+          theme: {
+            extend: {
+              screens: {
+                sm: '40rem',
+                portrait: { raw: 'screen and (orientation: portrait)' },
+              },
             },
           },
         },
+        base: '/root',
       }),
     })
 

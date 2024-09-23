@@ -1,6 +1,17 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
-import { comment, decl, rule, toCss, walk, WalkAction, type Rule } from './ast'
+import {
+  comment,
+  context,
+  decl,
+  rule,
+  toCss,
+  walk,
+  WalkAction,
+  type AstNode,
+  type Rule,
+} from './ast'
+import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
@@ -15,16 +26,21 @@ export type Config = UserConfig
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  loadPlugin?: (path: string) => Promise<Plugin>
-  loadConfig?: (path: string) => Promise<UserConfig>
+  base?: string
+  loadModule?: (
+    id: string,
+    base: string,
+    resourceHint: 'plugin' | 'config',
+  ) => Promise<{ module: Plugin | Config; base: string }>
+  loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
 }
 
-function throwOnPlugin(): never {
-  throw new Error('No `loadPlugin` function provided to `compile`')
+function throwOnLoadModule(): never {
+  throw new Error('No `loadModule` function provided to `compile`')
 }
 
-function throwOnConfig(): never {
-  throw new Error('No `loadConfig` function provided to `compile`')
+function throwOnLoadStylesheet(): never {
+  throw new Error('No `loadStylesheet` function provided to `compile`')
 }
 
 function parseThemeOptions(selector: string) {
@@ -45,9 +61,15 @@ function parseThemeOptions(selector: string) {
 
 async function parseCss(
   css: string,
-  { loadPlugin = throwOnPlugin, loadConfig = throwOnConfig }: CompileOptions = {},
+  {
+    base = '',
+    loadModule = throwOnLoadModule,
+    loadStylesheet = throwOnLoadStylesheet,
+  }: CompileOptions = {},
 ) {
-  let ast = CSS.parse(css)
+  let ast = [context({ base }, CSS.parse(css))] as AstNode[]
+
+  await substituteAtImports(ast, base, loadStylesheet)
 
   // Find all `@theme` declarations
   let theme = new Theme()
@@ -55,9 +77,9 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
-  let globs: { origin?: string; pattern: string }[] = []
+  let globs: { base: string; pattern: string }[] = []
 
-  walk(ast, (node, { parent, replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule') return
 
     // Collect custom `@utility` at-rules
@@ -104,7 +126,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ pattern: path.slice(1, -1) })
+      globs.push({ base: context.base, pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }
@@ -234,7 +256,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, ast, loadPlugin, loadConfig, globs })
+  await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -316,7 +338,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { origin?: string; pattern: string }[]
+  globs: { base: string; pattern: string }[]
   build(candidates: string[]): string
 }> {
   let { designSystem, ast, globs } = await parseCss(css, opts)

@@ -80,6 +80,86 @@ test(
 )
 
 test(
+  'production build with `postcss-import` (string)',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "postcss-import": "^16",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
+          }
+        }
+      `,
+      'project-a/postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            'postcss-import': {},
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'project-a/index.html': html`
+        <div
+          class="underline 2xl:font-bold hocus:underline inverted:flex"
+        ></div>
+      `,
+      'project-a/plugin.js': js`
+        module.exports = function ({ addVariant }) {
+          addVariant('inverted', '@media (inverted-colors: inverted)')
+          addVariant('hocus', ['&:focus', '&:hover'])
+        }
+      `,
+      'project-a/tailwind.config.js': js`
+        module.exports = {
+          content: ['../project-b/src/**/*.js'],
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @config '../tailwind.config.js';
+        @source '../../project-b/src/**/*.html';
+        @plugin '../plugin.js';
+      `,
+      'project-a/src/index.js': js`
+        const className = "content-['a/src/index.js']"
+        module.exports = { className }
+      `,
+      'project-b/src/index.html': html`
+        <div class="flex" />
+      `,
+      'project-b/src/index.js': js`
+        const className = "content-['b/src/index.js']"
+        module.exports = { className }
+      `,
+    },
+  },
+  async ({ root, fs, exec }) => {
+    await exec('pnpm postcss src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      candidate`underline`,
+      candidate`flex`,
+      candidate`content-['a/src/index.js']`,
+      candidate`content-['b/src/index.js']`,
+      candidate`inverted:flex`,
+      candidate`hocus:underline`,
+    ])
+  },
+)
+
+test(
   'production build (ESM)',
   {
     fs: {
