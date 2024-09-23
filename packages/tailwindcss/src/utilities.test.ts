@@ -15660,10 +15660,12 @@ describe('custom utilities', () => {
         display: flex;
       }
 
-      .hover\\:foo:hover {
-        flex-direction: column;
-        text-decoration-line: underline;
-        display: flex;
+      @media (hover: hover) {
+        .hover\\:foo:hover {
+          flex-direction: column;
+          text-decoration-line: underline;
+          display: flex;
+        }
       }"
     `)
   })

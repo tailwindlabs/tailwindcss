@@ -581,16 +581,22 @@ test('focus-within', async () => {
 
 test('hover', async () => {
   expect(await run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
+    "@media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
-    .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
-      display: flex;
+    @media (hover: hover) {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+        display: flex;
+      }
     }
 
-    .hover\\:flex:hover {
-      display: flex;
+    @media (hover: hover) {
+      .hover\\:flex:hover {
+        display: flex;
+      }
     }"
   `)
   expect(await run(['hover/foo:flex'])).toEqual('')
@@ -615,8 +621,10 @@ test('focus', async () => {
 
 test('group-hover group-focus sorting', async () => {
   expect(await run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
+    "@media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
     .group-focus\\:flex:is(:where(.group):focus *) {
@@ -624,8 +632,10 @@ test('group-hover group-focus sorting', async () => {
     }"
   `)
   expect(await run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
+    "@media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
     .group-focus\\:flex:is(:where(.group):focus *) {
@@ -741,16 +751,24 @@ test('group-[...]', async () => {
       display: flex;
     }
 
-    .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *):hover {
-      display: flex;
+    @media (hover: hover) {
+      .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *):hover {
+        display: flex;
+      }
     }
 
-    .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group) p *) {
-      display: flex;
+    @media (hover: hover) {
+      .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group) p *) {
+        display: flex;
+      }
     }
 
-    .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group) p *):hover {
-      display: flex;
+    @media (hover: hover) {
+      @media (hover: hover) {
+        .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group) p *):hover {
+          display: flex;
+        }
+      }
     }"
   `)
 
@@ -786,20 +804,26 @@ test('group-*', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
+    "@media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
     .group-focus\\:flex:is(:where(.group):focus *) {
       display: flex;
     }
 
-    .group-focus\\:group-hover\\:flex:is(:where(.group):focus *):is(:where(.group):hover *) {
-      display: flex;
+    @media (hover: hover) {
+      .group-focus\\:group-hover\\:flex:is(:where(.group):focus *):is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
-    .group-hover\\:group-focus\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
-      display: flex;
+    @media (hover: hover) {
+      .group-hover\\:group-focus\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
+        display: flex;
+      }
     }
 
     .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
@@ -843,16 +867,22 @@ test('peer-[...]', async () => {
       display: flex;
     }
 
-    .hover\\:peer-\\[\\&_p\\]\\:flex:hover:is(:where(.peer) p ~ *) {
-      display: flex;
+    @media (hover: hover) {
+      .hover\\:peer-\\[\\&_p\\]\\:flex:hover:is(:where(.peer) p ~ *) {
+        display: flex;
+      }
     }
 
-    .peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *):hover {
-      display: flex;
+    @media (hover: hover) {
+      .peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *):hover {
+        display: flex;
+      }
     }
 
-    .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover:is(:where(.peer) p ~ *):focus {
-      display: flex;
+    @media (hover: hover) {
+      .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover:is(:where(.peer) p ~ *):focus {
+        display: flex;
+      }
     }"
   `)
 
@@ -887,20 +917,26 @@ test('peer-*', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".peer-hover\\:flex:is(:where(.peer):hover ~ *) {
-      display: flex;
+    "@media (hover: hover) {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+        display: flex;
+      }
     }
 
     .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
       display: flex;
     }
 
-    .peer-focus\\:peer-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.peer):hover ~ *) {
-      display: flex;
+    @media (hover: hover) {
+      .peer-focus\\:peer-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.peer):hover ~ *) {
+        display: flex;
+      }
     }
 
-    .peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
-      display: flex;
+    @media (hover: hover) {
+      .peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
+        display: flex;
+      }
     }
 
     .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
@@ -2479,12 +2515,16 @@ test('variant order', async () => {
       --breakpoint-2xl: 1536px;
     }
 
-    .group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
     }
 
-    .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
-      display: flex;
+    @media (hover: hover) {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+        display: flex;
+      }
     }
 
     .first-letter\\:flex:first-letter {
@@ -2625,8 +2665,10 @@ test('variant order', async () => {
       display: flex;
     }
 
-    .hover\\:flex:hover {
-      display: flex;
+    @media (hover: hover) {
+      .hover\\:flex:hover {
+        display: flex;
+      }
     }
 
     .focus\\:flex:focus {

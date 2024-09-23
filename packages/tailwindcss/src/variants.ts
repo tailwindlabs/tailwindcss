@@ -452,15 +452,9 @@ export function createVariants(theme: Theme): Variants {
     ['focus-within', '&:focus-within'],
     [
       'hover',
-      '&:hover',
-      // TODO: Update tests for this:
-      // v => {
-      //   v.nodes = [
-      //     rule('@media (hover: hover) and (pointer: fine)', [
-      //       rule('&:hover', v.nodes),
-      //     ]),
-      //   ]
-      // }
+      (r) => {
+        r.nodes = [rule('&:hover', [rule('@media (hover: hover)', r.nodes)])]
+      },
     ],
     ['focus', '&:focus'],
     ['focus-visible', '&:focus-visible'],
@@ -470,7 +464,11 @@ export function createVariants(theme: Theme): Variants {
   ]
 
   for (let [key, value] of pseudos) {
-    staticVariant(key, [value])
+    if (typeof value === 'string') {
+      staticVariant(key, [value])
+    } else {
+      variants.static(key, value)
+    }
   }
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
