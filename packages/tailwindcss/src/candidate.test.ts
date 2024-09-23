@@ -6,12 +6,17 @@ import { Variants } from './variants'
 
 function run(
   candidate: string,
-  { utilities, variants }: { utilities?: Utilities; variants?: Variants } = {},
+  {
+    utilities,
+    variants,
+    prefix,
+  }: { utilities?: Utilities; variants?: Variants; prefix?: string } = {},
 ) {
   utilities ??= new Utilities()
   variants ??= new Variants()
 
   let designSystem = buildDesignSystem(new Theme())
+  designSystem.theme.prefix = prefix ?? null
 
   designSystem.utilities = utilities
   designSystem.variants = variants
@@ -1253,6 +1258,49 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
               "kind": "arbitrary",
               "value": "'}[("\\''",
             },
+          },
+        ],
+      },
+    ]
+  `)
+})
+
+it('should parse candidates with a prefix', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+
+  // A prefix is required
+  expect(run(`flex`, { utilities, variants, prefix: 'tw' })).toEqual([])
+
+  // The prefix always comes first — even before variants
+  expect(run(`tw:flex`, { utilities, variants, prefix: 'tw' })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "tw:flex",
+        "root": "flex",
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run(`tw:hover:flex`, { utilities, variants, prefix: 'tw' })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "negative": false,
+        "raw": "tw:hover:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "compounds": true,
+            "kind": "static",
+            "root": "hover",
           },
         ],
       },

@@ -226,6 +226,15 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   //             ^^^^^^^^^  -> Base
   let rawVariants = segment(input, ':')
 
+  // A prefix is a special variant used to prefix all utilities. When present,
+  // all utilities must start with that variant which we will then remove from
+  // the variant list so no other part of the codebase has to know about it.
+  if (designSystem.theme.prefix) {
+    if (rawVariants[0] !== designSystem.theme.prefix) return null
+
+    rawVariants.shift()
+  }
+
   // Safety: At this point it is safe to use TypeScript's non-null assertion
   // operator because even if the `input` was an empty string, splitting an
   // empty string by `:` will always result in an array with at least one
