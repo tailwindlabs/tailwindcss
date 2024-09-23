@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.13] - 2024-09-23
+
 ### Fixed
 
 - Improve source glob verification performance ([#14481](https://github.com/tailwindlabs/tailwindcss/pull/14481))
@@ -2445,7 +2449,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...HEAD
+[3.4.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...v3.4.13
 [3.4.12]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...v3.4.12
 [3.4.11]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...v3.4.11
 [3.4.10]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.9...v3.4.10
