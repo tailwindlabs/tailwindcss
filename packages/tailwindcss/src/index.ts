@@ -256,7 +256,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, ast, loadModule, globs })
+  await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)

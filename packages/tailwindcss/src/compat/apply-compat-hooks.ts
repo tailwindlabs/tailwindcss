@@ -15,11 +15,13 @@ import { registerThemeVariantOverrides } from './theme-variants'
 
 export async function applyCompatibilityHooks({
   designSystem,
+  base,
   ast,
   loadModule,
   globs,
 }: {
   designSystem: DesignSystem
+  base: string
   ast: AstNode[]
   loadModule: (
     path: string,
@@ -186,9 +188,9 @@ export async function applyCompatibilityHooks({
   let userConfig = [...pluginConfigs, ...configs]
 
   let resolvedConfig = resolveConfig(designSystem, [
-    { config: createCompatConfig(designSystem.theme), base: '' },
+    { config: createCompatConfig(designSystem.theme), base },
     ...userConfig,
-    { config: { plugins: [darkModePlugin] }, base: '' },
+    { config: { plugins: [darkModePlugin] }, base },
   ])
   let resolvedUserConfig = resolveConfig(designSystem, userConfig)
 

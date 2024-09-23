@@ -492,7 +492,6 @@ test('emits the right base for @source directives inside nested files', async ()
   )
 
   expect(compiler.globs).toEqual([
-    //
     { pattern: './nested/**/*.css', base: '/root/foo' },
     { pattern: './root/**/*.css', base: '/root' },
   ])
@@ -540,7 +539,6 @@ test('emits the right base for @source found inside JS configs and plugins from 
   )
 
   expect(compiler.globs).toEqual([
-    //
     { pattern: './nested-plugin/*.html', base: '/root/foo-plugin' },
     { pattern: './root-plugin/*.html', base: '/root-plugin' },
 
@@ -568,5 +566,7 @@ test('it crashes when inside a cycle', async () => {
       `,
       { loadStylesheet },
     ),
-  ).rejects.toMatchInlineSnapshot(`[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`)
+  ).rejects.toMatchInlineSnapshot(
+    `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
+  )
 })
