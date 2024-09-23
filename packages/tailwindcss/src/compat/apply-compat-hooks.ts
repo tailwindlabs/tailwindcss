@@ -229,6 +229,14 @@ export async function applyCompatibilityHooks({
     designSystem.theme.prefix = resolvedConfig.prefix
   }
 
+  // If an important strategy has already been set in CSS don't override it
+  if (!designSystem.important && resolvedConfig.important) {
+    designSystem.important =
+      typeof resolvedConfig.important === 'string'
+        ? `${resolvedConfig.important} &`
+        : resolvedConfig.important
+  }
+
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
   // by plugins or JS config files. This is significantly slower than just
