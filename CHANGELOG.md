@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip candidates with invalid `theme()` calls ([#14437](https://github.com/tailwindlabs/tailwindcss/pull/14437))
 - Don't generate `inset-*` utilities for `--inset-shadow-*` and `--inset-ring-*` theme values ([#14447](https://github.com/tailwindlabs/tailwindcss/pull/14447))
 - Include `--default-transition-*` variables in `transition-*` utility output ([#14482](https://github.com/tailwindlabs/tailwindcss/pull/14482))
+- Ensure `rtl` and `ltr` variants work with `[dir=auto]` ([#14306](https://github.com/tailwindlabs/tailwindcss/pull/14306))
 
 ### Changed
 
@@ -342,3 +343,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+
