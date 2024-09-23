@@ -30,7 +30,10 @@ export async function substituteAtImports(
 
         promises.push(
           (async () => {
-            if (recurseCount > 50) {
+            // Since we do not have fully resolved paths in core, we can't reliably detect circular
+            // imports. Instead, we try to limit the recursion depth to a number that is too large
+            // to be reached in practice.
+            if (recurseCount > 100) {
               throw new Error(
                 `Exceeded maximum recursion depth while resolving \`${uri}\` in \`${base}\`)`,
               )
