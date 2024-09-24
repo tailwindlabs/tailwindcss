@@ -1,8 +1,5 @@
 import { Scanner } from '@tailwindcss/oxide'
-// This file uses private APIs to work with candidates.
-// TODO: Should we export this in the public package so we have the same
-// version as the tailwindcss package?
-import { parseCandidate, type Candidate, type Variant } from '../../../tailwindcss/src/candidate'
+import { type Candidate, type Variant } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractCandidates(
@@ -14,7 +11,7 @@ export async function extractCandidates(
 
   let candidates: { candidate: Candidate; start: number; end: number }[] = []
   for (let { candidate: rawCandidate, position: start } of result) {
-    for (let candidate of parseCandidate(rawCandidate, designSystem)) {
+    for (let candidate of designSystem.parseCandidate(rawCandidate)) {
       candidates.push({ candidate, start, end: start + rawCandidate.length })
     }
   }

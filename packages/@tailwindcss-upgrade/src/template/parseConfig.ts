@@ -7,6 +7,7 @@ export async function parseConfig(
   path: string,
   options: { base: string },
 ): Promise<{ designSystem: DesignSystem; globs: { base: string; pattern: string }[] }> {
+  // TODO: base path needs to be resolved to v4
   let input = css`
     @import 'tailwindcss';
     @config './${path}';

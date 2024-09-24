@@ -1,6 +1,5 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
-import { parseCandidate } from '../../../tailwindcss/src/candidate'
 import { extractCandidates, printCandidate } from './candidates'
 
 let html = String.raw
@@ -181,7 +180,7 @@ describe('toString()', () => {
       base: __dirname,
     })
 
-    let candidates = parseCandidate(candidate, designSystem)
+    let candidates = designSystem.parseCandidate(candidate)
 
     // Sometimes we will have a functional and a static candidate for the same
     // raw input string (e.g. `-inset-full`). Dedupe in this case.
