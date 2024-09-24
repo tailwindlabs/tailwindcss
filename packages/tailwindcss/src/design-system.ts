@@ -49,6 +49,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
 
     // How to mark important utilities
     // - wrap with a selector (any string)
+    // - add an !important (true)
     // - do nothing (false)
     important: false,
 

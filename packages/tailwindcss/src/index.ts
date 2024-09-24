@@ -247,6 +247,18 @@ async function parseCss(
       return WalkAction.Skip
     }
 
+    // Drop instances of `@media important`
+    //
+    // We support `@import "tailwindcss" important` to mark all declarations
+    // in generated utilities as `!important`.
+    if (node.selector.startsWith('@media important')) {
+      important = true
+
+      replaceWith(node.nodes)
+
+      return WalkAction.Skip
+    }
+
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
     let [themeOptions, themePrefix] = parseThemeOptions(node.selector)

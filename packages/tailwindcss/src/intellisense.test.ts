@@ -120,3 +120,33 @@ test('Utilities show when nested in a selector in intellisense', async () => {
     ]
   `)
 })
+
+test('Utilities, when marked as important, show as important in intellisense', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities' important;
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline!important;
+    }
+    ",
+      ".hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through!important;
+        }
+      }
+    }
+    ",
+    ]
+  `)
+})
