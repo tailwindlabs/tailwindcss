@@ -3,11 +3,7 @@ import { Scanner } from '@tailwindcss/oxide'
 // This file uses private APIs to work with candidates.
 // TODO: Should we export this in the public package so we have the same
 // version as the tailwindcss package?
-import {
-  parseCandidate,
-  type Candidate,
-  type CandidateModifier,
-} from '../../../tailwindcss/src/candidate'
+import { parseCandidate, type Candidate, type Variant } from '../../../tailwindcss/src/candidate'
 
 let css = String.raw
 
@@ -32,46 +28,122 @@ export async function extractCandidates(
   return candidates
 }
 
-export function toString(candidate: Candidate): string {
-  let variants = ''
-  let important = candidate.important ? '!' : ''
+export function printCandidate(candidate: Candidate | null) {
+  if (candidate === null) return 'null'
+  let parts: string[] = []
 
-  switch (candidate.kind) {
-    case 'arbitrary': {
-      return `${variants}[${candidate.property}:${candidate.value}]${formatModifier(
-        candidate.modifier,
-      )}${important}`
-    }
-    case 'static': {
-      return `${formatNegative(candidate.negative)}${variants}${candidate.root}${important}`
-    }
-    case 'functional': {
-      let value =
-        candidate.value === null
-          ? ''
-          : candidate.value.kind === 'named'
-            ? `-${candidate.value.value}`
-            : `-[${candidate.value.value}]`
+  for (let variant of candidate.variants) {
+    parts.unshift(printVariant(variant))
+  }
 
-      return `${formatNegative(candidate.negative)}${variants}${candidate.root}${value}${formatModifier(
-        candidate.modifier,
-      )}${important}`
+  let base: string = ''
+
+  // Handle negative
+  if (candidate.kind === 'static' || candidate.kind === 'functional') {
+    if (candidate.negative) {
+      base += '-'
     }
   }
+
+  // Handle static
+  if (candidate.kind === 'static') {
+    base += candidate.root
+  }
+
+  // Handle functional
+  if (candidate.kind === 'functional') {
+    base += candidate.root
+
+    if (candidate.value) {
+      if (candidate.value.kind === 'arbitrary') {
+        if (candidate.value === null) {
+          base += ''
+        } else if (candidate.value.dataType) {
+          base += `-[${candidate.value.dataType}:${escapeArbitrary(candidate.value.value)}]`
+        } else {
+          base += `-[${escapeArbitrary(candidate.value.value)}]`
+        }
+      } else if (candidate.value.kind === 'named') {
+        base += `-${candidate.value.value}`
+      }
+    }
+  }
+
+  // Handle arbitrary
+  if (candidate.kind === 'arbitrary') {
+    base += `[${candidate.property}:${escapeArbitrary(candidate.value)}]`
+  }
+
+  // Handle modifier
+  if (candidate.kind === 'arbitrary' || candidate.kind === 'functional') {
+    if (candidate.modifier) {
+      if (candidate.modifier.kind === 'arbitrary') {
+        base += `/[${escapeArbitrary(candidate.modifier.value)}]`
+      } else if (candidate.modifier.kind === 'named') {
+        base += `/${candidate.modifier.value}`
+      }
+    }
+  }
+
+  // Handle important
+  if (candidate.important) {
+    base += '!'
+  }
+
+  parts.push(base)
+
+  return parts.join(':')
 }
 
-function formatModifier(modifier: CandidateModifier | null): string {
-  if (modifier === null) {
-    return ''
+function printVariant(variant: Variant) {
+  // Handle static variants
+  if (variant.kind === 'static') {
+    return variant.root
   }
-  switch (modifier.kind) {
-    case 'arbitrary':
-      return `/[${modifier.value}]`
-    case 'named':
-      return `/${modifier.value}`
+
+  // Handle arbitrary variants
+  if (variant.kind === 'arbitrary') {
+    return `[${escapeArbitrary(variant.selector)}]`
   }
+
+  let base: string = ''
+
+  // Handle functional variants
+  if (variant.kind === 'functional') {
+    if (variant.value) {
+      if (variant.value.kind === 'arbitrary') {
+        base += `${variant.root}-[${escapeArbitrary(variant.value.value)}]`
+      } else if (variant.value.kind === 'named') {
+        base += `${variant.root}-${variant.value.value}`
+      }
+    } else {
+      base += variant.root
+    }
+  }
+
+  // Handle compound variants
+  if (variant.kind === 'compound') {
+    base += variant.root
+    base += '-'
+    base += printVariant(variant.variant)
+  }
+
+  // Handle modifiers
+  if (variant.kind === 'functional' || variant.kind === 'compound') {
+    if (variant.modifier) {
+      if (variant.modifier.kind === 'arbitrary') {
+        base += `/[${escapeArbitrary(variant.modifier.value)}]`
+      } else if (variant.modifier.kind === 'named') {
+        base += `/${variant.modifier.value}`
+      }
+    }
+  }
+
+  return base
 }
 
-function formatNegative(negative: boolean): string {
-  return negative ? '-' : ''
+function escapeArbitrary(input: string) {
+  return input
+    .replaceAll(String.raw`_`, String.raw`\_`) // Escape underscores to keep them as-is
+    .replaceAll(String.raw` `, String.raw`_`) // Replace spaces with underscores
 }
