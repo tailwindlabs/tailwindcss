@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new `shadow-initial` and `inset-shadow-initial` utilities for resetting shadow colors ([#14468](https://github.com/tailwindlabs/tailwindcss/pull/14468))
 - Add `field-sizing-*` utilities ([#14469](https://github.com/tailwindlabs/tailwindcss/pull/14469))
 - Include gradient color properties in color transitions ([#14489](https://github.com/tailwindlabs/tailwindcss/pull/14489))
-- _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411))
+- _Experimental_: Add CSS codemods for `@apply` ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14434))
+- _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411), [#14504](https://github.com/tailwindlabs/tailwindcss/pull/14504))
 - _Experimental_: Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
 
 ### Fixed
