@@ -1,6 +1,5 @@
-import { parse, type AtRule, type ChildNode, type Comment, type Plugin, type Rule } from 'postcss'
+import { type AtRule, type Comment, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
-import { format } from 'prettier'
 import { segment } from '../../../tailwindcss/src/utils/segment'
 import { walk, WalkAction, walkDepth } from '../utils/walk'
 
@@ -264,31 +263,11 @@ export function migrateAtLayerUtilities(): Plugin {
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-layer-utilities',
-    OnceExit: async (root) => {
+    OnceExit: (root) => {
       // Migrate `@layer utilities` and `@layer components` into `@utility`.
       // Using this instead of the visitor API in case we want to use
       // postcss-nesting in the future.
       root.walkAtRules('layer', migrate)
-
-      // Prettier is used to generate cleaner output, but it's only used on the
-      // nodes that were marked as `pretty` during the migration.
-      {
-        // Find the nodes to format
-        let nodesToFormat: ChildNode[] = []
-        walk(root, (child) => {
-          if (child.raws.tailwind_pretty) {
-            nodesToFormat.push(child)
-            return WalkAction.Skip
-          }
-        })
-
-        // Format the nodes
-        await Promise.all(
-          nodesToFormat.map(async (node) => {
-            node.replaceWith(parse(await format(node.toString(), { parser: 'css', semi: true })))
-          }),
-        )
-      }
 
       // Merge `@utility <name>` with the same name into a single rule. This can
       // happen when the same classes is used in multiple `@layer utilities`

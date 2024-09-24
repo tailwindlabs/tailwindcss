@@ -8,6 +8,7 @@ const css = dedent
 function migrate(input: string) {
   return postcss()
     .use(migrateAtLayerUtilities())
+    .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
