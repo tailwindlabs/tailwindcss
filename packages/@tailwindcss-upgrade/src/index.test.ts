@@ -30,15 +30,13 @@ it('should print the input as-is', async () => {
 it('should migrate a stylesheet', async () => {
   expect(
     await migrateContents(css`
-      @import 'tailwindcss/base';
-      @import './my-base.css';
+      @tailwind base;
 
       html {
         overflow: hidden;
       }
 
-      @import 'tailwindcss/components';
-      @import './my-components.css';
+      @tailwind components;
 
       .a {
         z-index: 1;
@@ -54,8 +52,7 @@ it('should migrate a stylesheet', async () => {
         z-index: 3;
       }
 
-      @import 'tailwindcss/utilities';
-      @import './my-utilities.css';
+      @tailwind utilities;
 
       .d {
         z-index: 4;
@@ -68,13 +65,7 @@ it('should migrate a stylesheet', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "
-
-    @import 'tailwindcss';
-
-    @import './my-base.css' layer(base);
-    @import './my-components.css' layer(components);
-    @import './my-utilities.css' layer(utilities);
+    "@import 'tailwindcss';
 
     @layer base {
       html {
@@ -107,5 +98,23 @@ it('should migrate a stylesheet', async () => {
     @utility e {
       z-index: 5;
     }"
+  `)
+})
+
+it('should migrate a stylesheet (with imports)', async () => {
+  expect(
+    await migrateContents(css`
+      @import 'tailwindcss/base';
+      @import './my-base.css';
+      @import 'tailwindcss/components';
+      @import './my-components.css';
+      @import 'tailwindcss/utilities';
+      @import './my-utilities.css';
+    `),
+  ).toMatchInlineSnapshot(`
+    "@import 'tailwindcss';
+    @import './my-base.css' layer(base);
+    @import './my-components.css' layer(components);
+    @import './my-utilities.css' layer(utilities);"
   `)
 })
