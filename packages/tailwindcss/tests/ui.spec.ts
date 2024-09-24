@@ -11,12 +11,12 @@ const css = String.raw
 test('touch action', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="touch-pan-x touch-pan-y data-test:touch-pinch-zoom">Hello world</div>`,
+    html`<div id="x" class="touch-pan-x touch-pan-y hover:touch-pinch-zoom">Hello world</div>`,
   )
 
   expect(await getPropertyValue('#x', 'touch-action')).toEqual('pan-x pan-y')
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect([
     // `manipulation` is an alias for `pan-x pan-y pinch-zoom` and some engines
@@ -71,7 +71,7 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="bg-gradient-to-r from-red-500 data-test:via-green-500 to-blue-500">
+      <div id="x" class="bg-gradient-to-r from-red-500 hover:via-green-500 to-blue-500">
         Hello world
       </div>
     `,
@@ -81,7 +81,7 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
   )
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
@@ -92,10 +92,7 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`
-      <div
-        id="x"
-        class="bg-gradient-to-r from-red-500 via-green-500 data-test:via-none to-blue-500"
-      >
+      <div id="x" class="bg-gradient-to-r from-red-500 via-green-500 hover:via-none to-blue-500">
         Hello world
       </div>
     `,
@@ -105,7 +102,7 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
   )
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
     'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
@@ -226,8 +223,8 @@ test('shadow colors', async ({ page }) => {
       <div id="a" class="shadow shadow-red-500"></div>
       <div id="b" class="shadow-xl shadow-red-500"></div>
       <div id="c" class="shadow-[0px_2px_4px] shadow-red-500"></div>
-      <div id="d" class="shadow shadow-red-500 data-test:shadow-xl">Hello world</div>
-      <div id="e" class="shadow shadow-red-500 data-test:shadow-xl data-test:shadow-initial">
+      <div id="d" class="shadow shadow-red-500 hover:shadow-xl">Hello world</div>
+      <div id="e" class="shadow shadow-red-500 hover:shadow-xl hover:shadow-initial">
         Hello world
       </div>
     `,
@@ -271,7 +268,7 @@ test('shadow colors', async ({ page }) => {
     ].join(', '),
   )
 
-  await page.locator('#d').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#d').hover()
 
   expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
     [
@@ -293,7 +290,7 @@ test('shadow colors', async ({ page }) => {
     ].join(', '),
   )
 
-  await page.locator('#e').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#e').hover()
 
   expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
     [
@@ -313,12 +310,10 @@ test('inset shadow colors', async ({ page }) => {
       <div id="a" class="inset-shadow-sm inset-shadow-red-500"></div>
       <div id="b" class="inset-shadow inset-shadow-red-500"></div>
       <div id="c" class="inset-shadow-[0px_3px_6px] inset-shadow-red-500"></div>
-      <div id="d" class="inset-shadow-sm inset-shadow-red-500 data-test:inset-shadow">
-        Hello world
-      </div>
+      <div id="d" class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow">Hello world</div>
       <div
         id="e"
-        class="inset-shadow-sm inset-shadow-red-500 data-test:inset-shadow data-test:inset-shadow-initial"
+        class="inset-shadow-sm inset-shadow-red-500 hover:inset-shadow hover:inset-shadow-initial"
       >
         Hello world
       </div>
@@ -363,7 +358,7 @@ test('inset shadow colors', async ({ page }) => {
     ].join(', '),
   )
 
-  await page.locator('#d').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#d').hover()
 
   expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
     [
@@ -385,7 +380,7 @@ test('inset shadow colors', async ({ page }) => {
     ].join(', '),
   )
 
-  await page.locator('#e').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#e').hover()
 
   expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
     [
@@ -410,14 +405,14 @@ test('outline style is optional', async ({ page }) => {
 test('outline style is preserved when changing outline width', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="outline-2 outline-dotted outline-white data-test:outline-4">
+    html`<div id="x" class="outline-2 outline-dotted outline-white hover:outline-4">
       Hello world
     </div>`,
   )
 
   expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 2px')
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 4px')
 })
@@ -434,13 +429,13 @@ test('borders can be added without a border-style utility', async ({ page }) => 
 test('borders can be added to a single side without a border-style utility', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="text-black border-r-2 border-dashed data-test:border-r-4">
+    html`<div id="x" class="text-black border-r-2 border-dashed hover:border-r-4">
       Hello world
     </div>`,
   )
   expect(await getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
 })
@@ -448,14 +443,14 @@ test('borders can be added to a single side without a border-style utility', asy
 test('dividers can be added without setting border-style', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="a" class="divide-y-2 divide-dashed data-test:divide-y-4">
+    html`<div id="a" class="divide-y-2 divide-dashed hover:divide-y-4">
       <div id="b">First</div>
       <div>Second</div>
     </div>`,
   )
   expect(await getPropertyValue('#b', 'border-bottom')).toEqual('2px dashed rgb(0, 0, 0)')
 
-  await page.locator('#a').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#a').hover()
 
   expect(await getPropertyValue('#b', 'border-bottom')).toEqual('4px dashed rgb(0, 0, 0)')
 })
@@ -463,11 +458,11 @@ test('dividers can be added without setting border-style', async ({ page }) => {
 test('scale can be a number or percentage', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="scale-[50%] data-test:scale-[1.5]">Hello world</div>`,
+    html`<div id="x" class="scale-[50%] hover:scale-[1.5]">Hello world</div>`,
   )
   expect(await getPropertyValue('#x', 'scale')).toEqual('0.5')
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'scale')).toEqual('1.5')
 })
@@ -476,12 +471,12 @@ test('scale can be a number or percentage', async ({ page }) => {
 test('content-none persists when conditionally styling a pseudo-element', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="after:content-none after:data-test:underline">Hello world</div>`,
+    html`<div id="x" class="after:content-none after:hover:underline">Hello world</div>`,
   )
 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
 
   expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 })
@@ -490,9 +485,9 @@ test('explicit leading utilities are respected when overriding font-size', async
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="text-sm data-test:text-xl">Hello world</div>
-      <div id="y" class="text-sm leading-tight data-test:text-xl">Hello world</div>
-      <div id="z" class="text-sm leading-[10px] data-test:text-xl">Hello world</div>
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm leading-tight hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm leading-[10px] hover:text-xl">Hello world</div>
     `,
     css`
       @theme {
@@ -506,15 +501,15 @@ test('explicit leading utilities are respected when overriding font-size', async
   )
 
   expect(await getPropertyValue('#x', 'line-height')).toEqual('16px')
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
   expect(await getPropertyValue('#x', 'line-height')).toEqual('24px')
 
   expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
-  await page.locator('#y').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#y').hover()
   expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
 
   expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
-  await page.locator('#z').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#z').hover()
   expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
 })
 
@@ -522,9 +517,9 @@ test('explicit leading utilities are overridden by line-height modifiers', async
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="text-sm data-test:text-xl/[100px]">Hello world</div>
-      <div id="y" class="text-sm leading-tight data-test:text-xl/[100px]">Hello world</div>
-      <div id="z" class="text-sm leading-[10px] data-test:text-xl/[100px]">Hello world</div>
+      <div id="x" class="text-sm hover:text-xl/[100px]">Hello world</div>
+      <div id="y" class="text-sm leading-tight hover:text-xl/[100px]">Hello world</div>
+      <div id="z" class="text-sm leading-[10px] hover:text-xl/[100px]">Hello world</div>
     `,
     css`
       @theme {
@@ -538,15 +533,15 @@ test('explicit leading utilities are overridden by line-height modifiers', async
   )
 
   expect(await getPropertyValue('#x', 'line-height')).toEqual('16px')
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
   expect(await getPropertyValue('#x', 'line-height')).toEqual('100px')
 
   expect(await getPropertyValue('#y', 'line-height')).toEqual('8px')
-  await page.locator('#y').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#y').hover()
   expect(await getPropertyValue('#y', 'line-height')).toEqual('100px')
 
   expect(await getPropertyValue('#z', 'line-height')).toEqual('10px')
-  await page.locator('#z').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#z').hover()
   expect(await getPropertyValue('#z', 'line-height')).toEqual('100px')
 })
 
@@ -554,9 +549,9 @@ test('explicit tracking utilities are respected when overriding font-size', asyn
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="text-sm data-test:text-xl">Hello world</div>
-      <div id="y" class="text-sm tracking-tight data-test:text-xl">Hello world</div>
-      <div id="z" class="text-sm tracking-[3px] data-test:text-xl">Hello world</div>
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm tracking-tight hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm tracking-[3px] hover:text-xl">Hello world</div>
     `,
     css`
       @theme {
@@ -568,15 +563,15 @@ test('explicit tracking utilities are respected when overriding font-size', asyn
   )
 
   expect(await getPropertyValue('#x', 'letter-spacing')).toEqual('5px')
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
   expect(await getPropertyValue('#x', 'letter-spacing')).toEqual('10px')
 
   expect(await getPropertyValue('#y', 'letter-spacing')).toEqual('1px')
-  await page.locator('#y').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#y').hover()
   expect(await getPropertyValue('#y', 'letter-spacing')).toEqual('1px')
 
   expect(await getPropertyValue('#z', 'letter-spacing')).toEqual('3px')
-  await page.locator('#z').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#z').hover()
   expect(await getPropertyValue('#z', 'letter-spacing')).toEqual('3px')
 })
 
@@ -584,9 +579,9 @@ test('explicit font-weight utilities are respected when overriding font-size', a
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="x" class="text-sm data-test:text-xl">Hello world</div>
-      <div id="y" class="text-sm font-bold data-test:text-xl">Hello world</div>
-      <div id="z" class="text-sm font-[900] data-test:text-xl">Hello world</div>
+      <div id="x" class="text-sm hover:text-xl">Hello world</div>
+      <div id="y" class="text-sm font-bold hover:text-xl">Hello world</div>
+      <div id="z" class="text-sm font-[900] hover:text-xl">Hello world</div>
     `,
     css`
       @theme {
@@ -597,15 +592,15 @@ test('explicit font-weight utilities are respected when overriding font-size', a
   )
 
   expect(await getPropertyValue('#x', 'font-weight')).toEqual('100')
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
   expect(await getPropertyValue('#x', 'font-weight')).toEqual('200')
 
   expect(await getPropertyValue('#y', 'font-weight')).toEqual('700')
-  await page.locator('#y').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#y').hover()
   expect(await getPropertyValue('#y', 'font-weight')).toEqual('700')
 
   expect(await getPropertyValue('#z', 'font-weight')).toEqual('900')
-  await page.locator('#z').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#z').hover()
   expect(await getPropertyValue('#z', 'font-weight')).toEqual('900')
 })
 
@@ -617,7 +612,7 @@ test('explicit duration and ease utilities are respected when overriding transit
     html`
       <div
         id="x"
-        class="ease-[linear] duration-500 transition-[opacity] data-test:transition-[background-color]"
+        class="ease-[linear] duration-500 transition-[opacity] hover:transition-[background-color]"
       >
         Hello world
       </div>
@@ -626,7 +621,7 @@ test('explicit duration and ease utilities are respected when overriding transit
 
   expect(await getPropertyValue('#x', 'transition-timing-function')).toEqual('linear')
   expect(await getPropertyValue('#x', 'transition-duration')).toEqual('0.5s')
-  await page.locator('#x').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#x').hover()
   expect(await getPropertyValue('#x', 'transition-timing-function')).toEqual('linear')
   expect(await getPropertyValue('#x', 'transition-duration')).toEqual('0.5s')
 })
@@ -668,7 +663,7 @@ async function render(page: Page, content: string, extraCss: string = '') {
     content: optimizeCss(build(candidates)),
   })
 
-  await page.locator('#mouse-park').evaluate((el) => (el.dataset.test = ''))
+  await page.locator('#mouse-park').hover()
 
   return {
     getPropertyValue(selector: string | [string, string], property: string) {
