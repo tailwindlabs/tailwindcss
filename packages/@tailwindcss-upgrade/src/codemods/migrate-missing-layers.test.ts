@@ -14,7 +14,7 @@ function migrate(input: string) {
     .then((result) => result.css)
 }
 
-it('should migrate rules between tw directives', async () => {
+it('should migrate rules between tailwind directives', async () => {
   expect(
     await migrate(css`
       @tailwind base;
