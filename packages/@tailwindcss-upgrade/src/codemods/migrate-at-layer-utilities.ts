@@ -1,50 +1,8 @@
-import { AtRule, parse, Rule, type ChildNode, type Comment, type Plugin } from 'postcss'
+import { parse, type AtRule, type ChildNode, type Comment, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
 import { format } from 'prettier'
 import { segment } from '../../../tailwindcss/src/utils/segment'
-
-enum WalkAction {
-  // Continue walking the tree. Default behavior.
-  Continue,
-
-  // Skip walking into the current node.
-  Skip,
-
-  // Stop walking the tree entirely.
-  Stop,
-}
-
-interface Walkable<T> {
-  each(cb: (node: T, index: number) => void): void
-}
-
-// Custom walk implementation where we can skip going into nodes when we don't
-// need to process them.
-function walk<T>(rule: Walkable<T>, cb: (rule: T) => void | WalkAction): undefined | false {
-  let result: undefined | false = undefined
-
-  rule.each?.((node) => {
-    let action = cb(node) ?? WalkAction.Continue
-    if (action === WalkAction.Stop) {
-      result = false
-      return result
-    }
-    if (action !== WalkAction.Skip) {
-      result = walk(node as Walkable<T>, cb)
-      return result
-    }
-  })
-
-  return result
-}
-
-// Depth first walk reversal implementation.
-function walkDepth<T>(rule: Walkable<T>, cb: (rule: T) => void) {
-  rule?.each?.((node) => {
-    walkDepth(node as Walkable<T>, cb)
-    cb(node)
-  })
-}
+import { walk, WalkAction, walkDepth } from '../utils/walk'
 
 export function migrateAtLayerUtilities(): Plugin {
   function migrate(atRule: AtRule) {
