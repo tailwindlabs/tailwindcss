@@ -1919,8 +1919,10 @@ describe('matchVariant', () => {
       "@layer utilities {
         @media (width >= 100px) {
           @media (width <= 200px) {
-            .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:hover\\:underline:hover {
-              text-decoration-line: underline;
+            @media (hover: hover) {
+              .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:hover\\:underline:hover {
+                text-decoration-line: underline;
+              }
             }
           }
         }

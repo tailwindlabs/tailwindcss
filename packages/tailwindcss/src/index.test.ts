@@ -35,8 +35,10 @@ describe('compiling CSS', () => {
           display: flex;
         }
 
-        .hover\\:underline:hover {
-          text-decoration-line: underline;
+        @media (hover: hover) {
+          .hover\\:underline:hover {
+            text-decoration-line: underline;
+          }
         }
 
         @media (width >= 768px) {
@@ -193,8 +195,10 @@ describe('@apply', () => {
         text-decoration-line: underline;
       }
 
-      .foo:hover {
-        background-color: var(--color-blue-500, #3b82f6);
+      @media (hover: hover) {
+        .foo:hover {
+          background-color: var(--color-blue-500, #3b82f6);
+        }
       }
 
       @media (width >= 768px) {
@@ -390,16 +394,20 @@ describe('arbitrary variants', () => {
 describe('variant stacking', () => {
   it('should stack simple variants', async () => {
     expect(await run(['focus:hover:flex'])).toMatchInlineSnapshot(`
-      ".focus\\:hover\\:flex:focus:hover {
-        display: flex;
+      "@media (hover: hover) {
+        .focus\\:hover\\:flex:focus:hover {
+          display: flex;
+        }
       }"
     `)
   })
 
   it('should stack arbitrary variants and simple variants', async () => {
     expect(await run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
-      ".\\[\\&_p\\]\\:hover\\:flex p:hover {
-        display: flex;
+      "@media (hover: hover) {
+        .\\[\\&_p\\]\\:hover\\:flex p:hover {
+          display: flex;
+        }
       }"
     `)
   })
@@ -420,13 +428,17 @@ describe('variant stacking', () => {
         content: var(--tw-content);
       }
 
-      .before\\:hover\\:flex:before:hover {
-        display: flex;
+      @media (hover: hover) {
+        .before\\:hover\\:flex:before:hover {
+          display: flex;
+        }
       }
 
-      .hover\\:before\\:flex:hover:before {
-        content: var(--tw-content);
-        display: flex;
+      @media (hover: hover) {
+        .hover\\:before\\:flex:hover:before {
+          content: var(--tw-content);
+          display: flex;
+        }
       }
 
       @supports (-moz-orient: inline) {
@@ -627,22 +639,24 @@ describe('sorting', () => {
         ),
       ),
     ).toMatchInlineSnapshot(`
-        ".pointer-events-none {
-          pointer-events: none;
-        }
+      ".pointer-events-none {
+        pointer-events: none;
+      }
 
-        .flex {
-          display: flex;
-        }
+      .flex {
+        display: flex;
+      }
 
+      @media (hover: hover) {
         .hover\\:flex:hover {
           display: flex;
         }
+      }
 
-        .focus\\:pointer-events-none:focus {
-          pointer-events: none;
-        }"
-      `)
+      .focus\\:pointer-events-none:focus {
+        pointer-events: none;
+      }"
+    `)
   })
 
   /**
@@ -672,16 +686,20 @@ describe('sorting', () => {
         display: flex;
       }
 
-      .hover\\:flex:hover {
-        display: flex;
+      @media (hover: hover) {
+        .hover\\:flex:hover {
+          display: flex;
+        }
       }
 
       .focus\\:flex:focus {
         display: flex;
       }
 
-      .hover\\:focus\\:flex:hover:focus {
-        display: flex;
+      @media (hover: hover) {
+        .hover\\:focus\\:flex:hover:focus {
+          display: flex;
+        }
       }
 
       .disabled\\:flex:disabled {
@@ -715,44 +733,64 @@ describe('sorting', () => {
         ].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ".group-hover\\:flex:is(:where(.group):hover *) {
-        display: flex;
+      "@media (hover: hover) {
+        .group-hover\\:flex:is(:where(.group):hover *) {
+          display: flex;
+        }
       }
 
       .group-focus\\:flex:is(:where(.group):focus *) {
         display: flex;
       }
 
-      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
-        display: flex;
+      @media (hover: hover) {
+        .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+          display: flex;
+        }
       }
 
-      .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
-        display: flex;
+      @media (hover: hover) {
+        @media (hover: hover) {
+          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
+            display: flex;
+          }
+        }
       }
 
-      .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
-        display: flex;
+      @media (hover: hover) {
+        @media (hover: hover) {
+          .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
+            display: flex;
+          }
+        }
       }
 
-      .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
-        display: flex;
+      @media (hover: hover) {
+        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
+          display: flex;
+        }
       }
 
-      .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
-        display: flex;
+      @media (hover: hover) {
+        .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+          display: flex;
+        }
       }
 
       .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
         display: flex;
       }
 
-      .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
-        display: flex;
+      @media (hover: hover) {
+        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
+          display: flex;
+        }
       }
 
-      .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
-        display: flex;
+      @media (hover: hover) {
+        .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
+          display: flex;
+        }
       }
 
       .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
@@ -763,8 +801,10 @@ describe('sorting', () => {
         display: flex;
       }
 
-      .hover\\:flex:hover {
-        display: flex;
+      @media (hover: hover) {
+        .hover\\:flex:hover {
+          display: flex;
+        }
       }"
     `)
   })
@@ -2104,8 +2144,10 @@ describe('@variant', () => {
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
           @media (any-hover: hover) {
-            .any-hover\\:hover\\:underline:hover {
-              text-decoration-line: underline;
+            @media (hover: hover) {
+              .any-hover\\:hover\\:underline:hover {
+                text-decoration-line: underline;
+              }
             }
           }
         }"

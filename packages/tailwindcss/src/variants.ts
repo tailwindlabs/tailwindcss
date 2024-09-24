@@ -413,65 +413,48 @@ export function createVariants(theme: Theme): Variants {
     )
   }
 
-  let pseudos: [name: string, selector: string][] = [
-    // Positional
-    ['first', '&:first-child'],
-    ['last', '&:last-child'],
-    ['only', '&:only-child'],
-    ['odd', '&:nth-child(odd)'],
-    ['even', '&:nth-child(even)'],
-    ['first-of-type', '&:first-of-type'],
-    ['last-of-type', '&:last-of-type'],
-    ['only-of-type', '&:only-of-type'],
+  // Positional
+  staticVariant('first', ['&:first-child'])
+  staticVariant('last', ['&:last-child'])
+  staticVariant('only', ['&:only-child'])
+  staticVariant('odd', ['&:nth-child(odd)'])
+  staticVariant('even', ['&:nth-child(even)'])
+  staticVariant('first-of-type', ['&:first-of-type'])
+  staticVariant('last-of-type', ['&:last-of-type'])
+  staticVariant('only-of-type', ['&:only-of-type'])
 
-    // State
-    // TODO: Remove alpha vars or no?
-    ['visited', '&:visited'],
+  // State
+  staticVariant('visited', ['&:visited'])
+  staticVariant('target', ['&:target'])
+  staticVariant('open', ['&:is([open], :popover-open)'])
 
-    ['target', '&:target'],
-    ['open', '&:is([open], :popover-open)'],
+  // Forms
+  staticVariant('default', ['&:default'])
+  staticVariant('checked', ['&:checked'])
+  staticVariant('indeterminate', ['&:indeterminate'])
+  staticVariant('placeholder-shown', ['&:placeholder-shown'])
+  staticVariant('autofill', ['&:autofill'])
+  staticVariant('optional', ['&:optional'])
+  staticVariant('required', ['&:required'])
+  staticVariant('valid', ['&:valid'])
+  staticVariant('invalid', ['&:invalid'])
+  staticVariant('in-range', ['&:in-range'])
+  staticVariant('out-of-range', ['&:out-of-range'])
+  staticVariant('read-only', ['&:read-only'])
 
-    // Forms
-    ['default', '&:default'],
-    ['checked', '&:checked'],
-    ['indeterminate', '&:indeterminate'],
-    ['placeholder-shown', '&:placeholder-shown'],
-    ['autofill', '&:autofill'],
-    ['optional', '&:optional'],
-    ['required', '&:required'],
-    ['valid', '&:valid'],
-    ['invalid', '&:invalid'],
-    ['in-range', '&:in-range'],
-    ['out-of-range', '&:out-of-range'],
-    ['read-only', '&:read-only'],
+  // Content
+  staticVariant('empty', ['&:empty'])
 
-    // Content
-    ['empty', '&:empty'],
-
-    // Interactive
-    ['focus-within', '&:focus-within'],
-    [
-      'hover',
-      '&:hover',
-      // TODO: Update tests for this:
-      // v => {
-      //   v.nodes = [
-      //     rule('@media (hover: hover) and (pointer: fine)', [
-      //       rule('&:hover', v.nodes),
-      //     ]),
-      //   ]
-      // }
-    ],
-    ['focus', '&:focus'],
-    ['focus-visible', '&:focus-visible'],
-    ['active', '&:active'],
-    ['enabled', '&:enabled'],
-    ['disabled', '&:disabled'],
-  ]
-
-  for (let [key, value] of pseudos) {
-    staticVariant(key, [value])
-  }
+  // Interactive
+  staticVariant('focus-within', ['&:focus-within'])
+  variants.static('hover', (r) => {
+    r.nodes = [rule('&:hover', [rule('@media (hover: hover)', r.nodes)])]
+  })
+  staticVariant('focus', ['&:focus'])
+  staticVariant('focus-visible', ['&:focus-visible'])
+  staticVariant('active', ['&:active'])
+  staticVariant('enabled', ['&:enabled'])
+  staticVariant('disabled', ['&:disabled'])
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
