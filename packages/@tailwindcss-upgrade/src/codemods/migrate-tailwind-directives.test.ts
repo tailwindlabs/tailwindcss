@@ -1,6 +1,7 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
+import { formatNodes } from './format-nodes'
 import { migrateTailwindDirectives } from './migrate-tailwind-directives'
 
 const css = dedent
@@ -8,6 +9,7 @@ const css = dedent
 function migrate(input: string) {
   return postcss()
     .use(migrateTailwindDirectives())
+    .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }

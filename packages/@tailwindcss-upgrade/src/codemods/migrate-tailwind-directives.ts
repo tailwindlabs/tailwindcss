@@ -86,6 +86,6 @@ export function migrateTailwindDirectives(): Plugin {
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-tailwind-directives',
-    Once: migrate,
+    OnceExit: migrate,
   }
 }

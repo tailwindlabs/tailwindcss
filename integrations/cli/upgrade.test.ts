@@ -65,7 +65,17 @@ test(
       `,
       'src/index.css': css`
         @tailwind base;
+
+        html {
+          color: #333;
+        }
+
         @tailwind components;
+
+        .btn {
+          color: red;
+        }
+
         @tailwind utilities;
       `,
     },
@@ -73,7 +83,27 @@ test(
   async ({ fs, exec }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain('src/index.css', css` @import 'tailwindcss'; `)
+    await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
+    await fs.expectFileToContain(
+      'src/index.css',
+      css`
+        @layer base {
+          html {
+            color: #333;
+          }
+        }
+      `,
+    )
+    await fs.expectFileToContain(
+      'src/index.css',
+      css`
+        @layer components {
+          .btn {
+            color: red;
+          }
+        }
+      `,
+    )
   },
 )
 

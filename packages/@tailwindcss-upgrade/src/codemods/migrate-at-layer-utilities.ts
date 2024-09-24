@@ -1,65 +1,16 @@
-import { AtRule, parse, Rule, type ChildNode, type Comment, type Plugin } from 'postcss'
+import { type AtRule, type Comment, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
-import { format } from 'prettier'
 import { segment } from '../../../tailwindcss/src/utils/segment'
-
-enum WalkAction {
-  // Continue walking the tree. Default behavior.
-  Continue,
-
-  // Skip walking into the current node.
-  Skip,
-
-  // Stop walking the tree entirely.
-  Stop,
-}
-
-interface Walkable<T> {
-  each(cb: (node: T, index: number) => void): void
-}
-
-// Custom walk implementation where we can skip going into nodes when we don't
-// need to process them.
-function walk<T>(rule: Walkable<T>, cb: (rule: T) => void | WalkAction): undefined | false {
-  let result: undefined | false = undefined
-
-  rule.each?.((node) => {
-    let action = cb(node) ?? WalkAction.Continue
-    if (action === WalkAction.Stop) {
-      result = false
-      return result
-    }
-    if (action !== WalkAction.Skip) {
-      result = walk(node as Walkable<T>, cb)
-      return result
-    }
-  })
-
-  return result
-}
-
-// Depth first walk reversal implementation.
-function walkDepth<T>(rule: Walkable<T>, cb: (rule: T) => void) {
-  rule?.each?.((node) => {
-    walkDepth(node as Walkable<T>, cb)
-    cb(node)
-  })
-}
+import { walk, WalkAction, walkDepth } from '../utils/walk'
 
 export function migrateAtLayerUtilities(): Plugin {
   function migrate(atRule: AtRule) {
     // Only migrate `@layer utilities` and `@layer components`.
     if (atRule.params !== 'utilities' && atRule.params !== 'components') return
 
-    // If the `@layer utilities` contains CSS that should not be turned into an
-    // `@utility` at-rule, then we have to keep it around (including the
-    // `@layer utilities` wrapper). To prevent this from being processed over
-    // and over again, we mark it as seen and bail early.
-    if (atRule.raws.seen) return
-
     // Keep rules that should not be turned into utilities as is. This will
     // include rules with element or ID selectors.
-    let defaultsAtRule = atRule.clone({ raws: { seen: true } })
+    let defaultsAtRule = atRule.clone()
 
     // Clone each rule with multiple selectors into their own rule with a single
     // selector.
@@ -312,31 +263,11 @@ export function migrateAtLayerUtilities(): Plugin {
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-layer-utilities',
-    OnceExit: async (root) => {
+    OnceExit: (root) => {
       // Migrate `@layer utilities` and `@layer components` into `@utility`.
       // Using this instead of the visitor API in case we want to use
       // postcss-nesting in the future.
       root.walkAtRules('layer', migrate)
-
-      // Prettier is used to generate cleaner output, but it's only used on the
-      // nodes that were marked as `pretty` during the migration.
-      {
-        // Find the nodes to format
-        let nodesToFormat: ChildNode[] = []
-        walk(root, (child) => {
-          if (child.raws.tailwind_pretty) {
-            nodesToFormat.push(child)
-            return WalkAction.Skip
-          }
-        })
-
-        // Format the nodes
-        await Promise.all(
-          nodesToFormat.map(async (node) => {
-            node.replaceWith(parse(await format(node.toString(), { parser: 'css', semi: true })))
-          }),
-        )
-      }
 
       // Merge `@utility <name>` with the same name into a single rule. This can
       // happen when the same classes is used in multiple `@layer utilities`

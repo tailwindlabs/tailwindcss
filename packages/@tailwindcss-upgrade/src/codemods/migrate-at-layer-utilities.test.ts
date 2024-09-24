@@ -1,6 +1,7 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { describe, expect, it } from 'vitest'
+import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
@@ -8,6 +9,7 @@ const css = dedent
 function migrate(input: string) {
   return postcss()
     .use(migrateAtLayerUtilities())
+    .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
