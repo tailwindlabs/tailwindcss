@@ -490,6 +490,42 @@ test('invalid', async () => {
   expect(await run(['invalid/foo:flex'])).toEqual('')
 })
 
+test('user-valid', async () => {
+  expect(await run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']))
+    .toMatchInlineSnapshot(`
+    ".group-user-valid\\:flex:is(:where(.group):user-valid *) {
+      display: flex;
+    }
+
+    .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+      display: flex;
+    }
+
+    .user-valid\\:flex:user-valid {
+      display: flex;
+    }"
+  `)
+  expect(await run(['user-valid/foo:flex'])).toEqual('')
+})
+
+test('user-invalid', async () => {
+  expect(await run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']))
+    .toMatchInlineSnapshot(`
+    ".group-user-invalid\\:flex:is(:where(.group):user-invalid *) {
+      display: flex;
+    }
+
+    .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+      display: flex;
+    }
+
+    .user-invalid\\:flex:user-invalid {
+      display: flex;
+    }"
+  `)
+  expect(await run(['invalid/foo:flex'])).toEqual('')
+})
+
 test('in-range', async () => {
   expect(await run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
     .toMatchInlineSnapshot(`

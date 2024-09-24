@@ -438,6 +438,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('required', ['&:required'])
   staticVariant('valid', ['&:valid'])
   staticVariant('invalid', ['&:invalid'])
+  staticVariant('user-valid', ['&:user-valid'])
+  staticVariant('user-invalid', ['&:user-invalid'])
   staticVariant('in-range', ['&:in-range'])
   staticVariant('out-of-range', ['&:out-of-range'])
   staticVariant('read-only', ['&:read-only'])
