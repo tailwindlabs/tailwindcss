@@ -1236,9 +1236,8 @@ test('utilities must be prefixed', async () => {
   })
 
   // Prefixed utilities are generated
-  expect(
-    compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']),
-  ).toMatchInlineSnapshot(`
+  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
+    .toMatchInlineSnapshot(`
     ".tw\\:custom {
       color: red;
     }
@@ -1351,4 +1350,24 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
     }
     "
   `)
+})
+
+test('a prefix must be letters only', async () => {
+  await expect(() =>
+    compile(
+      css`
+        @config "./plugin.js";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: { prefix: '__' },
+          }
+        },
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: The prefix "__" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.]`,
+  )
 })

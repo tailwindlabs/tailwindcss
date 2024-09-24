@@ -17,9 +17,8 @@ test('utilities must be prefixed', async () => {
   let compiler = await compile(input)
 
   // Prefixed utilities are generated
-  expect(
-    compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']),
-  ).toMatchInlineSnapshot(`
+  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
+    .toMatchInlineSnapshot(`
     ".tw\\:custom {
       color: red;
     }
@@ -268,4 +267,14 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   })
 
   expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+})
+
+test('a prefix must be letters only', async () => {
+  let input = css`
+    @theme reference prefix(__);
+  `
+
+  await expect(() => compile(input)).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: The prefix "__" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.]`,
+  )
 })

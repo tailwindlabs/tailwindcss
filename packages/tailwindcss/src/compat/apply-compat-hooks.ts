@@ -13,6 +13,8 @@ import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api
 import { registerScreensConfig } from './screens-config'
 import { registerThemeVariantOverrides } from './theme-variants'
 
+const IS_VALID_PREFIX = /^[a-z]+$/
+
 export async function applyCompatibilityHooks({
   designSystem,
   base,
@@ -209,7 +211,21 @@ export async function applyCompatibilityHooks({
   registerScreensConfig(resolvedUserConfig, designSystem)
 
   // If a prefix has already been set in CSS don't override it
-  if (!designSystem.theme.prefix) {
+  if (!designSystem.theme.prefix && resolvedConfig.prefix) {
+    if (resolvedConfig.prefix.endsWith('-')) {
+      resolvedConfig.prefix = resolvedConfig.prefix.slice(0, -1)
+
+      console.warn(
+        `The prefix "${resolvedConfig.prefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only and is written as a variant before all utilities. We have fixed up the prefix for you. Remove the trailing \`-\` to silence this warning.`,
+      )
+    }
+
+    if (!IS_VALID_PREFIX.test(resolvedConfig.prefix)) {
+      throw new Error(
+        `The prefix "${resolvedConfig.prefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+      )
+    }
+
     designSystem.theme.prefix = resolvedConfig.prefix
   }
 
