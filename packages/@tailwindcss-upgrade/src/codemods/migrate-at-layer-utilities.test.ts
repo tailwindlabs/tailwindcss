@@ -1,6 +1,7 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { describe, expect, it } from 'vitest'
+import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
