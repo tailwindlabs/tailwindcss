@@ -9,15 +9,9 @@ export function migrateAtLayerUtilities(): Plugin {
     // Only migrate `@layer utilities` and `@layer components`.
     if (atRule.params !== 'utilities' && atRule.params !== 'components') return
 
-    // If the `@layer utilities` contains CSS that should not be turned into an
-    // `@utility` at-rule, then we have to keep it around (including the
-    // `@layer utilities` wrapper). To prevent this from being processed over
-    // and over again, we mark it as seen and bail early.
-    if (atRule.raws.seen) return
-
     // Keep rules that should not be turned into utilities as is. This will
     // include rules with element or ID selectors.
-    let defaultsAtRule = atRule.clone({ raws: { seen: true } })
+    let defaultsAtRule = atRule.clone()
 
     // Clone each rule with multiple selectors into their own rule with a single
     // selector.

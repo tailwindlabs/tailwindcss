@@ -13,7 +13,6 @@ export function migrateAtApply(): Plugin {
     let params = utilities.map((part) => {
       // Keep whitespace
       if (part.trim() === '') return part
-
       let variants = segment(part, ':')
       let utility = variants.pop()!
 
@@ -36,8 +35,8 @@ export function migrateAtApply(): Plugin {
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-apply',
-    AtRule: {
-      apply: migrate,
+    OnceExit(root) {
+      root.walkAtRules('apply', migrate)
     },
   }
 }
