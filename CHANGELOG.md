@@ -11,13 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for `aria`, `supports`, and `data` variants defined in JS config files ([#14407](https://github.com/tailwindlabs/tailwindcss/pull/14407))
 - Add `@tailwindcss/upgrade` tooling ([#14434](https://github.com/tailwindlabs/tailwindcss/pull/14434))
-- Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411))
 - Support `screens` in JS config files ([#14415](https://github.com/tailwindlabs/tailwindcss/pull/14415))
 - Add `bg-radial-*` and `bg-conic-*` utilities for radial and conic gradients ([#14467](https://github.com/tailwindlabs/tailwindcss/pull/14467))
 - Add new `shadow-initial` and `inset-shadow-initial` utilities for resetting shadow colors ([#14468](https://github.com/tailwindlabs/tailwindcss/pull/14468))
 - Add `field-sizing-*` utilities ([#14469](https://github.com/tailwindlabs/tailwindcss/pull/14469))
 - Include gradient color properties in color transitions ([#14489](https://github.com/tailwindlabs/tailwindcss/pull/14489))
-- Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
+- _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411))
+- _Experimental_: Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
 
 ### Fixed
 
