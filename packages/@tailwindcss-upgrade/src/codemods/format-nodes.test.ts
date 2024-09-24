@@ -24,12 +24,12 @@ function migrate(input: string) {
 it('should format PostCSS nodes that are marked with tailwind_pretty', async () => {
   expect(
     await migrate(`
-      @utility .foo { .foo { color: red; } } `),
+      @utility .foo { .foo { color: red; } }`),
   ).toMatchInlineSnapshot(`
     "@utility .foo {
       .foo {
         color: red;
       }
-    } "
+    }"
   `)
 })
