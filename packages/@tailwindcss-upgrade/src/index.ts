@@ -4,7 +4,8 @@ import { globby } from 'globby'
 import path from 'node:path'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { help } from './commands/help'
-import { migrate } from './migrate'
+import { migrate as migrateStylesheet } from './migrate'
+import { migrate as migrateTemplate } from './template/migrate'
 import { parseConfig } from './template/parseConfig'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
@@ -40,45 +41,78 @@ async function run() {
     }
   }
 
-  let designSystem: DesignSystem | null = null
-  let paths: string[] = []
+  let parsedConfig: {
+    designSystem: DesignSystem
+    globs: { pattern: string; base: string }[]
+  } | null = null
   if (flags['--config']) {
     try {
-      designSystem = await parseConfig(flags['--config'], { base: process.cwd() })
+      parsedConfig = await parseConfig(flags['--config'], { base: process.cwd() })
     } catch (e: any) {
       error(`Failed to parse the configuration file: ${e.message}`)
       process.exit(1)
     }
   }
 
-  // console.log(designSystem)
+  if (parsedConfig) {
+    // Template migrations
 
-  // Use provided files
-  let files = flags._.map((file) => path.resolve(process.cwd(), file))
+    info('Migrating templates using the provided configuration file.')
 
-  // Discover CSS files in case no files were provided
-  if (files.length === 0) {
-    info(
-      'No input stylesheets provided. Searching for CSS files in the current directory and its subdirectories…',
-    )
+    let set = new Set<string>()
+    for (let { pattern, base } of parsedConfig.globs) {
+      let files = await globby([pattern], {
+        absolute: true,
+        gitignore: true,
+        cwd: base,
+      })
 
-    files = await globby(['**/*.css'], {
-      absolute: true,
-      gitignore: true,
-    })
+      for (let file of files) {
+        set.add(file)
+      }
+    }
+
+    let files = Array.from(set)
+    files.sort()
+
+    // Migrate each file
+    await Promise.allSettled(files.map((file) => migrateTemplate(parsedConfig.designSystem, file)))
+
+    success('Template migration complete.')
   }
 
-  // Ensure we are only dealing with CSS files
-  files = files.filter((file) => file.endsWith('.css'))
+  {
+    // Stylesheet migrations
 
-  // Migrate each file
-  await Promise.allSettled(files.map((file) => migrate(file)))
+    // Use provided files
+    let files = flags._.map((file) => path.resolve(process.cwd(), file))
+
+    // Discover CSS files in case no files were provided
+    if (files.length === 0) {
+      info(
+        'No input stylesheets provided. Searching for CSS files in the current directory and its subdirectories…',
+      )
+
+      files = await globby(['**/*.css'], {
+        absolute: true,
+        gitignore: true,
+      })
+    }
+
+    // Ensure we are only dealing with CSS files
+    files = files.filter((file) => file.endsWith('.css'))
+
+    // Migrate each file
+    await Promise.allSettled(files.map((file) => migrateStylesheet(file)))
+
+    success('Stylesheet migration complete.')
+  }
 
   // Figure out if we made any changes
   if (isRepoDirty()) {
-    success('Migration complete. Verify the changes and commit them to your repository.')
+    success('Verify the changes and commit them to your repository.')
   } else {
-    success('Migration complete. No changes were made to your repository.')
+    success('No changes were made to your repository.')
   }
 }
 
