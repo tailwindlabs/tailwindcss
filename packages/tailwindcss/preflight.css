@@ -140,6 +140,7 @@ pre {
 
 small {
   font-size: 80%;
+  line-height: var(--default-line-height, 1.5);
 }
 
 /*

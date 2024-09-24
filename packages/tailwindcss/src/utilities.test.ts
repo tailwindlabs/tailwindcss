@@ -14765,34 +14765,42 @@ test('text', async () => {
 
     .text-\\[12px\\] {
       font-size: 12px;
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[50\\%\\] {
       font-size: 50%;
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[absolute-size\\:var\\(--my-size\\)\\] {
       font-size: var(--my-size);
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[clamp\\(1rem\\,2rem\\,3rem\\)\\] {
       font-size: 2rem;
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\] {
       font-size: clamp(1rem, var(--size), 3rem);
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[larger\\] {
       font-size: larger;
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[length\\:var\\(--my-size\\)\\], .text-\\[percentage\\:var\\(--my-size\\)\\], .text-\\[relative-size\\:var\\(--my-size\\)\\] {
       font-size: var(--my-size);
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[xx-large\\] {
       font-size: xx-large;
+      line-height: var(--tw-leading, var(--default-line-height));
     }
 
     .text-\\[\\#0088cc\\] {

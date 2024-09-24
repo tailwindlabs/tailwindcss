@@ -8,6 +8,7 @@
   --default-mono-font-family: var(--font-mono);
   --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
   --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
+  --default-line-height: round(max(min(2em - 0.5rem, 1em + 0.5rem, 2em / 3 + 1rem), 1em), 2px);
 
   /* Breakpoints */
   --breakpoint-sm: 40rem;
@@ -360,31 +361,18 @@
 
   /* Type scale */
   --text-xs: 0.75rem;
-  --text-xs--line-height: 1rem;
   --text-sm: 0.875rem;
-  --text-sm--line-height: 1.25rem;
   --text-base: 1rem;
-  --text-base--line-height: 1.5rem;
   --text-lg: 1.125rem;
-  --text-lg--line-height: 1.75rem;
   --text-xl: 1.25rem;
-  --text-xl--line-height: 1.75rem;
   --text-2xl: 1.5rem;
-  --text-2xl--line-height: 2rem;
   --text-3xl: 1.875rem;
-  --text-3xl--line-height: 2.25rem;
   --text-4xl: 2.25rem;
-  --text-4xl--line-height: 2.5rem;
   --text-5xl: 3rem;
-  --text-5xl--line-height: 1;
   --text-6xl: 3.75rem;
-  --text-6xl--line-height: 1;
   --text-7xl: 4.5rem;
-  --text-7xl--line-height: 1;
   --text-8xl: 6rem;
-  --text-8xl--line-height: 1;
   --text-9xl: 8rem;
-  --text-9xl--line-height: 1;
 
   /* Font weights */
   --font-weight-thin: 100;
