@@ -1,21 +1,14 @@
-import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
 // This file uses private APIs to work with candidates.
 // TODO: Should we export this in the public package so we have the same
 // version as the tailwindcss package?
 import { parseCandidate, type Candidate, type Variant } from '../../../tailwindcss/src/candidate'
-
-let css = String.raw
+import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractCandidates(
+  designSystem: DesignSystem,
   content: string,
 ): Promise<{ candidate: Candidate; start: number; end: number }[]> {
-  let designSystem = await __unstable__loadDesignSystem(
-    css`
-      @import 'tailwindcss';
-    `,
-    { base: __dirname },
-  )
   let scanner = new Scanner({})
   let result = scanner.getCandidatesWithPositions({ content, extension: 'html' })
 

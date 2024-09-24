@@ -2,13 +2,16 @@
 
 import { globby } from 'globby'
 import path from 'node:path'
+import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { help } from './commands/help'
 import { migrate } from './migrate'
+import { parseConfig } from './template/parseConfig'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
 import { eprintln, error, header, highlight, info, success } from './utils/renderer'
 
 const options = {
+  '--config': { type: 'string', description: 'Path to the configuration file', alias: '-c' },
   '--help': { type: 'boolean', description: 'Display usage information', alias: '-h' },
   '--force': { type: 'boolean', description: 'Force the migration', alias: '-f' },
   '--version': { type: 'boolean', description: 'Display the version number', alias: '-v' },
@@ -37,13 +40,26 @@ async function run() {
     }
   }
 
+  let designSystem: DesignSystem | null = null
+  let paths: string[] = []
+  if (flags['--config']) {
+    try {
+      designSystem = await parseConfig(flags['--config'], { base: process.cwd() })
+    } catch (e: any) {
+      error(`Failed to parse the configuration file: ${e.message}`)
+      process.exit(1)
+    }
+  }
+
+  // console.log(designSystem)
+
   // Use provided files
   let files = flags._.map((file) => path.resolve(process.cwd(), file))
 
   // Discover CSS files in case no files were provided
   if (files.length === 0) {
     info(
-      'No files provided. Searching for CSS files in the current directory and its subdirectories…',
+      'No input stylesheets provided. Searching for CSS files in the current directory and its subdirectories…',
     )
 
     files = await globby(['**/*.css'], {

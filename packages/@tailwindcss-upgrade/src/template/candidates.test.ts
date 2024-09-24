@@ -5,14 +5,18 @@ import { extractCandidates, printCandidate } from './candidates'
 
 let html = String.raw
 
-test('extracts candidates with positions from a template', () => {
+test('extracts candidates with positions from a template', async () => {
   let content = html`
     <div class="bg-blue-500 hover:focus:text-white [color:red]">
       <button class="bg-blue-500 text-white">My button</button>
     </div>
   `
 
-  expect(extractCandidates(content)).resolves.toMatchInlineSnapshot(`
+  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
+    base: __dirname,
+  })
+
+  expect(extractCandidates(designSystem, content)).resolves.toMatchInlineSnapshot(`
     [
       {
         "candidate": {
