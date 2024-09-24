@@ -2,7 +2,6 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
 import { formatNodes } from './codemods/format-nodes'
-import { hoistImports } from './codemods/hoist-imports'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
@@ -14,7 +13,6 @@ export async function migrateContents(contents: string, file?: string) {
     .use(migrateAtLayerUtilities())
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives())
-    .use(hoistImports())
     .use(formatNodes())
     .process(contents, { from: file })
     .then((result) => result.css)
