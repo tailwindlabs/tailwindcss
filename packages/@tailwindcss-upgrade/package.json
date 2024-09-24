@@ -35,7 +35,9 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^6.1.2",
     "prettier": "^3.3.3",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:^",
+    "@tailwindcss/oxide": "workspace:^",
+    "@tailwindcss/node": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",

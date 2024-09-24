@@ -270,6 +270,12 @@ importers:
 
   packages/@tailwindcss-upgrade:
     dependencies:
+      '@tailwindcss/node':
+        specifier: workspace:^
+        version: link:../@tailwindcss-node
+      '@tailwindcss/oxide':
+        specifier: workspace:^
+        version: link:../../crates/node
       enhanced-resolve:
         specifier: ^5.17.1
         version: 5.17.1
