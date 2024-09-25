@@ -103,7 +103,9 @@ async function run() {
     files = files.filter((file) => file.endsWith('.css'))
 
     // Migrate each file
-    await Promise.allSettled(files.map((file) => migrateStylesheet(file)))
+    await Promise.allSettled(
+      files.map((file) => migrateStylesheet(file, parsedConfig.designSystem)),
+    )
 
     success('Stylesheet migration complete.')
   }
