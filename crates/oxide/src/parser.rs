@@ -87,6 +87,8 @@ impl<'a> Extractor<'a> {
         let mut result = Vec::new();
         let extractor = Self::new(input, opts).flatten();
         for item in extractor {
+            // Since the items are slices of the input buffer, we can calculate the start index
+            // by doing some pointer arithmetics.
             let start_index = item.as_ptr() as usize - input.as_ptr() as usize;
             result.push((item, start_index));
         }
