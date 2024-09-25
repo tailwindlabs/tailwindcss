@@ -82,6 +82,16 @@ pub struct Scanner {
   scanner: tailwindcss_oxide::Scanner,
 }
 
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct CandidateWithPosition {
+  /// The candidate string
+  pub candidate: String,
+
+  /// The position of the candidate inside the content file
+  pub position: i64,
+}
+
 #[napi]
 impl Scanner {
   #[napi(constructor)]
@@ -106,6 +116,22 @@ impl Scanner {
     self
       .scanner
       .scan_content(input.into_iter().map(Into::into).collect())
+  }
+
+  #[napi]
+  pub fn get_candidates_with_positions(
+    &mut self,
+    input: ChangedContent,
+  ) -> Vec<CandidateWithPosition> {
+    self
+      .scanner
+      .get_candidates_with_positions(input.into())
+      .into_iter()
+      .map(|(candidate, position)| CandidateWithPosition {
+        candidate,
+        position: position as i64,
+      })
+      .collect()
   }
 
   #[napi(getter)]

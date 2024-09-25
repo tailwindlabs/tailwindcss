@@ -125,6 +125,28 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
+    pub fn get_candidates_with_positions(
+        &mut self,
+        changed_content: ChangedContent,
+    ) -> Vec<(String, usize)> {
+        self.prepare();
+
+        let content = read_changed_content(changed_content).unwrap_or_default();
+        let extractor = Extractor::with_positions(&content[..], Default::default());
+
+        let candidates: Vec<(String, usize)> = extractor
+            .into_iter()
+            .map(|(s, i)| {
+                // SAFETY: When we parsed the candidates, we already guaranteed that the byte slices
+                // are valid, therefore we don't have to re-check here when we want to convert it back
+                // to a string.
+                unsafe { (String::from_utf8_unchecked(s.to_vec()), i) }
+            })
+            .collect();
+        candidates
+    }
+
+    #[tracing::instrument(skip_all)]
     pub fn get_files(&mut self) -> Vec<String> {
         self.prepare();
 

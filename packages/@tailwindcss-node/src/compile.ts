@@ -4,7 +4,10 @@ import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import path, { dirname, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { compile as _compile } from 'tailwindcss'
+import {
+  __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
+  compile as _compile,
+} from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
 
 export async function compile(
@@ -14,59 +17,78 @@ export async function compile(
   return await _compile(css, {
     base,
     async loadModule(id, base) {
-      if (id[0] !== '.') {
-        let resolvedPath = await resolveJsId(id, base)
-        if (!resolvedPath) {
-          throw new Error(`Could not resolve '${id}' from '${base}'`)
-        }
-
-        let module = await importModule(pathToFileURL(resolvedPath).href)
-        return {
-          base: dirname(resolvedPath),
-          module: module.default ?? module,
-        }
-      }
-
-      let resolvedPath = await resolveJsId(id, base)
-      if (!resolvedPath) {
-        throw new Error(`Could not resolve '${id}' from '${base}'`)
-      }
-      let [module, moduleDependencies] = await Promise.all([
-        importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
-        getModuleDependencies(resolvedPath),
-      ])
-
-      onDependency(resolvedPath)
-      for (let file of moduleDependencies) {
-        onDependency(file)
-      }
-      return {
-        base: dirname(resolvedPath),
-        module: module.default ?? module,
-      }
+      return loadModule(id, base, onDependency)
     },
+    async loadStylesheet(id, base) {
+      return loadStylesheet(id, base, onDependency)
+    },
+  })
+}
 
-    async loadStylesheet(id, basedir) {
-      let resolvedPath = await resolveCssId(id, basedir)
-      if (!resolvedPath) throw new Error(`Could not resolve '${id}' from '${basedir}'`)
+export async function __unstable__loadDesignSystem(css: string, { base }: { base: string }) {
+  return ___unstable__loadDesignSystem(css, {
+    base,
+    async loadModule(id, base) {
+      return loadModule(id, base, () => {})
+    },
+    async loadStylesheet(id, base) {
+      return loadStylesheet(id, base, () => {})
+    },
+  })
+}
 
-      if (typeof globalThis.__tw_readFile === 'function') {
-        let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
-        if (file) {
-          return {
-            base: path.dirname(resolvedPath),
-            content: file,
-          }
-        }
-      }
+async function loadModule(id: string, base: string, onDependency: (path: string) => void) {
+  if (id[0] !== '.') {
+    let resolvedPath = await resolveJsId(id, base)
+    if (!resolvedPath) {
+      throw new Error(`Could not resolve '${id}' from '${base}'`)
+    }
 
-      let file = await fsPromises.readFile(resolvedPath, 'utf-8')
+    let module = await importModule(pathToFileURL(resolvedPath).href)
+    return {
+      base: dirname(resolvedPath),
+      module: module.default ?? module,
+    }
+  }
+
+  let resolvedPath = await resolveJsId(id, base)
+  if (!resolvedPath) {
+    throw new Error(`Could not resolve '${id}' from '${base}'`)
+  }
+  let [module, moduleDependencies] = await Promise.all([
+    importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
+    getModuleDependencies(resolvedPath),
+  ])
+
+  onDependency(resolvedPath)
+  for (let file of moduleDependencies) {
+    onDependency(file)
+  }
+  return {
+    base: dirname(resolvedPath),
+    module: module.default ?? module,
+  }
+}
+
+async function loadStylesheet(id: string, base: string, onDependency: (path: string) => void) {
+  let resolvedPath = await resolveCssId(id, base)
+  if (!resolvedPath) throw new Error(`Could not resolve '${id}' from '${base}'`)
+
+  if (typeof globalThis.__tw_readFile === 'function') {
+    let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
+    if (file) {
       return {
         base: path.dirname(resolvedPath),
         content: file,
       }
-    },
-  })
+    }
+  }
+
+  let file = await fsPromises.readFile(resolvedPath, 'utf-8')
+  return {
+    base: path.dirname(resolvedPath),
+    content: file,
+  }
 }
 
 // Attempts to import the module using the native `import()` function. If this

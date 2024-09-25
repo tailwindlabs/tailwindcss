@@ -82,6 +82,18 @@ impl<'a> Extractor<'a> {
 
         candidates
     }
+
+    pub fn with_positions(input: &'a [u8], opts: ExtractorOptions) -> Vec<(&'a [u8], usize)> {
+        let mut result = Vec::new();
+        let extractor = Self::new(input, opts).flatten();
+        for item in extractor {
+            // Since the items are slices of the input buffer, we can calculate the start index
+            // by doing some pointer arithmetics.
+            let start_index = item.as_ptr() as usize - input.as_ptr() as usize;
+            result.push((item, start_index));
+        }
+        result
+    }
 }
 
 impl<'a> Extractor<'a> {

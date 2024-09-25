@@ -1,4 +1,47 @@
-import { css, json, test } from '../utils'
+import { css, html, js, json, test } from '../utils'
+
+test(
+  `upgrades a v3 project to v4`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!flex sm:!block"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
+    await fs.expectFileToContain(
+      'src/index.html',
+      html`
+        <h1>🤠👋</h1>
+        <div class="flex! sm:block!"></div>
+      `,
+    )
+
+    await fs.expectFileToContain('src/input.css', css`@import 'tailwindcss';`)
+  },
+)
 
 test(
   'migrate @apply',

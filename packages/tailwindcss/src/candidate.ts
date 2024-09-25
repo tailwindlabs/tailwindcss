@@ -189,7 +189,7 @@ export type Candidate =
    * E.g.:
    *
    * - `underline`
-   * - `flex`
+   * - `box-border`
    */
   | {
       kind: 'static'

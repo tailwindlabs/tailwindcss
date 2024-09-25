@@ -27,6 +27,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@tailwindcss/node": "workspace:^",
+    "@tailwindcss/oxide": "workspace:^",
     "enhanced-resolve": "^5.17.1",
     "globby": "^14.0.2",
     "mri": "^1.2.0",
@@ -35,6 +37,7 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^6.1.2",
     "prettier": "^3.3.3",
+    "string-byte-slice": "^3.0.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
