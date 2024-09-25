@@ -75,9 +75,8 @@ export function migrateAtLayerUtilities(): Plugin {
               return WalkAction.Stop
             }
           })
-          node.selector = selector.toString()
         })
-      }).processSync(node.selector, { updateSelector: false })
+      }).processSync(node, { updateSelector: true })
     })
 
     // Upgrade every Rule in `@layer utilities` to an `@utility` at-rule.
@@ -157,10 +156,7 @@ export function migrateAtLayerUtilities(): Plugin {
               }
             })
           })
-
-          // Update the selector
-          node.selector = selectors.toString()
-        }).processSync(node.selector)
+        }).processSync(node, { updateSelector: true })
 
         // Cleanup all the nodes that should not be part of the `@utility` rule.
         if (!containsClass) {
