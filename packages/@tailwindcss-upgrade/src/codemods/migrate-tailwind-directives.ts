@@ -15,8 +15,13 @@ export function migrateTailwindDirectives(): Plugin {
     let layerOrder: string[] = []
 
     root.walkAtRules((node) => {
+      // Migrate legacy `@import "tailwindcss/tailwind.css"`
+      if (node.name === 'import' && node.params.match(/^["']tailwindcss\/tailwind\.css["']$/)) {
+        node.params = node.params.replace('tailwindcss/tailwind.css', 'tailwindcss')
+      }
+
       // Track old imports and directives
-      if (
+      else if (
         (node.name === 'tailwind' && node.params === 'base') ||
         (node.name === 'import' && node.params.match(/^["']tailwindcss\/base["']$/))
       ) {
