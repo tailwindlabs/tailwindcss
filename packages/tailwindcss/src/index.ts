@@ -76,7 +76,8 @@ async function parseCss(
   await substituteAtImports(ast, base, loadStylesheet)
 
   // Find all `@theme` declarations
-  let important: string | true | null = null
+  let important: boolean | null = null
+  let wrappingSelector: string | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -240,7 +241,7 @@ async function parseCss(
     if (node.selector.startsWith('@media selector(')) {
       let themeParams = node.selector.slice(16, -1)
 
-      important = `${themeParams} &`
+      wrappingSelector = `${themeParams} &`
 
       replaceWith(node.nodes)
 
@@ -313,6 +314,10 @@ async function parseCss(
 
   if (important) {
     designSystem.important = important
+  }
+
+  if (wrappingSelector) {
+    designSystem.wrappingSelector = wrappingSelector
   }
 
   // Apply hooks from backwards compatibility layer. This function takes a lot

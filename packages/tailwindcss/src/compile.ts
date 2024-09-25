@@ -135,7 +135,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
   for (let nodes of asts) {
     let propertySort = getPropertySort(nodes)
 
-    if (candidate.important || designSystem.important === true) {
+    if (candidate.important || designSystem.important) {
       applyImportant(nodes)
     }
 
@@ -154,8 +154,8 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       if (result === null) return []
     }
 
-    if (typeof designSystem.important === 'string') {
-      node.nodes = [rule(designSystem.important, node.nodes)]
+    if (designSystem.wrappingSelector) {
+      node.nodes = [rule(designSystem.wrappingSelector, node.nodes)]
     }
 
     rules.push({

@@ -230,11 +230,12 @@ export async function applyCompatibilityHooks({
   }
 
   // If an important strategy has already been set in CSS don't override it
-  if (!designSystem.important && resolvedConfig.important) {
-    designSystem.important =
-      typeof resolvedConfig.important === 'string'
-        ? `${resolvedConfig.important} &`
-        : resolvedConfig.important
+  if (!designSystem.important && resolvedConfig.important === true) {
+    designSystem.important = true
+  }
+
+  if (!designSystem.wrappingSelector && typeof resolvedConfig.important === 'string') {
+    designSystem.wrappingSelector = `${resolvedConfig.important} &`
   }
 
   // Replace `resolveThemeValue` with a version that is backwards compatible

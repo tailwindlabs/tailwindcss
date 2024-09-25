@@ -13,7 +13,11 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
-  important: string | boolean
+  // Whether to mark utility declarations as !important
+  important: boolean
+
+  // Whether to wrap utility declarations in a selector
+  wrappingSelector: string | null
 
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
@@ -47,11 +51,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     utilities,
     variants,
 
-    // How to mark important utilities
-    // - wrap with a selector (any string)
-    // - add an !important (true)
-    // - do nothing (false)
     important: false,
+    wrappingSelector: null,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
