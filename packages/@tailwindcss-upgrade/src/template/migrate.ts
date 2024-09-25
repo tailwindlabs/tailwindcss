@@ -25,7 +25,6 @@ export default async function migrateContents(
       if (migrated) {
         candidate = migrated
         needsMigration = true
-        break
       }
     }
 
