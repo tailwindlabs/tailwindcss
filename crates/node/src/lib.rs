@@ -85,11 +85,11 @@ pub struct Scanner {
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct CandidateWithPosition {
-  /// Base path of the glob
+  // The candidate string
   pub candidate: String,
 
-  /// Glob pattern
-  pub position: f64,
+  // The position of the candidate inside the content file
+  pub position: i64,
 }
 
 #[napi]
@@ -129,7 +129,7 @@ impl Scanner {
       .into_iter()
       .map(|(candidate, position)| CandidateWithPosition {
         candidate,
-        position: position as f64,
+        position: position as i64,
       })
       .collect()
   }
