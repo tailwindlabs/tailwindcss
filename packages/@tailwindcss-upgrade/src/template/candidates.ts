@@ -101,14 +101,13 @@ function printVariant(variant: Variant) {
 
   // Handle functional variants
   if (variant.kind === 'functional') {
+    base += variant.root
     if (variant.value) {
       if (variant.value.kind === 'arbitrary') {
-        base += `${variant.root}-[${escapeArbitrary(variant.value.value)}]`
+        base += `-[${escapeArbitrary(variant.value.value)}]`
       } else if (variant.value.kind === 'named') {
-        base += `${variant.root}-${variant.value.value}`
+        base += `-${variant.value.value}`
       }
-    } else {
-      base += variant.root
     }
   }
 
