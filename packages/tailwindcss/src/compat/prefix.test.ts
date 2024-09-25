@@ -97,7 +97,7 @@ test('CSS variables output by the theme are prefixed', async () => {
   `)
 })
 
-test('CSS theme functions do not need to use the prefix', async () => {
+test('CSS theme functions do not use the prefix', async () => {
   let compiler = await compile(css`
     @theme prefix(tw) {
       --color-red: #f00;
@@ -123,9 +123,23 @@ test('CSS theme functions do not need to use the prefix', async () => {
     }
     "
   `)
+
+  compiler = await compile(css`
+    @theme reference prefix(tw) {
+      --color-red: #f00;
+      --color-green: #0f0;
+      --breakpoint-sm: 640px;
+    }
+
+    @tailwind utilities;
+  `)
+
+  expect(
+    compiler.build(['tw:[color:theme(--tw-color-red)]', 'tw:text-[theme(--tw-color-red)]']),
+  ).toEqual('')
 })
 
-test('JS theme functions do not need to use the prefix', async () => {
+test('JS theme functions do not use the prefix', async () => {
   let compiler = await compile(
     css`
       @theme prefix(tw) {
@@ -148,6 +162,9 @@ test('JS theme functions do not need to use the prefix', async () => {
                 color: theme('--color-red'),
               },
             })
+
+            // The theme function does not use the prefix
+            expect(theme('--tw-color-red')).toEqual(undefined)
           }),
         }
       },
