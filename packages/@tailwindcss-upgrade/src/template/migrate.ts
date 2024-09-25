@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Candidate } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { extractCandidates, printCandidate } from './candidates'
+import { extractCandidates, printCandidate, replaceCandidateInContent } from './candidates'
 import { migrateImportant } from './codemods/migrate-important'
 
 export type Migration = (candidate: Candidate) => Candidate | null
@@ -30,7 +30,7 @@ export default async function migrateContents(
     }
 
     if (needsMigration) {
-      output = output.slice(0, start) + printCandidate(candidate) + output.slice(end)
+      output = replaceCandidateInContent(output, printCandidate(candidate), start, end)
     }
   }
 

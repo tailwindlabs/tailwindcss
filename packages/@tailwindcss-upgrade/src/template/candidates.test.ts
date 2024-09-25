@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
-import { extractCandidates, printCandidate } from './candidates'
+import { extractCandidates, printCandidate, replaceCandidateInContent } from './candidates'
 
 let html = String.raw
 
@@ -115,6 +115,27 @@ test('extracts candidates with positions from a template', async () => {
       },
     ]
   `)
+})
+
+test('replaces the right positions for a candidate', async () => {
+  let content = html`
+    <h1>🤠👋</h1>
+    <div class="bg-blue-500" />
+  `
+
+  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
+    base: __dirname,
+  })
+
+  let candidate = (await extractCandidates(designSystem, content))[0]
+
+  expect(replaceCandidateInContent(content, 'flex', candidate.start, candidate.end))
+    .toMatchInlineSnapshot(`
+      "
+          <h1>🤠👋</h1>
+          <div class="flex" />
+        "
+    `)
 })
 
 const candidates = [

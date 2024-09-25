@@ -300,6 +300,9 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
+      string-byte-slice:
+        specifier: ^3.0.0
+        version: 3.0.0
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
@@ -2786,6 +2789,10 @@ packages:
   streamsearch@1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
     engines: {node: '>=10.0.0'}
+
+  string-byte-slice@3.0.0:
+    resolution: {integrity: sha512-KqTTvThKPDgBPr9jI2cOdO04tJ+upcADk4j4zmcBNmG6Bqstsq1x1Z3xvJAPqRQgPE8yocXNLVZuCfYlv4+PTg==}
+    engines: {node: '>=18.18.0'}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -5559,6 +5566,8 @@ snapshots:
       internal-slot: 1.0.7
 
   streamsearch@1.1.0: {}
+
+  string-byte-slice@3.0.0: {}
 
   string-width@4.2.3:
     dependencies:
