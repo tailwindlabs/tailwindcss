@@ -13,7 +13,7 @@ import type { Candidate } from '../../../../tailwindcss/src/candidate'
 //
 //   flex! md:block!
 export function migrateImportant(candidate: Candidate): Candidate | null {
-  if (candidate.important) {
+  if (candidate.important && candidate.raw[candidate.raw.length - 1] !== '!') {
     // The printCandidate function will already put the exclamation mark in the
     // right place, so we just need to mark this candidate as requiring a
     // migration.

@@ -85,10 +85,10 @@ pub struct Scanner {
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct CandidateWithPosition {
-  // The candidate string
+  /// The candidate string
   pub candidate: String,
 
-  // The position of the candidate inside the content file
+  /// The position of the candidate inside the content file
   pub position: i64,
 }
 

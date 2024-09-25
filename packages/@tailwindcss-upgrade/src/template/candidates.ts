@@ -1,6 +1,6 @@
 import { Scanner } from '@tailwindcss/oxide'
 import stringByteSlice from 'string-byte-slice'
-import { type Candidate, type Variant } from '../../../tailwindcss/src/candidate'
+import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractCandidates(
