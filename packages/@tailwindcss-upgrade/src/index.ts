@@ -104,7 +104,7 @@ async function run() {
 
     // Migrate each file
     await Promise.allSettled(
-      files.map((file) => migrateStylesheet(file, parsedConfig.designSystem)),
+      files.map((file) => migrateStylesheet(file, parsedConfig?.designSystem)),
     )
 
     success('Stylesheet migration complete.')
