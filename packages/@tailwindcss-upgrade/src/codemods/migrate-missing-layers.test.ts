@@ -55,11 +55,9 @@ it('should migrate rules between tailwind directives', async () => {
 
     @tailwind utilities;
 
-    @layer utilities {
-      .utility-a {
-      }
-      .utility-b {
-      }
+    .utility-a {
+    }
+    .utility-b {
     }"
   `)
 })

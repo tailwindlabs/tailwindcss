@@ -78,28 +78,32 @@ export function migrateMissingLayers(): Plugin {
 
       // Track the node
       if (lastLayer !== '') {
-        if (bucket.push(node) !== 1) {
-          node.remove()
-        }
+        bucket.push(node)
       }
     })
 
-    // Add the last bucket if it's not empty
-    if (bucket.length > 0) {
-      buckets.push([lastLayer, bucket.splice(0)])
-    }
-
     // Wrap each bucket in an `@layer` at-rule
     for (let [layerName, nodes] of buckets) {
+      let target = nodes[0]
       let layerNode = new AtRule({
         name: 'layer',
         params: layerName,
-        nodes,
+        nodes: nodes.map((node) => {
+          // Keep the target node as-is, because we will be replacing that one
+          // with the new layer node.
+          if (node === target) {
+            return node
+          }
+
+          // Every other node should be removed from its original position. They
+          // will be added to the new layer node.
+          return node.remove()
+        }),
         raws: {
           tailwind_pretty: true,
         },
       })
-      nodes[0].replaceWith(layerNode)
+      target.replaceWith(layerNode)
     }
   }
 
