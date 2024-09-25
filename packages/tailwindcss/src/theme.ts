@@ -8,6 +8,8 @@ export const enum ThemeOptions {
 }
 
 export class Theme {
+  public prefix: string | null = null
+
   constructor(private values = new Map<string, { value: string; options: number }>()) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
@@ -74,7 +76,17 @@ export class Theme {
   }
 
   entries() {
-    return this.values.entries()
+    if (!this.prefix) return this.values.entries()
+
+    return Array.from(this.values, (entry) => {
+      entry[0] = this.#prefixKey(entry[0])
+      return entry
+    })
+  }
+
+  #prefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${this.prefix}-${key.slice(2)}`
   }
 
   #clearNamespace(namespace: string) {
@@ -103,7 +115,7 @@ export class Theme {
       return null
     }
 
-    return `var(${themeKey}, ${this.values.get(themeKey)?.value})`
+    return `var(${this.#prefixKey(themeKey)}, ${this.values.get(themeKey)?.value})`
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
