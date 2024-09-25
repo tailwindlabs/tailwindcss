@@ -234,28 +234,41 @@ async function parseCss(
       return WalkAction.Skip
     }
 
-    // Drop instances of `@media selector(…)`
-    //
-    // We support `@import "tailwindcss" selector(…)` as a way to
-    // nest utilities under a custom selector.
-    if (node.selector.startsWith('@media selector(')) {
-      let themeParams = node.selector.slice(16, -1)
+    if (node.selector.startsWith('@media')) {
+      let features = segment(node.selector.slice(6), ' ')
+      let shouldReplace = true
 
-      wrappingSelector = `${themeParams} &`
+      for (let i = 0; i < features.length; i++) {
+        let part = features[i]
 
-      replaceWith(node.nodes)
+        // Drop instances of `@media important`
+        //
+        // We support `@import "tailwindcss" important` to mark all declarations
+        // in generated utilities as `!important`.
+        if (part === 'important') {
+          important = true
+          shouldReplace = true
+          features[i] = ''
+        }
 
-      return WalkAction.Skip
-    }
+        // Drop instances of `@media selector(…)`
+        //
+        // We support `@import "tailwindcss" selector(…)` as a way to
+        // nest utilities under a custom selector.
+        else if (part.startsWith('selector(') && part.endsWith(')')) {
+          wrappingSelector = `${part.slice(9, -1)} &`
+          shouldReplace = true
+          features[i] = ''
+        }
+      }
 
-    // Drop instances of `@media important`
-    //
-    // We support `@import "tailwindcss" important` to mark all declarations
-    // in generated utilities as `!important`.
-    if (node.selector.startsWith('@media important')) {
-      important = true
+      let remaining = features.filter(Boolean).join(' ')
 
-      replaceWith(node.nodes)
+      node.selector = `@media ${remaining}`
+
+      if (remaining.trim() === '' && shouldReplace) {
+        replaceWith(node.nodes)
+      }
 
       return WalkAction.Skip
     }

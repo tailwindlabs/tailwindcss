@@ -62,3 +62,35 @@ test('Utilities can be marked with important', async () => {
     "
   `)
 })
+
+test('Utilities can be wrapped with a selector and marked as important', async () => {
+  // This is the v4 equivalent of `important: true` from v3
+  let input = css`
+    @import 'tailwindcss/utilities' selector(#app) important;
+  `
+
+  let compiler = await compile(input, {
+    loadStylesheet: async (id: string, base: string) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    ".underline {
+      #app & {
+        text-decoration-line: underline!important;
+      }
+    }
+    .hover\\:line-through {
+      #app & {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through!important;
+          }
+        }
+      }
+    }
+    "
+  `)
+})
