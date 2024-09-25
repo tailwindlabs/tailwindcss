@@ -24,6 +24,16 @@ it("should not migrate `@import 'tailwindcss'`", async () => {
   `)
 })
 
+it('should migrate the tailwind.css import', async () => {
+  expect(
+    await migrate(css`
+      @import 'tailwindcss/tailwind.css';
+    `),
+  ).toEqual(css`
+    @import 'tailwindcss';
+  `)
+})
+
 it('should migrate the default @tailwind directives to a single import', async () => {
   expect(
     await migrate(css`
