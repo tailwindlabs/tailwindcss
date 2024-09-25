@@ -205,7 +205,6 @@ describe('toString()', () => {
 
     // Sometimes we will have a functional and a static candidate for the same
     // raw input string (e.g. `-inset-full`). Dedupe in this case.
-    // TODO: This seems unexpected?
     let cleaned = new Set([...candidates].map(printCandidate))
 
     expect([...cleaned]).toEqual([result])
