@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- _Experimental_: Improve codemod output, keep CSS after last Tailwind directive unlayered ([#14512](https://github.com/tailwindlabs/tailwindcss/pull/14512))
 
 ## [4.0.0-alpha.25] - 2024-09-24
 
