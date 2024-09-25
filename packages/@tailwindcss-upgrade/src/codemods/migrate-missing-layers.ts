@@ -65,7 +65,7 @@ export function migrateMissingLayers(): Plugin {
 
         // Add layer to `@import` at-rules
         if (node.name === 'import') {
-          if (!node.params.includes('layer(')) {
+          if (lastLayer !== '' && !node.params.includes('layer(')) {
             node.params += ` layer(${lastLayer})`
           }
 
