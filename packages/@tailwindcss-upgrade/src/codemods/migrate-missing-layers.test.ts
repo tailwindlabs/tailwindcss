@@ -14,6 +14,14 @@ function migrate(input: string) {
     .then((result) => result.css)
 }
 
+it('should not migrate already migrated `@import` at-rules', async () => {
+  expect(
+    await migrate(css`
+      @import 'tailwindcss';
+    `),
+  ).toMatchInlineSnapshot(`"@import 'tailwindcss';"`)
+})
+
 it('should migrate rules between tailwind directives', async () => {
   expect(
     await migrate(css`
