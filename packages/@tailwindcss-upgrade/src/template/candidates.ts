@@ -135,8 +135,8 @@ function printVariant(variant: Variant) {
 
 function escapeArbitrary(input: string) {
   return input
-    .replaceAll(String.raw`_`, String.raw`\_`) // Escape underscores to keep them as-is
-    .replaceAll(String.raw` `, String.raw`_`) // Replace spaces with underscores
+    .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
+    .replaceAll(' ', '_') // Replace spaces with underscores
 }
 
 export function replaceCandidateInContent(
