@@ -118,8 +118,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
   }
 
-  let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
-  let inputBasePath = path.dirname(path.resolve(inputFile))
+  let inputBasePath =
+    args['--input'] && args['--input'] !== '-'
+      ? path.dirname(path.resolve(args['--input']))
+      : process.cwd()
   let fullRebuildPaths: string[] = []
 
   function createCompiler(css: string) {
