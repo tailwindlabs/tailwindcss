@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
+- _Experimental_: Add template codemods for removal of automatic `var(…)` injection ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
 
 ### Fixed
 
