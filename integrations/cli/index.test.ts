@@ -182,4 +182,29 @@ describe.each([
       ])
     },
   )
+
+  test(
+    'production build (stdin)',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.css': css`@import 'tailwindcss';`,
+      },
+    },
+    async ({ fs, exec }) => {
+      await exec(`${command} --input=- --output dist/out.css < src/index.css`)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+    },
+  )
 })
