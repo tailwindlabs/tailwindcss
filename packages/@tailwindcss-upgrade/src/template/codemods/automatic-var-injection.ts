@@ -30,14 +30,14 @@ export function automaticVarInjection(
     }
   }
 
-  // Some properties never had var() injection in v3. We need to convert the candidate to CSS
-  // so we can check the properties used by the utility.
-  let isException = isAutomaticVarInjectionException(designSystem, candidate)
-
   // Add `var(…)` to arbitrary candidates, e.g.:
   //
   // `[color:--my-color]` => `[color:var(--my-color)]`
-  if (!isException && candidate.kind === 'arbitrary' && candidate.value.startsWith('--')) {
+  if (
+    candidate.kind === 'arbitrary' &&
+    candidate.value.startsWith('--') &&
+    !isAutomaticVarInjectionException(designSystem, candidate, candidate.value)
+  ) {
     candidate.value = `var(${candidate.value})`
     didChange = true
   }
@@ -46,11 +46,11 @@ export function automaticVarInjection(
   //
   // `bg-[--my-color]` => `bg-[var(--my-color)]`
   if (
-    !isException &&
     candidate.kind === 'functional' &&
     candidate.value &&
     candidate.value.kind === 'arbitrary' &&
-    candidate.value.value.startsWith('--')
+    candidate.value.value.startsWith('--') &&
+    !isAutomaticVarInjectionException(designSystem, candidate, candidate.value.value)
   ) {
     candidate.value.value = `var(${candidate.value.value})`
     didChange = true
@@ -101,19 +101,21 @@ const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   'view-timeline',
   'position-try',
 ])
+// Some properties never had var() injection in v3. We need to convert the candidate to CSS
+// so we can check the properties used by the utility.
 function isAutomaticVarInjectionException(
   designSystem: DesignSystem,
   candidate: Candidate,
+  value: string,
 ): boolean {
   let ast = designSystem.compileAstNodes(candidate).map((n) => n.node)
 
-  console.dir(ast, { depth: null })
   let isException = false
   walk(ast, (node) => {
     if (
       node.kind === 'declaration' &&
       AUTO_VAR_INJECTION_EXCEPTIONS.has(node.property) &&
-      node.value?.startsWith('--')
+      node.value == value
     ) {
       isException = true
     }
