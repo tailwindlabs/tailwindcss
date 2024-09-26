@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
 - _Experimental_: Do not wrap comment nodes in `@layer` when running codemods ([#14517](https://github.com/tailwindlabs/tailwindcss/pull/14517))
 - _Experimental_: Ensure we don't lose selectors when running codemods ([#14518](https://github.com/tailwindlabs/tailwindcss/pull/14518))
+- Ensure that `@utility` is top-level and cannot be nested ([#14525](https://github.com/tailwindlabs/tailwindcss/pull/14525))
 
 ## [4.0.0-alpha.25] - 2024-09-24
 
