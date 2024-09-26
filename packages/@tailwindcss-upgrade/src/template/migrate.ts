@@ -6,7 +6,7 @@ import { extractCandidates, printCandidate, replaceCandidateInContent } from './
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { migrateImportant } from './codemods/migrate-important'
 
-export type Migration = (candidate: Candidate) => Candidate | null
+export type Migration = (designSystem: DesignSystem, candidate: Candidate) => Candidate | null
 
 export default async function migrateContents(
   designSystem: DesignSystem,
@@ -22,7 +22,7 @@ export default async function migrateContents(
   for (let { candidate, start, end } of candidates) {
     let needsMigration = false
     for (let migration of migrations) {
-      let migrated = migration(candidate)
+      let migrated = migration(designSystem, candidate)
       if (migrated) {
         candidate = migrated
         needsMigration = true

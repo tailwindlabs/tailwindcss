@@ -1,6 +1,11 @@
+import { walk } from '../../../../tailwindcss/src/ast'
 import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 
-export function automaticVarInjection(candidate: Candidate): Candidate | null {
+export function automaticVarInjection(
+  designSystem: DesignSystem,
+  candidate: Candidate,
+): Candidate | null {
   let didChange = false
 
   // Add `var(…)` in modifier position, e.g.:
@@ -25,10 +30,14 @@ export function automaticVarInjection(candidate: Candidate): Candidate | null {
     }
   }
 
+  // Some properties never had var() injection in v3. We need to convert the candidate to CSS
+  // so we can check the properties used by the utility.
+  let isException = isAutomaticVarInjectionException(designSystem, candidate)
+
   // Add `var(…)` to arbitrary candidates, e.g.:
   //
   // `[color:--my-color]` => `[color:var(--my-color)]`
-  if (candidate.kind === 'arbitrary' && candidate.value.startsWith('--')) {
+  if (!isException && candidate.kind === 'arbitrary' && candidate.value.startsWith('--')) {
     candidate.value = `var(${candidate.value})`
     didChange = true
   }
@@ -37,6 +46,7 @@ export function automaticVarInjection(candidate: Candidate): Candidate | null {
   //
   // `bg-[--my-color]` => `bg-[var(--my-color)]`
   if (
+    !isException &&
     candidate.kind === 'functional' &&
     candidate.value &&
     candidate.value.kind === 'arbitrary' &&
@@ -72,4 +82,41 @@ function injectVarIntoVariant(variant: Variant): boolean {
   }
 
   return didChange
+}
+
+const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
+  // Concrete properties
+  'scroll-timeline-name',
+  'timeline-scope',
+  'view-timeline-name',
+  'font-palette',
+  'anchor-name',
+  'anchor-scope',
+  'position-anchor',
+  'position-try-options',
+
+  // Shorthand properties
+  'scroll-timeline',
+  'animation-timeline',
+  'view-timeline',
+  'position-try',
+])
+function isAutomaticVarInjectionException(
+  designSystem: DesignSystem,
+  candidate: Candidate,
+): boolean {
+  let ast = designSystem.compileAstNodes(candidate).map((n) => n.node)
+
+  console.dir(ast, { depth: null })
+  let isException = false
+  walk(ast, (node) => {
+    if (
+      node.kind === 'declaration' &&
+      AUTO_VAR_INJECTION_EXCEPTIONS.has(node.property) &&
+      node.value?.startsWith('--')
+    ) {
+      isException = true
+    }
+  })
+  return isException
 }

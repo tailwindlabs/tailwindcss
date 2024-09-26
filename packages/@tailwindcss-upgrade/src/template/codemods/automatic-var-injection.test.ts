@@ -33,11 +33,25 @@ test.each([
   // Variants
   ['supports-[--test]:flex', 'supports-[var(--test)]:flex'],
   ['supports-[_--test]:flex', null],
+
+  // Some properties never had var() injection in v3.
+  ['[scroll-timeline-name:--myTimeline]', null],
+  ['[timeline-scope:--myScope]', null],
+  ['[view-timeline-name:--myTimeline]', null],
+  ['[font-palette:--myPalette]', null],
+  ['[anchor-name:--myAnchor]', null],
+  ['[anchor-scope:--myScope]', null],
+  ['[position-anchor:--myAnchor]', null],
+  ['[position-try-options:--myAnchor]', null],
+  ['[scroll-timeline:--myTimeline]', null],
+  ['[animation-timeline:--myAnimation]', null],
+  ['[view-timeline:--myTimeline]', null],
+  ['[position-try:--myAnchor]', null],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  let migrated = automaticVarInjection(designSystem.parseCandidate(candidate)[0]!)
+  let migrated = automaticVarInjection(designSystem, designSystem.parseCandidate(candidate)[0]!)
   expect(migrated ? printCandidate(migrated) : migrated).toEqual(result)
 })
