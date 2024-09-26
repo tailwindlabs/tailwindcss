@@ -4,13 +4,14 @@ import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates, replaceCandidateInContent } from './candidates'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
+import { variantOrder } from './codemods/variant-order'
 
 export type Migration = (designSystem: DesignSystem, rawCandidate: string) => string
 
 export default async function migrateContents(
   designSystem: DesignSystem,
   contents: string,
-  migrations: Migration[] = [important, bgGradient],
+  migrations: Migration[] = [important, bgGradient, variantOrder],
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents)
 
