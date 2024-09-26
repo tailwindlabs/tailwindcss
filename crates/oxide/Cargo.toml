@@ -8,7 +8,7 @@ bstr = "1.0.1"
 globwalk = "0.8.1"
 log = "0.4"
 rayon = "1.5.3"
-fxhash = "0.2.1"
+fxhash = { package = "rustc-hash", version = "2.0.0" }
 crossbeam = "0.8.2"
 tracing = { version = "0.1.37", features = [] }
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
