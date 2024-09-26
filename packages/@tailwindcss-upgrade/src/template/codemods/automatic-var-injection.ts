@@ -14,7 +14,8 @@ export function automaticVarInjection(
   if (
     'modifier' in candidate &&
     candidate.modifier?.kind === 'arbitrary' &&
-    candidate.modifier.value.startsWith('--')
+    candidate.modifier.value.startsWith('--') &&
+    !isAutomaticVarInjectionException(designSystem, candidate, candidate.modifier.value)
   ) {
     candidate.modifier.value = `var(${candidate.modifier.value})`
     didChange = true
@@ -24,7 +25,7 @@ export function automaticVarInjection(
   //
   // `supports-[--test]:flex'` => `supports-[var(--test)]:flex`
   for (let variant of candidate.variants) {
-    let didChangeVariant = injectVarIntoVariant(variant)
+    let didChangeVariant = injectVarIntoVariant(designSystem, variant)
     if (didChangeVariant) {
       didChange = true
     }
@@ -62,26 +63,43 @@ export function automaticVarInjection(
   return null
 }
 
-function injectVarIntoVariant(variant: Variant): boolean {
+function injectVarIntoVariant(designSystem: DesignSystem, variant: Variant): boolean {
   let didChange = false
   if (
     variant.kind === 'functional' &&
     variant.value &&
     variant.value.kind === 'arbitrary' &&
-    variant.value.value.startsWith('--')
+    variant.value.value.startsWith('--') &&
+    !isAutomaticVarInjectionException(
+      designSystem,
+      createEmptyCandidate(variant),
+      variant.value.value,
+    )
   ) {
     variant.value.value = `var(${variant.value.value})`
     didChange = true
   }
 
   if (variant.kind === 'compound') {
-    let compoundDidChange = injectVarIntoVariant(variant.variant)
+    let compoundDidChange = injectVarIntoVariant(designSystem, variant.variant)
     if (compoundDidChange) {
       didChange = true
     }
   }
 
   return didChange
+}
+
+function createEmptyCandidate(variant: Variant) {
+  return {
+    kind: 'arbitrary' as const,
+    property: 'color',
+    value: 'red',
+    modifier: null,
+    variants: [variant],
+    important: false,
+    raw: 'candidate',
+  }
 }
 
 const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
