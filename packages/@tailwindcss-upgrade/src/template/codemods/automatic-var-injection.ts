@@ -14,11 +14,11 @@ export function automaticVarInjection(
   if (
     'modifier' in candidate &&
     candidate.modifier?.kind === 'arbitrary' &&
-    candidate.modifier.value.startsWith('--') &&
     !isAutomaticVarInjectionException(designSystem, candidate, candidate.modifier.value)
   ) {
-    candidate.modifier.value = `var(${candidate.modifier.value})`
-    didChange = true
+    let { value, didChange: modifierDidChange } = injectVar(candidate.modifier.value)
+    candidate.modifier.value = value
+    didChange ||= modifierDidChange
   }
 
   // Add `var(…)` to all variants, e.g.:
@@ -36,11 +36,11 @@ export function automaticVarInjection(
   // `[color:--my-color]` => `[color:var(--my-color)]`
   if (
     candidate.kind === 'arbitrary' &&
-    candidate.value.startsWith('--') &&
     !isAutomaticVarInjectionException(designSystem, candidate, candidate.value)
   ) {
-    candidate.value = `var(${candidate.value})`
-    didChange = true
+    let { value, didChange: valueDidChange } = injectVar(candidate.value)
+    candidate.value = value
+    didChange ||= valueDidChange
   }
 
   // Add `var(…)` to arbitrary values for functional candidates, e.g.:
@@ -50,11 +50,11 @@ export function automaticVarInjection(
     candidate.kind === 'functional' &&
     candidate.value &&
     candidate.value.kind === 'arbitrary' &&
-    candidate.value.value.startsWith('--') &&
     !isAutomaticVarInjectionException(designSystem, candidate, candidate.value.value)
   ) {
-    candidate.value.value = `var(${candidate.value.value})`
-    didChange = true
+    let { value, didChange: valueDidChange } = injectVar(candidate.value.value)
+    candidate.value.value = value
+    didChange ||= valueDidChange
   }
 
   if (didChange) {
@@ -63,21 +63,33 @@ export function automaticVarInjection(
   return null
 }
 
+function injectVar(value: string): { value: string; didChange: boolean } {
+  let didChange = false
+  if (value.startsWith('--')) {
+    value = `var(${value})`
+    didChange = true
+  } else if (value.startsWith(' --')) {
+    value = value.slice(1)
+    didChange = true
+  }
+  return { value, didChange }
+}
+
 function injectVarIntoVariant(designSystem: DesignSystem, variant: Variant): boolean {
   let didChange = false
   if (
     variant.kind === 'functional' &&
     variant.value &&
     variant.value.kind === 'arbitrary' &&
-    variant.value.value.startsWith('--') &&
     !isAutomaticVarInjectionException(
       designSystem,
       createEmptyCandidate(variant),
       variant.value.value,
     )
   ) {
-    variant.value.value = `var(${variant.value.value})`
-    didChange = true
+    let { value, didChange: valueDidChange } = injectVar(variant.value.value)
+    variant.value.value = value
+    didChange ||= valueDidChange
   }
 
   if (variant.kind === 'compound') {

@@ -15,11 +15,11 @@ test.each([
   ['border-[length:--my-length]', 'border-[length:var(--my-length)]'],
   ['border-[line-width:--my-width]', 'border-[line-width:var(--my-width)]'],
 
-  // Does not add var() if there is a _ before the variable name
-  ['bg-[_--my-color]', null],
-  ['bg-[color:_--my-color]', null],
-  ['border-[length:_--my-length]', null],
-  ['border-[line-width:_--my-width]', null],
+  // Can clean up the workaround for opting out of automatic var injection
+  ['bg-[_--my-color]', 'bg-[--my-color]'],
+  ['bg-[color:_--my-color]', 'bg-[color:--my-color]'],
+  ['border-[length:_--my-length]', 'border-[length:--my-length]'],
+  ['border-[line-width:_--my-width]', 'border-[line-width:--my-width]'],
 
   // Modifiers
   ['[color:--my-color]/[--my-opacity]', '[color:var(--my-color)]/[var(--my-opacity)]'],
@@ -27,14 +27,15 @@ test.each([
   ['bg-[--my-color]/[--my-opacity]', 'bg-[var(--my-color)]/[var(--my-opacity)]'],
   ['bg-[color:--my-color]/[--my-opacity]', 'bg-[color:var(--my-color)]/[var(--my-opacity)]'],
 
-  ['[color:--my-color]/[_--my-opacity]', '[color:var(--my-color)]/[_--my-opacity]'],
-  ['bg-red-500/[_--my-opacity]', null],
-  ['bg-[--my-color]/[_--my-opacity]', 'bg-[var(--my-color)]/[_--my-opacity]'],
-  ['bg-[color:--my-color]/[_--my-opacity]', 'bg-[color:var(--my-color)]/[_--my-opacity]'],
+  // Can clean up the workaround for opting out of automatic var injection
+  ['[color:--my-color]/[_--my-opacity]', '[color:var(--my-color)]/[--my-opacity]'],
+  ['bg-red-500/[_--my-opacity]', 'bg-red-500/[--my-opacity]'],
+  ['bg-[--my-color]/[_--my-opacity]', 'bg-[var(--my-color)]/[--my-opacity]'],
+  ['bg-[color:--my-color]/[_--my-opacity]', 'bg-[color:var(--my-color)]/[--my-opacity]'],
 
   // Variants
   ['supports-[--test]:flex', 'supports-[var(--test)]:flex'],
-  ['supports-[_--test]:flex', null],
+  ['supports-[_--test]:flex', 'supports-[--test]:flex'],
 
   // Some properties never had var() injection in v3.
   ['[scroll-timeline-name:--myTimeline]', null],
