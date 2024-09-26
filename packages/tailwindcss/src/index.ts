@@ -88,6 +88,10 @@ async function parseCss(
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
+      if (parent !== null) {
+        throw new Error('`@utility` cannot be nested.')
+      }
+
       let name = node.selector.slice(9).trim()
 
       if (!IS_VALID_UTILITY_NAME.test(name)) {
