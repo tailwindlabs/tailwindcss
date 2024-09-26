@@ -6,8 +6,8 @@ import { automaticVarInjection } from './automatic-var-injection'
 test.each([
   // Arbitrary candidates
   ['[color:--my-color]', '[color:var(--my-color)]'],
-  ['[--my-color:red]']', '[--my-color:red]'],
-  ['[--my-color:--my-other-color]']', '[--my-color:var(--my-other-color)]'],
+  ['[--my-color:red]', null],
+  ['[--my-color:--my-other-color]', '[--my-color:var(--my-other-color)]'],
 
   // Arbitrary values for functional candidates
   ['bg-[--my-color]', 'bg-[var(--my-color)]'],
