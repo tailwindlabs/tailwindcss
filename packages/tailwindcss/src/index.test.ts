@@ -2573,6 +2573,40 @@ describe('@variant', () => {
   })
 })
 
+describe('@utility', () => {
+  test('@utility must be top-level and cannot be nested', () =>
+    expect(
+      compileCss(css`
+        .foo {
+          @utility foo {
+            color: red;
+          }
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@utility\` cannot be nested.]`))
+
+  test('@utility must include a body', () =>
+    expect(
+      compileCss(css`
+        @utility foo {
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility foo\` is empty. Utilities should include at least one property.]`,
+    ))
+
+  test('@utility cannot contain any special characters', () =>
+    expect(
+      compileCss(css`
+        @utility 💨 {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
+    ))
+})
+
 test('addBase', async () => {
   let { build } = await compile(
     css`
