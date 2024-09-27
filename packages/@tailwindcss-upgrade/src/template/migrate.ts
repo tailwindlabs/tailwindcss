@@ -1,36 +1,35 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Candidate } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { extractCandidates, printCandidate, replaceCandidateInContent } from './candidates'
+import { extractRawCandidates, replaceCandidateInContent } from './candidates'
 import { bgGradient } from './codemods/bg-gradient'
-import { migrateImportant } from './codemods/migrate-important'
+import { important } from './codemods/important'
 
-export type Migration = (candidate: Candidate) => Candidate | null
+export type Migration = (designSystem: DesignSystem, rawCandidate: string) => string
 
 export default async function migrateContents(
   designSystem: DesignSystem,
   contents: string,
-  migrations: Migration[] = [migrateImportant, bgGradient],
+  migrations: Migration[] = [important, bgGradient],
 ): Promise<string> {
-  let candidates = await extractCandidates(designSystem, contents)
+  let candidates = await extractRawCandidates(contents)
 
   // Sort candidates by starting position desc
   candidates.sort((a, z) => z.start - a.start)
 
   let output = contents
-  for (let { candidate, start, end } of candidates) {
+  for (let { rawCandidate, start, end } of candidates) {
     let needsMigration = false
     for (let migration of migrations) {
-      let migrated = migration(candidate)
-      if (migrated) {
-        candidate = migrated
+      let candidate = migration(designSystem, rawCandidate)
+      if (rawCandidate !== candidate) {
+        rawCandidate = candidate
         needsMigration = true
       }
     }
 
     if (needsMigration) {
-      output = replaceCandidateInContent(output, printCandidate(candidate), start, end)
+      output = replaceCandidateInContent(output, rawCandidate, start, end)
     }
   }
 
