@@ -1,20 +1,16 @@
 import { Scanner } from '@tailwindcss/oxide'
 import stringByteSlice from 'string-byte-slice'
 import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
-export async function extractCandidates(
-  designSystem: DesignSystem,
+export async function extractRawCandidates(
   content: string,
-): Promise<{ candidate: Candidate; start: number; end: number }[]> {
+): Promise<{ rawCandidate: string; start: number; end: number }[]> {
   let scanner = new Scanner({})
   let result = scanner.getCandidatesWithPositions({ content, extension: 'html' })
 
-  let candidates: { candidate: Candidate; start: number; end: number }[] = []
+  let candidates: { rawCandidate: string; start: number; end: number }[] = []
   for (let { candidate: rawCandidate, position: start } of result) {
-    for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-      candidates.push({ candidate, start, end: start + rawCandidate.length })
-    }
+    candidates.push({ rawCandidate, start, end: start + rawCandidate.length })
   }
   return candidates
 }

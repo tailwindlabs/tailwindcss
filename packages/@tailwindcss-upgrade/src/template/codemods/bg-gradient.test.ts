@@ -1,6 +1,5 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { printCandidate } from '../candidates'
 import { bgGradient } from './bg-gradient'
 
 test.each([
@@ -19,6 +18,5 @@ test.each([
     base: __dirname,
   })
 
-  let migrated = bgGradient(designSystem.parseCandidate(candidate)[0]!)
-  expect(migrated ? printCandidate(migrated) : migrated).toEqual(result)
+  expect(bgGradient(designSystem, candidate)).toEqual(result)
 })
