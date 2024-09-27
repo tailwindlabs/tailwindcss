@@ -22,6 +22,32 @@ it('should not migrate already migrated `@import` at-rules', async () => {
   ).toMatchInlineSnapshot(`"@import 'tailwindcss';"`)
 })
 
+it('should not migrate anything if no `@tailwind` directives (or imports) are found', async () => {
+  expect(
+    await migrate(css`
+      /* Base */
+      html {
+        color: red;
+      }
+
+      /* Utilities */
+      .foo {
+        color: blue;
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "/* Base */
+    html {
+      color: red;
+    }
+
+    /* Utilities */
+    .foo {
+      color: blue;
+    }"
+  `)
+})
+
 it('should not wrap comments in a layer, if they are the only nodes', async () => {
   expect(
     await migrate(css`
