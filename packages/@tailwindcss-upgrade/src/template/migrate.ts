@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { Candidate } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractCandidates, printCandidate, replaceCandidateInContent } from './candidates'
+import { bgGradient } from './codemods/bg-gradient'
 import { migrateImportant } from './codemods/migrate-important'
 
 export type Migration = (candidate: Candidate) => Candidate | null
@@ -10,7 +11,7 @@ export type Migration = (candidate: Candidate) => Candidate | null
 export default async function migrateContents(
   designSystem: DesignSystem,
   contents: string,
-  migrations: Migration[] = [migrateImportant],
+  migrations: Migration[] = [migrateImportant, bgGradient],
 ): Promise<string> {
   let candidates = await extractCandidates(designSystem, contents)
 
