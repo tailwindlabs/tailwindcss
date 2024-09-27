@@ -6,15 +6,11 @@ import { printCandidate } from '../candidates'
 export function variantOrder(designSystem: DesignSystem, rawCandidate: string): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.variants.length > 1) {
-      // If the variant stack is made of only variants where the order does not
-      // matter, we can skip the reordering
-      if (candidate.variants.every((v) => isOrderIndependentVariant(designSystem, v))) {
-        continue
-      }
-
       let mediaVariants = []
       let regularVariants = []
       let pseudoElementVariants = []
+
+      let originalOrder = candidate.variants
 
       for (let variant of candidate.variants) {
         if (isMediaVariant(designSystem, variant)) {
@@ -24,28 +20,28 @@ export function variantOrder(designSystem: DesignSystem, rawCandidate: string): 
         } else {
           regularVariants.push(variant)
         }
-      }
 
-      // The candidate list in the AST need to be in reverse order
-      candidate.variants = [
-        ...pseudoElementVariants.reverse(),
-        ...regularVariants.reverse(),
-        ...mediaVariants,
-      ]
-      return printCandidate(candidate)
+        // We only need to reorder regular variants if order is important
+        let regularVariantsNeedReordering = regularVariants.some((v) =>
+          isCombinatorVariant(designSystem, v),
+        )
+
+        // The candidate list in the AST need to be in reverse order
+        candidate.variants = [
+          ...pseudoElementVariants,
+          ...(regularVariantsNeedReordering ? regularVariants.reverse() : regularVariants),
+          ...mediaVariants,
+        ]
+
+        if (orderMatches(originalOrder, candidate.variants)) {
+          continue
+        }
+
+        return printCandidate(candidate)
+      }
     }
   }
   return rawCandidate
-}
-
-function isOrderIndependentVariant(designSystem: DesignSystem, variant: Variant) {
-  let stack = getAppliedNodeStack(designSystem, variant)
-    // Remove media variants from the stack, these are hoisted and don't affect the order of the
-    // below pseudos
-    .filter((node) => !(node.kind === 'rule' && node.selector.startsWith('@media (hover:')))
-  return stack.every(
-    (node) => node.kind === 'rule' && (node.selector === '&:hover' || node.selector === '&:focus'),
-  )
 }
 
 function isMediaVariant(designSystem: DesignSystem, variant: Variant) {
@@ -55,6 +51,21 @@ function isMediaVariant(designSystem: DesignSystem, variant: Variant) {
   }
   let stack = getAppliedNodeStack(designSystem, variant)
   return stack.every((node) => node.kind === 'rule' && node.selector.startsWith('@media'))
+}
+
+function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
+  let stack = getAppliedNodeStack(designSystem, variant)
+  return stack.some(
+    (node) =>
+      node.kind === 'rule' &&
+      // Ignore @media rules as they are hoisted
+      !node.selector.startsWith('@media') &&
+      // Combinators include any of the following characters
+      (node.selector.includes(' ') ||
+        node.selector.includes('>') ||
+        node.selector.includes('+') ||
+        node.selector.includes('~')),
+  )
 }
 
 function isEndOfSelectorPseudoElement(variant: Variant) {
@@ -102,4 +113,11 @@ function getAppliedNodeStack(designSystem: DesignSystem, variant: Variant): AstN
     stack.push(node)
   })
   return stack
+}
+
+function orderMatches<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) {
+    return false
+  }
+  return a.every((v, i) => b[i] === v)
 }
