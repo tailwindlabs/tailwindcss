@@ -10,107 +10,40 @@ test('extracts candidates with positions from a template', async () => {
       <button class="bg-blue-500 text-white">My button</button>
     </div>
   `
-
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  expect(extractRawCandidates(designSystem, content)).resolves.toMatchInlineSnapshot(`
+  let candidates = await extractRawCandidates(content)
+  let validCandidates = candidates.filter(
+    ({ rawCandidate }) => designSystem.parseCandidate(rawCandidate).length > 0,
+  )
+
+  expect(validCandidates).toMatchInlineSnapshot(`
     [
       {
-        "candidate": {
-          "important": false,
-          "kind": "functional",
-          "modifier": null,
-          "negative": false,
-          "raw": "bg-blue-500",
-          "root": "bg",
-          "value": {
-            "fraction": null,
-            "kind": "named",
-            "value": "blue-500",
-          },
-          "variants": [],
-        },
         "end": 28,
+        "rawCandidate": "bg-blue-500",
         "start": 17,
       },
       {
-        "candidate": {
-          "important": false,
-          "kind": "functional",
-          "modifier": null,
-          "negative": false,
-          "raw": "hover:focus:text-white",
-          "root": "text",
-          "value": {
-            "fraction": null,
-            "kind": "named",
-            "value": "white",
-          },
-          "variants": [
-            {
-              "compounds": true,
-              "kind": "static",
-              "root": "focus",
-            },
-            {
-              "compounds": true,
-              "kind": "static",
-              "root": "hover",
-            },
-          ],
-        },
         "end": 51,
+        "rawCandidate": "hover:focus:text-white",
         "start": 29,
       },
       {
-        "candidate": {
-          "important": false,
-          "kind": "arbitrary",
-          "modifier": null,
-          "property": "color",
-          "raw": "[color:red]",
-          "value": "red",
-          "variants": [],
-        },
         "end": 63,
+        "rawCandidate": "[color:red]",
         "start": 52,
       },
       {
-        "candidate": {
-          "important": false,
-          "kind": "functional",
-          "modifier": null,
-          "negative": false,
-          "raw": "bg-blue-500",
-          "root": "bg",
-          "value": {
-            "fraction": null,
-            "kind": "named",
-            "value": "blue-500",
-          },
-          "variants": [],
-        },
         "end": 98,
+        "rawCandidate": "bg-blue-500",
         "start": 87,
       },
       {
-        "candidate": {
-          "important": false,
-          "kind": "functional",
-          "modifier": null,
-          "negative": false,
-          "raw": "text-white",
-          "root": "text",
-          "value": {
-            "fraction": null,
-            "kind": "named",
-            "value": "white",
-          },
-          "variants": [],
-        },
         "end": 109,
+        "rawCandidate": "text-white",
         "start": 99,
       },
     ]
@@ -127,7 +60,11 @@ test('replaces the right positions for a candidate', async () => {
     base: __dirname,
   })
 
-  let candidate = (await extractRawCandidates(designSystem, content))[0]
+  let candidates = await extractRawCandidates(content)
+
+  let candidate = candidates.find(
+    ({ rawCandidate }) => designSystem.parseCandidate(rawCandidate).length > 0,
+  )!
 
   expect(replaceCandidateInContent(content, 'flex', candidate.start, candidate.end))
     .toMatchInlineSnapshot(`
