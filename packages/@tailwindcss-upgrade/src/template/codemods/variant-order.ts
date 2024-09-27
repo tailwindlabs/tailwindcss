@@ -5,41 +5,43 @@ import { printCandidate } from '../candidates'
 
 export function variantOrder(designSystem: DesignSystem, rawCandidate: string): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    if (candidate.variants.length > 1) {
-      let mediaVariants = []
-      let regularVariants = []
-      let pseudoElementVariants = []
+    if (candidate.variants.length <= 1) {
+      continue
+    }
 
-      let originalOrder = candidate.variants
+    let mediaVariants = []
+    let regularVariants = []
+    let pseudoElementVariants = []
 
-      for (let variant of candidate.variants) {
-        if (isMediaVariant(designSystem, variant)) {
-          mediaVariants.push(variant)
-        } else if (isEndOfSelectorPseudoElement(variant)) {
-          pseudoElementVariants.push(variant)
-        } else {
-          regularVariants.push(variant)
-        }
+    let originalOrder = candidate.variants
 
-        // We only need to reorder regular variants if order is important
-        let regularVariantsNeedReordering = regularVariants.some((v) =>
-          isCombinatorVariant(designSystem, v),
-        )
-
-        // The candidate list in the AST need to be in reverse order
-        candidate.variants = [
-          ...pseudoElementVariants,
-          ...(regularVariantsNeedReordering ? regularVariants.reverse() : regularVariants),
-          ...mediaVariants,
-        ]
-
-        if (orderMatches(originalOrder, candidate.variants)) {
-          continue
-        }
-
-        return printCandidate(candidate)
+    for (let variant of candidate.variants) {
+      if (isMediaVariant(designSystem, variant)) {
+        mediaVariants.push(variant)
+      } else if (isEndOfSelectorPseudoElement(variant)) {
+        pseudoElementVariants.push(variant)
+      } else {
+        regularVariants.push(variant)
       }
     }
+
+    // We only need to reorder regular variants if order is important
+    let regularVariantsNeedReordering = regularVariants.some((v) =>
+      isCombinatorVariant(designSystem, v),
+    )
+
+    // The candidate list in the AST need to be in reverse order
+    let newOrder = [
+      ...pseudoElementVariants,
+      ...(regularVariantsNeedReordering ? regularVariants.reverse() : regularVariants),
+      ...mediaVariants,
+    ]
+
+    if (orderMatches(originalOrder, newOrder)) {
+      continue
+    }
+
+    return printCandidate({ ...candidate, variants: newOrder })
   }
   return rawCandidate
 }
