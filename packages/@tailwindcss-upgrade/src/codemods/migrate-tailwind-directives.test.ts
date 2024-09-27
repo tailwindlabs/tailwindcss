@@ -58,6 +58,66 @@ it('should migrate the default @tailwind directives as imports to a single impor
   `)
 })
 
+it('should migrate the default @tailwind directives to a single import in a valid location', async () => {
+  expect(
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**! 
+       * License header
+       */
+
+      html {
+        color: red;
+      }
+
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `),
+  ).toEqual(css`
+    @charset "UTF-8";
+    @layer foo, bar, baz;
+
+    /**! 
+     * License header
+     */
+
+    @import 'tailwindcss';
+
+    html {
+      color: red;
+    }
+  `)
+})
+
+it('should migrate the default @tailwind directives as imports to a single import in a valid location', async () => {
+  expect(
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**! 
+       * License header
+       */
+
+      @import 'tailwindcss/base';
+      @import 'tailwindcss/components';
+      @import 'tailwindcss/utilities';
+    `),
+  ).toEqual(css`
+    @charset "UTF-8";
+    @layer foo, bar, baz;
+
+    /**! 
+     * License header
+     */
+
+    @import 'tailwindcss';
+  `)
+})
+
 it.each([
   [
     // The default order
