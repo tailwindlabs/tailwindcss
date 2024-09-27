@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
+- _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
 
 ### Fixed
 
