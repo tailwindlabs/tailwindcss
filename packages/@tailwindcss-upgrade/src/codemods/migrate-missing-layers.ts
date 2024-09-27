@@ -5,6 +5,7 @@ export function migrateMissingLayers(): Plugin {
     let lastLayer = ''
     let bucket: ChildNode[] = []
     let buckets: [layer: string, bucket: typeof bucket][] = []
+    let firstLayerName: string | null = null
 
     root.each((node) => {
       if (node.type === 'atrule') {
@@ -25,6 +26,7 @@ export function migrateMissingLayers(): Plugin {
             buckets.push([lastLayer, bucket.splice(0)])
           }
 
+          firstLayerName ??= 'base'
           lastLayer = 'base'
           return
         }
@@ -38,6 +40,7 @@ export function migrateMissingLayers(): Plugin {
             buckets.push([lastLayer, bucket.splice(0)])
           }
 
+          firstLayerName ??= 'components'
           lastLayer = 'components'
           return
         }
@@ -51,6 +54,7 @@ export function migrateMissingLayers(): Plugin {
             buckets.push([lastLayer, bucket.splice(0)])
           }
 
+          firstLayerName ??= 'utilities'
           lastLayer = 'utilities'
           return
         }
@@ -76,10 +80,14 @@ export function migrateMissingLayers(): Plugin {
         }
       }
 
-      // Track the node
-      if (lastLayer !== '') {
-        bucket.push(node)
+      // (License) comments can stay at the top, when we haven't found any
+      // `@tailwind` at-rules yet.
+      if (lastLayer === '' && node.type === 'comment') {
+        return
       }
+
+      // Track the node
+      bucket.push(node)
     })
 
     // Wrap each bucket in an `@layer` at-rule
@@ -92,7 +100,7 @@ export function migrateMissingLayers(): Plugin {
       let target = nodes[0]
       let layerNode = new AtRule({
         name: 'layer',
-        params: layerName,
+        params: layerName || firstLayerName || '',
         nodes: nodes.map((node) => {
           // Keep the target node as-is, because we will be replacing that one
           // with the new layer node.
