@@ -1,21 +1,23 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
-import postcss from 'postcss'
-import atImport from 'postcss-import'
-import prettier from 'prettier'
+import fs from 'node:fs/promises';  
+import path from 'node:path';  
+import postcss from 'postcss';  
+import atImport from 'postcss-import';  
+import prettier from 'prettier';  
 
-// Performance optimization: Inline the contents of the `tailwindcss/index.css`
-// file so that we don't need to handle imports at runtime.
-{
-  let __dirname = path.dirname(new URL(import.meta.url).pathname)
-  let file = path.resolve(__dirname, '../packages/tailwindcss/index.css')
-  let contents = await fs.readFile(file, 'utf-8')
-  let inlined = await prettier.format(
-    await postcss()
-      .use(atImport())
-      .process(contents, { from: file })
-      .then((result) => result.css),
-    { filepath: file },
-  )
-  await fs.writeFile(file, inlined, 'utf-8')
-}
+async function inlineTailwindCSS() {  
+  const __dirname = path.dirname(new URL(import.meta.url).pathname);  
+  const filePath = path.resolve(__dirname, '../packages/tailwindcss/index.css');  
+
+  try {  
+    const contents = await fs.readFile(filePath, 'utf-8');  
+    const result = await postcss([atImport()]).process(contents, { from: filePath });  
+    const formattedCSS = await prettier.format(result.css, { filepath: filePath });  
+    
+    await fs.writeFile(filePath, formattedCSS, 'utf-8');  
+    console.log('Tailwind CSS inlined and formatted successfully.');  
+  } catch (error) {  
+    console.error('Error processing Tailwind CSS:', error);  
+  }  
+}  
+
+inlineTailwindCSS();
