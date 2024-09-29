@@ -380,6 +380,13 @@ video {
   height: auto;
 }
 
+/*
+1. Sensible default for alt text
+*/
+img {
+  font-style: italic; /* 1 */
+}
+
 /* Make elements with the HTML hidden attribute stay hidden by default */
 [hidden] {
   display: none;
