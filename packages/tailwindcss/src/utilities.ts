@@ -2792,6 +2792,244 @@ export function createUtilities(theme: Theme) {
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
   })
 
+  // MASK UTILITIES
+
+  // TODO:
+  // - mask-clip
+  // - mask-composite
+  // - mask-image
+  //   - mask-linear
+  //   - mask-conic
+  //   - mask-gradient
+  //   - mask-from
+  //   - mask-via
+  //   - mask-to
+  // - mask-mode
+  // - mask-origin
+  // - mask-position
+  // - mask-repeat
+  // - mask-size
+
+  staticUtility('mask-none', [['background-image', 'none']])
+
+  for (let [value, direction] of [
+    ['t', 'top'],
+    ['tr', 'top right'],
+    ['r', 'right'],
+    ['br', 'bottom right'],
+    ['b', 'bottom'],
+    ['bl', 'bottom left'],
+    ['l', 'left'],
+    ['tl', 'top left'],
+  ]) {
+    staticUtility(`bg-gradient-to-${value}`, [
+      ['--tw-gradient-position', `to ${direction},`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+    ])
+
+    staticUtility(`bg-linear-to-${value}`, [
+      ['--tw-gradient-position', `to ${direction},`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+    ])
+  }
+
+  utilities.functional('bg-linear', (candidate) => {
+    if (!candidate.value || candidate.modifier) return
+
+    if (candidate.value.kind === 'arbitrary') {
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+
+      switch (type) {
+        case 'angle': {
+          value = withNegative(value, candidate)
+
+          return [
+            decl('--tw-gradient-position', `${value},`),
+            decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+          ]
+        }
+        default: {
+          if (candidate.negative) return
+
+          return [
+            decl('--tw-gradient-position', `${value},`),
+            decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+          ]
+        }
+      }
+    }
+  })
+
+  utilities.functional('bg-conic', (candidate) => {
+    if (candidate.modifier) return
+
+    if (!candidate.value) {
+      return [
+        decl('--tw-gradient-position', `initial`),
+        decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
+      ]
+    }
+
+    let value = candidate.value.value
+
+    if (candidate.value.kind === 'arbitrary') {
+      return [
+        decl('--tw-gradient-position', `${value},`),
+        decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+      ]
+    } else {
+      if (!isPositiveInteger(value)) return
+
+      value = withNegative(`${value}deg`, candidate)
+
+      return [
+        decl('--tw-gradient-position', `from ${value},`),
+        decl('background-image', `conic-gradient(var(--tw-gradient-stops,from ${value}))`),
+      ]
+    }
+  })
+
+  utilities.functional('bg-radial', (candidate) => {
+    if (candidate.modifier) return
+
+    if (!candidate.value) {
+      return [
+        decl('--tw-gradient-position', `initial`),
+        decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
+      ]
+    }
+
+    if (candidate.value.kind === 'arbitrary') {
+      let value = candidate.value.value
+      return [
+        decl('--tw-gradient-position', `${value},`),
+        decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
+      ]
+    }
+  })
+
+  let gradientStopProperties = () => {
+    return atRoot([
+      property('--tw-gradient-position'),
+      property('--tw-gradient-from', '#0000', '<color>'),
+      property('--tw-gradient-via', '#0000', '<color>'),
+      property('--tw-gradient-to', '#0000', '<color>'),
+      property('--tw-gradient-stops'),
+      property('--tw-gradient-via-stops'),
+      property('--tw-gradient-from-position', '0%', '<length> | <percentage>'),
+      property('--tw-gradient-via-position', '50%', '<length> | <percentage>'),
+      property('--tw-gradient-to-position', '100%', '<length> | <percentage>'),
+    ])
+  }
+
+  type GradientStopDescription = {
+    color: (value: string) => AstNode[] | undefined
+    position: (value: string) => AstNode[] | undefined
+  }
+
+  function gradientStopUtility(classRoot: string, desc: GradientStopDescription) {
+    utilities.functional(classRoot, (candidate) => {
+      if (candidate.negative || !candidate.value) return
+
+      // Arbitrary values
+      if (candidate.value.kind === 'arbitrary') {
+        let value: string | null = candidate.value.value
+        let type =
+          candidate.value.dataType ?? inferDataType(value, ['color', 'length', 'percentage'])
+
+        switch (type) {
+          case 'length':
+          case 'percentage': {
+            if (candidate.modifier) return
+            return desc.position(value)
+          }
+          default: {
+            value = asColor(value, candidate.modifier)
+            if (value === null) return
+
+            return desc.color(value)
+          }
+        }
+      }
+
+      // Known values: Color Stops
+      {
+        let value = resolveThemeColor(candidate, theme, ['--background-color', '--color'])
+        if (value) {
+          return desc.color(value)
+        }
+      }
+
+      // Known values: Positions
+      {
+        if (candidate.modifier) return
+        let value = theme.resolve(candidate.value.value, ['--gradient-color-stop-positions'])
+        if (value) {
+          return desc.position(value)
+        } else if (
+          candidate.value.value[candidate.value.value.length - 1] === '%' &&
+          isPositiveInteger(candidate.value.value.slice(0, -1))
+        ) {
+          return desc.position(candidate.value.value)
+        }
+      }
+    })
+
+    suggest(classRoot, () => [
+      {
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--background-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      },
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+        valueThemeKeys: ['--gradient-color-stop-positions'],
+      },
+    ])
+  }
+
+  gradientStopUtility('from', {
+    color: (value) => [
+      gradientStopProperties(),
+      decl('--tw-sort', '--tw-gradient-from'),
+      decl('--tw-gradient-from', value),
+      decl(
+        '--tw-gradient-stops',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+      ),
+    ],
+    position: (value) => [gradientStopProperties(), decl('--tw-gradient-from-position', value)],
+  })
+  staticUtility('via-none', [['--tw-gradient-via-stops', 'initial']])
+  gradientStopUtility('via', {
+    color: (value) => [
+      gradientStopProperties(),
+      decl('--tw-sort', '--tw-gradient-via'),
+      decl('--tw-gradient-via', value),
+      decl(
+        '--tw-gradient-via-stops',
+        'var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
+      ),
+      decl('--tw-gradient-stops', 'var(--tw-gradient-via-stops)'),
+    ],
+    position: (value) => [gradientStopProperties(), decl('--tw-gradient-via-position', value)],
+  })
+  gradientStopUtility('to', {
+    color: (value) => [
+      gradientStopProperties(),
+      decl('--tw-sort', '--tw-gradient-to'),
+      decl('--tw-gradient-to', value),
+      decl(
+        '--tw-gradient-stops',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+      ),
+    ],
+    position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
+  })
+
+  // END MASK UTILITIES
+
   /**
    * @css `box-decoration-break`
    */
