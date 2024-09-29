@@ -33,10 +33,10 @@ test('using @import instead of @tailwind', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       h1 {
         font-size: 32px;
       }
-      ${defaults}
       .container {
         width: 100%;
       }
