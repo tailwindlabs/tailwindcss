@@ -111,7 +111,7 @@ function createEmptyCandidate(variant: Variant) {
     variants: [variant],
     important: false,
     raw: 'candidate',
-  }
+  } satisfies Candidate
 }
 
 const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
