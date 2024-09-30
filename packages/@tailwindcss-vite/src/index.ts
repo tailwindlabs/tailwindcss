@@ -1,10 +1,10 @@
 import { compile, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
-
 import { Scanner } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
+import * as env from '../../tailwindcss/src/env'
 
 export default function tailwindcss(): Plugin[] {
   let servers: ViteDevServer[] = []
@@ -92,7 +92,10 @@ export default function tailwindcss(): Plugin[] {
     if (generated === false) {
       return
     }
-    return optimizeCss(generated, { minify })
+    env.DEBUG && console.time('[@tailwindcss/vite] Optimize CSS')
+    let result = optimizeCss(generated, { minify })
+    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Optimize CSS')
+    return result
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -378,9 +381,11 @@ class Root {
     // This should not be here, but right now the Vite plugin is setup where we
     // setup a new scanner and compiler every time we request the CSS file
     // (regardless whether it actually changed or not).
+    env.DEBUG && console.time('[@tailwindcss/vite] Scan for candidates')
     for (let candidate of this.scanner.scan()) {
       this.candidates.add(candidate)
     }
+    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
 
     // Watch individual files found via custom `@source` paths
     for (let file of this.scanner.files) {
@@ -404,6 +409,10 @@ class Root {
 
     this.requiresRebuild = true
 
-    return this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+    env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
+    let result = this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
+
+    return result
   }
 }
