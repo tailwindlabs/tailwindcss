@@ -122,6 +122,8 @@ it('should migrate a stylesheet (with imports)', async () => {
 it('should migrate a stylesheet (with preceding rules that should be wrapped in an `@layer`)', async () => {
   expect(
     await migrateContents(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
       /**! My license comment */
       html {
         color: red;
@@ -129,9 +131,12 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       @tailwind base;
       @tailwind components;
       @tailwind utilities;
+      @tailwind components;
     `),
   ).toMatchInlineSnapshot(`
-    "/**! My license comment */
+    "@charset "UTF-8";
+    @layer foo, bar, baz;
+    /**! My license comment */
     @import 'tailwindcss';
     @layer base {
       html {

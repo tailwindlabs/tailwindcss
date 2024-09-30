@@ -80,6 +80,44 @@ it('should not wrap comments in a layer, if they are the only nodes', async () =
   `)
 })
 
+it('should migrate rules above the `@tailwind base` directive in an `@layer base`', async () => {
+  expect(
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**! 
+       * License header
+       */
+
+      html {
+        color: red;
+      }
+
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `),
+  ).toMatchInlineSnapshot(`
+    "@charset "UTF-8";
+    @layer foo, bar, baz;
+
+    /**! 
+     * License header
+     */
+
+    @layer base {
+      html {
+        color: red;
+      }
+    }
+
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;"
+  `)
+})
+
 it('should migrate rules between tailwind directives', async () => {
   expect(
     await migrate(css`
