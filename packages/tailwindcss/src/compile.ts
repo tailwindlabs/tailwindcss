@@ -22,6 +22,11 @@ export function compileCandidates(
 
   // Parse candidates and variants
   for (let rawCandidate of rawCandidates) {
+    if (designSystem.invalidCandidates.has(rawCandidate)) {
+      onInvalidCandidate?.(rawCandidate)
+      continue // Bail, invalid candidate
+    }
+
     let candidates = designSystem.parseCandidate(rawCandidate)
     if (candidates.length === 0) {
       onInvalidCandidate?.(rawCandidate)

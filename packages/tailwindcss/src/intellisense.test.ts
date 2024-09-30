@@ -83,3 +83,24 @@ test('The variant `has-force` does not crash', () => {
 
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
 })
+
+test('Can produce CSS per candidate using `candidatesToCss`', () => {
+  let design = loadDesignSystem()
+  design.invalidCandidates = new Set(['bg-[#fff]'])
+
+  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']))
+    .toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline;
+    }
+    ",
+      null,
+      null,
+      ".bg-\\[\\#000\\] {
+      background-color: #000;
+    }
+    ",
+    ]
+  `)
+})

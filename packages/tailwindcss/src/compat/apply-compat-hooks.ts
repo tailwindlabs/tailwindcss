@@ -229,6 +229,10 @@ export async function applyCompatibilityHooks({
     designSystem.theme.prefix = resolvedConfig.prefix
   }
 
+  for (let candidate of resolvedConfig.blocklist) {
+    designSystem.invalidCandidates.add(candidate)
+  }
+
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
   // by plugins or JS config files. This is significantly slower than just
