@@ -131,7 +131,6 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       @tailwind base;
       @tailwind components;
       @tailwind utilities;
-      @tailwind components;
     `),
   ).toMatchInlineSnapshot(`
     "@charset "UTF-8";
