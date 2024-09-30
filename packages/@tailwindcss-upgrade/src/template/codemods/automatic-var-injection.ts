@@ -1,66 +1,66 @@
 import { walk } from '../../../../tailwindcss/src/ast'
 import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { printCandidate } from '../candidates'
 
-export function automaticVarInjection(
-  designSystem: DesignSystem,
-  candidate: Candidate,
-): Candidate | null {
-  let didChange = false
+export function automaticVarInjection(designSystem: DesignSystem, rawCandidate: string): string {
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    let didChange = false
 
-  // Add `var(…)` in modifier position, e.g.:
-  //
-  // `bg-red-500/[--my-opacity]` => `bg-red-500/[var(--my-opacity)]`
-  if (
-    'modifier' in candidate &&
-    candidate.modifier?.kind === 'arbitrary' &&
-    !isAutomaticVarInjectionException(designSystem, candidate, candidate.modifier.value)
-  ) {
-    let { value, didChange: modifierDidChange } = injectVar(candidate.modifier.value)
-    candidate.modifier.value = value
-    didChange ||= modifierDidChange
-  }
+    // Add `var(…)` in modifier position, e.g.:
+    //
+    // `bg-red-500/[--my-opacity]` => `bg-red-500/[var(--my-opacity)]`
+    if (
+      'modifier' in candidate &&
+      candidate.modifier?.kind === 'arbitrary' &&
+      !isAutomaticVarInjectionException(designSystem, candidate, candidate.modifier.value)
+    ) {
+      let { value, didChange: modifierDidChange } = injectVar(candidate.modifier.value)
+      candidate.modifier.value = value
+      didChange ||= modifierDidChange
+    }
 
-  // Add `var(…)` to all variants, e.g.:
-  //
-  // `supports-[--test]:flex'` => `supports-[var(--test)]:flex`
-  for (let variant of candidate.variants) {
-    let didChangeVariant = injectVarIntoVariant(designSystem, variant)
-    if (didChangeVariant) {
-      didChange = true
+    // Add `var(…)` to all variants, e.g.:
+    //
+    // `supports-[--test]:flex'` => `supports-[var(--test)]:flex`
+    for (let variant of candidate.variants) {
+      let didChangeVariant = injectVarIntoVariant(designSystem, variant)
+      if (didChangeVariant) {
+        didChange = true
+      }
+    }
+
+    // Add `var(…)` to arbitrary candidates, e.g.:
+    //
+    // `[color:--my-color]` => `[color:var(--my-color)]`
+    if (
+      candidate.kind === 'arbitrary' &&
+      !isAutomaticVarInjectionException(designSystem, candidate, candidate.value)
+    ) {
+      let { value, didChange: valueDidChange } = injectVar(candidate.value)
+      candidate.value = value
+      didChange ||= valueDidChange
+    }
+
+    // Add `var(…)` to arbitrary values for functional candidates, e.g.:
+    //
+    // `bg-[--my-color]` => `bg-[var(--my-color)]`
+    if (
+      candidate.kind === 'functional' &&
+      candidate.value &&
+      candidate.value.kind === 'arbitrary' &&
+      !isAutomaticVarInjectionException(designSystem, candidate, candidate.value.value)
+    ) {
+      let { value, didChange: valueDidChange } = injectVar(candidate.value.value)
+      candidate.value.value = value
+      didChange ||= valueDidChange
+    }
+
+    if (didChange) {
+      return printCandidate(candidate)
     }
   }
-
-  // Add `var(…)` to arbitrary candidates, e.g.:
-  //
-  // `[color:--my-color]` => `[color:var(--my-color)]`
-  if (
-    candidate.kind === 'arbitrary' &&
-    !isAutomaticVarInjectionException(designSystem, candidate, candidate.value)
-  ) {
-    let { value, didChange: valueDidChange } = injectVar(candidate.value)
-    candidate.value = value
-    didChange ||= valueDidChange
-  }
-
-  // Add `var(…)` to arbitrary values for functional candidates, e.g.:
-  //
-  // `bg-[--my-color]` => `bg-[var(--my-color)]`
-  if (
-    candidate.kind === 'functional' &&
-    candidate.value &&
-    candidate.value.kind === 'arbitrary' &&
-    !isAutomaticVarInjectionException(designSystem, candidate, candidate.value.value)
-  ) {
-    let { value, didChange: valueDidChange } = injectVar(candidate.value.value)
-    candidate.value.value = value
-    didChange ||= valueDidChange
-  }
-
-  if (didChange) {
-    return candidate
-  }
-  return null
+  return rawCandidate
 }
 
 function injectVar(value: string): { value: string; didChange: boolean } {

@@ -88,6 +88,10 @@ async function parseCss(
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
+      if (parent !== null) {
+        throw new Error('`@utility` cannot be nested.')
+      }
+
       let name = node.selector.slice(9).trim()
 
       if (!IS_VALID_UTILITY_NAME.test(name)) {
@@ -391,7 +395,7 @@ export async function compile(
   })
 
   if (process.env.NODE_ENV !== 'test') {
-    ast.unshift(comment(`! tailwindcss v${getVersion()} | MIT License | https://tailwindcss.com `))
+    ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
   }
 
   // Track all invalid candidates
@@ -453,14 +457,6 @@ export async function compile(
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
   let result = await parseCss(css, opts)
   return result.designSystem
-}
-
-function getVersion() {
-  if (process.env.VERSION) {
-    return process.env.VERSION
-  } else {
-    return version
-  }
 }
 
 export default function postcssPluginWarning() {

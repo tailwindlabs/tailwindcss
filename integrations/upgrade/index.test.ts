@@ -19,7 +19,13 @@ test(
       `,
       'src/index.html': html`
         <h1>🤠👋</h1>
+<<<<<<< HEAD
         <div class="!flex sm:!block bg-[--my-red]"></div>
+||||||| 89f0047c
+        <div class="!flex sm:!block"></div>
+=======
+        <div class="!flex sm:!block bg-gradient-to-t"></div>
+>>>>>>> origin/next
       `,
       'src/input.css': css`
         @tailwind base;
@@ -35,7 +41,13 @@ test(
       'src/index.html',
       html`
         <h1>🤠👋</h1>
+<<<<<<< HEAD
         <div class="flex! sm:block! bg-[var(--my-red)]"></div>
+||||||| 89f0047c
+        <div class="flex! sm:block!"></div>
+=======
+        <div class="flex! sm:block! bg-linear-to-t"></div>
+>>>>>>> origin/next
       `,
     )
 
