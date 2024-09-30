@@ -1,0 +1,113 @@
+import type { Config } from 'tailwindcss'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
+import { printCandidate } from '../candidates'
+
+export function prefix(
+  designSystem: DesignSystem,
+  userConfig: Config,
+  rawCandidate: string,
+): string {
+  if (!designSystem.theme.prefix) return rawCandidate
+
+  let v3Base = extractV3Base(designSystem, userConfig, rawCandidate)
+
+  if (!v3Base) return rawCandidate
+
+  // Only migrate candidates which are valid in v4
+  let originalPrefix = designSystem.theme.prefix
+  let candidate: Candidate | null = null
+  try {
+    designSystem.theme.prefix = null
+
+    let unprefixedCandidate =
+      rawCandidate.slice(0, v3Base.start) + v3Base.base + rawCandidate.slice(v3Base.end)
+
+    let candidates = designSystem.parseCandidate(unprefixedCandidate)
+    if (candidates.length > 0) {
+      candidate = candidates[0]
+    }
+  } finally {
+    designSystem.theme.prefix = originalPrefix
+  }
+
+  if (!candidate) return rawCandidate
+
+  return printCandidate(designSystem, candidate)
+}
+
+// Parses a raw candidate with v3 compatible prefix syntax. This won't match if
+// the `base` part of the candidate does not match the configured prefix, unless
+// a bare candidate is used.
+function extractV3Base(
+  designSystem: DesignSystem,
+  userConfig: Config,
+  rawCandidate: string,
+): { base: string; start: number; end: number } | null {
+  if (!designSystem.theme.prefix) return null
+  if (!userConfig.prefix)
+    throw new Error(
+      'Could not find the Tailwind CSS v3 `prefix` configuration inside the JavaScript config.',
+    )
+
+  // hover:focus:underline
+  // ^^^^^ ^^^^^^           -> Variants
+  //             ^^^^^^^^^  -> Base
+  let rawVariants = segment(rawCandidate, ':')
+
+  // Safety: At this point it is safe to use TypeScript's non-null assertion
+  // operator because even if the `input` was an empty string, splitting an
+  // empty string by `:` will always result in an array with at least one
+  // element.
+  let base = rawVariants.pop()!
+  let start = rawCandidate.length - base.length
+  let end = start + base.length
+
+  let important = false
+  let negative = false
+
+  // Candidates that end with an exclamation mark are the important version with
+  // higher specificity of the non-important candidate, e.g. `mx-4!`.
+  if (base[base.length - 1] === '!') {
+    important = true
+    base = base.slice(0, -1)
+  }
+
+  // Legacy syntax with leading `!`, e.g. `!mx-4`.
+  else if (base[0] === '!') {
+    important = true
+    base = base.slice(1)
+  }
+
+  // Candidates that start with a dash are the negative versions of another
+  // candidate, e.g. `-mx-4`.
+  if (base[0] === '-') {
+    negative = true
+    base = base.slice(1)
+  }
+
+  if (!base.startsWith(userConfig.prefix) && base[0] !== '[') {
+    return null
+  } else {
+    if (base[0] !== '[') base = base.slice(userConfig.prefix.length)
+
+    if (negative) base = '-' + base
+    if (important) base += '!'
+
+    return {
+      base,
+      start,
+      end,
+    }
+  }
+}
+
+const VALID_PREFIX = /([a-z]+)/
+export function migratePrefix(prefix: string): string {
+  let result = VALID_PREFIX.exec(prefix.toLocaleLowerCase())
+  if (!result) {
+    throw new Error(`The prefix "${prefix}" can not be converted to Tailwind CSS v4.`)
+  }
+  return result[0]
+}

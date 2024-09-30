@@ -37,7 +37,7 @@ export async function __unstable__loadDesignSystem(css: string, { base }: { base
   })
 }
 
-async function loadModule(id: string, base: string, onDependency: (path: string) => void) {
+export async function loadModule(id: string, base: string, onDependency: (path: string) => void) {
   if (id[0] !== '.') {
     let resolvedPath = await resolveJsId(id, base)
     if (!resolvedPath) {

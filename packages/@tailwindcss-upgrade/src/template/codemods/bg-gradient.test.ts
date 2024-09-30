@@ -18,5 +18,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(bgGradient(designSystem, candidate)).toEqual(result)
+  expect(bgGradient(designSystem, {}, candidate)).toEqual(result)
 })
