@@ -1,11 +1,10 @@
-import { compile } from '@tailwindcss/node'
+import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
-import * as env from '../../tailwindcss/src/env'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
 /**

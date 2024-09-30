@@ -1,4 +1,4 @@
-export const DEBUG = typeof process !== 'undefined' ? resolveDebug(process.env.DEBUG) : false
+export const DEBUG = resolveDebug(process.env.DEBUG)
 
 function resolveDebug(debug: typeof process.env.DEBUG) {
   if (debug === undefined) {

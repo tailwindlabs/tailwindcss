@@ -1,10 +1,9 @@
-import { compile, normalizePath } from '@tailwindcss/node'
+import { compile, env, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
-import * as env from '../../tailwindcss/src/env'
 
 export default function tailwindcss(): Plugin[] {
   let servers: ViteDevServer[] = []
