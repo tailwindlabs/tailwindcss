@@ -53,8 +53,15 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       let result: (string | null)[] = []
 
       for (let className of classes) {
-        let { astNodes } = compileCandidates([className], this)
-        if (astNodes.length === 0) {
+        let wasInvalid = false
+
+        let { astNodes } = compileCandidates([className], this, {
+          onInvalidCandidate(candidate) {
+            wasInvalid = true
+          },
+        })
+
+        if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
         } else {
           result.push(toCss(astNodes))
