@@ -80,9 +80,14 @@ export function migrateMissingLayers(): Plugin {
         }
       }
 
-      // (License) comments can stay at the top, when we haven't found any
-      // `@tailwind` at-rules yet.
-      if (lastLayer === '' && node.type === 'comment') {
+      // (License) comments, body-less `@layer` and `@charset` can stay at the
+      // top, when we haven't found any `@tailwind` at-rules yet.
+      if (
+        lastLayer === '' &&
+        (node.type === 'comment' /* Comment*/ ||
+          (node.type === 'atrule' && !node.nodes) || // @layer foo, bar, baz;
+          (node.type === 'atrule' && node.name === 'charset')) // @charset "UTF-8";
+      ) {
         return
       }
 
