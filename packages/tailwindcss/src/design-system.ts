@@ -13,6 +13,8 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
+  invalidCandidates: Set<string>
+
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
@@ -44,6 +46,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     theme,
     utilities,
     variants,
+
+    invalidCandidates: new Set(),
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []

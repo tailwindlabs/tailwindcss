@@ -399,7 +399,7 @@ export async function compile(
   }
 
   // Track all invalid candidates
-  let invalidCandidates = new Set<string>()
+  let invalidCandidates = designSystem.invalidCandidates
   function onInvalidCandidate(candidate: string) {
     invalidCandidates.add(candidate)
   }
