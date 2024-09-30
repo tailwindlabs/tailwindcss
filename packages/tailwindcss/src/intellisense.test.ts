@@ -88,9 +88,8 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
   let design = loadDesignSystem()
   design.invalidCandidates = new Set(['bg-[#fff]'])
 
-  expect(
-    design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']),
-  ).toMatchInlineSnapshot(`
+  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']))
+    .toMatchInlineSnapshot(`
     [
       ".underline {
       text-decoration-line: underline;
