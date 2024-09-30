@@ -148,6 +148,7 @@ function isAutomaticVarInjectionException(
       node.value == value
     ) {
       isException = true
+      return WalkAction.Stop
     }
   })
   return isException
