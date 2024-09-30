@@ -118,3 +118,29 @@ it('should migrate a stylesheet (with imports)', async () => {
     @import './my-utilities.css' layer(utilities);"
   `)
 })
+
+it('should migrate a stylesheet (with preceding rules that should be wrapped in an `@layer`)', async () => {
+  expect(
+    await migrateContents(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+      /**! My license comment */
+      html {
+        color: red;
+      }
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `),
+  ).toMatchInlineSnapshot(`
+    "@charset "UTF-8";
+    @layer foo, bar, baz;
+    /**! My license comment */
+    @import 'tailwindcss';
+    @layer base {
+      html {
+        color: red;
+      }
+    }"
+  `)
+})
