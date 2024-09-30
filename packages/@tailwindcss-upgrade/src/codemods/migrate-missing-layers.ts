@@ -84,7 +84,7 @@ export function migrateMissingLayers(): Plugin {
       // top, when we haven't found any `@tailwind` at-rules yet.
       if (
         lastLayer === '' &&
-        (node.type === 'comment' /* Comment*/ ||
+        (node.type === 'comment' /* Comment */ ||
           (node.type === 'atrule' && !node.nodes) || // @layer foo, bar, baz;
           (node.type === 'atrule' && node.name === 'charset')) // @charset "UTF-8";
       ) {
