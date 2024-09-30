@@ -76,20 +76,24 @@ it('should migrate the default @tailwind directives to a single import in a vali
       @tailwind components;
       @tailwind utilities;
     `),
-  ).toEqual(css`
-    @charset "UTF-8";
-    @layer foo, bar, baz;
+  )
+    // NOTE: The `html {}` is not wrapped in a `@layer` directive, because that
+    // is handled by another migration step. See ../index.test.ts for a
+    // dedicated test.
+    .toEqual(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
 
-    /**! 
-     * License header
-     */
+      /**! 
+       * License header
+       */
 
-    @import 'tailwindcss';
+      @import 'tailwindcss';
 
-    html {
-      color: red;
-    }
-  `)
+      html {
+        color: red;
+      }
+    `)
 })
 
 it('should migrate the default @tailwind directives as imports to a single import in a valid location', async () => {
