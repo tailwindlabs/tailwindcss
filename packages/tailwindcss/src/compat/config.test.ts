@@ -1371,3 +1371,42 @@ test('a prefix must be letters only', async () => {
     `[Error: The prefix "__" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.]`,
   )
 })
+
+test('blocklisted canddiates are not generated', async () => {
+  let compiler = await compile(
+    css`
+      @theme reference {
+        --color-white: #fff;
+        --breakpoint-md: 48rem;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: {
+            blocklist: ['bg-white'],
+          },
+        }
+      },
+    },
+  )
+
+  // bg-white will not get generated
+  expect(compiler.build(['bg-white'])).toEqual('')
+
+  // underline will as will md:bg-white
+  expect(compiler.build(['underline', 'bg-white', 'md:bg-white'])).toMatchInlineSnapshot(`
+    ".underline {
+      text-decoration-line: underline;
+    }
+    .md\\:bg-white {
+      @media (width >= 48rem) {
+        background-color: var(--color-white, #fff);
+      }
+    }
+    "
+  `)
+})
