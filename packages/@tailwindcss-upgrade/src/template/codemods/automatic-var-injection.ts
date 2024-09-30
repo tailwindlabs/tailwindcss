@@ -1,4 +1,4 @@
-import { walk } from '../../../../tailwindcss/src/ast'
+import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
 import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
