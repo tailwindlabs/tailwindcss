@@ -83,6 +83,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             return compiler
           }
 
+          // Whether this is the first build or not, if it is, then we can
+          // optimize the build by not creating the compiler until we need it.
+          let isInitialBuild = context.compiler === null
+
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
           context.compiler ??= await createCompiler()
@@ -158,7 +162,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             })
           }
 
-          if (rebuildStrategy === 'full') {
+          if (
+            rebuildStrategy === 'full' &&
+            // We can re-use the compiler if it was created during the
+            // initial build. If it wasn't, we need to create a new one.
+            !isInitialBuild
+          ) {
             context.compiler = await createCompiler()
           }
 
