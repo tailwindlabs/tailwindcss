@@ -107,7 +107,10 @@ const VALID_PREFIX = /([a-z]+)/
 export function migratePrefix(prefix: string): string {
   let result = VALID_PREFIX.exec(prefix.toLocaleLowerCase())
   if (!result) {
-    throw new Error(`The prefix "${prefix}" can not be converted to Tailwind CSS v4.`)
+    console.warn(
+      `The prefix "${prefix} can not be used with Tailwind CSS v4 and cannot be converted to a valid one automatically. We've updated it to "tw" for you.`,
+    )
+    return 'tw'
   }
   return result[0]
 }
