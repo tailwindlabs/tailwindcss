@@ -16,12 +16,12 @@ jobs:
         node-version: [20]
         runner: [ubuntu-latest, windows-latest, macos-14]
         # Exclude windows and macos from being built on feature branches
-        main:
-          - ${{ contains(github.ref, 'next') }}
+        on-next-branch:
+          - ${{ github.ref == 'refs/heads/next' }}
         exclude:
-          - main: false
+          - on-next-branch: false
             runner: windows-latest
-          - main: false
+          - on-next-branch: false
             runner: macos-14
 
     runs-on: ${{ matrix.runner }}
