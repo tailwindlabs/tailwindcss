@@ -1,9 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import dedent from 'dedent'
 import { expect, test } from 'vitest'
 import { important } from './important'
-
-let html = dedent
 
 test.each([
   ['!flex', 'flex!'],
@@ -18,5 +15,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(important(designSystem, candidate)).toEqual(result)
+  expect(important(designSystem, {}, candidate)).toEqual(result)
 })

@@ -44,6 +44,50 @@ test(
 )
 
 test(
+  `upgrades a v3 project with prefixes to v4`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+          prefix: 'tw__',
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red]"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
+    await fs.expectFileToContain(
+      'src/index.html',
+      html`
+        <h1>🤠👋</h1>
+        <div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"></div>
+      `,
+    )
+
+    await fs.expectFileToContain('src/input.css', css`@import 'tailwindcss' prefix(tw);`)
+  },
+)
+
+test(
   'migrate @apply',
   {
     fs: {

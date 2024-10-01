@@ -1,6 +1,7 @@
 import { Scanner } from '@tailwindcss/oxide'
 import stringByteSlice from 'string-byte-slice'
 import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
+import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractRawCandidates(
   content: string,
@@ -15,12 +16,16 @@ export async function extractRawCandidates(
   return candidates
 }
 
-export function printCandidate(candidate: Candidate | null) {
-  if (candidate === null) return 'null'
+export function printCandidate(designSystem: DesignSystem, candidate: Candidate) {
   let parts: string[] = []
 
   for (let variant of candidate.variants) {
     parts.unshift(printVariant(variant))
+  }
+
+  // Handle prefix
+  if (designSystem.theme.prefix) {
+    parts.unshift(designSystem.theme.prefix)
   }
 
   let base: string = ''

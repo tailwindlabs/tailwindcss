@@ -54,6 +54,6 @@ test.each([
     base: __dirname,
   })
 
-  let migrated = automaticVarInjection(designSystem, candidate)
+  let migrated = automaticVarInjection(designSystem, {}, candidate)
   expect(migrated).toEqual(result)
 })

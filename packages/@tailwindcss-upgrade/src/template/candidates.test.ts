@@ -132,7 +132,7 @@ for (let variant of variants) {
   }
 }
 
-describe('toString()', () => {
+describe('printCandidate()', () => {
   test.each(combinations)('%s', async (candidate: string, result: string) => {
     let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
       base: __dirname,
@@ -142,7 +142,7 @@ describe('toString()', () => {
 
     // Sometimes we will have a functional and a static candidate for the same
     // raw input string (e.g. `-inset-full`). Dedupe in this case.
-    let cleaned = new Set([...candidates].map(printCandidate))
+    let cleaned = new Set([...candidates].map((c) => printCandidate(designSystem, c)))
 
     expect([...cleaned]).toEqual([result])
   })

@@ -1,9 +1,14 @@
+import type { Config } from 'tailwindcss'
 import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
 import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
-export function automaticVarInjection(designSystem: DesignSystem, rawCandidate: string): string {
+export function automaticVarInjection(
+  designSystem: DesignSystem,
+  _userConfig: Config,
+  rawCandidate: string,
+): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     let didChange = false
 
@@ -57,7 +62,7 @@ export function automaticVarInjection(designSystem: DesignSystem, rawCandidate: 
     }
 
     if (didChange) {
-      return printCandidate(candidate)
+      return printCandidate(designSystem, candidate)
     }
   }
   return rawCandidate

@@ -2,7 +2,9 @@ import { AtRule, type ChildNode, type Plugin, type Root } from 'postcss'
 
 const DEFAULT_LAYER_ORDER = ['theme', 'base', 'components', 'utilities']
 
-export function migrateTailwindDirectives(): Plugin {
+export function migrateTailwindDirectives(options: { newPrefix?: string }): Plugin {
+  let prefixParams = options.newPrefix ? ` prefix(${options.newPrefix})` : ''
+
   function migrate(root: Root) {
     let baseNode = null as AtRule | null
     let utilitiesNode = null as AtRule | null
@@ -19,6 +21,11 @@ export function migrateTailwindDirectives(): Plugin {
       // Migrate legacy `@import "tailwindcss/tailwind.css"`
       if (node.name === 'import' && node.params.match(/^["']tailwindcss\/tailwind\.css["']$/)) {
         node.params = node.params.replace('tailwindcss/tailwind.css', 'tailwindcss')
+      }
+
+      // Append any new prefix() param to existing `@import 'tailwindcss'` directives
+      if (node.name === 'import' && node.params.match(/^["']tailwindcss["']/)) {
+        node.params += prefixParams
       }
 
       // Track old imports and directives
@@ -52,7 +59,9 @@ export function migrateTailwindDirectives(): Plugin {
     // Insert default import if all directives are present
     if (baseNode !== null && utilitiesNode !== null) {
       if (!defaultImportNode) {
-        findTargetNode(orderedNodes).before(new AtRule({ name: 'import', params: "'tailwindcss'" }))
+        findTargetNode(orderedNodes).before(
+          new AtRule({ name: 'import', params: `'tailwindcss'${prefixParams}` }),
+        )
       }
       baseNode?.remove()
       utilitiesNode?.remove()
@@ -69,7 +78,7 @@ export function migrateTailwindDirectives(): Plugin {
     } else if (baseNode !== null) {
       if (!themeImportNode) {
         findTargetNode(orderedNodes).before(
-          new AtRule({ name: 'import', params: "'tailwindcss/theme' layer(theme)" }),
+          new AtRule({ name: 'import', params: `'tailwindcss/theme' layer(theme)${prefixParams}` }),
         )
       }
 
