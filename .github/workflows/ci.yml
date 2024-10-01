@@ -87,3 +87,10 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:ui
+
+      - name: Notify Discord
+        if: failure() && github.ref == 'refs/heads/next'
+        uses: discord-actions/message@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'Oh noes! A build on `next` failed!'
