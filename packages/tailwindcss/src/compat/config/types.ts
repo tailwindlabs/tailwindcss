@@ -78,3 +78,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   prefix: string
 }
+
+// `blocklist` support
+export interface UserConfig {
+  blocklist?: string[]
+}
+
+export interface ResolvedConfig {
+  blocklist: string[]
+}
