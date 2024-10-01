@@ -60,7 +60,6 @@ export async function loadModule(id: string, base: string, onDependency: (path: 
     getModuleDependencies(resolvedPath),
   ])
 
-  onDependency(resolvedPath)
   for (let file of moduleDependencies) {
     onDependency(file)
   }
