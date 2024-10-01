@@ -326,5 +326,5 @@ function isVector(value: string) {
  */
 export function isPositiveInteger(value: any) {
   let num = Number(value)
-  return Number.isInteger(num) && num >= 0
+  return Number.isInteger(num) && num >= 0 && String(num) === String(value)
 }
