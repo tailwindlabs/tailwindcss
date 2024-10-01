@@ -15,6 +15,14 @@ jobs:
       matrix:
         node-version: [20]
         runner: [ubuntu-latest, windows-latest, macos-14]
+        # Exclude windows and macos from being built on feature branches
+        main:
+          - ${{ contains(github.ref, 'next') }}
+        exclude:
+          - main: false
+            runner: windows-latest
+          - main: false
+            runner: macos-14
 
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
