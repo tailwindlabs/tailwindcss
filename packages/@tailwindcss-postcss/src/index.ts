@@ -36,19 +36,19 @@ export type PluginOptions = {
   optimize?: boolean | { minify?: boolean }
 }
 
+let cache = new DefaultMap(() => {
+  return {
+    mtimes: new Map<string, number>(),
+    compiler: null as null | Awaited<ReturnType<typeof compile>>,
+    css: '',
+    optimizedCss: '',
+    fullRebuildPaths: [] as string[],
+  }
+})
+
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
-
-  let cache = new DefaultMap(() => {
-    return {
-      mtimes: new Map<string, number>(),
-      compiler: null as null | Awaited<ReturnType<typeof compile>>,
-      css: '',
-      optimizedCss: '',
-      fullRebuildPaths: [] as string[],
-    }
-  })
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
