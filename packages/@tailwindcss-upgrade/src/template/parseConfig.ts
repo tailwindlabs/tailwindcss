@@ -1,8 +1,10 @@
-import { __unstable__loadDesignSystem, compile, loadModule } from '@tailwindcss/node'
+import { __unstable__loadDesignSystem, compile } from '@tailwindcss/node'
 import path from 'node:path'
 import { dirname } from 'path'
 import type { Config } from 'tailwindcss'
 import { fileURLToPath } from 'url'
+import { loadModule } from '../../../@tailwindcss-node/src/compile'
+import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { migratePrefix } from './codemods/prefix'
 
@@ -34,12 +36,9 @@ export async function parseConfig(
     relative = './' + relative
   }
 
-  let userConfig = (await loadModule(fullConfigPath, __dirname, () => {}).then(
-    (result) => result.module,
-  )) as Config
+  let userConfig = await createResolvedUserConfig(fullConfigPath)
 
   let newPrefix = userConfig.prefix ? migratePrefix(userConfig.prefix) : null
-
   let input = css`
     @import 'tailwindcss' ${newPrefix ? `prefix(${newPrefix})` : ''};
     @config './${relative}';
@@ -51,4 +50,20 @@ export async function parseConfig(
   ])
 
   return { designSystem, globs: compiler.globs, userConfig, newPrefix }
+}
+
+async function createResolvedUserConfig(fullConfigPath: string): Promise<Config> {
+  let [noopDesignSystem, unresolvedUserConfig] = await Promise.all([
+    __unstable__loadDesignSystem(
+      css`
+        @import 'tailwindcss';
+      `,
+      { base: __dirname },
+    ),
+    loadModule(fullConfigPath, __dirname, () => {}).then((result) => result.module) as Config,
+  ])
+
+  return resolveConfig(noopDesignSystem, [
+    { base: dirname(fullConfigPath), config: unresolvedUserConfig },
+  ]) as any
 }

@@ -282,6 +282,9 @@ importers:
       globby:
         specifier: ^14.0.2
         version: 14.0.2
+      jiti:
+        specifier: ^2.0.0-beta.3
+        version: 2.0.0-beta.3
       mri:
         specifier: ^1.2.0
         version: 1.2.0
