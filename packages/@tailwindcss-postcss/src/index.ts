@@ -104,13 +104,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               })
             }
 
-            let files = new Set(
-              result.messages.flatMap((message) => {
-                if (message.type !== 'dependency') return []
-                return message.file
-              }),
-            )
-            files.add(inputFile)
+            let files = result.messages.flatMap((message) => {
+              if (message.type !== 'dependency') return []
+              return message.file
+            })
+            files.push(inputFile)
 
             for (let file of files) {
               let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
