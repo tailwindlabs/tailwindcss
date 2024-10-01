@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates, replaceCandidateInContent } from './candidates'
+import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 
@@ -10,7 +11,7 @@ export type Migration = (designSystem: DesignSystem, rawCandidate: string) => st
 export default async function migrateContents(
   designSystem: DesignSystem,
   contents: string,
-  migrations: Migration[] = [important, bgGradient],
+  migrations: Migration[] = [important, automaticVarInjection, bgGradient],
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents)
 

@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
 - Expose timing information in debug mode ([#14553](https://github.com/tailwindlabs/tailwindcss/pull/14553))
 - Add support for `blocklist` in config files ([#14556](https://github.com/tailwindlabs/tailwindcss/pull/14556))
-- _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
 - _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
+- _Experimental_: Add template codemods for removal of automatic `var(…)` injection ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
+- _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
+- _Experimental_: Add template codemods for migrating important utilities (e.g. `!flex` to `flex!`) ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
 
 ### Fixed
 
@@ -39,7 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add CSS codemods for `@apply` ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14434))
 - _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411), [#14504](https://github.com/tailwindlabs/tailwindcss/pull/14504))
 - _Experimental_: Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
-- _Experimental_: Add template codemods for migrating important utilities (e.g. `!flex` to `flex!`) ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
 
 ### Fixed
 
