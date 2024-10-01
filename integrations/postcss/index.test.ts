@@ -342,7 +342,7 @@ test(
       `,
       'project-a/index.html': html`
         <div
-          class="underline 2xl:font-bold hocus:underline inverted:flex"
+          class="underline 2xl:font-bold hocus:underline inverted:flex text-primary"
         ></div>
       `,
       'project-a/plugin.js': js`
@@ -358,9 +358,16 @@ test(
       `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
+        @import './custom-theme.css';
         @config '../tailwind.config.js';
         @source '../../project-b/src/**/*.html';
         @plugin '../plugin.js';
+      `,
+      'project-a/src/custom-theme.css': css`
+        /* Will be overwritten later */
+        @theme {
+          --color-primary: black;
+        }
       `,
       'project-a/src/index.js': js`
         const className = "content-['a/src/index.js']"
@@ -389,6 +396,11 @@ test(
       candidate`content-['b/src/index.js']`,
       candidate`inverted:flex`,
       candidate`hocus:underline`,
+      css`
+        .text-primary {
+          color: var(--color-primary, black);
+        }
+      `,
     ])
 
     await fs.write(
@@ -413,6 +425,24 @@ test(
 
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`[.changed_&]:content-['project-b/src/index.js']`,
+    ])
+
+    await fs.write(
+      'project-a/src/custom-theme.css',
+      css`
+        /* Overriding the primary color */
+        @theme {
+          --color-primary: red;
+        }
+      `,
+    )
+
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      css`
+        .text-primary {
+          color: var(--color-primary, red);
+        }
+      `,
     ])
   },
 )

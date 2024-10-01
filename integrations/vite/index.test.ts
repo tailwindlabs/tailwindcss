@@ -287,7 +287,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
               <link rel="stylesheet" href="./src/index.css" />
             </head>
             <body>
-              <div class="underline">Hello, world!</div>
+              <div class="underline text-primary">Hello, world!</div>
             </body>
           `,
           'project-a/tailwind.config.js': js`
@@ -298,8 +298,15 @@ for (let transformer of ['postcss', 'lightningcss']) {
           'project-a/src/index.css': css`
             @import 'tailwindcss/theme' theme(reference);
             @import 'tailwindcss/utilities';
+            @import './custom-theme.css';
             @config '../tailwind.config.js';
             @source '../../project-b/src/**/*.html';
+          `,
+          'project-a/src/custom-theme.css': css`
+            /* Will be overwritten later */
+            @theme {
+              --color-primary: black;
+            }
           `,
           'project-b/src/index.html': html`
             <div class="flex" />
@@ -322,7 +329,37 @@ for (let transformer of ['postcss', 'lightningcss']) {
           filename = files[0][0]
         })
 
-        await fs.expectFileToContain(filename, [candidate`underline`, candidate`flex`])
+        await fs.expectFileToContain(filename, [
+          candidate`underline`,
+          candidate`flex`,
+          css`
+            .text-primary {
+              color: var(--color-primary, black);
+            }
+          `,
+        ])
+
+        await retryAssertion(async () => {
+          await fs.write(
+            'project-a/src/custom-theme.css',
+            css`
+              /* Overriding the primary color */
+              @theme {
+                --color-primary: red;
+              }
+            `,
+          )
+
+          let files = await fs.glob('project-a/dist/**/*.css')
+          expect(files).toHaveLength(1)
+          let [, styles] = files[0]
+
+          expect(styles).toContain(css`
+            .text-primary {
+              color: var(--color-primary, red);
+            }
+          `)
+        })
 
         await retryAssertion(async () => {
           // Updates are additive and cause new candidates to be added.
