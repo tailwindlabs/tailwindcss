@@ -16,7 +16,8 @@ jobs:
         node-version: [20]
         runner: [ubuntu-latest, windows-latest, macos-14]
         # Exclude windows and macos from being built on feature branches
-        on-next-branch: ${{ github.ref == 'refs/heads/next' }}
+        on-next-branch:
+          - ${{ github.ref == 'refs/heads/next' }}
         exclude:
           - on-next-branch: false
             runner: windows-latest
