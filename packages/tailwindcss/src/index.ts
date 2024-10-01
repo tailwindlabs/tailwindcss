@@ -399,9 +399,8 @@ export async function compile(
   }
 
   // Track all invalid candidates
-  let invalidCandidates = new Set<string>()
   function onInvalidCandidate(candidate: string) {
-    invalidCandidates.add(candidate)
+    designSystem.invalidCandidates.add(candidate)
   }
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
@@ -419,7 +418,7 @@ export async function compile(
       // Add all new candidates unless we know that they are invalid.
       let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
-        if (!invalidCandidates.has(candidate)) {
+        if (!designSystem.invalidCandidates.has(candidate)) {
           allValidCandidates.add(candidate)
           didChange ||= allValidCandidates.size !== prevSize
         }
