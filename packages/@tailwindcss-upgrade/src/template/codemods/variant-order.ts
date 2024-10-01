@@ -18,7 +18,7 @@ export function variantOrder(designSystem: DesignSystem, rawCandidate: string): 
     for (let variant of candidate.variants) {
       if (isMediaVariant(designSystem, variant)) {
         mediaVariants.push(variant)
-      } else if (isEndOfSelectorPseudoElement(variant)) {
+      } else if (isEndOfSelectorPseudoElement(designSystem, variant)) {
         pseudoElementVariants.push(variant)
       } else {
         regularVariants.push(variant)
@@ -70,23 +70,20 @@ function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
   )
 }
 
-function isEndOfSelectorPseudoElement(variant: Variant) {
-  if (variant.kind !== 'static') {
-    return false
-  }
-  switch (variant.root) {
-    case 'after':
-    case 'backdrop':
-    case 'before':
-    case 'first-letter':
-    case 'first-line':
-    case 'marker':
-    case 'placeholder':
-    case 'selection':
-      return true
-    default:
-      return false
-  }
+function isEndOfSelectorPseudoElement(designSystem: DesignSystem, variant: Variant) {
+  let stack = getAppliedNodeStack(designSystem, variant)
+  return stack.some(
+    (node) =>
+      node.kind === 'rule' &&
+      (node.selector.includes('::after') ||
+        node.selector.includes('::backdrop') ||
+        node.selector.includes('::before') ||
+        node.selector.includes('::first-letter') ||
+        node.selector.includes('::first-line') ||
+        node.selector.includes('::marker') ||
+        node.selector.includes('::placeholder') ||
+        node.selector.includes('::selection')),
+  )
 }
 
 function getAppliedNodeStack(designSystem: DesignSystem, variant: Variant): AstNode[] {
