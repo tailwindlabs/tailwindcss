@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates, replaceCandidateInContent } from './candidates'
+import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
@@ -17,7 +18,7 @@ export default async function migrateContents(
   designSystem: DesignSystem,
   userConfig: Config,
   contents: string,
-  migrations: Migration[] = [prefix, important, bgGradient],
+  migrations: Migration[] = [prefix, important, automaticVarInjection, bgGradient],
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents)
 
