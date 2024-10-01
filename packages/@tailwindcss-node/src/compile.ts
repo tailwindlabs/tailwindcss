@@ -74,6 +74,8 @@ async function loadStylesheet(id: string, base: string, onDependency: (path: str
   let resolvedPath = await resolveCssId(id, base)
   if (!resolvedPath) throw new Error(`Could not resolve '${id}' from '${base}'`)
 
+  onDependency(resolvedPath)
+
   if (typeof globalThis.__tw_readFile === 'function') {
     let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
     if (file) {
