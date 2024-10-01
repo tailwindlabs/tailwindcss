@@ -10044,6 +10044,8 @@ test('from', async () => {
   expect(
     await run([
       'from',
+      'from-25.%',
+      'from-25.0%',
       'from-123',
       'from--123',
       'from--5%',
