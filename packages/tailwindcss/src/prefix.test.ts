@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { compile } from '..'
-import plugin from '../plugin'
+import { compile } from '.'
+import plugin from './plugin'
 
 const css = String.raw
 
