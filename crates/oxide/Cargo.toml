@@ -13,10 +13,9 @@ crossbeam = "0.8.2"
 tracing = { version = "0.1.37", features = [] }
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 walkdir = "2.3.3"
-ignore = "0.4.20"
+ignore = "0.4.23"
 glob-match = "0.2.1"
 dunce = "1.0.5"
 
 [dev-dependencies]
 tempfile = "3.5.0"
-
