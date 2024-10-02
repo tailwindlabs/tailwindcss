@@ -1872,6 +1872,13 @@ export function createUtilities(theme: Theme) {
   staticUtility('appearance-none', [['appearance', 'none']])
   staticUtility('appearance-auto', [['appearance', 'auto']])
 
+  staticUtility('scheme-normal', [['color-scheme', 'normal']])
+  staticUtility('scheme-dark', [['color-scheme', 'dark']])
+  staticUtility('scheme-light', [['color-scheme', 'light']])
+  staticUtility('scheme-light-dark', [['color-scheme', 'light dark']])
+  staticUtility('scheme-only-dark', [['color-scheme', 'dark only']])
+  staticUtility('scheme-only-light', [['color-scheme', 'light only']])
+
   // columns-*
   staticUtility('columns-auto', [['columns', 'auto']])
 
