@@ -5,27 +5,30 @@ import fs from 'fs'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import QuickLRU from 'quick-lru'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
-/**
- * A Map that can generate default values for keys that don't exist.
- * Generated default values are added to the map to avoid recomputation.
- */
-class DefaultMap<T = string, V = any> extends Map<T, V> {
-  constructor(private factory: (key: T, self: DefaultMap<T, V>) => V) {
-    super()
+interface CacheEntry {
+  mtimes: Map<string, number>
+  compiler: null | Awaited<ReturnType<typeof compile>>
+  css: string
+  optimizedCss: string
+  fullRebuildPaths: string[]
+}
+let cache = new QuickLRU<string, CacheEntry>({ maxSize: 1000 })
+
+function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
+  let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
+  if (cache.has(key)) return cache.get(key)!
+  let entry = {
+    mtimes: new Map<string, number>(),
+    compiler: null as null | Awaited<ReturnType<typeof compile>>,
+    css: '',
+    optimizedCss: '',
+    fullRebuildPaths: [] as string[],
   }
-
-  get(key: T): V {
-    let value = super.get(key)
-
-    if (value === undefined) {
-      value = this.factory(key, this)
-      this.set(key, value)
-    }
-
-    return value
-  }
+  cache.set(key, entry)
+  return entry
 }
 
 export type PluginOptions = {
@@ -36,16 +39,6 @@ export type PluginOptions = {
   optimize?: boolean | { minify?: boolean }
 }
 
-let cache = new DefaultMap(() => {
-  return {
-    mtimes: new Map<string, number>(),
-    compiler: null as null | Awaited<ReturnType<typeof compile>>,
-    css: '',
-    optimizedCss: '',
-    fullRebuildPaths: [] as string[],
-  }
-})
-
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
@@ -53,9 +46,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   return {
     postcssPlugin: '@tailwindcss/postcss',
     plugins: [
-      // We need to handle the case where `postcss-import` might have run before the Tailwind CSS
-      // plugin is run. In this case, we need to manually fix relative paths before processing it
-      // in core.
+      // We need to handle the case where `postcss-import` might have run before
+      // the Tailwind CSS plugin is run. In this case, we need to manually fix
+      // relative paths before processing it in core.
       fixRelativePathsPlugin(),
 
       {
@@ -63,7 +56,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         async OnceExit(root, { result }) {
           env.DEBUG && console.time('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
           let inputFile = result.opts.from ?? ''
-          let context = cache.get(inputFile)
+          let context = getContextFromCache(inputFile, opts)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           async function createCompiler() {
