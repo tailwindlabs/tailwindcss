@@ -9,15 +9,15 @@ export function variantOrder(designSystem: DesignSystem, rawCandidate: string): 
       continue
     }
 
-    let mediaVariants = []
+    let atRuleVariants = []
     let regularVariants = []
     let pseudoElementVariants = []
 
     let originalOrder = candidate.variants
 
     for (let variant of candidate.variants) {
-      if (isMediaVariant(designSystem, variant)) {
-        mediaVariants.push(variant)
+      if (isAtRuleVariant(designSystem, variant)) {
+        atRuleVariants.push(variant)
       } else if (isEndOfSelectorPseudoElement(designSystem, variant)) {
         pseudoElementVariants.push(variant)
       } else {
@@ -34,7 +34,7 @@ export function variantOrder(designSystem: DesignSystem, rawCandidate: string): 
     let newOrder = [
       ...pseudoElementVariants,
       ...(regularVariantsNeedReordering ? regularVariants.reverse() : regularVariants),
-      ...mediaVariants,
+      ...atRuleVariants,
     ]
 
     if (orderMatches(originalOrder, newOrder)) {
@@ -46,13 +46,13 @@ export function variantOrder(designSystem: DesignSystem, rawCandidate: string): 
   return rawCandidate
 }
 
-function isMediaVariant(designSystem: DesignSystem, variant: Variant) {
-  // Handle the dark variant as a media variant
+function isAtRuleVariant(designSystem: DesignSystem, variant: Variant) {
+  // Handle the dark variant as an at-rule variant
   if (variant.kind === 'static' && variant.root === 'dark') {
     return true
   }
   let stack = getAppliedNodeStack(designSystem, variant)
-  return stack.every((node) => node.kind === 'rule' && node.selector.startsWith('@media'))
+  return stack.every((node) => node.kind === 'rule' && node.selector[0] === '@')
 }
 
 function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
@@ -60,8 +60,8 @@ function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
   return stack.some(
     (node) =>
       node.kind === 'rule' &&
-      // Ignore @media rules as they are hoisted
-      !node.selector.startsWith('@media') &&
+      // Ignore at-rules as they are hoisted
+      node.selector[0] !== '@' &&
       // Combinators include any of the following characters
       (node.selector.includes(' ') ||
         node.selector.includes('>') ||

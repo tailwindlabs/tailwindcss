@@ -1,6 +1,9 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
+import dedent from 'dedent'
 import { expect, test } from 'vitest'
 import { variantOrder } from './variant-order'
+
+let css = dedent
 
 test.each([
   // Does nothing unless there are at least two variants
@@ -35,7 +38,7 @@ test.each([
   // Some pseudo-elements are treated as regular variants
   ['dark:*:hover:file:focus:underline', 'dark:focus:file:hover:*:underline'],
 
-  // Keeps @media-variants and the dark variant in the beginning and keeps their
+  // Keeps at-rule-variants and the dark variant in the beginning and keeps their
   // order
   ['sm:dark:hover:flex', 'sm:dark:hover:flex'],
   ['[@media(print)]:group-hover:flex', '[@media(print)]:group-hover:flex'],
@@ -44,10 +47,43 @@ test.each([
     'sm:data-[root]:*:data-[a]:even:*:data-[b]:even:before:underline',
     'sm:even:data-[b]:*:even:data-[a]:*:data-[root]:before:underline',
   ],
+  ['hover:[@supports(display:grid)]:flex', '[@supports(display:grid)]:hover:flex'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
   expect(variantOrder(designSystem, candidate)).toEqual(result)
+})
+
+test('it works with custom variants', async () => {
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @variant atrule {
+        @media (print) {
+          @slot;
+        }
+      }
+
+      @variant combinator {
+        > * {
+          @slot;
+        }
+      }
+
+      @variant pseudo {
+        &::before {
+          @slot;
+        }
+      }
+    `,
+    {
+      base: __dirname,
+    },
+  )
+
+  expect(variantOrder(designSystem, 'combinator:pseudo:atrule:underline')).toEqual(
+    'atrule:combinator:pseudo:underline',
+  )
 })
