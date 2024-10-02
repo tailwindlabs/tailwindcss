@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
+import type { Config } from 'tailwindcss'
+import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { formatNodes } from './codemods/format-nodes'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
@@ -9,11 +11,13 @@ import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directive
 
 export interface MigrateOptions {
   newPrefix?: string
+  designSystem?: DesignSystem
+  userConfig?: Config
 }
 
 export async function migrateContents(contents: string, options: MigrateOptions, file?: string) {
   return postcss()
-    .use(migrateAtApply())
+    .use(migrateAtApply(options))
     .use(migrateAtLayerUtilities())
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))

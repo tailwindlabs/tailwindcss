@@ -69,6 +69,10 @@ test(
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
+
+        .btn {
+          @apply !tw__rounded-md tw__px-2 tw__py-1 tw__bg-blue-500 tw__text-white;
+        }
       `,
     },
   },
@@ -83,7 +87,15 @@ test(
       `,
     )
 
-    await fs.expectFileToContain('src/input.css', css`@import 'tailwindcss' prefix(tw);`)
+    await fs.expectFileToContain('src/input.css', css` @import 'tailwindcss' prefix(tw); `)
+    await fs.expectFileToContain(
+      'src/input.css',
+      css`
+        .btn {
+          @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
+        }
+      `,
+    )
   },
 )
 
