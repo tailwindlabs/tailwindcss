@@ -5910,11 +5910,12 @@ test('appearance', async () => {
 test('color-scheme', async () => {
   expect(
     await run([
+      'scheme-normal',
       'scheme-dark',
       'scheme-light',
       'scheme-light-dark',
-      'scheme-dark-only',
-      'scheme-light-only',
+      'scheme-only-dark',
+      'scheme-only-light',
     ]),
   ).toMatchInlineSnapshot(`
     ".scheme-dark {
@@ -5940,6 +5941,22 @@ test('color-scheme', async () => {
         --lightningcss-light: ;
         --lightningcss-dark: initial;
       }
+    }
+
+    .scheme-normal {
+      color-scheme: normal;
+    }
+
+    .scheme-only-dark {
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
+      color-scheme: dark only;
+    }
+
+    .scheme-only-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light only;
     }"
   `)
   expect(
