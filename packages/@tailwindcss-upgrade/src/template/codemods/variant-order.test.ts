@@ -53,7 +53,7 @@ test.each([
     base: __dirname,
   })
 
-  expect(variantOrder(designSystem, candidate)).toEqual(result)
+  expect(variantOrder(designSystem, {}, candidate)).toEqual(result)
 })
 
 test('it works with custom variants', async () => {
@@ -83,7 +83,7 @@ test('it works with custom variants', async () => {
     },
   )
 
-  expect(variantOrder(designSystem, 'combinator:pseudo:atrule:underline')).toEqual(
+  expect(variantOrder(designSystem, {}, 'combinator:pseudo:atrule:underline')).toEqual(
     'atrule:combinator:pseudo:underline',
   )
 })

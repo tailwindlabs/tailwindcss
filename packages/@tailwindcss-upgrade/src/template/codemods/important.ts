@@ -1,3 +1,4 @@
+import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
@@ -13,13 +14,17 @@ import { printCandidate } from '../candidates'
 // Should turn into:
 //
 //   flex! md:block!
-export function important(designSystem: DesignSystem, rawCandidate: string): string {
+export function important(
+  designSystem: DesignSystem,
+  _userConfig: Config,
+  rawCandidate: string,
+): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.important && candidate.raw[candidate.raw.length - 1] !== '!') {
       // The printCandidate function will already put the exclamation mark in
       // the right place, so we just need to mark this candidate as requiring a
       // migration.
-      return printCandidate(candidate)
+      return printCandidate(designSystem, candidate)
     }
   }
 

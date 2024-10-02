@@ -2,6 +2,7 @@
 
 import { globby } from 'globby'
 import path from 'node:path'
+import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { help } from './commands/help'
 import { migrate as migrateStylesheet } from './migrate'
@@ -44,6 +45,8 @@ async function run() {
   let parsedConfig: {
     designSystem: DesignSystem
     globs: { pattern: string; base: string }[]
+    userConfig: Config
+    newPrefix: string | null
   } | null = null
   if (flags['--config']) {
     try {
@@ -76,7 +79,11 @@ async function run() {
     files.sort()
 
     // Migrate each file
-    await Promise.allSettled(files.map((file) => migrateTemplate(parsedConfig.designSystem, file)))
+    await Promise.allSettled(
+      files.map((file) =>
+        migrateTemplate(parsedConfig.designSystem, parsedConfig.userConfig, file),
+      ),
+    )
 
     success('Template migration complete.')
   }
@@ -103,7 +110,11 @@ async function run() {
     files = files.filter((file) => file.endsWith('.css'))
 
     // Migrate each file
-    await Promise.allSettled(files.map((file) => migrateStylesheet(file)))
+    await Promise.allSettled(
+      files.map((file) =>
+        migrateStylesheet(file, { newPrefix: parsedConfig?.newPrefix ?? undefined }),
+      ),
+    )
 
     success('Stylesheet migration complete.')
   }
