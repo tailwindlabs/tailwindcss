@@ -175,6 +175,9 @@ importers:
 
   packages/@tailwindcss-postcss:
     dependencies:
+      '@alloc/quick-lru':
+        specifier: ^5.2.0
+        version: 5.2.0
       '@tailwindcss/node':
         specifier: workspace:^
         version: link:../@tailwindcss-node
@@ -434,6 +437,10 @@ importers:
         version: 2.0.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4))(terser@5.31.6)
 
 packages:
+
+  '@alloc/quick-lru@5.2.0':
+    resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
+    engines: {node: '>=10'}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -3202,6 +3209,8 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@alloc/quick-lru@5.2.0': {}
 
   '@ampproject/remapping@2.3.0':
     dependencies:

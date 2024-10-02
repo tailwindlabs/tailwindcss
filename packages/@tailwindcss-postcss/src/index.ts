@@ -1,3 +1,4 @@
+import QuickLRU from '@alloc/quick-lru'
 import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
@@ -5,7 +6,6 @@ import fs from 'fs'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
-import QuickLRU from 'quick-lru'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
 interface CacheEntry {
@@ -15,10 +15,11 @@ interface CacheEntry {
   optimizedCss: string
   fullRebuildPaths: string[]
 }
-let cache = new QuickLRU<string, CacheEntry>({ maxSize: 1000 })
+let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
   let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
+  console.log('key:', key)
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
