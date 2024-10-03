@@ -16,7 +16,7 @@ import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
 import { compileCandidates } from './compile'
-import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
+import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
@@ -341,13 +341,9 @@ async function parseCss(
   }
 
   // Replace `@apply` rules with the actual utility classes.
-  if (css.includes('@apply')) {
-    substituteAtApply(ast, designSystem)
-  }
+  substituteAtApply(ast, designSystem)
 
-  if (css.includes(THEME_FUNCTION_INVOCATION)) {
-    substituteFunctions(ast, designSystem.resolveThemeValue)
-  }
+  substituteFunctions(ast, designSystem.resolveThemeValue)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.

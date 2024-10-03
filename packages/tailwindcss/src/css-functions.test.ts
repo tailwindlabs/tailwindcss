@@ -901,3 +901,37 @@ describe('in JS config files', () => {
     `)
   })
 })
+
+test('replaces CSS theme() function with values inside imported stylesheets', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        @import './bar.css';
+      `,
+      [],
+      {
+        async loadStylesheet() {
+          return {
+            base: '/bar.css',
+            content: css`
+              .red {
+                color: theme(colors.red.500);
+              }
+            `,
+          }
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --color-red-500: red;
+    }
+
+    .red {
+      color: red;
+    }"
+  `)
+})
