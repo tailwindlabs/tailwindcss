@@ -135,6 +135,7 @@ npx
 numbers
 nupkg
 o
+oa
 odp
 ods
 odt
@@ -200,9 +201,11 @@ sqlite
 sqlite3
 sqlite3
 stl
+storedata
 sub
 suo
 swf
+symbolsarchive
 tar
 tbz
 tbz2
