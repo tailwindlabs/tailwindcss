@@ -380,6 +380,10 @@ test(
         const className = "content-['b/src/index.js']"
         module.exports = { className }
       `,
+      'project-c/src/index.js': js`
+        const className = "content-['c/src/index.js']"
+        module.exports = { className }
+      `,
     },
   },
   async ({ root, fs, spawn }) => {
@@ -444,5 +448,19 @@ test(
         }
       `,
     ])
+
+    // Adding a new @source directive will scan for new candidates
+    await fs.write(
+      'project-a/src/index.css',
+      css`
+        @import 'tailwindcss/utilities';
+        @import './custom-theme.css';
+        @config '../tailwind.config.js';
+        @source '../../project-b/src/**/*.html';
+        @plugin '../plugin.js';
+        @source '../../project-c/src/**/*.js';
+      `,
+    )
+    await fs.expectFileToContain('project-a/dist/out.css', [candidate`content-['c/src/index.js']`])
   },
 )

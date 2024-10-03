@@ -20,7 +20,6 @@ let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
   let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
-  console.log('key:', key)
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
