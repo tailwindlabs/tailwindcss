@@ -1,6 +1,9 @@
 import { expect, test } from 'vitest'
+import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
+
+const css = String.raw
 
 function loadDesignSystem() {
   let theme = new Theme()
@@ -99,6 +102,73 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
       null,
       ".bg-\\[\\#000\\] {
       background-color: #000;
+    }
+    ",
+    ]
+  `)
+})
+
+test('Utilities do not show wrapping selector in intellisense', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @config './config.js';
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      base: '',
+      module: {
+        important: '#app',
+      },
+    }),
+  })
+
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline;
+    }
+    ",
+      ".hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
+      }
+    }
+    ",
+    ]
+  `)
+})
+
+test('Utilities, when marked as important, show as important in intellisense', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities' important;
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline!important;
+    }
+    ",
+      ".hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through!important;
+        }
+      }
     }
     ",
     ]

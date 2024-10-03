@@ -29,6 +29,7 @@ interface ResolutionContext {
 let minimal: ResolvedConfig = {
   blocklist: [],
   prefix: '',
+  important: false,
   darkMode: null,
   theme: {},
   plugins: [],
@@ -68,6 +69,10 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
 
     if ('blocklist' in config && config.blocklist !== undefined) {
       ctx.result.blocklist = config.blocklist ?? []
+    }
+
+    if ('important' in config && config.important !== undefined) {
+      ctx.result.important = config.important ?? false
     }
   }
 

@@ -87,3 +87,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   blocklist: string[]
 }
+
+// `important` support
+export interface UserConfig {
+  important?: boolean | string
+}
+
+export interface ResolvedConfig {
+  important: boolean | string
+}

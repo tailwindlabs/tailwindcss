@@ -15,6 +15,9 @@ export type DesignSystem = {
 
   invalidCandidates: Set<string>
 
+  // Whether to mark utility declarations as !important
+  important: boolean
+
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
@@ -48,6 +51,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     variants,
 
     invalidCandidates: new Set(),
+    important: false,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []

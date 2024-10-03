@@ -1372,6 +1372,78 @@ test('a prefix must be letters only', async () => {
   )
 })
 
+test('important: `#app`', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (_, base) => ({
+      base,
+      module: { important: '#app' },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
+    "#app {
+      .custom {
+        color: red;
+      }
+      .underline {
+        text-decoration-line: underline;
+      }
+      .hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
+        }
+      }
+    }
+    "
+  `)
+})
+
+test('important: true', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (_, base) => ({
+      base,
+      module: { important: true },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
+    ".custom {
+      color: red!important;
+    }
+    .underline {
+      text-decoration-line: underline!important;
+    }
+    .hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through!important;
+        }
+      }
+    }
+    "
+  `)
+})
+
 test('blocklisted canddiates are not generated', async () => {
   let compiler = await compile(
     css`

@@ -140,7 +140,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
   for (let nodes of asts) {
     let propertySort = getPropertySort(nodes)
 
-    if (candidate.important) {
+    if (candidate.important || designSystem.important) {
       applyImportant(nodes)
     }
 

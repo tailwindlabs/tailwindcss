@@ -76,6 +76,7 @@ async function parseCss(
   await substituteAtImports(ast, base, loadStylesheet)
 
   // Find all `@theme` declarations
+  let important: boolean | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -236,6 +237,35 @@ async function parseCss(
       return WalkAction.Skip
     }
 
+    if (node.selector.startsWith('@media')) {
+      let features = segment(node.selector.slice(6), ' ')
+      let shouldReplace = true
+
+      for (let i = 0; i < features.length; i++) {
+        let part = features[i]
+
+        // Drop instances of `@media important`
+        //
+        // We support `@import "tailwindcss" important` to mark all declarations
+        // in generated utilities as `!important`.
+        if (part === 'important') {
+          important = true
+          shouldReplace = true
+          features[i] = ''
+        }
+      }
+
+      let remaining = features.filter(Boolean).join(' ')
+
+      node.selector = `@media ${remaining}`
+
+      if (remaining.trim() === '' && shouldReplace) {
+        replaceWith(node.nodes)
+      }
+
+      return WalkAction.Skip
+    }
+
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
     let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
@@ -287,6 +317,10 @@ async function parseCss(
   })
 
   let designSystem = buildDesignSystem(theme)
+
+  if (important) {
+    designSystem.important = important
+  }
 
   // Apply hooks from backwards compatibility layer. This function takes a lot
   // of random arguments because it really just needs access to "the world" to
