@@ -93,8 +93,4 @@ jobs:
         uses: discord-actions/message@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: "Dear Sir or Madam,\n
-\n
-This is to formally notify you that the [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `next` branch has encountered a failure. We kindly request that the relevant stakeholders and team members review the associated logs and diagnostics at their earliest convenience to identify and resolve any underlying issues. Prompt attention to this matter will ensure the continued integrity of our development pipeline and minimize any potential disruptions to our workflow.\n
-\n
-Thank you for your cooperation and timely action."
+          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `next` branch has failed.'
