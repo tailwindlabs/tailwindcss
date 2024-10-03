@@ -125,7 +125,16 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           let css = ''
 
-          if (context.scanner === null) {
+          if (
+            rebuildStrategy === 'full' &&
+            // We can re-use the compiler if it was created during the
+            // initial build. If it wasn't, we need to create a new one.
+            !isInitialBuild
+          ) {
+            context.compiler = await createCompiler()
+          }
+
+          if (context.scanner === null || rebuildStrategy === 'full') {
             // Look for candidates used to generate the CSS
             context.scanner = new Scanner({
               detectSources: { base },
@@ -158,15 +167,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               glob: pattern,
               parent: result.opts.from,
             })
-          }
-
-          if (
-            rebuildStrategy === 'full' &&
-            // We can re-use the compiler if it was created during the
-            // initial build. If it wasn't, we need to create a new one.
-            !isInitialBuild
-          ) {
-            context.compiler = await createCompiler()
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
