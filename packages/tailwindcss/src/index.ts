@@ -250,16 +250,6 @@ async function parseCss(
           shouldReplace = true
           features[i] = ''
         }
-
-        // Drop instances of `@media selector(…)`
-        //
-        // We support `@import "tailwindcss" selector(…)` as a way to
-        // nest utilities under a custom selector.
-        else if (part.startsWith('selector(') && part.endsWith(')')) {
-          wrappingSelector = `${part.slice(9, -1)} &`
-          shouldReplace = true
-          features[i] = ''
-        }
       }
 
       let remaining = features.filter(Boolean).join(' ')
