@@ -93,12 +93,12 @@ it('should apply all candidate migration when migrating with a config', async ()
   expect(
     await migrateWithConfig(css`
       .foo {
-        @apply !tw_flex [color:--my-color];
+        @apply !tw_flex [color:--my-color] tw_bg-gradient-to-t;
       }
     `),
   ).toMatchInlineSnapshot(`
     ".foo {
-      @apply tw:flex! tw:[color:var(--my-color)];
+      @apply tw:flex! tw:[color:var(--my-color)] tw:bg-linear-to-t;
     }"
   `)
 })
