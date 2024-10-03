@@ -77,7 +77,6 @@ async function parseCss(
 
   // Find all `@theme` declarations
   let important: boolean | null = null
-  let wrappingSelector: string | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
@@ -321,10 +320,6 @@ async function parseCss(
 
   if (important) {
     designSystem.important = important
-  }
-
-  if (wrappingSelector) {
-    designSystem.wrappingSelector = wrappingSelector
   }
 
   // Apply hooks from backwards compatibility layer. This function takes a lot
