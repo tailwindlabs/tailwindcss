@@ -159,10 +159,6 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       if (result === null) return []
     }
 
-    if (designSystem.wrappingSelector) {
-      node.nodes = [rule(designSystem.wrappingSelector, node.nodes)]
-    }
-
     rules.push({
       node,
       propertySort,
