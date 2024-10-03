@@ -341,6 +341,32 @@ export function buildPluginApi(
         designSystem.utilities.functional(name, compileFn, {
           types,
         })
+
+        designSystem.utilities.suggest(name, () => {
+          let values = options?.values ?? {}
+          let valueKeys = new Set<string | null>(Object.keys(values))
+
+          // The `__BARE_VALUE__` key is a special key used to ensure bare values
+          // work even with legacy configs and plugins
+          valueKeys.delete('__BARE_VALUE__')
+
+          // The `DEFAULT` key is represented as `null` in the utility API
+          if (valueKeys.has('DEFAULT')) {
+            valueKeys.delete('DEFAULT')
+            valueKeys.add(null)
+          }
+
+          let modifiers = options?.modifiers ?? {}
+          let modifierKeys = modifiers === 'any' ? [] : Object.keys(modifiers)
+
+          return [
+            {
+              supportsNegative: options?.supportsNegativeValues ?? false,
+              values: Array.from(valueKeys),
+              modifiers: modifierKeys,
+            },
+          ]
+        })
       }
     },
 
