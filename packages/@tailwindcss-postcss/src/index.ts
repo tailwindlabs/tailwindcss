@@ -1,3 +1,4 @@
+import QuickLRU from '@alloc/quick-lru'
 import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
@@ -7,25 +8,29 @@ import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
-/**
- * A Map that can generate default values for keys that don't exist.
- * Generated default values are added to the map to avoid recomputation.
- */
-class DefaultMap<T = string, V = any> extends Map<T, V> {
-  constructor(private factory: (key: T, self: DefaultMap<T, V>) => V) {
-    super()
+interface CacheEntry {
+  mtimes: Map<string, number>
+  compiler: null | Awaited<ReturnType<typeof compile>>
+  scanner: null | Scanner
+  css: string
+  optimizedCss: string
+  fullRebuildPaths: string[]
+}
+let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
+
+function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
+  let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
+  if (cache.has(key)) return cache.get(key)!
+  let entry = {
+    mtimes: new Map<string, number>(),
+    compiler: null,
+    scanner: null,
+    css: '',
+    optimizedCss: '',
+    fullRebuildPaths: [] as string[],
   }
-
-  get(key: T): V {
-    let value = super.get(key)
-
-    if (value === undefined) {
-      value = this.factory(key, this)
-      this.set(key, value)
-    }
-
-    return value
-  }
+  cache.set(key, entry)
+  return entry
 }
 
 export type PluginOptions = {
@@ -40,22 +45,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
-  let cache = new DefaultMap(() => {
-    return {
-      mtimes: new Map<string, number>(),
-      compiler: null as null | Awaited<ReturnType<typeof compile>>,
-      css: '',
-      optimizedCss: '',
-      fullRebuildPaths: [] as string[],
-    }
-  })
-
   return {
     postcssPlugin: '@tailwindcss/postcss',
     plugins: [
-      // We need to handle the case where `postcss-import` might have run before the Tailwind CSS
-      // plugin is run. In this case, we need to manually fix relative paths before processing it
-      // in core.
+      // We need to handle the case where `postcss-import` might have run before
+      // the Tailwind CSS plugin is run. In this case, we need to manually fix
+      // relative paths before processing it in core.
       fixRelativePathsPlugin(),
 
       {
@@ -63,7 +58,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         async OnceExit(root, { result }) {
           env.DEBUG && console.time('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
           let inputFile = result.opts.from ?? ''
-          let context = cache.get(inputFile)
+          let context = getContextFromCache(inputFile, opts)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           async function createCompiler() {
@@ -72,7 +67,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             context.fullRebuildPaths = []
 
-            let compiler = compile(root.toString(), {
+            let compiler = await compile(root.toString(), {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
@@ -82,6 +77,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Setup compiler')
             return compiler
           }
+
+          // Whether this is the first build or not, if it is, then we can
+          // optimize the build by not creating the compiler until we need it.
+          let isInitialBuild = context.compiler === null
 
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
@@ -125,18 +124,29 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           let css = ''
 
-          // Look for candidates used to generate the CSS
-          let scanner = new Scanner({
-            detectSources: { base },
-            sources: context.compiler.globs,
-          })
+          if (
+            rebuildStrategy === 'full' &&
+            // We can re-use the compiler if it was created during the
+            // initial build. If it wasn't, we need to create a new one.
+            !isInitialBuild
+          ) {
+            context.compiler = await createCompiler()
+          }
+
+          if (context.scanner === null || rebuildStrategy === 'full') {
+            // Look for candidates used to generate the CSS
+            context.scanner = new Scanner({
+              detectSources: { base },
+              sources: context.compiler.globs,
+            })
+          }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
-          let candidates = scanner.scan()
+          let candidates = context.scanner.scan()
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Scan for candidates')
 
           // Add all found files as direct dependencies
-          for (let file of scanner.files) {
+          for (let file of context.scanner.files) {
             result.messages.push({
               type: 'dependency',
               plugin: '@tailwindcss/postcss',
@@ -148,7 +158,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, pattern } of scanner.globs) {
+          for (let { base, pattern } of context.scanner.globs) {
             result.messages.push({
               type: 'dir-dependency',
               plugin: '@tailwindcss/postcss',
@@ -156,10 +166,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               glob: pattern,
               parent: result.opts.from,
             })
-          }
-
-          if (rebuildStrategy === 'full') {
-            context.compiler = await createCompiler()
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')

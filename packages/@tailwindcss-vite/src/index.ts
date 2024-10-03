@@ -364,6 +364,7 @@ class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
+      env.DEBUG && console.time('[@tailwindcss/vite] Setup compiler')
       this.compiler = await compile(content, {
         base: inputBase,
         onDependency: (path) => {
@@ -371,6 +372,7 @@ class Root {
           this.dependencies.add(path)
         },
       })
+      env.DEBUG && console.timeEnd('[@tailwindcss/vite] Setup compiler')
 
       this.scanner = new Scanner({
         sources: this.compiler.globs,

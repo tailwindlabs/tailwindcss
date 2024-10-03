@@ -128,13 +128,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       : process.cwd()
   let fullRebuildPaths: string[] = []
 
-  function createCompiler(css: string) {
-    return compile(css, {
+  async function createCompiler(css: string) {
+    env.DEBUG && console.time('[@tailwindcss/cli] Setup compiler')
+    let compiler = await compile(css, {
       base: inputBasePath,
       onDependency(path) {
         fullRebuildPaths.push(path)
       },
     })
+    env.DEBUG && console.timeEnd('[@tailwindcss/cli] Setup compiler')
+    return compiler
   }
 
   // Compile the input

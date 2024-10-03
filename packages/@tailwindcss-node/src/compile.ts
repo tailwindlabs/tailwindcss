@@ -10,11 +10,11 @@ import {
 } from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
 
-export async function compile(
+export function compile(
   css: string,
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
-  return await _compile(css, {
+  return _compile(css, {
     base,
     async loadModule(id, base) {
       return loadModule(id, base, onDependency)
@@ -60,7 +60,6 @@ export async function loadModule(id: string, base: string, onDependency: (path: 
     getModuleDependencies(resolvedPath),
   ])
 
-  onDependency(resolvedPath)
   for (let file of moduleDependencies) {
     onDependency(file)
   }
