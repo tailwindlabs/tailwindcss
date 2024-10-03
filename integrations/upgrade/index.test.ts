@@ -19,7 +19,7 @@ test(
       `,
       'src/index.html': html`
         <h1>🤠👋</h1>
-        <div class="!flex sm:!block"></div>
+        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -35,11 +35,67 @@ test(
       'src/index.html',
       html`
         <h1>🤠👋</h1>
-        <div class="flex! sm:block!"></div>
+        <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
       `,
     )
 
     await fs.expectFileToContain('src/input.css', css`@import 'tailwindcss';`)
+  },
+)
+
+test(
+  `upgrades a v3 project with prefixes to v4`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+          prefix: 'tw__',
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red]"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        .btn {
+          @apply !tw__rounded-md tw__px-2 tw__py-1 tw__bg-blue-500 tw__text-white;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
+    await fs.expectFileToContain(
+      'src/index.html',
+      html`
+        <h1>🤠👋</h1>
+        <div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"></div>
+      `,
+    )
+
+    await fs.expectFileToContain('src/input.css', css` @import 'tailwindcss' prefix(tw); `)
+    await fs.expectFileToContain(
+      'src/input.css',
+      css`
+        .btn {
+          @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
+        }
+      `,
+    )
   },
 )
 

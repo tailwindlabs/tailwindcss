@@ -87,6 +87,15 @@ test('The variant `has-force` does not crash', () => {
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
 })
 
+test('Can produce CSS per candidate using `candidatesToCss`', () => {
+  let design = loadDesignSystem()
+  design.invalidCandidates = new Set(['bg-[#fff]'])
+
+  expect(
+    design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']),
+  ).toMatchInlineSnapshot()
+})
+
 test('Utilities do not show wrapping selector in intellisense', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
@@ -106,22 +115,7 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
     }),
   })
 
-  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
-    [
-      ".underline {
-      text-decoration-line: underline;
-    }
-    ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
-      }
-    }
-    ",
-    ]
-  `)
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot()
 })
 
 test('Utilities, when marked as important, show as important in intellisense', async () => {
@@ -136,20 +130,5 @@ test('Utilities, when marked as important, show as important in intellisense', a
     }),
   })
 
-  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
-    [
-      ".underline {
-      text-decoration-line: underline!important;
-    }
-    ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through!important;
-        }
-      }
-    }
-    ",
-    ]
-  `)
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot()
 })

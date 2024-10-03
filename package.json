@@ -50,13 +50,13 @@
   "devDependencies": {
     "@playwright/test": "^1.47.1",
     "@types/node": "catalog:",
-    "postcss": "8.4.41",
+    "postcss": "8.4.47",
     "postcss-import": "^16.1.0",
     "prettier": "^3.3.3",
     "prettier-plugin-embed": "^0.4.15",
     "prettier-plugin-organize-imports": "^4.0.0",
     "tsup": "^8.2.4",
-    "turbo": "^2.1.1",
+    "turbo": "^2.1.2",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },

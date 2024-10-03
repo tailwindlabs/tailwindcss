@@ -56,8 +56,8 @@ describe('compiling CSS', () => {
     `)
   })
 
-  test('that only CSS variables are allowed', () =>
-    expect(
+  test('that only CSS variables are allowed', () => {
+    return expect(
       compileCss(
         css`
           @theme {
@@ -79,7 +79,8 @@ describe('compiling CSS', () => {
       >   }
         }
         ]
-    `))
+    `)
+  })
 
   test('`@tailwind utilities` is only processed once', async () => {
     expect(
@@ -253,6 +254,34 @@ describe('@apply', () => {
     `)
   })
 
+  it('should replace @apply with the correct result inside imported stylesheets', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import './bar.css';
+          @tailwind utilities;
+        `,
+        [],
+        {
+          async loadStylesheet() {
+            return {
+              base: '/bar.css',
+              content: css`
+                .foo {
+                  @apply underline;
+                }
+              `,
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
   it('should @apply in order the utilities would be sorted in if they were used in HTML', async () => {
     expect(
       await compileCss(css`
@@ -290,7 +319,7 @@ describe('@apply', () => {
   })
 
   it('should error when using @apply with a utility that does not exist', () => {
-    expect(
+    return expect(
       compileCss(css`
         @tailwind utilities;
 
@@ -304,7 +333,7 @@ describe('@apply', () => {
   })
 
   it('should error when using @apply with a variant that does not exist', () => {
-    expect(
+    return expect(
       compileCss(css`
         @tailwind utilities;
 
@@ -1184,8 +1213,8 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@media theme(…)` can only contain `@theme` rules', () =>
-    expect(
+  test('`@media theme(…)` can only contain `@theme` rules', () => {
+    return expect(
       compileCss(
         css`
           @media theme(reference) {
@@ -1199,7 +1228,8 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Files imported with \`@import "…" theme(…)\` must only contain \`@theme\` blocks.]`,
-    ))
+    )
+  })
 
   test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
     expect(
@@ -1550,8 +1580,8 @@ describe('Parsing themes values from CSS', () => {
 })
 
 describe('plugins', () => {
-  test('@plugin need a path', () =>
-    expect(
+  test('@plugin need a path', () => {
+    return expect(
       compile(
         css`
           @plugin;
@@ -1565,10 +1595,11 @@ describe('plugins', () => {
           }),
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`)
+  })
 
-  test('@plugin can not have an empty path', () =>
-    expect(
+  test('@plugin can not have an empty path', () => {
+    return expect(
       compile(
         css`
           @plugin '';
@@ -1582,10 +1613,11 @@ describe('plugins', () => {
           }),
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`)
+  })
 
-  test('@plugin cannot be nested.', () =>
-    expect(
+  test('@plugin cannot be nested.', () => {
+    return expect(
       compile(
         css`
           div {
@@ -1601,7 +1633,8 @@ describe('plugins', () => {
           }),
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`)
+  })
 
   test('@plugin can accept options', async () => {
     expect.hasAssertions()
@@ -1694,7 +1727,7 @@ describe('plugins', () => {
   })
 
   test('@plugin options can only be simple key/value pairs', () => {
-    expect(
+    return expect(
       compile(
         css`
           @plugin "my-plugin" {
@@ -1736,7 +1769,7 @@ describe('plugins', () => {
   })
 
   test('@plugin options can only be provided to plugins using withOptions', () => {
-    expect(
+    return expect(
       compile(
         css`
           @plugin "my-plugin" {
@@ -1762,7 +1795,7 @@ describe('plugins', () => {
   })
 
   test('@plugin errors on array-like syntax', () => {
-    expect(
+    return expect(
       compile(
         css`
           @plugin "my-plugin" {
@@ -1779,7 +1812,7 @@ describe('plugins', () => {
   })
 
   test('@plugin errors on object-like syntax', () => {
-    expect(
+    return expect(
       compile(
         css`
           @plugin "my-plugin" {
@@ -1794,8 +1827,7 @@ describe('plugins', () => {
           loadModule: async () => ({ module: plugin(() => {}), base: '/root' }),
         },
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
       [Error: Unexpected \`@plugin\` option: Value of declaration \`--color: {
                     red: 100;
                     green: 200;
@@ -1803,8 +1835,7 @@ describe('plugins', () => {
                   };\` is not supported.
 
       Using an object as a plugin option is currently only supported in JavaScript configuration files.]
-    `,
-    )
+    `)
   })
 
   test('addVariant with string selector', async () => {
@@ -2066,36 +2097,39 @@ describe('@source', () => {
 })
 
 describe('@variant', () => {
-  test('@variant must be top-level and cannot be nested', () =>
-    expect(
+  test('@variant must be top-level and cannot be nested', () => {
+    return expect(
       compileCss(css`
         .foo {
           @variant hocus (&:hover, &:focus);
         }
       `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
+  })
 
-  test('@variant with no body must include a selector', () =>
-    expect(
+  test('@variant with no body must include a selector', () => {
+    return expect(
       compileCss(css`
         @variant hocus;
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       '[Error: `@variant hocus` has no selector or body.]',
-    ))
+    )
+  })
 
-  test('@variant with selector must include a body', () =>
-    expect(
+  test('@variant with selector must include a body', () => {
+    return expect(
       compileCss(css`
         @variant hocus {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       '[Error: `@variant hocus` has no selector or body.]',
-    ))
+    )
+  })
 
-  test('@variant cannot have both a selector and a body', () =>
-    expect(
+  test('@variant cannot have both a selector and a body', () => {
+    return expect(
       compileCss(css`
         @variant hocus (&:hover, &:focus) {
           &:is(.potato) {
@@ -2105,7 +2139,8 @@ describe('@variant', () => {
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: \`@variant hocus\` cannot have both a selector and a body.]`,
-    ))
+    )
+  })
 
   describe('body-less syntax', () => {
     test('selector variant', async () => {
@@ -2570,6 +2605,43 @@ describe('@variant', () => {
         }
       }"
     `)
+  })
+})
+
+describe('@utility', () => {
+  test('@utility must be top-level and cannot be nested', () => {
+    return expect(
+      compileCss(css`
+        .foo {
+          @utility foo {
+            color: red;
+          }
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@utility\` cannot be nested.]`)
+  })
+
+  test('@utility must include a body', () => {
+    return expect(
+      compileCss(css`
+        @utility foo {
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility foo\` is empty. Utilities should include at least one property.]`,
+    )
+  })
+
+  test('@utility cannot contain any special characters', () => {
+    return expect(
+      compileCss(css`
+        @utility 💨 {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
+    )
   })
 })
 

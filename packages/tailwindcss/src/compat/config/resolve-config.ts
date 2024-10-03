@@ -27,6 +27,7 @@ interface ResolutionContext {
 }
 
 let minimal: ResolvedConfig = {
+  blocklist: [],
   prefix: '',
   important: false,
   darkMode: null,
@@ -64,6 +65,10 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
 
     if ('prefix' in config && config.prefix !== undefined) {
       ctx.result.prefix = config.prefix ?? ''
+    }
+
+    if ('blocklist' in config && config.blocklist !== undefined) {
+      ctx.result.blocklist = config.blocklist ?? []
     }
 
     if ('important' in config && config.important !== undefined) {

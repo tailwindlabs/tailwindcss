@@ -13,6 +13,8 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
+  invalidCandidates: Set<string>
+
   // Whether to mark utility declarations as !important
   important: boolean
 
@@ -48,14 +50,22 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     utilities,
     variants,
 
+    invalidCandidates: new Set(),
     important: false,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
 
       for (let className of classes) {
-        let { astNodes } = compileCandidates([className], this)
-        if (astNodes.length === 0) {
+        let wasInvalid = false
+
+        let { astNodes } = compileCandidates([className], this, {
+          onInvalidCandidate(candidate) {
+            wasInvalid = true
+          },
+        })
+
+        if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
         } else {
           result.push(toCss(astNodes))

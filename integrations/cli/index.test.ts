@@ -112,7 +112,7 @@ describe.each([
         `,
         'project-a/index.html': html`
           <div
-            class="underline 2xl:font-bold hocus:underline inverted:flex"
+            class="underline 2xl:font-bold hocus:underline inverted:flex text-primary"
           ></div>
         `,
         'project-a/plugin.js': js`
@@ -128,9 +128,16 @@ describe.each([
         `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/utilities';
+          @import './custom-theme.css';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
           @plugin '../plugin.js';
+        `,
+        'project-a/src/custom-theme.css': css`
+          /* Will be overwritten later */
+          @theme {
+            --color-primary: black;
+          }
         `,
         'project-a/src/index.js': js`
           const className = "content-['project-a/src/index.js']"
@@ -157,6 +164,11 @@ describe.each([
         candidate`content-['project-b/src/index.js']`,
         candidate`inverted:flex`,
         candidate`hocus:underline`,
+        css`
+          .text-primary {
+            color: var(--color-primary, black);
+          }
+        `,
       ])
 
       await fs.write(
@@ -180,6 +192,49 @@ describe.each([
       await fs.expectFileToContain('project-a/dist/out.css', [
         candidate`[.changed_&]:content-['project-b/src/index.js']`,
       ])
+
+      await fs.write(
+        'project-a/src/custom-theme.css',
+        css`
+          /* Overriding the primary color */
+          @theme {
+            --color-primary: red;
+          }
+        `,
+      )
+
+      await fs.expectFileToContain('project-a/dist/out.css', [
+        css`
+          .text-primary {
+            color: var(--color-primary, red);
+          }
+        `,
+      ])
+    },
+  )
+
+  test(
+    'production build (stdin)',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.css': css`@import 'tailwindcss';`,
+      },
+    },
+    async ({ fs, exec }) => {
+      await exec(`${command} --input=- --output dist/out.css < src/index.css`)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
     },
   )
 })

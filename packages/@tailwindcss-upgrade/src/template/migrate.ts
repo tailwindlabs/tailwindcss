@@ -1,44 +1,64 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Candidate } from '../../../tailwindcss/src/candidate'
+import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { extractCandidates, printCandidate, replaceCandidateInContent } from './candidates'
-import { migrateImportant } from './codemods/migrate-important'
+import { extractRawCandidates, replaceCandidateInContent } from './candidates'
+import { automaticVarInjection } from './codemods/automatic-var-injection'
+import { bgGradient } from './codemods/bg-gradient'
+import { important } from './codemods/important'
+import { prefix } from './codemods/prefix'
+import { variantOrder } from './codemods/variant-order'
 
-export type Migration = (candidate: Candidate) => Candidate | null
+export type Migration = (
+  designSystem: DesignSystem,
+  userConfig: Config,
+  rawCandidate: string,
+) => string
+
+export const DEFAULT_MIGRATIONS: Migration[] = [
+  prefix,
+  important,
+  automaticVarInjection,
+  bgGradient,
+  variantOrder,
+]
+
+export function migrateCandidate(
+  designSystem: DesignSystem,
+  userConfig: Config,
+  rawCandidate: string,
+): string {
+  for (let migration of DEFAULT_MIGRATIONS) {
+    rawCandidate = migration(designSystem, userConfig, rawCandidate)
+  }
+  return rawCandidate
+}
 
 export default async function migrateContents(
   designSystem: DesignSystem,
+  userConfig: Config,
   contents: string,
-  migrations: Migration[] = [migrateImportant],
 ): Promise<string> {
-  let candidates = await extractCandidates(designSystem, contents)
+  let candidates = await extractRawCandidates(contents)
 
   // Sort candidates by starting position desc
   candidates.sort((a, z) => z.start - a.start)
 
   let output = contents
-  for (let { candidate, start, end } of candidates) {
-    let needsMigration = false
-    for (let migration of migrations) {
-      let migrated = migration(candidate)
-      if (migrated) {
-        candidate = migrated
-        needsMigration = true
-      }
-    }
+  for (let { rawCandidate, start, end } of candidates) {
+    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate)
 
-    if (needsMigration) {
-      output = replaceCandidateInContent(output, printCandidate(candidate), start, end)
+    if (migratedCandidate !== rawCandidate) {
+      output = replaceCandidateInContent(output, migratedCandidate, start, end)
     }
   }
 
   return output
 }
 
-export async function migrate(designSystem: DesignSystem, file: string) {
+export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {
   let fullPath = path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
-  await fs.writeFile(fullPath, await migrateContents(designSystem, contents))
+  await fs.writeFile(fullPath, await migrateContents(designSystem, userConfig, contents))
 }

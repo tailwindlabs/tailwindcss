@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { compile } from '..'
-import plugin from '../plugin'
+import { compile } from '.'
+import plugin from './plugin'
 
 const css = String.raw
 
@@ -198,15 +198,30 @@ test('a prefix can be configured via @import theme(…)', async () => {
     async loadStylesheet(id, base) {
       return {
         base,
-        content: '@theme {}',
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+        `,
       }
     },
   })
 
   // Prefixed utilities are generated
-  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
-    .toMatchInlineSnapshot(`
-    ".tw\\:custom {
+  expect(
+    compiler.build([
+      'tw:underline',
+      'tw:bg-potato',
+      'tw:hover:line-through',
+      'tw:custom',
+      'flex',
+      'text-potato',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".tw\\:bg-potato {
+      background-color: var(--tw-color-potato, #7a4724);
+    }
+    .tw\\:custom {
       color: red;
     }
     .tw\\:underline {
@@ -227,18 +242,21 @@ test('a prefix can be configured via @import theme(…)', async () => {
     async loadStylesheet(id, base) {
       return {
         base,
-        content: '@theme {}',
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+        `,
       }
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
   let input = css`
-    @import 'tailwindcss/theme' prefix(tw);
-    @tailwind utilities;
+    @import 'tailwindcss' prefix(tw);
 
     @utility custom {
       color: red;
@@ -249,15 +267,25 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     async loadStylesheet(id, base) {
       return {
         base,
-        content: '@theme reference {}',
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+          @tailwind utilities;
+        `,
       }
     },
   })
 
-  // Prefixed utilities are generated
-  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
+  expect(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom']))
     .toMatchInlineSnapshot(`
-    ".tw\\:custom {
+    ":root {
+      --tw-color-potato: #7a4724;
+    }
+    .tw\\:bg-potato {
+      background-color: var(--tw-color-potato, #7a4724);
+    }
+    .tw\\:custom {
       color: red;
     }
     .tw\\:underline {
@@ -278,12 +306,22 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     async loadStylesheet(id, base) {
       return {
         base,
-        content: '@theme reference {}',
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+          @tailwind utilities;
+        `,
       }
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
+    ":root {
+      --tw-color-potato: #7a4724;
+    }
+    "
+  `)
 })
 
 test('a prefix must be letters only', async () => {

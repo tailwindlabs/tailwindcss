@@ -783,3 +783,40 @@ describe('comments', () => {
     `)
   })
 })
+
+// Saw this when testing codemods on https://github.com/docker/docs
+it('should not lose attribute selectors', async () => {
+  expect(
+    await migrate(css`
+      @layer components {
+        #TableOfContents {
+          .toc a {
+            @apply block max-w-full truncate py-1 pl-2 hover:font-medium hover:no-underline;
+            &[aria-current='true'],
+            &:hover {
+              @apply border-l-2 border-l-gray-light bg-gradient-to-r from-gray-light-100 font-medium text-black dark:border-l-gray-dark dark:from-gray-dark-200 dark:text-white;
+            }
+            &:not([aria-current='true']) {
+              @apply text-gray-light-600 hover:text-black dark:text-gray-dark-700 dark:hover:text-white;
+            }
+          }
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@layer components {
+      #TableOfContents {
+        .toc a {
+          @apply block max-w-full truncate py-1 pl-2 hover:font-medium hover:no-underline;
+          &[aria-current='true'],
+          &:hover {
+            @apply border-l-2 border-l-gray-light bg-gradient-to-r from-gray-light-100 font-medium text-black dark:border-l-gray-dark dark:from-gray-dark-200 dark:text-white;
+          }
+          &:not([aria-current='true']) {
+            @apply text-gray-light-600 hover:text-black dark:text-gray-dark-700 dark:hover:text-white;
+          }
+        }
+      }
+    }"
+  `)
+})

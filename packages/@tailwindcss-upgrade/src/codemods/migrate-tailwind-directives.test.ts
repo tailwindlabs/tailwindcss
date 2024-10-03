@@ -6,9 +6,9 @@ import { migrateTailwindDirectives } from './migrate-tailwind-directives'
 
 const css = dedent
 
-function migrate(input: string) {
+function migrate(input: string, options: { newPrefix?: string } = {}) {
   return postcss()
-    .use(migrateTailwindDirectives())
+    .use(migrateTailwindDirectives(options))
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
@@ -24,6 +24,21 @@ it("should not migrate `@import 'tailwindcss'`", async () => {
   `)
 })
 
+it("should append a prefix to `@import 'tailwindcss'`", async () => {
+  expect(
+    await migrate(
+      css`
+        @import 'tailwindcss';
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss' prefix(tw);
+  `)
+})
+
 it('should migrate the tailwind.css import', async () => {
   expect(
     await migrate(css`
@@ -31,6 +46,21 @@ it('should migrate the tailwind.css import', async () => {
     `),
   ).toEqual(css`
     @import 'tailwindcss';
+  `)
+})
+
+it('should migrate the tailwind.css import with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @import 'tailwindcss/tailwind.css';
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss' prefix(tw);
   `)
 })
 
@@ -46,6 +76,23 @@ it('should migrate the default @tailwind directives to a single import', async (
   `)
 })
 
+it('should migrate the default @tailwind directives to a single import with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss' prefix(tw);
+  `)
+})
+
 it('should migrate the default @tailwind directives as imports to a single import', async () => {
   expect(
     await migrate(css`
@@ -55,6 +102,87 @@ it('should migrate the default @tailwind directives as imports to a single impor
     `),
   ).toEqual(css`
     @import 'tailwindcss';
+  `)
+})
+
+it('should migrate the default @tailwind directives to a single import in a valid location', async () => {
+  expect(
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**!
+       * License header
+       */
+
+      html {
+        color: red;
+      }
+
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `),
+  )
+    // NOTE: The `html {}` is not wrapped in a `@layer` directive, because that
+    // is handled by another migration step. See ../index.test.ts for a
+    // dedicated test.
+    .toEqual(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**!
+       * License header
+       */
+
+      @import 'tailwindcss';
+
+      html {
+        color: red;
+      }
+    `)
+})
+
+it('should migrate the default @tailwind directives as imports to a single import in a valid location', async () => {
+  expect(
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**!
+       * License header
+       */
+
+      @import 'tailwindcss/base';
+      @import 'tailwindcss/components';
+      @import 'tailwindcss/utilities';
+    `),
+  ).toEqual(css`
+    @charset "UTF-8";
+    @layer foo, bar, baz;
+
+    /**!
+     * License header
+     */
+
+    @import 'tailwindcss';
+  `)
+})
+
+it('should migrate the default @tailwind directives as imports to a single import with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss' prefix(tw);
   `)
 })
 
@@ -149,6 +277,22 @@ it('should migrate `@tailwind base` to theme and preflight imports', async () =>
   `)
 })
 
+it('should migrate `@tailwind base` to theme and preflight imports with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @tailwind base;
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss/theme' layer(theme) prefix(tw);
+    @import 'tailwindcss/preflight' layer(base);
+  `)
+})
+
 it('should migrate `@import "tailwindcss/base"` to theme and preflight imports', async () => {
   expect(
     await migrate(css`
@@ -156,6 +300,22 @@ it('should migrate `@import "tailwindcss/base"` to theme and preflight imports',
     `),
   ).toEqual(css`
     @import 'tailwindcss/theme' layer(theme);
+    @import 'tailwindcss/preflight' layer(base);
+  `)
+})
+
+it('should migrate `@import "tailwindcss/base"` to theme and preflight imports with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @import 'tailwindcss/base';
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss/theme' layer(theme) prefix(tw);
     @import 'tailwindcss/preflight' layer(base);
   `)
 })
@@ -206,6 +366,22 @@ it('should migrate `@tailwind base` and `@tailwind utilities` to a single import
     `),
   ).toEqual(css`
     @import 'tailwindcss';
+  `)
+})
+
+it('should migrate `@tailwind base` and `@tailwind utilities` to a single import with a prefix', async () => {
+  expect(
+    await migrate(
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/utilities';
+      `,
+      {
+        newPrefix: 'tw',
+      },
+    ),
+  ).toEqual(css`
+    @import 'tailwindcss' prefix(tw);
   `)
 })
 

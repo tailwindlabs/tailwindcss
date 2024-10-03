@@ -12,13 +12,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
 - Add support wrapping utilities in a selector ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
 - Add support marking all utilities as `!important` ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
+- Expose timing information in debug mode ([#14553](https://github.com/tailwindlabs/tailwindcss/pull/14553))
+- Add support for `blocklist` in config files ([#14556](https://github.com/tailwindlabs/tailwindcss/pull/14556))
+- Add `color-scheme` utilities ([#14567](https://github.com/tailwindlabs/tailwindcss/pull/14567))
+- _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
+- _Experimental_: Migrate `@apply` utilities with the template codemods ([#14574](https://github.com/tailwindlabs/tailwindcss/pull/14574))
+- _Experimental_: Add template codemods for migrating variant order ([#14524](https://github.com/tailwindlabs/tailwindcss/pull/14524]))
+- _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
+- _Experimental_: Add template codemods for migrating prefixes ([#14557](https://github.com/tailwindlabs/tailwindcss/pull/14557]))
+- _Experimental_: Add template codemods for removal of automatic `var(…)` injection ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
+- _Experimental_: Add template codemods for migrating important utilities (e.g. `!flex` to `flex!`) ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
 
 ### Fixed
 
+- Use the right import base path when using the CLI to reading files from stdin ([#14522](https://github.com/tailwindlabs/tailwindcss/pull/14522))
+- Ensure that `@utility` is top-level and cannot be nested ([#14525](https://github.com/tailwindlabs/tailwindcss/pull/14525))
+- Ensure editing imported CSS files triggers a rebuild ([#14561](https://github.com/tailwindlabs/tailwindcss/pull/14561))
+- Ensure `@apply` and CSS functions work inside imported stylesheets ([#14576](https://github.com/tailwindlabs/tailwindcss/pull/14576))
 - _Experimental_: Improve codemod output, keep CSS after last Tailwind directive unlayered ([#14512](https://github.com/tailwindlabs/tailwindcss/pull/14512))
 - _Experimental_: Fix incorrect empty `layer()` at the end of `@import` at-rules when running codemods ([#14513](https://github.com/tailwindlabs/tailwindcss/pull/14513))
-- _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
 - _Experimental_: Do not wrap comment nodes in `@layer` when running codemods ([#14517](https://github.com/tailwindlabs/tailwindcss/pull/14517))
+- _Experimental_: Ensure we don't lose selectors when running codemods ([#14518](https://github.com/tailwindlabs/tailwindcss/pull/14518))
+- _Experimental_: inject `@import` in a more expected location when running codemods ([#14536](https://github.com/tailwindlabs/tailwindcss/pull/14536))
+
+### Changed
+
+- Disallow bare values with decimal places ([#14562](https://github.com/tailwindlabs/tailwindcss/pull/14562))
 
 ## [4.0.0-alpha.25] - 2024-09-24
 
@@ -34,7 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add CSS codemods for `@apply` ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14434))
 - _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411), [#14504](https://github.com/tailwindlabs/tailwindcss/pull/14504))
 - _Experimental_: Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
-- _Experimental_: Add template codemods for migrating important utilities (e.g. `!flex` to `flex!`) ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
 
 ### Fixed
 

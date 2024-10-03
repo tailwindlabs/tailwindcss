@@ -15,6 +15,14 @@ jobs:
       matrix:
         node-version: [20]
         runner: [ubuntu-latest, windows-latest, macos-14]
+        # Exclude windows and macos from being built on feature branches
+        on-next-branch:
+          - ${{ github.ref == 'refs/heads/next' }}
+        exclude:
+          - on-next-branch: false
+            runner: windows-latest
+          - on-next-branch: false
+            runner: macos-14
 
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
@@ -79,3 +87,10 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:ui
+
+      - name: Notify Discord
+        if: failure() && github.ref == 'refs/heads/next'
+        uses: discord-actions/message@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'Oh noes! A build on `next` failed!'

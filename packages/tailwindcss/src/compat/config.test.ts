@@ -1443,3 +1443,72 @@ test('important: true', async () => {
     "
   `)
 })
+
+test('blocklisted canddiates are not generated', async () => {
+  let compiler = await compile(
+    css`
+      @theme reference {
+        --color-white: #fff;
+        --breakpoint-md: 48rem;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: {
+            blocklist: ['bg-white'],
+          },
+        }
+      },
+    },
+  )
+
+  // bg-white will not get generated
+  expect(compiler.build(['bg-white'])).toEqual('')
+
+  // underline will as will md:bg-white
+  expect(compiler.build(['underline', 'bg-white', 'md:bg-white'])).toMatchInlineSnapshot(`
+    ".underline {
+      text-decoration-line: underline;
+    }
+    .md\\:bg-white {
+      @media (width >= 48rem) {
+        background-color: var(--color-white, #fff);
+      }
+    }
+    "
+  `)
+})
+
+test('blocklisted canddiates cannot be used with `@apply`', async () => {
+  await expect(() =>
+    compile(
+      css`
+        @theme reference {
+          --color-white: #fff;
+          --breakpoint-md: 48rem;
+        }
+        @tailwind utilities;
+        @config "./config.js";
+        .foo {
+          @apply bg-white;
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: {
+              blocklist: ['bg-white'],
+            },
+          }
+        },
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: Cannot apply unknown utility class: bg-white]`,
+  )
+})

@@ -1,7 +1,9 @@
 import * as Module from 'node:module'
 import { pathToFileURL } from 'node:url'
-export * from './compile'
+import * as env from './env'
+export { __unstable__loadDesignSystem, compile } from './compile'
 export * from './normalize-path'
+export { env }
 
 // In Bun, ESM modules will also populate `require.cache`, so the module hook is
 // not necessary.

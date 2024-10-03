@@ -1,7 +1,13 @@
 import type { AtRule, Plugin } from 'postcss'
+import type { Config } from 'tailwindcss'
+import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { segment } from '../../../tailwindcss/src/utils/segment'
+import { migrateCandidate } from '../template/migrate'
 
-export function migrateAtApply(): Plugin {
+export function migrateAtApply({
+  designSystem,
+  userConfig,
+}: { designSystem?: DesignSystem; userConfig?: Config } = {}): Plugin {
   function migrate(atRule: AtRule) {
     let utilities = atRule.params.split(/(\s+)/)
     let important =
@@ -29,6 +35,12 @@ export function migrateAtApply(): Plugin {
       // Reconstruct the utility with the variants
       return [...variants, utility].join(':')
     })
+
+    // If we have a valid designSystem and config setup, we can run all
+    // candidate migrations on each utility
+    if (designSystem && userConfig) {
+      params = params.map((param) => migrateCandidate(designSystem, userConfig, param))
+    }
 
     atRule.params = params.join('').trim()
   }

@@ -16,7 +16,7 @@ import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
 import { compileCandidates } from './compile'
-import { substituteFunctions, THEME_FUNCTION_INVOCATION } from './css-functions'
+import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
@@ -90,6 +90,10 @@ async function parseCss(
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
+      if (parent !== null) {
+        throw new Error('`@utility` cannot be nested.')
+      }
+
       let name = node.selector.slice(9).trim()
 
       if (!IS_VALID_UTILITY_NAME.test(name)) {
@@ -376,13 +380,9 @@ async function parseCss(
   }
 
   // Replace `@apply` rules with the actual utility classes.
-  if (css.includes('@apply')) {
-    substituteAtApply(ast, designSystem)
-  }
+  substituteAtApply(ast, designSystem)
 
-  if (css.includes(THEME_FUNCTION_INVOCATION)) {
-    substituteFunctions(ast, designSystem.resolveThemeValue)
-  }
+  substituteFunctions(ast, designSystem.resolveThemeValue)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
@@ -430,13 +430,12 @@ export async function compile(
   })
 
   if (process.env.NODE_ENV !== 'test') {
-    ast.unshift(comment(`! tailwindcss v${getVersion()} | MIT License | https://tailwindcss.com `))
+    ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
   }
 
   // Track all invalid candidates
-  let invalidCandidates = new Set<string>()
   function onInvalidCandidate(candidate: string) {
-    invalidCandidates.add(candidate)
+    designSystem.invalidCandidates.add(candidate)
   }
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
@@ -454,7 +453,7 @@ export async function compile(
       // Add all new candidates unless we know that they are invalid.
       let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
-        if (!invalidCandidates.has(candidate)) {
+        if (!designSystem.invalidCandidates.has(candidate)) {
           allValidCandidates.add(candidate)
           didChange ||= allValidCandidates.size !== prevSize
         }
@@ -492,14 +491,6 @@ export async function compile(
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
   let result = await parseCss(css, opts)
   return result.designSystem
-}
-
-function getVersion() {
-  if (process.env.VERSION) {
-    return process.env.VERSION
-  } else {
-    return version
-  }
 }
 
 export default function postcssPluginWarning() {

@@ -1,4 +1,4 @@
-import { compile } from '@tailwindcss/node'
+import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'fs'
@@ -61,21 +61,26 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       {
         postcssPlugin: 'tailwindcss',
         async OnceExit(root, { result }) {
+          env.DEBUG && console.time('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
           let inputFile = result.opts.from ?? ''
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           async function createCompiler() {
+            env.DEBUG && console.time('[@tailwindcss/postcss] Setup compiler')
             clearRequireCache(context.fullRebuildPaths)
 
             context.fullRebuildPaths = []
 
-            return compile(root.toString(), {
+            let compiler = compile(root.toString(), {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
             })
+
+            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Setup compiler')
+            return compiler
           }
 
           // Setup the compiler if it doesn't exist yet. This way we can
@@ -126,7 +131,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             sources: context.compiler.globs,
           })
 
+          env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
           let candidates = scanner.scan()
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Scan for candidates')
 
           // Add all found files as direct dependencies
           for (let file of scanner.files) {
@@ -154,17 +161,26 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           if (rebuildStrategy === 'full') {
             context.compiler = await createCompiler()
           }
+
+          env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
           css = context.compiler.build(candidates)
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build CSS')
 
           // Replace CSS
           if (css !== context.css && optimize) {
+            env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
             context.optimizedCss = optimizeCss(css, {
               minify: typeof optimize === 'object' ? optimize.minify : true,
             })
+            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
           }
           context.css = css
+
+          env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
           root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
         },
       },
     ],
