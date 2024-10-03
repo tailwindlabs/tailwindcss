@@ -135,6 +135,7 @@ npx
 numbers
 nupkg
 o
+oa
 odp
 ods
 odt
@@ -151,6 +152,7 @@ pdf
 pea
 pgm
 pic
+plist
 png
 pnm
 pot
@@ -200,9 +202,11 @@ sqlite
 sqlite3
 sqlite3
 stl
+storedata
 sub
 suo
 swf
+symbolsarchive
 tar
 tbz
 tbz2
