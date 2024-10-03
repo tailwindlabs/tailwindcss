@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `color-scheme` utilities ([#14567](https://github.com/tailwindlabs/tailwindcss/pull/14567))
 - _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
 - _Experimental_: Migrate `@apply` utilities with the template codemods ([#14574](https://github.com/tailwindlabs/tailwindcss/pull/14574))
+- _Experimental_: Add template codemods for migrating variant order ([#14524](https://github.com/tailwindlabs/tailwindcss/pull/14524]))
 - _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
 - _Experimental_: Add template codemods for migrating prefixes ([#14557](https://github.com/tailwindlabs/tailwindcss/pull/14557]))
 - _Experimental_: Add template codemods for removal of automatic `var(…)` injection ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
