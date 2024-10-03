@@ -15,10 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for prefixes ([#14501](https://github.com/tailwindlabs/tailwindcss/pull/14501))
 - Expose timing information in debug mode ([#14553](https://github.com/tailwindlabs/tailwindcss/pull/14553))
-- Add support for `blocklist` in config files ([#14556](https://github.com/tailwindlabs/tailwindcss/pull/14556))
+- Add support for `blocklist` in JS config files ([#14556](https://github.com/tailwindlabs/tailwindcss/pull/14556))
 - Add `color-scheme` utilities ([#14567](https://github.com/tailwindlabs/tailwindcss/pull/14567))
-- Add support for wrapping utilities in a selector ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
-- Add support for marking all utilities as `!important` ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
+- Add support for `important` option in JS config files ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
 - _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
 - _Experimental_: Migrate `@apply` utilities with the template codemods ([#14574](https://github.com/tailwindlabs/tailwindcss/pull/14574))
 - _Experimental_: Add template codemods for migrating variant order ([#14524](https://github.com/tailwindlabs/tailwindcss/pull/14524]))
