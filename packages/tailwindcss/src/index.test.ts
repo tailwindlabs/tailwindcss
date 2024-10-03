@@ -254,6 +254,34 @@ describe('@apply', () => {
     `)
   })
 
+  it('should replace @apply with the correct result inside imported stylesheets', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import './bar.css';
+          @tailwind utilities;
+        `,
+        [],
+        {
+          async loadStylesheet() {
+            return {
+              base: '/bar.css',
+              content: css`
+                .foo {
+                  @apply underline;
+                }
+              `,
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
   it('should @apply in order the utilities would be sorted in if they were used in HTML', async () => {
     expect(
       await compileCss(css`

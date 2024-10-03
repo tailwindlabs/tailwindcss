@@ -5907,6 +5907,70 @@ test('appearance', async () => {
   ).toEqual('')
 })
 
+test('color-scheme', async () => {
+  expect(
+    await run([
+      'scheme-normal',
+      'scheme-dark',
+      'scheme-light',
+      'scheme-light-dark',
+      'scheme-only-dark',
+      'scheme-only-light',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".scheme-dark {
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
+      color-scheme: dark;
+    }
+
+    .scheme-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light;
+    }
+
+    .scheme-light-dark {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light dark;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .scheme-light-dark {
+        --lightningcss-light: ;
+        --lightningcss-dark: initial;
+      }
+    }
+
+    .scheme-normal {
+      color-scheme: normal;
+    }
+
+    .scheme-only-dark {
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
+      color-scheme: dark only;
+    }
+
+    .scheme-only-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light only;
+    }"
+  `)
+  expect(
+    await run([
+      'scheme',
+      '-scheme-dark',
+      '-scheme-light',
+      '-scheme-light-dark',
+      '-scheme-dark-only',
+      '-scheme-light-only',
+    ]),
+  ).toEqual('')
+})
+
 test('columns', async () => {
   expect(
     await compileCss(

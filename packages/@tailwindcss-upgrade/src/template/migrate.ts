@@ -7,6 +7,7 @@ import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
+import { variantOrder } from './codemods/variant-order'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -14,11 +15,29 @@ export type Migration = (
   rawCandidate: string,
 ) => string
 
+export const DEFAULT_MIGRATIONS: Migration[] = [
+  prefix,
+  important,
+  automaticVarInjection,
+  bgGradient,
+  variantOrder,
+]
+
+export function migrateCandidate(
+  designSystem: DesignSystem,
+  userConfig: Config,
+  rawCandidate: string,
+): string {
+  for (let migration of DEFAULT_MIGRATIONS) {
+    rawCandidate = migration(designSystem, userConfig, rawCandidate)
+  }
+  return rawCandidate
+}
+
 export default async function migrateContents(
   designSystem: DesignSystem,
   userConfig: Config,
   contents: string,
-  migrations: Migration[] = [prefix, important, automaticVarInjection, bgGradient],
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents)
 
@@ -27,17 +46,10 @@ export default async function migrateContents(
 
   let output = contents
   for (let { rawCandidate, start, end } of candidates) {
-    let needsMigration = false
-    for (let migration of migrations) {
-      let candidate = migration(designSystem, userConfig, rawCandidate)
-      if (rawCandidate !== candidate) {
-        rawCandidate = candidate
-        needsMigration = true
-      }
-    }
+    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate)
 
-    if (needsMigration) {
-      output = replaceCandidateInContent(output, rawCandidate, start, end)
+    if (migratedCandidate !== rawCandidate) {
+      output = replaceCandidateInContent(output, migratedCandidate, start, end)
     }
   }
 

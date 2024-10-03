@@ -281,6 +281,8 @@ export default [
   'caret-color',
   'accent-color',
 
+  'color-scheme',
+
   'opacity',
 
   'background-blend-mode',
