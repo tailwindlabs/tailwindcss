@@ -7,6 +7,7 @@ import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
+import { variantOrder } from './codemods/variant-order'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -18,7 +19,7 @@ export default async function migrateContents(
   designSystem: DesignSystem,
   userConfig: Config,
   contents: string,
-  migrations: Migration[] = [prefix, important, automaticVarInjection, bgGradient],
+  migrations: Migration[] = [prefix, important, bgGradient, automaticVarInjection, variantOrder],
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents)
 
