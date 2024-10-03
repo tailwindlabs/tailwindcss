@@ -152,6 +152,7 @@ pdf
 pea
 pgm
 pic
+plist
 png
 pnm
 pot
