@@ -11,6 +11,7 @@ import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 interface CacheEntry {
   mtimes: Map<string, number>
   compiler: null | Awaited<ReturnType<typeof compile>>
+  scanner: null | Scanner
   css: string
   optimizedCss: string
   fullRebuildPaths: string[]
@@ -23,7 +24,8 @@ function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
-    compiler: null as null | Awaited<ReturnType<typeof compile>>,
+    compiler: null,
+    scanner: null,
     css: '',
     optimizedCss: '',
     fullRebuildPaths: [] as string[],
@@ -123,18 +125,20 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           let css = ''
 
-          // Look for candidates used to generate the CSS
-          let scanner = new Scanner({
-            detectSources: { base },
-            sources: context.compiler.globs,
-          })
+          if (context.scanner === null) {
+            // Look for candidates used to generate the CSS
+            context.scanner = new Scanner({
+              detectSources: { base },
+              sources: context.compiler.globs,
+            })
+          }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
-          let candidates = scanner.scan()
+          let candidates = context.scanner.scan()
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Scan for candidates')
 
           // Add all found files as direct dependencies
-          for (let file of scanner.files) {
+          for (let file of context.scanner.files) {
             result.messages.push({
               type: 'dependency',
               plugin: '@tailwindcss/postcss',
@@ -146,7 +150,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, pattern } of scanner.globs) {
+          for (let { base, pattern } of context.scanner.globs) {
             result.messages.push({
               type: 'dir-dependency',
               plugin: '@tailwindcss/postcss',
