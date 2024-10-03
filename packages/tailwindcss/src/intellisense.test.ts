@@ -87,9 +87,10 @@ test('The variant `has-force` does not crash', () => {
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
 })
 
-test('Utilities show when nested in a selector in intellisense', async () => {
+test('Utilities do not show wrapping selector in intellisense', async () => {
   let input = css`
-    @import 'tailwindcss/utilities' selector(#app);
+    @import 'tailwindcss/utilities';
+    @config './config.js';
   `
 
   let design = await __unstable__loadDesignSystem(input, {
@@ -97,22 +98,24 @@ test('Utilities show when nested in a selector in intellisense', async () => {
       base,
       content: '@tailwind utilities;',
     }),
+    loadModule: async () => ({
+      base: '',
+      module: {
+        important: '#app',
+      },
+    }),
   })
 
   expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     [
       ".underline {
-      #app & {
-        text-decoration-line: underline;
-      }
+      text-decoration-line: underline;
     }
     ",
       ".hover\\:line-through {
-      #app & {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
-          }
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
         }
       }
     }
