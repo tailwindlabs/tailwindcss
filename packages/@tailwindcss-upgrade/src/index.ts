@@ -112,7 +112,11 @@ async function run() {
     // Migrate each file
     await Promise.allSettled(
       files.map((file) =>
-        migrateStylesheet(file, { newPrefix: parsedConfig?.newPrefix ?? undefined }),
+        migrateStylesheet(file, {
+          newPrefix: parsedConfig?.newPrefix ?? undefined,
+          designSystem: parsedConfig?.designSystem,
+          userConfig: parsedConfig?.userConfig,
+        }),
       ),
     )
 
