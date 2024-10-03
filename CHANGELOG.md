@@ -18,13 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for `blocklist` in JS config files ([#14556](https://github.com/tailwindlabs/tailwindcss/pull/14556))
 - Add `color-scheme` utilities ([#14567](https://github.com/tailwindlabs/tailwindcss/pull/14567))
 - Add support for `important` option in JS config files ([#14448](https://github.com/tailwindlabs/tailwindcss/pull/14448))
-- _Experimental_: Migrate `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
-- _Experimental_: Migrate `@apply` utilities with the template codemods ([#14574](https://github.com/tailwindlabs/tailwindcss/pull/14574))
-- _Experimental_: Add template codemods for migrating variant order ([#14524](https://github.com/tailwindlabs/tailwindcss/pull/14524]))
-- _Experimental_: Add template codemods for migrating `bg-gradient-*` utilities to `bg-linear-*` ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
-- _Experimental_: Add template codemods for migrating prefixes ([#14557](https://github.com/tailwindlabs/tailwindcss/pull/14557]))
-- _Experimental_: Add template codemods for removal of automatic `var(…)` injection ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
-- _Experimental_: Add template codemods for migrating important utilities (e.g. `!flex` to `flex!`) ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
+- _Upgrade (experimental)_: Convert `@import "tailwindcss/tailwind.css"` to `@import "tailwindcss"` in CSS files ([#14514](https://github.com/tailwindlabs/tailwindcss/pull/14514))
+- _Upgrade (experimental)_: Apply all utility upgrades to `@apply` in CSS files ([#14574](https://github.com/tailwindlabs/tailwindcss/pull/14574))
+- _Upgrade (experimental)_: Update variant order in template files ([#14524](https://github.com/tailwindlabs/tailwindcss/pull/14524]))
+- _Upgrade (experimental)_: Convert `bg-gradient-*` utilities to `bg-linear-*` in template files ([#14537](https://github.com/tailwindlabs/tailwindcss/pull/14537]))
+- _Upgrade (experimental)_: Convert legacy prefixes to variant prefixes in template files ([#14557](https://github.com/tailwindlabs/tailwindcss/pull/14557]))
+- _Upgrade (experimental)_: Convert bare CSS variables in arbitrary values to `var(…)` in template files ([#14526](https://github.com/tailwindlabs/tailwindcss/pull/14526))
+- _Upgrade (experimental)_: Convert legacy important modifier syntax to trailing syntax ([#14502](https://github.com/tailwindlabs/tailwindcss/pull/14502))
 
 ### Fixed
 
@@ -33,11 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only setup a single compiler in `@tailwindcss/postcss` for initial builds ([#14565](https://github.com/tailwindlabs/tailwindcss/pull/14565))
 - Ensure editing imported CSS files triggers a rebuild ([#14561](https://github.com/tailwindlabs/tailwindcss/pull/14561))
 - Ensure `@apply` and CSS functions work inside imported stylesheets ([#14576](https://github.com/tailwindlabs/tailwindcss/pull/14576))
-- _Experimental_: Improve codemod output, keep CSS after last Tailwind directive unlayered ([#14512](https://github.com/tailwindlabs/tailwindcss/pull/14512))
-- _Experimental_: Fix incorrect empty `layer()` at the end of `@import` at-rules when running codemods ([#14513](https://github.com/tailwindlabs/tailwindcss/pull/14513))
-- _Experimental_: Do not wrap comment nodes in `@layer` when running codemods ([#14517](https://github.com/tailwindlabs/tailwindcss/pull/14517))
-- _Experimental_: Ensure we don't lose selectors when running codemods ([#14518](https://github.com/tailwindlabs/tailwindcss/pull/14518))
-- _Experimental_: inject `@import` in a more expected location when running codemods ([#14536](https://github.com/tailwindlabs/tailwindcss/pull/14536))
+- _Upgrade (experimental)_: Don't wrap custom CSS after utilities in a layer ([#14512](https://github.com/tailwindlabs/tailwindcss/pull/14512))
+- _Upgrade (experimental)_: Don't add empty `layer()` to `@import` at-rules when the styles do not need to be imported into a layer ([#14513](https://github.com/tailwindlabs/tailwindcss/pull/14513))
+- _Upgrade (experimental)_: Don't wrap comment nodes in `@layer` when running codemods ([#14517](https://github.com/tailwindlabs/tailwindcss/pull/14517))
+- _Upgrade (experimental)_: Fix scenario where selectors can be lost in multi-selector rules ([#14518](https://github.com/tailwindlabs/tailwindcss/pull/14518))
+- _Upgrade (experimental)_: Ensure custom CSS before `@tailwind` rules is wrapped with `@layer base` when prepending `@import "tailwindcss"` to the top of the file ([#14536](https://github.com/tailwindlabs/tailwindcss/pull/14536))
 
 ### Changed
 
@@ -54,9 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new `shadow-initial` and `inset-shadow-initial` utilities for resetting shadow colors ([#14468](https://github.com/tailwindlabs/tailwindcss/pull/14468))
 - Add `field-sizing-*` utilities ([#14469](https://github.com/tailwindlabs/tailwindcss/pull/14469))
 - Include gradient color properties in color transitions ([#14489](https://github.com/tailwindlabs/tailwindcss/pull/14489))
-- _Experimental_: Add CSS codemods for `@apply` ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14434))
-- _Experimental_: Add CSS codemods for migrating `@tailwind` directives ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411), [#14504](https://github.com/tailwindlabs/tailwindcss/pull/14504))
-- _Experimental_: Add CSS codemods for migrating `@layer utilities` and `@layer components` ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
+- _Upgrade (experimental)_: Convert important syntax in `@apply` in CSS files ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14434))
+- _Upgrade (experimental)_: Convert `@tailwind` directives to `@import` rules in CSS files ([#14411](https://github.com/tailwindlabs/tailwindcss/pull/14411), [#14504](https://github.com/tailwindlabs/tailwindcss/pull/14504))
+- _Upgrade (experimental)_: Convert custom CSS in `@layer utilities` and `@layer components` to use `@utility` in CSS files ([#14455](https://github.com/tailwindlabs/tailwindcss/pull/14455))
 
 ### Fixed
 
