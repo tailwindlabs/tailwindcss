@@ -93,7 +93,20 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
 
   expect(
     design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']),
-  ).toMatchInlineSnapshot()
+  ).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline;
+    }
+    ",
+      null,
+      null,
+      ".bg-\\[\\#000\\] {
+      background-color: #000;
+    }
+    ",
+    ]
+  `)
 })
 
 test('Utilities do not show wrapping selector in intellisense', async () => {
@@ -115,7 +128,22 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
     }),
   })
 
-  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot()
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline;
+    }
+    ",
+      ".hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
+      }
+    }
+    ",
+    ]
+  `)
 })
 
 test('Utilities, when marked as important, show as important in intellisense', async () => {
@@ -130,5 +158,20 @@ test('Utilities, when marked as important, show as important in intellisense', a
     }),
   })
 
-  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot()
+  expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
+    [
+      ".underline {
+      text-decoration-line: underline!important;
+    }
+    ",
+      ".hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through!important;
+        }
+      }
+    }
+    ",
+    ]
+  `)
 })
