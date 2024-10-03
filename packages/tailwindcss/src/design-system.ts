@@ -16,9 +16,6 @@ export type DesignSystem = {
   // Whether to mark utility declarations as !important
   important: boolean
 
-  // Whether to wrap utility declarations in a selector
-  wrappingSelector: string | null
-
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
@@ -52,7 +49,6 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     variants,
 
     important: false,
-    wrappingSelector: null,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []

@@ -1,4 +1,4 @@
-import { toCss, walk, type AstNode } from '../ast'
+import { rule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { Theme, ThemeKey } from '../theme'
 import { withAlpha } from '../utilities'
@@ -234,8 +234,22 @@ export async function applyCompatibilityHooks({
     designSystem.important = true
   }
 
-  if (!designSystem.wrappingSelector && typeof resolvedConfig.important === 'string') {
-    designSystem.wrappingSelector = `${resolvedConfig.important} &`
+  if (typeof resolvedConfig.important === 'string') {
+    let wrappingSelector = resolvedConfig.important
+
+    walk(ast, (node, { replaceWith, parent }) => {
+      if (node.kind !== 'rule') return
+      if (node.selector !== '@tailwind utilities') return
+
+      // The AST node was already manually wrapped so there's nothing to do
+      if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {
+        return WalkAction.Stop
+      }
+
+      replaceWith(rule(wrappingSelector, [node]))
+
+      return WalkAction.Stop
+    })
   }
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
