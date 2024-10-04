@@ -321,6 +321,7 @@ export async function split(stylesheets: Stylesheet[]) {
   // If removing files means that some `@import` at-rules are now unnecessary, we
   // can also remove those.
   for (let sheet of stylesheets) {
+    continue
     if (!sheet.root) continue
 
     let utilitySheet = utilitySheets.get(sheet)
