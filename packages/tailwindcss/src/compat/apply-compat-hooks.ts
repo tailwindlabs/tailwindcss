@@ -5,6 +5,7 @@ import { withAlpha } from '../utilities'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
 import { applyConfigToTheme } from './apply-config-to-theme'
+import { applyKeyframesToAst } from './apply-keyframes-to-ast'
 import { createCompatConfig } from './config/create-compat-config'
 import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
@@ -206,6 +207,7 @@ export async function applyCompatibilityHooks({
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
   applyConfigToTheme(designSystem, resolvedUserConfig)
+  applyKeyframesToAst(ast, resolvedUserConfig)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
