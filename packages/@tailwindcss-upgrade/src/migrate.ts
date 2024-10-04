@@ -29,9 +29,12 @@ export interface Stylesheet {
   layers?: Set<string>
 
   parents?: Set<Stylesheet>
+  children?: Set<Stylesheet>
   importRules?: Set<AtRule>
+  hasUtilities?: boolean
 
   readonly ancestors?: Set<Stylesheet>
+  readonly descendants?: Set<Stylesheet>
 }
 
 export async function migrateContents(
@@ -70,18 +73,24 @@ export async function analyze(stylesheets: Stylesheet[]) {
     stylesheet.layers ??= new Set()
     stylesheet.importRules ??= new Set()
     stylesheet.parents ??= new Set()
+    stylesheet.children ??= new Set()
+
+    function* traverse(
+      sheet: Stylesheet,
+      list: (sheet: Stylesheet) => Iterable<Stylesheet>,
+    ): Iterable<Stylesheet> {
+      for (let child of list(sheet)) {
+        yield child
+        yield* traverse(child, list)
+      }
+    }
 
     Object.defineProperty(stylesheet, 'ancestors', {
-      get: () => {
-        function* ancestors(sheet: Stylesheet): Iterable<Stylesheet> {
-          for (let parent of sheet.parents ?? []) {
-            yield parent
-            yield* ancestors(parent)
-          }
-        }
+      get: () => new Set(traverse(stylesheet, (sheet) => sheet.parents ?? [])),
+    })
 
-        return new Set(ancestors(stylesheet))
-      },
+    Object.defineProperty(stylesheet, 'descendants', {
+      get: () => new Set(traverse(stylesheet, (sheet) => sheet.children ?? [])),
     })
   }
 
@@ -127,12 +136,17 @@ export async function analyze(stylesheets: Stylesheet[]) {
           // Record the import node for this sheet so it can be modified later
           stylesheet.importRules!.add(node)
 
+          node.raws.sheets ??= new Set()
+          // @ts-ignore
+          node.raws.sheets!.add(stylesheet)
+
           // Connect all stylesheets together in a dependency graph
           // The way this works is it uses the knowledge that we have a list of
           // the `@import` nodes that cause a given stylesheet to be imported.
           // That import has a `source` pointing to parent stylesheet's file path
           // which can be used to look it up
           stylesheet.parents!.add(parent)
+          parent.children!.add(stylesheet)
 
           for (let part of segment(node.params, ' ')) {
             if (!part.startsWith('layer(')) continue
@@ -179,7 +193,7 @@ export async function split(stylesheets: Stylesheet[]) {
   let utilitySheets = new Map<Stylesheet, Stylesheet>()
   let newRules: postcss.AtRule[] = []
 
-  for (let sheet of stylesheets.slice()) {
+  for (let sheet of stylesheets) {
     if (!sheet.root) continue
     if (!sheet.file) continue
 
@@ -199,7 +213,20 @@ export async function split(stylesheets: Stylesheet[]) {
       return WalkAction.Stop
     })
 
-    if (!hasUtilities) continue
+    sheet.hasUtilities = hasUtilities
+  }
+
+  for (let sheet of stylesheets) {
+    if (!sheet.root) continue
+    if (!sheet.importRules?.size) continue
+
+    // Skip stylesheets that don't have utilities
+    // and don't have any children that have utilities
+    if (!sheet.hasUtilities) {
+      if (!Array.from(sheet.descendants ?? []).some((child) => child.hasUtilities)) {
+        continue
+      }
+    }
 
     // Split the stylesheet into two parts: one with the utilities and one without
     let utilities = postcss.root({
@@ -217,134 +244,84 @@ export async function split(stylesheets: Stylesheet[]) {
       return WalkAction.Skip
     })
 
-    // Add the import for the new utility file immediately following the old import
-    for (let node of sheet.importRules ?? []) {
-      // This node didn't have a `layer(…)` yet, but we added one during the
-      // migration. This means that we don't have to consider this node for the
-      // new import rule.
-      if (node.raws.tailwind_injected_layer) {
-        continue
+    let utilitySheet: Stylesheet = {
+      file: sheet.file!.replace(/\.css$/, '.utilities.css'),
+      root: utilities,
+      importRules: new Set(),
+      parents: new Set(),
+      children: new Set(),
+      layers: new Set(),
+      hasUtilities: true,
+    }
+
+    utilitySheets.set(sheet, utilitySheet)
+  }
+
+  for (let sheet of stylesheets) {
+    if (!sheet.root) continue
+
+    let utilitySheet = utilitySheets.get(sheet)
+
+    let importNodes = new Set<postcss.AtRule>()
+    sheet.root.walkAtRules('import', (node) => {
+      importNodes.add(node)
+    })
+
+    let utilityImports: Set<postcss.AtRule> = new Set()
+
+    for (let node of importNodes) {
+      if (!node.raws.sheets) continue
+
+      let id = node.params.match(/['"](.*)['"]/)?.[1]
+      if (!id) return
+
+      let normalSheetForImport = Array.from(sheet.children ?? [])?.find((child) => {
+        return child.importRules?.has(node)
+      })
+      let utilitySheetForImport = utilitySheets.get(normalSheetForImport!)
+
+      let newFile = id.replace(/\.css$/, '.utilities.css')
+      let newImport = node.clone({
+        params: `"${newFile}"`,
+        raws: {
+          after: '\n\n',
+        },
+      })
+
+      if (utilitySheet) {
+        utilityImports.add(newImport)
+        utilitySheetForImport?.importRules?.add(newImport)
+      } else {
+        node.after(newImport)
       }
+    }
 
-      // Only interested in the main import rule with the layer
-      // if (!node.params.includes('layer(utilities)') && !node.params.includes('layer(components)')) {
-      //   continue
-      // }
-
-      // if (node !== sheet.rootImport) {
-      //   continue
-      // }
-
-      // We want to use the name of the main import, not the name of the
-      // transitive import.
-      //
-      // ```css
-      // /* index.css */
-      // @import "./a.css" layer(utilities);
-      //
-      // /* a.css */
-      // @import "./b.css";
-      //
-      // /* b.css */
-      // @layer utilities {
-      //   .foo {}
-      // }
-      // ```
-      //
-      // In this case we want `a.utilities.css` to be the name of the new file,
-      // not `b.utilities.css`. Every `@layer utilities` directive will be
-      // converted to `@utility` and will be hoisted to the `a.utilities.css`
-      // file.
-
-      let relativePath = /['"](.*?)['"]/g.exec(node.params)
-      if (!relativePath) continue // This should never happen
-      if (!node.source?.input.file) continue // This should never happen
-
-      let name = path.basename(relativePath[1])
-
-      let utilitySheet: Stylesheet = {
-        file: path.join(path.dirname(sheet.file!), name.replace(/\.css$/, '.utilities.css')),
-        root: utilities,
-      }
-
-      utilitySheets.set(sheet, utilitySheet)
-
-      // Figure out the new import rule
-      let newParams = node.params.replace(/\.css(['"])/, '.utilities.css$1')
-      console.log(newParams)
-
-      // Only add the new `@import` at-rule if it doesn't exist yet.
-      let existingNewImport = newRules.find((rule) => rule.params === newParams)
-      if (!existingNewImport) {
-        newRules.push(
-          node.cloneAfter({
-            params: newParams,
-            raws: {
-              after: '\n\n',
-              tailwind_pretty: true,
-            },
-          }),
-        )
-      }
+    if (utilitySheet && utilityImports.size > 0) {
+      utilitySheet.root!.prepend(Array.from(utilityImports))
     }
   }
 
-  console.dir(
-    [
-      ...Array.from(stylesheets.slice(), (s) => [
-        s.file,
-        Array.from(s.importRules ?? [], (r) => r.toString()),
-      ]),
-      Array.from(utilitySheets.values(), (s) => s.file),
-    ],
-    { depth: 1 },
-  )
+  // Make sure the utility sheets track parents and import nodes and what not
+  for (let [normalSheet, utilitySheet] of utilitySheets) {
+    if (!utilitySheet.parents) continue
+    if (!utilitySheet.children) continue
 
-  // Merge utility sheets.
-  // It could be that the same type of file is created from two different
-  // locations. In this case, the final file will exist twice.
-  // E.g.:
-  //
-  // ```css
-  // /* index.css*/
-  // @import './a.css' layer(utilities);
-  //
-  // /* a.css */
-  // @import './b.css';
-  // .foo {}            /* <- generates a.utilities.css, key points to a.css */
-  //
-  // /* b.css */
-  // .bar {}            /* <- generates a.utilities.css, key points to b.css */
-  // ```
-  let mergedUtilitySheets = new Map<string, Stylesheet>()
-  for (let utilitySheet of utilitySheets.values()) {
-    if (!utilitySheet.file) continue // Should never happen
+    for (let parent of normalSheet.parents ?? []) {
+      let utilityParent = utilitySheets.get(parent)
+      if (!utilityParent) continue
+      utilitySheet.parents.add(utilityParent)
+    }
 
-    let existing = mergedUtilitySheets.get(utilitySheet.file)
-    if (!existing) {
-      mergedUtilitySheets.set(utilitySheet.file, utilitySheet)
-    } else {
-      // TODO: Not sure why a `prepend` is required instead of an `append`, but
-      // this results in the correct order.
-      existing.root?.prepend(utilitySheet.root?.nodes ?? [])
+    for (let child of normalSheet.children ?? []) {
+      let utilityChild = utilitySheets.get(child)
+      if (!utilityChild) continue
+      utilitySheet.children.add(utilityChild)
     }
   }
 
-  // The new import rules should have just the filename import
-  // no layers, media queries, or anything else
-  for (let node of newRules) {
-    node.params = segment(node.params, ' ')[0]
-  }
+  stylesheets.push(...utilitySheets.values())
 
-  for (let [originalSheet, utilitySheet] of utilitySheets) {
-    utilitySheet.parents = new Set(
-      Array.from(originalSheet.parents ?? []).map((parent) => {
-        return utilitySheets.get(parent) ?? parent
-      }),
-    )
-  }
-
-  stylesheets.push(...mergedUtilitySheets.values())
+  return
 
   // At this point, we probably created `{name}.utilities.css` files. If the
   // original `{name}.css` is empty, then we can optimize the output a bit more
