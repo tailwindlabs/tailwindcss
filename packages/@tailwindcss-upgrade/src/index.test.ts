@@ -154,3 +154,30 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     }"
   `)
 })
+
+it('should keep CSS as-is before existing `@layer` at-rules', async () => {
+  expect(
+    await migrateContents(
+      css`
+        .foo {
+          color: blue;
+        }
+
+        @layer components {
+          .bar {
+            color: red;
+          }
+        }
+      `,
+      {},
+    ),
+  ).toMatchInlineSnapshot(`
+    ".foo {
+      color: blue;
+    }
+
+    @utility bar {
+      color: red;
+    }"
+  `)
+})

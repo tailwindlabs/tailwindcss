@@ -97,6 +97,11 @@ export function migrateMissingLayers(): Plugin {
 
     // Wrap each bucket in an `@layer` at-rule
     for (let [layerName, nodes] of buckets) {
+      let targetLayerName = layerName || firstLayerName || ''
+      if (targetLayerName === '') {
+        continue
+      }
+
       // Do not wrap comments in a layer, if they are the only nodes.
       if (nodes.every((node) => node.type === 'comment')) {
         continue
