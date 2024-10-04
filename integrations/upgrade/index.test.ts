@@ -111,6 +111,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @import 'tailwindcss';
 
@@ -162,6 +163,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @tailwind base;
 
@@ -218,6 +220,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @import 'tailwindcss';
 
