@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        runner: [nscloud-ubuntu-22.04-amd64-32x64, windows-latest, macos-14]
+        runner: [namespace-profile-default, windows-latest, macos-14]
         # Exclude windows and macos from being built on feature branches
         on-next-branch:
           - ${{ github.ref == 'refs/heads/next' }}
