@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add support for `tailwindcss/colors.js`, `tailwindcss/defaultTheme.js`, and `tailwindcss/plugin.js` exports ([#14595](https://github.com/tailwindlabs/tailwindcss/pull/14595))
+
 ### Fixed
 
 - Don’t crash when scanning a candidate equal to the configured prefix ([#14588](https://github.com/tailwindlabs/tailwindcss/pull/14588))
