@@ -1,6 +1,5 @@
-import fs from 'node:fs/promises'
 import path from 'node:path'
-import postcss, { AtRule } from 'postcss'
+import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { segment } from '../../tailwindcss/src/utils/segment'
@@ -8,6 +7,7 @@ import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
+import { Stylesheet } from './stylesheet'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -17,36 +17,12 @@ export interface MigrateOptions {
   userConfig?: Config
 }
 
-export interface Stylesheet {
-  file?: string
-  unlink?: boolean
-
-  rootFile?: string
-  rootImport?: postcss.AtRule
-
-  content?: string | null
-  root?: postcss.Root | null
-  layers?: Set<string>
-
-  parents?: Set<Stylesheet>
-  children?: Set<Stylesheet>
-  importsFromParents?: Set<AtRule>
-  importsInSelf?: Set<AtRule>
-  hasUtilities?: boolean
-
-  readonly ancestors?: Set<Stylesheet>
-  readonly descendants?: Set<Stylesheet>
-}
-
 export async function migrateContents(
   stylesheet: Stylesheet | string,
   options: MigrateOptions = {},
 ) {
   if (typeof stylesheet === 'string') {
-    stylesheet = {
-      content: stylesheet,
-      root: postcss.parse(stylesheet),
-    }
+    stylesheet = await Stylesheet.fromString(stylesheet)
   }
 
   return postcss()
@@ -54,7 +30,7 @@ export async function migrateContents(
     .use(migrateAtLayerUtilities(stylesheet))
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
-    .process(stylesheet.root!, { from: stylesheet.file })
+    .process(stylesheet.root, { from: stylesheet.file ?? undefined })
 }
 
 export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
@@ -67,33 +43,11 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
 
 export async function analyze(stylesheets: Stylesheet[]) {
   let stylesheetsByFile = new Map<string, Stylesheet>()
-  for (let stylesheet of stylesheets) {
-    if (!stylesheet.file) continue
-    stylesheetsByFile.set(stylesheet.file, stylesheet)
 
-    stylesheet.layers ??= new Set()
-    stylesheet.importsFromParents ??= new Set()
-    stylesheet.importsInSelf ??= new Set()
-    stylesheet.parents ??= new Set()
-    stylesheet.children ??= new Set()
-
-    function* traverse(
-      sheet: Stylesheet,
-      list: (sheet: Stylesheet) => Iterable<Stylesheet>,
-    ): Iterable<Stylesheet> {
-      for (let child of list(sheet)) {
-        yield child
-        yield* traverse(child, list)
-      }
+  for (let sheet of stylesheets) {
+    if (sheet.file) {
+      stylesheetsByFile.set(sheet.file, sheet)
     }
-
-    Object.defineProperty(stylesheet, 'ancestors', {
-      get: () => new Set(traverse(stylesheet, (sheet) => sheet.parents ?? [])),
-    })
-
-    Object.defineProperty(stylesheet, 'descendants', {
-      get: () => new Set(traverse(stylesheet, (sheet) => sheet.children ?? [])),
-    })
   }
 
   // Step 1: Record which `@import` rules point to which stylesheets
@@ -136,22 +90,22 @@ export async function analyze(stylesheets: Stylesheet[]) {
           if (!parent) return
 
           // Record the import node for this sheet so it can be modified later
-          stylesheet.importsFromParents!.add(node)
-          parent.importsInSelf!.add(node)
+          stylesheet.importsFromParents.add(node)
+          parent.importsInSelf.add(node)
 
           // Connect all stylesheets together in a dependency graph
           // The way this works is it uses the knowledge that we have a list of
           // the `@import` nodes that cause a given stylesheet to be imported.
           // That import has a `source` pointing to parent stylesheet's file path
           // which can be used to look it up
-          stylesheet.parents!.add(parent)
-          parent.children!.add(stylesheet)
+          stylesheet.parents.add(parent)
+          parent.children.add(stylesheet)
 
           for (let part of segment(node.params, ' ')) {
             if (!part.startsWith('layer(')) continue
             if (!part.endsWith(')')) continue
 
-            stylesheet.layers!.add(part.slice(6, -1).trim())
+            stylesheet.layers.add(part.slice(6, -1).trim())
           }
         },
       },
@@ -160,31 +114,17 @@ export async function analyze(stylesheets: Stylesheet[]) {
 
   for (let sheet of stylesheets) {
     if (!sheet.file) continue
-    if (!sheet.root) continue
 
     await processor.process(sheet.root, { from: sheet.file })
   }
 
   // Step 2: Analyze the AST so each stylesheet can know what layers it is inside
   for (let sheet of stylesheets) {
-    for (let ancestor of sheet.ancestors ?? []) {
-      for (let layer of ancestor.layers ?? []) {
-        sheet.layers!.add(layer)
+    for (let ancestor of sheet.ancestors) {
+      for (let layer of ancestor.layers) {
+        sheet.layers.add(layer)
       }
     }
-  }
-}
-
-export async function prepare(stylesheet: Stylesheet) {
-  if (stylesheet.file) {
-    stylesheet.file = path.resolve(process.cwd(), stylesheet.file)
-    stylesheet.content = await fs.readFile(stylesheet.file, 'utf-8')
-  }
-
-  if (stylesheet.content) {
-    stylesheet.root = postcss.parse(stylesheet.content, {
-      from: stylesheet.file,
-    })
   }
 }
 
@@ -192,11 +132,10 @@ export async function split(stylesheets: Stylesheet[]) {
   let utilitySheets = new Map<Stylesheet, Stylesheet>()
 
   for (let sheet of stylesheets) {
-    if (!sheet.root) continue
     if (!sheet.file) continue
 
     // We only care about stylesheets that were imported into a layer e.g. `layer(utilities)`
-    let isLayered = sheet.layers?.has('utilities') || sheet.layers?.has('components')
+    let isLayered = sheet.layers.has('utilities') || sheet.layers.has('components')
     if (!isLayered) continue
 
     // We only care about stylesheets that contain an `@utility`
@@ -215,13 +154,12 @@ export async function split(stylesheets: Stylesheet[]) {
   }
 
   for (let sheet of stylesheets) {
-    if (!sheet.root) continue
-    if (!sheet.importsFromParents?.size) continue
+    if (!sheet.importsFromParents.size) continue
 
     // Skip stylesheets that don't have utilities
     // and don't have any children that have utilities
     if (!sheet.hasUtilities) {
-      if (!Array.from(sheet.descendants ?? []).some((child) => child.hasUtilities)) {
+      if (!Array.from(sheet.descendants).some((child) => child.hasUtilities)) {
         continue
       }
     }
@@ -242,30 +180,22 @@ export async function split(stylesheets: Stylesheet[]) {
       return WalkAction.Skip
     })
 
-    let utilitySheet: Stylesheet = {
-      file: sheet.file!.replace(/\.css$/, '.utilities.css'),
-      root: utilities,
-      importsFromParents: new Set(),
-      importsInSelf: new Set(),
-      parents: new Set(),
-      children: new Set(),
-      layers: new Set(),
-      hasUtilities: true,
-    }
+    let utilitySheet = await Stylesheet.fromRoot(
+      utilities,
+      sheet.file!.replace(/\.css$/, '.utilities.css'),
+    )
 
     utilitySheets.set(sheet, utilitySheet)
   }
 
   for (let sheet of stylesheets) {
-    if (!sheet.root) continue
-
     let utilitySheet = utilitySheets.get(sheet)
     let utilityImports: Set<postcss.AtRule> = new Set()
 
     console.log(`---- ${sheet.file} ----`)
-    console.log(Array.from(sheet.importsInSelf ?? []).map((node) => node.toString()))
+    console.log(Array.from(sheet.importsInSelf).map((node) => node.toString()))
 
-    for (let node of sheet.importsInSelf ?? []) {
+    for (let node of sheet.importsInSelf) {
       let id = node.params.match(/['"](.*)['"]/)?.[1]
       if (!id) return
 
@@ -279,11 +209,11 @@ export async function split(stylesheets: Stylesheet[]) {
 
       if (utilitySheet) {
         utilityImports.add(newImport)
-        utilitySheet.importsInSelf!.add(newImport)
+        utilitySheet.importsInSelf.add(newImport)
 
-        for (let child of sheet.children ?? []) {
-          if (child.importsFromParents?.has(node)) {
-            utilitySheets.get(child)!.importsFromParents!.add(newImport)
+        for (let child of sheet.children) {
+          if (child.importsFromParents.has(node)) {
+            utilitySheets.get(child)!.importsFromParents.add(newImport)
           }
         }
       } else {
@@ -292,22 +222,19 @@ export async function split(stylesheets: Stylesheet[]) {
     }
 
     if (utilitySheet && utilityImports.size > 0) {
-      utilitySheet.root!.prepend(Array.from(utilityImports))
+      utilitySheet.root.prepend(Array.from(utilityImports))
     }
   }
 
   // Make sure the utility sheets track parents and import nodes and what not
   for (let [normalSheet, utilitySheet] of utilitySheets) {
-    if (!utilitySheet.parents) continue
-    if (!utilitySheet.children) continue
-
-    for (let parent of normalSheet.parents ?? []) {
+    for (let parent of normalSheet.parents) {
       let utilityParent = utilitySheets.get(parent)
       if (!utilityParent) continue
       utilitySheet.parents.add(utilityParent)
     }
 
-    for (let child of normalSheet.children ?? []) {
+    for (let child of normalSheet.children) {
       let utilityChild = utilitySheets.get(child)
       if (!utilityChild) continue
       utilitySheet.children.add(utilityChild)
@@ -322,8 +249,6 @@ export async function split(stylesheets: Stylesheet[]) {
   // can also remove those.
   for (let sheet of stylesheets) {
     continue
-    if (!sheet.root) continue
-
     let utilitySheet = utilitySheets.get(sheet)
     if (!utilitySheet) continue
 
@@ -334,14 +259,14 @@ export async function split(stylesheets: Stylesheet[]) {
     sheet.root = utilitySheet.root
 
     // 2. Point the imports back to the original file since we don't need the utility file anymore
-    for (let node of utilitySheet.importsFromParents ?? []) {
+    for (let node of utilitySheet.importsFromParents) {
       node.params = node.params.replace(/\.utilities\.css['"]/, '.css')
     }
 
     // 3. Remove the original import from the non-utility sheet
     // TODO: This does not work because we're cloning trees during the migration
     // we *cannot* rely on reference semantics at all for any postcss nodes
-    for (let node of sheet.importsFromParents ?? []) {
+    for (let node of sheet.importsFromParents) {
       node.remove()
     }
 

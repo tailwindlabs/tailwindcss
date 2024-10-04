@@ -11,11 +11,10 @@ import { help } from './commands/help'
 import {
   analyze as analyzeStylesheets,
   migrate as migrateStylesheet,
-  prepare as prepareStylesheet,
   split as splitStylesheets,
   type MigrateOptions,
-  type Stylesheet,
 } from './migrate'
+import { Stylesheet } from './stylesheet'
 import { migrate as migrateTemplate } from './template/migrate'
 import { parseConfig } from './template/parseConfig'
 import { args, type Arg } from './utils/args'
@@ -120,18 +119,18 @@ async function run() {
     files = files.filter((file) => file.endsWith('.css'))
 
     // Analyze the stylesheets
-    let stylesheets: Stylesheet[] = files.map((file) => ({ file }))
+    let loadResults = await Promise.allSettled(files.map((filepath) => Stylesheet.load(filepath)))
 
     // Load and parse all stylesheets
-    let prepareResults = await Promise.allSettled(
-      stylesheets.map((sheet) => prepareStylesheet(sheet)),
-    )
-
-    for (let result of prepareResults) {
+    for (let result of loadResults) {
       if (result.status === 'rejected') {
         error(`${result.reason}`)
       }
     }
+
+    let stylesheets = loadResults
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value)
 
     // Analyze the stylesheets
     try {
