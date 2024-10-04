@@ -371,11 +371,11 @@ export function buildPluginApi(
     },
 
     addComponents(components, options) {
-      this.addUtilities(components)
+      this.addUtilities(components, options)
     },
 
     matchComponents(components, options) {
-      this.matchUtilities(components)
+      this.matchUtilities(components, options)
     },
 
     theme: createThemeFn(
