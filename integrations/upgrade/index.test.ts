@@ -29,7 +29,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'src/index.html',
@@ -77,7 +77,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'src/index.html',
