@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 import { css, html, js, json, test } from '../utils'
 
 test(
@@ -259,5 +260,399 @@ test(
         }
       `,
     )
+  },
+)
+
+test(
+  'migrate utilities in an imported file',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @import './utilities.css' layer(utilities);
+      `,
+      'src/utilities.css': css`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    await fs.expectFileToContain(
+      'src/index.css',
+      css`
+        @import 'tailwindcss';
+        @import './utilities.css' layer(utilities);
+        @import './utilities.twupgrade.css';
+      `,
+    )
+
+    await fs.expectFileNotToContain(
+      'src/utilities.css',
+      css`
+        @utility no-scrollbar {
+          &::-webkit-scrollbar {
+            display: none;
+          }
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    )
+
+    await fs.expectFileNotToContain(
+      'src/utilities.twupgrade.css',
+      css`
+        @utility no-scrollbar {
+          &::-webkit-scrollbar {
+            display: none;
+          }
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    )
+  },
+)
+
+test(
+  'wip it',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.css' layer(utilities);
+        @import './b.css' layer(components);
+        @import './c.css';
+      `,
+      'src/a.css': css`
+        @import './utilities.css';
+
+        .foo-from-a {
+          color: red;
+        }
+      `,
+      'src/utilities.css': css`
+        #foo {
+          --keep: me;
+        }
+
+        .foo-from-import {
+          color: blue;
+        }
+      `,
+      'src/b.css': css`
+        @import './components.css';
+
+        .bar-from-b {
+          color: red;
+        }
+      `,
+      'src/components.css': css`
+        .bar-from-import {
+          color: blue;
+        }
+      `,
+      'src/c.css': css`
+        @import './c-2.css' layer(utilities);
+        .baz-from-c {
+          color: green;
+        }
+      `,
+      'src/c-2.css': css`
+        @import './c-3.css';
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+      'src/c-3.css': css`
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.read('src/index.css')).toMatchInlineSnapshot(`
+      "@import 'tailwindcss/utilities' layer(utilities);
+      @import './a.css' layer(utilities);
+      @import './a.utilities.css';
+      @import './b.css';"
+    `)
+    expect(await fs.read('src/a.css')).toMatchInlineSnapshot(`"@import './utilities.css'"`)
+    expect(await fs.read('src/utilities.css')).toMatchInlineSnapshot(`
+      "#foo {
+        --keep: me;
+      }"
+    `)
+    expect(await fs.read('src/a.utilities.css')).toMatchInlineSnapshot(`
+      "
+
+      @utility foo-from-import {
+        color: blue;
+      }
+
+      @utility foo-from-a {
+        color: red;
+      }"
+    `)
+    expect(await fs.read('src/b.css')).toMatchInlineSnapshot(`
+      "@utility bar-from-import {
+        color: blue;
+      }
+
+      @utility bar-from-b {
+        color: red;
+      }"
+    `)
+    expect(await fs.read('src/c.css')).toMatchInlineSnapshot()
+    expect(await fs.read('src/c-2.css')).toMatchInlineSnapshot()
+    expect(await fs.read('src/c.utilities.css')).toMatchInlineSnapshot()
+
+    // await exec('npx @tailwindcss/cli -i src/index.css -o out.css')
+
+    // expect(await fs.read('out.css')).toMatchInlineSnapshot()
+  },
+)
+
+test(
+  'deeply nested imports',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(utilities);
+      `,
+      'src/a.1.css': css`
+        @import './a.2.css';
+
+        #from-a-1 {
+          --keep: me;
+        }
+
+        .from-a-1 {
+          color: red;
+        }
+      `,
+      'src/a.2.css': css`
+        @import './a.3.css';
+
+        #from-a-2 {
+          --keep: me;
+        }
+
+        .from-a-2 {
+          color: green;
+        }
+      `,
+      'src/a.3.css': css`
+        #from-a-3 {
+          --keep: me;
+        }
+
+        .from-a-3 {
+          color: blue;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.read('src/index.css')).toMatchInlineSnapshot(`
+      "@import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);
+      @import './a.1.utilities.css';"
+    `)
+    expect(await fs.read('src/a.1.css')).toMatchInlineSnapshot(`
+      "@import './a.2.css';
+      #from-a-1 {
+        --keep: me;
+      }"
+    `)
+    expect(await fs.read('src/a.1.utilities.css')).toMatchInlineSnapshot(`
+      "
+
+      @utility from-a-3 {
+        color: blue;
+      }
+      @utility from-a-2 {
+        color: green;
+      }
+      @utility from-a-1 {
+        color: red;
+      }"
+    `)
+    expect(await fs.read('src/a.2.css')).toMatchInlineSnapshot(`
+      "@import './a.3.css';
+      #from-a-2 {
+        --keep: me;
+      }"
+    `)
+    expect(await fs.read('src/a.3.css')).toMatchInlineSnapshot(`
+      "#from-a-3 {
+        --keep: me;
+      }"
+    `)
+  },
+)
+
+test.debug(
+  'deeply nested imports',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css';
+      `,
+      'src/a.1.css': css`
+        @import './a.2.css' layer(utilities);
+
+        #from-a-1 {
+          --keep: me;
+        }
+
+        .from-a-1 {
+          color: red;
+        }
+      `,
+      'src/a.2.css': css`
+        @import './a.3.css';
+
+        #from-a-2 {
+          --keep: me;
+        }
+
+        .from-a-2 {
+          color: green;
+        }
+      `,
+      'src/a.3.css': css`
+        @import './a.4.css';
+
+        #from-a-3 {
+          --keep: me;
+        }
+
+        .from-a-3 {
+          color: blue;
+        }
+      `,
+      'src/a.4.css': css`
+        #from-a-4 {
+          --keep: me;
+        }
+
+        .from-a-4 {
+          color: blue;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.read('src/index.css')).toMatchInlineSnapshot(`
+      "@import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);"
+    `)
+    expect(await fs.read('src/a.1.css')).toMatchInlineSnapshot(`
+      "@import './a.2.css' layer(utilities);
+      @import "./a.2.utilities.css";
+      #from-a-1 {
+        --keep: me;
+      }
+      .from-a-1 {
+        color: red;
+      }"
+    `)
+    expect(await fs.read('src/a.2.css')).toMatchInlineSnapshot(`
+      "@import './a.3.css';
+      #from-a-2 {
+        --keep: me;
+      }"
+    `)
+    expect(await fs.read('src/a.2.utilities.css')).toMatchInlineSnapshot(`
+      "@utility from-a-4 {
+        color: blue;
+      }
+      @utility from-a-3 {
+        color: blue;
+      }
+      @utility from-a-2 {
+        color: green;
+      }"
+    `)
+    expect(await fs.read('src/a.3.css')).toMatchInlineSnapshot(`
+      "@import './a.4.css';
+      #from-a-3 {
+        --keep: me;
+      }"
+    `)
+    expect(await fs.read('src/a.4.css')).toMatchInlineSnapshot(`
+      "#from-a-4 {
+        --keep: me;
+      }"
+    `)
   },
 )

@@ -1,23 +1,27 @@
 import dedent from 'dedent'
+import postcss from 'postcss'
 import { expect, it } from 'vitest'
+import { formatNodes } from './codemods/format-nodes'
 import { migrateContents } from './migrate'
 
 const css = dedent
 
+function migrate(input: string) {
+  return migrateContents(input)
+    .then((result) => postcss([formatNodes()]).process(result.root, result.opts))
+    .then((result) => result.css)
+}
+
 it('should print the input as-is', async () => {
   expect(
-    await migrateContents(
-      css`
+    await migrate(css`
+      /* above */
+      .foo/* after */ {
         /* above */
-        .foo/* after */ {
-          /* above */
-          color:  /* before */ red /* after */;
-          /* below */
-        }
-      `,
-      {},
-      expect.getState().testPath,
-    ),
+        color:  /* before */ red /* after */;
+        /* below */
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "/* above */
     .foo/* after */ {
@@ -30,44 +34,41 @@ it('should print the input as-is', async () => {
 
 it('should migrate a stylesheet', async () => {
   expect(
-    await migrateContents(
-      css`
-        @tailwind base;
+    await migrate(css`
+      @tailwind base;
 
-        html {
-          overflow: hidden;
+      html {
+        overflow: hidden;
+      }
+
+      @tailwind components;
+
+      .a {
+        z-index: 1;
+      }
+
+      @layer components {
+        .b {
+          z-index: 2;
         }
+      }
 
-        @tailwind components;
+      .c {
+        z-index: 3;
+      }
 
-        .a {
-          z-index: 1;
+      @tailwind utilities;
+
+      .d {
+        z-index: 4;
+      }
+
+      @layer utilities {
+        .e {
+          z-index: 5;
         }
-
-        @layer components {
-          .b {
-            z-index: 2;
-          }
-        }
-
-        .c {
-          z-index: 3;
-        }
-
-        @tailwind utilities;
-
-        .d {
-          z-index: 4;
-        }
-
-        @layer utilities {
-          .e {
-            z-index: 5;
-          }
-        }
-      `,
-      {},
-    ),
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
 
@@ -107,17 +108,14 @@ it('should migrate a stylesheet', async () => {
 
 it('should migrate a stylesheet (with imports)', async () => {
   expect(
-    await migrateContents(
-      css`
-        @import 'tailwindcss/base';
-        @import './my-base.css';
-        @import 'tailwindcss/components';
-        @import './my-components.css';
-        @import 'tailwindcss/utilities';
-        @import './my-utilities.css';
-      `,
-      {},
-    ),
+    await migrate(css`
+      @import 'tailwindcss/base';
+      @import './my-base.css';
+      @import 'tailwindcss/components';
+      @import './my-components.css';
+      @import 'tailwindcss/utilities';
+      @import './my-utilities.css';
+    `),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
     @import './my-base.css' layer(base);
@@ -128,20 +126,17 @@ it('should migrate a stylesheet (with imports)', async () => {
 
 it('should migrate a stylesheet (with preceding rules that should be wrapped in an `@layer`)', async () => {
   expect(
-    await migrateContents(
-      css`
-        @charset "UTF-8";
-        @layer foo, bar, baz;
-        /**! My license comment */
-        html {
-          color: red;
-        }
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `,
-      {},
-    ),
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+      /**! My license comment */
+      html {
+        color: red;
+      }
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `),
   ).toMatchInlineSnapshot(`
     "@charset "UTF-8";
     @layer foo, bar, baz;
@@ -157,20 +152,17 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
 
 it('should keep CSS as-is before existing `@layer` at-rules', async () => {
   expect(
-    await migrateContents(
-      css`
-        .foo {
-          color: blue;
-        }
+    await migrate(css`
+      .foo {
+        color: blue;
+      }
 
-        @layer components {
-          .bar {
-            color: red;
-          }
+      @layer components {
+        .bar {
+          color: red;
         }
-      `,
-      {},
-    ),
+      }
+    `),
   ).toMatchInlineSnapshot(`
     ".foo {
       color: blue;

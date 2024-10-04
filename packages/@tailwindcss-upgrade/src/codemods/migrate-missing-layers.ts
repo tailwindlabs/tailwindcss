@@ -71,6 +71,7 @@ export function migrateMissingLayers(): Plugin {
         if (node.name === 'import') {
           if (lastLayer !== '' && !node.params.includes('layer(')) {
             node.params += ` layer(${lastLayer})`
+            node.raws.tailwind_injected_layer = true
           }
 
           if (bucket.length > 0) {
@@ -110,7 +111,7 @@ export function migrateMissingLayers(): Plugin {
       let target = nodes[0]
       let layerNode = new AtRule({
         name: 'layer',
-        params: layerName || firstLayerName || '',
+        params: targetLayerName,
         nodes: nodes.map((node) => {
           // Keep the target node as-is, because we will be replacing that one
           // with the new layer node.
