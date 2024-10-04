@@ -45,9 +45,6 @@ export async function migrateContents(
     }
   }
 
-  console.log(stylesheet.file)
-  console.log(stylesheet.root!.toString())
-
   return postcss()
     .use(migrateAtApply(options))
     .use(migrateAtLayerUtilities(stylesheet))
@@ -65,8 +62,6 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
 }
 
 export async function analyze(stylesheets: Stylesheet[]) {
-  let mediaWrapper = `__wrapper__${Math.random().toString(16).slice(3, 8)}__`
-
   let stylesheetsByFile = new Map<string, Stylesheet>()
   for (let stylesheet of stylesheets) {
     if (!stylesheet.file) continue
@@ -89,10 +84,6 @@ export async function analyze(stylesheets: Stylesheet[]) {
       },
     })
   }
-
-  // A list of all marker nodes used to annotate and analyze the AST
-  let importMarkers = new Set<postcss.Node>()
-  let fileMarkers = new Set<postcss.Node>()
 
   // Step 1: Record which `@import` rules point to which stylesheets
   // and which stylesheets are parents/children of each other
@@ -207,9 +198,6 @@ export async function split(stylesheets: Stylesheet[]) {
 
       return WalkAction.Stop
     })
-
-    console.log(sheet.file)
-    console.log(sheet.root.toString())
 
     if (!hasUtilities) continue
 
