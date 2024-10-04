@@ -1,6 +1,9 @@
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
+import * as util from 'node:util'
 import * as postcss from 'postcss'
+
+export type StylesheetId = string
 
 export class Stylesheet {
   /**
@@ -8,7 +11,7 @@ export class Stylesheet {
    *
    * Used to track the stylesheet in PostCSS nodes.
    */
-  id: string
+  id: StylesheetId
 
   /**
    * The PostCSS AST that represents this stylesheet.
@@ -37,24 +40,6 @@ export class Stylesheet {
    */
   layers = new Set<string>()
 
-  importsFromParents = new Set<postcss.AtRule>()
-  importsInSelf = new Set<postcss.AtRule>()
-  hasUtilities = false
-
-  constructor(root: postcss.Root, file?: string) {
-    this.id = crypto.randomUUID()
-    this.root = root
-    this.file = file ?? null
-  }
-
-  get ancestors() {
-    return walk<Stylesheet>(this, (sheet) => sheet.parents ?? [])
-  }
-
-  get descendants() {
-    return walk<Stylesheet>(this, (sheet) => sheet.children ?? [])
-  }
-
   static async load(filepath: string) {
     filepath = path.resolve(process.cwd(), filepath)
 
@@ -72,6 +57,44 @@ export class Stylesheet {
 
   static async fromRoot(root: postcss.Root, file?: string) {
     return new Stylesheet(root, file)
+  }
+
+  constructor(root: postcss.Root, file?: string) {
+    this.id = Math.random().toString(36).slice(2)
+    this.root = root
+    this.file = file ?? null
+  }
+
+  get importRules() {
+    let imports = new Set<postcss.AtRule>()
+
+    this.root.walkAtRules('import', (rule) => {
+      imports.add(rule)
+    })
+
+    return imports
+  }
+
+  get isEmpty() {
+    return this.root.toString().trim() === ''
+  }
+
+  get ancestors() {
+    return walk<Stylesheet>(this, (sheet) => sheet.parents ?? [])
+  }
+
+  get descendants() {
+    return walk<Stylesheet>(this, (sheet) => sheet.children ?? [])
+  }
+
+  [util.inspect.custom]() {
+    return {
+      ...this,
+      root: this.root.toString(),
+      layers: Array.from(this.layers),
+      parents: Array.from(this.parents, (s) => s.id),
+      children: Array.from(this.children, (s) => s.id),
+    }
   }
 }
 
