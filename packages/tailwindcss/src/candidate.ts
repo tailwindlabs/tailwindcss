@@ -230,6 +230,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // all utilities must start with that variant which we will then remove from
   // the variant list so no other part of the codebase has to know about it.
   if (designSystem.theme.prefix) {
+    if (rawVariants.length === 1) return null
     if (rawVariants[0] !== designSystem.theme.prefix) return null
 
     rawVariants.shift()
