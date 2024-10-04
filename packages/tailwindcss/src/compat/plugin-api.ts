@@ -384,7 +384,7 @@ export function buildPluginApi(
 
 export type CssInJs = { [key: string]: string | string[] | CssInJs | CssInJs[] }
 
-function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
+export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let ast: AstNode[] = []
 
   rules = Array.isArray(rules) ? rules : [rules]
