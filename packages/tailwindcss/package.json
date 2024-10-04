@@ -71,11 +71,23 @@
         "require": "./dist/plugin.js",
         "import": "./dist/plugin.mjs"
       },
+      "./plugin.js": {
+        "require": "./dist/plugin.js",
+        "import": "./dist/plugin.mjs"
+      },
       "./defaultTheme": {
         "require": "./dist/default-theme.js",
         "import": "./dist/default-theme.mjs"
       },
+      "./defaultTheme.js": {
+        "require": "./dist/default-theme.js",
+        "import": "./dist/default-theme.mjs"
+      },
       "./colors": {
+        "require": "./dist/colors.js",
+        "import": "./dist/colors.mjs"
+      },
+      "./colors.js": {
         "require": "./dist/colors.js",
         "import": "./dist/colors.mjs"
       },
