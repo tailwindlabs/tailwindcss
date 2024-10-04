@@ -1,4 +1,4 @@
-import { css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test } from '../utils'
 
 test(
   `upgrades a v3 project to v4`,
@@ -244,6 +244,71 @@ test(
     },
   },
   async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    await fs.expectFileToContain(
+      'src/index.css',
+      css`
+        @utility btn {
+          @apply rounded-md px-2 py-1 bg-blue-500 text-white;
+        }
+
+        @utility no-scrollbar {
+          &::-webkit-scrollbar {
+            display: none;
+          }
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    )
+  },
+)
+
+test.only(
+  'migrate a simple postcss setup',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "autoprefixer": "^10",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    // Assert that the v3 project works as expected
+    await exec('pnpm postcss src/index.css --output dist/out.css')
+    await fs.expectFileToContain('dist/out.css', [candidate`bg-[--my-red]`])
+
     await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
