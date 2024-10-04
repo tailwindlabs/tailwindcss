@@ -306,7 +306,7 @@ export async function split(stylesheets: Stylesheet[]) {
 
     // 2. Rewrite imports in parent sheets to point to the original sheet
     for (let node of importNodes.get(utilitySheet)) {
-      node.params = node.params.replace(/\.utilities\.css['"]/, '.css')
+      node.params = node.params.replace(/\.utilities\.css(['"])/, '.css$1')
     }
 
     // 3. Remove the original import from the non-utility sheet
