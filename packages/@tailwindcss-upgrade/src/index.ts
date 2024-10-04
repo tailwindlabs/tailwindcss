@@ -134,7 +134,11 @@ async function run() {
     }
 
     // Analyze the stylesheets
-    await analyzeStylesheets(stylesheets)
+    try {
+      await analyzeStylesheets(stylesheets)
+    } catch (e: unknown) {
+      error(`${e}`)
+    }
 
     // Migrate each file
     let options: MigrateOptions = {
@@ -154,7 +158,11 @@ async function run() {
     }
 
     // Split up stylesheets (as needed)
-    await splitStylesheets(stylesheets)
+    try {
+      await splitStylesheets(stylesheets)
+    } catch (e: unknown) {
+      error(`${e}`)
+    }
 
     // Format nodes
     for (let sheet of stylesheets) {

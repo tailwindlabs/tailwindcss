@@ -30,7 +30,8 @@ export interface Stylesheet {
 
   parents?: Set<Stylesheet>
   children?: Set<Stylesheet>
-  importRules?: Set<AtRule>
+  importsFromParents?: Set<AtRule>
+  importsInSelf?: Set<AtRule>
   hasUtilities?: boolean
 
   readonly ancestors?: Set<Stylesheet>
@@ -71,7 +72,8 @@ export async function analyze(stylesheets: Stylesheet[]) {
     stylesheetsByFile.set(stylesheet.file, stylesheet)
 
     stylesheet.layers ??= new Set()
-    stylesheet.importRules ??= new Set()
+    stylesheet.importsFromParents ??= new Set()
+    stylesheet.importsInSelf ??= new Set()
     stylesheet.parents ??= new Set()
     stylesheet.children ??= new Set()
 
@@ -129,16 +131,13 @@ export async function analyze(stylesheets: Stylesheet[]) {
           // that we don't want to modify
           if (!stylesheet) return
 
-          // If it does then this import node get added to that sylesheets `importRules` set
+          // If it does then this import node get added to that sylesheets `importsFromParents` set
           let parent = stylesheetsByFile.get(node.source?.input.file ?? '')
           if (!parent) return
 
           // Record the import node for this sheet so it can be modified later
-          stylesheet.importRules!.add(node)
-
-          node.raws.sheets ??= new Set()
-          // @ts-ignore
-          node.raws.sheets!.add(stylesheet)
+          stylesheet.importsFromParents!.add(node)
+          parent.importsInSelf!.add(node)
 
           // Connect all stylesheets together in a dependency graph
           // The way this works is it uses the knowledge that we have a list of
@@ -191,7 +190,6 @@ export async function prepare(stylesheet: Stylesheet) {
 
 export async function split(stylesheets: Stylesheet[]) {
   let utilitySheets = new Map<Stylesheet, Stylesheet>()
-  let newRules: postcss.AtRule[] = []
 
   for (let sheet of stylesheets) {
     if (!sheet.root) continue
@@ -218,7 +216,7 @@ export async function split(stylesheets: Stylesheet[]) {
 
   for (let sheet of stylesheets) {
     if (!sheet.root) continue
-    if (!sheet.importRules?.size) continue
+    if (!sheet.importsFromParents?.size) continue
 
     // Skip stylesheets that don't have utilities
     // and don't have any children that have utilities
@@ -247,7 +245,8 @@ export async function split(stylesheets: Stylesheet[]) {
     let utilitySheet: Stylesheet = {
       file: sheet.file!.replace(/\.css$/, '.utilities.css'),
       root: utilities,
-      importRules: new Set(),
+      importsFromParents: new Set(),
+      importsInSelf: new Set(),
       parents: new Set(),
       children: new Set(),
       layers: new Set(),
@@ -261,24 +260,14 @@ export async function split(stylesheets: Stylesheet[]) {
     if (!sheet.root) continue
 
     let utilitySheet = utilitySheets.get(sheet)
-
-    let importNodes = new Set<postcss.AtRule>()
-    sheet.root.walkAtRules('import', (node) => {
-      importNodes.add(node)
-    })
-
     let utilityImports: Set<postcss.AtRule> = new Set()
 
-    for (let node of importNodes) {
-      if (!node.raws.sheets) continue
+    console.log(`---- ${sheet.file} ----`)
+    console.log(Array.from(sheet.importsInSelf ?? []).map((node) => node.toString()))
 
+    for (let node of sheet.importsInSelf ?? []) {
       let id = node.params.match(/['"](.*)['"]/)?.[1]
       if (!id) return
-
-      let normalSheetForImport = Array.from(sheet.children ?? [])?.find((child) => {
-        return child.importRules?.has(node)
-      })
-      let utilitySheetForImport = utilitySheets.get(normalSheetForImport!)
 
       let newFile = id.replace(/\.css$/, '.utilities.css')
       let newImport = node.clone({
@@ -290,7 +279,13 @@ export async function split(stylesheets: Stylesheet[]) {
 
       if (utilitySheet) {
         utilityImports.add(newImport)
-        utilitySheetForImport?.importRules?.add(newImport)
+        utilitySheet.importsInSelf!.add(newImport)
+
+        for (let child of sheet.children ?? []) {
+          if (child.importsFromParents?.has(node)) {
+            utilitySheets.get(child)!.importsFromParents!.add(newImport)
+          }
+        }
       } else {
         node.after(newImport)
       }
@@ -319,57 +314,41 @@ export async function split(stylesheets: Stylesheet[]) {
     }
   }
 
-  stylesheets.push(...utilitySheets.values())
-
-  return
-
   // At this point, we probably created `{name}.utilities.css` files. If the
   // original `{name}.css` is empty, then we can optimize the output a bit more
   // by re-using the original file but just getting rid of the `layer
   // (utilities)` marker.
   // If removing files means that some `@import` at-rules are now unnecessary, we
   // can also remove those.
-  {
-    // 1. Get rid of empty files (and their imports)
-    let repeat = true
-    while (repeat) {
-      repeat = false
-      for (let stylesheet of stylesheets) {
-        // Was already marked to be removed, skip
-        if (stylesheet.unlink) continue
+  for (let sheet of stylesheets) {
+    if (!sheet.root) continue
 
-        // Original content was not empty, but the new content is. Therefore we
-        // can mark the file for removal.
-        // TODO: Make sure that empty files are not even part of `stylesheets`
-        //       in the first place. Then we can get rid of this check.
-        if (stylesheet.content?.trim() !== '' && stylesheet?.root?.toString().trim() === '') {
-          repeat = true
-          stylesheet.unlink = true
+    let utilitySheet = utilitySheets.get(sheet)
+    if (!utilitySheet) continue
 
-          // Cleanup imports that are now unnecessary
-          for (let parent of stylesheet.importRules ?? []) {
-            parent.remove()
-          }
-        }
-      }
+    if (sheet.root.toString().trim() !== '') continue
+
+    // We have a sheet that became empty after splitting
+    // 1. Replace the sheet with it's utility sheet content
+    sheet.root = utilitySheet.root
+
+    // 2. Point the imports back to the original file since we don't need the utility file anymore
+    for (let node of utilitySheet.importsFromParents ?? []) {
+      node.params = node.params.replace(/\.utilities\.css['"]/, '.css')
     }
 
-    // 2. Use `{name}.css` instead of `{name}.utilities.css` if the `{name}.css`
-    //    was marked for removal.
-    for (let [originalSheet, utilitySheet] of utilitySheets) {
-      // Original sheet was marked for removal, use the original file instead.
-      if (!originalSheet.unlink) continue
-
-      // Fixup the import rule
-      for (let parent of originalSheet.importRules ?? []) {
-        parent.params = parent.params.replace(/\.utilities\.css(['"])/, '.css$1')
-      }
-
-      // Fixup the file path
-      // utilitySheet.file = utilitySheet.file?.replace(/\.utilities\.css$/, '.css')
-      console.log('Cleanup', utilitySheet.file)
+    // 3. Remove the original import from the non-utility sheet
+    // TODO: This does not work because we're cloning trees during the migration
+    // we *cannot* rely on reference semantics at all for any postcss nodes
+    for (let node of sheet.importsFromParents ?? []) {
+      node.remove()
     }
+
+    // 3. Mark the utility sheet for removal
+    utilitySheets.delete(sheet)
   }
+
+  stylesheets.push(...utilitySheets.values())
 }
 
 // @import './a.css' layer(utilities) ;
