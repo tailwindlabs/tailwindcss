@@ -1,8 +1,17 @@
+import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import { expect, it } from 'vitest'
 import { migrateContents } from './migrate'
 
 const css = dedent
+
+let designSystem = await __unstable__loadDesignSystem(
+  css`
+    @import 'tailwindcss';
+  `,
+  { base: __dirname },
+)
+let config = { designSystem, userConfig: {}, newPrefix: null }
 
 it('should print the input as-is', async () => {
   expect(
@@ -15,7 +24,7 @@ it('should print the input as-is', async () => {
           /* below */
         }
       `,
-      {},
+      config,
       expect.getState().testPath,
     ),
   ).toMatchInlineSnapshot(`
@@ -66,7 +75,7 @@ it('should migrate a stylesheet', async () => {
           }
         }
       `,
-      {},
+      config,
     ),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
@@ -116,7 +125,7 @@ it('should migrate a stylesheet (with imports)', async () => {
         @import 'tailwindcss/utilities';
         @import './my-utilities.css';
       `,
-      {},
+      config,
     ),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
@@ -140,7 +149,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
         @tailwind components;
         @tailwind utilities;
       `,
-      {},
+      config,
     ),
   ).toMatchInlineSnapshot(`
     "@charset "UTF-8";
@@ -169,7 +178,7 @@ it('should keep CSS as-is before existing `@layer` at-rules', async () => {
           }
         }
       `,
-      {},
+      config,
     ),
   ).toMatchInlineSnapshot(`
     ".foo {

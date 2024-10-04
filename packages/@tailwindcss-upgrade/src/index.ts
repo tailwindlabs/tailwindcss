@@ -2,12 +2,10 @@
 
 import { globby } from 'globby'
 import path from 'node:path'
-import type { Config } from 'tailwindcss'
-import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { help } from './commands/help'
 import { migrate as migrateStylesheet } from './migrate'
 import { migrate as migrateTemplate } from './template/migrate'
-import { parseConfig } from './template/parseConfig'
+import { prepareConfig } from './template/prepareConfig'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
 import { eprintln, error, header, highlight, info, success } from './utils/renderer'
@@ -42,28 +40,15 @@ async function run() {
     }
   }
 
-  let parsedConfig: {
-    designSystem: DesignSystem
-    globs: { pattern: string; base: string }[]
-    userConfig: Config
-    newPrefix: string | null
-  } | null = null
-  if (flags['--config']) {
-    try {
-      parsedConfig = await parseConfig(flags['--config'], { base: process.cwd() })
-    } catch (e: any) {
-      error(`Failed to parse the configuration file: ${e.message}`)
-      process.exit(1)
-    }
-  }
+  let config = await prepareConfig(flags['--config'], { base: process.cwd() })
 
-  if (parsedConfig) {
+  {
     // Template migrations
 
     info('Migrating templates using the provided configuration file.')
 
     let set = new Set<string>()
-    for (let { pattern, base } of parsedConfig.globs) {
+    for (let { pattern, base } of config.globs) {
       let files = await globby([pattern], {
         absolute: true,
         gitignore: true,
@@ -80,9 +65,7 @@ async function run() {
 
     // Migrate each file
     await Promise.allSettled(
-      files.map((file) =>
-        migrateTemplate(parsedConfig.designSystem, parsedConfig.userConfig, file),
-      ),
+      files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
     )
 
     success('Template migration complete.')
@@ -110,15 +93,7 @@ async function run() {
     files = files.filter((file) => file.endsWith('.css'))
 
     // Migrate each file
-    await Promise.allSettled(
-      files.map((file) =>
-        migrateStylesheet(file, {
-          newPrefix: parsedConfig?.newPrefix ?? undefined,
-          designSystem: parsedConfig?.designSystem,
-          userConfig: parsedConfig?.userConfig,
-        }),
-      ),
-    )
+    await Promise.allSettled(files.map((file) => migrateStylesheet(file, config)))
 
     success('Stylesheet migration complete.')
   }

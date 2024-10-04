@@ -7,7 +7,10 @@ import { migrateCandidate } from '../template/migrate'
 export function migrateAtApply({
   designSystem,
   userConfig,
-}: { designSystem?: DesignSystem; userConfig?: Config } = {}): Plugin {
+}: {
+  designSystem: DesignSystem
+  userConfig: Config
+}): Plugin {
   function migrate(atRule: AtRule) {
     let utilities = atRule.params.split(/(\s+)/)
     let important =
@@ -27,20 +30,13 @@ export function migrateAtApply({
         utility += '!'
       }
 
-      // Migrate the important modifier to the end of the utility
-      if (utility[0] === '!') {
-        utility = `${utility.slice(1)}!`
-      }
-
       // Reconstruct the utility with the variants
       return [...variants, utility].join(':')
     })
 
     // If we have a valid designSystem and config setup, we can run all
     // candidate migrations on each utility
-    if (designSystem && userConfig) {
-      params = params.map((param) => migrateCandidate(designSystem, userConfig, param))
-    }
+    params = params.map((param) => migrateCandidate(designSystem, userConfig, param))
 
     atRule.params = params.join('').trim()
   }
