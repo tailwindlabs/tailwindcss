@@ -333,3 +333,14 @@ test('a prefix must be letters only', async () => {
     `[Error: The prefix "__" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.]`,
   )
 })
+
+test('does not crash on sole prefix', async () => {
+  let input = css`
+    @theme reference prefix(tw);
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input)
+
+  expect(compiler.build(['tw', 'tw:', 'tw: '])).toBe('')
+})
