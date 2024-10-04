@@ -165,3 +165,29 @@ it('should migrate rules between tailwind directives', async () => {
     }"
   `)
 })
+
+it('should keep CSS above a layer unlayered', async () => {
+  expect(
+    await migrate(css`
+      .foo {
+        color: red;
+      }
+
+      @layer components {
+        .bar {
+          color: blue;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    ".foo {
+      color: red;
+    }
+
+    @layer components {
+      .bar {
+        color: blue;
+      }
+    }"
+  `)
+})
