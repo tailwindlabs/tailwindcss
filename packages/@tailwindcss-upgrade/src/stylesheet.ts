@@ -40,6 +40,11 @@ export class Stylesheet {
    */
   layers = new Set<string>()
 
+  /**
+   * The list of config files that this stylesheet uses
+   */
+  configFiles = new Set<string>()
+
   static async load(filepath: string) {
     filepath = path.resolve(process.cwd(), filepath)
 
@@ -73,6 +78,16 @@ export class Stylesheet {
     })
 
     return imports
+  }
+
+  get configRules() {
+    let rules = new Set<postcss.AtRule>()
+
+    this.root.walkAtRules('config', (rule) => {
+      rules.add(rule)
+    })
+
+    return rules
   }
 
   get isEmpty() {

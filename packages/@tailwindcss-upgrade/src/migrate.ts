@@ -125,6 +125,24 @@ export async function analyze(stylesheets: Stylesheet[]) {
       }
     }
   }
+
+  // Step 3: Determine which config files are used by each stylesheet (if any)
+  for (let sheet of stylesheets) {
+    for (let node of sheet.configRules) {
+      let configPath = node.params.match(/['"](.*)['"]/)?.[1]
+      if (!configPath) continue
+
+      sheet.configFiles.add(configPath)
+    }
+  }
+
+  for (let sheet of stylesheets) {
+    for (let parent of sheet.ancestors) {
+      for (let file of parent.configFiles) {
+        sheet.configFiles.add(file)
+      }
+    }
+  }
 }
 
 export async function split(stylesheets: Stylesheet[]) {
