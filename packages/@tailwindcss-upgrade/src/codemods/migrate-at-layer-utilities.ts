@@ -268,7 +268,7 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-layer-utilities',
     OnceExit: (root, { atRule }) => {
       let isUtilityStylesheet =
-        stylesheet.layers?.includes('utilities') || stylesheet.layers?.includes('components')
+        stylesheet.layers?.has('utilities') || stylesheet.layers?.has('components')
 
       if (isUtilityStylesheet) {
         let rule = atRule({ name: 'layer', params: 'utilities' })

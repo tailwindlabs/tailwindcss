@@ -123,7 +123,15 @@ async function run() {
     let stylesheets: Stylesheet[] = files.map((file) => ({ file }))
 
     // Load and parse all stylesheets
-    await Promise.allSettled(stylesheets.map((sheet) => prepareStylesheet(sheet)))
+    let prepareResults = await Promise.allSettled(
+      stylesheets.map((sheet) => prepareStylesheet(sheet)),
+    )
+
+    for (let result of prepareResults) {
+      if (result.status === 'rejected') {
+        error(`${result.reason}`)
+      }
+    }
 
     // Analyze the stylesheets
     await analyzeStylesheets(stylesheets)
@@ -134,7 +142,16 @@ async function run() {
       designSystem: parsedConfig?.designSystem,
       userConfig: parsedConfig?.userConfig,
     }
-    await Promise.allSettled(stylesheets.map((sheet) => migrateStylesheet(sheet, options)))
+
+    let migrateResults = await Promise.allSettled(
+      stylesheets.map((sheet) => migrateStylesheet(sheet, options)),
+    )
+
+    for (let result of migrateResults) {
+      if (result.status === 'rejected') {
+        error(`${result.reason}`)
+      }
+    }
 
     // Split up stylesheets (as needed)
     await splitStylesheets(stylesheets)

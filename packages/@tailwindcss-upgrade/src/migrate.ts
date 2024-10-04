@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss, { AtRule } from 'postcss'
-import postcssImport from 'postcss-import'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { segment } from '../../tailwindcss/src/utils/segment'
@@ -9,6 +8,7 @@ import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
+import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
 export interface MigrateOptions {
@@ -26,10 +26,12 @@ export interface Stylesheet {
 
   content?: string | null
   root?: postcss.Root | null
-  layers?: string[]
+  layers?: Set<string>
 
   parents?: Set<Stylesheet>
   importRules?: Set<AtRule>
+
+  readonly ancestors?: Set<Stylesheet>
 }
 
 export async function migrateContents(
@@ -42,6 +44,9 @@ export async function migrateContents(
       root: postcss.parse(stylesheet),
     }
   }
+
+  console.log(stylesheet.file)
+  console.log(stylesheet.root!.toString())
 
   return postcss()
     .use(migrateAtApply(options))
@@ -67,173 +72,84 @@ export async function analyze(stylesheets: Stylesheet[]) {
     if (!stylesheet.file) continue
     stylesheetsByFile.set(stylesheet.file, stylesheet)
 
-    stylesheet.layers ??= []
+    stylesheet.layers ??= new Set()
     stylesheet.importRules ??= new Set()
     stylesheet.parents ??= new Set()
+
+    Object.defineProperty(stylesheet, 'ancestors', {
+      get: () => {
+        function* ancestors(sheet: Stylesheet): Iterable<Stylesheet> {
+          for (let parent of sheet.parents ?? []) {
+            yield parent
+            yield* ancestors(parent)
+          }
+        }
+
+        return new Set(ancestors(stylesheet))
+      },
+    })
   }
 
   // A list of all marker nodes used to annotate and analyze the AST
   let importMarkers = new Set<postcss.Node>()
   let fileMarkers = new Set<postcss.Node>()
 
+  // Step 1: Record which `@import` rules point to which stylesheets
+  // and which stylesheets are parents/children of each other
   let processor = postcss([
-    // Step 1: Add markers around the `@import` rules
-    //
-    // We need to mark the start and end of each `@import` rule so we can
-    // keep track of where they were in the original AST. We do this by cloning
-    // the node, renaming the original, and adding start/end markers around it.
     {
-      postcssPlugin: 'import-thing',
-      Once(root) {
-        let imports = new Set<AtRule>()
+      postcssPlugin: 'mark-import-nodes',
+      AtRule: {
+        import(node) {
+          // Find what the import points to
+          let id = node.params.match(/['"](.*)['"]/)?.[1]
+          if (!id) return
 
-        root.walkAtRules('import', (node) => {
-          imports.add(node)
-        })
+          let basePath = node.source?.input.file
+            ? path.dirname(node.source.input.file)
+            : process.cwd()
 
-        for (let node of imports) {
-          // Duplicate the `@import` rule
-          // this will be the one that `postcss-import` processes
-          node.cloneAfter({
-            params: `${node.params} ${mediaWrapper}`,
-          })
+          // Resolve the import to a file path
+          let resolvedPath: string | false
+          try {
+            resolvedPath = resolveCssId(id, basePath)
+          } catch (err) {
+            console.warn(`Failed to resolve import: ${id}. Skipping.`)
+            console.error(err)
+            return
+          }
 
-          // Replace the original `@import` rule with a dummy comment
-          // it'll retain the original node in `raws`
-          let importMarker = postcss.comment({
-            text: `__import_node__`,
-            raws: { original: node },
-          })
+          if (!resolvedPath) return
 
-          importMarkers.add(importMarker)
-          node.replaceWith(importMarker)
-        }
-      },
-    },
+          // Find the stylesheet pointing to the resolved path
+          let stylesheet = stylesheetsByFile.get(resolvedPath)
 
-    // Step 2: Expand `@import` rules and mark imported files
-    //
-    // Since valid imports are only at the top some files may not have any other
-    // nodes we can use to determine where in the AST a file was imported. To
-    // solve this, we'll add a marker at the top of each imported file which
-    // guarantees that we have a way to determine where the file was imported.
-    postcssImport({
-      plugins: [
-        {
-          postcssPlugin: 'import-marker',
-          Once(root) {
-            let marker = postcss.comment({
-              text: `marker:imported-file`,
-              source: root.source,
-            })
+          // If it _does not_ exist in stylesheets we don't care and skip it
+          // this is likely because its in node_modules or a workspace package
+          // that we don't want to modify
+          if (!stylesheet) return
 
-            fileMarkers.add(marker)
-            root.prepend(marker)
-          },
+          // If it does then this import node get added to that sylesheets `importRules` set
+          let parent = stylesheetsByFile.get(node.source?.input.file ?? '')
+          if (!parent) return
+
+          // Record the import node for this sheet so it can be modified later
+          stylesheet.importRules!.add(node)
+
+          // Connect all stylesheets together in a dependency graph
+          // The way this works is it uses the knowledge that we have a list of
+          // the `@import` nodes that cause a given stylesheet to be imported.
+          // That import has a `source` pointing to parent stylesheet's file path
+          // which can be used to look it up
+          stylesheet.parents!.add(parent)
+
+          for (let part of segment(node.params, ' ')) {
+            if (!part.startsWith('layer(')) continue
+            if (!part.endsWith(')')) continue
+
+            stylesheet.layers!.add(part.slice(6, -1).trim())
+          }
         },
-      ],
-    }),
-
-    // Step 3: Analyze the AST so each stylesheet can have each import node
-    // associated with it
-    {
-      postcssPlugin: 'import-thing2',
-      Once() {
-        // Associate import nodes with each stylesheet
-        for (let fileMarker of fileMarkers) {
-          let sourceFile = fileMarker.source?.input.file
-          if (!sourceFile) continue
-
-          let stylesheet = stylesheetsByFile.get(sourceFile)
-          if (!stylesheet) continue
-
-          // Find the closest import marker that precedes the file marker
-          let node = fileMarker
-
-          while (node) {
-            if (importMarkers.has(node)) {
-              break
-            }
-
-            let prev = node.prev()
-
-            if (prev) {
-              // Walk backwards until we find a node that is a marker
-              node = prev
-            } else if (node.parent) {
-              // If there are no earlier siblings, go up a level and try again
-              node = node.parent
-            } else {
-              break
-            }
-          }
-
-          // We were unable to find an import marker
-          // TODO: This should be an error
-          if (node === fileMarker) continue
-
-          // TODO: This shouldn't be possible
-          if (!node.raws.original) continue
-
-          stylesheet.importRules!.add(node.raws.original as AtRule)
-        }
-
-        // Analyze import nodes to determine layers
-        for (let sheet of stylesheets) {
-          for (let node of sheet.importRules ?? []) {
-            let parts = segment(node.params, ' ')
-            for (let part of parts) {
-              if (!part.startsWith('layer(')) continue
-              if (!part.endsWith(')')) continue
-
-              let layers = segment(part.slice(6, -1), ',').map((name) => name.trim())
-
-              sheet.layers!.push(...layers)
-            }
-          }
-        }
-
-        // Connect all stylesheets together in a dependency graph
-        // The way this works is it uses the knowledge that we have a list of
-        // the `@import` nodes that cause a given stylesheet to be imported.
-        // That import has a `source` pointing to parent stylesheet's file path
-        // which can be used to look it up
-        for (let sheet of stylesheets) {
-          for (let node of sheet.importRules ?? []) {
-            if (!node.source?.input.file) continue
-
-            let sourceFile = node.source.input.file
-
-            for (let parent of stylesheets) {
-              if (parent.file !== sourceFile) continue
-
-              // Track root import and `@import` node. This will allow us to
-              // hoist everything up to the root import when splitting the
-              // stylesheet.
-              sheet.rootFile = parent.rootFile ?? parent.file
-              sheet.rootImport = parent.rootImport ?? node
-
-              sheet.parents!.add(parent)
-            }
-          }
-        }
-      },
-    },
-
-    // Step 4: Restore the AST to its original state
-    {
-      postcssPlugin: 'import-thing2',
-      Once(root) {
-        // Replace the dummy comment nodes with the original `@import` nodes
-        for (let node of importMarkers) {
-          node.replaceWith(node.raws.original)
-        }
-
-        // Remove all imported nodes
-        root.walkAtRules('media', (rule) => {
-          if (!rule.params.includes(mediaWrapper)) return
-          rule.remove()
-        })
       },
     },
   ])
@@ -243,6 +159,15 @@ export async function analyze(stylesheets: Stylesheet[]) {
     if (!sheet.root) continue
 
     await processor.process(sheet.root, { from: sheet.file })
+  }
+
+  // Step 2: Analyze the AST so each stylesheet can know what layers it is inside
+  for (let sheet of stylesheets) {
+    for (let ancestor of sheet.ancestors ?? []) {
+      for (let layer of ancestor.layers ?? []) {
+        sheet.layers!.add(layer)
+      }
+    }
   }
 }
 
@@ -268,7 +193,7 @@ export async function split(stylesheets: Stylesheet[]) {
     if (!sheet.file) continue
 
     // We only care about stylesheets that were imported into a layer e.g. `layer(utilities)`
-    let isLayered = sheet.layers?.includes('utilities') || sheet.layers?.includes('components')
+    let isLayered = sheet.layers?.has('utilities') || sheet.layers?.has('components')
     if (!isLayered) continue
 
     // We only care about stylesheets that contain an `@utility`
@@ -282,6 +207,9 @@ export async function split(stylesheets: Stylesheet[]) {
 
       return WalkAction.Stop
     })
+
+    console.log(sheet.file)
+    console.log(sheet.root.toString())
 
     if (!hasUtilities) continue
 
@@ -311,13 +239,13 @@ export async function split(stylesheets: Stylesheet[]) {
       }
 
       // Only interested in the main import rule with the layer
-      if (!node.params.includes('layer(utilities)') && !node.params.includes('layer(components)')) {
-        continue
-      }
+      // if (!node.params.includes('layer(utilities)') && !node.params.includes('layer(components)')) {
+      //   continue
+      // }
 
-      if (node !== sheet.rootImport) {
-        continue
-      }
+      // if (node !== sheet.rootImport) {
+      //   continue
+      // }
 
       // We want to use the name of the main import, not the name of the
       // transitive import.
@@ -347,7 +275,7 @@ export async function split(stylesheets: Stylesheet[]) {
       let name = path.basename(relativePath[1])
 
       let utilitySheet: Stylesheet = {
-        file: path.join(path.dirname(sheet.rootFile!), name.replace(/\.css$/, '.utilities.css')),
+        file: path.join(path.dirname(sheet.file!), name.replace(/\.css$/, '.utilities.css')),
         root: utilities,
       }
 
@@ -372,6 +300,17 @@ export async function split(stylesheets: Stylesheet[]) {
       }
     }
   }
+
+  console.dir(
+    [
+      ...Array.from(stylesheets.slice(), (s) => [
+        s.file,
+        Array.from(s.importRules ?? [], (r) => r.toString()),
+      ]),
+      Array.from(utilitySheets.values(), (s) => s.file),
+    ],
+    { depth: 1 },
+  )
 
   // Merge utility sheets.
   // It could be that the same type of file is created from two different
@@ -468,6 +407,9 @@ export async function split(stylesheets: Stylesheet[]) {
   }
 }
 
+// @import './a.css' layer(utilities) ;
+//   -> @utility { … }
+
 // @import './a.css' layer(utilities);
 //  -> @import './b.css';
 //    -> @import './c.css';
@@ -477,11 +419,8 @@ export async function split(stylesheets: Stylesheet[]) {
 //  -> other stuff
 
 // @import './a.css' layer(utilities);
-//  -> @import './b.css';
+//  -> @import './b.css'; (layers: utilities)
 //    -> @import './c.css';
-//       -> #main
+//      -> @import './d.css';
+//         -> #main
 //    -> other stuff
-// @import './a.utility.css';
-//  -> @import './b.utility.css';
-//    -> @import './c.utility.css';
-//       -> @utility .utility-class
