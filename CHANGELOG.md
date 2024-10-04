@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Prevent a crash when encountering a candidate that matches the configured prefix ([#14593](https://github.com/tailwindlabs/tailwindcss/pull/14593))
 
 ## [4.0.0-alpha.26] - 2024-10-03
 
