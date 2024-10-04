@@ -1,7 +1,7 @@
 import { type AtRule, type Comment, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
 import { segment } from '../../../tailwindcss/src/utils/segment'
-import type { Stylesheet } from '../migrate'
+import { Stylesheet } from '../stylesheet'
 import { walk, WalkAction, walkDepth } from '../utils/walk'
 
 export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {

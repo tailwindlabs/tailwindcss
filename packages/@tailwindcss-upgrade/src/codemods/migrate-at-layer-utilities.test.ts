@@ -1,17 +1,32 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { describe, expect, it } from 'vitest'
-import type { Stylesheet } from '../migrate'
+import { Stylesheet } from '../stylesheet'
 import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
 
-function migrate(stylesheet: Stylesheet | string) {
-  if (typeof stylesheet === 'string') {
-    stylesheet = {
-      content: stylesheet,
-      root: postcss.parse(stylesheet),
+async function migrate(
+  data:
+    | Stylesheet
+    | string
+    | {
+        root: postcss.Root
+        layers?: string[]
+      },
+) {
+  let stylesheet: Stylesheet
+
+  if (typeof data === 'string') {
+    stylesheet = await Stylesheet.fromString(data)
+  } else if (data instanceof Stylesheet) {
+    stylesheet = data
+  } else {
+    stylesheet = await Stylesheet.fromRoot(data.root)
+
+    for (let layer of data.layers ?? []) {
+      stylesheet.layers.add(layer)
     }
   }
 
