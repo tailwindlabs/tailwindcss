@@ -169,10 +169,10 @@ async function run() {
     }
 
     // Write all files to disk
-    // 1. Unlink all files that are no longer needed go first
-    // 2. Write them all sequentially
     for (let sheet of stylesheets) {
-      await fs.writeFile(sheet.file!, sheet.root!.toString())
+      if (!sheet.file) continue
+
+      await fs.writeFile(sheet.file, sheet.root.toString())
     }
 
     success('Stylesheet migration complete.')

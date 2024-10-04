@@ -205,11 +205,17 @@ export async function split(stylesheets: Stylesheet[]) {
       // which likely means it points to `node_modules`
       if (!sheetId) continue
 
-      // This import points to a stylesheet that no longer exists
-      // which likely means it was removed by the optimizer
-      // this will be cleaned up later
       let originalDestination = stylesheetsById.get(sheetId)
+
+      // This import points to a stylesheet that no longer exists which likely
+      // means it was removed by the optimizer this will be cleaned up later
       if (!originalDestination) continue
+
+      let utilityDestination = utilitySheets.get(originalDestination)
+
+      // A utility sheet doesn't exist for this import so it doesn't need
+      // to be processed
+      if (!utilityDestination) continue
 
       let id = node.params.match(/['"](.*)['"]/)?.[1]
       if (!id) return
@@ -222,6 +228,7 @@ export async function split(stylesheets: Stylesheet[]) {
         params: `"${newFile}"`,
         raws: {
           after: '\n\n',
+          tailwind_destination_sheet_id: utilityDestination.id,
         },
       })
 
@@ -230,15 +237,9 @@ export async function split(stylesheets: Stylesheet[]) {
         // we'll collect it into a list to add later. If we don't'
         // we'll end up adding them in reverse order.
         utilityImports.add(newImport)
-
-        let utilityDestination = utilitySheets.get(originalDestination)
-        if (!utilityDestination) continue
-
-        newImport.raws.tailwind_destination_sheet_id = utilityDestination.id
       } else {
         // This import will go immediately after the original import
         node.after(newImport)
-        newImport.raws.tailwind_destination_sheet_id = node.raws.tailwind_destination_sheet_id
       }
     }
 
