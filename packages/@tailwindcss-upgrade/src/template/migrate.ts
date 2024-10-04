@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises'
-import path from 'node:path'
+import path, { extname } from 'node:path'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates, replaceCandidateInContent } from './candidates'
@@ -38,8 +38,9 @@ export default async function migrateContents(
   designSystem: DesignSystem,
   userConfig: Config,
   contents: string,
+  extension: string,
 ): Promise<string> {
-  let candidates = await extractRawCandidates(contents)
+  let candidates = await extractRawCandidates(contents, extension)
 
   // Sort candidates by starting position desc
   candidates.sort((a, z) => z.start - a.start)
@@ -60,5 +61,8 @@ export async function migrate(designSystem: DesignSystem, userConfig: Config, fi
   let fullPath = path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
-  await fs.writeFile(fullPath, await migrateContents(designSystem, userConfig, contents))
+  await fs.writeFile(
+    fullPath,
+    await migrateContents(designSystem, userConfig, contents, extname(file)),
+  )
 }

@@ -17,8 +17,10 @@ export function bgGradient(
         continue
       }
 
-      candidate.root = `bg-linear-to-${direction}`
-      return printCandidate(designSystem, candidate)
+      return printCandidate(designSystem, {
+        ...candidate,
+        root: `bg-linear-to-${direction}`,
+      })
     }
   }
   return rawCandidate

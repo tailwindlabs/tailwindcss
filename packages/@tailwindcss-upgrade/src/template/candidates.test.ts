@@ -14,7 +14,7 @@ test('extracts candidates with positions from a template', async () => {
     base: __dirname,
   })
 
-  let candidates = await extractRawCandidates(content)
+  let candidates = await extractRawCandidates(content, 'html')
   let validCandidates = candidates.filter(
     ({ rawCandidate }) => designSystem.parseCandidate(rawCandidate).length > 0,
   )
@@ -60,7 +60,7 @@ test('replaces the right positions for a candidate', async () => {
     base: __dirname,
   })
 
-  let candidates = await extractRawCandidates(content)
+  let candidates = await extractRawCandidates(content, 'html')
 
   let candidate = candidates.find(
     ({ rawCandidate }) => designSystem.parseCandidate(rawCandidate).length > 0,

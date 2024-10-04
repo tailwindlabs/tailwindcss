@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { walk, type AstNode } from '../../../../tailwindcss/src/ast'
-import type { Variant } from '../../../../tailwindcss/src/candidate'
+import { type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 

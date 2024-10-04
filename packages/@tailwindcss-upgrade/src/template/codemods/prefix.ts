@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import { parseCandidate, type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from '../candidates'
@@ -24,7 +24,10 @@ export function prefix(
     let unprefixedCandidate =
       rawCandidate.slice(0, v3Base.start) + v3Base.base + rawCandidate.slice(v3Base.end)
 
-    let candidates = designSystem.parseCandidate(unprefixedCandidate)
+    // Note: This is not a valid candidate in the original DesignSystem, so we
+    // can not use the `DesignSystem#parseCandidate` API here or otherwise this
+    // invalid candidate will be cached.
+    let candidates = [...parseCandidate(unprefixedCandidate, designSystem)]
     if (candidates.length > 0) {
       candidate = candidates[0]
     }
