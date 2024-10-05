@@ -11,7 +11,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableBaselineLast, enableWrapAnywhere } from './feature-flags'
+import { enableBaselineLast, enableSafeAlignment, enableWrapAnywhere } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -1856,6 +1856,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-content-center', [['place-content', 'center']])
   staticUtility('place-content-start', [['place-content', 'start']])
   staticUtility('place-content-end', [['place-content', 'end']])
+  if (enableSafeAlignment) {
+    staticUtility('place-content-center-safe', [['place-content', 'safe center']])
+    staticUtility('place-content-end-safe', [['place-content', 'safe end']])
+  }
   staticUtility('place-content-between', [['place-content', 'space-between']])
   staticUtility('place-content-around', [['place-content', 'space-around']])
   staticUtility('place-content-evenly', [['place-content', 'space-evenly']])
@@ -1865,6 +1869,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-items-center', [['place-items', 'center']])
   staticUtility('place-items-start', [['place-items', 'start']])
   staticUtility('place-items-end', [['place-items', 'end']])
+  if (enableSafeAlignment) {
+    staticUtility('place-items-center-safe', [['place-items', 'safe center']])
+    staticUtility('place-items-end-safe', [['place-items', 'safe end']])
+  }
   staticUtility('place-items-baseline', [['place-items', 'baseline']])
   staticUtility('place-items-stretch', [['place-items', 'stretch']])
 
@@ -1872,6 +1880,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('content-center', [['align-content', 'center']])
   staticUtility('content-start', [['align-content', 'flex-start']])
   staticUtility('content-end', [['align-content', 'flex-end']])
+  if (enableSafeAlignment) {
+    staticUtility('content-center-safe', [['align-content', 'safe center']])
+    staticUtility('content-end-safe', [['align-content', 'safe flex-end']])
+  }
   staticUtility('content-between', [['align-content', 'space-between']])
   staticUtility('content-around', [['align-content', 'space-around']])
   staticUtility('content-evenly', [['align-content', 'space-evenly']])
@@ -1881,6 +1893,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('items-center', [['align-items', 'center']])
   staticUtility('items-start', [['align-items', 'flex-start']])
   staticUtility('items-end', [['align-items', 'flex-end']])
+  if (enableSafeAlignment) {
+    staticUtility('items-center-safe', [['align-items', 'safe center']])
+    staticUtility('items-end-safe', [['align-items', 'safe flex-end']])
+  }
   staticUtility('items-baseline', [['align-items', 'baseline']])
   if (enableBaselineLast) {
     staticUtility('items-baseline-last', [['align-items', 'last baseline']])
@@ -1891,6 +1907,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-center', [['justify-content', 'center']])
   staticUtility('justify-start', [['justify-content', 'flex-start']])
   staticUtility('justify-end', [['justify-content', 'flex-end']])
+  if (enableSafeAlignment) {
+    staticUtility('justify-center-safe', [['justify-content', 'safe center']])
+    staticUtility('justify-end-safe', [['justify-content', 'safe flex-end']])
+  }
   staticUtility('justify-between', [['justify-content', 'space-between']])
   staticUtility('justify-around', [['justify-content', 'space-around']])
   staticUtility('justify-evenly', [['justify-content', 'space-evenly']])
@@ -1901,6 +1921,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-items-center', [['justify-items', 'center']])
   staticUtility('justify-items-start', [['justify-items', 'start']])
   staticUtility('justify-items-end', [['justify-items', 'end']])
+  if (enableSafeAlignment) {
+    staticUtility('justify-items-center-safe', [['justify-items', 'safe center']])
+    staticUtility('justify-items-end-safe', [['justify-items', 'safe end']])
+  }
   staticUtility('justify-items-stretch', [['justify-items', 'stretch']])
 
   spacingUtility('gap', ['--gap', '--spacing'], (value) => [decl('gap', value)])
@@ -1981,12 +2005,20 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-self-start', [['place-self', 'start']])
   staticUtility('place-self-end', [['place-self', 'end']])
   staticUtility('place-self-center', [['place-self', 'center']])
+  if (enableSafeAlignment) {
+    staticUtility('place-self-end-safe', [['place-self', 'safe end']])
+    staticUtility('place-self-center-safe', [['place-self', 'safe center']])
+  }
   staticUtility('place-self-stretch', [['place-self', 'stretch']])
 
   staticUtility('self-auto', [['align-self', 'auto']])
   staticUtility('self-start', [['align-self', 'flex-start']])
   staticUtility('self-end', [['align-self', 'flex-end']])
   staticUtility('self-center', [['align-self', 'center']])
+  if (enableSafeAlignment) {
+    staticUtility('self-end-safe', [['align-self', 'safe flex-end']])
+    staticUtility('self-center-safe', [['align-self', 'safe center']])
+  }
   staticUtility('self-stretch', [['align-self', 'stretch']])
   staticUtility('self-baseline', [['align-self', 'baseline']])
 
@@ -1994,6 +2026,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-self-start', [['justify-self', 'flex-start']])
   staticUtility('justify-self-end', [['justify-self', 'flex-end']])
   staticUtility('justify-self-center', [['justify-self', 'center']])
+  if (enableSafeAlignment) {
+    staticUtility('justify-self-end-safe', [['justify-self', 'safe flex-end']])
+    staticUtility('justify-self-center-safe', [['justify-self', 'safe center']])
+  }
   staticUtility('justify-self-stretch', [['justify-self', 'stretch']])
 
   for (let value of ['auto', 'hidden', 'clip', 'visible', 'scroll']) {
