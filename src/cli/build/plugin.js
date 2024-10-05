@@ -382,7 +382,7 @@ export async function createProcessor(args, cliConfigPath) {
           // resilient to future errors.
 
           if (state.watcher) {
-            console.error(err)
+            console.error(err.stack)
           } else {
             return Promise.reject(err)
           }
