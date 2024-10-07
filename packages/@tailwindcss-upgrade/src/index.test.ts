@@ -1,6 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
+import postcss from 'postcss'
 import { expect, it } from 'vitest'
+import { formatNodes } from './codemods/format-nodes'
 import { migrateContents } from './migrate'
 
 const css = dedent
@@ -13,9 +15,15 @@ let designSystem = await __unstable__loadDesignSystem(
 )
 let config = { designSystem, userConfig: {}, newPrefix: null }
 
+function migrate(input: string, config: any) {
+  return migrateContents(input, config, expect.getState().testPath)
+    .then((result) => postcss([formatNodes()]).process(result.root, result.opts))
+    .then((result) => result.css)
+}
+
 it('should print the input as-is', async () => {
   expect(
-    await migrateContents(
+    await migrate(
       css`
         /* above */
         .foo/* after */ {
@@ -25,7 +33,6 @@ it('should print the input as-is', async () => {
         }
       `,
       config,
-      expect.getState().testPath,
     ),
   ).toMatchInlineSnapshot(`
     "/* above */
@@ -39,7 +46,7 @@ it('should print the input as-is', async () => {
 
 it('should migrate a stylesheet', async () => {
   expect(
-    await migrateContents(
+    await migrate(
       css`
         @tailwind base;
 
@@ -116,7 +123,7 @@ it('should migrate a stylesheet', async () => {
 
 it('should migrate a stylesheet (with imports)', async () => {
   expect(
-    await migrateContents(
+    await migrate(
       css`
         @import 'tailwindcss/base';
         @import './my-base.css';
@@ -137,7 +144,7 @@ it('should migrate a stylesheet (with imports)', async () => {
 
 it('should migrate a stylesheet (with preceding rules that should be wrapped in an `@layer`)', async () => {
   expect(
-    await migrateContents(
+    await migrate(
       css`
         @charset "UTF-8";
         @layer foo, bar, baz;
@@ -166,7 +173,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
 
 it('should keep CSS as-is before existing `@layer` at-rules', async () => {
   expect(
-    await migrateContents(
+    await migrate(
       css`
         .foo {
           color: blue;

@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 import { globby } from 'globby'
+import fs from 'node:fs/promises'
 import path from 'node:path'
+import postcss from 'postcss'
+import { formatNodes } from './codemods/format-nodes'
 import { help } from './commands/help'
 import { migrate as migrateStylesheet } from './migrate'
 import { migratePostCSSConfig } from './migrate-postcss'
+import { Stylesheet } from './stylesheet'
 import { migrate as migrateTemplate } from './template/migrate'
 import { prepareConfig } from './template/prepare-config'
 import { args, type Arg } from './utils/args'
@@ -94,8 +98,42 @@ async function run() {
     // Ensure we are only dealing with CSS files
     files = files.filter((file) => file.endsWith('.css'))
 
+    // Analyze the stylesheets
+    let loadResults = await Promise.allSettled(files.map((filepath) => Stylesheet.load(filepath)))
+
+    // Load and parse all stylesheets
+    for (let result of loadResults) {
+      if (result.status === 'rejected') {
+        error(`${result.reason}`)
+      }
+    }
+
+    let stylesheets = loadResults
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value)
+
     // Migrate each file
-    await Promise.allSettled(files.map((file) => migrateStylesheet(file, config)))
+    let migrateResults = await Promise.allSettled(
+      stylesheets.map((sheet) => migrateStylesheet(sheet, config)),
+    )
+
+    for (let result of migrateResults) {
+      if (result.status === 'rejected') {
+        error(`${result.reason}`)
+      }
+    }
+
+    // Format nodes
+    for (let sheet of stylesheets) {
+      await postcss([formatNodes()]).process(sheet.root!, { from: sheet.file! })
+    }
+
+    // Write all files to disk
+    for (let sheet of stylesheets) {
+      if (!sheet.file) continue
+
+      await fs.writeFile(sheet.file, sheet.root.toString())
+    }
 
     success('Stylesheet migration complete.')
   }

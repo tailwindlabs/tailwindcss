@@ -1,16 +1,21 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { describe, expect, it } from 'vitest'
+import { Stylesheet } from '../stylesheet'
 import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 
 const css = dedent
 
-function migrate(input: string) {
+async function migrate(data: string) {
+  let stylesheet: Stylesheet
+
+  stylesheet = await Stylesheet.fromString(data)
+
   return postcss()
     .use(migrateAtLayerUtilities())
     .use(formatNodes())
-    .process(input, { from: expect.getState().testPath })
+    .process(stylesheet.root!, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
 
