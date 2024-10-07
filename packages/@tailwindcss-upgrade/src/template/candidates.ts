@@ -18,7 +18,7 @@ export async function extractRawCandidates(
     candidatesMap.set(`${start}:${end}:${rawCandidate}`, {
       rawCandidate,
       start,
-      end: start + rawCandidate.length,
+      end,
     })
   }
 
