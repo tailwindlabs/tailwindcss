@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for `tailwindcss/colors.js`, `tailwindcss/defaultTheme.js`, and `tailwindcss/plugin.js` exports ([#14595](https://github.com/tailwindlabs/tailwindcss/pull/14595))
 - Support `keyframes` in JS config file themes ([14594](https://github.com/tailwindlabs/tailwindcss/pull/14594))
+- Pretty print `!important` in declarations ([#14611](https://github.com/tailwindlabs/tailwindcss/pull/14611))
 
 ### Fixed
 
