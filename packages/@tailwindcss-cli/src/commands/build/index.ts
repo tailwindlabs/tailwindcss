@@ -3,7 +3,7 @@ import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
-import { existsSync } from 'node:fs'
+import { existsSync, Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Arg, Result } from '../../utils/args'
@@ -346,8 +346,11 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
           if (event.type === 'delete') return
 
           // Ignore directory changes. We only care about file changes
-          let stats = await fs.lstat(event.path)
-          if (stats.isDirectory()) {
+          let stats: Stats | null = null
+          try {
+            stats = await fs.lstat(event.path)
+          } catch {}
+          if (stats === null || stats.isDirectory()) {
             return
           }
 
