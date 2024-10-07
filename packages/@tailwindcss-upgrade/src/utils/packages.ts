@@ -27,6 +27,9 @@ async function detectPackageManager(base: string): Promise<null | string> {
       let packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8')
       let packageJson = JSON.parse(packageJsonContent)
       if (packageJson.packageManager) {
+        if (packageJson.packageManager.includes('bun')) {
+          return 'bun'
+        }
         if (packageJson.packageManager.includes('yarn')) {
           return 'yarn'
         }
@@ -40,6 +43,14 @@ async function detectPackageManager(base: string): Promise<null | string> {
     } catch {}
 
     // 2. Check for common lockfiles
+    try {
+      await fs.access(resolve(base, 'bun.lockb'))
+      return 'bun'
+    } catch {}
+    try {
+      await fs.access(resolve(base, 'bun.lock'))
+      return 'bun'
+    } catch {}
     try {
       await fs.access(resolve(base, 'pnpm-lock.yaml'))
       return 'pnpm'
