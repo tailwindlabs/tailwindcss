@@ -145,6 +145,21 @@ export async function applyCompatibilityHooks({
       return withAlpha(themeValue, modifier)
     }
 
+    if (themeValue === undefined) {
+      // If the theme value is not found in the simple resolver, we may attempt to upgrade to the
+      // full backward compatibility support.
+      upgradeToFullPluginSupport({
+        designSystem,
+        base,
+        ast,
+        globs,
+        configs: [],
+        pluginDetails: [],
+      })
+
+      return designSystem.resolveThemeValue(path)
+    }
+
     return themeValue
   }
 
@@ -175,6 +190,44 @@ export async function applyCompatibilityHooks({
       }),
     ),
   ])
+
+  upgradeToFullPluginSupport({
+    designSystem,
+    base,
+    ast,
+    globs,
+    configs,
+    pluginDetails,
+  })
+}
+
+let alreadyUpgradedSymbol = Symbol('alreadyUpgraded')
+function upgradeToFullPluginSupport({
+  designSystem,
+  base,
+  ast,
+  globs,
+  configs,
+  pluginDetails,
+}: {
+  designSystem: DesignSystem
+  base: string
+  ast: AstNode[]
+  globs: { origin?: string; pattern: string }[]
+  configs: {
+    path: string
+    base: string
+    config: UserConfig
+  }[]
+  pluginDetails: {
+    path: string
+    base: string
+    plugin: Plugin
+    options: CssPluginOptions | null
+  }[]
+}) {
+  if ((designSystem as any)[alreadyUpgradedSymbol]) return
+  ;(designSystem as any)[alreadyUpgradedSymbol] = true
 
   let pluginConfigs = pluginDetails.map((detail) => {
     if (!detail.options) {
@@ -295,10 +348,13 @@ export async function applyCompatibilityHooks({
 function toThemeKey(keypath: string[]) {
   return (
     keypath
-      // [1] should move into the nested object tuple. To create the CSS variable
-      // name for this, we replace it with an empty string that will result in two
-      // subsequent dashes when joined.
-      .map((path) => (path === '1' ? '' : path))
+      // [1] should move into the nested object tuple, if it's not at the end of the keypath. To
+      // create the CSS variable name for this, we replace it with an empty string that will result
+      // in two subsequent dashes when joined.
+      //
+      // theme(spacing.1) -> --spacing--1
+      // theme(fontSize.base.1.lineHeight.1) -> --fontSize-base--lineHeight--1
+      .map((path, index) => (path === '1' && index !== keypath.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
       .map((part) =>
@@ -327,6 +383,7 @@ function lookupThemeValue(theme: Theme, path: string) {
     if (!baseThemeKey.startsWith(givenKey)) continue
 
     let upgradedKey = upgradeKey + baseThemeKey.slice(givenKey.length)
+
     let resolvedValue = theme.get([upgradedKey as ThemeKey])
 
     if (resolvedValue !== null) {
