@@ -114,7 +114,8 @@ it('should migrate a custom max-width screen', async () => {
       },
     ),
   ).toMatchInlineSnapshot(`
-    "@media (123px >= width) {
+    "@custom-media --breakpoint-foo ((123px >= width));
+    @media (--breakpoint-foo) {
       .foo {
         color: red;
       }
@@ -141,7 +142,8 @@ it('should migrate a custom min and max-width screen', async () => {
       },
     ),
   ).toMatchInlineSnapshot(`
-    "@media (123px >= width >= 100px) {
+    "@custom-media --breakpoint-foo ((123px >= width >= 100px));
+    @media (--breakpoint-foo) {
       .foo {
         color: red;
       }
@@ -168,7 +170,8 @@ it('should migrate a raw media query', async () => {
       },
     ),
   ).toMatchInlineSnapshot(`
-    "@media only screen and (min-width: 123px) {
+    "@custom-media --breakpoint-foo (only screen and (min-width: 123px));
+    @media (--breakpoint-foo) {
       .foo {
         color: red;
       }

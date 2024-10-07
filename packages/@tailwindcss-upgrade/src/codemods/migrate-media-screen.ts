@@ -1,4 +1,4 @@
-import { type Plugin, type Root } from 'postcss'
+import { AtRule, type Plugin, type Root } from 'postcss'
 import type { Config } from 'tailwindcss'
 import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import { buildMediaQuery } from '../../../tailwindcss/src/compat/screens-config'
@@ -21,7 +21,16 @@ export function migrateMediaScreen({
     let mediaQueries = new DefaultMap<string, string | null>((name) => {
       let value = designSystem?.resolveThemeValue(`--breakpoint-${name}`) ?? screens?.[name]
       if (typeof value === 'string') return `(width >= theme(--breakpoint-${name}))`
-      return value ? buildMediaQuery(value) : null
+
+      if (value) {
+        let query = buildMediaQuery(value)
+        root.prepend(
+          new AtRule({ name: 'custom-media', params: `--breakpoint-${name} (${query})` }),
+        )
+        return `(--breakpoint-${name})`
+      }
+
+      return null
     })
 
     root.walkAtRules((rule) => {
