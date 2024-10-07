@@ -110,7 +110,7 @@ export function migrateMissingLayers(): Plugin {
       let target = nodes[0]
       let layerNode = new AtRule({
         name: 'layer',
-        params: layerName || firstLayerName || '',
+        params: targetLayerName,
         nodes: nodes.map((node) => {
           // Keep the target node as-is, because we will be replacing that one
           // with the new layer node.
