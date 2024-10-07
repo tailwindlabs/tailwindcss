@@ -324,7 +324,7 @@ test(
         }
       `,
     )
-    await fs.expectFileToContain('src/index.css', css` @import 'tailwindcss' prefix(tw); `)
+    await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
     await fs.expectFileToContain(
       'src/index.html',
       // prettier-ignore
