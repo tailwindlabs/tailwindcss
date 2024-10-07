@@ -33,7 +33,7 @@ it('should migrate a built-in breakpoint', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 48rem) {
+    "@media (width >= theme(--breakpoint-md)) {
       .foo {
         color: red;
       }
@@ -41,7 +41,34 @@ it('should migrate a built-in breakpoint', async () => {
   `)
 })
 
-it('should migrate a custom min-width screen', async () => {
+it('should migrate a custom min-width screen (string)', async () => {
+  expect(
+    await migrate(
+      css`
+        @media screen(foo) {
+          .foo {
+            color: red;
+          }
+        }
+      `,
+      {
+        theme: {
+          screens: {
+            foo: '123px',
+          },
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
+    "@media (width >= theme(--breakpoint-foo)) {
+      .foo {
+        color: red;
+      }
+    }"
+  `)
+})
+
+it('should migrate a custom min-width screen (object)', async () => {
   expect(
     await migrate(
       css`
@@ -60,7 +87,7 @@ it('should migrate a custom min-width screen', async () => {
       },
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 123px) {
+    "@media (width >= theme(--breakpoint-foo)) {
       .foo {
         color: red;
       }
