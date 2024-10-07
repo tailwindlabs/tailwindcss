@@ -7,6 +7,9 @@ export type StylesheetId = string
 
 export interface StylesheetConnection {
   item: Stylesheet
+  meta: {
+    layers: string[]
+  }
 }
 
 export class Stylesheet {
@@ -76,12 +79,36 @@ export class Stylesheet {
     }
   }
 
+  /**
+   * Return the layers the stylesheet is imported into directly or indirectly
+   */
+  layers() {
+    let layers = new Set<string>()
+
+    for (let { item, path } of walkDepth(this, (sheet) => sheet.parents)) {
+      if (item.parents.size > 0) {
+        continue
+      }
+
+      for (let { meta } of path) {
+        for (let layer of meta.layers) {
+          layers.add(layer)
+        }
+      }
+    }
+
+    return layers
+  }
+
   [util.inspect.custom]() {
     return {
       ...this,
       root: this.root.toString(),
+      layers: Array.from(this.layers()),
       parents: Array.from(this.parents, (s) => s.item.id),
       children: Array.from(this.children, (s) => s.item.id),
+      parentsMeta: Array.from(this.parents, (s) => s.meta),
+      childrenMeta: Array.from(this.children, (s) => s.meta),
     }
   }
 }

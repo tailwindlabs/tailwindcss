@@ -2,6 +2,7 @@ import path from 'node:path'
 import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
+import { segment } from '../../tailwindcss/src/utils/segment'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
@@ -29,7 +30,7 @@ export async function migrateContents(
   return postcss()
     .use(migrateAtApply(options))
     .use(migrateMediaScreen(options))
-    .use(migrateAtLayerUtilities())
+    .use(migrateAtLayerUtilities(stylesheet))
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
     .process(stylesheet.root, { from: stylesheet.file ?? undefined })
@@ -91,10 +92,20 @@ export async function analyze(stylesheets: Stylesheet[]) {
             ? stylesheetsByFile.get(node.source.input.file)
             : undefined
 
+          let layers: string[] = []
+
+          for (let part of segment(node.params, ' ')) {
+            if (!part.startsWith('layer(')) continue
+            if (!part.endsWith(')')) continue
+
+            layers.push(part.slice(6, -1).trim())
+          }
+
           // Connect sheets together in a dependency graph
           if (parent) {
-            stylesheet.parents.add(parent)
-            parent.children.add(stylesheet)
+            let meta = { layers }
+            stylesheet.parents.add({ item: parent, meta })
+            parent.children.add({ item: stylesheet, meta })
           }
         },
       },

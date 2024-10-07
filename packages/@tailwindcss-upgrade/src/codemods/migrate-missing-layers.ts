@@ -71,6 +71,7 @@ export function migrateMissingLayers(): Plugin {
         if (node.name === 'import') {
           if (lastLayer !== '' && !node.params.includes('layer(')) {
             node.params += ` layer(${lastLayer})`
+            node.raws.tailwind_injected_layer = true
           }
 
           if (bucket.length > 0) {
