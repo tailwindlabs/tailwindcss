@@ -293,9 +293,9 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
 function applyImportant(ast: AstNode[]): void {
   for (let node of ast) {
-    // Skip any `@at-root` rules — we don't want to make the contents of things
+    // Skip any `AtRoot` nodes — we don't want to make the contents of things
     // like `@keyframes` or `@property` important.
-    if (node.kind === 'rule' && node.selector === '@at-root') {
+    if (node.kind === 'at-root') {
       continue
     }
 
@@ -328,10 +328,6 @@ function getPropertySort(nodes: AstNode[]) {
       let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
       if (idx !== -1) propertySort.add(idx)
     } else if (node.kind === 'rule') {
-      // Don't consider properties within `@at-root` when determining the sort
-      // order for a rule.
-      if (node.selector === '@at-root') continue
-
       for (let child of node.nodes) {
         q.push(child)
       }
