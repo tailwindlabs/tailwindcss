@@ -4,7 +4,7 @@ import { compile, type Config } from './index'
 import plugin from './plugin'
 import { optimizeCss } from './test-utils/run'
 
-let css = String.raw
+const css = String.raw
 
 async function run(
   css: string,

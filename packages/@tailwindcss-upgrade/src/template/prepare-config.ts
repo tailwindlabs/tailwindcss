@@ -13,7 +13,7 @@ import { migratePrefix } from './codemods/prefix'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-let css = String.raw
+const css = String.raw
 
 export async function prepareConfig(
   configPath: string | null,
@@ -36,6 +36,7 @@ export async function prepareConfig(
     let fullConfigPath = path.resolve(options.base, configPath)
     let fullFilePath = path.resolve(__dirname)
     let relative = path.relative(fullFilePath, fullConfigPath)
+
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
     // consider the path relative
