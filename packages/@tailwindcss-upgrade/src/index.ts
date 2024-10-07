@@ -6,7 +6,7 @@ import path from 'node:path'
 import postcss from 'postcss'
 import { formatNodes } from './codemods/format-nodes'
 import { help } from './commands/help'
-import { migrate as migrateStylesheet } from './migrate'
+import { analyze as analyzeStylesheets, migrate as migrateStylesheet } from './migrate'
 import { migratePostCSSConfig } from './migrate-postcss'
 import { Stylesheet } from './stylesheet'
 import { migrate as migrateTemplate } from './template/migrate'
@@ -111,6 +111,13 @@ async function run() {
     let stylesheets = loadResults
       .filter((result) => result.status === 'fulfilled')
       .map((result) => result.value)
+
+    // Analyze the stylesheets
+    try {
+      await analyzeStylesheets(stylesheets)
+    } catch (e: unknown) {
+      error(`${e}`)
+    }
 
     // Migrate each file
     let migrateResults = await Promise.allSettled(

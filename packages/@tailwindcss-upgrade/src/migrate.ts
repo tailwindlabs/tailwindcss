@@ -1,3 +1,4 @@
+import path from 'node:path'
 import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
@@ -7,6 +8,7 @@ import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
 import { Stylesheet } from './stylesheet'
+import { resolveCssId } from './utils/resolve'
 
 export interface MigrateOptions {
   newPrefix: string | null
@@ -39,4 +41,69 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
   }
 
   await migrateContents(stylesheet, options)
+}
+
+export async function analyze(stylesheets: Stylesheet[]) {
+  let stylesheetsByFile = new Map<string, Stylesheet>()
+
+  for (let sheet of stylesheets) {
+    if (sheet.file) {
+      stylesheetsByFile.set(sheet.file, sheet)
+    }
+  }
+
+  // Step 1: Record which `@import` rules point to which stylesheets
+  // and which stylesheets are parents/children of each other
+  let processor = postcss([
+    {
+      postcssPlugin: 'mark-import-nodes',
+      AtRule: {
+        import(node) {
+          // Find what the import points to
+          let id = node.params.match(/['"](.*)['"]/)?.[1]
+          if (!id) return
+
+          let basePath = node.source?.input.file
+            ? path.dirname(node.source.input.file)
+            : process.cwd()
+
+          // Resolve the import to a file path
+          let resolvedPath: string | false
+          try {
+            resolvedPath = resolveCssId(id, basePath)
+          } catch (err) {
+            console.warn(`Failed to resolve import: ${id}. Skipping.`)
+            console.error(err)
+            return
+          }
+
+          if (!resolvedPath) return
+
+          // Find the stylesheet pointing to the resolved path
+          let stylesheet = stylesheetsByFile.get(resolvedPath)
+
+          // If it _does not_ exist in stylesheets we don't care and skip it
+          // this is likely because its in node_modules or a workspace package
+          // that we don't want to modify
+          if (!stylesheet) return
+
+          let parent = node.source?.input.file
+            ? stylesheetsByFile.get(node.source.input.file)
+            : undefined
+
+          // Connect sheets together in a dependency graph
+          if (parent) {
+            stylesheet.parents.add(parent)
+            parent.children.add(stylesheet)
+          }
+        },
+      },
+    },
+  ])
+
+  for (let sheet of stylesheets) {
+    if (!sheet.file) continue
+
+    await processor.process(sheet.root, { from: sheet.file })
+  }
 }
