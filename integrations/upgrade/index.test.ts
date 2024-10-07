@@ -297,7 +297,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    console.log(await exec('npx @tailwindcss/upgrade -c tailwind.config.js'))
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
 
     await fs.expectFileToContain(
       'src/index.html',
