@@ -312,7 +312,8 @@ test(
     },
   },
   async ({ fs, exec }) => {
-    console.log(await exec('npx @tailwindcss/upgrade -c tailwind.config.js'))
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
     await fs.expectFileToContain(
       'postcss.config.js',
       js`
@@ -323,10 +324,17 @@ test(
         }
       `,
     )
+    await fs.expectFileToContain('src/index.css', css` @import 'tailwindcss' prefix(tw); `)
+    await fs.expectFileToContain(
+      'src/index.html',
+      // prettier-ignore
+      js`
+        <div class="bg-[var(--my-red)]"></div>
+      `,
+    )
 
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
-
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringContaining('4.0.0'),
     })
