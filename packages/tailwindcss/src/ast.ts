@@ -206,7 +206,7 @@ export function toCss(ast: AstNode[]) {
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      css += `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
+      css += `${indent}${node.property}: ${node.value}${node.important ? ' !important' : ''};\n`
     }
 
     return css

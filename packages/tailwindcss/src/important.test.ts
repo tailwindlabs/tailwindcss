@@ -45,12 +45,12 @@ test('Utilities can be marked with important', async () => {
 
   expect(compiler.build(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     ".underline {
-      text-decoration-line: underline!important;
+      text-decoration-line: underline !important;
     }
     .hover\\:line-through {
       &:hover {
         @media (hover: hover) {
-          text-decoration-line: line-through!important;
+          text-decoration-line: line-through !important;
         }
       }
     }
@@ -74,12 +74,12 @@ test('Utilities can be wrapped with a selector and marked as important', async (
   expect(compiler.build(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     "#app {
       .underline {
-        text-decoration-line: underline!important;
+        text-decoration-line: underline !important;
       }
       .hover\\:line-through {
         &:hover {
           @media (hover: hover) {
-            text-decoration-line: line-through!important;
+            text-decoration-line: line-through !important;
           }
         }
       }
