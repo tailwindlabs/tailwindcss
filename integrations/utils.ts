@@ -41,6 +41,7 @@ interface TestContext {
     write(filePath: string, content: string): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
+    dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
       filePath: string,
       contents: string | string[] | RegExp | RegExp[],
@@ -305,6 +306,31 @@ export function test(
                 return [file, content]
               }),
             )
+          },
+          async dumpFiles(pattern: string) {
+            let files = await context.fs.glob(pattern)
+            return `\n${files
+              .slice()
+              .sort((a: [string], z: [string]) => {
+                let aParts = a[0].split('/')
+                let zParts = z[0].split('/')
+
+                let aFile = aParts.at(-1)
+                let zFile = aParts.at(-1)
+
+                // Sort by depth, shallow first
+                if (aParts.length < zParts.length) return -1
+                if (aParts.length > zParts.length) return 1
+
+                // Sort by filename, sort files named `index` before others
+                if (aFile?.startsWith('index')) return -1
+                if (zFile?.startsWith('index')) return 1
+
+                // Sort by filename, alphabetically
+                return a[0].localeCompare(z[0])
+              })
+              .map(([file, content]) => `--- ${file} ---\n${content || '<EMPTY>'}`)
+              .join('\n\n')}`
           },
           async expectFileToContain(filePath, contents) {
             return retryAssertion(async () => {
