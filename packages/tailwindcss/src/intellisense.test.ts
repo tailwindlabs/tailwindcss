@@ -160,13 +160,13 @@ test('Utilities, when marked as important, show as important in intellisense', a
   expect(design.candidatesToCss(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     [
       ".underline {
-      text-decoration-line: underline!important;
+      text-decoration-line: underline !important;
     }
     ",
       ".hover\\:line-through {
       &:hover {
         @media (hover: hover) {
-          text-decoration-line: line-through!important;
+          text-decoration-line: line-through !important;
         }
       }
     }

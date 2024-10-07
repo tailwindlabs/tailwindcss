@@ -1428,15 +1428,15 @@ test('important: true', async () => {
 
   expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
     ".custom {
-      color: red!important;
+      color: red !important;
     }
     .underline {
-      text-decoration-line: underline!important;
+      text-decoration-line: underline !important;
     }
     .hover\\:line-through {
       &:hover {
         @media (hover: hover) {
-          text-decoration-line: line-through!important;
+          text-decoration-line: line-through !important;
         }
       }
     }
