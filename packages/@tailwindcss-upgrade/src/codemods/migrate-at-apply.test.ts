@@ -1,21 +1,34 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import postcss from 'postcss'
+import type { Config } from 'tailwindcss'
 import { expect, it } from 'vitest'
 import { migrateAtApply } from './migrate-at-apply'
 
 const css = dedent
 
-function migrateWithoutConfig(input: string) {
+async function migrate(input: string, config: Config = {}) {
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+    `,
+    { base: __dirname },
+  )
+
   return postcss()
-    .use(migrateAtApply())
+    .use(
+      migrateAtApply({
+        designSystem,
+        userConfig: config,
+      }),
+    )
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
 
 it('should not migrate `@apply`, when there are no issues', async () => {
   expect(
-    await migrateWithoutConfig(css`
+    await migrate(css`
       .foo {
         @apply flex flex-col items-center;
       }
@@ -29,7 +42,7 @@ it('should not migrate `@apply`, when there are no issues', async () => {
 
 it('should append `!` to each utility, when using `!important`', async () => {
   expect(
-    await migrateWithoutConfig(css`
+    await migrate(css`
       .foo {
         @apply flex flex-col !important;
       }
@@ -44,7 +57,7 @@ it('should append `!` to each utility, when using `!important`', async () => {
 // TODO: Handle SCSS syntax
 it.skip('should append `!` to each utility, when using `#{!important}`', async () => {
   expect(
-    await migrateWithoutConfig(css`
+    await migrate(css`
       .foo {
         @apply flex flex-col #{!important};
       }
@@ -58,7 +71,7 @@ it.skip('should append `!` to each utility, when using `#{!important}`', async (
 
 it('should move the legacy `!` prefix, to the new `!` postfix notation', async () => {
   expect(
-    await migrateWithoutConfig(css`
+    await migrate(css`
       .foo {
         @apply !flex flex-col! hover:!items-start items-center;
       }
@@ -71,7 +84,7 @@ it('should move the legacy `!` prefix, to the new `!` postfix notation', async (
 })
 
 it('should apply all candidate migration when migrating with a config', async () => {
-  async function migrateWithConfig(input: string) {
+  async function migrateWithPrefix(input: string) {
     return postcss()
       .use(
         migrateAtApply({
@@ -91,7 +104,7 @@ it('should apply all candidate migration when migrating with a config', async ()
   }
 
   expect(
-    await migrateWithConfig(css`
+    await migrateWithPrefix(css`
       .foo {
         @apply !tw_flex [color:--my-color] tw_bg-gradient-to-t;
       }

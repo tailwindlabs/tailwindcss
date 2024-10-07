@@ -2,7 +2,7 @@ import { AtRule, type ChildNode, type Plugin, type Root } from 'postcss'
 
 const DEFAULT_LAYER_ORDER = ['theme', 'base', 'components', 'utilities']
 
-export function migrateTailwindDirectives(options: { newPrefix?: string }): Plugin {
+export function migrateTailwindDirectives(options: { newPrefix: string | null }): Plugin {
   let prefixParams = options.newPrefix ? ` prefix(${options.newPrefix})` : ''
 
   function migrate(root: Root) {

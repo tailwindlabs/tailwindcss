@@ -6,7 +6,7 @@ import { migrateTailwindDirectives } from './migrate-tailwind-directives'
 
 const css = dedent
 
-function migrate(input: string, options: { newPrefix?: string } = {}) {
+function migrate(input: string, options: { newPrefix: string | null } = { newPrefix: null }) {
   return postcss()
     .use(migrateTailwindDirectives(options))
     .use(formatNodes())

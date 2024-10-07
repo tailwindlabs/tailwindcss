@@ -29,7 +29,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'src/index.html',
@@ -77,7 +77,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'src/index.html',
@@ -111,6 +111,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @import 'tailwindcss';
 
@@ -162,6 +163,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @tailwind base;
 
@@ -218,6 +220,7 @@ test(
           }
         }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
         @import 'tailwindcss';
 

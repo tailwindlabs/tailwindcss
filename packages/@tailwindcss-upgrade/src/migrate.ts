@@ -10,9 +10,9 @@ import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
 
 export interface MigrateOptions {
-  newPrefix?: string
-  designSystem?: DesignSystem
-  userConfig?: Config
+  newPrefix: string | null
+  designSystem: DesignSystem
+  userConfig: Config
 }
 
 export async function migrateContents(contents: string, options: MigrateOptions, file?: string) {
