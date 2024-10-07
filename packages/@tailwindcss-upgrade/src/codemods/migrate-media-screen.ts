@@ -20,6 +20,7 @@ export function migrateMediaScreen({
 
     let mediaQueries = new DefaultMap<string, string | null>((name) => {
       let value = designSystem?.resolveThemeValue(`--breakpoint-${name}`) ?? screens?.[name]
+      if (typeof value === 'string') return `(width >= theme(--breakpoint-${name}))`
       return value ? buildMediaQuery(value) : null
     })
 
