@@ -3,7 +3,7 @@ import { compile, env } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
-import { existsSync, Stats } from 'node:fs'
+import { existsSync, type Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Arg, Result } from '../../utils/args'
@@ -350,7 +350,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
           try {
             stats = await fs.lstat(event.path)
           } catch {}
-          if (stats === null || stats.isDirectory()) {
+          if (!stats?.isFile()) {
             return
           }
 
