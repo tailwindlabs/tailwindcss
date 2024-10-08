@@ -350,7 +350,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
           try {
             stats = await fs.lstat(event.path)
           } catch {}
-          if (!stats?.isFile()) {
+          if (!stats?.isFile() || !stats?.isSymbolicLink()) {
             return
           }
 
