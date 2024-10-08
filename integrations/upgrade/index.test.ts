@@ -284,10 +284,10 @@ test(
         }
       `,
       'src/index.html': html`
-        <div class="tw__flex flex tw__flex"></div>
+        <div class="flex"></div>
       `,
       'src/other.html': html`
-        <div class="flex tw__flex flex"></div>
+        <div class="tw__flex"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -299,18 +299,12 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
 
-    await fs.expectFileToContain(
-      'src/index.html',
-      html`
-        <div class="tw:flex flex tw:flex"></div>
-      `,
-    )
-    await fs.expectFileToContain(
-      'src/other.html',
-      html`
-        <div class="flex tw:flex flex"></div>
-      `,
-    )
+    await fs.expectFileToContain('src/index.html', html`
+        <div class="flex"></div>
+      `)
+    await fs.expectFileToContain('src/other.html', html`
+        <div class="tw:flex"></div>
+      `)
   },
 )
 
