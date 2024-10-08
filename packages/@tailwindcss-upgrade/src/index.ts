@@ -100,7 +100,7 @@ async function run() {
     success('Stylesheet migration complete.')
   }
 
-  if (parsedConfig) {
+  {
     // PostCSS config migration
     await migratePostCSSConfig(process.cwd())
   }
