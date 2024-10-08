@@ -1,4 +1,4 @@
-import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
+import { WalkAction, atRoot, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -380,7 +380,7 @@ export function createVariants(theme: Theme): Variants {
 
   {
     function contentProperties() {
-      return rule('@at-root', [
+      return atRoot([
         rule('@property --tw-content', [
           decl('syntax', '"*"'),
           decl('initial-value', '""'),
@@ -933,16 +933,13 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
       replaceWith(nodes)
     }
 
-    // Wrap `@keyframes` and `@property` in `@at-root`
+    // Wrap `@keyframes` and `@property` in `AtRoot` nodes
     else if (
       node.kind === 'rule' &&
       node.selector[0] === '@' &&
       (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
     ) {
-      Object.assign(node, {
-        selector: '@at-root',
-        nodes: [rule(node.selector, node.nodes)],
-      })
+      Object.assign(node, atRoot([rule(node.selector, node.nodes)]))
       return WalkAction.Skip
     }
   })

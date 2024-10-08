@@ -1,6 +1,7 @@
 import { version } from '../package.json'
 import { substituteAtApply } from './apply'
 import {
+  atRoot,
   comment,
   context,
   decl,
@@ -361,13 +362,10 @@ async function parseCss(
           continue
         }
 
-        // Wrap `@keyframes` in `@at-root` so they are hoisted out of `:root`
-        // when printing.
+        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+        // printing.
         nodes.push(
-          Object.assign(keyframesRule, {
-            selector: '@at-root',
-            nodes: [rule(keyframesRule.selector, keyframesRule.nodes)],
-          }),
+          Object.assign(keyframesRule, atRoot([rule(keyframesRule.selector, keyframesRule.nodes)])),
         )
       }
     }

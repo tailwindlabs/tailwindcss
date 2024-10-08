@@ -22,7 +22,12 @@ export type Context = {
   nodes: AstNode[]
 }
 
-export type AstNode = Rule | Declaration | Comment | Context
+export type AtRoot = {
+  kind: 'at-root'
+  nodes: AstNode[]
+}
+
+export type AstNode = Rule | Declaration | Comment | Context | AtRoot
 
 export function rule(selector: string, nodes: AstNode[]): Rule {
   return {
@@ -52,6 +57,13 @@ export function context(context: Record<string, string>, nodes: AstNode[]): Cont
   return {
     kind: 'context',
     context,
+    nodes,
+  }
+}
+
+export function atRoot(nodes: AstNode[]): AtRoot {
+  return {
+    kind: 'at-root',
     nodes,
   }
 }
@@ -128,14 +140,6 @@ export function toCss(ast: AstNode[]) {
 
     // Rule
     if (node.kind === 'rule') {
-      // Pull out `@at-root` rules to append later
-      if (node.selector === '@at-root') {
-        for (let child of node.nodes) {
-          atRoots += stringify(child, 0)
-        }
-        return css
-      }
-
       if (node.selector === '@tailwind utilities') {
         for (let child of node.nodes) {
           css += stringify(child, depth)
@@ -202,6 +206,14 @@ export function toCss(ast: AstNode[]) {
       for (let child of node.nodes) {
         css += stringify(child, depth)
       }
+    }
+
+    // AtRoot Node
+    else if (node.kind === 'at-root') {
+      for (let child of node.nodes) {
+        atRoots += stringify(child, 0)
+      }
+      return css
     }
 
     // Declaration
