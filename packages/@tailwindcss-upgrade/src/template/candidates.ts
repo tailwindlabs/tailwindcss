@@ -5,24 +5,15 @@ import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractRawCandidates(
   content: string,
-  extension: string,
 ): Promise<{ rawCandidate: string; start: number; end: number }[]> {
   let scanner = new Scanner({})
-  let result = scanner.getCandidatesWithPositions({ content, extension })
+  let result = scanner.getCandidatesWithPositions({ content, extension: 'html' })
 
-  // Create a map to remove duplicates
-  let candidatesMap = new Map<string, { rawCandidate: string; start: number; end: number }>()
-
+  let candidates: { rawCandidate: string; start: number; end: number }[] = []
   for (let { candidate: rawCandidate, position: start } of result) {
-    let end = start + rawCandidate.length
-    candidatesMap.set(`${start}:${end}:${rawCandidate}`, {
-      rawCandidate,
-      start,
-      end,
-    })
+    candidates.push({ rawCandidate, start, end: start + rawCandidate.length })
   }
-
-  return [...candidatesMap.values()]
+  return candidates
 }
 
 export function printCandidate(designSystem: DesignSystem, candidate: Candidate) {
