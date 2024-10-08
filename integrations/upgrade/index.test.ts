@@ -264,3 +264,91 @@ test(
     )
   },
 )
+
+test(
+  `migrates prefixes even if other files have unprefixed versions of the candidate`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+          prefix: 'tw__',
+        }
+      `,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      'src/other.html': html`
+        <div class="tw__flex"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
+    await fs.expectFileToContain('src/index.html', html`
+        <div class="flex"></div>
+      `)
+    await fs.expectFileToContain('src/other.html', html`
+        <div class="tw:flex"></div>
+      `)
+  },
+)
+
+test(
+  `prefixed variants do not cause their unprefixed counterparts to be valid`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+          prefix: 'tw__',
+        }
+      `,
+      'src/index.html': html`
+        <div class="tw__bg-gradient-to-t"></div>
+      `,
+      'src/other.html': html`
+        <div class="bg-gradient-to-t"></div>
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+
+    await fs.expectFileToContain(
+      'src/index.html',
+      html`
+        <div class="tw:bg-linear-to-t"></div>
+      `,
+    )
+
+    await fs.expectFileToContain(
+      'src/other.html',
+      html`
+        <div class="bg-gradient-to-t"></div>
+      `,
+    )
+  },
+)

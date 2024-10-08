@@ -861,13 +861,17 @@ impl<'a> Extractor<'a> {
                 ParseAction::SingleCandidate(candidate)
             }
             Bracketing::Included(sliceable) | Bracketing::Wrapped(sliceable) => {
-                let parts = vec![candidate, sliceable];
-                let parts = parts
-                    .into_iter()
-                    .filter(|v| !v.is_empty())
-                    .collect::<Vec<_>>();
+                if candidate == sliceable {
+                    ParseAction::SingleCandidate(candidate)
+                } else {
+                    let parts = vec![candidate, sliceable];
+                    let parts = parts
+                        .into_iter()
+                        .filter(|v| !v.is_empty())
+                        .collect::<Vec<_>>();
 
-                ParseAction::MultipleCandidates(parts)
+                    ParseAction::MultipleCandidates(parts)
+                }
             }
         }
     }
@@ -1185,7 +1189,7 @@ mod test {
     fn bad_003() {
         // TODO: This seems… wrong
         let candidates = run(r"[𕤵:]", false);
-        assert_eq!(candidates, vec!["𕤵", "𕤵:"]);
+        assert_eq!(candidates, vec!["𕤵", "𕤵:",]);
     }
 
     #[test]
@@ -1435,5 +1439,16 @@ mod test {
             .transpose()
             .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
+    }
+
+    #[test]
+    fn does_not_emit_the_same_slice_multiple_times() {
+        let candidates: Vec<_> =
+            Extractor::with_positions("<div class=\"flex\"></div>".as_bytes(), Default::default())
+                .into_iter()
+                .map(|(s, p)| unsafe { (std::str::from_utf8_unchecked(s), p) })
+                .collect();
+
+        assert_eq!(candidates, vec![("div", 1), ("class", 5), ("flex", 12),]);
     }
 }

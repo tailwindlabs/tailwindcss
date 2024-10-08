@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
-import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
+import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
@@ -9,7 +9,11 @@ export function automaticVarInjection(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
+    // The below logic makes extended use of mutation. Since candidates in the
+    // DesignSystem are cached, we can't mutate them directly.
+    let candidate = structuredClone(readonlyCandidate) as Candidate
+
     let didChange = false
 
     // Add `var(…)` in modifier position, e.g.:
