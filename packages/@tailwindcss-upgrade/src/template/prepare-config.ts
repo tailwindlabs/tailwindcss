@@ -22,6 +22,7 @@ export async function prepareConfig(
   designSystem: DesignSystem
   globs: { base: string; pattern: string }[]
   userConfig: Config
+  configFilePath: string
 
   newPrefix: string | null
 }> {
@@ -57,7 +58,13 @@ export async function prepareConfig(
       __unstable__loadDesignSystem(input, { base: __dirname }),
     ])
 
-    return { designSystem, globs: compiler.globs, userConfig, newPrefix }
+    return {
+      designSystem,
+      globs: compiler.globs,
+      userConfig,
+      newPrefix,
+      configFilePath: fullConfigPath,
+    }
   } catch (e: any) {
     error('Could not load the configuration file: ' + e.message)
     process.exit(1)
