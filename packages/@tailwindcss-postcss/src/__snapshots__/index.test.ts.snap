@@ -576,7 +576,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     height: auto;
   }
 
-  [hidden] {
+  [hidden]:where(:not([hidden="until-found"])) {
     display: none !important;
   }
 }
