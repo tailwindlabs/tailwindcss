@@ -350,6 +350,79 @@ test(
 )
 
 test(
+  'migrates a postcss setup using package.json config',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "postcss-import": "^16",
+            "autoprefixer": "^10",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "postcss": {
+            "plugins": {
+              "postcss-import": {},
+              "tailwindcss/nesting": "postcss-nesting",
+              "tailwindcss": {},
+              "autoprefixer": {}
+            }
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    console.log(await exec('npx @tailwindcss/upgrade'))
+
+    await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
+    await fs.expectFileToContain(
+      'src/index.html',
+      // prettier-ignore
+      js`
+        <div class="bg-[var(--my-red)]"></div>
+      `,
+    )
+
+    let packageJsonContent = await fs.read('package.json')
+    let packageJson = JSON.parse(packageJsonContent)
+    expect(packageJson.postcss).toMatchInlineSnapshot(`
+      {
+        "plugins": {
+          "@tailwindcss/postcss": {},
+        },
+      }
+    `)
+
+    expect(packageJson.dependencies).toMatchObject({
+      tailwindcss: expect.stringContaining('4.0.0'),
+    })
+    expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
+    expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
+    expect(packageJson.devDependencies).toMatchObject({
+      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+    })
+  },
+)
+
+test(
   `migrates prefixes even if other files have unprefixed versions of the candidate`,
   {
     fs: {

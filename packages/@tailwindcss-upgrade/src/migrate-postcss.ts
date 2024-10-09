@@ -16,10 +16,83 @@ import { info, success, warn } from './utils/renderer'
 //   }
 // }
 export async function migratePostCSSConfig(base: string) {
-  let configPath = await detectConfigPath(base)
-  if (configPath === null) {
-    // TODO: We can look for an eventual config inside package.json
+  let didMigrate = false
+  let didAddPostcssClient = false
+  let didRemoveAutoprefixer = false
+  let didRemovePostCSSImport = false
+
+  // Priority 1: Handle JS config files
+  let jsConfigPath = await detectJSConfigPath(base)
+  if (jsConfigPath) {
+    let result = await migratePostCSSJSConfig(base, jsConfigPath)
+
+    if (result) {
+      didMigrate = true
+      didAddPostcssClient = result.didAddPostcssClient
+      didRemoveAutoprefixer = result.didRemoveAutoprefixer
+      didRemovePostCSSImport = result.didRemovePostCSSImport
+    }
+  }
+
+  // Priority 2: Handle package.json config
+  let packageJson
+  try {
+    packageJson = JSON.parse(await fs.readFile(path.resolve(base, 'package.json'), 'utf-8'))
+  } catch {}
+  if (!didMigrate && packageJson && 'postcss' in packageJson) {
+    let result = await migratePostCSSPackageJsonConfig(base, packageJson)
+
+    if (result) {
+      didMigrate = true
+      didAddPostcssClient = result.didAddPostcssClient
+      didRemoveAutoprefixer = result.didRemoveAutoprefixer
+      didRemovePostCSSImport = result.didRemovePostCSSImport
+    }
+  }
+
+  if (!didMigrate) {
+    info(`No PostCSS config found, skipping migration.`)
     return
+  }
+
+  if (didAddPostcssClient) {
+    try {
+      await pkg('add -D @tailwindcss/postcss@next', base)
+    } catch {}
+  }
+  if (didRemoveAutoprefixer) {
+    try {
+      await pkg('remove autoprefixer', base)
+    } catch {}
+  }
+  if (didRemovePostCSSImport) {
+    try {
+      await pkg('remove postcss-import', base)
+    } catch {}
+  }
+
+  success(`PostCSS config has been upgraded.`)
+}
+
+async function migratePostCSSJSConfig(
+  base: string,
+  configPath: string,
+): Promise<{
+  didAddPostcssClient: boolean
+  didRemoveAutoprefixer: boolean
+  didRemovePostCSSImport: boolean
+} | null> {
+  function isTailwindCSSPlugin(line: string) {
+    return /['"]?tailwindcss['"]?\: ?\{\}/.test(line)
+  }
+  function isPostCSSImportPlugin(line: string) {
+    return /['"]?postcss-import['"]?\: ?\{\}/.test(line)
+  }
+  function isAutoprefixerPlugin(line: string) {
+    return /['"]?autoprefixer['"]?\: ?\{\}/.test(line)
+  }
+  function isTailwindCSSNestingPlugin(line: string) {
+    return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
   }
 
   info(`Attempt to upgrade the PostCSS config in file: ${configPath}`)
@@ -27,7 +100,7 @@ export async function migratePostCSSConfig(base: string) {
   let isSimpleConfig = await isSimplePostCSSConfig(base, configPath)
   if (!isSimpleConfig) {
     warn(`The PostCSS config contains dynamic JavaScript and can not be automatically migrated.`)
-    return
+    return null
   }
 
   let didAddPostcssClient = false
@@ -81,23 +154,94 @@ export async function migratePostCSSConfig(base: string) {
   }
   await fs.writeFile(fullPath, newLines.join('\n'))
 
-  if (didAddPostcssClient) {
-    try {
-      await pkg('add -D @tailwindcss/postcss@next', base)
-    } catch {}
+  return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
+}
+
+async function migratePostCSSPackageJsonConfig(
+  base: string,
+  packageJson: any,
+): Promise<{
+  didAddPostcssClient: boolean
+  didRemoveAutoprefixer: boolean
+  didRemovePostCSSImport: boolean
+} | null> {
+  function isTailwindCSSPlugin(plugin: string, options: any) {
+    return plugin === 'tailwindcss' && isEmptyObject(options)
   }
-  if (didRemoveAutoprefixer) {
-    try {
-      await pkg('remove autoprefixer', base)
-    } catch {}
+  function isPostCSSImportPlugin(plugin: string, options: any) {
+    return plugin === 'postcss-import' && isEmptyObject(options)
   }
-  if (didRemovePostCSSImport) {
-    try {
-      await pkg('remove postcss-import', base)
-    } catch {}
+  function isAutoprefixerPlugin(plugin: string, options: any) {
+    return plugin === 'autoprefixer' && isEmptyObject(options)
+  }
+  function isTailwindCSSNestingPlugin(plugin: string, options: any) {
+    return (
+      plugin === 'tailwindcss/nesting' && (options === 'postcss-nesting' || isEmptyObject(options))
+    )
   }
 
-  success(`PostCSS config in file ${configPath} has been upgraded.`)
+  let postcss = packageJson.postcss
+
+  let didAddPostcssClient = false
+  let didRemoveAutoprefixer = false
+  let didRemovePostCSSImport = false
+
+  let plugins = Object.entries(postcss.plugins || {})
+
+  let newPlugins: [string, any][] = []
+  for (let i = 0; i < plugins.length; i++) {
+    let [plugin, options] = plugins[i]
+
+    if (isTailwindCSSPlugin(plugin, options)) {
+      didAddPostcssClient = true
+      newPlugins.push(['@tailwindcss/postcss', options])
+    } else if (isAutoprefixerPlugin(plugin, options)) {
+      didRemoveAutoprefixer = true
+    } else if (isPostCSSImportPlugin(plugin, options)) {
+      // Check that there are no unknown plugins before the tailwindcss plugin
+      let hasUnknownPluginsBeforeTailwindCSS = false
+      for (let j = i + 1; j < plugins.length; j++) {
+        let [nextPlugin, nextOptions] = plugins[j]
+        if (isTailwindCSSPlugin(nextPlugin, nextOptions)) {
+          break
+        }
+        if (isTailwindCSSNestingPlugin(nextPlugin, nextOptions)) {
+          continue
+        }
+        hasUnknownPluginsBeforeTailwindCSS = true
+        break
+      }
+
+      if (!hasUnknownPluginsBeforeTailwindCSS) {
+        didRemovePostCSSImport = true
+      } else {
+        newPlugins.push([plugin, options])
+      }
+    } else if (isTailwindCSSNestingPlugin(plugin, options)) {
+      // Check if the following rule is the tailwindcss plugin
+      let [nextPlugin, nextOptions] = plugins[i + 1]
+      if (isTailwindCSSPlugin(nextPlugin, nextOptions)) {
+        // Since this plugin is bundled with `tailwindcss`, we don't need to
+        // clean up a package when deleting this line.
+      } else {
+        newPlugins.push([plugin, options])
+      }
+    } else {
+      newPlugins.push([plugin, options])
+    }
+  }
+
+  let fullPath = path.resolve(base, 'package.json')
+  await fs.writeFile(
+    fullPath,
+    JSON.stringify(
+      { ...packageJson, postcss: { ...postcss, plugins: Object.fromEntries(newPlugins) } },
+      null,
+      2,
+    ),
+  )
+
+  return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
 }
 
 const CONFIG_FILE_LOCATIONS = [
@@ -114,7 +258,7 @@ const CONFIG_FILE_LOCATIONS = [
   'postcss.config.mts',
   'postcss.config.cts',
 ]
-async function detectConfigPath(base: string): Promise<null | string> {
+async function detectJSConfigPath(base: string): Promise<null | string> {
   for (let file of CONFIG_FILE_LOCATIONS) {
     let fullPath = path.resolve(base, file)
     try {
@@ -138,18 +282,6 @@ async function isSimplePostCSSConfig(base: string, configPath: string): Promise<
   )
 }
 
-function isTailwindCSSPlugin(line: string) {
-  return /['"]?tailwindcss['"]?\: ?\{\}/.test(line)
-}
-
-function isPostCSSImportPlugin(line: string) {
-  return /['"]?postcss-import['"]?\: ?\{\}/.test(line)
-}
-
-function isAutoprefixerPlugin(line: string) {
-  return /['"]?autoprefixer['"]?\: ?\{\}/.test(line)
-}
-
-function isTailwindCSSNestingPlugin(line: string) {
-  return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
+function isEmptyObject(obj: any) {
+  return typeof obj === 'object' && obj !== null && Object.keys(obj).length === 0
 }
