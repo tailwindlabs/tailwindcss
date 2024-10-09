@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don't set `display: none` on elements that use `hidden="until-found"` ([#14625](https://github.com/tailwindlabs/tailwindcss/pull/14625))
 
 ## [3.4.13] - 2024-09-23
 
