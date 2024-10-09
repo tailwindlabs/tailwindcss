@@ -11,8 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for `tailwindcss/colors.js`, `tailwindcss/defaultTheme.js`, and `tailwindcss/plugin.js` exports ([#14595](https://github.com/tailwindlabs/tailwindcss/pull/14595))
 - Support `keyframes` in JS config file themes ([#14594](https://github.com/tailwindlabs/tailwindcss/pull/14594))
-- _Experimental_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
-- _Experimental_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
+- _Upgrade (experimental)_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
 - _Upgrade (experimental)_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
 
 ### Fixed
