@@ -577,3 +577,234 @@ test(
     `)
   },
 )
+
+test(
+  'migrate utilities in an imported file',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @import './utilities.css' layer(utilities);
+      `,
+      'src/utilities.css': css`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
+      @import './utilities.css';
+
+      --- ./src/utilities.css ---
+      @utility no-scrollbar {
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }"
+    `)
+  },
+)
+
+test(
+  'migrate utilities in deep import trees',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(utilities);
+        @import './b.1.css' layer(components);
+        @import './c.1.css';
+        @import './d.1.css';
+      `,
+      'src/a.1.css': css`
+        @import './a.1.utilities.css';
+
+        .foo-from-a {
+          color: red;
+        }
+      `,
+      'src/a.1.utilities.css': css`
+        #foo {
+          --keep: me;
+        }
+
+        .foo-from-import {
+          color: blue;
+        }
+      `,
+      'src/b.1.css': css`
+        @import './b.1.components.css';
+
+        .bar-from-b {
+          color: red;
+        }
+      `,
+      'src/b.1.components.css': css`
+        .bar-from-import {
+          color: blue;
+        }
+      `,
+      'src/c.1.css': css`
+        @import './c.2.css' layer(utilities);
+        .baz-from-c {
+          color: green;
+        }
+      `,
+      'src/c.2.css': css`
+        @import './c.3.css';
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+      'src/c.3.css': css`
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+
+      // This is a super deep import chain
+      // And no `*.utilities.css` files should be created for these
+      // because there are no rules that need to be separated
+      'src/d.1.css': css`@import './d.2.css' layer(utilities);`,
+      'src/d.2.css': css`@import './d.3.css';`,
+      'src/d.3.css': css`@import './d.4.css';`,
+      'src/d.4.css': css`
+        .from-a-4 {
+          color: blue;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);
+      @import './a.1.utilities.1.css';
+      @import './b.1.css';
+      @import './c.1.css' layer(utilities);
+      @import './c.1.utilities.css';
+      @import './d.1.css';
+
+      --- ./src/a.1.css ---
+      @import './a.1.utilities.css'
+
+      --- ./src/a.1.utilities.1.css ---
+      @import './a.1.utilities.utilities.css';
+      @utility foo-from-a {
+        color: red;
+      }
+
+      --- ./src/a.1.utilities.css ---
+      #foo {
+        --keep: me;
+      }
+
+      --- ./src/a.1.utilities.utilities.css ---
+      @utility foo-from-import {
+        color: blue;
+      }
+
+      --- ./src/b.1.components.css ---
+      @utility bar-from-import {
+        color: blue;
+      }
+
+      --- ./src/b.1.css ---
+      @import './b.1.components.css';
+      @utility bar-from-b {
+        color: red;
+      }
+
+      --- ./src/c.1.css ---
+      @import './c.2.css' layer(utilities);
+      .baz-from-c {
+        color: green;
+      }
+
+      --- ./src/c.1.utilities.css ---
+      @import './c.2.utilities.css'
+
+      --- ./src/c.2.css ---
+      @import './c.3.css';
+      #baz {
+        --keep: me;
+      }
+
+      --- ./src/c.2.utilities.css ---
+      @import './c.3.utilities.css';
+      @utility baz-from-import {
+        color: yellow;
+      }
+
+      --- ./src/c.3.css ---
+      #baz {
+        --keep: me;
+      }
+
+      --- ./src/c.3.utilities.css ---
+      @utility baz-from-import {
+        color: yellow;
+      }
+
+      --- ./src/d.1.css ---
+      @import './d.2.css'
+
+      --- ./src/d.2.css ---
+      @import './d.3.css'
+
+      --- ./src/d.3.css ---
+      @import './d.4.css'
+
+      --- ./src/d.4.css ---
+      @utility from-a-4 {
+        color: blue;
+      }"
+    `)
+  },
+)

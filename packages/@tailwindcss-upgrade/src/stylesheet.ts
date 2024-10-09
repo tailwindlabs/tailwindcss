@@ -42,6 +42,11 @@ export class Stylesheet {
    */
   children = new Set<StylesheetConnection>()
 
+  /**
+   * Whether or not this stylesheet can be migrated
+   */
+  extension: string | null = null
+
   static async load(filepath: string) {
     filepath = path.resolve(process.cwd(), filepath)
 
@@ -65,6 +70,24 @@ export class Stylesheet {
     this.id = Math.random().toString(36).slice(2)
     this.root = root
     this.file = file ?? null
+
+    if (file) {
+      this.extension = path.extname(file)
+    }
+  }
+
+  get importRules() {
+    let imports = new Set<postcss.AtRule>()
+
+    this.root.walkAtRules('import', (rule) => {
+      imports.add(rule)
+    })
+
+    return imports
+  }
+
+  get isEmpty() {
+    return this.root.toString().trim() === ''
   }
 
   *ancestors() {
