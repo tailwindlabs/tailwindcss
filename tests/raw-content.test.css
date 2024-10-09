@@ -312,6 +312,12 @@
 .items-start {
   align-items: flex-start;
 }
+.items-first-baseline {
+  align-items: first baseline;
+}
+.items-last-baseline {
+  align-items: last baseline;
+}
 .justify-center {
   justify-content: center;
 }
@@ -525,7 +531,7 @@
 }
 .font-sans {
   font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-     Segoe UI Symbol, Noto Color Emoji;
+    Segoe UI Symbol, Noto Color Emoji;
 }
 .text-2xl {
   font-size: 1.5rem;
