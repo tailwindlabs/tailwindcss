@@ -13,14 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `keyframes` in JS config file themes ([#14594](https://github.com/tailwindlabs/tailwindcss/pull/14594))
 - _Experimental_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
 - _Experimental_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
+- _Upgrade (experimental)_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
 
 ### Fixed
 
 - Don’t crash when scanning a candidate equal to the configured prefix ([#14588](https://github.com/tailwindlabs/tailwindcss/pull/14588))
 - Ensure there's always a space before `!important` when stringifying CSS ([#14611](https://github.com/tailwindlabs/tailwindcss/pull/14611))
+- Don't set `display: none` on elements that use `hidden="until-found"` ([#14631](https://github.com/tailwindlabs/tailwindcss/pull/14631))
+- Fix issue that could cause the CLI to crash when files are deleted while watching ([#14616](https://github.com/tailwindlabs/tailwindcss/pull/14616))
 - _Upgrade (experimental)_: Ensure CSS before a layer stays unlayered when running codemods ([#14596](https://github.com/tailwindlabs/tailwindcss/pull/14596))
 - _Upgrade (experimental)_: Resolve issues where some prefixed candidates were not properly migrated ([#14600](https://github.com/tailwindlabs/tailwindcss/pull/14600))
-- Don't set `display: none` on elements that use `hidden="until-found"` ([#14631](https://github.com/tailwindlabs/tailwindcss/pull/14631))
 
 ## [4.0.0-alpha.26] - 2024-10-03
 
