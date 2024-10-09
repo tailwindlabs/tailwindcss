@@ -273,7 +273,7 @@ test(
 )
 
 test(
-  'fully migrate a simple postcss setup',
+  'migrates a simple postcss setup',
   {
     fs: {
       'package.json': json`
@@ -281,6 +281,7 @@ test(
           "dependencies": {
             "postcss": "^8",
             "postcss-cli": "^10",
+            "postcss-import": "^16",
             "autoprefixer": "^10",
             "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
@@ -296,6 +297,8 @@ test(
       'postcss.config.js': js`
         module.exports = {
           plugins: {
+            'postcss-import': {},
+            'tailwindcss/nesting': 'postcss-nesting',
             tailwindcss: {},
             autoprefixer: {},
           },
@@ -312,7 +315,7 @@ test(
     },
   },
   async ({ fs, exec }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'postcss.config.js',
@@ -339,6 +342,7 @@ test(
       tailwindcss: expect.stringContaining('4.0.0'),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
+    expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.devDependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
     })
@@ -377,7 +381,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.html', html`
         <div class="flex"></div>
@@ -415,7 +419,7 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade -c tailwind.config.js')
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
       'src/index.html',

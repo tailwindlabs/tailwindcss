@@ -8,10 +8,12 @@ import { info, success, warn } from './utils/renderer'
 //
 // ```js
 // module.exports = {
-//  plugins: {
-//    tailwindcss: {},
-//    autoprefixer: {},
-//  }
+//   plugins: {
+//     'postcss-import': {},
+//     'tailwindcss/nesting': 'postcss-nesting',
+//     tailwindcss: {},
+//     autoprefixer: {},
+//   }
 // }
 export async function migratePostCSSConfig(base: string) {
   let configPath = await detectConfigPath(base)
@@ -30,17 +32,49 @@ export async function migratePostCSSConfig(base: string) {
 
   let didAddPostcssClient = false
   let didRemoveAutoprefixer = false
+  let didRemovePostCSSImport = false
 
   let fullPath = path.resolve(base, configPath)
   let content = await fs.readFile(fullPath, 'utf-8')
   let lines = content.split('\n')
   let newLines: string[] = []
-  for (let line of lines) {
-    if (line.includes('tailwindcss:')) {
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i]
+
+    if (isTailwindCSSPlugin(line)) {
       didAddPostcssClient = true
       newLines.push(line.replace('tailwindcss:', `'@tailwindcss/postcss':`))
-    } else if (line.includes('autoprefixer:')) {
+    } else if (isAutoprefixerPlugin(line)) {
       didRemoveAutoprefixer = true
+    } else if (isPostCSSImportPlugin(line)) {
+      // Check that there are no unknown plugins before the tailwindcss plugin
+      let hasUnknownPluginsBeforeTailwindCSS = false
+      for (let j = i + 1; j < lines.length; j++) {
+        let nextLine = lines[j]
+        if (isTailwindCSSPlugin(nextLine)) {
+          break
+        }
+        if (isTailwindCSSNestingPlugin(nextLine)) {
+          continue
+        }
+        hasUnknownPluginsBeforeTailwindCSS = true
+        break
+      }
+
+      if (!hasUnknownPluginsBeforeTailwindCSS) {
+        didRemovePostCSSImport = true
+      } else {
+        newLines.push(line)
+      }
+    } else if (isTailwindCSSNestingPlugin(line)) {
+      // Check if the following rule is the tailwindcss plugin
+      let nextLine = lines[i + 1]
+      if (isTailwindCSSPlugin(nextLine)) {
+        // Since this plugin is bundled with `tailwindcss`, we don't need to
+        // clean up a package when deleting this line.
+      } else {
+        newLines.push(line)
+      }
     } else {
       newLines.push(line)
     }
@@ -55,6 +89,11 @@ export async function migratePostCSSConfig(base: string) {
   if (didRemoveAutoprefixer) {
     try {
       await pkg('remove autoprefixer', base)
+    } catch {}
+  }
+  if (didRemovePostCSSImport) {
+    try {
+      await pkg('remove postcss-import', base)
     } catch {}
   }
 
@@ -90,6 +129,27 @@ async function isSimplePostCSSConfig(base: string, configPath: string): Promise<
   let fullPath = path.resolve(base, configPath)
   let content = await fs.readFile(fullPath, 'utf-8')
   return (
-    content.includes('tailwindcss:') && !(content.includes('require') || content.includes('import'))
+    content.includes('tailwindcss:') &&
+    !(
+      content.includes('require') ||
+      // Adding a space at the end to not match `'postcss-import'`
+      content.includes('import ')
+    )
   )
+}
+
+function isTailwindCSSPlugin(line: string) {
+  return /['"]?tailwindcss['"]?\: ?\{\}/.test(line)
+}
+
+function isPostCSSImportPlugin(line: string) {
+  return /['"]?postcss-import['"]?\: ?\{\}/.test(line)
+}
+
+function isAutoprefixerPlugin(line: string) {
+  return /['"]?autoprefixer['"]?\: ?\{\}/.test(line)
+}
+
+function isTailwindCSSNestingPlugin(line: string) {
+  return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
 }
