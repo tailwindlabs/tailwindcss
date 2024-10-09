@@ -278,5 +278,12 @@ export default function expandTailwindAtRules(context) {
         rule.remove()
       }
     })
+
+    // Handle the --classes-output switch
+    if (context.tailwindConfig.cli?.classesOutput) {
+      const classesOutputPath = context.tailwindConfig.cli.classesOutput
+      const detectedClasses = Array.from(candidates).join('\n')
+      await fs.promises.writeFile(classesOutputPath, detectedClasses, 'utf8')
+    }
   }
 }
