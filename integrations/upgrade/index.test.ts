@@ -808,3 +808,68 @@ test(
     `)
   },
 )
+
+test(
+  'migrate utility files imported by multiple roots',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/root.1.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(utilities);
+      `,
+      'src/root.2.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(components);
+      `,
+      'src/root.3.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css';
+      `,
+      'src/a.1.css': css`
+        .foo-from-a {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade --force')
+
+    expect(output).toMatch(
+      /You have one or more stylesheets that are imported into a utility layer and non-utility layer./,
+    )
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/a.1.css ---
+      .foo-from-a {
+        color: red;
+      }
+
+      --- ./src/root.1.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);
+
+      --- ./src/root.2.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(components);
+
+      --- ./src/root.3.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);"
+    `)
+  },
+)

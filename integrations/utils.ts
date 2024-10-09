@@ -114,7 +114,7 @@ export function test(
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   reject(error)
                 } else {
-                  resolve(stdout.toString())
+                  resolve(stdout.toString() + '\n\n' + stderr.toString())
                 }
               },
             )

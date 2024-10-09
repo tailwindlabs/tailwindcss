@@ -9,7 +9,7 @@ import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
-import { Stylesheet, type StylesheetId } from './stylesheet'
+import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -42,6 +42,8 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
   if (!stylesheet.file) {
     throw new Error('Cannot migrate a stylesheet without a file path')
   }
+
+  if (!stylesheet.canMigrate) return
 
   await migrateContents(stylesheet, options)
 }
@@ -123,6 +125,57 @@ export async function analyze(stylesheets: Stylesheet[]) {
 
     await processor.process(sheet.root, { from: sheet.file })
   }
+
+  let commonPath = process.cwd()
+
+  function pathToString(path: StylesheetConnection[]) {
+    let parts: string[] = []
+
+    for (let connection of path) {
+      if (!connection.item.file) continue
+
+      let filePath = connection.item.file.replace(commonPath, '')
+      let layers = connection.meta.layers.join(', ')
+
+      if (layers.length > 0) {
+        parts.push(`${filePath} (layers: ${layers})`)
+      } else {
+        parts.push(filePath)
+      }
+    }
+
+    return parts.join(' <- ')
+  }
+
+  let lines: string[] = []
+
+  for (let sheet of stylesheets) {
+    if (!sheet.file) continue
+
+    let { convertablePaths, nonConvertablePaths } = sheet.analyzeImportPaths()
+    let isAmbiguous = convertablePaths.length > 0 && nonConvertablePaths.length > 0
+
+    if (!isAmbiguous) continue
+
+    sheet.canMigrate = false
+
+    let filePath = sheet.file.replace(commonPath, '')
+
+    for (let path of convertablePaths) {
+      lines.push(`- ${filePath} <- ${pathToString(path)}`)
+    }
+
+    for (let path of nonConvertablePaths) {
+      lines.push(`- ${filePath} <- ${pathToString(path)}`)
+    }
+  }
+
+  if (lines.length === 0) return
+
+  let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
+  error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
+
+  throw new Error(error + lines.join('\n'))
 }
 
 export async function split(stylesheets: Stylesheet[]) {

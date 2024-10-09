@@ -45,6 +45,11 @@ export class Stylesheet {
   /**
    * Whether or not this stylesheet can be migrated
    */
+  canMigrate = true
+
+  /**
+   * Whether or not this stylesheet can be migrated
+   */
   extension: string | null = null
 
   static async load(filepath: string) {
@@ -121,6 +126,97 @@ export class Stylesheet {
     }
 
     return layers
+  }
+
+  /**
+   * Iterate all paths from a stylesheet through its ancestors to all roots
+   *
+   * For example, given the following structure:
+   *
+   * ```
+   * c.css
+   *  -> a.1.css @import "…"
+   *      -> a.css
+   *          -> root.1.css (utility: no)
+   *          -> root.2.css (utility: no)
+   *      -> b.css
+   *          -> root.1.css (utility: no)
+   *          -> root.2.css (utility: no)
+   *
+   *  -> a.2.css @import "…" layer(foo)
+   *      -> a.css
+   *          -> root.1.css (utility: no)
+   *          -> root.2.css (utility: no)
+   *      -> b.css
+   *          -> root.1.css (utility: no)
+   *          -> root.2.css (utility: no)
+   *
+   *  -> b.1.css @import "…" layer(components / utilities)
+   *      -> a.css
+   *          -> root.1.css (utility: yes)
+   *          -> root.2.css (utility: yes)
+   *      -> b.css
+   *          -> root.1.css (utility: yes)
+   *          -> root.2.css (utility: yes)
+   * ```
+   *
+   * We can see there are a total of 12 import paths with various layers.
+   * We need to be able to iterate every one of these paths and inspect
+   * the layers used in each path..
+   */
+  *pathsToRoot(): Iterable<StylesheetConnection[]> {
+    for (let { item, path } of walkDepth(this, (sheet) => sheet.parents)) {
+      // Skip over intermediate stylesheets since all paths from a leaf to a
+      // root will encompass all possible intermediate stylesheet paths.
+      if (item.parents.size > 0) {
+        continue
+      }
+
+      yield path
+    }
+  }
+
+  /**
+   * Analyze a stylesheets import paths to see if some can be considered
+   * for conversion to utility rules and others can't.
+   *
+   * If a stylesheet is imported directly or indirectly and some imports are in
+   * a utility layer and some are not that means that we can't safely convert
+   * the rules in the stylesheet to `@utility`. Doing so would mean that we
+   * would need to replicate the stylesheet and change one to have `@utility`
+   * rules and leave the other as is.
+   *
+   * We can see, given the same structure from the `pathsToRoot` example, that
+   * `css.css` is imported into different layers:
+   * - `a.1.css` has no layers and should not be converted
+   * - `a.2.css` has a layer `foo` and should not be converted
+   * - `b.1.css` has a layer `utilities` (or `components`) which should be
+   *
+   * Since this means that `c.css` must both not be converted and converted
+   * we can't do this without replicating the stylesheet, any ancestors, and
+   * adjusting imports which is a non-trivial task.
+   */
+  analyzeImportPaths() {
+    let convertablePaths: StylesheetConnection[][] = []
+    let nonConvertablePaths: StylesheetConnection[][] = []
+
+    for (let path of this.pathsToRoot()) {
+      let isConvertable = false
+
+      for (let { meta } of path) {
+        for (let layer of meta.layers) {
+          isConvertable ||= layer === 'utilities' || layer === 'components'
+        }
+      }
+
+      if (isConvertable) {
+        convertablePaths.push(path)
+      } else {
+        nonConvertablePaths.push(path)
+      }
+    }
+
+    return { convertablePaths, nonConvertablePaths }
   }
 
   [util.inspect.custom]() {
