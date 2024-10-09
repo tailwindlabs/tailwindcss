@@ -3574,9 +3574,8 @@ describe('matchComponents()', () => {
       },
     )
 
-    expect(
-      optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim(),
-    ).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
+      .toMatchInlineSnapshot(`
       ".prose {
         --container-size: normal;
       }
