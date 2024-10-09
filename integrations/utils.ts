@@ -74,7 +74,7 @@ export function test(
 ) {
   return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
     name,
-    { timeout: TEST_TIMEOUT, retry: 3 },
+    { timeout: TEST_TIMEOUT, retry: debug ? 0 : 3 },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })

@@ -22,8 +22,8 @@ export type DesignSystem = {
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
 
-  parseCandidate(candidate: string): Candidate[]
-  parseVariant(variant: string): Variant | null
+  parseCandidate(candidate: string): Readonly<Candidate>[]
+  parseVariant(variant: string): Readonly<Variant> | null
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getVariantOrder(): Map<Variant, number>
