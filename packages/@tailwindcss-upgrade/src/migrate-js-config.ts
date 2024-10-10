@@ -42,11 +42,18 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
 
   let resetNamespaces = new Set()
+  let prevSectionKey = ''
 
   let css = `@theme reference inline {\n`
   for (let [key, value] of themeableValues(overwriteTheme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
+    }
+
+    let sectionKey = createSectionKey(key)
+    if (sectionKey !== prevSectionKey) {
+      css += `\n`
+      prevSectionKey = sectionKey
     }
 
     if (!resetNamespaces.has(key[0])) {
@@ -62,10 +69,30 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
       continue
     }
 
+    let sectionKey = createSectionKey(key)
+    if (sectionKey !== prevSectionKey) {
+      css += `\n`
+      prevSectionKey = sectionKey
+    }
+
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
   }
 
   return css + '}\n'
+}
+
+// Returns a string identifier used to section theme declarations
+function createSectionKey(key: string[]): string {
+  let sectionSegments = []
+  for (let i = 0; i < key.length - 1; i++) {
+    let segment = key[i]
+    // ignore tuples
+    if (key[i + 1][0] === '-') {
+      break
+    }
+    sectionSegments.push(segment)
+  }
+  return sectionSegments.join('-')
 }
 
 function migrateContent(unresolvedConfig: Config & { content: any }): string {
@@ -109,11 +136,6 @@ async function isSimpleConfig(unresolvedConfig: Config, source: string): Promise
     return false
   }
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
-    return false
-  }
-
-  // The file may not contain any imports
-  if (source.includes('import') || source.includes('require')) {
     return false
   }
 
