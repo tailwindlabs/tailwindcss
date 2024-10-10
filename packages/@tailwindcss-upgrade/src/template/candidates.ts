@@ -5,9 +5,10 @@ import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
 export async function extractRawCandidates(
   content: string,
+  extension: string = 'html',
 ): Promise<{ rawCandidate: string; start: number; end: number }[]> {
   let scanner = new Scanner({})
-  let result = scanner.getCandidatesWithPositions({ content, extension: 'html' })
+  let result = scanner.getCandidatesWithPositions({ content, extension })
 
   let candidates: { rawCandidate: string; start: number; end: number }[] = []
   for (let { candidate: rawCandidate, position: start } of result) {
