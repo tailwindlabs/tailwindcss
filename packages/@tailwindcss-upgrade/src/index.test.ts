@@ -94,7 +94,7 @@ it('should migrate a stylesheet', async () => {
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
 
-    @config "./tailwind.config.js";
+    @config './tailwind.config.js';
 
     @layer base {
       html {
@@ -148,7 +148,7 @@ it('should migrate a stylesheet (with imports)', async () => {
     @import './my-base.css' layer(base);
     @import './my-components.css' layer(components);
     @import './my-utilities.css' layer(utilities);
-    @config "./tailwind.config.js";"
+    @config './tailwind.config.js';"
   `)
 })
 
@@ -173,7 +173,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     @layer foo, bar, baz;
     /**! My license comment */
     @import 'tailwindcss';
-    @config "./tailwind.config.js";
+    @config './tailwind.config.js';
     @layer base {
       html {
         color: red;

@@ -49,7 +49,7 @@ export function migrateAtConfig(
       return WalkAction.Skip
     })
 
-    let configNode = new AtRule({ name: 'config', params: `"${relative}"` })
+    let configNode = new AtRule({ name: 'config', params: `'${relative}'` })
 
     if (!locationNode) {
       root.prepend(configNode)
