@@ -20,6 +20,7 @@ let config = {
   userConfig: {},
   newPrefix: null,
   configFilePath: path.resolve(__dirname, './tailwind.config.js'),
+  jsConfigMigration: null,
 }
 
 function migrate(input: string, config: any) {

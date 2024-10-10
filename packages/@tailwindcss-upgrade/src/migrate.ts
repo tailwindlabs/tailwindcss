@@ -5,11 +5,12 @@ import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'
 import { migrateAtApply } from './codemods/migrate-at-apply'
-import { migrateAtConfig } from './codemods/migrate-at-config'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
+import { migrateConfig } from './codemods/migrate-config'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
+import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
@@ -19,6 +20,7 @@ export interface MigrateOptions {
   designSystem: DesignSystem
   userConfig: Config
   configFilePath: string
+  jsConfigMigration: JSConfigMigration
 }
 
 export async function migrateContents(
@@ -37,7 +39,7 @@ export async function migrateContents(
     .use(migrateAtLayerUtilities(stylesheet))
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
-    .use(migrateAtConfig(stylesheet, options))
+    .use(migrateConfig(stylesheet, options))
     .process(stylesheet.root, { from: stylesheet.file ?? undefined })
 }
 

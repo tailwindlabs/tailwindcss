@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `keyframes` in JS config file themes ([#14594](https://github.com/tailwindlabs/tailwindcss/pull/14594))
 - _Upgrade (experimental)_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
 - _Upgrade (experimental)_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
+- _Upgrade (experimental)_: Fully convert simple JS configs to CSS ([#14639](https://github.com/tailwindlabs/tailwindcss/pull/14639))
 
 ### Fixed
 

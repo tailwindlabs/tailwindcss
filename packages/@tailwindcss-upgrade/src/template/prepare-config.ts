@@ -35,8 +35,7 @@ export async function prepareConfig(
     // required so that the base for Tailwind CSS can bet inside the
     // @tailwindcss-upgrade package and we can require `tailwindcss` properly.
     let fullConfigPath = path.resolve(options.base, configPath)
-    let fullFilePath = path.resolve(__dirname)
-    let relative = path.relative(fullFilePath, fullConfigPath)
+    let relative = path.relative(__dirname, fullConfigPath)
 
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still

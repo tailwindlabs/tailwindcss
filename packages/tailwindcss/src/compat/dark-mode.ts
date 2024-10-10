@@ -1,7 +1,7 @@
 import type { ResolvedConfig } from './config/types'
 import type { PluginAPI } from './plugin-api'
 
-export function darkModePlugin({ addVariant, config }: PluginAPI) {
+export function darkModePlugin({ addVariant, config }: Pick<PluginAPI, 'addVariant' | 'config'>) {
   let darkMode = config('darkMode', null) as ResolvedConfig['darkMode']
   let [mode, selector = '.dark'] = Array.isArray(darkMode) ? darkMode : [darkMode]
 
