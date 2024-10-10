@@ -974,10 +974,9 @@ test(
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
       @import 'tailwindcss';
+      @config "../tailwind.config.ts";
 
       @variant hocus (&:hover, &:focus);
-
-      @config "../tailwind.config.ts";
 
       @theme {
         --color-red-500: #f00;

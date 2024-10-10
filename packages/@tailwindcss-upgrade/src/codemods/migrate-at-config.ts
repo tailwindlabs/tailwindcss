@@ -37,18 +37,12 @@ export function migrateAtConfig(
     relative = normalizePath(relative)
 
     // Inject the `@config` in a sensible place
-    // 1. Above the first `@theme`
-    // 2. Below the last `@import`
-    // 3. At the top of the file
+    // 1. Below the last `@import`
+    // 2. At the top of the file
     let locationNode = null as AtRule | null
-    let firstThemeNode = null as AtRule | null
 
     walk(root, (node) => {
-      if (node.type === 'atrule' && node.name === 'theme' && firstThemeNode === null) {
-        firstThemeNode = node
-        locationNode = node
-        return WalkAction.Skip
-      } else if (node.type === 'atrule' && node.name === 'import') {
+      if (node.type === 'atrule' && node.name === 'import') {
         locationNode = node
       }
 
@@ -61,8 +55,6 @@ export function migrateAtConfig(
       root.prepend(configNode)
     } else if (locationNode.name === 'import') {
       locationNode.after(configNode)
-    } else if (locationNode.name === 'theme') {
-      locationNode.before(configNode)
     }
   }
 
