@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { segment } from '../../../../tailwindcss/src/utils/segment'
+import { printCandidate } from '../candidates'
 
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
 // CSS v4 anymore.
@@ -13,26 +13,28 @@ const LEGACY_CLASS_MAP = {
   'decoration-slice': 'box-decoration-slice',
 }
 
+const SEEDED = new WeakMap<DesignSystem, boolean>()
+
 export function simpleLegacyClasses(
-  _designSystem: DesignSystem,
+  designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  let variants = segment(rawCandidate, ':')
-  let utility = variants.pop()!
-
-  let important = false
-  if (utility[0] === '!') {
-    important = true
-    utility = utility.slice(1)
-  } else if (utility[utility?.length - 1] === '!') {
-    important = true
-    utility = utility.slice(0, -1)
+  // Prepare design system with the legacy classes
+  if (!SEEDED.has(designSystem)) {
+    for (let old in LEGACY_CLASS_MAP) {
+      designSystem.utilities.static(old, () => [])
+    }
+    SEEDED.set(designSystem, true)
   }
 
-  if (Object.hasOwn(LEGACY_CLASS_MAP, utility)) {
-    let replacement = LEGACY_CLASS_MAP[utility as keyof typeof LEGACY_CLASS_MAP]
-    return `${variants.concat(replacement).join(':')}${important ? '!' : ''}`
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
+      return printCandidate(designSystem, {
+        ...candidate,
+        root: LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP],
+      })
+    }
   }
 
   return rawCandidate
