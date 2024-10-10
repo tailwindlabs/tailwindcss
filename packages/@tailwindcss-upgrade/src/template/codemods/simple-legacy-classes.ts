@@ -30,7 +30,7 @@ export function simpleLegacyClasses(
     utility = utility.slice(0, -1)
   }
 
-  if (utility in LEGACY_CLASS_MAP) {
+  if (Object.hasOwn(LEGACY_CLASS_MAP, utility)) {
     let replacement = LEGACY_CLASS_MAP[utility as keyof typeof LEGACY_CLASS_MAP]
     return `${variants.concat(replacement).join(':')}${important ? '!' : ''}`
   }
