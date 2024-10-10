@@ -11,6 +11,7 @@ import {
   migrate as migrateStylesheet,
   split as splitStylesheets,
 } from './migrate'
+import { migrateJsConfig } from './migrate-js-config'
 import { migratePostCSSConfig } from './migrate-postcss'
 import { Stylesheet } from './stylesheet'
 import { migrate as migrateTemplate } from './template/migrate'
@@ -79,6 +80,14 @@ async function run() {
     )
 
     success('Template migration complete.')
+  }
+
+  {
+    // Migrate JS config
+
+    info('Migrating JavaScript configuration files using the provided configuration file.')
+
+    await migrateJsConfig(config.configFilePath)
   }
 
   {

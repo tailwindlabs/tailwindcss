@@ -81,7 +81,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, { theme }: Resolv
   return theme
 }
 
-function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][] {
+export function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][] {
   let toAdd: [string[], unknown][] = []
 
   walk(config as any, [], (value, path) => {
@@ -110,7 +110,7 @@ function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][]
   return toAdd
 }
 
-function keyPathToCssProperty(path: string[]) {
+export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'screens') path[0] = 'breakpoint'
 
