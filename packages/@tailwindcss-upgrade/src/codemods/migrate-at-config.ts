@@ -18,7 +18,6 @@ export function migrateAtConfig(
     if (hasConfig) return
 
     // We don't have a sheet with a file path
-    // TODO: Why? Tests?
     if (!sheet.file) return
 
     // Should this sheet have an `@config`?
@@ -39,7 +38,7 @@ export function migrateAtConfig(
     let sheetPath = sheet.file
     let configPath = configFilePath
 
-    let relativePath = path.relative(path.dirname(sheetPath), configPath)
+    let relativePath = path.relative(path.dirname(sheetPath), configPath).replaceAll('\\', '/')
     if (relativePath[0] !== '.') {
       relativePath = `./${relativePath}`
     }
