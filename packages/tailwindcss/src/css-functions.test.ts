@@ -935,3 +935,45 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
     }"
   `)
 })
+
+test('resolves paths ending with a 1', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-1: 0.25rem;
+        }
+
+        .foo {
+          margin: theme(spacing.1);
+        }
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --spacing-1: .25rem;
+    }
+
+    .foo {
+      margin: .25rem;
+    }"
+  `)
+})
+
+test('upgrades to a full JS compat theme lookup if a value can not be mapped to a CSS variable', async () => {
+  expect(
+    await compileCss(
+      css`
+        .semi {
+          font-weight: theme(fontWeight.semibold);
+        }
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".semi {
+      font-weight: 600;
+    }"
+  `)
+})
