@@ -59,7 +59,7 @@ export async function migratePostCSSConfig(base: string) {
   // Priority 3: JSON based postcss config files
   let jsonConfigPath = await detectJSONConfigPath(base)
   let jsonConfig: null | any = null
-  if (jsonConfigPath) {
+  if (!didMigrate && jsonConfigPath) {
     try {
       jsonConfig = JSON.parse(await fs.readFile(jsonConfigPath, 'utf-8'))
     } catch {}

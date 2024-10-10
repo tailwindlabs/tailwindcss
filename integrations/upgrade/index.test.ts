@@ -390,7 +390,7 @@ test(
     },
   },
   async ({ fs, exec }) => {
-    console.log(await exec('npx @tailwindcss/upgrade'))
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
     await fs.expectFileToContain(
@@ -465,7 +465,7 @@ test(
     },
   },
   async ({ fs, exec }) => {
-    console.log(await exec('npx @tailwindcss/upgrade'))
+    await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
     await fs.expectFileToContain(
@@ -476,9 +476,9 @@ test(
       `,
     )
 
-    let packageJsonContent = await fs.read('.postcssrc.json')
-    let packageJson = JSON.parse(packageJsonContent)
-    expect(packageJson).toMatchInlineSnapshot(`
+    let jsonConfigContent = await fs.read('.postcssrc.json')
+    let jsonConfig = JSON.parse(jsonConfigContent)
+    expect(jsonConfig).toMatchInlineSnapshot(`
       {
         "plugins": {
           "@tailwindcss/postcss": {},
@@ -486,6 +486,8 @@ test(
       }
     `)
 
+    let packageJsonContent = await fs.read('package.json')
+    let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringContaining('4.0.0'),
     })
