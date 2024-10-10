@@ -3,6 +3,7 @@ import path, { extname } from 'node:path'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates, replaceCandidateInContent } from './candidates'
+import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
@@ -22,6 +23,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   automaticVarInjection,
   bgGradient,
   simpleLegacyClasses,
+  arbitraryValueToBareValue,
   variantOrder,
 ]
 
