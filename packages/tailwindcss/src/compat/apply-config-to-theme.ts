@@ -113,6 +113,7 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
 export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'screens') path[0] = 'breakpoint'
+  if (path[0] === 'borderRadius') path[0] = 'radius'
 
   return (
     path
