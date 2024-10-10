@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { AtRule, type Plugin, type Root } from 'postcss'
+import { normalizePath } from '../../../@tailwindcss-node/src/normalize-path'
 import type { Stylesheet } from '../stylesheet'
 import { walk, WalkAction } from '../utils/walk'
 
@@ -27,10 +28,13 @@ export function migrateAtConfig(
     let sheetPath = sheet.file
     let configPath = configFilePath
 
-    let relativePath = path.relative(path.dirname(sheetPath), configPath).replaceAll('\\', '/')
-    if (relativePath[0] !== '.') {
-      relativePath = `./${relativePath}`
+    let relative = path.relative(path.dirname(sheetPath), configPath)
+    if (relative[0] !== '.') {
+      relative = `./${relative}`
     }
+    // Ensure relative is a posix style path since we will merge it with the
+    // glob.
+    relative = normalizePath(relative)
 
     // Inject the `@config` in a sensible place
     // 1. Above the first `@theme`
@@ -51,7 +55,7 @@ export function migrateAtConfig(
       return WalkAction.Skip
     })
 
-    let configNode = new AtRule({ name: 'config', params: `"${relativePath}"` })
+    let configNode = new AtRule({ name: 'config', params: `"${relative}"` })
 
     if (!locationNode) {
       root.prepend(configNode)
