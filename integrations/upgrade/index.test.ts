@@ -39,7 +39,9 @@ test(
       <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
 
       --- ./src/input.css ---
-      @import 'tailwindcss';"
+      @import 'tailwindcss';
+      @config "../tailwind.config.js";
+      "
     `)
 
     let packageJsonContent = await fs.read('package.json')
@@ -95,9 +97,12 @@ test(
       --- ./src/input.css ---
       @import 'tailwindcss' prefix(tw);
 
+      @config "../tailwind.config.js";
+
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
-      }"
+      }
+      "
     `)
   },
 )
@@ -140,6 +145,8 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
+      @config "../tailwind.config.js";
+
       .a {
         @apply flex;
       }
@@ -150,7 +157,8 @@ test(
 
       .c {
         @apply flex! flex-col! items-center!;
-      }"
+      }
+      "
     `)
   },
 )
@@ -193,6 +201,8 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
+      @config "../tailwind.config.js";
+
       @layer base {
         html {
           color: #333;
@@ -203,7 +213,8 @@ test(
         .btn {
           color: red;
         }
-      }"
+      }
+      "
     `)
   },
 )
@@ -251,6 +262,8 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
+      @config "../tailwind.config.js";
+
       @utility btn {
         @apply rounded-md px-2 py-1 bg-blue-500 text-white;
       }
@@ -261,7 +274,8 @@ test(
         }
         -ms-overflow-style: none;
         scrollbar-width: none;
-      }"
+      }
+      "
     `)
   },
 )
@@ -533,7 +547,8 @@ test(
       <div class="flex"></div>
 
       --- ./src/other.html ---
-      <div class="tw:flex"></div>"
+      <div class="tw:flex"></div>
+      "
     `)
   },
 )
@@ -573,7 +588,8 @@ test(
       <div class="tw:bg-linear-to-t"></div>
 
       --- ./src/other.html ---
-      <div class="bg-gradient-to-t"></div>"
+      <div class="bg-gradient-to-t"></div>
+      "
     `)
   },
 )
@@ -615,6 +631,7 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
       @import './utilities.css';
+      @config "../tailwind.config.js";
 
       --- ./src/utilities.css ---
       @utility no-scrollbar {
@@ -623,7 +640,8 @@ test(
         }
         -ms-overflow-style: none;
         scrollbar-width: none;
-      }"
+      }
+      "
     `)
   },
 )
@@ -730,6 +748,7 @@ test(
       @import './c.1.css' layer(utilities);
       @import './c.1.utilities.css';
       @import './d.1.css';
+      @config "../tailwind.config.js";
 
       --- ./src/a.1.css ---
       @import './a.1.utilities.css'
@@ -804,7 +823,8 @@ test(
       --- ./src/d.4.css ---
       @utility from-a-4 {
         color: blue;
-      }"
+      }
+      "
     `)
   },
 )
@@ -862,14 +882,141 @@ test(
       --- ./src/root.1.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
+      @config "../tailwind.config.js";
 
       --- ./src/root.2.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(components);
+      @config "../tailwind.config.js";
 
       --- ./src/root.3.css ---
       @import 'tailwindcss/utilities' layer(utilities);
-      @import './a.1.css' layer(utilities);"
+      @import './a.1.css' layer(utilities);
+      @config "../tailwind.config.js";
+      "
+    `)
+  },
+)
+
+test(
+  'injecting `@config` when a tailwind.config.{js,ts,…} is detected',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"></div>
+      `,
+      'src/root.1.css': css`
+        /* Inject missing @config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/root.2.css': css`
+        /* Already contains @config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config "../tailwind.config.js";
+      `,
+      'src/root.3.css': css`
+        /* Inject missing @config above first @theme */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @variant hocus (&:hover, &:focus);
+
+        @theme {
+          --color-red-500: #f00;
+        }
+
+        @theme {
+          --color-blue-500: #00f;
+        }
+      `,
+      'src/root.4.css': css`
+        /* Inject missing @config due to nested imports with tailwind imports */
+        @import './root.4/base.css';
+        @import './root.4/utilities.css';
+      `,
+      'src/root.4/base.css': css`@import 'tailwindcss/base';`,
+      'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
+
+      'src/root.5.css': css`@import './root.5/tailwind.css';`,
+      'src/root.5/tailwind.css': css`
+        /* Inject missing @config in this file, due to full import */
+        @import 'tailwindcss';
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
+
+      --- ./src/root.1.css ---
+      /* Inject missing @config */
+      @import 'tailwindcss';
+      @config "../tailwind.config.ts";
+
+      --- ./src/root.2.css ---
+      /* Already contains @config */
+      @import 'tailwindcss';
+      @config "../tailwind.config.js";
+
+      --- ./src/root.3.css ---
+      /* Inject missing @config above first @theme */
+      @import 'tailwindcss';
+      @config "../tailwind.config.ts";
+
+      @variant hocus (&:hover, &:focus);
+
+      @theme {
+        --color-red-500: #f00;
+      }
+
+      @theme {
+        --color-blue-500: #00f;
+      }
+
+      --- ./src/root.4.css ---
+      /* Inject missing @config due to nested imports with tailwind imports */
+      @import './root.4/base.css';
+      @import './root.4/utilities.css';
+      @config "../tailwind.config.ts";
+
+      --- ./src/root.5.css ---
+      @import './root.5/tailwind.css';
+
+      --- ./src/root.4/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      --- ./src/root.4/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      --- ./src/root.5/tailwind.css ---
+      /* Inject missing @config in this file, due to full import */
+      @import 'tailwindcss';
+      @config "../../tailwind.config.ts";
+      "
     `)
   },
 )
