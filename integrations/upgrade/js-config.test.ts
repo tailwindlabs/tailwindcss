@@ -17,6 +17,7 @@ test(
         import defaultTheme from 'tailwindcss/defaultTheme'
 
         module.exports = {
+          darkMode: 'selector',
           content: ['./src/**/*.{html,js}'],
           theme: {
             boxShadow: {

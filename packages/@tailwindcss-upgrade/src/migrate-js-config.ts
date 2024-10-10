@@ -7,6 +7,7 @@ import {
   keyPathToCssProperty,
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
+import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -26,6 +27,10 @@ export async function migrateJsConfig(fullConfigPath: string): Promise<void> {
   }
 
   let cssConfigs: string[] = []
+
+  if ('darkMode' in unresolvedConfig) {
+    cssConfigs.push(migrateDarkMode(unresolvedConfig as any))
+  }
 
   if ('content' in unresolvedConfig) {
     cssConfigs.push(migrateContent(unresolvedConfig as any))
@@ -81,6 +86,18 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   return css + '}\n'
 }
 
+function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
+  let variant: string = ''
+  let addVariant = (_name: string, _variant: string) => (variant = _variant)
+  let config = () => unresolvedConfig.darkMode
+  darkModePlugin({ config, addVariant })
+
+  if (variant === '') {
+    return ''
+  }
+  return `@variant dark (${variant});\n`
+}
+
 // Returns a string identifier used to section theme declarations
 function createSectionKey(key: string[]): string {
   let sectionSegments = []
@@ -128,7 +145,7 @@ async function isSimpleConfig(unresolvedConfig: Config, source: string): Promise
   }
 
   // The file may only contain known-migrateable high-level properties
-  const knownProperties = ['content', 'theme', 'plugins', 'presets']
+  const knownProperties = ['darkMode', 'content', 'theme', 'plugins', 'presets']
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
     return false
   }
