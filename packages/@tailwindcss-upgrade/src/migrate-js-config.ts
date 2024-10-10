@@ -142,7 +142,7 @@ function migrateContent(
 }
 
 // Applies heuristics to determine if we can attempt to migrate the config
-async function isSimpleConfig(unresolvedConfig: Config, source: string): Promise<boolean> {
+function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
   // The file may not contain any functions
   if (source.includes('function') || source.includes(' => ')) {
     return false
