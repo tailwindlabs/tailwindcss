@@ -40,7 +40,7 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss';
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
       "
     `)
 
@@ -97,7 +97,7 @@ test(
       --- ./src/input.css ---
       @import 'tailwindcss' prefix(tw);
 
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
@@ -145,7 +145,7 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       .a {
         @apply flex;
@@ -201,7 +201,7 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       @layer base {
         html {
@@ -262,7 +262,7 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
 
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       @utility btn {
         @apply rounded-md px-2 py-1 bg-blue-500 text-white;
@@ -631,7 +631,7 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
       @import './utilities.css';
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       --- ./src/utilities.css ---
       @utility no-scrollbar {
@@ -748,7 +748,7 @@ test(
       @import './c.1.css' layer(utilities);
       @import './c.1.utilities.css';
       @import './d.1.css';
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       --- ./src/a.1.css ---
       @import './a.1.utilities.css'
@@ -882,17 +882,17 @@ test(
       --- ./src/root.1.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       --- ./src/root.2.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(components);
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
 
       --- ./src/root.3.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
-      @config "../tailwind.config.js";
+      @config '../tailwind.config.js';
       "
     `)
   },
@@ -974,7 +974,7 @@ test(
       --- ./src/root.1.css ---
       /* Inject missing @config */
       @import 'tailwindcss';
-      @config "../tailwind.config.ts";
+      @config '../tailwind.config.ts';
 
       --- ./src/root.2.css ---
       /* Already contains @config */
@@ -984,7 +984,7 @@ test(
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
       @import 'tailwindcss';
-      @config "../tailwind.config.ts";
+      @config '../tailwind.config.ts';
 
       @variant hocus (&:hover, &:focus);
 
@@ -1000,7 +1000,7 @@ test(
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
-      @config "../tailwind.config.ts";
+      @config '../tailwind.config.ts';
 
       --- ./src/root.5.css ---
       @import './root.5/tailwind.css';
@@ -1015,7 +1015,7 @@ test(
       --- ./src/root.5/tailwind.css ---
       /* Inject missing @config in this file, due to full import */
       @import 'tailwindcss';
-      @config "../../tailwind.config.ts";
+      @config '../../tailwind.config.ts';
       "
     `)
   },
