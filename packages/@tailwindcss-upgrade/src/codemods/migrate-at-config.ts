@@ -69,29 +69,36 @@ export function migrateAtConfig(
   function migrate(root: Root) {
     // We can only migrate if there is an `@import "tailwindcss"` (or sub-import)
     let hasTailwindImport = false
+    let hasFullTailwindImport = false
     root.walkAtRules('import', (node) => {
-      if (node.params.match(/['"]tailwindcss\/?(.*?)['"]/)) {
+      if (node.params.match(/['"]tailwindcss['"]/)) {
         hasTailwindImport = true
+        hasFullTailwindImport = true
         return false
+      } else if (node.params.match(/['"]tailwindcss\/.*?['"]/)) {
+        hasTailwindImport = true
       }
     })
 
     if (!hasTailwindImport) return
 
-    // If we are not the root file, we need to inject the `@config` into the
-    // root file.
+    // - If a full `@import "tailwindcss"` is present, we can inject the
+    //   `@config` directive directly into this stylesheet.
+    // - If we are the root file (no parents), then we can inject the `@config`
+    //   directive directly into this file as well.
+    if (hasFullTailwindImport || sheet.parents.size <= 0) {
+      injectInto(sheet)
+      return
+    }
+
+    // Otherwise, if we are not the root file, we need to inject the `@config`
+    // into the root file.
     if (sheet.parents.size > 0) {
       for (let parent of sheet.ancestors()) {
         if (parent.parents.size === 0) {
           injectInto(parent)
         }
       }
-    }
-
-    // If it is the root file, we have to inject the `@config` into the current
-    // file.
-    else {
-      injectInto(sheet)
     }
   }
 

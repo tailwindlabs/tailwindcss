@@ -944,6 +944,12 @@ test(
       `,
       'src/root.4/base.css': css`@import 'tailwindcss/base';`,
       'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
+
+      'src/root.5.css': css`@import './root.5/tailwind.css';`,
+      'src/root.5/tailwind.css': css`
+        /* Inject missing @config in this file, due to full import */
+        @import 'tailwindcss';
+      `,
     },
   },
   async ({ exec, fs }) => {
@@ -987,12 +993,20 @@ test(
       @import './root.4/utilities.css';
       @config "../tailwind.config.ts";
 
+      --- ./src/root.5.css ---
+      @import './root.5/tailwind.css';
+
       --- ./src/root.4/base.css ---
       @import 'tailwindcss/theme' layer(theme);
       @import 'tailwindcss/preflight' layer(base);
 
       --- ./src/root.4/utilities.css ---
-      @import 'tailwindcss/utilities' layer(utilities);"
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      --- ./src/root.5/tailwind.css ---
+      /* Inject missing @config in this file, due to full import */
+      @import 'tailwindcss';
+      @config "../../tailwind.config.ts";"
     `)
   },
 )
