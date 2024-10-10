@@ -35,18 +35,45 @@ export async function migratePostCSSConfig(base: string) {
   }
 
   // Priority 2: Handle package.json config
+  let packageJsonPath = path.resolve(base, 'package.json')
   let packageJson
   try {
-    packageJson = JSON.parse(await fs.readFile(path.resolve(base, 'package.json'), 'utf-8'))
+    packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
   } catch {}
   if (!didMigrate && packageJson && 'postcss' in packageJson) {
-    let result = await migratePostCSSPackageJsonConfig(base, packageJson)
+    let result = await migratePostCSSJsonConfig(base, packageJson.postcss)
 
     if (result) {
+      await fs.writeFile(
+        packageJsonPath,
+        JSON.stringify({ ...packageJson, postcss: result?.json }, null, 2),
+      )
+
       didMigrate = true
       didAddPostcssClient = result.didAddPostcssClient
       didRemoveAutoprefixer = result.didRemoveAutoprefixer
       didRemovePostCSSImport = result.didRemovePostCSSImport
+    }
+  }
+
+  // Priority 3: JSON based postcss config files
+  let jsonConfigPath = await detectJSONConfigPath(base)
+  let jsonConfig: null | any = null
+  if (jsonConfigPath) {
+    try {
+      jsonConfig = JSON.parse(await fs.readFile(jsonConfigPath, 'utf-8'))
+    } catch {}
+    if (jsonConfig) {
+      let result = await migratePostCSSJsonConfig(base, jsonConfig)
+
+      if (result) {
+        await fs.writeFile(jsonConfigPath, JSON.stringify(result.json, null, 2))
+
+        didMigrate = true
+        didAddPostcssClient = result.didAddPostcssClient
+        didRemoveAutoprefixer = result.didRemoveAutoprefixer
+        didRemovePostCSSImport = result.didRemovePostCSSImport
+      }
     }
   }
 
@@ -60,14 +87,15 @@ export async function migratePostCSSConfig(base: string) {
       await pkg('add -D @tailwindcss/postcss@next', base)
     } catch {}
   }
-  if (didRemoveAutoprefixer) {
+  if (didRemoveAutoprefixer || didRemovePostCSSImport) {
     try {
-      await pkg('remove autoprefixer', base)
-    } catch {}
-  }
-  if (didRemovePostCSSImport) {
-    try {
-      await pkg('remove postcss-import', base)
+      let packagesToRemove = [
+        didRemoveAutoprefixer ? 'autoprefixer' : null,
+        didRemovePostCSSImport ? 'postcss-import' : null,
+      ]
+        .filter(Boolean)
+        .join(' ')
+      await pkg(`remove ${packagesToRemove}`, base)
     } catch {}
   }
 
@@ -157,10 +185,11 @@ async function migratePostCSSJSConfig(
   return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
 }
 
-async function migratePostCSSPackageJsonConfig(
+async function migratePostCSSJsonConfig(
   base: string,
-  packageJson: any,
+  json: any,
 ): Promise<{
+  json: any
   didAddPostcssClient: boolean
   didRemoveAutoprefixer: boolean
   didRemovePostCSSImport: boolean
@@ -180,13 +209,11 @@ async function migratePostCSSPackageJsonConfig(
     )
   }
 
-  let postcss = packageJson.postcss
-
   let didAddPostcssClient = false
   let didRemoveAutoprefixer = false
   let didRemovePostCSSImport = false
 
-  let plugins = Object.entries(postcss.plugins || {})
+  let plugins = Object.entries(json.plugins || {})
 
   let newPlugins: [string, any][] = []
   for (let i = 0; i < plugins.length; i++) {
@@ -231,20 +258,15 @@ async function migratePostCSSPackageJsonConfig(
     }
   }
 
-  let fullPath = path.resolve(base, 'package.json')
-  await fs.writeFile(
-    fullPath,
-    JSON.stringify(
-      { ...packageJson, postcss: { ...postcss, plugins: Object.fromEntries(newPlugins) } },
-      null,
-      2,
-    ),
-  )
-
-  return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
+  return {
+    json: { ...json, plugins: Object.fromEntries(newPlugins) },
+    didAddPostcssClient,
+    didRemoveAutoprefixer,
+    didRemovePostCSSImport,
+  }
 }
 
-const CONFIG_FILE_LOCATIONS = [
+const JS_CONFIG_FILE_LOCATIONS = [
   '.postcssrc.js',
   '.postcssrc.mjs',
   '.postcssrc.cjs',
@@ -259,7 +281,24 @@ const CONFIG_FILE_LOCATIONS = [
   'postcss.config.cts',
 ]
 async function detectJSConfigPath(base: string): Promise<null | string> {
-  for (let file of CONFIG_FILE_LOCATIONS) {
+  for (let file of JS_CONFIG_FILE_LOCATIONS) {
+    let fullPath = path.resolve(base, file)
+    try {
+      await fs.access(fullPath)
+      return file
+    } catch {}
+  }
+  return null
+}
+
+const JSON_CONFIG_FILE_LOCATIONS = [
+  '.postcssrc',
+  '.postcssrc.json',
+  // yaml syntax is not supported
+  // '.postcssrc.yml'
+]
+async function detectJSONConfigPath(base: string): Promise<null | string> {
+  for (let file of JSON_CONFIG_FILE_LOCATIONS) {
     let fullPath = path.resolve(base, file)
     try {
       await fs.access(fullPath)
