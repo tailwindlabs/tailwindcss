@@ -13,7 +13,7 @@ const LEGACY_CLASS_MAP = {
   'decoration-slice': 'box-decoration-slice',
 }
 
-const SEEDED = new WeakMap<DesignSystem, boolean>()
+const SEEDED = new WeakSet<DesignSystem>()
 
 export function simpleLegacyClasses(
   designSystem: DesignSystem,
@@ -25,7 +25,7 @@ export function simpleLegacyClasses(
     for (let old in LEGACY_CLASS_MAP) {
       designSystem.utilities.static(old, () => [])
     }
-    SEEDED.set(designSystem, true)
+    SEEDED.add(designSystem)
   }
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
