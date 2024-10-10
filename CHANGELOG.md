@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
 - _Upgrade (experimental)_: The upgrade tool now automatically discovers your JavaScript config ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
 - _Upgrade (experimental)_: Migrate legacy classes to the v4 alternative ([#14643](https://github.com/tailwindlabs/tailwindcss/pull/14643))
+- _Upgrade (experimental)_: Migrate `data-*` and `aria-*` variants from arbitrary values to bare values ([#14644](https://github.com/tailwindlabs/tailwindcss/pull/14644))
 
 ### Fixed
 
