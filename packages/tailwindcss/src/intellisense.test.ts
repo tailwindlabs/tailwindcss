@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
+import plugin from './plugin'
 import { Theme } from './theme'
 
 const css = String.raw
@@ -173,4 +174,179 @@ test('Utilities, when marked as important, show as important in intellisense', a
     ",
     ]
   `)
+})
+
+test('Static utilities from plugins are listed in hovers and completions', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js"l;
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      base: '',
+      module: plugin(({ addUtilities }) => {
+        addUtilities({
+          '.custom-utility': {
+            color: 'red',
+          },
+        })
+      }),
+    }),
+  })
+
+  expect(design.candidatesToCss(['custom-utility'])).toMatchInlineSnapshot(`
+    [
+      ".custom-utility {
+      color: red;
+    }
+    ",
+    ]
+  `)
+
+  expect(design.getClassList().map((entry) => entry[0])).toContain('custom-utility')
+})
+
+test('Functional utilities from plugins are listed in hovers and completions', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js"l;
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      base: '',
+      module: plugin(({ matchUtilities }) => {
+        matchUtilities(
+          {
+            'custom-1': (value) => ({
+              color: value,
+            }),
+          },
+          {
+            values: {
+              red: '#ff0000',
+              green: '#ff0000',
+            },
+          },
+        )
+
+        matchUtilities(
+          {
+            'custom-2': (value, { modifier }) => ({
+              color: `${value} / ${modifier ?? '0%'}`,
+            }),
+          },
+          {
+            values: {
+              red: '#ff0000',
+              green: '#ff0000',
+            },
+            modifiers: {
+              '50': '50%',
+              '75': '75%',
+            },
+          },
+        )
+
+        matchUtilities(
+          {
+            'custom-3': (value, { modifier }) => ({
+              color: `${value} / ${modifier ?? '0%'}`,
+            }),
+          },
+          {
+            values: {
+              red: '#ff0000',
+              green: '#ff0000',
+            },
+            modifiers: 'any',
+          },
+        )
+      }),
+    }),
+  })
+
+  expect(design.candidatesToCss(['custom-1-red', 'custom-1-green', 'custom-1-unknown']))
+    .toMatchInlineSnapshot(`
+    [
+      ".custom-1-red {
+      color: #ff0000;
+    }
+    ",
+      ".custom-1-green {
+      color: #ff0000;
+    }
+    ",
+      null,
+    ]
+  `)
+
+  expect(design.candidatesToCss(['custom-2-red', 'custom-2-green', 'custom-2-unknown']))
+    .toMatchInlineSnapshot(`
+    [
+      ".custom-2-red {
+      color: #ff0000 / 0%;
+    }
+    ",
+      ".custom-2-green {
+      color: #ff0000 / 0%;
+    }
+    ",
+      null,
+    ]
+  `)
+
+  expect(design.candidatesToCss(['custom-2-red/50', 'custom-2-red/75', 'custom-2-red/unknown']))
+    .toMatchInlineSnapshot(`
+    [
+      ".custom-2-red\\/50 {
+      color: #ff0000 / 50%;
+    }
+    ",
+      ".custom-2-red\\/75 {
+      color: #ff0000 / 75%;
+    }
+    ",
+      null,
+    ]
+  `)
+
+  let classMap = new Map(design.getClassList())
+  let classNames = Array.from(classMap.keys())
+
+  // matchUtilities without modifiers
+  expect(classNames).toContain('custom-1-red')
+  expect(classMap.get('custom-1-red')?.modifiers).toEqual([])
+
+  expect(classNames).toContain('custom-1-green')
+  expect(classMap.get('custom-1-green')?.modifiers).toEqual([])
+
+  expect(classNames).not.toContain('custom-1-unknown')
+
+  // matchUtilities with a set list of modifiers
+  expect(classNames).toContain('custom-2-red')
+  expect(classMap.get('custom-2-red')?.modifiers).toEqual(['50', '75'])
+
+  expect(classNames).toContain('custom-2-green')
+  expect(classMap.get('custom-2-green')?.modifiers).toEqual(['50', '75'])
+
+  expect(classNames).not.toContain('custom-2-unknown')
+
+  // matchUtilities with a any modifiers
+  expect(classNames).toContain('custom-3-red')
+  expect(classMap.get('custom-3-red')?.modifiers).toEqual([])
+
+  expect(classNames).toContain('custom-3-green')
+  expect(classMap.get('custom-3-green')?.modifiers).toEqual([])
+
+  expect(classNames).not.toContain('custom-3-unknown')
 })
