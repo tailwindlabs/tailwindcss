@@ -4,10 +4,12 @@ import { globby } from 'globby'
 import path from 'node:path'
 import { help } from './commands/help'
 import { migrate as migrateStylesheet } from './migrate'
+import { migratePostCSSConfig } from './migrate-postcss'
 import { migrate as migrateTemplate } from './template/migrate'
 import { prepareConfig } from './template/prepare-config'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
+import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, success } from './utils/renderer'
 
 const options = {
@@ -97,6 +99,16 @@ async function run() {
 
     success('Stylesheet migration complete.')
   }
+
+  {
+    // PostCSS config migration
+    await migratePostCSSConfig(process.cwd())
+  }
+
+  try {
+    // Upgrade Tailwind CSS
+    await pkg('add tailwindcss@next', process.cwd())
+  } catch {}
 
   // Figure out if we made any changes
   if (isRepoDirty()) {
