@@ -24,10 +24,10 @@ export function migrateAtConfig(
     // 1. It should be a root CSS file
     if (sheet.parents.size > 0) return
 
-    // 2. It should include a `@import "tailwindcss"`
+    // 2. It should include an `@import "tailwindcss"`
     let hasTailwindImport = false
     root.walkAtRules('import', (node) => {
-      if (node.params.includes('tailwindcss')) {
+      if (node.params.match(/['"]tailwindcss\/?(.*?)['"]/)) {
         hasTailwindImport = true
         return false
       }
@@ -44,10 +44,18 @@ export function migrateAtConfig(
     }
 
     // Inject the `@config` in a sensible place
+    // 1. Above the first `@theme`
+    // 2. Below the last `@import`
+    // 3. At the top of the file
     let locationNode = null as AtRule | null
+    let firstThemeNode = null as AtRule | null
 
     walk(root, (node) => {
-      if (node.type === 'atrule' && (node.name === 'import' || node.name === 'theme')) {
+      if (node.type === 'atrule' && node.name === 'theme' && firstThemeNode === null) {
+        firstThemeNode = node
+        locationNode = node
+        return WalkAction.Skip
+      } else if (node.type === 'atrule' && node.name === 'import') {
         locationNode = node
       }
 
