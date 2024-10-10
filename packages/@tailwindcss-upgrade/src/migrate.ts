@@ -6,6 +6,7 @@ import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { formatNodes } from './codemods/format-nodes'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
+import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
 
@@ -18,6 +19,7 @@ export interface MigrateOptions {
 export async function migrateContents(contents: string, options: MigrateOptions, file?: string) {
   return postcss()
     .use(migrateAtApply(options))
+    .use(migrateMediaScreen(options))
     .use(migrateAtLayerUtilities())
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
