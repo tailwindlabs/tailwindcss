@@ -918,16 +918,12 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
-    await fs.expectFileToContain(
-      'src/index.html',
-      html`
-        <h1>🤠👋</h1>
-        <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
-      `,
-    )
-
-    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
+
       --- ./src/input.css ---
       @import 'tailwindcss';
       @config "../tailwind.config.ts";"
