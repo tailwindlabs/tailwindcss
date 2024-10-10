@@ -19,6 +19,22 @@ test('Config values can be merged into the theme', () => {
             },
           },
 
+          screens: {
+            sm: '1234px',
+          },
+
+          boxShadow: {
+            normal: '0 1px 3px black',
+          },
+
+          borderRadius: {
+            sm: '0.33rem',
+          },
+
+          animation: {
+            blink: 'blink 1s linear infinite',
+          },
+
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['Potato Mono', { fontVariationSettings: '"XHGT" 0.7' }],
@@ -41,6 +57,10 @@ test('Config values can be merged into the theme', () => {
   applyConfigToTheme(design, resolvedUserConfig)
 
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
+  expect(theme.resolve('sm', ['--breakpoint'])).toEqual('1234px')
+  expect(theme.resolve('normal', ['--shadow'])).toEqual('0 1px 3px black')
+  expect(theme.resolve('sm', ['--radius'])).toEqual('0.33rem')
+  expect(theme.resolve('blink', ['--animate'])).toEqual('blink 1s linear infinite')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
   expect(theme.resolve('sans', ['--font-family'])).toEqual('Inter, system-ui, sans-serif')
   expect(theme.resolveWith('mono', ['--font-family'], ['--font-variation-settings'])).toEqual([
