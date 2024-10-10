@@ -32,15 +32,15 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain(
-      'src/index.html',
-      html`
-        <h1>🤠👋</h1>
-        <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
-      `,
-    )
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
 
-    await fs.expectFileToContain('src/input.css', css`@import 'tailwindcss';`)
+      --- ./src/input.css ---
+      @import 'tailwindcss';"
+    `)
 
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
@@ -86,23 +86,19 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain(
-      'src/index.html',
-      html`
-        <h1>🤠👋</h1>
-        <div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"></div>
-      `,
-    )
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"></div>
 
-    await fs.expectFileToContain('src/input.css', css` @import 'tailwindcss' prefix(tw); `)
-    await fs.expectFileToContain(
-      'src/input.css',
-      css`
-        .btn {
-          @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
-        }
-      `,
-    )
+      --- ./src/input.css ---
+      @import 'tailwindcss' prefix(tw);
+
+      .btn {
+        @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
+      }"
+    `)
   },
 )
 
@@ -139,22 +135,23 @@ test(
   async ({ fs, exec }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain(
-      'src/index.css',
-      css`
-        .a {
-          @apply flex;
-        }
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
 
-        .b {
-          @apply flex!;
-        }
+      .a {
+        @apply flex;
+      }
 
-        .c {
-          @apply flex! flex-col! items-center!;
-        }
-      `,
-    )
+      .b {
+        @apply flex!;
+      }
+
+      .c {
+        @apply flex! flex-col! items-center!;
+      }"
+    `)
   },
 )
 
@@ -191,27 +188,23 @@ test(
   async ({ fs, exec }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
-    await fs.expectFileToContain(
-      'src/index.css',
-      css`
-        @layer base {
-          html {
-            color: #333;
-          }
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
+
+      @layer base {
+        html {
+          color: #333;
         }
-      `,
-    )
-    await fs.expectFileToContain(
-      'src/index.css',
-      css`
-        @layer components {
-          .btn {
-            color: red;
-          }
+      }
+
+      @layer components {
+        .btn {
+          color: red;
         }
-      `,
-    )
+      }"
+    `)
   },
 )
 
@@ -253,22 +246,23 @@ test(
   async ({ fs, exec }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain(
-      'src/index.css',
-      css`
-        @utility btn {
-          @apply rounded-md px-2 py-1 bg-blue-500 text-white;
-        }
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
 
-        @utility no-scrollbar {
-          &::-webkit-scrollbar {
-            display: none;
-          }
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+      @utility btn {
+        @apply rounded-md px-2 py-1 bg-blue-500 text-white;
+      }
+
+      @utility no-scrollbar {
+        &::-webkit-scrollbar {
+          display: none;
         }
-      `,
-    )
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }"
+    `)
   },
 )
 
@@ -533,12 +527,14 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain('src/index.html', html`
-        <div class="flex"></div>
-      `)
-    await fs.expectFileToContain('src/other.html', html`
-        <div class="tw:flex"></div>
-      `)
+    expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="flex"></div>
+
+      --- ./src/other.html ---
+      <div class="tw:flex"></div>"
+    `)
   },
 )
 
@@ -571,18 +567,309 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain(
-      'src/index.html',
-      html`
-        <div class="tw:bg-linear-to-t"></div>
+    expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="tw:bg-linear-to-t"></div>
+
+      --- ./src/other.html ---
+      <div class="bg-gradient-to-t"></div>"
+    `)
+  },
+)
+
+test(
+  'migrate utilities in an imported file',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
       `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @import './utilities.css' layer(utilities);
+      `,
+      'src/utilities.css': css`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
+      @import './utilities.css';
+
+      --- ./src/utilities.css ---
+      @utility no-scrollbar {
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }"
+    `)
+  },
+)
+
+test(
+  'migrate utilities in deep import trees',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(utilities);
+        @import './b.1.css' layer(components);
+        @import './c.1.css';
+        @import './d.1.css';
+      `,
+      'src/a.1.css': css`
+        @import './a.1.utilities.css';
+
+        .foo-from-a {
+          color: red;
+        }
+      `,
+      'src/a.1.utilities.css': css`
+        #foo {
+          --keep: me;
+        }
+
+        .foo-from-import {
+          color: blue;
+        }
+      `,
+      'src/b.1.css': css`
+        @import './b.1.components.css';
+
+        .bar-from-b {
+          color: red;
+        }
+      `,
+      'src/b.1.components.css': css`
+        .bar-from-import {
+          color: blue;
+        }
+      `,
+      'src/c.1.css': css`
+        @import './c.2.css' layer(utilities);
+        .baz-from-c {
+          color: green;
+        }
+      `,
+      'src/c.2.css': css`
+        @import './c.3.css';
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+      'src/c.3.css': css`
+        #baz {
+          --keep: me;
+        }
+        .baz-from-import {
+          color: yellow;
+        }
+      `,
+
+      // This is a super deep import chain
+      // And no `*.utilities.css` files should be created for these
+      // because there are no rules that need to be separated
+      'src/d.1.css': css`@import './d.2.css' layer(utilities);`,
+      'src/d.2.css': css`@import './d.3.css';`,
+      'src/d.3.css': css`@import './d.4.css';`,
+      'src/d.4.css': css`
+        .from-a-4 {
+          color: blue;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);
+      @import './a.1.utilities.1.css';
+      @import './b.1.css';
+      @import './c.1.css' layer(utilities);
+      @import './c.1.utilities.css';
+      @import './d.1.css';
+
+      --- ./src/a.1.css ---
+      @import './a.1.utilities.css'
+
+      --- ./src/a.1.utilities.1.css ---
+      @import './a.1.utilities.utilities.css';
+      @utility foo-from-a {
+        color: red;
+      }
+
+      --- ./src/a.1.utilities.css ---
+      #foo {
+        --keep: me;
+      }
+
+      --- ./src/a.1.utilities.utilities.css ---
+      @utility foo-from-import {
+        color: blue;
+      }
+
+      --- ./src/b.1.components.css ---
+      @utility bar-from-import {
+        color: blue;
+      }
+
+      --- ./src/b.1.css ---
+      @import './b.1.components.css';
+      @utility bar-from-b {
+        color: red;
+      }
+
+      --- ./src/c.1.css ---
+      @import './c.2.css' layer(utilities);
+      .baz-from-c {
+        color: green;
+      }
+
+      --- ./src/c.1.utilities.css ---
+      @import './c.2.utilities.css'
+
+      --- ./src/c.2.css ---
+      @import './c.3.css';
+      #baz {
+        --keep: me;
+      }
+
+      --- ./src/c.2.utilities.css ---
+      @import './c.3.utilities.css';
+      @utility baz-from-import {
+        color: yellow;
+      }
+
+      --- ./src/c.3.css ---
+      #baz {
+        --keep: me;
+      }
+
+      --- ./src/c.3.utilities.css ---
+      @utility baz-from-import {
+        color: yellow;
+      }
+
+      --- ./src/d.1.css ---
+      @import './d.2.css'
+
+      --- ./src/d.2.css ---
+      @import './d.3.css'
+
+      --- ./src/d.3.css ---
+      @import './d.4.css'
+
+      --- ./src/d.4.css ---
+      @utility from-a-4 {
+        color: blue;
+      }"
+    `)
+  },
+)
+
+test(
+  'migrate utility files imported by multiple roots',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.html': html`
+        <div class="hover:thing"></div>
+      `,
+      'src/root.1.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(utilities);
+      `,
+      'src/root.2.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css' layer(components);
+      `,
+      'src/root.3.css': css`
+        @import 'tailwindcss/utilities';
+        @import './a.1.css';
+      `,
+      'src/a.1.css': css`
+        .foo-from-a {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade --force')
+
+    expect(output).toMatch(
+      /You have one or more stylesheets that are imported into a utility layer and non-utility layer./,
     )
 
-    await fs.expectFileToContain(
-      'src/other.html',
-      html`
-        <div class="bg-gradient-to-t"></div>
-      `,
-    )
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/a.1.css ---
+      .foo-from-a {
+        color: red;
+      }
+
+      --- ./src/root.1.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);
+
+      --- ./src/root.2.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(components);
+
+      --- ./src/root.3.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './a.1.css' layer(utilities);"
+    `)
   },
 )
