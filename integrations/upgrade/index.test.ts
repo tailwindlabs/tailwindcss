@@ -908,11 +908,42 @@ test(
         <h1>🤠👋</h1>
         <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"></div>
       `,
-      'src/input.css': css`
+      'src/root.1.css': css`
+        /* Inject missing @config */
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
       `,
+      'src/root.2.css': css`
+        /* Already contains @config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config "../tailwind.config.js";
+      `,
+      'src/root.3.css': css`
+        /* Inject missing @config above first @theme */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @variant hocus (&:hover, &:focus);
+
+        @theme {
+          --color-red-500: #f00;
+        }
+
+        @theme {
+          --color-blue-500: #00f;
+        }
+      `,
+      'src/root.4.css': css`
+        /* Inject missing @config due to nested imports with tailwind imports */
+        @import './root.4/base.css';
+        @import './root.4/utilities.css';
+      `,
+      'src/root.4/base.css': css`@import 'tailwindcss/base';`,
+      'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
     },
   },
   async ({ exec, fs }) => {
@@ -924,9 +955,43 @@ test(
       <h1>🤠👋</h1>
       <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
 
-      --- ./src/input.css ---
+      --- ./src/root.1.css ---
+      /* Inject missing @config */
       @import 'tailwindcss';
-      @config "../tailwind.config.ts";"
+      @config "../tailwind.config.ts";
+
+      --- ./src/root.2.css ---
+      /* Already contains @config */
+      @import 'tailwindcss';
+      @config "../tailwind.config.js";
+
+      --- ./src/root.3.css ---
+      /* Inject missing @config above first @theme */
+      @import 'tailwindcss';
+
+      @variant hocus (&:hover, &:focus);
+
+      @config "../tailwind.config.ts";
+
+      @theme {
+        --color-red-500: #f00;
+      }
+
+      @theme {
+        --color-blue-500: #00f;
+      }
+
+      --- ./src/root.4.css ---
+      /* Inject missing @config due to nested imports with tailwind imports */
+      @import './root.4/base.css';
+      @import './root.4/utilities.css';
+
+      --- ./src/root.4/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      --- ./src/root.4/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);"
     `)
   },
 )
