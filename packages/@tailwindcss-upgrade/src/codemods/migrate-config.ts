@@ -1,12 +1,16 @@
 import path from 'node:path'
-import { AtRule, type Plugin, type Root } from 'postcss'
+import { AtRule, type Plugin, Root } from 'postcss'
 import { normalizePath } from '../../../@tailwindcss-node/src/normalize-path'
+import type { JSConfigMigration } from '../migrate-js-config'
 import type { Stylesheet } from '../stylesheet'
 import { walk, WalkAction } from '../utils/walk'
 
-export function migrateAtConfig(
+export function migrateConfig(
   sheet: Stylesheet,
-  { configFilePath }: { configFilePath: string },
+  {
+    configFilePath,
+    jsConfigMigration,
+  }: { configFilePath: string; jsConfigMigration: JSConfigMigration },
 ): Plugin {
   function injectInto(sheet: Stylesheet) {
     let root = sheet.root
@@ -14,27 +18,43 @@ export function migrateAtConfig(
     // We don't have a sheet with a file path
     if (!sheet.file) return
 
-    // Skip if there is already a `@config` directive
-    {
-      let hasConfig = false
-      root.walkAtRules('config', () => {
-        hasConfig = true
-        return false
-      })
-      if (hasConfig) return
-    }
+    let cssConfig = new AtRule()
+    cssConfig.raws.tailwind_pretty = true
 
-    // Figure out the path to the config file
-    let sheetPath = sheet.file
-    let configPath = configFilePath
+    if (jsConfigMigration === null) {
+      // Skip if there is already a `@config` directive
+      {
+        let hasConfig = false
+        root.walkAtRules('config', () => {
+          hasConfig = true
+          return false
+        })
+        if (hasConfig) return
+      }
 
-    let relative = path.relative(path.dirname(sheetPath), configPath)
-    if (relative[0] !== '.') {
-      relative = `./${relative}`
+      cssConfig.append(
+        new AtRule({
+          name: 'config',
+          params: `'${relativeToStylesheet(sheet, configFilePath)}'`,
+        }),
+      )
+    } else {
+      for (let source of jsConfigMigration.sources) {
+        let absolute = path.resolve(source.base, source.pattern)
+        cssConfig.append(
+          new AtRule({
+            name: 'source',
+            params: `'${relativeToStylesheet(sheet, absolute)}'`,
+          }),
+        )
+      }
+
+      if (jsConfigMigration.css.nodes.length > 0 && jsConfigMigration.sources.length > 0) {
+        jsConfigMigration.css.nodes[0].raws.before = '\n\n'
+      }
+
+      cssConfig.append(jsConfigMigration.css.nodes)
     }
-    // Ensure relative is a posix style path since we will merge it with the
-    // glob.
-    relative = normalizePath(relative)
 
     // Inject the `@config` in a sensible place
     // 1. Below the last `@import`
@@ -49,12 +69,10 @@ export function migrateAtConfig(
       return WalkAction.Skip
     })
 
-    let configNode = new AtRule({ name: 'config', params: `'${relative}'` })
-
     if (!locationNode) {
-      root.prepend(configNode)
+      root.prepend(cssConfig.nodes)
     } else if (locationNode.name === 'import') {
-      locationNode.after(configNode)
+      locationNode.after(cssConfig.nodes)
     }
   }
 
@@ -95,7 +113,21 @@ export function migrateAtConfig(
   }
 
   return {
-    postcssPlugin: '@tailwindcss/upgrade/migrate-at-config',
+    postcssPlugin: '@tailwindcss/upgrade/migrate-config',
     OnceExit: migrate,
   }
+}
+
+function relativeToStylesheet(sheet: Stylesheet, absolute: string) {
+  if (!sheet.file) throw new Error('Can not find a path for the stylesheet')
+
+  let sheetPath = sheet.file
+
+  let relative = path.relative(path.dirname(sheetPath), absolute)
+  if (relative[0] !== '.') {
+    relative = `./${relative}`
+  }
+  // Ensure relative is a posix style path since we will merge it with the
+  // glob.
+  return normalizePath(relative)
 }

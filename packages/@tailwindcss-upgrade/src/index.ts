@@ -38,6 +38,8 @@ if (flags['--help']) {
 }
 
 async function run() {
+  let base = process.cwd()
+
   eprintln(header())
   eprintln()
 
@@ -51,7 +53,7 @@ async function run() {
     }
   }
 
-  let config = await prepareConfig(flags['--config'], { base: process.cwd() })
+  let config = await prepareConfig(flags['--config'], { base })
 
   {
     // Template migrations
@@ -82,19 +84,16 @@ async function run() {
     success('Template migration complete.')
   }
 
-  {
-    // Migrate JS config
+  // Migrate JS config
 
-    info('Migrating JavaScript configuration files using the provided configuration file.')
-
-    await migrateJsConfig(config.configFilePath)
-  }
+  info('Migrating JavaScript configuration files using the provided configuration file.')
+  let jsConfigMigration = await migrateJsConfig(config.configFilePath, base)
 
   {
     // Stylesheet migrations
 
     // Use provided files
-    let files = flags._.map((file) => path.resolve(process.cwd(), file))
+    let files = flags._.map((file) => path.resolve(base, file))
 
     // Discover CSS files in case no files were provided
     if (files.length === 0) {
@@ -134,7 +133,7 @@ async function run() {
 
     // Migrate each file
     let migrateResults = await Promise.allSettled(
-      stylesheets.map((sheet) => migrateStylesheet(sheet, config)),
+      stylesheets.map((sheet) => migrateStylesheet(sheet, { ...config, jsConfigMigration })),
     )
 
     for (let result of migrateResults) {
@@ -167,13 +166,18 @@ async function run() {
 
   {
     // PostCSS config migration
-    await migratePostCSSConfig(process.cwd())
+    await migratePostCSSConfig(base)
   }
 
   try {
     // Upgrade Tailwind CSS
-    await pkg('add tailwindcss@next', process.cwd())
+    await pkg('add tailwindcss@next', base)
   } catch {}
+
+  // Remove the JS config if it was fully migrated
+  if (jsConfigMigration !== null) {
+    await fs.rm(config.configFilePath)
+  }
 
   // Figure out if we made any changes
   if (isRepoDirty()) {

@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import { dirname } from 'path'
+import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
@@ -13,7 +14,17 @@ import { info } from './utils/renderer'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-export async function migrateJsConfig(fullConfigPath: string): Promise<void> {
+export type JSConfigMigration =
+  // Could not convert the config file, need to inject it as-is in a @config directive
+  null | {
+    sources: { base: string; pattern: string }[]
+    css: postcss.Root
+  }
+
+export async function migrateJsConfig(
+  fullConfigPath: string,
+  base: string,
+): Promise<JSConfigMigration> {
   let [unresolvedConfig, source] = await Promise.all([
     loadModule(fullConfigPath, __dirname, () => {}).then((result) => result.module) as Config,
     fs.readFile(fullConfigPath, 'utf-8'),
@@ -23,9 +34,10 @@ export async function migrateJsConfig(fullConfigPath: string): Promise<void> {
     info(
       'The configuration file is not a simple object. Please refer to the migration guide for how to migrate it fully to Tailwind CSS v4. For now, we will load the configuration file as-is.',
     )
-    return
+    return null
   }
 
+  let sources: { base: string; pattern: string }[] = []
   let cssConfigs: string[] = []
 
   if ('darkMode' in unresolvedConfig) {
@@ -33,14 +45,17 @@ export async function migrateJsConfig(fullConfigPath: string): Promise<void> {
   }
 
   if ('content' in unresolvedConfig) {
-    cssConfigs.push(migrateContent(unresolvedConfig as any))
+    sources = migrateContent(unresolvedConfig as any, base)
   }
 
   if ('theme' in unresolvedConfig) {
     cssConfigs.push(await migrateTheme(unresolvedConfig as any))
   }
 
-  console.log(cssConfigs.join('\n'))
+  return {
+    sources,
+    css: postcss.parse(cssConfigs.join('\n')),
+  }
 }
 
 async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string> {
@@ -49,7 +64,7 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let resetNamespaces = new Set()
   let prevSectionKey = ''
 
-  let css = `@theme reference inline {\n`
+  let css = `@theme {`
   for (let [key, value] of themeableValues(overwriteTheme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
@@ -112,16 +127,18 @@ function createSectionKey(key: string[]): string {
   return sectionSegments.join('-')
 }
 
-function migrateContent(unresolvedConfig: Config & { content: any }): string {
-  let css = ''
+function migrateContent(
+  unresolvedConfig: Config & { content: any },
+  base: string,
+): { base: string; pattern: string }[] {
+  let sources = []
   for (let content of unresolvedConfig.content) {
     if (typeof content !== 'string') {
       throw new Error('Unsupported content value: ' + content)
     }
-
-    css += `@source  "${content}";\n`
+    sources.push({ base, pattern: content })
   }
-  return css
+  return sources
 }
 
 // Applies heuristics to determine if we can attempt to migrate the config

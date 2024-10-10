@@ -59,9 +59,42 @@ test(
     },
   },
   async ({ exec, fs }) => {
-    console.log(await exec('npx @tailwindcss/upgrade'))
+    await exec('npx @tailwindcss/upgrade')
 
-    await fs.expectFileToContain('src/input.css', css` @import 'tailwindcss'; `)
-    expect(fs.read('tailwind.config.ts')).rejects.toMatchInlineSnapshot()
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @source './**/*.{html,js}';
+
+      @variant dark (&:where(.dark, .dark *));
+
+      @theme {
+        --box-shadow-*: initial;
+        --box-shadow-sm: 0 2px 6px rgb(15 23 42 / 0.08);
+
+        --color-*: initial;
+        --color-red-500: #ef4444;
+
+        --font-size-*: initial;
+        --font-size-xs: 0.75rem;
+        --font-size-xs--line-height: 1rem;
+        --font-size-sm: 0.875rem;
+        --font-size-sm--line-height: 1.5rem;
+        --font-size-base: 1rem;
+        --font-size-base--line-height: 2rem;
+
+        --color-red-600: #dc2626;
+
+        --font-family-sans: Inter, system-ui, sans-serif;
+        --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+        --border-radius-4xl: 2rem;
+      }
+      "
+    `)
+
+    expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toBe('')
   },
 )
