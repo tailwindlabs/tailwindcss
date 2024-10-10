@@ -2295,6 +2295,52 @@ describe('matchVariant', () => {
       }"
     `)
   })
+
+  test('should be called with eventual modifiers', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('my-container', (value, { modifier }) => {
+                function parseValue(value: string) {
+                  const numericValue = value.match(/^(\d+\.\d+|\d+|\.\d+)\D+/)?.[1] ?? null
+                  if (numericValue === null) return null
+
+                  return parseFloat(value)
+                }
+
+                const parsed = parseValue(value)
+                return parsed !== null ? `@container ${modifier ?? ''} (min-width: ${value})` : []
+              })
+            },
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'my-container-[250px]:underline',
+      'my-container-[250px]/placement:underline',
+    ])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@container (width >= 250px) {
+        .my-container-\\[250px\\]\\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @container placement (width >= 250px) {
+        .my-container-\\[250px\\]\\/placement\\:underline {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
 })
 
 describe('addUtilities()', () => {

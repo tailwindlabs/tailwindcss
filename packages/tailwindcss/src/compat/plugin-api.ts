@@ -116,9 +116,13 @@ export function buildPluginApi(
       designSystem.variants.group(
         () => {
           designSystem.variants.functional(name, (ruleNodes, variant) => {
-            if (!variant.value || variant.modifier) {
+            if (!variant.value) {
               if (options?.values && 'DEFAULT' in options.values) {
-                ruleNodes.nodes = resolveVariantValue(options.values.DEFAULT, null, ruleNodes.nodes)
+                ruleNodes.nodes = resolveVariantValue(
+                  options.values.DEFAULT,
+                  variant.modifier,
+                  ruleNodes.nodes,
+                )
                 return
               }
               return null
@@ -136,7 +140,7 @@ export function buildPluginApi(
                 return
               }
 
-              ruleNodes.nodes = resolveVariantValue(defaultValue, null, ruleNodes.nodes)
+              ruleNodes.nodes = resolveVariantValue(defaultValue, variant.modifier, ruleNodes.nodes)
             }
           })
         },
