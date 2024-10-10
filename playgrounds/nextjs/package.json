@@ -20,7 +20,7 @@
     "@types/node": "catalog:",
     "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.11.1",
     "eslint-config-next": "^14.2.5",
     "typescript": "^5.5.4"
   }
