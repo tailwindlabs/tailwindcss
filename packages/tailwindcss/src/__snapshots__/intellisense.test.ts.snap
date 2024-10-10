@@ -2376,6 +2376,8 @@ exports[`getClassList 1`] = `
   "items-baseline",
   "items-center",
   "items-end",
+  "items-first-baseline",
+  "items-last-baseline",
   "items-start",
   "items-stretch",
   "justify-around",
