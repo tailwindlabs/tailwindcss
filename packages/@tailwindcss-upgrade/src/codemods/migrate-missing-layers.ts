@@ -10,7 +10,13 @@ export function migrateMissingLayers(): Plugin {
     root.each((node) => {
       if (node.type === 'atrule') {
         // Known Tailwind directives that should not be inside a layer.
-        if (node.name === 'theme' || node.name === 'utility') {
+        if (
+          node.name === 'config' ||
+          node.name === 'source' ||
+          node.name === 'theme' ||
+          node.name === 'utility' ||
+          node.name === 'variant'
+        ) {
           if (bucket.length > 0) {
             buckets.push([lastLayer, bucket.splice(0)])
           }
