@@ -3544,6 +3544,51 @@ describe('addComponents()', () => {
   })
 })
 
+describe('matchComponents()', () => {
+  test('is an alias for matchUtilities', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ matchComponents }: PluginAPI) => {
+              matchComponents(
+                {
+                  prose: (value) => ({ '--container-size': value }),
+                },
+                {
+                  values: {
+                    DEFAULT: 'normal',
+                    sm: 'sm',
+                    lg: 'lg',
+                  },
+                },
+              )
+            },
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
+      .toMatchInlineSnapshot(`
+      ".prose {
+        --container-size: normal;
+      }
+
+      @media (hover: hover) {
+        .hover\\:prose-lg:hover {
+          --container-size: lg;
+        }
+      }"
+    `)
+  })
+})
+
 describe('prefix()', () => {
   test('is an identity function', async () => {
     let fn = vi.fn()
