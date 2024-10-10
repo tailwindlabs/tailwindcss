@@ -40,7 +40,8 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss';
-      @config "../tailwind.config.js";"
+      @config "../tailwind.config.js";
+      "
     `)
 
     let packageJsonContent = await fs.read('package.json')
@@ -100,7 +101,8 @@ test(
 
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
-      }"
+      }
+      "
     `)
   },
 )
@@ -155,7 +157,8 @@ test(
 
       .c {
         @apply flex! flex-col! items-center!;
-      }"
+      }
+      "
     `)
   },
 )
@@ -210,7 +213,8 @@ test(
         .btn {
           color: red;
         }
-      }"
+      }
+      "
     `)
   },
 )
@@ -270,7 +274,8 @@ test(
         }
         -ms-overflow-style: none;
         scrollbar-width: none;
-      }"
+      }
+      "
     `)
   },
 )
@@ -542,7 +547,8 @@ test(
       <div class="flex"></div>
 
       --- ./src/other.html ---
-      <div class="tw:flex"></div>"
+      <div class="tw:flex"></div>
+      "
     `)
   },
 )
@@ -582,7 +588,8 @@ test(
       <div class="tw:bg-linear-to-t"></div>
 
       --- ./src/other.html ---
-      <div class="bg-gradient-to-t"></div>"
+      <div class="bg-gradient-to-t"></div>
+      "
     `)
   },
 )
@@ -633,7 +640,8 @@ test(
         }
         -ms-overflow-style: none;
         scrollbar-width: none;
-      }"
+      }
+      "
     `)
   },
 )
@@ -815,7 +823,8 @@ test(
       --- ./src/d.4.css ---
       @utility from-a-4 {
         color: blue;
-      }"
+      }
+      "
     `)
   },
 )
@@ -883,7 +892,8 @@ test(
       --- ./src/root.3.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
-      @config "../tailwind.config.js";"
+      @config "../tailwind.config.js";
+      "
     `)
   },
 )
@@ -1005,7 +1015,8 @@ test(
       --- ./src/root.5/tailwind.css ---
       /* Inject missing @config in this file, due to full import */
       @import 'tailwindcss';
-      @config "../../tailwind.config.ts";"
+      @config "../../tailwind.config.ts";
+      "
     `)
   },
 )
