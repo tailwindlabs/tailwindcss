@@ -985,6 +985,7 @@ test(
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
+      @config "../tailwind.config.ts";
 
       --- ./src/root.4/base.css ---
       @import 'tailwindcss/theme' layer(theme);

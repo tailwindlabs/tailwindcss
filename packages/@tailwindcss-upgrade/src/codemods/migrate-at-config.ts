@@ -7,32 +7,21 @@ export function migrateAtConfig(
   sheet: Stylesheet,
   { configFilePath }: { configFilePath: string },
 ): Plugin {
-  function migrate(root: Root) {
-    let hasConfig = false
-    root.walkAtRules('config', () => {
-      hasConfig = true
-      return false
-    })
-
-    // We already have a `@config`
-    if (hasConfig) return
+  function injectInto(sheet: Stylesheet) {
+    let root = sheet.root
 
     // We don't have a sheet with a file path
     if (!sheet.file) return
 
-    // Should this sheet have an `@config`?
-    // 1. It should be a root CSS file
-    if (sheet.parents.size > 0) return
-
-    // 2. It should include an `@import "tailwindcss"`
-    let hasTailwindImport = false
-    root.walkAtRules('import', (node) => {
-      if (node.params.match(/['"]tailwindcss\/?(.*?)['"]/)) {
-        hasTailwindImport = true
+    // Skip if there is already a `@config` directive
+    {
+      let hasConfig = false
+      root.walkAtRules('config', () => {
+        hasConfig = true
         return false
-      }
-    })
-    if (!hasTailwindImport) return
+      })
+      if (hasConfig) return
+    }
 
     // Figure out the path to the config file
     let sheetPath = sheet.file
@@ -70,6 +59,35 @@ export function migrateAtConfig(
       locationNode.after(configNode)
     } else if (locationNode.name === 'theme') {
       locationNode.before(configNode)
+    }
+  }
+
+  function migrate(root: Root) {
+    // We can only migrate if there is an `@import "tailwindcss"` (or sub-import)
+    let hasTailwindImport = false
+    root.walkAtRules('import', (node) => {
+      if (node.params.match(/['"]tailwindcss\/?(.*?)['"]/)) {
+        hasTailwindImport = true
+        return false
+      }
+    })
+
+    if (!hasTailwindImport) return
+
+    // If we are not the root file, we need to inject the `@config` into the
+    // root file.
+    if (sheet.parents.size > 0) {
+      for (let parent of sheet.ancestors()) {
+        if (parent.parents.size === 0) {
+          injectInto(parent)
+        }
+      }
+    }
+
+    // If it is the root file, we have to inject the `@config` into the current
+    // file.
+    else {
+      injectInto(sheet)
     }
   }
 
