@@ -330,7 +330,8 @@ export function test(
                 return a[0].localeCompare(z[0])
               })
               .map(([file, content]) => `--- ${file} ---\n${content || '<EMPTY>'}`)
-              .join('\n\n')}`
+              .join('\n\n')
+              .trim()}\n`
           },
           async expectFileToContain(filePath, contents) {
             return retryAssertion(async () => {
