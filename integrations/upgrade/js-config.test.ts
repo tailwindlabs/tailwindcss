@@ -74,8 +74,8 @@ test(
       @variant dark (&:where(.dark, .dark *));
 
       @theme {
-        --box-shadow-*: initial;
-        --box-shadow-sm: 0 2px 6px rgb(15 23 42 / 0.08);
+        --shadow-*: initial;
+        --shadow-sm: 0 2px 6px rgb(15 23 42 / 0.08);
 
         --color-*: initial;
         --color-red-400: #f87171;
