@@ -9,6 +9,7 @@ import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
+import { themeToVar } from './codemods/theme-to-var'
 import { variantOrder } from './codemods/variant-order'
 import { spliceChangesIntoString, type StringChange } from './splice-changes-into-string'
 
@@ -25,6 +26,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   bgGradient,
   simpleLegacyClasses,
   arbitraryValueToBareValue,
+  themeToVar,
   variantOrder,
 ]
 
