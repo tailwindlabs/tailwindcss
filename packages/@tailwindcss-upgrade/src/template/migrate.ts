@@ -7,6 +7,7 @@ import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
+import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { variantOrder } from './codemods/variant-order'
 
 export type Migration = (
@@ -20,6 +21,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   important,
   automaticVarInjection,
   bgGradient,
+  simpleLegacyClasses,
   variantOrder,
 ]
 
