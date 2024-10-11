@@ -18,14 +18,14 @@ test(
 
         module.exports = {
           darkMode: 'selector',
-          content: ['./src/**/*.{html,js}'],
+          content: ['./src/**/*.{html,js}', './my-app/**/*.{html,js}'],
           theme: {
             boxShadow: {
               sm: '0 2px 6px rgb(15 23 42 / 0.08)',
             },
             colors: {
               red: {
-                500: '#ef4444',
+                500: 'red',
               },
             },
             fontSize: {
@@ -36,6 +36,7 @@ test(
             extend: {
               colors: {
                 red: {
+                  500: '#ef4444',
                   600: '#dc2626',
                 },
               },
@@ -68,6 +69,8 @@ test(
 
       @source './**/*.{html,js}';
 
+      @source '../my-app/**/*.{html,js}';
+
       @variant dark (&:where(.dark, .dark *));
 
       @theme {
@@ -76,6 +79,7 @@ test(
 
         --color-*: initial;
         --color-red-500: #ef4444;
+        --color-red-600: #dc2626;
 
         --font-size-*: initial;
         --font-size-xs: 0.75rem;
@@ -85,12 +89,10 @@ test(
         --font-size-base: 1rem;
         --font-size-base--line-height: 2rem;
 
-        --color-red-600: #dc2626;
-
         --font-family-sans: Inter, system-ui, sans-serif;
         --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-        --border-radius-4xl: 2rem;
+        --radius-4xl: 2rem;
       }
       "
     `)

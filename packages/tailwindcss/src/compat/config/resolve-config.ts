@@ -87,7 +87,7 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
   }
 }
 
-function mergeThemeExtension(
+export function mergeThemeExtension(
   themeValue: ThemeValue | ThemeValue[],
   extensionValue: ThemeValue | ThemeValue[],
 ) {

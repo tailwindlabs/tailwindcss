@@ -8,6 +8,8 @@ import {
   keyPathToCssProperty,
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
+import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
+import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import { info } from './utils/renderer'
 
@@ -61,30 +63,28 @@ export async function migrateJsConfig(
 async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string> {
   let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
 
-  let resetNamespaces = new Set()
-  let prevSectionKey = ''
-
-  let css = `@theme {`
+  let resetNamespaces = new Map<string, boolean>()
+  // Before we merge the resetting theme values with the `extend` values, we
+  // capture all namespaces that need to be reset
   for (let [key, value] of themeableValues(overwriteTheme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
 
-    let sectionKey = createSectionKey(key)
-    if (sectionKey !== prevSectionKey) {
-      css += `\n`
-      prevSectionKey = sectionKey
-    }
-
     if (!resetNamespaces.has(key[0])) {
-      resetNamespaces.add(key[0])
-      css += `  --${keyPathToCssProperty([key[0]])}-*: initial;\n`
+      resetNamespaces.set(key[0], false)
+      // css += `  --${keyPathToCssProperty([key[0]])}-*: initial;\n`
     }
 
-    css += `  --${keyPathToCssProperty(key)}: ${value};\n`
+    // css += `  --${keyPathToCssProperty(key)}: ${value};\n`
   }
 
-  for (let [key, value] of themeableValues(extendTheme)) {
+  let themeValues = deepMerge({}, [overwriteTheme, extendTheme], mergeThemeExtension)
+
+  let prevSectionKey = ''
+
+  let css = `@theme {`
+  for (let [key, value] of themeableValues(themeValues)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
@@ -93,6 +93,11 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     if (sectionKey !== prevSectionKey) {
       css += `\n`
       prevSectionKey = sectionKey
+    }
+
+    if (resetNamespaces.has(key[0]) && resetNamespaces.get(key[0]) === false) {
+      resetNamespaces.set(key[0], true)
+      css += `  --${keyPathToCssProperty([key[0]])}-*: initial;\n`
     }
 
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
@@ -149,7 +154,7 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
   }
 
   // The file may not contain non-serializable values
-  function isSimpleValue (value: unknown): boolean {
+  function isSimpleValue(value: unknown): boolean {
     if (typeof value === 'function') return false
     if (Array.isArray(value)) return value.every(isSimpleValue)
     if (typeof value === 'object' && value !== null) {
