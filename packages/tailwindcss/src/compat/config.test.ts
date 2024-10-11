@@ -1444,7 +1444,7 @@ test('important: true', async () => {
   `)
 })
 
-test('blocklisted canddiates are not generated', async () => {
+test('blocklisted candidates are not generated', async () => {
   let compiler = await compile(
     css`
       @theme reference {
@@ -1483,7 +1483,7 @@ test('blocklisted canddiates are not generated', async () => {
   `)
 })
 
-test('blocklisted canddiates cannot be used with `@apply`', async () => {
+test('blocklisted candidates cannot be used with `@apply`', async () => {
   await expect(() =>
     compile(
       css`
