@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { compile, type Config } from '..'
-import plugin from '../plugin'
+import { default as plugin } from '../plugin'
 import { flattenColorPalette } from './flatten-color-palette'
 
 const css = String.raw
@@ -1511,4 +1511,83 @@ test('blocklisted canddiates cannot be used with `@apply`', async () => {
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `[Error: Cannot apply unknown utility class: bg-white]`,
   )
+})
+
+test('old theme values are merged with their renamed counterparts in the CSS theme', async () => {
+  let didCallPluginFn = vi.fn()
+
+  await compile(
+    css`
+      @theme reference {
+        --breakpoint-a: 1;
+        --breakpoint-b: 2;
+
+        --color-a: 1;
+        --color-b: 2;
+
+        --radius-a: 1;
+        --radius-b: 2;
+
+        --shadow-a: 1;
+        --shadow-b: 2;
+
+        --animate-a: 1;
+        --animate-b: 2;
+      }
+
+      @plugin "./plugin.js";
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: plugin(function ({ theme }) {
+            didCallPluginFn()
+
+            expect(theme('screens')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('screens.a')).toEqual('1')
+            expect(theme('screens.b')).toEqual('2')
+
+            expect(theme('colors')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('colors.a')).toEqual('1')
+            expect(theme('colors.b')).toEqual('2')
+
+            expect(theme('borderRadius')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('borderRadius.a')).toEqual('1')
+            expect(theme('borderRadius.b')).toEqual('2')
+
+            expect(theme('animation')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('animation.a')).toEqual('1')
+            expect(theme('animation.b')).toEqual('2')
+
+            expect(theme('boxShadow')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('boxShadow.a')).toEqual('1')
+            expect(theme('boxShadow.b')).toEqual('2')
+          }),
+        }
+      },
+    },
+  )
+
+  expect(didCallPluginFn).toHaveBeenCalled()
 })

@@ -114,6 +114,8 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'screens') path[0] = 'breakpoint'
   if (path[0] === 'borderRadius') path[0] = 'radius'
+  if (path[0] === 'boxShadow') path[0] = 'shadow'
+  if (path[0] === 'animation') path[0] = 'animate'
 
   return (
     path
