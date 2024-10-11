@@ -21,16 +21,6 @@ test('extracts different kind of imports from an ESM file', () => {
     plugin6: { module: './plugin3', export: null },
     plugin7: { module: './plugin7', export: '*' },
     plugin8: { module: './plugin7', export: null },
-
-    // plugin6: { module: 'plugin6', export: null },
-    // plugin7: { module: 'plugin7', export: 'plugin7' },
-    // plugin8: { module: 'plugin8', export: 'foo' },
-    // plugin9: { module: 'plugin9', export: null },
-    // plugin10: { module: 'plugin10', export: 'plugin10' },
-    // plugin11: { module: 'plugin11', export: 'foo' },
-    // plugin12: { module: 'plugin12', export: null },
-    // plugin13: { module: 'plugin13', export: 'plugin13' },
-    // plugin14: { module: 'plugin14', export: 'foo' },
   })
 })
 

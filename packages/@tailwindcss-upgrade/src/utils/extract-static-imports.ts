@@ -132,17 +132,6 @@ export function findSimplePlugins(source: string): string[] | null {
           }
         }
       }
-
-      // console.log({ imported, from })
-
-      // console.log(match.captures.map((c) => ({ name: c.name, text: c.node.text })))
-      // console.log('+++++++++++++++++++++++++==')
-      // let name = match.captures.find((c) => c.name === 'imported-name')
-      // let from = match.captures.find((c) => c.name === 'imported-from')
-
-      // if (!name || !from) continue
-
-      // imports[name.node.text] = { module: from.node.text, export: null }
     }
     return plugins
   } catch (error) {
