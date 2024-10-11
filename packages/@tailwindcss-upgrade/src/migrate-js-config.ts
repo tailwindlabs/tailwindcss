@@ -31,9 +31,9 @@ export async function migrateJsConfig(
     fs.readFile(fullConfigPath, 'utf-8'),
   ])
 
-  if (!isSimpleConfig(unresolvedConfig, source)) {
+  if (!canMigrateConfig(unresolvedConfig, source)) {
     info(
-      'The configuration file is not a simple object. Please refer to the migration guide for how to migrate it fully to Tailwind CSS v4. For now, we will load the configuration file as-is.',
+      'Your configuration file could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.',
     )
     return null
   }
@@ -63,8 +63,8 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
 
   let resetNamespaces = new Map<string, boolean>()
-  // Before we merge the resetting theme values with the `extend` values, we
-  // capture all namespaces that need to be reset
+  // Before we merge theme overrides with theme extensions, we capture all
+  // namespaces that need to be reset.
   for (let [key, value] of themeableValues(overwriteTheme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
@@ -119,7 +119,7 @@ function createSectionKey(key: string[]): string {
   let sectionSegments = []
   for (let i = 0; i < key.length - 1; i++) {
     let segment = key[i]
-    // ignore tuples
+    // Ignore tuples
     if (key[i + 1][0] === '-') {
       break
     }
@@ -143,7 +143,7 @@ function migrateContent(
 }
 
 // Applies heuristics to determine if we can attempt to migrate the config
-function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
+function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   // The file may not contain any functions
   if (source.includes('function') || source.includes(' => ')) {
     return false

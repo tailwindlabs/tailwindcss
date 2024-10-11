@@ -2,7 +2,7 @@ import { expect } from 'vitest'
 import { css, json, test, ts } from '../utils'
 
 test(
-  `upgrades a simple JS config file to CSS`,
+  `upgrade JS config files with flat theme values, darkMode, and content fields`,
   {
     fs: {
       'package.json': json`

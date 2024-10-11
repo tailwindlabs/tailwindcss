@@ -63,9 +63,8 @@ export function migrateConfig(
       cssConfig.append(postcss.parse(css + jsConfigMigration.css))
     }
 
-    // Inject the `@config` in a sensible place
-    // 1. Below the last `@import`
-    // 2. At the top of the file
+    // Inject the `@config` directive after the last `@import` or at the
+    // top of the file if no `@import` rules are present
     let locationNode = null as AtRule | null
 
     walk(root, (node) => {
@@ -99,10 +98,9 @@ export function migrateConfig(
 
     if (!hasTailwindImport) return
 
-    // - If a full `@import "tailwindcss"` is present, we can inject the
-    //   `@config` directive directly into this stylesheet.
-    // - If we are the root file (no parents), then we can inject the `@config`
-    //   directive directly into this file as well.
+    // If a full `@import "tailwindcss"` is present or this is the root
+    // stylesheet, we can inject the `@config` directive directly into this
+    // file.
     if (hasFullTailwindImport || sheet.parents.size <= 0) {
       injectInto(sheet)
       return
@@ -134,7 +132,7 @@ function relativeToStylesheet(sheet: Stylesheet, absolute: string) {
   if (relative[0] !== '.') {
     relative = `./${relative}`
   }
-  // Ensure relative is a posix style path since we will merge it with the
+  // Ensure relative is a POSIX style path since we will merge it with the
   // glob.
   return normalizePath(relative)
 }
