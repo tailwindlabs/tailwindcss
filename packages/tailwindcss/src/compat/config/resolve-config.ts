@@ -1,4 +1,5 @@
 import type { DesignSystem } from '../../design-system'
+import colors from '../colors'
 import type { PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
 import { deepMerge, isPlainObject } from './deep-merge'
@@ -117,6 +118,7 @@ export function mergeThemeExtension(
 
 export interface PluginUtils {
   theme(keypath: string, defaultValue?: any): any
+  colors: typeof colors
 }
 
 function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFile): void {
@@ -176,6 +178,7 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
 function mergeTheme(ctx: ResolutionContext) {
   let api: PluginUtils = {
     theme: createThemeFn(ctx.design, () => ctx.theme, resolveValue),
+    colors,
   }
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {
