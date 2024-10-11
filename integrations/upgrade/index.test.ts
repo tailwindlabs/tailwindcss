@@ -973,18 +973,17 @@ test(
       --- ./src/root.1.css ---
       /* Inject missing @config */
       @import 'tailwindcss';
-      @source './**/*.{html,js}';
+      @config '../tailwind.config.ts';
 
       --- ./src/root.2.css ---
       /* Already contains @config */
       @import 'tailwindcss';
-      @source './**/*.{html,js}';
       @config "../tailwind.config.js";
 
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
       @import 'tailwindcss';
-      @source './**/*.{html,js}';
+      @config '../tailwind.config.ts';
 
       @variant hocus (&:hover, &:focus);
 
@@ -1000,7 +999,7 @@ test(
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
-      @source './**/*.{html,js}';
+      @config '../tailwind.config.ts';
 
       --- ./src/root.5.css ---
       @import './root.5/tailwind.css';
@@ -1015,7 +1014,7 @@ test(
       --- ./src/root.5/tailwind.css ---
       /* Inject missing @config in this file, due to full import */
       @import 'tailwindcss';
-      @source '../**/*.{html,js}';
+      @config '../../tailwind.config.ts';
       "
     `)
   },
