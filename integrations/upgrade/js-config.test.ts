@@ -101,3 +101,52 @@ test(
     expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toBe('')
   },
 )
+
+test(
+  `does not upgrade a complex JS config file to CSS`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        export default {
+          plugins: [function complexConfig() {}],
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+
+      export default {
+        plugins: [function complexConfig() {}],
+      } satisfies Config
+      "
+    `)
+  },
+)
