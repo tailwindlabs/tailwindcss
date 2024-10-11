@@ -158,6 +158,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     }
     return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
+
   if (!isSimpleValue(unresolvedConfig)) {
     return false
   }
@@ -171,12 +172,15 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     'presets',
     'prefix', // Prefix is handled in the dedicated prefix migrator
   ]
+
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
     return false
   }
+
   if (unresolvedConfig.plugins && unresolvedConfig.plugins.length > 0) {
     return false
   }
+
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
     return false
   }
