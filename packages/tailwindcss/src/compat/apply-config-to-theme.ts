@@ -24,7 +24,10 @@ export function applyConfigToTheme(designSystem: DesignSystem, { theme }: Resolv
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
+
     let name = keyPathToCssProperty(path)
+    if (!name) continue
+
     designSystem.theme.add(
       `--${name}`,
       value as any,
@@ -110,12 +113,18 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
   return toAdd
 }
 
+const IS_VALID_KEY = /^[a-zA-Z0-9-_]+$/
+
 export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'screens') path[0] = 'breakpoint'
   if (path[0] === 'borderRadius') path[0] = 'radius'
   if (path[0] === 'boxShadow') path[0] = 'shadow'
   if (path[0] === 'animation') path[0] = 'animate'
+
+  for (let part of path) {
+    if (!IS_VALID_KEY.test(part)) return null
+  }
 
   return (
     path

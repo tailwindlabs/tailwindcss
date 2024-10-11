@@ -74,3 +74,27 @@ test('Config values can be merged into the theme', () => {
     { '--line-height': '1.5' },
   ])
 })
+
+test('Invalid keys are not merged into the theme', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let resolvedUserConfig = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: {
+            'primary color': '#86753099',
+          },
+        },
+      },
+      base: '/root',
+    },
+  ])
+
+  applyConfigToTheme(design, resolvedUserConfig)
+
+  let entries = Array.from(theme.entries())
+
+  expect(entries.length).toEqual(0)
+})
