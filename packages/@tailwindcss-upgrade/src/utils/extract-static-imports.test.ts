@@ -58,6 +58,16 @@ test('find simple plugins', () => {
 
   expect(
     findSimplePlugins(js`
+      let plugin1 = () => {}
+
+      export default {
+        plugins: [plugin1]
+      }
+    `),
+  ).toEqual(null)
+
+  expect(
+    findSimplePlugins(js`
       import {plugin1} from './plugin1'
 
       export default {
