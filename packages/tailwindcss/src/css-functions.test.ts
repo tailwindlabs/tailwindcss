@@ -220,6 +220,28 @@ describe('theme function', () => {
         `)
       })
 
+      test('theme(colors.red.500/var(--opacity,50%))', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              /* prettier-ignore */
+              color: theme(colors.red.500/var(--opacity,50%));
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: color-mix(in srgb, red calc(var(--opacity, 50%) * 100%), transparent);
+          }"
+        `)
+      })
+
       test('theme(spacing.12)', async () => {
         expect(
           await compileCss(css`
