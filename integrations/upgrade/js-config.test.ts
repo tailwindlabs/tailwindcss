@@ -164,7 +164,7 @@ test(
 )
 
 test(
-  'does not upgrade JS config files with typography styles in the theme config',
+  'does not upgrade JS config files with dynamic values in the theme config',
   {
     fs: {
       'package.json': json`
