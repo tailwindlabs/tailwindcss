@@ -40,7 +40,8 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss';
-      @config '../tailwind.config.js';
+
+      @source './**/*.{html,js}';
       "
     `)
 
@@ -71,8 +72,9 @@ test(
         }
       `,
       'src/index.html': html`
-        <h1>🤠👋</h1>
-        <div class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red]"></div>
+        <div
+          class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red]"
+        ></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -91,13 +93,14 @@ test(
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
       --- ./src/index.html ---
-      <h1>🤠👋</h1>
-      <div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"></div>
+      <div
+        class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"
+      ></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss' prefix(tw);
 
-      @config '../tailwind.config.js';
+      @source './**/*.{html,js}';
 
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
@@ -144,8 +147,6 @@ test(
       "
       --- ./src/index.css ---
       @import 'tailwindcss';
-
-      @config '../tailwind.config.js';
 
       .a {
         @apply flex;
@@ -200,8 +201,6 @@ test(
       "
       --- ./src/index.css ---
       @import 'tailwindcss';
-
-      @config '../tailwind.config.js';
 
       @layer base {
         html {
@@ -261,8 +260,6 @@ test(
       "
       --- ./src/index.css ---
       @import 'tailwindcss';
-
-      @config '../tailwind.config.js';
 
       @utility btn {
         @apply rounded-md px-2 py-1 bg-blue-500 text-white;
@@ -631,7 +628,6 @@ test(
       --- ./src/index.css ---
       @import 'tailwindcss';
       @import './utilities.css';
-      @config '../tailwind.config.js';
 
       --- ./src/utilities.css ---
       @utility no-scrollbar {
@@ -748,7 +744,6 @@ test(
       @import './c.1.css' layer(utilities);
       @import './c.1.utilities.css';
       @import './d.1.css';
-      @config '../tailwind.config.js';
 
       --- ./src/a.1.css ---
       @import './a.1.utilities.css'
@@ -882,17 +877,14 @@ test(
       --- ./src/root.1.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
-      @config '../tailwind.config.js';
 
       --- ./src/root.2.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(components);
-      @config '../tailwind.config.js';
 
       --- ./src/root.3.css ---
       @import 'tailwindcss/utilities' layer(utilities);
       @import './a.1.css' layer(utilities);
-      @config '../tailwind.config.js';
       "
     `)
   },
@@ -912,11 +904,17 @@ test(
       'tailwind.config.ts': js`
         export default {
           content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {
+              // custom stuff which is too complicated to migrate to CSS
+            },
+          ],
         }
       `,
       'src/index.html': html`
-        <h1>🤠👋</h1>
-        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"></div>
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
       `,
       'src/root.1.css': css`
         /* Inject missing @config */
@@ -968,8 +966,9 @@ test(
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
       --- ./src/index.html ---
-      <h1>🤠👋</h1>
-      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+      ></div>
 
       --- ./src/root.1.css ---
       /* Inject missing @config */
