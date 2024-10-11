@@ -149,7 +149,7 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
   }
 
   // The file may not contain non-serializable values
-  const isSimpleValue = (value: unknown): boolean => {
+  function isSimpleValue (value: unknown): boolean {
     if (typeof value === 'function') return false
     if (Array.isArray(value)) return value.every(isSimpleValue)
     if (typeof value === 'object' && value !== null) {
@@ -161,8 +161,8 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
-  // The file may only contain known-migrateable high-level properties
-  const knownProperties = ['darkMode', 'content', 'theme', 'plugins', 'presets']
+  // The file may only contain known-migrateable top-level properties
+  let knownProperties = ['darkMode', 'content', 'theme', 'plugins', 'presets']
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
     return false
   }
