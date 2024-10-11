@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Migrate `@media screen(…)` when running codemods ([#14603](https://github.com/tailwindlabs/tailwindcss/pull/14603))
 - _Upgrade (experimental)_: Inject `@config "…"` when a `tailwind.config.{js,ts,…}` is detected ([#14635](https://github.com/tailwindlabs/tailwindcss/pull/14635))
 - _Upgrade (experimental)_: Migrate `aria-*`, `data-*`, and `supports-*` variants from arbitrary values to bare values ([#14644](https://github.com/tailwindlabs/tailwindcss/pull/14644))
+- _Upgrade (experimental)_: Migrate static JS configurations to CSS ([#14639](https://github.com/tailwindlabs/tailwindcss/pull/14639))
 
 ### Fixed
 

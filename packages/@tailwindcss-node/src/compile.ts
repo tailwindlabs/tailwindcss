@@ -100,11 +100,8 @@ async function importModule(path: string): Promise<any> {
   try {
     return await import(path)
   } catch (error) {
-    try {
-      jiti ??= createJiti(import.meta.url, { moduleCache: false, fsCache: false })
-      return await jiti.import(path)
-    } catch {}
-    throw error
+    jiti ??= createJiti(import.meta.url, { moduleCache: false, fsCache: false })
+    return await jiti.import(path)
   }
 }
 
@@ -144,6 +141,7 @@ async function resolveCssId(id: string, base: string): Promise<string | false | 
 const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
+  extensions: ['.js', '.json', '.node', '.ts'],
 })
 
 function resolveJsId(id: string, base: string): Promise<string | false | undefined> {

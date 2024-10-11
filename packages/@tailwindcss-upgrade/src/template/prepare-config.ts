@@ -65,6 +65,7 @@ export async function prepareConfig(
       configFilePath: fullConfigPath,
     }
   } catch (e: any) {
+    console.error(e)
     error('Could not load the configuration file: ' + e.message)
     process.exit(1)
   }
