@@ -12,6 +12,7 @@ test.each([
 
   ['aria-[selected]:flex', 'aria-[selected]:flex'],
   ['aria-[selected="true"]:flex', 'aria-selected:flex'],
+  ['aria-[selected*="true"]:flex', 'aria-[selected*="true"]:flex'],
 
   ['group-aria-[selected]:flex', 'group-aria-[selected]:flex'],
   ['group-aria-[selected="true"]:flex', 'group-aria-selected:flex'],

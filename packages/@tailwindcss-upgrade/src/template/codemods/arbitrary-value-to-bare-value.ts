@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from '../candidates'
 
 export function arbitraryValueToBareValue(
@@ -31,8 +32,26 @@ export function arbitraryValueToBareValue(
         variant.kind === 'functional' &&
         variant.root === 'aria' &&
         variant.value?.kind === 'arbitrary' &&
-        variant.value.value.endsWith('="true"')
+        (variant.value.value.endsWith('=true') ||
+          variant.value.value.endsWith('="true"') ||
+          variant.value.value.endsWith("='true'"))
       ) {
+        let [key, _value] = segment(variant.value.value, '=')
+        if (
+          // aria-[foo~="true"]
+          key[key.length - 1] === '~' ||
+          // aria-[foo|="true"]
+          key[key.length - 1] === '|' ||
+          // aria-[foo^="true"]
+          key[key.length - 1] === '^' ||
+          // aria-[foo$="true"]
+          key[key.length - 1] === '$' ||
+          // aria-[foo*="true"]
+          key[key.length - 1] === '*'
+        ) {
+          continue
+        }
+
         changed = true
         variant.value = {
           kind: 'named',
