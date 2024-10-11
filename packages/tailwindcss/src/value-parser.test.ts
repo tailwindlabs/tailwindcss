@@ -66,6 +66,20 @@ describe('parse', () => {
     ])
   })
 
+  it('should parse a function with nested arguments separated by `/`', () => {
+    expect(parse('theme(colors.red.500/var(--opacity))')).toEqual([
+      {
+        kind: 'function',
+        value: 'theme',
+        nodes: [
+          { kind: 'word', value: 'colors.red.500' },
+          { kind: 'separator', value: '/' },
+          { kind: 'function', value: 'var', nodes: [{ kind: 'word', value: '--opacity' }] },
+        ],
+      },
+    ])
+  })
+
   it('should handle calculations', () => {
     expect(parse('calc((1 + 2) * 3)')).toEqual([
       {

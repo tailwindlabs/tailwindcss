@@ -136,6 +136,27 @@ describe('theme function', () => {
         `)
       })
 
+      test('theme(colors.red.500/75%)', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              color: theme(colors.red.500/75%);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: #ff0000bf;
+          }"
+        `)
+      })
+
       test('theme(colors.red.500 / 75%)', async () => {
         expect(
           await compileCss(css`
@@ -174,6 +195,27 @@ describe('theme function', () => {
 
           .red {
             color: #ff0000bf;
+          }"
+        `)
+      })
+
+      test('theme(colors.red.500/var(--opacity))', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              color: theme(colors.red.500/var(--opacity));
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: color-mix(in srgb, red calc(var(--opacity) * 100%), transparent);
           }"
         `)
       })
