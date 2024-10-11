@@ -234,7 +234,7 @@ test(
 )
 
 test(
-  'does not upgrade JS config files with static plugins',
+  'does not upgrade JS config files with plugins',
   {
     fs: {
       'package.json': json`
@@ -294,7 +294,7 @@ test(
 )
 
 test(
-  `does not upgrade JS config files with dynamic plugins`,
+  `does not upgrade JS config files with inline plugins`,
   {
     fs: {
       'package.json': json`
