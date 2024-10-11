@@ -58,6 +58,20 @@ export function arbitraryValueToBareValue(
           value: variant.value.value.slice(0, variant.value.value.indexOf('=')),
         }
       }
+
+      // Convert `supports-[gap]` to `supports-gap`
+      else if (
+        variant.kind === 'functional' &&
+        variant.root === 'supports' &&
+        variant.value?.kind === 'arbitrary' &&
+        /^[a-z-][a-z0-9-]*$/i.test(variant.value.value)
+      ) {
+        changed = true
+        variant.value = {
+          kind: 'named',
+          value: variant.value.value,
+        }
+      }
     }
 
     return changed ? printCandidate(designSystem, clone) : rawCandidate

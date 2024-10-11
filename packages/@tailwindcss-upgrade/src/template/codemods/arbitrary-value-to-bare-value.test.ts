@@ -6,6 +6,9 @@ test.each([
   ['data-[selected]:flex', 'data-selected:flex'],
   ['data-[foo=bar]:flex', 'data-[foo=bar]:flex'],
 
+  ['supports-[gap]:flex', 'supports-gap:flex'],
+  ['supports-[display:grid]:flex', 'supports-[display:grid]:flex'],
+
   ['group-data-[selected]:flex', 'group-data-selected:flex'],
   ['group-data-[foo=bar]:flex', 'group-data-[foo=bar]:flex'],
   ['group-has-data-[selected]:flex', 'group-has-data-selected:flex'],
