@@ -163,7 +163,14 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
   }
 
   // The file may only contain known-migrateable top-level properties
-  let knownProperties = ['darkMode', 'content', 'theme', 'plugins', 'presets']
+  let knownProperties = [
+    'darkMode',
+    'content',
+    'theme',
+    'plugins',
+    'presets',
+    'prefix', // Prefix is handled in the dedicated prefix migrator
+  ]
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
     return false
   }
