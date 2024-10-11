@@ -68,7 +68,6 @@ test(
       @import 'tailwindcss';
 
       @source './**/*.{html,js}';
-
       @source '../my-app/**/*.{html,js}';
 
       @variant dark (&:where(.dark, .dark *));

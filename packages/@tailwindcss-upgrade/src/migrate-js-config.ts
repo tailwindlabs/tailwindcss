@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises'
 import { dirname } from 'path'
-import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
@@ -20,7 +19,7 @@ export type JSConfigMigration =
   // Could not convert the config file, need to inject it as-is in a @config directive
   null | {
     sources: { base: string; pattern: string }[]
-    css: postcss.Root
+    css: string
   }
 
 export async function migrateJsConfig(
@@ -56,7 +55,7 @@ export async function migrateJsConfig(
 
   return {
     sources,
-    css: postcss.parse(cssConfigs.join('\n')),
+    css: cssConfigs.join('\n'),
   }
 }
 
@@ -73,10 +72,7 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
 
     if (!resetNamespaces.has(key[0])) {
       resetNamespaces.set(key[0], false)
-      // css += `  --${keyPathToCssProperty([key[0]])}-*: initial;\n`
     }
-
-    // css += `  --${keyPathToCssProperty(key)}: ${value};\n`
   }
 
   let themeValues = deepMerge({}, [overwriteTheme, extendTheme], mergeThemeExtension)

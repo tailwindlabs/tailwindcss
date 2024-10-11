@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { AtRule, type Plugin, Root } from 'postcss'
+import postcss, { AtRule, type Plugin, Root } from 'postcss'
 import { normalizePath } from '../../../@tailwindcss-node/src/normalize-path'
 import type { JSConfigMigration } from '../migrate-js-config'
 import type { Stylesheet } from '../stylesheet'
@@ -39,21 +39,17 @@ export function migrateConfig(
         }),
       )
     } else {
+      let css = '\n\n'
       for (let source of jsConfigMigration.sources) {
         let absolute = path.resolve(source.base, source.pattern)
-        cssConfig.append(
-          new AtRule({
-            name: 'source',
-            params: `'${relativeToStylesheet(sheet, absolute)}'`,
-          }),
-        )
+        css += `@source '${relativeToStylesheet(sheet, absolute)}';\n`
       }
 
-      if (jsConfigMigration.css.nodes.length > 0 && jsConfigMigration.sources.length > 0) {
-        jsConfigMigration.css.nodes[0].raws.before = '\n\n'
+      if (jsConfigMigration.sources.length > 0) {
+        css = css + '\n'
       }
 
-      cssConfig.append(jsConfigMigration.css.nodes)
+      cssConfig.append(postcss.parse(css + jsConfigMigration.css))
     }
 
     // Inject the `@config` in a sensible place
