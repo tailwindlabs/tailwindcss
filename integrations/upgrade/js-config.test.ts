@@ -244,7 +244,7 @@ test(
           }
         }
       `,
-      'tailwind.config.js': ts`
+      'tailwind.config.ts': ts`
         export default {
           theme: {
             colors: {
@@ -261,7 +261,7 @@ test(
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
-        @config '../tailwind.config.js';
+        @config '../tailwind.config.ts';
       `,
     },
   },
@@ -272,13 +272,13 @@ test(
       "
       --- src/input.css ---
       @import 'tailwindcss';
-      @config '../tailwind.config.js';
+      @config '../tailwind.config.ts';
       "
     `)
 
-    expect(await fs.dumpFiles('tailwind.config.js')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
       "
-      --- tailwind.config.js ---
+      --- tailwind.config.ts ---
       export default {
         theme: {
           colors: {
