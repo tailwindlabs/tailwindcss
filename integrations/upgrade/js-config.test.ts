@@ -296,6 +296,122 @@ test(
 )
 
 test(
+  'does not upgrade JS config files with deeply nested objects in the theme.extend config',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        export default {
+          theme: {
+            extend: {
+              colors: {
+                red: {
+                  500: {
+                    50: '#fff5f57f',
+                  },
+                },
+              },
+            },
+          },
+        }
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      export default {
+        theme: {
+          extend: {
+            colors: {
+              red: {
+                500: {
+                  50: '#fff5f57f',
+                },
+              },
+            },
+          },
+        },
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'does upgrade JS config even if theme.extend has 3 levels of nesting',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        export default {
+          theme: {
+            extend: {
+              colors: {
+                red: {
+                  500: '#fff5f5',
+                },
+              },
+            },
+          },
+        }
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @theme {
+        --color-red-500: #fff5f5;
+      }
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toBe('')
+  },
+)
+
+test(
   'does not upgrade JS config files with plugins',
   {
     fs: {
