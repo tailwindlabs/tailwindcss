@@ -185,5 +185,42 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
+  // The file may not contain deeply nested objects in the theme
+  function isTooNested(value: any, maxDepth: number): boolean {
+    if (maxDepth === 0) return true
+
+    if (!value) return false
+
+    if (Array.isArray(value)) {
+      // This is a tuple value so its fine
+      if (value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'object') {
+        return false
+      }
+
+      return value.some((v) => isTooNested(v, maxDepth - 1))
+    }
+
+    if (typeof value === 'object') {
+      return Object.values(value).some((v) => isTooNested(v, maxDepth - 1))
+    }
+
+    return false
+  }
+
+  let theme = unresolvedConfig.theme
+
+  if (theme && typeof theme === 'object') {
+    if (theme.extend && isTooNested(theme.extend, 4)) {
+      return false
+    }
+
+    let themeCopy = { ...theme }
+    delete themeCopy.extend
+
+    if (isTooNested(themeCopy, 4)) {
+      return false
+    }
+  }
+
   return true
 }
