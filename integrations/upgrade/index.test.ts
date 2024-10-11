@@ -904,6 +904,11 @@ test(
       'tailwind.config.ts': js`
         export default {
           content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {
+              // custom stuff which is too complicated to migrate to CSS
+            },
+          ],
         }
       `,
       'src/index.html': html`
@@ -995,7 +1000,6 @@ test(
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
-      @source './**/*.{html,js}';
       @source './**/*.{html,js}';
 
       --- ./src/root.5.css ---

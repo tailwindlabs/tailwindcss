@@ -5,6 +5,8 @@ import type { JSConfigMigration } from '../migrate-js-config'
 import type { Stylesheet } from '../stylesheet'
 import { walk, WalkAction } from '../utils/walk'
 
+const ALREADY_INJECTED = new WeakMap<Stylesheet, string[]>()
+
 export function migrateConfig(
   sheet: Stylesheet,
   {
@@ -13,6 +15,15 @@ export function migrateConfig(
   }: { configFilePath: string; jsConfigMigration: JSConfigMigration },
 ): Plugin {
   function injectInto(sheet: Stylesheet) {
+    let alreadyInjected = ALREADY_INJECTED.get(sheet)
+    if (alreadyInjected && alreadyInjected.includes(configFilePath)) {
+      return
+    } else if (alreadyInjected) {
+      alreadyInjected.push(configFilePath)
+    } else {
+      ALREADY_INJECTED.set(sheet, [configFilePath])
+    }
+
     let root = sheet.root
 
     // We don't have a sheet with a file path
