@@ -12,6 +12,7 @@ import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
+import { findSimplePlugins } from './utils/extract-static-imports'
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -21,6 +22,7 @@ export type JSConfigMigration =
   // Could not convert the config file, need to inject it as-is in a @config directive
   null | {
     sources: { base: string; pattern: string }[]
+    plugins: { base: string; path: string }[]
     css: string
   }
 
@@ -41,6 +43,7 @@ export async function migrateJsConfig(
   }
 
   let sources: { base: string; pattern: string }[] = []
+  let plugins: { base: string; path: string }[] = []
   let cssConfigs: string[] = []
 
   if ('darkMode' in unresolvedConfig) {
@@ -56,8 +59,17 @@ export async function migrateJsConfig(
     if (themeConfig) cssConfigs.push(themeConfig)
   }
 
+  let simplePlugins = findSimplePlugins(source)
+  console.log(simplePlugins)
+  if (simplePlugins !== null) {
+    for (let plugin of simplePlugins) {
+      plugins.push({ base, path: plugin })
+    }
+  }
+
   return {
     sources,
+    plugins,
     css: cssConfigs.join('\n'),
   }
 }
@@ -168,7 +180,9 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
 
-  if (!isSimpleValue(unresolvedConfig)) {
+  // Plugins can be complex, we have a special heuristics for them!
+  let { plugins, ...remainder } = unresolvedConfig
+  if (!isSimpleValue(remainder)) {
     return false
   }
 
@@ -186,7 +200,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
-  if (unresolvedConfig.plugins && unresolvedConfig.plugins.length > 0) {
+  if (findSimplePlugins(source) === null) {
     return false
   }
 

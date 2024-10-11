@@ -8,6 +8,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "@tailwindcss/typography": "^0.5.15",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -15,8 +16,10 @@ test(
       'tailwind.config.ts': ts`
         import { type Config } from 'tailwindcss'
         import defaultTheme from 'tailwindcss/defaultTheme'
+        import typography from '@tailwindcss/typography'
+        import customPlugin from './custom-plugin'
 
-        module.exports = {
+        export default {
           darkMode: 'selector',
           content: ['./src/**/*.{html,js}', './my-app/**/*.{html,js}'],
           theme: {
@@ -50,8 +53,14 @@ test(
               },
             },
           },
-          plugins: [],
+          plugins: [typography, customPlugin],
         } satisfies Config
+      `,
+      'custom-plugin.js': ts`
+        export default function ({ addVariant }) {
+          addVariant('inverted', '@media (inverted-colors: inverted)')
+          addVariant('hocus', ['&:focus', '&:hover'])
+        }
       `,
       'src/input.css': css`
         @tailwind base;
@@ -70,6 +79,9 @@ test(
 
       @source './**/*.{html,js}';
       @source '../my-app/**/*.{html,js}';
+
+      @plugin '@tailwindcss/typography';
+      @plugin '../custom-plugin';
 
       @variant dark (&:where(.dark, .dark *));
 
