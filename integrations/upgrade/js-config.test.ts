@@ -25,6 +25,7 @@ test(
             },
             colors: {
               red: {
+                400: '#f87171',
                 500: 'red',
               },
             },
@@ -77,6 +78,7 @@ test(
         --box-shadow-sm: 0 2px 6px rgb(15 23 42 / 0.08);
 
         --color-*: initial;
+        --color-red-400: #f87171;
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
