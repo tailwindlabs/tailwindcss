@@ -16,6 +16,7 @@ pub mod fast_skip;
 pub mod glob;
 pub mod parser;
 pub mod scanner;
+pub mod extractor;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
     || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind")),
