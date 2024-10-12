@@ -2,6 +2,7 @@ mod escape;
 mod fast_stack;
 mod gurantee;
 mod segment;
+mod throughput;
 
 #[allow(unused_imports)]
 pub use crate::util::escape::*;
@@ -14,3 +15,6 @@ pub use crate::util::gurantee::*;
 
 #[allow(unused_imports)]
 pub use crate::util::segment::*;
+
+#[allow(unused_imports)]
+pub use crate::util::throughput::*;
