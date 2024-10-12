@@ -80,10 +80,10 @@ fn is_ascii_whitespace(value: [u8; STRIDE]) -> [bool; STRIDE] {
     let whitespace_5 = eq(value, b' ');
 
     or(
-        or(
-            or(or(whitespace_1, whitespace_2), whitespace_3),
-            whitespace_4,
-        ),
-        whitespace_5,
+      or(
+        or(whitespace_1, whitespace_2),
+        or(whitespace_3, whitespace_4)
+      ),
+      whitespace_5
     )
 }
