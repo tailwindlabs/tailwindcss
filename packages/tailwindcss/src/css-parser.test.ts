@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import * as CSS from './css-parser'
+import { segment } from './utils/segment'
 
 const css = String.raw
 
@@ -1035,4 +1036,50 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!;"]`)
     })
   })
+})
+
+it.only('wip css-parser on preflight.css', async () => {
+  const { fileURLToPath } = await import('node:url')
+  const { readFile } = await import('node:fs/promises')
+  const currentFolder = fileURLToPath(new URL('..', import.meta.url))
+  const cssFile = await readFile(currentFolder + './preflight.css', 'utf-8')
+
+  function formatByteSize(size: number) {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    const unit = 1000
+    let i = 0
+    while (size > unit) {
+      size /= unit
+      i++
+    }
+    return `${size.toFixed(2)} ${units[i]}`
+  }
+
+  function throughput(iterations: number, memoryBaseline: number, callback: () => void) {
+    let now = process.hrtime.bigint()
+    let len = 0
+    for (let i = 0; i < iterations; ++i) {
+      len += CSS.parse(cssFile).length
+    }
+    let elapsed = Number(process.hrtime.bigint() - now) / 1e9
+    let memorySize = iterations * memoryBaseline
+    let rate = memorySize / elapsed
+
+    return { rate, elapsed, len }
+  }
+
+  let t1 = throughput(100_000, cssFile.length, () => CSS.parse(cssFile).length)
+  console.log(`CSS.parse: ${formatByteSize(t1.rate)}/s over ${t1.elapsed}s`)
+
+  let input =
+    'var(--a, 0 0 1px rgb(0, 0, 0)), 0 0 1px rgb(0, 0, 0), var(--a, 0 0 1px rgb(0, 0, 0)), 0 0 1px rgb(0, 0, 0), '.repeat(
+      500,
+    )
+
+  let t2 = throughput(100_000, input.length, () => segment(input, ','))
+  console.log(`segment: ${formatByteSize(t2.rate)}/s over ${t2.elapsed}s`)
+
+  console.log({ t1, t2 })
+
+  throw new Error('stop here')
 })
