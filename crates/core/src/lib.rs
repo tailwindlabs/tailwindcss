@@ -1,6 +1,7 @@
 mod compat;
 mod css;
 mod util;
+mod compiler;
 mod engine;
 
 use css::optimize::optimize_ast;
