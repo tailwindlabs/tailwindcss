@@ -2,10 +2,10 @@ use std::{ascii::escape_default, fmt::Display};
 
 #[derive(Debug, Clone)]
 pub struct Cursor<'a> {
-    // The input we're scanning
+    /// The input we're scanning
     pub input: &'a [u8],
 
-    // The location of the cursor in the input
+    /// The location of the cursor in the input
     pub pos: usize,
 
     /// Is the cursor at the start of the input
