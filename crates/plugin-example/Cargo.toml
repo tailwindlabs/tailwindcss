@@ -1,0 +1,15 @@
+[package]
+name = "tailwindcss-plugin-example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lsp-server = "0.7.6"
+serde = "1.0.209"
+serde_json = "1.0.127"
+tracing = "0.1.40"
+tailwindcss-core = { path = "../core" }
+crossbeam-channel = "0.5.13"
+log = "0.4.22"
+tokio = { version = "1.39.3", features = ["full"] }
+mio = "1.0.2"
