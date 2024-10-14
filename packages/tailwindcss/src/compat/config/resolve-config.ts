@@ -116,9 +116,8 @@ export function mergeThemeExtension(
   return undefined
 }
 
-type ThemeFunction = (keypath: string, defaultValue?: any) => any
-export type PluginUtils = ThemeFunction & {
-  theme: ThemeFunction
+export type PluginUtils = {
+  theme: (keypath: string, defaultValue?: any) => any
   colors: typeof colors
 }
 

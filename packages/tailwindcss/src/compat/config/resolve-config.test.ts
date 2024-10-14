@@ -202,7 +202,7 @@ test('theme keys can read from the CSS theme', () => {
             // Gives access to the colors object directly
             primary: colors.green,
           }),
-          transitionColor: (theme) => ({
+          transitionColor: (theme: any) => ({
             // The parameter object is also the theme function
             ...theme('colors'),
           }),
