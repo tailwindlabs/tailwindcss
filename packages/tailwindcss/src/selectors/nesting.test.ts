@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest'
-import { toCss } from '../ast'
+import { atRoot, context, decl, rule, toCss } from '../ast'
 import { parse } from '../css-parser'
 import { flattenNesting } from './nesting'
 
 const css = String.raw
 
-test('parse', () => {
+test('it flattens nested style rules and at-rules', () => {
   let ast = parse(css`
     .a {
       color: red;
@@ -69,7 +69,7 @@ test('parse', () => {
   `)
 })
 
-test('parse', () => {
+test('wip', () => {
   let ast = parse(css`
     .a {
       color: red;
@@ -117,7 +117,82 @@ test('parse', () => {
   `)
 })
 
-test('parse', () => {
+test('at-root is hoisted before flattening', () => {
+  let ast = [
+    rule('.a', [
+      decl('color', 'red'),
+      rule('.b', [decl('color', 'orange'), decl('color', 'yellow')]),
+      atRoot([
+        rule('.root', [
+          decl('color', 'green'),
+          decl('color', 'blue'),
+
+          rule('.c', [decl('color', 'indigo'), decl('color', 'violet')]),
+        ]),
+      ]),
+    ]),
+  ]
+
+  expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
+    ".a {
+      color: red;
+    }
+    .a .b {
+      color: orange;
+      color: yellow;
+    }
+    .root {
+      color: green;
+      color: blue;
+    }
+    .root .c {
+      color: indigo;
+      color: violet;
+    }
+    "
+  `)
+})
+
+test('context nodes are stripped', () => {
+  let ast = [
+    rule('.a', [
+      context({}, [
+        decl('color', 'red'),
+        rule('.b', [decl('color', 'orange'), decl('color', 'yellow')]),
+      ]),
+      context({}, [
+        atRoot([
+          rule('.root', [
+            context({}, [decl('color', 'green'), decl('color', 'blue')]),
+
+            rule('.c', [decl('color', 'indigo'), decl('color', 'violet')]),
+          ]),
+        ]),
+      ]),
+    ]),
+  ]
+
+  expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
+    ".a {
+      color: red;
+    }
+    .a .b {
+      color: orange;
+      color: yellow;
+    }
+    .root {
+      color: green;
+      color: blue;
+    }
+    .root .c {
+      color: indigo;
+      color: violet;
+    }
+    "
+  `)
+})
+
+test('it turns multiple nested selectors into :is(…) as needed', () => {
   let ast = parse(css`
     .a,
     .b {
@@ -146,7 +221,7 @@ test('parse', () => {
   `)
 })
 
-test('flat variant', () => {
+test('it can flatten variant-like syntax', () => {
   let ast = parse(css`
     &:hover {
       &:focus {

@@ -136,23 +136,30 @@ export function walkDepth(
     utils: {
       parent: AstNode | null
       path: AstNode[]
+      context: Record<string, string>
       replaceWith(newNode: AstNode[]): void
     },
   ) => void,
   parent: AstNode | null = null,
   parentPath: AstNode[] = [],
+  context: Record<string, string> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
     let path = [node, ...parentPath]
 
     if (node.kind === 'rule') {
-      walkDepth(node.nodes, visit, node, path)
+      walkDepth(node.nodes, visit, node, path, context)
+    } else if (node.kind === 'context') {
+      walkDepth(node.nodes, visit, node, path, { ...context, ...node.context })
+
+      // NOTE: we _do_ want to visit individual context nodes in `walkDepth`
     }
 
     visit(node, {
       parent,
       path,
+      context,
       replaceWith(newNode) {
         ast.splice(i, 1, ...newNode)
 

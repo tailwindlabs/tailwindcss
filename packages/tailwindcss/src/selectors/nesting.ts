@@ -11,7 +11,7 @@ let nestableAtRules = [
 ]
 
 export function flattenNesting(ast: AstNode[]) {
-  // Step 0: Hoist at-root nodes to the root of the AST
+  // Step 1: Hoist at-root nodes to the root of the AST
   //
   // These are hoisted when printing so we should also hoist them here to
   // ensure that they correctly flatten nesting without being affected by
@@ -19,14 +19,23 @@ export function flattenNesting(ast: AstNode[]) {
   let roots: AstNode[] = []
   walkDepth(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-root') {
-      roots.push(node)
+      roots.push(...node.nodes)
       replaceWith([])
     }
   })
 
-  ast.unshift(...roots)
+  // This is placed at the end to mirror the implementation in `toCss`
+  ast.push(...roots)
 
-  // Step 1: Sorting and selector preparation
+  // Step 2: Strip all context nodes
+  // We don't need to keep track of context nodes because they are only used
+  // for `@import` stuff right now so we can pretend they don't exist.
+  walkDepth(ast, (node, { replaceWith }) => {
+    if (node.kind !== 'context') return
+    replaceWith(node.nodes)
+  })
+
+  // Step 3: Sorting and selector preparation
   //
   // - Selectors have their implicit `&` inserted to make selector manipulation
   // simpler in future steps.
@@ -62,7 +71,7 @@ export function flattenNesting(ast: AstNode[]) {
       node.selector = selectors.join(', ')
     }
 
-    // Step 2: Group rules and declarations separately
+    // Step 4: Group rules and declarations separately
     //
     // We cannot collect all declarations into a single list because nesting
     // allows declarations to appear after nested rules / at rules and they
@@ -120,7 +129,7 @@ export function flattenNesting(ast: AstNode[]) {
     replaceWith(replacements)
   })
 
-  // Step 2: Merge selectors of style rules
+  // Step 5: Merge selectors of style rules
   // This technically produces invalid intermediate CSS but that gets flattened
   // out in the next step
   walkDepth(ast, (node, { path }) => {
@@ -138,7 +147,7 @@ export function flattenNesting(ast: AstNode[]) {
     }
   })
 
-  // Step 3: Flatten nested style rules
+  // Step 6: Flatten nested style rules
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'rule') return
     if (node.selector[0] === '@') return
