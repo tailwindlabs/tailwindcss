@@ -164,7 +164,7 @@ test(
 )
 
 test(
-  'does not upgrade JS config files with deeply nested objects in the theme config',
+  'does not upgrade JS config files with theme keys contributed to by plugins in the theme config',
   {
     fs: {
       'package.json': json`

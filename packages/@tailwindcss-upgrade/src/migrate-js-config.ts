@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import { dirname } from 'path'
 import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
 import {
@@ -9,6 +10,7 @@ import {
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
 import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
+import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import { info } from './utils/renderer'
 
@@ -192,35 +194,28 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
-  // The file may not contain deeply nested objects in the theme
+  // Only migrate the config file if all top-level theme keys are allowed to be
+  // migrated
   let theme = unresolvedConfig.theme
   if (theme && typeof theme === 'object') {
-    if (theme.extend && isTooNested(theme.extend, 4)) return false
+    if (theme.extend && !onlyUsesAllowedTopLevelKeys(theme.extend)) return false
     let { extend: _extend, ...themeCopy } = theme
-    if (isTooNested(themeCopy, 4)) return false
+    if (!onlyUsesAllowedTopLevelKeys(themeCopy)) return false
   }
 
   return true
 }
 
-// The file may not contain deeply nested objects in the theme
-function isTooNested(value: any, maxDepth: number): boolean {
-  if (maxDepth === 0) return true
-
-  if (!value) return false
-
-  if (Array.isArray(value)) {
-    // This is a tuple value so its fine
-    if (value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'object') {
+const DEFAULT_THEME_KEYS = [
+  ...Object.keys(defaultTheme),
+  // Used by @tailwindcss/container-queries
+  'containers',
+]
+function onlyUsesAllowedTopLevelKeys(theme: ThemeConfig): boolean {
+  for (let key of Object.keys(theme)) {
+    if (!DEFAULT_THEME_KEYS.includes(key)) {
       return false
     }
-
-    return value.some((v) => isTooNested(v, maxDepth - 1))
   }
-
-  if (typeof value === 'object') {
-    return Object.values(value).some((v) => isTooNested(v, maxDepth - 1))
-  }
-
-  return false
+  return true
 }
