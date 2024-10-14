@@ -202,6 +202,10 @@ test('theme keys can read from the CSS theme', () => {
             // Gives access to the colors object directly
             primary: colors.green,
           }),
+          transitionColor: (theme) => ({
+            // The parameter object is also the theme function
+            ...theme('colors'),
+          }),
         },
       },
       base: '/root',
@@ -236,6 +240,10 @@ test('theme keys can read from the CSS theme', () => {
           '900': '#14532d',
           '950': '#052e16',
         },
+      },
+      transitionColor: {
+        red: 'red',
+        green: 'green',
       },
     },
   })

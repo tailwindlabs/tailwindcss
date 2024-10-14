@@ -116,8 +116,9 @@ export function mergeThemeExtension(
   return undefined
 }
 
-export interface PluginUtils {
-  theme(keypath: string, defaultValue?: any): any
+type ThemeFunction = (keypath: string, defaultValue?: any) => any
+export type PluginUtils = ThemeFunction & {
+  theme: ThemeFunction
   colors: typeof colors
 }
 
@@ -176,14 +177,16 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
 }
 
 function mergeTheme(ctx: ResolutionContext) {
+  let theme = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
   let api: PluginUtils = {
-    theme: createThemeFn(ctx.design, () => ctx.theme, resolveValue),
+    theme,
     colors,
   }
+  Object.assign(theme, api)
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {
     if (typeof value === 'function') {
-      return value(api) ?? null
+      return value(theme) ?? null
     }
 
     return value ?? null
