@@ -8,7 +8,7 @@ const treesitter = String.raw
 const PLUGINS_QUERY = new Parser.Query(
   TS.typescript,
   treesitter`
-    ; export default = {}
+    ; export default {}
     (export_statement
       value: (satisfies_expression (object
         (pair
