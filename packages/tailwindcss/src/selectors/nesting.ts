@@ -11,13 +11,25 @@ let nestableAtRules = [
 ]
 
 export function flattenNesting(ast: AstNode[]) {
+  // Step 0: Hoist at-root nodes to the root of the AST
+  //
+  // These are hoisted when printing so we should also hoist them here to
+  // ensure that they correctly flatten nesting without being affected by
+  // the parent rules.
+  let roots: AstNode[] = []
+  walkDepth(ast, (node, { replaceWith }) => {
+    if (node.kind === 'at-root') {
+      roots.push(node)
+      replaceWith([])
+    }
+  })
+
+  ast.unshift(...roots)
+
   // Step 1: Sorting and selector preparation
   //
   // - Selectors have their implicit `&` inserted to make selector manipulation
   // simpler in future steps.
-  //
-  // - Declarations must be sorted before nested rules:
-  // https://www.w3.org/TR/css-nesting-1/#mixing
   //
   // - Rules are split into multiple groups such that each group has either
   // a list of declarations OR at most one rule inside. This means the split
