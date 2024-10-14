@@ -88,6 +88,13 @@ export function findStaticPlugins(source: string): string[] | null {
             case 'string':
               plugins.push(pluginDefinition.children[1].text)
               break
+            case 'call_expression':
+              // allow require('..') calls
+              if (pluginDefinition.children?.[0]?.text !== 'require') return null
+              let firstArgument = pluginDefinition.children?.[1]?.children?.[1]?.children?.[1]?.text
+              if (typeof firstArgument !== 'string') return null
+              plugins.push(firstArgument)
+              break
             default:
               return null
           }

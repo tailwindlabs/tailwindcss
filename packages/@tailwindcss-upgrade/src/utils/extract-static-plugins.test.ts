@@ -12,10 +12,10 @@ describe('findStaticPlugins', () => {
         import * as plugin2 from './plugin2'
 
         export default {
-          plugins: [plugin1, plugin2, 'plugin3']
+          plugins: [plugin1, plugin2, 'plugin3', require('./plugin4')]
         }
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', './plugin2', 'plugin3', './plugin4'])
 
     expect(
       findStaticPlugins(js`
@@ -23,10 +23,10 @@ describe('findStaticPlugins', () => {
         import * as plugin2 from './plugin2'
 
         export default {
-          plugins: [plugin1, plugin2, 'plugin3']
+          plugins: [plugin1, plugin2, 'plugin3', require('./plugin4')]
         } as any
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', './plugin2', 'plugin3', './plugin4'])
 
     expect(
       findStaticPlugins(js`
@@ -34,40 +34,40 @@ describe('findStaticPlugins', () => {
         import * as plugin2 from './plugin2'
 
         export default {
-          plugins: [plugin1, plugin2, 'plugin3']
+          plugins: [plugin1, plugin2, 'plugin3', require('./plugin4')]
         } satisfies any
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', './plugin2', 'plugin3', './plugin4'])
 
     expect(
       findStaticPlugins(js`
         const plugin1 = require('./plugin1')
 
         module.exports =  {
-          plugins: [plugin1, 'plugin2']
+          plugins: [plugin1, 'plugin2', require('./plugin3')]
         } as any
     `),
-    ).toEqual(['./plugin1', 'plugin2'])
+    ).toEqual(['./plugin1', 'plugin2', './plugin3'])
 
     expect(
       findStaticPlugins(js`
         const plugin1 = require('./plugin1')
 
         module.exports =  {
-          plugins: [plugin1, 'plugin2']
+          plugins: [plugin1, 'plugin2', require('./plugin3')]
         } satisfies any
     `),
-    ).toEqual(['./plugin1', 'plugin2'])
+    ).toEqual(['./plugin1', 'plugin2', './plugin3'])
 
     expect(
       findStaticPlugins(js`
         const plugin1 = require('./plugin1')
 
         module.exports =  {
-          plugins: [plugin1, 'plugin2']
+          plugins: [plugin1, 'plugin2', require('./plugin3')]
         }
     `),
-    ).toEqual(['./plugin1', 'plugin2'])
+    ).toEqual(['./plugin1', 'plugin2', './plugin3'])
   })
 
   test('bails out on inline plugins', () => {
@@ -87,6 +87,16 @@ describe('findStaticPlugins', () => {
 
       export default {
         plugins: [plugin1]
+      }
+    `),
+    ).toEqual(null)
+  })
+
+  test('bails out on non `require` calls', () => {
+    expect(
+      findStaticPlugins(js`
+      export default {
+        plugins: [frequire('./plugin1')]
       }
     `),
     ).toEqual(null)
