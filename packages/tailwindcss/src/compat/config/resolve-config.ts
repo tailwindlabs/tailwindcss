@@ -116,8 +116,9 @@ export function mergeThemeExtension(
   return undefined
 }
 
-export type PluginUtils = {
-  theme: (keypath: string, defaultValue?: any) => any
+type ThemeFunction = (keypath: string, defaultValue?: any) => any
+export type PluginUtils = ThemeFunction & {
+  theme: ThemeFunction
   colors: typeof colors
 }
 
@@ -175,25 +176,12 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   ctx.configs.push(config)
 }
 
-let didWarnAboutUsingObjectArgumentAsThemeFn = false
-
 function mergeTheme(ctx: ResolutionContext) {
   let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
-  let theme = Object.assign(
-    (path: string, defaultValue?: any) => {
-      if (!didWarnAboutUsingObjectArgumentAsThemeFn) {
-        didWarnAboutUsingObjectArgumentAsThemeFn = true
-        console.warn(
-          'Using the plugin object parameter as the theme function is deprecated. Please use the `theme` property instead.',
-        )
-      }
-      return themeFn(path, defaultValue)
-    },
-    {
-      theme: themeFn,
-      colors,
-    },
-  )
+  let theme = Object.assign(themeFn, {
+    theme: themeFn,
+    colors,
+  })
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {
     if (typeof value === 'function') {

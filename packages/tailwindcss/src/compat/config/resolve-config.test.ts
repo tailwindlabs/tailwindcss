@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest'
+import { expect, test } from 'vitest'
 import { buildDesignSystem } from '../../design-system'
 import { Theme } from '../../theme'
 import { resolveConfig } from './resolve-config'
@@ -172,12 +172,7 @@ test('theme keys can reference other theme keys using the theme function regardl
   })
 })
 
-test('theme keys can read from the CSS theme', ({ onTestFinished }) => {
-  let warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
-  onTestFinished(() => {
-    warn.mockReset()
-  })
-
+test('theme keys can read from the CSS theme', () => {
   let theme = new Theme()
   theme.add('--color-green', 'green')
 
@@ -207,7 +202,7 @@ test('theme keys can read from the CSS theme', ({ onTestFinished }) => {
             // Gives access to the colors object directly
             primary: colors.green,
           }),
-          transitionColor: (theme: any) => ({
+          transitionColor: (theme) => ({
             // The parameter object is also the theme function
             ...theme('colors'),
           }),
@@ -252,7 +247,4 @@ test('theme keys can read from the CSS theme', ({ onTestFinished }) => {
       },
     },
   })
-  expect(warn).toHaveBeenCalledWith(
-    'Using the plugin object parameter as the theme function is deprecated. Please use the `theme` property instead.',
-  )
 })
