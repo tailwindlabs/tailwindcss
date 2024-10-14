@@ -179,7 +179,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
 
-  // Plugins can be complex, we have a special heuristics for them!
+  // Plugins are more complex, so we have a special heuristics for them.
   let { plugins, ...remainder } = unresolvedConfig
   if (!isSimpleValue(remainder)) {
     return false
