@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- _Upgrade (experimental)_: Migrate `theme(…)` calls in classes to `var(…)` or to the modern `theme(…)` syntax ([#14664](https://github.com/tailwindlabs/tailwindcss/pull/14664))
+
 ### Fixed
 
 - Ensure `theme` values defined outside of `extend` in JS configuration files overwrite all existing values for that namespace ([#14672](https://github.com/tailwindlabs/tailwindcss/pull/14672))
