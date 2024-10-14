@@ -48,6 +48,20 @@ test(
               borderRadius: {
                 '4xl': '2rem',
               },
+              keyframes: {
+                'spin-clockwise': {
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(360deg)' },
+                },
+                'spin-counterclockwise': {
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(-360deg)' },
+                },
+              },
+              animation: {
+                'spin-clockwise': 'spin-clockwise 1s linear infinite',
+                'spin-counterclockwise': 'spin-counterclockwise 1s linear infinite',
+              },
             },
           },
           plugins: [],
@@ -91,9 +105,30 @@ test(
         --font-size-base--line-height: 2rem;
 
         --font-family-sans: Inter, system-ui, sans-serif;
-        --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
         --radius-4xl: 2rem;
+
+        --animate-spin-clockwise: spin-clockwise 1s linear infinite;
+        --animate-spin-counterclockwise: spin-counterclockwise 1s linear infinite;
+
+        @keyframes spin-clockwise {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes spin-counterclockwise {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(-360deg);
+          }
+        }
       }
       "
     `)
