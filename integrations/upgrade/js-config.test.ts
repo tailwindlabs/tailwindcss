@@ -143,20 +143,15 @@ test(
       "
       --- src/input.css ---
       @import 'tailwindcss';
-      @config '../tailwind.config.ts';
+
+      @plugin '@tailwindcss/typography';
+      @plugin '../custom-plugin';
       "
     `)
 
     expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
       "
-      --- tailwind.config.ts ---
-      import { type Config } from 'tailwindcss'
-      import typography from '@tailwindcss/typography'
-      import customPlugin from './custom-plugin'
 
-      export default {
-        plugins: [typography, customPlugin],
-      } satisfies Config
       "
     `)
   },
@@ -271,11 +266,21 @@ test(
 
     expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
       "
-      --- src/input.css ---
-      @import 'tailwindcss';
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
 
-      @plugin '@tailwindcss/typography';
-      @plugin '../custom-plugin';
+      export default {
+        theme: {
+          typography: {
+            DEFAULT: {
+              css: {
+                '--tw-prose-body': 'red',
+                color: 'var(--tw-prose-body)',
+              },
+            },
+          },
+        },
+      } satisfies Config
       "
     `)
   },
