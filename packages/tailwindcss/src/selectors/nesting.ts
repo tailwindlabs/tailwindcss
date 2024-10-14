@@ -50,32 +50,59 @@ export function flattenNesting(ast: AstNode[]) {
       node.selector = selectors.join(', ')
     }
 
-    // Step 2: Split rules from declarations
-    // This will simplify the tree-flattening later
-    let rules: Rule[] = []
-    let other: AstNode[] = []
+    // Step 2: Group rules and declarations separately
+    //
+    // We cannot collect all declarations into a single list because nesting
+    // allows declarations to appear after nested rules / at rules and they
+    // resolve in that order.
+    //
+    // This was not previously the case in older versions of the spec, but
+    // it was changed in the 4 October 2024 draft.
+    //
+    // https://drafts.csswg.org/css-nesting/#the-cssnestrule
+    let groups: AstNode[][] = []
+    let currentGroup: AstNode[] = []
 
     for (let child of node.nodes) {
-      if (child.kind !== 'rule') {
-        other.push(child)
+      if (child.kind === 'comment') continue
+
+      if (currentGroup.length === 0) {
+        currentGroup.push(child)
+        groups.push(currentGroup)
+        continue
+      }
+
+      if (child.kind === 'rule' && currentGroup[0].kind === 'rule') {
+        currentGroup.push(child)
+      } else if (child.kind === 'declaration' && currentGroup[0].kind === 'declaration') {
+        currentGroup.push(child)
       } else {
-        rules.push(child)
+        currentGroup = [child]
+        groups.push(currentGroup)
       }
     }
 
-    // We need at least two nested
-    if (rules.length === 0) return
+    // We need at least two nested rules
+    let ruleCount = 0
+    for (let group of groups) {
+      if (group[0].kind === 'rule') ruleCount++
+    }
+
+    if (ruleCount === 0) return
 
     let replacements: AstNode[] = []
 
-    // Add declarations in a separate rule node
-    if (other.length > 0) {
-      replacements.push(rule(node.selector, other))
-    }
+    for (let group of groups) {
+      // Wrap declarations in a separate rule node
+      if (group[0].kind === 'declaration') {
+        replacements.push(rule(node.selector, group))
+        continue
+      }
 
-    // Add each nested rule in a separate rule node
-    for (let r of rules) {
-      replacements.push(rule(node.selector, [r]))
+      // Wrap each nested rule in a separate rule node
+      for (let r of group) {
+        replacements.push(rule(node.selector, [r]))
+      }
     }
 
     replaceWith(replacements)

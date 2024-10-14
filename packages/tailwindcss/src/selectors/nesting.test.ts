@@ -34,12 +34,10 @@ test('parse', () => {
   expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
     ".a {
       color: red;
-      color: violet;
     }
     @layer thing {
       .a .b {
         color: orange;
-        color: blue;
       }
     }
     @layer thing {
@@ -56,8 +54,16 @@ test('parse', () => {
         }
       }
     }
+    @layer thing {
+      .a .b {
+        color: blue;
+      }
+    }
     .a .e {
       color: indigo;
+    }
+    .a {
+      color: violet;
     }
     "
   `)
@@ -90,7 +96,6 @@ test('parse', () => {
   expect(toCss(flattenNesting(ast))).toMatchInlineSnapshot(`
     ".a {
       color: red;
-      color: violet;
     }
     .a .b {
       color: orange;
@@ -104,6 +109,9 @@ test('parse', () => {
     }
     .a .e {
       color: indigo;
+    }
+    .a {
+      color: violet;
     }
     "
   `)
