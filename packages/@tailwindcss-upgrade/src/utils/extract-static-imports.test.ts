@@ -127,11 +127,11 @@ describe('findSimplePlugins', () => {
 describe('extractStaticImportMap', () => {
   test('extracts different kind of imports from an ESM file', () => {
     let extracted = extractStaticImportMap(js`
-    import plugin1 from './plugin1'
-    import * as plugin2 from './plugin2'
-    import plugin6, { plugin3, plugin4, default as plugin5 } from './plugin3'
-    import plugin8, * as plugin7 from './plugin7'
-  `)
+      import plugin1 from './plugin1'
+      import * as plugin2 from './plugin2'
+      import plugin6, { plugin3, plugin4, default as plugin5 } from './plugin3'
+      import plugin8, * as plugin7 from './plugin7'
+    `)
 
     expect(extracted).toEqual({
       plugin1: { module: './plugin1', export: null },
@@ -142,6 +142,33 @@ describe('extractStaticImportMap', () => {
       plugin6: { module: './plugin3', export: null },
       plugin7: { module: './plugin7', export: '*' },
       plugin8: { module: './plugin7', export: null },
+    })
+  })
+
+  test('extracts different kind of imports from an CJS file', () => {
+    let extracted = extractStaticImportMap(js`
+      const plugin1 = require('./plugin1')
+      let plugin2 = require('./plugin2')
+      var plugin3 = require('./plugin3')
+
+      const {plugin4, foo: plugin5, ...plugin6} = require('./plugin4')
+      let {plugin7, foo: plugin8, ...plugin9} = require('./plugin5')
+      var {plugin10, foo: plugin11, ...plugin12} = require('./plugin6')
+    `)
+
+    expect(extracted).toEqual({
+      plugin1: { module: './plugin1', export: null },
+      plugin2: { module: './plugin2', export: null },
+      plugin3: { module: './plugin3', export: null },
+      plugin4: { module: './plugin4', export: 'plugin4' },
+      plugin5: { module: './plugin4', export: 'foo' },
+      plugin6: { module: './plugin4', export: '*' },
+      plugin7: { module: './plugin5', export: 'plugin7' },
+      plugin8: { module: './plugin5', export: 'foo' },
+      plugin9: { module: './plugin5', export: '*' },
+      plugin10: { module: './plugin6', export: 'plugin10' },
+      plugin11: { module: './plugin6', export: 'foo' },
+      plugin12: { module: './plugin6', export: '*' },
     })
   })
 })

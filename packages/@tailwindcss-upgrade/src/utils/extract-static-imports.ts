@@ -12,19 +12,19 @@ const PLUGINS_QUERY = new Parser.Query(
     (export_statement
       value: (satisfies_expression (object
         (pair
-          key: (property_identifier) @name (#eq? @name "plugins")
+          key: (property_identifier) @_name (#eq? @_name "plugins")
           value: (array) @imports
         )
       ))?
       value: (as_expression (object
         (pair
-          key: (property_identifier) @name (#eq? @name "plugins")
+          key: (property_identifier) @_name (#eq? @_name "plugins")
           value: (array) @imports
         )
       ))?
       value: (object
         (pair
-          key: (property_identifier) @name (#eq? @name "plugins")
+          key: (property_identifier) @_name (#eq? @_name "plugins")
           value: (array) @imports
         )
       )?
@@ -36,19 +36,19 @@ const PLUGINS_QUERY = new Parser.Query(
         left: (member_expression) @left (#eq? @left "module.exports")
         right: (satisfies_expression (object
           (pair
-            key: (property_identifier) @name (#eq? @name "plugins")
+            key: (property_identifier) @_name (#eq? @_name "plugins")
             value: (array) @imports
           )
         ))?
         right: (as_expression (object
           (pair
-            key: (property_identifier) @name (#eq? @name "plugins")
+            key: (property_identifier) @_name (#eq? @_name "plugins")
             value: (array) @imports
           )
         ))?
         right: (object
           (pair
-            key: (property_identifier) @name (#eq? @name "plugins")
+            key: (property_identifier) @_name (#eq? @_name "plugins")
             value: (array) @imports
           )
         )?
@@ -102,9 +102,10 @@ export function findSimplePlugins(source: string): string[] | null {
   }
 }
 
-const ESM_IMPORT_QUERY = new Parser.Query(
+const IMPORT_QUERY = new Parser.Query(
   TS.typescript,
   treesitter`
+    ; ESM import
     (import_statement
       (import_clause
         (identifier)? @default
@@ -118,14 +119,38 @@ const ESM_IMPORT_QUERY = new Parser.Query(
       )
       (string
         (string_fragment) @imported-from)
-    )`,
+    )
+
+    ; CJS require
+    (variable_declarator
+      name: (identifier)? @default
+      name: (object_pattern
+        (shorthand_property_identifier_pattern)? @imported-name
+        (pair_pattern
+          key: (property_identifier) @imported-name
+          value: (identifier) @imported-alias
+        )?
+        (rest_pattern
+          (identifier) @imported-namespace
+        )?
+      )?
+      value: (call_expression
+        function: (identifier) @_fn (#eq? @_fn "require")
+        arguments: (arguments
+          (string
+              (string_fragment) @imported-from
+            )
+        )
+      )
+    )
+  `,
 )
 
 export function extractStaticImportMap(source: string) {
   let tree = parser.parse(source)
   let root = tree.rootNode
 
-  let captures = ESM_IMPORT_QUERY.matches(root)
+  let captures = IMPORT_QUERY.matches(root)
 
   let imports: Record<string, { module: string; export: string | null }> = {}
   for (let match of captures) {
