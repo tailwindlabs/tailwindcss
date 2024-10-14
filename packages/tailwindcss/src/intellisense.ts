@@ -1,4 +1,4 @@
-import { decl, rule } from './ast'
+import { decl, rule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
@@ -75,6 +75,18 @@ export function getVariants(design: DesignSystem) {
       if (applyVariant(node, variant, design.variants) === null) {
         return []
       }
+
+      // Produce v3-style selector strings in the face of nested rules
+      // This is more visible for things like group-*, not-*, etc…
+      walkDepth(node.nodes, (node) => {
+        if (node.kind !== 'rule') return
+
+        let child = node.nodes[0]
+        let childSelector = child?.kind === 'rule' ? child.selector : '&'
+
+        node.selector =
+          node.selector === '&' ? childSelector : `${node.selector} { ${childSelector} }`
+      })
 
       // Now look at the selector(s) inside the rule
       let selectors: string[] = []

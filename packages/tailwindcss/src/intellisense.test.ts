@@ -72,9 +72,9 @@ test('getVariants compound', () => {
   ]
 
   expect(list).toEqual([
-    ['&:is(:where(.group):hover *)'],
-    ['&:is(:where(.group\\/sidebar):hover *)'],
-    ['&:is(:where(.group):is(:where(.group):hover *) *)'],
+    ['@media (hover: hover) { &:is(:where(.group):hover *) { & } }'],
+    ['@media (hover: hover) { &:is(:where(.group\\/sidebar):hover *) { & } }'],
+    ['@media (hover: hover) { &:is(:where(.group):is(:where(.group):hover *) *) { & } }'],
     [],
     [],
   ])
