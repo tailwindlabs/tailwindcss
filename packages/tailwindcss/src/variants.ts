@@ -4,6 +4,7 @@ import { flattenNesting } from './selectors/nesting'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
+import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
@@ -238,34 +239,45 @@ export function createVariants(theme: Theme): Variants {
 
     // Name the group by appending the modifier to `group` class itself if
     // present.
-    let groupSelector = variant.modifier
+    let variantSelector = variant.modifier
       ? `:where(.group\\/${variant.modifier.value})`
       : ':where(.group)'
 
-    let rules: Rule[] = []
+    // Most variants rely on CSS nesting to build-up the final selector, but
+    // there is no way to use CSS nesting to make `&` refer to just the `.group`
+    // class the way we'd need to for these variants, so we flatten the nesting
+    // and manually update the selectors for each rule ourselves.
+    let flattened = flattenNesting(structuredClone([ruleNode]))
+    let hasStyleRules = false
 
-    for (let node of flattenNesting(structuredClone([ruleNode]))) {
-      if (node.kind !== 'rule') continue
+    walk(flattened, (node) => {
+      if (node.kind !== 'rule') return
+      if (node.selector[0] === '@') return
 
-      // Don't allow not to be used with variants that use at-rules
-      if (node.selector[0] === '@') return null
+      hasStyleRules = true
 
-      rules.push(node)
-    }
+      let parts = segment(node.selector, ',').map((part) => {
+        if (part.startsWith(':is(') && part.endsWith(')')) {
+          part = part.slice(4, -1)
+        }
 
-    if (rules.length === 0) return null
+        part = part.replaceAll('&', variantSelector)
+        part = `&:is(${part} *)`
 
-    for (let node of rules) {
-      // For most variants we rely entirely on CSS nesting to build-up the final
-      // selector, but there is no way to use CSS nesting to make `&` refer to
-      // just the `.group` class the way we'd need to for these variants, so we
-      // need to replace it in the selector ourselves.
-      node.selector = node.selector.replaceAll('&', groupSelector)
-      node.selector = `&:is(${node.selector} *)`
+        return part
+      })
+
+      node.selector = parts.join(', ')
+    })
+
+    // A group variant with no style rules makes no sense
+    // group-md:underline is a useless utility
+    if (!hasStyleRules) {
+      return null
     }
 
     ruleNode.selector = '&'
-    ruleNode.nodes = rules
+    ruleNode.nodes = flattened
   })
 
   variants.suggest('group', () => {
@@ -279,34 +291,45 @@ export function createVariants(theme: Theme): Variants {
 
     // Name the peer by appending the modifier to `peer` class itself if
     // present.
-    let peerSelector = variant.modifier
+    let variantSelector = variant.modifier
       ? `:where(.peer\\/${variant.modifier.value})`
       : ':where(.peer)'
 
-    let rules: Rule[] = []
+    // Most variants rely on CSS nesting to build-up the final selector, but
+    // there is no way to use CSS nesting to make `&` refer to just the `.group`
+    // class the way we'd need to for these variants, so we flatten the nesting
+    // and manually update the selectors for each rule ourselves.
+    let flattened = flattenNesting(structuredClone([ruleNode]))
+    let hasStyleRules = false
 
-    for (let node of flattenNesting(structuredClone([ruleNode]))) {
-      if (node.kind !== 'rule') continue
+    walk(flattened, (node) => {
+      if (node.kind !== 'rule') return
+      if (node.selector[0] === '@') return
 
-      // Don't allow not to be used with variants that use at-rules
-      if (node.selector[0] === '@') return null
+      hasStyleRules = true
 
-      rules.push(node)
-    }
+      let parts = segment(node.selector, ',').map((part) => {
+        if (part.startsWith(':is(') && part.endsWith(')')) {
+          part = part.slice(4, -1)
+        }
 
-    if (rules.length === 0) return null
+        part = part.replaceAll('&', variantSelector)
+        part = `&:is(${part} ~ *)`
 
-    for (let node of rules) {
-      // For most variants we rely entirely on CSS nesting to build-up the final
-      // selector, but there is no way to use CSS nesting to make `&` refer to
-      // just the `.group` class the way we'd need to for these variants, so we
-      // need to replace it in the selector ourselves.
-      node.selector = node.selector.replaceAll('&', peerSelector)
-      node.selector = `&:is(${node.selector} ~ *)`
+        return part
+      })
+
+      node.selector = parts.join(', ')
+    })
+
+    // A group variant with no style rules makes no sense
+    // group-md:underline is a useless utility
+    if (!hasStyleRules) {
+      return null
     }
 
     ruleNode.selector = '&'
-    ruleNode.nodes = rules
+    ruleNode.nodes = flattened
   })
 
   variants.suggest('peer', () => {
@@ -409,30 +432,41 @@ export function createVariants(theme: Theme): Variants {
   variants.compound('has', (ruleNode, variant) => {
     if (variant.modifier) return null
 
-    let rules: Rule[] = []
+    // Most variants rely on CSS nesting to build-up the final selector, but
+    // there is no way to use CSS nesting to make `&` refer to just the `.group`
+    // class the way we'd need to for these variants, so we flatten the nesting
+    // and manually update the selectors for each rule ourselves.
+    let flattened = flattenNesting(structuredClone([ruleNode]))
+    let hasStyleRules = false
 
-    for (let node of flattenNesting(structuredClone([ruleNode]))) {
-      if (node.kind !== 'rule') continue
+    walk(flattened, (node) => {
+      if (node.kind !== 'rule') return
+      if (node.selector[0] === '@') return
 
-      // Don't allow not to be used with variants that use at-rules
-      if (node.selector[0] === '@') return null
+      hasStyleRules = true
 
-      rules.push(node)
-    }
+      let parts = segment(node.selector, ',').map((part) => {
+        if (part.startsWith(':is(') && part.endsWith(')')) {
+          part = part.slice(4, -1)
+        }
 
-    if (rules.length === 0) return null
+        part = part.replaceAll('&', '*')
+        part = `&:has(${part})`
 
-    for (let node of rules) {
-      let selector = node.selector.replaceAll('&', '*')
-      if (selector.startsWith(':is(') && selector.endsWith(')')) {
-        selector = selector.slice(4, -1)
-      }
+        return part
+      })
 
-      node.selector = `&:has(${selector})`
+      node.selector = parts.join(', ')
+    })
+
+    // A group variant with no style rules makes no sense
+    // group-md:underline is a useless utility
+    if (!hasStyleRules) {
+      return null
     }
 
     ruleNode.selector = '&'
-    ruleNode.nodes = rules
+    ruleNode.nodes = flattened
   })
 
   variants.suggest('has', () => {

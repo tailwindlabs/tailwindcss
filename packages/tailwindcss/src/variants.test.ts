@@ -799,6 +799,19 @@ test('group-*', async () => {
             }
           }
         }
+        @variant complex-selectors {
+          &:hover,
+          &[data-hovered] {
+            &:focus {
+              @slot;
+            }
+
+            &:active,
+            &[data-active] {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -806,6 +819,7 @@ test('group-*', async () => {
         'group-focus:flex',
         'group-hocus:flex',
         'group-nested-selectors:flex',
+        'group-complex-selectors:flex',
 
         'group-hover:group-focus:flex',
         'group-focus:group-hover:flex',
@@ -834,11 +848,15 @@ test('group-*', async () => {
       }
     }
 
-    .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+    .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
       display: flex;
     }
 
     .group-nested-selectors\\:flex:is(:where(.group):hover:focus *) {
+      display: flex;
+    }
+
+    .group-complex-selectors\\:flex:is(:is(:where(.group):hover, :where(.group)[data-hovered]):focus *), .group-complex-selectors\\:flex:is(:is(:where(.group):hover, :where(.group)[data-hovered]):active *), .group-complex-selectors\\:flex:is(:is(:where(.group):hover, :where(.group)[data-hovered])[data-active] *) {
       display: flex;
     }"
   `)
@@ -911,6 +929,26 @@ test('peer-*', async () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
+        @variant complex-selectors {
+          &:hover,
+          &[data-hovered] {
+            &:focus {
+              @slot;
+            }
+
+            &:active,
+            &[data-active] {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -918,6 +956,8 @@ test('peer-*', async () => {
         'peer-focus:flex',
         'peer-hocus:flex',
         'peer-nested-selectors:flex',
+        'peer-complex-selectors:flex',
+
         'peer-hover:peer-focus:flex',
         'peer-focus:peer-hover:flex',
       ],
@@ -945,7 +985,15 @@ test('peer-*', async () => {
       }
     }
 
-    .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
+    .peer-hocus\\:flex:is(:where(.peer):hover ~ *), .peer-hocus\\:flex:is(:where(.peer):focus ~ *) {
+      display: flex;
+    }
+
+    .peer-nested-selectors\\:flex:is(:where(.peer):hover:focus ~ *) {
+      display: flex;
+    }
+
+    .peer-complex-selectors\\:flex:is(:is(:where(.peer):hover, :where(.peer)[data-hovered]):focus ~ *), .peer-complex-selectors\\:flex:is(:is(:where(.peer):hover, :where(.peer)[data-hovered]):active ~ *), .peer-complex-selectors\\:flex:is(:is(:where(.peer):hover, :where(.peer)[data-hovered])[data-active] ~ *) {
       display: flex;
     }"
   `)
@@ -1693,12 +1741,26 @@ test('not', async () => {
             }
           }
         }
+        @variant complex-selectors {
+          &:hover,
+          &[data-hovered] {
+            &:focus {
+              @slot;
+            }
+
+            &:active,
+            &[data-active] {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
         'not-[:checked]:flex',
         'not-hocus:flex',
         'not-nested-selectors:flex',
+        'not-complex-selectors:flex',
 
         'group-not-[:checked]:flex',
         'group-not-[:checked]/parent-name:flex',
@@ -1706,11 +1768,21 @@ test('not', async () => {
         'group-not-hocus:flex',
         'group-not-hocus/parent-name:flex',
 
+        'group-not-nested-selectors:flex',
+        'group-not-nested-selectors/parent-name:flex',
+        'group-not-complex-selectors:flex',
+        'group-not-complex-selectors/parent-name:flex',
+
         'peer-not-[:checked]:flex',
         'peer-not-[:checked]/sibling-name:flex',
         'peer-not-checked:flex',
         'peer-not-hocus:flex',
         'peer-not-hocus/sibling-name:flex',
+
+        'peer-not-nested-selectors:flex',
+        'peer-not-nested-selectors/parent-name:flex',
+        'peer-not-complex-selectors:flex',
+        'peer-not-complex-selectors/parent-name:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -1719,6 +1791,10 @@ test('not', async () => {
     }
 
     .not-nested-selectors\\:flex:not(:hover:focus) {
+      display: flex;
+    }
+
+    .not-complex-selectors\\:flex:not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) {
       display: flex;
     }
 
@@ -1735,6 +1811,22 @@ test('not', async () => {
     }
 
     .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover, :focus) *) {
+      display: flex;
+    }
+
+    .group-not-nested-selectors\\:flex:is(:where(.group):not(:hover:focus) *) {
+      display: flex;
+    }
+
+    .group-not-nested-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover:focus) *) {
+      display: flex;
+    }
+
+    .group-not-complex-selectors\\:flex:is(:where(.group):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
+      display: flex;
+    }
+
+    .group-not-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
       display: flex;
     }
 
@@ -1755,6 +1847,22 @@ test('not', async () => {
     }
 
     .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-not-nested-selectors\\:flex:is(:where(.peer):not(:hover:focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-not-nested-selectors\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:hover:focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-not-complex-selectors\\:flex:is(:where(.peer):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
+      display: flex;
+    }
+
+    .peer-not-complex-selectors\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
       display: flex;
     }
 
@@ -1880,11 +1988,11 @@ test('has', async () => {
       display: flex;
     }
 
-    .group-has-hocus\\:flex:is(:where(.group):has(:hover, :focus) *) {
+    .group-has-hocus\\:flex:is(:where(.group):has(:hover) *), .group-has-hocus\\:flex:is(:where(.group):has(:focus) *) {
       display: flex;
     }
 
-    .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *) {
+    .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover) *), .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:focus) *) {
       display: flex;
     }
 
@@ -1896,7 +2004,7 @@ test('has', async () => {
       display: flex;
     }
 
-    .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):focus) *), .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
+    .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):focus) *), .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered]):active) *), .group-has-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:is(:hover, [data-hovered])[data-active]) *) {
       display: flex;
     }
 
@@ -1940,11 +2048,11 @@ test('has', async () => {
       display: flex;
     }
 
-    .peer-has-hocus\\:flex:is(:where(.peer):has(:hover, :focus) ~ *) {
+    .peer-has-hocus\\:flex:is(:where(.peer):has(:hover) ~ *), .peer-has-hocus\\:flex:is(:where(.peer):has(:focus) ~ *) {
       display: flex;
     }
 
-    .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ *) {
+    .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover) ~ *), .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:focus) ~ *) {
       display: flex;
     }
 
@@ -1956,7 +2064,7 @@ test('has', async () => {
       display: flex;
     }
 
-    .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):focus) ~ *), .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
+    .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):focus) ~ *), .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered]):active) ~ *), .peer-has-complex-selectors\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:is(:hover, [data-hovered])[data-active]) ~ *) {
       display: flex;
     }
 
@@ -1996,7 +2104,7 @@ test('has', async () => {
       display: flex;
     }
 
-    .has-hocus\\:flex:has(:hover, :focus) {
+    .has-hocus\\:flex:has(:hover), .has-hocus\\:flex:has(:focus) {
       display: flex;
     }
 
@@ -2004,7 +2112,7 @@ test('has', async () => {
       display: flex;
     }
 
-    .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):focus), .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) {
+    .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):focus), .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered]):active), .has-complex-selectors\\:flex:has(:is(:hover, [data-hovered])[data-active]) {
       display: flex;
     }
 
