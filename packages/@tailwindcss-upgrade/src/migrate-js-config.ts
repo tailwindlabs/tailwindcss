@@ -12,7 +12,7 @@ import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
-import { findSimplePlugins } from './utils/extract-static-imports'
+import { findStaticPlugins } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -59,8 +59,7 @@ export async function migrateJsConfig(
     if (themeConfig) cssConfigs.push(themeConfig)
   }
 
-  let simplePlugins = findSimplePlugins(source)
-  console.log(simplePlugins)
+  let simplePlugins = findStaticPlugins(source)
   if (simplePlugins !== null) {
     for (let plugin of simplePlugins) {
       plugins.push({ base, path: plugin })
@@ -200,7 +199,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
-  if (findSimplePlugins(source) === null) {
+  if (findStaticPlugins(source) === null) {
     return false
   }
 

@@ -1,13 +1,13 @@
 import dedent from 'dedent'
 import { describe, expect, test } from 'vitest'
-import { extractStaticImportMap, findSimplePlugins } from './extract-static-imports'
+import { extractStaticImportMap, findStaticPlugins } from './extract-static-plugins'
 
 const js = dedent
 
-describe('findSimplePlugins', () => {
+describe('findStaticPlugins', () => {
   test('parses all export styles', () => {
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
         import plugin1 from './plugin1'
         import * as plugin2 from './plugin2'
 
@@ -18,7 +18,7 @@ describe('findSimplePlugins', () => {
     ).toEqual(['./plugin1', './plugin2', 'plugin3'])
 
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
         import plugin1 from './plugin1'
         import * as plugin2 from './plugin2'
 
@@ -29,7 +29,7 @@ describe('findSimplePlugins', () => {
     ).toEqual(['./plugin1', './plugin2', 'plugin3'])
 
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
         import plugin1 from './plugin1'
         import * as plugin2 from './plugin2'
 
@@ -40,42 +40,39 @@ describe('findSimplePlugins', () => {
     ).toEqual(['./plugin1', './plugin2', 'plugin3'])
 
     expect(
-      findSimplePlugins(js`
-        import plugin1 from './plugin1'
-        import * as plugin2 from './plugin2'
+      findStaticPlugins(js`
+        const plugin1 = require('./plugin1')
 
         module.exports =  {
-          plugins: [plugin1, plugin2, 'plugin3']
+          plugins: [plugin1, 'plugin2']
         } as any
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', 'plugin2'])
 
     expect(
-      findSimplePlugins(js`
-        import plugin1 from './plugin1'
-        import * as plugin2 from './plugin2'
+      findStaticPlugins(js`
+        const plugin1 = require('./plugin1')
 
         module.exports =  {
-          plugins: [plugin1, plugin2, 'plugin3']
+          plugins: [plugin1, 'plugin2']
         } satisfies any
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', 'plugin2'])
 
     expect(
-      findSimplePlugins(js`
-      import plugin1 from './plugin1'
-      import * as plugin2 from './plugin2'
+      findStaticPlugins(js`
+        const plugin1 = require('./plugin1')
 
-      module.exports =  {
-        plugins: [plugin1, plugin2, 'plugin3']
-      }
+        module.exports =  {
+          plugins: [plugin1, 'plugin2']
+        }
     `),
-    ).toEqual(['./plugin1', './plugin2', 'plugin3'])
+    ).toEqual(['./plugin1', 'plugin2'])
   })
 
   test('bails out on inline plugins', () => {
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
       import plugin1 from './plugin1'
 
       export default {
@@ -85,7 +82,7 @@ describe('findSimplePlugins', () => {
     ).toEqual(null)
 
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
       let plugin1 = () => {}
 
       export default {
@@ -97,7 +94,7 @@ describe('findSimplePlugins', () => {
 
   test('bails out on named imports for plugins', () => {
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
       import {plugin1} from './plugin1'
 
       export default {
@@ -109,7 +106,7 @@ describe('findSimplePlugins', () => {
 
   test('returns no plugins if none are exported', () => {
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
       export default {
         plugins: []
       }
@@ -117,7 +114,7 @@ describe('findSimplePlugins', () => {
     ).toEqual([])
 
     expect(
-      findSimplePlugins(js`
+      findStaticPlugins(js`
       export default {}
     `),
     ).toEqual([])

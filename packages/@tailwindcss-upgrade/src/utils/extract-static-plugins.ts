@@ -54,10 +54,9 @@ const PLUGINS_QUERY = new Parser.Query(
         )?
       )
     )
-
   `,
 )
-export function findSimplePlugins(source: string): string[] | null {
+export function findStaticPlugins(source: string): string[] | null {
   try {
     let tree = parser.parse(source)
     let root = tree.rootNode
