@@ -50,7 +50,8 @@ export async function migrateJsConfig(
   }
 
   if ('theme' in unresolvedConfig) {
-    cssConfigs.push(await migrateTheme(unresolvedConfig as any))
+    let themeConfig = await migrateTheme(unresolvedConfig as any)
+    if (themeConfig) cssConfigs.push(themeConfig)
   }
 
   return {
@@ -59,7 +60,7 @@ export async function migrateJsConfig(
   }
 }
 
-async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string> {
+async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string | null> {
   let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
 
   let resetNamespaces = new Map<string, boolean>()
@@ -80,10 +81,12 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let prevSectionKey = ''
 
   let css = `@theme {`
+  let containsThemeKeys = false
   for (let [key, value] of themeableValues(themeValues)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
+    containsThemeKeys = true
 
     let sectionKey = createSectionKey(key)
     if (sectionKey !== prevSectionKey) {
@@ -97,6 +100,10 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     }
 
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
+  }
+
+  if (!containsThemeKeys) {
+    return null
   }
 
   return css + '}\n'
