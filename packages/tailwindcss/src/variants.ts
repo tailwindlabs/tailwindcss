@@ -206,10 +206,88 @@ export function createVariants(theme: Theme): Variants {
   variants.static('force', () => {}, { compounds: false })
   staticVariant('*', [':where(& > *)'], { compounds: false })
 
+  // The `not-*` variant
+  //
+  // This variant only supports inversion of style rules whether nested or not.
+  //
+  // Inversion of at-rules is explicitly not handled because it introduces
+  // signfiicant complexity. Supporting at-rules would be a purely additive
+  // change and as such can be done in the future without breaking changes.
+  //
+  // As a demonstration of the complexity, consider the `hover` variant:
+  // ```css
+  // @media (hover: hover) {
+  //   &:hover {
+  //     /* declarations */
+  //   }
+  // }
+  // ```
+  //
+  // This requires the media query AND the `:hover` selector to match and is
+  // is equvivalent to the following logically:
+  // media hover && selector :hover
+  //
+  // Negating then simplifying by De Morgan's laws results in:
+  // -> not(media hover && selector :hover)
+  // -> not(media hover) || not(selector :hover)
+  // -> media not hover || selector :not(:hover)
+  //
+  // Which means that we now have to act like the following definition:
+  // ```css
+  // @media not (hover: hover) {
+  //   /* declarations */
+  // }
+  //
+  // &:not(:hover) {
+  //   /* declarations */
+  // }
+  // ```
+  //
+  // Further, for a variant using multiple at-rules as an OR we would have to
+  // combine them like so:
+  //
+  // ```css
+  // @media (hover: hover), (any-hover: fine) {
+  //   &:hover {
+  //     /* declarations */
+  //   }
+  // }
+  // ```
+  //
+  // Which is equivalent to the following logically:
+  // (media hover || media any-hover) && selector :hover
+  //
+  // Negating then simplifying by De Morgan's laws results in:
+  // -> not((media hover || media any-hover) && selector :hover)
+  // -> not(media hover || media any-hover) || not(selector :hover)
+  // -> (media not hover && media not any-hover) || selector :not(:hover)
+  //
+  // Which means that we now have to act like the following definition:
+  // ```css
+  // @media not (hover: hover) {
+  //   @media not (any-hover: fine) {
+  //     /* declarations */
+  //    }
+  // }
+  //
+  // &:not(:hover) {
+  //  /* declarations */
+  // }
+  // ```
+  //
+  // Which as you can see can introduce arbitrary levels of nesting and
+  // complexity. This is why we do not support inverting at-rules.
   variants.compound('not', (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     if (variant.modifier) return null
+
+    // Most variants rely on CSS nesting to build-up the final selector, but
+    // there is no way to use CSS nesting to make `&` refer to just the `.group`
+    // class the way we'd need to for these variants, so we flatten the nesting
+    // and manually update the selectors for each rule ourselves.
+    let flattened = flattenNesting(structuredClone([ruleNode]))
+    let hasStyleRules = false
 
     let rules: Rule[] = []
 
@@ -219,18 +297,31 @@ export function createVariants(theme: Theme): Variants {
       // Don't allow not to be used with variants that use at-rules
       if (node.selector[0] === '@') return null
 
+      hasStyleRules = true
+
       rules.push(node)
     }
 
-    // 3. Merge selectors from all rules into a single selector
-    let selector = rules.map((rule) => rule.selector.replaceAll('&', '*')).join(', ')
-
-    // 4. Remove wrapping :is() if present
-    if (selector.startsWith(':is(') && selector.endsWith(')')) {
-      selector = selector.slice(4, -1)
+    // We do not invert media queries, supports, or container rules so a not-md
+    // variant does not make sense to have.
+    if (!hasStyleRules) {
+      return null
     }
 
-    ruleNode.selector = `&:not(${selector})`
+    // 3. Merge selectors from all rules into a single selector
+    let selectors = rules.flatMap((rule) => {
+      return segment(rule.selector, ',').map((part) => {
+        if (part.startsWith(':is(') && part.endsWith(')')) {
+          part = part.slice(4, -1)
+        }
+
+        part = part.replaceAll('&', '*')
+
+        return part
+      })
+    })
+
+    ruleNode.selector = `&:not(${selectors.join(', ')})`
     ruleNode.nodes = []
   })
 
