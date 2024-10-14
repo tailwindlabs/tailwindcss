@@ -2,7 +2,7 @@ import { expect } from 'vitest'
 import { css, json, test, ts } from '../utils'
 
 test(
-  `upgrades a simple JS config file to CSS`,
+  `upgrade JS config files with flat theme values, darkMode, and content fields`,
   {
     fs: {
       'package.json': json`
@@ -103,7 +103,196 @@ test(
 )
 
 test(
-  `does not upgrade a complex JS config file to CSS`,
+  'does not upgrade JS config files with functions in the theme config',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        export default {
+          theme: {
+            extend: {
+              colors: ({ colors }) => ({
+                gray: colors.neutral,
+              }),
+            },
+          },
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.{css,ts}')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+
+      export default {
+        theme: {
+          extend: {
+            colors: ({ colors }) => ({
+              gray: colors.neutral,
+            }),
+          },
+        },
+      } satisfies Config
+      "
+    `)
+  },
+)
+
+test(
+  'does not upgrade JS config files with theme keys contributed to by plugins in the theme config',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        export default {
+          theme: {
+            typography: {
+              DEFAULT: {
+                css: {
+                  '--tw-prose-body': 'red',
+                  color: 'var(--tw-prose-body)',
+                },
+              },
+            },
+          },
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+
+      export default {
+        theme: {
+          typography: {
+            DEFAULT: {
+              css: {
+                '--tw-prose-body': 'red',
+                color: 'var(--tw-prose-body)',
+              },
+            },
+          },
+        },
+      } satisfies Config
+      "
+    `)
+  },
+)
+
+test(
+  'does not upgrade JS config files with plugins',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/typography": "^0.5.15",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+        import typography from '@tailwindcss/typography'
+        import customPlugin from './custom-plugin'
+
+        export default {
+          plugins: [typography, customPlugin],
+        } satisfies Config
+      `,
+      'custom-plugin.js': ts`
+        export default function ({ addVariant }) {
+          addVariant('inverted', '@media (inverted-colors: inverted)')
+          addVariant('hocus', ['&:focus', '&:hover'])
+        }
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+      import typography from '@tailwindcss/typography'
+      import customPlugin from './custom-plugin'
+
+      export default {
+        plugins: [typography, customPlugin],
+      } satisfies Config
+      "
+    `)
+  },
+)
+
+test(
+  `does not upgrade JS config files with inline plugins`,
   {
     fs: {
       'package.json': json`

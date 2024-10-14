@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import { dirname } from 'path'
 import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
 import {
@@ -9,6 +10,7 @@ import {
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
 import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
+import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import { info } from './utils/renderer'
 
@@ -31,9 +33,9 @@ export async function migrateJsConfig(
     fs.readFile(fullConfigPath, 'utf-8'),
   ])
 
-  if (!isSimpleConfig(unresolvedConfig, source)) {
+  if (!canMigrateConfig(unresolvedConfig, source)) {
     info(
-      'The configuration file is not a simple object. Please refer to the migration guide for how to migrate it fully to Tailwind CSS v4. For now, we will load the configuration file as-is.',
+      'Your configuration file could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.',
     )
     return null
   }
@@ -50,7 +52,8 @@ export async function migrateJsConfig(
   }
 
   if ('theme' in unresolvedConfig) {
-    cssConfigs.push(await migrateTheme(unresolvedConfig as any))
+    let themeConfig = await migrateTheme(unresolvedConfig as any)
+    if (themeConfig) cssConfigs.push(themeConfig)
   }
 
   return {
@@ -59,12 +62,12 @@ export async function migrateJsConfig(
   }
 }
 
-async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string> {
+async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string | null> {
   let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
 
   let resetNamespaces = new Map<string, boolean>()
-  // Before we merge the resetting theme values with the `extend` values, we
-  // capture all namespaces that need to be reset
+  // Before we merge theme overrides with theme extensions, we capture all
+  // namespaces that need to be reset.
   for (let [key, value] of themeableValues(overwriteTheme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
@@ -80,10 +83,12 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let prevSectionKey = ''
 
   let css = `@theme {`
+  let containsThemeKeys = false
   for (let [key, value] of themeableValues(themeValues)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
+    containsThemeKeys = true
 
     let sectionKey = createSectionKey(key)
     if (sectionKey !== prevSectionKey) {
@@ -97,6 +102,10 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     }
 
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
+  }
+
+  if (!containsThemeKeys) {
+    return null
   }
 
   return css + '}\n'
@@ -119,7 +128,7 @@ function createSectionKey(key: string[]): string {
   let sectionSegments = []
   for (let i = 0; i < key.length - 1; i++) {
     let segment = key[i]
-    // ignore tuples
+    // Ignore tuples
     if (key[i + 1][0] === '-') {
       break
     }
@@ -143,7 +152,7 @@ function migrateContent(
 }
 
 // Applies heuristics to determine if we can attempt to migrate the config
-function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
+function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   // The file may not contain any functions
   if (source.includes('function') || source.includes(' => ')) {
     return false
@@ -158,6 +167,7 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
     }
     return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
+
   if (!isSimpleValue(unresolvedConfig)) {
     return false
   }
@@ -171,15 +181,41 @@ function isSimpleConfig(unresolvedConfig: Config, source: string): boolean {
     'presets',
     'prefix', // Prefix is handled in the dedicated prefix migrator
   ]
+
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
     return false
   }
+
   if (unresolvedConfig.plugins && unresolvedConfig.plugins.length > 0) {
     return false
   }
+
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
     return false
   }
 
+  // Only migrate the config file if all top-level theme keys are allowed to be
+  // migrated
+  let theme = unresolvedConfig.theme
+  if (theme && typeof theme === 'object') {
+    if (theme.extend && !onlyUsesAllowedTopLevelKeys(theme.extend)) return false
+    let { extend: _extend, ...themeCopy } = theme
+    if (!onlyUsesAllowedTopLevelKeys(themeCopy)) return false
+  }
+
+  return true
+}
+
+const DEFAULT_THEME_KEYS = [
+  ...Object.keys(defaultTheme),
+  // Used by @tailwindcss/container-queries
+  'containers',
+]
+function onlyUsesAllowedTopLevelKeys(theme: ThemeConfig): boolean {
+  for (let key of Object.keys(theme)) {
+    if (!DEFAULT_THEME_KEYS.includes(key)) {
+      return false
+    }
+  }
   return true
 }
