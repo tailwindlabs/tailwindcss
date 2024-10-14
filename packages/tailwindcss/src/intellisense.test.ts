@@ -72,12 +72,39 @@ test('getVariants compound', () => {
   ]
 
   expect(list).toEqual([
-    ['&:is(:where(.group):hover *)'],
-    ['&:is(:where(.group\\/sidebar):hover *)'],
-    ['&:is(:where(.group):is(:where(.group):hover *) *)'],
+    ['@media (hover: hover) { &:is(:where(.group):hover *) }'],
+    ['@media (hover: hover) { &:is(:where(.group\\/sidebar):hover *) }'],
+    ['@media (hover: hover) { &:is(:where(.group):is(:where(.group):hover *) *) }'],
     [],
     [],
   ])
+})
+
+test('variant selectors are in the correct order', async () => {
+  let input = css`
+    @variant overactive {
+      &:hover {
+        @media (hover: hover) {
+          &:focus {
+            &:active {
+              @slot;
+            }
+          }
+        }
+      }
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+  let variants = design.getVariants()
+  let overactive = variants.find((v) => v.name === 'overactive')!
+
+  expect(overactive).toBeTruthy()
+  expect(overactive.selectors({})).toMatchInlineSnapshot(`
+    [
+      "@media (hover: hover) { &:hover { &:focus { &:active } } }",
+    ]
+  `)
 })
 
 test('The variant `has-force` does not crash', () => {

@@ -1,4 +1,4 @@
-import { decl, rule } from './ast'
+import { rule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
@@ -69,7 +69,7 @@ export function getVariants(design: DesignSystem) {
       if (!variant) return []
 
       // Apply the variant to a placeholder rule
-      let node = rule('.__placeholder__', [decl('color', 'red')])
+      let node = rule('.__placeholder__', [])
 
       // If the rule produces no nodes it means the variant does not apply
       if (applyVariant(node, variant, design.variants) === null) {
@@ -79,11 +79,41 @@ export function getVariants(design: DesignSystem) {
       // Now look at the selector(s) inside the rule
       let selectors: string[] = []
 
-      for (let child of node.nodes) {
-        if (child.kind === 'rule') {
-          selectors.push(child.selector)
+      // Produce v3-style selector strings in the face of nested rules
+      // This is more visible for things like group-*, not-*, etc…
+      walkDepth(node.nodes, (node, { path }) => {
+        if (node.kind !== 'rule') return
+        if (node.nodes.length > 0) return
+
+        // Sort at-rules before style rules
+        path.sort((a, b) => {
+          // This won't actually happen, but it's here to make TypeScript happy
+          if (a.kind !== 'rule' || b.kind !== 'rule') return 0
+
+          let aIsAtRule = a.selector.startsWith('@')
+          let bIsAtRule = b.selector.startsWith('@')
+
+          if (aIsAtRule && !bIsAtRule) return -1
+          if (!aIsAtRule && bIsAtRule) return 1
+
+          return 0
+        })
+
+        // A list of the selectors / at rules encountered to get to this point
+        let group = path.flatMap((node) => {
+          if (node.kind !== 'rule') return []
+          return node.selector === '&' ? [] : [node.selector]
+        })
+
+        // Build a v3-style nested selector
+        let selector = ''
+
+        for (let i = group.length - 1; i >= 0; i--) {
+          selector = selector === '' ? group[i] : `${group[i]} { ${selector} }`
         }
-      }
+
+        selectors.push(selector)
+      })
 
       return selectors
     }
