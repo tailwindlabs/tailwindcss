@@ -114,6 +114,26 @@ describe('findStaticPlugins', () => {
     ).toEqual(null)
   })
 
+  test('bails for plugins with options', () => {
+    expect(
+      findStaticPlugins(js`
+        import plugin1 from './plugin1'
+
+        export default {
+          plugins: [plugin1({foo:'bar'})]
+        }
+      `),
+    ).toEqual(null)
+
+    expect(
+      findStaticPlugins(js`
+        export default {
+          plugins: [require('@tailwindcss/typography')({foo:'bar'})]
+        }
+    `),
+    ).toEqual(null)
+  })
+
   test('returns no plugins if none are exported', () => {
     expect(
       findStaticPlugins(js`
