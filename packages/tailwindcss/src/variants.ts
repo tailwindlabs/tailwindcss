@@ -244,7 +244,9 @@ export function createVariants(theme: Theme): Variants {
   // ```
   //
   // Further, for a variant using multiple at-rules as an OR we would have to
-  // combine them like so:
+  // combine them.
+  //
+  // For example, given the following:
   //
   // ```css
   // @media (hover: hover), (any-hover: fine) {
@@ -267,11 +269,11 @@ export function createVariants(theme: Theme): Variants {
   // @media not (hover: hover) {
   //   @media not (any-hover: fine) {
   //     /* declarations */
-  //    }
+  //   }
   // }
   //
   // &:not(:hover) {
-  //  /* declarations */
+  //   /* declarations */
   // }
   // ```
   //
