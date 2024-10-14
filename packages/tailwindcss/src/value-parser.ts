@@ -114,6 +114,7 @@ const SPACE = 0x20
 const LESS_THAN = 0x3c
 const GREATER_THAN = 0x3e
 const EQUALS = 0x3d
+const SLASH = 0x2f
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -143,6 +144,7 @@ export function parse(input: string) {
       case COLON:
       case COMMA:
       case SPACE:
+      case SLASH:
       case LESS_THAN:
       case GREATER_THAN:
       case EQUALS: {

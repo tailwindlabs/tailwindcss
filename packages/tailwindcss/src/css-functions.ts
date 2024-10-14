@@ -68,7 +68,7 @@ export function substituteFunctionsInValue(
         if (node.nodes[i].value.includes(',')) {
           break
         }
-        path += node.nodes[i].value
+        path += ValueParser.toCss([node.nodes[i]])
         skipUntilIndex = i + 1
       }
 
