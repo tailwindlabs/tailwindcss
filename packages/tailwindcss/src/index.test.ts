@@ -1859,7 +1859,7 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
           display: flex;
         }
 
@@ -1892,6 +1892,10 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1923,6 +1927,10 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1957,12 +1965,12 @@ describe('plugins', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (hover: hover) {
-          .group-hocus\\:flex:is(:where(.group) *):hover {
+          .group-hocus\\:flex:is(:where(.group):hover *) {
             display: flex;
           }
         }
 
-        .group-hocus\\:flex:is(:where(.group) *):is(:where(.group):focus *) {
+        .group-hocus\\:flex:is(:where(.group):focus *) {
           display: flex;
         }
 
@@ -2147,6 +2155,10 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
+          .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+            display: flex;
+          }
+
           .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
@@ -2223,7 +2235,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
             text-decoration-line: underline;
           }
 
@@ -2254,6 +2266,10 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+
           .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
@@ -2346,6 +2362,16 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
+              text-decoration-line: underline;
+            }
+          }
+
+          .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+
           @media (hover: hover) {
             .hocus\\:underline:hover {
               text-decoration-line: underline;
