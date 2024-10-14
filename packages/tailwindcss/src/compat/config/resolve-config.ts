@@ -177,12 +177,11 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
 }
 
 function mergeTheme(ctx: ResolutionContext) {
-  let theme = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
-  let api: PluginUtils = {
-    theme,
+  let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
+  let theme = Object.assign(themeFn, {
+    theme: themeFn,
     colors,
-  }
-  Object.assign(theme, api)
+  })
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {
     if (typeof value === 'function') {
