@@ -312,6 +312,12 @@ importers:
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
+      tree-sitter:
+        specifier: ^0.21.1
+        version: 0.21.1
+      tree-sitter-typescript:
+        specifier: ^0.23.0
+        version: 0.23.0(tree-sitter@0.21.1)
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -2384,6 +2390,14 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
+  node-addon-api@8.1.0:
+    resolution: {integrity: sha512-yBY+qqWSv3dWKGODD6OGE6GnTX7Q2r+4+DfpqxHSHh8x0B4EKP9+wVGLS6U/AM1vxSNNmUEuIV5EGhYwPpfOwQ==}
+    engines: {node: ^18 || ^20 || >= 21}
+
+  node-gyp-build@4.8.2:
+    resolution: {integrity: sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==}
+    hasBin: true
+
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
@@ -2916,6 +2930,18 @@ packages:
   tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
+
+  tree-sitter-typescript@0.23.0:
+    resolution: {integrity: sha512-hRy5O9d+9ON4HxIWWxkI4zonrw2v/WNN1JoiGW5HkXfC9K2R3p53ugMvs6Vs4T7ASCwggsoQ75LNdgpExC/zgQ==}
+    peerDependencies:
+      tree-sitter: ^0.21.0
+      tree_sitter: '*'
+    peerDependenciesMeta:
+      tree_sitter:
+        optional: true
+
+  tree-sitter@0.21.1:
+    resolution: {integrity: sha512-7dxoA6kYvtgWw80265MyqJlkRl4yawIjO7S5MigytjELkX43fV2WsAXzsNfO7sBpPPCF5Gp0+XzHk0DwLCq3xQ==}
 
   ts-api-utils@1.3.0:
     resolution: {integrity: sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==}
@@ -5145,6 +5171,10 @@ snapshots:
 
   node-addon-api@7.1.1: {}
 
+  node-addon-api@8.1.0: {}
+
+  node-gyp-build@4.8.2: {}
+
   node-releases@2.0.18: {}
 
   normalize-path@3.0.0: {}
@@ -5676,6 +5706,17 @@ snapshots:
       punycode: 2.3.1
 
   tree-kill@1.2.2: {}
+
+  tree-sitter-typescript@0.23.0(tree-sitter@0.21.1):
+    dependencies:
+      node-addon-api: 8.1.0
+      node-gyp-build: 4.8.2
+      tree-sitter: 0.21.1
+
+  tree-sitter@0.21.1:
+    dependencies:
+      node-addon-api: 8.1.0
+      node-gyp-build: 4.8.2
 
   ts-api-utils@1.3.0(typescript@5.5.4):
     dependencies:

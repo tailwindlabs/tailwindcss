@@ -55,8 +55,18 @@ export function migrateConfig(
         let absolute = path.resolve(source.base, source.pattern)
         css += `@source '${relativeToStylesheet(sheet, absolute)}';\n`
       }
-
       if (jsConfigMigration.sources.length > 0) {
+        css = css + '\n'
+      }
+
+      for (let plugin of jsConfigMigration.plugins) {
+        let relative =
+          plugin.path[0] === '.'
+            ? relativeToStylesheet(sheet, path.resolve(plugin.base, plugin.path))
+            : plugin.path
+        css += `@plugin '${relative}';\n`
+      }
+      if (jsConfigMigration.plugins.length > 0) {
         css = css + '\n'
       }
 

@@ -39,7 +39,9 @@
     "postcss-selector-parser": "^6.1.2",
     "prettier": "^3.3.3",
     "string-byte-slice": "^3.0.0",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:^",
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-typescript": "^0.23.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",

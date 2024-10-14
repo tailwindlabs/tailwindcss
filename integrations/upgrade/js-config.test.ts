@@ -103,6 +103,61 @@ test(
 )
 
 test(
+  'upgrades JS config files with plugins',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/typography": "^0.5.15",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+        import typography from '@tailwindcss/typography'
+        import customPlugin from './custom-plugin'
+
+        export default {
+          plugins: [typography, customPlugin],
+        } satisfies Config
+      `,
+      'custom-plugin.js': ts`
+        export default function ({ addVariant }) {
+          addVariant('inverted', '@media (inverted-colors: inverted)')
+          addVariant('hocus', ['&:focus', '&:hover'])
+        }
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @plugin '@tailwindcss/typography';
+      @plugin '../custom-plugin';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+
+      "
+    `)
+  },
+)
+
+test(
   'does not upgrade JS config files with functions in the theme config',
   {
     fs: {
@@ -225,66 +280,6 @@ test(
             },
           },
         },
-      } satisfies Config
-      "
-    `)
-  },
-)
-
-test(
-  'does not upgrade JS config files with plugins',
-  {
-    fs: {
-      'package.json': json`
-        {
-          "dependencies": {
-            "@tailwindcss/typography": "^0.5.15",
-            "@tailwindcss/upgrade": "workspace:^"
-          }
-        }
-      `,
-      'tailwind.config.ts': ts`
-        import { type Config } from 'tailwindcss'
-        import typography from '@tailwindcss/typography'
-        import customPlugin from './custom-plugin'
-
-        export default {
-          plugins: [typography, customPlugin],
-        } satisfies Config
-      `,
-      'custom-plugin.js': ts`
-        export default function ({ addVariant }) {
-          addVariant('inverted', '@media (inverted-colors: inverted)')
-          addVariant('hocus', ['&:focus', '&:hover'])
-        }
-      `,
-      'src/input.css': css`
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `,
-    },
-  },
-  async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade')
-
-    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
-      "
-      --- src/input.css ---
-      @import 'tailwindcss';
-      @config '../tailwind.config.ts';
-      "
-    `)
-
-    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
-      "
-      --- tailwind.config.ts ---
-      import { type Config } from 'tailwindcss'
-      import typography from '@tailwindcss/typography'
-      import customPlugin from './custom-plugin'
-
-      export default {
-        plugins: [typography, customPlugin],
       } satisfies Config
       "
     `)
