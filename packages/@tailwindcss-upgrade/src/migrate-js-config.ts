@@ -10,10 +10,10 @@ import {
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
 import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
-import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
-import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
+import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
+import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { findStaticPlugins } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
@@ -29,6 +29,7 @@ export type JSConfigMigration =
   }
 
 export async function migrateJsConfig(
+  designSystem: DesignSystem,
   fullConfigPath: string,
   base: string,
 ): Promise<JSConfigMigration> {
@@ -56,10 +57,12 @@ export async function migrateJsConfig(
     sources = migrateContent(unresolvedConfig as any, base)
   }
 
+  console.error('A', Object.keys(unresolvedConfig))
   if ('theme' in unresolvedConfig) {
-    let themeConfig = await migrateTheme(unresolvedConfig as any)
+    let themeConfig = await migrateTheme(designSystem, unresolvedConfig, base)
     if (themeConfig) cssConfigs.push(themeConfig)
   }
+  console.error('B', Object.keys(unresolvedConfig))
 
   let simplePlugins = findStaticPlugins(source)
   if (simplePlugins !== null) {
@@ -75,33 +78,27 @@ export async function migrateJsConfig(
   }
 }
 
-async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<string | null> {
-  let { extend: extendTheme, ...overwriteTheme } = unresolvedConfig.theme
-
-  let resetNamespaces = new Map<string, boolean>()
-  // Before we merge theme overrides with theme extensions, we capture all
-  // namespaces that need to be reset.
-  for (let [key, value] of themeableValues(overwriteTheme)) {
-    if (typeof value !== 'string' && typeof value !== 'number') {
-      continue
-    }
-
-    if (!resetNamespaces.has(key[0])) {
-      resetNamespaces.set(key[0], false)
-    }
+async function migrateTheme(
+  designSystem: DesignSystem,
+  unresolvedConfig: Config,
+  base: string,
+): Promise<string | null> {
+  // Resolve the config file without applying plugins and presets, as these are
+  // migrated to CSS separately.
+  let configToResolve: ConfigFile = {
+    base,
+    config: { ...unresolvedConfig, plugins: [], presets: undefined },
   }
+  let { resolvedConfig, resetThemeKeys } = resolveConfig(designSystem, [configToResolve])
 
-  let themeValues: Record<string, Record<string, unknown>> = deepMerge(
-    {},
-    [overwriteTheme, extendTheme],
-    mergeThemeExtension,
+  let resetNamespaces = new Map<string, boolean>(
+    Array.from(resetThemeKeys.entries()).map(([key]) => [key, false]),
   )
 
   let prevSectionKey = ''
-
   let css = `@theme {`
   let containsThemeKeys = false
-  for (let [key, value] of themeableValues(themeValues)) {
+  for (let [key, value] of themeableValues(resolvedConfig.theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
@@ -125,9 +122,9 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
   }
 
-  if ('keyframes' in themeValues) {
+  if ('keyframes' in resolvedConfig.theme) {
     containsThemeKeys = true
-    css += '\n' + keyframesToCss(themeValues.keyframes)
+    css += '\n' + keyframesToCss(resolvedConfig.theme.keyframes)
   }
 
   if (!containsThemeKeys) {
@@ -179,11 +176,6 @@ function migrateContent(
 
 // Applies heuristics to determine if we can attempt to migrate the config
 function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
-  // The file may not contain any functions
-  if (source.includes('function') || source.includes(' => ')) {
-    return false
-  }
-
   // The file may not contain non-serializable values
   function isSimpleValue(value: unknown): boolean {
     if (typeof value === 'function') return false
@@ -194,8 +186,9 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
 
-  // Plugins are more complex, so we have a special heuristics for them.
-  let { plugins, ...remainder } = unresolvedConfig
+  // - `theme` can contain functions that we attempt to resolve.
+  // - `plugins` are more complex, we have a special heuristics for them.
+  let { plugins, theme, ...remainder } = unresolvedConfig
   if (!isSimpleValue(remainder)) {
     return false
   }
@@ -224,7 +217,6 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
 
   // Only migrate the config file if all top-level theme keys are allowed to be
   // migrated
-  let theme = unresolvedConfig.theme
   if (theme && typeof theme === 'object') {
     if (theme.extend && !onlyAllowedThemeValues(theme.extend)) return false
     let { extend: _extend, ...themeCopy } = theme
@@ -234,14 +226,18 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   return true
 }
 
-const DEFAULT_THEME_KEYS = [
+const ALLOWED_THEME_KEYS = [
   ...Object.keys(defaultTheme),
   // Used by @tailwindcss/container-queries
   'containers',
 ]
+const BLOCKED_THEME_KEYS = ['supports', 'data', 'aria']
 function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
-    if (!DEFAULT_THEME_KEYS.includes(key)) {
+    if (!ALLOWED_THEME_KEYS.includes(key)) {
+      return false
+    }
+    if (BLOCKED_THEME_KEYS.includes(key)) {
       return false
     }
   }
