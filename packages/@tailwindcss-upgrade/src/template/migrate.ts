@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { extractRawCandidates, replaceCandidateInContent } from './candidates'
+import { extractRawCandidates } from './candidates'
 import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
@@ -10,6 +10,7 @@ import { important } from './codemods/important'
 import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { variantOrder } from './codemods/variant-order'
+import { spliceChangesIntoString, type StringChange } from './splice-changes-into-string'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -46,19 +47,23 @@ export default async function migrateContents(
 ): Promise<string> {
   let candidates = await extractRawCandidates(contents, extension)
 
-  // Sort candidates by starting position desc
-  candidates.sort((a, z) => z.start - a.start)
+  let changes: StringChange[] = []
 
-  let output = contents
   for (let { rawCandidate, start, end } of candidates) {
     let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate)
 
-    if (migratedCandidate !== rawCandidate) {
-      output = replaceCandidateInContent(output, migratedCandidate, start, end)
+    if (migratedCandidate === rawCandidate) {
+      continue
     }
+
+    changes.push({
+      start,
+      end,
+      replacement: migratedCandidate,
+    })
   }
 
-  return output
+  return spliceChangesIntoString(contents, changes)
 }
 
 export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {

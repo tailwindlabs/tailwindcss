@@ -1,5 +1,4 @@
 import { Scanner } from '@tailwindcss/oxide'
-import stringByteSlice from 'string-byte-slice'
 import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 
@@ -138,13 +137,4 @@ function escapeArbitrary(input: string) {
   return input
     .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
     .replaceAll(' ', '_') // Replace spaces with underscores
-}
-
-export function replaceCandidateInContent(
-  content: string,
-  replacement: string,
-  startByte: number,
-  endByte: number,
-) {
-  return stringByteSlice(content, 0, startByte) + replacement + stringByteSlice(content, endByte)
 }
