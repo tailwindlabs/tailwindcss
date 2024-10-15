@@ -11877,6 +11877,7 @@ test('font-stretch', async () => {
       'font-stretch-20%',
       'font-stretch-50',
       'font-stretch-400%',
+      'font-stretch-50.5%',
       'font-stretch-potato',
       'font-stretch-ultra-expanded/foo',
       'font-stretch-50%/foo',
