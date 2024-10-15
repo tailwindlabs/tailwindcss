@@ -230,24 +230,26 @@ test(
       "
       --- src/input.css ---
       @import 'tailwindcss';
-      @config '../tailwind.config.ts';
+
+      @theme {
+        --color-gray-50: #fafafa;
+        --color-gray-100: #f5f5f5;
+        --color-gray-200: #e5e5e5;
+        --color-gray-300: #d4d4d4;
+        --color-gray-400: #a3a3a3;
+        --color-gray-500: #737373;
+        --color-gray-600: #525252;
+        --color-gray-700: #404040;
+        --color-gray-800: #262626;
+        --color-gray-900: #171717;
+        --color-gray-950: #0a0a0a;
+      }
       "
     `)
 
     expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
       "
-      --- tailwind.config.ts ---
-      import { type Config } from 'tailwindcss'
 
-      export default {
-        theme: {
-          extend: {
-            colors: ({ colors }) => ({
-              gray: colors.neutral,
-            }),
-          },
-        },
-      } satisfies Config
       "
     `)
   },

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Ensure the `theme` object defined in `@config` and `@plugin` can overwrite default theme values ([#14672](https://github.com/tailwindlabs/tailwindcss/pull/14672))
 - _Upgrade (experimental)_: Speed up template migrations ([#14679](https://github.com/tailwindlabs/tailwindcss/pull/14679))
 
 ## [4.0.0-alpha.27] - 2024-10-15
