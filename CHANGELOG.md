@@ -7,20 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.27] - 2024-10-15
+
 ### Added
 
 - Add support for `tailwindcss/colors.js`, `tailwindcss/defaultTheme.js`, and `tailwindcss/plugin.js` exports ([#14595](https://github.com/tailwindlabs/tailwindcss/pull/14595))
 - Support `keyframes` in JS config file themes ([#14594](https://github.com/tailwindlabs/tailwindcss/pull/14594))
 - Support the `color` parameter in JS theme configuration callbacks ([#14651](https://github.com/tailwindlabs/tailwindcss/pull/14651))
 - Support using the object parameter in the JS theme configuration callback as `theme()` function ([#14659](https://github.com/tailwindlabs/tailwindcss/pull/14659))
-- _Upgrade (experimental)_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
 - _Upgrade (experimental)_: Automatically discover JavaScript config files ([#14597](https://github.com/tailwindlabs/tailwindcss/pull/14597))
-- _Upgrade (experimental)_: Migrate legacy classes to the v4 alternative ([#14643](https://github.com/tailwindlabs/tailwindcss/pull/14643))
-- _Upgrade (experimental)_: Migrate static JS configurations to CSS ([#14639](https://github.com/tailwindlabs/tailwindcss/pull/14639), [#14650](https://github.com/tailwindlabs/tailwindcss/pull/14650), [#14648](https://github.com/tailwindlabs/tailwindcss/pull/14648), [#14666](https://github.com/tailwindlabs/tailwindcss/pull/14666))
-- _Upgrade (experimental)_: Migrate `@media screen(…)` when running codemods ([#14603](https://github.com/tailwindlabs/tailwindcss/pull/14603))
 - _Upgrade (experimental)_: Inject `@config "…"` when a `tailwind.config.{js,ts,…}` is detected ([#14635](https://github.com/tailwindlabs/tailwindcss/pull/14635))
+- _Upgrade (experimental)_: Migrate `@media screen(…)` when running codemods ([#14603](https://github.com/tailwindlabs/tailwindcss/pull/14603))
 - _Upgrade (experimental)_: Migrate `aria-*`, `data-*`, and `supports-*` variants from arbitrary values to bare values ([#14644](https://github.com/tailwindlabs/tailwindcss/pull/14644))
 - _Upgrade (experimental)_: Migrate arbitrary values to bare values ([#14669](https://github.com/tailwindlabs/tailwindcss/pull/14669))
+- _Upgrade (experimental)_: Migrate legacy classes to the v4 alternative ([#14643](https://github.com/tailwindlabs/tailwindcss/pull/14643))
+- _Upgrade (experimental)_: Migrate static JS configurations to CSS ([#14639](https://github.com/tailwindlabs/tailwindcss/pull/14639), [#14650](https://github.com/tailwindlabs/tailwindcss/pull/14650), [#14648](https://github.com/tailwindlabs/tailwindcss/pull/14648), [#14666](https://github.com/tailwindlabs/tailwindcss/pull/14666))
+- _Upgrade (experimental)_: Migrate v3 PostCSS setups to v4 in some cases ([#14612](https://github.com/tailwindlabs/tailwindcss/pull/14612))
 
 ### Fixed
 
