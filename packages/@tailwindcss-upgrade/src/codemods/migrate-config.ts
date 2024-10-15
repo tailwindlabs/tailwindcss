@@ -30,7 +30,6 @@ export function migrateConfig(
     if (!sheet.file) return
 
     let cssConfig = new AtRule()
-    cssConfig.raws.tailwind_pretty = true
 
     if (jsConfigMigration === null) {
       // Skip if there is already a `@config` directive
@@ -84,6 +83,10 @@ export function migrateConfig(
 
       return WalkAction.Skip
     })
+
+    for (let node of cssConfig?.nodes ?? []) {
+      node.raws.tailwind_pretty = true
+    }
 
     if (!locationNode) {
       root.prepend(cssConfig.nodes)

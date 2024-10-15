@@ -4,10 +4,12 @@ import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
+import { toCss, type AstNode } from '../../tailwindcss/src/ast'
 import {
   keyPathToCssProperty,
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
+import { applyKeyframesToAst } from '../../tailwindcss/src/compat/apply-keyframes-to-ast'
 import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
@@ -89,7 +91,11 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     }
   }
 
-  let themeValues = deepMerge({}, [overwriteTheme, extendTheme], mergeThemeExtension)
+  let themeValues: Record<string, Record<string, unknown>> = deepMerge(
+    {},
+    [overwriteTheme, extendTheme],
+    mergeThemeExtension,
+  )
 
   let prevSectionKey = ''
 
@@ -97,6 +103,10 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
   let containsThemeKeys = false
   for (let [key, value] of themeableValues(themeValues)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
+      continue
+    }
+
+    if (key[0] === 'keyframes') {
       continue
     }
     containsThemeKeys = true
@@ -113,6 +123,11 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     }
 
     css += `  --${keyPathToCssProperty(key)}: ${value};\n`
+  }
+
+  if ('keyframes' in themeValues) {
+    containsThemeKeys = true
+    css += '\n' + keyframesToCss(themeValues.keyframes)
   }
 
   if (!containsThemeKeys) {
@@ -231,4 +246,10 @@ function onlyUsesAllowedTopLevelKeys(theme: ThemeConfig): boolean {
     }
   }
   return true
+}
+
+function keyframesToCss(keyframes: Record<string, unknown>): string {
+  let ast: AstNode[] = []
+  applyKeyframesToAst(ast, { theme: { keyframes } })
+  return toCss(ast).trim() + '\n'
 }
