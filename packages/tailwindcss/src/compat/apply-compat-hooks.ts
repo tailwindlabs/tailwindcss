@@ -2,7 +2,7 @@ import { rule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
-import { applyKeyframesToAst } from './apply-keyframes-to-ast'
+import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
 import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
@@ -235,7 +235,7 @@ function upgradeToFullPluginSupport({
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
   applyConfigToTheme(designSystem, resolvedUserConfig, resetThemeKeys)
-  applyKeyframesToAst(ast, resolvedUserConfig)
+  applyKeyframesToTheme(designSystem, resolvedUserConfig, resetThemeKeys)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
