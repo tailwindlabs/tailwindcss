@@ -1,5 +1,3 @@
-import stringByteSlice from 'string-byte-slice'
-
 export interface StringChange {
   start: number
   end: number
@@ -25,20 +23,20 @@ export function spliceChangesIntoString(str: string, changes: StringChange[]) {
 
   let previous = changes[0]
 
-  result += stringByteSlice(str, 0, previous.start)
+  result += str.slice(0, previous.start)
   result += previous.replacement
 
   for (let i = 1; i < changes.length; ++i) {
     let change = changes[i]
 
-    result += stringByteSlice(str, previous.end, change.start)
+    result += str.slice(previous.end, change.start)
     result += change.replacement
 
     previous = change
   }
 
   // Add leftover string from last chunk to end
-  result += stringByteSlice(str, previous.end)
+  result += str.slice(previous.end)
 
   return result
 }

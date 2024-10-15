@@ -1,5 +1,9 @@
+use utf16::IndexConverter;
+
 #[macro_use]
 extern crate napi_derive;
+
+mod utf16;
 
 #[derive(Debug, Clone)]
 #[napi(object)]
@@ -123,13 +127,25 @@ impl Scanner {
     &mut self,
     input: ChangedContent,
   ) -> Vec<CandidateWithPosition> {
+    let content = input.content.unwrap_or_else(|| {
+      std::fs::read_to_string(&input.file.unwrap()).expect("Failed to read file")
+    });
+
+    let input = ChangedContent {
+      file: None,
+      content: Some(content.clone()),
+      extension: input.extension,
+    };
+
+    let mut utf16_idx = IndexConverter::new(&content[..]);
+
     self
       .scanner
       .get_candidates_with_positions(input.into())
       .into_iter()
       .map(|(candidate, position)| CandidateWithPosition {
         candidate,
-        position: position as i64,
+        position: utf16_idx.get(position),
       })
       .collect()
   }
