@@ -6,7 +6,7 @@ import { resolveConfig } from './resolve-config'
 test('top level theme keys are replaced', () => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -43,7 +43,7 @@ test('top level theme keys are replaced', () => {
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         blue: 'blue',
@@ -53,12 +53,13 @@ test('top level theme keys are replaced', () => {
       },
     },
   })
+  expect(resetThemeKeys).toEqual(new Set(['colors', 'fontFamily']))
 })
 
 test('theme can be extended', () => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -87,7 +88,7 @@ test('theme can be extended', () => {
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -98,6 +99,7 @@ test('theme can be extended', () => {
       },
     },
   })
+  expect(resetThemeKeys).toEqual(new Set(['colors', 'fontFamily']))
 })
 
 test('theme keys can reference other theme keys using the theme function regardless of order', ({
@@ -105,7 +107,7 @@ test('theme keys can reference other theme keys using the theme function regardl
 }) => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -146,7 +148,7 @@ test('theme keys can reference other theme keys using the theme function regardl
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -170,6 +172,7 @@ test('theme keys can reference other theme keys using the theme function regardl
       },
     },
   })
+  expect(resetThemeKeys).toEqual(new Set(['colors', 'placeholderColor']))
 })
 
 test('theme keys can read from the CSS theme', () => {
@@ -178,7 +181,7 @@ test('theme keys can read from the CSS theme', () => {
 
   let design = buildDesignSystem(theme)
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -212,7 +215,7 @@ test('theme keys can read from the CSS theme', () => {
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -247,4 +250,7 @@ test('theme keys can read from the CSS theme', () => {
       },
     },
   })
+  expect(resetThemeKeys).toEqual(
+    new Set(['colors', 'accentColor', 'placeholderColor', 'caretColor', 'transitionColor']),
+  )
 })

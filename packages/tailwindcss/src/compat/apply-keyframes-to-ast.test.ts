@@ -5,13 +5,13 @@ import { Theme } from '../theme'
 import { applyKeyframesToAst } from './apply-keyframes-to-ast'
 import { resolveConfig } from './config/resolve-config'
 
-test('Config values can be merged into the theme', () => {
+test('keyframes can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
   let ast: AstNode[] = []
 
-  let resolvedUserConfig = resolveConfig(design, [
+  let { resolvedConfig } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -30,7 +30,7 @@ test('Config values can be merged into the theme', () => {
       base: '/root',
     },
   ])
-  applyKeyframesToAst(ast, resolvedUserConfig)
+  applyKeyframesToAst(ast, resolvedConfig)
 
   expect(toCss(ast)).toMatchInlineSnapshot(`
     "@keyframes fade-in {
@@ -52,3 +52,5 @@ test('Config values can be merged into the theme', () => {
     "
   `)
 })
+
+test.todo('will reset default keyframes with overwriting keyframes')

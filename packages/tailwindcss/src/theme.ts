@@ -20,7 +20,11 @@ export class Theme {
       if (key === '--*') {
         this.values.clear()
       } else {
-        this.#clearNamespace(key.slice(0, -2))
+        this.clearNamespace(
+          key.slice(0, -2),
+          // `--${key}-*: initial;` should clear _all_ theme values
+          ThemeOptions.NONE,
+        )
       }
     }
 
@@ -89,9 +93,15 @@ export class Theme {
     return `--${this.prefix}-${key.slice(2)}`
   }
 
-  #clearNamespace(namespace: string) {
+  clearNamespace(namespace: string, clearOptions: ThemeOptions) {
     for (let key of this.values.keys()) {
       if (key.startsWith(namespace)) {
+        if (clearOptions !== ThemeOptions.NONE) {
+          let options = this.getOptions(key)
+          if ((options & clearOptions) !== clearOptions) {
+            continue
+          }
+        }
         this.values.delete(key)
       }
     }

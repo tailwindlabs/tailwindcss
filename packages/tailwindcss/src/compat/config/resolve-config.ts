@@ -11,6 +11,8 @@ import {
   type UserConfig,
 } from './types'
 
+type ResetThemeKeys = Set<string>
+
 export interface ConfigFile {
   path?: string
   base: string
@@ -39,7 +41,10 @@ let minimal: ResolvedConfig = {
   },
 }
 
-export function resolveConfig(design: DesignSystem, files: ConfigFile[]): ResolvedConfig {
+export function resolveConfig(
+  design: DesignSystem,
+  files: ConfigFile[],
+): { resolvedConfig: ResolvedConfig; resetThemeKeys: ResetThemeKeys } {
   let ctx: ResolutionContext = {
     design,
     configs: [],
@@ -78,13 +83,16 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
   }
 
   // Merge themes
-  mergeTheme(ctx)
+  let resetThemeKeys = mergeTheme(ctx)
 
   return {
-    ...ctx.result,
-    content: ctx.content,
-    theme: ctx.theme as ResolvedConfig['theme'],
-    plugins: ctx.plugins,
+    resolvedConfig: {
+      ...ctx.result,
+      content: ctx.content,
+      theme: ctx.theme as ResolvedConfig['theme'],
+      plugins: ctx.plugins,
+    },
+    resetThemeKeys,
   }
 }
 
@@ -175,7 +183,9 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   ctx.configs.push(config)
 }
 
-function mergeTheme(ctx: ResolutionContext) {
+function mergeTheme(ctx: ResolutionContext): ResetThemeKeys {
+  let resetThemeKeys: Set<string> = new Set()
+
   let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
   let theme = Object.assign(themeFn, {
     theme: themeFn,
@@ -193,6 +203,14 @@ function mergeTheme(ctx: ResolutionContext) {
   for (let config of ctx.configs) {
     let theme = config.theme ?? {}
     let extend = theme.extend ?? {}
+
+    // Keep track of all theme keys that were reset
+    for (let key in theme) {
+      if (key === 'extend') {
+        continue
+      }
+      resetThemeKeys.add(key)
+    }
 
     // Shallow merge themes so latest "group" wins
     Object.assign(ctx.theme, theme)
@@ -238,4 +256,6 @@ function mergeTheme(ctx: ResolutionContext) {
       ctx.theme.screens[key] = screen.min
     }
   }
+
+  return resetThemeKeys
 }

@@ -215,12 +215,15 @@ function upgradeToFullPluginSupport({
 
   let userConfig = [...pluginConfigs, ...configs]
 
-  let resolvedConfig = resolveConfig(designSystem, [
+  let { resolvedConfig } = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme), base },
     ...userConfig,
     { config: { plugins: [darkModePlugin] }, base },
   ])
-  let resolvedUserConfig = resolveConfig(designSystem, userConfig)
+  let { resolvedConfig: resolvedUserConfig, resetThemeKeys } = resolveConfig(
+    designSystem,
+    userConfig,
+  )
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
@@ -231,7 +234,7 @@ function upgradeToFullPluginSupport({
   // Merge the user-configured theme keys into the design system. The compat
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
-  applyConfigToTheme(designSystem, resolvedUserConfig)
+  applyConfigToTheme(designSystem, resolvedUserConfig, resetThemeKeys)
   applyKeyframesToAst(ast, resolvedUserConfig)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
