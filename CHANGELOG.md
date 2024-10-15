@@ -10,17 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add first draft of new wide-gamut color palette ([#14693](https://github.com/tailwindlabs/tailwindcss/pull/14693))
-- _Upgrade (experimental)_: Migrate `theme(…)` calls to `var(…)` or to the modern `theme(…)` syntax ([#14664](https://github.com/tailwindlabs/tailwindcss/pull/14664), [#14695](https://github.com/tailwindlabs/tailwindcss/pull/14695))
+- _Upgrade (experimental)_: Migrate `theme(…)` calls in classes to `var(…)` or to the modern `theme(…)` syntax ([#14664](https://github.com/tailwindlabs/tailwindcss/pull/14664))
+- _Upgrade (experimental)_: Support migrating JS configurations to CSS that contain functions inside the `theme` object ([#14675](https://github.com/tailwindlabs/tailwindcss/pull/14675))
 
 ### Fixed
 
 - Ensure `theme` values defined outside of `extend` in JS configuration files overwrite all existing values for that namespace ([#14672](https://github.com/tailwindlabs/tailwindcss/pull/14672))
 - _Upgrade (experimental)_: Speed up template migrations ([#14679](https://github.com/tailwindlabs/tailwindcss/pull/14679))
 - _Upgrade (experimental)_: Don't generate invalid CSS when migrating a complex `screens` config ([#14691](https://github.com/tailwindlabs/tailwindcss/pull/14691))
-
-### Added
-
-- _Upgrade (experimental)_: Support migrating JS configurations to CSS that contain functions inside the `theme` object ([#14675](https://github.com/tailwindlabs/tailwindcss/pull/14675))
 
 ## [4.0.0-alpha.27] - 2024-10-15
 
