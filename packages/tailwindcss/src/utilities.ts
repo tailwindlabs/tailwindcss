@@ -3146,6 +3146,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ value }) => {
       if (!value.endsWith('%')) return null
       let num = Number(value.slice(0, -1))
+      if (!isPositiveInteger(num)) return null
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       if (Number.isNaN(num) || num < 50 || num > 200) return null
