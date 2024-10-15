@@ -57,12 +57,10 @@ export async function migrateJsConfig(
     sources = migrateContent(unresolvedConfig as any, base)
   }
 
-  console.error('A', Object.keys(unresolvedConfig))
   if ('theme' in unresolvedConfig) {
     let themeConfig = await migrateTheme(designSystem, unresolvedConfig, base)
     if (themeConfig) cssConfigs.push(themeConfig)
   }
-  console.error('B', Object.keys(unresolvedConfig))
 
   let simplePlugins = findStaticPlugins(source)
   if (simplePlugins !== null) {
