@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `boxShadow` and `animation` theme keys in JS config files are accessible under `--shadow-*` and `--animate-*` using the `theme()` function ([#14642](https://github.com/tailwindlabs/tailwindcss/pull/14642))
 - Ensure all theme keys with new names are also accessible under their old names when using the `theme()` function with the legacy dot notation syntax ([#14642](https://github.com/tailwindlabs/tailwindcss/pull/14642))
 - Ensure `var(…)` can be used as the opacity value inside the `theme([path] / [modifier])` function ([#14653](https://github.com/tailwindlabs/tailwindcss/pull/14653))
+- Ensure `font-stretch` utilities only accepts positive integer bare values ([#14670](https://github.com/tailwindlabs/tailwindcss/pull/14670))
 - _Upgrade (experimental)_: Ensure CSS before a layer stays unlayered when running codemods ([#14596](https://github.com/tailwindlabs/tailwindcss/pull/14596))
 - _Upgrade (experimental)_: Resolve issues where some prefixed candidates were not properly migrated ([#14600](https://github.com/tailwindlabs/tailwindcss/pull/14600))
 
