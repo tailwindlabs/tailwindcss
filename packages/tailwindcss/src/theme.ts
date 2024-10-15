@@ -1,3 +1,4 @@
+import type { Rule } from './ast'
 import { escape } from './utils/escape'
 
 export const enum ThemeOptions {
@@ -10,7 +11,10 @@ export const enum ThemeOptions {
 export class Theme {
   public prefix: string | null = null
 
-  constructor(private values = new Map<string, { value: string; options: number }>()) {}
+  constructor(
+    private values = new Map<string, { value: string; options: ThemeOptions }>(),
+    private keyframes = new Set<{ value: Rule; options: ThemeOptions }>([]),
+  ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
     if (key.endsWith('-*')) {
@@ -198,6 +202,23 @@ export class Theme {
     }
 
     return values
+  }
+
+  addKeyframe(value: Rule, options = ThemeOptions.NONE): void {
+    this.keyframes.add({ value, options })
+  }
+
+  clearKeyframes(clearOptions: ThemeOptions) {
+    for (let keyframe of this.keyframes) {
+      if ((keyframe.options & clearOptions) !== clearOptions) {
+        continue
+      }
+      this.keyframes.delete(keyframe)
+    }
+  }
+
+  getKeyframes() {
+    return Array.from(this.keyframes.entries()).map(([{ value }]) => value)
   }
 }
 
