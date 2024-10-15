@@ -11,6 +11,7 @@ test.each([
   // Only 50-200% (inclusive) are valid:
   // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
   ['font-stretch-[50%]', 'font-stretch-50%'],
+  ['font-stretch-[50.5%]', 'font-stretch-[50.5%]'],
   ['font-stretch-[201%]', 'font-stretch-[201%]'],
   ['font-stretch-[49%]', 'font-stretch-[49%]'],
   // Should stay as-is

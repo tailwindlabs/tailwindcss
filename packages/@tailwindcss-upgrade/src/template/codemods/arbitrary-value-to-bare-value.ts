@@ -21,8 +21,8 @@ export function arbitraryValueToBareValue(
       clone.value.dataType === null &&
       clone.root === 'font-stretch'
     ) {
-      if (clone.value.value.endsWith('%')) {
-        let percentage = parseFloat(clone.value.value)
+      if (clone.value.value.endsWith('%') && isPositiveInteger(clone.value.value.slice(0, -1))) {
+        let percentage = parseInt(clone.value.value)
         if (percentage >= 50 && percentage <= 200) {
           changed = true
           clone.value = {
