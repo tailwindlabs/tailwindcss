@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from '../candidates'
 
@@ -12,6 +13,74 @@ export function arbitraryValueToBareValue(
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
+
+    // Convert font-stretch-* utilities
+    if (
+      clone.kind === 'functional' &&
+      clone.value?.kind === 'arbitrary' &&
+      clone.value.dataType === null &&
+      clone.root === 'font-stretch'
+    ) {
+      if (clone.value.value.endsWith('%') && isPositiveInteger(clone.value.value.slice(0, -1))) {
+        let percentage = parseInt(clone.value.value)
+        if (percentage >= 50 && percentage <= 200) {
+          changed = true
+          clone.value = {
+            kind: 'named',
+            value: clone.value.value,
+            fraction: null,
+          }
+        }
+      }
+    }
+
+    // Convert arbitrary values with positive integers to bare values
+    // Convert arbitrary values with fractions to bare values
+    else if (
+      clone.kind === 'functional' &&
+      clone.value?.kind === 'arbitrary' &&
+      clone.value.dataType === null
+    ) {
+      let parts = segment(clone.value.value, '/')
+      if (parts.every((part) => isPositiveInteger(part))) {
+        changed = true
+
+        let currentValue = clone.value
+        let currentModifier = clone.modifier
+
+        // E.g.: `col-start-[12]`
+        //                   ^^
+        if (parts.length === 1) {
+          clone.value = {
+            kind: 'named',
+            value: clone.value.value,
+            fraction: null,
+          }
+        }
+
+        // E.g.: `aspect-[12/34]`
+        //                ^^ ^^
+        else {
+          clone.value = {
+            kind: 'named',
+            value: parts[0],
+            fraction: clone.value.value,
+          }
+          clone.modifier = {
+            kind: 'named',
+            value: parts[1],
+          }
+        }
+
+        // Double check that the new value compiles correctly
+        if (designSystem.compileAstNodes(clone).length === 0) {
+          clone.value = currentValue
+          clone.modifier = currentModifier
+          changed = false
+        }
+      }
+    }
+
     for (let variant of variants(clone)) {
       // Convert `data-[selected]` to `data-selected`
       if (
