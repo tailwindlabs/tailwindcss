@@ -129,10 +129,6 @@ async function migrateTheme(unresolvedConfig: Config & { theme: any }): Promise<
     containsThemeKeys = true
     css += '\n' + keyframesToCss(themeValues.keyframes)
   }
-  if ('extends' in themeValues && 'keyframes' in themeValues.extends) {
-    containsThemeKeys = true
-    css += '\n' + keyframesToCss(themeValues.extends.keyframes as Record<string, unknown>)
-  }
 
   if (!containsThemeKeys) {
     return null
