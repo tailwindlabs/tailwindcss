@@ -1,4 +1,4 @@
-import { walk, type AstNode } from './ast'
+import { walk, WalkAction, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import { escape } from './utils/escape'
@@ -6,6 +6,21 @@ import { escape } from './utils/escape'
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'rule') return
+
+    // Do not allow `@apply` rules inside `@keyframes` rules.
+    if (node.selector[0] === '@' && node.selector.startsWith('@keyframes')) {
+      walk(node.nodes, (child) => {
+        if (
+          child.kind === 'rule' &&
+          child.selector[0] === '@' &&
+          child.selector.startsWith('@apply ')
+        ) {
+          throw new Error(`You cannot use \`@apply\` inside \`@keyframes\`.`)
+        }
+      })
+      return WalkAction.Skip
+    }
+
     if (!(node.selector[0] === '@' && node.selector.startsWith('@apply '))) return
 
     let candidates = node.selector
