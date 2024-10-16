@@ -369,3 +369,62 @@ test(
     `)
   },
 )
+
+test(
+  `does not upgrade JS config files with non-simple screens object`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        export default {
+          theme: {
+            screens: {
+              xl: { min: '1024px', max: '1279px' },
+              tall: { raw: '(min-height: 800px)' },
+            },
+          },
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.ts';
+      "
+    `)
+
+    expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
+      "
+      --- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+
+      export default {
+        theme: {
+          screens: {
+            xl: { min: '1024px', max: '1279px' },
+            tall: { raw: '(min-height: 800px)' },
+          },
+        },
+      } satisfies Config
+      "
+    `)
+  },
+)
