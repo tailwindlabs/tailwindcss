@@ -76,14 +76,14 @@ export function themeToVar(
   }
 
   function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
+    let ast = ValueParser.parse(input)
+
     // In some scenarios (e.g.: variants), we can't migrate to `var(…)` if it
     // ends up in the `@media (…)` part. In this case we only have to migrate to
     // the new `theme(…)` notation.
     if (options & Convert.MigrateThemeOnly) {
-      return [substituteFunctionsInValue(input, toTheme), null]
+      return [substituteFunctionsInValue(ast, toTheme), null]
     }
-
-    let ast = ValueParser.parse(input)
 
     let themeUsageCount = 0
     let themeModifierCount = 0
@@ -120,7 +120,7 @@ export function themeToVar(
 
     // No `theme(…)` with modifiers, we can migrate to `var(…)`
     if (themeModifierCount === 0) {
-      return [substituteFunctionsInValue(input, toVar), null]
+      return [substituteFunctionsInValue(ast, toVar), null]
     }
 
     // Multiple modifiers which means that there are multiple `theme(…/…)`
@@ -131,13 +131,13 @@ export function themeToVar(
     //
     // Try to convert each `theme(…)` call to the modern syntax.
     if (themeModifierCount > 1) {
-      return [substituteFunctionsInValue(input, toTheme), null]
+      return [substituteFunctionsInValue(ast, toTheme), null]
     }
 
     // Only a single `theme(…)` with a modifier left, that modifier will be
     // migrated to a candidate modifier.
     let modifier: CandidateModifier | null = null
-    let result = substituteFunctionsInValue(input, (path, fallback) => {
+    let result = substituteFunctionsInValue(ast, (path, fallback) => {
       let parts = segment(path, '/').map((part) => part.trim())
 
       // Multiple `/` separators, which makes this an invalid path
@@ -213,10 +213,9 @@ export function themeToVar(
 }
 
 function substituteFunctionsInValue(
-  value: string,
+  ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  let ast = ValueParser.parse(value)
   ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
