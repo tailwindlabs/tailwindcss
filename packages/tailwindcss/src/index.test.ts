@@ -2598,6 +2598,12 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
+        @media not foo {
+          .not-foo\\:flex {
+            display: flex;
+          }
+        }
+
         @media foo {
           .foo\\:flex {
             display: flex;
