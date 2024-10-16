@@ -13,7 +13,7 @@ import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { printCandidate } from '../candidates'
 
 enum Convert {
-  None = 0,
+  All = 0,
   MigrateModifier = 1 << 0,
   MigrateThemeOnly = 1 << 1,
 }
@@ -30,7 +30,7 @@ export function themeToVar(
     if (clone.kind === 'arbitrary') {
       let [newValue, modifier] = convert(
         clone.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.None,
+        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
       )
       if (newValue !== clone.value) {
         changed = true
@@ -43,7 +43,7 @@ export function themeToVar(
     } else if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
       let [newValue, modifier] = convert(
         clone.value.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.None,
+        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
       )
       if (newValue !== clone.value.value) {
         changed = true
@@ -75,7 +75,7 @@ export function themeToVar(
     return changed ? printCandidate(designSystem, clone) : rawCandidate
   }
 
-  function convert(input: string, options = Convert.None): [string, CandidateModifier | null] {
+  function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
     // In some scenarios (e.g.: variants), we can't migrate to `var(…)` if it
     // ends up in the `@media (…)` part. In this case we only have to migrate to
     // the new `theme(…)` notation.
