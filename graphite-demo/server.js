@@ -18,17 +18,38 @@ const tasks = [
   }
 ];
 
+// Fake data for users
+const users = [
+  {
+    id: 101,
+    name: 'Alice Smith'
+  },
+  {
+    id: 102,
+    name: 'Bob Johnson'
+  },
+  {
+    id: 103,
+    name: 'Charlie Brown'
+  }
+];
+
 app.get('/search', (req, res) => {
   // Retrieve the query parameter
   const query = req.query.query?.toLowerCase() || '';
 
   // Filter tasks based on the query
-  const filteredTasks = tasks.filter(task => task.description.toLowerCase().includes(query));
+  const filteredTasks = tasks.filter(task =>
+    task.description.toLowerCase().includes(query)
+  ).sort((a, b) => a.description.localeCompare(b.description));
 
-  // Sort the filtered tasks alphabetically by description
-  const sortedTasks = filteredTasks.sort((a, b) => a.description.localeCompare(b.description));
+  // Filter users based on the query
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(query)
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
-  res.json(sortedTasks);
+  // Return both sets of results
+  res.json({ tasks: filteredTasks, users: filteredUsers });
 });
 
 app.listen(port, () => {
