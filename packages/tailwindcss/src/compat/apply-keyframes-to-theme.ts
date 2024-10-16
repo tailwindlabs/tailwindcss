@@ -1,6 +1,5 @@
 import { rule, type Rule } from '../ast'
 import type { DesignSystem } from '../design-system'
-import { ThemeOptions } from '../theme'
 import type { ResolvedConfig } from './config/types'
 import { objectToAst } from './plugin-api'
 
@@ -9,12 +8,8 @@ export function applyKeyframesToTheme(
   resolvedConfig: Pick<ResolvedConfig, 'theme'>,
   resetThemeKeys: Set<string>,
 ) {
-  if (resetThemeKeys.has('keyframes')) {
-    designSystem.theme.clearKeyframes(ThemeOptions.DEFAULT)
-  }
-
   for (let rule of keyframesToRules(resolvedConfig)) {
-    designSystem.theme.addKeyframe(rule)
+    designSystem.theme.addKeyframes(rule)
   }
 }
 

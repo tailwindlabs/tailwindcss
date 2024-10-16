@@ -285,19 +285,9 @@ async function parseCss(
       // Collect `@keyframes` rules to re-insert with theme variables later,
       // since the `@theme` rule itself will be removed.
       if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
-        theme.addKeyframe(child, themeOptions)
+        theme.addKeyframes(child)
         replaceWith([])
         return WalkAction.Skip
-      }
-
-      // Detect `--keyframes-*: initial;` to unset the keyframes list
-      if (
-        child.kind === 'declaration' &&
-        child.property === '--keyframes-*' &&
-        child.value === 'initial'
-      ) {
-        theme.clearKeyframes(ThemeOptions.NONE)
-        return
       }
 
       if (child.kind === 'comment') return

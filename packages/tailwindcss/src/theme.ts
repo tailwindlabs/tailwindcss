@@ -13,7 +13,7 @@ export class Theme {
 
   constructor(
     private values = new Map<string, { value: string; options: ThemeOptions }>(),
-    private keyframes = new Set<{ value: Rule; options: ThemeOptions }>([]),
+    private keyframes = new Set<Rule>([]),
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
@@ -204,21 +204,12 @@ export class Theme {
     return values
   }
 
-  addKeyframe(value: Rule, options = ThemeOptions.NONE): void {
-    this.keyframes.add({ value, options })
-  }
-
-  clearKeyframes(clearOptions: ThemeOptions) {
-    for (let keyframe of this.keyframes) {
-      if ((keyframe.options & clearOptions) !== clearOptions) {
-        continue
-      }
-      this.keyframes.delete(keyframe)
-    }
+  addKeyframes(value: Rule): void {
+    this.keyframes.add(value)
   }
 
   getKeyframes() {
-    return Array.from(this.keyframes.entries()).map(([{ value }]) => value)
+    return Array.from(this.keyframes)
   }
 }
 

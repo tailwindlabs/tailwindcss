@@ -204,7 +204,7 @@ export function buildPluginApi(
 
       for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
-          designSystem.theme.addKeyframe(rule(name, objectToAst(css)))
+          designSystem.theme.addKeyframes(rule(name, objectToAst(css)))
           continue
         }
 
