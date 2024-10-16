@@ -3,8 +3,12 @@ import { expect, test } from 'vitest'
 import { themeToVar } from './theme-to-var'
 
 test.each([
+  // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
+  ['[color:red]', '[color:red]'],
+
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
+  ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
   ['bg-[theme(colors.red.500)]', 'bg-[var(--color-red-500)]'], // Arbitrary value
   ['bg-[size:theme(spacing.4)]', 'bg-[size:var(--spacing-4)]'], // Arbitrary value + data type hint
 
@@ -77,6 +81,20 @@ test.each([
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
+
+  // Invalid cases
+  ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
+  ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:theme(colors.red.500/50/50)]/50'],
+
+  // Partially invalid cases
+  [
+    '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]',
+    '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]',
+  ],
+  [
+    '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
+    '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
+  ],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
