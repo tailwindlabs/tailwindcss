@@ -148,6 +148,20 @@ describe('arbitrary properties', () => {
 })
 
 describe('@apply', () => {
+  it('@apply in @keyframes is not allowed', () => {
+    return expect(() =>
+      compileCss(css`
+        @keyframes foo {
+          0% {
+            @apply bg-red-500;
+          }
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot use \`@apply\` inside \`@keyframes\`.]`,
+    )
+  })
+
   it('should replace @apply with the correct result', async () => {
     expect(
       await compileCss(css`
