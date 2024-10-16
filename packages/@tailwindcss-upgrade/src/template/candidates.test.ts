@@ -1,6 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
-import { extractRawCandidates, printCandidate, replaceCandidateInContent } from './candidates'
+import { extractRawCandidates, printCandidate } from './candidates'
+import { spliceChangesIntoString } from './splice-changes-into-string'
 
 let html = String.raw
 
@@ -66,13 +67,20 @@ test('replaces the right positions for a candidate', async () => {
     ({ rawCandidate }) => designSystem.parseCandidate(rawCandidate).length > 0,
   )!
 
-  expect(replaceCandidateInContent(content, 'flex', candidate.start, candidate.end))
-    .toMatchInlineSnapshot(`
+  let migrated = spliceChangesIntoString(content, [
+    {
+      start: candidate.start,
+      end: candidate.end,
+      replacement: 'flex',
+    },
+  ])
+
+  expect(migrated).toMatchInlineSnapshot(`
+    "
+        <h1>🤠👋</h1>
+        <div class="flex" />
       "
-          <h1>🤠👋</h1>
-          <div class="flex" />
-        "
-    `)
+  `)
 })
 
 const candidates = [
