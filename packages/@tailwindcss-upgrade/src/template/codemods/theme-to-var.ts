@@ -80,7 +80,7 @@ export function themeToVar(
   return rawCandidate
 }
 
-export function createConverter(designSystem: DesignSystem) {
+export function createConverter(designSystem: DesignSystem, { pretty = false } = {}) {
   function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
     let ast = ValueParser.parse(input)
 
@@ -110,7 +110,7 @@ export function createConverter(designSystem: DesignSystem) {
         }
 
         // If we see a `/`, we have a modifier
-        else if (child.kind === 'separator' && child.value === '/') {
+        else if (child.kind === 'separator' && child.value.trim() === '/') {
           themeModifierCount += 1
           return ValueParser.ValueWalkAction.Stop
         }
@@ -211,7 +211,8 @@ export function createConverter(designSystem: DesignSystem) {
     let variable = pathToVariableName(path)
     if (!variable) return null
 
-    let modifier = parts.length > 0 ? `/${parts.join('/')}` : ''
+    let modifier =
+      parts.length > 0 ? (pretty ? ` / ${parts.join(' / ')}` : `/${parts.join('/')}`) : ''
     return fallback ? `theme(${variable}${modifier}, ${fallback})` : `theme(${variable}${modifier})`
   }
 
