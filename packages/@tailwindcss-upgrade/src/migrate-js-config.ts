@@ -226,9 +226,9 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   // migrated
   let theme = unresolvedConfig.theme
   if (theme && typeof theme === 'object') {
-    if (theme.extend && !onlyUsesAllowedTopLevelKeys(theme.extend)) return false
+    if (theme.extend && !onlyAllowedThemeValues(theme.extend)) return false
     let { extend: _extend, ...themeCopy } = theme
-    if (!onlyUsesAllowedTopLevelKeys(themeCopy)) return false
+    if (!onlyAllowedThemeValues(themeCopy)) return false
   }
 
   return true
@@ -239,10 +239,17 @@ const DEFAULT_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-function onlyUsesAllowedTopLevelKeys(theme: ThemeConfig): boolean {
+function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
     if (!DEFAULT_THEME_KEYS.includes(key)) {
       return false
+    }
+  }
+
+  if ('screens' in theme && typeof theme.screens === 'object' && theme.screens !== null) {
+    for (let screen of Object.values(theme.screens)) {
+      if (typeof screen === 'object' && screen !== null && ('max' in screen || 'raw' in screen))
+        return false
     }
   }
   return true
