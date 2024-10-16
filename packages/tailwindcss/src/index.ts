@@ -82,7 +82,6 @@ async function parseCss(
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
-  let keyframesRules: Rule[] = []
   let globs: { base: string; pattern: string }[] = []
 
   walk(ast, (node, { parent, replaceWith, context }) => {
@@ -286,7 +285,7 @@ async function parseCss(
       // Collect `@keyframes` rules to re-insert with theme variables later,
       // since the `@theme` rule itself will be removed.
       if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
-        keyframesRules.push(child)
+        theme.addKeyframes(child)
         replaceWith([])
         return WalkAction.Skip
       }
@@ -350,6 +349,7 @@ async function parseCss(
       nodes.push(decl(key, value.value))
     }
 
+    let keyframesRules = theme.getKeyframes()
     if (keyframesRules.length > 0) {
       let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
         animation.split(' '),

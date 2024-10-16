@@ -1,3 +1,4 @@
+import type { Rule } from './ast'
 import { escape } from './utils/escape'
 
 export const enum ThemeOptions {
@@ -10,7 +11,10 @@ export const enum ThemeOptions {
 export class Theme {
   public prefix: string | null = null
 
-  constructor(private values = new Map<string, { value: string; options: number }>()) {}
+  constructor(
+    private values = new Map<string, { value: string; options: ThemeOptions }>(),
+    private keyframes = new Set<Rule>([]),
+  ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
     if (key.endsWith('-*')) {
@@ -20,7 +24,11 @@ export class Theme {
       if (key === '--*') {
         this.values.clear()
       } else {
-        this.#clearNamespace(key.slice(0, -2))
+        this.clearNamespace(
+          key.slice(0, -2),
+          // `--${key}-*: initial;` should clear _all_ theme values
+          ThemeOptions.NONE,
+        )
       }
     }
 
@@ -89,9 +97,15 @@ export class Theme {
     return `--${this.prefix}-${key.slice(2)}`
   }
 
-  #clearNamespace(namespace: string) {
+  clearNamespace(namespace: string, clearOptions: ThemeOptions) {
     for (let key of this.values.keys()) {
       if (key.startsWith(namespace)) {
+        if (clearOptions !== ThemeOptions.NONE) {
+          let options = this.getOptions(key)
+          if ((options & clearOptions) !== clearOptions) {
+            continue
+          }
+        }
         this.values.delete(key)
       }
     }
@@ -188,6 +202,14 @@ export class Theme {
     }
 
     return values
+  }
+
+  addKeyframes(value: Rule): void {
+    this.keyframes.add(value)
+  }
+
+  getKeyframes() {
+    return Array.from(this.keyframes)
   }
 }
 

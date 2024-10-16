@@ -1011,10 +1011,20 @@ describe('Parsing themes values from CSS', () => {
             --color-blue: #00f;
             --font-size-sm: 13px;
             --font-size-md: 16px;
+
+            --animate-spin: spin 1s infinite linear;
+
+            @keyframes spin {
+              to {
+                transform: rotate(360deg);
+              }
+            }
           }
           @theme {
             --color-*: initial;
             --font-size-md: initial;
+            --animate-*: initial;
+            --keyframes-*: initial;
           }
           @theme {
             --color-green: #0f0;

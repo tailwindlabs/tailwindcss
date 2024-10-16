@@ -19,7 +19,18 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
   return null
 }
 
-export function applyConfigToTheme(designSystem: DesignSystem, { theme }: ResolvedConfig) {
+export function applyConfigToTheme(
+  designSystem: DesignSystem,
+  { theme }: ResolvedConfig,
+  replacedThemeKeys: Set<string>,
+) {
+  for (let resetThemeKey of replacedThemeKeys) {
+    let name = keyPathToCssProperty([resetThemeKey])
+    if (!name) continue
+
+    designSystem.theme.clearNamespace(`--${name}`, ThemeOptions.DEFAULT)
+  }
+
   for (let [path, value] of themeableValues(theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue

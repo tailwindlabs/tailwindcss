@@ -83,7 +83,7 @@ async function createResolvedUserConfig(fullConfigPath: string): Promise<Config>
 
   return resolveConfig(noopDesignSystem, [
     { base: dirname(fullConfigPath), config: unresolvedUserConfig },
-  ]) as any
+  ]).resolvedConfig as any
 }
 
 const DEFAULT_CONFIG_FILES = [

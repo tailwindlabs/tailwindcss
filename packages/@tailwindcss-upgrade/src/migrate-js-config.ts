@@ -9,7 +9,7 @@ import {
   keyPathToCssProperty,
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
-import { applyKeyframesToAst } from '../../tailwindcss/src/compat/apply-keyframes-to-ast'
+import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
 import { deepMerge } from '../../tailwindcss/src/compat/config/deep-merge'
 import { mergeThemeExtension } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
@@ -249,7 +249,6 @@ function onlyUsesAllowedTopLevelKeys(theme: ThemeConfig): boolean {
 }
 
 function keyframesToCss(keyframes: Record<string, unknown>): string {
-  let ast: AstNode[] = []
-  applyKeyframesToAst(ast, { theme: { keyframes } })
+  let ast: AstNode[] = keyframesToRules({ theme: { keyframes } })
   return toCss(ast).trim() + '\n'
 }

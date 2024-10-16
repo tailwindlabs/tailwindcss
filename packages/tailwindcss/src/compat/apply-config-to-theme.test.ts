@@ -1,14 +1,14 @@
 import { expect, test } from 'vitest'
 import { buildDesignSystem } from '../design-system'
-import { Theme } from '../theme'
+import { Theme, ThemeOptions } from '../theme'
 import { applyConfigToTheme } from './apply-config-to-theme'
 import { resolveConfig } from './config/resolve-config'
 
-test('Config values can be merged into the theme', () => {
+test('config values can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  let resolvedUserConfig = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -54,7 +54,7 @@ test('Config values can be merged into the theme', () => {
       base: '/root',
     },
   ])
-  applyConfigToTheme(design, resolvedUserConfig)
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
 
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
   expect(theme.resolve('sm', ['--breakpoint'])).toEqual('1234px')
@@ -75,11 +75,60 @@ test('Config values can be merged into the theme', () => {
   ])
 })
 
-test('Invalid keys are not merged into the theme', () => {
+test('will reset default theme values with overwriting theme values', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  let resolvedUserConfig = resolveConfig(design, [
+  theme.add('--color-blue-400', 'lightblue', ThemeOptions.DEFAULT)
+  theme.add('--color-blue-500', 'blue', ThemeOptions.DEFAULT)
+  theme.add('--color-red-400', '#f87171')
+  theme.add('--color-red-500', '#ef4444')
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: {
+            blue: {
+              500: '#3b82f6',
+            },
+            red: {
+              500: 'red',
+            },
+          },
+          extend: {
+            colors: {
+              blue: {
+                600: '#2563eb',
+              },
+              red: {
+                600: '#dc2626',
+              },
+            },
+          },
+        },
+      },
+      base: '/root',
+    },
+  ])
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.namespace('--color')).toMatchInlineSnapshot(`
+    Map {
+      "red-400" => "#f87171",
+      "red-500" => "#ef4444",
+      "blue-500" => "#3b82f6",
+      "blue-600" => "#2563eb",
+      "red-600" => "#dc2626",
+    }
+  `)
+})
+
+test('invalid keys are not merged into the theme', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -92,7 +141,7 @@ test('Invalid keys are not merged into the theme', () => {
     },
   ])
 
-  applyConfigToTheme(design, resolvedUserConfig)
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
 
   let entries = Array.from(theme.entries())
 

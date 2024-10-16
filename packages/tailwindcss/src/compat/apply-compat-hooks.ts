@@ -2,7 +2,7 @@ import { rule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
-import { applyKeyframesToAst } from './apply-keyframes-to-ast'
+import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
 import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
@@ -215,12 +215,15 @@ function upgradeToFullPluginSupport({
 
   let userConfig = [...pluginConfigs, ...configs]
 
-  let resolvedConfig = resolveConfig(designSystem, [
+  let { resolvedConfig } = resolveConfig(designSystem, [
     { config: createCompatConfig(designSystem.theme), base },
     ...userConfig,
     { config: { plugins: [darkModePlugin] }, base },
   ])
-  let resolvedUserConfig = resolveConfig(designSystem, userConfig)
+  let { resolvedConfig: resolvedUserConfig, replacedThemeKeys } = resolveConfig(
+    designSystem,
+    userConfig,
+  )
 
   let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
 
@@ -231,8 +234,8 @@ function upgradeToFullPluginSupport({
   // Merge the user-configured theme keys into the design system. The compat
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
-  applyConfigToTheme(designSystem, resolvedUserConfig)
-  applyKeyframesToAst(ast, resolvedUserConfig)
+  applyConfigToTheme(designSystem, resolvedUserConfig, replacedThemeKeys)
+  applyKeyframesToTheme(designSystem, resolvedUserConfig, replacedThemeKeys)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)

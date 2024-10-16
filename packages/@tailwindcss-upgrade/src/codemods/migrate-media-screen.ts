@@ -15,8 +15,8 @@ export function migrateMediaScreen({
   function migrate(root: Root) {
     if (!designSystem || !userConfig) return
 
-    let resolvedUserConfig = resolveConfig(designSystem, [{ base: '', config: userConfig }])
-    let screens = resolvedUserConfig?.theme?.screens || {}
+    let { resolvedConfig } = resolveConfig(designSystem, [{ base: '', config: userConfig }])
+    let screens = resolvedConfig?.theme?.screens || {}
 
     let mediaQueries = new DefaultMap<string, string | null>((name) => {
       let value = designSystem?.resolveThemeValue(`--breakpoint-${name}`) ?? screens?.[name]
