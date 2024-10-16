@@ -9,7 +9,7 @@ test('keyframes can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -30,7 +30,7 @@ test('keyframes can be merged into the theme', () => {
       base: '/root',
     },
   ])
-  applyKeyframesToTheme(design, resolvedConfig, resetThemeKeys)
+  applyKeyframesToTheme(design, resolvedConfig, replacedThemeKeys)
 
   expect(toCss(design.theme.getKeyframes())).toMatchInlineSnapshot(`
     "@keyframes fade-in {
@@ -70,7 +70,7 @@ test('will append to the default keyframes with new keyframes', () => {
     ]),
   )
 
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -93,7 +93,7 @@ test('will append to the default keyframes with new keyframes', () => {
       base: '/root',
     },
   ])
-  applyKeyframesToTheme(design, resolvedConfig, resetThemeKeys)
+  applyKeyframesToTheme(design, resolvedConfig, replacedThemeKeys)
 
   expect(toCss(design.theme.getKeyframes())).toMatchInlineSnapshot(`
     "@keyframes slide-in {

@@ -8,7 +8,7 @@ test('config values can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -54,7 +54,7 @@ test('config values can be merged into the theme', () => {
       base: '/root',
     },
   ])
-  applyConfigToTheme(design, resolvedConfig, resetThemeKeys)
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
 
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
   expect(theme.resolve('sm', ['--breakpoint'])).toEqual('1234px')
@@ -84,7 +84,7 @@ test('will reset default theme values with overwriting theme values', () => {
   theme.add('--color-red-400', '#f87171')
   theme.add('--color-red-500', '#ef4444')
 
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -111,7 +111,7 @@ test('will reset default theme values with overwriting theme values', () => {
       base: '/root',
     },
   ])
-  applyConfigToTheme(design, resolvedConfig, resetThemeKeys)
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
 
   expect(theme.namespace('--color')).toMatchInlineSnapshot(`
     Map {
@@ -128,7 +128,7 @@ test('invalid keys are not merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
 
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -141,7 +141,7 @@ test('invalid keys are not merged into the theme', () => {
     },
   ])
 
-  applyConfigToTheme(design, resolvedConfig, resetThemeKeys)
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
 
   let entries = Array.from(theme.entries())
 

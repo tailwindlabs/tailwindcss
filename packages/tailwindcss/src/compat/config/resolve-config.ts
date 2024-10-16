@@ -11,8 +11,6 @@ import {
   type UserConfig,
 } from './types'
 
-type ResetThemeKeys = Set<string>
-
 export interface ConfigFile {
   path?: string
   base: string
@@ -44,7 +42,7 @@ let minimal: ResolvedConfig = {
 export function resolveConfig(
   design: DesignSystem,
   files: ConfigFile[],
-): { resolvedConfig: ResolvedConfig; resetThemeKeys: ResetThemeKeys } {
+): { resolvedConfig: ResolvedConfig; replacedThemeKeys: Set<string> } {
   let ctx: ResolutionContext = {
     design,
     configs: [],
@@ -83,7 +81,7 @@ export function resolveConfig(
   }
 
   // Merge themes
-  let resetThemeKeys = mergeTheme(ctx)
+  let replacedThemeKeys = mergeTheme(ctx)
 
   return {
     resolvedConfig: {
@@ -92,7 +90,7 @@ export function resolveConfig(
       theme: ctx.theme as ResolvedConfig['theme'],
       plugins: ctx.plugins,
     },
-    resetThemeKeys,
+    replacedThemeKeys,
   }
 }
 
@@ -183,8 +181,8 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   ctx.configs.push(config)
 }
 
-function mergeTheme(ctx: ResolutionContext): ResetThemeKeys {
-  let resetThemeKeys: Set<string> = new Set()
+function mergeTheme(ctx: ResolutionContext): Set<string> {
+  let replacedThemeKeys: Set<string> = new Set()
 
   let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
   let theme = Object.assign(themeFn, {
@@ -209,7 +207,7 @@ function mergeTheme(ctx: ResolutionContext): ResetThemeKeys {
       if (key === 'extend') {
         continue
       }
-      resetThemeKeys.add(key)
+      replacedThemeKeys.add(key)
     }
 
     // Shallow merge themes so latest "group" wins
@@ -257,5 +255,5 @@ function mergeTheme(ctx: ResolutionContext): ResetThemeKeys {
     }
   }
 
-  return resetThemeKeys
+  return replacedThemeKeys
 }

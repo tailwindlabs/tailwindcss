@@ -22,9 +22,9 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
 export function applyConfigToTheme(
   designSystem: DesignSystem,
   { theme }: ResolvedConfig,
-  resetThemeKeys: Set<string>,
+  replacedThemeKeys: Set<string>,
 ) {
-  for (let resetThemeKey of resetThemeKeys) {
+  for (let resetThemeKey of replacedThemeKeys) {
     let name = keyPathToCssProperty([resetThemeKey])
     if (!name) continue
 
