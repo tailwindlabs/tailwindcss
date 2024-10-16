@@ -248,8 +248,9 @@ function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
 
   if ('screens' in theme && typeof theme.screens === 'object' && theme.screens !== null) {
     for (let screen of Object.values(theme.screens)) {
-      if (typeof screen === 'object' && screen !== null && ('max' in screen || 'raw' in screen))
+      if (typeof screen === 'object' && screen !== null && ('max' in screen || 'raw' in screen)) {
         return false
+      }
     }
   }
   return true
