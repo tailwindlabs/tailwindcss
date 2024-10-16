@@ -1754,13 +1754,31 @@ test('not', async () => {
             }
           }
         }
+
+        @variant custom-media-rule (@media foo);
+        @variant custom-supports-rule (@supports foo);
+        @variant custom-container-rule (@container foo);
+        @variant nested-at-rules {
+          @media print {
+            &:hover {
+              @slot;
+            }
+          }
+        }
+
         @tailwind utilities;
       `,
       [
         'not-[:checked]:flex',
+        'not-hover:flex',
         'not-hocus:flex',
         'not-nested-selectors:flex',
         'not-complex-selectors:flex',
+
+        'not-print:flex',
+        'not-[@media_print]:flex',
+        'not-custom-at-rule:flex',
+        'not-nested-at-rules:flex',
 
         'group-not-[:checked]:flex',
         'group-not-[:checked]/parent-name:flex',
@@ -1786,7 +1804,17 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".not-hocus\\:flex:not(:hover, :focus) {
+    ".not-hover\\:flex:not(:hover) {
+      display: flex;
+    }
+
+    @media not (hover: hover) {
+      .not-hover\\:flex {
+        display: flex;
+      }
+    }
+
+    .not-hocus\\:flex:not(:hover, :focus) {
       display: flex;
     }
 
@@ -1794,12 +1822,28 @@ test('not', async () => {
       display: flex;
     }
 
-    .not-complex-selectors\\:flex:not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) {
+    .not-complex-selectors\\:flex:not(:is(:hover, [data-hovered]):focus):not(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) {
       display: flex;
+    }
+
+    .not-nested-at-rules\\:flex:not(:hover) {
+      display: flex;
+    }
+
+    @media not print {
+      .not-nested-at-rules\\:flex {
+        display: flex;
+      }
     }
 
     .not-\\[\\:checked\\]\\:flex:not(:checked) {
       display: flex;
+    }
+
+    @media not print {
+      .not-\\[\\@media_print\\]\\:flex {
+        display: flex;
+      }
     }
 
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *) {
@@ -1822,11 +1866,11 @@ test('not', async () => {
       display: flex;
     }
 
-    .group-not-complex-selectors\\:flex:is(:where(.group):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
+    .group-not-complex-selectors\\:flex:is(:where(.group):not(:is(:hover, [data-hovered]):focus):not(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
       display: flex;
     }
 
-    .group-not-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
+    .group-not-complex-selectors\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:is(:hover, [data-hovered]):focus):not(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) *) {
       display: flex;
     }
 
@@ -1858,11 +1902,11 @@ test('not', async () => {
       display: flex;
     }
 
-    .peer-not-complex-selectors\\:flex:is(:where(.peer):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
+    .peer-not-complex-selectors\\:flex:is(:where(.peer):not(:is(:hover, [data-hovered]):focus):not(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
       display: flex;
     }
 
-    .peer-not-complex-selectors\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:is(:hover, [data-hovered]):focus, :is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
+    .peer-not-complex-selectors\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:is(:hover, [data-hovered]):focus):not(:is(:hover, [data-hovered]):active, :is(:hover, [data-hovered])[data-active]) ~ *) {
       display: flex;
     }
 
@@ -1878,24 +1922,14 @@ test('not', async () => {
   expect(
     await compileCss(
       css`
-        @variant custom-at-rule (@media foo);
-        @variant nested-at-rules {
-          &:hover {
-            @media print {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
       [
+        //
         'not-[>img]:flex',
         'not-[+img]:flex',
         'not-[~img]:flex',
         'not-[:checked]/foo:flex',
-        'not-[@media_print]:flex',
-        'not-custom-at-rule:flex',
-        'not-nested-at-rules:flex',
       ],
     ),
   ).toEqual('')
@@ -3049,11 +3083,12 @@ test('not selector inversion creation thing', async () => {
         @slot;
       }
     }
+
     @tailwind utilities;
   `
 
   expect(await compileCss(input, ['omg:flex', 'not-omg:flex'])).toMatchInlineSnapshot(`
-    ".not-omg\\:flex:not(:hover:focus:active, :hover:focus[data-whatever], :hover[data-foo], :visited) {
+    ".not-omg\\:flex:not(:hover:focus:active):not(:hover:focus[data-whatever]):not(:hover[data-foo]):not(:visited) {
       display: flex;
     }
 

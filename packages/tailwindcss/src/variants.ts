@@ -1,5 +1,6 @@
 import { WalkAction, atRoot, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
+import { negateRules } from './selectors/negate'
 import { flattenNesting } from './selectors/nesting'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -284,47 +285,14 @@ export function createVariants(theme: Theme): Variants {
 
     if (variant.modifier) return null
 
-    // Most variants rely on CSS nesting to build-up the final selector, but
-    // there is no way to use CSS nesting to make `&` refer to just the `.group`
-    // class the way we'd need to for these variants, so we flatten the nesting
-    // and manually update the selectors for each rule ourselves.
-    let flattened = flattenNesting(structuredClone([ruleNode]))
-    let hasStyleRules = false
+    // Logical negation of a complex AST is not a simple task
+    // It involves building an expression tree representing the AST,
+    // applying De Morgan's laws, conversion to DNF, simplification, and
+    // finally conversion back to a CSS AST.
+    let negated = negateRules([ruleNode])
 
-    let rules: Rule[] = []
-
-    for (let node of flattenNesting([ruleNode])) {
-      if (node.kind !== 'rule') continue
-
-      // Don't allow not to be used with variants that use at-rules
-      if (node.selector[0] === '@') return null
-
-      hasStyleRules = true
-
-      rules.push(node)
-    }
-
-    // We do not invert media queries, supports, or container rules so a not-md
-    // variant does not make sense to have.
-    if (!hasStyleRules) {
-      return null
-    }
-
-    // 3. Merge selectors from all rules into a single selector
-    let selectors = rules.flatMap((rule) => {
-      return segment(rule.selector, ',').map((part) => {
-        if (part.startsWith(':is(') && part.endsWith(')')) {
-          part = part.slice(4, -1)
-        }
-
-        part = part.replaceAll('&', '*')
-
-        return part
-      })
-    })
-
-    ruleNode.selector = `&:not(${selectors.join(', ')})`
-    ruleNode.nodes = []
+    ruleNode.selector = `&`
+    ruleNode.nodes = negated
   })
 
   variants.compound('group', (ruleNode, variant) => {
