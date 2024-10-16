@@ -1,18 +1,42 @@
-import { and, none, not, or, visit, visitDepth, type Expr } from './expr'
+import { and, none, not, or, visit, type Expr } from './expr'
 
-export function toDNF(expr: Expr): Expr {
+export function toDNF(e: Expr): Expr {
   // Convert the expression to Negation Normal Form (NNF)
-  expr = visit(expr, deMorgan)
-  expr = visitDepth(expr, flatten)
+  e = visit(e, {
+    Enter(e) {
+      if (e.kind === 'not') {
+        let child = e.nodes[0]
+        if (child.kind === 'or') {
+          return and(child.nodes.map(not))
+        } else if (child.kind === 'and') {
+          return or(child.nodes.map(not))
+        }
+      }
 
-  // Convert the expression to Disjunctive Normal Form (DNF)
-  expr = visitDepth(expr, dnf)
-  expr = visitDepth(expr, flatten)
-  expr = visitDepth(expr, dedupe)
-  expr = normalizeDNF(expr)
-  expr = visitDepth(expr, eliminateSupersets)
+      return e
+    },
 
-  return expr
+    Exit(e) {
+      if (e.kind === 'not') {
+        let child = e.nodes[0]
+        if (child.kind === 'not') return child.nodes[0]
+      } else if (e.kind === 'and' || e.kind === 'or') {
+        e.nodes = e.nodes.flatMap((child) => (child.kind === e.kind ? child.nodes : child))
+        if (e.nodes.length === 1) return e.nodes[0]
+      }
+
+      return e
+    },
+  })
+
+  // Convert the eession to Disjunctive Normal Form (DNF)
+  e = visit(e, { Exit: dnf })
+  e = visit(e, { Exit: flatten })
+  e = visit(e, { Exit: dedupe })
+  e = normalizeDNF(e)
+  e = visit(e, { Exit: eliminateSupersets })
+
+  return e
 }
 
 /**
@@ -42,28 +66,6 @@ export function flatten(e: Expr) {
   return e
 }
 
-/**
- * Apply one iteration of De Morgan's law to the expression
- *
- * To apply this to an entire tree you must use a breadth-first visitor
- */
-function deMorgan(e: Expr): Expr {
-  if (e.kind === 'not') {
-    let child = e.nodes[0]
-
-    // We can re-assign the node because its still logically correct to do so
-    if (child.kind === 'or') {
-      e.kind = 'and'
-      e.nodes = child.nodes.map((node) => not(node))
-    } else if (child.kind === 'and') {
-      e.kind = 'or'
-      e.nodes = child.nodes.map((node) => not(node))
-    }
-  }
-
-  return e
-}
-
 function normalizeDNF(e: Expr): Expr {
   if (e.kind === 'lit' || e.kind === 'not') {
     return or([and([e])])
@@ -80,18 +82,6 @@ function normalizeDNF(e: Expr): Expr {
   }
 
   return e
-}
-
-function dedupe(e: Expr): Expr {
-  for (let i = 0; i < e.nodes.length; i++) {
-    for (let j = i + 1; j < e.nodes.length; j++) {
-      if (areNodesEqual(e.nodes[i], e.nodes[j])) {
-        e.nodes[j] = none()
-      }
-    }
-  }
-
-  return clean(e)
 }
 
 // DNF Convert an expression to disjunctive normal form
@@ -223,6 +213,32 @@ function combinations(lists: Expr[][]): Expr[][] {
   return blocks
 }
 
+function dedupe(e: Expr): Expr {
+  for (let i = 0; i < e.nodes.length; i++) {
+    for (let j = i + 1; j < e.nodes.length; j++) {
+      if (areNodesEqual(e.nodes[i], e.nodes[j])) {
+        e.nodes[j] = none()
+      }
+    }
+  }
+
+  return clean(e)
+}
+
+function countIntersections(a: Expr, z: Expr): number {
+  let n = 0
+
+  for (let i = 0; i < a.nodes.length; i++) {
+    for (let j = 0; j < z.nodes.length; j++) {
+      if (areNodesEqual(a.nodes[i], z.nodes[j])) {
+        n++
+      }
+    }
+  }
+
+  return n
+}
+
 // Determine if two nodes are semantically- and structurally-equivalent even if they don't share pointers
 function areNodesEqual(a: Expr, z: Expr): boolean {
   if (a === z) {
@@ -250,20 +266,6 @@ function areNodesEqual(a: Expr, z: Expr): boolean {
   return true
 }
 
-function countIntersections(a: Expr, z: Expr): number {
-  let n = 0
-
-  for (let i = 0; i < a.nodes.length; i++) {
-    for (let j = 0; j < z.nodes.length; j++) {
-      if (areNodesEqual(a.nodes[i], z.nodes[j])) {
-        n++
-      }
-    }
-  }
-
-  return n
-}
-
 /**
  * Cleanup an expression to ensure that:
  * - All `none` placeholder nodes are removed
@@ -272,26 +274,13 @@ function countIntersections(a: Expr, z: Expr): number {
 function clean(e: Expr): Expr {
   if (e.kind === 'not') {
     // The node that is negated has disappeared this is no longer valid
-    if (e.nodes.length === 0) {
-      return none()
-    }
-
-    if (e.nodes[0].kind === 'none') {
-      return none()
-    }
+    if (e.nodes.length === 0) return none()
+    if (e.nodes[0].kind === 'none') return e.nodes[0]
   } else if (e.kind === 'and' || e.kind === 'or') {
-    e.nodes = e.nodes.flatMap((node) => {
-      if (node.kind === 'none') {
-        return []
-      }
-
-      return node
-    })
+    e.nodes = e.nodes.flatMap((node) => (node.kind === 'none' ? [] : node))
 
     // If therea re no nodes left the AND / OR goes away too
-    if (e.nodes.length == 0) {
-      return none()
-    }
+    if (e.nodes.length == 0) return none()
   }
 
   return e

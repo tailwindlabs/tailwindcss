@@ -14,45 +14,55 @@ export type Expr<T = any> = {
   nodes: Expr<T>[]
 }
 
-// This is a standin for a node that has been removed
+/**
+ * A placeholder for a node that has been removed from the expression graph
+ */
 export function none(): Expr<any> {
   return { kind: 'none', value: null, nodes: [] }
 }
 
+/**
+ * Creates an AND relationship between the given nodes
+ */
 export function and<T>(nodes: Expr<T>[]): Expr<T> {
   return { kind: 'and', value: null, nodes }
 }
 
+/**
+ * Creates an OR relationship between the given nodes
+ */
 export function or<T>(nodes: Expr<T>[]): Expr<T> {
   return { kind: 'or', value: null, nodes }
 }
 
+/**
+ * Creates a NOT relationship with the given node
+ */
 export function not<T>(node: Expr<T>): Expr<T> {
   return { kind: 'not', value: null, nodes: [node] }
 }
 
+/**
+ * Represents a "literal" value in the expression graph.
+ * This is essential an opaque variable that stands in for some value.
+ */
 export function lit<T>(value: T): Expr<T> {
   return { kind: 'lit', value, nodes: [] }
 }
 
-export type Visitor = (e: Expr) => Expr
-
-export function visit(e: Expr, w: Visitor, depth: number = 0): Expr {
-  e = w(e)
-
-  for (let i = 0; i < e.nodes.length; i++) {
-    e.nodes[i] = visit(e.nodes[i], w, depth + 1)
-  }
-
-  return e
+export type Visitor = {
+  Enter?: (e: Expr) => Expr
+  Exit?: (e: Expr) => Expr
 }
 
-export function visitDepth(e: Expr, w: Visitor, depth: number = 0): Expr {
+export function visit(e: Expr, w: Visitor): Expr {
+  e = w.Enter?.(e) ?? e
+
   for (let i = 0; i < e.nodes.length; i++) {
-    e.nodes[i] = visitDepth(e.nodes[i], w, depth + 1)
+    e.nodes[i] = visit(e.nodes[i], w)
   }
 
-  e = w(e)
+  e = w.Exit?.(e) ?? e
 
   return e
 }

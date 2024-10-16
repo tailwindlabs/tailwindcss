@@ -1,16 +1,16 @@
 import { expect, test } from 'vitest'
-import { and, lit, not, or, visitDepth } from './expr'
+import { and, lit, not, or, visit } from './expr'
 import { flatten, toDNF } from './rewriting'
 
 test('De Morgan: !(A || B)', () => {
   let expr = toDNF(not(or([lit(1), lit(2)])))
-  expr = visitDepth(expr, flatten)
+  expr = visit(expr, { Exit: flatten })
   expect(expr).toEqual(and([not(lit(1)), not(lit(2))]))
 })
 
 test('De Morgan: !(A && B)', () => {
   let expr = toDNF(not(and([lit(1), lit(2)])))
-  expr = visitDepth(expr, flatten)
+  expr = visit(expr, { Exit: flatten })
   expect(expr).toEqual(or([not(lit(1)), not(lit(2))]))
 })
 
