@@ -30,9 +30,14 @@ export function negateRules(ast: AstNode[]): AstNode[] {
     let current: AstNode | null = null
 
     for (let child of expr.nodes.reverse()) {
-      let selector = child.kind === 'not' ? invertSelector(child.nodes[0].value!) : child.value!
+      let selector = child.kind === 'not' ? child.nodes[0].value! : child.value!
+      let negated = negateSelector(selector)
 
-      current = rule(selector, current ? [current] : [])
+      // We can't negate this selector which means we're unable to accurately
+      // negate the entire AST
+      if (negated === null) throw new Error(`Unable to negate rule: ${selector}`)
+
+      current = rule(negated, current ? [current] : [])
     }
 
     if (current) {
@@ -43,12 +48,53 @@ export function negateRules(ast: AstNode[]): AstNode[] {
   return flattenNesting(newAst)
 }
 
-function invertSelector(selector: string): string {
+function negateSelector(selector: string): string | null {
+  function negateConditions(ruleName: string, conditions: string[]) {
+    return conditions.map((condition) => {
+      condition = condition.trim()
+
+      let parts = segment(condition, ' ')
+
+      // @media not {query}
+      // @supports not {query}
+      // @container not {query}
+      if (parts[0] === 'not') {
+        return parts.slice(1).join(' ')
+      }
+
+      if (ruleName === 'container') {
+        // @container {query}
+        if (parts[0].startsWith('(')) {
+          return `not ${condition}`
+        }
+
+        // @container {name} not {query}
+        else if (parts[1] === 'not') {
+          return `${parts[0]} ${parts.slice(2).join(' ')}`
+        }
+
+        // @container {name} {query}
+        else {
+          return `${parts[0]} not ${parts.slice(1).join(' ')}`
+        }
+      }
+
+      return `not ${condition}`
+    })
+  }
+
   if (selector[0] === '@') {
-    return selector
-      .replace('@media', '@media not')
-      .replace('@supports', '@supports not')
-      .replace('@document', '@document not')
+    let name = selector.slice(1, selector.indexOf(' '))
+    let params = selector.slice(selector.indexOf(' ') + 1)
+
+    if (name === 'media' || name === 'supports' || name === 'container') {
+      let conditions = negateConditions(name, segment(params, ','))
+
+      return `@${name} ${conditions.join(', ')}`
+    }
+
+    // This contains an at-rule that we can't negate
+    return null
   }
 
   let selectors = segment(selector, ',').map((part) => {

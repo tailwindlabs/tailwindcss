@@ -152,7 +152,7 @@ test('Negation of complex graphs mixing at rules and style rules', () => {
     @media (min-width: 500px) {
       &:hover:focus,
       &:visited {
-        @container sidebar {
+        @container sidebar (width < 500px) {
           &:active {
           }
         }
@@ -168,7 +168,7 @@ test('Negation of complex graphs mixing at rules and style rules', () => {
         /* … */
       }
     }
-    @container sidebar {
+    @container sidebar not (width < 500px) {
       @media not (orientation: landscape) {
         /* … */
       }
@@ -180,4 +180,15 @@ test('Negation of complex graphs mixing at rules and style rules', () => {
     }
     "
   `)
+})
+
+test('Negation of at-rules that cant be', () => {
+  expect(() =>
+    negate(css`
+      @media (min-width: 500px) {
+        @layer components {
+        }
+      }
+    `),
+  ).toThrowErrorMatchingInlineSnapshot(`[Error: Unable to negate rule: @layer components]`)
 })
