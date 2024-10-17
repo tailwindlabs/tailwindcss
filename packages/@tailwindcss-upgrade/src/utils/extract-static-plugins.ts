@@ -5,58 +5,137 @@ let parser = new Parser()
 parser.setLanguage(TS.typescript)
 const treesitter = String.raw
 
+// Extract `plugins` property of the object export for both ESM and CJS files
 const PLUGINS_QUERY = new Parser.Query(
   TS.typescript,
   treesitter`
     ; export default {}
     (export_statement
-      value: (satisfies_expression (object
-        (pair
-          key: (property_identifier) @_name (#eq? @_name "plugins")
-          value: (array) @imports
+      value: [
+        (satisfies_expression (object
+          (pair
+            key: (property_identifier) @_name (#eq? @_name "plugins")
+            value: (array) @imports
+          )
+        ))
+        value: (as_expression (object
+          (pair
+            key: (property_identifier) @_name (#eq? @_name "plugins")
+            value: (array) @imports
+          )
+        ))
+        value: (object
+          (pair
+            key: (property_identifier) @_name (#eq? @_name "plugins")
+            value: (array) @imports
+          )
         )
-      ))?
-      value: (as_expression (object
-        (pair
-          key: (property_identifier) @_name (#eq? @_name "plugins")
-          value: (array) @imports
-        )
-      ))?
-      value: (object
-        (pair
-          key: (property_identifier) @_name (#eq? @_name "plugins")
-          value: (array) @imports
-        )
-      )?
+      ]
     )
 
     ; module.exports = {}
     (expression_statement
       (assignment_expression
         left: (member_expression) @left (#eq? @left "module.exports")
-        right: (satisfies_expression (object
-          (pair
-            key: (property_identifier) @_name (#eq? @_name "plugins")
-            value: (array) @imports
+        right: [
+          (satisfies_expression (object
+            (pair
+              key: (property_identifier) @_name (#eq? @_name "plugins")
+              value: (array) @imports
+            )
+          ))
+          (as_expression (object
+            (pair
+              key: (property_identifier) @_name (#eq? @_name "plugins")
+              value: (array) @imports
+            )
+          ))
+          (object
+            (pair
+              key: (property_identifier) @_name (#eq? @_name "plugins")
+              value: (array) @imports
+            )
           )
-        ))?
-        right: (as_expression (object
-          (pair
-            key: (property_identifier) @_name (#eq? @_name "plugins")
-            value: (array) @imports
-          )
-        ))?
-        right: (object
-          (pair
-            key: (property_identifier) @_name (#eq? @_name "plugins")
-            value: (array) @imports
-          )
-        )?
+        ]
       )
     )
   `,
 )
-export function findStaticPlugins(source: string): string[] | null {
+
+// Extract require() calls, as well as identifiers with options or require()
+// with options
+const PLUGIN_CALL_OPTIONS_QUERY = new Parser.Query(
+  TS.typescript,
+  treesitter`
+    (call_expression
+      function: [
+        (call_expression
+          function: (identifier) @_name (#eq? @_name "require")
+          arguments: (arguments
+            (string (string_fragment) @module_string)
+          )
+        )
+        (identifier) @module_identifier
+      ]
+      arguments: [
+        (arguments
+          (object
+            (pair
+              key: [
+                (property_identifier) @property
+                (string (string_fragment) @property)
+              ]
+
+              value: [
+                (string (string_fragment) @str_value)
+                (template_string
+                  . (string_fragment) @str_value
+                  ; If the template string has more than exactly one string
+                  ; fragment at the top, the migration should bail.
+                  _ @error
+                )
+                (number) @num_value
+                (true) @true_value
+                (false) @false_value
+                (null) @null_value
+                (array [
+                  (string (string_fragment) @str_value)
+                  (template_string (string_fragment) @str_value)
+                  (number) @num_value
+                  (true) @true_value
+                  (false) @false_value
+                  (null) @null_value
+                ]) @array_value
+              ]
+            )
+          )
+        )
+        (arguments) @_empty_args (#eq? @_empty_args "()")
+      ]
+    )
+    (call_expression
+      function: (identifier) @_name (#eq? @_name "require")
+      arguments: (arguments
+      (string (string_fragment) @module_string)
+      )
+    )
+  `,
+)
+
+export type StaticPluginOptions = Record<
+  string,
+  | string
+  | number
+  | boolean
+  | null
+  | string
+  | number
+  | boolean
+  | null
+  | Array<string | number | boolean | null>
+>
+
+export function findStaticPlugins(source: string): [string, null | StaticPluginOptions][] | null {
   try {
     let tree = parser.parse(source)
     let root = tree.rootNode
@@ -64,7 +143,7 @@ export function findStaticPlugins(source: string): string[] | null {
     let imports = extractStaticImportMap(source)
     let captures = PLUGINS_QUERY.matches(root)
 
-    let plugins = []
+    let plugins: [string, null | StaticPluginOptions][] = []
     for (let match of captures) {
       for (let capture of match.captures) {
         if (capture.name !== 'imports') continue
@@ -80,20 +159,111 @@ export function findStaticPlugins(source: string): string[] | null {
           switch (pluginDefinition.type) {
             case 'identifier':
               let source = imports[pluginDefinition.text]
-              if (!source || (source.export !== null && source.export !== '*')) {
+              if (!source || source.export !== null) {
                 return null
               }
-              plugins.push(source.module)
+              plugins.push([source.module, null])
               break
             case 'string':
-              plugins.push(pluginDefinition.children[1].text)
+              plugins.push([pluginDefinition.children[1].text, null])
               break
             case 'call_expression':
-              // allow require('..') calls
-              if (pluginDefinition.children?.[0]?.text !== 'require') return null
-              let firstArgument = pluginDefinition.children?.[1]?.children?.[1]?.children?.[1]?.text
-              if (typeof firstArgument !== 'string') return null
-              plugins.push(firstArgument)
+              let matches = PLUGIN_CALL_OPTIONS_QUERY.matches(pluginDefinition)
+              if (matches.length === 0) return null
+
+              let moduleName: string | null = null
+              let moduleIdentifier: string | null = null
+
+              let options: StaticPluginOptions | null = null
+              let lastProperty: string | null = null
+
+              let captures = matches.flatMap((m) => m.captures)
+              for (let i = 0; i < captures.length; i++) {
+                let capture = captures[i]
+                switch (capture.name) {
+                  case 'module_identifier': {
+                    moduleIdentifier = capture.node.text
+                    break
+                  }
+                  case 'module_string': {
+                    moduleName = capture.node.text
+                    break
+                  }
+                  case 'property': {
+                    if (lastProperty !== null) return null
+                    lastProperty = capture.node.text
+                    break
+                  }
+                  case 'str_value':
+                  case 'num_value':
+                  case 'null_value':
+                  case 'true_value':
+                  case 'false_value': {
+                    if (lastProperty === null) return null
+                    options ??= {}
+                    options[lastProperty] = extractValue(capture)
+                    lastProperty = null
+                    break
+                  }
+                  case 'array_value': {
+                    if (lastProperty === null) return null
+                    options ??= {}
+
+                    // Loop over all captures after this one that are on the
+                    // same property (it will be one match for any array
+                    // element)
+                    let array: Array<string | number | boolean | null> = []
+                    let lastConsumedIndex = i
+                    arrayLoop: for (let j = i + 1; j < captures.length; j++) {
+                      let innerCapture = captures[j]
+
+                      switch (innerCapture.name) {
+                        case 'property': {
+                          if (innerCapture.node.text !== lastProperty) {
+                            break arrayLoop
+                          }
+                          break
+                        }
+                        case 'str_value':
+                        case 'num_value':
+                        case 'null_value':
+                        case 'true_value':
+                        case 'false_value': {
+                          array.push(extractValue(innerCapture))
+                          lastConsumedIndex = j
+                        }
+                      }
+                    }
+
+                    i = lastConsumedIndex
+                    options[lastProperty] = array
+                    lastProperty = null
+                    break
+                  }
+
+                  case '_name':
+                  case '_empty_args':
+                    break
+                  default:
+                    return null
+                }
+              }
+
+              if (lastProperty !== null) return null
+
+              if (moduleIdentifier !== null) {
+                let source = imports[moduleIdentifier]
+                if (!source || (source.export !== null && source.export !== '*')) {
+                  return null
+                }
+                moduleName = source.module
+              }
+
+              if (moduleName === null) {
+                return null
+              }
+
+              plugins.push([moduleName, options])
               break
             default:
               return null
@@ -108,6 +278,7 @@ export function findStaticPlugins(source: string): string[] | null {
   }
 }
 
+// Extract all top-level imports for both ESM and CJS files
 const IMPORT_QUERY = new Parser.Query(
   TS.typescript,
   treesitter`
@@ -196,4 +367,16 @@ export function extractStaticImportMap(source: string) {
   }
 
   return imports
+}
+
+function extractValue(capture: { name: string; node: { text: string } }) {
+  return capture.name === 'num_value'
+    ? parseFloat(capture.node.text)
+    : capture.name === 'null_value'
+      ? null
+      : capture.name === 'true_value'
+        ? true
+        : capture.name === 'false_value'
+          ? false
+          : capture.node.text
 }
