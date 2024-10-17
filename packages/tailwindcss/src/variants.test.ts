@@ -1985,6 +1985,7 @@ test('aria', async () => {
       'aria-checked:flex',
       'aria-[invalid=spelling]:flex',
       'aria-[valuenow=1]:flex',
+      'aria-[valuenow_=_"1"]:flex',
 
       'group-aria-[modal]:flex',
       'group-aria-checked:flex',
@@ -2059,6 +2060,10 @@ test('aria', async () => {
 
     .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
       display: flex;
+    }
+
+    .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"] {
+      display: flex;
     }"
   `)
   expect(await run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
@@ -2069,6 +2074,8 @@ test('data', async () => {
     await run([
       'data-disabled:flex',
       'data-[potato=salad]:flex',
+      'data-[potato_=_"salad"]:flex',
+      'data-[potato_^=_"salad"]:flex',
       'data-[foo=1]:flex',
       'data-[foo=bar_baz]:flex',
       "data-[foo$='bar'_i]:flex",
@@ -2155,6 +2162,14 @@ test('data', async () => {
       display: flex;
     }
 
+    .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato="salad"] {
+      display: flex;
+    }
+
+    .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"] {
+      display: flex;
+    }
+
     .data-\\[foo\\=1\\]\\:flex[data-foo="1"] {
       display: flex;
     }
@@ -2171,7 +2186,13 @@ test('data', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'])).toEqual('')
+  expect(
+    await run([
+      'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
+      'data-disabled/foo:flex',
+      'data-[potato=salad]/foo:flex',
+    ]),
+  ).toEqual('')
 })
 
 test('portrait', async () => {
