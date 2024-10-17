@@ -6,14 +6,10 @@ export async function compileCss(css: string, candidates: string[] = [], options
   return optimizeCss(build(candidates)).trim()
 }
 
-export async function run(candidates: string[]) {
+export async function run(candidates: string[], { optimize = true } = {}) {
   let { build } = await compile('@tailwind utilities;')
-  return optimizeCss(build(candidates)).trim()
-}
-
-export async function build(candidates: string[]) {
-  let { build } = await compile('@tailwind utilities;')
-  return build(candidates).trim()
+  let css = build(candidates)
+  return optimize ? optimizeCss(css).trim() : css.trim()
 }
 
 export function optimizeCss(
