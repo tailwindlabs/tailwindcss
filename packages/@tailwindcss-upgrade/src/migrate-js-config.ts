@@ -87,10 +87,10 @@ async function migrateTheme(
     base,
     config: { ...unresolvedConfig, plugins: [], presets: undefined },
   }
-  let { resolvedConfig, resetThemeKeys } = resolveConfig(designSystem, [configToResolve])
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(designSystem, [configToResolve])
 
   let resetNamespaces = new Map<string, boolean>(
-    Array.from(resetThemeKeys.entries()).map(([key]) => [key, false]),
+    Array.from(replacedThemeKeys.entries()).map(([key]) => [key, false]),
   )
 
   let prevSectionKey = ''

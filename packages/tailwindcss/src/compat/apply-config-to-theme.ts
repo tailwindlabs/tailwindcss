@@ -24,8 +24,8 @@ export function applyConfigToTheme(
   { theme }: ResolvedConfig,
   replacedThemeKeys: Set<string>,
 ) {
-  for (let resetThemeKey of replacedThemeKeys) {
-    let name = keyPathToCssProperty([resetThemeKey])
+  for (let replacedThemeKey of replacedThemeKeys) {
+    let name = keyPathToCssProperty([replacedThemeKey])
     if (!name) continue
 
     designSystem.theme.clearNamespace(`--${name}`, ThemeOptions.DEFAULT)
