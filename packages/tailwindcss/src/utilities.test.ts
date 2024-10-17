@@ -9566,42 +9566,42 @@ test('bg', async () => {
 
     .bg-gradient-to-b {
       --tw-gradient-position: to bottom, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-bl {
       --tw-gradient-position: to bottom left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to bottom left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-br {
       --tw-gradient-position: to bottom right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to bottom right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-l {
       --tw-gradient-position: to left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-r {
       --tw-gradient-position: to right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-t {
       --tw-gradient-position: to top, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tl {
       --tw-gradient-position: to top left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tr {
       --tw-gradient-position: to top right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-\\[1\\.3rad\\] {
@@ -9614,44 +9614,49 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops, 125deg));
     }
 
-    .bg-linear-\\[to_bottom\\], .bg-linear-to-b {
+    .bg-linear-\\[to_bottom\\] {
       --tw-gradient-position: to bottom, ;
       background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
     }
 
+    .bg-linear-to-b {
+      --tw-gradient-position: to bottom, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-linear-to-bl {
       --tw-gradient-position: to bottom left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to bottom left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-br {
       --tw-gradient-position: to bottom right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to bottom right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-l {
       --tw-gradient-position: to left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r {
       --tw-gradient-position: to right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-t {
       --tw-gradient-position: to top, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tl {
       --tw-gradient-position: to top left, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top left));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tr {
       --tw-gradient-position: to top right, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, to top right));
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-\\[image\\:var\\(--my-gradient\\)\\] {
