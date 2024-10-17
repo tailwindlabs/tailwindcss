@@ -12,7 +12,7 @@ import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { printCandidate } from '../candidates'
 
-enum Convert {
+export enum Convert {
   All = 0,
   MigrateModifier = 1 << 0,
   MigrateThemeOnly = 1 << 1,
@@ -23,6 +23,8 @@ export function themeToVar(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
+  let convert = createConverter(designSystem)
+
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
@@ -75,6 +77,10 @@ export function themeToVar(
     return changed ? printCandidate(designSystem, clone) : rawCandidate
   }
 
+  return rawCandidate
+}
+
+export function createConverter(designSystem: DesignSystem) {
   function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
     let ast = ValueParser.parse(input)
 
@@ -209,7 +215,7 @@ export function themeToVar(
     return fallback ? `theme(${variable}${modifier}, ${fallback})` : `theme(${variable}${modifier})`
   }
 
-  return rawCandidate
+  return convert
 }
 
 function substituteFunctionsInValue(
