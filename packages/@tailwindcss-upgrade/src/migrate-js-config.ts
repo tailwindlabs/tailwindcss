@@ -14,7 +14,7 @@ import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/con
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
-import { findStaticPlugins } from './utils/extract-static-plugins'
+import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -46,7 +46,7 @@ export async function migrateJsConfig(
   }
 
   let sources: { base: string; pattern: string }[] = []
-  let plugins: { base: string; path: string }[] = []
+  let plugins: { base: string; path: string; options: null | StaticPluginOptions }[] = []
   let cssConfigs: string[] = []
 
   if ('darkMode' in unresolvedConfig) {
@@ -64,8 +64,8 @@ export async function migrateJsConfig(
 
   let simplePlugins = findStaticPlugins(source)
   if (simplePlugins !== null) {
-    for (let plugin of simplePlugins) {
-      plugins.push({ base, path: plugin })
+    for (let [path, options] of simplePlugins) {
+      plugins.push({ base, path, options })
     }
   }
 
