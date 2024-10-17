@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.28] - 2024-10-17
+
 ### Added
 
 - Add first draft of new wide-gamut color palette ([#14693](https://github.com/tailwindlabs/tailwindcss/pull/14693))
