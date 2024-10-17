@@ -43,9 +43,9 @@
     "*.js"
   ],
   "devDependencies": {
-    "@swc/cli": "^0.1.65",
-    "@swc/core": "^1.7.36",
-    "@swc/jest": "^0.2.36",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.55",
+    "@swc/jest": "^0.2.26",
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.20",
     "browserslist": "^4.24.0",
