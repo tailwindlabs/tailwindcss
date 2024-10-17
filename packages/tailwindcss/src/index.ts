@@ -163,9 +163,30 @@ async function parseCss(
 
         let selectors = segment(selector.slice(1, -1), ',')
 
+        let atRuleSelectors: string[] = []
+        let styleRuleSelectors: string[] = []
+
+        for (let selector of selectors) {
+          if (selector.startsWith('@')) {
+            atRuleSelectors.push(selector)
+          } else {
+            styleRuleSelectors.push(selector)
+          }
+        }
+
         customVariants.push((designSystem) => {
           designSystem.variants.static(name, (r) => {
-            r.nodes = selectors.map((selector) => rule(selector, r.nodes))
+            let nodes: AstNode[] = []
+
+            if (styleRuleSelectors.length > 0) {
+              nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
+            }
+
+            for (let selector of atRuleSelectors) {
+              nodes.push(rule(selector, r.nodes))
+            }
+
+            r.nodes = nodes
           })
         })
 
