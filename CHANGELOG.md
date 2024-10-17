@@ -126,6 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add new `selector` and `variant` strategies for dark mode ([#12717](https://github.com/tailwindlabs/tailwindcss/pull/12717))
+- Add `border-x-{style}`, `border-y-{style}`, `border-b-{style}`, `border-l-{style}`, `border-t-{style}`, `border-r-{style}`, `border-s-{style}` and `border-e-{style}` utilities ([#12652](https://github.com/tailwindlabs/tailwindcss/pull/12652))
 
 ### Changed
 
