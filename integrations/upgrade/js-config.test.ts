@@ -106,7 +106,7 @@ test(
 
         --font-family-sans: Inter, system-ui, sans-serif;
         --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,
-          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
         --radius-4xl: 2rem;
 
@@ -155,14 +155,33 @@ test(
         import customPlugin from './custom-plugin'
 
         export default {
-          plugins: [typography, customPlugin],
+          plugins: [
+            typography,
+            customPlugin({
+              'is-null': null,
+              'is-true': true,
+              'is-false': false,
+              'is-int': 1234567,
+              'is-float': 1.35,
+              'is-sci': 1.35e-5,
+              'is-str-null': 'null',
+              'is-str-true': 'true',
+              'is-str-false': 'false',
+              'is-str-int': '1234567',
+              'is-str-float': '1.35',
+              'is-str-sci': '1.35e-5',
+              'is-arr': ['foo', 'bar'],
+              'is-arr-mixed': [null, true, false, 1234567, 1.35, 'foo', 'bar', 'true'],
+            }),
+          ],
         } satisfies Config
       `,
       'custom-plugin.js': ts`
-        export default function ({ addVariant }) {
+        import plugin from 'tailwindcss/plugin'
+        export default plugin.withOptions((_options) => ({ addVariant }) => {
           addVariant('inverted', '@media (inverted-colors: inverted)')
           addVariant('hocus', ['&:focus', '&:hover'])
-        }
+        })
       `,
       'src/input.css': css`
         @tailwind base;
@@ -180,7 +199,22 @@ test(
       @import 'tailwindcss';
 
       @plugin '@tailwindcss/typography';
-      @plugin '../custom-plugin';
+      @plugin '../custom-plugin' {
+        is-null: null;
+        is-true: true;
+        is-false: false;
+        is-int: 1234567;
+        is-float: 1.35;
+        is-sci: 0.0000135;
+        is-str-null: 'null';
+        is-str-true: 'true';
+        is-str-false: 'false';
+        is-str-int: '1234567';
+        is-str-float: '1.35';
+        is-str-sci: '1.35e-5';
+        is-arr: 'foo', 'bar';
+        is-arr-mixed: null, true, false, 1234567, 1.35, 'foo', 'bar', 'true';
+      }
       "
     `)
 

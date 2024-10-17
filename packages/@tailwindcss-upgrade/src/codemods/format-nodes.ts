@@ -18,7 +18,15 @@ export function formatNodes(): Plugin {
     // Format the nodes
     await Promise.all(
       nodesToFormat.map(async (node) => {
-        node.replaceWith(parse(await format(node.toString(), { parser: 'css', semi: true })))
+        node.replaceWith(
+          parse(
+            await format(node.toString(), {
+              parser: 'css',
+              semi: true,
+              singleQuote: true,
+            }),
+          ),
+        )
       }),
     )
   }

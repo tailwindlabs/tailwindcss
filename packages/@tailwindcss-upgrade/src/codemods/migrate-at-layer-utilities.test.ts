@@ -413,7 +413,7 @@ it('should migrate classes with attribute selectors', async () => {
     `),
   ).toMatchInlineSnapshot(`
     "@utility no-scrollbar {
-      &[data-checked=""] {
+      &[data-checked=''] {
         display: none;
       }
     }"
