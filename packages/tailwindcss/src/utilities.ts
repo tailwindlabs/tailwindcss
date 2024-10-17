@@ -2516,12 +2516,12 @@ export function createUtilities(theme: Theme) {
     ['tl', 'top left'],
   ]) {
     staticUtility(`bg-gradient-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction},`],
+      ['--tw-gradient-position', `to ${direction} in oklch,`],
       ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
 
     staticUtility(`bg-linear-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction},`],
+      ['--tw-gradient-position', `to ${direction} in oklch,`],
       ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
   }
@@ -2558,8 +2558,8 @@ export function createUtilities(theme: Theme) {
       value = withNegative(`${value}deg`, candidate)
 
       return [
-        decl('--tw-gradient-position', `${value},`),
-        decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+        decl('--tw-gradient-position', `${value} in oklch,`),
+        decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
       ]
     }
   })
@@ -2569,7 +2569,7 @@ export function createUtilities(theme: Theme) {
 
     if (!candidate.value) {
       return [
-        decl('--tw-gradient-position', `initial`),
+        decl('--tw-gradient-position', `in oklch,`),
         decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
       ]
     }
@@ -2587,7 +2587,7 @@ export function createUtilities(theme: Theme) {
       value = withNegative(`${value}deg`, candidate)
 
       return [
-        decl('--tw-gradient-position', `from ${value},`),
+        decl('--tw-gradient-position', `from ${value} in oklch,`),
         decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
       ]
     }
@@ -2598,7 +2598,7 @@ export function createUtilities(theme: Theme) {
 
     if (!candidate.value) {
       return [
-        decl('--tw-gradient-position', `initial`),
+        decl('--tw-gradient-position', `in oklch,`),
         decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
       ]
     }

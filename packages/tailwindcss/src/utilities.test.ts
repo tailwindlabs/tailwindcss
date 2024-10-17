@@ -9557,8 +9557,8 @@ test('bg', async () => {
     }
 
     .-bg-linear-45 {
-      --tw-gradient-position: calc(45deg * -1), ;
-      background-image: linear-gradient(var(--tw-gradient-stops, calc(45deg * -1)));
+      --tw-gradient-position: calc(45deg * -1) in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .-bg-linear-\\[1\\.3rad\\] {
@@ -9572,48 +9572,48 @@ test('bg', async () => {
     }
 
     .bg-gradient-to-b {
-      --tw-gradient-position: to bottom, ;
+      --tw-gradient-position: to bottom in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-bl {
-      --tw-gradient-position: to bottom left, ;
+      --tw-gradient-position: to bottom left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-br {
-      --tw-gradient-position: to bottom right, ;
+      --tw-gradient-position: to bottom right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-l {
-      --tw-gradient-position: to left, ;
+      --tw-gradient-position: to left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-r {
-      --tw-gradient-position: to right, ;
+      --tw-gradient-position: to right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-t {
-      --tw-gradient-position: to top, ;
+      --tw-gradient-position: to top in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tl {
-      --tw-gradient-position: to top left, ;
+      --tw-gradient-position: to top left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tr {
-      --tw-gradient-position: to top right, ;
+      --tw-gradient-position: to top right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45 {
-      --tw-gradient-position: 45deg, ;
-      background-image: linear-gradient(var(--tw-gradient-stops, 45deg));
+      --tw-gradient-position: 45deg in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-\\[1\\.3rad\\] {
@@ -9632,42 +9632,42 @@ test('bg', async () => {
     }
 
     .bg-linear-to-b {
-      --tw-gradient-position: to bottom, ;
+      --tw-gradient-position: to bottom in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-bl {
-      --tw-gradient-position: to bottom left, ;
+      --tw-gradient-position: to bottom left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-br {
-      --tw-gradient-position: to bottom right, ;
+      --tw-gradient-position: to bottom right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-l {
-      --tw-gradient-position: to left, ;
+      --tw-gradient-position: to left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r {
-      --tw-gradient-position: to right, ;
+      --tw-gradient-position: to right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-t {
-      --tw-gradient-position: to top, ;
+      --tw-gradient-position: to top in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tl {
-      --tw-gradient-position: to top left, ;
+      --tw-gradient-position: to top left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tr {
-      --tw-gradient-position: to top right, ;
+      --tw-gradient-position: to top right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
