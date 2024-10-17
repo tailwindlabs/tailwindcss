@@ -185,7 +185,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   }
 
   // - `theme` can contain functions that we attempt to resolve.
-  // - `plugins` are more complex, we have a special heuristics for them.
+  // - `plugins` are more complex, we have special heuristics for them.
   let { plugins, theme, ...remainder } = unresolvedConfig
   if (!isSimpleValue(remainder)) {
     return false
