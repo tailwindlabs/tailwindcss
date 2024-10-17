@@ -2517,12 +2517,12 @@ export function createUtilities(theme: Theme) {
   ]) {
     staticUtility(`bg-gradient-to-${value}`, [
       ['--tw-gradient-position', `to ${direction},`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
 
     staticUtility(`bg-linear-to-${value}`, [
       ['--tw-gradient-position', `to ${direction},`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
   }
 
@@ -2578,7 +2578,7 @@ export function createUtilities(theme: Theme) {
 
       return [
         decl('--tw-gradient-position', `from ${value},`),
-        decl('background-image', `conic-gradient(var(--tw-gradient-stops,from ${value}))`),
+        decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
       ]
     }
   })
