@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure `theme` values defined outside of `extend` in JS configuration files overwrite all existing values for that namespace ([#14672](https://github.com/tailwindlabs/tailwindcss/pull/14672))
+- Remove unnecessary variable fallbacks in gradient utilities ([#14705](https://github.com/tailwindlabs/tailwindcss/pull/14705))
 - _Upgrade (experimental)_: Speed up template migrations ([#14679](https://github.com/tailwindlabs/tailwindcss/pull/14679))
 - _Upgrade (experimental)_: Don't generate invalid CSS when migrating a complex `screens` config ([#14691](https://github.com/tailwindlabs/tailwindcss/pull/14691))
 
