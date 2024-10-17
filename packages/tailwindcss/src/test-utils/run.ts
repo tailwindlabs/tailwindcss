@@ -11,6 +11,11 @@ export async function run(candidates: string[]) {
   return optimizeCss(build(candidates)).trim()
 }
 
+export async function build(candidates: string[]) {
+  let { build } = await compile('@tailwind utilities;')
+  return build(candidates).trim()
+}
+
 export function optimizeCss(
   input: string,
   { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
