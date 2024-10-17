@@ -203,7 +203,7 @@ describe('findStaticPlugins', () => {
     expect(
       findStaticPlugins(js`
         export default {
-          plugins: [falserequire('./plugin1')]
+          plugins: [load('./plugin1')]
         }
       `),
     ).toEqual(null)
