@@ -42,6 +42,19 @@ for (let [classes, expected] of [
     'linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   ],
   [
+    'bg-linear-45 from-red to-blue',
+    'linear-gradient(45deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+  ],
+  [
+    '-bg-linear-45 from-red to-blue',
+    // Chrome reports a different (but also correct) computed value than Firefox/WebKit so we check
+    // for both options.
+    [
+      'linear-gradient(-45deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+      'linear-gradient(calc(-45deg), rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    ],
+  ],
+  [
     'bg-linear-to-r via-red to-blue',
     'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)',
   ],
@@ -60,7 +73,11 @@ for (let [classes, expected] of [
       html`<div id="x" class="${classes}">Hello world</div>`,
     )
 
-    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+    if (Array.isArray(expected)) {
+      expect(expected).toContain(await getPropertyValue('#x', 'background-image'))
+    } else {
+      expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+    }
   })
 }
 

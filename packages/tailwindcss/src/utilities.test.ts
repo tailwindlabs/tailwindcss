@@ -9448,6 +9448,8 @@ test('bg', async () => {
         'bg-linear-to-bl',
         'bg-linear-to-l',
         'bg-linear-to-tl',
+        'bg-linear-45',
+        '-bg-linear-45',
 
         'bg-[url(/image.png)]',
         'bg-[url:var(--my-url)]',
@@ -9554,6 +9556,11 @@ test('bg', async () => {
       background-color: #0000;
     }
 
+    .-bg-linear-45 {
+      --tw-gradient-position: calc(45deg * -1), ;
+      background-image: linear-gradient(var(--tw-gradient-stops, calc(45deg * -1)));
+    }
+
     .-bg-linear-\\[1\\.3rad\\] {
       --tw-gradient-position: calc(74.4845deg * -1), ;
       background-image: linear-gradient(var(--tw-gradient-stops, calc(74.4845deg * -1)));
@@ -9602,6 +9609,11 @@ test('bg', async () => {
     .bg-gradient-to-tr {
       --tw-gradient-position: to top right, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45 {
+      --tw-gradient-position: 45deg, ;
+      background-image: linear-gradient(var(--tw-gradient-stops, 45deg));
     }
 
     .bg-linear-\\[1\\.3rad\\] {

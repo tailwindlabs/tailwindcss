@@ -2529,8 +2529,9 @@ export function createUtilities(theme: Theme) {
   utilities.functional('bg-linear', (candidate) => {
     if (!candidate.value || candidate.modifier) return
 
+    let value = candidate.value.value
+
     if (candidate.value.kind === 'arbitrary') {
-      let value: string | null = candidate.value.value
       let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
       switch (type) {
@@ -2551,6 +2552,15 @@ export function createUtilities(theme: Theme) {
           ]
         }
       }
+    } else {
+      if (!isPositiveInteger(value)) return
+
+      value = withNegative(`${value}deg`, candidate)
+
+      return [
+        decl('--tw-gradient-position', `${value},`),
+        decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+      ]
     }
   })
 
