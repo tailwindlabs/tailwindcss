@@ -506,7 +506,10 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [rule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+      let value = quoteAttributeValue(variant.value.value)
+      if (value === null) return null
+
+      ruleNode.nodes = [rule(`&[aria-${value}]`, ruleNode.nodes)]
     } else {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
@@ -527,7 +530,10 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [rule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+    let value = quoteAttributeValue(variant.value.value)
+    if (value === null) return null
+
+    ruleNode.nodes = [rule(`&[data-${value}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -900,9 +906,16 @@ export function createVariants(theme: Theme): Variants {
 
 function quoteAttributeValue(value: string) {
   if (value.includes('=')) {
+    // Do not allow invalid operators in attribute values
+    if (/[*$^|~]\s+=/.test(value)) {
+      return null
+    }
+
     value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      let value = match.slice(1).trim()
+
       // If the value is already quoted, skip.
-      if (match[1] === "'" || match[1] === '"') {
+      if (value[0] === "'" || value[0] === '"') {
         return match
       }
 
