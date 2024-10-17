@@ -11,7 +11,7 @@ export function migrateThemeToVar({
     postcssPlugin: '@tailwindcss/upgrade/migrate-theme-to-var',
     OnceExit(root) {
       if (!designSystem) return
-      let convert = createConverter(designSystem, { pretty: true })
+      let convert = createConverter(designSystem, { prettyPrint: true })
 
       root.walkDecls((decl) => {
         let [newValue] = convert(decl.value)

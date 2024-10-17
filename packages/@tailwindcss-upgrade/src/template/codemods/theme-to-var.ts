@@ -80,7 +80,7 @@ export function themeToVar(
   return rawCandidate
 }
 
-export function createConverter(designSystem: DesignSystem, { pretty = false } = {}) {
+export function createConverter(designSystem: DesignSystem, { prettyPrint = false } = {}) {
   function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
     let ast = ValueParser.parse(input)
 
@@ -212,7 +212,7 @@ export function createConverter(designSystem: DesignSystem, { pretty = false } =
     if (!variable) return null
 
     let modifier =
-      parts.length > 0 ? (pretty ? ` / ${parts.join(' / ')}` : `/${parts.join('/')}`) : ''
+      parts.length > 0 ? (prettyPrint ? ` / ${parts.join(' / ')}` : `/${parts.join('/')}`) : ''
     return fallback ? `theme(${variable}${modifier}, ${fallback})` : `theme(${variable}${modifier})`
   }
 
