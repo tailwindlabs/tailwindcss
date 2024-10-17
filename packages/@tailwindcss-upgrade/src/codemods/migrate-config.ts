@@ -63,7 +63,27 @@ export function migrateConfig(
           plugin.path[0] === '.'
             ? relativeToStylesheet(sheet, path.resolve(plugin.base, plugin.path))
             : plugin.path
-        css += `@plugin '${relative}';\n`
+
+        if (plugin.options === null) {
+          css += `@plugin '${relative}';\n`
+        } else {
+          css += `@plugin '${relative}' {\n`
+          for (let [property, value] of Object.entries(plugin.options)) {
+            let cssValue = ''
+            if (typeof value === 'string') {
+              cssValue = quoteString(value)
+            } else if (Array.isArray(value)) {
+              cssValue = value
+                .map((v) => (typeof v === 'string' ? quoteString(v) : '' + v))
+                .join(', ')
+            } else {
+              cssValue = '' + value
+            }
+
+            css += `  ${property}: ${cssValue};\n`
+          }
+          css += '}\n'
+        }
       }
       if (jsConfigMigration.plugins.length > 0) {
         css = css + '\n'
@@ -148,4 +168,8 @@ function relativeToStylesheet(sheet: Stylesheet, absolute: string) {
   // Ensure relative is a POSIX style path since we will merge it with the
   // glob.
   return normalizePath(relative)
+}
+
+function quoteString(value: string): string {
+  return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 }

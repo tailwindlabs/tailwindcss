@@ -24,7 +24,7 @@ export type JSConfigMigration =
   // Could not convert the config file, need to inject it as-is in a @config directive
   null | {
     sources: { base: string; pattern: string }[]
-    plugins: { base: string; path: string }[]
+    plugins: { base: string; path: string; options: null | StaticPluginOptions }[]
     css: string
   }
 
