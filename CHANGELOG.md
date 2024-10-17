@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add first draft of new wide-gamut color palette ([#14693](https://github.com/tailwindlabs/tailwindcss/pull/14693))
-- _Upgrade (experimental)_: Migrate `theme(…)` calls in classes to `var(…)` or to the modern `theme(…)` syntax ([#14664](https://github.com/tailwindlabs/tailwindcss/pull/14664))
+- _Upgrade (experimental)_: Migrate `theme(…)` calls to `var(…)` or to the modern `theme(…)` syntax ([#14664](https://github.com/tailwindlabs/tailwindcss/pull/14664), [#14695](https://github.com/tailwindlabs/tailwindcss/pull/14695))
 
 ### Fixed
 
