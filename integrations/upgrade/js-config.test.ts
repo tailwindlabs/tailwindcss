@@ -232,17 +232,17 @@ test(
       @import 'tailwindcss';
 
       @theme {
-        --color-gray-50: #fafafa;
-        --color-gray-100: #f5f5f5;
-        --color-gray-200: #e5e5e5;
-        --color-gray-300: #d4d4d4;
-        --color-gray-400: #a3a3a3;
-        --color-gray-500: #737373;
-        --color-gray-600: #525252;
-        --color-gray-700: #404040;
-        --color-gray-800: #262626;
-        --color-gray-900: #171717;
-        --color-gray-950: #0a0a0a;
+        --color-gray-50: oklch(0.985 0 none);
+        --color-gray-100: oklch(0.97 0 none);
+        --color-gray-200: oklch(0.922 0 none);
+        --color-gray-300: oklch(0.87 0 none);
+        --color-gray-400: oklch(0.708 0 none);
+        --color-gray-500: oklch(0.556 0 none);
+        --color-gray-600: oklch(0.439 0 none);
+        --color-gray-700: oklch(0.371 0 none);
+        --color-gray-800: oklch(0.269 0 none);
+        --color-gray-900: oklch(0.205 0 none);
+        --color-gray-950: oklch(0.145 0 none);
       }
       "
     `)
