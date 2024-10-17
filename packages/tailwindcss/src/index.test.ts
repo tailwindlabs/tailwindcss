@@ -988,6 +988,7 @@ describe('Parsing themes values from CSS', () => {
 
       .text-lg {
         font-size: var(--font-size-lg, 20px);
+        line-height: var(--tw-leading, var(--default-line-height));
       }
 
       .accent-red {
@@ -1041,6 +1042,7 @@ describe('Parsing themes values from CSS', () => {
 
       .text-sm {
         font-size: var(--font-size-sm, 13px);
+        line-height: var(--tw-leading, var(--default-line-height));
       }
 
       .accent-green {
