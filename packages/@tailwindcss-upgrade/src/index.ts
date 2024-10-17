@@ -87,7 +87,7 @@ async function run() {
   // Migrate JS config
 
   info('Migrating JavaScript configuration files using the provided configuration file.')
-  let jsConfigMigration = await migrateJsConfig(config.configFilePath, base)
+  let jsConfigMigration = await migrateJsConfig(config.designSystem, config.configFilePath, base)
 
   {
     // Stylesheet migrations

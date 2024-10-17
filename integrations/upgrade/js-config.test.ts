@@ -193,7 +193,7 @@ test(
 )
 
 test(
-  'does not upgrade JS config files with functions in the theme config',
+  'upgrades JS config files with functions in the theme config',
   {
     fs: {
       'package.json': json`
@@ -230,24 +230,26 @@ test(
       "
       --- src/input.css ---
       @import 'tailwindcss';
-      @config '../tailwind.config.ts';
+
+      @theme {
+        --color-gray-50: oklch(0.985 0 none);
+        --color-gray-100: oklch(0.97 0 none);
+        --color-gray-200: oklch(0.922 0 none);
+        --color-gray-300: oklch(0.87 0 none);
+        --color-gray-400: oklch(0.708 0 none);
+        --color-gray-500: oklch(0.556 0 none);
+        --color-gray-600: oklch(0.439 0 none);
+        --color-gray-700: oklch(0.371 0 none);
+        --color-gray-800: oklch(0.269 0 none);
+        --color-gray-900: oklch(0.205 0 none);
+        --color-gray-950: oklch(0.145 0 none);
+      }
       "
     `)
 
     expect(await fs.dumpFiles('tailwind.config.ts')).toMatchInlineSnapshot(`
       "
-      --- tailwind.config.ts ---
-      import { type Config } from 'tailwindcss'
 
-      export default {
-        theme: {
-          extend: {
-            colors: ({ colors }) => ({
-              gray: colors.neutral,
-            }),
-          },
-        },
-      } satisfies Config
       "
     `)
   },
