@@ -47,7 +47,7 @@ for (let [classes, expected] of [
   ],
   [
     '-bg-linear-45 from-red to-blue',
-    'linear-gradient(calc(-45deg), rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(-45deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   ],
   [
     'bg-linear-to-r via-red to-blue',
