@@ -2516,21 +2516,22 @@ export function createUtilities(theme: Theme) {
     ['tl', 'top left'],
   ]) {
     staticUtility(`bg-gradient-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction},`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+      ['--tw-gradient-position', `to ${direction} in oklch,`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
 
     staticUtility(`bg-linear-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction},`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops, to ${direction}))`],
+      ['--tw-gradient-position', `to ${direction} in oklch,`],
+      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
     ])
   }
 
   utilities.functional('bg-linear', (candidate) => {
     if (!candidate.value || candidate.modifier) return
 
+    let value = candidate.value.value
+
     if (candidate.value.kind === 'arbitrary') {
-      let value: string | null = candidate.value.value
       let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
       switch (type) {
@@ -2551,6 +2552,15 @@ export function createUtilities(theme: Theme) {
           ]
         }
       }
+    } else {
+      if (!isPositiveInteger(value)) return
+
+      value = withNegative(`${value}deg`, candidate)
+
+      return [
+        decl('--tw-gradient-position', `${value} in oklch,`),
+        decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
+      ]
     }
   })
 
@@ -2559,7 +2569,7 @@ export function createUtilities(theme: Theme) {
 
     if (!candidate.value) {
       return [
-        decl('--tw-gradient-position', `initial`),
+        decl('--tw-gradient-position', `in oklch,`),
         decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
       ]
     }
@@ -2577,8 +2587,8 @@ export function createUtilities(theme: Theme) {
       value = withNegative(`${value}deg`, candidate)
 
       return [
-        decl('--tw-gradient-position', `from ${value},`),
-        decl('background-image', `conic-gradient(var(--tw-gradient-stops,from ${value}))`),
+        decl('--tw-gradient-position', `from ${value} in oklch,`),
+        decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
       ]
     }
   })
@@ -2588,7 +2598,7 @@ export function createUtilities(theme: Theme) {
 
     if (!candidate.value) {
       return [
-        decl('--tw-gradient-position', `initial`),
+        decl('--tw-gradient-position', `in oklch,`),
         decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
       ]
     }
