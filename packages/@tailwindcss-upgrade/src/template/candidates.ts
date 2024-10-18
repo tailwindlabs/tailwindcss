@@ -163,8 +163,15 @@ function printArbitraryValue(input: string) {
       drop.add(next)
     }
 
+    // The value parser handles `/` as a separator in some scenarios. E.g.:
+    // `theme(colors.red/50%)`. Because of this, we have to handle this case
+    // separately.
+    else if (node.kind === 'separator' && node.value.trim() === '/') {
+      node.value = '/'
+    }
+
     // Leading and trailing whitespace
-    if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
+    else if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
       if (parentArray[0] === node || parentArray[parentArray.length - 1] === node) {
         drop.add(node)
       }
