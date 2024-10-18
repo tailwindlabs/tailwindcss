@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Ensure existing spaces in attribute selectors are valid ([#14703](https://github.com/tailwindlabs/tailwindcss/pull/14703))
+- Allow spaces spaces around operators in attribute selector variants ([#14703](https://github.com/tailwindlabs/tailwindcss/pull/14703))
 
 ### Changed
 
