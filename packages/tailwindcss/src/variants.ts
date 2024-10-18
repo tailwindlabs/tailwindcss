@@ -898,32 +898,34 @@ export function createVariants(theme: Theme): Variants {
   return variants
 }
 
-function quoteAttributeValue(value: string) {
-  if (value.includes('=')) {
-    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
-      // If the value is already quoted, skip.
-      if (match[1] === "'" || match[1] === '"') {
-        return match
-      }
+function quoteAttributeValue(input: string) {
+  if (input.includes('=')) {
+    let [attribute, ...after] = segment(input, '=')
+    let value = after.join('=').trim()
 
-      // Handle regex flags on unescaped values
-      if (match.length > 2) {
-        let trailingCharacter = match[match.length - 1]
-        if (
-          match[match.length - 2] === ' ' &&
-          (trailingCharacter === 'i' ||
-            trailingCharacter === 'I' ||
-            trailingCharacter === 's' ||
-            trailingCharacter === 'S')
-        ) {
-          return `="${match.slice(1, -2)}" ${match[match.length - 1]}`
-        }
-      }
+    // If the value is already quoted, skip.
+    if (value[0] === "'" || value[0] === '"') {
+      return input
+    }
 
-      return `="${match.slice(1)}"`
-    })
+    // Handle case sensitivity flags on unescaped values
+    if (value.length > 1) {
+      let trailingCharacter = value[value.length - 1]
+      if (
+        value[value.length - 2] === ' ' &&
+        (trailingCharacter === 'i' ||
+          trailingCharacter === 'I' ||
+          trailingCharacter === 's' ||
+          trailingCharacter === 'S')
+      ) {
+        return `${attribute}="${value.slice(0, -2)}" ${trailingCharacter}`
+      }
+    }
+
+    return `${attribute}="${value}"`
   }
-  return value
+
+  return input
 }
 
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
