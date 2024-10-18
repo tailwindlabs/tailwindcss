@@ -24,40 +24,39 @@ export function themeToVar(
 ): string {
   let convert = createConverter(designSystem)
 
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    let clone: Candidate = structuredClone(candidate)
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     let changed = false
 
-    if (clone.kind === 'arbitrary') {
+    if (candidate.kind === 'arbitrary') {
       let [newValue, modifier] = convert(
-        clone.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
+        candidate.value,
+        candidate.modifier === null ? Convert.MigrateModifier : Convert.All,
       )
-      if (newValue !== clone.value) {
+      if (newValue !== candidate.value) {
         changed = true
-        clone.value = newValue
+        candidate.value = newValue
 
         if (modifier !== null) {
-          clone.modifier = modifier
+          candidate.modifier = modifier
         }
       }
-    } else if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
+    } else if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') {
       let [newValue, modifier] = convert(
-        clone.value.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
+        candidate.value.value,
+        candidate.modifier === null ? Convert.MigrateModifier : Convert.All,
       )
-      if (newValue !== clone.value.value) {
+      if (newValue !== candidate.value.value) {
         changed = true
-        clone.value.value = newValue
+        candidate.value.value = newValue
 
         if (modifier !== null) {
-          clone.modifier = modifier
+          candidate.modifier = modifier
         }
       }
     }
 
     // Handle variants
-    for (let variant of variants(clone)) {
+    for (let variant of variants(candidate)) {
       if (variant.kind === 'arbitrary') {
         let [newValue] = convert(variant.selector, Convert.MigrateThemeOnly)
         if (newValue !== variant.selector) {
@@ -73,7 +72,7 @@ export function themeToVar(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? printCandidate(designSystem, candidate) : rawCandidate
   }
 
   return rawCandidate

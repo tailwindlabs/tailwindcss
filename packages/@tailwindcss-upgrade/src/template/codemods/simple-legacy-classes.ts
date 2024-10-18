@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
@@ -28,12 +29,10 @@ export function simpleLegacyClasses(
     SEEDED.add(designSystem)
   }
 
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
-      return printCandidate(designSystem, {
-        ...candidate,
-        root: LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP],
-      })
+      candidate.root = LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP]
+      return printCandidate(designSystem, candidate)
     }
   }
 

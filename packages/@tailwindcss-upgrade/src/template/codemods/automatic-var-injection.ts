@@ -9,11 +9,7 @@ export function automaticVarInjection(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    // The below logic makes extended use of mutation. Since candidates in the
-    // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Candidate
-
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     let didChange = false
 
     // Add `var(…)` in modifier position, e.g.:

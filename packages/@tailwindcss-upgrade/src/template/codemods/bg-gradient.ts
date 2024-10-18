@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
@@ -9,7 +10,7 @@ export function bgGradient(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     if (candidate.kind === 'static' && candidate.root.startsWith('bg-gradient-to-')) {
       let direction = candidate.root.slice(15)
 
@@ -17,10 +18,9 @@ export function bgGradient(
         continue
       }
 
-      return printCandidate(designSystem, {
-        ...candidate,
-        root: `bg-linear-to-${direction}`,
-      })
+      candidate.root = `bg-linear-to-${direction}`
+
+      return printCandidate(designSystem, candidate)
     }
   }
   return rawCandidate

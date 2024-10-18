@@ -10,24 +10,26 @@ export function arbitraryValueToBareValue(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    let clone: Candidate = structuredClone(candidate)
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     let changed = false
 
     // Convert font-stretch-* utilities
     if (
-      clone.kind === 'functional' &&
-      clone.value?.kind === 'arbitrary' &&
-      clone.value.dataType === null &&
-      clone.root === 'font-stretch'
+      candidate.kind === 'functional' &&
+      candidate.value?.kind === 'arbitrary' &&
+      candidate.value.dataType === null &&
+      candidate.root === 'font-stretch'
     ) {
-      if (clone.value.value.endsWith('%') && isPositiveInteger(clone.value.value.slice(0, -1))) {
-        let percentage = parseInt(clone.value.value)
+      if (
+        candidate.value.value.endsWith('%') &&
+        isPositiveInteger(candidate.value.value.slice(0, -1))
+      ) {
+        let percentage = parseInt(candidate.value.value)
         if (percentage >= 50 && percentage <= 200) {
           changed = true
-          clone.value = {
+          candidate.value = {
             kind: 'named',
-            value: clone.value.value,
+            value: candidate.value.value,
             fraction: null,
           }
         }
@@ -37,23 +39,23 @@ export function arbitraryValueToBareValue(
     // Convert arbitrary values with positive integers to bare values
     // Convert arbitrary values with fractions to bare values
     else if (
-      clone.kind === 'functional' &&
-      clone.value?.kind === 'arbitrary' &&
-      clone.value.dataType === null
+      candidate.kind === 'functional' &&
+      candidate.value?.kind === 'arbitrary' &&
+      candidate.value.dataType === null
     ) {
-      let parts = segment(clone.value.value, '/')
+      let parts = segment(candidate.value.value, '/')
       if (parts.every((part) => isPositiveInteger(part))) {
         changed = true
 
-        let currentValue = clone.value
-        let currentModifier = clone.modifier
+        let currentValue = candidate.value
+        let currentModifier = candidate.modifier
 
         // E.g.: `col-start-[12]`
         //                   ^^
         if (parts.length === 1) {
-          clone.value = {
+          candidate.value = {
             kind: 'named',
-            value: clone.value.value,
+            value: candidate.value.value,
             fraction: null,
           }
         }
@@ -61,27 +63,27 @@ export function arbitraryValueToBareValue(
         // E.g.: `aspect-[12/34]`
         //                ^^ ^^
         else {
-          clone.value = {
+          candidate.value = {
             kind: 'named',
             value: parts[0],
-            fraction: clone.value.value,
+            fraction: candidate.value.value,
           }
-          clone.modifier = {
+          candidate.modifier = {
             kind: 'named',
             value: parts[1],
           }
         }
 
         // Double check that the new value compiles correctly
-        if (designSystem.compileAstNodes(clone).length === 0) {
-          clone.value = currentValue
-          clone.modifier = currentModifier
+        if (designSystem.compileAstNodes(candidate).length === 0) {
+          candidate.value = currentValue
+          candidate.modifier = currentModifier
           changed = false
         }
       }
     }
 
-    for (let variant of variants(clone)) {
+    for (let variant of variants(candidate)) {
       // Convert `data-[selected]` to `data-selected`
       if (
         variant.kind === 'functional' &&
@@ -143,7 +145,7 @@ export function arbitraryValueToBareValue(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? printCandidate(designSystem, candidate) : rawCandidate
   }
 
   return rawCandidate

@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { walk, type AstNode } from '../../../../tailwindcss/src/ast'
-import { type Variant } from '../../../../tailwindcss/src/candidate'
+import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
@@ -9,7 +9,7 @@ export function variantOrder(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+  for (let candidate of designSystem.parseCandidate(rawCandidate) as Candidate[]) {
     if (candidate.variants.length <= 1) {
       continue
     }
@@ -46,7 +46,9 @@ export function variantOrder(
       continue
     }
 
-    return printCandidate(designSystem, { ...candidate, variants: newOrder })
+    candidate.variants = newOrder
+
+    return printCandidate(designSystem, candidate)
   }
   return rawCandidate
 }
