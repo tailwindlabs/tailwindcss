@@ -15,6 +15,7 @@ export type ValueSeparatorNode = {
 }
 
 export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
+type ValueParentNode = ValueFunctionNode | null
 
 function word(value: string): ValueWordNode {
   return {
@@ -54,11 +55,11 @@ export function walk(
   visit: (
     node: ValueAstNode,
     utils: {
-      parent: ValueAstNode | null
+      parent: ValueParentNode
       replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
     },
   ) => void | ValueWalkAction,
-  parent: ValueAstNode | null = null,
+  parent: ValueParentNode = null,
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]

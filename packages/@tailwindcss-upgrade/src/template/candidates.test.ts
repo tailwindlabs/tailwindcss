@@ -108,40 +108,63 @@ const candidates = [
   ['bg-[#0088cc]/[0.5]', 'bg-[#0088cc]/[0.5]'],
   ['bg-[#0088cc]!', 'bg-[#0088cc]!'],
   ['!bg-[#0088cc]', 'bg-[#0088cc]!'],
+  ['bg-[var(--spacing)-1px]', 'bg-[var(--spacing)-1px]'],
+  ['bg-[var(--spacing)_-_1px]', 'bg-[var(--spacing)-1px]'],
+  ['bg-[-1px_-1px]', 'bg-[-1px_-1px]'],
   ['w-1/2', 'w-1/2'],
+
+  // Keep spaces in strings
+  ['content-["hello_world"]', 'content-["hello_world"]'],
+  ['content-[____"hello_world"___]', 'content-["hello_world"]'],
 ]
 
 const variants = [
-  '', // no variant
-  '*:',
-  'focus:',
-  'group-focus:',
+  ['', ''], // no variant
+  ['*:', '*:'],
+  ['focus:', 'focus:'],
+  ['group-focus:', 'group-focus:'],
 
-  'hover:focus:',
-  'hover:group-focus:',
-  'group-hover:focus:',
-  'group-hover:group-focus:',
+  ['hover:focus:', 'hover:focus:'],
+  ['hover:group-focus:', 'hover:group-focus:'],
+  ['group-hover:focus:', 'group-hover:focus:'],
+  ['group-hover:group-focus:', 'group-hover:group-focus:'],
 
-  'min-[10px]:',
-  // TODO: This currently expands `calc(1000px+12em)` to `calc(1000px_+_12em)`
-  'min-[calc(1000px_+_12em)]:',
+  ['min-[10px]:', 'min-[10px]:'],
 
-  'peer-[&_p]:',
-  'peer-[&_p]:hover:',
-  'hover:peer-[&_p]:',
-  'hover:peer-[&_p]:focus:',
-  'peer-[&:hover]:peer-[&_p]:',
+  // Normalize spaces
+  ['min-[calc(1000px_+_12em)]:', 'min-[calc(1000px+12em)]:'],
+  ['min-[calc(1000px_+12em)]:', 'min-[calc(1000px+12em)]:'],
+  ['min-[calc(1000px+_12em)]:', 'min-[calc(1000px+12em)]:'],
+  ['min-[calc(1000px___+___12em)]:', 'min-[calc(1000px+12em)]:'],
+
+  ['peer-[&_p]:', 'peer-[&_p]:'],
+  ['peer-[&_p]:hover:', 'peer-[&_p]:hover:'],
+  ['hover:peer-[&_p]:', 'hover:peer-[&_p]:'],
+  ['hover:peer-[&_p]:focus:', 'hover:peer-[&_p]:focus:'],
+  ['peer-[&:hover]:peer-[&_p]:', 'peer-[&:hover]:peer-[&_p]:'],
+
+  ['[p]:', '[p]:'],
+  ['[_p_]:', '[p]:'],
+  ['has-[p]:', 'has-[p]:'],
+  ['has-[_p_]:', 'has-[p]:'],
+
+  // Simplify `&:is(p)` to `p`
+  ['[&:is(p)]:', '[p]:'],
+  ['[&:is(_p_)]:', '[p]:'],
+  ['has-[&:is(p)]:', 'has-[p]:'],
+  ['has-[&:is(_p_)]:', 'has-[p]:'],
 ]
 
 let combinations: [string, string][] = []
-for (let variant of variants) {
-  for (let [input, output] of candidates) {
-    combinations.push([`${variant}${input}`, `${variant}${output}`])
+
+for (let [inputVariant, outputVariant] of variants) {
+  for (let [inputCandidate, outputCandidate] of candidates) {
+    combinations.push([`${inputVariant}${inputCandidate}`, `${outputVariant}${outputCandidate}`])
   }
 }
 
 describe('printCandidate()', () => {
-  test.each(combinations)('%s', async (candidate: string, result: string) => {
+  test.each(combinations)('%s -> %s', async (candidate: string, result: string) => {
     let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
       base: __dirname,
     })

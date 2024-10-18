@@ -1,6 +1,7 @@
 import { Scanner } from '@tailwindcss/oxide'
 import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
+import * as ValueParser from '../../../tailwindcss/src/value-parser'
 
 export async function extractRawCandidates(
   content: string,
@@ -51,9 +52,9 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
         if (candidate.value === null) {
           base += ''
         } else if (candidate.value.dataType) {
-          base += `-[${candidate.value.dataType}:${escapeArbitrary(candidate.value.value)}]`
+          base += `-[${candidate.value.dataType}:${escapeArbitrary(trimWhitespace(candidate.value.value))}]`
         } else {
-          base += `-[${escapeArbitrary(candidate.value.value)}]`
+          base += `-[${escapeArbitrary(trimWhitespace(candidate.value.value))}]`
         }
       } else if (candidate.value.kind === 'named') {
         base += `-${candidate.value.value}`
@@ -63,14 +64,14 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
 
   // Handle arbitrary
   if (candidate.kind === 'arbitrary') {
-    base += `[${candidate.property}:${escapeArbitrary(candidate.value)}]`
+    base += `[${candidate.property}:${escapeArbitrary(trimWhitespace(candidate.value))}]`
   }
 
   // Handle modifier
   if (candidate.kind === 'arbitrary' || candidate.kind === 'functional') {
     if (candidate.modifier) {
       if (candidate.modifier.kind === 'arbitrary') {
-        base += `/[${escapeArbitrary(candidate.modifier.value)}]`
+        base += `/[${escapeArbitrary(trimWhitespace(candidate.modifier.value))}]`
       } else if (candidate.modifier.kind === 'named') {
         base += `/${candidate.modifier.value}`
       }
@@ -95,7 +96,7 @@ function printVariant(variant: Variant) {
 
   // Handle arbitrary variants
   if (variant.kind === 'arbitrary') {
-    return `[${escapeArbitrary(variant.selector)}]`
+    return `[${escapeArbitrary(trimWhitespace(simplifyArbitraryVariant(variant.selector)))}]`
   }
 
   let base: string = ''
@@ -105,7 +106,7 @@ function printVariant(variant: Variant) {
     base += variant.root
     if (variant.value) {
       if (variant.value.kind === 'arbitrary') {
-        base += `-[${escapeArbitrary(variant.value.value)}]`
+        base += `-[${escapeArbitrary(trimWhitespace(variant.value.value))}]`
       } else if (variant.value.kind === 'named') {
         base += `-${variant.value.value}`
       }
@@ -123,7 +124,7 @@ function printVariant(variant: Variant) {
   if (variant.kind === 'functional' || variant.kind === 'compound') {
     if (variant.modifier) {
       if (variant.modifier.kind === 'arbitrary') {
-        base += `/[${escapeArbitrary(variant.modifier.value)}]`
+        base += `/[${escapeArbitrary(trimWhitespace(variant.modifier.value))}]`
       } else if (variant.modifier.kind === 'named') {
         base += `/${variant.modifier.value}`
       }
@@ -137,4 +138,74 @@ function escapeArbitrary(input: string) {
   return input
     .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
     .replaceAll(' ', '_') // Replace spaces with underscores
+}
+
+function trimWhitespace(input: string) {
+  let ast = ValueParser.parse(input)
+  let drop = new Set<ValueParser.ValueAstNode>()
+
+  ValueParser.walk(ast, (node, { parent }) => {
+    let parentArray = parent === null ? ast : (parent.nodes ?? [])
+
+    // Handle operators (e.g.: inside of `calc(…)`)
+    if (
+      node.kind === 'word' &&
+      // Operators
+      (node.value === '+' || node.value === '-' || node.value === '*' || node.value === '/')
+    ) {
+      let idx = parentArray.indexOf(node) ?? -1
+
+      // This should not be possible
+      if (idx === -1) return
+
+      let previous = parentArray[idx - 1]
+      if (previous?.kind !== 'separator' || previous.value !== ' ') return
+
+      let next = parentArray[idx + 1]
+      if (next?.kind !== 'separator' || next.value !== ' ') return
+
+      drop.add(previous)
+      drop.add(next)
+    }
+
+    // Leading and trailing whitespace
+    if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
+      if (parentArray[0] === node || parentArray[parentArray.length - 1] === node) {
+        drop.add(node)
+      }
+    }
+  })
+
+  if (drop.size > 0) {
+    ValueParser.walk(ast, (node, { replaceWith }) => {
+      if (drop.has(node)) {
+        drop.delete(node)
+        replaceWith([])
+      }
+    })
+  }
+
+  return ValueParser.toCss(ast)
+}
+
+function simplifyArbitraryVariant(input: string) {
+  let ast = ValueParser.parse(input)
+
+  // &:is(…)
+  if (
+    ast.length === 3 &&
+    // &
+    ast[0].kind === 'word' &&
+    ast[0].value === '&' &&
+    // :
+    ast[1].kind === 'separator' &&
+    ast[1].value === ':' &&
+    // is(…)
+    ast[2].kind === 'function' &&
+    ast[2].value === 'is'
+  ) {
+    return ValueParser.toCss(ast[2].nodes)
+  }
+
+  return input
 }
