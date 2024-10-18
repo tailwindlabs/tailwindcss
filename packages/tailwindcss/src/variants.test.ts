@@ -2082,6 +2082,9 @@ test('data', async () => {
       'data-[potato_=_"salad"]:flex',
       'data-[potato_^=_"salad"]:flex',
       'data-[potato="^_="]:flex',
+      // Can't have spaces between `^` and `=`. We will generate CSS (garbage in
+      // garbage out), but Lightning CSS will throw it out.
+      'data-[foo_^_=_"bar"]:flex',
       'data-[foo=1]:flex',
       'data-[foo=bar_baz]:flex',
       "data-[foo$='bar'_i]:flex",
@@ -2197,14 +2200,7 @@ test('data', async () => {
     }"
   `)
   expect(
-    await run(
-      [
-        'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
-        'data-disabled/foo:flex',
-        'data-[potato=salad]/foo:flex',
-      ],
-      { optimize: false },
-    ),
+    await run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'], { optimize: false }),
   ).toEqual('')
 })
 
