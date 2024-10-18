@@ -135,11 +135,7 @@ function printVariant(variant: Variant) {
 }
 
 function printArbitraryValue(input: string) {
-  let ast = ValueParser.parse(
-    input
-      .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
-      .replaceAll(' ', '_'), // Replace spaces with underscores
-  )
+  let ast = ValueParser.parse(input)
 
   let drop = new Set<ValueParser.ValueAstNode>()
 
@@ -185,6 +181,8 @@ function printArbitraryValue(input: string) {
   }
 
   return ValueParser.toCss(ast)
+    .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
+    .replaceAll(' ', '_') // Replace spaces with underscores
 }
 
 function simplifyArbitraryVariant(input: string) {
