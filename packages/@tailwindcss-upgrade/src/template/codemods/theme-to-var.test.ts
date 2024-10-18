@@ -26,7 +26,7 @@ test.each([
   ],
 
   // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
-  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)_*_2)]'],
+  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)*2)]'],
 
   // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
   // - Can't convert to `var(…)` because that would lose the modifier.

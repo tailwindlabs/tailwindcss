@@ -15,6 +15,7 @@ export type ValueSeparatorNode = {
 }
 
 export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
+type ValueParentNode = ValueFunctionNode | null
 
 function word(value: string): ValueWordNode {
   return {
@@ -54,11 +55,11 @@ export function walk(
   visit: (
     node: ValueAstNode,
     utils: {
-      parent: ValueAstNode | null
+      parent: ValueParentNode
       replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
     },
   ) => void | ValueWalkAction,
-  parent: ValueAstNode | null = null,
+  parent: ValueParentNode = null,
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
@@ -149,7 +150,7 @@ export function parse(input: string) {
       case GREATER_THAN:
       case EQUALS: {
         // 1. Handle everything before the separator as a word
-        // Handle everything before the closing paren a word
+        // Handle everything before the closing paren as a word
         if (buffer.length > 0) {
           let node = word(buffer)
           if (parent) {
@@ -169,6 +170,7 @@ export function parse(input: string) {
             peekChar !== COLON &&
             peekChar !== COMMA &&
             peekChar !== SPACE &&
+            peekChar !== SLASH &&
             peekChar !== LESS_THAN &&
             peekChar !== GREATER_THAN &&
             peekChar !== EQUALS

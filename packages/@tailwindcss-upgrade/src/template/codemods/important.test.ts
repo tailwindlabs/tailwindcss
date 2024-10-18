@@ -4,7 +4,7 @@ import { important } from './important'
 
 test.each([
   ['!flex', 'flex!'],
-  ['min-[calc(1000px+12em)]:!flex', 'min-[calc(1000px_+_12em)]:flex!'],
+  ['min-[calc(1000px+12em)]:!flex', 'min-[calc(1000px+12em)]:flex!'],
   ['md:!block', 'md:block!'],
 
   // Does not change non-important candidates
