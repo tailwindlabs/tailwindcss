@@ -2076,6 +2076,7 @@ test('data', async () => {
       'data-[potato=salad]:flex',
       'data-[potato_=_"salad"]:flex',
       'data-[potato_^=_"salad"]:flex',
+      'data-[potato="^_="]:flex',
       'data-[foo=1]:flex',
       'data-[foo=bar_baz]:flex',
       "data-[foo$='bar'_i]:flex",
@@ -2167,6 +2168,10 @@ test('data', async () => {
     }
 
     .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"] {
+      display: flex;
+    }
+
+    .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="] {
       display: flex;
     }
 
