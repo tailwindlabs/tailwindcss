@@ -16,7 +16,7 @@ import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
-import { info, warn } from './utils/renderer'
+import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -163,7 +163,7 @@ async function migrateContent(
   unresolvedConfig: Config & { content: any },
   base: string,
 ): Promise<{ base: string; pattern: string }[]> {
-  let autoContentFiles = listAutoContentFiles(base)
+  let autoContentFiles = autodetectedSourceFiles(base)
 
   let sources = []
   for (let content of unresolvedConfig.content) {
@@ -171,7 +171,7 @@ async function migrateContent(
       throw new Error('Unsupported content value: ' + content)
     }
 
-    let sourceFiles = listSourceContentFiles({ base, pattern: content })
+    let sourceFiles = patternSourceFiles({ base, pattern: content })
 
     let autoContentContainsAllSourceFiles = true
     for (let sourceFile of sourceFiles) {
@@ -181,11 +181,7 @@ async function migrateContent(
       }
     }
 
-    if (autoContentContainsAllSourceFiles) {
-      warn(
-        'The `content` configuration `${content}` is already included in the automatic content file discovery and will not be migrated.',
-      )
-    } else {
+    if (!autoContentContainsAllSourceFiles) {
       sources.push({ base, pattern: content })
     }
   }
@@ -274,13 +270,13 @@ function keyframesToCss(keyframes: Record<string, unknown>): string {
   return toCss(ast).trim() + '\n'
 }
 
-function listAutoContentFiles(base: string) {
+function autodetectedSourceFiles(base: string) {
   let scanner = new Scanner({ detectSources: { base } })
   scanner.scan()
   return scanner.files
 }
 
-function listSourceContentFiles(source: { base: string; pattern: string }): string[] {
+function patternSourceFiles(source: { base: string; pattern: string }): string[] {
   let scanner = new Scanner({ sources: [source] })
   scanner.scan()
   return scanner.files
