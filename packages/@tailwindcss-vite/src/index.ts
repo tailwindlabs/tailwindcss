@@ -261,9 +261,13 @@ function getExtension(id: string) {
 function isPotentialCssRootFile(id: string) {
   let extension = getExtension(id)
   let isCssFile =
-    extension === 'css' ||
-    (extension === 'vue' && id.includes('&lang.css')) ||
-    (extension === 'astro' && id.includes('&lang.css'))
+    (extension === 'css' ||
+      (extension === 'vue' && id.includes('&lang.css')) ||
+      (extension === 'astro' && id.includes('&lang.css'))) &&
+    // Don't intercept ?url and ?raw static asset handling
+    !id.includes('?url') &&
+    !id.includes('?raw')
+
   return isCssFile
 }
 
