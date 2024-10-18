@@ -506,10 +506,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      let value = quoteAttributeValue(variant.value.value)
-      if (value === null) return null
-
-      ruleNode.nodes = [rule(`&[aria-${value}]`, ruleNode.nodes)]
+      ruleNode.nodes = [rule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
     } else {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
@@ -530,10 +527,7 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    let value = quoteAttributeValue(variant.value.value)
-    if (value === null) return null
-
-    ruleNode.nodes = [rule(`&[data-${value}]`, ruleNode.nodes)]
+    ruleNode.nodes = [rule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -904,39 +898,35 @@ export function createVariants(theme: Theme): Variants {
   return variants
 }
 
-function quoteAttributeValue(value: string) {
-  if (value.includes('=')) {
-    // Do not allow invalid operators in attribute values
-    if (/[*$^|~]\s+=/.test(value)) {
-      return null
+function quoteAttributeValue(input: string) {
+  if (input.includes('=')) {
+    let [attribute, ...after] = segment(input, '=')
+    let value = after.join('=')
+    let valueTrimmed = value.trim()
+
+    // If the value is already quoted, skip.
+    if (valueTrimmed[0] === "'" || valueTrimmed[0] === '"') {
+      return input
     }
 
-    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
-      let value = match.slice(1).trim()
-
-      // If the value is already quoted, skip.
-      if (value[0] === "'" || value[0] === '"') {
-        return match
+    // Handle regex flags on unescaped values
+    if (value.length > 1) {
+      let trailingCharacter = value[value.length - 1]
+      if (
+        value[value.length - 2] === ' ' &&
+        (trailingCharacter === 'i' ||
+          trailingCharacter === 'I' ||
+          trailingCharacter === 's' ||
+          trailingCharacter === 'S')
+      ) {
+        return `${attribute}="${value.slice(0, -2)}" ${trailingCharacter}`
       }
+    }
 
-      // Handle regex flags on unescaped values
-      if (match.length > 2) {
-        let trailingCharacter = match[match.length - 1]
-        if (
-          match[match.length - 2] === ' ' &&
-          (trailingCharacter === 'i' ||
-            trailingCharacter === 'I' ||
-            trailingCharacter === 's' ||
-            trailingCharacter === 'S')
-        ) {
-          return `="${match.slice(1, -2)}" ${match[match.length - 1]}`
-        }
-      }
-
-      return `="${match.slice(1)}"`
-    })
+    return `${attribute}="${valueTrimmed}"`
   }
-  return value
+
+  return input
 }
 
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
