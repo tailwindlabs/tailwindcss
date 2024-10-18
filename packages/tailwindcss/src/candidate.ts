@@ -1,5 +1,5 @@
 import type { DesignSystem } from './design-system'
-import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
+import { decodeArbitraryValue as defaultDecodeArbitraryValue } from './utils/decode-arbitrary-value'
 import { segment } from './utils/segment'
 
 const COLON = 0x3a
@@ -220,7 +220,11 @@ export type Candidate =
       raw: string
     }
 
-export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
+export function* parseCandidate(
+  input: string,
+  designSystem: DesignSystem,
+  { decodeArbitraryValue = defaultDecodeArbitraryValue } = {},
+): Iterable<Candidate> {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -339,7 +343,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       kind: 'arbitrary',
       property,
       value,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier:
+        modifierSegment === null ? null : parseModifier(modifierSegment, { decodeArbitraryValue }),
       variants: parsedCandidateVariants,
       important,
       raw: input,
@@ -393,7 +398,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     let candidate: Candidate = {
       kind: 'functional',
       root,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier:
+        modifierSegment === null ? null : parseModifier(modifierSegment, { decodeArbitraryValue }),
       value: null,
       variants: parsedCandidateVariants,
       negative,
@@ -460,7 +466,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   }
 }
 
-function parseModifier(modifier: string): CandidateModifier {
+function parseModifier(
+  modifier: string,
+  { decodeArbitraryValue }: { decodeArbitraryValue: (input: string) => string },
+): CandidateModifier {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
     let arbitraryValue = modifier.slice(1, -1)
 
@@ -476,7 +485,11 @@ function parseModifier(modifier: string): CandidateModifier {
   }
 }
 
-export function parseVariant(variant: string, designSystem: DesignSystem): Variant | null {
+export function parseVariant(
+  variant: string,
+  designSystem: DesignSystem,
+  { decodeArbitraryValue = defaultDecodeArbitraryValue } = {},
+): Variant | null {
   // Arbitrary variants
   if (variant[0] === '[' && variant[variant.length - 1] === ']') {
     /**
@@ -555,7 +568,8 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier:
+                modifier === null ? null : parseModifier(modifier, { decodeArbitraryValue }),
               value: null,
               compounds: designSystem.variants.compounds(root),
             }
@@ -565,7 +579,8 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier:
+                modifier === null ? null : parseModifier(modifier, { decodeArbitraryValue }),
               value: {
                 kind: 'arbitrary',
                 value: decodeArbitraryValue(value.slice(1, -1)),
@@ -577,7 +592,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           return {
             kind: 'functional',
             root,
-            modifier: modifier === null ? null : parseModifier(modifier),
+            modifier: modifier === null ? null : parseModifier(modifier, { decodeArbitraryValue }),
             value: { kind: 'named', value },
             compounds: designSystem.variants.compounds(root),
           }
