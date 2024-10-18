@@ -111,6 +111,7 @@ const candidates = [
   ['bg-[var(--spacing)-1px]', 'bg-[var(--spacing)-1px]'],
   ['bg-[var(--spacing)_-_1px]', 'bg-[var(--spacing)-1px]'],
   ['bg-[-1px_-1px]', 'bg-[-1px_-1px]'],
+  ['p-[round(to-zero,1px)]', 'p-[round(to-zero,1px)]'],
   ['w-1/2', 'w-1/2'],
 
   // Keep spaces in strings
