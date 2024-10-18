@@ -17,7 +17,7 @@ export function decodeArbitraryValue(input: string): string {
  * Convert `_` to ` `, except for escaped underscores `\_` they should be
  * converted to `_` instead.
  */
-function convertUnderscoresToWhitespace(input: string) {
+export function convertUnderscoresToWhitespace(input: string) {
   let output = ''
   for (let i = 0; i < input.length; i++) {
     let char = input[i]

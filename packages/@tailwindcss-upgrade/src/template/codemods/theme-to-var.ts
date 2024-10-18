@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss'
 import {
-  parseCandidate,
   type Candidate,
   type CandidateModifier,
   type Variant,
@@ -25,8 +24,8 @@ export function themeToVar(
 ): string {
   let convert = createConverter(designSystem)
 
-  for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-    let clone = structuredClone(candidate)
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    let clone: Candidate = structuredClone(candidate)
     let changed = false
 
     if (clone.kind === 'arbitrary') {

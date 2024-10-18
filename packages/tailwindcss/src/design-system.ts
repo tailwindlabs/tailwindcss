@@ -60,7 +60,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
         let wasInvalid = false
 
         let { astNodes } = compileCandidates([className], this, {
-          onInvalidCandidate(candidate) {
+          onInvalidCandidate(_candidate) {
             wasInvalid = true
           },
         })

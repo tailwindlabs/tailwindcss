@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import { loadModule } from '../../../@tailwindcss-node/src/compile'
 import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
+import { mockDesignSystem } from '../mock-design-system'
 import { error } from '../utils/renderer'
 import { migratePrefix } from './codemods/prefix'
 
@@ -58,7 +59,7 @@ export async function prepareConfig(
     ])
 
     return {
-      designSystem,
+      designSystem: mockDesignSystem(designSystem),
       globs: compiler.globs,
       userConfig,
       newPrefix,

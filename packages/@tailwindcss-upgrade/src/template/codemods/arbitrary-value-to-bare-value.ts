@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
+import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
@@ -10,8 +10,8 @@ export function arbitraryValueToBareValue(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-    let clone = structuredClone(candidate)
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    let clone: Candidate = structuredClone(candidate)
     let changed = false
 
     // Convert font-stretch-* utilities

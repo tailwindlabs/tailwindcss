@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { themeToVar } from './theme-to-var'
 
 test.each([
@@ -96,9 +97,11 @@ test.each([
     '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
   ],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss";', {
+      base: __dirname,
+    }),
+  )
 
   expect(themeToVar(designSystem, {}, candidate)).toEqual(result)
 })

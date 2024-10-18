@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { important } from './important'
 
 test.each([
@@ -11,9 +12,11 @@ test.each([
   ['bg-blue-500', 'bg-blue-500'],
   ['min-[calc(1000px+12em)]:flex', 'min-[calc(1000px+12em)]:flex'],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss";', {
+      base: __dirname,
+    }),
+  )
 
   expect(important(designSystem, {}, candidate)).toEqual(result)
 })

@@ -1,6 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import { expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { variantOrder } from './variant-order'
 
 let css = dedent
@@ -49,38 +50,42 @@ test.each([
   ],
   ['hover:[@supports(display:grid)]:flex', '[@supports(display:grid)]:hover:flex'],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss";', {
+      base: __dirname,
+    }),
+  )
 
   expect(variantOrder(designSystem, {}, candidate)).toEqual(result)
 })
 
 test('it works with custom variants', async () => {
-  let designSystem = await __unstable__loadDesignSystem(
-    css`
-      @import 'tailwindcss';
-      @variant atrule {
-        @media (print) {
-          @slot;
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem(
+      css`
+        @import 'tailwindcss';
+        @variant atrule {
+          @media (print) {
+            @slot;
+          }
         }
-      }
 
-      @variant combinator {
-        > * {
-          @slot;
+        @variant combinator {
+          > * {
+            @slot;
+          }
         }
-      }
 
-      @variant pseudo {
-        &::before {
-          @slot;
+        @variant pseudo {
+          &::before {
+            @slot;
+          }
         }
-      }
-    `,
-    {
-      base: __dirname,
-    },
+      `,
+      {
+        base: __dirname,
+      },
+    ),
   )
 
   expect(variantOrder(designSystem, {}, 'combinator:pseudo:atrule:underline')).toEqual(

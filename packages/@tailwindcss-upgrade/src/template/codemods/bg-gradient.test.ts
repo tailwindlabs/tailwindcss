@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { bgGradient } from './bg-gradient'
 
 test.each([
@@ -14,9 +15,11 @@ test.each([
 
   ['max-lg:hover:bg-gradient-to-t', 'max-lg:hover:bg-linear-to-t'],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss";', {
+      base: __dirname,
+    }),
+  )
 
   expect(bgGradient(designSystem, {}, candidate)).toEqual(result)
 })

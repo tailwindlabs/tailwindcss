@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { automaticVarInjection } from './automatic-var-injection'
 
 test.each([
@@ -50,9 +51,11 @@ test.each([
   ['[view-timeline:--myTimeline]', '[view-timeline:--myTimeline]'],
   ['[position-try:--myAnchor]', '[position-try:--myAnchor]'],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss";', {
+      base: __dirname,
+    }),
+  )
 
   let migrated = automaticVarInjection(designSystem, {}, candidate)
   expect(migrated).toEqual(result)

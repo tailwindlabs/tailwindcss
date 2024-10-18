@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
+import { mockDesignSystem } from '../../mock-design-system'
 import { prefix } from './prefix'
 
 describe('for projects with configured prefix', () => {
@@ -21,27 +22,33 @@ describe('for projects with configured prefix', () => {
     // Adds prefix to arbitrary candidates
     ['[color:red]', 'tw:[color:red]'],
   ])('%s => %s', async (candidate, result) => {
-    let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
-      base: __dirname,
-    })
+    let designSystem = mockDesignSystem(
+      await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
+        base: __dirname,
+      }),
+    )
 
     expect(prefix(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
   })
 })
 
 test('can handle complex prefix separators', async () => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
-    base: __dirname,
-  })
+  let designSystem = mockDesignSystem(
+    await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
+      base: __dirname,
+    }),
+  )
 
   expect(prefix(designSystem, { prefix: 'tw__' }, 'tw__flex')).toEqual('tw:flex')
 })
 
 describe('for projects without configured prefix', () => {
   test('ignores candidates with prefixes', async () => {
-    let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-      base: __dirname,
-    })
+    let designSystem = mockDesignSystem(
+      await __unstable__loadDesignSystem('@import "tailwindcss";', {
+        base: __dirname,
+      }),
+    )
 
     expect(prefix(designSystem, {}, 'tw-flex')).toEqual('tw-flex')
   })
