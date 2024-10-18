@@ -113,6 +113,7 @@ const candidates = [
   ['bg-[-1px_-1px]', 'bg-[-1px_-1px]'],
   ['p-[round(to-zero,1px)]', 'p-[round(to-zero,1px)]'],
   ['w-1/2', 'w-1/2'],
+  ['p-[calc((100vw-theme(maxWidth.2xl))_/_2)]', 'p-[calc((100vw-theme(maxWidth.2xl))/2)]'],
 
   // Keep spaces in strings
   ['content-["hello_world"]', 'content-["hello_world"]'],
