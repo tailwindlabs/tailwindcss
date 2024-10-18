@@ -14,16 +14,24 @@ export function arbitraryValueToBareValue(
     let clone = structuredClone(candidate)
     let changed = false
 
-    // Convert font-stretch-* utilities
+    // Convert utilities that accept bare values ending in %
     if (
       clone.kind === 'functional' &&
       clone.value?.kind === 'arbitrary' &&
       clone.value.dataType === null &&
-      clone.root === 'font-stretch'
+      (clone.root === 'from' ||
+        clone.root === 'via' ||
+        clone.root === 'to' ||
+        clone.root === 'font-stretch')
     ) {
       if (clone.value.value.endsWith('%') && isPositiveInteger(clone.value.value.slice(0, -1))) {
         let percentage = parseInt(clone.value.value)
-        if (percentage >= 50 && percentage <= 200) {
+        if (
+          clone.root === 'from' ||
+          clone.root === 'via' ||
+          clone.root === 'to' ||
+          (clone.root === 'font-stretch' && percentage >= 50 && percentage <= 200)
+        ) {
           changed = true
           clone.value = {
             kind: 'named',
