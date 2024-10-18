@@ -150,7 +150,7 @@ export function parse(input: string) {
       case GREATER_THAN:
       case EQUALS: {
         // 1. Handle everything before the separator as a word
-        // Handle everything before the closing paren a word
+        // Handle everything before the closing paren as a word
         if (buffer.length > 0) {
           let node = word(buffer)
           if (parent) {
@@ -170,6 +170,7 @@ export function parse(input: string) {
             peekChar !== COLON &&
             peekChar !== COMMA &&
             peekChar !== SPACE &&
+            peekChar !== SLASH &&
             peekChar !== LESS_THAN &&
             peekChar !== GREATER_THAN &&
             peekChar !== EQUALS
