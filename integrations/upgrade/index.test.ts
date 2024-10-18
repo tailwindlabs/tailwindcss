@@ -40,8 +40,6 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss';
-
-      @source './**/*.{html,js}';
       "
     `)
 
@@ -99,8 +97,6 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss' prefix(tw);
-
-      @source './**/*.{html,js}';
 
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
