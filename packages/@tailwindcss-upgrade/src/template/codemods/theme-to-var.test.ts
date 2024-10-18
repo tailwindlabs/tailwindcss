@@ -6,6 +6,10 @@ test.each([
   // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
   ['[color:red]', '[color:red]'],
 
+  // Handle special cases around `.1` in the `theme(…)`
+  ['[--value:theme(spacing.1)]', '[--value:var(--spacing-1)]'],
+  ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--font-size-xs--line-height)]'],
+
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
   ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
