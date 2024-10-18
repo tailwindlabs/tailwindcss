@@ -901,11 +901,10 @@ export function createVariants(theme: Theme): Variants {
 function quoteAttributeValue(input: string) {
   if (input.includes('=')) {
     let [attribute, ...after] = segment(input, '=')
-    let value = after.join('=')
-    let valueTrimmed = value.trim()
+    let value = after.join('=').trim()
 
     // If the value is already quoted, skip.
-    if (valueTrimmed[0] === "'" || valueTrimmed[0] === '"') {
+    if (value[0] === "'" || value[0] === '"') {
       return input
     }
 
@@ -923,7 +922,7 @@ function quoteAttributeValue(input: string) {
       }
     }
 
-    return `${attribute}="${valueTrimmed}"`
+    return `${attribute}="${value}"`
   }
 
   return input
