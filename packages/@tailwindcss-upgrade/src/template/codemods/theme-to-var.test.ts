@@ -27,7 +27,7 @@ test.each([
   ],
 
   // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
-  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)_*_2)]'],
+  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)*2)]'],
 
   // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
   // - Can't convert to `var(…)` because that would lose the modifier.
@@ -96,6 +96,11 @@ test.each([
     '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
     '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
   ],
+
+  // Maintains the whitespace of the original arbitrary value contents
+  ['[@media(calc(theme(spacing.4)-1px))]:flex', '[@media(calc(theme(--spacing-4)-1px))]:flex'],
+  ['px-[calc(theme(spacing.4)-1px)]', 'px-[calc(var(--spacing-4)-1px)]'],
+  ['px-[calc(theme(spacing.4)-_1px)]', 'px-[calc(var(--spacing-4)-_1px)]'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = mockDesignSystem(
     await __unstable__loadDesignSystem('@import "tailwindcss";', {

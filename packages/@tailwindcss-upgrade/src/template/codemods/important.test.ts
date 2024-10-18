@@ -5,8 +5,12 @@ import { important } from './important'
 
 test.each([
   ['!flex', 'flex!'],
-  ['min-[calc(1000px+12em)]:!flex', 'min-[calc(1000px_+_12em)]:flex!'],
+  ['min-[calc(1000px+12em)]:!flex', 'min-[calc(1000px+12em)]:flex!'],
   ['md:!block', 'md:block!'],
+
+  // Maintains the original arbitrary value contents
+  ['has-[[data-foo]]:!flex', 'has-[[data-foo]]:flex!'],
+  ['!px-[calc(var(--spacing-1)-1px)]', 'px-[calc(var(--spacing-1)-1px)]!'],
 
   // Does not change non-important candidates
   ['bg-blue-500', 'bg-blue-500'],
