@@ -1,6 +1,7 @@
+import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
 import { dirname } from 'path'
-import type { Config } from 'tailwindcss'
+import { type Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
@@ -54,7 +55,7 @@ export async function migrateJsConfig(
   }
 
   if ('content' in unresolvedConfig) {
-    sources = migrateContent(unresolvedConfig as any, base)
+    sources = await migrateContent(unresolvedConfig as any, base)
   }
 
   if ('theme' in unresolvedConfig) {
@@ -158,16 +159,31 @@ function createSectionKey(key: string[]): string {
   return sectionSegments.join('-')
 }
 
-function migrateContent(
+async function migrateContent(
   unresolvedConfig: Config & { content: any },
   base: string,
-): { base: string; pattern: string }[] {
+): Promise<{ base: string; pattern: string }[]> {
+  let autoContentFiles = autodetectedSourceFiles(base)
+
   let sources = []
   for (let content of unresolvedConfig.content) {
     if (typeof content !== 'string') {
       throw new Error('Unsupported content value: ' + content)
     }
-    sources.push({ base, pattern: content })
+
+    let sourceFiles = patternSourceFiles({ base, pattern: content })
+
+    let autoContentContainsAllSourceFiles = true
+    for (let sourceFile of sourceFiles) {
+      if (!autoContentFiles.includes(sourceFile)) {
+        autoContentContainsAllSourceFiles = false
+        break
+      }
+    }
+
+    if (!autoContentContainsAllSourceFiles) {
+      sources.push({ base, pattern: content })
+    }
   }
   return sources
 }
@@ -252,4 +268,16 @@ function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
 function keyframesToCss(keyframes: Record<string, unknown>): string {
   let ast: AstNode[] = keyframesToRules({ theme: { keyframes } })
   return toCss(ast).trim() + '\n'
+}
+
+function autodetectedSourceFiles(base: string) {
+  let scanner = new Scanner({ detectSources: { base } })
+  scanner.scan()
+  return scanner.files
+}
+
+function patternSourceFiles(source: { base: string; pattern: string }): string[] {
+  let scanner = new Scanner({ sources: [source] })
+  scanner.scan()
+  return scanner.files
 }

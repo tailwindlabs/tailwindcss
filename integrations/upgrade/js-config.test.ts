@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { css, json, test, ts } from '../utils'
+import { css, html, json, test, ts } from '../utils'
 
 test(
   `upgrade JS config files with flat theme values, darkMode, and content fields`,
@@ -18,7 +18,7 @@ test(
 
         module.exports = {
           darkMode: 'selector',
-          content: ['./src/**/*.{html,js}', './my-app/**/*.{html,js}'],
+          content: ['./src/**/*.{html,js}', './node_modules/my-external-lib/**/*.{html}'],
           theme: {
             boxShadow: {
               sm: '0 2px 6px rgb(15 23 42 / 0.08)',
@@ -72,6 +72,11 @@ test(
         @tailwind components;
         @tailwind utilities;
       `,
+      'node_modules/my-external-lib/src/template.html': html`
+        <div class="text-red-500">
+          Hello world!
+        </div>
+      `,
     },
   },
   async ({ exec, fs }) => {
@@ -82,8 +87,7 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
-      @source './**/*.{html,js}';
-      @source '../my-app/**/*.{html,js}';
+      @source '../node_modules/my-external-lib/**/*.{html}';
 
       @variant dark (&:where(.dark, .dark *));
 
