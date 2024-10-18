@@ -8,7 +8,6 @@
 
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "preserveConstEnums": true,
     "noEmit": true,
