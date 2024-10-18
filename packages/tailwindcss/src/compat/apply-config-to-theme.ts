@@ -142,7 +142,11 @@ export function keyPathToCssProperty(path: string[]) {
       // [1] should move into the nested object tuple. To create the CSS variable
       // name for this, we replace it with an empty string that will result in two
       // subsequent dashes when joined.
-      .map((path) => (path === '1' ? '' : path))
+      //
+      // E.g.:
+      // - `fontSize.xs.1.lineHeight` -> `font-size-xs--line-height`
+      // - `spacing.1` -> `--spacing-1`
+      .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
       .map((part) =>
