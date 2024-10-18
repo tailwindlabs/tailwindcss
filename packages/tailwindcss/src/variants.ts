@@ -909,7 +909,7 @@ function quoteAttributeValue(input: string) {
       return input
     }
 
-    // Handle regex flags on unescaped values
+    // Handle case sensitivity flags on unescaped values
     if (value.length > 1) {
       let trailingCharacter = value[value.length - 1]
       if (
