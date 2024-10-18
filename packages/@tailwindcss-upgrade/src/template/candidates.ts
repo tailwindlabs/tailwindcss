@@ -52,9 +52,9 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
         if (candidate.value === null) {
           base += ''
         } else if (candidate.value.dataType) {
-          base += `-[${candidate.value.dataType}:${escapeArbitrary(trimWhitespace(candidate.value.value))}]`
+          base += `-[${candidate.value.dataType}:${printArbitraryValue(candidate.value.value)}]`
         } else {
-          base += `-[${escapeArbitrary(trimWhitespace(candidate.value.value))}]`
+          base += `-[${printArbitraryValue(candidate.value.value)}]`
         }
       } else if (candidate.value.kind === 'named') {
         base += `-${candidate.value.value}`
@@ -64,14 +64,14 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
 
   // Handle arbitrary
   if (candidate.kind === 'arbitrary') {
-    base += `[${candidate.property}:${escapeArbitrary(trimWhitespace(candidate.value))}]`
+    base += `[${candidate.property}:${printArbitraryValue(candidate.value)}]`
   }
 
   // Handle modifier
   if (candidate.kind === 'arbitrary' || candidate.kind === 'functional') {
     if (candidate.modifier) {
       if (candidate.modifier.kind === 'arbitrary') {
-        base += `/[${escapeArbitrary(trimWhitespace(candidate.modifier.value))}]`
+        base += `/[${printArbitraryValue(candidate.modifier.value)}]`
       } else if (candidate.modifier.kind === 'named') {
         base += `/${candidate.modifier.value}`
       }
@@ -96,7 +96,7 @@ function printVariant(variant: Variant) {
 
   // Handle arbitrary variants
   if (variant.kind === 'arbitrary') {
-    return `[${escapeArbitrary(trimWhitespace(simplifyArbitraryVariant(variant.selector)))}]`
+    return `[${printArbitraryValue(simplifyArbitraryVariant(variant.selector))}]`
   }
 
   let base: string = ''
@@ -106,7 +106,7 @@ function printVariant(variant: Variant) {
     base += variant.root
     if (variant.value) {
       if (variant.value.kind === 'arbitrary') {
-        base += `-[${escapeArbitrary(trimWhitespace(variant.value.value))}]`
+        base += `-[${printArbitraryValue(variant.value.value)}]`
       } else if (variant.value.kind === 'named') {
         base += `-${variant.value.value}`
       }
@@ -124,7 +124,7 @@ function printVariant(variant: Variant) {
   if (variant.kind === 'functional' || variant.kind === 'compound') {
     if (variant.modifier) {
       if (variant.modifier.kind === 'arbitrary') {
-        base += `/[${escapeArbitrary(trimWhitespace(variant.modifier.value))}]`
+        base += `/[${printArbitraryValue(variant.modifier.value)}]`
       } else if (variant.modifier.kind === 'named') {
         base += `/${variant.modifier.value}`
       }
@@ -134,14 +134,13 @@ function printVariant(variant: Variant) {
   return base
 }
 
-function escapeArbitrary(input: string) {
-  return input
-    .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
-    .replaceAll(' ', '_') // Replace spaces with underscores
-}
+function printArbitraryValue(input: string) {
+  let ast = ValueParser.parse(
+    input
+      .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
+      .replaceAll(' ', '_'), // Replace spaces with underscores
+  )
 
-function trimWhitespace(input: string) {
-  let ast = ValueParser.parse(input)
   let drop = new Set<ValueParser.ValueAstNode>()
 
   ValueParser.walk(ast, (node, { parent }) => {
