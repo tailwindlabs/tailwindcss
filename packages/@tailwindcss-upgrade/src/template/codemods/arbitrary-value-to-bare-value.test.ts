@@ -17,6 +17,14 @@ test.each([
   // Should stay as-is
   ['font-stretch-[1/2]', 'font-stretch-[1/2]'],
 
+  // Bare value with % is valid for these utilities
+  ['from-[28%]', 'from-28%'],
+  ['via-[28%]', 'via-28%'],
+  ['to-[28%]', 'to-28%'],
+  ['from-[28.5%]', 'from-[28.5%]'],
+  ['via-[28.5%]', 'via-[28.5%]'],
+  ['to-[28.5%]', 'to-[28.5%]'],
+
   // This test in itself is a bit flawed because `text-[1/2]` currently
   // generates something. Converting it to `text-1/2` doesn't produce anything.
   ['text-[1/2]', 'text-[1/2]'],
