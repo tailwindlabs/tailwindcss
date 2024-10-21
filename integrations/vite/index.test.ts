@@ -504,3 +504,64 @@ test(
     })
   },
 )
+
+test(
+  `does not interfere with ?raw and ?url static asset handling`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^5.3.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <script type="module" src="./src/index.js"></script>
+        </head>
+      `,
+      'src/index.js': js`
+        import url from './index.css?url'
+        import raw from './index.css?raw'
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ spawn, getFreePort }) => {
+    let port = await getFreePort()
+    await spawn(`pnpm vite dev --port ${port}`)
+
+    await retryAssertion(async () => {
+      // We have to load the .js file first so that the static assets are
+      // resolved
+      await fetch(`http://localhost:${port}/src/index.js`).then((r) => r.text())
+
+      let [raw, url] = await Promise.all([
+        fetch(`http://localhost:${port}/src/index.css?raw`).then((r) => r.text()),
+        fetch(`http://localhost:${port}/src/index.css?url`).then((r) => r.text()),
+      ])
+
+      expect(firstLine(raw)).toBe(`export default "@import 'tailwindcss';"`)
+      expect(firstLine(url)).toBe(`export default "/src/index.css"`)
+    })
+  },
+)
+
+function firstLine(str: string) {
+  return str.split('\n')[0]
+}
