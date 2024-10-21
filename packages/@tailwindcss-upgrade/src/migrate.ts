@@ -159,8 +159,8 @@ export async function analyze(stylesheets: Stylesheet[]) {
   for (let sheet of stylesheets) {
     if (!sheet.file) continue
 
-    let { convertablePaths, nonConvertablePaths } = sheet.analyzeImportPaths()
-    let isAmbiguous = convertablePaths.length > 0 && nonConvertablePaths.length > 0
+    let { convertiblePaths, nonConvertiblePaths } = sheet.analyzeImportPaths()
+    let isAmbiguous = convertiblePaths.length > 0 && nonConvertiblePaths.length > 0
 
     if (!isAmbiguous) continue
 
@@ -168,11 +168,11 @@ export async function analyze(stylesheets: Stylesheet[]) {
 
     let filePath = sheet.file.replace(commonPath, '')
 
-    for (let path of convertablePaths) {
+    for (let path of convertiblePaths) {
       lines.push(`- ${filePath} <- ${pathToString(path)}`)
     }
 
-    for (let path of nonConvertablePaths) {
+    for (let path of nonConvertiblePaths) {
       lines.push(`- ${filePath} <- ${pathToString(path)}`)
     }
   }
@@ -197,7 +197,7 @@ export async function split(stylesheets: Stylesheet[]) {
     }
   }
 
-  // Keep track of sheets that contain `@utillity` rules
+  // Keep track of sheets that contain `@utility` rules
   let containsUtilities = new Set<Stylesheet>()
 
   for (let sheet of stylesheets) {
@@ -324,6 +324,7 @@ export async function split(stylesheets: Stylesheet[]) {
         params: `${quote}${newFile}${quote}`,
         raws: {
           after: '\n\n',
+          tailwind_injected_layer: node.raws.tailwind_injected_layer,
           tailwind_original_params: `${quote}${id}${quote}`,
           tailwind_destination_sheet_id: utilityDestination.id,
         },
