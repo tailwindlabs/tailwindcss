@@ -324,6 +324,7 @@ export async function split(stylesheets: Stylesheet[]) {
         params: `${quote}${newFile}${quote}`,
         raws: {
           after: '\n\n',
+          tailwind_injected_layer: node.raws.tailwind_injected_layer,
           tailwind_original_params: `${quote}${id}${quote}`,
           tailwind_destination_sheet_id: utilityDestination.id,
         },
