@@ -83,15 +83,16 @@ export class Variants {
     })
   }
 
-  compound(
+  compoundWith(
     name: string,
+    compoundsWith: CompoundKind,
     applyFn: VariantFn<'compound'>,
     { compounds, order }: { compounds?: CompoundKind; order?: number } = {},
   ) {
     this.set(name, {
       kind: 'compound',
       applyFn,
-      compoundsWith: ['selector'],
+      compoundsWith,
       compounds: compounds ?? ['selector'],
       order,
     })
@@ -270,7 +271,7 @@ export function createVariants(theme: Theme): Variants {
   variants.static('force', () => {}, { compounds: false })
   staticVariant('*', [':where(& > *)'], { compounds: false })
 
-  variants.compound('not', (ruleNode, variant) => {
+  variants.compoundWith('not', ['selector'], (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     if (variant.modifier) return null
@@ -311,7 +312,7 @@ export function createVariants(theme: Theme): Variants {
     })
   })
 
-  variants.compound('group', (ruleNode, variant) => {
+  variants.compoundWith('group', ['selector'], (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     // Name the group by appending the modifier to `group` class itself if
@@ -367,7 +368,7 @@ export function createVariants(theme: Theme): Variants {
     })
   })
 
-  variants.compound('peer', (ruleNode, variant) => {
+  variants.compoundWith('peer', ['selector'], (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     // Name the peer by appending the modifier to `peer` class itself if
@@ -514,7 +515,7 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
-  variants.compound('has', (ruleNode, variant) => {
+  variants.compoundWith('has', ['selector'], (ruleNode, variant) => {
     if (variant.modifier) return null
 
     let didApply = false
