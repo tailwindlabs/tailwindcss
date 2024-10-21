@@ -44,7 +44,7 @@
   --color-gray-900: oklch(0.21 0.034 264.665);
   --color-gray-950: oklch(0.13 0.028 261.692);
 
-  --color-zinc-50: oklch(0.985 0 none);
+  --color-zinc-50: oklch(0.985 0 0);
   --color-zinc-100: oklch(0.967 0.001 286.375);
   --color-zinc-200: oklch(0.92 0.004 286.32);
   --color-zinc-300: oklch(0.871 0.006 286.286);
@@ -56,17 +56,17 @@
   --color-zinc-900: oklch(0.21 0.006 285.885);
   --color-zinc-950: oklch(0.141 0.005 285.823);
 
-  --color-neutral-50: oklch(0.985 0 none);
-  --color-neutral-100: oklch(0.97 0 none);
-  --color-neutral-200: oklch(0.922 0 none);
-  --color-neutral-300: oklch(0.87 0 none);
-  --color-neutral-400: oklch(0.708 0 none);
-  --color-neutral-500: oklch(0.556 0 none);
-  --color-neutral-600: oklch(0.439 0 none);
-  --color-neutral-700: oklch(0.371 0 none);
-  --color-neutral-800: oklch(0.269 0 none);
-  --color-neutral-900: oklch(0.205 0 none);
-  --color-neutral-950: oklch(0.145 0 none);
+  --color-neutral-50: oklch(0.985 0 0);
+  --color-neutral-100: oklch(0.97 0 0);
+  --color-neutral-200: oklch(0.922 0 0);
+  --color-neutral-300: oklch(0.87 0 0);
+  --color-neutral-400: oklch(0.708 0 0);
+  --color-neutral-500: oklch(0.556 0 0);
+  --color-neutral-600: oklch(0.439 0 0);
+  --color-neutral-700: oklch(0.371 0 0);
+  --color-neutral-800: oklch(0.269 0 0);
+  --color-neutral-900: oklch(0.205 0 0);
+  --color-neutral-950: oklch(0.145 0 0);
 
   --color-stone-50: oklch(0.985 0.001 106.423);
   --color-stone-100: oklch(0.97 0.001 106.424);

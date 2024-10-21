@@ -152,7 +152,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: #ff0000bf;
+            color: oklch(62.7955% .257683 29.2339 / .75);
           }"
         `)
       })
@@ -173,7 +173,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: #ff0000bf;
+            color: oklch(62.7955% .257683 29.2339 / .75);
           }"
         `)
       })
@@ -194,7 +194,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: #ff0000bf;
+            color: oklch(62.7955% .257683 29.2339 / .75);
           }"
         `)
       })
@@ -215,7 +215,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in srgb, red calc(var(--opacity) * 100%), transparent);
+            color: color-mix(in oklch, red calc(var(--opacity) * 100%), transparent);
           }"
         `)
       })
@@ -237,7 +237,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in srgb, red calc(var(--opacity, 50%) * 100%), transparent);
+            color: color-mix(in oklch, red calc(var(--opacity, 50%) * 100%), transparent);
           }"
         `)
       })
@@ -455,7 +455,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: #ff000040;
+            color: oklch(62.7955% .257683 29.2339 / .25);
           }"
         `)
       })
@@ -513,11 +513,11 @@ describe('theme function', () => {
         ).toMatchInlineSnapshot(`
           ":root {
             --color-red-500: red;
-            --color-foo: #ff000080;
+            --color-foo: oklch(62.7955% .257683 29.2339 / .5);
           }
 
           .red {
-            color: #ff000040;
+            color: oklch(62.7955% .257683 29.2339 / .25);
           }"
         `)
       })
@@ -561,7 +561,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: #ff000080;
+            color: oklch(62.7955% .257683 29.2339 / .5);
           }"
         `)
       })
@@ -849,10 +849,10 @@ describe('in plugins', () => {
         @layer base, utilities;
         @plugin "my-plugin";
         @theme reference {
-          --color-red: red;
-          --color-orange: orange;
-          --color-blue: blue;
-          --color-pink: pink;
+          --color-red: oklch(62% 0.25 30);
+          --color-orange: oklch(79% 0.17 70);
+          --color-blue: oklch(45% 0.31 264);
+          --color-pink: oklch(87% 0.07 7);
         }
         @layer utilities {
           @tailwind utilities;
@@ -886,16 +886,16 @@ describe('in plugins', () => {
     expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
       "@layer base {
         .my-base-rule {
-          color: red;
-          background-color: #00f;
-          border-color: #ffc0cb1a;
-          outline-color: #ffa50026;
+          color: oklch(62% .25 30);
+          background-color: oklch(45% .31 264);
+          border-color: oklch(87% .07 7 / .1);
+          outline-color: oklch(79% .17 70 / .15);
         }
       }
 
       @layer utilities {
         .my-utility {
-          color: red;
+          color: oklch(62% .25 30);
         }
       }"
     `)
