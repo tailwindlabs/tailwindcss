@@ -104,6 +104,7 @@ test('important selector', () => {
           max-width: 1536px;
         }
       }
+      #app.btn,
       #app .btn {
         button: yes;
       }
@@ -124,41 +125,56 @@ test('important selector', () => {
           transform: rotate(360deg);
         }
       }
+      #app:is(.animate-spin),
       #app :is(.animate-spin) {
         animation: 1s linear infinite spin;
       }
+      #app:is(.font-bold),
       #app :is(.font-bold) {
         font-weight: 700;
       }
       .custom-util {
         button: no;
       }
+      #app.\[color\:red\],
       #app .\[color\:red\] {
         color: red;
       }
+      #app:is(.group:hover .group-hover\:focus-within\:text-left:focus-within),
       #app :is(.group:hover .group-hover\:focus-within\:text-left:focus-within) {
         text-align: left;
       }
       @media (prefers-reduced-motion: no-preference) {
+        #app:is(.motion-safe\:hover\:text-center:hover),
         #app :is(.motion-safe\:hover\:text-center:hover) {
           text-align: center;
         }
       }
       @media (min-width: 768px) {
+        #app:is(.md\:hover\:text-right:hover),
         #app :is(.md\:hover\:text-right:hover) {
           text-align: right;
         }
       }
+      #app:is(.rtl\:active\:text-center:active:where([dir='rtl'], [dir='rtl'] *)),
       #app :is(.rtl\:active\:text-center:active:where([dir='rtl'], [dir='rtl'] *)) {
         text-align: center;
       }
+      #app:is(.dark\:before\:underline:where(.dark, .dark *)):before,
       #app :is(.dark\:before\:underline:where(.dark, .dark *)):before {
         content: var(--tw-content);
         text-decoration-line: underline;
       }
+      #app:is(.dark\:focus\:text-left:focus:where(.dark, .dark *)),
       #app :is(.dark\:focus\:text-left:focus:where(.dark, .dark *)) {
         text-align: left;
       }
+      #app:is(
+          .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100:where(
+              .dark,
+              .dark *
+            ):where([dir='rtl'], [dir='rtl'] *)
+        )::file-selector-button:hover,
       #app
         :is(
           .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100:where(
@@ -193,6 +209,7 @@ test('pseudo-elements are appended after the `:is()`', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
+      #app.dark\:before\:bg-black:where(.dark, .dark *)::before,
       #app .dark\:before\:bg-black:where(.dark, .dark *)::before {
         content: var(--tw-content);
         --tw-bg-opacity: 1;

@@ -843,6 +843,7 @@ test('when important is a selector it is used to scope utilities instead of addi
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      #app.tw-custom-rotate-90,
       #app .tw-custom-rotate-90 {
         transform: rotate(90deg);
       }
@@ -867,7 +868,9 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      #app.custom-rotate-90,
       #app .custom-rotate-90,
+      #app.custom-rotate-1\/4,
       #app .custom-rotate-1\/4 {
         transform: rotate(90deg);
       }
