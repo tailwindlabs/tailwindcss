@@ -639,6 +639,60 @@ test(
 )
 
 test(
+  'migrate utilities in an imported file and keep @utility top-level',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @import './utilities.css';
+        @import 'tailwindcss/components';
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+      @import './utilities.css';
+
+      --- ./src/utilities.css ---
+      @utility no-scrollbar {
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'migrate utilities in deep import trees',
   {
     fs: {
@@ -737,7 +791,7 @@ test(
       @import './a.1.css' layer(utilities);
       @import './a.1.utilities.1.css';
       @import './b.1.css';
-      @import './c.1.css' layer(utilities);
+      @import './c.1.css';
       @import './c.1.utilities.css';
       @import './d.1.css';
 

@@ -197,26 +197,26 @@ export class Stylesheet {
    * adjusting imports which is a non-trivial task.
    */
   analyzeImportPaths() {
-    let convertablePaths: StylesheetConnection[][] = []
-    let nonConvertablePaths: StylesheetConnection[][] = []
+    let convertiblePaths: StylesheetConnection[][] = []
+    let nonConvertiblePaths: StylesheetConnection[][] = []
 
     for (let path of this.pathsToRoot()) {
-      let isConvertable = false
+      let isConvertible = false
 
       for (let { meta } of path) {
         for (let layer of meta.layers) {
-          isConvertable ||= layer === 'utilities' || layer === 'components'
+          isConvertible ||= layer === 'utilities' || layer === 'components'
         }
       }
 
-      if (isConvertable) {
-        convertablePaths.push(path)
+      if (isConvertible) {
+        convertiblePaths.push(path)
       } else {
-        nonConvertablePaths.push(path)
+        nonConvertiblePaths.push(path)
       }
     }
 
-    return { convertablePaths, nonConvertablePaths }
+    return { convertiblePaths, nonConvertiblePaths }
   }
 
   [util.inspect.custom]() {
