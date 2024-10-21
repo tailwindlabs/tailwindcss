@@ -1754,9 +1754,11 @@ it('apply + layer utilities + selector variants (like group) + important selecto
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
+    #myselector:is(.custom-utility),
     #myselector :is(.custom-utility) {
       font-weight: 400;
     }
+    #myselector:is(.group:hover .custom-utility),
     #myselector :is(.group:hover .custom-utility) {
       text-decoration-line: underline;
     }

@@ -22,5 +22,5 @@ export function applyImportantSelector(selector, important) {
     movePseudos(sel)
   })
 
-  return `${important} ${sel.toString()}`
+  return `${important}${sel.toString()}, ${important} ${sel.toString()}`
 }
