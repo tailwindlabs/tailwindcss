@@ -563,7 +563,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::placeholder {
     opacity: 1;
-    color: color-mix(in srgb, currentColor 50%, transparent);
+    color: color-mix(in oklch, currentColor 50%, transparent);
   }
 
   img, svg, video, canvas, audio, iframe, embed, object {
@@ -590,7 +590,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: color-mix(in srgb, var(--color-black, #000) 50%, transparent);
+    color: color-mix(in oklch, var(--color-black, #000) 50%, transparent);
   }
 
   .underline {
