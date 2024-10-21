@@ -654,6 +654,7 @@ test(
       'src/index.css': css`
         @import 'tailwindcss/utilities';
         @import './utilities.css';
+        @import 'tailwindcss/components';
       `,
       'src/utilities.css': css`
         @layer utilities {
