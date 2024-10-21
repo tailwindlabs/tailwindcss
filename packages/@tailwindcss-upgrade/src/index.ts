@@ -151,6 +151,11 @@ async function run() {
 
     // Cleanup `@import "…" layer(utilities)`
     for (let sheet of stylesheets) {
+      // If the `@import` contains an injected `layer(…)` we need to remove it
+      if (!Array.from(sheet.importRules).some((node) => node.raws.tailwind_injected_layer)) {
+        continue
+      }
+
       let hasAtUtility = false
 
       // Only remove the `layer(…)` next to the import, if any of the children
