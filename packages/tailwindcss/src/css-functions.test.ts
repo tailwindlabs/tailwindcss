@@ -849,10 +849,10 @@ describe('in plugins', () => {
         @layer base, utilities;
         @plugin "my-plugin";
         @theme reference {
-          --color-red: red;
-          --color-orange: orange;
-          --color-blue: blue;
-          --color-pink: pink;
+          --color-red: oklch(62% 0.25 30);
+          --color-orange: oklch(79% 0.17 70);
+          --color-blue: oklch(45% 0.31 264);
+          --color-pink: oklch(87% 0.07 7);
         }
         @layer utilities {
           @tailwind utilities;
@@ -886,16 +886,16 @@ describe('in plugins', () => {
     expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
       "@layer base {
         .my-base-rule {
-          color: red;
-          background-color: #00f;
-          border-color: oklch(86.7739% .073542 7.08554 / .1);
-          outline-color: oklch(79.2689% .171026 70.6699 / .15);
+          color: oklch(62% .25 30);
+          background-color: oklch(45% .31 264);
+          border-color: oklch(87% .07 7 / .1);
+          outline-color: oklch(79% .17 70 / .15);
         }
       }
 
       @layer utilities {
         .my-utility {
-          color: red;
+          color: oklch(62% .25 30);
         }
       }"
     `)
