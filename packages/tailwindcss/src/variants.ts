@@ -12,7 +12,7 @@ type VariantFn<T extends Variant['kind']> = (
 
 type CompareFn = (a: Variant, z: Variant) => number
 
-type CompoundKind = false | Array<'selector'>
+type CompoundKind = false | Array<'at-rule' | 'selector'>
 
 export class Variants {
   public compareFns = new Map<number, CompareFn>()
@@ -271,7 +271,79 @@ export function createVariants(theme: Theme): Variants {
   variants.static('force', () => {}, { compounds: false })
   staticVariant('*', [':where(& > *)'], { compounds: false })
 
-  variants.compoundWith('not', ['selector'], (ruleNode, variant) => {
+  function negateConditions(ruleName: string, conditions: string[]) {
+    return conditions.map((condition) => {
+      condition = condition.trim()
+
+      let parts = segment(condition, ' ')
+
+      // @media not {query}
+      // @supports not {query}
+      // @container not {query}
+      if (parts[0] === 'not') {
+        return parts.slice(1).join(' ')
+      }
+
+      if (ruleName === 'container') {
+        // @container {query}
+        if (parts[0].startsWith('(')) {
+          return `not ${condition}`
+        }
+
+        // @container {name} not {query}
+        else if (parts[1] === 'not') {
+          return `${parts[0]} ${parts.slice(2).join(' ')}`
+        }
+
+        // @container {name} {query}
+        else {
+          return `${parts[0]} not ${parts.slice(1).join(' ')}`
+        }
+      }
+
+      return `not ${condition}`
+    })
+  }
+
+  function negateSelector(selector: string) {
+    if (selector[0] === '@') {
+      let name = selector.slice(1, selector.indexOf(' '))
+      let params = selector.slice(selector.indexOf(' ') + 1)
+
+      if (name === 'media' || name === 'supports' || name === 'container') {
+        let conditions = segment(params, ',')
+
+        // We don't support things like `@media screen, print` because
+        // the negation would be `@media not screen and print` and we don't
+        // want to deal with that complexity.
+        if (conditions.length > 1) return null
+
+        conditions = negateConditions(name, conditions)
+        return `@${name} ${conditions.join(', ')}`
+      }
+
+      return null
+    }
+
+    if (selector.includes('::')) return null
+
+    let selectors = segment(selector, ',').map((sel) => {
+      // Remove unncessary wrapping &:is(…) to reduce the selector size
+      if (sel.startsWith('&:is(') && sel.endsWith(')')) {
+        sel = sel.slice(5, -1)
+      }
+
+      // Replace `&` in target variant with `*`, so variants like `&:hover`
+      // become `&:not(*:hover)`. The `*` will often be optimized away.
+      sel = sel.replaceAll('&', '*')
+
+      return sel
+    })
+
+    return `&:not(${selectors.join(', ')})`
+  }
+
+  variants.compoundWith('not', ['selector', 'at-rule'], (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     if (variant.modifier) return null
@@ -280,26 +352,60 @@ export function createVariants(theme: Theme): Variants {
 
     walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
-
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
+      if (node.nodes.length > 0) return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'rule') continue
-        if (parent.selector[0] === '@') continue
+      let atRules: Rule[] = []
+      let styleRules: Rule[] = []
 
-        didApply = false
-        return WalkAction.Stop
+      for (let parent of path) {
+        if (parent.kind !== 'rule') continue
+        if (parent.selector[0] === '@') {
+          atRules.push(parent)
+        } else {
+          styleRules.push(parent)
+        }
       }
 
-      // Replace `&` in target variant with `*`, so variants like `&:hover`
-      // become `&:not(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:not(${node.selector.replaceAll('&', '*')})`
+      if (atRules.length > 1) return WalkAction.Stop
+      if (styleRules.length > 1) return WalkAction.Stop
+
+      let rules: Rule[] = []
+
+      for (let styleRule of styleRules) {
+        let selector = negateSelector(styleRule.selector)
+        if (!selector) {
+          didApply = false
+          return WalkAction.Stop
+        }
+
+        rules.push(rule(selector, []))
+      }
+
+      for (let atRule of atRules) {
+        let selector = negateSelector(atRule.selector)
+        if (!selector) {
+          didApply = false
+          return WalkAction.Stop
+        }
+
+        rules.push(rule(selector, []))
+      }
+
+      ruleNode.selector = '&'
+      ruleNode.nodes = rules
 
       // Track that the variant was actually applied
       didApply = true
+
+      return WalkAction.Skip
     })
+
+    // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
+    if (ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
+      ruleNode.selector = (ruleNode.nodes[0] as Rule).selector
+      ruleNode.nodes = (ruleNode.nodes[0] as Rule).nodes
+    }
 
     // If the node wasn't modified, this variant is not compatible with
     // `not-*` so discard the candidate.
@@ -661,16 +767,22 @@ export function createVariants(theme: Theme): Variants {
 
       ruleNode.nodes = [rule(`@supports ${value}`, ruleNode.nodes)]
     },
-    { compounds: false },
+    { compounds: ['at-rule'] },
   )
 
   staticVariant('motion-safe', ['@media (prefers-reduced-motion: no-preference)'], {
-    compounds: false,
+    compounds: ['at-rule'],
   })
-  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'], { compounds: false })
+  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'], {
+    compounds: ['at-rule'],
+  })
 
-  staticVariant('contrast-more', ['@media (prefers-contrast: more)'], { compounds: false })
-  staticVariant('contrast-less', ['@media (prefers-contrast: less)'], { compounds: false })
+  staticVariant('contrast-more', ['@media (prefers-contrast: more)'], {
+    compounds: ['at-rule'],
+  })
+  staticVariant('contrast-less', ['@media (prefers-contrast: less)'], {
+    compounds: ['at-rule'],
+  })
 
   {
     // Helper to compare variants by their resolved values, this is used by the
@@ -782,7 +894,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [rule(`@media (width < ${value})`, ruleNode.nodes)]
             },
-            { compounds: false },
+            { compounds: ['at-rule'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'desc', resolvedBreakpoints),
@@ -804,7 +916,7 @@ export function createVariants(theme: Theme): Variants {
               (ruleNode) => {
                 ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
               },
-              { compounds: false },
+              { compounds: ['at-rule'] },
             )
           }
 
@@ -817,7 +929,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
             },
-            { compounds: false },
+            { compounds: ['at-rule'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'asc', resolvedBreakpoints),
@@ -875,7 +987,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['at-rule'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'desc', resolvedWidths),
@@ -903,7 +1015,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['at-rule'] },
           )
           variants.functional(
             '@min',
@@ -920,7 +1032,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['at-rule'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'asc', resolvedWidths),
@@ -933,19 +1045,25 @@ export function createVariants(theme: Theme): Variants {
     }
   }
 
-  staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })
-  staticVariant('landscape', ['@media (orientation: landscape)'], { compounds: false })
+  staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: ['at-rule'] })
+  staticVariant('landscape', ['@media (orientation: landscape)'], {
+    compounds: ['at-rule'],
+  })
 
   staticVariant('ltr', ['&:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)'])
   staticVariant('rtl', ['&:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)'])
 
-  staticVariant('dark', ['@media (prefers-color-scheme: dark)'], { compounds: false })
+  staticVariant('dark', ['@media (prefers-color-scheme: dark)'], {
+    compounds: ['at-rule'],
+  })
 
   staticVariant('starting', ['@starting-style'], { compounds: false })
 
-  staticVariant('print', ['@media print'], { compounds: false })
+  staticVariant('print', ['@media print'], { compounds: ['at-rule'] })
 
-  staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: false })
+  staticVariant('forced-colors', ['@media (forced-colors: active)'], {
+    compounds: ['at-rule'],
+  })
 
   return variants
 }
