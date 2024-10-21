@@ -49,6 +49,13 @@ test('config values can be merged into the theme', () => {
               },
             ],
           },
+
+          width: {
+            // Purposely setting to something different from the default
+            '1/2': '60%',
+            '0.5': '60%',
+            '100%': '100%',
+          },
         },
       },
       base: '/root',
@@ -73,6 +80,9 @@ test('config values can be merged into the theme', () => {
     '1rem',
     { '--line-height': '1.5' },
   ])
+  expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
+  expect(theme.resolve('0.5', ['--width'])).toEqual('60%')
+  expect(theme.resolve('100%', ['--width'])).toEqual('100%')
 })
 
 test('will reset default theme values with overwriting theme values', () => {

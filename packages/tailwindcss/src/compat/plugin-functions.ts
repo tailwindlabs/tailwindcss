@@ -2,6 +2,7 @@ import type { DesignSystem } from '../design-system'
 import { ThemeOptions, type Theme, type ThemeKey } from '../theme'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
+import { unescape } from '../utils/escape'
 import { toKeyPath } from '../utils/to-key-path'
 import { deepMerge } from './config/deep-merge'
 import type { UserConfig } from './config/types'
@@ -37,7 +38,6 @@ export function createThemeFn(
         return cssValue
       }
 
-      //
       if (configValue !== null && typeof configValue === 'object' && !Array.isArray(configValue)) {
         let configValueCopy: Record<string, unknown> & { __CSS_VALUES__?: Record<string, number> } =
           // We want to make sure that we don't mutate the original config
@@ -70,7 +70,7 @@ export function createThemeFn(
           }
 
           // CSS values from `@theme` win over values from the config
-          configValueCopy[key] = cssValue[key]
+          configValueCopy[unescape(key)] = cssValue[key]
         }
 
         return configValueCopy

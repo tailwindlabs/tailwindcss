@@ -1,5 +1,6 @@
 import type { DesignSystem } from '../design-system'
 import { ThemeOptions } from '../theme'
+import { escape } from '../utils/escape'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
@@ -40,8 +41,8 @@ export function applyConfigToTheme(
     if (!name) continue
 
     designSystem.theme.add(
-      `--${name}`,
-      value as any,
+      `--${escape(name)}`,
+      '' + value,
       ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
     )
   }
@@ -124,7 +125,7 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
   return toAdd
 }
 
-const IS_VALID_KEY = /^[a-zA-Z0-9-_]+$/
+const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'colors') path[0] = 'color'
