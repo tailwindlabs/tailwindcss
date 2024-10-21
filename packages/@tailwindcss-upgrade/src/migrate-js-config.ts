@@ -65,7 +65,7 @@ export async function migrateJsConfig(
 
   if ('corePlugins' in unresolvedConfig) {
     info(
-      `Your configuration file contains a \`corePlugins\` property, which is no longer available in Tailwind CSS v4. This option was not migrated to CSS.`,
+      `The \`corePlugins\` option is no longer supported as of Tailwind CSS v4.0, so it's been removed from your configuration.`,
     )
   }
 
