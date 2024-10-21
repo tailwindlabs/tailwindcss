@@ -210,6 +210,23 @@ describe.each([
           }
         `,
       ])
+
+      await fs.write(
+        'project-a/src/index.css',
+        css`
+          @import 'tailwindcss/utilities';
+          @theme {
+            --color-*: initial;
+          }
+        `,
+      )
+
+      await fs.expectFileToContain('project-a/dist/out.css', [
+        css`
+          :root {
+          }
+        `,
+      ])
     },
   )
 
