@@ -30,7 +30,7 @@ export function important(
       // The important migration is one of the most broad migrations with a high
       // potential of matching false positives since `!` is a valid character in
       // most programming languages. Since v4 is technically backward compatible
-      // to v3 in that it can read `!` in the front of the utility too, we err
+      // with v3 in that it can read `!` in the front of the utility too, we err
       // on the side of caution and only migrate candidates that we are certain
       // are inside of a string.
       if (location) {
