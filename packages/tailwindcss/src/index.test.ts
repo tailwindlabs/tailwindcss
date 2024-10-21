@@ -2179,7 +2179,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
             display: flex;
           }
 
@@ -2622,6 +2622,12 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
+        @media not foo {
+          .not-foo\\:flex {
+            display: flex;
+          }
+        }
+
         @media foo {
           .foo\\:flex {
             display: flex;
