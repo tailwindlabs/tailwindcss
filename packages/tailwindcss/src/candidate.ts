@@ -100,9 +100,6 @@ export type Variant =
       kind: 'arbitrary'
       selector: string
 
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
-
       // Whether or not the selector is a relative selector
       // @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#relative_selector
       relative: boolean
@@ -116,9 +113,6 @@ export type Variant =
   | {
       kind: 'static'
       root: string
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
   /**
@@ -138,9 +132,6 @@ export type Variant =
       root: string
       value: ArbitraryVariantValue | NamedVariantValue | null
       modifier: ArbitraryModifier | NamedModifier | null
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
   /**
@@ -157,9 +148,6 @@ export type Variant =
       root: string
       modifier: ArbitraryModifier | NamedModifier | null
       variant: Variant
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
 export type Candidate =
@@ -511,7 +499,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     return {
       kind: 'arbitrary',
       selector,
-      compounds: true,
       relative,
     }
   }
@@ -546,7 +533,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           return {
             kind: 'static',
             root,
-            compounds: designSystem.variants.compounds(root),
           }
         }
 
@@ -557,7 +543,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
               root,
               modifier: modifier === null ? null : parseModifier(modifier),
               value: null,
-              compounds: designSystem.variants.compounds(root),
             }
           }
 
@@ -570,7 +555,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
                 kind: 'arbitrary',
                 value: decodeArbitraryValue(value.slice(1, -1)),
               },
-              compounds: designSystem.variants.compounds(root),
             }
           }
 
@@ -579,7 +563,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             root,
             modifier: modifier === null ? null : parseModifier(modifier),
             value: { kind: 'named', value },
-            compounds: designSystem.variants.compounds(root),
           }
         }
 
@@ -588,14 +571,15 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
           let subVariant = designSystem.parseVariant(value)
           if (subVariant === null) return null
-          if (subVariant.compounds === false) return null
+
+          // These two variants must be compatible when compounded
+          if (!designSystem.variants.compoundsWith(root, subVariant)) return null
 
           return {
             kind: 'compound',
             root,
             modifier: modifier === null ? null : { kind: 'named', value: modifier },
             variant: subVariant,
-            compounds: designSystem.variants.compounds(root),
           }
         }
       }
