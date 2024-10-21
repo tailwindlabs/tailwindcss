@@ -71,3 +71,11 @@ export function escape(value: string) {
   }
   return result
 }
+
+export function unescape(escaped: string) {
+  return escaped.replace(/\\([\dA-Fa-f]{1,6}[\t\n\f\r ]?|[\S\s])/g, (match) => {
+    return match.length > 2
+      ? String.fromCodePoint(Number.parseInt(match.slice(1).trim(), 16))
+      : match[1]
+  })
+}

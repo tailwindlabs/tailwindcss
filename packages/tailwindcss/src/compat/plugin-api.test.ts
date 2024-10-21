@@ -1209,6 +1209,165 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('can use escaped JS variables in theme values', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                { 'my-width': (value) => ({ width: value }) },
+                { values: theme('width') },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  width: {
+                    '1': '0.25rem',
+                    // Purposely setting to something different from the v3 default
+                    '1/2': '60%',
+                    '1.5': '0.375rem',
+                  },
+                },
+              },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1/2', 'my-width-1.5'])).toMatchInlineSnapshot(
+      `
+      ".my-width-1 {
+        width: 0.25rem;
+      }
+      .my-width-1\\.5 {
+        width: 0.375rem;
+      }
+      .my-width-1\\/2 {
+        width: 60%;
+      }
+      "
+    `,
+    )
+  })
+
+  test('can use escaped CSS variables in theme values', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+
+      @theme {
+        --width-1: 0.25rem;
+        /* Purposely setting to something different from the v3 default */
+        --width-1\/2: 60%;
+        --width-1\.5: 0.375rem;
+        --width-2_5: 0.625rem;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+              { 'my-width': (value) => ({ width: value }) },
+              { values: theme('width') },
+            )
+          }),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+      .toMatchInlineSnapshot(`
+        ".my-width-1 {
+          width: 0.25rem;
+        }
+        .my-width-1\\.5 {
+          width: 0.375rem;
+        }
+        .my-width-1\\/2 {
+          width: 60%;
+        }
+        .my-width-2\\.5 {
+          width: 0.625rem;
+        }
+        :root {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
+        }
+        "
+      `)
+  })
+
+  test('can use escaped CSS variables in referenced theme namespace', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+
+      @theme {
+        --width-1: 0.25rem;
+        /* Purposely setting to something different from the v3 default */
+        --width-1\/2: 60%;
+        --width-1\.5: 0.375rem;
+        --width-2_5: 0.625rem;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                { 'my-width': (value) => ({ width: value }) },
+                { values: theme('myWidth') },
+              )
+            },
+            {
+              theme: { myWidth: ({ theme }) => theme('width') },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+      .toMatchInlineSnapshot(`
+        ".my-width-1 {
+          width: 0.25rem;
+        }
+        .my-width-1\\.5 {
+          width: 0.375rem;
+        }
+        .my-width-1\\/2 {
+          width: 60%;
+        }
+        .my-width-2\\.5 {
+          width: 0.625rem;
+        }
+        :root {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
+        }
+        "
+      `)
+  })
 })
 
 describe('addVariant', () => {
