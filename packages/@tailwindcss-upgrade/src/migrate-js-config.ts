@@ -63,6 +63,12 @@ export async function migrateJsConfig(
     if (themeConfig) cssConfigs.push(themeConfig)
   }
 
+  if ('corePlugins' in unresolvedConfig) {
+    info(
+      `Your configuration file contains a \`corePlugins\` property, which is no longer available in Tailwind CSS v4. This option was not migrated to CSS.`,
+    )
+  }
+
   let simplePlugins = findStaticPlugins(source)
   if (simplePlugins !== null) {
     for (let [path, options] of simplePlugins) {
@@ -214,6 +220,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     'plugins',
     'presets',
     'prefix', // Prefix is handled in the dedicated prefix migrator
+    'corePlugins',
   ]
 
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
