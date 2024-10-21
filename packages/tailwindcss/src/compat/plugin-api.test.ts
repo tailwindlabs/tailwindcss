@@ -252,13 +252,13 @@ describe('theme', async () => {
 
     expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
       ".fraction {
-        color: color-mix(in srgb, #ef4444 50%, transparent);
+        color: color-mix(in oklch, #ef4444 50%, transparent);
       }
       .percentage {
-        color: color-mix(in srgb, #ef4444 50%, transparent);
+        color: color-mix(in oklch, #ef4444 50%, transparent);
       }
       .variable {
-        color: color-mix(in srgb, #ef4444 calc(var(--opacity) * 100%), transparent);
+        color: color-mix(in oklch, #ef4444 calc(var(--opacity) * 100%), transparent);
       }
       :root {
         --color-red-500: #ef4444;
@@ -3017,7 +3017,7 @@ describe('matchUtilities()', () => {
         }
 
         .scrollbar-\\[\\#08c\\]\\/50 {
-          scrollbar-color: #0088cc80;
+          scrollbar-color: oklch(59.9824% .14119 241.555 / .5);
         }
 
         .scrollbar-\\[2px\\] {
@@ -3180,7 +3180,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[\\#fff\\]\\/50 {
-        scrollbar-color: #ffffff80;
+        scrollbar-color: oklch(100% 5.96046e-8 none / .5);
       }
 
       .scrollbar-\\[2px\\] {
@@ -3192,7 +3192,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
@@ -3204,7 +3204,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-black {
@@ -3212,7 +3212,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/50 {
-        scrollbar-color: #00000080;
+        scrollbar-color: oklch(0% none none / .5);
       }"
     `)
 
@@ -3278,7 +3278,7 @@ describe('matchUtilities()', () => {
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 25%, transparent);
+        scrollbar-color: color-mix(in oklch, var(--my-color) 25%, transparent);
       }
 
       .scrollbar-black {
@@ -3286,11 +3286,11 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/33 {
-        scrollbar-color: #00000054;
+        scrollbar-color: oklch(0% none none / .33);
       }
 
       .scrollbar-black\\/\\[50\\%\\] {
-        scrollbar-color: #00000080;
+        scrollbar-color: oklch(0% none none / .5);
       }
 
       .scrollbar-current {
@@ -3298,7 +3298,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-current\\/45 {
-        scrollbar-color: color-mix(in srgb, currentColor 45%, transparent);
+        scrollbar-color: color-mix(in oklch, currentColor 45%, transparent);
       }"
     `)
   })

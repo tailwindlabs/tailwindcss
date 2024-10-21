@@ -129,7 +129,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: #ff000080;
+        color: oklch(62.7955% .257683 29.2339 / .5);
       }"
     `)
   })
@@ -141,7 +141,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with variables and with modifiers', async () => {
     expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        color: color-mix(in srgb, var(--my-color) 50%, transparent);
+        color: color-mix(in oklch, var(--my-color) 50%, transparent);
       }"
     `)
   })

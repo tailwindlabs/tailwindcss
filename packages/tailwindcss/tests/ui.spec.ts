@@ -214,17 +214,17 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
     page,
     html`<div
       id="x"
-      class="shadow shadow-[#f00]/50 inset-shadow inset-shadow-[#0f0]/50 ring ring-[#fff]/50 inset-ring inset-ring-[#00f]/50"
+      class="shadow shadow-[#f00] inset-shadow inset-shadow-[#0f0] ring ring-[#fff] inset-ring inset-ring-[#00f]"
     ></div>`,
   )
 
   expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
     [
-      'rgba(0, 255, 0, 0.5) 0px 2px 4px 0px inset', // inset-shadow
-      'rgba(0, 0, 255, 0.5) 0px 0px 0px 1px inset', // inset-ring
+      'rgb(0, 255, 0) 0px 2px 4px 0px inset', // inset-shadow
+      'rgb(0, 0, 255) 0px 0px 0px 1px inset', // inset-ring
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px', // ring-offset (disabled)
-      'rgba(255, 255, 255, 0.5) 0px 0px 0px 1px', // ring
-      'rgba(255, 0, 0, 0.5) 0px 1px 3px 0px, rgba(255, 0, 0, 0.5) 0px 1px 2px -1px', // shadow
+      'rgb(255, 255, 255) 0px 0px 0px 1px', // ring
+      'rgb(255, 0, 0) 0px 1px 3px 0px, rgb(255, 0, 0) 0px 1px 2px -1px', // shadow
     ].join(', '),
   )
 })

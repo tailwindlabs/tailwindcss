@@ -119,7 +119,7 @@ export function withAlpha(value: string, alpha: string): string {
     alpha = `calc(${alpha} * 100%)`
   }
 
-  return `color-mix(in srgb, ${value} ${alpha}, transparent)`
+  return `color-mix(in oklch, ${value} ${alpha}, transparent)`
 }
 
 /**

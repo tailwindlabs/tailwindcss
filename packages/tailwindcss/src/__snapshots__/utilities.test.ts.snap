@@ -63,7 +63,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[\\#0088cc\\]\\/50 {
-  border-color: #0088cc80;
+  border-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-\\[color\\:var\\(--my-color\\)\\] {
@@ -71,7 +71,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-\\[var\\(--my-color\\)\\] {
@@ -79,7 +79,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[var\\(--my-color\\)\\]\\/50 {
-  border-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-current {
@@ -87,7 +87,7 @@ exports[`border-* 1`] = `
 }
 
 .border-current\\/50 {
-  border-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-inherit {
@@ -99,7 +99,7 @@ exports[`border-* 1`] = `
 }
 
 .border-red-500\\/50 {
-  border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-transparent {
@@ -184,7 +184,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[\\#0088cc\\]\\/50 {
-  border-bottom-color: #0088cc80;
+  border-bottom-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-b-\\[color\\:var\\(--my-color\\)\\] {
@@ -192,7 +192,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-b-\\[var\\(--my-color\\)\\] {
@@ -200,7 +200,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-b-current {
@@ -208,7 +208,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-current\\/50 {
-  border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-bottom-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-b-inherit {
@@ -220,7 +220,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-red-500\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-b-transparent {
@@ -305,7 +305,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[\\#0088cc\\]\\/50 {
-  border-inline-end-color: #0088cc80;
+  border-inline-end-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-e-\\[color\\:var\\(--my-color\\)\\] {
@@ -313,7 +313,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-end-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-e-\\[var\\(--my-color\\)\\] {
@@ -321,7 +321,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-end-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-e-current {
@@ -329,7 +329,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-current\\/50 {
-  border-inline-end-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-inline-end-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-e-inherit {
@@ -341,7 +341,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-red-500\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-inline-end-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-e-transparent {
@@ -426,7 +426,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[\\#0088cc\\]\\/50 {
-  border-left-color: #0088cc80;
+  border-left-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-l-\\[color\\:var\\(--my-color\\)\\] {
@@ -434,7 +434,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-l-\\[var\\(--my-color\\)\\] {
@@ -442,7 +442,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-l-current {
@@ -450,7 +450,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-current\\/50 {
-  border-left-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-left-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-l-inherit {
@@ -462,7 +462,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-red-500\\/50 {
-  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-l-transparent {
@@ -547,7 +547,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[\\#0088cc\\]\\/50 {
-  border-right-color: #0088cc80;
+  border-right-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-r-\\[color\\:var\\(--my-color\\)\\] {
@@ -555,7 +555,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-r-\\[var\\(--my-color\\)\\] {
@@ -563,7 +563,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[var\\(--my-color\\)\\]\\/50 {
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-r-current {
@@ -571,7 +571,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-current\\/50 {
-  border-right-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-right-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-r-inherit {
@@ -583,7 +583,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-red-500\\/50 {
-  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-r-transparent {
@@ -668,7 +668,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[\\#0088cc\\]\\/50 {
-  border-inline-start-color: #0088cc80;
+  border-inline-start-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-s-\\[color\\:var\\(--my-color\\)\\] {
@@ -676,7 +676,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-start-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-s-\\[var\\(--my-color\\)\\] {
@@ -684,7 +684,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-start-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-s-current {
@@ -692,7 +692,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-current\\/50 {
-  border-inline-start-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-inline-start-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-s-inherit {
@@ -704,7 +704,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-red-500\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-inline-start-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-s-transparent {
@@ -789,7 +789,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[\\#0088cc\\]\\/50 {
-  border-top-color: #0088cc80;
+  border-top-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-t-\\[color\\:var\\(--my-color\\)\\] {
@@ -797,7 +797,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-t-\\[var\\(--my-color\\)\\] {
@@ -805,7 +805,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-t-current {
@@ -813,7 +813,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-current\\/50 {
-  border-top-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-top-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-t-inherit {
@@ -825,7 +825,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-red-500\\/50 {
-  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-t-transparent {
@@ -931,8 +931,8 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-\\[\\#0088cc\\]\\/50 {
-  border-left-color: #0088cc80;
-  border-right-color: #0088cc80;
+  border-left-color: oklch(59.9824% .14119 241.555 / .5);
+  border-right-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-x-\\[color\\:var\\(--my-color\\)\\] {
@@ -941,8 +941,8 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-x-\\[var\\(--my-color\\)\\] {
@@ -951,8 +951,8 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-\\[var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-x-current {
@@ -961,8 +961,8 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-current\\/50 {
-  border-left-color: color-mix(in srgb, currentColor 50%, transparent);
-  border-right-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-left-color: color-mix(in oklch, currentColor 50%, transparent);
+  border-right-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-x-inherit {
@@ -976,8 +976,8 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-red-500\\/50 {
-  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-left-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+  border-right-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-x-transparent {
@@ -1084,8 +1084,8 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-\\[\\#0088cc\\]\\/50 {
-  border-top-color: #0088cc80;
-  border-bottom-color: #0088cc80;
+  border-top-color: oklch(59.9824% .14119 241.555 / .5);
+  border-bottom-color: oklch(59.9824% .14119 241.555 / .5);
 }
 
 .border-y-\\[color\\:var\\(--my-color\\)\\] {
@@ -1094,8 +1094,8 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-y-\\[var\\(--my-color\\)\\] {
@@ -1104,8 +1104,8 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-\\[var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--my-color) 50%, transparent);
 }
 
 .border-y-current {
@@ -1114,8 +1114,8 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-current\\/50 {
-  border-top-color: color-mix(in srgb, currentColor 50%, transparent);
-  border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-top-color: color-mix(in oklch, currentColor 50%, transparent);
+  border-bottom-color: color-mix(in oklch, currentColor 50%, transparent);
 }
 
 .border-y-inherit {
@@ -1129,8 +1129,8 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-red-500\\/50 {
-  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-top-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-y-transparent {
