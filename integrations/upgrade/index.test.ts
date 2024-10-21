@@ -790,7 +790,7 @@ test(
       @import './a.1.css' layer(utilities);
       @import './a.1.utilities.1.css';
       @import './b.1.css';
-      @import './c.1.css' layer(utilities);
+      @import './c.1.css';
       @import './c.1.utilities.css';
       @import './d.1.css';
 
