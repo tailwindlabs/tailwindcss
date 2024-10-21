@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Allow spaces spaces around operators in attribute selector variants ([#14703](https://github.com/tailwindlabs/tailwindcss/pull/14703))
 - Ensure color opacity modifiers work with OKLCH colors ([#14741](https://github.com/tailwindlabs/tailwindcss/pull/14741))
+- Ensure changes to the input CSS file result in a full rebuild ([#14744](https://github.com/tailwindlabs/tailwindcss/pull/14744))
 - _Upgrade (experimental)_: Migrate `flex-grow` to `grow` and `flex-shrink` to `shrink` ([#14721](https://github.com/tailwindlabs/tailwindcss/pull/14721))
 - _Upgrade (experimental)_: Minify arbitrary values when printing candidates ([#14720](https://github.com/tailwindlabs/tailwindcss/pull/14720))
 - _Upgrade (experimental)_: Ensure legacy theme values ending in `1` (like `theme(spacing.1)`) are correctly migrated to custom properties ([#14724](https://github.com/tailwindlabs/tailwindcss/pull/14724))

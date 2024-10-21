@@ -122,11 +122,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     env.DEBUG && console.timeEnd('[@tailwindcss/cli] Write output')
   }
 
-  let inputBasePath =
-    args['--input'] && args['--input'] !== '-'
-      ? path.dirname(path.resolve(args['--input']))
-      : process.cwd()
-  let fullRebuildPaths: string[] = []
+  let inputFilePath =
+    args['--input'] && args['--input'] !== '-' ? path.resolve(args['--input']) : null
+
+  let inputBasePath = inputFilePath ? path.dirname(inputFilePath) : process.cwd()
+
+  let fullRebuildPaths: string[] = inputFilePath ? [inputFilePath] : []
 
   async function createCompiler(css: string) {
     env.DEBUG && console.time('[@tailwindcss/cli] Setup compiler')
@@ -201,7 +202,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   @import 'tailwindcss';
                 `
             clearRequireCache(resolvedFullRebuildPaths)
-            fullRebuildPaths = []
+            fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
             compiler = await createCompiler(input)
