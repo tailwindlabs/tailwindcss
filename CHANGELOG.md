@@ -28,12 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Minify arbitrary values when printing candidates ([#14720](https://github.com/tailwindlabs/tailwindcss/pull/14720))
 - _Upgrade (experimental)_: Ensure legacy theme values ending in `1` (like `theme(spacing.1)`) are correctly migrated to custom properties ([#14724](https://github.com/tailwindlabs/tailwindcss/pull/14724))
 - _Upgrade (experimental)_: Migrate arbitrary values to bare values for the `from-*`, `via-*`, and `to-*` utilities ([#14725](https://github.com/tailwindlabs/tailwindcss/pull/14725))
-<<<<<<< HEAD
 - _Upgrade (experimental)_: Ensure `layer(utilities)` is removed from `@import` to keep `@utility` top-level ([#14738](https://github.com/tailwindlabs/tailwindcss/pull/14738))
-||||||| parent of e9c9f7ed (Upgrade: Migrate JS theme configuration keys with dot and slash in the property name)
-=======
 - _Upgrade (experimental)_: Ensure JS theme keys special characters are migrated correctly ([#14736](https://github.com/tailwindlabs/tailwindcss/pull/14736))
->>>>>>> e9c9f7ed (Upgrade: Migrate JS theme configuration keys with dot and slash in the property name)
 
 ### Changed
 
