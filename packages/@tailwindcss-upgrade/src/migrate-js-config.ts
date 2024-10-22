@@ -124,13 +124,13 @@ async function migrateTheme(
       resetNamespaces.set(key[0], true)
       let property = keyPathToCssProperty([key[0]])
       if (property !== null) {
-        css += `  --${escape(property)}-*: initial;\n`
+        css += `  ${escape(`--${property}`)}-*: initial;\n`
       }
     }
 
     let property = keyPathToCssProperty(key)
     if (property !== null) {
-      css += `  --${escape(property)}: ${value};\n`
+      css += `  ${escape(`--${property}`)}: ${value};\n`
     }
   }
 
