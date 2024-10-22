@@ -154,6 +154,7 @@ test(
       candidate`duration-350`,
       'transition-duration: 350ms',
       'animation-duration: 350ms',
+      '@keyframes enter {',
     ])
   },
 )
