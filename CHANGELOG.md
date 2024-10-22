@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure color opacity modifiers work with OKLCH colors ([#14741](https://github.com/tailwindlabs/tailwindcss/pull/14741))
 - Ensure changes to the input CSS file result in a full rebuild ([#14744](https://github.com/tailwindlabs/tailwindcss/pull/14744))
 - Add `postcss` as a dependency of `@tailwindcss/postcss` ([#14750](https://github.com/tailwindlabs/tailwindcss/pull/14750))
+- Always emit keyframes registered in `addUtilities` ([#14747](https://github.com/tailwindlabs/tailwindcss/pull/14747))
 - Ensure loading stylesheets via the `?raw` and `?url` static asset query works when using the Vite plugin ([#14716](https://github.com/tailwindlabs/tailwindcss/pull/14716))
 - _Upgrade (experimental)_: Migrate `flex-grow` to `grow` and `flex-shrink` to `shrink` ([#14721](https://github.com/tailwindlabs/tailwindcss/pull/14721))
 - _Upgrade (experimental)_: Minify arbitrary values when printing candidates ([#14720](https://github.com/tailwindlabs/tailwindcss/pull/14720))

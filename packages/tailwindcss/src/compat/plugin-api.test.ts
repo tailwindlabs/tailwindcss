@@ -71,6 +71,39 @@ describe('theme', async () => {
     `)
   })
 
+  test('keyframes added via addUtilities are appended to the AST', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '@keyframes enter': {
+                from: {
+                  opacity: 'var(--tw-enter-opacity, 1)',
+                },
+              },
+            })
+          }),
+        }
+      },
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@keyframes enter {
+        from {
+          opacity: var(--tw-enter-opacity, 1);
+        }
+      }
+      "
+    `)
+  })
+
   test('plugin theme can extend colors', async () => {
     let input = css`
       @theme reference {
