@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Migrate `max-w-screen-*` utilities to `max-w-[var(…)]`([#14754](https://github.com/tailwindlabs/tailwindcss/pull/14754))
 - _Upgrade (experimental)_: Migrate `@variants` and `@responsive` directives ([#14748](https://github.com/tailwindlabs/tailwindcss/pull/14748))
 - _Upgrade (experimental)_: Migrate `@screen` directive ([#14749](https://github.com/tailwindlabs/tailwindcss/pull/14749))
+- _Upgrade (experimental)_: Generate compatibility styles for legacy default border color ([#14746](https://github.com/tailwindlabs/tailwindcss/pull/14746))
+- _Upgrade (experimental)_: Generate compatibility styles for legacy default border width on form elements ([#14746](https://github.com/tailwindlabs/tailwindcss/pull/14746))
 
 ### Fixed
 

@@ -1,101 +1,34 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
-import path from 'node:path'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import { formatNodes } from './codemods/format-nodes'
-import { migrateContents } from './migrate'
+import { formatNodes } from './format-nodes'
+import { migrateBorderCompatibility } from './migrate-border-compatibility'
 
 const css = dedent
 
-let designSystem = await __unstable__loadDesignSystem(
-  css`
-    @import 'tailwindcss';
-  `,
-  { base: __dirname },
-)
+async function migrate(input: string) {
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+    `,
+    { base: __dirname },
+  )
 
-let config = {
-  designSystem,
-  userConfig: {},
-  newPrefix: null,
-  configFilePath: path.resolve(__dirname, './tailwind.config.js'),
-  jsConfigMigration: null,
-}
-
-function migrate(input: string, config: any) {
-  return migrateContents(input, config, expect.getState().testPath)
-    .then((result) => postcss([formatNodes()]).process(result.root, result.opts))
+  return postcss()
+    .use(migrateBorderCompatibility({ designSystem }))
+    .use(formatNodes())
+    .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
 
-it('should print the input as-is', async () => {
+it("should add compatibility CSS after the `@import 'tailwindcss'`", async () => {
   expect(
-    await migrate(
-      css`
-        /* above */
-        .foo/* after */ {
-          /* above */
-          color:  /* before */ red /* after */;
-          /* below */
-        }
-      `,
-      config,
-    ),
-  ).toMatchInlineSnapshot(`
-    "/* above */
-    .foo/* after */ {
-      /* above */
-      color:  /* before */ red /* after */;
-      /* below */
-    }"
-  `)
-})
-
-it('should migrate a stylesheet', async () => {
-  expect(
-    await migrate(
-      css`
-        @tailwind base;
-
-        html {
-          overflow: hidden;
-        }
-
-        @tailwind components;
-
-        .a {
-          z-index: 1;
-        }
-
-        @layer components {
-          .b {
-            z-index: 2;
-          }
-        }
-
-        .c {
-          z-index: 3;
-        }
-
-        @tailwind utilities;
-
-        .d {
-          z-index: 4;
-        }
-
-        @layer utilities {
-          .e {
-            z-index: 5;
-          }
-        }
-      `,
-      config,
-    ),
+    await migrate(css`
+      @import 'tailwindcss';
+    `),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
-
-    @config './tailwind.config.js';
 
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -105,7 +38,6 @@ it('should migrate a stylesheet', async () => {
       If we ever want to remove these styles, we need to add an explicit border
       color utility to any element that depends on these defaults.
     */
-
     @layer base {
       *,
       ::after,
@@ -130,60 +62,21 @@ it('should migrate a stylesheet', async () => {
       textarea {
         border-width: 0;
       }
-    }
-
-    @layer base {
-      html {
-        overflow: hidden;
-      }
-    }
-
-    @layer components {
-      .a {
-        z-index: 1;
-      }
-    }
-
-    @utility b {
-      z-index: 2;
-    }
-
-    @layer components {
-      .c {
-        z-index: 3;
-      }
-    }
-
-    @layer utilities {
-      .d {
-        z-index: 4;
-      }
-    }
-
-    @utility e {
-      z-index: 5;
     }"
   `)
 })
 
-it('should migrate a stylesheet (with imports)', async () => {
+it('should add the compatibility CSS after the last `@import`', async () => {
   expect(
-    await migrate(
-      css`
-        @import 'tailwindcss/base';
-        @import './my-base.css';
-        @import 'tailwindcss/components';
-        @import './my-components.css';
-        @import 'tailwindcss/utilities';
-        @import './my-utilities.css';
-      `,
-      config,
-    ),
+    await migrate(css`
+      @import 'tailwindcss/base';
+      @import 'tailwindcss/components';
+      @import 'tailwindcss/utilities';
+    `),
   ).toMatchInlineSnapshot(`
-    "@import 'tailwindcss';
-    @import './my-base.css' layer(base);
-    @import './my-components.css' layer(components);
-    @import './my-utilities.css' layer(utilities);
+    "@import 'tailwindcss/base';
+    @import 'tailwindcss/components';
+    @import 'tailwindcss/utilities';
 
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -216,33 +109,36 @@ it('should migrate a stylesheet (with imports)', async () => {
       textarea {
         border-width: 0;
       }
-    }
-    @config './tailwind.config.js';"
+    }"
   `)
 })
 
-it('should migrate a stylesheet (with preceding rules that should be wrapped in an `@layer`)', async () => {
+it('should add the compatibility CSS after the last import, even if a body-less `@layer` exists', async () => {
   expect(
-    await migrate(
-      css`
-        @charset "UTF-8";
-        @layer foo, bar, baz;
-        /**! My license comment */
-        html {
-          color: red;
-        }
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `,
-      config,
-    ),
+    await migrate(css`
+      @charset "UTF-8";
+      @layer foo, bar, baz;
+
+      /**!
+       * License header
+       */
+
+      @import 'tailwindcss/base';
+      @import 'tailwindcss/components';
+      @import 'tailwindcss/utilities';
+    `),
   ).toMatchInlineSnapshot(`
     "@charset "UTF-8";
     @layer foo, bar, baz;
-    /**! My license comment */
-    @import 'tailwindcss';
-    @config './tailwind.config.js';
+
+    /**!
+     * License header
+     */
+
+    @import 'tailwindcss/base';
+    @import 'tailwindcss/components';
+    @import 'tailwindcss/utilities';
+
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
@@ -274,38 +170,85 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       textarea {
         border-width: 0;
       }
-    }
-    @layer base {
-      html {
-        color: red;
-      }
     }"
   `)
 })
 
-it('should keep CSS as-is before existing `@layer` at-rules', async () => {
+it('should add the compatibility CSS before the first `@layer base`', async () => {
   expect(
-    await migrate(
-      css`
-        .foo {
-          color: blue;
-        }
+    await migrate(css`
+      @import 'tailwindcss/base';
+      @import 'tailwindcss/components';
+      @import 'tailwindcss/utilities';
 
-        @layer components {
-          .bar {
-            color: red;
-          }
-        }
-      `,
-      config,
-    ),
+      @variant foo {
+      }
+
+      @utility bar {
+      }
+
+      @layer base {
+      }
+
+      @utility baz {
+      }
+
+      @layer base {
+      }
+    `),
   ).toMatchInlineSnapshot(`
-    ".foo {
-      color: blue;
+    "@import 'tailwindcss/base';
+    @import 'tailwindcss/components';
+    @import 'tailwindcss/utilities';
+
+    @variant foo {
     }
 
     @utility bar {
-      color: red;
+    }
+
+    /*
+      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      so we've added these compatibility styles to make sure everything still
+      looks the same as it did with Tailwind CSS v3.
+
+      If we ever want to remove these styles, we need to add an explicit border
+      color utility to any element that depends on these defaults.
+    */
+
+    @layer base {
+      *,
+      ::after,
+      ::before,
+      ::backdrop,
+      ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+      }
+    }
+
+    /*
+      Form elements have a 1px border by default in Tailwind CSS v4, so we've
+      added these compatibility styles to make sure everything still looks the
+      same as it did with Tailwind CSS v3.
+
+      If we ever want to remove these styles, we need to add \`border-0\` to
+      any form elements that shouldn't have a border.
+    */
+    @layer base {
+      input:where(:not([type='button'], [type='reset'], [type='submit'])),
+      select,
+      textarea {
+        border-width: 0;
+      }
+    }
+
+    @layer base {
+    }
+
+    @utility baz {
+    }
+
+    @layer base {
     }"
   `)
 })
