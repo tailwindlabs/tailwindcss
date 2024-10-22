@@ -261,6 +261,37 @@ export function createVariants(theme: Theme): Variants {
     selectors: string[],
     { compounds }: { compounds?: Compounds } = {},
   ) {
+    if (compounds === undefined) {
+      compounds = (() => {
+        let compounds = Compounds.Never
+
+        for (let sel of selectors) {
+          if (sel[0] === '@') {
+            // Non-conditional at-rules are present so we can't compound
+            if (
+              !sel.startsWith('@media') &&
+              !sel.startsWith('@supports') &&
+              !sel.startsWith('@container')
+            ) {
+              return Compounds.Never
+            }
+
+            compounds |= Compounds.AtRules
+            continue
+          }
+
+          // Pseudo-elements are present so we can't compound
+          if (sel.includes('::')) {
+            return Compounds.Never
+          }
+
+          compounds |= Compounds.StyleRules
+        }
+
+        return compounds
+      })()
+    }
+
     variants.static(
       name,
       (r) => {
@@ -532,16 +563,16 @@ export function createVariants(theme: Theme): Variants {
     })
   })
 
-  staticVariant('first-letter', ['&::first-letter'], { compounds: Compounds.Never })
-  staticVariant('first-line', ['&::first-line'], { compounds: Compounds.Never })
+  staticVariant('first-letter', ['&::first-letter'])
+  staticVariant('first-line', ['&::first-line'])
 
   // TODO: Remove alpha vars or no?
-  staticVariant('marker', ['& *::marker', '&::marker'], { compounds: Compounds.Never })
+  staticVariant('marker', ['& *::marker', '&::marker'])
 
-  staticVariant('selection', ['& *::selection', '&::selection'], { compounds: Compounds.Never })
-  staticVariant('file', ['&::file-selector-button'], { compounds: Compounds.Never })
-  staticVariant('placeholder', ['&::placeholder'], { compounds: Compounds.Never })
-  staticVariant('backdrop', ['&::backdrop'], { compounds: Compounds.Never })
+  staticVariant('selection', ['& *::selection', '&::selection'])
+  staticVariant('file', ['&::file-selector-button'])
+  staticVariant('placeholder', ['&::placeholder'])
+  staticVariant('backdrop', ['&::backdrop'])
 
   {
     function contentProperties() {
@@ -772,19 +803,11 @@ export function createVariants(theme: Theme): Variants {
     { compounds: Compounds.AtRules },
   )
 
-  staticVariant('motion-safe', ['@media (prefers-reduced-motion: no-preference)'], {
-    compounds: Compounds.AtRules,
-  })
-  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'], {
-    compounds: Compounds.AtRules,
-  })
+  staticVariant('motion-safe', ['@media (prefers-reduced-motion: no-preference)'])
+  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'])
 
-  staticVariant('contrast-more', ['@media (prefers-contrast: more)'], {
-    compounds: Compounds.AtRules,
-  })
-  staticVariant('contrast-less', ['@media (prefers-contrast: less)'], {
-    compounds: Compounds.AtRules,
-  })
+  staticVariant('contrast-more', ['@media (prefers-contrast: more)'])
+  staticVariant('contrast-less', ['@media (prefers-contrast: less)'])
 
   {
     // Helper to compare variants by their resolved values, this is used by the
@@ -1047,25 +1070,19 @@ export function createVariants(theme: Theme): Variants {
     }
   }
 
-  staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: Compounds.AtRules })
-  staticVariant('landscape', ['@media (orientation: landscape)'], {
-    compounds: Compounds.AtRules,
-  })
+  staticVariant('portrait', ['@media (orientation: portrait)'])
+  staticVariant('landscape', ['@media (orientation: landscape)'])
 
   staticVariant('ltr', ['&:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)'])
   staticVariant('rtl', ['&:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)'])
 
-  staticVariant('dark', ['@media (prefers-color-scheme: dark)'], {
-    compounds: Compounds.AtRules,
-  })
+  staticVariant('dark', ['@media (prefers-color-scheme: dark)'])
 
-  staticVariant('starting', ['@starting-style'], { compounds: Compounds.Never })
+  staticVariant('starting', ['@starting-style'])
 
-  staticVariant('print', ['@media print'], { compounds: Compounds.AtRules })
+  staticVariant('print', ['@media print'])
 
-  staticVariant('forced-colors', ['@media (forced-colors: active)'], {
-    compounds: Compounds.AtRules,
-  })
+  staticVariant('forced-colors', ['@media (forced-colors: active)'])
 
   return variants
 }
