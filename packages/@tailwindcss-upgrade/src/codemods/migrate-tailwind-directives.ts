@@ -54,6 +54,18 @@ export function migrateTailwindDirectives(options: { newPrefix: string | null })
       ) {
         node.remove()
       }
+
+      // Replace Tailwind CSS v2 directives that still worked in v3.
+      else if (node.name === 'responsive') {
+        if (node.nodes) {
+          for (let child of node.nodes) {
+            child.raws.tailwind_pretty = true
+          }
+          node.replaceWith(node.nodes)
+        } else {
+          node.remove()
+        }
+      }
     })
 
     // Insert default import if all directives are present
