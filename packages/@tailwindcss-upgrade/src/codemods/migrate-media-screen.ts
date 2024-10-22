@@ -24,6 +24,13 @@ export function migrateMediaScreen({
       return value ? buildMediaQuery(value) : null
     })
 
+    // First migrate `@screen md` to `@media screen(md)`
+    root.walkAtRules('screen', (node) => {
+      node.name = 'media'
+      node.params = `screen(${node.params})`
+    })
+
+    // Then migrate the `screen(…)` function
     root.walkAtRules((rule) => {
       if (rule.name !== 'media') return
 

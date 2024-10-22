@@ -26,6 +26,12 @@ test(
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
+
+        @variants hover, focus {
+          .foo {
+            color: red;
+          }
+        }
       `,
     },
   },
@@ -40,6 +46,10 @@ test(
 
       --- ./src/input.css ---
       @import 'tailwindcss';
+
+      @utility foo {
+        color: red;
+      }
       "
     `)
 

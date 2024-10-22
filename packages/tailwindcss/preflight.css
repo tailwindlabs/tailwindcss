@@ -200,7 +200,7 @@ textarea,
 input:where(:not([type='button'], [type='reset'], [type='submit'])),
 select,
 textarea {
-  border: 1px solid;
+  border-width: 1px;
 }
 
 /*

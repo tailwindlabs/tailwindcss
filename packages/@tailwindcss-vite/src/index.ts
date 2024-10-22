@@ -5,6 +5,8 @@ import { Features, transform } from 'lightningcss'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
+const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
+
 export default function tailwindcss(): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
@@ -261,9 +263,12 @@ function getExtension(id: string) {
 function isPotentialCssRootFile(id: string) {
   let extension = getExtension(id)
   let isCssFile =
-    extension === 'css' ||
-    (extension === 'vue' && id.includes('&lang.css')) ||
-    (extension === 'astro' && id.includes('&lang.css'))
+    (extension === 'css' ||
+      (extension === 'vue' && id.includes('&lang.css')) ||
+      (extension === 'astro' && id.includes('&lang.css'))) &&
+    // Don't intercept special static asset resources
+    !SPECIAL_QUERY_RE.test(id)
+
   return isCssFile
 }
 

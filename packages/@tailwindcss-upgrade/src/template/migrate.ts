@@ -17,6 +17,11 @@ export type Migration = (
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
+  location?: {
+    contents: string
+    start: number
+    end: number
+  },
 ) => string
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
@@ -34,9 +39,15 @@ export function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
+  // Location is only set when migrating a candidate from a source file
+  location?: {
+    contents: string
+    start: number
+    end: number
+  },
 ): string {
   for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = migration(designSystem, userConfig, rawCandidate)
+    rawCandidate = migration(designSystem, userConfig, rawCandidate, location)
   }
   return rawCandidate
 }
@@ -52,7 +63,11 @@ export default async function migrateContents(
   let changes: StringChange[] = []
 
   for (let { rawCandidate, start, end } of candidates) {
-    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate)
+    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate, {
+      contents,
+      start,
+      end,
+    })
 
     if (migratedCandidate === rawCandidate) {
       continue
