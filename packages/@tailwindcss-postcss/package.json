@@ -34,13 +34,13 @@
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
+    "postcss": "^8.4.41",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/postcss-import": "14.0.3",
     "internal-example-plugin": "workspace:*",
-    "postcss": "^8.4.41",
     "postcss-import": "^16.1.0"
   }
 }
