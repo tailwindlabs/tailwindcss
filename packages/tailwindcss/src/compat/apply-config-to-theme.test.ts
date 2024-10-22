@@ -1,7 +1,7 @@
-import { expect, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { buildDesignSystem } from '../design-system'
 import { Theme, ThemeOptions } from '../theme'
-import { applyConfigToTheme } from './apply-config-to-theme'
+import { applyConfigToTheme, keyPathToCssProperty } from './apply-config-to-theme'
 import { resolveConfig } from './config/resolve-config'
 
 test('config values can be merged into the theme', () => {
@@ -156,4 +156,13 @@ test('invalid keys are not merged into the theme', () => {
   let entries = Array.from(theme.entries())
 
   expect(entries.length).toEqual(0)
+})
+
+describe('keyPathToCssProperty', () => {
+  test.each([
+    [['width', '40', '2/5'], '--width-40-2/5'],
+    [['spacing', '0.5'], '--spacing-0_5'],
+  ])('converts %s to %s', (keyPath, expected) => {
+    expect(`--${keyPathToCssProperty(keyPath)}`).toEqual(expected)
+  })
 })

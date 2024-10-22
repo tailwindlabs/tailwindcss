@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Ensure legacy theme values ending in `1` (like `theme(spacing.1)`) are correctly migrated to custom properties ([#14724](https://github.com/tailwindlabs/tailwindcss/pull/14724))
 - _Upgrade (experimental)_: Migrate arbitrary values to bare values for the `from-*`, `via-*`, and `to-*` utilities ([#14725](https://github.com/tailwindlabs/tailwindcss/pull/14725))
 - _Upgrade (experimental)_: Ensure `layer(utilities)` is removed from `@import` to keep `@utility` top-level ([#14738](https://github.com/tailwindlabs/tailwindcss/pull/14738))
+- _Upgrade (experimental)_: Ensure JS theme keys with special characters are escaped when migrated to CSS variables ([#14736](https://github.com/tailwindlabs/tailwindcss/pull/14736))
 - _Upgrade (experimental)_: Don't migrate important modifiers that are actually logical negations (e.g. `let foo = !border` to `let foo = border!`) ([#14737](https://github.com/tailwindlabs/tailwindcss/pull/14737))
 
 ### Changed
