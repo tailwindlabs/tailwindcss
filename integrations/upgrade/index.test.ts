@@ -20,7 +20,7 @@ test(
       `,
       'src/index.html': html`
         <h1>🤠👋</h1>
-        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"></div>
+        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -42,7 +42,7 @@ test(
       "
       --- ./src/index.html ---
       <h1>🤠👋</h1>
-      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"></div>
+      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)]"></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
