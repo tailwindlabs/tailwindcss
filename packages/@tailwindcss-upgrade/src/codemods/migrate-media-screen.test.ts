@@ -41,6 +41,24 @@ it('should migrate a built-in breakpoint', async () => {
   `)
 })
 
+it('should migrate `@screen` with a built-in breakpoint', async () => {
+  expect(
+    await migrate(css`
+      @screen md {
+        .foo {
+          color: red;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "@media (width >= theme(--breakpoint-md)) {
+      .foo {
+        color: red;
+      }
+    }"
+  `)
+})
+
 it('should migrate a custom min-width screen (string)', async () => {
   expect(
     await migrate(

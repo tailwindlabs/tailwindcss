@@ -15,5 +15,39 @@ test.each([
     base: __dirname,
   })
 
-  expect(important(designSystem, {}, candidate)).toEqual(result)
+  expect(
+    important(designSystem, {}, candidate, {
+      contents: `"${candidate}"`,
+      start: 1,
+      end: candidate.length + 1,
+    }),
+  ).toEqual(result)
+})
+
+test('does not match false positives', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
+    base: __dirname,
+  })
+
+  expect(
+    important(designSystem, {}, '!border', {
+      contents: `let notBorder = !border\n`,
+      start: 16,
+      end: 16 + '!border'.length,
+    }),
+  ).toEqual('!border')
+})
+
+test('does not match false positives with spaces at the end of the line', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
+    base: __dirname,
+  })
+
+  expect(
+    important(designSystem, {}, '!border', {
+      contents: `let notBorder = !border    \n`,
+      start: 16,
+      end: 16 + '!border'.length,
+    }),
+  ).toEqual('!border')
 })

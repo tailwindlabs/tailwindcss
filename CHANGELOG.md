@@ -11,25 +11,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Upgrade (experimental)_: Migrate `plugins` with options to CSS ([#14700](https://github.com/tailwindlabs/tailwindcss/pull/14700))
 - _Upgrade (experimental)_: Allow JS configuration files with `corePlugins` options to be migrated to CSS ([#14742](https://github.com/tailwindlabs/tailwindcss/pull/14742))
+- _Upgrade (experimental)_: Migrate `@variants` and `@responsive` directives ([#14748](https://github.com/tailwindlabs/tailwindcss/pull/14748))
+- _Upgrade (experimental)_: Migrate `@screen` directive ([#14749](https://github.com/tailwindlabs/tailwindcss/pull/14749))
 
 ### Fixed
 
 - Allow spaces spaces around operators in attribute selector variants ([#14703](https://github.com/tailwindlabs/tailwindcss/pull/14703))
-<<<<<<< HEAD
 - Ensure color opacity modifiers work with OKLCH colors ([#14741](https://github.com/tailwindlabs/tailwindcss/pull/14741))
 - Ensure changes to the input CSS file result in a full rebuild ([#14744](https://github.com/tailwindlabs/tailwindcss/pull/14744))
 - Add `postcss` as a dependency of `@tailwindcss/postcss` ([#14750](https://github.com/tailwindlabs/tailwindcss/pull/14750))
-||||||| parent of 99072cae (Escape JS theme configuration keys)
-=======
 - Ensure the JS `theme()` function can reference CSS theme variables that contain special characters without escaping them (e.g. referencing `--width-1\/2` as `theme('width.1/2')`) ([#14739](https://github.com/tailwindlabs/tailwindcss/pull/14739))
 - Ensure JS theme keys containing special characters correctly produce utility classes (e.g. `'1/2': 50%` to `w-1/2`) ([#14739](https://github.com/tailwindlabs/tailwindcss/pull/14739))
->>>>>>> 99072cae (Escape JS theme configuration keys)
+- Ensure loading stylesheets via the `?raw` and `?url` static asset query works when using the Vite plugin ([#14716](https://github.com/tailwindlabs/tailwindcss/pull/14716))
 - _Upgrade (experimental)_: Migrate `flex-grow` to `grow` and `flex-shrink` to `shrink` ([#14721](https://github.com/tailwindlabs/tailwindcss/pull/14721))
 - _Upgrade (experimental)_: Minify arbitrary values when printing candidates ([#14720](https://github.com/tailwindlabs/tailwindcss/pull/14720))
 - _Upgrade (experimental)_: Ensure legacy theme values ending in `1` (like `theme(spacing.1)`) are correctly migrated to custom properties ([#14724](https://github.com/tailwindlabs/tailwindcss/pull/14724))
 - _Upgrade (experimental)_: Migrate arbitrary values to bare values for the `from-*`, `via-*`, and `to-*` utilities ([#14725](https://github.com/tailwindlabs/tailwindcss/pull/14725))
 - _Upgrade (experimental)_: Ensure `layer(utilities)` is removed from `@import` to keep `@utility` top-level ([#14738](https://github.com/tailwindlabs/tailwindcss/pull/14738))
 - _Upgrade (experimental)_: Ensure JS theme keys special characters are migrated correctly ([#14736](https://github.com/tailwindlabs/tailwindcss/pull/14736))
+- _Upgrade (experimental)_: Don't migrate important modifiers that are actually logical negations (e.g. `let foo = !border` to `let foo = border!`) ([#14737](https://github.com/tailwindlabs/tailwindcss/pull/14737))
 
 ### Changed
 

@@ -11,6 +11,7 @@ import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
 import { migrateThemeToVar } from './codemods/migrate-theme-to-var'
+import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
 import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { resolveCssId } from './utils/resolve'
@@ -38,6 +39,7 @@ export async function migrateContents(
     .use(migrateAtApply(options))
     .use(migrateThemeToVar(options))
     .use(migrateMediaScreen(options))
+    .use(migrateVariantsDirective())
     .use(migrateAtLayerUtilities(stylesheet))
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))

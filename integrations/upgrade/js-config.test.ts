@@ -123,6 +123,11 @@ test(
         @tailwind components;
         @tailwind utilities;
       `,
+      'src/test.js': ts`
+        export default {
+          shouldNotUse: !border.shouldUse,
+        }
+      `,
       'node_modules/my-external-lib/src/template.html': html`
         <div class="text-red-500">
           Hello world!
@@ -133,7 +138,7 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('src/**/*.{css,js}')).toMatchInlineSnapshot(`
       "
       --- src/input.css ---
       @import 'tailwindcss';
@@ -232,6 +237,11 @@ test(
             transform: rotate(-360deg);
           }
         }
+      }
+
+      --- src/test.js ---
+      export default {
+        shouldNotUse: !border.shouldUse,
       }
       "
     `)

@@ -400,3 +400,19 @@ it('should drop `@tailwind variants;`', async () => {
     `),
   ).toEqual('')
 })
+
+it('should replace `@responsive` with its children', async () => {
+  expect(
+    await migrate(css`
+      @responsive {
+        .foo {
+          color: red;
+        }
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    ".foo {
+      color: red;
+    }"
+  `)
+})
