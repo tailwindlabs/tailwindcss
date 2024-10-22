@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- No longer resolve filenames without a prefix as relative files (e.g. `@import 'styles.css'` instead of `@import './styles.css'`) ([#14755](https://github.com/tailwindlabs/tailwindcss/pull/14755))
+- Require a relative path prefix for importing relative CSS files (e.g. `@import './styles.css'` instead of `@import 'styles.css'`) ([#14755](https://github.com/tailwindlabs/tailwindcss/pull/14755))
 - _Upgrade (experimental)_: Don't create `@source` rules for `content` paths that are already covered by automatic source detection ([#14714](https://github.com/tailwindlabs/tailwindcss/pull/14714))
 
 ## [4.0.0-alpha.28] - 2024-10-17
