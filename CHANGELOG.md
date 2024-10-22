@@ -12,8 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Migrate `plugins` with options to CSS ([#14700](https://github.com/tailwindlabs/tailwindcss/pull/14700))
 - _Upgrade (experimental)_: Allow JS configuration files with `corePlugins` options to be migrated to CSS ([#14742](https://github.com/tailwindlabs/tailwindcss/pull/14742))
 - _Upgrade (experimental)_: Migrate `@import` statements for relative CSS files to use relative path syntax (e.g. `./file.css`) ([#14755](https://github.com/tailwindlabs/tailwindcss/pull/14755))
+- _Upgrade (experimental)_: Migrate `max-w-screen-*` utilities to `max-w-[var(…)]`([#14754](https://github.com/tailwindlabs/tailwindcss/pull/14754))
 - _Upgrade (experimental)_: Migrate `@variants` and `@responsive` directives ([#14748](https://github.com/tailwindlabs/tailwindcss/pull/14748))
 - _Upgrade (experimental)_: Migrate `@screen` directive ([#14749](https://github.com/tailwindlabs/tailwindcss/pull/14749))
+- _Upgrade (experimental)_: Generate compatibility styles for legacy default border color ([#14746](https://github.com/tailwindlabs/tailwindcss/pull/14746))
+- _Upgrade (experimental)_: Generate compatibility styles for legacy default border width on form elements ([#14746](https://github.com/tailwindlabs/tailwindcss/pull/14746))
 
 ### Fixed
 
@@ -21,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure color opacity modifiers work with OKLCH colors ([#14741](https://github.com/tailwindlabs/tailwindcss/pull/14741))
 - Ensure changes to the input CSS file result in a full rebuild ([#14744](https://github.com/tailwindlabs/tailwindcss/pull/14744))
 - Add `postcss` as a dependency of `@tailwindcss/postcss` ([#14750](https://github.com/tailwindlabs/tailwindcss/pull/14750))
+- Ensure the JS `theme()` function can reference CSS theme variables that contain special characters without escaping them (e.g. referencing `--width-1\/2` as `theme('width.1/2')`) ([#14739](https://github.com/tailwindlabs/tailwindcss/pull/14739))
+- Ensure JS theme keys containing special characters correctly produce utility classes (e.g. `'1/2': 50%` to `w-1/2`) ([#14739](https://github.com/tailwindlabs/tailwindcss/pull/14739))
 - Always emit keyframes registered in `addUtilities` ([#14747](https://github.com/tailwindlabs/tailwindcss/pull/14747))
 - Ensure loading stylesheets via the `?raw` and `?url` static asset query works when using the Vite plugin ([#14716](https://github.com/tailwindlabs/tailwindcss/pull/14716))
 - _Upgrade (experimental)_: Migrate `flex-grow` to `grow` and `flex-shrink` to `shrink` ([#14721](https://github.com/tailwindlabs/tailwindcss/pull/14721))

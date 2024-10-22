@@ -279,6 +279,9 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
       enhanced-resolve:
         specifier: ^5.17.1
         version: 5.17.1
@@ -322,9 +325,6 @@ importers:
       '@types/postcss-import':
         specifier: ^14.0.3
         version: 14.0.3
-      dedent:
-        specifier: 1.5.3
-        version: 1.5.3
 
   packages/@tailwindcss-vite:
     dependencies:

@@ -6,6 +6,7 @@ import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
+import { migrateBorderCompatibility } from './codemods/migrate-border-compatibility'
 import { migrateConfig } from './codemods/migrate-config'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
@@ -37,13 +38,14 @@ export async function migrateContents(
 
   return postcss()
     .use(migrateAtApply(options))
-    .use(migrateThemeToVar(options))
     .use(migrateMediaScreen(options))
     .use(migrateVariantsDirective())
     .use(migrateAtLayerUtilities(stylesheet))
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
     .use(migrateConfig(stylesheet, options))
+    .use(migrateBorderCompatibility(options))
+    .use(migrateThemeToVar(options))
     .process(stylesheet.root, { from: stylesheet.file ?? undefined })
 }
 

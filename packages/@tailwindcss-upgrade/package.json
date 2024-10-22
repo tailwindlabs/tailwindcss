@@ -29,6 +29,7 @@
   "dependencies": {
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
+    "dedent": "1.5.3",
     "enhanced-resolve": "^5.17.1",
     "globby": "^14.0.2",
     "jiti": "^2.0.0-beta.3",
@@ -44,7 +45,6 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/postcss-import": "^14.0.3",
-    "dedent": "1.5.3"
+    "@types/postcss-import": "^14.0.3"
   }
 }

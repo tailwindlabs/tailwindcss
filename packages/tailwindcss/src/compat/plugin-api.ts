@@ -267,7 +267,7 @@ export function buildPluginApi(
 
           // Resolve the candidate value
           let value: string | null = null
-          let isFraction = false
+          let ignoreModifier = false
 
           {
             let values = options?.values ?? {}
@@ -289,12 +289,14 @@ export function buildPluginApi(
               value = values.DEFAULT ?? null
             } else if (candidate.value.kind === 'arbitrary') {
               value = candidate.value.value
+            } else if (candidate.value.fraction && values[candidate.value.fraction]) {
+              value = values[candidate.value.fraction]
+              ignoreModifier = true
             } else if (values[candidate.value.value]) {
               value = values[candidate.value.value]
             } else if (values.__BARE_VALUE__) {
               value = values.__BARE_VALUE__(candidate.value) ?? null
-
-              isFraction = (candidate.value.fraction !== null && value?.includes('/')) ?? false
+              ignoreModifier = (candidate.value.fraction !== null && value?.includes('/')) ?? false
             }
           }
 
@@ -320,7 +322,7 @@ export function buildPluginApi(
           }
 
           // A modifier was provided but is invalid
-          if (candidate.modifier && modifier === null && !isFraction) {
+          if (candidate.modifier && modifier === null && !ignoreModifier) {
             // For arbitrary values, return `null` to avoid falling through to the next utility
             return candidate.value?.kind === 'arbitrary' ? null : undefined
           }

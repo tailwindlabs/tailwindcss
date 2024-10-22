@@ -86,6 +86,9 @@ test.each([
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
 
+  // `screens` values
+  ['max-w-[theme(screens.md)]', 'max-w-[var(--breakpoint-md)]'],
+
   // Invalid cases
   ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
   ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:theme(colors.red.500/50/50)]/50'],
