@@ -34,6 +34,57 @@ test(
               sm: ['0.875rem', { lineHeight: '1.5rem' }],
               base: ['1rem', { lineHeight: '2rem' }],
             },
+            width: {
+              px: '1px',
+              auto: 'auto',
+              1: '0.25rem',
+              1.5: '0.375rem',
+              2: '0.5rem',
+              2.5: '0.625rem',
+              3: '0.75rem',
+              3.5: '0.875rem',
+              4: '1rem',
+              5: '1.25rem',
+              6: '1.5rem',
+              8: '2rem',
+              10: '2.5rem',
+              11: '2.75rem',
+              12: '3rem',
+              16: '4rem',
+              24: '6rem',
+              32: '8rem',
+              40: '10rem',
+              48: '12rem',
+              64: '16rem',
+              80: '20rem',
+              96: '24rem',
+              128: '32rem',
+
+              full: '100%',
+              0: '0%',
+              '1/2': '50%',
+              '1/3': 'calc(100% / 3)',
+              '2/3': 'calc(100% / 3 * 2)',
+              '1/4': '25%',
+              '3/4': '75%',
+              '1/5': '20%',
+              '2/5': '40%',
+              '3/5': '60%',
+              '4/5': '80%',
+              '1/6': 'calc(100% / 6)',
+              '5/6': 'calc(100% / 6 * 5)',
+              '1/7': 'calc(100% / 7)',
+              '1/10': 'calc(100% / 10)',
+              '3/10': 'calc(100% / 10 * 3)',
+              '7/10': 'calc(100% / 10 * 7)',
+              '9/10': 'calc(100% / 10 * 9)',
+              screen: '100vw',
+
+              'full-minus-80': 'calc(100% - 20rem)',
+              'full-minus-96': 'calc(100% - 24rem)',
+
+              '225px': '225px',
+            },
             extend: {
               colors: {
                 red: {
@@ -146,6 +197,54 @@ test(
         --font-size-sm--line-height: 1.5rem;
         --font-size-base: 1rem;
         --font-size-base--line-height: 2rem;
+
+        --width-*: initial;
+        --width-0: 0%;
+        --width-1: 0.25rem;
+        --width-2: 0.5rem;
+        --width-3: 0.75rem;
+        --width-4: 1rem;
+        --width-5: 1.25rem;
+        --width-6: 1.5rem;
+        --width-8: 2rem;
+        --width-10: 2.5rem;
+        --width-11: 2.75rem;
+        --width-12: 3rem;
+        --width-16: 4rem;
+        --width-24: 6rem;
+        --width-32: 8rem;
+        --width-40: 10rem;
+        --width-48: 12rem;
+        --width-64: 16rem;
+        --width-80: 20rem;
+        --width-96: 24rem;
+        --width-128: 32rem;
+        --width-px: 1px;
+        --width-auto: auto;
+        --width-1_5: 0.375rem;
+        --width-2_5: 0.625rem;
+        --width-3_5: 0.875rem;
+        --width-full: 100%;
+        --width-1\\/2: 50%;
+        --width-1\\/3: calc(100% / 3);
+        --width-2\\/3: calc(100% / 3 * 2);
+        --width-1\\/4: 25%;
+        --width-3\\/4: 75%;
+        --width-1\\/5: 20%;
+        --width-2\\/5: 40%;
+        --width-3\\/5: 60%;
+        --width-4\\/5: 80%;
+        --width-1\\/6: calc(100% / 6);
+        --width-5\\/6: calc(100% / 6 * 5);
+        --width-1\\/7: calc(100% / 7);
+        --width-1\\/10: calc(100% / 10);
+        --width-3\\/10: calc(100% / 10 * 3);
+        --width-7\\/10: calc(100% / 10 * 7);
+        --width-9\\/10: calc(100% / 10 * 9);
+        --width-screen: 100vw;
+        --width-full-minus-80: calc(100% - 20rem);
+        --width-full-minus-96: calc(100% - 24rem);
+        --width-225px: 225px;
 
         --font-family-sans: Inter, system-ui, sans-serif;
         --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,

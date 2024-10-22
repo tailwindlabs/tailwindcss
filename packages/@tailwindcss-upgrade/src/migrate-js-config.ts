@@ -15,6 +15,7 @@ import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/con
 import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
+import { escape } from '../../tailwindcss/src/utils/escape'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
@@ -121,10 +122,16 @@ async function migrateTheme(
 
     if (resetNamespaces.has(key[0]) && resetNamespaces.get(key[0]) === false) {
       resetNamespaces.set(key[0], true)
-      css += `  --${keyPathToCssProperty([key[0]])}-*: initial;\n`
+      let property = keyPathToCssProperty([key[0]])
+      if (property !== null) {
+        css += `  ${escape(`--${property}`)}-*: initial;\n`
+      }
     }
 
-    css += `  --${keyPathToCssProperty(key)}: ${value};\n`
+    let property = keyPathToCssProperty(key)
+    if (property !== null) {
+      css += `  ${escape(`--${property}`)}: ${value};\n`
+    }
   }
 
   if ('keyframes' in resolvedConfig.theme) {
