@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Upgrade (experimental)_: Migrate `plugins` with options to CSS ([#14700](https://github.com/tailwindlabs/tailwindcss/pull/14700))
 - _Upgrade (experimental)_: Allow JS configuration files with `corePlugins` options to be migrated to CSS ([#14742](https://github.com/tailwindlabs/tailwindcss/pull/14742))
+- _Upgrade (experimental)_: Migrate `@import` statements for relative CSS files to use relative path syntax (e.g. `./file.css`) ([#14755](https://github.com/tailwindlabs/tailwindcss/pull/14755))
 
 ### Fixed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- No longer resolve filenames without a prefix as relative files (e.g. `@import 'styles.css'` instead of `@import './styles.css'`) ([#14755](https://github.com/tailwindlabs/tailwindcss/pull/14755))
 - _Upgrade (experimental)_: Don't create `@source` rules for `content` paths that are already covered by automatic source detection ([#14714](https://github.com/tailwindlabs/tailwindcss/pull/14714))
 
 ## [4.0.0-alpha.28] - 2024-10-17

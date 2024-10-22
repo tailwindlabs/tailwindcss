@@ -67,7 +67,7 @@ export async function substituteAtImports(
 // `postcss-import` <https://github.com/postcss/postcss-import>
 // Copyright (c) 2014 Maxime Thirouin, Jason Campbell & Kevin Mårtensson
 // Released under the MIT License.
-function parseImportParams(params: ValueParser.ValueAstNode[]) {
+export function parseImportParams(params: ValueParser.ValueAstNode[]) {
   let uri
   let layer: string | null = null
   let media: string | null = null

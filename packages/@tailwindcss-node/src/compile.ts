@@ -2,7 +2,7 @@ import EnhancedResolve from 'enhanced-resolve'
 import { createJiti, type Jiti } from 'jiti'
 import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
-import path, { dirname, extname } from 'node:path'
+import path, { dirname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
@@ -118,21 +118,6 @@ async function resolveCssId(id: string, base: string): Promise<string | false | 
     if (resolved) {
       return Promise.resolve(resolved)
     }
-  }
-
-  // CSS imports that do not have a dir prefix are considered relative. Since
-  // the resolver does not account for this, we need to do a first pass with an
-  // assumed relative import by prefixing `./${path}`. We don't have to do this
-  // when the path starts with a `.` or when the path has no extension (at which
-  // case it's likely an npm package and not a relative stylesheet).
-  let skipRelativeCheck = extname(id) === '' || id.startsWith('.')
-
-  if (!skipRelativeCheck) {
-    try {
-      let dotResolved = await runResolver(cssResolver, `./${id}`, base)
-      if (!dotResolved) throw new Error()
-      return dotResolved
-    } catch {}
   }
 
   return runResolver(cssResolver, id, base)
