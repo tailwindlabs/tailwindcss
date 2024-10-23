@@ -76,7 +76,6 @@ async function parseCss(
 
   await substituteAtImports(ast, base, loadStylesheet)
 
-  // Find all `@theme` declarations
   let important: boolean | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
@@ -84,8 +83,10 @@ async function parseCss(
   let firstThemeRule: Rule | null = null
   let globs: { base: string; pattern: string }[] = []
 
+  // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule') return
+    if (node.selector[0] !== '@') return
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
@@ -196,7 +197,7 @@ async function parseCss(
       }
     }
 
-    if (node.selector[0] === '@' && node.selector.startsWith('@media ')) {
+    if (node.selector.startsWith('@media ')) {
       let params = segment(node.selector.slice(7), ' ')
       let unknownParams: string[] = []
 
