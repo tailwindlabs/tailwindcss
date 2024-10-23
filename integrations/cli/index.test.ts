@@ -1,6 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { candidate, css, html, js, json, test, yaml } from '../utils'
 
 const STANDALONE_BINARY = (() => {
@@ -252,6 +252,113 @@ describe.each([
       await exec(`${command} --input=- --output dist/out.css < src/index.css`)
 
       await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+    },
+  )
+})
+
+describe.only('@source', () => {
+  test(
+    'it works',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'project-a/src/index.css': css`
+          @import 'tailwindcss/theme' theme(reference);
+
+          /* Run auto-content detection in ../../project-b */
+          @import 'tailwindcss/utilities' source('../../project-b');
+
+          /* Additive: */
+          /*   {my-lib-1,my-lib-2}: expand */
+          /*   *.html: only look for .html */
+          @source '../node_modules/{my-lib-1,my-lib-2}/src/**/*.html';
+          @source './logo.{jpg,png}'; /* Don't worry about it */
+        `,
+        'project-a/src/index.html': html`
+          <div
+            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-a/src/index.html']"
+          ></div>
+        `,
+        'project-a/src/logo.jpg': html`
+          <div
+            class="content-['project-a/src/logo.jpg']"
+          ></div>
+        `,
+        'project-a/node_modules/my-lib-1/src/index.html': html`
+          <div
+            class="content-['project-a/node_modules/my-lib-1/src/index.html']"
+          ></div>
+        `,
+        'project-a/node_modules/my-lib-2/src/index.html': html`
+          <div
+            class="content-['project-a/node_modules/my-lib-2/src/index.html']"
+          ></div>
+        `,
+        'project-b/src/index.html': html`
+          <div
+            class="content-['project-b/src/index.html']"
+          ></div>
+        `,
+        'project-b/node_modules/my-lib-3/src/index.html': html`
+          <div
+            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-b/node_modules/my-lib-3/src/index.html']"
+          ></div>
+        `,
+      },
+    },
+    async ({ fs, exec, root }) => {
+      await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+        cwd: path.join(root, 'project-a'),
+      })
+
+      expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+        "
+        --- ./project-a/dist/out.css ---
+        @tailwind utilities source('../../project-b') {
+          .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
+            --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
+            content: var(--tw-content);
+          }
+          .content-\\[\\'project-a\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
+            --tw-content: 'project-a/node modules/my-lib-2/src/index.html';
+            content: var(--tw-content);
+          }
+          .content-\\[\\'project-a\\/src\\/logo\\.jpg\\'\\] {
+            --tw-content: 'project-a/src/logo.jpg';
+            content: var(--tw-content);
+          }
+          .content-\\[\\'project-b\\/src\\/index\\.html\\'\\] {
+            --tw-content: 'project-b/src/index.html';
+            content: var(--tw-content);
+          }
+        }
+        @supports (-moz-orient: inline) {
+          @layer base {
+            *, ::before, ::after, ::backdrop {
+              --tw-content: "";
+            }
+          }
+        }
+        @property --tw-content {
+          syntax: "*";
+          inherits: false;
+          initial-value: "";
+        }
+        "
+      `)
     },
   )
 })
