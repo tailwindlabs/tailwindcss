@@ -22,6 +22,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { segment } from './utils/segment'
+import { compoundsForSelectors } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
@@ -178,19 +179,25 @@ async function parseCss(
         }
 
         customVariants.push((designSystem) => {
-          designSystem.variants.static(name, (r) => {
-            let nodes: AstNode[] = []
+          designSystem.variants.static(
+            name,
+            (r) => {
+              let nodes: AstNode[] = []
 
-            if (styleRuleSelectors.length > 0) {
-              nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
-            }
+              if (styleRuleSelectors.length > 0) {
+                nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
+              }
 
-            for (let selector of atRuleSelectors) {
-              nodes.push(rule(selector, r.nodes))
-            }
+              for (let selector of atRuleSelectors) {
+                nodes.push(rule(selector, r.nodes))
+              }
 
-            r.nodes = nodes
-          })
+              r.nodes = nodes
+            },
+            {
+              compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleSelectors]),
+            },
+          )
         })
 
         return

@@ -66,11 +66,25 @@ export class Variants {
   }
 
   fromAst(name: string, ast: AstNode[]) {
-    this.static(name, (r) => {
-      let body = structuredClone(ast)
-      substituteAtSlot(body, r.nodes)
-      r.nodes = body
+    let selectors: string[] = []
+
+    walk(ast, (node) => {
+      if (node.kind !== 'rule') return
+      if (node.selector === '@slot') return
+      selectors.push(node.selector)
     })
+
+    this.static(
+      name,
+      (r) => {
+        let body = structuredClone(ast)
+        substituteAtSlot(body, r.nodes)
+        r.nodes = body
+      },
+      {
+        compounds: compoundsForSelectors(selectors),
+      },
+    )
   }
 
   functional(
