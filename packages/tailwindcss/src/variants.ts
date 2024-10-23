@@ -127,7 +127,9 @@ export class Variants {
       typeof child === 'string'
         ? this.variants.get(child)
         : child.kind === 'arbitrary'
-          ? { compounds: Compounds.StyleRules }
+          ? // This isn't strictly necessary but it'll allow us to bail quickly
+            // when parsing candidates
+            { compounds: compoundsForSelectors([child.selector]) }
           : this.variants.get(child.root)
 
     // One of the variants don't exist
