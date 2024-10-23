@@ -3,7 +3,7 @@ import { substituteAtApply } from './apply'
 import {
   atRoot,
   comment,
-  context,
+  context as contextNode,
   decl,
   rule,
   toCss,
@@ -73,21 +73,63 @@ async function parseCss(
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
 ) {
-  let ast = [context({ base }, CSS.parse(css))] as AstNode[]
+  let ast = [contextNode({ base }, CSS.parse(css))] as AstNode[]
 
   await substituteAtImports(ast, base, loadStylesheet)
 
-  let important: boolean | null = null
+  let important = null as boolean | null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
-  let firstThemeRule: Rule | null = null
+  let firstThemeRule = null as Rule | null
+  let utilitiesNode = null as Rule | null
   let globs: { base: string; pattern: string }[] = []
+  let root:
+    | null // Unknown root
+    | 'none' // Explicitly no root specified via `source(none)`
+    // Specified via `source(…)`, relative to the `base`
+    | { base: string; pattern: string } = null
 
   // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule') return
     if (node.selector[0] !== '@') return
+
+    // Find `@tailwind utilities` so that we can later replace it with the
+    // actual generated utility class CSS.
+    if (
+      utilitiesNode === null &&
+      (node.selector === '@tailwind utilities' || node.selector.startsWith('@tailwind utilities '))
+    ) {
+      let params = segment(node.selector.slice(20).trim(), ' ')
+      for (let param of params) {
+        if (param.startsWith('source(')) {
+          let path = param.slice(7, -1)
+
+          // Keyword: `source(none)`
+          if (path === 'none') {
+            root = path
+            continue
+          }
+
+          // Explicit path: `source('…')`
+          if (
+            (path[0] === '"' && path[path.length - 1] !== '"') ||
+            (path[0] === "'" && path[path.length - 1] !== "'") ||
+            (path[0] !== "'" && path[0] !== '"')
+          ) {
+            throw new Error('`source(…)` paths must be quoted.')
+          }
+
+          root = {
+            base: context.sourceBase ?? context.base,
+            pattern: path.slice(1, -1),
+          }
+        }
+      }
+
+      utilitiesNode = node
+    }
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
@@ -232,12 +274,26 @@ async function parseCss(
       let unknownParams: string[] = []
 
       for (let param of params) {
+        // Handle `@media source(…)`
+        if (param.startsWith('source(')) {
+          let path = param.slice(7, -1)
+
+          walk(node.nodes, (child, { replaceWith }) => {
+            if (child.kind !== 'rule') return
+            if (child.selector === '@tailwind utilities') {
+              child.selector += ` source(${path})`
+              replaceWith([contextNode({ sourceBase: context.base }, [child])])
+              return WalkAction.Stop
+            }
+          })
+        }
+
         // Handle `@media theme(…)`
         //
         // We support `@import "tailwindcss/theme" theme(reference)` as a way to
         // import an external theme file as a reference, which becomes `@media
         // theme(reference) { … }` when the `@import` is processed.
-        if (param.startsWith('theme(')) {
+        else if (param.startsWith('theme(')) {
           let themeParams = param.slice(6, -1)
 
           walk(node.nodes, (child) => {
@@ -419,6 +475,8 @@ async function parseCss(
     designSystem,
     ast,
     globs,
+    root,
+    utilitiesNode,
   }
 }
 
@@ -427,24 +485,13 @@ export async function compile(
   opts: CompileOptions = {},
 ): Promise<{
   globs: { base: string; pattern: string }[]
+  root:
+    | null // Unknown root
+    | 'none' // Explicitly no root specified via `source(none)`
+    | { base: string; pattern: string } // Specified via `source(…)`, relative to the `base`
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs } = await parseCss(css, opts)
-
-  let tailwindUtilitiesNode: Rule | null = null
-
-  // Find `@tailwind utilities` so that we can later replace it with the actual
-  // generated utility class CSS.
-  walk(ast, (node) => {
-    if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
-      tailwindUtilitiesNode = node
-
-      // Stop walking after finding `@tailwind utilities` to avoid walking all
-      // of the generated CSS. This means `@tailwind utilities` can only appear
-      // once per file but that's the intended usage at this point in time.
-      return WalkAction.Stop
-    }
-  })
+  let { designSystem, ast, globs, root, utilitiesNode } = await parseCss(css, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -464,6 +511,7 @@ export async function compile(
 
   return {
     globs,
+    root,
     build(newRawCandidates: string[]) {
       let didChange = false
 
@@ -482,7 +530,7 @@ export async function compile(
         return compiledCss
       }
 
-      if (tailwindUtilitiesNode) {
+      if (utilitiesNode) {
         let newNodes = compileCandidates(allValidCandidates, designSystem, {
           onInvalidCandidate,
         }).astNodes
@@ -496,7 +544,7 @@ export async function compile(
 
         previousAstNodeCount = newNodes.length
 
-        tailwindUtilitiesNode.nodes = newNodes
+        utilitiesNode.nodes = newNodes
         compiledCss = toCss(ast)
       }
 
