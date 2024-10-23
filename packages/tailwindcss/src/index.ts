@@ -258,54 +258,55 @@ async function parseCss(
       return WalkAction.Skip
     }
 
-    if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
+    // Handle `@theme`
+    if (node.selector === '@theme' || node.selector.startsWith('@theme ')) {
+      let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
 
-    let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
+      if (themePrefix) {
+        if (!IS_VALID_PREFIX.test(themePrefix)) {
+          throw new Error(
+            `The prefix "${themePrefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+          )
+        }
 
-    if (themePrefix) {
-      if (!IS_VALID_PREFIX.test(themePrefix)) {
+        theme.prefix = themePrefix
+      }
+
+      // Record all custom properties in the `@theme` declaration
+      walk(node.nodes, (child, { replaceWith }) => {
+        // Collect `@keyframes` rules to re-insert with theme variables later,
+        // since the `@theme` rule itself will be removed.
+        if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
+          theme.addKeyframes(child)
+          replaceWith([])
+          return WalkAction.Skip
+        }
+
+        if (child.kind === 'comment') return
+        if (child.kind === 'declaration' && child.property.startsWith('--')) {
+          theme.add(child.property, child.value ?? '', themeOptions)
+          return
+        }
+
+        let snippet = toCss([rule(node.selector, [child])])
+          .split('\n')
+          .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
+          .join('\n')
+
         throw new Error(
-          `The prefix "${themePrefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+          `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
         )
-      }
+      })
 
-      theme.prefix = themePrefix
-    }
-
-    // Record all custom properties in the `@theme` declaration
-    walk(node.nodes, (child, { replaceWith }) => {
-      // Collect `@keyframes` rules to re-insert with theme variables later,
-      // since the `@theme` rule itself will be removed.
-      if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
-        theme.addKeyframes(child)
+      // Keep a reference to the first `@theme` rule to update with the full
+      // theme later, and delete any other `@theme` rules.
+      if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
+        firstThemeRule = node
+      } else {
         replaceWith([])
-        return WalkAction.Skip
       }
-
-      if (child.kind === 'comment') return
-      if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', themeOptions)
-        return
-      }
-
-      let snippet = toCss([rule(node.selector, [child])])
-        .split('\n')
-        .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
-        .join('\n')
-
-      throw new Error(
-        `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
-      )
-    })
-
-    // Keep a reference to the first `@theme` rule to update with the full theme
-    // later, and delete any other `@theme` rules.
-    if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-      firstThemeRule = node
-    } else {
-      replaceWith([])
+      return WalkAction.Skip
     }
-    return WalkAction.Skip
   })
 
   let designSystem = buildDesignSystem(theme)
