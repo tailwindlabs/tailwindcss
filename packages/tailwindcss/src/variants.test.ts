@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
+import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
 
@@ -3258,4 +3259,30 @@ test('variant order', async () => {
       initial-value: "";
     }"
   `)
+})
+
+test.each([
+  // These are style rules
+  [['.foo'], Compounds.StyleRules],
+  [['&:is(:hover)'], Compounds.StyleRules],
+
+  // These are conditional at rules
+  [['@media foo'], Compounds.AtRules],
+  [['@supports foo'], Compounds.AtRules],
+  [['@container foo'], Compounds.AtRules],
+
+  // These are both
+  [['.foo', '@media foo'], Compounds.StyleRules | Compounds.AtRules],
+
+  // These are never compoundable because:
+  // - Pseudo-elements are not compoundable
+  // - Non-conditional at-rules are not compoundable
+  [['.foo::before'], Compounds.Never],
+  [['@starting-style'], Compounds.Never],
+
+  // The presence of a single non-compoundable selector makes the whole list non-compoundable
+  [['.foo', '@media foo', '.foo::before'], Compounds.Never],
+  [['.foo', '@media foo', '@starting-style'], Compounds.Never],
+])('compoundsForSelectors: %s', (selectors, expected) => {
+  expect(compoundsForSelectors(selectors)).toBe(expected)
 })
