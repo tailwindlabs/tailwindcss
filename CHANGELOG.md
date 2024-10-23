@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.29] - 2024-10-23
+
 ### Added
 
 - _Upgrade (experimental)_: Migrate `plugins` with options to CSS ([#14700](https://github.com/tailwindlabs/tailwindcss/pull/14700))
