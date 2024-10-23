@@ -303,7 +303,11 @@ export function test(
             return Promise.all(
               files.map(async (file) => {
                 let content = await fs.readFile(path.join(root, file), 'utf8')
-                return [file, content]
+                return [
+                  file,
+                  // Drop license comment
+                  content.replace(/[\s\n]*\/\*! tailwindcss .*? \*\/[\s\n]*/g, ''),
+                ]
               }),
             )
           },
