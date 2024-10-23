@@ -247,6 +247,35 @@ export class Variants {
   }
 }
 
+export function compoundsForSelectors(selectors: string[]) {
+  let compounds = Compounds.Never
+
+  for (let sel of selectors) {
+    if (sel[0] === '@') {
+      // Non-conditional at-rules are present so we can't compound
+      if (
+        !sel.startsWith('@media') &&
+        !sel.startsWith('@supports') &&
+        !sel.startsWith('@container')
+      ) {
+        return Compounds.Never
+      }
+
+      compounds |= Compounds.AtRules
+      continue
+    }
+
+    // Pseudo-elements are present so we can't compound
+    if (sel.includes('::')) {
+      return Compounds.Never
+    }
+
+    compounds |= Compounds.StyleRules
+  }
+
+  return compounds
+}
+
 export function createVariants(theme: Theme): Variants {
   // In the future we may want to support returning a rule here if some complex
   // variant requires it. For now pure mutation is sufficient and will be the
@@ -261,36 +290,7 @@ export function createVariants(theme: Theme): Variants {
     selectors: string[],
     { compounds }: { compounds?: Compounds } = {},
   ) {
-    if (compounds === undefined) {
-      compounds = (() => {
-        let compounds = Compounds.Never
-
-        for (let sel of selectors) {
-          if (sel[0] === '@') {
-            // Non-conditional at-rules are present so we can't compound
-            if (
-              !sel.startsWith('@media') &&
-              !sel.startsWith('@supports') &&
-              !sel.startsWith('@container')
-            ) {
-              return Compounds.Never
-            }
-
-            compounds |= Compounds.AtRules
-            continue
-          }
-
-          // Pseudo-elements are present so we can't compound
-          if (sel.includes('::')) {
-            return Compounds.Never
-          }
-
-          compounds |= Compounds.StyleRules
-        }
-
-        return compounds
-      })()
-    }
+    compounds = compounds ?? compoundsForSelectors(selectors)
 
     variants.static(
       name,
