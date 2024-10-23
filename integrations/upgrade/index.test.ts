@@ -1963,3 +1963,80 @@ test(
     `)
   },
 )
+
+test(
+  'relative imports without a relative path prefix are migrated to include a relative path prefix',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'styles/components';
+        @import 'tailwindcss/utilities';
+      `,
+      'src/styles/components.css': css`
+        .btn {
+          @apply bg-black px-4 py-2 rounded-md text-white font-medium hover:bg-zinc-800;
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss';
+      @import './styles/components.css' layer(components);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've
+        added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add \`border-0\` to
+        any form elements that shouldn't have a border.
+      */
+      @layer base {
+        input:where(:not([type='button'], [type='reset'], [type='submit'])),
+        select,
+        textarea {
+          border-width: 0;
+        }
+      }
+
+      --- ./src/styles/components.css ---
+      .btn {
+        @apply bg-black px-4 py-2 rounded-md text-white font-medium hover:bg-zinc-800;
+      }
+      "
+    `)
+  },
+)

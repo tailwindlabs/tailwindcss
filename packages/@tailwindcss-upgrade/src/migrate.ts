@@ -8,6 +8,7 @@ import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateBorderCompatibility } from './codemods/migrate-border-compatibility'
 import { migrateConfig } from './codemods/migrate-config'
+import { migrateImport } from './codemods/migrate-import'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
@@ -37,6 +38,7 @@ export async function migrateContents(
   }
 
   return postcss()
+    .use(migrateImport())
     .use(migrateAtApply(options))
     .use(migrateMediaScreen(options))
     .use(migrateVariantsDirective())
