@@ -76,7 +76,6 @@ async function parseCss(
 
   await substituteAtImports(ast, base, loadStylesheet)
 
-  // Find all `@theme` declarations
   let important: boolean | null = null
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
@@ -84,8 +83,10 @@ async function parseCss(
   let firstThemeRule: Rule | null = null
   let globs: { base: string; pattern: string }[] = []
 
+  // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'rule') return
+    if (node.selector[0] !== '@') return
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
@@ -196,124 +197,117 @@ async function parseCss(
       }
     }
 
-    // Drop instances of `@media theme(…)`
-    //
-    // We support `@import "tailwindcss/theme" theme(reference)` as a way to
-    // import an external theme file as a reference, which becomes `@media
-    // theme(reference) { … }` when the `@import` is processed.
-    if (node.selector.startsWith('@media theme(')) {
-      let themeParams = node.selector.slice(13, -1)
+    if (node.selector.startsWith('@media ')) {
+      let params = segment(node.selector.slice(7), ' ')
+      let unknownParams: string[] = []
 
-      walk(node.nodes, (child) => {
-        if (child.kind !== 'rule') {
-          throw new Error(
-            'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
-          )
-        }
-        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-          child.selector += ' ' + themeParams
-          return WalkAction.Skip
-        }
-      })
-      replaceWith(node.nodes)
-      return WalkAction.Skip
-    }
-
-    // Drop instances of `@media prefix(…)`
-    //
-    // We support `@import "tailwindcss" prefix(ident)` as a way to
-    // configure a theme prefix for variables and utilities.
-    if (node.selector.startsWith('@media prefix(')) {
-      let themeParams = node.selector.slice(7)
-
-      walk(node.nodes, (child) => {
-        if (child.kind !== 'rule') return
-        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-          child.selector += ' ' + themeParams
-          return WalkAction.Skip
-        }
-      })
-      replaceWith(node.nodes)
-      return WalkAction.Skip
-    }
-
-    if (node.selector.startsWith('@media')) {
-      let features = segment(node.selector.slice(6), ' ')
-      let shouldReplace = true
-
-      for (let i = 0; i < features.length; i++) {
-        let part = features[i]
-
-        // Drop instances of `@media important`
+      for (let param of params) {
+        // Handle `@media theme(…)`
         //
-        // We support `@import "tailwindcss" important` to mark all declarations
-        // in generated utilities as `!important`.
-        if (part === 'important') {
+        // We support `@import "tailwindcss/theme" theme(reference)` as a way to
+        // import an external theme file as a reference, which becomes `@media
+        // theme(reference) { … }` when the `@import` is processed.
+        if (param.startsWith('theme(')) {
+          let themeParams = param.slice(6, -1)
+
+          walk(node.nodes, (child) => {
+            if (child.kind !== 'rule') {
+              throw new Error(
+                'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
+              )
+            }
+            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+              child.selector += ' ' + themeParams
+              return WalkAction.Skip
+            }
+          })
+        }
+
+        // Handle `@media prefix(…)`
+        //
+        // We support `@import "tailwindcss" prefix(ident)` as a way to
+        // configure a theme prefix for variables and utilities.
+        else if (param.startsWith('prefix(')) {
+          let prefix = param.slice(7, -1)
+
+          walk(node.nodes, (child) => {
+            if (child.kind !== 'rule') return
+            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+              child.selector += ` prefix(${prefix})`
+              return WalkAction.Skip
+            }
+          })
+        }
+
+        // Handle important
+        else if (param === 'important') {
           important = true
-          shouldReplace = true
-          features[i] = ''
+        }
+
+        //
+        else {
+          unknownParams.push(param)
         }
       }
 
-      let remaining = features.filter(Boolean).join(' ')
-
-      node.selector = `@media ${remaining}`
-
-      if (remaining.trim() === '' && shouldReplace) {
+      if (unknownParams.length > 0) {
+        node.selector = `@media ${unknownParams.join(' ')}`
+      } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
 
       return WalkAction.Skip
     }
 
-    if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
+    // Handle `@theme`
+    if (node.selector === '@theme' || node.selector.startsWith('@theme ')) {
+      let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
 
-    let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
+      if (themePrefix) {
+        if (!IS_VALID_PREFIX.test(themePrefix)) {
+          throw new Error(
+            `The prefix "${themePrefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+          )
+        }
 
-    if (themePrefix) {
-      if (!IS_VALID_PREFIX.test(themePrefix)) {
+        theme.prefix = themePrefix
+      }
+
+      // Record all custom properties in the `@theme` declaration
+      walk(node.nodes, (child, { replaceWith }) => {
+        // Collect `@keyframes` rules to re-insert with theme variables later,
+        // since the `@theme` rule itself will be removed.
+        if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
+          theme.addKeyframes(child)
+          replaceWith([])
+          return WalkAction.Skip
+        }
+
+        if (child.kind === 'comment') return
+        if (child.kind === 'declaration' && child.property.startsWith('--')) {
+          theme.add(child.property, child.value ?? '', themeOptions)
+          return
+        }
+
+        let snippet = toCss([rule(node.selector, [child])])
+          .split('\n')
+          .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
+          .join('\n')
+
         throw new Error(
-          `The prefix "${themePrefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+          `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
         )
-      }
+      })
 
-      theme.prefix = themePrefix
-    }
-
-    // Record all custom properties in the `@theme` declaration
-    walk(node.nodes, (child, { replaceWith }) => {
-      // Collect `@keyframes` rules to re-insert with theme variables later,
-      // since the `@theme` rule itself will be removed.
-      if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
-        theme.addKeyframes(child)
+      // Keep a reference to the first `@theme` rule to update with the full
+      // theme later, and delete any other `@theme` rules.
+      if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
+        firstThemeRule = node
+      } else {
         replaceWith([])
-        return WalkAction.Skip
       }
-
-      if (child.kind === 'comment') return
-      if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value ?? '', themeOptions)
-        return
-      }
-
-      let snippet = toCss([rule(node.selector, [child])])
-        .split('\n')
-        .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
-        .join('\n')
-
-      throw new Error(
-        `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
-      )
-    })
-
-    // Keep a reference to the first `@theme` rule to update with the full theme
-    // later, and delete any other `@theme` rules.
-    if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-      firstThemeRule = node
-    } else {
-      replaceWith([])
+      return WalkAction.Skip
     }
-    return WalkAction.Skip
   })
 
   let designSystem = buildDesignSystem(theme)
