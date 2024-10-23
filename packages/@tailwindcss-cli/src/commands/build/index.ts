@@ -137,16 +137,29 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         fullRebuildPaths.push(path)
       },
     })
+
+    let detectSources = (() => {
+      // Disable auto source detection
+      if (compiler.root === 'none') {
+        return undefined
+      }
+
+      // No root specified, use the base directory
+      if (compiler.root === null) {
+        return { base }
+      }
+
+      // Use the specified root
+      return { base: path.resolve(compiler.root.base, compiler.root.pattern) }
+    })()
+
+    let scanner = new Scanner({ detectSources, sources: compiler.globs })
     env.DEBUG && console.timeEnd('[@tailwindcss/cli] Setup compiler')
-    return compiler
+
+    return [compiler, scanner] as const
   }
 
-  // Compile the input
-  let compiler = await createCompiler(input)
-  let scanner = new Scanner({
-    detectSources: { base },
-    sources: compiler.globs,
-  })
+  let [compiler, scanner] = await createCompiler(input)
 
   // Watch for changes
   if (args['--watch']) {
@@ -205,13 +218,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
-            compiler = await createCompiler(input)
-
-            // Re-scan the directory to get the new `candidates`
-            scanner = new Scanner({
-              detectSources: { base },
-              sources: compiler.globs,
-            })
+            ;[compiler, scanner] = await createCompiler(input)
 
             // Scan the directory for candidates
             env.DEBUG && console.time('[@tailwindcss/cli] Scan for candidates')
