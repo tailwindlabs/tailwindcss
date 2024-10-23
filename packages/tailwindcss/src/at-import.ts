@@ -44,8 +44,12 @@ export async function substituteAtImports(
             let ast = CSS.parse(loaded.content)
             await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
 
-            contextNode.nodes = buildImportNodes(ast, layer, media, supports)
-            contextNode.context.base = loaded.base
+            contextNode.nodes = buildImportNodes(
+              [context({ base: loaded.base }, ast)],
+              layer,
+              media,
+              supports,
+            )
           })(),
         )
 
