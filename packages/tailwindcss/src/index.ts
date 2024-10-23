@@ -196,70 +196,62 @@ async function parseCss(
       }
     }
 
-    // Drop instances of `@media theme(…)`
-    //
-    // We support `@import "tailwindcss/theme" theme(reference)` as a way to
-    // import an external theme file as a reference, which becomes `@media
-    // theme(reference) { … }` when the `@import` is processed.
-    if (node.selector.startsWith('@media theme(')) {
-      let themeParams = node.selector.slice(13, -1)
+    if (node.selector[0] === '@' && node.selector.startsWith('@media ')) {
+      let params = segment(node.selector.slice(7), ' ')
+      let unknownParams: string[] = []
 
-      walk(node.nodes, (child) => {
-        if (child.kind !== 'rule') {
-          throw new Error(
-            'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
-          )
-        }
-        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-          child.selector += ' ' + themeParams
-          return WalkAction.Skip
-        }
-      })
-      replaceWith(node.nodes)
-      return WalkAction.Skip
-    }
-
-    // Drop instances of `@media prefix(…)`
-    //
-    // We support `@import "tailwindcss" prefix(ident)` as a way to
-    // configure a theme prefix for variables and utilities.
-    if (node.selector.startsWith('@media prefix(')) {
-      let themeParams = node.selector.slice(7)
-
-      walk(node.nodes, (child) => {
-        if (child.kind !== 'rule') return
-        if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-          child.selector += ' ' + themeParams
-          return WalkAction.Skip
-        }
-      })
-      replaceWith(node.nodes)
-      return WalkAction.Skip
-    }
-
-    if (node.selector.startsWith('@media')) {
-      let features = segment(node.selector.slice(6), ' ')
-      let shouldReplace = true
-
-      for (let i = 0; i < features.length; i++) {
-        let part = features[i]
-
-        // Drop instances of `@media important`
+      for (let param of params) {
+        // Handle `@media theme(…)`
         //
-        // We support `@import "tailwindcss" important` to mark all declarations
-        // in generated utilities as `!important`.
-        if (part === 'important') {
+        // We support `@import "tailwindcss/theme" theme(reference)` as a way to
+        // import an external theme file as a reference, which becomes `@media
+        // theme(reference) { … }` when the `@import` is processed.
+        if (param.startsWith('theme(')) {
+          let themeParams = param.slice(6, -1)
+
+          walk(node.nodes, (child) => {
+            if (child.kind !== 'rule') {
+              throw new Error(
+                'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
+              )
+            }
+            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+              child.selector += ' ' + themeParams
+              return WalkAction.Skip
+            }
+          })
+        }
+
+        // Handle `@media prefix(…)`
+        //
+        // We support `@import "tailwindcss" prefix(ident)` as a way to
+        // configure a theme prefix for variables and utilities.
+        else if (param.startsWith('prefix(')) {
+          let prefix = param.slice(7, -1)
+
+          walk(node.nodes, (child) => {
+            if (child.kind !== 'rule') return
+            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
+              child.selector += ` prefix(${prefix})`
+              return WalkAction.Skip
+            }
+          })
+        }
+
+        // Handle important
+        else if (param === 'important') {
           important = true
-          shouldReplace = true
-          features[i] = ''
+        }
+
+        //
+        else {
+          unknownParams.push(param)
         }
       }
 
-      let remaining = features.filter(Boolean).join(' ')
-
-      node.selector = `@media ${remaining}`
-
-      if (remaining.trim() === '' && shouldReplace) {
+      if (unknownParams.length > 0) {
+        node.selector = `@media ${unknownParams.join(' ')}`
+      } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
 
