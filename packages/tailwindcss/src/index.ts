@@ -171,7 +171,7 @@ async function parseCss(
         for (let selector of selectors) {
           selector = selector.trim()
 
-          if (selector.startsWith('@')) {
+          if (selector[0] === '@') {
             atRuleSelectors.push(selector)
           } else {
             styleRuleSelectors.push(selector)

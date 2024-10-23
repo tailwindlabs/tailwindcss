@@ -1204,7 +1204,7 @@ it('should not parse compound group with a non-compoundable variant', () => {
   utilities.static('flex', () => [])
 
   let variants = new Variants()
-  variants.compoundWith('group', ['selector'], () => {})
+  variants.compoundWith('group', Compounds.StyleRules, () => {})
 
   expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })

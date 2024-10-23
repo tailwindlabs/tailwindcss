@@ -80,7 +80,7 @@ export function getVariants(design: DesignSystem) {
       let selectors: string[] = []
 
       // Produce v3-style selector strings in the face of nested rules
-      // This is more visible for things like group-*, not-*, etc…
+      // this is more visible for things like group-*, not-*, etc…
       walkDepth(node.nodes, (node, { path }) => {
         if (node.kind !== 'rule') return
         if (node.nodes.length > 0) return
@@ -90,8 +90,8 @@ export function getVariants(design: DesignSystem) {
           // This won't actually happen, but it's here to make TypeScript happy
           if (a.kind !== 'rule' || b.kind !== 'rule') return 0
 
-          let aIsAtRule = a.selector.startsWith('@')
-          let bIsAtRule = b.selector.startsWith('@')
+          let aIsAtRule = a.selector[0] === '@'
+          let bIsAtRule = b.selector[0] === '@'
 
           if (aIsAtRule && !bIsAtRule) return -1
           if (!aIsAtRule && bIsAtRule) return 1

@@ -335,7 +335,7 @@ export function createVariants(theme: Theme): Variants {
 
       if (ruleName === 'container') {
         // @container {query}
-        if (parts[0].startsWith('(')) {
+        if (parts[0][0] === '(') {
           return `not ${condition}`
         }
 
@@ -377,7 +377,7 @@ export function createVariants(theme: Theme): Variants {
     if (selector.includes('::')) return null
 
     let selectors = segment(selector, ',').map((sel) => {
-      // Remove unncessary wrapping &:is(…) to reduce the selector size
+      // Remove unnecessary wrapping &:is(…) to reduce the selector size
       if (sel.startsWith('&:is(') && sel.endsWith(')')) {
         sel = sel.slice(5, -1)
       }
