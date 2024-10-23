@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- _Upgrade (experimental)_: Ensure `@import` statements for relative CSS files are actually migrated to use relative path syntax ([#14769](https://github.com/tailwindlabs/tailwindcss/pull/14769))
 
 ## [4.0.0-alpha.29] - 2024-10-23
 
