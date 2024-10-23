@@ -35,7 +35,7 @@
     "enhanced-resolve": "^5.17.1",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
-    "picocolors": "^1.0.1",
+    "picocolors": "^1.1.1",
     "tailwindcss": "workspace:^"
   }
 }
