@@ -101,7 +101,7 @@ export class Variants {
     })
   }
 
-  compoundWith(
+  compound(
     name: string,
     compoundsWith: Compounds,
     applyFn: VariantFn<'compound'>,
@@ -354,12 +354,16 @@ export function createVariants(theme: Theme): Variants {
     })
   }
 
+  let conditionalRules = ['@media', '@supports', '@container']
+
   function negateSelector(selector: string) {
     if (selector[0] === '@') {
-      let name = selector.slice(1, selector.indexOf(' '))
-      let params = selector.slice(selector.indexOf(' ') + 1)
+      for (let ruleName of conditionalRules) {
+        if (!selector.startsWith(ruleName)) continue
 
-      if (name === 'media' || name === 'supports' || name === 'container') {
+        let name = ruleName.slice(1)
+        let params = selector.slice(ruleName.length).trim()
+
         let conditions = segment(params, ',')
 
         // We don't support things like `@media screen, print` because
@@ -392,7 +396,7 @@ export function createVariants(theme: Theme): Variants {
     return `&:not(${selectors.join(', ')})`
   }
 
-  variants.compoundWith('not', Compounds.StyleRules | Compounds.AtRules, (ruleNode, variant) => {
+  variants.compound('not', Compounds.StyleRules | Compounds.AtRules, (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     if (variant.modifier) return null
@@ -467,7 +471,7 @@ export function createVariants(theme: Theme): Variants {
     })
   })
 
-  variants.compoundWith('group', Compounds.StyleRules, (ruleNode, variant) => {
+  variants.compound('group', Compounds.StyleRules, (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     // Name the group by appending the modifier to `group` class itself if
@@ -523,7 +527,7 @@ export function createVariants(theme: Theme): Variants {
     })
   })
 
-  variants.compoundWith('peer', Compounds.StyleRules, (ruleNode, variant) => {
+  variants.compound('peer', Compounds.StyleRules, (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
     // Name the peer by appending the modifier to `peer` class itself if
@@ -670,7 +674,7 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
-  variants.compoundWith('has', Compounds.StyleRules, (ruleNode, variant) => {
+  variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
     if (variant.modifier) return null
 
     let didApply = false

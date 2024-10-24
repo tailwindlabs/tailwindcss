@@ -1706,6 +1706,10 @@ test('not', async () => {
       `,
       [
         'not-[:checked]:flex',
+        'not-[@media_print]:flex',
+        'not-[@media(orientation:portrait)]:flex',
+        'not-[@media_(orientation:landscape)]:flex',
+        'not-[@media_not_(orientation:portrait)]:flex',
         'not-hocus:flex',
         'not-device-hocus:flex',
 
@@ -2052,6 +2056,30 @@ test('not', async () => {
       display: flex;
     }
 
+    @media not (orientation: landscape) {
+      .not-\\[\\@media_\\(orientation\\:landscape\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (orientation: portrait) {
+      .not-\\[\\@media_not_\\(orientation\\:portrait\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not print {
+      .not-\\[\\@media_print\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (orientation: portrait) {
+      .not-\\[\\@media\\(orientation\\:portrait\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *) {
       display: flex;
     }
@@ -2122,6 +2150,10 @@ test('not', async () => {
         'not-[+img]:flex',
         'not-[~img]:flex',
         'not-[:checked]/foo:flex',
+        'not-[@media_screen,print]:flex',
+        'not-[@media_not_screen,print]:flex',
+        'not-[@media_not_screen,not_print]:flex',
+
         'not-nested-at-rules:flex',
         'not-nested-style-rules:flex',
         'not-multiple-media-conditions:flex',
@@ -2147,14 +2179,6 @@ test('not', async () => {
 
         // This is not a conditional at rule
         'not-starting:flex',
-
-        // TODO:
-        // 'not-group-[...]:flex',
-        // 'not-group-*:flex',
-        // 'not-peer-[...]:flex',
-        // 'not-peer-*:flex',
-        // 'not-max-*:flex',
-        // 'not-min-*:flex',
       ],
     ),
   ).toEqual('')
