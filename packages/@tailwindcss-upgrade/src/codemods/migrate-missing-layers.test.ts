@@ -22,6 +22,22 @@ it('should not migrate already migrated `@import` at-rules', async () => {
   ).toMatchInlineSnapshot(`"@import 'tailwindcss';"`)
 })
 
+it('should add missing `layer(…)` to imported files', async () => {
+  expect(
+    await migrate(css`
+      @import 'tailwindcss/utilities'; /* Expected no layer */
+      @import './foo.css'; /* Expected layer(utilities) */
+      @import './bar.css'; /* Expected layer(utilities) */
+      @import 'tailwindcss/components'; /* Expected no layer */
+    `),
+  ).toMatchInlineSnapshot(`
+    "@import 'tailwindcss/utilities'; /* Expected no layer */
+    @import './foo.css' layer(utilities); /* Expected layer(utilities) */
+    @import './bar.css' layer(utilities); /* Expected layer(utilities) */
+    @import 'tailwindcss/components'; /* Expected no layer */"
+  `)
+})
+
 it('should not migrate anything if no `@tailwind` directives (or imports) are found', async () => {
   expect(
     await migrate(css`
