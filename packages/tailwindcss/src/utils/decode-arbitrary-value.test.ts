@@ -29,6 +29,14 @@ describe('decoding arbitrary values', () => {
     )
   })
 
+  it('should not replace underscores in the first argument of theme()', () => {
+    expect(decodeArbitraryValue('theme(--spacing-1_5)')).toBe('theme(--spacing-1_5)')
+    expect(decodeArbitraryValue('theme(--spacing-1_5,_1rem)')).toBe('theme(--spacing-1_5, 1rem)')
+    expect(decodeArbitraryValue('theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))')).toBe(
+      'theme(--spacing-1_5, theme(--spacing-2_5, 1rem))',
+    )
+  })
+
   it('should leave var(…) as is', () => {
     expect(decodeArbitraryValue('var(--foo)')).toBe('var(--foo)')
     expect(decodeArbitraryValue('var(--headings-h1-size)')).toBe('var(--headings-h1-size)')
