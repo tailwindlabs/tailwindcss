@@ -674,6 +674,100 @@ describe('sorting', () => {
     `)
   })
 
+  it('should sort individual logical properties later than left/right pairs', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-1: 1px;
+            --spacing-2: 2px;
+            --spacing-3: 3px;
+          }
+          @tailwind utilities;
+        `,
+        [
+          // scroll-margin
+          'scroll-ms-1',
+          'scroll-me-2',
+          'scroll-mx-3',
+
+          // scroll-padding
+          'scroll-ps-1',
+          'scroll-pe-2',
+          'scroll-px-3',
+
+          // margin
+          'ms-1',
+          'me-2',
+          'mx-3',
+
+          // padding
+          'ps-1',
+          'pe-2',
+          'px-3',
+        ].sort(() => Math.random() - 0.5),
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-1: 1px;
+        --spacing-2: 2px;
+        --spacing-3: 3px;
+      }
+
+      .mx-3 {
+        margin-left: var(--spacing-3, 3px);
+        margin-right: var(--spacing-3, 3px);
+      }
+
+      .ms-1 {
+        margin-inline-start: var(--spacing-1, 1px);
+      }
+
+      .me-2 {
+        margin-inline-end: var(--spacing-2, 2px);
+      }
+
+      .scroll-mx-3 {
+        scroll-margin-left: var(--spacing-3, 3px);
+        scroll-margin-right: var(--spacing-3, 3px);
+      }
+
+      .scroll-ms-1 {
+        scroll-margin-inline-start: var(--spacing-1, 1px);
+      }
+
+      .scroll-me-2 {
+        scroll-margin-inline-end: var(--spacing-2, 2px);
+      }
+
+      .scroll-px-3 {
+        scroll-padding-left: var(--spacing-3, 3px);
+        scroll-padding-right: var(--spacing-3, 3px);
+      }
+
+      .scroll-ps-1 {
+        scroll-padding-inline-start: var(--spacing-1, 1px);
+      }
+
+      .scroll-pe-2 {
+        scroll-padding-inline-end: var(--spacing-2, 2px);
+      }
+
+      .px-3 {
+        padding-left: var(--spacing-3, 3px);
+        padding-right: var(--spacing-3, 3px);
+      }
+
+      .ps-1 {
+        padding-inline-start: var(--spacing-1, 1px);
+      }
+
+      .pe-2 {
+        padding-inline-end: var(--spacing-2, 2px);
+      }"
+    `)
+  })
+
   it('should move variants to the end while sorting', async () => {
     expect(
       await run(
