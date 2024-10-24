@@ -1775,6 +1775,7 @@ test(
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
+      @config '../tailwind.config.ts';
 
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -1808,7 +1809,6 @@ test(
           border-width: 0;
         }
       }
-      @config '../tailwind.config.ts';
 
       --- ./src/root.5.css ---
       @import './root.5/tailwind.css';
