@@ -158,8 +158,8 @@ async function run() {
         )
         if (!importedSheet) continue
 
-        // Only remove the `layer(…)` next to the import, if any of the children
-        // contains an `@utility`. Otherwise the `@utility` will not be top-level.
+        // Only remove the `layer(…)` next to the import if any of the children
+        // contain `@utility`. Otherwise `@utility` will not be top-level.
         if (
           !importedSheet.containsRule((node) => node.type === 'atrule' && node.name === 'utility')
         ) {
