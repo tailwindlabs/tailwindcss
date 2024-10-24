@@ -7,12 +7,13 @@ const QUOTES = ['"', "'", '`']
 const LOGICAL_OPERATORS = ['&&', '||', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
 const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Vue
+  /v-else-if=['"]$/,
   /v-if=['"]$/,
   /v-show=['"]$/,
 
   // Alpine
-  /x-show=['"]$/,
   /x-if=['"]$/,
+  /x-show=['"]$/,
 ]
 
 // In v3 the important modifier `!` sits in front of the utility itself, not
@@ -63,7 +64,7 @@ export function important(
           currentLineAfterCandidate += char
         }
 
-        // Heuristics 1: Require the candidate to be inside quotes
+        // Heuristic 1: Require the candidate to be inside quotes
         let isQuoteBeforeCandidate = QUOTES.some((quote) =>
           currentLineBeforeCandidate.includes(quote),
         )
@@ -74,12 +75,12 @@ export function important(
           continue nextCandidate
         }
 
-        // Heuristics 2: Disallow object access immediately following the candidate
+        // Heuristic 2: Disallow object access immediately following the candidate
         if (currentLineAfterCandidate[0] === '.') {
           continue nextCandidate
         }
 
-        // Heuristics 3: Disallow logical operators proceeding or following the candidate
+        // Heuristic 3: Disallow logical operators preceding or following the candidate
         for (let operator of LOGICAL_OPERATORS) {
           if (
             currentLineAfterCandidate.trim().startsWith(operator) ||
@@ -89,7 +90,7 @@ export function important(
           }
         }
 
-        // Heuristics 4: Disallow conditional template syntax
+        // Heuristic 4: Disallow conditional template syntax
         for (let rule of CONDITIONAL_TEMPLATE_SYNTAX) {
           if (rule.test(currentLineBeforeCandidate)) {
             continue nextCandidate
