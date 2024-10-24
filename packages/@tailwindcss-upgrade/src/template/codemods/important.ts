@@ -3,6 +3,18 @@ import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
+const QUOTES = ['"', "'", '`']
+const LOGICAL_OPERATORS = ['&&', '||', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
+const CONDITIONAL_TEMPLATE_SYNTAX = [
+  // Vue
+  /v-if=['"]$/,
+  /v-show=['"]$/,
+
+  // Alpine
+  /x-show=['"]$/,
+  /x-if=['"]$/,
+]
+
 // In v3 the important modifier `!` sits in front of the utility itself, not
 // before any of the variants. In v4, we want it to be at the end of the utility
 // so that it's always in the same location regardless of whether you used
@@ -25,7 +37,7 @@ export function important(
     end: number
   },
 ): string {
-  for (let candidate of parseCandidate(rawCandidate, designSystem)) {
+  nextCandidate: for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     if (candidate.important && candidate.raw[candidate.raw.length - 1] !== '!') {
       // The important migration is one of the most broad migrations with a high
       // potential of matching false positives since `!` is a valid character in
@@ -34,32 +46,54 @@ export function important(
       // on the side of caution and only migrate candidates that we are certain
       // are inside of a string.
       if (location) {
-        let isQuoteBeforeCandidate = false
+        let currentLineBeforeCandidate = ''
         for (let i = location.start - 1; i >= 0; i--) {
           let char = location.contents.at(i)!
           if (char === '\n') {
             break
           }
-          if (isQuote(char)) {
-            isQuoteBeforeCandidate = true
-            break
-          }
+          currentLineBeforeCandidate = char + currentLineBeforeCandidate
         }
-
-        let isQuoteAfterCandidate = false
+        let currentLineAfterCandidate = ''
         for (let i = location.end; i < location.contents.length; i++) {
           let char = location.contents.at(i)!
           if (char === '\n') {
             break
           }
-          if (isQuote(char)) {
-            isQuoteAfterCandidate = true
-            break
+          currentLineAfterCandidate += char
+        }
+
+        // Heuristics 1: Require the candidate to be inside quotes
+        let isQuoteBeforeCandidate = QUOTES.some((quote) =>
+          currentLineBeforeCandidate.includes(quote),
+        )
+        let isQuoteAfterCandidate = QUOTES.some((quote) =>
+          currentLineAfterCandidate.includes(quote),
+        )
+        if (!isQuoteBeforeCandidate || !isQuoteAfterCandidate) {
+          continue nextCandidate
+        }
+
+        // Heuristics 2: Disallow object access immediately following the candidate
+        if (currentLineAfterCandidate[0] === '.') {
+          continue nextCandidate
+        }
+
+        // Heuristics 3: Disallow logical operators proceeding or following the candidate
+        for (let operator of LOGICAL_OPERATORS) {
+          if (
+            currentLineAfterCandidate.trim().startsWith(operator) ||
+            currentLineBeforeCandidate.trim().endsWith(operator)
+          ) {
+            continue nextCandidate
           }
         }
 
-        if (!isQuoteBeforeCandidate || !isQuoteAfterCandidate) {
-          continue
+        // Heuristics 4: Disallow conditional template syntax
+        for (let rule of CONDITIONAL_TEMPLATE_SYNTAX) {
+          if (rule.test(currentLineBeforeCandidate)) {
+            continue nextCandidate
+          }
         }
       }
 
@@ -71,15 +105,4 @@ export function important(
   }
 
   return rawCandidate
-}
-
-function isQuote(char: string) {
-  switch (char) {
-    case '"':
-    case "'":
-    case '`':
-      return true
-    default:
-      return false
-  }
 }
