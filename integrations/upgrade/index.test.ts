@@ -1024,7 +1024,7 @@ test(
       @import './a.1.css' layer(utilities);
       @import './a.1.utilities.1.css';
       @import './b.1.css';
-      @import './c.1.css';
+      @import './c.1.css' layer(utilities);
       @import './c.1.utilities.css';
       @import './d.1.css';
 
@@ -1540,6 +1540,90 @@ test(
       --- ./src/styles/components.css ---
       .btn {
         @apply bg-black px-4 py-2 rounded-md text-white font-medium hover:bg-zinc-800;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'that it attaches the correct layers to the imported files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+
+        /* No layer expected */
+        @import './my-components.css';
+
+        /* No layer expected */
+        @import './my-utilities.css';
+
+        /* Expecting a layer */
+        @import './my-other.css';
+
+        @import 'tailwindcss/components';
+      `,
+      'src/my-components.css': css`
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+      `,
+      'src/my-utilities.css': css`
+        @layer utilities {
+          .css {
+            color: red;
+          }
+        }
+      `,
+      'src/my-other.css': css`
+        /* All my fonts! */
+        @font-face {
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      /* No layer expected */
+      @import './my-components.css';
+
+      /* No layer expected */
+      @import './my-utilities.css';
+
+      /* Expecting a layer */
+      @import './my-other.css' layer(utilities);
+
+      --- ./src/my-components.css ---
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/my-other.css ---
+      /* All my fonts! */
+      @font-face {
+      }
+
+      --- ./src/my-utilities.css ---
+      @utility css {
+        color: red;
       }
       "
     `)

@@ -151,42 +151,23 @@ async function run() {
 
     // Cleanup `@import "…" layer(utilities)`
     for (let sheet of stylesheets) {
-      // If the `@import` contains an injected `layer(…)` we need to remove it
-      if (!Array.from(sheet.importRules).some((node) => node.raws.tailwind_injected_layer)) {
-        continue
-      }
+      for (let importRule of sheet.importRules) {
+        if (!importRule.raws.tailwind_injected_layer) continue
+        let importedSheet = stylesheets.find(
+          (sheet) => sheet.id === importRule.raws.tailwind_destination_sheet_id,
+        )
+        if (!importedSheet) continue
 
-      let hasAtUtility = false
-
-      // Only remove the `layer(…)` next to the import, if any of the children
-      // contains an `@utility`. Otherwise the `@utility` will not be top-level.
-      {
-        sheet.root.walkAtRules('utility', () => {
-          hasAtUtility = true
-          return false
-        })
-
-        if (!hasAtUtility) {
-          for (let child of sheet.descendants()) {
-            child.root.walkAtRules('utility', () => {
-              hasAtUtility = true
-              return false
-            })
-
-            if (hasAtUtility) {
-              break
-            }
-          }
+        // Only remove the `layer(…)` next to the import, if any of the children
+        // contains an `@utility`. Otherwise the `@utility` will not be top-level.
+        if (
+          !importedSheet.containsRule((node) => node.type === 'atrule' && node.name === 'utility')
+        ) {
+          continue
         }
-      }
 
-      // No `@utility` found, we can keep the `layer(…)` next to the import
-      if (!hasAtUtility) continue
-
-      for (let importNode of sheet.importRules) {
-        if (importNode.raws.tailwind_injected_layer) {
-          importNode.params = importNode.params.replace(/ layer\([^)]+\)/, '').trim()
-        }
+        // Make sure to remove the `layer(…)` from the `@import` at-rule
+        importRule.params = importRule.params.replace(/ layer\([^)]+\)/, '').trim()
       }
     }
 

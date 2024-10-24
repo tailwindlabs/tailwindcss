@@ -219,6 +219,29 @@ export class Stylesheet {
     return { convertiblePaths, nonConvertiblePaths }
   }
 
+  containsRule(cb: (rule: postcss.AnyNode) => boolean) {
+    let contains = false
+
+    this.root.walk((rule) => {
+      if (cb(rule)) {
+        contains = true
+        return false
+      }
+    })
+
+    if (contains) {
+      return true
+    }
+
+    for (let child of this.children) {
+      if (child.item.containsRule(cb)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   [util.inspect.custom]() {
     return {
       ...this,
