@@ -8,6 +8,7 @@
   --default-mono-font-family: var(--font-family-mono);
   --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
   --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+  --default-line-height: round(max(min(2em - 0.5rem, 1em + 0.5rem, 2em / 3 + 1rem), 1em), 2px);
 
   /* Breakpoints */
   --breakpoint-sm: 40rem;
@@ -395,31 +396,18 @@
 
   /* Type scale */
   --font-size-xs: 0.75rem;
-  --font-size-xs--line-height: 1rem;
   --font-size-sm: 0.875rem;
-  --font-size-sm--line-height: 1.25rem;
   --font-size-base: 1rem;
-  --font-size-base--line-height: 1.5rem;
   --font-size-lg: 1.125rem;
-  --font-size-lg--line-height: 1.75rem;
   --font-size-xl: 1.25rem;
-  --font-size-xl--line-height: 1.75rem;
   --font-size-2xl: 1.5rem;
-  --font-size-2xl--line-height: 2rem;
   --font-size-3xl: 1.875rem;
-  --font-size-3xl--line-height: 2.25rem;
   --font-size-4xl: 2.25rem;
-  --font-size-4xl--line-height: 2.5rem;
   --font-size-5xl: 3rem;
-  --font-size-5xl--line-height: 1;
   --font-size-6xl: 3.75rem;
-  --font-size-6xl--line-height: 1;
   --font-size-7xl: 4.5rem;
-  --font-size-7xl--line-height: 1;
   --font-size-8xl: 6rem;
-  --font-size-8xl--line-height: 1;
   --font-size-9xl: 8rem;
-  --font-size-9xl--line-height: 1;
 
   /* Letter spacing */
   --letter-spacing-tighter: -0.05em;

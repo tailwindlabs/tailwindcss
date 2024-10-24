@@ -4221,12 +4221,16 @@ export function createUtilities(theme: Theme) {
                 ? candidate.modifier.value
                 : theme.resolve(candidate.modifier.value, ['--line-height'])
 
-            if (modifier) {
-              return [decl('font-size', value), decl('line-height', modifier)]
-            }
+            return [
+              decl('font-size', value),
+              decl('line-height', modifier ?? 'var(--tw-leading, var(--default-line-height))'),
+            ]
           }
 
-          return [decl('font-size', value)]
+          return [
+            decl('font-size', value),
+            decl('line-height', 'var(--tw-leading, var(--default-line-height))'),
+          ]
         }
         default: {
           value = asColor(value, candidate.modifier)
@@ -4261,9 +4265,10 @@ export function createUtilities(theme: Theme) {
               ? candidate.modifier.value
               : theme.resolve(candidate.modifier.value, ['--line-height'])
 
-          let declarations = [decl('font-size', fontSize)]
-          modifier && declarations.push(decl('line-height', modifier))
-          return declarations
+          return [
+            decl('font-size', fontSize),
+            decl('line-height', modifier ?? 'var(--tw-leading, var(--default-line-height))'),
+          ]
         }
 
         if (typeof options === 'string') {
@@ -4274,7 +4279,7 @@ export function createUtilities(theme: Theme) {
           decl('font-size', fontSize),
           decl(
             'line-height',
-            options['--line-height'] ? `var(--tw-leading, ${options['--line-height']})` : undefined,
+            `var(--tw-leading, ${options['--line-height'] ?? 'var(--default-line-height)'})`,
           ),
           decl(
             'letter-spacing',
