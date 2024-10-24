@@ -115,6 +115,34 @@ describe('compiling CSS', () => {
       ),
     ).toMatchSnapshot()
   })
+
+  test('unescapes underscores to spaces inside arbitrary values expect for url() and first parameter of var()', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-1_5: 1.5rem;
+            --spacing-2_5: 2.5rem;
+          }
+          @tailwind utilities;
+        `,
+        ['bg-[no-repeat_url(./my_file.jpg)', 'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-1_5: 1.5rem;
+        --spacing-2_5: 2.5rem;
+      }
+
+      .ml-\\[var\\(--spacing-1_5\\,_var\\(--spacing-2_5\\,_1rem\\)\\)\\] {
+        margin-left: var(--spacing-1_5, var(--spacing-2_5, 1rem));
+      }
+
+      .bg-\\[no-repeat_url\\(\\.\\/my_file\\.jpg\\) {
+        background-color: no-repeat url("./")my file. jpg;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

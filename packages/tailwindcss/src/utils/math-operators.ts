@@ -28,11 +28,6 @@ export function hasMathFn(input: string) {
 }
 
 export function addWhitespaceAroundMathOperators(input: string) {
-  // There's definitely no functions in the input, so bail early
-  if (input.indexOf('(') === -1) {
-    return input
-  }
-
   // Bail early if there are no math functions in the input
   if (!MATH_FUNCTIONS.some((fn) => input.includes(fn))) {
     return input
