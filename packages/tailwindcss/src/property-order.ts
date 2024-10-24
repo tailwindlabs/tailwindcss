@@ -155,7 +155,6 @@ export default [
   '--tw-divide-y-reverse',
   'divide-style',
   'divide-color',
-  '--tw-divide-opacity',
 
   'place-self',
   'align-self',
@@ -170,14 +169,6 @@ export default [
   'overscroll-behavior-y',
 
   'scroll-behavior',
-
-  'text-overflow',
-  'hyphens',
-  'white-space',
-
-  'text-wrap',
-  'overflow-wrap',
-  'work-break',
 
   'border-radius',
   'border-start-radius', // Not real
@@ -215,10 +206,7 @@ export default [
   'border-bottom-color',
   'border-left-color',
 
-  '--tw-border-opacity',
-
   'background-color',
-  '--tw-bg-opacity',
 
   'background-image',
   '--tw-gradient-position',
@@ -263,15 +251,21 @@ export default [
 
   'font-family',
   'font-size',
+  'line-height',
   'font-weight',
+  'letter-spacing',
+  'text-wrap',
+  'overflow-wrap',
+  'word-break',
+  'text-overflow',
+  'hyphens',
+  'white-space',
+
+  'color',
   'text-transform',
   'font-style',
   'font-stretch',
   'font-variant-numeric',
-  'line-height',
-  'letter-spacing',
-  'color',
-  '--tw-text-opacity',
   'text-decoration-line',
   'text-decoration-color',
   'text-decoration-style',
@@ -279,8 +273,7 @@ export default [
   'text-underline-offset',
   '-webkit-font-smoothing',
 
-  'placeholder-color', // Not real
-  '--tw-placeholder-opacity',
+  'placeholder-color',
 
   'caret-color',
   'accent-color',
@@ -301,7 +294,6 @@ export default [
   '--tw-inset-shadow-color',
   '--tw-inset-ring-shadow',
   '--tw-inset-ring-color',
-  '--tw-ring-opacity',
   '--tw-ring-offset-width',
   '--tw-ring-offset-color',
 
