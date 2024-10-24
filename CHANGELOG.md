@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure third-party plugins with `exports` in their `package.json` are resolved correctly ([#14775](https://github.com/tailwindlabs/tailwindcss/pull/14775))
 
 ## [4.0.0-alpha.29] - 2024-10-23
 

@@ -127,6 +127,7 @@ const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
+  conditionNames: import.meta.url ? ['node', 'import'] : ['node', 'require'],
 })
 
 function resolveJsId(id: string, base: string): Promise<string | false | undefined> {
