@@ -16,14 +16,14 @@ function loadDesign() {
 
 const table = [
   // Utilities
-  ['px-3 p-1 py-3', 'p-1 py-3 px-3'],
+  ['py-3 p-1 px-3', 'p-1 px-3 py-3'],
 
   // Utilities with variants
-  ['px-3 focus:hover:p-3 hover:p-1 py-3', 'py-3 px-3 hover:p-1 focus:hover:p-3'],
+  ['px-3 focus:hover:p-3 hover:p-1 py-3', 'px-3 py-3 hover:p-1 focus:hover:p-3'],
 
   // Utilities with important
-  ['px-3 py-4! p-1', 'p-1 py-4! px-3'],
-  ['py-4! px-3 p-1', 'p-1 py-4! px-3'],
+  ['px-3 py-4! p-1', 'p-1 px-3 py-4!'],
+  ['py-4! px-3 p-1', 'p-1 px-3 py-4!'],
 
   // User CSS order is the same and moved to the front
   ['b p-1 a', 'b a p-1'],
@@ -48,11 +48,11 @@ test('can sort classes deterministically across multiple class lists', async () 
   let classes = [
     [
       'a-class px-3 p-1 b-class py-3 bg-red-500 bg-blue-500',
-      'a-class b-class bg-blue-500 bg-red-500 p-1 py-3 px-3',
+      'a-class b-class bg-blue-500 bg-red-500 p-1 px-3 py-3',
     ],
     [
       'px-3 b-class p-1 py-3 bg-blue-500 a-class bg-red-500',
-      'b-class a-class bg-blue-500 bg-red-500 p-1 py-3 px-3',
+      'b-class a-class bg-blue-500 bg-red-500 p-1 px-3 py-3',
     ],
   ]
 

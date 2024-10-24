@@ -99,6 +99,8 @@ export default [
   'scroll-snap-align',
   'scroll-snap-stop',
   'scroll-margin',
+  'scroll-margin-inline',
+  'scroll-margin-block',
   'scroll-margin-inline-start',
   'scroll-margin-inline-end',
   'scroll-margin-top',
@@ -107,6 +109,8 @@ export default [
   'scroll-margin-left',
 
   'scroll-padding',
+  'scroll-padding-inline',
+  'scroll-padding-block',
   'scroll-padding-inline-start',
   'scroll-padding-inline-end',
   'scroll-padding-top',

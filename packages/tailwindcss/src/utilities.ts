@@ -1743,13 +1743,21 @@ export function createUtilities(theme: Theme) {
   functionalUtility('scroll-mx', {
     supportsNegative: true,
     themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-left', value), decl('scroll-margin-right', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'scroll-margin-inline'),
+      decl('scroll-margin-left', value),
+      decl('scroll-margin-right', value),
+    ],
   })
 
   functionalUtility('scroll-my', {
     supportsNegative: true,
     themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-top', value), decl('scroll-margin-bottom', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'scroll-margin-block'),
+      decl('scroll-margin-top', value),
+      decl('scroll-margin-bottom', value),
+    ],
   })
 
   functionalUtility('scroll-ms', {
@@ -1798,13 +1806,21 @@ export function createUtilities(theme: Theme) {
   functionalUtility('scroll-px', {
     supportsNegative: true,
     themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-left', value), decl('scroll-padding-right', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'scroll-padding-inline'),
+      decl('scroll-padding-left', value),
+      decl('scroll-padding-right', value),
+    ],
   })
 
   functionalUtility('scroll-py', {
     supportsNegative: true,
     themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-top', value), decl('scroll-padding-bottom', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'scroll-padding-block'),
+      decl('scroll-padding-top', value),
+      decl('scroll-padding-bottom', value),
+    ],
   })
 
   functionalUtility('scroll-ps', {
@@ -2960,12 +2976,20 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('px', {
     themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-left', value), decl('padding-right', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'padding-inline'),
+      decl('padding-left', value),
+      decl('padding-right', value),
+    ],
   })
 
   functionalUtility('py', {
     themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-top', value), decl('padding-bottom', value)],
+    handle: (value) => [
+      decl('--tw-sort', 'padding-block'),
+      decl('padding-top', value),
+      decl('padding-bottom', value),
+    ],
   })
 
   functionalUtility('pt', {
