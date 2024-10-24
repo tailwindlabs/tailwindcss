@@ -2309,7 +2309,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
             display: flex;
           }
 
@@ -2337,6 +2337,37 @@ describe('@variant', () => {
               .any-hover\\:hover\\:underline:hover {
                 text-decoration-line: underline;
               }
+            }
+          }
+        }"
+      `)
+    })
+
+    test('style-rules and at-rules', async () => {
+      let { build } = await compile(css`
+        @variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `)
+      let compiled = build(['cant-hover:focus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          :is(.cant-hover\\:focus\\:underline:not(:hover), .cant-hover\\:focus\\:underline:not(:active)):focus {
+            text-decoration-line: underline;
+          }
+
+          @media not (any-hover: hover) {
+            .cant-hover\\:focus\\:underline:focus {
+              text-decoration-line: underline;
+            }
+          }
+
+          @media not (pointer: fine) {
+            .cant-hover\\:focus\\:underline:focus {
+              text-decoration-line: underline;
             }
           }
         }"
@@ -2752,6 +2783,12 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
+        @media not foo {
+          .not-foo\\:flex {
+            display: flex;
+          }
+        }
+
         @media foo {
           .foo\\:flex {
             display: flex;

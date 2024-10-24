@@ -8,7 +8,7 @@ import { withAlpha, withNegative } from '../utilities'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
-import { substituteAtSlot } from '../variants'
+import { compoundsForSelectors, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
 
@@ -92,9 +92,15 @@ export function buildPluginApi(
     addVariant(name, variant) {
       // Single selector or multiple parallel selectors
       if (typeof variant === 'string' || Array.isArray(variant)) {
-        designSystem.variants.static(name, (r) => {
-          r.nodes = parseVariantValue(variant, r.nodes)
-        })
+        designSystem.variants.static(
+          name,
+          (r) => {
+            r.nodes = parseVariantValue(variant, r.nodes)
+          },
+          {
+            compounds: compoundsForSelectors(typeof variant === 'string' ? [variant] : variant),
+          },
+        )
       }
 
       // CSS-in-JS object

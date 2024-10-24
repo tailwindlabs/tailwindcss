@@ -72,12 +72,39 @@ test('getVariants compound', () => {
   ]
 
   expect(list).toEqual([
-    ['&:is(:where(.group):hover *)'],
-    ['&:is(:where(.group\\/sidebar):hover *)'],
-    ['&:is(:where(.group):is(:where(.group):hover *) *)'],
+    ['@media (hover: hover) { &:is(:where(.group):hover *) }'],
+    ['@media (hover: hover) { &:is(:where(.group\\/sidebar):hover *) }'],
+    ['@media (hover: hover) { &:is(:where(.group):is(:where(.group):hover *) *) }'],
     [],
     [],
   ])
+})
+
+test('variant selectors are in the correct order', async () => {
+  let input = css`
+    @variant overactive {
+      &:hover {
+        @media (hover: hover) {
+          &:focus {
+            &:active {
+              @slot;
+            }
+          }
+        }
+      }
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+  let variants = design.getVariants()
+  let overactive = variants.find((v) => v.name === 'overactive')!
+
+  expect(overactive).toBeTruthy()
+  expect(overactive.selectors({})).toMatchInlineSnapshot(`
+    [
+      "@media (hover: hover) { &:hover { &:focus { &:active } } }",
+    ]
+  `)
 })
 
 test('The variant `has-force` does not crash', () => {
@@ -349,4 +376,59 @@ test('Functional utilities from plugins are listed in hovers and completions', a
   expect(classMap.get('custom-3-green')?.modifiers).toEqual([])
 
   expect(classNames).not.toContain('custom-3-unknown')
+})
+
+test('Custom at-rule variants do not show up as a value under `group`', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @variant variant-1 (@media foo);
+    @variant variant-2 {
+      @media bar {
+        @slot;
+      }
+    }
+    @plugin "./plugin.js";
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      base: '',
+      module: plugin(({ addVariant }) => {
+        addVariant('variant-3', '@media baz')
+        addVariant('variant-4', ['@media qux', '@media cat'])
+      }),
+    }),
+  })
+
+  let variants = design.getVariants()
+  let v1 = variants.find((v) => v.name === 'variant-1')!
+  let v2 = variants.find((v) => v.name === 'variant-2')!
+  let v3 = variants.find((v) => v.name === 'variant-3')!
+  let v4 = variants.find((v) => v.name === 'variant-4')!
+  let group = variants.find((v) => v.name === 'group')!
+  let not = variants.find((v) => v.name === 'not')!
+
+  // All the variants should exist
+  expect(v1).not.toBeUndefined()
+  expect(v2).not.toBeUndefined()
+  expect(v3).not.toBeUndefined()
+  expect(v4).not.toBeUndefined()
+  expect(group).not.toBeUndefined()
+  expect(not).not.toBeUndefined()
+
+  // Group should not have variant-1, variant-2, or variant-3
+  expect(group.values).not.toContain('variant-1')
+  expect(group.values).not.toContain('variant-2')
+  expect(group.values).not.toContain('variant-3')
+  expect(group.values).not.toContain('variant-4')
+
+  // Not should have variant-1, variant-2, or variant-3
+  expect(not.values).toContain('variant-1')
+  expect(not.values).toContain('variant-2')
+  expect(not.values).toContain('variant-3')
+  expect(not.values).toContain('variant-4')
 })

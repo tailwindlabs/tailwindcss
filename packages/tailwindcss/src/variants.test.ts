@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
+import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
 
@@ -1687,16 +1688,33 @@ test('not', async () => {
             @slot;
           }
         }
+
+        @variant device-hocus {
+          @media (hover: hover) {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+
         @tailwind utilities;
       `,
       [
         'not-[:checked]:flex',
         'not-hocus:flex',
+        'not-device-hocus:flex',
 
         'group-not-[:checked]:flex',
         'group-not-[:checked]/parent-name:flex',
         'group-not-checked:flex',
         'group-not-hocus:flex',
+        // 'group-not-hover:flex',
+        // 'group-not-device-hocus:flex',
         'group-not-hocus/parent-name:flex',
 
         'peer-not-[:checked]:flex',
@@ -1704,11 +1722,330 @@ test('not', async () => {
         'peer-not-checked:flex',
         'peer-not-hocus:flex',
         'peer-not-hocus/sibling-name:flex',
+
+        // Not versions of built-in variants
+        'not-first:flex',
+        'not-last:flex',
+        'not-only:flex',
+        'not-odd:flex',
+        'not-even:flex',
+        'not-first-of-type:flex',
+        'not-last-of-type:flex',
+        'not-only-of-type:flex',
+        'not-visited:flex',
+        'not-target:flex',
+        'not-open:flex',
+        'not-default:flex',
+        'not-checked:flex',
+        'not-indeterminate:flex',
+        'not-placeholder-shown:flex',
+        'not-autofill:flex',
+        'not-optional:flex',
+        'not-required:flex',
+        'not-valid:flex',
+        'not-invalid:flex',
+        'not-in-range:flex',
+        'not-out-of-range:flex',
+        'not-read-only:flex',
+        'not-empty:flex',
+        'not-focus-within:flex',
+        'not-hover:flex',
+        'not-focus:flex',
+        'not-focus-visible:flex',
+        'not-active:flex',
+        'not-enabled:flex',
+        'not-disabled:flex',
+        'not-inert:flex',
+
+        'not-ltr:flex',
+        'not-rtl:flex',
+        'not-motion-safe:flex',
+        'not-motion-reduce:flex',
+        'not-dark:flex',
+        'not-print:flex',
+        'not-supports-grid:flex',
+        'not-has-checked:flex',
+        'not-aria-selected:flex',
+        'not-data-foo:flex',
+        'not-portrait:flex',
+        'not-landscape:flex',
+        'not-contrast-more:flex',
+        'not-contrast-less:flex',
+        'not-forced-colors:flex',
+        'not-nth-2:flex',
+
+        'not-sm:flex',
+        'not-min-sm:flex',
+        'not-min-[130px]:flex',
+        'not-max-sm:flex',
+        'not-max-[130px]:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".not-hocus\\:flex:not(:hover, :focus) {
+    ":root {
+      --breakpoint-sm: 640px;
+    }
+
+    .not-first\\:flex:not(:first-child) {
       display: flex;
+    }
+
+    .not-last\\:flex:not(:last-child) {
+      display: flex;
+    }
+
+    .not-only\\:flex:not(:only-child) {
+      display: flex;
+    }
+
+    .not-odd\\:flex:not(:nth-child(odd)) {
+      display: flex;
+    }
+
+    .not-even\\:flex:not(:nth-child(2n)) {
+      display: flex;
+    }
+
+    .not-first-of-type\\:flex:not(:first-of-type) {
+      display: flex;
+    }
+
+    .not-last-of-type\\:flex:not(:last-of-type) {
+      display: flex;
+    }
+
+    .not-only-of-type\\:flex:not(:only-of-type) {
+      display: flex;
+    }
+
+    .not-visited\\:flex:not(:visited) {
+      display: flex;
+    }
+
+    .not-target\\:flex:not(:target) {
+      display: flex;
+    }
+
+    .not-open\\:flex:not([open], :popover-open) {
+      display: flex;
+    }
+
+    .not-default\\:flex:not(:default) {
+      display: flex;
+    }
+
+    .not-checked\\:flex:not(:checked) {
+      display: flex;
+    }
+
+    .not-indeterminate\\:flex:not(:indeterminate) {
+      display: flex;
+    }
+
+    .not-placeholder-shown\\:flex:not(:placeholder-shown) {
+      display: flex;
+    }
+
+    .not-autofill\\:flex:not(:autofill) {
+      display: flex;
+    }
+
+    .not-optional\\:flex:not(:optional) {
+      display: flex;
+    }
+
+    .not-required\\:flex:not(:required) {
+      display: flex;
+    }
+
+    .not-valid\\:flex:not(:valid) {
+      display: flex;
+    }
+
+    .not-invalid\\:flex:not(:invalid) {
+      display: flex;
+    }
+
+    .not-in-range\\:flex:not(:in-range) {
+      display: flex;
+    }
+
+    .not-out-of-range\\:flex:not(:out-of-range) {
+      display: flex;
+    }
+
+    .not-read-only\\:flex:not(:read-only) {
+      display: flex;
+    }
+
+    .not-empty\\:flex:not(:empty) {
+      display: flex;
+    }
+
+    .not-focus-within\\:flex:not(:focus-within) {
+      display: flex;
+    }
+
+    .not-hover\\:flex:not(:hover) {
+      display: flex;
+    }
+
+    @media not (hover: hover) {
+      .not-hover\\:flex {
+        display: flex;
+      }
+    }
+
+    .not-focus\\:flex:not(:focus) {
+      display: flex;
+    }
+
+    .not-focus-visible\\:flex:not(:focus-visible) {
+      display: flex;
+    }
+
+    .not-active\\:flex:not(:active) {
+      display: flex;
+    }
+
+    .not-enabled\\:flex:not(:enabled) {
+      display: flex;
+    }
+
+    .not-disabled\\:flex:not(:disabled) {
+      display: flex;
+    }
+
+    .not-inert\\:flex:not([inert], [inert] *) {
+      display: flex;
+    }
+
+    .not-has-checked\\:flex:not(:has(:checked)) {
+      display: flex;
+    }
+
+    .not-aria-selected\\:flex:not([aria-selected="true"]) {
+      display: flex;
+    }
+
+    .not-data-foo\\:flex:not([data-foo]) {
+      display: flex;
+    }
+
+    .not-nth-2\\:flex:not(:nth-child(2)) {
+      display: flex;
+    }
+
+    @supports not (grid: var(--tw)) {
+      .not-supports-grid\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (prefers-reduced-motion: no-preference) {
+      .not-motion-safe\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (prefers-reduced-motion: reduce) {
+      .not-motion-reduce\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (prefers-contrast: more) {
+      .not-contrast-more\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (prefers-contrast: less) {
+      .not-contrast-less\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (width < 640px) {
+      .not-max-sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (width < 130px) {
+      .not-max-\\[130px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (width >= 130px) {
+      .not-min-\\[130px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (width >= 640px) {
+      .not-min-sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (width >= 640px) {
+      .not-sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (orientation: portrait) {
+      .not-portrait\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (orientation: landscape) {
+      .not-landscape\\:flex {
+        display: flex;
+      }
+    }
+
+    .not-ltr\\:flex:not(:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)) {
+      display: flex;
+    }
+
+    .not-rtl\\:flex:not(:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)) {
+      display: flex;
+    }
+
+    @media not (prefers-color-scheme: dark) {
+      .not-dark\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not print {
+      .not-print\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (forced-colors: active) {
+      .not-forced-colors\\:flex {
+        display: flex;
+      }
+    }
+
+    .not-hocus\\:flex:not(:hover, :focus) {
+      display: flex;
+    }
+
+    .not-device-hocus\\:flex:not(:hover, :focus) {
+      display: flex;
+    }
+
+    @media not (hover: hover) {
+      .not-device-hocus\\:flex {
+        display: flex;
+      }
     }
 
     .not-\\[\\:checked\\]\\:flex:not(:checked) {
@@ -1759,8 +2096,19 @@ test('not', async () => {
   expect(
     await compileCss(
       css`
-        @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
+        @variant nested-at-rules {
+          @media foo {
+            @media bar {
+              @slot;
+            }
+          }
+        }
+        @variant multiple-media-conditions {
+          @media foo, bar {
+            @slot;
+          }
+        }
+        @variant nested-style-rules {
           &:hover {
             &:focus {
               @slot;
@@ -1774,9 +2122,39 @@ test('not', async () => {
         'not-[+img]:flex',
         'not-[~img]:flex',
         'not-[:checked]/foo:flex',
-        'not-[@media_print]:flex',
-        'not-custom-at-rule:flex',
-        'not-nested-selectors:flex',
+        'not-nested-at-rules:flex',
+        'not-nested-style-rules:flex',
+        'not-multiple-media-conditions:flex',
+        'not-starting:flex',
+
+        // The following built-in variants don't have not-* versions because
+        // there is no sensible negative version of them.
+
+        // These just don't make sense as not-*
+        'not-force',
+        'not-*',
+
+        // These contain pseudo-elements
+        'not-first-letter',
+        'not-first-line',
+        'not-marker',
+        'not-selection',
+        'not-file',
+        'not-placeholder',
+        'not-backdrop',
+        'not-before',
+        'not-after',
+
+        // This is not a conditional at rule
+        'not-starting:flex',
+
+        // TODO:
+        // 'not-group-[...]:flex',
+        // 'not-group-*:flex',
+        // 'not-peer-[...]:flex',
+        // 'not-peer-*:flex',
+        // 'not-max-*:flex',
+        // 'not-min-*:flex',
       ],
     ),
   ).toEqual('')
@@ -2881,4 +3259,30 @@ test('variant order', async () => {
       initial-value: "";
     }"
   `)
+})
+
+test.each([
+  // These are style rules
+  [['.foo'], Compounds.StyleRules],
+  [['&:is(:hover)'], Compounds.StyleRules],
+
+  // These are conditional at rules
+  [['@media foo'], Compounds.AtRules],
+  [['@supports foo'], Compounds.AtRules],
+  [['@container foo'], Compounds.AtRules],
+
+  // These are both
+  [['.foo', '@media foo'], Compounds.StyleRules | Compounds.AtRules],
+
+  // These are never compoundable because:
+  // - Pseudo-elements are not compoundable
+  // - Non-conditional at-rules are not compoundable
+  [['.foo::before'], Compounds.Never],
+  [['@starting-style'], Compounds.Never],
+
+  // The presence of a single non-compoundable selector makes the whole list non-compoundable
+  [['.foo', '@media foo', '.foo::before'], Compounds.Never],
+  [['.foo', '@media foo', '@starting-style'], Compounds.Never],
+])('compoundsForSelectors: %s', (selectors, expected) => {
+  expect(compoundsForSelectors(selectors)).toBe(expected)
 })
