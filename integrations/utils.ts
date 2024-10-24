@@ -620,11 +620,3 @@ async function gracefullyRemove(dir: string) {
     await fs.rm(dir, { recursive: true, force: true })
   }
 }
-
-async function dirExists(dir: string): Promise<boolean> {
-  try {
-    return await fs.stat(dir).then((stat) => stat.isDirectory())
-  } catch {
-    return false
-  }
-}

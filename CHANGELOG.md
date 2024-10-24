@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Changed
+
+- Don't convert underscores in the first argument to `var()` to spaces ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776))
+
+### Fixed
+
+- Ensure individual logical property utilities are sorted later than left/right pair utilities ([#14777](https://github.com/tailwindlabs/tailwindcss/pull/14777))
+- Don't migrate important modifiers inside conditional statements in Vue and Alpine (e.g. `<div v-if="!border" />`) ([#14774](https://github.com/tailwindlabs/tailwindcss/pull/14774))
+- Ensure third-party plugins with `exports` in their `package.json` are resolved correctly ([#14775](https://github.com/tailwindlabs/tailwindcss/pull/14775))
+- Ensure underscores in the `url()` function are never unescaped ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776))
+- _Upgrade (experimental)_: Ensure `@import` statements for relative CSS files are actually migrated to use relative path syntax ([#14769](https://github.com/tailwindlabs/tailwindcss/pull/14769))
 
 ## [4.0.0-alpha.29] - 2024-10-23
 

@@ -8,6 +8,7 @@ import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateBorderCompatibility } from './codemods/migrate-border-compatibility'
 import { migrateConfig } from './codemods/migrate-config'
+import { migrateImport } from './codemods/migrate-import'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
@@ -37,6 +38,7 @@ export async function migrateContents(
   }
 
   return postcss()
+    .use(migrateImport())
     .use(migrateAtApply(options))
     .use(migrateMediaScreen(options))
     .use(migrateVariantsDirective())
@@ -84,9 +86,20 @@ export async function analyze(stylesheets: Stylesheet[]) {
             : process.cwd()
 
           // Resolve the import to a file path
-          let resolvedPath: string | false
+          let resolvedPath: string | false = false
           try {
-            resolvedPath = resolveCssId(id, basePath)
+            // We first try to resolve the file as relative to the current file
+            // to mimic the behavior of `postcss-import` since that's what was
+            // used to resolve imports in Tailwind CSS v3.
+            if (id[0] !== '.') {
+              try {
+                resolvedPath = resolveCssId(`./${id}`, basePath)
+              } catch {}
+            }
+
+            if (!resolvedPath) {
+              resolvedPath = resolveCssId(id, basePath)
+            }
           } catch (err) {
             console.warn(`Failed to resolve import: ${id}. Skipping.`)
             console.error(err)
