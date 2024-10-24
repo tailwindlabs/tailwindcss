@@ -86,9 +86,20 @@ export async function analyze(stylesheets: Stylesheet[]) {
             : process.cwd()
 
           // Resolve the import to a file path
-          let resolvedPath: string | false
+          let resolvedPath: string | false = false
           try {
-            resolvedPath = resolveCssId(id, basePath)
+            // We first try to resolve the file as relative to the current file,
+            // this is mimicking the default behavior of postcss-import and thus
+            // of v3.
+            if (id[0] !== '.') {
+              try {
+                resolvedPath = resolveCssId(`./${id}`, basePath)
+              } catch {}
+            }
+
+            if (!resolvedPath) {
+              resolvedPath = resolveCssId(id, basePath)
+            }
           } catch (err) {
             console.warn(`Failed to resolve import: ${id}. Skipping.`)
             console.error(err)
