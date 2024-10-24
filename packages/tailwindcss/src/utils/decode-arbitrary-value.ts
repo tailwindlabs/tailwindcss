@@ -2,7 +2,7 @@ import * as ValueParser from '../value-parser'
 import { addWhitespaceAroundMathOperators } from './math-operators'
 
 export function decodeArbitraryValue(input: string): string {
-  // There's definitely no functions in the input, so bail early
+  // There are definitely no functions in the input, so bail early
   if (input.indexOf('(') === -1) {
     return convertUnderscoresToWhitespace(input)
   }

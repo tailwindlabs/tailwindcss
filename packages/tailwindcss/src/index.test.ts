@@ -116,7 +116,7 @@ describe('compiling CSS', () => {
     ).toMatchSnapshot()
   })
 
-  test('unescapes underscores to spaces inside arbitrary values expect for url() and first parameter of var()', async () => {
+  test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()`', async () => {
     expect(
       await compileCss(
         css`

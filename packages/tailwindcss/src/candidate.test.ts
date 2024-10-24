@@ -1080,7 +1080,7 @@ it('should not replace `_` inside of `url()`', () => {
     `)
 })
 
-it('should not replace `_` for the first value of `var()`', () => {
+it('should not replace `_` in the first argument to `var()`', () => {
   let utilities = new Utilities()
   utilities.functional('ml', () => [])
 
