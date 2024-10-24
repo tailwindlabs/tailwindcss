@@ -1560,7 +1560,7 @@ test(
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss/utilities';
+        @import 'tailwindcss/components';
 
         /* No layer expected */
         @import './my-components.css';
@@ -1571,7 +1571,7 @@ test(
         /* Expecting a layer */
         @import './my-other.css';
 
-        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
       `,
       'src/my-components.css': css`
         @layer components {
@@ -1600,8 +1600,6 @@ test(
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
       --- ./src/index.css ---
-      @import 'tailwindcss/utilities' layer(utilities);
-
       /* No layer expected */
       @import './my-components.css';
 
@@ -1609,7 +1607,9 @@ test(
       @import './my-utilities.css';
 
       /* Expecting a layer */
-      @import './my-other.css' layer(utilities);
+      @import './my-other.css' layer(components);
+
+      @import 'tailwindcss/utilities' layer(utilities);
 
       --- ./src/my-components.css ---
       @utility foo {
