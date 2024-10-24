@@ -209,7 +209,7 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
   utilities.static('flex', () => [])
 
   let variants = new Variants()
-  variants.compoundWith('group', Compounds.StyleRules, () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run('group-[&_p]/parent-name:flex', { utilities, variants })).toMatchInlineSnapshot(`
     [
@@ -244,7 +244,7 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
   utilities.static('flex', () => [])
 
   let variants = new Variants()
-  variants.compoundWith('group', Compounds.StyleRules, () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
   variants.functional('aria', () => {})
 
   expect(run('group-aria-[disabled]/parent-name:flex', { utilities, variants }))
@@ -286,7 +286,7 @@ it('should parse compound group with itself group-group-*', () => {
 
   let variants = new Variants()
   variants.static('hover', () => {})
-  variants.compoundWith('group', Compounds.StyleRules, () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run('group-group-group-hover/parent-name:flex', { utilities, variants }))
     .toMatchInlineSnapshot(`
@@ -1255,7 +1255,7 @@ it('should not parse compound group with a non-compoundable variant', () => {
   utilities.static('flex', () => [])
 
   let variants = new Variants()
-  variants.compoundWith('group', Compounds.StyleRules, () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
