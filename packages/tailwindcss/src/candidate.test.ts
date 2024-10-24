@@ -1086,6 +1086,31 @@ it('should not replace `_` in the first argument to `var()`', () => {
     `)
 })
 
+it('should not replace `_` in the first argument to `theme()`', () => {
+  let utilities = new Utilities()
+  utilities.functional('ml', () => [])
+
+  expect(run('ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": null,
+          "negative": false,
+          "raw": "ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]",
+          "root": "ml",
+          "value": {
+            "dataType": null,
+            "kind": "arbitrary",
+            "value": "theme(--spacing-1_5, theme(--spacing-2_5, 1rem))",
+          },
+          "variants": [],
+        },
+      ]
+    `)
+})
+
 it('should parse arbitrary properties', () => {
   expect(run('[color:red]')).toMatchInlineSnapshot(`
     [

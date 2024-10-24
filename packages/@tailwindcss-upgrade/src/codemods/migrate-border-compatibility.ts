@@ -64,6 +64,19 @@ export function migrateBorderCompatibility({
   }
 
   function migrate(root: Root) {
+    let isTailwindRoot = false
+    root.walkAtRules('import', (node) => {
+      if (
+        /['"]tailwindcss['"]/.test(node.params) ||
+        /['"]tailwindcss\/preflight['"]/.test(node.params)
+      ) {
+        isTailwindRoot = true
+        return false
+      }
+    })
+
+    if (!isTailwindRoot) return
+
     let targetNode = null as AtRule | null
 
     root.walkAtRules((node) => {
