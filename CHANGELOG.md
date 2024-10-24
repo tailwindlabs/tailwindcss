@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Ensure `@import` statements for relative CSS files are actually migrated to use relative path syntax ([#14769](https://github.com/tailwindlabs/tailwindcss/pull/14769))
 - _Upgrade (experimental)_: Only generate Preflight compatibility styles when Preflight is used ([#14773](https://github.com/tailwindlabs/tailwindcss/pull/14773))
 - _Upgrade (experimental)_: Don't escape underscores when printing theme values migrated to CSS variables in arbitrary values (e.g. `m-[var(--spacing-1_5)]` instead of `m-[var(--spacing-1\_5)]`) ([#14778](https://github.com/tailwindlabs/tailwindcss/pull/14778))
+- _Upgrade (experimental)_: Ensure `layer(…)` on `@import` is correct ([#14783](https://github.com/tailwindlabs/tailwindcss/pull/14783))
 
 ## [4.0.0-alpha.29] - 2024-10-23
 
@@ -490,3 +491,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+
