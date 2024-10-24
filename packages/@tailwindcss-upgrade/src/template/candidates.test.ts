@@ -118,6 +118,13 @@ const candidates = [
   // Keep spaces in strings
   ['content-["hello_world"]', 'content-["hello_world"]'],
   ['content-[____"hello_world"___]', 'content-["hello_world"]'],
+
+  // Do not escape underscores for url() and CSS variable in var()
+  ['bg-[no-repeat_url(/image_13.png)]', 'bg-[no-repeat_url(/image_13.png)]'],
+  [
+    'bg-[var(--spacing-0_5,_var(--spacing-1_5,_3rem))]',
+    'bg-[var(--spacing-0_5,_var(--spacing-1_5,_3rem))]',
+  ],
 ]
 
 const variants = [
