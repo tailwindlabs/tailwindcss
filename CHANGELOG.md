@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Don't convert underscores in the first argument to `var()` and `theme()` to spaces ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776), [#14781](https://github.com/tailwindlabs/tailwindcss/pull/14781))
+- Sort text alignment and wrapping utilities with typography utilities ([#14787](https://github.com/tailwindlabs/tailwindcss/pull/14787))
+- Sort line height and letter spacing utilities before text color utilities ([#14787](https://github.com/tailwindlabs/tailwindcss/pull/14787))
 
 ## [4.0.0-alpha.29] - 2024-10-23
 
