@@ -245,10 +245,6 @@ export default [
   'padding-bottom',
   'padding-left',
 
-  'text-overflow',
-  'hyphens',
-  'white-space',
-
   'text-align',
   'text-indent',
   'vertical-align',
@@ -261,6 +257,10 @@ export default [
   'text-wrap',
   'overflow-wrap',
   'word-break',
+  'text-overflow',
+  'hyphens',
+  'white-space',
+
   'color',
   'text-transform',
   'font-style',
