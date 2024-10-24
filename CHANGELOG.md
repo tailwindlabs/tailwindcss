@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `not-*` versions of all builtin media query and supports variants ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
-- Improved support for custom variants with `group-*`, `peer-*`, `has-*`, and `not-*` ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
+- Support `not-*` with all built-in media query and `supports-*` variants ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
+- Support `not-*` with custom variants containing at-rules ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
+- Support `group-*`, `peer-*`, and `has-*` with custom variants containing multiple, non-nested style rules ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
 
 ### Changed
 
@@ -22,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't migrate important modifiers inside conditional statements in Vue and Alpine (e.g. `<div v-if="!border" />`) ([#14774](https://github.com/tailwindlabs/tailwindcss/pull/14774))
 - Ensure third-party plugins with `exports` in their `package.json` are resolved correctly ([#14775](https://github.com/tailwindlabs/tailwindcss/pull/14775))
 - Ensure underscores in the `url()` function are never unescaped ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776))
-- Fixed display of complex variants in Intellisense ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
+- Ensure complex variants are displayed correctly in IntelliSense completions ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
 - _Upgrade (experimental)_: Ensure `@import` statements for relative CSS files are actually migrated to use relative path syntax ([#14769](https://github.com/tailwindlabs/tailwindcss/pull/14769))
 - _Upgrade (experimental)_: Only generate Preflight compatibility styles when Preflight is used ([#14773](https://github.com/tailwindlabs/tailwindcss/pull/14773))
 - _Upgrade (experimental)_: Don't escape underscores when printing theme values migrated to CSS variables in arbitrary values (e.g. `m-[var(--spacing-1_5)]` instead of `m-[var(--spacing-1\_5)]`) ([#14778](https://github.com/tailwindlabs/tailwindcss/pull/14778))
