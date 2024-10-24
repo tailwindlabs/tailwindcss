@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test } from '../utils'
 
 test(
   `upgrades a v3 project to v4`,
@@ -9,6 +9,9 @@ test(
         {
           "dependencies": {
             "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
           }
         }
       `,
@@ -20,7 +23,9 @@ test(
       `,
       'src/index.html': html`
         <h1>🤠👋</h1>
-        <div class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md"></div>
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(spacing[1.5])]"
+        ></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -42,7 +47,9 @@ test(
       "
       --- ./src/index.html ---
       <h1>🤠👋</h1>
-      <div class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)]"></div>
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)] ml-[var(--spacing-1_5)]"
+      ></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
@@ -92,6 +99,18 @@ test(
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringContaining('4.0.0'),
     })
+
+    // Ensure the v4 project compiles correctly
+    await exec('npx tailwindcss --input src/input.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`flex!`,
+      candidate`sm:block!`,
+      candidate`bg-linear-to-t`,
+      candidate`bg-[var(--my-red)]`,
+      candidate`max-w-[var(--breakpoint-md)]`,
+      candidate`ml-[var(--spacing-1\_5)`,
+    ])
   },
 )
 

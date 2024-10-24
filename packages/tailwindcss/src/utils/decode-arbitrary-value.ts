@@ -1,13 +1,16 @@
+import * as ValueParser from '../value-parser'
 import { addWhitespaceAroundMathOperators } from './math-operators'
 
 export function decodeArbitraryValue(input: string): string {
-  // We do not want to normalize anything inside of a url() because if we
-  // replace `_` with ` `, then it will very likely break the url.
-  if (input.startsWith('url(')) {
-    return input
+  // There are definitely no functions in the input, so bail early
+  if (input.indexOf('(') === -1) {
+    return convertUnderscoresToWhitespace(input)
   }
 
-  input = convertUnderscoresToWhitespace(input)
+  let ast = ValueParser.parse(input)
+  recursivelyDecodeArbitraryValues(ast)
+  input = ValueParser.toCss(ast)
+
   input = addWhitespaceAroundMathOperators(input)
 
   return input
@@ -40,4 +43,51 @@ function convertUnderscoresToWhitespace(input: string) {
   }
 
   return output
+}
+
+function recursivelyDecodeArbitraryValues(ast: ValueParser.ValueAstNode[]) {
+  for (let node of ast) {
+    switch (node.kind) {
+      case 'function': {
+        if (node.value === 'url' || node.value.endsWith('_url')) {
+          // Don't decode underscores in url() but do decode the function name
+          node.value = convertUnderscoresToWhitespace(node.value)
+          break
+        }
+
+        if (
+          node.value === 'var' ||
+          node.value.endsWith('_var') ||
+          node.value === 'theme' ||
+          node.value.endsWith('_theme')
+        ) {
+          // Don't decode underscores in the first argument of var() but do
+          // decode the function name
+          node.value = convertUnderscoresToWhitespace(node.value)
+          for (let i = 0; i < node.nodes.length; i++) {
+            if (i == 0 && node.nodes[i].kind === 'word') {
+              continue
+            }
+            recursivelyDecodeArbitraryValues([node.nodes[i]])
+          }
+          break
+        }
+
+        node.value = convertUnderscoresToWhitespace(node.value)
+        recursivelyDecodeArbitraryValues(node.nodes)
+        break
+      }
+      case 'separator':
+      case 'word': {
+        node.value = convertUnderscoresToWhitespace(node.value)
+        break
+      }
+      default:
+        never(node)
+    }
+  }
+}
+
+function never(value: never): never {
+  throw new Error(`Unexpected value: ${value}`)
 }

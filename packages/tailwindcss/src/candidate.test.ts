@@ -1059,24 +1059,75 @@ it('should not replace `_` inside of `url()`', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[url(https://example.com/some_page)]', { utilities })).toMatchInlineSnapshot(`
-    [
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "raw": "bg-[url(https://example.com/some_page)]",
-        "root": "bg",
-        "value": {
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "url(https://example.com/some_page)",
+  expect(run('bg-[no-repeat_url(https://example.com/some_page)]', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": null,
+          "negative": false,
+          "raw": "bg-[no-repeat_url(https://example.com/some_page)]",
+          "root": "bg",
+          "value": {
+            "dataType": null,
+            "kind": "arbitrary",
+            "value": "no-repeat url(https://example.com/some_page)",
+          },
+          "variants": [],
         },
-        "variants": [],
-      },
-    ]
-  `)
+      ]
+    `)
+})
+
+it('should not replace `_` in the first argument to `var()`', () => {
+  let utilities = new Utilities()
+  utilities.functional('ml', () => [])
+
+  expect(run('ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": null,
+          "negative": false,
+          "raw": "ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]",
+          "root": "ml",
+          "value": {
+            "dataType": null,
+            "kind": "arbitrary",
+            "value": "var(--spacing-1_5, var(--spacing-2_5, 1rem))",
+          },
+          "variants": [],
+        },
+      ]
+    `)
+})
+
+it('should not replace `_` in the first argument to `theme()`', () => {
+  let utilities = new Utilities()
+  utilities.functional('ml', () => [])
+
+  expect(run('ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": null,
+          "negative": false,
+          "raw": "ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]",
+          "root": "ml",
+          "value": {
+            "dataType": null,
+            "kind": "arbitrary",
+            "value": "theme(--spacing-1_5, theme(--spacing-2_5, 1rem))",
+          },
+          "variants": [],
+        },
+      ]
+    `)
 })
 
 it('should parse arbitrary properties', () => {

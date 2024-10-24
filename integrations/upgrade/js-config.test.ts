@@ -123,9 +123,10 @@ test(
         @tailwind components;
         @tailwind utilities;
       `,
+      // prettier-ignore
       'src/test.js': ts`
         export default {
-          shouldNotUse: !border.shouldUse,
+          'shouldNotMigrate': !border.test + '',
         }
       `,
       'node_modules/my-external-lib/src/template.html': html`
@@ -275,7 +276,7 @@ test(
 
       --- src/test.js ---
       export default {
-        shouldNotUse: !border.shouldUse,
+        'shouldNotMigrate': !border.test + '',
       }
       "
     `)
