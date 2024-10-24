@@ -177,7 +177,7 @@ export default [
 
   'text-wrap',
   'overflow-wrap',
-  'work-break',
+  'word-break',
 
   'border-radius',
   'border-start-radius', // Not real
