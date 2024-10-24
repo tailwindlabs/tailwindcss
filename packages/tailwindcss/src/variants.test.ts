@@ -2074,6 +2074,12 @@ test('not', async () => {
       }
     }
 
+    @media not (orientation: portrait) {
+      .not-\\[\\@media\\(orientation\\:portrait\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *) {
       display: flex;
     }
