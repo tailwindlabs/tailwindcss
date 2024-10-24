@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.30] - 2024-10-24
+
 ### Added
 
 - Support `not-*` with all built-in media query and `supports-*` variants ([#14743](https://github.com/tailwindlabs/tailwindcss/pull/14743))
