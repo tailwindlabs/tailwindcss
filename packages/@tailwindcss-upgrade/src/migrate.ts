@@ -88,9 +88,9 @@ export async function analyze(stylesheets: Stylesheet[]) {
           // Resolve the import to a file path
           let resolvedPath: string | false = false
           try {
-            // We first try to resolve the file as relative to the current file,
-            // this is mimicking the default behavior of postcss-import and thus
-            // of v3.
+            // We first try to resolve the file as relative to the current file
+            // to mimic the behavior of `postcss-import` since that's what was
+            // used to resolve imports in Tailwind CSS v3.
             if (id[0] !== '.') {
               try {
                 resolvedPath = resolveCssId(`./${id}`, basePath)
