@@ -187,9 +187,9 @@ function printArbitraryValue(input: string) {
     })
   }
 
+  recursivelyEscapeUnderscores(ast)
+
   return ValueParser.toCss(ast)
-    .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
-    .replaceAll(' ', '_') // Replace spaces with underscores
 }
 
 function simplifyArbitraryVariant(input: string) {
@@ -212,4 +212,57 @@ function simplifyArbitraryVariant(input: string) {
   }
 
   return input
+}
+
+function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
+  for (let node of ast) {
+    switch (node.kind) {
+      case 'function': {
+        if (node.value === 'url' || node.value.endsWith('_url')) {
+          // Don't decode underscores in url() but do decode the function name
+          node.value = escapeUnderscore(node.value)
+          break
+        }
+
+        if (
+          node.value === 'var' ||
+          node.value.endsWith('_var') ||
+          node.value === 'theme' ||
+          node.value.endsWith('_theme')
+        ) {
+          // Don't decode underscores in the first argument of var() and theme()
+          // but do decode the function name
+          node.value = escapeUnderscore(node.value)
+          for (let i = 0; i < node.nodes.length; i++) {
+            if (i == 0 && node.nodes[i].kind === 'word') {
+              continue
+            }
+            recursivelyEscapeUnderscores([node.nodes[i]])
+          }
+          break
+        }
+
+        node.value = escapeUnderscore(node.value)
+        recursivelyEscapeUnderscores(node.nodes)
+        break
+      }
+      case 'separator':
+      case 'word': {
+        node.value = escapeUnderscore(node.value)
+        break
+      }
+      default:
+        never(node)
+    }
+  }
+}
+
+function never(value: never): never {
+  throw new Error(`Unexpected value: ${value}`)
+}
+
+function escapeUnderscore(value: string): string {
+  return value
+    .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
+    .replaceAll(' ', '_') // Replace spaces with underscores
 }
