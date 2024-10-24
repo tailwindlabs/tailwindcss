@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Don't convert underscores in the first argument to `var()` to spaces ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776))
+- Don't convert underscores in the first argument to `var()` and `theme()` to spaces ([#14776](https://github.com/tailwindlabs/tailwindcss/pull/14776), [#14781](https://github.com/tailwindlabs/tailwindcss/pull/14781))
 
 ### Fixed
 

@@ -116,7 +116,7 @@ describe('compiling CSS', () => {
     ).toMatchSnapshot()
   })
 
-  test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()`', async () => {
+  test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()` and `theme()`', async () => {
     expect(
       await compileCss(
         css`
@@ -126,12 +126,20 @@ describe('compiling CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-[no-repeat_url(./my_file.jpg)', 'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]'],
+        [
+          'bg-[no-repeat_url(./my_file.jpg)',
+          'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]',
+          'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]',
+        ],
       ),
     ).toMatchInlineSnapshot(`
       ":root {
         --spacing-1_5: 1.5rem;
         --spacing-2_5: 2.5rem;
+      }
+
+      .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
+        margin-left: 1.5rem;
       }
 
       .ml-\\[var\\(--spacing-1_5\\,_var\\(--spacing-2_5\\,_1rem\\)\\)\\] {

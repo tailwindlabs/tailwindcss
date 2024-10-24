@@ -55,7 +55,12 @@ function recursivelyDecodeArbitraryValues(ast: ValueParser.ValueAstNode[]) {
           break
         }
 
-        if (node.value === 'var' || node.value.endsWith('_var')) {
+        if (
+          node.value === 'var' ||
+          node.value.endsWith('_var') ||
+          node.value === 'theme' ||
+          node.value.endsWith('_theme')
+        ) {
           // Don't decode underscores in the first argument of var() but do
           // decode the function name
           node.value = convertUnderscoresToWhitespace(node.value)
@@ -78,11 +83,11 @@ function recursivelyDecodeArbitraryValues(ast: ValueParser.ValueAstNode[]) {
         break
       }
       default:
-        never()
+        never(node)
     }
   }
 }
 
-function never(): never {
-  throw new Error('This should never happen')
+function never(value: never): never {
+  throw new Error(`Unexpected value: ${value}`)
 }
