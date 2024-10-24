@@ -18,7 +18,9 @@ test('sr-only', async () => {
       overflow: hidden;
     }"
   `)
-  expect(await run(['-sr-only', 'sr-only-[var(--value)]', 'sr-only/foo'])).toEqual('')
+  expect(
+    await run(['-sr-only', 'sr-only-[var(--value)]', 'sr-only/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('not-sr-only', async () => {
@@ -34,7 +36,11 @@ test('not-sr-only', async () => {
       overflow: visible;
     }"
   `)
-  expect(await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'])).toEqual('')
+  expect(
+    await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('pointer-events', async () => {
@@ -48,12 +54,15 @@ test('pointer-events', async () => {
     }"
   `)
   expect(
-    await run([
-      '-pointer-events-none',
-      '-pointer-events-auto',
-      'pointer-events-[var(--value)]',
-      'pointer-events-none/foo',
-    ]),
+    await run(
+      [
+        '-pointer-events-none',
+        '-pointer-events-auto',
+        'pointer-events-[var(--value)]',
+        'pointer-events-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -72,14 +81,10 @@ test('visibility', async () => {
     }"
   `)
   expect(
-    await run([
-      '-visible',
-      '-invisible',
-      '-collapse',
-      'visible/foo',
-      'invisible/foo',
-      'collapse/foo',
-    ]),
+    await run(
+      ['-visible', '-invisible', '-collapse', 'visible/foo', 'invisible/foo', 'collapse/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -106,18 +111,21 @@ test('position', async () => {
     }"
   `)
   expect(
-    await run([
-      '-static',
-      '-fixed',
-      '-absolute',
-      '-relative',
-      '-sticky',
-      'static/foo',
-      'fixed/foo',
-      'absolute/foo',
-      'relative/foo',
-      'sticky/foo',
-    ]),
+    await run(
+      [
+        '-static',
+        '-fixed',
+        '-absolute',
+        '-relative',
+        '-sticky',
+        'static/foo',
+        'fixed/foo',
+        'absolute/foo',
+        'relative/foo',
+        'sticky/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -174,20 +182,23 @@ test('inset', async () => {
     }"
   `)
   expect(
-    await run([
-      'inset',
-      'inset--1',
-      'inset--1/2',
-      'inset--1/-2',
-      'inset-1/-2',
-      'inset-auto/foo',
-      '-inset-full/foo',
-      'inset-full/foo',
-      'inset-3/4/foo',
-      'inset-4/foo',
-      '-inset-4/foo',
-      'inset-[4px]/foo',
-    ]),
+    await run(
+      [
+        'inset',
+        'inset--1',
+        'inset--1/2',
+        'inset--1/-2',
+        'inset-1/-2',
+        'inset-auto/foo',
+        '-inset-full/foo',
+        'inset-full/foo',
+        'inset-3/4/foo',
+        'inset-4/foo',
+        '-inset-4/foo',
+        'inset-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -251,20 +262,23 @@ test('inset-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'inset-x',
-      'inset-x--1',
-      'inset-x--1/2',
-      'inset-x--1/-2',
-      'inset-x-1/-2',
-      'inset-x-auto/foo',
-      'inset-x-full/foo',
-      '-inset-x-full/foo',
-      'inset-x-3/4/foo',
-      'inset-x-4/foo',
-      '-inset-x-4/foo',
-      'inset-x-[4px]/foo',
-    ]),
+    await run(
+      [
+        'inset-x',
+        'inset-x--1',
+        'inset-x--1/2',
+        'inset-x--1/-2',
+        'inset-x-1/-2',
+        'inset-x-auto/foo',
+        'inset-x-full/foo',
+        '-inset-x-full/foo',
+        'inset-x-3/4/foo',
+        'inset-x-4/foo',
+        '-inset-x-4/foo',
+        'inset-x-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -328,20 +342,23 @@ test('inset-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'inset-y',
-      'inset-y--1',
-      'inset-y--1/2',
-      'inset-y--1/-2',
-      'inset-1/-2',
-      'inset-y-auto/foo',
-      'inset-y-full/foo',
-      '-inset-y-full/foo',
-      'inset-y-3/4/foo',
-      'inset-y-4/foo',
-      '-inset-y-4/foo',
-      'inset-y-[4px]/foo',
-    ]),
+    await run(
+      [
+        'inset-y',
+        'inset-y--1',
+        'inset-y--1/2',
+        'inset-y--1/-2',
+        'inset-1/-2',
+        'inset-y-auto/foo',
+        'inset-y-full/foo',
+        '-inset-y-full/foo',
+        'inset-y-3/4/foo',
+        'inset-y-4/foo',
+        '-inset-y-4/foo',
+        'inset-y-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -398,20 +415,23 @@ test('start', async () => {
     }"
   `)
   expect(
-    await run([
-      'start',
-      'start--1',
-      'start--1/2',
-      'start--1/-2',
-      'start-1/-2',
-      'start-auto/foo',
-      '-start-full/foo',
-      'start-full/foo',
-      'start-3/4/foo',
-      'start-4/foo',
-      '-start-4/foo',
-      'start-[4px]/foo',
-    ]),
+    await run(
+      [
+        'start',
+        'start--1',
+        'start--1/2',
+        'start--1/-2',
+        'start-1/-2',
+        'start-auto/foo',
+        '-start-full/foo',
+        'start-full/foo',
+        'start-3/4/foo',
+        'start-4/foo',
+        '-start-4/foo',
+        'start-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -460,20 +480,23 @@ test('end', async () => {
     }"
   `)
   expect(
-    await run([
-      'end',
-      'end--1',
-      'end--1/2',
-      'end--1/-2',
-      'end-1/-2',
-      'end-auto/foo',
-      '-end-full/foo',
-      'end-full/foo',
-      'end-3/4/foo',
-      'end-4/foo',
-      '-end-4/foo',
-      'end-[4px]/foo',
-    ]),
+    await run(
+      [
+        'end',
+        'end--1',
+        'end--1/2',
+        'end--1/-2',
+        'end-1/-2',
+        'end-auto/foo',
+        '-end-full/foo',
+        'end-full/foo',
+        'end-3/4/foo',
+        'end-4/foo',
+        '-end-4/foo',
+        'end-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -523,20 +546,23 @@ test('top', async () => {
     }"
   `)
   expect(
-    await run([
-      'top',
-      'top--1',
-      'top--1/2',
-      'top--1/-2',
-      'top-1/-2',
-      'top-auto/foo',
-      '-top-full/foo',
-      'top-full/foo',
-      'top-3/4/foo',
-      'top-4/foo',
-      '-top-4/foo',
-      'top-[4px]/foo',
-    ]),
+    await run(
+      [
+        'top',
+        'top--1',
+        'top--1/2',
+        'top--1/-2',
+        'top-1/-2',
+        'top-auto/foo',
+        '-top-full/foo',
+        'top-full/foo',
+        'top-3/4/foo',
+        'top-4/foo',
+        '-top-4/foo',
+        'top-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -593,20 +619,23 @@ test('right', async () => {
     }"
   `)
   expect(
-    await run([
-      'right',
-      'right--1',
-      'right--1/2',
-      'right--1/-2',
-      'right-1/-2',
-      'right-auto/foo',
-      '-right-full/foo',
-      'right-full/foo',
-      'right-3/4/foo',
-      'right-4/foo',
-      '-right-4/foo',
-      'right-[4px]/foo',
-    ]),
+    await run(
+      [
+        'right',
+        'right--1',
+        'right--1/2',
+        'right--1/-2',
+        'right-1/-2',
+        'right-auto/foo',
+        '-right-full/foo',
+        'right-full/foo',
+        'right-3/4/foo',
+        'right-4/foo',
+        '-right-4/foo',
+        'right-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -663,20 +692,23 @@ test('bottom', async () => {
     }"
   `)
   expect(
-    await run([
-      'bottom',
-      'bottom--1',
-      'bottom--1/2',
-      'bottom--1/-2',
-      'bottom-1/-2',
-      'bottom-auto/foo',
-      '-bottom-full/foo',
-      'bottom-full/foo',
-      'bottom-3/4/foo',
-      'bottom-4/foo',
-      '-bottom-4/foo',
-      'bottom-[4px]/foo',
-    ]),
+    await run(
+      [
+        'bottom',
+        'bottom--1',
+        'bottom--1/2',
+        'bottom--1/-2',
+        'bottom-1/-2',
+        'bottom-auto/foo',
+        '-bottom-full/foo',
+        'bottom-full/foo',
+        'bottom-3/4/foo',
+        'bottom-4/foo',
+        '-bottom-4/foo',
+        'bottom-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -725,20 +757,23 @@ test('left', async () => {
     }"
   `)
   expect(
-    await run([
-      'left',
-      'left--1',
-      'left--1/2',
-      'left--1/-2',
-      'left-1/-2',
-      'left-auto/foo',
-      '-left-full/foo',
-      'left-full/foo',
-      'left-3/4/foo',
-      'left-4/foo',
-      '-left-4/foo',
-      'left-[4px]/foo',
-    ]),
+    await run(
+      [
+        'left',
+        'left--1',
+        'left--1/2',
+        'left--1/-2',
+        'left-1/-2',
+        'left-auto/foo',
+        '-left-full/foo',
+        'left-full/foo',
+        'left-3/4/foo',
+        'left-4/foo',
+        '-left-4/foo',
+        'left-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -752,9 +787,11 @@ test('isolation', async () => {
       isolation: auto;
     }"
   `)
-  expect(await run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('z-index', async () => {
@@ -781,18 +818,21 @@ test('z-index', async () => {
       }"
     `)
   expect(
-    await run([
-      'z',
-      'z--1',
-      '-z-auto',
-      'z-unknown',
-      'z-123.5',
-      'z-auto/foo',
-      'z-10/foo',
-      '-z-10/foo',
-      'z-[123]/foo',
-      '-z-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'z',
+        'z--1',
+        '-z-auto',
+        'z-unknown',
+        'z-123.5',
+        'z-auto/foo',
+        'z-10/foo',
+        '-z-10/foo',
+        'z-[123]/foo',
+        '-z-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -837,22 +877,25 @@ test('order', async () => {
     }"
   `)
   expect(
-    await run([
-      'order',
-      'order--4',
-      '-order-first',
-      '-order-last',
-      '-order-none',
-      'order-unknown',
-      'order-123.5',
-      'order-4/foo',
-      '-order-4/foo',
-      'order-[123]/foo',
-      '-order-[var(--value)]/foo',
-      'order-first/foo',
-      'order-last/foo',
-      'order-none/foo',
-    ]),
+    await run(
+      [
+        'order',
+        'order--4',
+        '-order-first',
+        '-order-last',
+        '-order-none',
+        'order-unknown',
+        'order-123.5',
+        'order-4/foo',
+        '-order-4/foo',
+        'order-[123]/foo',
+        '-order-[var(--value)]/foo',
+        'order-first/foo',
+        'order-last/foo',
+        'order-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -892,19 +935,22 @@ test('col', async () => {
     }"
   `)
   expect(
-    await run([
-      'col',
-      'col-span',
-      'col-span--1',
-      '-col-span-4',
-      'col-span-unknown',
-      'col-auto/foo',
-      'col-span-4/foo',
-      'col-span-17/foo',
-      'col-span-full/foo',
-      'col-[span_123/span_123]/foo',
-      'col-span-[var(--my-variable)]/foo',
-    ]),
+    await run(
+      [
+        'col',
+        'col-span',
+        'col-span--1',
+        '-col-span-4',
+        'col-span-unknown',
+        'col-auto/foo',
+        'col-span-4/foo',
+        'col-span-17/foo',
+        'col-span-full/foo',
+        'col-[span_123/span_123]/foo',
+        'col-span-[var(--my-variable)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -933,16 +979,19 @@ test('col-start', async () => {
     }"
   `)
   expect(
-    await run([
-      'col-start',
-      'col-start--1',
-      'col-start-unknown',
-      'col-start-auto/foo',
-      'col-start-4/foo',
-      'col-start-99/foo',
-      'col-start-[123]/foo',
-      '-col-start-4/foo',
-    ]),
+    await run(
+      [
+        'col-start',
+        'col-start--1',
+        'col-start-unknown',
+        'col-start-auto/foo',
+        'col-start-4/foo',
+        'col-start-99/foo',
+        'col-start-[123]/foo',
+        '-col-start-4/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -970,16 +1019,19 @@ test('col-end', async () => {
       }"
     `)
   expect(
-    await run([
-      'col-end',
-      'col-end--1',
-      'col-end-unknown',
-      'col-end-auto/foo',
-      'col-end-4/foo',
-      'col-end-99/foo',
-      'col-end-[123]/foo',
-      '-col-end-4/foo',
-    ]),
+    await run(
+      [
+        'col-end',
+        'col-end--1',
+        'col-end-unknown',
+        'col-end-auto/foo',
+        'col-end-4/foo',
+        'col-end-99/foo',
+        'col-end-[123]/foo',
+        '-col-end-4/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1019,19 +1071,22 @@ test('row', async () => {
     }"
   `)
   expect(
-    await run([
-      'row',
-      'row-span',
-      'row-span--1',
-      '-row-span-4',
-      'row-span-unknown',
-      'row-auto/foo',
-      'row-span-4/foo',
-      'row-span-17/foo',
-      'row-span-full/foo',
-      'row-[span_123/span_123]/foo',
-      'row-span-[var(--my-variable)]/foo',
-    ]),
+    await run(
+      [
+        'row',
+        'row-span',
+        'row-span--1',
+        '-row-span-4',
+        'row-span-unknown',
+        'row-auto/foo',
+        'row-span-4/foo',
+        'row-span-17/foo',
+        'row-span-full/foo',
+        'row-[span_123/span_123]/foo',
+        'row-span-[var(--my-variable)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1060,16 +1115,19 @@ test('row-start', async () => {
       }"
     `)
   expect(
-    await run([
-      'row-start',
-      'row-start--1',
-      'row-start-unknown',
-      'row-start-auto/foo',
-      'row-start-4/foo',
-      'row-start-99/foo',
-      'row-start-[123]/foo',
-      '-row-start-4/foo',
-    ]),
+    await run(
+      [
+        'row-start',
+        'row-start--1',
+        'row-start-unknown',
+        'row-start-auto/foo',
+        'row-start-4/foo',
+        'row-start-99/foo',
+        'row-start-[123]/foo',
+        '-row-start-4/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1097,16 +1155,19 @@ test('row-end', async () => {
       }"
     `)
   expect(
-    await run([
-      'row-end',
-      'row-end--1',
-      'row-end-unknown',
-      'row-end-auto/foo',
-      'row-end-4/foo',
-      'row-end-99/foo',
-      'row-end-[123]/foo',
-      '-row-end-4/foo',
-    ]),
+    await run(
+      [
+        'row-end',
+        'row-end--1',
+        'row-end-unknown',
+        'row-end-auto/foo',
+        'row-end-4/foo',
+        'row-end-99/foo',
+        'row-end-[123]/foo',
+        '-row-end-4/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1134,19 +1195,22 @@ test('float', async () => {
     }"
   `)
   expect(
-    await run([
-      'float',
-      '-float-start',
-      '-float-end',
-      '-float-right',
-      '-float-left',
-      '-float-none',
-      'float-start/foo',
-      'float-end/foo',
-      'float-right/foo',
-      'float-left/foo',
-      'float-none/foo',
-    ]),
+    await run(
+      [
+        'float',
+        '-float-start',
+        '-float-end',
+        '-float-right',
+        '-float-left',
+        '-float-none',
+        'float-start/foo',
+        'float-end/foo',
+        'float-right/foo',
+        'float-left/foo',
+        'float-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1186,21 +1250,24 @@ test('clear', async () => {
     }"
   `)
   expect(
-    await run([
-      'clear',
-      '-clear-start',
-      '-clear-end',
-      '-clear-right',
-      '-clear-left',
-      '-clear-both',
-      '-clear-none',
-      'clear-start/foo',
-      'clear-end/foo',
-      'clear-right/foo',
-      'clear-left/foo',
-      'clear-both/foo',
-      'clear-none/foo',
-    ]),
+    await run(
+      [
+        'clear',
+        '-clear-start',
+        '-clear-end',
+        '-clear-right',
+        '-clear-left',
+        '-clear-both',
+        '-clear-none',
+        'clear-start/foo',
+        'clear-end/foo',
+        'clear-right/foo',
+        'clear-left/foo',
+        'clear-both/foo',
+        'clear-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1241,7 +1308,9 @@ test('margin', async () => {
     }"
   `)
   expect(
-    await run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[var(--value)]/foo']),
+    await run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[var(--value)]/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -1287,14 +1356,10 @@ test('margin-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'mx',
-      'mx-auto/foo',
-      'mx-4/foo',
-      'mx-[4px]/foo',
-      '-mx-4/foo',
-      '-mx-[var(--value)]/foo',
-    ]),
+    await run(
+      ['mx', 'mx-auto/foo', 'mx-4/foo', 'mx-[4px]/foo', '-mx-4/foo', '-mx-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1340,14 +1405,10 @@ test('margin-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'my',
-      'my-auto/foo',
-      'my-4/foo',
-      'my-[4px]/foo',
-      '-my-4/foo',
-      '-my-[var(--value)]/foo',
-    ]),
+    await run(
+      ['my', 'my-auto/foo', 'my-4/foo', 'my-[4px]/foo', '-my-4/foo', '-my-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1388,14 +1449,10 @@ test('margin-top', async () => {
     }"
   `)
   expect(
-    await run([
-      'mt',
-      'mt-auto/foo',
-      'mt-4/foo',
-      'mt-[4px]/foo',
-      '-mt-4/foo',
-      '-mt-[var(--value)]/foo',
-    ]),
+    await run(
+      ['mt', 'mt-auto/foo', 'mt-4/foo', 'mt-[4px]/foo', '-mt-4/foo', '-mt-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1436,14 +1493,10 @@ test('margin-inline-start', async () => {
     }"
   `)
   expect(
-    await run([
-      'ms',
-      'ms-auto/foo',
-      'ms-4/foo',
-      'ms-[4px]/foo',
-      '-ms-4/foo',
-      '-ms-[var(--value)]/foo',
-    ]),
+    await run(
+      ['ms', 'ms-auto/foo', 'ms-4/foo', 'ms-[4px]/foo', '-ms-4/foo', '-ms-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1484,14 +1537,10 @@ test('margin-inline-end', async () => {
     }"
   `)
   expect(
-    await run([
-      'me',
-      'me-auto/foo',
-      'me-4/foo',
-      'me-[4px]/foo',
-      '-me-4/foo',
-      '-me-[var(--value)]/foo',
-    ]),
+    await run(
+      ['me', 'me-auto/foo', 'me-4/foo', 'me-[4px]/foo', '-me-4/foo', '-me-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1532,14 +1581,10 @@ test('margin-right', async () => {
     }"
   `)
   expect(
-    await run([
-      'mr',
-      'mr-auto/foo',
-      'mr-4/foo',
-      'mr-[4px]/foo',
-      '-mr-4/foo',
-      '-mr-[var(--value)]/foo',
-    ]),
+    await run(
+      ['mr', 'mr-auto/foo', 'mr-4/foo', 'mr-[4px]/foo', '-mr-4/foo', '-mr-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1580,14 +1625,10 @@ test('margin-bottom', async () => {
     }"
   `)
   expect(
-    await run([
-      'mb',
-      'mb-auto/foo',
-      'mb-4/foo',
-      'mb-[4px]/foo',
-      '-mb-4/foo',
-      '-mb-[var(--value)]/foo',
-    ]),
+    await run(
+      ['mb', 'mb-auto/foo', 'mb-4/foo', 'mb-[4px]/foo', '-mb-4/foo', '-mb-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1628,14 +1669,10 @@ test('margin-left', async () => {
     }"
   `)
   expect(
-    await run([
-      'ml',
-      'ml-auto/foo',
-      'ml-4/foo',
-      'ml-[4px]/foo',
-      '-ml-4/foo',
-      '-ml-[var(--value)]/foo',
-    ]),
+    await run(
+      ['ml', 'ml-auto/foo', 'ml-4/foo', 'ml-[4px]/foo', '-ml-4/foo', '-ml-[var(--value)]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1694,18 +1731,21 @@ test('margin sort order', async () => {
     }"
   `)
   expect(
-    await run([
-      'm',
-      'mb-4/foo',
-      'me-4/foo',
-      'mx-4/foo',
-      'ml-4/foo',
-      'ms-4/foo',
-      'm-4/foo',
-      'mr-4/foo',
-      'mt-4/foo',
-      'my-4/foo',
-    ]),
+    await run(
+      [
+        'm',
+        'mb-4/foo',
+        'me-4/foo',
+        'mx-4/foo',
+        'ml-4/foo',
+        'ms-4/foo',
+        'm-4/foo',
+        'mr-4/foo',
+        'mt-4/foo',
+        'my-4/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1720,7 +1760,9 @@ test('box-sizing', async () => {
     }"
   `)
   expect(
-    await run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo']),
+    await run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -1756,19 +1798,22 @@ test('line-clamp', async () => {
       }"
     `)
   expect(
-    await run([
-      'line-clamp',
-      'line-clamp--4',
-      '-line-clamp-4',
-      '-line-clamp-[123]',
-      '-line-clamp-none',
-      'line-clamp-unknown',
-      'line-clamp-123.5',
-      'line-clamp-4/foo',
-      'line-clamp-99/foo',
-      'line-clamp-[123]/foo',
-      'line-clamp-none/foo',
-    ]),
+    await run(
+      [
+        'line-clamp',
+        'line-clamp--4',
+        '-line-clamp-4',
+        '-line-clamp-[123]',
+        '-line-clamp-none',
+        'line-clamp-unknown',
+        'line-clamp-123.5',
+        'line-clamp-4/foo',
+        'line-clamp-99/foo',
+        'line-clamp-[123]/foo',
+        'line-clamp-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1883,50 +1928,53 @@ test('display', async () => {
     }"
   `)
   expect(
-    await run([
-      '-block',
-      '-inline-block',
-      '-inline',
-      '-flex',
-      '-inline-flex',
-      '-table',
-      '-inline-table',
-      '-table-caption',
-      '-table-cell',
-      '-table-column',
-      '-table-column-group',
-      '-table-footer-group',
-      '-table-header-group',
-      '-table-row-group',
-      '-table-row',
-      '-flow-root',
-      '-grid',
-      '-inline-grid',
-      '-contents',
-      '-list-item',
-      '-hidden',
-      'block/foo',
-      'inline-block/foo',
-      'inline/foo',
-      'flex/foo',
-      'inline-flex/foo',
-      'table/foo',
-      'inline-table/foo',
-      'table-caption/foo',
-      'table-cell/foo',
-      'table-column/foo',
-      'table-column-group/foo',
-      'table-footer-group/foo',
-      'table-header-group/foo',
-      'table-row-group/foo',
-      'table-row/foo',
-      'flow-root/foo',
-      'grid/foo',
-      'inline-grid/foo',
-      'contents/foo',
-      'list-item/foo',
-      'hidden/foo',
-    ]),
+    await run(
+      [
+        '-block',
+        '-inline-block',
+        '-inline',
+        '-flex',
+        '-inline-flex',
+        '-table',
+        '-inline-table',
+        '-table-caption',
+        '-table-cell',
+        '-table-column',
+        '-table-column-group',
+        '-table-footer-group',
+        '-table-header-group',
+        '-table-row-group',
+        '-table-row',
+        '-flow-root',
+        '-grid',
+        '-inline-grid',
+        '-contents',
+        '-list-item',
+        '-hidden',
+        'block/foo',
+        'inline-block/foo',
+        'inline/foo',
+        'flex/foo',
+        'inline-flex/foo',
+        'table/foo',
+        'inline-table/foo',
+        'table-caption/foo',
+        'table-cell/foo',
+        'table-column/foo',
+        'table-column-group/foo',
+        'table-footer-group/foo',
+        'table-header-group/foo',
+        'table-row-group/foo',
+        'table-row/foo',
+        'flow-root/foo',
+        'grid/foo',
+        'inline-grid/foo',
+        'contents/foo',
+        'list-item/foo',
+        'hidden/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -1941,7 +1989,9 @@ test('field-sizing', async () => {
     }"
   `)
   expect(
-    await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed']),
+    await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -1960,19 +2010,22 @@ test('aspect-ratio', async () => {
     }"
   `)
   expect(
-    await run([
-      'aspect',
-      'aspect-potato',
-      '-aspect-video',
-      '-aspect-[10/9]',
-      'aspect-foo/bar',
-      'aspect-video/foo',
-      'aspect-[10/9]/foo',
-      'aspect-4/3/foo',
-      'aspect--4/3',
-      'aspect--4/-3',
-      'aspect-4/-3',
-    ]),
+    await run(
+      [
+        'aspect',
+        'aspect-potato',
+        '-aspect-video',
+        '-aspect-[10/9]',
+        'aspect-foo/bar',
+        'aspect-video/foo',
+        'aspect-[10/9]/foo',
+        'aspect-4/3/foo',
+        'aspect--4/3',
+        'aspect--4/-3',
+        'aspect-4/-3',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2042,24 +2095,27 @@ test('size', async () => {
     }"
   `)
   expect(
-    await run([
-      'size',
-      'size--1',
-      'size--1/2',
-      'size--1/-2',
-      'size-1/-2',
-      '-size-4',
-      '-size-1/2',
-      '-size-[4px]',
-      'size-auto/foo',
-      'size-full/foo',
-      'size-min/foo',
-      'size-max/foo',
-      'size-fit/foo',
-      'size-4/foo',
-      'size-1/2/foo',
-      'size-[4px]/foo',
-    ]),
+    await run(
+      [
+        'size',
+        'size--1',
+        'size--1/2',
+        'size--1/-2',
+        'size-1/-2',
+        '-size-4',
+        '-size-1/2',
+        '-size-[4px]',
+        'size-auto/foo',
+        'size-full/foo',
+        'size-min/foo',
+        'size-max/foo',
+        'size-fit/foo',
+        'size-4/foo',
+        'size-1/2/foo',
+        'size-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2148,29 +2204,32 @@ test('width', async () => {
     }"
   `)
   expect(
-    await run([
-      'w',
-      'w--1',
-      'w--1/2',
-      'w--1/-2',
-      'w-1/-2',
-      '-w-4',
-      '-w-1/2',
-      '-w-[4px]',
-      'w-full/foo',
-      'w-auto/foo',
-      'w-screen/foo',
-      'w-svw/foo',
-      'w-lvw/foo',
-      'w-dvw/foo',
-      'w-min/foo',
-      'w-max/foo',
-      'w-fit/foo',
-      'w-4/foo',
-      'w-xl/foo',
-      'w-1/2/foo',
-      'w-[4px]/foo',
-    ]),
+    await run(
+      [
+        'w',
+        'w--1',
+        'w--1/2',
+        'w--1/-2',
+        'w-1/-2',
+        '-w-4',
+        '-w-1/2',
+        '-w-[4px]',
+        'w-full/foo',
+        'w-auto/foo',
+        'w-screen/foo',
+        'w-svw/foo',
+        'w-lvw/foo',
+        'w-dvw/foo',
+        'w-min/foo',
+        'w-max/foo',
+        'w-fit/foo',
+        'w-4/foo',
+        'w-xl/foo',
+        'w-1/2/foo',
+        'w-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2234,19 +2293,22 @@ test('min-width', async () => {
     }"
   `)
   expect(
-    await run([
-      'min-w',
-      '-min-w-4',
-      '-min-w-[4px]',
-      'min-w-auto/foo',
-      'min-w-full/foo',
-      'min-w-min/foo',
-      'min-w-max/foo',
-      'min-w-fit/foo',
-      'min-w-4/foo',
-      'min-w-xl/foo',
-      'min-w-[4px]/foo',
-    ]),
+    await run(
+      [
+        'min-w',
+        '-min-w-4',
+        '-min-w-[4px]',
+        'min-w-auto/foo',
+        'min-w-full/foo',
+        'min-w-min/foo',
+        'min-w-max/foo',
+        'min-w-fit/foo',
+        'min-w-4/foo',
+        'min-w-xl/foo',
+        'min-w-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2306,19 +2368,22 @@ test('max-width', async () => {
     }"
   `)
   expect(
-    await run([
-      'max-w',
-      '-max-w-4',
-      '-max-w-[4px]',
-      'max-w-none/foo',
-      'max-w-full/foo',
-      'max-w-max/foo',
-      'max-w-max/foo',
-      'max-w-fit/foo',
-      'max-w-4/foo',
-      'max-w-xl/foo',
-      'max-w-[4px]/foo',
-    ]),
+    await run(
+      [
+        'max-w',
+        '-max-w-4',
+        '-max-w-[4px]',
+        'max-w-none/foo',
+        'max-w-full/foo',
+        'max-w-max/foo',
+        'max-w-max/foo',
+        'max-w-fit/foo',
+        'max-w-4/foo',
+        'max-w-xl/foo',
+        'max-w-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2400,28 +2465,31 @@ test('height', async () => {
     }"
   `)
   expect(
-    await run([
-      'h',
-      '-h-4',
-      'h--1',
-      'h--1/2',
-      'h--1/-2',
-      'h-1/-2',
-      '-h-1/2',
-      '-h-[4px]',
-      'h-full/foo',
-      'h-auto/foo',
-      'h-screen/foo',
-      'h-svh/foo',
-      'h-lvh/foo',
-      'h-dvh/foo',
-      'h-min/foo',
-      'h-max/foo',
-      'h-fit/foo',
-      'h-4/foo',
-      'h-1/2/foo',
-      'h-[4px]/foo',
-    ]),
+    await run(
+      [
+        'h',
+        '-h-4',
+        'h--1',
+        'h--1/2',
+        'h--1/-2',
+        'h-1/-2',
+        '-h-1/2',
+        '-h-[4px]',
+        'h-full/foo',
+        'h-auto/foo',
+        'h-screen/foo',
+        'h-svh/foo',
+        'h-lvh/foo',
+        'h-dvh/foo',
+        'h-min/foo',
+        'h-max/foo',
+        'h-fit/foo',
+        'h-4/foo',
+        'h-1/2/foo',
+        'h-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2498,22 +2566,25 @@ test('min-height', async () => {
     }"
   `)
   expect(
-    await run([
-      'min-h',
-      '-min-h-4',
-      '-min-h-[4px]',
-      'min-h-auto/foo',
-      'min-h-full/foo',
-      'min-h-screen/foo',
-      'min-h-svh/foo',
-      'min-h-lvh/foo',
-      'min-h-dvh/foo',
-      'min-h-min/foo',
-      'min-h-max/foo',
-      'min-h-fit/foo',
-      'min-h-4/foo',
-      'min-h-[4px]/foo',
-    ]),
+    await run(
+      [
+        'min-h',
+        '-min-h-4',
+        '-min-h-[4px]',
+        'min-h-auto/foo',
+        'min-h-full/foo',
+        'min-h-screen/foo',
+        'min-h-svh/foo',
+        'min-h-lvh/foo',
+        'min-h-dvh/foo',
+        'min-h-min/foo',
+        'min-h-max/foo',
+        'min-h-fit/foo',
+        'min-h-4/foo',
+        'min-h-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2590,22 +2661,25 @@ test('max-height', async () => {
     }"
   `)
   expect(
-    await run([
-      'max-h',
-      '-max-h-4',
-      '-max-h-[4px]',
-      'max-h-none/foo',
-      'max-h-full/foo',
-      'max-h-screen/foo',
-      'max-h-svh/foo',
-      'max-h-lvh/foo',
-      'max-h-dvh/foo',
-      'max-h-min/foo',
-      'max-h-max/foo',
-      'max-h-fit/foo',
-      'max-h-4/foo',
-      'max-h-[4px]/foo',
-    ]),
+    await run(
+      [
+        'max-h',
+        '-max-h-4',
+        '-max-h-[4px]',
+        'max-h-none/foo',
+        'max-h-full/foo',
+        'max-h-screen/foo',
+        'max-h-svh/foo',
+        'max-h-lvh/foo',
+        'max-h-dvh/foo',
+        'max-h-min/foo',
+        'max-h-max/foo',
+        'max-h-fit/foo',
+        'max-h-4/foo',
+        'max-h-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2650,25 +2724,28 @@ test('flex', async () => {
     }"
   `)
   expect(
-    await run([
-      '-flex-1',
-      'flex--1',
-      '-flex-auto',
-      '-flex-initial',
-      '-flex-none',
-      '-flex-[123]',
-      'flex-unknown',
-      'flex-1/foo',
-      'flex-99/foo',
-      'flex--1/2',
-      'flex--1/-2',
-      'flex-1/-2',
-      'flex-1/2/foo',
-      'flex-auto/foo',
-      'flex-initial/foo',
-      'flex-none/foo',
-      'flex-[123]/foo',
-    ]),
+    await run(
+      [
+        '-flex-1',
+        'flex--1',
+        '-flex-auto',
+        '-flex-initial',
+        '-flex-none',
+        '-flex-[123]',
+        'flex-unknown',
+        'flex-1/foo',
+        'flex-99/foo',
+        'flex--1/2',
+        'flex--1/-2',
+        'flex-1/-2',
+        'flex-1/2/foo',
+        'flex-auto/foo',
+        'flex-initial/foo',
+        'flex-none/foo',
+        'flex-[123]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2687,17 +2764,20 @@ test('flex-shrink', async () => {
     }"
   `)
   expect(
-    await run([
-      '-shrink',
-      'shrink--1',
-      'shrink-1.5',
-      '-shrink-0',
-      '-shrink-[123]',
-      'shrink-unknown',
-      'shrink/foo',
-      'shrink-0/foo',
-      'shrink-[123]/foo',
-    ]),
+    await run(
+      [
+        '-shrink',
+        'shrink--1',
+        'shrink-1.5',
+        '-shrink-0',
+        '-shrink-[123]',
+        'shrink-unknown',
+        'shrink/foo',
+        'shrink-0/foo',
+        'shrink-[123]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2716,17 +2796,20 @@ test('flex-grow', async () => {
     }"
   `)
   expect(
-    await run([
-      '-grow',
-      'grow--1',
-      'grow-1.5',
-      '-grow-0',
-      '-grow-[123]',
-      'grow-unknown',
-      'grow/foo',
-      'grow-0/foo',
-      'grow-[123]/foo',
-    ]),
+    await run(
+      [
+        '-grow',
+        'grow--1',
+        'grow-1.5',
+        '-grow-0',
+        '-grow-[123]',
+        'grow-unknown',
+        'grow/foo',
+        'grow-0/foo',
+        'grow-[123]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2767,20 +2850,23 @@ test('flex-basis', async () => {
     }"
   `)
   expect(
-    await run([
-      'basis',
-      'basis--1',
-      'basis--1/2',
-      'basis--1/-2',
-      'basis-1/-2',
-      '-basis-full',
-      '-basis-[123px]',
-      'basis-auto/foo',
-      'basis-full/foo',
-      'basis-xl/foo',
-      'basis-11/12/foo',
-      'basis-[123px]/foo',
-    ]),
+    await run(
+      [
+        'basis',
+        'basis--1',
+        'basis--1/2',
+        'basis--1/-2',
+        'basis-1/-2',
+        '-basis-full',
+        '-basis-[123px]',
+        'basis-auto/foo',
+        'basis-full/foo',
+        'basis-xl/foo',
+        'basis-11/12/foo',
+        'basis-[123px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2794,9 +2880,11 @@ test('table-layout', async () => {
       table-layout: fixed;
     }"
   `)
-  expect(await run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('caption-side', async () => {
@@ -2810,7 +2898,9 @@ test('caption-side', async () => {
     }"
   `)
   expect(
-    await run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo']),
+    await run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -2825,12 +2915,10 @@ test('border-collapse', async () => {
     }"
   `)
   expect(
-    await run([
-      '-border-collapse',
-      '-border-separate',
-      'border-collapse/foo',
-      'border-separate/foo',
-    ]),
+    await run(
+      ['-border-collapse', '-border-separate', 'border-collapse/foo', 'border-separate/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2884,13 +2972,16 @@ test('border-spacing', async () => {
     }"
   `)
   expect(
-    await run([
-      'border-spacing',
-      '-border-spacing-1',
-      '-border-spacing-[123px]',
-      'border-spacing-1/foo',
-      'border-spacing-[123px]/foo',
-    ]),
+    await run(
+      [
+        'border-spacing',
+        '-border-spacing-1',
+        '-border-spacing-[123px]',
+        'border-spacing-1/foo',
+        'border-spacing-[123px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2942,13 +3033,16 @@ test('border-spacing-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'border-spacing-x',
-      '-border-spacing-x-1',
-      '-border-spacing-x-[123px]',
-      'border-spacing-x-1/foo',
-      'border-spacing-x-[123px]/foo',
-    ]),
+    await run(
+      [
+        'border-spacing-x',
+        '-border-spacing-x-1',
+        '-border-spacing-x-[123px]',
+        'border-spacing-x-1/foo',
+        'border-spacing-x-[123px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3000,13 +3094,16 @@ test('border-spacing-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'border-spacing-x',
-      '-border-spacing-y-1',
-      '-border-spacing-y-[123px]',
-      'border-spacing-y-1/foo',
-      'border-spacing-y-[123px]/foo',
-    ]),
+    await run(
+      [
+        'border-spacing-x',
+        '-border-spacing-y-1',
+        '-border-spacing-y-[123px]',
+        'border-spacing-y-1/foo',
+        'border-spacing-y-[123px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3071,21 +3168,24 @@ test('origin', async () => {
     }"
   `)
   expect(
-    await run([
-      '-origin-center',
-      '-origin-[var(--value)]',
-      'origin-center/foo',
-      'origin-top/foo',
-      'origin-top-right/foo',
-      'origin-right/foo',
-      'origin-bottom-right/foo',
-      'origin-bottom/foo',
-      'origin-bottom-left/foo',
-      'origin-left/foo',
-      'origin-top-left/foo',
-      'origin-[50px_100px]/foo',
-      'origin-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-origin-center',
+        '-origin-[var(--value)]',
+        'origin-center/foo',
+        'origin-top/foo',
+        'origin-top-right/foo',
+        'origin-right/foo',
+        'origin-bottom-right/foo',
+        'origin-bottom/foo',
+        'origin-bottom-left/foo',
+        'origin-left/foo',
+        'origin-top-left/foo',
+        'origin-[50px_100px]/foo',
+        'origin-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3150,21 +3250,24 @@ test('perspective-origin', async () => {
     }"
   `)
   expect(
-    await run([
-      '-perspective-origin-center',
-      '-perspective-origin-[var(--value)]',
-      'perspective-origin-center/foo',
-      'perspective-origin-top/foo',
-      'perspective-origin-top-right/foo',
-      'perspective-origin-right/foo',
-      'perspective-origin-bottom-right/foo',
-      'perspective-origin-bottom/foo',
-      'perspective-origin-bottom-left/foo',
-      'perspective-origin-left/foo',
-      'perspective-origin-top-left/foo',
-      'perspective-origin-[50px_100px]/foo',
-      'perspective-origin-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-perspective-origin-center',
+        '-perspective-origin-[var(--value)]',
+        'perspective-origin-center/foo',
+        'perspective-origin-top/foo',
+        'perspective-origin-top-right/foo',
+        'perspective-origin-right/foo',
+        'perspective-origin-bottom-right/foo',
+        'perspective-origin-bottom/foo',
+        'perspective-origin-bottom-left/foo',
+        'perspective-origin-left/foo',
+        'perspective-origin-top-left/foo',
+        'perspective-origin-[50px_100px]/foo',
+        'perspective-origin-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3242,18 +3345,21 @@ test('translate', async () => {
     }"
   `)
   expect(
-    await run([
-      'translate',
-      'translate--1',
-      'translate--1/2',
-      'translate--1/-2',
-      'translate-1/-2',
-      'translate-1/2/foo',
-      'translate-full/foo',
-      '-translate-full/foo',
-      'translate-[123px]/foo',
-      '-translate-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'translate',
+        'translate--1',
+        'translate--1/2',
+        'translate--1/-2',
+        'translate-1/-2',
+        'translate-1/2/foo',
+        'translate-full/foo',
+        '-translate-full/foo',
+        'translate-[123px]/foo',
+        '-translate-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3315,17 +3421,20 @@ test('translate-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'translate-x',
-      'translate-x--1',
-      'translate-x--1/2',
-      'translate-x--1/-2',
-      'translate-x-1/-2',
-      'translate-x-full/foo',
-      '-translate-x-full/foo',
-      'translate-x-px/foo',
-      '-translate-x-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'translate-x',
+        'translate-x--1',
+        'translate-x--1/2',
+        'translate-x--1/-2',
+        'translate-x-1/-2',
+        'translate-x-full/foo',
+        '-translate-x-full/foo',
+        'translate-x-px/foo',
+        '-translate-x-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3387,17 +3496,20 @@ test('translate-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'translate-y',
-      'translate-y--1',
-      'translate-y--1/2',
-      'translate-y--1/-2',
-      'translate-y-1/-2',
-      'translate-y-full/foo',
-      '-translate-y-full/foo',
-      'translate-y-px/foo',
-      '-translate-y-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'translate-y',
+        'translate-y--1',
+        'translate-y--1/2',
+        'translate-y--1/-2',
+        'translate-y-1/-2',
+        'translate-y-full/foo',
+        '-translate-y-full/foo',
+        'translate-y-px/foo',
+        '-translate-y-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3442,18 +3554,21 @@ test('translate-z', async () => {
     }"
   `)
   expect(
-    await run([
-      'translate-z',
-      'translate-z--1',
-      'translate-z--1/2',
-      'translate-z--1/-2',
-      'translate-z-1/-2',
-      'translate-z-full',
-      '-translate-z-full',
-      'translate-z-1/2',
-      'translate-y-px/foo',
-      '-translate-z-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'translate-z',
+        'translate-z--1',
+        'translate-z--1/2',
+        'translate-z--1/-2',
+        'translate-z-1/-2',
+        'translate-z-full',
+        '-translate-z-full',
+        'translate-z-1/2',
+        'translate-y-px/foo',
+        '-translate-z-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3491,7 +3606,7 @@ test('translate-3d', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['-translate-3d', 'translate-3d/foo'])).toEqual('')
+  expect(await run(['-translate-3d', 'translate-3d/foo'], { optimize: false })).toEqual('')
 })
 
 test('rotate', async () => {
@@ -3514,16 +3629,19 @@ test('rotate', async () => {
     }"
   `)
   expect(
-    await run([
-      'rotate',
-      'rotate-z',
-      'rotate--2',
-      'rotate-unknown',
-      'rotate-45/foo',
-      '-rotate-45/foo',
-      'rotate-[123deg]/foo',
-      'rotate-[0.3_0.7_1_45deg]/foo',
-    ]),
+    await run(
+      [
+        'rotate',
+        'rotate-z',
+        'rotate--2',
+        'rotate-unknown',
+        'rotate-45/foo',
+        '-rotate-45/foo',
+        'rotate-[123deg]/foo',
+        'rotate-[0.3_0.7_1_45deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3587,15 +3705,18 @@ test('rotate-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'rotate-x',
-      'rotate-x--1',
-      '-rotate-x',
-      'rotate-x-potato',
-      'rotate-x-45/foo',
-      '-rotate-x-45/foo',
-      'rotate-x-[123deg]/foo',
-    ]),
+    await run(
+      [
+        'rotate-x',
+        'rotate-x--1',
+        '-rotate-x',
+        'rotate-x-potato',
+        'rotate-x-45/foo',
+        '-rotate-x-45/foo',
+        'rotate-x-[123deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3659,15 +3780,18 @@ test('rotate-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'rotate-y',
-      'rotate-y--1',
-      '-rotate-y',
-      'rotate-y-potato',
-      'rotate-y-45/foo',
-      '-rotate-y-45/foo',
-      'rotate-y-[123deg]/foo',
-    ]),
+    await run(
+      [
+        'rotate-y',
+        'rotate-y--1',
+        '-rotate-y',
+        'rotate-y-potato',
+        'rotate-y-45/foo',
+        '-rotate-y-45/foo',
+        'rotate-y-[123deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3734,14 +3858,10 @@ test('skew', async () => {
     }"
   `)
   expect(
-    await run([
-      'skew',
-      'skew--1',
-      'skew-unknown',
-      'skew-6/foo',
-      '-skew-6/foo',
-      'skew-[123deg]/foo',
-    ]),
+    await run(
+      ['skew', 'skew--1', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3805,14 +3925,17 @@ test('skew-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'skew-x',
-      'skew-x--1',
-      'skew-x-unknown',
-      'skew-x-6/foo',
-      '-skew-x-6/foo',
-      'skew-x-[123deg]/foo',
-    ]),
+    await run(
+      [
+        'skew-x',
+        'skew-x--1',
+        'skew-x-unknown',
+        'skew-x-6/foo',
+        '-skew-x-6/foo',
+        'skew-x-[123deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3876,14 +3999,17 @@ test('skew-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'skew-y',
-      'skew-y--1',
-      'skew-y-unknown',
-      'skew-y-6/foo',
-      '-skew-y-6/foo',
-      'skew-y-[123deg]/foo',
-    ]),
+    await run(
+      [
+        'skew-y',
+        'skew-y--1',
+        'skew-y-unknown',
+        'skew-y-6/foo',
+        '-skew-y-6/foo',
+        'skew-y-[123deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3941,16 +4067,19 @@ test('scale', async () => {
     }"
   `)
   expect(
-    await run([
-      'scale',
-      'scale--50',
-      'scale-1.5',
-      'scale-unknown',
-      'scale-50/foo',
-      '-scale-50/foo',
-      'scale-[2]/foo',
-      'scale-[2_1.5_3]/foo',
-    ]),
+    await run(
+      [
+        'scale',
+        'scale--50',
+        'scale-1.5',
+        'scale-unknown',
+        'scale-50/foo',
+        '-scale-50/foo',
+        'scale-[2]/foo',
+        'scale-[2_1.5_3]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -3988,7 +4117,7 @@ test('scale-3d', async () => {
       initial-value: 1;
     }"
   `)
-  expect(await run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
+  expect(await run(['-scale-3d', 'scale-3d/foo'], { optimize: false })).toEqual('')
 })
 
 test('scale-x', async () => {
@@ -4078,17 +4207,20 @@ test('scale-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'scale-x',
-      'scale-x--1',
-      'scale-x-1.5',
-      'scale-x-unknown',
-      'scale-200/foo',
-      'scale-x-400/foo',
-      'scale-x-50/foo',
-      '-scale-x-50/foo',
-      'scale-x-[2]/foo',
-    ]),
+    await run(
+      [
+        'scale-x',
+        'scale-x--1',
+        'scale-x-1.5',
+        'scale-x-unknown',
+        'scale-200/foo',
+        'scale-x-400/foo',
+        'scale-x-50/foo',
+        '-scale-x-50/foo',
+        'scale-x-[2]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4138,15 +4270,18 @@ test('scale-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'scale-y',
-      'scale-y--1',
-      'scale-y-1.5',
-      'scale-y-unknown',
-      'scale-y-50/foo',
-      '-scale-y-50/foo',
-      'scale-y-[2]/foo',
-    ]),
+    await run(
+      [
+        'scale-y',
+        'scale-y--1',
+        'scale-y-1.5',
+        'scale-y-unknown',
+        'scale-y-50/foo',
+        '-scale-y-50/foo',
+        'scale-y-[2]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4196,14 +4331,17 @@ test('scale-z', async () => {
     }"
   `)
   expect(
-    await run([
-      'scale-z',
-      'scale-z--1',
-      'scale-z-1.5',
-      'scale-z-50/foo',
-      '-scale-z-50/foo',
-      'scale-z-[123deg]/foo',
-    ]),
+    await run(
+      [
+        'scale-z',
+        'scale-z--1',
+        'scale-z-1.5',
+        'scale-z-50/foo',
+        '-scale-z-50/foo',
+        'scale-z-[123deg]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4329,26 +4467,29 @@ test('transform', async () => {
       }"
     `)
   expect(
-    await run([
-      '-transform',
-      '-transform-cpu',
-      '-transform-gpu',
-      '-transform-none',
-      'transform/foo',
-      'transform-cpu/foo',
-      'transform-gpu/foo',
-      'transform-none/foo',
-      'transform-[scaleZ(2)_rotateY(45deg)]/foo',
-      'transform-flat/foo',
-      'transform-3d/foo',
-      'transform-content/foo',
-      'transform-border/foo',
-      'transform-fill/foo',
-      'transform-stroke/foo',
-      'transform-view/foo',
-      'backface-visible/foo',
-      'backface-hidden/foo',
-    ]),
+    await run(
+      [
+        '-transform',
+        '-transform-cpu',
+        '-transform-gpu',
+        '-transform-none',
+        'transform/foo',
+        'transform-cpu/foo',
+        'transform-gpu/foo',
+        'transform-none/foo',
+        'transform-[scaleZ(2)_rotateY(45deg)]/foo',
+        'transform-flat/foo',
+        'transform-3d/foo',
+        'transform-content/foo',
+        'transform-border/foo',
+        'transform-fill/foo',
+        'transform-stroke/foo',
+        'transform-view/foo',
+        'backface-visible/foo',
+        'backface-hidden/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4387,16 +4528,19 @@ test('perspective', async () => {
     }"
   `)
   expect(
-    await run([
-      'perspective',
-      '-perspective',
-      'perspective-potato',
-      'perspective-123',
-      'perspective-normal/foo',
-      'perspective-dramatic/foo',
-      'perspective-none/foo',
-      'perspective-[456px]/foo',
-    ]),
+    await run(
+      [
+        'perspective',
+        '-perspective',
+        'perspective-potato',
+        'perspective-123',
+        'perspective-normal/foo',
+        'perspective-dramatic/foo',
+        'perspective-none/foo',
+        'perspective-[456px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4608,85 +4752,88 @@ test('cursor', async () => {
     }"
   `)
   expect(
-    await run([
-      'cursor',
-      '-cursor-auto',
-      '-cursor-default',
-      '-cursor-pointer',
-      '-cursor-wait',
-      '-cursor-text',
-      '-cursor-move',
-      '-cursor-help',
-      '-cursor-not-allowed',
-      '-cursor-none',
-      '-cursor-context-menu',
-      '-cursor-progress',
-      '-cursor-cell',
-      '-cursor-crosshair',
-      '-cursor-vertical-text',
-      '-cursor-alias',
-      '-cursor-copy',
-      '-cursor-no-drop',
-      '-cursor-grab',
-      '-cursor-grabbing',
-      '-cursor-all-scroll',
-      '-cursor-col-resize',
-      '-cursor-row-resize',
-      '-cursor-n-resize',
-      '-cursor-e-resize',
-      '-cursor-s-resize',
-      '-cursor-w-resize',
-      '-cursor-ne-resize',
-      '-cursor-nw-resize',
-      '-cursor-se-resize',
-      '-cursor-sw-resize',
-      '-cursor-ew-resize',
-      '-cursor-ns-resize',
-      '-cursor-nesw-resize',
-      '-cursor-nwse-resize',
-      '-cursor-zoom-in',
-      '-cursor-zoom-out',
-      '-cursor-[var(--value)]',
-      '-cursor-custom',
-      'cursor-auto/foo',
-      'cursor-default/foo',
-      'cursor-pointer/foo',
-      'cursor-wait/foo',
-      'cursor-text/foo',
-      'cursor-move/foo',
-      'cursor-help/foo',
-      'cursor-not-allowed/foo',
-      'cursor-none/foo',
-      'cursor-context-menu/foo',
-      'cursor-progress/foo',
-      'cursor-cell/foo',
-      'cursor-crosshair/foo',
-      'cursor-vertical-text/foo',
-      'cursor-alias/foo',
-      'cursor-copy/foo',
-      'cursor-no-drop/foo',
-      'cursor-grab/foo',
-      'cursor-grabbing/foo',
-      'cursor-all-scroll/foo',
-      'cursor-col-resize/foo',
-      'cursor-row-resize/foo',
-      'cursor-n-resize/foo',
-      'cursor-e-resize/foo',
-      'cursor-s-resize/foo',
-      'cursor-w-resize/foo',
-      'cursor-ne-resize/foo',
-      'cursor-nw-resize/foo',
-      'cursor-se-resize/foo',
-      'cursor-sw-resize/foo',
-      'cursor-ew-resize/foo',
-      'cursor-ns-resize/foo',
-      'cursor-nesw-resize/foo',
-      'cursor-nwse-resize/foo',
-      'cursor-zoom-in/foo',
-      'cursor-zoom-out/foo',
-      'cursor-[var(--value)]/foo',
-      'cursor-custom/foo',
-    ]),
+    await run(
+      [
+        'cursor',
+        '-cursor-auto',
+        '-cursor-default',
+        '-cursor-pointer',
+        '-cursor-wait',
+        '-cursor-text',
+        '-cursor-move',
+        '-cursor-help',
+        '-cursor-not-allowed',
+        '-cursor-none',
+        '-cursor-context-menu',
+        '-cursor-progress',
+        '-cursor-cell',
+        '-cursor-crosshair',
+        '-cursor-vertical-text',
+        '-cursor-alias',
+        '-cursor-copy',
+        '-cursor-no-drop',
+        '-cursor-grab',
+        '-cursor-grabbing',
+        '-cursor-all-scroll',
+        '-cursor-col-resize',
+        '-cursor-row-resize',
+        '-cursor-n-resize',
+        '-cursor-e-resize',
+        '-cursor-s-resize',
+        '-cursor-w-resize',
+        '-cursor-ne-resize',
+        '-cursor-nw-resize',
+        '-cursor-se-resize',
+        '-cursor-sw-resize',
+        '-cursor-ew-resize',
+        '-cursor-ns-resize',
+        '-cursor-nesw-resize',
+        '-cursor-nwse-resize',
+        '-cursor-zoom-in',
+        '-cursor-zoom-out',
+        '-cursor-[var(--value)]',
+        '-cursor-custom',
+        'cursor-auto/foo',
+        'cursor-default/foo',
+        'cursor-pointer/foo',
+        'cursor-wait/foo',
+        'cursor-text/foo',
+        'cursor-move/foo',
+        'cursor-help/foo',
+        'cursor-not-allowed/foo',
+        'cursor-none/foo',
+        'cursor-context-menu/foo',
+        'cursor-progress/foo',
+        'cursor-cell/foo',
+        'cursor-crosshair/foo',
+        'cursor-vertical-text/foo',
+        'cursor-alias/foo',
+        'cursor-copy/foo',
+        'cursor-no-drop/foo',
+        'cursor-grab/foo',
+        'cursor-grabbing/foo',
+        'cursor-all-scroll/foo',
+        'cursor-col-resize/foo',
+        'cursor-row-resize/foo',
+        'cursor-n-resize/foo',
+        'cursor-e-resize/foo',
+        'cursor-s-resize/foo',
+        'cursor-w-resize/foo',
+        'cursor-ne-resize/foo',
+        'cursor-nw-resize/foo',
+        'cursor-se-resize/foo',
+        'cursor-sw-resize/foo',
+        'cursor-ew-resize/foo',
+        'cursor-ns-resize/foo',
+        'cursor-nesw-resize/foo',
+        'cursor-nwse-resize/foo',
+        'cursor-zoom-in/foo',
+        'cursor-zoom-out/foo',
+        'cursor-[var(--value)]/foo',
+        'cursor-custom/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4705,14 +4852,17 @@ test('touch-action', async () => {
     }"
   `)
   expect(
-    await run([
-      '-touch-auto',
-      '-touch-none',
-      '-touch-manipulation',
-      'touch-auto/foo',
-      'touch-none/foo',
-      'touch-manipulation/foo',
-    ]),
+    await run(
+      [
+        '-touch-auto',
+        '-touch-none',
+        '-touch-manipulation',
+        'touch-auto/foo',
+        'touch-none/foo',
+        'touch-manipulation/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4783,20 +4933,23 @@ test('touch-pan', async () => {
     }"
   `)
   expect(
-    await run([
-      '-touch-pan-x',
-      '-touch-pan-left',
-      '-touch-pan-right',
-      '-touch-pan-y',
-      '-touch-pan-up',
-      '-touch-pan-down',
-      'touch-pan-x/foo',
-      'touch-pan-left/foo',
-      'touch-pan-right/foo',
-      'touch-pan-y/foo',
-      'touch-pan-up/foo',
-      'touch-pan-down/foo',
-    ]),
+    await run(
+      [
+        '-touch-pan-x',
+        '-touch-pan-left',
+        '-touch-pan-right',
+        '-touch-pan-y',
+        '-touch-pan-up',
+        '-touch-pan-down',
+        'touch-pan-x/foo',
+        'touch-pan-left/foo',
+        'touch-pan-right/foo',
+        'touch-pan-y/foo',
+        'touch-pan-up/foo',
+        'touch-pan-down/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4832,7 +4985,7 @@ test('touch-pinch-zoom', async () => {
       inherits: false
     }"
   `)
-  expect(await run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
+  expect(await run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'], { optimize: false })).toEqual('')
 })
 
 test('select', async () => {
@@ -4859,16 +5012,19 @@ test('select', async () => {
     }"
   `)
   expect(
-    await run([
-      '-select-none',
-      '-select-text',
-      '-select-all',
-      '-select-auto',
-      'select-none/foo',
-      'select-text/foo',
-      'select-all/foo',
-      'select-auto/foo',
-    ]),
+    await run(
+      [
+        '-select-none',
+        '-select-text',
+        '-select-all',
+        '-select-auto',
+        'select-none/foo',
+        'select-text/foo',
+        'select-all/foo',
+        'select-auto/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4891,16 +5047,19 @@ test('resize', async () => {
     }"
   `)
   expect(
-    await run([
-      '-resize-none',
-      '-resize',
-      '-resize-x',
-      '-resize-y',
-      'resize-none/foo',
-      'resize/foo',
-      'resize-x/foo',
-      'resize-y/foo',
-    ]),
+    await run(
+      [
+        '-resize-none',
+        '-resize',
+        '-resize-x',
+        '-resize-y',
+        'resize-none/foo',
+        'resize/foo',
+        'resize-x/foo',
+        'resize-y/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4937,16 +5096,19 @@ test('scroll-snap-type', async () => {
     }"
   `)
   expect(
-    await run([
-      '-snap-none',
-      '-snap-x',
-      '-snap-y',
-      '-snap-both',
-      'snap-none/foo',
-      'snap-x/foo',
-      'snap-y/foo',
-      'snap-both/foo',
-    ]),
+    await run(
+      [
+        '-snap-none',
+        '-snap-x',
+        '-snap-y',
+        '-snap-both',
+        'snap-none/foo',
+        'snap-x/foo',
+        'snap-y/foo',
+        'snap-both/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -4975,7 +5137,9 @@ test('--tw-scroll-snap-strictness', async () => {
     }"
   `)
   expect(
-    await run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
+    await run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -4999,16 +5163,19 @@ test('scroll-snap-align', async () => {
     }"
   `)
   expect(
-    await run([
-      '-snap-align-none',
-      '-snap-start',
-      '-snap-end',
-      '-snap-center',
-      'snap-align-none/foo',
-      'snap-start/foo',
-      'snap-end/foo',
-      'snap-center/foo',
-    ]),
+    await run(
+      [
+        '-snap-align-none',
+        '-snap-start',
+        '-snap-end',
+        '-snap-center',
+        'snap-align-none/foo',
+        'snap-start/foo',
+        'snap-end/foo',
+        'snap-center/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5022,9 +5189,11 @@ test('scroll-snap-stop', async () => {
       scroll-snap-stop: normal;
     }"
   `)
-  expect(await run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('scroll-m', async () => {
@@ -5060,13 +5229,16 @@ test('scroll-m', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-m',
-      'scroll-m-4/foo',
-      'scroll-m-[4px]/foo',
-      '-scroll-m-4/foo',
-      '-scroll-m-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-m',
+        'scroll-m-4/foo',
+        'scroll-m-[4px]/foo',
+        '-scroll-m-4/foo',
+        '-scroll-m-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5107,13 +5279,16 @@ test('scroll-mx', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-mx',
-      'scroll-mx-4/foo',
-      'scroll-mx-[4px]/foo',
-      '-scroll-mx-4/foo',
-      '-scroll-mx-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-mx',
+        'scroll-mx-4/foo',
+        'scroll-mx-[4px]/foo',
+        '-scroll-mx-4/foo',
+        '-scroll-mx-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5154,13 +5329,16 @@ test('scroll-my', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-my',
-      'scroll-my-4/foo',
-      'scroll-my-[4px]/foo',
-      '-scroll-my-4/foo',
-      '-scroll-my-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-my',
+        'scroll-my-4/foo',
+        'scroll-my-[4px]/foo',
+        '-scroll-my-4/foo',
+        '-scroll-my-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5197,13 +5375,16 @@ test('scroll-ms', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-ms',
-      'scroll-ms-4/foo',
-      'scroll-ms-[4px]/foo',
-      '-scroll-ms-4/foo',
-      '-scroll-ms-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-ms',
+        'scroll-ms-4/foo',
+        'scroll-ms-[4px]/foo',
+        '-scroll-ms-4/foo',
+        '-scroll-ms-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5240,13 +5421,16 @@ test('scroll-me', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-me',
-      'scroll-me-4/foo',
-      'scroll-me-[4px]/foo',
-      '-scroll-me-4/foo',
-      '-scroll-me-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-me',
+        'scroll-me-4/foo',
+        'scroll-me-[4px]/foo',
+        '-scroll-me-4/foo',
+        '-scroll-me-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5283,13 +5467,16 @@ test('scroll-mt', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-mt',
-      'scroll-mt-4/foo',
-      'scroll-mt-[4px]/foo',
-      '-scroll-mt-4/foo',
-      '-scroll-mt-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-mt',
+        'scroll-mt-4/foo',
+        'scroll-mt-[4px]/foo',
+        '-scroll-mt-4/foo',
+        '-scroll-mt-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5326,13 +5513,16 @@ test('scroll-mr', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-mr',
-      'scroll-mr-4/foo',
-      'scroll-mr-[4px]/foo',
-      '-scroll-mr-4/foo',
-      '-scroll-mr-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-mr',
+        'scroll-mr-4/foo',
+        'scroll-mr-[4px]/foo',
+        '-scroll-mr-4/foo',
+        '-scroll-mr-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5369,13 +5559,16 @@ test('scroll-mb', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-mb',
-      'scroll-mb-4/foo',
-      'scroll-mb-[4px]/foo',
-      '-scroll-mb-4/foo',
-      '-scroll-mb-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-mb',
+        'scroll-mb-4/foo',
+        'scroll-mb-[4px]/foo',
+        '-scroll-mb-4/foo',
+        '-scroll-mb-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5412,13 +5605,16 @@ test('scroll-ml', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-ml',
-      'scroll-ml-4/foo',
-      'scroll-ml-[4px]/foo',
-      '-scroll-ml-4/foo',
-      '-scroll-ml-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-ml',
+        'scroll-ml-4/foo',
+        'scroll-ml-[4px]/foo',
+        '-scroll-ml-4/foo',
+        '-scroll-ml-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5455,13 +5651,16 @@ test('scroll-p', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-p',
-      'scroll-p-4/foo',
-      'scroll-p-[4px]/foo',
-      '-scroll-p-4/foo',
-      '-scroll-p-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-p',
+        'scroll-p-4/foo',
+        'scroll-p-[4px]/foo',
+        '-scroll-p-4/foo',
+        '-scroll-p-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5502,13 +5701,16 @@ test('scroll-px', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-px',
-      'scroll-px-4/foo',
-      'scroll-px-[4px]/foo',
-      '-scroll-px-4/foo',
-      '-scroll-px-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-px',
+        'scroll-px-4/foo',
+        'scroll-px-[4px]/foo',
+        '-scroll-px-4/foo',
+        '-scroll-px-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5549,13 +5751,16 @@ test('scroll-py', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-py',
-      'scroll-py-4/foo',
-      'scroll-py-[4px]/foo',
-      '-scroll-py-4/foo',
-      '-scroll-py-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-py',
+        'scroll-py-4/foo',
+        'scroll-py-[4px]/foo',
+        '-scroll-py-4/foo',
+        '-scroll-py-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5592,13 +5797,16 @@ test('scroll-ps', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-ps',
-      'scroll-ps-4/foo',
-      'scroll-ps-[4px]/foo',
-      '-scroll-ps-4/foo',
-      '-scroll-ps-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-ps',
+        'scroll-ps-4/foo',
+        'scroll-ps-[4px]/foo',
+        '-scroll-ps-4/foo',
+        '-scroll-ps-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5635,13 +5843,16 @@ test('scroll-pe', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-pe',
-      'scroll-pe-4/foo',
-      'scroll-pe-[4px]/foo',
-      '-scroll-pe-4/foo',
-      '-scroll-pe-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-pe',
+        'scroll-pe-4/foo',
+        'scroll-pe-[4px]/foo',
+        '-scroll-pe-4/foo',
+        '-scroll-pe-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5678,13 +5889,16 @@ test('scroll-pt', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-pt',
-      'scroll-pt-4/foo',
-      'scroll-pt-[4px]/foo',
-      '-scroll-pt-4/foo',
-      '-scroll-pt-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-pt',
+        'scroll-pt-4/foo',
+        'scroll-pt-[4px]/foo',
+        '-scroll-pt-4/foo',
+        '-scroll-pt-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5721,13 +5935,16 @@ test('scroll-pr', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-pr',
-      'scroll-pr-4/foo',
-      'scroll-pr-[4px]/foo',
-      '-scroll-pr-4/foo',
-      '-scroll-pr-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-pr',
+        'scroll-pr-4/foo',
+        'scroll-pr-[4px]/foo',
+        '-scroll-pr-4/foo',
+        '-scroll-pr-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5764,13 +5981,16 @@ test('scroll-pb', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-pb',
-      'scroll-pb-4/foo',
-      'scroll-pb-[4px]/foo',
-      '-scroll-pb-4/foo',
-      '-scroll-pb-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-pb',
+        'scroll-pb-4/foo',
+        'scroll-pb-[4px]/foo',
+        '-scroll-pb-4/foo',
+        '-scroll-pb-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5807,13 +6027,16 @@ test('scroll-pl', async () => {
     }"
   `)
   expect(
-    await run([
-      'scroll-pl',
-      'scroll-pl-4/foo',
-      'scroll-pl-[4px]/foo',
-      '-scroll-pl-4/foo',
-      '-scroll-pl-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'scroll-pl',
+        'scroll-pl-4/foo',
+        'scroll-pl-[4px]/foo',
+        '-scroll-pl-4/foo',
+        '-scroll-pl-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5828,7 +6051,9 @@ test('list-style-position', async () => {
     }"
   `)
   expect(
-    await run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo']),
+    await run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -5852,16 +6077,19 @@ test('list', async () => {
       }"
     `)
   expect(
-    await run([
-      '-list-none',
-      '-list-disc',
-      '-list-decimal',
-      '-list-[var(--value)]',
-      'list-none/foo',
-      'list-disc/foo',
-      'list-decimal/foo',
-      'list-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-list-none',
+        '-list-disc',
+        '-list-decimal',
+        '-list-[var(--value)]',
+        'list-none/foo',
+        'list-disc/foo',
+        'list-decimal/foo',
+        'list-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5876,13 +6104,16 @@ test('list-image', async () => {
     }"
   `)
   expect(
-    await run([
-      'list-image',
-      '-list-image-none',
-      '-list-image-[var(--value)]',
-      'list-image-none/foo',
-      'list-image-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'list-image',
+        '-list-image-none',
+        '-list-image-[var(--value)]',
+        'list-image-none/foo',
+        'list-image-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5897,13 +6128,16 @@ test('appearance', async () => {
     }"
   `)
   expect(
-    await run([
-      'appearance',
-      '-appearance-none',
-      '-appearance-auto',
-      'appearance-none/foo',
-      'appearance-auto/foo',
-    ]),
+    await run(
+      [
+        'appearance',
+        '-appearance-none',
+        '-appearance-auto',
+        'appearance-none/foo',
+        'appearance-auto/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -5960,14 +6194,17 @@ test('color-scheme', async () => {
     }"
   `)
   expect(
-    await run([
-      'scheme',
-      '-scheme-dark',
-      '-scheme-light',
-      '-scheme-light-dark',
-      '-scheme-dark-only',
-      '-scheme-light-only',
-    ]),
+    await run(
+      [
+        'scheme',
+        '-scheme-dark',
+        '-scheme-light',
+        '-scheme-light-dark',
+        '-scheme-dark-only',
+        '-scheme-light-only',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6026,21 +6263,24 @@ test('columns', async () => {
     }"
   `)
   expect(
-    await run([
-      'columns',
-      'columns--4',
-      '-columns-4',
-      '-columns-[123]',
-      '-columns-[var(--value)]',
-      'columns-unknown',
-      'columns-auto/foo',
-      'columns-3xs/foo',
-      'columns-7xl/foo',
-      'columns-4/foo',
-      'columns-99/foo',
-      'columns-[123]/foo',
-      'columns-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'columns',
+        'columns--4',
+        '-columns-4',
+        '-columns-[123]',
+        '-columns-[var(--value)]',
+        'columns-unknown',
+        'columns-auto/foo',
+        'columns-3xs/foo',
+        'columns-7xl/foo',
+        'columns-4/foo',
+        'columns-99/foo',
+        'columns-[123]/foo',
+        'columns-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6090,25 +6330,28 @@ test('break-before', async () => {
     }"
   `)
   expect(
-    await run([
-      'break-before',
-      '-break-before-auto',
-      '-break-before-avoid',
-      '-break-before-all',
-      '-break-before-avoid-page',
-      '-break-before-page',
-      '-break-before-left',
-      '-break-before-right',
-      '-break-before-column',
-      'break-before-auto/foo',
-      'break-before-avoid/foo',
-      'break-before-all/foo',
-      'break-before-avoid-page/foo',
-      'break-before-page/foo',
-      'break-before-left/foo',
-      'break-before-right/foo',
-      'break-before-column/foo',
-    ]),
+    await run(
+      [
+        'break-before',
+        '-break-before-auto',
+        '-break-before-avoid',
+        '-break-before-all',
+        '-break-before-avoid-page',
+        '-break-before-page',
+        '-break-before-left',
+        '-break-before-right',
+        '-break-before-column',
+        'break-before-auto/foo',
+        'break-before-avoid/foo',
+        'break-before-all/foo',
+        'break-before-avoid-page/foo',
+        'break-before-page/foo',
+        'break-before-left/foo',
+        'break-before-right/foo',
+        'break-before-column/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6138,17 +6381,20 @@ test('break-inside', async () => {
     }"
   `)
   expect(
-    await run([
-      'break-inside',
-      '-break-inside-auto',
-      '-break-inside-avoid',
-      '-break-inside-avoid-page',
-      '-break-inside-avoid-column',
-      'break-inside-auto/foo',
-      'break-inside-avoid/foo',
-      'break-inside-avoid-page/foo',
-      'break-inside-avoid-column/foo',
-    ]),
+    await run(
+      [
+        'break-inside',
+        '-break-inside-auto',
+        '-break-inside-avoid',
+        '-break-inside-avoid-page',
+        '-break-inside-avoid-column',
+        'break-inside-auto/foo',
+        'break-inside-avoid/foo',
+        'break-inside-avoid-page/foo',
+        'break-inside-avoid-column/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6198,25 +6444,28 @@ test('break-after', async () => {
     }"
   `)
   expect(
-    await run([
-      'break-after',
-      '-break-after-auto',
-      '-break-after-avoid',
-      '-break-after-all',
-      '-break-after-avoid-page',
-      '-break-after-page',
-      '-break-after-left',
-      '-break-after-right',
-      '-break-after-column',
-      'break-after-auto/foo',
-      'break-after-avoid/foo',
-      'break-after-all/foo',
-      'break-after-avoid-page/foo',
-      'break-after-page/foo',
-      'break-after-left/foo',
-      'break-after-right/foo',
-      'break-after-column/foo',
-    ]),
+    await run(
+      [
+        'break-after',
+        '-break-after-auto',
+        '-break-after-avoid',
+        '-break-after-all',
+        '-break-after-avoid-page',
+        '-break-after-page',
+        '-break-after-left',
+        '-break-after-right',
+        '-break-after-column',
+        'break-after-auto/foo',
+        'break-after-avoid/foo',
+        'break-after-all/foo',
+        'break-after-avoid-page/foo',
+        'break-after-page/foo',
+        'break-after-left/foo',
+        'break-after-right/foo',
+        'break-after-column/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6251,16 +6500,19 @@ test('auto-cols', async () => {
     }"
   `)
   expect(
-    await run([
-      'auto-cols',
-      '-auto-cols-auto',
-      '-auto-cols-[2fr]',
-      'auto-cols-auto/foo',
-      'auto-cols-min/foo',
-      'auto-cols-max/foo',
-      'auto-cols-fr/foo',
-      'auto-cols-[2fr]/foo',
-    ]),
+    await run(
+      [
+        'auto-cols',
+        '-auto-cols-auto',
+        '-auto-cols-[2fr]',
+        'auto-cols-auto/foo',
+        'auto-cols-min/foo',
+        'auto-cols-max/foo',
+        'auto-cols-fr/foo',
+        'auto-cols-[2fr]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6295,19 +6547,22 @@ test('grid-flow', async () => {
     }"
   `)
   expect(
-    await run([
-      'grid-flow',
-      '-grid-flow-row',
-      '-grid-flow-col',
-      '-grid-flow-dense',
-      '-grid-flow-row-dense',
-      '-grid-flow-col-dense',
-      'grid-flow-row/foo',
-      'grid-flow-col/foo',
-      'grid-flow-dense/foo',
-      'grid-flow-row-dense/foo',
-      'grid-flow-col-dense/foo',
-    ]),
+    await run(
+      [
+        'grid-flow',
+        '-grid-flow-row',
+        '-grid-flow-col',
+        '-grid-flow-dense',
+        '-grid-flow-row-dense',
+        '-grid-flow-col-dense',
+        'grid-flow-row/foo',
+        'grid-flow-col/foo',
+        'grid-flow-dense/foo',
+        'grid-flow-row-dense/foo',
+        'grid-flow-col-dense/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6342,16 +6597,19 @@ test('auto-rows', async () => {
     }"
   `)
   expect(
-    await run([
-      'auto-rows',
-      '-auto-rows-auto',
-      '-auto-rows-[2fr]',
-      'auto-rows-auto/foo',
-      'auto-rows-min/foo',
-      'auto-rows-max/foo',
-      'auto-rows-fr/foo',
-      'auto-rows-[2fr]/foo',
-    ]),
+    await run(
+      [
+        'auto-rows',
+        '-auto-rows-auto',
+        '-auto-rows-[2fr]',
+        'auto-rows-auto/foo',
+        'auto-rows-min/foo',
+        'auto-rows-max/foo',
+        'auto-rows-fr/foo',
+        'auto-rows-[2fr]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6386,20 +6644,23 @@ test('grid-cols', async () => {
     }"
   `)
   expect(
-    await run([
-      'grid-cols',
-      '-grid-cols-none',
-      '-grid-cols-subgrid',
-      'grid-cols--12',
-      '-grid-cols-12',
-      '-grid-cols-[123]',
-      'grid-cols-unknown',
-      'grid-cols-none/foo',
-      'grid-cols-subgrid/foo',
-      'grid-cols-12/foo',
-      'grid-cols-99/foo',
-      'grid-cols-[123]/foo',
-    ]),
+    await run(
+      [
+        'grid-cols',
+        '-grid-cols-none',
+        '-grid-cols-subgrid',
+        'grid-cols--12',
+        '-grid-cols-12',
+        '-grid-cols-[123]',
+        'grid-cols-unknown',
+        'grid-cols-none/foo',
+        'grid-cols-subgrid/foo',
+        'grid-cols-12/foo',
+        'grid-cols-99/foo',
+        'grid-cols-[123]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6434,20 +6695,23 @@ test('grid-rows', async () => {
     }"
   `)
   expect(
-    await run([
-      'grid-rows',
-      '-grid-rows-none',
-      '-grid-rows-subgrid',
-      'grid-rows--12',
-      '-grid-rows-12',
-      '-grid-rows-[123]',
-      'grid-rows-unknown',
-      'grid-rows-none/foo',
-      'grid-rows-subgrid/foo',
-      'grid-rows-12/foo',
-      'grid-rows-99/foo',
-      'grid-rows-[123]/foo',
-    ]),
+    await run(
+      [
+        'grid-rows',
+        '-grid-rows-none',
+        '-grid-rows-subgrid',
+        'grid-rows--12',
+        '-grid-rows-12',
+        '-grid-rows-[123]',
+        'grid-rows-unknown',
+        'grid-rows-none/foo',
+        'grid-rows-subgrid/foo',
+        'grid-rows-12/foo',
+        'grid-rows-99/foo',
+        'grid-rows-[123]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6471,16 +6735,19 @@ test('flex-direction', async () => {
     }"
   `)
   expect(
-    await run([
-      '-flex-row',
-      '-flex-row-reverse',
-      '-flex-col',
-      '-flex-col-reverse',
-      'flex-row/foo',
-      'flex-row-reverse/foo',
-      'flex-col/foo',
-      'flex-col-reverse/foo',
-    ]),
+    await run(
+      [
+        '-flex-row',
+        '-flex-row-reverse',
+        '-flex-col',
+        '-flex-col-reverse',
+        'flex-row/foo',
+        'flex-row-reverse/foo',
+        'flex-col/foo',
+        'flex-col-reverse/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6499,14 +6766,17 @@ test('flex-wrap', async () => {
     }"
   `)
   expect(
-    await run([
-      '-flex-wrap',
-      '-flex-wrap-reverse',
-      '-flex-nowrap',
-      'flex-wrap/foo',
-      'flex-wrap-reverse/foo',
-      'flex-nowrap/foo',
-    ]),
+    await run(
+      [
+        '-flex-wrap',
+        '-flex-wrap-reverse',
+        '-flex-nowrap',
+        'flex-wrap/foo',
+        'flex-wrap-reverse/foo',
+        'flex-nowrap/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6556,25 +6826,28 @@ test('place-content', async () => {
     }"
   `)
   expect(
-    await run([
-      'place-content',
-      '-place-content-center',
-      '-place-content-start',
-      '-place-content-end',
-      '-place-content-between',
-      '-place-content-around',
-      '-place-content-evenly',
-      '-place-content-baseline',
-      '-place-content-stretch',
-      'place-content-center/foo',
-      'place-content-start/foo',
-      'place-content-end/foo',
-      'place-content-between/foo',
-      'place-content-around/foo',
-      'place-content-evenly/foo',
-      'place-content-baseline/foo',
-      'place-content-stretch/foo',
-    ]),
+    await run(
+      [
+        'place-content',
+        '-place-content-center',
+        '-place-content-start',
+        '-place-content-end',
+        '-place-content-between',
+        '-place-content-around',
+        '-place-content-evenly',
+        '-place-content-baseline',
+        '-place-content-stretch',
+        'place-content-center/foo',
+        'place-content-start/foo',
+        'place-content-end/foo',
+        'place-content-between/foo',
+        'place-content-around/foo',
+        'place-content-evenly/foo',
+        'place-content-baseline/foo',
+        'place-content-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6609,19 +6882,22 @@ test('place-items', async () => {
     }"
   `)
   expect(
-    await run([
-      'place-items',
-      '-place-items-start',
-      '-place-items-end',
-      '-place-items-center',
-      '-place-items-baseline',
-      '-place-items-stretch',
-      'place-items-start/foo',
-      'place-items-end/foo',
-      'place-items-center/foo',
-      'place-items-baseline/foo',
-      'place-items-stretch/foo',
-    ]),
+    await run(
+      [
+        'place-items',
+        '-place-items-start',
+        '-place-items-end',
+        '-place-items-center',
+        '-place-items-baseline',
+        '-place-items-stretch',
+        'place-items-start/foo',
+        'place-items-end/foo',
+        'place-items-center/foo',
+        'place-items-baseline/foo',
+        'place-items-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6676,27 +6952,30 @@ test('align-content', async () => {
     }"
   `)
   expect(
-    await run([
-      'content',
-      '-content-normal',
-      '-content-center',
-      '-content-start',
-      '-content-end',
-      '-content-between',
-      '-content-around',
-      '-content-evenly',
-      '-content-baseline',
-      '-content-stretch',
-      'content-normal/foo',
-      'content-center/foo',
-      'content-start/foo',
-      'content-end/foo',
-      'content-between/foo',
-      'content-around/foo',
-      'content-evenly/foo',
-      'content-baseline/foo',
-      'content-stretch/foo',
-    ]),
+    await run(
+      [
+        'content',
+        '-content-normal',
+        '-content-center',
+        '-content-start',
+        '-content-end',
+        '-content-between',
+        '-content-around',
+        '-content-evenly',
+        '-content-baseline',
+        '-content-stretch',
+        'content-normal/foo',
+        'content-center/foo',
+        'content-start/foo',
+        'content-end/foo',
+        'content-between/foo',
+        'content-around/foo',
+        'content-evenly/foo',
+        'content-baseline/foo',
+        'content-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6724,19 +7003,22 @@ test('items', async () => {
     }"
   `)
   expect(
-    await run([
-      'items',
-      '-items-start',
-      '-items-end',
-      '-items-center',
-      '-items-baseline',
-      '-items-stretch',
-      'items-start/foo',
-      'items-end/foo',
-      'items-center/foo',
-      'items-baseline/foo',
-      'items-stretch/foo',
-    ]),
+    await run(
+      [
+        'items',
+        '-items-start',
+        '-items-end',
+        '-items-center',
+        '-items-baseline',
+        '-items-stretch',
+        'items-start/foo',
+        'items-end/foo',
+        'items-center/foo',
+        'items-baseline/foo',
+        'items-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6786,25 +7068,28 @@ test('justify', async () => {
     }"
   `)
   expect(
-    await run([
-      'justify',
-      '-justify-normal',
-      '-justify-start',
-      '-justify-end',
-      '-justify-center',
-      '-justify-between',
-      '-justify-around',
-      '-justify-evenly',
-      '-justify-stretch',
-      'justify-normal/foo',
-      'justify-start/foo',
-      'justify-end/foo',
-      'justify-center/foo',
-      'justify-between/foo',
-      'justify-around/foo',
-      'justify-evenly/foo',
-      'justify-stretch/foo',
-    ]),
+    await run(
+      [
+        'justify',
+        '-justify-normal',
+        '-justify-start',
+        '-justify-end',
+        '-justify-center',
+        '-justify-between',
+        '-justify-around',
+        '-justify-evenly',
+        '-justify-stretch',
+        'justify-normal/foo',
+        'justify-start/foo',
+        'justify-end/foo',
+        'justify-center/foo',
+        'justify-between/foo',
+        'justify-around/foo',
+        'justify-evenly/foo',
+        'justify-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6834,17 +7119,20 @@ test('justify-items', async () => {
     }"
   `)
   expect(
-    await run([
-      'justify-items',
-      '-justify-items-start',
-      '-justify-items-end',
-      '-justify-items-center',
-      '-justify-items-stretch',
-      'justify-items-start/foo',
-      'justify-items-end/foo',
-      'justify-items-center/foo',
-      'justify-items-stretch/foo',
-    ]),
+    await run(
+      [
+        'justify-items',
+        '-justify-items-start',
+        '-justify-items-end',
+        '-justify-items-center',
+        '-justify-items-stretch',
+        'justify-items-start/foo',
+        'justify-items-end/foo',
+        'justify-items-center/foo',
+        'justify-items-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -6872,7 +7160,9 @@ test('gap', async () => {
       gap: 4px;
     }"
   `)
-  expect(await run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('gap-x', async () => {
@@ -6900,7 +7190,9 @@ test('gap-x', async () => {
     }"
   `)
   expect(
-    await run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo']),
+    await run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -6929,7 +7221,9 @@ test('gap-y', async () => {
     }"
   `)
   expect(
-    await run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo']),
+    await run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo'], {
+      optimize: false,
+    }),
   ).toEqual('')
 })
 
@@ -6978,7 +7272,11 @@ test('space-x', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
+  expect(
+    await run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('space-y', async () => {
@@ -7026,7 +7324,11 @@ test('space-y', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
+  expect(
+    await run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('space-x-reverse', async () => {
@@ -7049,7 +7351,7 @@ test('space-x-reverse', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
+  expect(await run(['-space-x-reverse', 'space-x-reverse/foo'], { optimize: false })).toEqual('')
 })
 
 test('space-y-reverse', async () => {
@@ -7072,7 +7374,7 @@ test('space-y-reverse', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
+  expect(await run(['-space-y-reverse', 'space-y-reverse/foo'], { optimize: false })).toEqual('')
 })
 
 test('divide-x', async () => {
@@ -7130,17 +7432,20 @@ test('divide-x', async () => {
     }"
   `)
   expect(
-    await run([
-      '-divide-x',
-      'divide-x--4',
-      '-divide-x-4',
-      '-divide-x-123',
-      'divide-x-unknown',
-      'divide-x/foo',
-      'divide-x-4/foo',
-      'divide-x-123/foo',
-      'divide-x-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-divide-x',
+        'divide-x--4',
+        '-divide-x-4',
+        '-divide-x-123',
+        'divide-x-unknown',
+        'divide-x/foo',
+        'divide-x-4/foo',
+        'divide-x-123/foo',
+        'divide-x-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7187,7 +7492,7 @@ test('divide-x with custom default border width', async () => {
       initial-value: solid;
     }"
   `)
-  expect(await run(['divide-x/foo'])).toEqual('')
+  expect(await run(['divide-x/foo'], { optimize: false })).toEqual('')
 })
 
 test('divide-y', async () => {
@@ -7249,17 +7554,20 @@ test('divide-y', async () => {
     }"
   `)
   expect(
-    await run([
-      '-divide-y',
-      'divide-y--4',
-      '-divide-y-4',
-      '-divide-y-123',
-      'divide-y-unknown',
-      'divide-y/foo',
-      'divide-y-4/foo',
-      'divide-y-123/foo',
-      'divide-y-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-divide-y',
+        'divide-y--4',
+        '-divide-y-4',
+        '-divide-y-123',
+        'divide-y-unknown',
+        'divide-y/foo',
+        'divide-y-4/foo',
+        'divide-y-123/foo',
+        'divide-y-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7307,7 +7615,7 @@ test('divide-y with custom default border width', async () => {
       initial-value: solid;
     }"
   `)
-  expect(await run(['divide-y/foo'])).toEqual('')
+  expect(await run(['divide-y/foo'], { optimize: false })).toEqual('')
 })
 
 test('divide-x-reverse', async () => {
@@ -7330,7 +7638,7 @@ test('divide-x-reverse', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['-divide-x-reverse', 'divide-x-reverse/foo'])).toEqual('')
+  expect(await run(['-divide-x-reverse', 'divide-x-reverse/foo'], { optimize: false })).toEqual('')
 })
 
 test('divide-y-reverse', async () => {
@@ -7353,7 +7661,7 @@ test('divide-y-reverse', async () => {
       initial-value: 0;
     }"
   `)
-  expect(await run(['-divide-y-reverse', 'divide-y-reverse/foo'])).toEqual('')
+  expect(await run(['-divide-y-reverse', 'divide-y-reverse/foo'], { optimize: false })).toEqual('')
 })
 
 test('divide-style', async () => {
@@ -7386,19 +7694,22 @@ test('divide-style', async () => {
       }"
     `)
   expect(
-    await run([
-      'divide',
-      '-divide-solid',
-      '-divide-dashed',
-      '-divide-dotted',
-      '-divide-double',
-      '-divide-none',
-      'divide-solid/foo',
-      'divide-dashed/foo',
-      'divide-dotted/foo',
-      'divide-double/foo',
-      'divide-none/foo',
-    ]),
+    await run(
+      [
+        'divide',
+        '-divide-solid',
+        '-divide-dashed',
+        '-divide-dotted',
+        '-divide-double',
+        '-divide-none',
+        'divide-solid/foo',
+        'divide-dashed/foo',
+        'divide-dotted/foo',
+        'divide-double/foo',
+        'divide-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7466,39 +7777,42 @@ test('accent', async () => {
     }"
   `)
   expect(
-    await run([
-      'accent',
-      '-accent-red-500',
-      'accent-red-500/-50',
-      '-accent-red-500/50',
-      '-accent-red-500/[0.5]',
-      '-accent-red-500/[50%]',
-      '-accent-current',
-      '-accent-current/50',
-      '-accent-current/[0.5]',
-      '-accent-current/[50%]',
-      '-accent-inherit',
-      '-accent-transparent',
-      'accent-[#0088cc]/-50',
-      '-accent-[#0088cc]',
-      '-accent-[#0088cc]/50',
-      '-accent-[#0088cc]/[0.5]',
-      '-accent-[#0088cc]/[50%]',
-      'accent-red-500/foo',
-      'accent-red-500/50/foo',
-      'accent-red-500/[0.5]/foo',
-      'accent-red-500/[50%]/foo',
-      'accent-current/foo',
-      'accent-current/50/foo',
-      'accent-current/[0.5]/foo',
-      'accent-current/[50%]/foo',
-      'accent-inherit/foo',
-      'accent-transparent/foo',
-      'accent-[#0088cc]/foo',
-      'accent-[#0088cc]/50/foo',
-      'accent-[#0088cc]/[0.5]/foo',
-      'accent-[#0088cc]/[50%]/foo',
-    ]),
+    await run(
+      [
+        'accent',
+        '-accent-red-500',
+        'accent-red-500/-50',
+        '-accent-red-500/50',
+        '-accent-red-500/[0.5]',
+        '-accent-red-500/[50%]',
+        '-accent-current',
+        '-accent-current/50',
+        '-accent-current/[0.5]',
+        '-accent-current/[50%]',
+        '-accent-inherit',
+        '-accent-transparent',
+        'accent-[#0088cc]/-50',
+        '-accent-[#0088cc]',
+        '-accent-[#0088cc]/50',
+        '-accent-[#0088cc]/[0.5]',
+        '-accent-[#0088cc]/[50%]',
+        'accent-red-500/foo',
+        'accent-red-500/50/foo',
+        'accent-red-500/[0.5]/foo',
+        'accent-red-500/[50%]/foo',
+        'accent-current/foo',
+        'accent-current/50/foo',
+        'accent-current/[0.5]/foo',
+        'accent-current/[50%]/foo',
+        'accent-inherit/foo',
+        'accent-transparent/foo',
+        'accent-[#0088cc]/foo',
+        'accent-[#0088cc]/50/foo',
+        'accent-[#0088cc]/[0.5]/foo',
+        'accent-[#0088cc]/[50%]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7566,37 +7880,40 @@ test('caret', async () => {
     }"
   `)
   expect(
-    await run([
-      'caret',
-      '-caret-red-500',
-      '-caret-red-500/50',
-      '-caret-red-500/[0.5]',
-      '-caret-red-500/[50%]',
-      '-caret-current',
-      '-caret-current/50',
-      '-caret-current/[0.5]',
-      '-caret-current/[50%]',
-      '-caret-inherit',
-      '-caret-transparent',
-      '-caret-[#0088cc]',
-      '-caret-[#0088cc]/50',
-      '-caret-[#0088cc]/[0.5]',
-      '-caret-[#0088cc]/[50%]',
-      'caret-red-500/foo',
-      'caret-red-500/50/foo',
-      'caret-red-500/[0.5]/foo',
-      'caret-red-500/[50%]/foo',
-      'caret-current/foo',
-      'caret-current/50/foo',
-      'caret-current/[0.5]/foo',
-      'caret-current/[50%]/foo',
-      'caret-inherit/foo',
-      'caret-transparent/foo',
-      'caret-[#0088cc]/foo',
-      'caret-[#0088cc]/50/foo',
-      'caret-[#0088cc]/[0.5]/foo',
-      'caret-[#0088cc]/[50%]/foo',
-    ]),
+    await run(
+      [
+        'caret',
+        '-caret-red-500',
+        '-caret-red-500/50',
+        '-caret-red-500/[0.5]',
+        '-caret-red-500/[50%]',
+        '-caret-current',
+        '-caret-current/50',
+        '-caret-current/[0.5]',
+        '-caret-current/[50%]',
+        '-caret-inherit',
+        '-caret-transparent',
+        '-caret-[#0088cc]',
+        '-caret-[#0088cc]/50',
+        '-caret-[#0088cc]/[0.5]',
+        '-caret-[#0088cc]/[50%]',
+        'caret-red-500/foo',
+        'caret-red-500/50/foo',
+        'caret-red-500/[0.5]/foo',
+        'caret-red-500/[50%]/foo',
+        'caret-current/foo',
+        'caret-current/50/foo',
+        'caret-current/[0.5]/foo',
+        'caret-current/[50%]/foo',
+        'caret-inherit/foo',
+        'caret-transparent/foo',
+        'caret-[#0088cc]/foo',
+        'caret-[#0088cc]/50/foo',
+        'caret-[#0088cc]/[0.5]/foo',
+        'caret-[#0088cc]/[50%]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7688,37 +8005,40 @@ test('divide-color', async () => {
     }"
   `)
   expect(
-    await run([
-      'divide',
-      '-divide-red-500',
-      '-divide-red-500/50',
-      '-divide-red-500/[0.5]',
-      '-divide-red-500/[50%]',
-      '-divide-current',
-      '-divide-current/50',
-      '-divide-current/[0.5]',
-      '-divide-current/[50%]',
-      '-divide-inherit',
-      '-divide-transparent',
-      '-divide-[#0088cc]',
-      '-divide-[#0088cc]/50',
-      '-divide-[#0088cc]/[0.5]',
-      '-divide-[#0088cc]/[50%]',
-      'divide-red-500/foo',
-      'divide-red-500/50/foo',
-      'divide-red-500/[0.5]/foo',
-      'divide-red-500/[50%]/foo',
-      'divide-current/foo',
-      'divide-current/50/foo',
-      'divide-current/[0.5]/foo',
-      'divide-current/[50%]/foo',
-      'divide-inherit/foo',
-      'divide-transparent/foo',
-      'divide-[#0088cc]/foo',
-      'divide-[#0088cc]/50/foo',
-      'divide-[#0088cc]/[0.5]/foo',
-      'divide-[#0088cc]/[50%]/foo',
-    ]),
+    await run(
+      [
+        'divide',
+        '-divide-red-500',
+        '-divide-red-500/50',
+        '-divide-red-500/[0.5]',
+        '-divide-red-500/[50%]',
+        '-divide-current',
+        '-divide-current/50',
+        '-divide-current/[0.5]',
+        '-divide-current/[50%]',
+        '-divide-inherit',
+        '-divide-transparent',
+        '-divide-[#0088cc]',
+        '-divide-[#0088cc]/50',
+        '-divide-[#0088cc]/[0.5]',
+        '-divide-[#0088cc]/[50%]',
+        'divide-red-500/foo',
+        'divide-red-500/50/foo',
+        'divide-red-500/[0.5]/foo',
+        'divide-red-500/[50%]/foo',
+        'divide-current/foo',
+        'divide-current/50/foo',
+        'divide-current/[0.5]/foo',
+        'divide-current/[50%]/foo',
+        'divide-inherit/foo',
+        'divide-transparent/foo',
+        'divide-[#0088cc]/foo',
+        'divide-[#0088cc]/50/foo',
+        'divide-[#0088cc]/[0.5]/foo',
+        'divide-[#0088cc]/[50%]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7753,19 +8073,22 @@ test('place-self', async () => {
     }"
   `)
   expect(
-    await run([
-      'place-self',
-      '-place-self-auto',
-      '-place-self-start',
-      '-place-self-end',
-      '-place-self-center',
-      '-place-self-stretch',
-      'place-self-auto/foo',
-      'place-self-start/foo',
-      'place-self-end/foo',
-      'place-self-center/foo',
-      'place-self-stretch/foo',
-    ]),
+    await run(
+      [
+        'place-self',
+        '-place-self-auto',
+        '-place-self-start',
+        '-place-self-end',
+        '-place-self-center',
+        '-place-self-stretch',
+        'place-self-auto/foo',
+        'place-self-start/foo',
+        'place-self-end/foo',
+        'place-self-center/foo',
+        'place-self-stretch/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7805,21 +8128,24 @@ test('self', async () => {
     }"
   `)
   expect(
-    await run([
-      'self',
-      '-self-auto',
-      '-self-start',
-      '-self-end',
-      '-self-center',
-      '-self-stretch',
-      '-self-baseline',
-      'self-auto/foo',
-      'self-start/foo',
-      'self-end/foo',
-      'self-center/foo',
-      'self-stretch/foo',
-      'self-baseline/foo',
-    ]),
+    await run(
+      [
+        'self',
+        '-self-auto',
+        '-self-start',
+        '-self-end',
+        '-self-center',
+        '-self-stretch',
+        '-self-baseline',
+        'self-auto/foo',
+        'self-start/foo',
+        'self-end/foo',
+        'self-center/foo',
+        'self-stretch/foo',
+        'self-baseline/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7855,21 +8181,24 @@ test('justify-self', async () => {
     }"
   `)
   expect(
-    await run([
-      'justify-self',
-      '-justify-self-auto',
-      '-justify-self-start',
-      '-justify-self-end',
-      '-justify-self-center',
-      '-justify-self-stretch',
-      '-justify-self-baseline',
-      'justify-self-auto/foo',
-      'justify-self-start/foo',
-      'justify-self-end/foo',
-      'justify-self-center/foo',
-      'justify-self-stretch/foo',
-      'justify-self-baseline/foo',
-    ]),
+    await run(
+      [
+        'justify-self',
+        '-justify-self-auto',
+        '-justify-self-start',
+        '-justify-self-end',
+        '-justify-self-center',
+        '-justify-self-stretch',
+        '-justify-self-baseline',
+        'justify-self-auto/foo',
+        'justify-self-start/foo',
+        'justify-self-end/foo',
+        'justify-self-center/foo',
+        'justify-self-stretch/foo',
+        'justify-self-baseline/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7904,19 +8233,22 @@ test('overflow', async () => {
     }"
   `)
   expect(
-    await run([
-      'overflow',
-      '-overflow-auto',
-      '-overflow-hidden',
-      '-overflow-clip',
-      '-overflow-visible',
-      '-overflow-scroll',
-      'overflow-auto/foo',
-      'overflow-hidden/foo',
-      'overflow-clip/foo',
-      'overflow-visible/foo',
-      'overflow-scroll/foo',
-    ]),
+    await run(
+      [
+        'overflow',
+        '-overflow-auto',
+        '-overflow-hidden',
+        '-overflow-clip',
+        '-overflow-visible',
+        '-overflow-scroll',
+        'overflow-auto/foo',
+        'overflow-hidden/foo',
+        'overflow-clip/foo',
+        'overflow-visible/foo',
+        'overflow-scroll/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7951,19 +8283,22 @@ test('overflow-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'overflow-x',
-      '-overflow-x-auto',
-      '-overflow-x-hidden',
-      '-overflow-x-clip',
-      '-overflow-x-visible',
-      '-overflow-x-scroll',
-      'overflow-x-auto/foo',
-      'overflow-x-hidden/foo',
-      'overflow-x-clip/foo',
-      'overflow-x-visible/foo',
-      'overflow-x-scroll/foo',
-    ]),
+    await run(
+      [
+        'overflow-x',
+        '-overflow-x-auto',
+        '-overflow-x-hidden',
+        '-overflow-x-clip',
+        '-overflow-x-visible',
+        '-overflow-x-scroll',
+        'overflow-x-auto/foo',
+        'overflow-x-hidden/foo',
+        'overflow-x-clip/foo',
+        'overflow-x-visible/foo',
+        'overflow-x-scroll/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -7998,19 +8333,22 @@ test('overflow-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'overflow-y',
-      '-overflow-y-auto',
-      '-overflow-y-hidden',
-      '-overflow-y-clip',
-      '-overflow-y-visible',
-      '-overflow-y-scroll',
-      'overflow-y-auto/foo',
-      'overflow-y-hidden/foo',
-      'overflow-y-clip/foo',
-      'overflow-y-visible/foo',
-      'overflow-y-scroll/foo',
-    ]),
+    await run(
+      [
+        'overflow-y',
+        '-overflow-y-auto',
+        '-overflow-y-hidden',
+        '-overflow-y-clip',
+        '-overflow-y-visible',
+        '-overflow-y-scroll',
+        'overflow-y-auto/foo',
+        'overflow-y-hidden/foo',
+        'overflow-y-clip/foo',
+        'overflow-y-visible/foo',
+        'overflow-y-scroll/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8030,15 +8368,18 @@ test('overscroll', async () => {
     }"
   `)
   expect(
-    await run([
-      'overscroll',
-      '-overscroll-auto',
-      '-overscroll-contain',
-      '-overscroll-none',
-      'overscroll-auto/foo',
-      'overscroll-contain/foo',
-      'overscroll-none/foo',
-    ]),
+    await run(
+      [
+        'overscroll',
+        '-overscroll-auto',
+        '-overscroll-contain',
+        '-overscroll-none',
+        'overscroll-auto/foo',
+        'overscroll-contain/foo',
+        'overscroll-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8058,15 +8399,18 @@ test('overscroll-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'overscroll-x',
-      '-overscroll-x-auto',
-      '-overscroll-x-contain',
-      '-overscroll-x-none',
-      'overscroll-x-auto/foo',
-      'overscroll-x-contain/foo',
-      'overscroll-x-none/foo',
-    ]),
+    await run(
+      [
+        'overscroll-x',
+        '-overscroll-x-auto',
+        '-overscroll-x-contain',
+        '-overscroll-x-none',
+        'overscroll-x-auto/foo',
+        'overscroll-x-contain/foo',
+        'overscroll-x-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8086,15 +8430,18 @@ test('overscroll-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'overscroll-y',
-      '-overscroll-y-auto',
-      '-overscroll-y-contain',
-      '-overscroll-y-none',
-      'overscroll-y-auto/foo',
-      'overscroll-y-contain/foo',
-      'overscroll-y-none/foo',
-    ]),
+    await run(
+      [
+        'overscroll-y',
+        '-overscroll-y-auto',
+        '-overscroll-y-contain',
+        '-overscroll-y-none',
+        'overscroll-y-auto/foo',
+        'overscroll-y-contain/foo',
+        'overscroll-y-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8109,7 +8456,10 @@ test('scroll-behavior', async () => {
     }"
   `)
   expect(
-    await run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
+    await run(
+      ['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8121,7 +8471,7 @@ test('truncate', async () => {
       overflow: hidden;
     }"
   `)
-  expect(await run(['-truncate', 'truncate/foo'])).toEqual('')
+  expect(await run(['-truncate', 'truncate/foo'], { optimize: false })).toEqual('')
 })
 
 test('text-overflow', async () => {
@@ -8134,9 +8484,11 @@ test('text-overflow', async () => {
       text-overflow: ellipsis;
     }"
   `)
-  expect(await run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('hyphens', async () => {
@@ -8157,15 +8509,18 @@ test('hyphens', async () => {
     }"
   `)
   expect(
-    await run([
-      'hyphens',
-      '-hyphens-none',
-      '-hyphens-manual',
-      '-hyphens-auto',
-      'hyphens-none/foo',
-      'hyphens-manual/foo',
-      'hyphens-auto/foo',
-    ]),
+    await run(
+      [
+        'hyphens',
+        '-hyphens-none',
+        '-hyphens-manual',
+        '-hyphens-auto',
+        'hyphens-none/foo',
+        'hyphens-manual/foo',
+        'hyphens-auto/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8205,21 +8560,24 @@ test('whitespace', async () => {
     }"
   `)
   expect(
-    await run([
-      'whitespace',
-      '-whitespace-normal',
-      '-whitespace-nowrap',
-      '-whitespace-pre',
-      '-whitespace-pre-line',
-      '-whitespace-pre-wrap',
-      '-whitespace-break-spaces',
-      'whitespace-normal/foo',
-      'whitespace-nowrap/foo',
-      'whitespace-pre/foo',
-      'whitespace-pre-line/foo',
-      'whitespace-pre-wrap/foo',
-      'whitespace-break-spaces/foo',
-    ]),
+    await run(
+      [
+        'whitespace',
+        '-whitespace-normal',
+        '-whitespace-nowrap',
+        '-whitespace-pre',
+        '-whitespace-pre-line',
+        '-whitespace-pre-wrap',
+        '-whitespace-break-spaces',
+        'whitespace-normal/foo',
+        'whitespace-nowrap/foo',
+        'whitespace-pre/foo',
+        'whitespace-pre-line/foo',
+        'whitespace-pre-wrap/foo',
+        'whitespace-break-spaces/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8243,16 +8601,19 @@ test('text-wrap', async () => {
     }"
   `)
   expect(
-    await run([
-      '-text-wrap',
-      '-text-nowrap',
-      '-text-balance',
-      '-text-pretty',
-      'text-wrap/foo',
-      'text-nowrap/foo',
-      'text-balance/foo',
-      'text-pretty/foo',
-    ]),
+    await run(
+      [
+        '-text-wrap',
+        '-text-nowrap',
+        '-text-balance',
+        '-text-pretty',
+        'text-wrap/foo',
+        'text-nowrap/foo',
+        'text-balance/foo',
+        'text-pretty/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8277,16 +8638,19 @@ test('overflow-wrap', async () => {
     }"
   `)
   expect(
-    await run([
-      '-break-normal',
-      '-break-words',
-      '-break-all',
-      '-break-keep',
-      'break-normal/foo',
-      'break-words/foo',
-      'break-all/foo',
-      'break-keep/foo',
-    ]),
+    await run(
+      [
+        '-break-normal',
+        '-break-words',
+        '-break-all',
+        '-break-keep',
+        'break-normal/foo',
+        'break-words/foo',
+        'break-all/foo',
+        'break-keep/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8329,18 +8693,21 @@ test('rounded', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded',
-      '-rounded-full',
-      '-rounded-none',
-      '-rounded-sm',
-      '-rounded-[4px]',
-      'rounded/foo',
-      'rounded-full/foo',
-      'rounded-none/foo',
-      'rounded-sm/foo',
-      'rounded-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded',
+        '-rounded-full',
+        '-rounded-none',
+        '-rounded-sm',
+        '-rounded-[4px]',
+        'rounded/foo',
+        'rounded-full/foo',
+        'rounded-none/foo',
+        'rounded-sm/foo',
+        'rounded-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8392,18 +8759,21 @@ test('rounded-s', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-s',
-      '-rounded-s-full',
-      '-rounded-s-none',
-      '-rounded-s-sm',
-      '-rounded-s-[4px]',
-      'rounded-s/foo',
-      'rounded-s-full/foo',
-      'rounded-s-none/foo',
-      'rounded-s-sm/foo',
-      'rounded-s-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-s',
+        '-rounded-s-full',
+        '-rounded-s-none',
+        '-rounded-s-sm',
+        '-rounded-s-[4px]',
+        'rounded-s/foo',
+        'rounded-s-full/foo',
+        'rounded-s-none/foo',
+        'rounded-s-sm/foo',
+        'rounded-s-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8455,18 +8825,21 @@ test('rounded-e', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-e',
-      '-rounded-e-full',
-      '-rounded-e-none',
-      '-rounded-e-sm',
-      '-rounded-e-[4px]',
-      'rounded-e/foo',
-      'rounded-e-full/foo',
-      'rounded-e-none/foo',
-      'rounded-e-sm/foo',
-      'rounded-e-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-e',
+        '-rounded-e-full',
+        '-rounded-e-none',
+        '-rounded-e-sm',
+        '-rounded-e-[4px]',
+        'rounded-e/foo',
+        'rounded-e-full/foo',
+        'rounded-e-none/foo',
+        'rounded-e-sm/foo',
+        'rounded-e-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8522,18 +8895,21 @@ test('rounded-t', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-t',
-      '-rounded-t-full',
-      '-rounded-t-none',
-      '-rounded-t-sm',
-      '-rounded-t-[4px]',
-      'rounded-t/foo',
-      'rounded-t-full/foo',
-      'rounded-t-none/foo',
-      'rounded-t-sm/foo',
-      'rounded-t-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-t',
+        '-rounded-t-full',
+        '-rounded-t-none',
+        '-rounded-t-sm',
+        '-rounded-t-[4px]',
+        'rounded-t/foo',
+        'rounded-t-full/foo',
+        'rounded-t-none/foo',
+        'rounded-t-sm/foo',
+        'rounded-t-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8589,18 +8965,21 @@ test('rounded-r', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-r',
-      '-rounded-r-full',
-      '-rounded-r-none',
-      '-rounded-r-sm',
-      '-rounded-r-[4px]',
-      'rounded-r/foo',
-      'rounded-r-full/foo',
-      'rounded-r-none/foo',
-      'rounded-r-sm/foo',
-      'rounded-r-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-r',
+        '-rounded-r-full',
+        '-rounded-r-none',
+        '-rounded-r-sm',
+        '-rounded-r-[4px]',
+        'rounded-r/foo',
+        'rounded-r-full/foo',
+        'rounded-r-none/foo',
+        'rounded-r-sm/foo',
+        'rounded-r-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8656,18 +9035,21 @@ test('rounded-b', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-b',
-      '-rounded-b-full',
-      '-rounded-b-none',
-      '-rounded-b-sm',
-      '-rounded-b-[4px]',
-      'rounded-b/foo',
-      'rounded-b-full/foo',
-      'rounded-b-none/foo',
-      'rounded-b-sm/foo',
-      'rounded-b-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-b',
+        '-rounded-b-full',
+        '-rounded-b-none',
+        '-rounded-b-sm',
+        '-rounded-b-[4px]',
+        'rounded-b/foo',
+        'rounded-b-full/foo',
+        'rounded-b-none/foo',
+        'rounded-b-sm/foo',
+        'rounded-b-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8723,18 +9105,21 @@ test('rounded-l', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-l',
-      '-rounded-l-full',
-      '-rounded-l-none',
-      '-rounded-l-sm',
-      '-rounded-l-[4px]',
-      'rounded-l/foo',
-      'rounded-l-full/foo',
-      'rounded-l-none/foo',
-      'rounded-l-sm/foo',
-      'rounded-l-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-l',
+        '-rounded-l-full',
+        '-rounded-l-none',
+        '-rounded-l-sm',
+        '-rounded-l-[4px]',
+        'rounded-l/foo',
+        'rounded-l-full/foo',
+        'rounded-l-none/foo',
+        'rounded-l-sm/foo',
+        'rounded-l-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8781,18 +9166,21 @@ test('rounded-ss', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-ss',
-      '-rounded-ss-full',
-      '-rounded-ss-none',
-      '-rounded-ss-sm',
-      '-rounded-ss-[4px]',
-      'rounded-ss/foo',
-      'rounded-ss-full/foo',
-      'rounded-ss-none/foo',
-      'rounded-ss-sm/foo',
-      'rounded-ss-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-ss',
+        '-rounded-ss-full',
+        '-rounded-ss-none',
+        '-rounded-ss-sm',
+        '-rounded-ss-[4px]',
+        'rounded-ss/foo',
+        'rounded-ss-full/foo',
+        'rounded-ss-none/foo',
+        'rounded-ss-sm/foo',
+        'rounded-ss-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8839,18 +9227,21 @@ test('rounded-se', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-se',
-      '-rounded-se-full',
-      '-rounded-se-none',
-      '-rounded-se-sm',
-      '-rounded-se-[4px]',
-      'rounded-se/foo',
-      'rounded-se-full/foo',
-      'rounded-se-none/foo',
-      'rounded-se-sm/foo',
-      'rounded-se-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-se',
+        '-rounded-se-full',
+        '-rounded-se-none',
+        '-rounded-se-sm',
+        '-rounded-se-[4px]',
+        'rounded-se/foo',
+        'rounded-se-full/foo',
+        'rounded-se-none/foo',
+        'rounded-se-sm/foo',
+        'rounded-se-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8897,18 +9288,21 @@ test('rounded-ee', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-ee',
-      '-rounded-ee-full',
-      '-rounded-ee-none',
-      '-rounded-ee-sm',
-      '-rounded-ee-[4px]',
-      'rounded-ee/foo',
-      'rounded-ee-full/foo',
-      'rounded-ee-none/foo',
-      'rounded-ee-sm/foo',
-      'rounded-ee-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-ee',
+        '-rounded-ee-full',
+        '-rounded-ee-none',
+        '-rounded-ee-sm',
+        '-rounded-ee-[4px]',
+        'rounded-ee/foo',
+        'rounded-ee-full/foo',
+        'rounded-ee-none/foo',
+        'rounded-ee-sm/foo',
+        'rounded-ee-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -8955,18 +9349,21 @@ test('rounded-es', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-es',
-      '-rounded-es-full',
-      '-rounded-es-none',
-      '-rounded-es-sm',
-      '-rounded-es-[4px]',
-      'rounded-es/foo',
-      'rounded-es-full/foo',
-      'rounded-es-none/foo',
-      'rounded-es-sm/foo',
-      'rounded-es-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-es',
+        '-rounded-es-full',
+        '-rounded-es-none',
+        '-rounded-es-sm',
+        '-rounded-es-[4px]',
+        'rounded-es/foo',
+        'rounded-es-full/foo',
+        'rounded-es-none/foo',
+        'rounded-es-sm/foo',
+        'rounded-es-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9015,18 +9412,21 @@ test('rounded-tl', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-tl',
-      '-rounded-tl-full',
-      '-rounded-tl-none',
-      '-rounded-tl-sm',
-      '-rounded-tl-[4px]',
-      'rounded-tl/foo',
-      'rounded-tl-full/foo',
-      'rounded-tl-none/foo',
-      'rounded-tl-sm/foo',
-      'rounded-tl-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-tl',
+        '-rounded-tl-full',
+        '-rounded-tl-none',
+        '-rounded-tl-sm',
+        '-rounded-tl-[4px]',
+        'rounded-tl/foo',
+        'rounded-tl-full/foo',
+        'rounded-tl-none/foo',
+        'rounded-tl-sm/foo',
+        'rounded-tl-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9075,18 +9475,21 @@ test('rounded-tr', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-tr',
-      '-rounded-tr-full',
-      '-rounded-tr-none',
-      '-rounded-tr-sm',
-      '-rounded-tr-[4px]',
-      'rounded-tr/foo',
-      'rounded-tr-full/foo',
-      'rounded-tr-none/foo',
-      'rounded-tr-sm/foo',
-      'rounded-tr-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-tr',
+        '-rounded-tr-full',
+        '-rounded-tr-none',
+        '-rounded-tr-sm',
+        '-rounded-tr-[4px]',
+        'rounded-tr/foo',
+        'rounded-tr-full/foo',
+        'rounded-tr-none/foo',
+        'rounded-tr-sm/foo',
+        'rounded-tr-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9135,18 +9538,21 @@ test('rounded-br', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-br',
-      '-rounded-br-full',
-      '-rounded-br-none',
-      '-rounded-br-sm',
-      '-rounded-br-[4px]',
-      'rounded-br/foo',
-      'rounded-br-full/foo',
-      'rounded-br-none/foo',
-      'rounded-br-sm/foo',
-      'rounded-br-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-br',
+        '-rounded-br-full',
+        '-rounded-br-none',
+        '-rounded-br-sm',
+        '-rounded-br-[4px]',
+        'rounded-br/foo',
+        'rounded-br-full/foo',
+        'rounded-br-none/foo',
+        'rounded-br-sm/foo',
+        'rounded-br-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9195,18 +9601,21 @@ test('rounded-bl', async () => {
     }"
   `)
   expect(
-    await run([
-      '-rounded-bl',
-      '-rounded-bl-full',
-      '-rounded-bl-none',
-      '-rounded-bl-sm',
-      '-rounded-bl-[4px]',
-      'rounded-bl/foo',
-      'rounded-bl-full/foo',
-      'rounded-bl-none/foo',
-      'rounded-bl-sm/foo',
-      'rounded-bl-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded-bl',
+        '-rounded-bl-full',
+        '-rounded-bl-none',
+        '-rounded-bl-sm',
+        '-rounded-bl-[4px]',
+        'rounded-bl/foo',
+        'rounded-bl-full/foo',
+        'rounded-bl-none/foo',
+        'rounded-bl-sm/foo',
+        'rounded-bl-[4px]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9252,20 +9661,23 @@ test('border-style', async () => {
     }"
   `)
   expect(
-    await run([
-      '-border-solid',
-      '-border-dashed',
-      '-border-dotted',
-      '-border-double',
-      '-border-hidden',
-      '-border-none',
-      'border-solid/foo',
-      'border-dashed/foo',
-      'border-dotted/foo',
-      'border-double/foo',
-      'border-hidden/foo',
-      'border-none/foo',
-    ]),
+    await run(
+      [
+        '-border-solid',
+        '-border-dashed',
+        '-border-dotted',
+        '-border-double',
+        '-border-hidden',
+        '-border-none',
+        'border-solid/foo',
+        'border-dashed/foo',
+        'border-dotted/foo',
+        'border-double/foo',
+        'border-hidden/foo',
+        'border-none/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -9334,21 +9746,29 @@ for (let prefix of prefixes) {
     ).toMatchSnapshot()
 
     // No border utilities can ever be negative
-    expect(await run(classes.map((cls) => `-${cls}`))).toEqual('')
     expect(
-      await run([
-        `${prefix}/foo`,
-        `${prefix}-0/foo`,
-        `${prefix}-2/foo`,
-        `${prefix}-4/foo`,
-        `${prefix}-123/foo`,
-        `${prefix}-[thin]/foo`,
-        `${prefix}-[medium]/foo`,
-        `${prefix}-[thick]/foo`,
-        `${prefix}-[12px]/foo`,
-        `${prefix}-[length:var(--my-width)]/foo`,
-        `${prefix}-[line-width:var(--my-width)]/foo`,
-      ]),
+      await run(
+        classes.map((cls) => `-${cls}`),
+        { optimize: false },
+      ),
+    ).toEqual('')
+    expect(
+      await run(
+        [
+          `${prefix}/foo`,
+          `${prefix}-0/foo`,
+          `${prefix}-2/foo`,
+          `${prefix}-4/foo`,
+          `${prefix}-123/foo`,
+          `${prefix}-[thin]/foo`,
+          `${prefix}-[medium]/foo`,
+          `${prefix}-[thick]/foo`,
+          `${prefix}-[12px]/foo`,
+          `${prefix}-[length:var(--my-width)]/foo`,
+          `${prefix}-[line-width:var(--my-width)]/foo`,
+        ],
+        { optimize: false },
+      ),
     ).toEqual('')
   })
 }
@@ -9388,7 +9808,7 @@ test('border with custom default border width', async () => {
       initial-value: solid;
     }"
   `)
-  expect(await run(['-border', 'border/foo'])).toEqual('')
+  expect(await run(['-border', 'border/foo'], { optimize: false })).toEqual('')
 })
 
 test('bg', async () => {
@@ -9796,116 +10216,119 @@ test('bg', async () => {
     }"
   `)
   expect(
-    await run([
-      'bg',
-      'bg-unknown',
+    await run(
+      [
+        'bg',
+        'bg-unknown',
 
-      // background-color
-      '-bg-red-500',
-      '-bg-red-500/50',
-      '-bg-red-500/[0.5]',
-      '-bg-red-500/[50%]',
-      '-bg-current',
-      '-bg-current/50',
-      '-bg-current/[0.5]',
-      '-bg-current/[50%]',
-      '-bg-inherit',
-      '-bg-transparent',
-      '-bg-[#0088cc]',
-      '-bg-[#0088cc]/50',
-      '-bg-[#0088cc]/[0.5]',
-      '-bg-[#0088cc]/[50%]',
+        // background-color
+        '-bg-red-500',
+        '-bg-red-500/50',
+        '-bg-red-500/[0.5]',
+        '-bg-red-500/[50%]',
+        '-bg-current',
+        '-bg-current/50',
+        '-bg-current/[0.5]',
+        '-bg-current/[50%]',
+        '-bg-inherit',
+        '-bg-transparent',
+        '-bg-[#0088cc]',
+        '-bg-[#0088cc]/50',
+        '-bg-[#0088cc]/[0.5]',
+        '-bg-[#0088cc]/[50%]',
 
-      // background-image
-      '-bg-none',
-      '-bg-gradient-to-br',
-      '-bg-linear-to-br',
-      '-bg-linear-[to_bottom]',
+        // background-image
+        '-bg-none',
+        '-bg-gradient-to-br',
+        '-bg-linear-to-br',
+        '-bg-linear-[to_bottom]',
 
-      // background-size
-      '-bg-auto',
-      '-bg-cover',
-      '-bg-contain',
+        // background-size
+        '-bg-auto',
+        '-bg-cover',
+        '-bg-contain',
 
-      // background-attachment
-      '-bg-fixed',
-      '-bg-local',
-      '-bg-scroll',
+        // background-attachment
+        '-bg-fixed',
+        '-bg-local',
+        '-bg-scroll',
 
-      // background-position
-      '-bg-center',
-      '-bg-top',
-      '-bg-right-top',
-      '-bg-right-bottom',
-      '-bg-bottom',
-      '-bg-left-bottom',
-      '-bg-left',
-      '-bg-left-top',
+        // background-position
+        '-bg-center',
+        '-bg-top',
+        '-bg-right-top',
+        '-bg-right-bottom',
+        '-bg-bottom',
+        '-bg-left-bottom',
+        '-bg-left',
+        '-bg-left-top',
 
-      // background-repeat
-      '-bg-repeat',
-      '-bg-no-repeat',
-      '-bg-repeat-x',
-      '-bg-repeat-y',
-      '-bg-round',
-      '-bg-space',
+        // background-repeat
+        '-bg-repeat',
+        '-bg-no-repeat',
+        '-bg-repeat-x',
+        '-bg-repeat-y',
+        '-bg-round',
+        '-bg-space',
 
-      'bg-none/foo',
-      'bg-gradient-to-t/foo',
-      'bg-gradient-to-tr/foo',
-      'bg-gradient-to-r/foo',
-      'bg-gradient-to-br/foo',
-      'bg-gradient-to-b/foo',
-      'bg-gradient-to-bl/foo',
-      'bg-gradient-to-l/foo',
-      'bg-gradient-to-tl/foo',
-      'bg-linear-to-t/foo',
-      'bg-linear-to-tr/foo',
-      'bg-linear-to-r/foo',
-      'bg-linear-to-br/foo',
-      'bg-linear-to-b/foo',
-      'bg-linear-to-bl/foo',
-      'bg-linear-to-l/foo',
-      'bg-linear-to-tl/foo',
-      'bg-[url(/image.png)]/foo',
-      'bg-[url:var(--my-url)]/foo',
-      'bg-[linear-gradient(to_bottom,red,blue)]/foo',
-      'bg-[image:var(--my-gradient)]/foo',
-      'bg-linear-[125deg]/foo',
-      'bg-linear-[1.3rad]/foo',
-      'bg-linear-[to_bottom]/foo',
-      '-bg-linear-[125deg]/foo',
-      '-bg-linear-[1.3rad]/foo',
-      'bg-auto/foo',
-      'bg-cover/foo',
-      'bg-contain/foo',
-      'bg-[cover]/foo',
-      'bg-[contain]/foo',
-      'bg-[size:120px_120px]/foo',
-      'bg-fixed/foo',
-      'bg-local/foo',
-      'bg-scroll/foo',
-      'bg-center/foo',
-      'bg-top/foo',
-      'bg-right-top/foo',
-      'bg-right-bottom/foo',
-      'bg-bottom/foo',
-      'bg-left-bottom/foo',
-      'bg-left/foo',
-      'bg-left-top/foo',
-      'bg-[50%]/foo',
-      'bg-[120px]/foo',
-      'bg-[120px_120px]/foo',
-      'bg-[length:120px_120px]/foo',
-      'bg-[position:120px_120px]/foo',
-      'bg-[size:120px_120px]/foo',
-      'bg-repeat/foo',
-      'bg-no-repeat/foo',
-      'bg-repeat-x/foo',
-      'bg-repeat-y/foo',
-      'bg-round/foo',
-      'bg-space/foo',
-    ]),
+        'bg-none/foo',
+        'bg-gradient-to-t/foo',
+        'bg-gradient-to-tr/foo',
+        'bg-gradient-to-r/foo',
+        'bg-gradient-to-br/foo',
+        'bg-gradient-to-b/foo',
+        'bg-gradient-to-bl/foo',
+        'bg-gradient-to-l/foo',
+        'bg-gradient-to-tl/foo',
+        'bg-linear-to-t/foo',
+        'bg-linear-to-tr/foo',
+        'bg-linear-to-r/foo',
+        'bg-linear-to-br/foo',
+        'bg-linear-to-b/foo',
+        'bg-linear-to-bl/foo',
+        'bg-linear-to-l/foo',
+        'bg-linear-to-tl/foo',
+        'bg-[url(/image.png)]/foo',
+        'bg-[url:var(--my-url)]/foo',
+        'bg-[linear-gradient(to_bottom,red,blue)]/foo',
+        'bg-[image:var(--my-gradient)]/foo',
+        'bg-linear-[125deg]/foo',
+        'bg-linear-[1.3rad]/foo',
+        'bg-linear-[to_bottom]/foo',
+        '-bg-linear-[125deg]/foo',
+        '-bg-linear-[1.3rad]/foo',
+        'bg-auto/foo',
+        'bg-cover/foo',
+        'bg-contain/foo',
+        'bg-[cover]/foo',
+        'bg-[contain]/foo',
+        'bg-[size:120px_120px]/foo',
+        'bg-fixed/foo',
+        'bg-local/foo',
+        'bg-scroll/foo',
+        'bg-center/foo',
+        'bg-top/foo',
+        'bg-right-top/foo',
+        'bg-right-bottom/foo',
+        'bg-bottom/foo',
+        'bg-left-bottom/foo',
+        'bg-left/foo',
+        'bg-left-top/foo',
+        'bg-[50%]/foo',
+        'bg-[120px]/foo',
+        'bg-[120px_120px]/foo',
+        'bg-[length:120px_120px]/foo',
+        'bg-[position:120px_120px]/foo',
+        'bg-[size:120px_120px]/foo',
+        'bg-repeat/foo',
+        'bg-no-repeat/foo',
+        'bg-repeat-x/foo',
+        'bg-repeat-y/foo',
+        'bg-round/foo',
+        'bg-space/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 
   expect(
@@ -10123,37 +10546,40 @@ test('from', async () => {
     }"
   `)
   expect(
-    await run([
-      'from',
-      'from-25.%',
-      'from-25.0%',
-      'from-123',
-      'from--123',
-      'from--5%',
-      'from-unknown',
-      'from-unknown%',
+    await run(
+      [
+        'from',
+        'from-25.%',
+        'from-25.0%',
+        'from-123',
+        'from--123',
+        'from--5%',
+        'from-unknown',
+        'from-unknown%',
 
-      // --tw-gradient-from
-      '-from-red-500',
-      '-from-red-500/50',
-      '-from-red-500/[0.5]',
-      '-from-red-500/[50%]',
-      '-from-current',
-      '-from-current/50',
-      '-from-current/[0.5]',
-      '-from-current/[50%]',
-      '-from-inherit',
-      '-from-transparent',
-      '-from-[#0088cc]',
-      '-from-[#0088cc]/50',
-      '-from-[#0088cc]/[0.5]',
-      '-from-[#0088cc]/[50%]',
+        // --tw-gradient-from
+        '-from-red-500',
+        '-from-red-500/50',
+        '-from-red-500/[0.5]',
+        '-from-red-500/[50%]',
+        '-from-current',
+        '-from-current/50',
+        '-from-current/[0.5]',
+        '-from-current/[50%]',
+        '-from-inherit',
+        '-from-transparent',
+        '-from-[#0088cc]',
+        '-from-[#0088cc]/50',
+        '-from-[#0088cc]/[0.5]',
+        '-from-[#0088cc]/[50%]',
 
-      // --tw-gradient-from-position
-      '-from-0%',
-      '-from-5%',
-      '-from-100%',
-    ]),
+        // --tw-gradient-from-position
+        '-from-0%',
+        '-from-5%',
+        '-from-100%',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10370,35 +10796,38 @@ test('via', async () => {
     }"
   `)
   expect(
-    await run([
-      'via',
-      'via-123',
-      'via--123',
-      'via--5%',
-      'via-unknown',
-      'via-unknown%',
+    await run(
+      [
+        'via',
+        'via-123',
+        'via--123',
+        'via--5%',
+        'via-unknown',
+        'via-unknown%',
 
-      // --tw-gradient-stops
-      '-via-red-500',
-      '-via-red-500/50',
-      '-via-red-500/[0.5]',
-      '-via-red-500/[50%]',
-      '-via-current',
-      '-via-current/50',
-      '-via-current/[0.5]',
-      '-via-current/[50%]',
-      '-via-inherit',
-      '-via-transparent',
-      '-via-[#0088cc]',
-      '-via-[#0088cc]/50',
-      '-via-[#0088cc]/[0.5]',
-      '-via-[#0088cc]/[50%]',
+        // --tw-gradient-stops
+        '-via-red-500',
+        '-via-red-500/50',
+        '-via-red-500/[0.5]',
+        '-via-red-500/[50%]',
+        '-via-current',
+        '-via-current/50',
+        '-via-current/[0.5]',
+        '-via-current/[50%]',
+        '-via-inherit',
+        '-via-transparent',
+        '-via-[#0088cc]',
+        '-via-[#0088cc]/50',
+        '-via-[#0088cc]/[0.5]',
+        '-via-[#0088cc]/[50%]',
 
-      // --tw-gradient-via-position
-      '-via-0%',
-      '-via-5%',
-      '-via-100%',
-    ]),
+        // --tw-gradient-via-position
+        '-via-0%',
+        '-via-5%',
+        '-via-100%',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10603,35 +11032,38 @@ test('to', async () => {
     }"
   `)
   expect(
-    await run([
-      'to',
-      'to-123',
-      'to--123',
-      'to--5%',
-      'to-unknown',
-      'to-unknown%',
+    await run(
+      [
+        'to',
+        'to-123',
+        'to--123',
+        'to--5%',
+        'to-unknown',
+        'to-unknown%',
 
-      // --tw-gradient-to
-      '-to-red-500',
-      '-to-red-500/50',
-      '-to-red-500/[0.5]',
-      '-to-red-500/[50%]',
-      '-to-current',
-      '-to-current/50',
-      '-to-current/[0.5]',
-      '-to-current/[50%]',
-      '-to-inherit',
-      '-to-transparent',
-      '-to-[#0088cc]',
-      '-to-[#0088cc]/50',
-      '-to-[#0088cc]/[0.5]',
-      '-to-[#0088cc]/[50%]',
+        // --tw-gradient-to
+        '-to-red-500',
+        '-to-red-500/50',
+        '-to-red-500/[0.5]',
+        '-to-red-500/[50%]',
+        '-to-current',
+        '-to-current/50',
+        '-to-current/[0.5]',
+        '-to-current/[50%]',
+        '-to-inherit',
+        '-to-transparent',
+        '-to-[#0088cc]',
+        '-to-[#0088cc]/50',
+        '-to-[#0088cc]/[0.5]',
+        '-to-[#0088cc]/[50%]',
 
-      // --tw-gradient-to-position
-      '-to-0%',
-      '-to-5%',
-      '-to-100%',
-    ]),
+        // --tw-gradient-to-position
+        '-to-0%',
+        '-to-5%',
+        '-to-100%',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10648,14 +11080,17 @@ test('box-decoration', async () => {
     }"
   `)
   expect(
-    await run([
-      'box',
-      'box-decoration',
-      '-box-decoration-slice',
-      '-box-decoration-clone',
-      'box-decoration-slice/foo',
-      'box-decoration-clone/foo',
-    ]),
+    await run(
+      [
+        'box',
+        'box-decoration',
+        '-box-decoration-slice',
+        '-box-decoration-clone',
+        'box-decoration-slice/foo',
+        'box-decoration-clone/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10679,17 +11114,20 @@ test('bg-clip', async () => {
     }"
   `)
   expect(
-    await run([
-      'bg-clip',
-      '-bg-clip-border',
-      '-bg-clip-padding',
-      '-bg-clip-content',
-      '-bg-clip-text',
-      'bg-clip-border/foo',
-      'bg-clip-padding/foo',
-      'bg-clip-content/foo',
-      'bg-clip-text/foo',
-    ]),
+    await run(
+      [
+        'bg-clip',
+        '-bg-clip-border',
+        '-bg-clip-padding',
+        '-bg-clip-content',
+        '-bg-clip-text',
+        'bg-clip-border/foo',
+        'bg-clip-padding/foo',
+        'bg-clip-content/foo',
+        'bg-clip-text/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10709,15 +11147,18 @@ test('bg-origin', async () => {
     }"
   `)
   expect(
-    await run([
-      'bg-origin',
-      '-bg-origin-border',
-      '-bg-origin-padding',
-      '-bg-origin-content',
-      'bg-origin-border/foo',
-      'bg-origin-padding/foo',
-      'bg-origin-content/foo',
-    ]),
+    await run(
+      [
+        'bg-origin',
+        '-bg-origin-border',
+        '-bg-origin-padding',
+        '-bg-origin-content',
+        'bg-origin-border/foo',
+        'bg-origin-padding/foo',
+        'bg-origin-content/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10807,41 +11248,44 @@ test('bg-blend', async () => {
     }"
   `)
   expect(
-    await run([
-      'bg-blend',
-      '-bg-blend-normal',
-      '-bg-blend-multiply',
-      '-bg-blend-screen',
-      '-bg-blend-overlay',
-      '-bg-blend-darken',
-      '-bg-blend-lighten',
-      '-bg-blend-color-dodge',
-      '-bg-blend-color-burn',
-      '-bg-blend-hard-light',
-      '-bg-blend-soft-light',
-      '-bg-blend-difference',
-      '-bg-blend-exclusion',
-      '-bg-blend-hue',
-      '-bg-blend-saturation',
-      '-bg-blend-color',
-      '-bg-blend-luminosity',
-      'bg-blend-normal/foo',
-      'bg-blend-multiply/foo',
-      'bg-blend-screen/foo',
-      'bg-blend-overlay/foo',
-      'bg-blend-darken/foo',
-      'bg-blend-lighten/foo',
-      'bg-blend-color-dodge/foo',
-      'bg-blend-color-burn/foo',
-      'bg-blend-hard-light/foo',
-      'bg-blend-soft-light/foo',
-      'bg-blend-difference/foo',
-      'bg-blend-exclusion/foo',
-      'bg-blend-hue/foo',
-      'bg-blend-saturation/foo',
-      'bg-blend-color/foo',
-      'bg-blend-luminosity/foo',
-    ]),
+    await run(
+      [
+        'bg-blend',
+        '-bg-blend-normal',
+        '-bg-blend-multiply',
+        '-bg-blend-screen',
+        '-bg-blend-overlay',
+        '-bg-blend-darken',
+        '-bg-blend-lighten',
+        '-bg-blend-color-dodge',
+        '-bg-blend-color-burn',
+        '-bg-blend-hard-light',
+        '-bg-blend-soft-light',
+        '-bg-blend-difference',
+        '-bg-blend-exclusion',
+        '-bg-blend-hue',
+        '-bg-blend-saturation',
+        '-bg-blend-color',
+        '-bg-blend-luminosity',
+        'bg-blend-normal/foo',
+        'bg-blend-multiply/foo',
+        'bg-blend-screen/foo',
+        'bg-blend-overlay/foo',
+        'bg-blend-darken/foo',
+        'bg-blend-lighten/foo',
+        'bg-blend-color-dodge/foo',
+        'bg-blend-color-burn/foo',
+        'bg-blend-hard-light/foo',
+        'bg-blend-soft-light/foo',
+        'bg-blend-difference/foo',
+        'bg-blend-exclusion/foo',
+        'bg-blend-hue/foo',
+        'bg-blend-saturation/foo',
+        'bg-blend-color/foo',
+        'bg-blend-luminosity/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -10941,44 +11385,47 @@ test('mix-blend', async () => {
     }"
   `)
   expect(
-    await run([
-      'mix-blend',
-      '-mix-blend-normal',
-      '-mix-blend-multiply',
-      '-mix-blend-screen',
-      '-mix-blend-overlay',
-      '-mix-blend-darken',
-      '-mix-blend-lighten',
-      '-mix-blend-color-dodge',
-      '-mix-blend-color-burn',
-      '-mix-blend-hard-light',
-      '-mix-blend-soft-light',
-      '-mix-blend-difference',
-      '-mix-blend-exclusion',
-      '-mix-blend-hue',
-      '-mix-blend-saturation',
-      '-mix-blend-color',
-      '-mix-blend-luminosity',
-      '-mix-blend-plus-lighter',
-      'mix-blend-normal/foo',
-      'mix-blend-multiply/foo',
-      'mix-blend-screen/foo',
-      'mix-blend-overlay/foo',
-      'mix-blend-darken/foo',
-      'mix-blend-lighten/foo',
-      'mix-blend-color-dodge/foo',
-      'mix-blend-color-burn/foo',
-      'mix-blend-hard-light/foo',
-      'mix-blend-soft-light/foo',
-      'mix-blend-difference/foo',
-      'mix-blend-exclusion/foo',
-      'mix-blend-hue/foo',
-      'mix-blend-saturation/foo',
-      'mix-blend-color/foo',
-      'mix-blend-luminosity/foo',
-      'mix-blend-plus-darker/foo',
-      'mix-blend-plus-lighter/foo',
-    ]),
+    await run(
+      [
+        'mix-blend',
+        '-mix-blend-normal',
+        '-mix-blend-multiply',
+        '-mix-blend-screen',
+        '-mix-blend-overlay',
+        '-mix-blend-darken',
+        '-mix-blend-lighten',
+        '-mix-blend-color-dodge',
+        '-mix-blend-color-burn',
+        '-mix-blend-hard-light',
+        '-mix-blend-soft-light',
+        '-mix-blend-difference',
+        '-mix-blend-exclusion',
+        '-mix-blend-hue',
+        '-mix-blend-saturation',
+        '-mix-blend-color',
+        '-mix-blend-luminosity',
+        '-mix-blend-plus-lighter',
+        'mix-blend-normal/foo',
+        'mix-blend-multiply/foo',
+        'mix-blend-screen/foo',
+        'mix-blend-overlay/foo',
+        'mix-blend-darken/foo',
+        'mix-blend-lighten/foo',
+        'mix-blend-color-dodge/foo',
+        'mix-blend-color-burn/foo',
+        'mix-blend-hard-light/foo',
+        'mix-blend-soft-light/foo',
+        'mix-blend-difference/foo',
+        'mix-blend-exclusion/foo',
+        'mix-blend-hue/foo',
+        'mix-blend-saturation/foo',
+        'mix-blend-color/foo',
+        'mix-blend-luminosity/foo',
+        'mix-blend-plus-darker/foo',
+        'mix-blend-plus-lighter/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11046,24 +11493,27 @@ test('fill', async () => {
     }"
   `)
   expect(
-    await run([
-      'fill',
-      'fill-unknown',
-      '-fill-red-500',
-      '-fill-red-500/50',
-      '-fill-red-500/[0.5]',
-      '-fill-red-500/[50%]',
-      '-fill-current',
-      '-fill-current/50',
-      '-fill-current/[0.5]',
-      '-fill-current/[50%]',
-      '-fill-inherit',
-      '-fill-transparent',
-      '-fill-[#0088cc]',
-      '-fill-[#0088cc]/50',
-      '-fill-[#0088cc]/[0.5]',
-      '-fill-[#0088cc]/[50%]',
-    ]),
+    await run(
+      [
+        'fill',
+        'fill-unknown',
+        '-fill-red-500',
+        '-fill-red-500/50',
+        '-fill-red-500/[0.5]',
+        '-fill-red-500/[50%]',
+        '-fill-current',
+        '-fill-current/50',
+        '-fill-current/[0.5]',
+        '-fill-current/[50%]',
+        '-fill-inherit',
+        '-fill-transparent',
+        '-fill-[#0088cc]',
+        '-fill-[#0088cc]/50',
+        '-fill-[#0088cc]/[0.5]',
+        '-fill-[#0088cc]/[50%]',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11200,30 +11650,33 @@ test('stroke', async () => {
     }"
   `)
   expect(
-    await run([
-      'stroke',
-      'stroke-unknown',
+    await run(
+      [
+        'stroke',
+        'stroke-unknown',
 
-      // Color
-      '-stroke-red-500',
-      '-stroke-red-500/50',
-      '-stroke-red-500/[0.5]',
-      '-stroke-red-500/[50%]',
-      '-stroke-current',
-      '-stroke-current/50',
-      '-stroke-current/[0.5]',
-      '-stroke-current/[50%]',
-      '-stroke-inherit',
-      '-stroke-transparent',
-      '-stroke-[#0088cc]',
-      '-stroke-[#0088cc]/50',
-      '-stroke-[#0088cc]/[0.5]',
-      '-stroke-[#0088cc]/[50%]',
+        // Color
+        '-stroke-red-500',
+        '-stroke-red-500/50',
+        '-stroke-red-500/[0.5]',
+        '-stroke-red-500/[50%]',
+        '-stroke-current',
+        '-stroke-current/50',
+        '-stroke-current/[0.5]',
+        '-stroke-current/[50%]',
+        '-stroke-inherit',
+        '-stroke-transparent',
+        '-stroke-[#0088cc]',
+        '-stroke-[#0088cc]/50',
+        '-stroke-[#0088cc]/[0.5]',
+        '-stroke-[#0088cc]/[50%]',
 
-      // Width
-      '-stroke-0',
-      'stroke--1',
-    ]),
+        // Width
+        '-stroke-0',
+        'stroke--1',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11311,35 +11764,38 @@ test('object', async () => {
     }"
   `)
   expect(
-    await run([
-      'object',
-      // object-fit
-      '-object-contain',
-      '-object-cover',
-      '-object-fill',
-      '-object-none',
-      '-object-scale-down',
+    await run(
+      [
+        'object',
+        // object-fit
+        '-object-contain',
+        '-object-cover',
+        '-object-fill',
+        '-object-none',
+        '-object-scale-down',
 
-      // object-position
-      '-object-[var(--value)]',
-      '-object-bottom',
+        // object-position
+        '-object-[var(--value)]',
+        '-object-bottom',
 
-      'object-contain/foo',
-      'object-cover/foo',
-      'object-fill/foo',
-      'object-none/foo',
-      'object-scale-down/foo',
-      'object-[var(--value)]/foo',
-      'object-bottom/foo',
-      'object-center/foo',
-      'object-left/foo',
-      'object-left-bottom/foo',
-      'object-left-top/foo',
-      'object-right/foo',
-      'object-right-bottom/foo',
-      'object-right-top/foo',
-      'object-top/foo',
-    ]),
+        'object-contain/foo',
+        'object-cover/foo',
+        'object-fill/foo',
+        'object-none/foo',
+        'object-scale-down/foo',
+        'object-[var(--value)]/foo',
+        'object-bottom/foo',
+        'object-center/foo',
+        'object-left/foo',
+        'object-left-bottom/foo',
+        'object-left-top/foo',
+        'object-right/foo',
+        'object-right-bottom/foo',
+        'object-right-top/foo',
+        'object-top/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11367,7 +11823,9 @@ test('p', async () => {
       padding: 4px;
     }"
   `)
-  expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('px', async () => {
@@ -11396,7 +11854,9 @@ test('px', async () => {
       padding-right: 4px;
     }"
   `)
-  expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('py', async () => {
@@ -11425,7 +11885,9 @@ test('py', async () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('pt', async () => {
@@ -11452,7 +11914,9 @@ test('pt', async () => {
       padding-top: 4px;
     }"
   `)
-  expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('ps', async () => {
@@ -11479,7 +11943,9 @@ test('ps', async () => {
       padding-inline-start: 4px;
     }"
   `)
-  expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('pe', async () => {
@@ -11506,7 +11972,9 @@ test('pe', async () => {
       padding-inline-end: 4px;
     }"
   `)
-  expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('pr', async () => {
@@ -11533,7 +12001,9 @@ test('pr', async () => {
       padding-right: 4px;
     }"
   `)
-  expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('pb', async () => {
@@ -11560,7 +12030,9 @@ test('pb', async () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('pl', async () => {
@@ -11587,7 +12059,9 @@ test('pl', async () => {
       padding-left: 4px;
     }"
   `)
-  expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('text-align', async () => {
@@ -11619,20 +12093,23 @@ test('text-align', async () => {
     }"
   `)
   expect(
-    await run([
-      '-text-left',
-      '-text-center',
-      '-text-right',
-      '-text-justify',
-      '-text-start',
-      '-text-end',
-      'text-left/foo',
-      'text-center/foo',
-      'text-right/foo',
-      'text-justify/foo',
-      'text-start/foo',
-      'text-end/foo',
-    ]),
+    await run(
+      [
+        '-text-left',
+        '-text-center',
+        '-text-right',
+        '-text-justify',
+        '-text-start',
+        '-text-end',
+        'text-left/foo',
+        'text-center/foo',
+        'text-right/foo',
+        'text-justify/foo',
+        'text-start/foo',
+        'text-end/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11646,7 +12123,9 @@ test('indent', async () => {
       text-indent: 4px;
     }"
   `)
-  expect(await run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('align', async () => {
@@ -11701,29 +12180,32 @@ test('align', async () => {
     }"
   `)
   expect(
-    await run([
-      'align',
-      '-align-baseline',
-      '-align-top',
-      '-align-middle',
-      '-align-bottom',
-      '-align-text-top',
-      '-align-text-bottom',
-      '-align-sub',
-      '-align-super',
+    await run(
+      [
+        'align',
+        '-align-baseline',
+        '-align-top',
+        '-align-middle',
+        '-align-bottom',
+        '-align-text-top',
+        '-align-text-bottom',
+        '-align-sub',
+        '-align-super',
 
-      '-align-[var(--value)]',
+        '-align-[var(--value)]',
 
-      'align-baseline/foo',
-      'align-top/foo',
-      'align-middle/foo',
-      'align-bottom/foo',
-      'align-text-top/foo',
-      'align-text-bottom/foo',
-      'align-sub/foo',
-      'align-super/foo',
-      'align-[var(--value)]/foo',
-    ]),
+        'align-baseline/foo',
+        'align-top/foo',
+        'align-middle/foo',
+        'align-bottom/foo',
+        'align-text-top/foo',
+        'align-text-bottom/foo',
+        'align-sub/foo',
+        'align-super/foo',
+        'align-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11807,24 +12289,27 @@ test('font', async () => {
     }"
   `)
   expect(
-    await run([
-      'font',
-      // font-family
-      '-font-sans',
+    await run(
+      [
+        'font',
+        // font-family
+        '-font-sans',
 
-      // font-weight
-      '-font-bold',
+        // font-weight
+        '-font-bold',
 
-      'font-sans/foo',
-      'font-["arial_rounded"]/foo',
-      'font-[ui-sans-serif]/foo',
-      'font-[var(--my-family)]/foo',
-      'font-[family-name:var(--my-family)]/foo',
-      'font-[generic-name:var(--my-family)]/foo',
-      'font-bold/foo',
-      'font-[100]/foo',
-      'font-[number:var(--my-weight)]/foo',
-    ]),
+        'font-sans/foo',
+        'font-["arial_rounded"]/foo',
+        'font-[ui-sans-serif]/foo',
+        'font-[var(--my-family)]/foo',
+        'font-[family-name:var(--my-family)]/foo',
+        'font-[generic-name:var(--my-family)]/foo',
+        'font-bold/foo',
+        'font-[100]/foo',
+        'font-[number:var(--my-weight)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11847,16 +12332,19 @@ test('text-transform', async () => {
     }"
   `)
   expect(
-    await run([
-      '-uppercase',
-      '-lowercase',
-      '-capitalize',
-      '-normal-case',
-      'uppercase/foo',
-      'lowercase/foo',
-      'capitalize/foo',
-      'normal-case/foo',
-    ]),
+    await run(
+      [
+        '-uppercase',
+        '-lowercase',
+        '-capitalize',
+        '-normal-case',
+        'uppercase/foo',
+        'lowercase/foo',
+        'capitalize/foo',
+        'normal-case/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11870,7 +12358,9 @@ test('font-style', async () => {
       font-style: normal;
     }"
   `)
-  expect(await run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'])).toEqual('')
+  expect(
+    await run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('font-stretch', async () => {
@@ -11889,17 +12379,20 @@ test('font-stretch', async () => {
       }"
     `)
   expect(
-    await run([
-      'font-stretch',
-      'font-stretch-20%',
-      'font-stretch-50',
-      'font-stretch-400%',
-      'font-stretch-50.5%',
-      'font-stretch-potato',
-      'font-stretch-ultra-expanded/foo',
-      'font-stretch-50%/foo',
-      'font-stretch-200%/foo',
-    ]),
+    await run(
+      [
+        'font-stretch',
+        'font-stretch-20%',
+        'font-stretch-50',
+        'font-stretch-400%',
+        'font-stretch-50.5%',
+        'font-stretch-potato',
+        'font-stretch-ultra-expanded/foo',
+        'font-stretch-50%/foo',
+        'font-stretch-200%/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -11923,16 +12416,19 @@ test('text-decoration-line', async () => {
     }"
   `)
   expect(
-    await run([
-      '-underline',
-      '-overline',
-      '-line-through',
-      '-no-underline',
-      'underline/foo',
-      'overline/foo',
-      'line-through/foo',
-      'no-underline/foo',
-    ]),
+    await run(
+      [
+        '-underline',
+        '-overline',
+        '-line-through',
+        '-no-underline',
+        'underline/foo',
+        'overline/foo',
+        'line-through/foo',
+        'no-underline/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -12024,23 +12520,26 @@ test('placeholder', async () => {
     }"
   `)
   expect(
-    await run([
-      'placeholder',
-      '-placeholder-red-500',
-      '-placeholder-red-500/50',
-      '-placeholder-red-500/[0.5]',
-      '-placeholder-red-500/[50%]',
-      '-placeholder-current',
-      '-placeholder-current/50',
-      '-placeholder-current/[0.5]',
-      '-placeholder-current/[50%]',
-      '-placeholder-inherit',
-      '-placeholder-transparent',
-      '-placeholder-[#0088cc]',
-      '-placeholder-[#0088cc]/50',
-      '-placeholder-[#0088cc]/[0.5]',
-      '-placeholder-[#0088cc]/[50%]',
-    ]),
+    await run(
+      [
+        'placeholder',
+        '-placeholder-red-500',
+        '-placeholder-red-500/50',
+        '-placeholder-red-500/[0.5]',
+        '-placeholder-red-500/[50%]',
+        '-placeholder-current',
+        '-placeholder-current/50',
+        '-placeholder-current/[0.5]',
+        '-placeholder-current/[50%]',
+        '-placeholder-inherit',
+        '-placeholder-transparent',
+        '-placeholder-[#0088cc]',
+        '-placeholder-[#0088cc]/50',
+        '-placeholder-[#0088cc]/[0.5]',
+        '-placeholder-[#0088cc]/[50%]',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -12221,57 +12720,60 @@ test('decoration', async () => {
     }"
   `)
   expect(
-    await run([
-      'decoration',
-      // text-decoration-color
-      '-decoration-red-500',
-      '-decoration-red-500/50',
-      '-decoration-red-500/[0.5]',
-      '-decoration-red-500/[50%]',
-      '-decoration-current',
-      '-decoration-current/50',
-      '-decoration-current/[0.5]',
-      '-decoration-current/[50%]',
-      '-decoration-transparent',
-      '-decoration-[#0088cc]',
-      '-decoration-[#0088cc]/50',
-      '-decoration-[#0088cc]/[0.5]',
-      '-decoration-[#0088cc]/[50%]',
+    await run(
+      [
+        'decoration',
+        // text-decoration-color
+        '-decoration-red-500',
+        '-decoration-red-500/50',
+        '-decoration-red-500/[0.5]',
+        '-decoration-red-500/[50%]',
+        '-decoration-current',
+        '-decoration-current/50',
+        '-decoration-current/[0.5]',
+        '-decoration-current/[50%]',
+        '-decoration-transparent',
+        '-decoration-[#0088cc]',
+        '-decoration-[#0088cc]/50',
+        '-decoration-[#0088cc]/[0.5]',
+        '-decoration-[#0088cc]/[50%]',
 
-      // text-decoration-style
-      '-decoration-solid',
-      '-decoration-double',
-      '-decoration-dotted',
-      '-decoration-dashed',
-      '-decoration-wavy',
+        // text-decoration-style
+        '-decoration-solid',
+        '-decoration-double',
+        '-decoration-dotted',
+        '-decoration-dashed',
+        '-decoration-wavy',
 
-      // text-decoration-thickness
-      'decoration--2',
-      '-decoration-auto',
-      '-decoration-from-font',
-      '-decoration-0',
-      '-decoration-1',
-      '-decoration-2',
-      '-decoration-4',
-      '-decoration-123',
+        // text-decoration-thickness
+        'decoration--2',
+        '-decoration-auto',
+        '-decoration-from-font',
+        '-decoration-0',
+        '-decoration-1',
+        '-decoration-2',
+        '-decoration-4',
+        '-decoration-123',
 
-      'decoration-solid/foo',
-      'decoration-double/foo',
-      'decoration-dotted/foo',
-      'decoration-dashed/foo',
-      'decoration-wavy/foo',
-      'decoration-auto/foo',
-      'decoration-from-font/foo',
-      'decoration-0/foo',
-      'decoration-1/foo',
-      'decoration-2/foo',
-      'decoration-4/foo',
-      'decoration-123/foo',
-      'decoration-[12px]/foo',
-      'decoration-[50%]/foo',
-      'decoration-[length:var(--my-thickness)]/foo',
-      'decoration-[percentage:var(--my-thickness)]/foo',
-    ]),
+        'decoration-solid/foo',
+        'decoration-double/foo',
+        'decoration-dotted/foo',
+        'decoration-dashed/foo',
+        'decoration-wavy/foo',
+        'decoration-auto/foo',
+        'decoration-from-font/foo',
+        'decoration-0/foo',
+        'decoration-1/foo',
+        'decoration-2/foo',
+        'decoration-4/foo',
+        'decoration-123/foo',
+        'decoration-[12px]/foo',
+        'decoration-[50%]/foo',
+        'decoration-[length:var(--my-thickness)]/foo',
+        'decoration-[percentage:var(--my-thickness)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -12304,17 +12806,20 @@ test('animate', async () => {
     }"
   `)
   expect(
-    await run([
-      'animate',
-      '-animate-spin',
-      '-animate-none',
-      '-animate-[bounce_1s_infinite]',
-      '-animate-not-found',
-      'animate-spin/foo',
-      'animate-none/foo',
-      'animate-[bounce_1s_infinite]/foo',
-      'animate-not-found/foo',
-    ]),
+    await run(
+      [
+        'animate',
+        '-animate-spin',
+        '-animate-none',
+        '-animate-[bounce_1s_infinite]',
+        '-animate-not-found',
+        'animate-spin/foo',
+        'animate-none/foo',
+        'animate-[bounce_1s_infinite]/foo',
+        'animate-not-found/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -12572,73 +13077,76 @@ test('filter', async () => {
     }"
   `)
   expect(
-    await run([
-      '-filter',
-      '-filter-none',
-      '-filter-[var(--value)]',
-      '-blur-xl',
-      '-blur-[4px]',
-      'brightness--50',
-      '-brightness-50',
-      '-brightness-[1.23]',
-      'brightness-unknown',
-      'contrast--50',
-      '-contrast-50',
-      '-contrast-[1.23]',
-      'contrast-unknown',
-      '-grayscale',
-      '-grayscale-0',
-      'grayscale--1',
-      '-grayscale-[var(--value)]',
-      'grayscale-unknown',
-      'hue-rotate--5',
-      'hue-rotate-unknown',
-      '-invert',
-      'invert--5',
-      '-invert-0',
-      '-invert-[var(--value)]',
-      'invert-unknown',
-      '-drop-shadow-xl',
-      '-drop-shadow-[0_0_red]',
-      '-saturate-0',
-      'saturate--5',
-      '-saturate-[1.75]',
-      '-saturate-[var(--value)]',
-      'saturate-saturate',
-      '-sepia',
-      'sepia--50',
-      '-sepia-0',
-      '-sepia-[50%]',
-      '-sepia-[var(--value)]',
-      'sepia-unknown',
-      'filter/foo',
-      'filter-none/foo',
-      'filter-[var(--value)]/foo',
-      'blur-xl/foo',
-      'blur-none/foo',
-      'blur-[4px]/foo',
-      'brightness-50/foo',
-      'brightness-[1.23]/foo',
-      'contrast-50/foo',
-      'contrast-[1.23]/foo',
-      'grayscale/foo',
-      'grayscale-0/foo',
-      'grayscale-[var(--value)]/foo',
-      'hue-rotate-15/foo',
-      'hue-rotate-[45deg]/foo',
-      'invert/foo',
-      'invert-0/foo',
-      'invert-[var(--value)]/foo',
-      'drop-shadow-xl/foo',
-      'drop-shadow-[0_0_red]/foo',
-      'saturate-0/foo',
-      'saturate-[1.75]/foo',
-      'saturate-[var(--value)]/foo',
-      'sepia/foo',
-      'sepia-0/foo',
-      'sepia-[50%]/foo',
-      'sepia-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-filter',
+        '-filter-none',
+        '-filter-[var(--value)]',
+        '-blur-xl',
+        '-blur-[4px]',
+        'brightness--50',
+        '-brightness-50',
+        '-brightness-[1.23]',
+        'brightness-unknown',
+        'contrast--50',
+        '-contrast-50',
+        '-contrast-[1.23]',
+        'contrast-unknown',
+        '-grayscale',
+        '-grayscale-0',
+        'grayscale--1',
+        '-grayscale-[var(--value)]',
+        'grayscale-unknown',
+        'hue-rotate--5',
+        'hue-rotate-unknown',
+        '-invert',
+        'invert--5',
+        '-invert-0',
+        '-invert-[var(--value)]',
+        'invert-unknown',
+        '-drop-shadow-xl',
+        '-drop-shadow-[0_0_red]',
+        '-saturate-0',
+        'saturate--5',
+        '-saturate-[1.75]',
+        '-saturate-[var(--value)]',
+        'saturate-saturate',
+        '-sepia',
+        'sepia--50',
+        '-sepia-0',
+        '-sepia-[50%]',
+        '-sepia-[var(--value)]',
+        'sepia-unknown',
+        'filter/foo',
+        'filter-none/foo',
+        'filter-[var(--value)]/foo',
+        'blur-xl/foo',
+        'blur-none/foo',
+        'blur-[4px]/foo',
+        'brightness-50/foo',
+        'brightness-[1.23]/foo',
+        'contrast-50/foo',
+        'contrast-[1.23]/foo',
+        'grayscale/foo',
+        'grayscale-0/foo',
+        'grayscale-[var(--value)]/foo',
+        'hue-rotate-15/foo',
+        'hue-rotate-[45deg]/foo',
+        'invert/foo',
+        'invert-0/foo',
+        'invert-[var(--value)]/foo',
+        'drop-shadow-xl/foo',
+        'drop-shadow-[0_0_red]/foo',
+        'saturate-0/foo',
+        'saturate-[1.75]/foo',
+        'saturate-[var(--value)]/foo',
+        'sepia/foo',
+        'sepia-0/foo',
+        'sepia-[50%]/foo',
+        'sepia-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -12928,76 +13436,79 @@ test('backdrop-filter', async () => {
     }"
   `)
   expect(
-    await run([
-      '-backdrop-filter',
-      '-backdrop-filter-none',
-      '-backdrop-filter-[var(--value)]',
-      '-backdrop-blur-xl',
-      '-backdrop-blur-[4px]',
-      'backdrop-brightness--50',
-      '-backdrop-brightness-50',
-      '-backdrop-brightness-[1.23]',
-      'backdrop-brightness-unknown',
-      'backdrop-contrast--50',
-      '-backdrop-contrast-50',
-      '-backdrop-contrast-[1.23]',
-      'backdrop-contrast-unknown',
-      '-backdrop-grayscale',
-      'backdrop-grayscale--1',
-      '-backdrop-grayscale-0',
-      '-backdrop-grayscale-[var(--value)]',
-      'backdrop-grayscale-unknown',
-      'backdrop-hue-rotate-unknown',
-      '-backdrop-invert',
-      'backdrop-invert--1',
-      '-backdrop-invert-0',
-      '-backdrop-invert-[var(--value)]',
-      'backdrop-invert-unknown',
-      'backdrop-opacity--50',
-      '-backdrop-opacity-50',
-      '-backdrop-opacity-[0.5]',
-      'backdrop-opacity-unknown',
-      '-backdrop-saturate-0',
-      'backdrop-saturate--50',
-      '-backdrop-saturate-[1.75]',
-      '-backdrop-saturate-[var(--value)]',
-      'backdrop-saturate-unknown',
-      '-backdrop-sepia',
-      'backdrop-sepia--50',
-      '-backdrop-sepia-0',
-      '-backdrop-sepia-[50%]',
-      '-backdrop-sepia-[var(--value)]',
-      'backdrop-sepia-unknown',
-      'backdrop-filter/foo',
-      'backdrop-filter-none/foo',
-      'backdrop-filter-[var(--value)]/foo',
-      'backdrop-blur-none/foo',
-      'backdrop-blur-xl/foo',
-      'backdrop-blur-[4px]/foo',
-      'backdrop-brightness-50/foo',
-      'backdrop-brightness-[1.23]/foo',
-      'backdrop-contrast-50/foo',
-      'backdrop-contrast-[1.23]/foo',
-      'backdrop-grayscale/foo',
-      'backdrop-grayscale-0/foo',
-      'backdrop-grayscale-[var(--value)]/foo',
-      'backdrop-hue-rotate--15',
-      'backdrop-hue-rotate-15/foo',
-      'backdrop-hue-rotate-[45deg]/foo',
-      'backdrop-invert/foo',
-      'backdrop-invert-0/foo',
-      'backdrop-invert-[var(--value)]/foo',
-      'backdrop-opacity-50/foo',
-      'backdrop-opacity-71/foo',
-      'backdrop-opacity-[0.5]/foo',
-      'backdrop-saturate-0/foo',
-      'backdrop-saturate-[1.75]/foo',
-      'backdrop-saturate-[var(--value)]/foo',
-      'backdrop-sepia/foo',
-      'backdrop-sepia-0/foo',
-      'backdrop-sepia-[50%]/foo',
-      'backdrop-sepia-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-backdrop-filter',
+        '-backdrop-filter-none',
+        '-backdrop-filter-[var(--value)]',
+        '-backdrop-blur-xl',
+        '-backdrop-blur-[4px]',
+        'backdrop-brightness--50',
+        '-backdrop-brightness-50',
+        '-backdrop-brightness-[1.23]',
+        'backdrop-brightness-unknown',
+        'backdrop-contrast--50',
+        '-backdrop-contrast-50',
+        '-backdrop-contrast-[1.23]',
+        'backdrop-contrast-unknown',
+        '-backdrop-grayscale',
+        'backdrop-grayscale--1',
+        '-backdrop-grayscale-0',
+        '-backdrop-grayscale-[var(--value)]',
+        'backdrop-grayscale-unknown',
+        'backdrop-hue-rotate-unknown',
+        '-backdrop-invert',
+        'backdrop-invert--1',
+        '-backdrop-invert-0',
+        '-backdrop-invert-[var(--value)]',
+        'backdrop-invert-unknown',
+        'backdrop-opacity--50',
+        '-backdrop-opacity-50',
+        '-backdrop-opacity-[0.5]',
+        'backdrop-opacity-unknown',
+        '-backdrop-saturate-0',
+        'backdrop-saturate--50',
+        '-backdrop-saturate-[1.75]',
+        '-backdrop-saturate-[var(--value)]',
+        'backdrop-saturate-unknown',
+        '-backdrop-sepia',
+        'backdrop-sepia--50',
+        '-backdrop-sepia-0',
+        '-backdrop-sepia-[50%]',
+        '-backdrop-sepia-[var(--value)]',
+        'backdrop-sepia-unknown',
+        'backdrop-filter/foo',
+        'backdrop-filter-none/foo',
+        'backdrop-filter-[var(--value)]/foo',
+        'backdrop-blur-none/foo',
+        'backdrop-blur-xl/foo',
+        'backdrop-blur-[4px]/foo',
+        'backdrop-brightness-50/foo',
+        'backdrop-brightness-[1.23]/foo',
+        'backdrop-contrast-50/foo',
+        'backdrop-contrast-[1.23]/foo',
+        'backdrop-grayscale/foo',
+        'backdrop-grayscale-0/foo',
+        'backdrop-grayscale-[var(--value)]/foo',
+        'backdrop-hue-rotate--15',
+        'backdrop-hue-rotate-15/foo',
+        'backdrop-hue-rotate-[45deg]/foo',
+        'backdrop-invert/foo',
+        'backdrop-invert-0/foo',
+        'backdrop-invert-[var(--value)]/foo',
+        'backdrop-opacity-50/foo',
+        'backdrop-opacity-71/foo',
+        'backdrop-opacity-[0.5]/foo',
+        'backdrop-saturate-0/foo',
+        'backdrop-saturate-[1.75]/foo',
+        'backdrop-saturate-[var(--value)]/foo',
+        'backdrop-sepia/foo',
+        'backdrop-sepia-0/foo',
+        'backdrop-sepia-[50%]/foo',
+        'backdrop-sepia-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13135,21 +13646,24 @@ test('transition', async () => {
   `)
 
   expect(
-    await run([
-      '-transition',
-      '-transition-none',
-      '-transition-all',
-      '-transition-opacity',
-      '-transition-[var(--value)]',
-      'transition/foo',
-      'transition-none/foo',
-      'transition-all/foo',
-      'transition-transform/foo',
-      'transition-shadow/foo',
-      'transition-colors/foo',
-      'transition-opacity/foo',
-      'transition-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-transition',
+        '-transition-none',
+        '-transition-all',
+        '-transition-opacity',
+        '-transition-[var(--value)]',
+        'transition/foo',
+        'transition-none/foo',
+        'transition-all/foo',
+        'transition-transform/foo',
+        'transition-shadow/foo',
+        'transition-colors/foo',
+        'transition-opacity/foo',
+        'transition-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13168,16 +13682,19 @@ test('delay', async () => {
     }"
   `)
   expect(
-    await run([
-      'delay',
-      'delay--200',
-      '-delay-200',
-      '-delay-[300ms]',
-      'delay-unknown',
-      'delay-123/foo',
-      'delay-200/foo',
-      'delay-[300ms]/foo',
-    ]),
+    await run(
+      [
+        'delay',
+        'delay--200',
+        '-delay-200',
+        '-delay-[300ms]',
+        'delay-unknown',
+        'delay-123/foo',
+        'delay-200/foo',
+        'delay-[300ms]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13212,15 +13729,18 @@ test('duration', async () => {
     }"
   `)
   expect(
-    await run([
-      'duration',
-      'duration--200',
-      '-duration-200',
-      '-duration-[300ms]',
-      'duration-123/foo',
-      'duration-200/foo',
-      'duration-[300ms]/foo',
-    ]),
+    await run(
+      [
+        'duration',
+        'duration--200',
+        '-duration-200',
+        '-duration-[300ms]',
+        'duration-123/foo',
+        'duration-200/foo',
+        'duration-[300ms]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13271,14 +13791,17 @@ test('ease', async () => {
     }"
   `)
   expect(
-    await run([
-      '-ease-in',
-      '-ease-out',
-      '-ease-[var(--value)]',
-      'ease-in/foo',
-      'ease-out/foo',
-      'ease-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        '-ease-in',
+        '-ease-out',
+        '-ease-[var(--value)]',
+        'ease-in/foo',
+        'ease-out/foo',
+        'ease-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13313,19 +13836,22 @@ test('will-change', async () => {
     }"
   `)
   expect(
-    await run([
-      'will-change',
-      '-will-change-auto',
-      '-will-change-contents',
-      '-will-change-transform',
-      '-will-change-scroll',
-      '-will-change-[var(--value)]',
-      'will-change-auto/foo',
-      'will-change-contents/foo',
-      'will-change-transform/foo',
-      'will-change-scroll/foo',
-      'will-change-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'will-change',
+        '-will-change-auto',
+        '-will-change-contents',
+        '-will-change-transform',
+        '-will-change-scroll',
+        '-will-change-[var(--value)]',
+        'will-change-auto/foo',
+        'will-change-contents/foo',
+        'will-change-transform/foo',
+        'will-change-scroll/foo',
+        'will-change-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13416,17 +13942,20 @@ test('contain', async () => {
     }"
   `)
   expect(
-    await run([
-      'contain-none/foo',
-      'contain-content/foo',
-      'contain-strict/foo',
-      'contain-size/foo',
-      'contain-inline-size/foo',
-      'contain-layout/foo',
-      'contain-paint/foo',
-      'contain-style/foo',
-      'contain-[unset]/foo',
-    ]),
+    await run(
+      [
+        'contain-none/foo',
+        'contain-content/foo',
+        'contain-strict/foo',
+        'contain-size/foo',
+        'contain-inline-size/foo',
+        'contain-layout/foo',
+        'contain-paint/foo',
+        'contain-style/foo',
+        'contain-[unset]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13451,9 +13980,11 @@ test('content', async () => {
       initial-value: "";
     }"
   `)
-  expect(await run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'], {
+      optimize: false,
+    }),
+  ).toEqual('')
 })
 
 test('forced-color-adjust', async () => {
@@ -13468,15 +13999,18 @@ test('forced-color-adjust', async () => {
     }"
   `)
   expect(
-    await run([
-      'forced',
-      'forced-color',
-      'forced-color-adjust',
-      '-forced-color-adjust-none',
-      '-forced-color-adjust-auto',
-      'forced-color-adjust-none/foo',
-      'forced-color-adjust-auto/foo',
-    ]),
+    await run(
+      [
+        'forced',
+        'forced-color',
+        'forced-color-adjust',
+        '-forced-color-adjust-none',
+        '-forced-color-adjust-auto',
+        'forced-color-adjust-none/foo',
+        'forced-color-adjust-auto/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13527,15 +14061,18 @@ test('leading', async () => {
     }"
   `)
   expect(
-    await run([
-      'leading',
-      '-leading-none',
-      '-leading-6',
-      '-leading-[var(--value)]',
-      'leading-none/foo',
-      'leading-6/foo',
-      'leading-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'leading',
+        '-leading-none',
+        '-leading-6',
+        '-leading-[var(--value)]',
+        'leading-none/foo',
+        'leading-6/foo',
+        'leading-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13591,13 +14128,16 @@ test('tracking', async () => {
     }"
   `)
   expect(
-    await run([
-      'tracking',
-      'tracking-normal/foo',
-      'tracking-wide/foo',
-      'tracking-[var(--value)]/foo',
-      '-tracking-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'tracking',
+        'tracking-normal/foo',
+        'tracking-wide/foo',
+        'tracking-[var(--value)]/foo',
+        '-tracking-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13614,12 +14154,10 @@ test('font-smoothing', async () => {
     }"
   `)
   expect(
-    await run([
-      '-antialiased',
-      '-subpixel-antialiased',
-      'antialiased/foo',
-      'subpixel-antialiased/foo',
-    ]),
+    await run(
+      ['-antialiased', '-subpixel-antialiased', 'antialiased/foo', 'subpixel-antialiased/foo'],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13719,26 +14257,29 @@ test('font-variant-numeric', async () => {
     }"
   `)
   expect(
-    await run([
-      '-normal-nums',
-      '-ordinal',
-      '-slashed-zero',
-      '-lining-nums',
-      '-oldstyle-nums',
-      '-proportional-nums',
-      '-tabular-nums',
-      '-diagonal-fractions',
-      '-stacked-fractions',
-      'normal-nums/foo',
-      'ordinal/foo',
-      'slashed-zero/foo',
-      'lining-nums/foo',
-      'oldstyle-nums/foo',
-      'proportional-nums/foo',
-      'tabular-nums/foo',
-      'diagonal-fractions/foo',
-      'stacked-fractions/foo',
-    ]),
+    await run(
+      [
+        '-normal-nums',
+        '-ordinal',
+        '-slashed-zero',
+        '-lining-nums',
+        '-oldstyle-nums',
+        '-proportional-nums',
+        '-tabular-nums',
+        '-diagonal-fractions',
+        '-stacked-fractions',
+        'normal-nums/foo',
+        'ordinal/foo',
+        'slashed-zero/foo',
+        'lining-nums/foo',
+        'oldstyle-nums/foo',
+        'proportional-nums/foo',
+        'tabular-nums/foo',
+        'diagonal-fractions/foo',
+        'stacked-fractions/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -13938,43 +14479,46 @@ test('outline', async () => {
     }"
   `)
   expect(
-    await run([
-      '-outline',
+    await run(
+      [
+        '-outline',
 
-      // outline-style
-      '-outline-none',
-      '-outline-dashed',
-      '-outline-dotted',
-      '-outline-double',
+        // outline-style
+        '-outline-none',
+        '-outline-dashed',
+        '-outline-dotted',
+        '-outline-double',
 
-      // outline-color
-      '-outline-red-500',
-      '-outline-red-500/50',
-      '-outline-red-500/[0.5]',
-      '-outline-red-500/[50%]',
-      '-outline-current',
-      '-outline-current/50',
-      '-outline-current/[0.5]',
-      '-outline-current/[50%]',
-      '-outline-inherit',
-      '-outline-transparent',
-      '-outline-[#0088cc]',
-      '-outline-[#0088cc]/50',
-      '-outline-[#0088cc]/[0.5]',
-      '-outline-[#0088cc]/[50%]',
-      '-outline-[black]',
+        // outline-color
+        '-outline-red-500',
+        '-outline-red-500/50',
+        '-outline-red-500/[0.5]',
+        '-outline-red-500/[50%]',
+        '-outline-current',
+        '-outline-current/50',
+        '-outline-current/[0.5]',
+        '-outline-current/[50%]',
+        '-outline-inherit',
+        '-outline-transparent',
+        '-outline-[#0088cc]',
+        '-outline-[#0088cc]/50',
+        '-outline-[#0088cc]/[0.5]',
+        '-outline-[#0088cc]/[50%]',
+        '-outline-[black]',
 
-      // outline-width
-      '-outline-0',
-      'outline--10',
+        // outline-width
+        '-outline-0',
+        'outline--10',
 
-      'outline/foo',
-      'outline-none/foo',
-      'outline-solid/foo',
-      'outline-dashed/foo',
-      'outline-dotted/foo',
-      'outline-double/foo',
-    ]),
+        'outline/foo',
+        'outline-none/foo',
+        'outline-solid/foo',
+        'outline-dashed/foo',
+        'outline-dotted/foo',
+        'outline-double/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14004,15 +14548,18 @@ test('outline-offset', async () => {
     }"
   `)
   expect(
-    await run([
-      'outline-offset',
-      'outline-offset--4',
-      'outline-offset-unknown',
-      'outline-offset-4/foo',
-      '-outline-offset-4/foo',
-      'outline-offset-[var(--value)]/foo',
-      '-outline-offset-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'outline-offset',
+        'outline-offset--4',
+        'outline-offset-unknown',
+        'outline-offset-4/foo',
+        '-outline-offset-4/foo',
+        'outline-offset-[var(--value)]/foo',
+        '-outline-offset-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14027,15 +14574,18 @@ test('opacity', async () => {
     }"
   `)
   expect(
-    await run([
-      'opacity',
-      'opacity--15',
-      '-opacity-15',
-      '-opacity-[var(--value)]',
-      'opacity-unknown',
-      'opacity-15/foo',
-      'opacity-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'opacity',
+        'opacity--15',
+        '-opacity-15',
+        '-opacity-[var(--value)]',
+        'opacity-unknown',
+        'opacity-15/foo',
+        'opacity-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14087,19 +14637,22 @@ test('underline-offset', async () => {
     }"
   `)
   expect(
-    await run([
-      'underline-offset',
-      'underline-offset--4',
-      '-underline-offset-auto',
-      'underline-offset-unknown',
-      'underline-offset-auto/foo',
-      'underline-offset-4/foo',
-      '-underline-offset-4/foo',
-      'underline-offset-123/foo',
-      '-underline-offset-123/foo',
-      'underline-offset-[var(--value)]/foo',
-      '-underline-offset-[var(--value)]/foo',
-    ]),
+    await run(
+      [
+        'underline-offset',
+        'underline-offset--4',
+        '-underline-offset-auto',
+        'underline-offset-unknown',
+        'underline-offset-auto/foo',
+        'underline-offset-4/foo',
+        '-underline-offset-4/foo',
+        'underline-offset-123/foo',
+        '-underline-offset-123/foo',
+        'underline-offset-[var(--value)]/foo',
+        '-underline-offset-[var(--value)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14293,29 +14846,32 @@ test('text', async () => {
     }"
   `)
   expect(
-    await run([
-      'text',
-      // color
-      '-text-red-500',
-      '-text-red-500/50',
-      '-text-red-500/[0.5]',
-      '-text-red-500/[50%]',
-      '-text-current',
-      '-text-current/50',
-      '-text-current/[0.5]',
-      '-text-current/[50%]',
-      '-text-inherit',
-      '-text-transparent',
-      '-text-[#0088cc]',
-      '-text-[#0088cc]/50',
-      '-text-[#0088cc]/[0.5]',
-      '-text-[#0088cc]/[50%]',
+    await run(
+      [
+        'text',
+        // color
+        '-text-red-500',
+        '-text-red-500/50',
+        '-text-red-500/[0.5]',
+        '-text-red-500/[50%]',
+        '-text-current',
+        '-text-current/50',
+        '-text-current/[0.5]',
+        '-text-current/[50%]',
+        '-text-inherit',
+        '-text-transparent',
+        '-text-[#0088cc]',
+        '-text-[#0088cc]/50',
+        '-text-[#0088cc]/[0.5]',
+        '-text-[#0088cc]/[50%]',
 
-      // font-size / line-height / letter-spacing / font-weight
-      '-text-sm',
-      '-text-sm/6',
-      '-text-sm/[4px]',
-    ]),
+        // font-size / line-height / letter-spacing / font-weight
+        '-text-sm',
+        '-text-sm/6',
+        '-text-sm/[4px]',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14525,25 +15081,28 @@ test('shadow', async () => {
     }"
   `)
   expect(
-    await run([
-      '-shadow-xl',
-      '-shadow-none',
-      '-shadow-red-500',
-      '-shadow-red-500/50',
-      '-shadow-red-500/[0.5]',
-      '-shadow-red-500/[50%]',
-      '-shadow-current',
-      '-shadow-current/50',
-      '-shadow-current/[0.5]',
-      '-shadow-current/[50%]',
-      '-shadow-inherit',
-      '-shadow-transparent',
-      '-shadow-[#0088cc]',
-      '-shadow-[#0088cc]/50',
-      '-shadow-[#0088cc]/[0.5]',
-      '-shadow-[#0088cc]/[50%]',
-      '-shadow-[var(--value)]',
-    ]),
+    await run(
+      [
+        '-shadow-xl',
+        '-shadow-none',
+        '-shadow-red-500',
+        '-shadow-red-500/50',
+        '-shadow-red-500/[0.5]',
+        '-shadow-red-500/[50%]',
+        '-shadow-current',
+        '-shadow-current/50',
+        '-shadow-current/[0.5]',
+        '-shadow-current/[50%]',
+        '-shadow-inherit',
+        '-shadow-transparent',
+        '-shadow-[#0088cc]',
+        '-shadow-[#0088cc]/50',
+        '-shadow-[#0088cc]/[0.5]',
+        '-shadow-[#0088cc]/[50%]',
+        '-shadow-[var(--value)]',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14753,25 +15312,28 @@ test('inset-shadow', async () => {
     }"
   `)
   expect(
-    await run([
-      '-inset-shadow-sm',
-      '-inset-shadow-none',
-      '-inset-shadow-red-500',
-      '-inset-shadow-red-500/50',
-      '-inset-shadow-red-500/[0.5]',
-      '-inset-shadow-red-500/[50%]',
-      '-inset-shadow-current',
-      '-inset-shadow-current/50',
-      '-inset-shadow-current/[0.5]',
-      '-inset-shadow-current/[50%]',
-      '-inset-shadow-inherit',
-      '-inset-shadow-transparent',
-      '-inset-shadow-[#0088cc]',
-      '-inset-shadow-[#0088cc]/50',
-      '-inset-shadow-[#0088cc]/[0.5]',
-      '-inset-shadow-[#0088cc]/[50%]',
-      '-inset-shadow-[var(--value)]',
-    ]),
+    await run(
+      [
+        '-inset-shadow-sm',
+        '-inset-shadow-none',
+        '-inset-shadow-red-500',
+        '-inset-shadow-red-500/50',
+        '-inset-shadow-red-500/[0.5]',
+        '-inset-shadow-red-500/[50%]',
+        '-inset-shadow-current',
+        '-inset-shadow-current/50',
+        '-inset-shadow-current/[0.5]',
+        '-inset-shadow-current/[50%]',
+        '-inset-shadow-inherit',
+        '-inset-shadow-transparent',
+        '-inset-shadow-[#0088cc]',
+        '-inset-shadow-[#0088cc]/50',
+        '-inset-shadow-[#0088cc]/[0.5]',
+        '-inset-shadow-[#0088cc]/[50%]',
+        '-inset-shadow-[var(--value)]',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -14999,40 +15561,43 @@ test('ring', async () => {
     }"
   `)
   expect(
-    await run([
-      // ring color
-      '-ring-inset',
-      '-ring-red-500',
-      '-ring-red-500/50',
-      '-ring-red-500/[0.5]',
-      '-ring-red-500/[50%]',
-      '-ring-current',
-      '-ring-current/50',
-      '-ring-current/[0.5]',
-      '-ring-current/[50%]',
-      '-ring-inherit',
-      '-ring-transparent',
-      '-ring-[#0088cc]',
-      '-ring-[#0088cc]/50',
-      '-ring-[#0088cc]/[0.5]',
-      '-ring-[#0088cc]/[50%]',
+    await run(
+      [
+        // ring color
+        '-ring-inset',
+        '-ring-red-500',
+        '-ring-red-500/50',
+        '-ring-red-500/[0.5]',
+        '-ring-red-500/[50%]',
+        '-ring-current',
+        '-ring-current/50',
+        '-ring-current/[0.5]',
+        '-ring-current/[50%]',
+        '-ring-inherit',
+        '-ring-transparent',
+        '-ring-[#0088cc]',
+        '-ring-[#0088cc]/50',
+        '-ring-[#0088cc]/[0.5]',
+        '-ring-[#0088cc]/[50%]',
 
-      // ring width
-      '-ring',
-      'ring--1',
-      '-ring-0',
-      '-ring-1',
-      '-ring-2',
-      '-ring-4',
+        // ring width
+        '-ring',
+        'ring--1',
+        '-ring-0',
+        '-ring-1',
+        '-ring-2',
+        '-ring-4',
 
-      'ring/foo',
-      'ring-0/foo',
-      'ring-1/foo',
-      'ring-2/foo',
-      'ring-4/foo',
-      'ring-[12px]/foo',
-      'ring-[length:var(--my-width)]/foo',
-    ]),
+        'ring/foo',
+        'ring-0/foo',
+        'ring-1/foo',
+        'ring-2/foo',
+        'ring-4/foo',
+        'ring-[12px]/foo',
+        'ring-[length:var(--my-width)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -15258,39 +15823,42 @@ test('inset-ring', async () => {
     }"
   `)
   expect(
-    await run([
-      // ring color
-      '-inset-ring-red-500',
-      '-inset-ring-red-500/50',
-      '-inset-ring-red-500/[0.5]',
-      '-inset-ring-red-500/[50%]',
-      '-inset-ring-current',
-      '-inset-ring-current/50',
-      '-inset-ring-current/[0.5]',
-      '-inset-ring-current/[50%]',
-      '-inset-ring-inherit',
-      '-inset-ring-transparent',
-      '-inset-ring-[#0088cc]',
-      '-inset-ring-[#0088cc]/50',
-      '-inset-ring-[#0088cc]/[0.5]',
-      '-inset-ring-[#0088cc]/[50%]',
+    await run(
+      [
+        // ring color
+        '-inset-ring-red-500',
+        '-inset-ring-red-500/50',
+        '-inset-ring-red-500/[0.5]',
+        '-inset-ring-red-500/[50%]',
+        '-inset-ring-current',
+        '-inset-ring-current/50',
+        '-inset-ring-current/[0.5]',
+        '-inset-ring-current/[50%]',
+        '-inset-ring-inherit',
+        '-inset-ring-transparent',
+        '-inset-ring-[#0088cc]',
+        '-inset-ring-[#0088cc]/50',
+        '-inset-ring-[#0088cc]/[0.5]',
+        '-inset-ring-[#0088cc]/[50%]',
 
-      // ring width
-      '-inset-ring',
-      'inset-ring--1',
-      '-inset-ring-0',
-      '-inset-ring-1',
-      '-inset-ring-2',
-      '-inset-ring-4',
+        // ring width
+        '-inset-ring',
+        'inset-ring--1',
+        '-inset-ring-0',
+        '-inset-ring-1',
+        '-inset-ring-2',
+        '-inset-ring-4',
 
-      'inset-ring/foo',
-      'inset-ring-0/foo',
-      'inset-ring-1/foo',
-      'inset-ring-2/foo',
-      'inset-ring-4/foo',
-      'inset-ring-[12px]/foo',
-      'inset-ring-[length:var(--my-width)]/foo',
-    ]),
+        'inset-ring/foo',
+        'inset-ring-0/foo',
+        'inset-ring-1/foo',
+        'inset-ring-2/foo',
+        'inset-ring-4/foo',
+        'inset-ring-[12px]/foo',
+        'inset-ring-[length:var(--my-width)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -15423,39 +15991,42 @@ test('ring-offset', async () => {
     }"
   `)
   expect(
-    await run([
-      'ring-offset',
-      // ring color
-      '-ring-offset-inset',
-      '-ring-offset-red-500',
-      '-ring-offset-red-500/50',
-      '-ring-offset-red-500/[0.5]',
-      '-ring-offset-red-500/[50%]',
-      '-ring-offset-current',
-      '-ring-offset-current/50',
-      '-ring-offset-current/[0.5]',
-      '-ring-offset-current/[50%]',
-      '-ring-offset-inherit',
-      '-ring-offset-transparent',
-      '-ring-offset-[#0088cc]',
-      '-ring-offset-[#0088cc]/50',
-      '-ring-offset-[#0088cc]/[0.5]',
-      '-ring-offset-[#0088cc]/[50%]',
+    await run(
+      [
+        'ring-offset',
+        // ring color
+        '-ring-offset-inset',
+        '-ring-offset-red-500',
+        '-ring-offset-red-500/50',
+        '-ring-offset-red-500/[0.5]',
+        '-ring-offset-red-500/[50%]',
+        '-ring-offset-current',
+        '-ring-offset-current/50',
+        '-ring-offset-current/[0.5]',
+        '-ring-offset-current/[50%]',
+        '-ring-offset-inherit',
+        '-ring-offset-transparent',
+        '-ring-offset-[#0088cc]',
+        '-ring-offset-[#0088cc]/50',
+        '-ring-offset-[#0088cc]/[0.5]',
+        '-ring-offset-[#0088cc]/[50%]',
 
-      // ring width
-      'ring-offset--1',
-      '-ring-offset-0',
-      '-ring-offset-1',
-      '-ring-offset-2',
-      '-ring-offset-4',
+        // ring width
+        'ring-offset--1',
+        '-ring-offset-0',
+        '-ring-offset-1',
+        '-ring-offset-2',
+        '-ring-offset-4',
 
-      'ring-offset-0/foo',
-      'ring-offset-1/foo',
-      'ring-offset-2/foo',
-      'ring-offset-4/foo',
-      'ring-offset-[12px]/foo',
-      'ring-offset-[length:var(--my-width)]/foo',
-    ]),
+        'ring-offset-0/foo',
+        'ring-offset-1/foo',
+        'ring-offset-2/foo',
+        'ring-offset-4/foo',
+        'ring-offset-[12px]/foo',
+        'ring-offset-[length:var(--my-width)]/foo',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -15495,14 +16066,17 @@ test('@container', async () => {
     }"
   `)
   expect(
-    await run([
-      '-@container',
-      '-@container-normal',
-      '-@container/sidebar',
-      '-@container-normal/sidebar',
-      '-@container-[size]',
-      '-@container-[size]/sidebar',
-    ]),
+    await run(
+      [
+        '-@container',
+        '-@container-normal',
+        '-@container/sidebar',
+        '-@container-normal/sidebar',
+        '-@container-[size]',
+        '-@container-[size]/sidebar',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
