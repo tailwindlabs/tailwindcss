@@ -1707,6 +1707,7 @@ test('not', async () => {
       [
         'not-[:checked]:flex',
         'not-[@media_print]:flex',
+        'not-[@media(orientation:portrait)]:flex',
         'not-[@media_(orientation:landscape)]:flex',
         'not-[@media_not_(orientation:portrait)]:flex',
         'not-hocus:flex',

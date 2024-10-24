@@ -354,12 +354,16 @@ export function createVariants(theme: Theme): Variants {
     })
   }
 
+  let conditionalRules = ['@media', '@supports', '@container']
+
   function negateSelector(selector: string) {
     if (selector[0] === '@') {
-      let name = selector.slice(1, selector.indexOf(' '))
-      let params = selector.slice(selector.indexOf(' ') + 1)
+      for (let ruleName of conditionalRules) {
+        if (!selector.startsWith(ruleName)) continue
 
-      if (name === 'media' || name === 'supports' || name === 'container') {
+        let name = ruleName.slice(1)
+        let params = selector.slice(ruleName.length).trim()
+
         let conditions = segment(params, ',')
 
         // We don't support things like `@media screen, print` because
