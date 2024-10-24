@@ -38,16 +38,31 @@ test('does not match false positives', async () => {
   ).toEqual('!border')
 })
 
-test('does not match false positives with spaces at the end of the line', async () => {
+test('does not match false positives', async () => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  expect(
-    important(designSystem, {}, '!border', {
-      contents: `let notBorder = !border    \n`,
-      start: 16,
-      end: 16 + '!border'.length,
-    }),
-  ).toEqual('!border')
+  function shouldNotDetect(example: string, candidate = '!border') {
+    expect(
+      important(designSystem, {}, candidate, {
+        contents: example,
+        start: example.indexOf(candidate),
+        end: example.indexOf(candidate) + candidate.length,
+      }),
+    ).toEqual('!border')
+  }
+
+  shouldNotDetect(`let notBorder = !border    \n`)
+  shouldNotDetect(`{ "foo": !border.something + ""}\n`)
+  shouldNotDetect(`<div v-if="something && !border"></div>\n`)
+  shouldNotDetect(`<div v-else-if="something && !border"></div>\n`)
+  shouldNotDetect(`<div v-show="something && !border"></div>\n`)
+  shouldNotDetect(`<div v-if="!border || !border"></div>\n`)
+  shouldNotDetect(`<div v-else-if="!border || !border"></div>\n`)
+  shouldNotDetect(`<div v-show="!border || !border"></div>\n`)
+  shouldNotDetect(`<div v-if="!border"></div>\n`)
+  shouldNotDetect(`<div v-else-if="!border"></div>\n`)
+  shouldNotDetect(`<div v-show="!border"></div>\n`)
+  shouldNotDetect(`<div x-if="!border"></div>\n`)
 })
