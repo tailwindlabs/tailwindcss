@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure spacing utilities with no value (e.g. `px` or `translate-y`) don't generate CSS ([#14911](https://github.com/tailwindlabs/tailwindcss/pull/14911))
 - Don't override user-agent background color for input elements in Preflight ([#14913](https://github.com/tailwindlabs/tailwindcss/pull/14913))
 - Don't attempt to convert CSS variables (which should already be percentages) to percentages when used as opacity modifiers ([#14916](https://github.com/tailwindlabs/tailwindcss/pull/14916))
+- Ensure support for JS plugins that register utilities starting with `@` ([#14793](https://github.com/tailwindlabs/tailwindcss/pull/14793))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 - _Upgrade (experimental)_: Fix crash during upgrade when content globs escape root of project ([#14896](https://github.com/tailwindlabs/tailwindcss/pull/14896))

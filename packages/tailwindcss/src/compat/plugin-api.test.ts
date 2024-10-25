@@ -2943,6 +2943,50 @@ describe('matchUtilities()', () => {
     ).toEqual('')
   })
 
+  test('custom functional utilities can start with @', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+
+        {
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  { '@w': (value) => ({ width: value }) },
+                  {
+                    values: {
+                      1: '1px',
+                    },
+                  },
+                )
+              },
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(optimizeCss(await run(['@w-1','hover:@w-1'])).trim())
+      .toMatchInlineSnapshot(`
+        ".\\@w-1 {
+          width: 1px;
+        }
+
+        @media (hover: hover) {
+          .hover\\:\\@w-1:hover {
+            width: 1px;
+          }
+        }"
+      `)
+  })
+
   test('custom functional utilities can return an array of rules', async () => {
     let compiled = await compile(
       css`
