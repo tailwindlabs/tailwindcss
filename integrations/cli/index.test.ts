@@ -365,11 +365,9 @@ test(
     },
   },
   async ({ fs, exec, root }) => {
-    console.log(
-      await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
-        cwd: path.join(root, 'project-a'),
-      }),
-    )
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
 
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
