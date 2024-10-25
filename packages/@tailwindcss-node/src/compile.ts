@@ -10,11 +10,11 @@ import {
 } from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
 
-export function compile(
+export async function compile(
   css: string,
   { base, onDependency }: { base: string; onDependency: (path: string) => void },
 ) {
-  return _compile(css, {
+  let compiler = await _compile(css, {
     base,
     async loadModule(id, base) {
       return loadModule(id, base, onDependency)
@@ -23,6 +23,30 @@ export function compile(
       return loadStylesheet(id, base, onDependency)
     },
   })
+
+  // Verify if the `source(…)` path exists (until the glob pattern starts)
+  if (compiler.root && compiler.root !== 'none') {
+    let globSymbols = /[*{]/
+    let basePath = []
+    for (let segment of compiler.root.pattern.split('/')) {
+      if (globSymbols.test(segment)) {
+        break
+      }
+
+      basePath.push(segment)
+    }
+
+    let exists = await fsPromises
+      .stat(path.resolve(base, basePath.join('/')))
+      .then((stat) => stat.isDirectory())
+      .catch(() => false)
+
+    if (!exists) {
+      throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
+    }
+  }
+
+  return compiler
 }
 
 export async function __unstable__loadDesignSystem(css: string, { base }: { base: string }) {
