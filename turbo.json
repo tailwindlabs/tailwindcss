@@ -3,29 +3,41 @@
   "ui": "tui",
   "tasks": {
     "@tailwindcss/oxide#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["./index.d.ts", "./index.js", "./*.node"],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "./index.d.ts",
+        "./index.js",
+        "./*.node"
+      ],
       "inputs": [
         "./src/**/*",
         "./build.rs",
         "./package.json",
         "./Cargo.toml",
-        "../core/src/**/*",
-        "../core/Cargo.toml",
+        "../oxide/src/**/*",
+        "../oxide/Cargo.toml",
         "../Cargo.toml",
         "../package.json"
       ]
     },
     "@tailwindcss/oxide#dev": {
-      "dependsOn": ["^dev"],
-      "outputs": ["./index.d.ts", "./index.js", "./*.node"],
+      "dependsOn": [
+        "^dev"
+      ],
+      "outputs": [
+        "./index.d.ts",
+        "./index.js",
+        "./*.node"
+      ],
       "inputs": [
         "./src/**/*",
         "./build.rs",
         "./package.json",
         "./Cargo.toml",
-        "../core/src/**/*",
-        "../core/Cargo.toml",
+        "../oxide/src/**/*",
+        "../oxide/Cargo.toml",
         "../Cargo.toml",
         "../package.json"
       ],
@@ -33,8 +45,12 @@
       "persistent": true
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "lint": {},
     "dev": {
@@ -44,5 +60,7 @@
   },
   // If rustup is installed outside of the default ~/.rustup directory, we need
   // to pass the path through to the individual rust tasks.
-  "globalPassThroughEnv": ["RUSTUP_HOME"]
+  "globalPassThroughEnv": [
+    "RUSTUP_HOME"
+  ]
 }
