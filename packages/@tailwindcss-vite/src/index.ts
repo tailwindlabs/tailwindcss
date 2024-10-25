@@ -393,6 +393,8 @@ class Root {
 
         // No root specified, use the module graph
         if (this.compiler.root === null) {
+          this.includeCandidatesFromModuleGraph = true
+
           return []
         }
 
