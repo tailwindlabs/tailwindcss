@@ -1,5 +1,6 @@
 use crate::parser::Extractor;
 use crate::scanner::detect_sources::DetectSources;
+use bexpand::Expression;
 use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::fast_glob;
@@ -216,6 +217,26 @@ impl Scanner {
         if sources.is_empty() {
             return;
         }
+
+        // Expand glob patterns and create new `GlobEntry` instances for each expanded pattern.
+        let sources = sources
+            .iter()
+            .flat_map(|source| {
+                let expression: Result<Expression, _> = source.pattern[..].try_into();
+                let Ok(expression) = expression else {
+                    return vec![source.clone()];
+                };
+
+                expression
+                    .into_iter()
+                    .filter_map(|expanded_pattern| expanded_pattern.map(|x| x.into()).ok())
+                    .map(move |pattern| GlobEntry {
+                        base: source.base.clone(),
+                        pattern,
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>();
 
         // Partition sources into sources that should be promoted to auto source detection and
         // sources that should be resolved as globs.
