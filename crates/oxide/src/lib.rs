@@ -231,20 +231,22 @@ impl Scanner {
                 }
 
                 let path = PathBuf::from(&source.base).join(&source.pattern);
-                if let Some(folder_name) = path.file_name() {
-                    // Contains a file extension, e.g.: `foo.html`, therefore we don't want to
-                    // detect sources here.
-                    if folder_name.to_str().unwrap().contains(".") {
-                        continue;
-                    }
+                let Some(folder_name) = path.file_name() else {
+                    continue;
+                };
 
-                    // Promote to auto source detection
-                    let detect_sources = DetectSources::new(path.clone());
-
-                    let (files, globs) = detect_sources.detect();
-                    self.files.extend(files);
-                    self.globs.extend(globs);
+                // Contains a file extension, e.g.: `foo.html`, therefore we don't want to
+                // detect sources here.
+                if folder_name.to_str().unwrap().contains(".") {
+                    continue;
                 }
+
+                // Promote to auto source detection
+                let detect_sources = DetectSources::new(path.clone());
+
+                let (files, globs) = detect_sources.detect();
+                self.files.extend(files);
+                self.globs.extend(globs);
             }
         }
     }
