@@ -396,6 +396,9 @@ class Root {
           return []
         }
 
+        // TODO: In a follow up PR we want this filter this against the module graph.
+        this.includeCandidatesFromModuleGraph = false
+
         // Use the specified root
         return [this.compiler.root]
       })().concat(this.compiler.globs)
