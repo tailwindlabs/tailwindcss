@@ -30,6 +30,7 @@ test.each([
   ['text-[1/2]', 'text-[1/2]'],
 
   ['data-[selected]:flex', 'data-selected:flex'],
+  ['data-[selected]:flex data-[selected]:flex-col', 'data-selected:flex data-selected:flex-col'],
   ['data-[foo=bar]:flex', 'data-[foo=bar]:flex'],
 
   ['supports-[gap]:flex', 'supports-gap:flex'],
