@@ -348,6 +348,11 @@ class Root {
   // root.
   private dependencies = new Set<string>()
 
+  // Whether to include candidates from the module graph. This is disabled when
+  // the user provides `source(none)` to essentially disable auto source
+  // detection.
+  private includeCandidatesFromModuleGraph = true
+
   constructor(
     private id: string,
     private getSharedCandidates: () => Set<string>,
@@ -379,9 +384,23 @@ class Root {
       })
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Setup compiler')
 
-      this.scanner = new Scanner({
-        sources: this.compiler.globs,
-      })
+      let sources = (() => {
+        // Disable auto source detection
+        if (this.compiler.root === 'none') {
+          this.includeCandidatesFromModuleGraph = false
+          return []
+        }
+
+        // No root specified, use the module graph
+        if (this.compiler.root === null) {
+          return []
+        }
+
+        // Use the specified root
+        return [this.compiler.root]
+      })().concat(this.compiler.globs)
+
+      this.scanner = new Scanner({ sources })
     }
 
     // This should not be here, but right now the Vite plugin is setup where we
@@ -416,7 +435,11 @@ class Root {
     this.requiresRebuild = true
 
     env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
-    let result = this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+    let result = this.compiler.build(
+      this.includeCandidatesFromModuleGraph
+        ? [...this.getSharedCandidates(), ...this.candidates]
+        : Array.from(this.candidates),
+    )
     env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
 
     return result
