@@ -256,159 +256,157 @@ describe.each([
   )
 })
 
-describe.only('@source', () => {
-  test(
-    'it works',
-    {
-      fs: {
-        'package.json': json`{}`,
-        'pnpm-workspace.yaml': yaml`
-          #
-          packages:
-            - project-a
-        `,
-        'project-a/package.json': json`
-          {
-            "dependencies": {
-              "tailwindcss": "workspace:^",
-              "@tailwindcss/cli": "workspace:^"
-            }
-          }
-        `,
-        'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
-
-          /* Run auto-content detection in ../../project-b */
-          @import 'tailwindcss/utilities' source('../../project-b');
-
-          /* Additive: */
-          /*   {my-lib-1,my-lib-2}: expand */
-          /*   *.html: only look for .html */
-          @source '../node_modules/{my-lib-1,my-lib-2}/src/**/*.html';
-
-          /* We typically ignore these extensions, but now include them explicitly */
-          @source './logo.{jpg,png}';
-
-          /* Project C should apply auto source detection */
-          @source '../../project-c';
-        `,
-
-        // Project A is the current folder, but we explicitly configured
-        // `source(project-b)`, therefore project-a should not be included in
-        // the output.
-        'project-a/src/index.html': html`
-          <div
-            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-a/src/index.html']"
-          ></div>
-        `,
-
-        // Project A explicitly includes an extension we usually ignore,
-        // therefore it should be included in the output.
-        'project-a/src/logo.jpg': html`
-          <div
-            class="content-['project-a/src/logo.jpg']"
-          ></div>
-        `,
-
-        // Project A explicitly includes node_modules/{my-lib-1,my-lib-2},
-        // therefore these files should be included in the output.
-        'project-a/node_modules/my-lib-1/src/index.html': html`
-          <div
-            class="content-['project-a/node_modules/my-lib-1/src/index.html']"
-          ></div>
-        `,
-        'project-a/node_modules/my-lib-2/src/index.html': html`
-          <div
-            class="content-['project-a/node_modules/my-lib-2/src/index.html']"
-          ></div>
-        `,
-
-        // Project B is the configured `source(…)`, therefore auto source
-        // detection should include known extensions and folders in the output.
-        'project-b/src/index.html': html`
-          <div
-            class="content-['project-b/src/index.html']"
-          ></div>
-        `,
-
-        // Project B is the configured `source(…)`, therefore auto source
-        // detection should apply and node_modules should not be included in the
-        // output.
-        'project-b/node_modules/my-lib-3/src/index.html': html`
-          <div
-            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-b/node_modules/my-lib-3/src/index.html']"
-          ></div>
-        `,
-
-        // Project C should apply auto source detection, therefore known
-        // extensions and folders should be included in the output.
-        'project-c/src/index.html': html`
-          <div
-            class="content-['project-c/src/index.html']"
-          ></div>
-        `,
-
-        // Project C should apply auto source detection, therefore known ignored
-        // extensions should not be included in the output.
-        'project-c/src/logo.jpg': html`
-          <div
-            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-c/src/logo.jpg']"
-          ></div>
-        `,
-
-        // Project C should apply auto source detection, therefore node_modules
-        // should not be included in the output.
-        'project-c/node_modules/my-lib-1/src/index.html': html`
-          <div
-            class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-c/node_modules/my-lib-1/src/index.html']"
-          ></div>
-        `,
-      },
-    },
-    async ({ fs, exec, root }) => {
-      console.log(
-        await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
-          cwd: path.join(root, 'project-a'),
-        }),
-      )
-
-      expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
-        "
-        --- ./project-a/dist/out.css ---
-        .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
-          --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
-          content: var(--tw-content);
-        }
-        .content-\\[\\'project-a\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
-          --tw-content: 'project-a/node modules/my-lib-2/src/index.html';
-          content: var(--tw-content);
-        }
-        .content-\\[\\'project-a\\/src\\/logo\\.jpg\\'\\] {
-          --tw-content: 'project-a/src/logo.jpg';
-          content: var(--tw-content);
-        }
-        .content-\\[\\'project-b\\/src\\/index\\.html\\'\\] {
-          --tw-content: 'project-b/src/index.html';
-          content: var(--tw-content);
-        }
-        .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
-          --tw-content: 'project-c/src/index.html';
-          content: var(--tw-content);
-        }
-        @supports (-moz-orient: inline) {
-          @layer base {
-            *, ::before, ::after, ::backdrop {
-              --tw-content: "";
-            }
+test(
+  'source(…) and `@source` can be configured to use auto source detection',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
           }
         }
-        @property --tw-content {
-          syntax: "*";
-          inherits: false;
-          initial-value: "";
-        }
-        "
-      `)
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+
+        /* Run auto-content detection in ../../project-b */
+        @import 'tailwindcss/utilities' source('../../project-b');
+
+        /* Additive: */
+        /*   {my-lib-1,my-lib-2}: expand */
+        /*   *.html: only look for .html */
+        @source '../node_modules/{my-lib-1,my-lib-2}/src/**/*.html';
+
+        /* We typically ignore these extensions, but now include them explicitly */
+        @source './logo.{jpg,png}';
+
+        /* Project C should apply auto source detection */
+        @source '../../project-c';
+      `,
+
+      // Project A is the current folder, but we explicitly configured
+      // `source(project-b)`, therefore project-a should not be included in
+      // the output.
+      'project-a/src/index.html': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-a/src/index.html']"
+        ></div>
+      `,
+
+      // Project A explicitly includes an extension we usually ignore,
+      // therefore it should be included in the output.
+      'project-a/src/logo.jpg': html`
+        <div
+          class="content-['project-a/src/logo.jpg']"
+        ></div>
+      `,
+
+      // Project A explicitly includes node_modules/{my-lib-1,my-lib-2},
+      // therefore these files should be included in the output.
+      'project-a/node_modules/my-lib-1/src/index.html': html`
+        <div
+          class="content-['project-a/node_modules/my-lib-1/src/index.html']"
+        ></div>
+      `,
+      'project-a/node_modules/my-lib-2/src/index.html': html`
+        <div
+          class="content-['project-a/node_modules/my-lib-2/src/index.html']"
+        ></div>
+      `,
+
+      // Project B is the configured `source(…)`, therefore auto source
+      // detection should include known extensions and folders in the output.
+      'project-b/src/index.html': html`
+        <div
+          class="content-['project-b/src/index.html']"
+        ></div>
+      `,
+
+      // Project B is the configured `source(…)`, therefore auto source
+      // detection should apply and node_modules should not be included in the
+      // output.
+      'project-b/node_modules/my-lib-3/src/index.html': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-b/node_modules/my-lib-3/src/index.html']"
+        ></div>
+      `,
+
+      // Project C should apply auto source detection, therefore known
+      // extensions and folders should be included in the output.
+      'project-c/src/index.html': html`
+        <div
+          class="content-['project-c/src/index.html']"
+        ></div>
+      `,
+
+      // Project C should apply auto source detection, therefore known ignored
+      // extensions should not be included in the output.
+      'project-c/src/logo.jpg': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-c/src/logo.jpg']"
+        ></div>
+      `,
+
+      // Project C should apply auto source detection, therefore node_modules
+      // should not be included in the output.
+      'project-c/node_modules/my-lib-1/src/index.html': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-c/node_modules/my-lib-1/src/index.html']"
+        ></div>
+      `,
     },
-  )
-})
+  },
+  async ({ fs, exec, root }) => {
+    console.log(
+      await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+        cwd: path.join(root, 'project-a'),
+      }),
+    )
+
+    expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/dist/out.css ---
+      .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-a\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-a/node modules/my-lib-2/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-a\\/src\\/logo\\.jpg\\'\\] {
+        --tw-content: 'project-a/src/logo.jpg';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-b\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-b/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-c/src/index.html';
+        content: var(--tw-content);
+      }
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      "
+    `)
+  },
+)
