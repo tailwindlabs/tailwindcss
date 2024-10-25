@@ -12,11 +12,6 @@ test(
             "astro": "^4.15.2",
             "@tailwindcss/vite": "workspace:^",
             "tailwindcss": "workspace:^"
-          },
-          "pnpm": {
-            "overrides": {
-              "zod-to-json-schema": "3.23.3"
-            }
           }
         }
       `,
