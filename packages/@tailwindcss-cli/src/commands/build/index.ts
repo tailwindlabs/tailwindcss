@@ -138,22 +138,22 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       },
     })
 
-    let detectSources = (() => {
+    let sources = (() => {
       // Disable auto source detection
       if (compiler.root === 'none') {
-        return undefined
+        return []
       }
 
       // No root specified, use the base directory
       if (compiler.root === null) {
-        return { base }
+        return [{ base, pattern: '**/*' }]
       }
 
       // Use the specified root
-      return { base: path.resolve(compiler.root.base, compiler.root.pattern) }
-    })()
+      return [{ base: path.resolve(compiler.root.base, compiler.root.pattern), pattern: '**/*' }]
+    })().concat(compiler.globs)
 
-    let scanner = new Scanner({ detectSources, sources: compiler.globs })
+    let scanner = new Scanner({ sources })
     env.DEBUG && console.timeEnd('[@tailwindcss/cli] Setup compiler')
 
     return [compiler, scanner] as const

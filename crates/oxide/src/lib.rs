@@ -62,9 +62,6 @@ pub struct GlobEntry {
 
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
-    /// Auto content configuration
-    detect_sources: Option<DetectSources>,
-
     /// Glob sources
     sources: Option<Vec<GlobEntry>>,
 
@@ -86,9 +83,8 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(detect_sources: Option<DetectSources>, sources: Option<Vec<GlobEntry>>) -> Self {
+    pub fn new(sources: Option<Vec<GlobEntry>>) -> Self {
         Self {
-            detect_sources,
             sources,
             ..Default::default()
         }
@@ -206,49 +202,9 @@ impl Scanner {
             return;
         }
 
-        self.detect_sources();
         self.scan_sources();
 
         self.ready = true;
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn detect_sources(&mut self) {
-        if let Some(detect_sources) = &self.detect_sources {
-            let (files, globs) = detect_sources.detect();
-            self.files.extend(files);
-            self.globs.extend(globs);
-        }
-
-        // Find all `@source` globs that point to a directory. If so, promote the source to auto
-        // source detection instead.
-        if let Some(sources) = &mut self.sources {
-            for source in sources {
-                // If a glob ends with `**/*`, then we just want to register the base path as a new
-                // base.
-                if source.pattern.ends_with("**/*") {
-                    source.pattern = source.pattern.trim_end_matches("**/*").to_owned();
-                }
-
-                let path = PathBuf::from(&source.base).join(&source.pattern);
-                let Some(folder_name) = path.file_name() else {
-                    continue;
-                };
-
-                // Contains a file extension, e.g.: `foo.html`, therefore we don't want to
-                // detect sources here.
-                if folder_name.to_str().unwrap().contains(".") {
-                    continue;
-                }
-
-                // Promote to auto source detection
-                let detect_sources = DetectSources::new(path.clone());
-
-                let (files, globs) = detect_sources.detect();
-                self.files.extend(files);
-                self.globs.extend(globs);
-            }
-        }
     }
 
     #[tracing::instrument(skip_all)]
@@ -261,7 +217,38 @@ impl Scanner {
             return;
         }
 
-        let resolved_files: Vec<_> = match fast_glob(sources) {
+        // Partition sources into sources that should be promoted to auto source detection and
+        // sources that should be resolved as globs.
+        let (auto_sources, glob_sources): (Vec<_>, Vec<_>) = sources.iter().partition(|source| {
+            // If a glob ends with `/**/*`, then we just want to register the base path as a new
+            // base. Essentially converting it to use auto source detection.
+            if source.pattern.ends_with("**/*") {
+                return true;
+            }
+
+            // Directories should be promoted to auto source detection
+            if PathBuf::from(&source.base).join(&source.pattern).is_dir() {
+                return true;
+            }
+
+            false
+        });
+
+        // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
+        let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
+
+        for path in auto_sources
+            .iter()
+            .map(|source| PathBuf::from(&source.base).join(source.pattern.trim_end_matches("**/*")))
+        {
+            let detect_sources = DetectSources::new(path);
+
+            let (files, globs) = detect_sources.detect();
+            self.files.extend(files);
+            self.globs.extend(globs);
+        }
+
+        let resolved_files: Vec<_> = match fast_glob(&glob_sources) {
             Ok(matches) => matches
                 .filter_map(|x| dunce::canonicalize(&x).ok())
                 .collect(),
@@ -272,7 +259,7 @@ impl Scanner {
         };
 
         self.files.extend(resolved_files);
-        self.globs.extend(sources.clone());
+        self.globs.extend(glob_sources);
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = get_fast_patterns(&self.globs)

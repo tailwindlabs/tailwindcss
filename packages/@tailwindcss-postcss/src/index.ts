@@ -136,8 +136,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           if (context.scanner === null || rebuildStrategy === 'full') {
             // Look for candidates used to generate the CSS
             context.scanner = new Scanner({
-              detectSources: { base },
-              sources: context.compiler.globs,
+              sources: [{ base, pattern: '**/*' }].concat(context.compiler.globs),
             })
           }
 
