@@ -257,7 +257,7 @@ describe.each([
 })
 
 test(
-  'source(…) and `@source` can be configured to use auto source detection',
+  'source(…) and `@source` can be configured to use auto source detection (build + watch mode)',
   {
     fs: {
       'package.json': json`{}`,
@@ -364,7 +364,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec, root }) => {
+  async ({ fs, exec, spawn, root }) => {
     await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
       cwd: path.join(root, 'project-a'),
     })
@@ -406,5 +406,103 @@ test(
       }
       "
     `)
+
+    // Watch mode tests
+    await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    // Changes to project-a should not be included in the output, we changed the
+    // base folder to project-b.
+    await fs.write(
+      'project-a/src/index.html',
+      html`<div class="[.changed_&]:content-['project-a/src/index.html']"></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/src/index.html']`,
+    ])
+
+    // Changes to this file should be included, because we explicitly listed
+    // them using `@source`.
+    await fs.write(
+      'project-a/src/logo.jpg',
+      html`<div class="[.changed_&]:content-['project-a/src/logo.jpg']"></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/src/logo.jpg']`,
+    ])
+
+    // Changes to these files should be included, because we explicitly listed
+    // them using `@source`.
+    await fs.write(
+      'project-a/node_modules/my-lib-1/src/index.html',
+      html`<div
+          class="[.changed_&]:content-['project-a/node_modules/my-lib-1/src/index.html']"
+        ></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/node_modules/my-lib-1/src/index.html']`,
+    ])
+    await fs.write(
+      'project-a/node_modules/my-lib-2/src/index.html',
+      html`<div
+          class="[.changed_&]:content-['project-a/node_modules/my-lib-2/src/index.html']"
+        ></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/node_modules/my-lib-2/src/index.html']`,
+    ])
+
+    // Changes to this file should be included, because we changed the base to
+    // `project-b`.
+    await fs.write(
+      'project-b/src/index.html',
+      html`<div class="[.changed_&]:content-['project-b/src/index.html']"></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-b/src/index.html']`,
+    ])
+
+    // Changes to this file should not be included. We did change the base to
+    // `project-b`, but we still apply the auto source detection rules which
+    // ignore `node_modules`.
+    await fs.write(
+      'project-b/node_modules/my-lib-3/src/index.html',
+      html`<div
+          class="[.changed_&]:content-['project-b/node_modules/my-lib-3/src/index.html']"
+        ></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-b/node_modules/my-lib-3/src/index.html']`,
+    ])
+
+    // Project C was added explicitly via `@source`, therefore changes to these
+    // files should be included.
+    await fs.write(
+      'project-c/src/index.html',
+      html`<div class="[.changed_&]:content-['project-c/src/index.html']"></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-c/src/index.html']`,
+    ])
+
+    // Except for these files, since they are ignored by the default auto source
+    // detection rules.
+    await fs.write(
+      'project-c/src/logo.jpg',
+      html`<div class="[.changed_&]:content-['project-c/src/logo.jpg']"></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-c/src/logo.jpg']`,
+    ])
+    await fs.write(
+      'project-c/node_modules/my-lib-1/src/index.html',
+      html`<div
+          class="[.changed_&]:content-['project-c/node_modules/my-lib-1/src/index.html']"
+        ></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-c/node_modules/my-lib-1/src/index.html']`,
+    ])
   },
 )
