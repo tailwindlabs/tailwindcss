@@ -285,7 +285,7 @@ function keyframesToCss(keyframes: Record<string, unknown>): string {
 }
 
 function autodetectedSourceFiles(base: string) {
-  let scanner = new Scanner({ detectSources: { base } })
+  let scanner = new Scanner({ sources: [{ base, pattern: '**/*' }] })
   scanner.scan()
   return scanner.files
 }
