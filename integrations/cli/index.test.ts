@@ -375,27 +375,25 @@ describe.only('@source', () => {
       expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
         "
         --- ./project-a/dist/out.css ---
-        @tailwind utilities source('../../project-b') {
-          .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
-            --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
-            content: var(--tw-content);
-          }
-          .content-\\[\\'project-a\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
-            --tw-content: 'project-a/node modules/my-lib-2/src/index.html';
-            content: var(--tw-content);
-          }
-          .content-\\[\\'project-a\\/src\\/logo\\.jpg\\'\\] {
-            --tw-content: 'project-a/src/logo.jpg';
-            content: var(--tw-content);
-          }
-          .content-\\[\\'project-b\\/src\\/index\\.html\\'\\] {
-            --tw-content: 'project-b/src/index.html';
-            content: var(--tw-content);
-          }
-          .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
-            --tw-content: 'project-c/src/index.html';
-            content: var(--tw-content);
-          }
+        .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
+          --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
+          content: var(--tw-content);
+        }
+        .content-\\[\\'project-a\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
+          --tw-content: 'project-a/node modules/my-lib-2/src/index.html';
+          content: var(--tw-content);
+        }
+        .content-\\[\\'project-a\\/src\\/logo\\.jpg\\'\\] {
+          --tw-content: 'project-a/src/logo.jpg';
+          content: var(--tw-content);
+        }
+        .content-\\[\\'project-b\\/src\\/index\\.html\\'\\] {
+          --tw-content: 'project-b/src/index.html';
+          content: var(--tw-content);
+        }
+        .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
+          --tw-content: 'project-c/src/index.html';
+          content: var(--tw-content);
         }
         @supports (-moz-orient: inline) {
           @layer base {

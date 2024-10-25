@@ -185,7 +185,10 @@ export function toCss(ast: AstNode[]) {
 
     // Rule
     if (node.kind === 'rule') {
-      if (node.selector === '@tailwind utilities') {
+      if (
+        node.selector === '@tailwind utilities' ||
+        node.selector.startsWith('@tailwind utilities ')
+      ) {
         for (let child of node.nodes) {
           css += stringify(child, depth)
         }
