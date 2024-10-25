@@ -134,10 +134,23 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           if (context.scanner === null || rebuildStrategy === 'full') {
+            let sources = (() => {
+              // Disable auto source detection
+              if (context.compiler.root === 'none') {
+                return []
+              }
+
+              // No root specified, use the base directory
+              if (context.compiler.root === null) {
+                return [{ base, pattern: '**/*' }]
+              }
+
+              // Use the specified root
+              return [context.compiler.root]
+            })().concat(context.compiler.globs)
+
             // Look for candidates used to generate the CSS
-            context.scanner = new Scanner({
-              sources: [{ base, pattern: '**/*' }].concat(context.compiler.globs),
-            })
+            context.scanner = new Scanner({ sources })
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
