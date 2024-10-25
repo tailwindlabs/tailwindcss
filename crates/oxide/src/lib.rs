@@ -219,6 +219,34 @@ impl Scanner {
             self.files.extend(files);
             self.globs.extend(globs);
         }
+
+        // Find all `@source` globs that point to a directory. If so, promote the source to auto
+        // source detection instead.
+        if let Some(sources) = &mut self.sources {
+            for source in sources {
+                // If a glob ends with `**/*`, then we just want to register the base path as a new
+                // base.
+                if source.pattern.ends_with("**/*") {
+                    source.pattern = source.pattern.trim_end_matches("**/*").to_owned();
+                }
+
+                let path = PathBuf::from(&source.base).join(&source.pattern);
+                if let Some(folder_name) = path.file_name() {
+                    // Contains a file extension, e.g.: `foo.html`, therefore we don't want to
+                    // detect sources here.
+                    if folder_name.to_str().unwrap().contains(".") {
+                        continue;
+                    }
+
+                    // Promote to auto source detection
+                    let detect_sources = DetectSources::new(path.clone());
+
+                    let (files, globs) = detect_sources.detect();
+                    self.files.extend(files);
+                    self.globs.extend(globs);
+                }
+            }
+        }
     }
 
     #[tracing::instrument(skip_all)]
