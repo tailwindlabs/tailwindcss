@@ -150,7 +150,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       }
 
       // Use the specified root
-      return [{ base: path.resolve(compiler.root.base, compiler.root.pattern), pattern: '**/*' }]
+      return [{ base: compiler.root.base, pattern: compiler.root.pattern }]
     })().concat(compiler.globs)
 
     let scanner = new Scanner({ sources })
