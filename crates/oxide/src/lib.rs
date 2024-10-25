@@ -229,10 +229,10 @@ impl Scanner {
 
                 expression
                     .into_iter()
-                    .filter_map(|expanded_pattern| expanded_pattern.map(|x| x.into()).ok())
+                    .filter_map(Result::ok)
                     .map(move |pattern| GlobEntry {
                         base: source.base.clone(),
-                        pattern,
+                        pattern: pattern.into(),
                     })
                     .collect::<Vec<_>>()
             })
