@@ -3793,6 +3793,33 @@ describe('prefix()', () => {
 })
 
 describe('config()', () => {
+  test('can return the resolved config when passed no arguments', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config())
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        theme: expect.objectContaining({
+          spacing: expect.any(Object),
+        }),
+      }),
+    )
+  })
+
   test('can return part of the config', async () => {
     let fn = vi.fn()
     await compile(

@@ -71,7 +71,7 @@ export type PluginAPI = {
   ): void
 
   theme(path: string, defaultValue?: any): any
-  config(path: string, defaultValue?: any): any
+  config(path?: string, defaultValue?: any): any
   prefix(className: string): string
 }
 
@@ -398,6 +398,8 @@ export function buildPluginApi(
 
     config(path, defaultValue) {
       let obj: Record<any, any> = resolvedConfig
+
+      if (!path) return obj
 
       let keypath = toKeyPath(path)
 
