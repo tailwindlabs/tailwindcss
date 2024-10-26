@@ -1,4 +1,4 @@
-import type { Rule } from './ast'
+import type { AtRule } from './ast'
 import { escape } from './utils/escape'
 
 export const enum ThemeOptions {
@@ -13,7 +13,7 @@ export class Theme {
 
   constructor(
     private values = new Map<string, { value: string; options: ThemeOptions }>(),
-    private keyframes = new Set<Rule>([]),
+    private keyframes = new Set<AtRule>([]),
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
@@ -204,7 +204,7 @@ export class Theme {
     return values
   }
 
-  addKeyframes(value: Rule): void {
+  addKeyframes(value: AtRule): void {
     this.keyframes.add(value)
   }
 

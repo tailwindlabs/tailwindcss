@@ -57,7 +57,7 @@ function isAtRuleVariant(designSystem: DesignSystem, variant: Variant) {
     return true
   }
   let stack = getAppliedNodeStack(designSystem, variant)
-  return stack.every((node) => node.kind === 'rule' && node.selector[0] === '@')
+  return stack.every((node) => node.kind === 'at-rule')
 }
 
 function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
@@ -65,8 +65,6 @@ function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
   return stack.some(
     (node) =>
       node.kind === 'rule' &&
-      // Ignore at-rules as they are hoisted
-      node.selector[0] !== '@' &&
       // Combinators include any of the following characters
       (node.selector.includes(' ') ||
         node.selector.includes('>') ||

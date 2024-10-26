@@ -2,6 +2,7 @@ import { version } from '../package.json'
 import { substituteAtApply } from './apply'
 import {
   atRoot,
+  atRule,
   comment,
   context,
   decl,
@@ -10,6 +11,7 @@ import {
   walk,
   WalkAction,
   type AstNode,
+  type AtRule,
   type Rule,
 } from './ast'
 import { substituteAtImports } from './at-import'
@@ -46,11 +48,11 @@ function throwOnLoadStylesheet(): never {
   throw new Error('No `loadStylesheet` function provided to `compile`')
 }
 
-function parseThemeOptions(selector: string) {
+function parseThemeOptions(params: string) {
   let options = ThemeOptions.NONE
   let prefix = null
 
-  for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
+  for (let option of segment(params, ' ')) {
     if (option === 'reference') {
       options |= ThemeOptions.REFERENCE
     } else if (option === 'inline') {
@@ -81,21 +83,20 @@ async function parseCss(
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
-  let firstThemeRule: Rule | null = null
+  let firstThemeRule = null as Rule | null
   let globs: { base: string; pattern: string }[] = []
 
   // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
-    if (node.kind !== 'rule') return
-    if (node.selector[0] !== '@') return
+    if (node.kind !== 'at-rule') return
 
     // Collect custom `@utility` at-rules
-    if (node.selector.startsWith('@utility ')) {
+    if (node.name === 'utility') {
       if (parent !== null) {
         throw new Error('`@utility` cannot be nested.')
       }
 
-      let name = node.selector.slice(9).trim()
+      let name = node.params
 
       if (!IS_VALID_UTILITY_NAME.test(name)) {
         throw new Error(
@@ -120,7 +121,7 @@ async function parseCss(
     }
 
     // Collect paths from `@source` at-rules
-    if (node.selector.startsWith('@source ')) {
+    if (node.name === 'source') {
       if (node.nodes.length > 0) {
         throw new Error('`@source` cannot have a body.')
       }
@@ -129,7 +130,7 @@ async function parseCss(
         throw new Error('`@source` cannot be nested.')
       }
 
-      let path = node.selector.slice(8)
+      let path = node.params
       if (
         (path[0] === '"' && path[path.length - 1] !== '"') ||
         (path[0] === "'" && path[path.length - 1] !== "'") ||
@@ -143,7 +144,7 @@ async function parseCss(
     }
 
     // Register custom variants from `@variant` at-rules
-    if (node.selector.startsWith('@variant ')) {
+    if (node.name === 'variant') {
       if (parent !== null) {
         throw new Error('`@variant` cannot be nested.')
       }
@@ -151,7 +152,7 @@ async function parseCss(
       // Remove `@variant` at-rule so it's not included in the compiled CSS
       replaceWith([])
 
-      let [name, selector] = segment(node.selector.slice(9), ' ')
+      let [name, selector] = segment(node.params, ' ')
 
       if (node.nodes.length > 0 && selector) {
         throw new Error(`\`@variant ${name}\` cannot have both a selector and a body.`)
@@ -165,14 +166,14 @@ async function parseCss(
 
         let selectors = segment(selector.slice(1, -1), ',')
 
-        let atRuleSelectors: string[] = []
+        let atRuleParams: string[] = []
         let styleRuleSelectors: string[] = []
 
         for (let selector of selectors) {
           selector = selector.trim()
 
           if (selector[0] === '@') {
-            atRuleSelectors.push(selector)
+            atRuleParams.push(selector)
           } else {
             styleRuleSelectors.push(selector)
           }
@@ -188,14 +189,14 @@ async function parseCss(
                 nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
               }
 
-              for (let selector of atRuleSelectors) {
-                nodes.push(rule(selector, r.nodes))
+              for (let selector of atRuleParams) {
+                nodes.push(CSS.parseAtRule(selector, r.nodes))
               }
 
               r.nodes = nodes
             },
             {
-              compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleSelectors]),
+              compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleParams]),
             },
           )
         })
@@ -227,8 +228,8 @@ async function parseCss(
       }
     }
 
-    if (node.selector.startsWith('@media ')) {
-      let params = segment(node.selector.slice(7), ' ')
+    if (node.name === 'media') {
+      let params = segment(node.params, ' ')
       let unknownParams: string[] = []
 
       for (let param of params) {
@@ -241,13 +242,13 @@ async function parseCss(
           let themeParams = param.slice(6, -1)
 
           walk(node.nodes, (child) => {
-            if (child.kind !== 'rule') {
+            if (child.kind !== 'at-rule') {
               throw new Error(
                 'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
               )
             }
-            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-              child.selector += ' ' + themeParams
+            if (child.name === 'theme') {
+              child.params += ' ' + themeParams
               return WalkAction.Skip
             }
           })
@@ -261,9 +262,9 @@ async function parseCss(
           let prefix = param.slice(7, -1)
 
           walk(node.nodes, (child) => {
-            if (child.kind !== 'rule') return
-            if (child.selector === '@theme' || child.selector.startsWith('@theme ')) {
-              child.selector += ` prefix(${prefix})`
+            if (child.kind !== 'at-rule') return
+            if (child.name === 'theme') {
+              child.params += ` prefix(${prefix})`
               return WalkAction.Skip
             }
           })
@@ -281,7 +282,7 @@ async function parseCss(
       }
 
       if (unknownParams.length > 0) {
-        node.selector = `@media ${unknownParams.join(' ')}`
+        node.params = unknownParams.join(' ')
       } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
@@ -290,8 +291,8 @@ async function parseCss(
     }
 
     // Handle `@theme`
-    if (node.selector === '@theme' || node.selector.startsWith('@theme ')) {
-      let [themeOptions, themePrefix] = parseThemeOptions(node.selector)
+    if (node.name === 'theme') {
+      let [themeOptions, themePrefix] = parseThemeOptions(node.params)
 
       if (themePrefix) {
         if (!IS_VALID_PREFIX.test(themePrefix)) {
@@ -307,7 +308,7 @@ async function parseCss(
       walk(node.nodes, (child, { replaceWith }) => {
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
-        if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
+        if (child.kind === 'at-rule' && child.name === 'keyframes') {
           theme.addKeyframes(child)
           replaceWith([])
           return WalkAction.Skip
@@ -319,7 +320,7 @@ async function parseCss(
           return
         }
 
-        let snippet = toCss([rule(node.selector, [child])])
+        let snippet = toCss([atRule(node.name, node.params, [child])])
           .split('\n')
           .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
           .join('\n')
@@ -332,7 +333,8 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = node
+        firstThemeRule = rule(':root', node.nodes)
+        replaceWith([firstThemeRule])
       } else {
         replaceWith([])
       }
@@ -363,9 +365,6 @@ async function parseCss(
   // Output final set of theme variables at the position of the first `@theme`
   // rule.
   if (firstThemeRule) {
-    firstThemeRule = firstThemeRule as Rule
-    firstThemeRule.selector = ':root'
-
     let nodes = []
 
     for (let [key, value] of theme.entries()) {
@@ -381,7 +380,7 @@ async function parseCss(
 
       for (let keyframesRule of keyframesRules) {
         // Remove any keyframes that aren't used by an animation variable.
-        let keyframesName = keyframesRule.selector.slice(11) // `@keyframes `.length
+        let keyframesName = keyframesRule.params
         if (!animationParts.includes(keyframesName)) {
           continue
         }
@@ -389,7 +388,10 @@ async function parseCss(
         // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
         // printing.
         nodes.push(
-          Object.assign(keyframesRule, atRoot([rule(keyframesRule.selector, keyframesRule.nodes)])),
+          Object.assign(
+            keyframesRule,
+            atRoot([atRule(keyframesRule.name, keyframesRule.params, keyframesRule.nodes)]),
+          ),
         )
       }
     }
@@ -404,9 +406,9 @@ async function parseCss(
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
   walk(ast, (node, { replaceWith }) => {
-    if (node.kind !== 'rule') return
+    if (node.kind !== 'at-rule') return
 
-    if (node.selector[0] === '@' && node.selector.startsWith('@utility ')) {
+    if (node.name === 'utility') {
       replaceWith([])
     }
 
@@ -431,12 +433,12 @@ export async function compile(
 }> {
   let { designSystem, ast, globs } = await parseCss(css, opts)
 
-  let tailwindUtilitiesNode: Rule | null = null
+  let tailwindUtilitiesNode: AtRule | null = null
 
   // Find `@tailwind utilities` so that we can later replace it with the actual
   // generated utility class CSS.
   walk(ast, (node) => {
-    if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
+    if (node.kind === 'at-rule' && node.name === 'tailwind' && node.params === 'utilities') {
       tailwindUtilitiesNode = node
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all

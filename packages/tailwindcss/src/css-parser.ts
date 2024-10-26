@@ -1,4 +1,13 @@
-import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
+import {
+  atRule,
+  comment,
+  rule,
+  type AstNode,
+  type AtRule,
+  type Comment,
+  type Declaration,
+  type Rule,
+} from './ast'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -26,9 +35,9 @@ export function parse(input: string) {
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
 
-  let stack: (Rule | null)[] = []
+  let stack: (Rule | AtRule | null)[] = []
 
-  let parent = null as Rule | null
+  let parent = null as (Rule | AtRule) | null
   let node = null as AstNode | null
 
   let buffer = ''
@@ -294,7 +303,7 @@ export function parse(input: string) {
     //                 ^
     // ```
     else if (currentChar === SEMICOLON && buffer.charCodeAt(0) === AT_SIGN) {
-      node = rule(buffer, [])
+      node = parseAtRule(buffer)
 
       // At-rule is nested inside of a rule, attach it to the parent.
       if (parent) {
@@ -338,7 +347,11 @@ export function parse(input: string) {
       closingBracketStack += '}'
 
       // At this point `buffer` should resemble a selector or an at-rule.
-      node = rule(buffer.trim(), [])
+      if (buffer.charCodeAt(0) === AT_SIGN) {
+        node = parseAtRule(buffer)
+      } else {
+        node = rule(buffer.trim(), [])
+      }
 
       // Attach the rule to the parent in case it's nested.
       if (parent) {
@@ -381,7 +394,7 @@ export function parse(input: string) {
         // }
         // ```
         if (buffer.charCodeAt(0) === AT_SIGN) {
-          node = rule(buffer.trim(), [])
+          node = parseAtRule(buffer)
 
           // At-rule is nested inside of a rule, attach it to the parent.
           if (parent) {
@@ -464,14 +477,19 @@ export function parse(input: string) {
   // If we have a leftover `buffer` that happens to start with an `@` then it
   // means that we have an at-rule that is not terminated with a semicolon at
   // the end of the input.
-  if (buffer[0] === '@') {
-    ast.push(rule(buffer.trim(), []))
+  if (buffer.charCodeAt(0) === AT_SIGN) {
+    ast.push(parseAtRule(buffer))
   }
 
   // When we are done parsing then everything should be balanced. If we still
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
-    throw new Error(`Missing closing } at ${parent.selector}`)
+    if (parent.kind === 'rule') {
+      throw new Error(`Missing closing } at ${parent.selector}`)
+    }
+    if (parent.kind === 'at-rule') {
+      throw new Error(`Missing closing } at @${parent.name} ${parent.params}`)
+    }
   }
 
   if (licenseComments.length > 0) {
@@ -479,6 +497,14 @@ export function parse(input: string) {
   }
 
   return ast
+}
+
+export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
+  let splitIdx = buffer.search(/[\s(]/g)
+  if (splitIdx === -1) return atRule(buffer.slice(1).trim(), '', nodes)
+  let name = buffer.slice(1, splitIdx).trim()
+  let params = buffer.slice(splitIdx).trim()
+  return atRule(name, params, nodes)
 }
 
 function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {

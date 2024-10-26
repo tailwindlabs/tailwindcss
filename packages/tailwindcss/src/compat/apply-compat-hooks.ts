@@ -34,15 +34,15 @@ export async function applyCompatibilityHooks({
   let configPaths: { id: string; base: string }[] = []
 
   walk(ast, (node, { parent, replaceWith, context }) => {
-    if (node.kind !== 'rule' || node.selector[0] !== '@') return
+    if (node.kind !== 'at-rule') return
 
     // Collect paths from `@plugin` at-rules
-    if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
+    if (node.name === 'plugin') {
       if (parent !== null) {
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      let pluginPath = node.selector.slice(9, -1)
+      let pluginPath = node.params.slice(1, -1)
       if (pluginPath.length === 0) {
         throw new Error('`@plugin` must have a path.')
       }
@@ -100,7 +100,7 @@ export async function applyCompatibilityHooks({
     }
 
     // Collect paths from `@config` at-rules
-    if (node.selector === '@config' || node.selector.startsWith('@config ')) {
+    if (node.name === 'config') {
       if (node.nodes.length > 0) {
         throw new Error('`@config` cannot have a body.')
       }
@@ -109,7 +109,7 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot be nested.')
       }
 
-      configPaths.push({ id: node.selector.slice(9, -1), base: context.base })
+      configPaths.push({ id: node.params.slice(1, -1), base: context.base })
       replaceWith([])
       return
     }
@@ -268,8 +268,8 @@ function upgradeToFullPluginSupport({
     let wrappingSelector = resolvedConfig.important
 
     walk(ast, (node, { replaceWith, parent }) => {
-      if (node.kind !== 'rule') return
-      if (node.selector !== '@tailwind utilities') return
+      if (node.kind !== 'at-rule') return
+      if (node.name !== 'tailwind' || node.params !== 'utilities') return
 
       // The AST node was already manually wrapped so there's nothing to do
       if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {

@@ -1,4 +1,4 @@
-import { context, rule, walk, WalkAction, type AstNode } from './ast'
+import { atRule, context, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
@@ -13,15 +13,9 @@ export async function substituteAtImports(
   let promises: Promise<void>[] = []
 
   walk(ast, (node, { replaceWith }) => {
-    if (
-      node.kind === 'rule' &&
-      node.selector[0] === '@' &&
-      node.selector.toLowerCase().startsWith('@import ')
-    ) {
+    if (node.kind === 'at-rule' && node.name === 'import') {
       try {
-        let { uri, layer, media, supports } = parseImportParams(
-          ValueParser.parse(node.selector.slice(8)),
-        )
+        let { uri, layer, media, supports } = parseImportParams(ValueParser.parse(node.params))
 
         // Skip importing data or remote URIs
         if (uri.startsWith('data:')) return
@@ -132,15 +126,15 @@ function buildImportNodes(
   let root = importedAst
 
   if (layer !== null) {
-    root = [rule('@layer ' + layer, root)]
+    root = [atRule('layer', layer, root)]
   }
 
   if (media !== null) {
-    root = [rule('@media ' + media, root)]
+    root = [atRule('media', media, root)]
   }
 
   if (supports !== null) {
-    root = [rule(`@supports ${supports[0] === '(' ? supports : `(${supports})`}`, root)]
+    root = [atRule('supports', supports[0] === '(' ? supports : `(${supports})`, root)]
   }
 
   return root

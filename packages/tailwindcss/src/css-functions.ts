@@ -15,20 +15,15 @@ export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveTh
     }
 
     // Find at-rules rules
-    if (node.kind === 'rule') {
+    if (node.kind === 'at-rule') {
       if (
-        node.selector[0] === '@' &&
-        (node.selector.startsWith('@media ') ||
-          node.selector.startsWith('@media(') ||
-          node.selector.startsWith('@custom-media ') ||
-          node.selector.startsWith('@custom-media(') ||
-          node.selector.startsWith('@container ') ||
-          node.selector.startsWith('@container(') ||
-          node.selector.startsWith('@supports ') ||
-          node.selector.startsWith('@supports(')) &&
-        node.selector.includes(THEME_FUNCTION_INVOCATION)
+        (node.name === 'media' ||
+          node.name === 'custom-media' ||
+          node.name === 'container' ||
+          node.name === 'supports') &&
+        node.params.includes(THEME_FUNCTION_INVOCATION)
       ) {
-        node.selector = substituteFunctionsInValue(node.selector, resolveThemeValue)
+        node.params = substituteFunctionsInValue(node.params, resolveThemeValue)
       }
     }
   })

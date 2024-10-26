@@ -82,16 +82,13 @@ export function getVariants(design: DesignSystem) {
       // Produce v3-style selector strings in the face of nested rules
       // this is more visible for things like group-*, not-*, etc…
       walkDepth(node.nodes, (node, { path }) => {
-        if (node.kind !== 'rule') return
+        if (node.kind !== 'rule' && node.kind !== 'at-rule') return
         if (node.nodes.length > 0) return
 
         // Sort at-rules before style rules
         path.sort((a, b) => {
-          // This won't actually happen, but it's here to make TypeScript happy
-          if (a.kind !== 'rule' || b.kind !== 'rule') return 0
-
-          let aIsAtRule = a.selector[0] === '@'
-          let bIsAtRule = b.selector[0] === '@'
+          let aIsAtRule = a.kind === 'at-rule'
+          let bIsAtRule = b.kind === 'at-rule'
 
           if (aIsAtRule && !bIsAtRule) return -1
           if (!aIsAtRule && bIsAtRule) return 1
@@ -101,8 +98,15 @@ export function getVariants(design: DesignSystem) {
 
         // A list of the selectors / at rules encountered to get to this point
         let group = path.flatMap((node) => {
-          if (node.kind !== 'rule') return []
-          return node.selector === '&' ? [] : [node.selector]
+          if (node.kind === 'rule') {
+            return node.selector === '&' ? [] : [node.selector]
+          }
+
+          if (node.kind === 'at-rule') {
+            return [`@${node.name} ${node.params}`]
+          }
+
+          return []
         })
 
         // Build a v3-style nested selector

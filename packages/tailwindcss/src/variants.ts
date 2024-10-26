@@ -1,12 +1,23 @@
-import { WalkAction, atRoot, decl, rule, walk, type AstNode, type Rule } from './ast'
+import {
+  WalkAction,
+  atRoot,
+  atRule,
+  decl,
+  rule,
+  walk,
+  type AstNode,
+  type AtRule,
+  type Rule,
+} from './ast'
 import { type Variant } from './candidate'
+import { parseAtRule } from './css-parser'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
-  rule: Rule,
+  rule: AtRule | Rule,
   variant: Extract<Variant, { kind: T }>,
 ) => null | void
 
@@ -69,9 +80,11 @@ export class Variants {
     let selectors: string[] = []
 
     walk(ast, (node) => {
-      if (node.kind !== 'rule') return
-      if (node.selector === '@slot') return
-      selectors.push(node.selector)
+      if (node.kind === 'rule') {
+        selectors.push(node.selector)
+      } else if (node.kind === 'at-rule' && node.name !== 'slot') {
+        selectors.push(`@${node.name} ${node.params}`)
+      }
     })
 
     this.static(
@@ -311,7 +324,13 @@ export function createVariants(theme: Theme): Variants {
     variants.static(
       name,
       (r) => {
-        r.nodes = selectors.map((selector) => rule(selector, r.nodes))
+        r.nodes = selectors.map((selector) => {
+          if (selector[0] === '@') {
+            return parseAtRule(selector, r.nodes)
+          } else {
+            return rule(selector, r.nodes)
+          }
+        })
       },
       { compounds },
     )
@@ -354,30 +373,27 @@ export function createVariants(theme: Theme): Variants {
     })
   }
 
-  let conditionalRules = ['@media', '@supports', '@container']
+  let conditionalRules = ['media', 'supports', 'container']
 
-  function negateSelector(selector: string) {
-    if (selector[0] === '@') {
-      for (let ruleName of conditionalRules) {
-        if (!selector.startsWith(ruleName)) continue
+  function negateAtRule(rule: AtRule) {
+    for (let ruleName of conditionalRules) {
+      if (ruleName !== rule.name) continue
 
-        let name = ruleName.slice(1)
-        let params = selector.slice(ruleName.length).trim()
+      let conditions = segment(rule.params, ',')
 
-        let conditions = segment(params, ',')
+      // We don't support things like `@media screen, print` because
+      // the negation would be `@media not screen and print` and we don't
+      // want to deal with that complexity.
+      if (conditions.length > 1) return null
 
-        // We don't support things like `@media screen, print` because
-        // the negation would be `@media not screen and print` and we don't
-        // want to deal with that complexity.
-        if (conditions.length > 1) return null
-
-        conditions = negateConditions(name, conditions)
-        return `@${name} ${conditions.join(', ')}`
-      }
-
-      return null
+      conditions = negateConditions(rule.name, conditions)
+      return atRule(rule.name, conditions.join(', '))
     }
 
+    return null
+  }
+
+  function negateSelector(selector: string) {
     if (selector.includes('::')) return null
 
     let selectors = segment(selector, ',').map((sel) => {
@@ -404,18 +420,17 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+      if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
       if (node.nodes.length > 0) return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      let atRules: Rule[] = []
+      let atRules: AtRule[] = []
       let styleRules: Rule[] = []
 
       for (let parent of path) {
-        if (parent.kind !== 'rule') continue
-        if (parent.selector[0] === '@') {
+        if (parent.kind === 'at-rule') {
           atRules.push(parent)
-        } else {
+        } else if (parent.kind === 'rule') {
           styleRules.push(parent)
         }
       }
@@ -423,10 +438,10 @@ export function createVariants(theme: Theme): Variants {
       if (atRules.length > 1) return WalkAction.Stop
       if (styleRules.length > 1) return WalkAction.Stop
 
-      let rules: Rule[] = []
+      let rules: (Rule | AtRule)[] = []
 
-      for (let styleRule of styleRules) {
-        let selector = negateSelector(styleRule.selector)
+      for (let node of styleRules) {
+        let selector = negateSelector(node.selector)
         if (!selector) {
           didApply = false
           return WalkAction.Stop
@@ -435,18 +450,17 @@ export function createVariants(theme: Theme): Variants {
         rules.push(rule(selector, []))
       }
 
-      for (let atRule of atRules) {
-        let selector = negateSelector(atRule.selector)
-        if (!selector) {
+      for (let node of atRules) {
+        let negatedAtRule = negateAtRule(node)
+        if (!negatedAtRule) {
           didApply = false
           return WalkAction.Stop
         }
 
-        rules.push(rule(selector, []))
+        rules.push(negatedAtRule)
       }
 
-      ruleNode.selector = '&'
-      ruleNode.nodes = rules
+      Object.assign(ruleNode, rule('&', rules))
 
       // Track that the variant was actually applied
       didApply = true
@@ -455,9 +469,8 @@ export function createVariants(theme: Theme): Variants {
     })
 
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
-    if (ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
-      ruleNode.selector = (ruleNode.nodes[0] as Rule).selector
-      ruleNode.nodes = (ruleNode.nodes[0] as Rule).nodes
+    if (ruleNode.kind === 'rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
+      Object.assign(ruleNode, ruleNode.nodes[0])
     }
 
     // If the node wasn't modified, this variant is not compatible with
@@ -485,13 +498,9 @@ export function createVariants(theme: Theme): Variants {
     walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
-
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
-        if (parent.selector[0] === '@') continue
 
         didApply = false
         return WalkAction.Stop
@@ -541,13 +550,9 @@ export function createVariants(theme: Theme): Variants {
     walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
-
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
-        if (parent.selector[0] === '@') continue
 
         didApply = false
         return WalkAction.Stop
@@ -597,7 +602,7 @@ export function createVariants(theme: Theme): Variants {
   {
     function contentProperties() {
       return atRoot([
-        rule('@property --tw-content', [
+        atRule('property', '--tw-content', [
           decl('syntax', '"*"'),
           decl('initial-value', '""'),
           decl('inherits', 'false'),
@@ -664,7 +669,7 @@ export function createVariants(theme: Theme): Variants {
   // Interactive
   staticVariant('focus-within', ['&:focus-within'])
   variants.static('hover', (r) => {
-    r.nodes = [rule('&:hover', [rule('@media (hover: hover)', r.nodes)])]
+    r.nodes = [rule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
   })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
@@ -682,13 +687,9 @@ export function createVariants(theme: Theme): Variants {
     walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
-      // Skip past at-rules, and continue traversing the children of the at-rule
-      if (node.selector[0] === '@') return WalkAction.Continue
-
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
-        if (parent.selector[0] === '@') continue
 
         didApply = false
         return WalkAction.Stop
@@ -792,7 +793,7 @@ export function createVariants(theme: Theme): Variants {
         // `(condition1) or (condition2)` is supported.
         let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
 
-        ruleNode.nodes = [rule(`@supports ${query}`, ruleNode.nodes)]
+        ruleNode.nodes = [atRule('supports', query, ruleNode.nodes)]
         return
       }
 
@@ -818,7 +819,7 @@ export function createVariants(theme: Theme): Variants {
         value = `(${value})`
       }
 
-      ruleNode.nodes = [rule(`@supports ${value}`, ruleNode.nodes)]
+      ruleNode.nodes = [atRule('supports', value, ruleNode.nodes)]
     },
     { compounds: Compounds.AtRules },
   )
@@ -937,7 +938,7 @@ export function createVariants(theme: Theme): Variants {
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 
-              ruleNode.nodes = [rule(`@media (width < ${value})`, ruleNode.nodes)]
+              ruleNode.nodes = [atRule('media', `(width < ${value})`, ruleNode.nodes)]
             },
             { compounds: Compounds.AtRules },
           )
@@ -959,7 +960,7 @@ export function createVariants(theme: Theme): Variants {
             variants.static(
               key,
               (ruleNode) => {
-                ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
+                ruleNode.nodes = [atRule('media', `(width >= ${value})`, ruleNode.nodes)]
               },
               { compounds: Compounds.AtRules },
             )
@@ -972,7 +973,7 @@ export function createVariants(theme: Theme): Variants {
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 
-              ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
+              ruleNode.nodes = [atRule('media', `(width >= ${value})`, ruleNode.nodes)]
             },
             { compounds: Compounds.AtRules },
           )
@@ -1024,10 +1025,11 @@ export function createVariants(theme: Theme): Variants {
               if (value === null) return null
 
               ruleNode.nodes = [
-                rule(
+                atRule(
+                  'container',
                   variant.modifier
-                    ? `@container ${variant.modifier.value} (width < ${value})`
-                    : `@container (width < ${value})`,
+                    ? `${variant.modifier.value} (width < ${value})`
+                    : `(width < ${value})`,
                   ruleNode.nodes,
                 ),
               ]
@@ -1052,10 +1054,11 @@ export function createVariants(theme: Theme): Variants {
               if (value === null) return null
 
               ruleNode.nodes = [
-                rule(
+                atRule(
+                  'container',
                   variant.modifier
-                    ? `@container ${variant.modifier.value} (width >= ${value})`
-                    : `@container (width >= ${value})`,
+                    ? `${variant.modifier.value} (width >= ${value})`
+                    : `(width >= ${value})`,
                   ruleNode.nodes,
                 ),
               ]
@@ -1069,10 +1072,11 @@ export function createVariants(theme: Theme): Variants {
               if (value === null) return null
 
               ruleNode.nodes = [
-                rule(
+                atRule(
+                  'container',
                   variant.modifier
-                    ? `@container ${variant.modifier.value} (width >= ${value})`
-                    : `@container (width >= ${value})`,
+                    ? `${variant.modifier.value} (width >= ${value})`
+                    : `(width >= ${value})`,
                   ruleNode.nodes,
                 ),
               ]
@@ -1140,17 +1144,13 @@ function quoteAttributeValue(input: string) {
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
   walk(ast, (node, { replaceWith }) => {
     // Replace `@slot` with rule nodes
-    if (node.kind === 'rule' && node.selector === '@slot') {
+    if (node.kind === 'at-rule' && node.name === 'slot') {
       replaceWith(nodes)
     }
 
     // Wrap `@keyframes` and `@property` in `AtRoot` nodes
-    else if (
-      node.kind === 'rule' &&
-      node.selector[0] === '@' &&
-      (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
-    ) {
-      Object.assign(node, atRoot([rule(node.selector, node.nodes)]))
+    else if (node.kind === 'at-rule' && (node.name === 'keyframes' || node.name === 'property')) {
+      Object.assign(node, atRoot([atRule(node.name, node.params, node.nodes)]))
       return WalkAction.Skip
     }
   })

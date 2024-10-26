@@ -1,4 +1,4 @@
-import { atRoot, decl, rule, type AstNode } from './ast'
+import { atRoot, atRule, decl, rule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -85,7 +85,7 @@ export class Utilities {
 }
 
 function property(ident: string, initialValue?: string, syntax?: string) {
-  return rule(`@property ${ident}`, [
+  return atRule('property', ident, [
     decl('syntax', syntax ? `"${syntax}"` : `"*"`),
     decl('inherits', 'false'),
 

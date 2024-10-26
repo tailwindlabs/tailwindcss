@@ -5,28 +5,21 @@ import { escape } from './utils/escape'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   walk(ast, (node, { replaceWith }) => {
-    if (node.kind !== 'rule') return
+    if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.
-    if (node.selector[0] === '@' && node.selector.startsWith('@keyframes')) {
+    if (node.name === 'keyframes') {
       walk(node.nodes, (child) => {
-        if (
-          child.kind === 'rule' &&
-          child.selector[0] === '@' &&
-          child.selector.startsWith('@apply ')
-        ) {
+        if (child.kind === 'at-rule' && child.name === 'apply') {
           throw new Error(`You cannot use \`@apply\` inside \`@keyframes\`.`)
         }
       })
       return WalkAction.Skip
     }
 
-    if (!(node.selector[0] === '@' && node.selector.startsWith('@apply '))) return
+    if (node.name !== 'apply') return
 
-    let candidates = node.selector
-      .slice(7 /* Ignore `@apply ` when parsing the selector */)
-      .trim()
-      .split(/\s+/g)
+    let candidates = node.params.split(/\s+/g)
 
     // Replace the `@apply` rule with the actual utility classes
     {
@@ -43,7 +36,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
       // don't want the wrapping selector.
       let newNodes: AstNode[] = []
       for (let candidateNode of candidateAst) {
-        if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
+        if (candidateNode.kind === 'rule') {
           for (let child of candidateNode.nodes) {
             newNodes.push(child)
           }
