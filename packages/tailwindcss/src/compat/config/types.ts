@@ -96,3 +96,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   important: boolean | string
 }
+
+// `future` key support
+export interface UserConfig {
+  future: 'all' | Record<string, boolean>
+}
+
+export interface ResolvedConfig {
+  future: Record<string, boolean>
+}
