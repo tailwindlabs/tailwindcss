@@ -3791,3 +3791,51 @@ describe('prefix()', () => {
     expect(fn).toHaveBeenCalledWith('btn')
   })
 })
+
+describe('config()', () => {
+  test('can return part of the config', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config('theme'))
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        spacing: expect.any(Object),
+      }),
+    )
+  })
+
+  test('falls back to default value if requested path does not exist', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config('somekey', 'defaultvalue'))
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith('defaultvalue')
+  })
+})
