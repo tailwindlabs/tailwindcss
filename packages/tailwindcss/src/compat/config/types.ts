@@ -99,7 +99,7 @@ export interface ResolvedConfig {
 
 // `future` key support
 export interface UserConfig {
-  future: 'all' | Record<string, boolean>
+  future?: 'all' | Record<string, boolean>
 }
 
 export interface ResolvedConfig {
