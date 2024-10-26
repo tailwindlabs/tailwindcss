@@ -1,12 +1,12 @@
 import {
   atRule,
   comment,
-  rule,
+  styleRule,
   type AstNode,
   type AtRule,
   type Comment,
   type Declaration,
-  type Rule,
+  type StyleRule,
 } from './ast'
 
 const BACKSLASH = 0x5c
@@ -35,9 +35,9 @@ export function parse(input: string) {
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
 
-  let stack: (Rule | AtRule | null)[] = []
+  let stack: (StyleRule | AtRule | null)[] = []
 
-  let parent = null as (Rule | AtRule) | null
+  let parent = null as (StyleRule | AtRule) | null
   let node = null as AstNode | null
 
   let buffer = ''
@@ -350,7 +350,7 @@ export function parse(input: string) {
       if (buffer.charCodeAt(0) === AT_SIGN) {
         node = parseAtRule(buffer)
       } else {
-        node = rule(buffer.trim(), [])
+        node = styleRule(buffer.trim(), [])
       }
 
       // Attach the rule to the parent in case it's nested.
@@ -484,7 +484,7 @@ export function parse(input: string) {
   // When we are done parsing then everything should be balanced. If we still
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
-    if (parent.kind === 'rule') {
+    if (parent.kind === 'style-rule') {
       throw new Error(`Missing closing } at ${parent.selector}`)
     }
     if (parent.kind === 'at-rule') {

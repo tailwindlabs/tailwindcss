@@ -1,4 +1,4 @@
-import { rule, toCss, walk, WalkAction, type AstNode } from '../ast'
+import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
@@ -272,11 +272,11 @@ function upgradeToFullPluginSupport({
       if (node.name !== 'tailwind' || node.params !== 'utilities') return
 
       // The AST node was already manually wrapped so there's nothing to do
-      if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {
+      if (parent?.kind === 'style-rule' && parent.selector === wrappingSelector) {
         return WalkAction.Stop
       }
 
-      replaceWith(rule(wrappingSelector, [node]))
+      replaceWith(styleRule(wrappingSelector, [node]))
 
       return WalkAction.Stop
     })

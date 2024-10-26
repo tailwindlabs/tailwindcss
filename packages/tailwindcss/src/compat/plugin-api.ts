@@ -1,5 +1,5 @@
 import { substituteAtApply } from '../apply'
-import { atRule, decl, rule, type AstNode } from '../ast'
+import { atRule, decl, styleRule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -437,7 +437,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
         if (name[0] === '@') {
           ast.push(CSS.parseAtRule(name, [atRule('slot')]))
         } else {
-          ast.push(rule(name, [atRule('slot')]))
+          ast.push(styleRule(name, [atRule('slot')]))
         }
       } else {
         // Convert camelCase to kebab-case:
@@ -454,7 +454,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
           if (name[0] === '@') {
             ast.push(CSS.parseAtRule(name, objectToAst(item)))
           } else {
-            ast.push(rule(name, objectToAst(item)))
+            ast.push(styleRule(name, objectToAst(item)))
           }
         }
       }
@@ -462,7 +462,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
       if (name[0] === '@') {
         ast.push(CSS.parseAtRule(name, objectToAst(value)))
       } else {
-        ast.push(rule(name, objectToAst(value)))
+        ast.push(styleRule(name, objectToAst(value)))
       }
     }
   }
@@ -479,7 +479,7 @@ function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNo
       substituteAtSlot(ast, nodes)
       return ast
     } else {
-      return rule(r, nodes)
+      return styleRule(r, nodes)
     }
   })
 }

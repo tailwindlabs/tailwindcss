@@ -6,13 +6,13 @@ import {
   comment,
   context,
   decl,
-  rule,
+  styleRule,
   toCss,
   walk,
   WalkAction,
   type AstNode,
   type AtRule,
-  type Rule,
+  type StyleRule,
 } from './ast'
 import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
@@ -83,7 +83,7 @@ async function parseCss(
   let theme = new Theme()
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
-  let firstThemeRule = null as Rule | null
+  let firstThemeRule = null as StyleRule | null
   let globs: { base: string; pattern: string }[] = []
 
   // Handle at-rules
@@ -186,7 +186,7 @@ async function parseCss(
               let nodes: AstNode[] = []
 
               if (styleRuleSelectors.length > 0) {
-                nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
+                nodes.push(styleRule(styleRuleSelectors.join(', '), r.nodes))
               }
 
               for (let selector of atRuleParams) {
@@ -333,7 +333,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = rule(':root', node.nodes)
+        firstThemeRule = styleRule(':root', node.nodes)
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])

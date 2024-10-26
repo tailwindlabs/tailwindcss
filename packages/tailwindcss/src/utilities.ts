@@ -1,4 +1,4 @@
-import { atRoot, atRule, decl, rule, type AstNode } from './ast'
+import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -19,13 +19,13 @@ interface SuggestionGroup {
 type SuggestionDefinition =
   | string
   | {
-      supportsNegative?: boolean
-      values?: string[]
-      modifiers?: string[]
-      valueThemeKeys?: ThemeKey[]
-      modifierThemeKeys?: ThemeKey[]
-      hasDefaultValue?: boolean
-    }
+    supportsNegative?: boolean
+    values?: string[]
+    modifiers?: string[]
+    valueThemeKeys?: ThemeKey[]
+    modifierThemeKeys?: ThemeKey[]
+    hasDefaultValue?: boolean
+  }
 
 export type UtilityOptions = {
   types: string[]
@@ -2024,7 +2024,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
 
-      rule(':where(& > :not(:last-child))', [
+      styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
         decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
         decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
@@ -2038,7 +2038,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
 
-      rule(':where(& > :not(:last-child))', [
+      styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
         decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
         decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
@@ -2049,7 +2049,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('space-x-reverse', [
     () => atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
     () =>
-      rule(':where(& > :not(:last-child))', [
+      styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
         decl('--tw-space-x-reverse', '1'),
       ]),
@@ -2058,7 +2058,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('space-y-reverse', [
     () => atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
     () =>
-      rule(':where(& > :not(:last-child))', [
+      styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
         decl('--tw-space-y-reverse', '1'),
       ]),
@@ -2078,7 +2078,7 @@ export function createUtilities(theme: Theme) {
   colorUtility('divide', {
     themeKeys: ['--divide-color', '--color'],
     handle: (value) => [
-      rule(':where(& > :not(:last-child))', [
+      styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'divide-color'),
         decl('border-color', value),
       ]),
@@ -2386,7 +2386,7 @@ export function createUtilities(theme: Theme) {
       handle: (value) => [
         atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
 
-        rule(':where(& > :not(:last-child))', [
+        styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-x-width'),
           borderProperties(),
           decl('border-inline-style', 'var(--tw-border-style)'),
@@ -2406,7 +2406,7 @@ export function createUtilities(theme: Theme) {
       handle: (value) => [
         atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
 
-        rule(':where(& > :not(:last-child))', [
+        styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-y-width'),
           borderProperties(),
           decl('border-bottom-style', 'var(--tw-border-style)'),
@@ -2435,18 +2435,18 @@ export function createUtilities(theme: Theme) {
 
     staticUtility('divide-x-reverse', [
       () => atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
-      () => rule(':where(& > :not(:last-child))', [decl('--tw-divide-x-reverse', '1')]),
+      () => styleRule(':where(& > :not(:last-child))', [decl('--tw-divide-x-reverse', '1')]),
     ])
 
     staticUtility('divide-y-reverse', [
       () => atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
-      () => rule(':where(& > :not(:last-child))', [decl('--tw-divide-y-reverse', '1')]),
+      () => styleRule(':where(& > :not(:last-child))', [decl('--tw-divide-y-reverse', '1')]),
     ])
 
     for (let value of ['solid', 'dashed', 'dotted', 'double', 'none']) {
       staticUtility(`divide-${value}`, [
         () =>
-          rule(':where(& > :not(:last-child))', [
+          styleRule(':where(& > :not(:last-child))', [
             decl('--tw-sort', 'divide-style'),
             decl('--tw-border-style', value),
             decl('border-style', value),
@@ -3150,7 +3150,7 @@ export function createUtilities(theme: Theme) {
   colorUtility('placeholder', {
     themeKeys: ['--background-color', '--color'],
     handle: (value) => [
-      rule('&::placeholder', [decl('--tw-sort', 'placeholder-color'), decl('color', value)]),
+      styleRule('&::placeholder', [decl('--tw-sort', 'placeholder-color'), decl('color', value)]),
     ],
   })
 

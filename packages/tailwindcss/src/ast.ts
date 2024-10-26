@@ -1,5 +1,5 @@
-export type Rule = {
-  kind: 'rule'
+export type StyleRule = {
+  kind: 'style-rule'
   selector: string
   nodes: AstNode[]
 }
@@ -34,11 +34,11 @@ export type AtRoot = {
   nodes: AstNode[]
 }
 
-export type AstNode = Rule | AtRule | Declaration | Comment | Context | AtRoot
+export type AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtRoot
 
-export function rule(selector: string, nodes: AstNode[] = []): Rule {
+export function styleRule(selector: string, nodes: AstNode[] = []): StyleRule {
   return {
-    kind: 'rule',
+    kind: 'style-rule',
     selector,
     nodes,
   }
@@ -142,7 +142,7 @@ export function walk(
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
-    if (node.kind === 'rule' || node.kind === 'at-rule') {
+    if (node.kind === 'style-rule' || node.kind === 'at-rule') {
       walk(node.nodes, visit, path, context)
     }
   }
@@ -168,7 +168,7 @@ export function walkDepth(
     let path = [...parentPath, node]
     let parent = parentPath.at(-1) ?? null
 
-    if (node.kind === 'rule' || node.kind === 'at-rule') {
+    if (node.kind === 'style-rule' || node.kind === 'at-rule') {
       walkDepth(node.nodes, visit, path, context)
     } else if (node.kind === 'context') {
       walkDepth(node.nodes, visit, parentPath, { ...context, ...node.context })
@@ -200,7 +200,7 @@ export function toCss(ast: AstNode[]) {
     let indent = '  '.repeat(depth)
 
     // Rule
-    if (node.kind === 'rule') {
+    if (node.kind === 'style-rule') {
       css += `${indent}${node.selector} {\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
@@ -307,11 +307,11 @@ export function toCss(ast: AstNode[]) {
   let fallbackAst = []
 
   if (propertyFallbacksRoot.length) {
-    fallbackAst.push(rule(':root', propertyFallbacksRoot))
+    fallbackAst.push(styleRule(':root', propertyFallbacksRoot))
   }
 
   if (propertyFallbacksUniversal.length) {
-    fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    fallbackAst.push(styleRule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
   }
 
   let fallback = ''

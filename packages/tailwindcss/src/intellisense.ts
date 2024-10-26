@@ -1,4 +1,4 @@
-import { rule, walkDepth } from './ast'
+import { styleRule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
@@ -69,7 +69,7 @@ export function getVariants(design: DesignSystem) {
       if (!variant) return []
 
       // Apply the variant to a placeholder rule
-      let node = rule('.__placeholder__', [])
+      let node = styleRule('.__placeholder__', [])
 
       // If the rule produces no nodes it means the variant does not apply
       if (applyVariant(node, variant, design.variants) === null) {
@@ -82,7 +82,7 @@ export function getVariants(design: DesignSystem) {
       // Produce v3-style selector strings in the face of nested rules
       // this is more visible for things like group-*, not-*, etc…
       walkDepth(node.nodes, (node, { path }) => {
-        if (node.kind !== 'rule' && node.kind !== 'at-rule') return
+        if (node.kind !== 'style-rule' && node.kind !== 'at-rule') return
         if (node.nodes.length > 0) return
 
         // Sort at-rules before style rules
@@ -98,7 +98,7 @@ export function getVariants(design: DesignSystem) {
 
         // A list of the selectors / at rules encountered to get to this point
         let group = path.flatMap((node) => {
-          if (node.kind === 'rule') {
+          if (node.kind === 'style-rule') {
             return node.selector === '&' ? [] : [node.selector]
           }
 

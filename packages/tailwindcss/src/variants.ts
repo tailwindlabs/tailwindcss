@@ -3,11 +3,11 @@ import {
   atRoot,
   atRule,
   decl,
-  rule,
+  styleRule,
   walk,
   type AstNode,
   type AtRule,
-  type Rule,
+  type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
 import { parseAtRule } from './css-parser'
@@ -17,7 +17,7 @@ import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
-  rule: AtRule | Rule,
+  rule: AtRule | StyleRule,
   variant: Extract<Variant, { kind: T }>,
 ) => null | void
 
@@ -80,7 +80,7 @@ export class Variants {
     let selectors: string[] = []
 
     walk(ast, (node) => {
-      if (node.kind === 'rule') {
+      if (node.kind === 'style-rule') {
         selectors.push(node.selector)
       } else if (node.kind === 'at-rule' && node.name !== 'slot') {
         selectors.push(`@${node.name} ${node.params}`)
@@ -155,8 +155,8 @@ export class Variants {
         ? this.variants.get(child)
         : child.kind === 'arbitrary'
           ? // This isn't strictly necessary but it'll allow us to bail quickly
-            // when parsing candidates
-            { compounds: compoundsForSelectors([child.selector]) }
+          // when parsing candidates
+          { compounds: compoundsForSelectors([child.selector]) }
           : this.variants.get(child.root)
 
     // One of the variants don't exist
@@ -328,7 +328,7 @@ export function createVariants(theme: Theme): Variants {
           if (selector[0] === '@') {
             return parseAtRule(selector, r.nodes)
           } else {
-            return rule(selector, r.nodes)
+            return styleRule(selector, r.nodes)
           }
         })
       },
@@ -336,7 +336,7 @@ export function createVariants(theme: Theme): Variants {
     )
   }
 
-  variants.static('force', () => {}, { compounds: Compounds.Never })
+  variants.static('force', () => { }, { compounds: Compounds.Never })
   staticVariant('*', [':where(& > *)'], { compounds: Compounds.Never })
 
   function negateConditions(ruleName: string, conditions: string[]) {
@@ -420,17 +420,17 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
+      if (node.kind !== 'style-rule' && node.kind !== 'at-rule') return WalkAction.Continue
       if (node.nodes.length > 0) return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       let atRules: AtRule[] = []
-      let styleRules: Rule[] = []
+      let styleRules: StyleRule[] = []
 
       for (let parent of path) {
         if (parent.kind === 'at-rule') {
           atRules.push(parent)
-        } else if (parent.kind === 'rule') {
+        } else if (parent.kind === 'style-rule') {
           styleRules.push(parent)
         }
       }
@@ -438,7 +438,7 @@ export function createVariants(theme: Theme): Variants {
       if (atRules.length > 1) return WalkAction.Stop
       if (styleRules.length > 1) return WalkAction.Stop
 
-      let rules: (Rule | AtRule)[] = []
+      let rules: (StyleRule | AtRule)[] = []
 
       for (let node of styleRules) {
         let selector = negateSelector(node.selector)
@@ -447,7 +447,7 @@ export function createVariants(theme: Theme): Variants {
           return WalkAction.Stop
         }
 
-        rules.push(rule(selector, []))
+        rules.push(styleRule(selector, []))
       }
 
       for (let node of atRules) {
@@ -460,7 +460,7 @@ export function createVariants(theme: Theme): Variants {
         rules.push(negatedAtRule)
       }
 
-      Object.assign(ruleNode, rule('&', rules))
+      Object.assign(ruleNode, styleRule('&', rules))
 
       // Track that the variant was actually applied
       didApply = true
@@ -469,7 +469,7 @@ export function createVariants(theme: Theme): Variants {
     })
 
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
-    if (ruleNode.kind === 'rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
+    if (ruleNode.kind === 'style-rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
       Object.assign(ruleNode, ruleNode.nodes[0])
     }
 
@@ -496,11 +496,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+      if (node.kind !== 'style-rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'rule') continue
+        if (parent.kind !== 'style-rule') continue
 
         didApply = false
         return WalkAction.Stop
@@ -548,11 +548,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+      if (node.kind !== 'style-rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'rule') continue
+        if (parent.kind !== 'style-rule') continue
 
         didApply = false
         return WalkAction.Stop
@@ -613,7 +613,7 @@ export function createVariants(theme: Theme): Variants {
       'before',
       (v) => {
         v.nodes = [
-          rule('&::before', [
+          styleRule('&::before', [
             contentProperties(),
             decl('content', 'var(--tw-content)'),
             ...v.nodes,
@@ -627,7 +627,7 @@ export function createVariants(theme: Theme): Variants {
       'after',
       (v) => {
         v.nodes = [
-          rule('&::after', [contentProperties(), decl('content', 'var(--tw-content)'), ...v.nodes]),
+          styleRule('&::after', [contentProperties(), decl('content', 'var(--tw-content)'), ...v.nodes]),
         ]
       },
       { compounds: Compounds.Never },
@@ -669,7 +669,7 @@ export function createVariants(theme: Theme): Variants {
   // Interactive
   staticVariant('focus-within', ['&:focus-within'])
   variants.static('hover', (r) => {
-    r.nodes = [rule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
+    r.nodes = [styleRule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
   })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
@@ -685,11 +685,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'rule') return WalkAction.Continue
+      if (node.kind !== 'style-rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'rule') continue
+        if (parent.kind !== 'style-rule') continue
 
         didApply = false
         return WalkAction.Stop
@@ -718,9 +718,9 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [rule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+      ruleNode.nodes = [styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
     } else {
-      ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
+      ruleNode.nodes = [styleRule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
   })
 
@@ -739,7 +739,7 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [rule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -748,7 +748,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-last', (ruleNode, variant) => {
@@ -757,7 +757,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-of-type', (ruleNode, variant) => {
@@ -766,7 +766,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-last-of-type', (ruleNode, variant) => {
@@ -775,7 +775,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional(
@@ -858,16 +858,16 @@ export function createVariants(theme: Theme): Variants {
       let aBucket =
         aIsCssFunction === -1
           ? // No CSS function found, bucket by unit instead
-            aValue.replace(/[\d.]+/g, '')
+          aValue.replace(/[\d.]+/g, '')
           : // CSS function found, bucket by function name
-            aValue.slice(0, aIsCssFunction)
+          aValue.slice(0, aIsCssFunction)
 
       let zBucket =
         zIsCssFunction === -1
           ? // No CSS function found, bucket by unit
-            zValue.replace(/[\d.]+/g, '')
+          zValue.replace(/[\d.]+/g, '')
           : // CSS function found, bucket by function name
-            zValue.slice(0, zIsCssFunction)
+          zValue.slice(0, zIsCssFunction)
 
       let order =
         // Compare by bucket name
