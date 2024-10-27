@@ -1,5 +1,5 @@
 import { substituteAtApply } from '../apply'
-import { atRule, decl, rule, styleRule, type AstNode } from '../ast'
+import { atRule, decl, rule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -467,7 +467,7 @@ function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNo
       substituteAtSlot(ast, nodes)
       return ast
     } else {
-      return styleRule(r, nodes)
+      return rule(r, nodes)
     }
   })
 }

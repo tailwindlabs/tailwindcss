@@ -318,11 +318,11 @@ export function toCss(ast: AstNode[]) {
   let fallbackAst = []
 
   if (propertyFallbacksRoot.length) {
-    fallbackAst.push(styleRule(':root', propertyFallbacksRoot))
+    fallbackAst.push(rule(':root', propertyFallbacksRoot))
   }
 
   if (propertyFallbacksUniversal.length) {
-    fallbackAst.push(styleRule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
   }
 
   let fallback = ''

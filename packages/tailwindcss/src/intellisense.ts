@@ -1,4 +1,4 @@
-import { styleRule, walkDepth } from './ast'
+import { rule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
@@ -69,7 +69,7 @@ export function getVariants(design: DesignSystem) {
       if (!variant) return []
 
       // Apply the variant to a placeholder rule
-      let node = styleRule('.__placeholder__', [])
+      let node = rule('.__placeholder__', [])
 
       // If the rule produces no nodes it means the variant does not apply
       if (applyVariant(node, variant, design.variants) === null) {
