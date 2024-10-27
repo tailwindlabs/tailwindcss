@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { atRule, decl, rule, toCss } from '../ast'
+import { atRule, decl, styleRule, toCss } from '../ast'
 import { buildDesignSystem } from '../design-system'
 import { Theme } from '../theme'
 import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
@@ -59,14 +59,14 @@ test('will append to the default keyframes with new keyframes', () => {
 
   theme.addKeyframes(
     atRule('keyframes', 'slide-in', [
-      rule('from', [decl('opacity', 'translateX(0%)')]),
-      rule('to', [decl('opacity', 'translateX(100%)')]),
+      styleRule('from', [decl('opacity', 'translateX(0%)')]),
+      styleRule('to', [decl('opacity', 'translateX(100%)')]),
     ]),
   )
   theme.addKeyframes(
     atRule('keyframes', 'slide-out', [
-      rule('from', [decl('opacity', 'translateX(100%)')]),
-      rule('to', [decl('opacity', 'translateX(0%)')]),
+      styleRule('from', [decl('opacity', 'translateX(100%)')]),
+      styleRule('to', [decl('opacity', 'translateX(0%)')]),
     ]),
   )
 

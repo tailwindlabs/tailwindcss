@@ -1,4 +1,4 @@
-import { rule, toCss, walk, WalkAction, type AstNode } from '../ast'
+import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
@@ -276,7 +276,7 @@ function upgradeToFullPluginSupport({
         return WalkAction.Stop
       }
 
-      replaceWith(rule(wrappingSelector, [node]))
+      replaceWith(styleRule(wrappingSelector, [node]))
 
       return WalkAction.Stop
     })

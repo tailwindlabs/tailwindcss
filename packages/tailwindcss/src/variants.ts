@@ -4,6 +4,7 @@ import {
   atRule,
   decl,
   rule,
+  styleRule,
   walk,
   type AstNode,
   type AtRule,
@@ -441,7 +442,7 @@ export function createVariants(theme: Theme): Variants {
           return WalkAction.Stop
         }
 
-        rules.push(rule(selector, []))
+        rules.push(styleRule(selector, []))
       }
 
       for (let node of atRules) {
@@ -454,7 +455,7 @@ export function createVariants(theme: Theme): Variants {
         rules.push(negatedAtRule)
       }
 
-      Object.assign(ruleNode, rule('&', rules))
+      Object.assign(ruleNode, styleRule('&', rules))
 
       // Track that the variant was actually applied
       didApply = true
@@ -607,7 +608,7 @@ export function createVariants(theme: Theme): Variants {
       'before',
       (v) => {
         v.nodes = [
-          rule('&::before', [
+          styleRule('&::before', [
             contentProperties(),
             decl('content', 'var(--tw-content)'),
             ...v.nodes,
@@ -621,7 +622,11 @@ export function createVariants(theme: Theme): Variants {
       'after',
       (v) => {
         v.nodes = [
-          rule('&::after', [contentProperties(), decl('content', 'var(--tw-content)'), ...v.nodes]),
+          styleRule('&::after', [
+            contentProperties(),
+            decl('content', 'var(--tw-content)'),
+            ...v.nodes,
+          ]),
         ]
       },
       { compounds: Compounds.Never },
@@ -663,7 +668,7 @@ export function createVariants(theme: Theme): Variants {
   // Interactive
   staticVariant('focus-within', ['&:focus-within'])
   variants.static('hover', (r) => {
-    r.nodes = [rule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
+    r.nodes = [styleRule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
   })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
@@ -712,9 +717,11 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [rule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+      ruleNode.nodes = [
+        styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
+      ]
     } else {
-      ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
+      ruleNode.nodes = [styleRule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
   })
 
@@ -733,7 +740,9 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [rule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+    ruleNode.nodes = [
+      styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
+    ]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -742,7 +751,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-last', (ruleNode, variant) => {
@@ -751,7 +760,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-of-type', (ruleNode, variant) => {
@@ -760,7 +769,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional('nth-last-of-type', (ruleNode, variant) => {
@@ -769,7 +778,7 @@ export function createVariants(theme: Theme): Variants {
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && !isPositiveInteger(variant.value.value)) return null
 
-    ruleNode.nodes = [rule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
+    ruleNode.nodes = [styleRule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
   })
 
   variants.functional(

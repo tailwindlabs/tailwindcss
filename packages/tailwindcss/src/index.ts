@@ -7,6 +7,7 @@ import {
   context,
   decl,
   rule,
+  styleRule,
   toCss,
   walk,
   WalkAction,
@@ -186,7 +187,7 @@ async function parseCss(
               let nodes: AstNode[] = []
 
               if (styleRuleSelectors.length > 0) {
-                nodes.push(rule(styleRuleSelectors.join(', '), r.nodes))
+                nodes.push(styleRule(styleRuleSelectors.join(', '), r.nodes))
               }
 
               for (let selector of atRuleParams) {
@@ -333,7 +334,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = rule(':root', node.nodes) as StyleRule
+        firstThemeRule = styleRule(':root', node.nodes)
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
