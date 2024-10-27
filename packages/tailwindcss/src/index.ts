@@ -388,12 +388,7 @@ async function parseCss(
 
         // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
         // printing.
-        nodes.push(
-          Object.assign(
-            keyframesRule,
-            atRoot([atRule(keyframesRule.name, keyframesRule.params, keyframesRule.nodes)]),
-          ),
-        )
+        nodes.push(atRoot([keyframesRule]))
       }
     }
     firstThemeRule.nodes = nodes
