@@ -496,7 +496,24 @@ export function parse(input: string) {
 }
 
 export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
-  for (let i = 2 /* '@x'.length */; i < buffer.length; i++) {
+  // Assumption: The smallest at-rule in CSS right now is `@page`, this means
+  //             that we can always skip the first 5 characters and start at the
+  //             sixth (at index 5).
+  //
+  // There is a chance someone is using a shorter at-rule, in that case we have
+  // to adjust this number back to 2, e.g.: `@x`.
+  //
+  // This issue can only occur if somebody does the following things:
+  //
+  // 1. Uses a shorter at-rule than `@page`
+  // 2. Disables Lightning CSS from `@tailwindcss/postcss` (because Lightning
+  //    CSS doesn't handle custom at-rules properly right now)
+  // 3. Sandwiches the `@tailwindcss/postcss` plugin between two other plugins
+  //    that can handle the shorter at-rule
+  //
+  // Let's use the more common case as the default and we can adjust this
+  // behavior if necessary.
+  for (let i = 5 /* '@page'.length */; i < buffer.length; i++) {
     let currentChar = buffer.charCodeAt(i)
     if (currentChar === SPACE || currentChar === OPEN_PAREN) {
       let name = buffer.slice(1, i).trim()
