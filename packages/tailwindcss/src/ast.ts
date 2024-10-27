@@ -1,5 +1,7 @@
 import { parseAtRule } from './css-parser'
 
+const AT_SIGN = 0x40
+
 export type StyleRule = {
   kind: 'rule'
   selector: string
@@ -57,7 +59,7 @@ export function atRule(name: string, params: string = '', nodes: AstNode[] = [])
 }
 
 export function rule(selector: string, nodes: AstNode[] = []): StyleRule | AtRule {
-  if (selector[0] === '@') {
+  if (selector.charCodeAt(0) === AT_SIGN) {
     return parseAtRule(selector, nodes)
   }
 
