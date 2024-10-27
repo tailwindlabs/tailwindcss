@@ -496,12 +496,16 @@ export function parse(input: string) {
 }
 
 export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
-  let splitIdx = buffer.search(/[\s(]/g)
-  if (splitIdx === -1) return atRule(buffer.slice(1).trim(), '', nodes)
+  for (let i = 0; i < buffer.length; i++) {
+    let currentChar = buffer.charCodeAt(i)
+    if (currentChar === SPACE || currentChar === OPEN_PAREN) {
+      let name = buffer.slice(1, i).trim()
+      let params = buffer.slice(i).trim()
+      return atRule(name, params, nodes)
+    }
+  }
 
-  let name = buffer.slice(1, splitIdx).trim()
-  let params = buffer.slice(splitIdx).trim()
-  return atRule(name, params, nodes)
+  return atRule(buffer.slice(1).trim(), '', nodes)
 }
 
 function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {
