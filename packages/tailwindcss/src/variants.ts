@@ -3,21 +3,22 @@ import {
   atRoot,
   atRule,
   decl,
+  rule,
   styleRule,
   walk,
   type AstNode,
   type AtRule,
+  type Rule,
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
-import { parseAtRule } from './css-parser'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
-  rule: AtRule | StyleRule,
+  rule: Rule,
   variant: Extract<Variant, { kind: T }>,
 ) => null | void
 
@@ -324,13 +325,7 @@ export function createVariants(theme: Theme): Variants {
     variants.static(
       name,
       (r) => {
-        r.nodes = selectors.map((selector) => {
-          if (selector[0] === '@') {
-            return parseAtRule(selector, r.nodes)
-          } else {
-            return styleRule(selector, r.nodes)
-          }
-        })
+        r.nodes = selectors.map((selector) => rule(selector, r.nodes))
       },
       { compounds },
     )
@@ -438,7 +433,7 @@ export function createVariants(theme: Theme): Variants {
       if (atRules.length > 1) return WalkAction.Stop
       if (styleRules.length > 1) return WalkAction.Stop
 
-      let rules: (StyleRule | AtRule)[] = []
+      let rules: Rule[] = []
 
       for (let node of styleRules) {
         let selector = negateSelector(node.selector)

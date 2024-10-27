@@ -1,12 +1,12 @@
 import {
   atRule,
   comment,
-  styleRule,
+  rule,
   type AstNode,
   type AtRule,
   type Comment,
   type Declaration,
-  type StyleRule,
+  type Rule,
 } from './ast'
 
 const BACKSLASH = 0x5c
@@ -35,9 +35,9 @@ export function parse(input: string) {
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
 
-  let stack: (StyleRule | AtRule | null)[] = []
+  let stack: (Rule | null)[] = []
 
-  let parent = null as (StyleRule | AtRule) | null
+  let parent = null as Rule | null
   let node = null as AstNode | null
 
   let buffer = ''
@@ -347,11 +347,7 @@ export function parse(input: string) {
       closingBracketStack += '}'
 
       // At this point `buffer` should resemble a selector or an at-rule.
-      if (buffer.charCodeAt(0) === AT_SIGN) {
-        node = parseAtRule(buffer)
-      } else {
-        node = styleRule(buffer.trim(), [])
-      }
+      node = rule(buffer.trim())
 
       // Attach the rule to the parent in case it's nested.
       if (parent) {
@@ -502,6 +498,7 @@ export function parse(input: string) {
 export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
   let splitIdx = buffer.search(/[\s(]/g)
   if (splitIdx === -1) return atRule(buffer.slice(1).trim(), '', nodes)
+
   let name = buffer.slice(1, splitIdx).trim()
   let params = buffer.slice(splitIdx).trim()
   return atRule(name, params, nodes)

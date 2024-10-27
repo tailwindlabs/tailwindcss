@@ -1,5 +1,5 @@
 import { substituteAtApply } from '../apply'
-import { atRule, decl, styleRule, type AstNode } from '../ast'
+import { atRule, decl, rule, styleRule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -210,7 +210,7 @@ export function buildPluginApi(
 
       for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
-          ast.push(CSS.parseAtRule(name, objectToAst(css)))
+          ast.push(rule(name, objectToAst(css)))
           continue
         }
 
@@ -434,11 +434,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   for (let [name, value] of entries) {
     if (typeof value !== 'object') {
       if (!name.startsWith('--') && value === '@slot') {
-        if (name[0] === '@') {
-          ast.push(CSS.parseAtRule(name, [atRule('slot')]))
-        } else {
-          ast.push(styleRule(name, [atRule('slot')]))
-        }
+        ast.push(rule(name, [atRule('slot')]))
       } else {
         // Convert camelCase to kebab-case:
         // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
@@ -451,19 +447,11 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
         if (typeof item === 'string') {
           ast.push(decl(name, item))
         } else {
-          if (name[0] === '@') {
-            ast.push(CSS.parseAtRule(name, objectToAst(item)))
-          } else {
-            ast.push(styleRule(name, objectToAst(item)))
-          }
+          ast.push(rule(name, objectToAst(item)))
         }
       }
     } else if (value !== null) {
-      if (name[0] === '@') {
-        ast.push(CSS.parseAtRule(name, objectToAst(value)))
-      } else {
-        ast.push(styleRule(name, objectToAst(value)))
-      }
+      ast.push(rule(name, objectToAst(value)))
     }
   }
 

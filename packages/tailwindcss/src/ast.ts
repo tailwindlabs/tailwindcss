@@ -1,3 +1,5 @@
+import { parseAtRule } from './css-parser'
+
 export type StyleRule = {
   kind: 'style-rule'
   selector: string
@@ -34,6 +36,7 @@ export type AtRoot = {
   nodes: AstNode[]
 }
 
+export type Rule = StyleRule | AtRule
 export type AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtRoot
 
 export function styleRule(selector: string, nodes: AstNode[] = []): StyleRule {
@@ -51,6 +54,14 @@ export function atRule(name: string, params: string = '', nodes: AstNode[] = [])
     params,
     nodes,
   }
+}
+
+export function rule(selector: string, nodes: AstNode[] = []): StyleRule | AtRule {
+  if (selector[0] === '@') {
+    return parseAtRule(selector, nodes)
+  }
+
+  return styleRule(selector, nodes)
 }
 
 export function decl(property: string, value: string | undefined): Declaration {

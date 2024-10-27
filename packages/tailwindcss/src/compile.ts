@@ -1,7 +1,15 @@
-import { atRule, decl, styleRule, walk, WalkAction, type AstNode, type AtRule, type StyleRule } from './ast'
+import {
+  atRule,
+  decl,
+  rule,
+  walk,
+  WalkAction,
+  type AstNode,
+  type Rule,
+  type StyleRule,
+} from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { substituteFunctions } from './css-functions'
-import { parseAtRule } from './css-parser'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
 import { asColor, type Utility } from './utilities'
@@ -170,7 +178,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
 }
 
 export function applyVariant(
-  node: AtRule | StyleRule,
+  node: Rule,
   variant: Variant,
   variants: Variants,
   depth: number = 0,
@@ -182,11 +190,7 @@ export function applyVariant(
     // E.g. `[>img]:flex` is not valid, but `has-[>img]:flex` is
     if (variant.relative && depth === 0) return null
 
-    if (variant.selector[0] === '@') {
-      node.nodes = [parseAtRule(variant.selector, node.nodes)]
-    } else {
-      node.nodes = [styleRule(variant.selector, node.nodes)]
-    }
+    node.nodes = [rule(variant.selector, node.nodes)]
     return
   }
 

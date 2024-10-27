@@ -6,6 +6,7 @@ import {
   comment,
   context,
   decl,
+  rule,
   styleRule,
   toCss,
   walk,
@@ -190,7 +191,7 @@ async function parseCss(
               }
 
               for (let selector of atRuleParams) {
-                nodes.push(CSS.parseAtRule(selector, r.nodes))
+                nodes.push(rule(selector, r.nodes))
               }
 
               r.nodes = nodes
