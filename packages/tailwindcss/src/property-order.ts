@@ -187,7 +187,8 @@ export default [
   'border-bottom-left-radius',
 
   'border-width',
-  'border-inline-width', // Not real
+  'border-inline-width',
+  'border-block-width',
   'border-inline-start-width',
   'border-inline-end-width',
   'border-top-width',
@@ -196,9 +197,18 @@ export default [
   'border-left-width',
 
   'border-style',
+  'border-inline-style',
+  'border-block-style',
+  'border-inline-start-style',
+  'border-inline-end-style',
+  'border-top-style',
+  'border-right-style',
+  'border-bottom-style',
+  'border-left-style',
+
   'border-color',
-  'border-x-color', // Not real
-  'border-y-color', // Not real
+  'border-inline-color',
+  'border-block-color',
   'border-inline-start-color',
   'border-inline-end-color',
   'border-top-color',
