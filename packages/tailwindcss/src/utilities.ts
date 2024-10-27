@@ -19,13 +19,13 @@ interface SuggestionGroup {
 type SuggestionDefinition =
   | string
   | {
-    supportsNegative?: boolean
-    values?: string[]
-    modifiers?: string[]
-    valueThemeKeys?: ThemeKey[]
-    modifierThemeKeys?: ThemeKey[]
-    hasDefaultValue?: boolean
-  }
+      supportsNegative?: boolean
+      values?: string[]
+      modifiers?: string[]
+      valueThemeKeys?: ThemeKey[]
+      modifierThemeKeys?: ThemeKey[]
+      hasDefaultValue?: boolean
+    }
 
 export type UtilityOptions = {
   types: string[]

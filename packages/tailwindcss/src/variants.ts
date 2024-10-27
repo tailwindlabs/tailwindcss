@@ -156,8 +156,8 @@ export class Variants {
         ? this.variants.get(child)
         : child.kind === 'arbitrary'
           ? // This isn't strictly necessary but it'll allow us to bail quickly
-          // when parsing candidates
-          { compounds: compoundsForSelectors([child.selector]) }
+            // when parsing candidates
+            { compounds: compoundsForSelectors([child.selector]) }
           : this.variants.get(child.root)
 
     // One of the variants don't exist
@@ -331,7 +331,7 @@ export function createVariants(theme: Theme): Variants {
     )
   }
 
-  variants.static('force', () => { }, { compounds: Compounds.Never })
+  variants.static('force', () => {}, { compounds: Compounds.Never })
   staticVariant('*', [':where(& > *)'], { compounds: Compounds.Never })
 
   function negateConditions(ruleName: string, conditions: string[]) {
@@ -464,7 +464,11 @@ export function createVariants(theme: Theme): Variants {
     })
 
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
-    if (ruleNode.kind === 'style-rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
+    if (
+      ruleNode.kind === 'style-rule' &&
+      ruleNode.selector === '&' &&
+      ruleNode.nodes.length === 1
+    ) {
       Object.assign(ruleNode, ruleNode.nodes[0])
     }
 
@@ -622,7 +626,11 @@ export function createVariants(theme: Theme): Variants {
       'after',
       (v) => {
         v.nodes = [
-          styleRule('&::after', [contentProperties(), decl('content', 'var(--tw-content)'), ...v.nodes]),
+          styleRule('&::after', [
+            contentProperties(),
+            decl('content', 'var(--tw-content)'),
+            ...v.nodes,
+          ]),
         ]
       },
       { compounds: Compounds.Never },
@@ -713,7 +721,9 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+      ruleNode.nodes = [
+        styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
+      ]
     } else {
       ruleNode.nodes = [styleRule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
@@ -734,7 +744,9 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
+    ruleNode.nodes = [
+      styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
+    ]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -853,16 +865,16 @@ export function createVariants(theme: Theme): Variants {
       let aBucket =
         aIsCssFunction === -1
           ? // No CSS function found, bucket by unit instead
-          aValue.replace(/[\d.]+/g, '')
+            aValue.replace(/[\d.]+/g, '')
           : // CSS function found, bucket by function name
-          aValue.slice(0, aIsCssFunction)
+            aValue.slice(0, aIsCssFunction)
 
       let zBucket =
         zIsCssFunction === -1
           ? // No CSS function found, bucket by unit
-          zValue.replace(/[\d.]+/g, '')
+            zValue.replace(/[\d.]+/g, '')
           : // CSS function found, bucket by function name
-          zValue.slice(0, zIsCssFunction)
+            zValue.slice(0, zIsCssFunction)
 
       let order =
         // Compare by bucket name
