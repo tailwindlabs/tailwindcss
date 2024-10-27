@@ -496,7 +496,7 @@ export function parse(input: string) {
 }
 
 export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
-  for (let i = 0; i < buffer.length; i++) {
+  for (let i = 6 /* '@page'.length + 1 */; i < buffer.length; i++) {
     let currentChar = buffer.charCodeAt(i)
     if (currentChar === SPACE || currentChar === OPEN_PAREN) {
       let name = buffer.slice(1, i).trim()
