@@ -1,7 +1,7 @@
 import { parseAtRule } from './css-parser'
 
 export type StyleRule = {
-  kind: 'style-rule'
+  kind: 'rule'
   selector: string
   nodes: AstNode[]
 }
@@ -41,7 +41,7 @@ export type AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtR
 
 export function styleRule(selector: string, nodes: AstNode[] = []): StyleRule {
   return {
-    kind: 'style-rule',
+    kind: 'rule',
     selector,
     nodes,
   }
@@ -153,7 +153,7 @@ export function walk(
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
-    if (node.kind === 'style-rule' || node.kind === 'at-rule') {
+    if (node.kind === 'rule' || node.kind === 'at-rule') {
       walk(node.nodes, visit, path, context)
     }
   }
@@ -179,7 +179,7 @@ export function walkDepth(
     let path = [...parentPath, node]
     let parent = parentPath.at(-1) ?? null
 
-    if (node.kind === 'style-rule' || node.kind === 'at-rule') {
+    if (node.kind === 'rule' || node.kind === 'at-rule') {
       walkDepth(node.nodes, visit, path, context)
     } else if (node.kind === 'context') {
       walkDepth(node.nodes, visit, parentPath, { ...context, ...node.context })
@@ -211,7 +211,7 @@ export function toCss(ast: AstNode[]) {
     let indent = '  '.repeat(depth)
 
     // Rule
-    if (node.kind === 'style-rule') {
+    if (node.kind === 'rule') {
       css += `${indent}${node.selector} {\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)

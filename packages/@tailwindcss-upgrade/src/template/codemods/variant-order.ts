@@ -64,7 +64,7 @@ function isCombinatorVariant(designSystem: DesignSystem, variant: Variant) {
   let stack = getAppliedNodeStack(designSystem, variant)
   return stack.some(
     (node) =>
-      node.kind === 'style-rule' &&
+      node.kind === 'rule' &&
       // Combinators include any of the following characters
       (node.selector.includes(' ') ||
         node.selector.includes('>') ||
@@ -77,7 +77,7 @@ function isEndOfSelectorPseudoElement(designSystem: DesignSystem, variant: Varia
   let stack = getAppliedNodeStack(designSystem, variant)
   return stack.some(
     (node) =>
-      node.kind === 'style-rule' &&
+      node.kind === 'rule' &&
       (node.selector.includes('::after') ||
         node.selector.includes('::backdrop') ||
         node.selector.includes('::before') ||
@@ -105,7 +105,7 @@ function getAppliedNodeStack(designSystem: DesignSystem, variant: Variant): AstN
 
   walk(ast, (node) => {
     // Ignore the variant root class
-    if (node.kind === 'style-rule' && node.selector === '.candidate') {
+    if (node.kind === 'rule' && node.selector === '.candidate') {
       return
     }
     // Ignore the dummy declaration

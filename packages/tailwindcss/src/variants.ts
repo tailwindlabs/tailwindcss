@@ -81,7 +81,7 @@ export class Variants {
     let selectors: string[] = []
 
     walk(ast, (node) => {
-      if (node.kind === 'style-rule') {
+      if (node.kind === 'rule') {
         selectors.push(node.selector)
       } else if (node.kind === 'at-rule' && node.name !== 'slot') {
         selectors.push(`@${node.name} ${node.params}`)
@@ -415,7 +415,7 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'style-rule' && node.kind !== 'at-rule') return WalkAction.Continue
+      if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
       if (node.nodes.length > 0) return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
@@ -425,7 +425,7 @@ export function createVariants(theme: Theme): Variants {
       for (let parent of path) {
         if (parent.kind === 'at-rule') {
           atRules.push(parent)
-        } else if (parent.kind === 'style-rule') {
+        } else if (parent.kind === 'rule') {
           styleRules.push(parent)
         }
       }
@@ -464,11 +464,7 @@ export function createVariants(theme: Theme): Variants {
     })
 
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
-    if (
-      ruleNode.kind === 'style-rule' &&
-      ruleNode.selector === '&' &&
-      ruleNode.nodes.length === 1
-    ) {
+    if (ruleNode.kind === 'rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
       Object.assign(ruleNode, ruleNode.nodes[0])
     }
 
@@ -495,11 +491,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'style-rule') return WalkAction.Continue
+      if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'style-rule') continue
+        if (parent.kind !== 'rule') continue
 
         didApply = false
         return WalkAction.Stop
@@ -547,11 +543,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'style-rule') return WalkAction.Continue
+      if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'style-rule') continue
+        if (parent.kind !== 'rule') continue
 
         didApply = false
         return WalkAction.Stop
@@ -688,11 +684,11 @@ export function createVariants(theme: Theme): Variants {
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
-      if (node.kind !== 'style-rule') return WalkAction.Continue
+      if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
       for (let parent of path.slice(0, -1)) {
-        if (parent.kind !== 'style-rule') continue
+        if (parent.kind !== 'rule') continue
 
         didApply = false
         return WalkAction.Stop

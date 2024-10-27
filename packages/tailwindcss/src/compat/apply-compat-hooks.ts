@@ -272,7 +272,7 @@ function upgradeToFullPluginSupport({
       if (node.name !== 'tailwind' || node.params !== 'utilities') return
 
       // The AST node was already manually wrapped so there's nothing to do
-      if (parent?.kind === 'style-rule' && parent.selector === wrappingSelector) {
+      if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {
         return WalkAction.Stop
       }
 

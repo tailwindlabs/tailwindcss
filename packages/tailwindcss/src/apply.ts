@@ -36,7 +36,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
       // don't want the wrapping selector.
       let newNodes: AstNode[] = []
       for (let candidateNode of candidateAst) {
-        if (candidateNode.kind === 'style-rule') {
+        if (candidateNode.kind === 'rule') {
           for (let child of candidateNode.nodes) {
             newNodes.push(child)
           }
@@ -58,7 +58,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           let selector = `.${escape(candidate)}`
 
           for (let rule of candidateAst) {
-            if (rule.kind !== 'style-rule') continue
+            if (rule.kind !== 'rule') continue
             if (rule.selector !== selector) continue
 
             walk(rule.nodes, (child) => {

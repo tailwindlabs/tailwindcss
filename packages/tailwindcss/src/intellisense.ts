@@ -82,7 +82,7 @@ export function getVariants(design: DesignSystem) {
       // Produce v3-style selector strings in the face of nested rules
       // this is more visible for things like group-*, not-*, etc…
       walkDepth(node.nodes, (node, { path }) => {
-        if (node.kind !== 'style-rule' && node.kind !== 'at-rule') return
+        if (node.kind !== 'rule' && node.kind !== 'at-rule') return
         if (node.nodes.length > 0) return
 
         // Sort at-rules before style rules
@@ -98,7 +98,7 @@ export function getVariants(design: DesignSystem) {
 
         // A list of the selectors / at rules encountered to get to this point
         let group = path.flatMap((node) => {
-          if (node.kind === 'style-rule') {
+          if (node.kind === 'rule') {
             return node.selector === '&' ? [] : [node.selector]
           }
 

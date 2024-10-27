@@ -480,7 +480,7 @@ export function parse(input: string) {
   // When we are done parsing then everything should be balanced. If we still
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
-    if (parent.kind === 'style-rule') {
+    if (parent.kind === 'rule') {
       throw new Error(`Missing closing } at ${parent.selector}`)
     }
     if (parent.kind === 'at-rule') {

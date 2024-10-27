@@ -34,7 +34,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [],
         },
@@ -63,12 +63,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toEqual([
-        { kind: 'style-rule', selector: '.foo.baz', nodes: [] },
-        { kind: 'style-rule', selector: '.foo.qux', nodes: [] },
-        { kind: 'style-rule', selector: '.foo .qux', nodes: [] },
-        { kind: 'style-rule', selector: '.foo .baz', nodes: [] },
-        { kind: 'style-rule', selector: '.foo .baz', nodes: [] },
-        { kind: 'style-rule', selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', selector: '.foo.baz', nodes: [] },
+        { kind: 'rule', selector: '.foo.qux', nodes: [] },
+        { kind: 'rule', selector: '.foo .qux', nodes: [] },
+        { kind: 'rule', selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', selector: '.foo .baz', nodes: [] },
       ])
     })
 
@@ -112,12 +112,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         { kind: 'comment', value: '! License #2.5 ' },
         { kind: 'comment', value: '! License #3 ' },
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
         },
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.bar',
           nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
         },
@@ -133,7 +133,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.dark p',
           nodes: [
             {
@@ -256,7 +256,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       it('should parse a minified custom property', () => {
         expect(parse(':root{--foo:bar;}')).toEqual([
           {
-            kind: 'style-rule',
+            kind: 'rule',
             selector: ':root',
             nodes: [
               {
@@ -273,7 +273,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       it('should parse a minified custom property with no semicolon ', () => {
         expect(parse(':root{--foo:bar}')).toEqual([
           {
-            kind: 'style-rule',
+            kind: 'rule',
             selector: ':root',
             nodes: [
               {
@@ -466,7 +466,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         { kind: 'declaration', property: 'color', value: 'red', important: false },
         { kind: 'declaration', property: 'font-weight', value: 'bold', important: false },
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             {
@@ -492,7 +492,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             {
@@ -514,7 +514,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           .foo {
           }
         `),
-      ).toEqual([{ kind: 'style-rule', selector: '.foo', nodes: [] }])
+      ).toEqual([{ kind: 'rule', selector: '.foo', nodes: [] }])
     })
 
     it('should parse selectors with escaped characters', () => {
@@ -526,8 +526,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toEqual([
-        { kind: 'style-rule', selector: '.hover\\:foo:hover', nodes: [] },
-        { kind: 'style-rule', selector: '.\\32 xl\\:foo', nodes: [] },
+        { kind: 'rule', selector: '.hover\\:foo:hover', nodes: [] },
+        { kind: 'rule', selector: '.\\32 xl\\:foo', nodes: [] },
       ])
     })
 
@@ -538,7 +538,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           .bar {
           }
         `),
-      ).toEqual([{ kind: 'style-rule', selector: '.foo, .bar', nodes: [] }])
+      ).toEqual([{ kind: 'rule', selector: '.foo, .bar', nodes: [] }])
     })
 
     it('should parse multiple declarations inside of a selector', () => {
@@ -551,7 +551,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -571,7 +571,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -591,7 +591,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -604,7 +604,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     it('should parse a multi-line selector', () => {
       expect(parse(['.foo,', '.bar,', '.baz', '{', 'color:red;', '}'].join('\n'))).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo, .bar, .baz',
           nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
         },
@@ -616,7 +616,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(['.foo,', '.bar,', '.baz\t\n \n .qux', '{', 'color:red;', '}'].join('\n')),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo, .bar, .baz .qux',
           nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
         },
@@ -677,7 +677,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           nodes: [{ kind: 'at-rule', name: 'charset', params: '"UTF-8"', nodes: [] }],
         },
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'at-rule', name: 'apply', params: 'font-bold hover:text-red-500', nodes: [] },
@@ -720,7 +720,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           params: '(width >= 600px)',
           nodes: [
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.foo',
               nodes: [
                 { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -760,7 +760,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           nodes: [
             {
               kind: 'at-rule',
@@ -790,15 +790,15 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.bar',
               nodes: [
                 {
-                  kind: 'style-rule',
+                  kind: 'rule',
                   selector: '.baz',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -824,12 +824,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '&:hover',
               nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
             },
@@ -853,16 +853,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.bar',
               nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
             },
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.baz',
               nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
             },
@@ -893,7 +893,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'font-weight', value: 'bold', important: false },
@@ -904,13 +904,13 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               important: false,
             },
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.bar',
               nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
             },
             { kind: 'declaration', property: '--in-between', value: '1', important: false },
             {
-              kind: 'style-rule',
+              kind: 'rule',
               selector: '.baz',
               nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
             },
@@ -944,7 +944,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse('.foo{color:red;@media(width>=600px){.bar{color:blue;font-weight:bold}}}'),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo',
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
@@ -954,7 +954,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               params: '(width>=600px)',
               nodes: [
                 {
-                  kind: 'style-rule',
+                  kind: 'rule',
                   selector: '.bar',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'blue', important: false },
@@ -982,7 +982,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'style-rule',
+          kind: 'rule',
           selector: '.foo:has(.bar )',
           nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
         },

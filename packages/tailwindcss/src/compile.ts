@@ -154,7 +154,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
     }
 
     let node: StyleRule = {
-      kind: 'style-rule',
+      kind: 'rule',
       selector,
       nodes,
     }
@@ -227,7 +227,7 @@ export function applyVariant(
       // This means `child` may be a declaration and we don't want to apply the
       // variant to it. This also means the entire variant as a whole is not
       // applicable to the rule and should generate nothing.
-      if (child.kind !== 'style-rule' && child.kind !== 'at-rule') return null
+      if (child.kind !== 'rule' && child.kind !== 'at-rule') return null
 
       let result = applyFn(child, variant)
       if (result === null) return null
@@ -236,7 +236,7 @@ export function applyVariant(
     // Replace the placeholder node with the actual node
     {
       walk(isolatedNode.nodes, (child) => {
-        if ((child.kind === 'style-rule' || child.kind === 'at-rule') && child.nodes.length <= 0) {
+        if ((child.kind === 'rule' || child.kind === 'at-rule') && child.nodes.length <= 0) {
           child.nodes = node.nodes
           return WalkAction.Skip
         }
@@ -310,7 +310,7 @@ function applyImportant(ast: AstNode[]): void {
 
     if (node.kind === 'declaration') {
       node.important = true
-    } else if (node.kind === 'style-rule' || node.kind === 'at-rule') {
+    } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       applyImportant(node.nodes)
     }
   }
@@ -336,7 +336,7 @@ function getPropertySort(nodes: AstNode[]) {
 
       let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
       if (idx !== -1) propertySort.add(idx)
-    } else if (node.kind === 'style-rule' || node.kind === 'at-rule') {
+    } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       for (let child of node.nodes) {
         q.push(child)
       }
