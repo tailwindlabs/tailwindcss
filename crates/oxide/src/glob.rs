@@ -47,7 +47,13 @@ pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 
         let pattern = match dynamic_part {
             Some(dynamic_part) => dynamic_part,
-            None => "**/*".to_owned(),
+            None => {
+                if base.is_dir() {
+                    "**/*".to_owned()
+                } else {
+                    "".to_owned()
+                }
+            }
         };
 
         result.push(GlobEntry {
