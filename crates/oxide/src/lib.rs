@@ -57,7 +57,7 @@ pub struct ScanResult {
     pub globs: Vec<GlobEntry>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct GlobEntry {
     pub base: String,
     pub pattern: String,
