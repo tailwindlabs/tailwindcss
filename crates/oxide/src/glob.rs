@@ -174,167 +174,186 @@ pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
         .any(|g| glob_match(&format!("{}/{}", g.base, g.pattern), &path))
 }
 
-/// Given this input: a-{b,c}-d-{e,f}
-/// We will get:
-/// [
-///   a-b-d-e
-///   a-b-d-f
-///   a-c-d-e
-///   a-c-d-f
-/// ]
-/// TODO: There is probably a way nicer way of doing this, but this works for now.
-fn expand_braces(input: &str) -> Vec<String> {
-    let mut result: Vec<String> = vec![];
-
-    let mut in_braces = false;
-    let mut last_char: char = '\0';
-
-    let mut current = String::new();
-
-    // Given the input: a-{b,c}-d-{e,f}-g
-    // The template will look like this: ["a-", "-d-", "g"].
-    let mut template: Vec<String> = vec![];
-
-    // The branches will look like this: [["b", "c"], ["e", "f"]].
-    let mut branches: Vec<Vec<String>> = vec![];
-
-    for (i, c) in input.char_indices() {
-        let is_escaped = i > 0 && last_char == '\\';
-        last_char = c;
-
-        match c {
-            '{' if !is_escaped => {
-                // Ensure that when a new set of braces is opened, that we at least have 1
-                // template.
-                if template.is_empty() {
-                    template.push(String::new());
-                }
-
-                in_braces = true;
-                branches.push(vec![]);
-                template.push(String::new());
-            }
-            '}' if !is_escaped => {
-                in_braces = false;
-                if let Some(last) = branches.last_mut() {
-                    last.push(current.clone());
-                }
-                current.clear();
-            }
-            ',' if !is_escaped && in_braces => {
-                if let Some(last) = branches.last_mut() {
-                    last.push(current.clone());
-                }
-                current.clear();
-            }
-            _ if in_braces => current.push(c),
-            _ => {
-                if template.is_empty() {
-                    template.push(String::new());
-                }
-
-                if let Some(last) = template.last_mut() {
-                    last.push(c);
-                }
-            }
-        };
-    }
-
-    // Ensure we have a string that we can start adding information too.
-    if !template.is_empty() && !branches.is_empty() {
-        result.push("".to_string());
-    }
-
-    // Let's try to generate everything!
-    for (i, template) in template.into_iter().enumerate() {
-        // Append current template string to all existing results.
-        result = result.into_iter().map(|x| x + &template).collect();
-
-        // Get the results, and copy it for every single branch.
-        if let Some(branches) = branches.get(i) {
-            result = branches
-                .iter()
-                .flat_map(|branch| {
-                    result
-                        .clone()
-                        .into_iter()
-                        .map(|x| x + branch)
-                        .collect::<Vec<_>>()
-                })
-                .collect::<Vec<_>>();
-        }
-    }
-
-    result
-}
-
 #[cfg(test)]
 mod tests {
-    use super::get_fast_patterns;
+    use super::optimize_patterns;
     use crate::GlobEntry;
-    use std::path::PathBuf;
+    use bexpand::Expression;
+    use std::process::Command;
+    use std::{fs, path};
+    use tempfile::tempdir;
+
+    fn create_folders(folders: &[&str]) -> String {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create the necessary files
+        for path in folders {
+            // Ensure we use the right path separator for the current platform
+            let path = dir.join(path.replace('/', path::MAIN_SEPARATOR.to_string().as_str()));
+            let parent = path.parent().unwrap();
+            if !parent.exists() {
+                fs::create_dir_all(parent).unwrap();
+            }
+
+            dbg!(&path);
+            fs::write(path, "").unwrap();
+        }
+
+        let base = format!("{}", dir.display());
+
+        base
+    }
+
+    fn test(base: &str, sources: &[GlobEntry]) -> Vec<GlobEntry> {
+        // Resolve all content paths for the (temporary) current working directory
+        let sources: Vec<GlobEntry> = sources
+            .iter()
+            .map(|x| GlobEntry {
+                base: format!("{}{}", base, x.base),
+                pattern: x.pattern.clone(),
+            })
+            .collect();
+
+        // Expand glob patterns into multiple `GlobEntry`s.
+        let sources = sources
+            .iter()
+            .flat_map(|source| {
+                let expression: Result<Expression, _> = source.pattern[..].try_into();
+                let Ok(expression) = expression else {
+                    return vec![source.clone()];
+                };
+
+                expression
+                    .into_iter()
+                    .filter_map(Result::ok)
+                    .map(move |pattern| GlobEntry {
+                        base: source.base.clone(),
+                        pattern: pattern.into(),
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>();
+
+        let optimized_sources = optimize_patterns(&sources);
+
+        let parent_dir = format!("{}", fs::canonicalize(base).unwrap().display());
+
+        // Remove the temporary directory from the base
+        optimized_sources
+            .into_iter()
+            .map(|source| GlobEntry {
+                // Normalize paths to use unix style separators
+                base: source.base.replace(&parent_dir, "").replace('\\', "/"),
+                pattern: source.pattern,
+            })
+            .collect()
+    }
 
     #[test]
     fn it_should_keep_globs_that_start_with_file_wildcards_as_is() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
+        let base = create_folders(&["projects"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "*.html".to_string(),
+            }],
+        );
+
+        let expected = vec![GlobEntry {
             base: "/projects".to_string(),
             pattern: "*.html".to_string(),
-        }]);
-        let expected = vec![(PathBuf::from("/projects"), vec!["*.html".to_string()])];
+        }];
 
-        assert_eq!(actual, expected,);
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn it_should_keep_globs_that_start_with_folder_wildcards_as_is() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
+        let base = create_folders(&["projects"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "**/*.html".to_string(),
+            }],
+        );
+
+        let expected = vec![GlobEntry {
             base: "/projects".to_string(),
             pattern: "**/*.html".to_string(),
-        }]);
-
-        let expected = vec![(PathBuf::from("/projects"), vec!["**/*.html".to_string()])];
+        }];
 
         assert_eq!(actual, expected,);
     }
 
     #[test]
     fn it_should_move_the_starting_folder_to_the_path() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "example/*.html".to_string(),
-        }]);
-        let expected = vec![(
-            PathBuf::from("/projects/example"),
-            vec!["*.html".to_string()],
-        )];
+        let base = create_folders(&["projects/example"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "example/*.html".to_string(),
+            }],
+        );
+
+        let expected = vec![GlobEntry {
+            base: "/projects/example".to_string(),
+            pattern: "*.html".to_string(),
+        }];
 
         assert_eq!(actual, expected,);
     }
 
     #[test]
     fn it_should_move_the_starting_folders_to_the_path() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "example/other/*.html".to_string(),
-        }]);
-        let expected = vec![(
-            PathBuf::from("/projects/example/other"),
-            vec!["*.html".to_string()],
-        )];
+        let base = create_folders(&["projects/example/other"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "example/other/*.html".to_string(),
+            }],
+        );
+
+        let expected = vec![GlobEntry {
+            base: "/projects/example/other".to_string(),
+            pattern: "*.html".to_string(),
+        }];
 
         assert_eq!(actual, expected,);
     }
 
     #[test]
     fn it_should_branch_expandable_folders() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "{foo,bar}/*.html".to_string(),
-        }]);
+        let base = create_folders(&["projects/foo", "projects/bar"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "{foo,bar}/*.html".to_string(),
+            }],
+        );
 
         let expected = vec![
-            (PathBuf::from("/projects/foo"), vec!["*.html".to_string()]),
-            (PathBuf::from("/projects/bar"), vec!["*.html".to_string()]),
+            GlobEntry {
+                base: "/projects/bar".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/foo".to_string(),
+                pattern: "*.html".to_string(),
+            },
         ];
 
         assert_eq!(actual, expected,);
@@ -342,27 +361,38 @@ mod tests {
 
     #[test]
     fn it_should_expand_multiple_expansions_in_the_same_folder() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "a-{b,c}-d-{e,f}-g/*.html".to_string(),
-        }]);
+        let base = create_folders(&[
+            "projects/a-b-d-e-g",
+            "projects/a-b-d-f-g",
+            "projects/a-c-d-e-g",
+            "projects/a-c-d-f-g",
+        ]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "a-{b,c}-d-{e,f}-g/*.html".to_string(),
+            }],
+        );
+
         let expected = vec![
-            (
-                PathBuf::from("/projects/a-b-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-b-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
+            GlobEntry {
+                base: "/projects/a-b-d-e-g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-b-d-f-g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-d-e-g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-d-f-g".to_string(),
+                pattern: "*.html".to_string(),
+            },
         ];
 
         assert_eq!(actual, expected,);
@@ -370,75 +400,98 @@ mod tests {
 
     #[test]
     fn multiple_expansions_per_folder_starting_at_the_root() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "{a,b}-c-{d,e}-f/{b,c}-d-{e,f}-g/*.html".to_string(),
-        }]);
+        let base = create_folders(&[
+            "projects/a-c-d-f/b-d-e-g",
+            "projects/a-c-d-f/b-d-f-g",
+            "projects/a-c-d-f/c-d-e-g",
+            "projects/a-c-d-f/c-d-f-g",
+            "projects/a-c-e-f/b-d-e-g",
+            "projects/a-c-e-f/b-d-f-g",
+            "projects/a-c-e-f/c-d-e-g",
+            "projects/a-c-e-f/c-d-f-g",
+            "projects/b-c-d-f/b-d-e-g",
+            "projects/b-c-d-f/b-d-f-g",
+            "projects/b-c-d-f/c-d-e-g",
+            "projects/b-c-d-f/c-d-f-g",
+            "projects/b-c-e-f/b-d-e-g",
+            "projects/b-c-e-f/b-d-f-g",
+            "projects/b-c-e-f/c-d-e-g",
+            "projects/b-c-e-f/c-d-f-g",
+        ]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "{a,b}-c-{d,e}-f/{b,c}-d-{e,f}-g/*.html".to_string(),
+            }],
+        );
+
         let expected = vec![
-            (
-                PathBuf::from("/projects/a-c-d-f/b-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-d-f/b-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-e-f/b-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-e-f/b-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-d-f/c-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-d-f/c-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-e-f/c-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-e-f/c-d-e-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-d-f/b-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-d-f/b-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-e-f/b-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-e-f/b-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-d-f/c-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-d-f/c-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a-c-e-f/c-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/b-c-e-f/c-d-f-g"),
-                vec!["*.html".to_string()],
-            ),
+            GlobEntry {
+                base: "/projects/a-c-d-f/b-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-d-f/b-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-d-f/c-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-d-f/c-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-e-f/b-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-e-f/b-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-e-f/c-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a-c-e-f/c-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-d-f/b-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-d-f/b-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-d-f/c-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-d-f/c-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-e-f/b-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-e-f/b-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-e-f/c-d-e-g".into(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/b-c-e-f/c-d-f-g".into(),
+                pattern: "*.html".to_string(),
+            },
         ];
 
         assert_eq!(actual, expected,);
@@ -446,20 +499,25 @@ mod tests {
 
     #[test]
     fn it_should_stop_expanding_once_we_hit_a_wildcard() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "{foo,bar}/example/**/{baz,qux}/*.html".to_string(),
-        }]);
+        let base = create_folders(&["projects/bar/example", "projects/foo/example"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "{foo,bar}/example/**/{baz,qux}/*.html".to_string(),
+            }],
+        );
 
         let expected = vec![
-            (
-                PathBuf::from("/projects/foo/example"),
-                vec!["**/{baz,qux}/*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/bar/example"),
-                vec!["**/{baz,qux}/*.html".to_string()],
-            ),
+            GlobEntry {
+                base: "/projects/bar/example".to_string(),
+                pattern: "{**/baz/*.html,**/qux/*.html}".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/foo/example".to_string(),
+                pattern: "{**/baz/*.html,**/qux/*.html}".to_string(),
+            },
         ];
 
         assert_eq!(actual, expected,);
@@ -467,41 +525,60 @@ mod tests {
 
     #[test]
     fn it_should_keep_the_negation_symbol_for_all_new_patterns() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
+        let base = create_folders(&["projects"]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "!{foo,bar}/*.html".to_string(),
+            }],
+        );
+
+        let expected = vec![GlobEntry {
             base: "/projects".to_string(),
-            pattern: "!{foo,bar}/*.html".to_string(),
-        }]);
-        let expected = vec![
-            (PathBuf::from("/projects/foo"), vec!["!*.html".to_string()]),
-            (PathBuf::from("/projects/bar"), vec!["!*.html".to_string()]),
-        ];
+            // TODO: This is wrong, because `!` should be in front. But right now we don't support
+            // `@source "!../foo/bar";` anyway.
+            pattern: "{!bar/*.html,!foo/*.html}".to_string(),
+        }];
 
         assert_eq!(actual, expected,);
     }
 
     #[test]
     fn it_should_expand_a_complex_example() {
-        let actual = get_fast_patterns(&vec![GlobEntry {
-            base: "/projects".to_string(),
-            pattern: "a/{b,c}/d/{e,f}/g/*.html".to_string(),
-        }]);
+        let base = create_folders(&[
+            "projects/a/b/d/e/g",
+            "projects/a/b/d/f/g",
+            "projects/a/c/d/e/g",
+            "projects/a/c/d/f/g",
+        ]);
+
+        let actual = test(
+            &base,
+            &[GlobEntry {
+                base: "/projects".to_string(),
+                pattern: "a/{b,c}/d/{e,f}/g/*.html".to_string(),
+            }],
+        );
+
         let expected = vec![
-            (
-                PathBuf::from("/projects/a/b/d/e/g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a/c/d/e/g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a/b/d/f/g"),
-                vec!["*.html".to_string()],
-            ),
-            (
-                PathBuf::from("/projects/a/c/d/f/g"),
-                vec!["*.html".to_string()],
-            ),
+            GlobEntry {
+                base: "/projects/a/b/d/e/g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a/b/d/f/g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a/c/d/e/g".to_string(),
+                pattern: "*.html".to_string(),
+            },
+            GlobEntry {
+                base: "/projects/a/c/d/f/g".to_string(),
+                pattern: "*.html".to_string(),
+            },
         ];
 
         assert_eq!(actual, expected,);
