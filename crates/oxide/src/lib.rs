@@ -271,17 +271,27 @@ impl Scanner {
         // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
         let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
         let hoisted = hoist_static_glob_parts(&glob_sources);
+        dbg!(&glob_sources, &hoisted);
 
         for source in &hoisted {
-            // We need to combine the base and the pattern, otherwise a pattern that looks like
-            // `*.html`, will never match a path that looks like
+            // If the pattern is empty, then the base points to a specific file or folder already
+            // if it doesn't contain any dynamic parts. In that case we can use the base as the
+            // pattern.
+            //
+            // Otherwise we need to combine the base and the pattern, otherwise a pattern that
+            // looks like `*.html`, will never match a path that looks like
             // `/my-project/project-a/index.html`, because it contains `/`.
             //
             // We can't prepend `**/`, because then `/my-project/project-a/nested/index.html` would
             // match as well.
             //
             // Instead we combine the base and the pattern as a single glob pattern.
-            let Ok(glob) = Glob::new(&format!("{}/{}", source.base, source.pattern)) else {
+            let mut full_pattern = source.base.clone();
+            if !source.pattern.is_empty() {
+                full_pattern.push('/');
+                full_pattern.push_str(&source.pattern);
+            }
+            let Ok(glob) = Glob::new(&full_pattern) else {
                 continue;
             };
 
