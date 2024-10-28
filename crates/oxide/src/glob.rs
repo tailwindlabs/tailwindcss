@@ -205,7 +205,6 @@ mod tests {
                 fs::create_dir_all(parent).unwrap();
             }
 
-            dbg!(&path);
             fs::write(path, "").unwrap();
         }
 

@@ -271,7 +271,6 @@ impl Scanner {
         // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
         let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
         let hoisted = hoist_static_glob_parts(&glob_sources);
-        dbg!(&glob_sources, &hoisted);
 
         for source in &hoisted {
             // If the pattern is empty, then the base points to a specific file or folder already
