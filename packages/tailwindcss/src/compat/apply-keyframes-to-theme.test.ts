@@ -58,13 +58,13 @@ test('will append to the default keyframes with new keyframes', () => {
   let design = buildDesignSystem(theme)
 
   theme.addKeyframes(
-    atRule('keyframes', 'slide-in', [
+    atRule('@keyframes', 'slide-in', [
       styleRule('from', [decl('opacity', 'translateX(0%)')]),
       styleRule('to', [decl('opacity', 'translateX(100%)')]),
     ]),
   )
   theme.addKeyframes(
-    atRule('keyframes', 'slide-out', [
+    atRule('@keyframes', 'slide-out', [
       styleRule('from', [decl('opacity', 'translateX(100%)')]),
       styleRule('to', [decl('opacity', 'translateX(0%)')]),
     ]),

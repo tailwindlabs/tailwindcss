@@ -83,8 +83,8 @@ export class Variants {
     walk(ast, (node) => {
       if (node.kind === 'rule') {
         selectors.push(node.selector)
-      } else if (node.kind === 'at-rule' && node.name !== 'slot') {
-        selectors.push(`@${node.name} ${node.params}`)
+      } else if (node.kind === 'at-rule' && node.name !== '@slot') {
+        selectors.push(`${node.name} ${node.params}`)
       }
     })
 
@@ -347,7 +347,7 @@ export function createVariants(theme: Theme): Variants {
         return parts.slice(1).join(' ')
       }
 
-      if (ruleName === 'container') {
+      if (ruleName === '@container') {
         // @container {query}
         if (parts[0][0] === '(') {
           return `not ${condition}`
@@ -368,7 +368,7 @@ export function createVariants(theme: Theme): Variants {
     })
   }
 
-  let conditionalRules = ['media', 'supports', 'container']
+  let conditionalRules = ['@media', '@supports', '@container']
 
   function negateAtRule(rule: AtRule) {
     for (let ruleName of conditionalRules) {
@@ -597,7 +597,7 @@ export function createVariants(theme: Theme): Variants {
   {
     function contentProperties() {
       return atRoot([
-        atRule('property', '--tw-content', [
+        atRule('@property', '--tw-content', [
           decl('syntax', '"*"'),
           decl('initial-value', '""'),
           decl('inherits', 'false'),
@@ -668,7 +668,7 @@ export function createVariants(theme: Theme): Variants {
   // Interactive
   staticVariant('focus-within', ['&:focus-within'])
   variants.static('hover', (r) => {
-    r.nodes = [styleRule('&:hover', [atRule('media', '(hover: hover)', r.nodes)])]
+    r.nodes = [styleRule('&:hover', [atRule('@media', '(hover: hover)', r.nodes)])]
   })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
@@ -796,7 +796,7 @@ export function createVariants(theme: Theme): Variants {
         // `(condition1) or (condition2)` is supported.
         let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
 
-        ruleNode.nodes = [atRule('supports', query, ruleNode.nodes)]
+        ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return
       }
 
@@ -822,7 +822,7 @@ export function createVariants(theme: Theme): Variants {
         value = `(${value})`
       }
 
-      ruleNode.nodes = [atRule('supports', value, ruleNode.nodes)]
+      ruleNode.nodes = [atRule('@supports', value, ruleNode.nodes)]
     },
     { compounds: Compounds.AtRules },
   )
@@ -941,7 +941,7 @@ export function createVariants(theme: Theme): Variants {
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 
-              ruleNode.nodes = [atRule('media', `(width < ${value})`, ruleNode.nodes)]
+              ruleNode.nodes = [atRule('@media', `(width < ${value})`, ruleNode.nodes)]
             },
             { compounds: Compounds.AtRules },
           )
@@ -963,7 +963,7 @@ export function createVariants(theme: Theme): Variants {
             variants.static(
               key,
               (ruleNode) => {
-                ruleNode.nodes = [atRule('media', `(width >= ${value})`, ruleNode.nodes)]
+                ruleNode.nodes = [atRule('@media', `(width >= ${value})`, ruleNode.nodes)]
               },
               { compounds: Compounds.AtRules },
             )
@@ -976,7 +976,7 @@ export function createVariants(theme: Theme): Variants {
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 
-              ruleNode.nodes = [atRule('media', `(width >= ${value})`, ruleNode.nodes)]
+              ruleNode.nodes = [atRule('@media', `(width >= ${value})`, ruleNode.nodes)]
             },
             { compounds: Compounds.AtRules },
           )
@@ -1029,7 +1029,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [
                 atRule(
-                  'container',
+                  '@container',
                   variant.modifier
                     ? `${variant.modifier.value} (width < ${value})`
                     : `(width < ${value})`,
@@ -1058,7 +1058,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [
                 atRule(
-                  'container',
+                  '@container',
                   variant.modifier
                     ? `${variant.modifier.value} (width >= ${value})`
                     : `(width >= ${value})`,
@@ -1076,7 +1076,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [
                 atRule(
-                  'container',
+                  '@container',
                   variant.modifier
                     ? `${variant.modifier.value} (width >= ${value})`
                     : `(width >= ${value})`,
@@ -1147,12 +1147,12 @@ function quoteAttributeValue(input: string) {
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
   walk(ast, (node, { replaceWith }) => {
     // Replace `@slot` with rule nodes
-    if (node.kind === 'at-rule' && node.name === 'slot') {
+    if (node.kind === 'at-rule' && node.name === '@slot') {
       replaceWith(nodes)
     }
 
     // Wrap `@keyframes` and `@property` in `AtRoot` nodes
-    else if (node.kind === 'at-rule' && (node.name === 'keyframes' || node.name === 'property')) {
+    else if (node.kind === 'at-rule' && (node.name === '@keyframes' || node.name === '@property')) {
       Object.assign(node, atRoot([atRule(node.name, node.params, node.nodes)]))
       return WalkAction.Skip
     }

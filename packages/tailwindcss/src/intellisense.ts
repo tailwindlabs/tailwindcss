@@ -103,7 +103,7 @@ export function getVariants(design: DesignSystem) {
           }
 
           if (node.kind === 'at-rule') {
-            return [`@${node.name} ${node.params}`]
+            return [`${node.name} ${node.params}`]
           }
 
           return []

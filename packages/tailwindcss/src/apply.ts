@@ -8,16 +8,16 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
     if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.
-    if (node.name === 'keyframes') {
+    if (node.name === '@keyframes') {
       walk(node.nodes, (child) => {
-        if (child.kind === 'at-rule' && child.name === 'apply') {
+        if (child.kind === 'at-rule' && child.name === '@apply') {
           throw new Error(`You cannot use \`@apply\` inside \`@keyframes\`.`)
         }
       })
       return WalkAction.Skip
     }
 
-    if (node.name !== 'apply') return
+    if (node.name !== '@apply') return
 
     let candidates = node.params.split(/\s+/g)
 

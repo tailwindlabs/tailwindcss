@@ -214,7 +214,7 @@ export function applyVariant(
     // To solve this, we provide an isolated placeholder node to the variant.
     // The variant can now apply its logic to the isolated node without
     // affecting the original node.
-    let isolatedNode = atRule('slot')
+    let isolatedNode = atRule('@slot')
 
     let result = applyVariant(isolatedNode, variant.variant, variants, depth + 1)
     if (result === null) return null

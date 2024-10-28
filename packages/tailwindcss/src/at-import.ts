@@ -13,7 +13,7 @@ export async function substituteAtImports(
   let promises: Promise<void>[] = []
 
   walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'at-rule' && node.name === 'import') {
+    if (node.kind === 'at-rule' && node.name === '@import') {
       try {
         let { uri, layer, media, supports } = parseImportParams(ValueParser.parse(node.params))
 
@@ -126,15 +126,15 @@ function buildImportNodes(
   let root = importedAst
 
   if (layer !== null) {
-    root = [atRule('layer', layer, root)]
+    root = [atRule('@layer', layer, root)]
   }
 
   if (media !== null) {
-    root = [atRule('media', media, root)]
+    root = [atRule('@media', media, root)]
   }
 
   if (supports !== null) {
-    root = [atRule('supports', supports[0] === '(' ? supports : `(${supports})`, root)]
+    root = [atRule('@supports', supports[0] === '(' ? supports : `(${supports})`, root)]
   }
 
   return root

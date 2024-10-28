@@ -630,7 +630,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(css`
           @charset "UTF-8";
         `),
-      ).toEqual([{ kind: 'at-rule', name: 'charset', params: '"UTF-8"', nodes: [] }])
+      ).toEqual([{ kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] }])
     })
 
     it('should parse an at-rule without a block or semicolon', () => {
@@ -638,7 +638,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(`
           @tailwind utilities
         `),
-      ).toEqual([{ kind: 'at-rule', name: 'tailwind', params: 'utilities', nodes: [] }])
+      ).toEqual([{ kind: 'at-rule', name: '@tailwind', params: 'utilities', nodes: [] }])
     })
 
     it("should parse an at-rule without a block or semicolon when it's the last rule in a block", () => {
@@ -651,9 +651,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'at-rule',
-          name: 'layer',
+          name: '@layer',
           params: 'utilities',
-          nodes: [{ kind: 'at-rule', name: 'tailwind', params: 'utilities', nodes: [] }],
+          nodes: [{ kind: 'at-rule', name: '@tailwind', params: 'utilities', nodes: [] }],
         },
       ])
     })
@@ -672,15 +672,15 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'at-rule',
-          name: 'layer',
+          name: '@layer',
           params: 'utilities',
-          nodes: [{ kind: 'at-rule', name: 'charset', params: '"UTF-8"', nodes: [] }],
+          nodes: [{ kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] }],
         },
         {
           kind: 'rule',
           selector: '.foo',
           nodes: [
-            { kind: 'at-rule', name: 'apply', params: 'font-bold hover:text-red-500', nodes: [] },
+            { kind: 'at-rule', name: '@apply', params: 'font-bold hover:text-red-500', nodes: [] },
           ],
         },
       ])
@@ -693,8 +693,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           @tailwind base;
         `),
       ).toEqual([
-        { kind: 'at-rule', name: 'tailwind', params: '', nodes: [] },
-        { kind: 'at-rule', name: 'tailwind', params: 'base', nodes: [] },
+        { kind: 'at-rule', name: '@tailwind', params: '', nodes: [] },
+        { kind: 'at-rule', name: '@tailwind', params: 'base', nodes: [] },
       ])
     })
 
@@ -716,7 +716,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'at-rule',
-          name: 'media',
+          name: '@media',
           params: '(width >= 600px)',
           nodes: [
             {
@@ -726,7 +726,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
                 { kind: 'declaration', property: 'color', value: 'red', important: false },
                 {
                   kind: 'at-rule',
-                  name: 'media',
+                  name: '@media',
                   params: '(width >= 800px)',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'blue', important: false },
@@ -734,7 +734,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
                 },
                 {
                   kind: 'at-rule',
-                  name: 'media',
+                  name: '@media',
                   params: '(width >= 1000px)',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'green', important: false },
@@ -764,7 +764,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           nodes: [
             {
               kind: 'at-rule',
-              name: 'apply',
+              name: '@apply',
               params:
                 'hover:text-red-100 sm:hover:text-red-200 md:hover:text-red-300 lg:hover:text-red-400 xl:hover:text-red-500',
               nodes: [],
@@ -932,7 +932,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'at-rule',
-          name: 'custom',
+          name: '@custom',
           params: '\\{',
           nodes: [{ kind: 'declaration', property: 'foo', value: 'bar', important: false }],
         },
@@ -950,7 +950,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             { kind: 'declaration', property: 'color', value: 'red', important: false },
             {
               kind: 'at-rule',
-              name: 'media',
+              name: '@media',
               params: '(width>=600px)',
               nodes: [
                 {

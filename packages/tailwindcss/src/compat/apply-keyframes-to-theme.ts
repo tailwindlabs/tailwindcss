@@ -17,7 +17,7 @@ export function keyframesToRules(resolvedConfig: Pick<ResolvedConfig, 'theme'>):
   let rules: AtRule[] = []
   if ('keyframes' in resolvedConfig.theme) {
     for (let [name, keyframe] of Object.entries(resolvedConfig.theme.keyframes)) {
-      rules.push(atRule('keyframes', name, objectToAst(keyframe as any)))
+      rules.push(atRule('@keyframes', name, objectToAst(keyframe as any)))
     }
   }
   return rules

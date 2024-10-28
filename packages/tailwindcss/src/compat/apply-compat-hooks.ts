@@ -37,7 +37,7 @@ export async function applyCompatibilityHooks({
     if (node.kind !== 'at-rule') return
 
     // Collect paths from `@plugin` at-rules
-    if (node.name === 'plugin') {
+    if (node.name === '@plugin') {
       if (parent !== null) {
         throw new Error('`@plugin` cannot be nested.')
       }
@@ -100,7 +100,7 @@ export async function applyCompatibilityHooks({
     }
 
     // Collect paths from `@config` at-rules
-    if (node.name === 'config') {
+    if (node.name === '@config') {
       if (node.nodes.length > 0) {
         throw new Error('`@config` cannot have a body.')
       }
@@ -269,7 +269,7 @@ function upgradeToFullPluginSupport({
 
     walk(ast, (node, { replaceWith, parent }) => {
       if (node.kind !== 'at-rule') return
-      if (node.name !== 'tailwind' || node.params !== 'utilities') return
+      if (node.name !== '@tailwind' || node.params !== 'utilities') return
 
       // The AST node was already manually wrapped so there's nothing to do
       if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {

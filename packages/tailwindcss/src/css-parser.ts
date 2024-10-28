@@ -484,7 +484,7 @@ export function parse(input: string) {
       throw new Error(`Missing closing } at ${parent.selector}`)
     }
     if (parent.kind === 'at-rule') {
-      throw new Error(`Missing closing } at @${parent.name} ${parent.params}`)
+      throw new Error(`Missing closing } at ${parent.name} ${parent.params}`)
     }
   }
 
@@ -516,13 +516,13 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
   for (let i = 5 /* '@page'.length */; i < buffer.length; i++) {
     let currentChar = buffer.charCodeAt(i)
     if (currentChar === SPACE || currentChar === OPEN_PAREN) {
-      let name = buffer.slice(1, i).trim()
+      let name = buffer.slice(0, i).trim()
       let params = buffer.slice(i).trim()
       return atRule(name, params, nodes)
     }
   }
 
-  return atRule(buffer.slice(1).trim(), '', nodes)
+  return atRule(buffer.trim(), '', nodes)
 }
 
 function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {

@@ -223,7 +223,7 @@ export function toCss(ast: AstNode[]) {
 
     // AtRule
     else if (node.kind === 'at-rule') {
-      if (node.name === 'tailwind' && node.params === 'utilities') {
+      if (node.name === '@tailwind' && node.params === 'utilities') {
         for (let child of node.nodes) {
           css += stringify(child, depth)
         }
@@ -238,11 +238,11 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       else if (node.nodes.length === 0) {
-        return `${indent}@${node.name} ${node.params};\n`
+        return `${indent}${node.name} ${node.params};\n`
       }
 
       //
-      else if (node.name === 'property' && depth === 0) {
+      else if (node.name === '@property' && depth === 0) {
         // Don't output duplicate `@property` rules
         if (seenAtProperties.has(node.params)) {
           return ''
@@ -273,7 +273,7 @@ export function toCss(ast: AstNode[]) {
         seenAtProperties.add(node.params)
       }
 
-      css += `${indent}@${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
+      css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
@@ -331,7 +331,7 @@ export function toCss(ast: AstNode[]) {
 
   if (fallbackAst.length) {
     fallback = stringify(
-      atRule('supports', '(-moz-orient: inline)', [atRule('layer', 'base', fallbackAst)]),
+      atRule('@supports', '(-moz-orient: inline)', [atRule('@layer', 'base', fallbackAst)]),
     )
   }
 

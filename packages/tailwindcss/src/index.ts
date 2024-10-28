@@ -92,7 +92,7 @@ async function parseCss(
     if (node.kind !== 'at-rule') return
 
     // Collect custom `@utility` at-rules
-    if (node.name === 'utility') {
+    if (node.name === '@utility') {
       if (parent !== null) {
         throw new Error('`@utility` cannot be nested.')
       }
@@ -122,7 +122,7 @@ async function parseCss(
     }
 
     // Collect paths from `@source` at-rules
-    if (node.name === 'source') {
+    if (node.name === '@source') {
       if (node.nodes.length > 0) {
         throw new Error('`@source` cannot have a body.')
       }
@@ -145,7 +145,7 @@ async function parseCss(
     }
 
     // Register custom variants from `@variant` at-rules
-    if (node.name === 'variant') {
+    if (node.name === '@variant') {
       if (parent !== null) {
         throw new Error('`@variant` cannot be nested.')
       }
@@ -229,7 +229,7 @@ async function parseCss(
       }
     }
 
-    if (node.name === 'media') {
+    if (node.name === '@media') {
       let params = segment(node.params, ' ')
       let unknownParams: string[] = []
 
@@ -248,7 +248,7 @@ async function parseCss(
                 'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
               )
             }
-            if (child.name === 'theme') {
+            if (child.name === '@theme') {
               child.params += ' ' + themeParams
               return WalkAction.Skip
             }
@@ -264,7 +264,7 @@ async function parseCss(
 
           walk(node.nodes, (child) => {
             if (child.kind !== 'at-rule') return
-            if (child.name === 'theme') {
+            if (child.name === '@theme') {
               child.params += ` prefix(${prefix})`
               return WalkAction.Skip
             }
@@ -292,7 +292,7 @@ async function parseCss(
     }
 
     // Handle `@theme`
-    if (node.name === 'theme') {
+    if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
 
       if (themePrefix) {
@@ -309,7 +309,7 @@ async function parseCss(
       walk(node.nodes, (child, { replaceWith }) => {
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
-        if (child.kind === 'at-rule' && child.name === 'keyframes') {
+        if (child.kind === 'at-rule' && child.name === '@keyframes') {
           theme.addKeyframes(child)
           replaceWith([])
           return WalkAction.Skip
@@ -404,7 +404,7 @@ async function parseCss(
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'at-rule') return
 
-    if (node.name === 'utility') {
+    if (node.name === '@utility') {
       replaceWith([])
     }
 
@@ -434,7 +434,7 @@ export async function compile(
   // Find `@tailwind utilities` so that we can later replace it with the actual
   // generated utility class CSS.
   walk(ast, (node) => {
-    if (node.kind === 'at-rule' && node.name === 'tailwind' && node.params === 'utilities') {
+    if (node.kind === 'at-rule' && node.name === '@tailwind' && node.params === 'utilities') {
       tailwindUtilitiesNode = node
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all

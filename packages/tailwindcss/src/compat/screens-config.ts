@@ -45,7 +45,7 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
       designSystem.variants.static(
         name,
         (ruleNode) => {
-          ruleNode.nodes = [atRule('media', query, ruleNode.nodes)]
+          ruleNode.nodes = [atRule('@media', query, ruleNode.nodes)]
         },
         { order },
       )

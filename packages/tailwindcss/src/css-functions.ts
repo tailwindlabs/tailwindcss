@@ -17,10 +17,10 @@ export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveTh
     // Find at-rules rules
     if (node.kind === 'at-rule') {
       if (
-        (node.name === 'media' ||
-          node.name === 'custom-media' ||
-          node.name === 'container' ||
-          node.name === 'supports') &&
+        (node.name === '@media' ||
+          node.name === '@custom-media' ||
+          node.name === '@container' ||
+          node.name === '@supports') &&
         node.params.includes(THEME_FUNCTION_INVOCATION)
       ) {
         node.params = substituteFunctionsInValue(node.params, resolveThemeValue)

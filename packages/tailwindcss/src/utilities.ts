@@ -85,7 +85,7 @@ export class Utilities {
 }
 
 function property(ident: string, initialValue?: string, syntax?: string) {
-  return atRule('property', ident, [
+  return atRule('@property', ident, [
     decl('syntax', syntax ? `"${syntax}"` : `"*"`),
     decl('inherits', 'false'),
 
