@@ -35,7 +35,7 @@ export default function tailwindcss(): Plugin[] {
   // Note: To improve performance, we do not remove candidates from this set.
   // This means a longer-ongoing dev mode session might contain candidates that
   // are no longer referenced in code.
-  let moduleGraphCandidates = new Set<string>()
+  let moduleGraphCandidates = new DefaultMap<string, Set<string>>(() => new Set<string>())
   let moduleGraphScanner = new Scanner({})
 
   let roots: DefaultMap<string, Root> = new DefaultMap(
@@ -46,7 +46,7 @@ export default function tailwindcss(): Plugin[] {
     let updated = false
     for (let candidate of moduleGraphScanner.scanFiles([{ content, extension }])) {
       updated = true
-      moduleGraphCandidates.add(candidate)
+      moduleGraphCandidates.get(id).add(candidate)
     }
 
     if (updated) {
@@ -348,14 +348,9 @@ class Root {
   // root.
   private dependencies = new Set<string>()
 
-  // Whether to include candidates from the module graph. This is disabled when
-  // the user provides `source(none)` to essentially disable auto source
-  // detection.
-  private includeCandidatesFromModuleGraph = true
-
   constructor(
     private id: string,
-    private getSharedCandidates: () => Set<string>,
+    private getSharedCandidates: () => Map<string, Set<string>>,
     private base: string,
   ) {}
 
@@ -387,19 +382,13 @@ class Root {
       let sources = (() => {
         // Disable auto source detection
         if (this.compiler.root === 'none') {
-          this.includeCandidatesFromModuleGraph = false
           return []
         }
 
         // No root specified, use the module graph
         if (this.compiler.root === null) {
-          this.includeCandidatesFromModuleGraph = true
-
           return []
         }
-
-        // TODO: In a follow up PR we want this filter this against the module graph.
-        this.includeCandidatesFromModuleGraph = true
 
         // Use the specified root
         return [this.compiler.root]
@@ -440,13 +429,24 @@ class Root {
     this.requiresRebuild = true
 
     env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
-    let result = this.compiler.build(
-      this.includeCandidatesFromModuleGraph
-        ? [...this.getSharedCandidates(), ...this.candidates]
-        : Array.from(this.candidates),
-    )
+    let result = this.compiler.build([...this.sharedCandidates(), ...this.candidates])
     env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
 
     return result
+  }
+
+  private sharedCandidates(): Set<string> {
+    if (!this.compiler) return new Set()
+    if (this.compiler.root === 'none') return new Set()
+
+    let shared = new Set<string>()
+
+    for (let [id, candidates] of this.getSharedCandidates()) {
+      for (let candidate of candidates) {
+        shared.add(candidate)
+      }
+    }
+
+    return shared
   }
 }
