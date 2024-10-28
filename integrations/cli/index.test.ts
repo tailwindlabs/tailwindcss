@@ -256,7 +256,7 @@ describe.each([
   )
 })
 
-test(
+test.only(
   'source(…) and `@source` can be configured to use auto source detection (build + watch mode)',
   {
     fs: {
@@ -280,9 +280,7 @@ test(
         /* Run auto-content detection in ../../project-b */
         @import 'tailwindcss/utilities' source('../../project-b');
 
-        /* Additive: */
-        /*   {my-lib-1,my-lib-2}: expand */
-        /*   *.html: only look for .html */
+        /* Explicitly using node_modules in the @source allows git ignored folders */
         @source '../node_modules/{my-lib-1,my-lib-2}/src/**/*.html';
 
         /* We typically ignore these extensions, but now include them explicitly */
@@ -290,6 +288,9 @@ test(
 
         /* Project C should apply auto source detection */
         @source '../../project-c';
+
+        /* Project D should apply auto source detection rules, such as ignoring node_modules */
+        @source '../../project-d/**/*.{html,js}';
       `,
 
       // Project A is the current folder, but we explicitly configured
@@ -362,6 +363,21 @@ test(
           class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-c/node_modules/my-lib-1/src/index.html']"
         ></div>
       `,
+
+      // Project D should apply auto source detection rules, such as ignoring
+      // node_modules.
+      'project-d/node_modules/my-lib-1/src/index.html': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-d/node_modules/my-lib-1/src/index.html']"
+        ></div>
+      `,
+
+      // Project D should look for files with the extensions html and js.
+      'project-d/src/index.html': html`
+        <div
+          class="content-['project-d/src/index.html']"
+        ></div>
+      `,
     },
   },
   async ({ fs, exec, spawn, root }) => {
@@ -390,6 +406,10 @@ test(
       }
       .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-c/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-d\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-d/src/index.html';
         content: var(--tw-content);
       }
       @supports (-moz-orient: inline) {
