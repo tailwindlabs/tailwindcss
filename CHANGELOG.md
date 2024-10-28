@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Make `config()` path argument optional in v4 plugin API for backwards compat ([#14799](https://github.com/tailwindlabs/tailwindcss/pull/14799))
+- Support calling `config()` with no arguments in plugin API ([#14799](https://github.com/tailwindlabs/tailwindcss/pull/14799))
 
 ## [4.0.0-alpha.30] - 2024-10-24
 
