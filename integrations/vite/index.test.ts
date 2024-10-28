@@ -513,6 +513,108 @@ for (let transformer of ['postcss', 'lightningcss']) {
         ])
       },
     )
+
+    test(
+      `source("…") filters the module graph`,
+      {
+        fs: {
+          'package.json': json`{}`,
+          'pnpm-workspace.yaml': yaml`
+            #
+            packages:
+              - project-a
+          `,
+          'project-a/package.json': txt`
+            {
+              "type": "module",
+              "dependencies": {
+                "@tailwindcss/vite": "workspace:^",
+                "tailwindcss": "workspace:^"
+              },
+              "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
+                "vite": "^5.3.5"
+              }
+            }
+          `,
+          'project-a/vite.config.ts': ts`
+            import tailwindcss from '@tailwindcss/vite'
+            import { defineConfig } from 'vite'
+
+            export default defineConfig({
+              css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+              build: { cssMinify: false },
+              plugins: [tailwindcss()],
+            })
+          `,
+          'project-a/index.html': html`
+            <head>
+              <link rel="stylesheet" href="/src/index.css" />
+            </head>
+            <body>
+              <div class="underline m-2 content-['project-a/index.html']">Hello, world!</div>
+              <script type="module" src="/app/index.js"></script>
+            </body>
+          `,
+          'project-a/app/index.js': js`
+            const className = "content-['project-a/app/index.js']"
+            export default { className }
+          `,
+          'project-a/src/index.css': css`
+            @import 'tailwindcss' source('../app');
+            @source '../../project-b/src/**/*.html';
+          `,
+          'project-b/src/index.html': html`
+            <div
+              class="content-['project-b/src/index.html']"
+            />
+          `,
+          'project-b/src/index.js': js`
+            const className = "content-['project-b/src/index.js']"
+            module.exports = { className }
+          `,
+        },
+      },
+      async ({ root, fs, exec }) => {
+        await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
+
+        let files = await fs.glob('project-a/dist/**/*.css')
+        expect(files).toHaveLength(1)
+        let [filename] = files[0]
+
+        // `underline` and `m-2` are present in files in the module graph but
+        // we've filtered the module graph such that we only look in
+        // `./app/**/*` so they should not be present
+        await fs.expectFileNotToContain(filename, [
+          //
+          candidate`underline`,
+          candidate`m-2`,
+          candidate`content-['project-a/index.html']`,
+        ])
+
+        // We've filtered the module graph to only look in ./app/**/* so the
+        // candidates from that project should be present
+        await fs.expectFileToContain(filename, [
+          //
+          candidate`content-['project-a/app/index.js']`,
+        ])
+
+        // Even through we're filtering the module graph explicit sources are
+        // additive and as such files from `project-b` should be included
+        // because there is an explicit `@source` directive for it
+        await fs.expectFileToContain(filename, [
+          //
+          candidate`content-['project-b/src/index.html']`,
+        ])
+
+        // The explicit source directive only covers HTML files, so the JS file
+        // should not be included
+        await fs.expectFileNotToContain(filename, [
+          //
+          candidate`content-['project-b/src/index.js']`,
+        ])
+      },
+    )
   })
 }
 

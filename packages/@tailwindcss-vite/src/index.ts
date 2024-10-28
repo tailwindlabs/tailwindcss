@@ -439,9 +439,24 @@ class Root {
     if (!this.compiler) return new Set()
     if (this.compiler.root === 'none') return new Set()
 
+    let root = this.compiler.root
+    let basePath = root ? path.resolve(root.base, root.pattern) : null
+
+    function moduleIdIsAllowed(id: string) {
+      if (basePath === null) return true
+
+      // This a virtual module that's not on the file system
+      // TODO: What should we do here?
+      if (!id.startsWith('/')) return true
+
+      return id.startsWith(basePath)
+    }
+
     let shared = new Set<string>()
 
     for (let [id, candidates] of this.getSharedCandidates()) {
+      if (!moduleIdIsAllowed(id)) continue
+
       for (let candidate of candidates) {
         shared.add(candidate)
       }
