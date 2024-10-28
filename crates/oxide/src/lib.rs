@@ -273,7 +273,15 @@ impl Scanner {
         let hoisted = hoist_static_glob_parts(&glob_sources);
 
         for source in &hoisted {
-            let Ok(glob) = Glob::new(&source.base) else {
+            // We need to combine the base and the pattern, otherwise a pattern that looks like
+            // `*.html`, will never match a path that looks like
+            // `/my-project/project-a/index.html`, because it contains `/`.
+            //
+            // We can't prepend `**/`, because then `/my-project/project-a/nested/index.html` would
+            // match as well.
+            //
+            // Instead we combine the base and the pattern as a single glob pattern.
+            let Ok(glob) = Glob::new(&format!("{}/{}", source.base, source.pattern)) else {
                 continue;
             };
 
