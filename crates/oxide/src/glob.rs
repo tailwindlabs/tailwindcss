@@ -97,7 +97,7 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
     // 1. All base paths in the pattern_map, that start with the current base path, can be removed.
     // 2. All patterns that are not `**/*` can be removed from the current base path.
 
-    pattern_map
+    let mut glob_entries = pattern_map
         .into_iter()
         .map(|(base, patterns)| {
             let size = patterns.len();
@@ -116,7 +116,12 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
                 },
             }
         })
-        .collect::<Vec<GlobEntry>>()
+        .collect::<Vec<GlobEntry>>();
+
+    // Sort the entries by base path to ensure we have stable results.
+    glob_entries.sort_by(|a, z| a.base.cmp(&z.base));
+
+    glob_entries
 }
 
 // Split a glob pattern into a `static` and `dynamic` part.
