@@ -1629,3 +1629,33 @@ test(
     `)
   },
 )
+
+test(
+  'migrating the prettier-plugin-tailwindcss version',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    let pkg = JSON.parse(await fs.read('package.json'))
+
+    expect(pkg.devDependencies).toMatchObject({
+      'prettier-plugin-tailwindcss': expect.any(String),
+    })
+    expect(pkg.devDependencies['prettier-plugin-tailwindcss']).not.toEqual('0.5.0')
+  },
+)
