@@ -256,7 +256,7 @@ describe.each([
   )
 })
 
-test.only(
+test(
   'source(…) and `@source` can be configured to use auto source detection (build + watch mode)',
   {
     fs: {
@@ -291,6 +291,10 @@ test.only(
 
         /* Project D should apply auto source detection rules, such as ignoring node_modules */
         @source '../../project-d/**/*.{html,js}';
+        @source '../../project-d/**/*.bin';
+
+        /* Same as above, but my-lib-2 _should_ be includes */
+        @source '../../project-d/node_modules/my-lib-2/*.{html,js}';
       `,
 
       // Project A is the current folder, but we explicitly configured
@@ -372,10 +376,25 @@ test.only(
         ></div>
       `,
 
+      // Project D has an explicit glob containing node_modules, thus should include the html file
+      'project-d/node_modules/my-lib-2/src/index.html': html`
+        <div
+          class="content-['project-d/node_modules/my-lib-2/src/index.html']"
+        ></div>
+      `,
+
       // Project D should look for files with the extensions html and js.
       'project-d/src/index.html': html`
         <div
           class="content-['project-d/src/index.html']"
+        ></div>
+      `,
+
+      // Project D should have a binary file even though we ignore binary files
+      // by default, but it's explicitly listed.
+      'project-d/my-binary-file.bin': html`
+        <div
+          class="content-['project-d/my-binary-file.bin']"
         ></div>
       `,
     },
@@ -406,6 +425,14 @@ test.only(
       }
       .content-\\[\\'project-c\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-c/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-d\\/my-binary-file\\.bin\\'\\] {
+        --tw-content: 'project-d/my-binary-file.bin';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-d\\/node_modules\\/my-lib-2\\/src\\/index\\.html\\'\\] {
+        --tw-content: 'project-d/node modules/my-lib-2/src/index.html';
         content: var(--tw-content);
       }
       .content-\\[\\'project-d\\/src\\/index\\.html\\'\\] {
