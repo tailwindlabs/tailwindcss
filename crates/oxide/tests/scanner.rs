@@ -66,17 +66,16 @@ mod scanner {
             ));
         }
 
+        let parent_dir = format!(
+            "{}{}",
+            fs::canonicalize(&base).unwrap().display(),
+            path::MAIN_SEPARATOR
+        );
+
         paths = paths
             .into_iter()
             .map(|x| {
-                let parent_dir = format!(
-                    "{}{}",
-                    fs::canonicalize(&base).unwrap().display(),
-                    path::MAIN_SEPARATOR
-                );
-                x.replace(&parent_dir, "")
-                    // Normalize paths to use unix style separators
-                    .replace('\\', "/")
+                x.replace(&parent_dir, "").replace('\\', "/") // Normalize paths to use unix style separators
             })
             .collect();
 
