@@ -216,38 +216,31 @@ test('inset-x', async () => {
     }
 
     .-inset-x-4 {
-      right: calc(var(--spacing-4, 1rem) * -1);
-      left: calc(var(--spacing-4, 1rem) * -1);
+      inset-inline: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-inset-x-full {
-      left: -100%;
-      right: -100%;
+      inset-inline: -100%;
     }
 
     .inset-x-3\\/4 {
-      left: 75%;
-      right: 75%;
+      inset-inline: 75%;
     }
 
     .inset-x-4 {
-      right: var(--spacing-4, 1rem);
-      left: var(--spacing-4, 1rem);
+      inset-inline: var(--spacing-4, 1rem);
     }
 
     .inset-x-\\[4px\\] {
-      left: 4px;
-      right: 4px;
+      inset-inline: 4px;
     }
 
     .inset-x-auto {
-      left: auto;
-      right: auto;
+      inset-inline: auto;
     }
 
     .inset-x-full {
-      left: 100%;
-      right: 100%;
+      inset-inline: 100%;
     }"
   `)
   expect(
@@ -293,38 +286,31 @@ test('inset-y', async () => {
     }
 
     .-inset-y-4 {
-      top: calc(var(--spacing-4, 1rem) * -1);
-      bottom: calc(var(--spacing-4, 1rem) * -1);
+      inset-block: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-inset-y-full {
-      top: -100%;
-      bottom: -100%;
+      inset-block: -100%;
     }
 
     .inset-y-3\\/4 {
-      top: 75%;
-      bottom: 75%;
+      inset-block: 75%;
     }
 
     .inset-y-4 {
-      top: var(--spacing-4, 1rem);
-      bottom: var(--spacing-4, 1rem);
+      inset-block: var(--spacing-4, 1rem);
     }
 
     .inset-y-\\[4px\\] {
-      top: 4px;
-      bottom: 4px;
+      inset-block: 4px;
     }
 
     .inset-y-auto {
-      top: auto;
-      bottom: auto;
+      inset-block: auto;
     }
 
     .inset-y-full {
-      top: 100%;
-      bottom: 100%;
+      inset-block: 100%;
     }"
   `)
   expect(
@@ -1262,28 +1248,23 @@ test('margin-x', async () => {
     }
 
     .-mx-4 {
-      margin-left: calc(var(--spacing-4, 1rem) * -1);
-      margin-right: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-mx-\\[var\\(--value\\)\\] {
-      margin-left: calc(var(--value) * -1);
-      margin-right: calc(var(--value) * -1);
+      margin-inline: calc(var(--value) * -1);
     }
 
     .mx-4 {
-      margin-left: var(--spacing-4, 1rem);
-      margin-right: var(--spacing-4, 1rem);
+      margin-inline: var(--spacing-4, 1rem);
     }
 
     .mx-\\[4px\\] {
-      margin-left: 4px;
-      margin-right: 4px;
+      margin-inline: 4px;
     }
 
     .mx-auto {
-      margin-left: auto;
-      margin-right: auto;
+      margin-inline: auto;
     }"
   `)
   expect(
@@ -1315,28 +1296,23 @@ test('margin-y', async () => {
     }
 
     .-my-4 {
-      margin-top: calc(var(--spacing-4, 1rem) * -1);
-      margin-bottom: calc(var(--spacing-4, 1rem) * -1);
+      margin-block: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-my-\\[var\\(--value\\)\\] {
-      margin-top: calc(var(--value) * -1);
-      margin-bottom: calc(var(--value) * -1);
+      margin-block: calc(var(--value) * -1);
     }
 
     .my-4 {
-      margin-top: var(--spacing-4, 1rem);
-      margin-bottom: var(--spacing-4, 1rem);
+      margin-block: var(--spacing-4, 1rem);
     }
 
     .my-\\[4px\\] {
-      margin-top: 4px;
-      margin-bottom: 4px;
+      margin-block: 4px;
     }
 
     .my-auto {
-      margin-top: auto;
-      margin-bottom: auto;
+      margin-block: auto;
     }"
   `)
   expect(
@@ -1660,13 +1636,11 @@ test('margin sort order', async () => {
     }
 
     .mx-4 {
-      margin-left: var(--spacing-4, 1rem);
-      margin-right: var(--spacing-4, 1rem);
+      margin-inline: var(--spacing-4, 1rem);
     }
 
     .my-4 {
-      margin-top: var(--spacing-4, 1rem);
-      margin-bottom: var(--spacing-4, 1rem);
+      margin-block: var(--spacing-4, 1rem);
     }
 
     .ms-4 {
@@ -5087,23 +5061,19 @@ test('scroll-mx', async () => {
     }
 
     .-scroll-mx-4 {
-      scroll-margin-left: calc(var(--spacing-4, 1rem) * -1);
-      scroll-margin-right: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-inline: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-mx-\\[var\\(--value\\)\\] {
-      scroll-margin-left: calc(var(--value) * -1);
-      scroll-margin-right: calc(var(--value) * -1);
+      scroll-margin-inline: calc(var(--value) * -1);
     }
 
     .scroll-mx-4 {
-      scroll-margin-left: var(--spacing-4, 1rem);
-      scroll-margin-right: var(--spacing-4, 1rem);
+      scroll-margin-inline: var(--spacing-4, 1rem);
     }
 
     .scroll-mx-\\[4px\\] {
-      scroll-margin-left: 4px;
-      scroll-margin-right: 4px;
+      scroll-margin-inline: 4px;
     }"
   `)
   expect(
@@ -5134,23 +5104,19 @@ test('scroll-my', async () => {
     }
 
     .-scroll-my-4 {
-      scroll-margin-top: calc(var(--spacing-4, 1rem) * -1);
-      scroll-margin-bottom: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-block: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-my-\\[var\\(--value\\)\\] {
-      scroll-margin-top: calc(var(--value) * -1);
-      scroll-margin-bottom: calc(var(--value) * -1);
+      scroll-margin-block: calc(var(--value) * -1);
     }
 
     .scroll-my-4 {
-      scroll-margin-top: var(--spacing-4, 1rem);
-      scroll-margin-bottom: var(--spacing-4, 1rem);
+      scroll-margin-block: var(--spacing-4, 1rem);
     }
 
     .scroll-my-\\[4px\\] {
-      scroll-margin-top: 4px;
-      scroll-margin-bottom: 4px;
+      scroll-margin-block: 4px;
     }"
   `)
   expect(
@@ -5482,23 +5448,19 @@ test('scroll-px', async () => {
     }
 
     .-scroll-px-4 {
-      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
-      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
+      scroll-padding-inline: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-px-\\[var\\(--value\\)\\] {
-      scroll-padding-left: calc(var(--value) * -1);
-      scroll-padding-right: calc(var(--value) * -1);
+      scroll-padding-inline: calc(var(--value) * -1);
     }
 
     .scroll-px-4 {
-      scroll-padding-left: var(--spacing-4, 1rem);
-      scroll-padding-right: var(--spacing-4, 1rem);
+      scroll-padding-inline: var(--spacing-4, 1rem);
     }
 
     .scroll-px-\\[4px\\] {
-      scroll-padding-left: 4px;
-      scroll-padding-right: 4px;
+      scroll-padding-inline: 4px;
     }"
   `)
   expect(
@@ -5529,23 +5491,19 @@ test('scroll-py', async () => {
     }
 
     .-scroll-py-4 {
-      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
-      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
+      scroll-padding-block: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-py-\\[var\\(--value\\)\\] {
-      scroll-padding-top: calc(var(--value) * -1);
-      scroll-padding-bottom: calc(var(--value) * -1);
+      scroll-padding-block: calc(var(--value) * -1);
     }
 
     .scroll-py-4 {
-      scroll-padding-top: var(--spacing-4, 1rem);
-      scroll-padding-bottom: var(--spacing-4, 1rem);
+      scroll-padding-block: var(--spacing-4, 1rem);
     }
 
     .scroll-py-\\[4px\\] {
-      scroll-padding-top: 4px;
-      scroll-padding-bottom: 4px;
+      scroll-padding-block: 4px;
     }"
   `)
   expect(
@@ -6998,18 +6956,18 @@ test('space-y', async () => {
     }
 
     :where(.-space-y-4 > :not(:last-child)) {
-      margin-top: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
-      margin-bottom: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-4 > :not(:last-child)) {
-      margin-top: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
-      margin-bottom: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
+      margin-block-end: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-\\[4px\\] > :not(:last-child)) {
-      margin-top: calc(4px * var(--tw-space-y-reverse));
-      margin-bottom: calc(4px * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(4px * var(--tw-space-y-reverse));
+      margin-block-end: calc(4px * calc(1 - var(--tw-space-y-reverse)));
     }
 
     @supports (-moz-orient: inline) {
@@ -11387,13 +11345,11 @@ test('px', async () => {
     }
 
     .px-4 {
-      padding-left: var(--spacing-4, 1rem);
-      padding-right: var(--spacing-4, 1rem);
+      padding-inline: var(--spacing-4, 1rem);
     }
 
     .px-\\[4px\\] {
-      padding-left: 4px;
-      padding-right: 4px;
+      padding-inline: 4px;
     }"
   `)
   expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
@@ -11416,13 +11372,11 @@ test('py', async () => {
     }
 
     .py-4 {
-      padding-top: var(--spacing-4, 1rem);
-      padding-bottom: var(--spacing-4, 1rem);
+      padding-block: var(--spacing-4, 1rem);
     }
 
     .py-\\[4px\\] {
-      padding-top: 4px;
-      padding-bottom: 4px;
+      padding-block: 4px;
     }"
   `)
   expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')

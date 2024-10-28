@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support calling `config()` with no arguments in plugin API ([#14799](https://github.com/tailwindlabs/tailwindcss/pull/14799))
 
+### Changed
+
+- Use logical `*-inline` and `*-block` properties for all x/y utilities like `px-*`, `my-*`, `scroll-px-*`, and `inset-y-*` ([#14805](https://github.com/tailwindlabs/tailwindcss/pull/14805))
+
 ## [4.0.0-alpha.30] - 2024-10-24
 
 ### Added

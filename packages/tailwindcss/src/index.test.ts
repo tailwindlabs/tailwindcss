@@ -627,8 +627,7 @@ describe('sorting', () => {
       }
 
       .px-1 {
-        padding-left: var(--spacing-1, .25rem);
-        padding-right: var(--spacing-1, .25rem);
+        padding-inline: var(--spacing-1, .25rem);
       }
 
       .pl-1 {
@@ -681,8 +680,7 @@ describe('sorting', () => {
       }
 
       .mx-0 {
-        margin-left: var(--spacing-0, 0px);
-        margin-right: var(--spacing-0, 0px);
+        margin-inline: var(--spacing-0, 0px);
       }
 
       .gap-4 {
@@ -751,8 +749,7 @@ describe('sorting', () => {
       }
 
       .mx-3 {
-        margin-left: var(--spacing-3, 3px);
-        margin-right: var(--spacing-3, 3px);
+        margin-inline: var(--spacing-3, 3px);
       }
 
       .ms-1 {
@@ -764,8 +761,7 @@ describe('sorting', () => {
       }
 
       .scroll-mx-3 {
-        scroll-margin-left: var(--spacing-3, 3px);
-        scroll-margin-right: var(--spacing-3, 3px);
+        scroll-margin-inline: var(--spacing-3, 3px);
       }
 
       .scroll-ms-1 {
@@ -777,8 +773,7 @@ describe('sorting', () => {
       }
 
       .scroll-px-3 {
-        scroll-padding-left: var(--spacing-3, 3px);
-        scroll-padding-right: var(--spacing-3, 3px);
+        scroll-padding-inline: var(--spacing-3, 3px);
       }
 
       .scroll-ps-1 {
@@ -790,8 +785,7 @@ describe('sorting', () => {
       }
 
       .px-3 {
-        padding-left: var(--spacing-3, 3px);
-        padding-right: var(--spacing-3, 3px);
+        padding-inline: var(--spacing-3, 3px);
       }
 
       .ps-1 {
