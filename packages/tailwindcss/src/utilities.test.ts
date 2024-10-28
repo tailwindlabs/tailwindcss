@@ -6956,18 +6956,18 @@ test('space-y', async () => {
     }
 
     :where(.-space-y-4 > :not(:last-child)) {
-      margin-top: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
-      margin-bottom: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-4 > :not(:last-child)) {
-      margin-top: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
-      margin-bottom: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
+      margin-block-end: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-\\[4px\\] > :not(:last-child)) {
-      margin-top: calc(4px * var(--tw-space-y-reverse));
-      margin-bottom: calc(4px * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(4px * var(--tw-space-y-reverse));
+      margin-block-end: calc(4px * calc(1 - var(--tw-space-y-reverse)));
     }
 
     @supports (-moz-orient: inline) {

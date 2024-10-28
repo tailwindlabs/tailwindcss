@@ -2040,8 +2040,8 @@ export function createUtilities(theme: Theme) {
 
       rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
-        decl('margin-top', `calc(${value} * var(--tw-space-y-reverse))`),
-        decl('margin-bottom', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
+        decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
+        decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
       ]),
     ],
   })
