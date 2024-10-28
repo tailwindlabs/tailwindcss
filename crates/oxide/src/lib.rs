@@ -1,10 +1,12 @@
+use crate::glob::hoist_static_glob_parts;
 use crate::parser::Extractor;
+use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
 use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
-use glob::fast_glob;
-use glob::get_fast_patterns;
+use glob::optimize_patterns;
+use globset::Glob;
 use rayon::prelude::*;
 use std::fs;
 use std::path::PathBuf;
@@ -255,9 +257,6 @@ impl Scanner {
             false
         });
 
-        // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
-        let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
-
         for path in auto_sources
             .iter()
             .map(|source| PathBuf::from(&source.base).join(source.pattern.trim_end_matches("**/*")))
@@ -269,46 +268,43 @@ impl Scanner {
             self.globs.extend(globs);
         }
 
-        let resolved_files: Vec<_> = match fast_glob(&glob_sources) {
-            Ok(matches) => matches
-                .filter_map(|x| dunce::canonicalize(&x).ok())
-                .collect(),
-            Err(err) => {
-                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-                vec![]
-            }
-        };
+        // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
+        let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
+        let hoisted = hoist_static_glob_parts(&glob_sources);
 
-        self.files.extend(resolved_files);
-        self.globs.extend(glob_sources);
+        for source in &hoisted {
+            let Ok(glob) = Glob::new(&source.base) else {
+                continue;
+            };
 
-        // Re-optimize the globs to reduce the number of patterns we have to scan.
-        self.globs = get_fast_patterns(&self.globs)
-            .into_iter()
-            .filter_map(|(root, globs)| {
-                let root = match dunce::canonicalize(root) {
-                    Ok(root) => root,
-                    Err(error) => {
-                        event!(
-                            tracing::Level::ERROR,
-                            "Failed to canonicalize base path {:?}",
-                            error
-                        );
-                        return None;
-                    }
+            let glob = glob.compile_matcher();
+
+            let base = PathBuf::from(&source.base);
+            for entry in resolve_paths(&base) {
+                let Some(file_type) = entry.file_type() else {
+                    continue;
                 };
 
-                Some((root, globs))
-            })
-            .flat_map(|(root, globs)| {
-                let base = root.display().to_string();
+                if !file_type.is_file() {
+                    continue;
+                }
 
-                globs.into_iter().map(move |glob| GlobEntry {
-                    base: base.clone(),
-                    pattern: glob,
-                })
-            })
-            .collect::<Vec<GlobEntry>>();
+                let file_path = entry.into_path();
+
+                let Some(file_path_str) = file_path.to_str() else {
+                    continue;
+                };
+
+                if glob.is_match(file_path_str) {
+                    self.files.push(file_path);
+                }
+            }
+        }
+
+        self.globs.extend(hoisted);
+
+        // Re-optimize the globs to reduce the number of patterns we have to scan.
+        self.globs = optimize_patterns(&self.globs);
     }
 }
 

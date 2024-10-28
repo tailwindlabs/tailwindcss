@@ -1,22 +1,62 @@
+use fxhash::{FxHashMap, FxHashSet};
 use glob_match::glob_match;
 use std::iter;
 use std::path::{Path, PathBuf};
+use tracing::event;
 
 use crate::GlobEntry;
 
 pub fn fast_glob(
     patterns: &Vec<GlobEntry>,
 ) -> Result<impl iter::Iterator<Item = PathBuf>, std::io::Error> {
-    Ok(get_fast_patterns(patterns)
+    Ok(optimize_patterns(patterns)
         .into_iter()
-        .flat_map(|(base_path, patterns)| {
-            globwalk::GlobWalkerBuilder::from_patterns(base_path, &patterns)
-                .follow_links(true)
-                .build()
-                .unwrap()
-                .filter_map(Result::ok)
-                .map(|file| file.path().to_path_buf())
+        .flat_map(|glob_entry| {
+            globwalk::GlobWalkerBuilder::from_patterns(
+                glob_entry.base,
+                &[glob_entry.pattern.as_str()][..],
+            )
+            .follow_links(true)
+            .build()
+            .unwrap()
+            .filter_map(Result::ok)
+            .map(|file| file.path().to_path_buf())
         }))
+}
+
+pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
+    let mut result = vec![];
+
+    for entry in entries {
+        let (static_part, dynamic_part) = split_pattern(&entry.pattern);
+
+        let base: PathBuf = entry.base.clone().into();
+        let base = match static_part {
+            Some(static_part) => base.join(static_part),
+            None => base,
+        };
+
+        let base = match dunce::canonicalize(&base) {
+            Ok(base) => base,
+            Err(err) => {
+                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                // If we can't resolve the new base on disk, let's just skip this entry.
+                continue;
+            }
+        };
+
+        let pattern = match dynamic_part {
+            Some(dynamic_part) => dynamic_part,
+            None => "**/*".to_owned(),
+        };
+
+        result.push(GlobEntry {
+            base: base.to_string_lossy().to_string(),
+            pattern,
+        });
+    }
+
+    result
 }
 
 /// This function attempts to optimize the glob patterns to improve performance. The problem is
@@ -42,98 +82,83 @@ pub fn fast_glob(
 /// tailwind --pwd ./project/pages --content "**/*.js"
 /// tailwind --pwd ./project/components --content "**/*.js"
 /// ```
-pub fn get_fast_patterns(patterns: &Vec<GlobEntry>) -> Vec<(PathBuf, Vec<String>)> {
-    let mut optimized_patterns: Vec<(PathBuf, Vec<String>)> = vec![];
+pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
+    let entries = hoist_static_glob_parts(entries);
 
-    for pattern in patterns {
-        let base_path = PathBuf::from(&pattern.base);
-        let pattern = &pattern.pattern;
+    // Track all base paths and their patterns. Later we will turn them back into `GlobalEntry`s.
+    let mut pattern_map: FxHashMap<String, FxHashSet<String>> = FxHashMap::default();
 
-        let is_negated = pattern.starts_with('!');
-        let mut pattern = pattern.clone();
-        if is_negated {
-            pattern.remove(0);
+    for glob_entry in entries {
+        let entry = pattern_map.entry(glob_entry.base).or_default();
+        entry.insert(glob_entry.pattern.clone());
+    }
+
+    // TODO: Optimization, if any of the patterns result in `**/*`, then we can do two things:
+    // 1. All base paths in the pattern_map, that start with the current base path, can be removed.
+    // 2. All patterns that are not `**/*` can be removed from the current base path.
+
+    pattern_map
+        .into_iter()
+        .map(|(base, patterns)| {
+            let size = patterns.len();
+            let mut patterns = patterns.into_iter().collect::<Vec<_>>();
+            patterns.sort();
+            let combined_patterns = patterns.join(",");
+
+            // TODO: Right now this will generate something like `{**/*.html,**/*.js}`, but maybe
+            // we want to generate this instead:`**/*.{html,js}`.
+
+            GlobEntry {
+                base,
+                pattern: match size {
+                    1 => combined_patterns,
+                    _ => format!("{{{}}}", combined_patterns),
+                },
+            }
+        })
+        .collect::<Vec<GlobEntry>>()
+}
+
+// Split a glob pattern into a `static` and `dynamic` part.
+//
+// Assumption: we assume that all globs are expanded, which means that the only dynamic parts are
+// using `*`.
+//
+// E.g.:
+//  Original input: `../project-b/**/*.{html,js}`
+//  Expanded input: `../project-b/**/*.html` & `../project-b/**/*.js`
+//  Split on first input: ("../project-b", "**/*.html")
+//  Split on second input: ("../project-b", "**/*.js")
+fn split_pattern(input: &str) -> (Option<String>, Option<String>) {
+    // No dynamic parts, so we can just return the input as-is.
+    if !input.contains('*') {
+        return (Some(input.to_owned()), None);
+    }
+
+    let mut last_slash_position = None;
+
+    for (i, c) in input.char_indices() {
+        if c == '/' {
+            last_slash_position = Some(i);
         }
 
-        let mut folders = pattern.split('/').collect::<Vec<_>>();
-
-        if folders.len() <= 1 {
-            // No paths we can simplify, so let's use it as-is.
-            optimized_patterns.push((base_path, vec![pattern]));
-        } else {
-            // We do have folders because `/` exists. Let's try to simplify the globs!
-            // Safety: We know that the length is greater than 1, so we can safely unwrap.
-            let file_pattern = folders.pop().unwrap();
-            let all_folders = folders.clone();
-            let mut temp_paths = vec![base_path];
-
-            let mut bail = false;
-
-            for (i, folder) in folders.into_iter().enumerate() {
-                // There is a wildcard in the folder, so we have to bail now... 😢 But this also
-                // means that we can skip looking at the rest of the folders, so there is at least
-                // this small optimization we can apply!
-                if folder.contains('*') {
-                    // Get all the remaining folders, attach the existing file_pattern so that this
-                    // can now be the final pattern we use.
-                    let mut remaining_folders = all_folders[i..].to_vec();
-                    remaining_folders.push(file_pattern);
-
-                    let pattern = remaining_folders.join("/");
-                    for path in &temp_paths {
-                        optimized_patterns.push((path.to_path_buf(), vec![pattern.to_string()]));
-                    }
-
-                    bail = true;
-                    break;
-                }
-
-                // The folder is very likely using an expandable pattern which we can expand!
-                if folder.contains('{') && folder.contains('}') {
-                    let branches = expand_braces(folder);
-
-                    let existing_paths = temp_paths;
-                    temp_paths = branches
-                        .iter()
-                        .flat_map(|branch| {
-                            existing_paths
-                                .clone()
-                                .into_iter()
-                                .map(|path| path.join(branch))
-                                .collect::<Vec<_>>()
-                        })
-                        .collect::<Vec<_>>();
-                }
-                // The folder should just be a simple folder name without any glob magic. We should
-                // be able to safely add it to the existing paths.
-                else {
-                    temp_paths = temp_paths
-                        .into_iter()
-                        .map(|path| path.join(folder))
-                        .collect();
-                }
-            }
-
-            // As long as we didn't bail, we can now add the current expanded patterns to the
-            // optimized patterns.
-            if !bail {
-                for path in &temp_paths {
-                    optimized_patterns.push((path.to_path_buf(), vec![file_pattern.to_string()]));
-                }
-            }
-        }
-
-        // Ensure that we re-add all the `!` signs to the patterns.
-        if is_negated {
-            for (_, patterns) in &mut optimized_patterns {
-                for pattern in patterns {
-                    pattern.insert(0, '!');
-                }
-            }
+        if c == '*' {
+            break;
         }
     }
 
-    optimized_patterns
+    // Very first character is a `*`, therefore there is no static part, only a dynamic part.
+    let Some(last_slash_position) = last_slash_position else {
+        return (None, Some(input.to_owned()));
+    };
+
+    let static_part = input[..last_slash_position].to_owned();
+    let dynamic_part = input[last_slash_position + 1..].to_owned();
+
+    let static_part = (!static_part.is_empty()).then_some(static_part);
+    let dynamic_part = (!dynamic_part.is_empty()).then_some(dynamic_part);
+
+    (static_part, dynamic_part)
 }
 
 pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
