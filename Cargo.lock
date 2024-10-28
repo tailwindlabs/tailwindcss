@@ -525,6 +525,7 @@ dependencies = [
  "crossbeam",
  "dunce",
  "glob-match",
+ "globset",
  "globwalk",
  "ignore",
  "log",
