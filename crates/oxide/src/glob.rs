@@ -134,31 +134,31 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 //  Expanded input: `../project-b/**/*.html` & `../project-b/**/*.js`
 //  Split on first input: ("../project-b", "**/*.html")
 //  Split on second input: ("../project-b", "**/*.js")
-fn split_pattern(input: &str) -> (Option<String>, Option<String>) {
+fn split_pattern(pattern: &str) -> (Option<String>, Option<String>) {
     // No dynamic parts, so we can just return the input as-is.
-    if !input.contains('*') {
-        return (Some(input.to_owned()), None);
+    if !pattern.contains('*') {
+        return (Some(pattern.to_owned()), None);
     }
 
     let mut last_slash_position = None;
 
-    for (i, c) in input.char_indices() {
+    for (i, c) in pattern.char_indices() {
         if c == '/' {
             last_slash_position = Some(i);
         }
 
-        if c == '*' {
+        if c == '*' || c == '!' {
             break;
         }
     }
 
     // Very first character is a `*`, therefore there is no static part, only a dynamic part.
     let Some(last_slash_position) = last_slash_position else {
-        return (None, Some(input.to_owned()));
+        return (None, Some(pattern.to_owned()));
     };
 
-    let static_part = input[..last_slash_position].to_owned();
-    let dynamic_part = input[last_slash_position + 1..].to_owned();
+    let static_part = pattern[..last_slash_position].to_owned();
+    let dynamic_part = pattern[last_slash_position + 1..].to_owned();
 
     let static_part = (!static_part.is_empty()).then_some(static_part);
     let dynamic_part = (!dynamic_part.is_empty()).then_some(dynamic_part);
