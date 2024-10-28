@@ -13,6 +13,7 @@ import {
 } from './migrate'
 import { migrateJsConfig } from './migrate-js-config'
 import { migratePostCSSConfig } from './migrate-postcss'
+import { migratePrettierPlugin } from './migrate-prettier'
 import { Stylesheet } from './stylesheet'
 import { migrate as migrateTemplate } from './template/migrate'
 import { prepareConfig } from './template/prepare-config'
@@ -189,6 +190,11 @@ async function run() {
   {
     // PostCSS config migration
     await migratePostCSSConfig(base)
+  }
+
+  {
+    // Migrate the prettier plugin to the latest version
+    await migratePrettierPlugin(base)
   }
 
   try {
