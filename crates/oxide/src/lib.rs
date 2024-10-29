@@ -1,9 +1,12 @@
+use crate::glob::hoist_static_glob_parts;
 use crate::parser::Extractor;
+use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
+use bexpand::Expression;
 use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
-use glob::fast_glob;
-use glob::get_fast_patterns;
+use glob::optimize_patterns;
+use glob_match::glob_match;
 use rayon::prelude::*;
 use std::fs;
 use std::path::PathBuf;
@@ -54,7 +57,7 @@ pub struct ScanResult {
     pub globs: Vec<GlobEntry>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct GlobEntry {
     pub base: String,
     pub pattern: String,
@@ -62,9 +65,6 @@ pub struct GlobEntry {
 
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
-    /// Auto content configuration
-    detect_sources: Option<DetectSources>,
-
     /// Glob sources
     sources: Option<Vec<GlobEntry>>,
 
@@ -86,9 +86,8 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(detect_sources: Option<DetectSources>, sources: Option<Vec<GlobEntry>>) -> Self {
+    pub fn new(sources: Option<Vec<GlobEntry>>) -> Self {
         Self {
-            detect_sources,
             sources,
             ..Default::default()
         }
@@ -206,19 +205,9 @@ impl Scanner {
             return;
         }
 
-        self.detect_sources();
         self.scan_sources();
 
         self.ready = true;
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn detect_sources(&mut self) {
-        if let Some(detect_sources) = &self.detect_sources {
-            let (files, globs) = detect_sources.detect();
-            self.files.extend(files);
-            self.globs.extend(globs);
-        }
     }
 
     #[tracing::instrument(skip_all)]
@@ -231,46 +220,110 @@ impl Scanner {
             return;
         }
 
-        let resolved_files: Vec<_> = match fast_glob(sources) {
-            Ok(matches) => matches
-                .filter_map(|x| dunce::canonicalize(&x).ok())
-                .collect(),
-            Err(err) => {
-                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-                vec![]
-            }
-        };
-
-        self.files.extend(resolved_files);
-        self.globs.extend(sources.clone());
-
-        // Re-optimize the globs to reduce the number of patterns we have to scan.
-        self.globs = get_fast_patterns(&self.globs)
-            .into_iter()
-            .filter_map(|(root, globs)| {
-                let root = match dunce::canonicalize(root) {
-                    Ok(root) => root,
-                    Err(error) => {
-                        event!(
-                            tracing::Level::ERROR,
-                            "Failed to canonicalize base path {:?}",
-                            error
-                        );
-                        return None;
-                    }
+        // Expand glob patterns and create new `GlobEntry` instances for each expanded pattern.
+        let sources = sources
+            .iter()
+            .flat_map(|source| {
+                let expression: Result<Expression, _> = source.pattern[..].try_into();
+                let Ok(expression) = expression else {
+                    return vec![source.clone()];
                 };
 
-                Some((root, globs))
+                expression
+                    .into_iter()
+                    .filter_map(Result::ok)
+                    .map(move |pattern| GlobEntry {
+                        base: source.base.clone(),
+                        pattern: pattern.into(),
+                    })
+                    .collect::<Vec<_>>()
             })
-            .flat_map(|(root, globs)| {
-                let base = root.display().to_string();
+            .collect::<Vec<_>>();
 
-                globs.into_iter().map(move |glob| GlobEntry {
-                    base: base.clone(),
-                    pattern: glob,
-                })
-            })
-            .collect::<Vec<GlobEntry>>();
+        // Partition sources into sources that should be promoted to auto source detection and
+        // sources that should be resolved as globs.
+        let (auto_sources, glob_sources): (Vec<_>, Vec<_>) = sources.iter().partition(|source| {
+            // If a glob ends with `/**/*`, then we just want to register the base path as a new
+            // base. Essentially converting it to use auto source detection.
+            if source.pattern.ends_with("**/*") {
+                return true;
+            }
+
+            // Directories should be promoted to auto source detection
+            if PathBuf::from(&source.base).join(&source.pattern).is_dir() {
+                return true;
+            }
+
+            false
+        });
+
+        for path in auto_sources
+            .iter()
+            .map(|source| PathBuf::from(&source.base).join(source.pattern.trim_end_matches("**/*")))
+        {
+            // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+            self.globs.push(GlobEntry {
+                base: path.to_string_lossy().into(),
+                pattern: "*".into(),
+            });
+
+            // Detect all files/folders in the directory
+            let detect_sources = DetectSources::new(path);
+
+            let (files, globs) = detect_sources.detect();
+            self.files.extend(files);
+            self.globs.extend(globs);
+        }
+
+        // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
+        let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
+        let hoisted = hoist_static_glob_parts(&glob_sources);
+
+        for source in &hoisted {
+            // If the pattern is empty, then the base points to a specific file or folder already
+            // if it doesn't contain any dynamic parts. In that case we can use the base as the
+            // pattern.
+            //
+            // Otherwise we need to combine the base and the pattern, otherwise a pattern that
+            // looks like `*.html`, will never match a path that looks like
+            // `/my-project/project-a/index.html`, because it contains `/`.
+            //
+            // We can't prepend `**/`, because then `/my-project/project-a/nested/index.html` would
+            // match as well.
+            //
+            // Instead we combine the base and the pattern as a single glob pattern.
+            let mut full_pattern = source.base.clone();
+            if !source.pattern.is_empty() {
+                full_pattern.push('/');
+                full_pattern.push_str(&source.pattern);
+            }
+
+            let base = PathBuf::from(&source.base);
+            for entry in resolve_paths(&base) {
+                let Some(file_type) = entry.file_type() else {
+                    continue;
+                };
+
+                if !file_type.is_file() {
+                    continue;
+                }
+
+                let file_path = entry.into_path();
+
+                let Some(file_path_str) = file_path.to_str() else {
+                    continue;
+                };
+
+                if glob_match(&full_pattern, file_path_str) {
+                    self.files.push(file_path);
+                }
+            }
+        }
+
+        self.globs.extend(hoisted);
+
+        // Re-optimize the globs to reduce the number of patterns we have to scan.
+        self.globs = optimize_patterns(&self.globs);
     }
 }
 

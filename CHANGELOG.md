@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support specifying the base path for automatic source detection using a `source(…)` function on `@tailwind utilities` or `@import "tailwindcss"` ([#14820](https://github.com/tailwindlabs/tailwindcss/pull/14820))
+- Support disabling automatic source detection with `source(none)` ([#14820](https://github.com/tailwindlabs/tailwindcss/pull/14820))
+- Support passing directories to `@source` without needing to pass a complete glob ([#14820](https://github.com/tailwindlabs/tailwindcss/pull/14820))
 - _Upgrade (experimental)_: Bump `prettier-plugin-tailwindcss` to latest version during upgrade ([#14808](https://github.com/tailwindlabs/tailwindcss/pull/14808))
 
 ### Fixed
@@ -18,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use logical `*-inline` and `*-block` properties for all x/y utilities like `px-*`, `my-*`, `scroll-px-*`, and `inset-y-*` ([#14805](https://github.com/tailwindlabs/tailwindcss/pull/14805))
+- Respect automatic source detection heuristics in sources registered with `@source` ([#14820](https://github.com/tailwindlabs/tailwindcss/pull/14820))
 
 ## [4.0.0-alpha.30] - 2024-10-24
 

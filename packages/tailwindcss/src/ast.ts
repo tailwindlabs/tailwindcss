@@ -223,7 +223,10 @@ export function toCss(ast: AstNode[]) {
 
     // AtRule
     else if (node.kind === 'at-rule') {
-      if (node.name === '@tailwind' && node.params === 'utilities') {
+      if (
+        node.name === '@tailwind' &&
+        (node.params === 'utilities' || node.params.startsWith('utilities'))
+      ) {
         for (let child of node.nodes) {
           css += stringify(child, depth)
         }

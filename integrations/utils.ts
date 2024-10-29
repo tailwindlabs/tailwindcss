@@ -112,8 +112,14 @@ export function test(
               (error, stdout, stderr) => {
                 if (error) {
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
+                  if (only || debug) {
+                    console.error(stdout)
+                  }
                   reject(error)
                 } else {
+                  if (only || debug) {
+                    console.log(stdout.toString() + '\n\n' + stderr.toString())
+                  }
                   resolve(stdout.toString() + '\n\n' + stderr.toString())
                 }
               },
@@ -187,14 +193,14 @@ export function test(
 
           child.stdout.on('data', (result) => {
             let content = result.toString()
-            if (debug) console.log(content)
+            if (debug || only) console.log(content)
             combined.push(['stdout', content])
             stdoutMessages.push(content)
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
-            if (debug) console.error(content)
+            if (debug || only) console.error(content)
             combined.push(['stderr', content])
             stderrMessages.push(content)
             notifyNext(stderrActors, stderrMessages)
@@ -303,7 +309,11 @@ export function test(
             return Promise.all(
               files.map(async (file) => {
                 let content = await fs.readFile(path.join(root, file), 'utf8')
-                return [file, content]
+                return [
+                  file,
+                  // Drop license comment
+                  content.replace(/[\s\n]*\/\*! tailwindcss .*? \*\/[\s\n]*/g, ''),
+                ]
               }),
             )
           },

@@ -2,6 +2,7 @@ import { compile, env, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
+import fs from 'node:fs/promises'
 import path from 'path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
@@ -35,7 +36,7 @@ export default function tailwindcss(): Plugin[] {
   // Note: To improve performance, we do not remove candidates from this set.
   // This means a longer-ongoing dev mode session might contain candidates that
   // are no longer referenced in code.
-  let moduleGraphCandidates = new Set<string>()
+  let moduleGraphCandidates = new DefaultMap<string, Set<string>>(() => new Set<string>())
   let moduleGraphScanner = new Scanner({})
 
   let roots: DefaultMap<string, Root> = new DefaultMap(
@@ -46,7 +47,7 @@ export default function tailwindcss(): Plugin[] {
     let updated = false
     for (let candidate of moduleGraphScanner.scanFiles([{ content, extension }])) {
       updated = true
-      moduleGraphCandidates.add(candidate)
+      moduleGraphCandidates.get(id).add(candidate)
     }
 
     if (updated) {
@@ -343,14 +344,16 @@ class Root {
   // the lifetime of the root.
   private candidates: Set<string> = new Set<string>()
 
-  // List of all file dependencies that were captured while generating the root.
-  // These are retained so we can clear the require cache when we rebuild the
-  // root.
+  // List of all dependencies captured while generating the root. These are
+  // retained so we can clear the require cache when we rebuild the root.
   private dependencies = new Set<string>()
+
+  // The resolved path given to `source(…)`. When not given this is `null`.
+  private basePath: string | null = null
 
   constructor(
     private id: string,
-    private getSharedCandidates: () => Set<string>,
+    private getSharedCandidates: () => Map<string, Set<string>>,
     private base: string,
   ) {}
 
@@ -379,9 +382,22 @@ class Root {
       })
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Setup compiler')
 
-      this.scanner = new Scanner({
-        sources: this.compiler.globs,
-      })
+      let sources = (() => {
+        // Disable auto source detection
+        if (this.compiler.root === 'none') {
+          return []
+        }
+
+        // No root specified, use the module graph
+        if (this.compiler.root === null) {
+          return []
+        }
+
+        // Use the specified root
+        return [this.compiler.root]
+      })().concat(this.compiler.globs)
+
+      this.scanner = new Scanner({ sources })
     }
 
     // This should not be here, but right now the Vite plugin is setup where we
@@ -411,14 +427,62 @@ class Root {
       relative = normalizePath(relative)
 
       addWatchFile(path.posix.join(relative, glob.pattern))
+
+      let root = this.compiler.root
+
+      if (root !== 'none' && root !== null) {
+        let basePath = path.posix.resolve(root.base, root.pattern)
+
+        let isDir = await fs.stat(basePath).then(
+          (stats) => stats.isDirectory(),
+          () => false,
+        )
+
+        if (!isDir) {
+          throw new Error(
+            `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
+          )
+        }
+
+        this.basePath = basePath
+      } else if (root === null) {
+        this.basePath = null
+      }
     }
 
     this.requiresRebuild = true
 
     env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
-    let result = this.compiler.build([...this.getSharedCandidates(), ...this.candidates])
+    let result = this.compiler.build([...this.sharedCandidates(), ...this.candidates])
     env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
 
     return result
+  }
+
+  private sharedCandidates(): Set<string> {
+    if (!this.compiler) return new Set()
+    if (this.compiler.root === 'none') return new Set()
+
+    let shouldIncludeCandidatesFrom = (id: string) => {
+      if (this.basePath === null) return true
+
+      // This a virtual module that's not on the file system
+      // TODO: What should we do here?
+      if (!id.startsWith('/')) return true
+
+      return id.startsWith(this.basePath)
+    }
+
+    let shared = new Set<string>()
+
+    for (let [id, candidates] of this.getSharedCandidates()) {
+      if (!shouldIncludeCandidatesFrom(id)) continue
+
+      for (let candidate of candidates) {
+        shared.add(candidate)
+      }
+    }
+
+    return shared
   }
 }

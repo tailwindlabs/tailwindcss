@@ -137,21 +137,34 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         fullRebuildPaths.push(path)
       },
     })
+
+    let sources = (() => {
+      // Disable auto source detection
+      if (compiler.root === 'none') {
+        return []
+      }
+
+      // No root specified, use the base directory
+      if (compiler.root === null) {
+        return [{ base, pattern: '**/*' }]
+      }
+
+      // Use the specified root
+      return [compiler.root]
+    })().concat(compiler.globs)
+
+    let scanner = new Scanner({ sources })
     env.DEBUG && console.timeEnd('[@tailwindcss/cli] Setup compiler')
-    return compiler
+
+    return [compiler, scanner] as const
   }
 
-  // Compile the input
-  let compiler = await createCompiler(input)
-  let scanner = new Scanner({
-    detectSources: { base },
-    sources: compiler.globs,
-  })
+  let [compiler, scanner] = await createCompiler(input)
 
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
-      watchDirectories(base, scanner),
+      watchDirectories(scanner),
       async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
@@ -205,13 +218,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
-            compiler = await createCompiler(input)
-
-            // Re-scan the directory to get the new `candidates`
-            scanner = new Scanner({
-              detectSources: { base },
-              sources: compiler.globs,
-            })
+            ;[compiler, scanner] = await createCompiler(input)
 
             // Scan the directory for candidates
             env.DEBUG && console.time('[@tailwindcss/cli] Scan for candidates')
@@ -219,7 +226,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
+            cleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
 
             // Re-compile the CSS
             env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
@@ -287,19 +294,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-function watchDirectories(base: string, scanner: Scanner) {
-  return [base].concat(
-    scanner.globs.flatMap((globEntry) => {
-      // We don't want a watcher for negated globs.
-      if (globEntry.pattern[0] === '!') return []
+function watchDirectories(scanner: Scanner) {
+  return scanner.globs.flatMap((globEntry) => {
+    // We don't want a watcher for negated globs.
+    if (globEntry.pattern[0] === '!') return []
 
-      // We don't want a watcher for nested directories, these will be covered
-      // by the `base` directory already.
-      if (globEntry.base.startsWith(base)) return []
+    // We don't want a watcher for files, only directories.
+    if (globEntry.pattern === '') return []
 
-      return globEntry.base
-    }),
-  )
+    return globEntry.base
+  })
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
