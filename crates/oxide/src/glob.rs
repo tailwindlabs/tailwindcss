@@ -237,15 +237,18 @@ mod tests {
 
         let optimized_sources = optimize_patterns(&sources);
 
-        let parent_dir = format!("{}", fs::canonicalize(base).unwrap().display());
+        let parent_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
 
         // Remove the temporary directory from the base
         optimized_sources
             .into_iter()
-            .map(|source| GlobEntry {
-                // Normalize paths to use unix style separators
-                base: source.base.replace(&parent_dir, "").replace('\\', "/"),
-                pattern: source.pattern,
+            .map(|source| {
+                GlobEntry {
+                    // Normalize paths to use unix style separators
+                    base: source.base.replace('\\', "/").replace(&parent_dir, "/"),
+                    pattern: source.pattern,
+                }
             })
             .collect()
     }

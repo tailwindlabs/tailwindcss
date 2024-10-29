@@ -431,7 +431,7 @@ class Root {
       let root = this.compiler.root
 
       if (root !== 'none' && root !== null) {
-        let basePath = path.posix.resolve(root.base, root.pattern)
+        let basePath = normalizePath(path.resolve(root.base, root.pattern))
 
         let isDir = await fs.stat(basePath).then(
           (stats) => stats.isDirectory(),
@@ -463,14 +463,22 @@ class Root {
     if (!this.compiler) return new Set()
     if (this.compiler.root === 'none') return new Set()
 
+    const HAS_DRIVE_LETTER = /^[A-Z]:/
+
     let shouldIncludeCandidatesFrom = (id: string) => {
       if (this.basePath === null) return true
 
-      // This a virtual module that's not on the file system
-      // TODO: What should we do here?
+      if (id.startsWith(this.basePath)) return true
+
+      // This is a windows absolute path that doesn't match so return false
+      if (HAS_DRIVE_LETTER.test(id)) return false
+
+      // We've got a path that's not absolute and not on Windows
+      // TODO: this is probably a virtual module -- not sure if we need to scan it
       if (!id.startsWith('/')) return true
 
-      return id.startsWith(this.basePath)
+      // This is an absolute path on POSIX and it does not match
+      return false
     }
 
     let shared = new Set<string>()

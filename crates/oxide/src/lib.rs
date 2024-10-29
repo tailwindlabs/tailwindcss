@@ -7,6 +7,7 @@ use bstr::ByteSlice;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
 use glob_match::glob_match;
+use paths::Path;
 use rayon::prelude::*;
 use std::fs;
 use std::path::PathBuf;
@@ -18,6 +19,7 @@ pub mod cursor;
 pub mod fast_skip;
 pub mod glob;
 pub mod parser;
+pub mod paths;
 pub mod scanner;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
@@ -151,7 +153,8 @@ impl Scanner {
 
         self.files
             .iter()
-            .map(|x| x.to_string_lossy().into())
+            .filter_map(|x| Path::from(x.clone()).canonicalize().ok())
+            .map(|x| x.to_string())
             .collect()
     }
 
@@ -257,9 +260,18 @@ impl Scanner {
             false
         });
 
+        fn join_paths(a: &str, b: &str) -> PathBuf {
+            let mut tmp = a.to_owned();
+
+            tmp += "/";
+            tmp += b.trim_end_matches("**/*").trim_end_matches('/');
+
+            PathBuf::from(&tmp)
+        }
+
         for path in auto_sources
             .iter()
-            .map(|source| PathBuf::from(&source.base).join(source.pattern.trim_end_matches("**/*")))
+            .map(|source| join_paths(&source.base, &source.pattern))
         {
             // Insert a glob for the base path, so we can see new files/folders in the directory itself.
             self.globs.push(GlobEntry {
@@ -292,7 +304,8 @@ impl Scanner {
             // match as well.
             //
             // Instead we combine the base and the pattern as a single glob pattern.
-            let mut full_pattern = source.base.clone();
+            let mut full_pattern = source.base.clone().replace('\\', "/");
+
             if !source.pattern.is_empty() {
                 full_pattern.push('/');
                 full_pattern.push_str(&source.pattern);
@@ -314,7 +327,9 @@ impl Scanner {
                     continue;
                 };
 
-                if glob_match(&full_pattern, file_path_str) {
+                let file_path_str = file_path_str.replace('\\', "/");
+
+                if glob_match(&full_pattern, &file_path_str) {
                     self.files.push(file_path);
                 }
             }
