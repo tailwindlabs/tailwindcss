@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod scanner {
-    use scanner::detect_sources::DetectSources;
     use std::process::Command;
     use std::{fs, path};
 
@@ -35,18 +34,20 @@ mod scanner {
         let base = format!("{}", dir.display());
 
         // Resolve all content paths for the (temporary) current working directory
-        let mut scanner = Scanner::new(
-            Some(DetectSources::new(base.clone().into())),
-            Some(
-                globs
-                    .iter()
-                    .map(|x| GlobEntry {
-                        base: base.clone(),
-                        pattern: x.to_string(),
-                    })
-                    .collect(),
-            ),
-        );
+        let mut sources: Vec<GlobEntry> = globs
+            .iter()
+            .map(|x| GlobEntry {
+                base: base.clone(),
+                pattern: x.to_string(),
+            })
+            .collect();
+
+        sources.push(GlobEntry {
+            base: base.clone(),
+            pattern: "**/*".to_string(),
+        });
+
+        let mut scanner = Scanner::new(Some(sources));
 
         let candidates = scanner.scan();
 
@@ -75,7 +76,7 @@ mod scanner {
             })
             .collect();
 
-        // Sort the output for easier comparison (depending on internal datastructure the order
+        // Sort the output for easier comparison (depending on internal data structure the order
         // _could_ be random)
         paths.sort();
 

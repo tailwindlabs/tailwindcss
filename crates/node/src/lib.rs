@@ -20,13 +20,6 @@ pub struct ChangedContent {
 
 #[derive(Debug, Clone)]
 #[napi(object)]
-pub struct DetectSources {
-  /// Base path to start scanning from
-  pub base: String,
-}
-
-#[derive(Debug, Clone)]
-#[napi(object)]
 pub struct GlobEntry {
   /// Base path of the glob
   pub base: String,
@@ -62,20 +55,11 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   }
 }
 
-impl From<DetectSources> for tailwindcss_oxide::scanner::detect_sources::DetectSources {
-  fn from(detect_sources: DetectSources) -> Self {
-    Self::new(detect_sources.base.into())
-  }
-}
-
 // ---
 
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScannerOptions {
-  /// Automatically detect sources in the base path
-  pub detect_sources: Option<DetectSources>,
-
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
 }
@@ -102,7 +86,6 @@ impl Scanner {
   pub fn new(opts: ScannerOptions) -> Self {
     Self {
       scanner: tailwindcss_oxide::Scanner::new(
-        opts.detect_sources.map(Into::into),
         opts
           .sources
           .map(|x| x.into_iter().map(Into::into).collect()),

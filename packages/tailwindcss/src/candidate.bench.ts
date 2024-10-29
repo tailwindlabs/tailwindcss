@@ -8,7 +8,7 @@ import { Theme } from './theme'
 const root = process.env.FOLDER || process.cwd()
 
 // Auto content detection
-const scanner = new Scanner({ detectSources: { base: root } })
+const scanner = new Scanner({ sources: [{ base: root, pattern: '**/*' }] })
 
 const candidates = scanner.scan()
 const designSystem = buildDesignSystem(new Theme())
