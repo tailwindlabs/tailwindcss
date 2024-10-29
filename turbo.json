@@ -10,8 +10,8 @@
         "./build.rs",
         "./package.json",
         "./Cargo.toml",
-        "../core/src/**/*",
-        "../core/Cargo.toml",
+        "../oxide/src/**/*",
+        "../oxide/Cargo.toml",
         "../Cargo.toml",
         "../package.json"
       ]
@@ -24,8 +24,8 @@
         "./build.rs",
         "./package.json",
         "./Cargo.toml",
-        "../core/src/**/*",
-        "../core/Cargo.toml",
+        "../oxide/src/**/*",
+        "../oxide/Cargo.toml",
         "../Cargo.toml",
         "../package.json"
       ],
