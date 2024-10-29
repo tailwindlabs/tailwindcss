@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.31] - 2024-10-29
+
 ### Added
 
 - Support specifying the base path for automatic source detection using a `source(…)` function on `@tailwind utilities` or `@import "tailwindcss"` ([#14820](https://github.com/tailwindlabs/tailwindcss/pull/14820))
