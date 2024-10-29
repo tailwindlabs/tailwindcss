@@ -102,7 +102,7 @@ mod scanner {
             ("b.html", None),
             ("c.html", None),
         ]);
-        assert_eq!(globs, vec!["a.html", "b.html", "c.html", "index.html"]);
+        assert_eq!(globs, vec!["*", "a.html", "b.html", "c.html", "index.html"]);
     }
 
     #[test]
@@ -114,7 +114,7 @@ mod scanner {
             ("b.html", None),
             ("c.html", None),
         ]);
-        assert_eq!(globs, vec!["a.html", "c.html", "index.html"]);
+        assert_eq!(globs, vec!["*", "a.html", "c.html", "index.html"]);
     }
 
     #[test]
@@ -128,6 +128,7 @@ mod scanner {
         assert_eq!(
             globs,
             vec![
+                "*",
                 "index.html",
                 "public/a.html",
                 "public/b.html",
@@ -152,6 +153,7 @@ mod scanner {
         assert_eq!(
             globs,
             vec![
+                "*",
                 "index.html",
                 "public/a.html",
                 "public/b.html",
@@ -174,7 +176,7 @@ mod scanner {
             ("public/b.html", None),
             ("public/c.html", None),
         ]);
-        assert_eq!(globs, vec!["index.html", "public/c.html",]);
+        assert_eq!(globs, vec!["*", "index.html", "public/c.html",]);
     }
 
     #[test]
@@ -185,7 +187,7 @@ mod scanner {
             ("src/b.html", None),
             ("src/c.html", None),
         ]);
-        assert_eq!(globs, vec![
+        assert_eq!(globs, vec!["*",
             "index.html",
             "src/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
             "src/a.html",
@@ -202,7 +204,7 @@ mod scanner {
             ("b.png", None),
             ("c.lock", None),
         ]);
-        assert_eq!(globs, vec!["index.html"]);
+        assert_eq!(globs, vec!["*", "index.html"]);
     }
 
     #[test]
@@ -213,7 +215,7 @@ mod scanner {
             ("b.sass", None),
             ("c.less", None),
         ]);
-        assert_eq!(globs, vec!["index.html"]);
+        assert_eq!(globs, vec!["*", "index.html"]);
     }
 
     #[test]
@@ -223,7 +225,7 @@ mod scanner {
             ("package-lock.json", None),
             ("yarn.lock", None),
         ]);
-        assert_eq!(globs, vec!["index.html"]);
+        assert_eq!(globs, vec!["*", "index.html"]);
     }
 
     #[test]
@@ -274,6 +276,7 @@ mod scanner {
         assert_eq!(
             globs,
             vec![
+                "*",
                 "bar.html",
                 "baz.html",
                 "foo.html",
