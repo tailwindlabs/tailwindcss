@@ -31,20 +31,18 @@ impl<'a> IndexConverter<'a> {
     // will only ever be incremented up to the length of the input string.
     //
     // This eliminates a "potential" panic that cannot actually happen
-    let slice = unsafe {
-      self.input.get_unchecked(self.curr_utf8..)
-    };
+    let slice = unsafe { self.input.get_unchecked(self.curr_utf8..) };
 
     for c in slice.chars() {
       if self.curr_utf8 >= pos {
-        break
+        break;
       }
 
       self.curr_utf8 += c.len_utf8();
       self.curr_utf16 += c.len_utf16();
     }
 
-    return self.curr_utf16 as i64;
+    self.curr_utf16 as i64
   }
 }
 
@@ -66,19 +64,16 @@ mod test {
       (4, 4),
       (5, 5),
       (6, 6),
-
       // inside the 🔥
       (7, 8),
       (8, 8),
       (9, 8),
       (10, 8),
-
       // inside the 🥳
       (11, 10),
       (12, 10),
       (13, 10),
       (14, 10),
-
       // <space>world!
       (15, 11),
       (16, 12),
@@ -87,7 +82,6 @@ mod test {
       (19, 15),
       (20, 16),
       (21, 17),
-
       // Past the end should return the last utf-16 character index
       (22, 17),
       (100, 17),
