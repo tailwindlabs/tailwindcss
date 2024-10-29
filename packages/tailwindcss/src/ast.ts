@@ -1,6 +1,17 @@
-export type Rule = {
+import { parseAtRule } from './css-parser'
+
+const AT_SIGN = 0x40
+
+export type StyleRule = {
   kind: 'rule'
   selector: string
+  nodes: AstNode[]
+}
+
+export type AtRule = {
+  kind: 'at-rule'
+  name: string
+  params: string
   nodes: AstNode[]
 }
 
@@ -27,14 +38,32 @@ export type AtRoot = {
   nodes: AstNode[]
 }
 
-export type AstNode = Rule | Declaration | Comment | Context | AtRoot
+export type Rule = StyleRule | AtRule
+export type AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtRoot
 
-export function rule(selector: string, nodes: AstNode[]): Rule {
+export function styleRule(selector: string, nodes: AstNode[] = []): StyleRule {
   return {
     kind: 'rule',
     selector,
     nodes,
   }
+}
+
+export function atRule(name: string, params: string = '', nodes: AstNode[] = []): AtRule {
+  return {
+    kind: 'at-rule',
+    name,
+    params,
+    nodes,
+  }
+}
+
+export function rule(selector: string, nodes: AstNode[] = []): StyleRule | AtRule {
+  if (selector.charCodeAt(0) === AT_SIGN) {
+    return parseAtRule(selector, nodes)
+  }
+
+  return styleRule(selector, nodes)
 }
 
 export function decl(property: string, value: string | undefined): Declaration {
@@ -126,7 +155,7 @@ export function walk(
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
-    if (node.kind === 'rule') {
+    if (node.kind === 'rule' || node.kind === 'at-rule') {
       walk(node.nodes, visit, path, context)
     }
   }
@@ -152,7 +181,7 @@ export function walkDepth(
     let path = [...parentPath, node]
     let parent = parentPath.at(-1) ?? null
 
-    if (node.kind === 'rule') {
+    if (node.kind === 'rule' || node.kind === 'at-rule') {
       walkDepth(node.nodes, visit, path, context)
     } else if (node.kind === 'context') {
       walkDepth(node.nodes, visit, parentPath, { ...context, ...node.context })
@@ -185,7 +214,16 @@ export function toCss(ast: AstNode[]) {
 
     // Rule
     if (node.kind === 'rule') {
-      if (node.selector === '@tailwind utilities') {
+      css += `${indent}${node.selector} {\n`
+      for (let child of node.nodes) {
+        css += stringify(child, depth + 1)
+      }
+      css += `${indent}}\n`
+    }
+
+    // AtRule
+    else if (node.kind === 'at-rule') {
+      if (node.name === '@tailwind' && node.params === 'utilities') {
         for (let child of node.nodes) {
           css += stringify(child, depth)
         }
@@ -199,20 +237,21 @@ export function toCss(ast: AstNode[]) {
       // ```css
       // @layer base, components, utilities;
       // ```
-      if (node.selector[0] === '@' && node.nodes.length === 0) {
-        return `${indent}${node.selector};\n`
+      else if (node.nodes.length === 0) {
+        return `${indent}${node.name} ${node.params};\n`
       }
 
-      if (node.selector[0] === '@' && node.selector.startsWith('@property ') && depth === 0) {
+      //
+      else if (node.name === '@property' && depth === 0) {
         // Don't output duplicate `@property` rules
-        if (seenAtProperties.has(node.selector)) {
+        if (seenAtProperties.has(node.params)) {
           return ''
         }
 
         // Collect fallbacks for `@property` rules for Firefox support
         // We turn these into rules on `:root` or `*` and some pseudo-elements
         // based on the value of `inherits``
-        let property = node.selector.replace(/@property\s*/g, '')
+        let property = node.params
         let initialValue = null
         let inherits = false
 
@@ -231,10 +270,10 @@ export function toCss(ast: AstNode[]) {
           propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
         }
 
-        seenAtProperties.add(node.selector)
+        seenAtProperties.add(node.params)
       }
 
-      css += `${indent}${node.selector} {\n`
+      css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
@@ -292,7 +331,7 @@ export function toCss(ast: AstNode[]) {
 
   if (fallbackAst.length) {
     fallback = stringify(
-      rule('@supports (-moz-orient: inline)', [rule('@layer base', fallbackAst)]),
+      atRule('@supports', '(-moz-orient: inline)', [atRule('@layer', 'base', fallbackAst)]),
     )
   }
 

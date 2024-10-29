@@ -1,5 +1,5 @@
 import { substituteAtApply } from '../apply'
-import { decl, rule, type AstNode } from '../ast'
+import { atRule, decl, rule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -86,7 +86,7 @@ export function buildPluginApi(
     addBase(css) {
       let baseNodes = objectToAst(css)
       substituteFunctions(baseNodes, api.theme)
-      ast.push(rule('@layer base', baseNodes))
+      ast.push(atRule('@layer', 'base', baseNodes))
     },
 
     addVariant(name, variant) {
@@ -434,7 +434,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   for (let [name, value] of entries) {
     if (typeof value !== 'object') {
       if (!name.startsWith('--') && value === '@slot') {
-        ast.push(rule(name, [rule('@slot', [])]))
+        ast.push(rule(name, [atRule('@slot')]))
       } else {
         // Convert camelCase to kebab-case:
         // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35

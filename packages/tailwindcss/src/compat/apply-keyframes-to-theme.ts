@@ -1,4 +1,4 @@
-import { rule, type Rule } from '../ast'
+import { atRule, type AtRule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { ResolvedConfig } from './config/types'
 import { objectToAst } from './plugin-api'
@@ -13,11 +13,11 @@ export function applyKeyframesToTheme(
   }
 }
 
-export function keyframesToRules(resolvedConfig: Pick<ResolvedConfig, 'theme'>): Rule[] {
-  let rules: Rule[] = []
+export function keyframesToRules(resolvedConfig: Pick<ResolvedConfig, 'theme'>): AtRule[] {
+  let rules: AtRule[] = []
   if ('keyframes' in resolvedConfig.theme) {
     for (let [name, keyframe] of Object.entries(resolvedConfig.theme.keyframes)) {
-      rules.push(rule(`@keyframes ${name}`, objectToAst(keyframe as any)))
+      rules.push(atRule('@keyframes', name, objectToAst(keyframe as any)))
     }
   }
   return rules

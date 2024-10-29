@@ -1,4 +1,4 @@
-import { rule } from '../ast'
+import { atRule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { ResolvedConfig } from './config/types'
 
@@ -45,7 +45,7 @@ export function registerScreensConfig(userConfig: ResolvedConfig, designSystem: 
       designSystem.variants.static(
         name,
         (ruleNode) => {
-          ruleNode.nodes = [rule(`@media ${query}`, ruleNode.nodes)]
+          ruleNode.nodes = [atRule('@media', query, ruleNode.nodes)]
         },
         { order },
       )

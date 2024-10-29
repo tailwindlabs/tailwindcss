@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { context, decl, rule, toCss, walk } from './ast'
+import { context, decl, styleRule, toCss, walk } from './ast'
 import * as CSS from './css-parser'
 
 it('should pretty print an AST', () => {
@@ -16,13 +16,13 @@ it('should pretty print an AST', () => {
 
 it('allows the placement of context nodes', () => {
   const ast = [
-    rule('.foo', [decl('color', 'red')]),
+    styleRule('.foo', [decl('color', 'red')]),
     context({ context: 'a' }, [
-      rule('.bar', [
+      styleRule('.bar', [
         decl('color', 'blue'),
         context({ context: 'b' }, [
           //
-          rule('.baz', [decl('color', 'green')]),
+          styleRule('.baz', [decl('color', 'green')]),
         ]),
       ]),
     ]),

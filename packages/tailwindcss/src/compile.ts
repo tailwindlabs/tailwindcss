@@ -1,4 +1,13 @@
-import { decl, rule, walk, WalkAction, type AstNode, type Rule } from './ast'
+import {
+  atRule,
+  decl,
+  rule,
+  walk,
+  WalkAction,
+  type AstNode,
+  type Rule,
+  type StyleRule,
+} from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { substituteFunctions } from './css-functions'
 import { type DesignSystem } from './design-system'
@@ -144,7 +153,7 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       applyImportant(nodes)
     }
 
-    let node: Rule = {
+    let node: StyleRule = {
       kind: 'rule',
       selector,
       nodes,
@@ -205,7 +214,7 @@ export function applyVariant(
     // To solve this, we provide an isolated placeholder node to the variant.
     // The variant can now apply its logic to the isolated node without
     // affecting the original node.
-    let isolatedNode = rule('@slot', [])
+    let isolatedNode = atRule('@slot')
 
     let result = applyVariant(isolatedNode, variant.variant, variants, depth + 1)
     if (result === null) return null
@@ -218,16 +227,16 @@ export function applyVariant(
       // This means `child` may be a declaration and we don't want to apply the
       // variant to it. This also means the entire variant as a whole is not
       // applicable to the rule and should generate nothing.
-      if (child.kind !== 'rule') return null
+      if (child.kind !== 'rule' && child.kind !== 'at-rule') return null
 
-      let result = applyFn(child as Rule, variant)
+      let result = applyFn(child, variant)
       if (result === null) return null
     }
 
     // Replace the placeholder node with the actual node
     {
       walk(isolatedNode.nodes, (child) => {
-        if (child.kind === 'rule' && child.nodes.length <= 0) {
+        if ((child.kind === 'rule' || child.kind === 'at-rule') && child.nodes.length <= 0) {
           child.nodes = node.nodes
           return WalkAction.Skip
         }
@@ -301,7 +310,7 @@ function applyImportant(ast: AstNode[]): void {
 
     if (node.kind === 'declaration') {
       node.important = true
-    } else if (node.kind === 'rule') {
+    } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       applyImportant(node.nodes)
     }
   }
@@ -327,7 +336,7 @@ function getPropertySort(nodes: AstNode[]) {
 
       let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
       if (idx !== -1) propertySort.add(idx)
-    } else if (node.kind === 'rule') {
+    } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       for (let child of node.nodes) {
         q.push(child)
       }
