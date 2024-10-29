@@ -91,6 +91,9 @@ importers:
       '@tailwindcss/oxide-linux-x64-musl':
         specifier: workspace:*
         version: link:npm/linux-x64-musl
+      '@tailwindcss/oxide-win32-arm64-msvc':
+        specifier: workspace:*
+        version: link:npm/win32-arm64-msvc
       '@tailwindcss/oxide-win32-x64-msvc':
         specifier: workspace:*
         version: link:npm/win32-x64-msvc
@@ -118,6 +121,8 @@ importers:
   crates/node/npm/linux-x64-gnu: {}
 
   crates/node/npm/linux-x64-musl: {}
+
+  crates/node/npm/win32-arm64-msvc: {}
 
   crates/node/npm/win32-x64-msvc: {}
 

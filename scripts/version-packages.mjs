@@ -28,6 +28,7 @@ const syncedWorkspaces = new Map([
       'crates/node/npm/linux-x64-gnu',
       'crates/node/npm/linux-x64-musl',
       'crates/node/npm/win32-x64-msvc',
+      'crates/node/npm/win32-arm64-msvc',
     ],
   ],
   ['@tailwindcss/cli', ['packages/@tailwindcss-standalone']],
