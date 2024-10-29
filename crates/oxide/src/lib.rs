@@ -261,6 +261,13 @@ impl Scanner {
             .iter()
             .map(|source| PathBuf::from(&source.base).join(source.pattern.trim_end_matches("**/*")))
         {
+            // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+            self.globs.push(GlobEntry {
+                base: path.to_string_lossy().into(),
+                pattern: "*".into(),
+            });
+
+            // Detect all files/folders in the directory
             let detect_sources = DetectSources::new(path);
 
             let (files, globs) = detect_sources.detect();
