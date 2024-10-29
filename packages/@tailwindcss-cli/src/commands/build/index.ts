@@ -164,7 +164,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
-      watchDirectories(base, scanner),
+      watchDirectories(scanner),
       async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
@@ -226,7 +226,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
+            cleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
 
             // Re-compile the CSS
             env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
@@ -294,22 +294,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-function watchDirectories(base: string, scanner: Scanner) {
-  return [base].concat(
-    scanner.globs.flatMap((globEntry) => {
-      // We don't want a watcher for negated globs.
-      if (globEntry.pattern[0] === '!') return []
+function watchDirectories(scanner: Scanner) {
+  return scanner.globs.flatMap((globEntry) => {
+    // We don't want a watcher for negated globs.
+    if (globEntry.pattern[0] === '!') return []
 
-      // We don't want a watcher for files, only directories.
-      if (globEntry.pattern === '') return []
+    // We don't want a watcher for files, only directories.
+    if (globEntry.pattern === '') return []
 
-      // We don't want a watcher for nested directories, these will be covered
-      // by the `base` directory already.
-      if (globEntry.base.startsWith(base)) return []
-
-      return globEntry.base
-    }),
-  )
+    return globEntry.base
+  })
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
