@@ -598,7 +598,7 @@ test(
 )
 
 test(
-  '`@tailwindcss/postcss` should be installed in dev dependencies when `tailwindcss` exists in dev dependencies',
+  '`@tailwindcss/postcss` should be installed in devDependencies when `tailwindcss` exists in dev dependencies',
   {
     fs: {
       'package.json': json`
