@@ -83,19 +83,25 @@ export async function migratePostCSSConfig(base: string) {
   }
 
   if (didAddPostcssClient) {
-    try {
-      await pkg('add -D @tailwindcss/postcss@next', base)
-    } catch {}
+    let location = Object.hasOwn(packageJson?.dependencies ?? {}, 'tailwindcss')
+      ? ('dependencies' as const)
+      : Object.hasOwn(packageJson?.devDependencies ?? {}, 'tailwindcss')
+        ? ('devDependencies' as const)
+        : null
+
+    if (location !== null) {
+      try {
+        await pkg(base).add(['@tailwindcss/postcss@next'], location)
+      } catch {}
+    }
   }
   if (didRemoveAutoprefixer || didRemovePostCSSImport) {
     try {
       let packagesToRemove = [
         didRemoveAutoprefixer ? 'autoprefixer' : null,
         didRemovePostCSSImport ? 'postcss-import' : null,
-      ]
-        .filter(Boolean)
-        .join(' ')
-      await pkg(`remove ${packagesToRemove}`, base)
+      ].filter(Boolean) as string[]
+      await pkg(base).remove(packagesToRemove)
     } catch {}
   }
 
