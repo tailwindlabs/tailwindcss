@@ -85,7 +85,7 @@ test.each([
 
   // `theme(…)` calls in another CSS function is replaced correctly.
   // Additionally we remove unnecessary whitespace.
-  ['grid-cols-[min(50%,theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
+  ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
