@@ -199,7 +199,7 @@ async function run() {
 
   try {
     // Upgrade Tailwind CSS
-    await pkg('add tailwindcss@next', base)
+    await pkg(base).add(['tailwindcss@next'])
   } catch {}
 
   // Remove the JS config if it was fully migrated

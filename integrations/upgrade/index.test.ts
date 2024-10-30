@@ -544,6 +544,100 @@ test(
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
+    expect(packageJson.dependencies).toMatchObject({
+      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+    })
+  },
+)
+
+test(
+  '`@tailwindcss/postcss` should be installed in dependencies when `tailwindcss` exists in dependencies',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            tailwindcss: {},
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    let packageJsonContent = await fs.read('package.json')
+    let packageJson = JSON.parse(packageJsonContent)
+    expect(packageJson.dependencies).toMatchObject({
+      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+    })
+  },
+)
+
+test(
+  '`@tailwindcss/postcss` should be installed in devDependencies when `tailwindcss` exists in dev dependencies',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "devDependencies": {
+            "postcss": "^8",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            tailwindcss: {},
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    let packageJsonContent = await fs.read('package.json')
+    let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.devDependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
     })
@@ -617,7 +711,7 @@ test(
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
-    expect(packageJson.devDependencies).toMatchObject({
+    expect(packageJson.dependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
     })
   },
@@ -694,7 +788,7 @@ test(
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
-    expect(packageJson.devDependencies).toMatchObject({
+    expect(packageJson.dependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
     })
   },
