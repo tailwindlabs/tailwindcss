@@ -27,9 +27,25 @@ static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
 
 #[tracing::instrument(skip(root))]
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
+    // Read the directory recursively with no depth limit
+    read_dir(root, None)
+}
+
+#[tracing::instrument(skip(root))]
+pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
     WalkBuilder::new(root)
         .hidden(false)
         .require_git(false)
+        .build()
+        .filter_map(Result::ok)
+}
+
+#[tracing::instrument(skip(root))]
+pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEntry> {
+    WalkBuilder::new(root)
+        .hidden(false)
+        .require_git(false)
+        .max_depth(depth)
         .filter_entry(move |entry| match entry.file_type() {
             Some(file_type) if file_type.is_dir() => match entry.file_name().to_str() {
                 Some(dir) => !IGNORED_CONTENT_DIRS.contains(&dir),
@@ -40,15 +56,6 @@ pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
             }
             _ => false,
         })
-        .build()
-        .filter_map(Result::ok)
-}
-
-#[tracing::instrument(skip(root))]
-pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
-    WalkBuilder::new(root)
-        .hidden(false)
-        .require_git(false)
         .build()
         .filter_map(Result::ok)
 }

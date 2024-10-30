@@ -27,11 +27,11 @@ impl DetectSources {
         Self { base }
     }
 
-    pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>) {
+    pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
         let (files, dirs) = self.resolve_files();
         let globs = self.resolve_globs(&dirs);
 
-        (files, globs)
+        (files, globs, dirs)
     }
 
     fn resolve_files(&self) -> (Vec<PathBuf>, Vec<PathBuf>) {

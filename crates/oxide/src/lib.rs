@@ -9,6 +9,7 @@ use glob::optimize_patterns;
 use glob_match::glob_match;
 use paths::Path;
 use rayon::prelude::*;
+use scanner::allowed_paths::read_dir;
 use std::fs;
 use std::path::PathBuf;
 use std::sync;
@@ -77,6 +78,9 @@ pub struct Scanner {
     /// All files that we have to scan
     files: Vec<PathBuf>,
 
+    /// All directories, sub-directories, etc… we saw during source detection
+    dirs: Vec<PathBuf>,
+
     /// All generated globs
     globs: Vec<GlobEntry>,
 
@@ -98,7 +102,7 @@ impl Scanner {
     pub fn scan(&mut self) -> Vec<String> {
         init_tracing();
         self.prepare();
-
+        self.check_for_new_files();
         self.compute_candidates();
 
         let mut candidates: Vec<String> = self.candidates.clone().into_iter().collect();
@@ -214,6 +218,62 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
+    fn check_for_new_files(&mut self) {
+        let mut modified_dirs: Vec<PathBuf> = vec![];
+
+        // Check all directories to see if they were modified
+        for path in &self.dirs {
+            let current_time = fs::metadata(path)
+                .and_then(|m| m.modified())
+                .unwrap_or(SystemTime::now());
+
+            let previous_time = self.mtimes.insert(path.clone(), current_time);
+
+            let should_scan = match previous_time {
+                // Time has changed, so we need to re-scan the file
+                Some(prev) if prev != current_time => true,
+
+                // File was in the cache, no need to re-scan
+                Some(_) => false,
+
+                // File didn't exist before, so we need to scan it
+                None => true,
+            };
+
+            if should_scan {
+                modified_dirs.push(path.clone());
+            }
+        }
+
+        // Scan all modified directories for their immediate files
+        let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
+
+        while !modified_dirs.is_empty() {
+            let new_entries = modified_dirs
+                .iter()
+                .flat_map(|dir| read_dir(dir, Some(1)))
+                .map(|entry| entry.path().to_owned())
+                .filter(|path| !known.contains(path))
+                .collect::<Vec<_>>();
+
+            modified_dirs.clear();
+
+            for path in new_entries {
+                if path.is_file() {
+                    known.insert(path.clone());
+                    self.files.push(path);
+                } else if path.is_dir() {
+                    known.insert(path.clone());
+                    self.dirs.push(path.clone());
+
+                    // Recursively scan the new directory for files
+                    modified_dirs.push(path);
+                }
+            }
+        }
+    }
+
+    #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
         let Some(sources) = &self.sources else {
             return;
@@ -282,9 +342,10 @@ impl Scanner {
             // Detect all files/folders in the directory
             let detect_sources = DetectSources::new(path);
 
-            let (files, globs) = detect_sources.detect();
+            let (files, globs, dirs) = detect_sources.detect();
             self.files.extend(files);
             self.globs.extend(globs);
+            self.dirs.extend(dirs);
         }
 
         // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`

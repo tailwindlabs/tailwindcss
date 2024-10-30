@@ -39,6 +39,7 @@ interface TestContext {
   getFreePort(): Promise<number>
   fs: {
     write(filePath: string, content: string): Promise<void>
+    create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
     dumpFiles(pattern: string): Promise<string>
@@ -294,6 +295,17 @@ export function test(
             await fs.mkdir(dir, { recursive: true })
             await fs.writeFile(full, content)
           },
+
+          async create(filenames: string[]): Promise<void> {
+            for (let filename of filenames) {
+              let full = path.join(root, filename)
+
+              let dir = path.dirname(full)
+              await fs.mkdir(dir, { recursive: true })
+              await fs.writeFile(full, '')
+            }
+          },
+
           async read(filePath: string) {
             let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
 

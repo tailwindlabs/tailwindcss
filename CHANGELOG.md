@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Detect classes in new files when using `@tailwindcss/postcss` ([#14829](https://github.com/tailwindlabs/tailwindcss/pull/14829))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
