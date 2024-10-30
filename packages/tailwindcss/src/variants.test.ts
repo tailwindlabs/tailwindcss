@@ -2400,9 +2400,9 @@ test('aria', async () => {
       'peer-aria-[modal]:flex',
       'peer-aria-checked:flex',
       'peer-aria-[valuenow=1]:flex',
-      'peer-aria-[modal]/parent-name:flex',
-      'peer-aria-checked/parent-name:flex',
-      'peer-aria-[valuenow=1]/parent-name:flex',
+      'peer-aria-[modal]/sibling-name:flex',
+      'peer-aria-checked/sibling-name:flex',
+      'peer-aria-[valuenow=1]/sibling-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *) {
@@ -2433,7 +2433,7 @@ test('aria', async () => {
       display: flex;
     }
 
-    .peer-aria-checked\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-checked="true"] ~ *) {
+    .peer-aria-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *) {
       display: flex;
     }
 
@@ -2441,7 +2441,7 @@ test('aria', async () => {
       display: flex;
     }
 
-    .peer-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-modal] ~ *) {
+    .peer-aria-\\[modal\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-modal] ~ *) {
       display: flex;
     }
 
@@ -2449,7 +2449,7 @@ test('aria', async () => {
       display: flex;
     }
 
-    .peer-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-valuenow="1"] ~ *) {
+    .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *) {
       display: flex;
     }
 
@@ -2494,12 +2494,12 @@ test('data', async () => {
       'group-data-[foo$=bar_baz_i]/parent-name:flex',
 
       'peer-data-[disabled]:flex',
-      'peer-data-[disabled]/parent-name:flex',
+      'peer-data-[disabled]/sibling-name:flex',
       'peer-data-[foo=1]:flex',
-      'peer-data-[foo=1]/parent-name:flex',
-      'peer-data-[foo=bar baz]/parent-name:flex',
-      "peer-data-[foo$='bar'_i]/parent-name:flex",
-      'peer-data-[foo$=bar_baz_i]/parent-name:flex',
+      'peer-data-[foo=1]/sibling-name:flex',
+      'peer-data-[foo=bar baz]/sibling-name:flex',
+      "peer-data-[foo$='bar'_i]/sibling-name:flex",
+      'peer-data-[foo$=bar_baz_i]/sibling-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
@@ -2534,15 +2534,15 @@ test('data', async () => {
       display: flex;
     }
 
-    .peer-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-disabled] ~ *) {
+    .peer-data-\\[disabled\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-disabled] ~ *) {
       display: flex;
     }
 
-    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
+    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar" i] ~ *) {
       display: flex;
     }
 
-    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar baz" i] ~ *) {
+    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *) {
       display: flex;
     }
 
@@ -2550,11 +2550,11 @@ test('data', async () => {
       display: flex;
     }
 
-    .peer-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo="1"] ~ *) {
+    .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *) {
       display: flex;
     }
 
-    .peer-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo="bar baz"] ~ *) {
+    .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *) {
       display: flex;
     }
 
