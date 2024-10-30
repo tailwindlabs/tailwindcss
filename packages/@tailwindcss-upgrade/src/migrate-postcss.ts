@@ -83,9 +83,17 @@ export async function migratePostCSSConfig(base: string) {
   }
 
   if (didAddPostcssClient) {
-    try {
-      await pkg(base).add(['@tailwindcss/postcss@next'], 'devDependencies')
-    } catch {}
+    let location = Object.hasOwn(packageJson?.dependencies ?? {}, 'tailwindcss')
+      ? ('dependencies' as const)
+      : Object.hasOwn(packageJson?.devDependencies ?? {}, 'tailwindcss')
+        ? ('devDependencies' as const)
+        : null
+
+    if (location !== null) {
+      try {
+        await pkg(base).add(['@tailwindcss/postcss@next'], location)
+      } catch {}
+    }
   }
   if (didRemoveAutoprefixer || didRemovePostCSSImport) {
     try {
