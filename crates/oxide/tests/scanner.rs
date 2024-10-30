@@ -31,7 +31,7 @@ mod scanner {
         let _ = Command::new("git").arg("init").current_dir(&dir).output();
 
         // Create the necessary files
-        self::create_files_in(&dir, &paths_with_content);
+        self::create_files_in(&dir, paths_with_content);
 
         let base = format!("{}", dir.display()).replace('\\', "/");
 
@@ -190,7 +190,7 @@ mod scanner {
     #[test]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
-          ("index.html", ""),
+            ("index.html", ""),
             ("a.mp4", ""),
             ("b.png", ""),
             ("c.lock", ""),
@@ -201,7 +201,7 @@ mod scanner {
     #[test]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
-          ("index.html", ""),
+            ("index.html", ""),
             ("a.css", ""),
             ("b.sass", ""),
             ("c.less", ""),
@@ -212,7 +212,7 @@ mod scanner {
     #[test]
     fn it_should_ignore_known_files() {
         let globs = test(&[
-          ("index.html", ""),
+            ("index.html", ""),
             ("package-lock.json", ""),
             ("yarn.lock", ""),
         ]);
@@ -361,5 +361,127 @@ mod scanner {
         .1;
 
         assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    fn it_should_pick_up_new_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/index.html", "content-['project-a/index.html']"),
+                ("project-b/index.html", "content-['project-b/index.html']"),
+            ],
+        );
+
+        let sources = vec![
+            GlobEntry {
+                base: dir.join("project-a").to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+            },
+            GlobEntry {
+                base: dir.join("project-b").to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+            },
+        ];
+
+        let mut scanner = Scanner::new(Some(sources));
+        let candidates = scanner.scan();
+
+        // We've done the initial scan and found the files
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+            ]
+        );
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/new.html", "content-['project-a/new.html']"),
+                ("project-b/new.html", "content-['project-b/new.html']"),
+            ],
+        );
+
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-a/new.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+                "content-['project-b/new.html']".to_owned(),
+            ]
+        );
+
+        // Create folders
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "project-a/sub1/sub2/index.html",
+                    "content-['project-a/sub1/sub2/index.html']",
+                ),
+                (
+                    "project-b/sub1/sub2/index.html",
+                    "content-['project-b/sub1/sub2/index.html']",
+                ),
+            ],
+        );
+
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-a/new.html']".to_owned(),
+                "content-['project-a/sub1/sub2/index.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+                "content-['project-b/new.html']".to_owned(),
+                "content-['project-b/sub1/sub2/index.html']".to_owned(),
+            ]
+        );
+
+        // Create folders
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "project-a/sub1/sub2/new.html",
+                    "content-['project-a/sub1/sub2/new.html']",
+                ),
+                (
+                    "project-b/sub1/sub2/new.html",
+                    "content-['project-b/sub1/sub2/new.html']",
+                ),
+            ],
+        );
+
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-a/new.html']".to_owned(),
+                "content-['project-a/sub1/sub2/index.html']".to_owned(),
+                "content-['project-a/sub1/sub2/new.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+                "content-['project-b/new.html']".to_owned(),
+                "content-['project-b/sub1/sub2/index.html']".to_owned(),
+                "content-['project-b/sub1/sub2/new.html']".to_owned(),
+            ]
+        );
     }
 }
