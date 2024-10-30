@@ -405,6 +405,9 @@ mod scanner {
             ]
         );
 
+        // We have to sleep because it might run too fast (seriously) and the
+        // mtimes of the directories end up being the same as the last time we
+        // checked them
         sleep(Duration::from_millis(100));
 
         // Create files
@@ -427,6 +430,11 @@ mod scanner {
                 "content-['project-b/new.html']".to_owned(),
             ]
         );
+
+        // We have to sleep because it might run too fast (seriously) and the
+        // mtimes of the directories end up being the same as the last time we
+        // checked them
+        sleep(Duration::from_millis(100));
 
         // Create folders
         create_files_in(
@@ -456,6 +464,11 @@ mod scanner {
                 "content-['project-b/sub1/sub2/index.html']".to_owned(),
             ]
         );
+
+        // We have to sleep because it might run too fast (seriously) and the
+        // mtimes of the directories end up being the same as the last time we
+        // checked them
+        sleep(Duration::from_millis(100));
 
         // Create folders
         create_files_in(
