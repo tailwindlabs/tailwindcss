@@ -328,6 +328,12 @@ impl Scanner {
                 return PathBuf::from(b);
             }
 
+            // On Windows a path like C:/foo.txt is absolute but C:foo.txt is not
+            // (the 2nd is relative to the CWD)
+            if b.chars().nth(1) == Some(':') && b.chars().nth(2) == Some('/') {
+                return PathBuf::from(b);
+            }
+
             tmp += "/";
             tmp += b;
 

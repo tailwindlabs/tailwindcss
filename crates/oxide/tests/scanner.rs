@@ -414,12 +414,7 @@ mod scanner {
         );
 
         // Get POSIX-style absolute path
-        let mut full_path = format!("{}", dir.display()).replace('\\', "/");
-
-        // Strip windows drive letter from the front if it exists
-        if full_path.chars().nth(1) == Some(':') {
-            full_path.replace_range(..2, "");
-        }
+        let full_path = format!("{}", dir.display()).replace('\\', "/");
 
         let sources = vec![GlobEntry {
             base: full_path.clone(),
