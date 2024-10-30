@@ -6,8 +6,22 @@ mod scanner {
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
+    fn create_files_in(dir: &path::PathBuf, paths: &[(&str, &str)]) {
+        // Create the necessary files
+        for (path, contents) in paths {
+            // Ensure we use the right path separator for the current platform
+            let path = dir.join(path.replace('/', path::MAIN_SEPARATOR.to_string().as_str()));
+            let parent = path.parent().unwrap();
+            if !parent.exists() {
+                fs::create_dir_all(parent).unwrap();
+            }
+
+            fs::write(path, contents).unwrap()
+        }
+    }
+
     fn scan_with_globs(
-        paths_with_content: &[(&str, Option<&str>)],
+        paths_with_content: &[(&str, &str)],
         globs: Vec<&str>,
     ) -> (Vec<String>, Vec<String>) {
         // Create a temporary working directory
@@ -17,19 +31,7 @@ mod scanner {
         let _ = Command::new("git").arg("init").current_dir(&dir).output();
 
         // Create the necessary files
-        for (path, contents) in paths_with_content {
-            // Ensure we use the right path separator for the current platform
-            let path = dir.join(path.replace('/', path::MAIN_SEPARATOR.to_string().as_str()));
-            let parent = path.parent().unwrap();
-            if !parent.exists() {
-                fs::create_dir_all(parent).unwrap();
-            }
-
-            match contents {
-                Some(contents) => fs::write(path, contents).unwrap(),
-                None => fs::write(path, "").unwrap(),
-            }
-        }
+        self::create_files_in(&dir, &paths_with_content);
 
         let base = format!("{}", dir.display()).replace('\\', "/");
 
@@ -75,21 +77,21 @@ mod scanner {
         (paths, candidates)
     }
 
-    fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
+    fn scan(paths_with_content: &[(&str, &str)]) -> (Vec<String>, Vec<String>) {
         scan_with_globs(paths_with_content, vec![])
     }
 
-    fn test(paths_with_content: &[(&str, Option<&str>)]) -> Vec<String> {
+    fn test(paths_with_content: &[(&str, &str)]) -> Vec<String> {
         scan(paths_with_content).0
     }
 
     #[test]
     fn it_should_work_with_a_set_of_root_files() {
         let globs = test(&[
-            ("index.html", None),
-            ("a.html", None),
-            ("b.html", None),
-            ("c.html", None),
+            ("index.html", ""),
+            ("a.html", ""),
+            ("b.html", ""),
+            ("c.html", ""),
         ]);
         assert_eq!(globs, vec!["*", "a.html", "b.html", "c.html", "index.html"]);
     }
@@ -97,11 +99,11 @@ mod scanner {
     #[test]
     fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
         let globs = test(&[
-            (".gitignore", Some("b.html")),
-            ("index.html", None),
-            ("a.html", None),
-            ("b.html", None),
-            ("c.html", None),
+            (".gitignore", "b.html"),
+            ("index.html", ""),
+            ("a.html", ""),
+            ("b.html", ""),
+            ("c.html", ""),
         ]);
         assert_eq!(globs, vec!["*", "a.html", "c.html", "index.html"]);
     }
@@ -109,10 +111,10 @@ mod scanner {
     #[test]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
-            ("index.html", None),
-            ("public/a.html", None),
-            ("public/b.html", None),
-            ("public/c.html", None),
+            ("index.html", ""),
+            ("public/a.html", ""),
+            ("public/b.html", ""),
+            ("public/c.html", ""),
         ]);
         assert_eq!(
             globs,
@@ -129,15 +131,15 @@ mod scanner {
     #[test]
     fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
         let globs = test(&[
-            ("index.html", None),
-            ("public/a.html", None),
-            ("public/b.html", None),
-            ("public/c.html", None),
-            ("public/nested/a.html", None),
-            ("public/nested/b.html", None),
-            ("public/nested/c.html", None),
-            ("public/nested/again/a.html", None),
-            ("public/very/deeply/nested/a.html", None),
+            ("index.html", ""),
+            ("public/a.html", ""),
+            ("public/b.html", ""),
+            ("public/c.html", ""),
+            ("public/nested/a.html", ""),
+            ("public/nested/b.html", ""),
+            ("public/nested/c.html", ""),
+            ("public/nested/again/a.html", ""),
+            ("public/very/deeply/nested/a.html", ""),
         ]);
         assert_eq!(
             globs,
@@ -159,11 +161,11 @@ mod scanner {
     #[test]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
-            (".gitignore", Some("public/b.html\na.html")),
-            ("index.html", None),
-            ("public/a.html", None),
-            ("public/b.html", None),
-            ("public/c.html", None),
+            (".gitignore", "public/b.html\na.html"),
+            ("index.html", ""),
+            ("public/a.html", ""),
+            ("public/b.html", ""),
+            ("public/c.html", ""),
         ]);
         assert_eq!(globs, vec!["*", "index.html", "public/c.html",]);
     }
@@ -171,10 +173,10 @@ mod scanner {
     #[test]
     fn it_should_use_a_glob_for_top_level_folders() {
         let globs = test(&[
-            ("index.html", None),
-            ("src/a.html", None),
-            ("src/b.html", None),
-            ("src/c.html", None),
+            ("index.html", ""),
+            ("src/a.html", ""),
+            ("src/b.html", ""),
+            ("src/c.html", ""),
         ]);
         assert_eq!(globs, vec!["*",
             "index.html",
@@ -188,10 +190,10 @@ mod scanner {
     #[test]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
-            ("index.html", None),
-            ("a.mp4", None),
-            ("b.png", None),
-            ("c.lock", None),
+          ("index.html", ""),
+            ("a.mp4", ""),
+            ("b.png", ""),
+            ("c.lock", ""),
         ]);
         assert_eq!(globs, vec!["*", "index.html"]);
     }
@@ -199,10 +201,10 @@ mod scanner {
     #[test]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
-            ("index.html", None),
-            ("a.css", None),
-            ("b.sass", None),
-            ("c.less", None),
+          ("index.html", ""),
+            ("a.css", ""),
+            ("b.sass", ""),
+            ("c.less", ""),
         ]);
         assert_eq!(globs, vec!["*", "index.html"]);
     }
@@ -210,9 +212,9 @@ mod scanner {
     #[test]
     fn it_should_ignore_known_files() {
         let globs = test(&[
-            ("index.html", None),
-            ("package-lock.json", None),
-            ("yarn.lock", None),
+          ("index.html", ""),
+            ("package-lock.json", ""),
+            ("yarn.lock", ""),
         ]);
         assert_eq!(globs, vec!["*", "index.html"]);
     }
@@ -221,45 +223,45 @@ mod scanner {
     fn it_should_ignore_and_expand_nested_ignored_folders() {
         let globs = test(&[
             // Explicitly listed root files
-            ("foo.html", None),
-            ("bar.html", None),
-            ("baz.html", None),
+            ("foo.html", ""),
+            ("bar.html", ""),
+            ("baz.html", ""),
             // Nested folder A, using glob
-            ("nested-a/foo.html", None),
-            ("nested-a/bar.html", None),
-            ("nested-a/baz.html", None),
+            ("nested-a/foo.html", ""),
+            ("nested-a/bar.html", ""),
+            ("nested-a/baz.html", ""),
             // Nested folder B, with deeply nested files, using glob
-            ("nested-b/deeply-nested/foo.html", None),
-            ("nested-b/deeply-nested/bar.html", None),
-            ("nested-b/deeply-nested/baz.html", None),
+            ("nested-b/deeply-nested/foo.html", ""),
+            ("nested-b/deeply-nested/bar.html", ""),
+            ("nested-b/deeply-nested/baz.html", ""),
             // Nested folder C, with ignored sub-folder
-            ("nested-c/foo.html", None),
-            ("nested-c/bar.html", None),
-            ("nested-c/baz.html", None),
+            ("nested-c/foo.html", ""),
+            ("nested-c/bar.html", ""),
+            ("nested-c/baz.html", ""),
             //   Ignored folder
-            ("nested-c/.gitignore", Some("ignored-folder/")),
-            ("nested-c/ignored-folder/foo.html", None),
-            ("nested-c/ignored-folder/bar.html", None),
-            ("nested-c/ignored-folder/baz.html", None),
+            ("nested-c/.gitignore", "ignored-folder/"),
+            ("nested-c/ignored-folder/foo.html", ""),
+            ("nested-c/ignored-folder/bar.html", ""),
+            ("nested-c/ignored-folder/baz.html", ""),
             //   Deeply nested, without issues
-            ("nested-c/sibling-folder/foo.html", None),
-            ("nested-c/sibling-folder/bar.html", None),
-            ("nested-c/sibling-folder/baz.html", None),
+            ("nested-c/sibling-folder/foo.html", ""),
+            ("nested-c/sibling-folder/bar.html", ""),
+            ("nested-c/sibling-folder/baz.html", ""),
             // Nested folder D, with deeply nested ignored folder
-            ("nested-d/foo.html", None),
-            ("nested-d/bar.html", None),
-            ("nested-d/baz.html", None),
-            ("nested-d/.gitignore", Some("deep/")),
-            ("nested-d/very/deeply/nested/deep/foo.html", None),
-            ("nested-d/very/deeply/nested/deep/bar.html", None),
-            ("nested-d/very/deeply/nested/deep/baz.html", None),
-            ("nested-d/very/deeply/nested/foo.html", None),
-            ("nested-d/very/deeply/nested/bar.html", None),
-            ("nested-d/very/deeply/nested/baz.html", None),
-            ("nested-d/very/deeply/nested/directory/foo.html", None),
-            ("nested-d/very/deeply/nested/directory/bar.html", None),
-            ("nested-d/very/deeply/nested/directory/baz.html", None),
-            ("nested-d/very/deeply/nested/directory/again/foo.html", None),
+            ("nested-d/foo.html", ""),
+            ("nested-d/bar.html", ""),
+            ("nested-d/baz.html", ""),
+            ("nested-d/.gitignore", "deep/"),
+            ("nested-d/very/deeply/nested/deep/foo.html", ""),
+            ("nested-d/very/deeply/nested/deep/bar.html", ""),
+            ("nested-d/very/deeply/nested/deep/baz.html", ""),
+            ("nested-d/very/deeply/nested/foo.html", ""),
+            ("nested-d/very/deeply/nested/bar.html", ""),
+            ("nested-d/very/deeply/nested/baz.html", ""),
+            ("nested-d/very/deeply/nested/directory/foo.html", ""),
+            ("nested-d/very/deeply/nested/directory/bar.html", ""),
+            ("nested-d/very/deeply/nested/directory/baz.html", ""),
+            ("nested-d/very/deeply/nested/directory/again/foo.html", ""),
         ]);
 
         assert_eq!(
@@ -312,15 +314,15 @@ mod scanner {
 
         let candidates = scan(&[
             // The gitignore file is used to filter out files but not scanned for candidates
-            (".gitignore", Some(&ignores)),
+            (".gitignore", &ignores),
             // A file that should definitely be scanned
-            ("index.html", Some("font-bold md:flex")),
+            ("index.html", "font-bold md:flex"),
             // A file that should definitely not be scanned
-            ("foo.jpg", Some("xl:font-bold")),
+            ("foo.jpg", "xl:font-bold"),
             // A file that is ignored
-            ("foo.html", Some("lg:font-bold")),
+            ("foo.html", "lg:font-bold"),
             // A svelte file with `class:foo="bar"` syntax
-            ("index.svelte", Some("<div class:px-4='condition'></div>")),
+            ("index.svelte", "<div class:px-4='condition'></div>"),
         ])
         .1;
 
@@ -336,7 +338,7 @@ mod scanner {
             &[
                 // We know that `.styl` extensions are ignored, so they are not covered by auto content
                 // detection.
-                ("foo.styl", Some("content-['foo.styl']")),
+                ("foo.styl", "content-['foo.styl']"),
             ],
             vec!["*.styl"],
         )
@@ -349,10 +351,10 @@ mod scanner {
     fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
         let candidates = scan_with_globs(
             &[
-                (".gitignore", Some("foo.styl")),
+                (".gitignore", "foo.styl"),
                 // We know that `.styl` extensions are ignored, so they are not covered by auto content
                 // detection.
-                ("foo.styl", Some("content-['foo.styl']")),
+                ("foo.styl", "content-['foo.styl']"),
             ],
             vec!["foo.styl"],
         )
