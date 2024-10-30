@@ -335,6 +335,53 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_be_possible_to_scan_in_the_parent_directory() {
+        let candidates = scan_with_globs(
+            &[("foo/bar/baz/foo.html", "content-['foo.html']")],
+            vec!["./foo/bar/baz/.."],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.html']"]);
+    }
+
+    #[test]
+    fn it_should_scan_files_without_extensions() {
+        // These look like folders, but they are files
+        let candidates =
+            scan_with_globs(&[("my-file", "content-['my-file']")], vec!["./my-file"]).1;
+
+        assert_eq!(candidates, vec!["content-['my-file']"]);
+    }
+
+    #[test]
+    fn it_should_scan_folders_with_extensions() {
+        // These look like files, but they are folders
+        let candidates = scan_with_globs(
+            &[
+                (
+                    "my-folder.templates/foo.html",
+                    "content-['my-folder.templates/foo.html']",
+                ),
+                (
+                    "my-folder.bin/foo.html",
+                    "content-['my-folder.bin/foo.html']",
+                ),
+            ],
+            vec!["./my-folder.templates", "./my-folder.bin"],
+        )
+        .1;
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['my-folder.bin/foo.html']",
+                "content-['my-folder.templates/foo.html']",
+            ]
+        );
+    }
+
+    #[test]
     fn it_should_scan_content_paths() {
         let candidates = scan_with_globs(
             &[
