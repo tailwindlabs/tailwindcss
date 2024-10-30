@@ -7,6 +7,19 @@ import { warn } from './renderer'
 
 const exec = promisify(execCb)
 
+export function pkg(base: string) {
+  return {
+    async add(packages: string[], location: 'dependencies' | 'devDependencies' = 'dependencies') {
+      let packageManager = await packageManagerForBase.get(base)
+      return packageManager.add(packages, location)
+    },
+    async remove(packages: string[]) {
+      let packageManager = await packageManagerForBase.get(base)
+      return packageManager.remove(packages)
+    },
+  }
+}
+
 class PackageManager {
   constructor(private base: string) {}
 
@@ -106,19 +119,6 @@ let packageManagers = new DefaultMap((base) => {
     }
   })
 })
-
-export function pkg(base: string) {
-  return {
-    async add(packages: string[], location: 'dependencies' | 'devDependencies' = 'dependencies') {
-      let packageManager = await detectPackageManager(base)
-      return packageManager.add(packages, location)
-    },
-    async remove(packages: string[]) {
-      let packageManager = await detectPackageManager(base)
-      return packageManager.remove(packages)
-    },
-  }
-}
 
 let didWarnAboutPackageManager = false
 async function detectPackageManager(base: string): Promise<PackageManager> {
