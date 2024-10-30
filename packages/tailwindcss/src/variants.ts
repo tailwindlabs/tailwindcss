@@ -198,6 +198,8 @@ export class Variants {
     if (z === null) return 1
 
     if (a.kind === 'arbitrary' && z.kind === 'arbitrary') {
+      // SAFETY: The selectors don't need to be checked for equality as they
+      // are guaranteed to be unique since we sort a list of de-duped variants
       return a.selector < z.selector ? -1 : 1
     } else if (a.kind === 'arbitrary') {
       return 1
@@ -213,16 +215,19 @@ export class Variants {
 
     if (a.kind === 'compound' && z.kind === 'compound') {
       let order = this.compare(a.variant, z.variant)
-      if (order === 0) {
-        if (a.modifier && z.modifier) {
-          return a.modifier.value < z.modifier.value ? -1 : 1
-        } else if (a.modifier) {
-          return 1
-        } else if (z.modifier) {
-          return -1
-        }
+      if (order !== 0) return order
+
+      if (a.modifier && z.modifier) {
+        // SAFETY: The modifiers don't need to be checked for equality as they
+        // are guaranteed to be unique since we sort a list of de-duped variants
+        return a.modifier.value < z.modifier.value ? -1 : 1
+      } else if (a.modifier) {
+        return 1
+      } else if (z.modifier) {
+        return -1
+      } else {
+        return 0
       }
-      return order
     }
 
     let compareFn = this.compareFns.get(aOrder)
@@ -230,44 +235,24 @@ export class Variants {
 
     if (a.root !== z.root) return a.root < z.root ? -1 : 1
 
-    // SAFETY: variants a and z are of the same `kind` and can only be static or
-    // functional at this point
-
-    let aValue =
-      a.kind === 'static'
-        ? // Static variants don't have a value
-          null
-        : a.kind === 'compound'
-          ? // Compound variants never reach this point
-            null
-          : a.value
-
-    let zValue =
-      z.kind === 'static'
-        ? // Static variants don't have a value
-          null
-        : z.kind === 'compound'
-          ? // Compound variants never reach this point
-            null
-          : z.value
-
-    // Both variants are static, functional without a value, or functional with
-    // equal values
-    if (aValue === zValue) return 0
-
-    // Here both variants must be functional and have different values. One of
-    // the values being `null` here means we have something like `foo` vs
-    // `foo-bar` or `foo-[:bar]` where `foo` is the "root" of the variant.
-    //
-    // We want `foo` to appear before `foo-bar` or `foo-[:bar]`. While this is
-    // an arbitrary decision its one that must be consistent.
-    if (aValue === null) return -1
-    if (zValue === null) return 1
+    // SAFETY: Variants `a` and `z` are both functional at this point. Static
+    // variants are de-duped by the `DefaultMap` and checked earlier. Also,
+    // no functional variant in core supports a "default" value so the `null`
+    // case can only happen in the case of `matchVariant` which has a dedicated
+    // comparison function and is thus checked before this point.
+    let aValue = (a as Extract<Variant, { kind: 'functional' }>).value!
+    let zValue = (z as Extract<Variant, { kind: 'functional' }>).value!
 
     // Variants with arbitrary values should appear after any with named values
     if (aValue.kind === 'arbitrary' && zValue.kind !== 'arbitrary') return 1
     if (aValue.kind !== 'arbitrary' && zValue.kind === 'arbitrary') return -1
 
+    // SAFETY: The values don't need to be checked for equality as they are
+    // guaranteed to be unique since we sort a list of de-duped variants. The
+    // only way this could matter would be when two different variants parse to
+    // the same AST. That is only possible with arbitrary values when spaces are
+    // involved. e.g. `data-[a_b]:flex` and `data-[a ]:flex` but this is not a
+    // concern for us because spaces are not allowed in variant names.
     return aValue.value < zValue.value ? -1 : 1
   }
 
