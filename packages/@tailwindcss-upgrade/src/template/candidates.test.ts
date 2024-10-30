@@ -123,7 +123,7 @@ const candidates = [
   ['bg-[no-repeat_url(/image_13.png)]', 'bg-[no-repeat_url(/image_13.png)]'],
   [
     'bg-[var(--spacing-0_5,_var(--spacing-1_5,_3rem))]',
-    'bg-[var(--spacing-0_5,_var(--spacing-1_5,_3rem))]',
+    'bg-[var(--spacing-0_5,var(--spacing-1_5,3rem))]',
   ],
 ]
 
