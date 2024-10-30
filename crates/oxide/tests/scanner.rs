@@ -8,7 +8,7 @@ mod scanner {
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
-    fn create_files_in(dir: &path::PathBuf, paths: &[(&str, &str)]) {
+    fn create_files_in(dir: &path::Path, paths: &[(&str, &str)]) {
         // Create the necessary files
         for (path, contents) in paths {
             // Ensure we use the right path separator for the current platform
