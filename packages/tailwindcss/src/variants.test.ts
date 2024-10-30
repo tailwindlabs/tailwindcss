@@ -1,5 +1,6 @@
 import dedent from 'dedent'
 import { expect, test } from 'vitest'
+import createPlugin from './plugin'
 import { compileCss, run } from './test-utils/run'
 import { Compounds, compoundsForSelectors } from './variants'
 
@@ -3338,6 +3339,56 @@ test('variants with the same root are sorted deterministically', async () => {
         }
 
         .data-\[foo\]\:flex[data-foo] {
+          display: flex;
+        }
+      `),
+    )
+  }
+})
+
+test('matchVariant sorts deterministically', async () => {
+  function permute(arr: string[]): string[][] {
+    if (arr.length <= 1) return [arr]
+
+    return arr.flatMap((item, i) =>
+      permute([...arr.slice(0, i), ...arr.slice(i + 1)]).map((permutation) => [
+        item,
+        ...permutation,
+      ]),
+    )
+  }
+
+  let classLists = permute(['is-data:flex', 'is-data-foo:flex', 'is-data-bar:flex'])
+
+  for (let classList of classLists) {
+    let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
+      loadModule(id: string) {
+        return {
+          base: '/',
+          module: createPlugin(({ matchVariant }) => {
+            matchVariant('is-data', (value) => `&:is([data-${value}])`, {
+              values: {
+                DEFAULT: 'default',
+                foo: 'foo',
+                bar: 'bar',
+              },
+            })
+          }),
+        }
+      },
+    })
+
+    expect(output.trim()).toEqual(
+      dedent(css`
+        .is-data\:flex[data-default] {
+          display: flex;
+        }
+
+        .is-data-foo\:flex[data-foo] {
+          display: flex;
+        }
+
+        .is-data-bar\:flex[data-bar] {
           display: flex;
         }
       `),
