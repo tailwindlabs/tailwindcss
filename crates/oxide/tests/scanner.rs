@@ -397,6 +397,42 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_scan_absolute_paths() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/index.html", "content-['project-a/index.html']"),
+                ("project-b/index.html", "content-['project-b/index.html']"),
+            ],
+        );
+
+        let full_path = format!("{}", dir.display()).replace('\\', "/");
+        let sources = vec![GlobEntry {
+            base: full_path.clone(),
+            pattern: full_path.clone(),
+        }];
+
+        let mut scanner = Scanner::new(Some(sources));
+        let candidates = scanner.scan();
+
+        // We've done the initial scan and found the files
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+            ]
+        );
+    }
+
+    #[test]
     fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
         let candidates = scan_with_globs(
             &[
