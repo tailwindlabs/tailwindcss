@@ -302,9 +302,6 @@ export function test(
 
               let dir = path.dirname(full)
               await fs.mkdir(dir, { recursive: true })
-
-              // Create the file _then_ write to it which is necessary because
-              // postcss-cli doesn't listen for new files just updates to them
               await fs.writeFile(full, '')
             }
           },
