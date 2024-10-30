@@ -91,6 +91,9 @@ importers:
       '@tailwindcss/oxide-linux-x64-musl':
         specifier: workspace:*
         version: link:npm/linux-x64-musl
+      '@tailwindcss/oxide-win32-arm64-msvc':
+        specifier: workspace:*
+        version: link:npm/win32-arm64-msvc
       '@tailwindcss/oxide-win32-x64-msvc':
         specifier: workspace:*
         version: link:npm/win32-x64-msvc
@@ -118,6 +121,8 @@ importers:
   crates/node/npm/linux-x64-gnu: {}
 
   crates/node/npm/linux-x64-musl: {}
+
+  crates/node/npm/win32-arm64-msvc: {}
 
   crates/node/npm/win32-x64-msvc: {}
 
@@ -247,7 +252,7 @@ importers:
         specifier: ^1.1.11
         version: 1.1.11
       bun:
-        specifier: ^1.1.29
+        specifier: 1.1.29
         version: 1.1.29
       lightningcss-darwin-arm64:
         specifier: ^1.25.1

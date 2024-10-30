@@ -31,7 +31,7 @@ mod scanner {
             }
         }
 
-        let base = format!("{}", dir.display());
+        let base = format!("{}", dir.display()).replace('\\', "/");
 
         // Resolve all content paths for the (temporary) current working directory
         let mut sources: Vec<GlobEntry> = globs
@@ -51,31 +51,20 @@ mod scanner {
 
         let candidates = scanner.scan();
 
-        let mut paths: Vec<_> = scanner
-            .get_files()
-            .into_iter()
-            .map(|x| x.replace(&format!("{}{}", &base, path::MAIN_SEPARATOR), ""))
-            .collect();
+        let mut paths: Vec<_> = scanner.get_files();
 
         for glob in scanner.get_globs() {
-            paths.push(format!(
-                "{}{}{}",
-                glob.base,
-                path::MAIN_SEPARATOR,
-                glob.pattern
-            ));
+            paths.push(format!("{}{}{}", glob.base, "/", glob.pattern));
         }
 
-        let parent_dir = format!(
-            "{}{}",
-            fs::canonicalize(&base).unwrap().display(),
-            path::MAIN_SEPARATOR
-        );
+        let parent_dir =
+            format!("{}{}", dunce::canonicalize(&base).unwrap().display(), "/").replace('\\', "/");
 
         paths = paths
             .into_iter()
             .map(|x| {
-                x.replace(&parent_dir, "").replace('\\', "/") // Normalize paths to use unix style separators
+                // Normalize paths to use unix style separators
+                x.replace('\\', "/").replace(&parent_dir, "")
             })
             .collect();
 
