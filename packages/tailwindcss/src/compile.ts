@@ -97,7 +97,7 @@ export function compileCandidates(
   }
 
   astNodes.sort((a, z) => {
-    // Safety: At this point it is safe to use TypeScript's non-null assertion
+    // SAFETY: At this point it is safe to use TypeScript's non-null assertion
     // operator because if the ast nodes didn't exist, we introduced a bug
     // above, but there is no need to re-check just to be sure. If this relied
     // on pure user input, then we would need to check for its existence.
@@ -194,7 +194,7 @@ export function applyVariant(
     return
   }
 
-  // Safety: At this point it is safe to use TypeScript's non-null assertion
+  // SAFETY: At this point it is safe to use TypeScript's non-null assertion
   // operator because if the `candidate.root` didn't exist, `parseCandidate`
   // would have returned `null` and we would have returned early resulting in
   // not hitting this code path.
@@ -322,7 +322,7 @@ function getPropertySort(nodes: AstNode[]) {
   let q: AstNode[] = nodes.slice()
 
   while (q.length > 0) {
-    // Safety: At this point it is safe to use TypeScript's non-null assertion
+    // SAFETY: At this point it is safe to use TypeScript's non-null assertion
     // operator because we guarded against `q.length > 0` above.
     let node = q.shift()!
     if (node.kind === 'declaration') {
