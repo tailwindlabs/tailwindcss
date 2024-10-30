@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod scanner {
     use std::process::Command;
+    use std::thread::sleep;
+    use std::time::Duration;
     use std::{fs, path};
 
     use tailwindcss_oxide::*;
@@ -402,6 +404,8 @@ mod scanner {
                 "content-['project-b/index.html']".to_owned(),
             ]
         );
+
+        sleep(Duration::from_millis(100));
 
         // Create files
         create_files_in(
