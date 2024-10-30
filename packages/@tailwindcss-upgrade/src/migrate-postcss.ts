@@ -84,7 +84,7 @@ export async function migratePostCSSConfig(base: string) {
 
   if (didAddPostcssClient) {
     try {
-      await pkg('add -D @tailwindcss/postcss@next', base)
+      await pkg(base).add(['@tailwindcss/postcss@next'], 'devDependencies')
     } catch {}
   }
   if (didRemoveAutoprefixer || didRemovePostCSSImport) {
@@ -92,10 +92,8 @@ export async function migratePostCSSConfig(base: string) {
       let packagesToRemove = [
         didRemoveAutoprefixer ? 'autoprefixer' : null,
         didRemovePostCSSImport ? 'postcss-import' : null,
-      ]
-        .filter(Boolean)
-        .join(' ')
-      await pkg(`remove ${packagesToRemove}`, base)
+      ].filter(Boolean) as string[]
+      await pkg(base).remove(packagesToRemove)
     } catch {}
   }
 
