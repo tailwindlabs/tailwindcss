@@ -121,7 +121,7 @@ let packageManagers = new DefaultMap((base) => {
 })
 
 let didWarnAboutPackageManager = false
-async function detectPackageManager(base: string): Promise<PackageManager> {
+let packageManagerForBase = new DefaultMap(async (base) => {
   do {
     // 1. Check package.json for a `packageManager` field
     let packageJsonPath = resolve(base, 'package.json')
@@ -182,4 +182,4 @@ async function detectPackageManager(base: string): Promise<PackageManager> {
       return Promise.reject('No package manager detected')
     }
   } while (true)
-}
+})
