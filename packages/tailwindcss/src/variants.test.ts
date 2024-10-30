@@ -1,3 +1,4 @@
+import dedent from 'dedent'
 import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
 import { Compounds, compoundsForSelectors } from './variants'
@@ -1623,14 +1624,20 @@ test('supports', async () => {
       }
     }
 
-    @supports (display: grid) {
-      .supports-\\[display\\:grid\\]\\:flex {
+    @supports (display: grid) and font-format(opentype) {
+      .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports (--test: var(--tw)) {
+      .supports-\\[--test\\]\\:flex {
         display: flex;
       }
     }
 
-    @supports selector(A > B) {
-      .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
+    @supports (display: grid) {
+      .supports-\\[display\\:grid\\]\\:flex {
         display: flex;
       }
     }
@@ -1641,26 +1648,20 @@ test('supports', async () => {
       }
     }
 
-    @supports (display: grid) and font-format(opentype) {
-      .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
-        display: grid;
-      }
-    }
-
     @supports font-tech(color-COLRv1) {
       .supports-\\[font-tech\\(color-COLRv1\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @supports var(--test) {
-      .supports-\\[var\\(--test\\)\\]\\:flex {
+    @supports selector(A > B) {
+      .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @supports (--test: var(--tw)) {
-      .supports-\\[--test\\]\\:flex {
+    @supports var(--test) {
+      .supports-\\[var\\(--test\\)\\]\\:flex {
         display: flex;
       }
     }"
@@ -2404,19 +2405,7 @@ test('aria', async () => {
       'peer-aria-[valuenow=1]/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
-      display: flex;
-    }
-
-    .group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *) {
-      display: flex;
-    }
-
-    .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *) {
-      display: flex;
-    }
-
-    .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *) {
+    ".group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *) {
       display: flex;
     }
 
@@ -2424,11 +2413,19 @@ test('aria', async () => {
       display: flex;
     }
 
-    .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *) {
+    .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
       display: flex;
     }
 
-    .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *) {
+    .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *) {
+      display: flex;
+    }
+
+    .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *) {
+      display: flex;
+    }
+
+    .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *) {
       display: flex;
     }
 
@@ -2436,7 +2433,11 @@ test('aria', async () => {
       display: flex;
     }
 
-    .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *) {
+    .peer-aria-checked\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-checked="true"] ~ *) {
+      display: flex;
+    }
+
+    .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *) {
       display: flex;
     }
 
@@ -2444,7 +2445,7 @@ test('aria', async () => {
       display: flex;
     }
 
-    .peer-aria-checked\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-checked="true"] ~ *) {
+    .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *) {
       display: flex;
     }
 
@@ -2460,11 +2461,11 @@ test('aria', async () => {
       display: flex;
     }
 
-    .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
+    .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"] {
       display: flex;
     }
 
-    .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"] {
+    .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
       display: flex;
     }"
   `)
@@ -2509,6 +2510,14 @@ test('data', async () => {
       display: flex;
     }
 
+    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
+      display: flex;
+    }
+
     .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *) {
       display: flex;
     }
@@ -2521,19 +2530,19 @@ test('data', async () => {
       display: flex;
     }
 
-    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
-      display: flex;
-    }
-
-    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
-      display: flex;
-    }
-
     .peer-data-\\[disabled\\]\\:flex:is(:where(.peer)[data-disabled] ~ *) {
       display: flex;
     }
 
     .peer-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-disabled] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar baz" i] ~ *) {
       display: flex;
     }
 
@@ -2549,19 +2558,23 @@ test('data', async () => {
       display: flex;
     }
 
-    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
-      display: flex;
-    }
-
-    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar baz" i] ~ *) {
-      display: flex;
-    }
-
     .data-disabled\\:flex[data-disabled] {
       display: flex;
     }
 
-    .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i] {
+      display: flex;
+    }
+
+    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i] {
+      display: flex;
+    }
+
+    .data-\\[foo\\=1\\]\\:flex[data-foo="1"] {
+      display: flex;
+    }
+
+    .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"] {
       display: flex;
     }
 
@@ -2577,19 +2590,7 @@ test('data', async () => {
       display: flex;
     }
 
-    .data-\\[foo\\=1\\]\\:flex[data-foo="1"] {
-      display: flex;
-    }
-
-    .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"] {
-      display: flex;
-    }
-
-    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i] {
-      display: flex;
-    }
-
-    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i] {
+    .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
       display: flex;
     }"
   `)
@@ -2881,6 +2882,7 @@ test('variant order', async () => {
         'contrast-less:flex',
         'contrast-more:flex',
         'dark:flex',
+        'data-custom:flex',
         'data-[custom=true]:flex',
         'default:flex',
         'disabled:flex',
@@ -3123,10 +3125,6 @@ test('variant order', async () => {
       display: flex;
     }
 
-    .aria-\\[custom\\=true\\]\\:flex[aria-custom="true"] {
-      display: flex;
-    }
-
     .aria-busy\\:flex[aria-busy="true"] {
       display: flex;
     }
@@ -3160,6 +3158,14 @@ test('variant order', async () => {
     }
 
     .aria-selected\\:flex[aria-selected="true"] {
+      display: flex;
+    }
+
+    .aria-\\[custom\\=true\\]\\:flex[aria-custom="true"] {
+      display: flex;
+    }
+
+    .data-custom\\:flex[data-custom] {
       display: flex;
     }
 

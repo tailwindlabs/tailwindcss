@@ -1109,14 +1109,14 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
       'print:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".aria-polite\\:underline {
-      &[aria-live="polite"] {
-        text-decoration-line: underline;
-      }
-    }
-    .aria-hidden\\:flex {
+    ".aria-hidden\\:flex {
       &[aria-hidden="true"] {
         display: flex;
+      }
+    }
+    .aria-polite\\:underline {
+      &[aria-live="polite"] {
+        text-decoration-line: underline;
       }
     }
     .data-checked\\:underline {
