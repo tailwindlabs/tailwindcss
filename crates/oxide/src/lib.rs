@@ -223,11 +223,17 @@ impl Scanner {
 
         // Check all directories to see if they were modified
         for path in &self.dirs {
+            dbg!(&path);
+
             let current_time = fs::metadata(path)
                 .and_then(|m| m.modified())
                 .unwrap_or(SystemTime::now());
 
+            dbg!(&current_time);
+
             let previous_time = self.mtimes.insert(path.clone(), current_time);
+
+            dbg!(&previous_time);
 
             let should_scan = match previous_time {
                 // Time has changed, so we need to re-scan the file
@@ -240,6 +246,8 @@ impl Scanner {
                 None => true,
             };
 
+            dbg!(&should_scan);
+
             if should_scan {
                 modified_dirs.push(path.clone());
             }
@@ -248,6 +256,8 @@ impl Scanner {
         // Scan all modified directories for their immediate files
         let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
 
+        dbg!(&self.dirs, &modified_dirs, &known);
+
         while !modified_dirs.is_empty() {
             let new_entries = modified_dirs
                 .iter()
@@ -255,6 +265,8 @@ impl Scanner {
                 .map(|entry| entry.path().to_owned())
                 .filter(|path| !known.contains(path))
                 .collect::<Vec<_>>();
+
+            dbg!(&new_entries);
 
             modified_dirs.clear();
 
@@ -268,6 +280,8 @@ impl Scanner {
 
                     // Recursively scan the new directory for files
                     modified_dirs.push(path);
+                } else {
+                    eprintln!("Ignoring non-file/directory: {:?}", path);
                 }
             }
         }
