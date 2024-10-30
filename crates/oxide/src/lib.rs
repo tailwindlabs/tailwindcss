@@ -322,9 +322,14 @@ impl Scanner {
 
         fn join_paths(a: &str, b: &str) -> PathBuf {
             let mut tmp = a.to_owned();
+            let b = b.trim_end_matches("**/*").trim_end_matches('/');
+
+            if b.starts_with('/') {
+                return PathBuf::from(b);
+            }
 
             tmp += "/";
-            tmp += b.trim_end_matches("**/*").trim_end_matches('/');
+            tmp += b;
 
             PathBuf::from(&tmp)
         }
