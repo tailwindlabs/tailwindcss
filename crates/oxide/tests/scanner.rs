@@ -8,7 +8,7 @@ mod scanner {
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
-    fn create_files_in(dir: &path::PathBuf, paths: &[(&str, &str)]) {
+    fn create_files_in(dir: &path::Path, paths: &[(&str, &str)]) {
         // Create the necessary files
         for (path, contents) in paths {
             // Ensure we use the right path separator for the current platform
@@ -335,6 +335,53 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_be_possible_to_scan_in_the_parent_directory() {
+        let candidates = scan_with_globs(
+            &[("foo/bar/baz/foo.html", "content-['foo.html']")],
+            vec!["./foo/bar/baz/.."],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.html']"]);
+    }
+
+    #[test]
+    fn it_should_scan_files_without_extensions() {
+        // These look like folders, but they are files
+        let candidates =
+            scan_with_globs(&[("my-file", "content-['my-file']")], vec!["./my-file"]).1;
+
+        assert_eq!(candidates, vec!["content-['my-file']"]);
+    }
+
+    #[test]
+    fn it_should_scan_folders_with_extensions() {
+        // These look like files, but they are folders
+        let candidates = scan_with_globs(
+            &[
+                (
+                    "my-folder.templates/foo.html",
+                    "content-['my-folder.templates/foo.html']",
+                ),
+                (
+                    "my-folder.bin/foo.html",
+                    "content-['my-folder.bin/foo.html']",
+                ),
+            ],
+            vec!["./my-folder.templates", "./my-folder.bin"],
+        )
+        .1;
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['my-folder.bin/foo.html']",
+                "content-['my-folder.templates/foo.html']",
+            ]
+        );
+    }
+
+    #[test]
     fn it_should_scan_content_paths() {
         let candidates = scan_with_globs(
             &[
@@ -347,6 +394,44 @@ mod scanner {
         .1;
 
         assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    fn it_should_scan_absolute_paths() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/index.html", "content-['project-a/index.html']"),
+                ("project-b/index.html", "content-['project-b/index.html']"),
+            ],
+        );
+
+        // Get POSIX-style absolute path
+        let full_path = format!("{}", dir.display()).replace('\\', "/");
+
+        let sources = vec![GlobEntry {
+            base: full_path.clone(),
+            pattern: full_path.clone(),
+        }];
+
+        let mut scanner = Scanner::new(Some(sources));
+        let candidates = scanner.scan();
+
+        // We've done the initial scan and found the files
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['project-a/index.html']".to_owned(),
+                "content-['project-b/index.html']".to_owned(),
+            ]
+        );
     }
 
     #[test]

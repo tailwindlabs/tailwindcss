@@ -431,6 +431,9 @@ test(
 
         /* bar.html is git ignored, but explicitly listed here to scan */
         @source '../../project-d/src/bar.html';
+
+        /* Project E's source ends with '..' */
+        @source '../../project-e/nested/..';
       `,
 
       // Project A is the current folder, but we explicitly configured
@@ -553,6 +556,13 @@ test(
           class="content-['project-d/my-binary-file.bin']"
         ></div>
       `,
+
+      // Project E's `@source "project-e/nested/.."` ends with `..`, which
+      // should look for files in `project-e` itself.
+      'project-e/index.html': html`<div class="content-['project-e/index.html']"></div>`,
+      'project-e/nested/index.html': html`<div
+          class="content-['project-e/nested/index.html']"
+        ></div>`,
     },
   },
   async ({ fs, exec, spawn, root }) => {
@@ -597,6 +607,14 @@ test(
       }
       .content-\\[\\'project-d\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-d/src/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-e\\/index\\.html\\'\\] {
+        --tw-content: 'project-e/index.html';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'project-e\\/nested\\/index\\.html\\'\\] {
+        --tw-content: 'project-e/nested/index.html';
         content: var(--tw-content);
       }
       @supports (-moz-orient: inline) {

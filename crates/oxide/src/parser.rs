@@ -362,6 +362,8 @@ impl<'a> Extractor<'a> {
             }
 
             // The ':` must be preceded by a-Z0-9 because it represents a property name.
+            // SAFETY: the Self::validate_arbitrary_property function from above validates that the
+            //         `:` exists.
             let colon = utility.find(":").unwrap();
 
             if !utility

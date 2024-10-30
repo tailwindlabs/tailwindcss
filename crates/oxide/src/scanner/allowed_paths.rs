@@ -25,13 +25,13 @@ static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(||
 static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
     sync::LazyLock::new(|| vec![".git"]);
 
-#[tracing::instrument(skip(root))]
+#[tracing::instrument(skip_all)]
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
     // Read the directory recursively with no depth limit
     read_dir(root, None)
 }
 
-#[tracing::instrument(skip(root))]
+#[tracing::instrument(skip_all)]
 pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
     WalkBuilder::new(root)
         .hidden(false)
@@ -40,7 +40,7 @@ pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
         .filter_map(Result::ok)
 }
 
-#[tracing::instrument(skip(root))]
+#[tracing::instrument(skip_all)]
 pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEntry> {
     WalkBuilder::new(root)
         .hidden(false)
