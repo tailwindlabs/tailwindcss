@@ -679,7 +679,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
       },
       async ({ root, fs, exec }) => {
         await expect(() =>
-          exec('pnpm vite build', { cwd: path.join(root, 'project-a') }),
+          exec('pnpm vite build', { cwd: path.join(root, 'project-a') }, { ignoreStdErr: true }),
         ).rejects.toThrowError('The `source(../i-do-not-exist)` does not exist')
 
         let files = await fs.glob('project-a/dist/**/*.css')
