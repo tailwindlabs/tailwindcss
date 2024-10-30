@@ -3285,6 +3285,60 @@ test('variant order', async () => {
   `)
 })
 
+test('variants with the same root are sorted deterministically', async () => {
+  function permute(arr: string[]): string[][] {
+    if (arr.length <= 1) return [arr]
+
+    return arr.flatMap((item, i) =>
+      permute([...arr.slice(0, i), ...arr.slice(i + 1)]).map((permutation) => [
+        item,
+        ...permutation,
+      ]),
+    )
+  }
+
+  let classLists = permute([
+    'data-hover:flex',
+    'data-focus:flex',
+    'data-active:flex',
+    'data-[foo]:flex',
+    'data-[bar]:flex',
+    'data-[baz]:flex',
+  ])
+
+  for (let classList of classLists) {
+    let output = await compileCss('@tailwind utilities;', classList)
+
+    expect(output.trim()).toEqual(
+      dedent(css`
+        .data-active\:flex[data-active] {
+          display: flex;
+        }
+
+        .data-focus\:flex[data-focus] {
+          display: flex;
+        }
+
+        .data-hover\:flex[data-hover] {
+          display: flex;
+        }
+
+        .data-\[bar\]\:flex[data-bar] {
+          display: flex;
+        }
+
+        .data-\[baz\]\:flex[data-baz] {
+          display: flex;
+        }
+
+        .data-\[foo\]\:flex[data-foo] {
+          display: flex;
+        }
+      `),
+    )
+  }
+})
+
 test.each([
   // These are style rules
   [['.foo'], Compounds.StyleRules],

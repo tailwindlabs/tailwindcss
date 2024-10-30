@@ -226,8 +226,49 @@ export class Variants {
     }
 
     let compareFn = this.compareFns.get(aOrder)
-    if (compareFn === undefined) return a.root < z.root ? -1 : 1
-    return compareFn(a, z)
+    if (compareFn !== undefined) return compareFn(a, z)
+
+    if (a.root !== z.root) return a.root < z.root ? -1 : 1
+
+    // SAFETY: variants a and z are of the same `kind` and can only be static or
+    // functional at this point
+
+    let aValue =
+      a.kind === 'static'
+        ? // Static variants don't have a value
+          null
+        : a.kind === 'compound'
+          ? // Compound variants never reach this point
+            null
+          : a.value
+
+    let zValue =
+      z.kind === 'static'
+        ? // Static variants don't have a value
+          null
+        : z.kind === 'compound'
+          ? // Compound variants never reach this point
+            null
+          : z.value
+
+    // Both variants are static, functional without a value, or functional with
+    // equal values
+    if (aValue === zValue) return 0
+
+    // Here both variants must be functional and have different values. One of
+    // the values being `null` here means we have something like `foo` vs
+    // `foo-bar` or `foo-[:bar]` where `foo` is the "root" of the variant.
+    //
+    // We want `foo` to appear before `foo-bar` or `foo-[:bar]`. While this is
+    // an arbitrary decision its one that must be consistent.
+    if (aValue === null) return -1
+    if (zValue === null) return 1
+
+    // Variants with arbitrary values should appear after any with named values
+    if (aValue.kind === 'arbitrary' && zValue.kind !== 'arbitrary') return 1
+    if (aValue.kind !== 'arbitrary' && zValue.kind === 'arbitrary') return -1
+
+    return aValue.value < zValue.value ? -1 : 1
   }
 
   keys() {
