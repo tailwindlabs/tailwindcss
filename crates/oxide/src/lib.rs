@@ -329,10 +329,9 @@ impl Scanner {
             PathBuf::from(&tmp)
         }
 
-        for path in auto_sources
-            .iter()
-            .map(|source| join_paths(&source.base, &source.pattern))
-        {
+        for path in auto_sources.iter().filter_map(|source| {
+            dunce::canonicalize(join_paths(&source.base, &source.pattern)).ok()
+        }) {
             // Insert a glob for the base path, so we can see new files/folders in the directory itself.
             self.globs.push(GlobEntry {
                 base: path.to_string_lossy().into(),
