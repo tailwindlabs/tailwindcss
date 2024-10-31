@@ -278,17 +278,17 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
   --radius-4xl: 2rem;
-  --shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-  --shadow-xs: 0 1px #0000000d;
-  --shadow-sm: 0 1px 2px 0 #0000000d;
+  --shadow-2xs: 0 1px #0000000d;
+  --shadow-xs: 0 1px 2px 0 #0000000d;
+  --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
   --shadow-md: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
   --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
   --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
   --shadow-2xl: 0 25px 50px -12px #00000040;
   --shadow-inner: inset 0 2px 4px 0 #0000000d;
-  --inset-shadow-xs: inset 0 1px #0000000d;
-  --inset-shadow-sm: inset 0 1px 1px #0000000d;
-  --inset-shadow: inset 0 2px 4px #0000000d;
+  --inset-shadow-2xs: inset 0 1px #0000000d;
+  --inset-shadow-xs: inset 0 1px 1px #0000000d;
+  --inset-shadow-sm: inset 0 2px 4px #0000000d;
   --drop-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f;
   --drop-shadow-sm: 0 1px 1px #0000000d;
   --drop-shadow-md: 0 4px 3px #00000012, 0 2px 2px #0000000f;
@@ -412,7 +412,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   background-color: var(--color-red-500, oklch(.637 .237 25.331));
 }
 
-.shadow {
+.shadow-sm {
   --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }

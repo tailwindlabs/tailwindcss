@@ -14559,14 +14559,14 @@ test('shadow', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
           --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
         @tailwind utilities;
       `,
       [
         // Shadows
-        'shadow',
+        'shadow-sm',
         'shadow-xl',
         'shadow-none',
         'shadow-[12px_12px_#0088cc]',
@@ -14598,13 +14598,8 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
-      --shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+      --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
       --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
-    }
-
-    .shadow {
-      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[10px_10px\\] {
@@ -14624,6 +14619,11 @@ test('shadow', async () => {
 
     .shadow-none {
       --tw-shadow: 0 0 #0000;
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-sm {
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
