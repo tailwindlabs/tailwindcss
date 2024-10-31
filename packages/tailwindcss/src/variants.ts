@@ -236,12 +236,17 @@ export class Variants {
     if (a.root !== z.root) return a.root < z.root ? -1 : 1
 
     // SAFETY: Variants `a` and `z` are both functional at this point. Static
-    // variants are de-duped by the `DefaultMap` and checked earlier. Also,
-    // no functional variant in core supports a "default" value so the `null`
-    // case can only happen in the case of `matchVariant` which has a dedicated
-    // comparison function and is thus checked before this point.
-    let aValue = (a as Extract<Variant, { kind: 'functional' }>).value!
-    let zValue = (z as Extract<Variant, { kind: 'functional' }>).value!
+    // variants are de-duped by the `DefaultMap` and checked earlier.
+    let aValue = (a as Extract<Variant, { kind: 'functional' }>).value
+    let zValue = (z as Extract<Variant, { kind: 'functional' }>).value
+
+    // While no functional variant in core supports a "default" value the parser
+    // will see something like `data:flex` and still parse and store it as a
+    // functional variant even though it actually produces no CSS. This means
+    // that we need to handle the case where the value is `null` here. Even
+    // though _for valid utilities_ this never happens.
+    if (aValue === null) return -1
+    if (zValue === null) return 1
 
     // Variants with arbitrary values should appear after any with named values
     if (aValue.kind === 'arbitrary' && zValue.kind !== 'arbitrary') return 1
