@@ -3358,7 +3358,13 @@ test('matchVariant sorts deterministically', async () => {
     )
   }
 
-  let classLists = permute(['is-data:flex', 'is-data-foo:flex', 'is-data-bar:flex'])
+  let classLists = permute([
+    'is-data:flex',
+    'is-data-foo:flex',
+    'is-data-bar:flex',
+    'is-data-[potato]:flex',
+    'is-data-[sandwich]:flex',
+  ])
 
   for (let classList of classLists) {
     let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
@@ -3389,6 +3395,14 @@ test('matchVariant sorts deterministically', async () => {
         }
 
         .is-data-bar\:flex[data-bar] {
+          display: flex;
+        }
+
+        .is-data-\[potato\]\:flex[data-potato] {
+          display: flex;
+        }
+
+        .is-data-\[sandwich\]\:flex[data-sandwich] {
           display: flex;
         }
       `),

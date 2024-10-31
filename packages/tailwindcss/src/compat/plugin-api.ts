@@ -173,6 +173,10 @@ export function buildPluginApi(
           let aOrder = defaultOptionKeys.indexOf(aValueKey)
           let zOrder = defaultOptionKeys.indexOf(zValueKey)
 
+          // Sort arbitrary values after configured values
+          aOrder = aOrder === -1 ? defaultOptionKeys.length : aOrder
+          zOrder = zOrder === -1 ? defaultOptionKeys.length : zOrder
+
           if (aOrder !== zOrder) return aOrder - zOrder
 
           // SAFETY: The values don't need to be checked for equality as they
