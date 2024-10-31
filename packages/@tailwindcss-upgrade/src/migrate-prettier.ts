@@ -8,7 +8,7 @@ export async function migratePrettierPlugin(base: string) {
   try {
     let packageJson = await fs.readFile(packageJsonPath, 'utf-8')
     if (packageJson.includes('prettier-plugin-tailwindcss')) {
-      await pkg('add prettier-plugin-tailwindcss@latest', base)
+      await pkg(base).add(['prettier-plugin-tailwindcss@latest'])
       success(`Prettier plugin migrated to latest version.`)
     }
   } catch {}

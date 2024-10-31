@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Detect classes in new files when using `@tailwindcss/postcss` ([#14829](https://github.com/tailwindlabs/tailwindcss/pull/14829))
+- Fix crash when using `@source` containing `..` ([#14831](https://github.com/tailwindlabs/tailwindcss/pull/14831))
 - Ensure utilities with variants are sorted deterministically ([#14835](https://github.com/tailwindlabs/tailwindcss/pull/14835))
+- _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
+- _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 

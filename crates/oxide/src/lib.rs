@@ -322,17 +322,27 @@ impl Scanner {
 
         fn join_paths(a: &str, b: &str) -> PathBuf {
             let mut tmp = a.to_owned();
+            let b = b.trim_end_matches("**/*").trim_end_matches('/');
+
+            if b.starts_with('/') {
+                return PathBuf::from(b);
+            }
+
+            // On Windows a path like C:/foo.txt is absolute but C:foo.txt is not
+            // (the 2nd is relative to the CWD)
+            if b.chars().nth(1) == Some(':') && b.chars().nth(2) == Some('/') {
+                return PathBuf::from(b);
+            }
 
             tmp += "/";
-            tmp += b.trim_end_matches("**/*").trim_end_matches('/');
+            tmp += b;
 
             PathBuf::from(&tmp)
         }
 
-        for path in auto_sources
-            .iter()
-            .map(|source| join_paths(&source.base, &source.pattern))
-        {
+        for path in auto_sources.iter().filter_map(|source| {
+            dunce::canonicalize(join_paths(&source.base, &source.pattern)).ok()
+        }) {
             // Insert a glob for the base path, so we can see new files/folders in the directory itself.
             self.globs.push(GlobEntry {
                 base: path.to_string_lossy().into(),

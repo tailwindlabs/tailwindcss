@@ -59,7 +59,7 @@ function extractV3Base(
   //             ^^^^^^^^^  -> Base
   let rawVariants = segment(rawCandidate, ':')
 
-  // Safety: At this point it is safe to use TypeScript's non-null assertion
+  // SAFETY: At this point it is safe to use TypeScript's non-null assertion
   // operator because even if the `input` was an empty string, splitting an
   // empty string by `:` will always result in an array with at least one
   // element.

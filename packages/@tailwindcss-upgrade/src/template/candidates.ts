@@ -176,6 +176,12 @@ function printArbitraryValue(input: string) {
         drop.add(node)
       }
     }
+
+    // Whitespace around `,` separators can be removed.
+    // E.g.: `min(1px , 2px)` -> `min(1px,2px)`
+    else if (node.kind === 'separator' && node.value.trim() === ',') {
+      node.value = ','
+    }
   })
 
   if (drop.size > 0) {

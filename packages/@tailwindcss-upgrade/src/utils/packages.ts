@@ -1,25 +1,36 @@
-import { execSync } from 'node:child_process'
+import { exec as execCb } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import { promisify } from 'node:util'
+import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
 import { warn } from './renderer'
 
-let didWarnAboutPackageManager = false
+const exec = promisify(execCb)
 
-export async function pkg(command: string, base: string): Promise<Buffer | void> {
-  let packageManager = await detectPackageManager(base)
-  if (!packageManager) {
-    if (!didWarnAboutPackageManager) {
-      didWarnAboutPackageManager = true
-      warn('Could not detect a package manager. Please manually update `tailwindcss` to v4.')
-    }
-    return
-  }
-  return execSync(`${packageManager} ${command}`, {
-    cwd: base,
-  })
+const SAVE_DEV: Record<string, string> = {
+  default: '-D',
+  bun: '-d',
 }
 
-async function detectPackageManager(base: string): Promise<null | string> {
+export function pkg(base: string) {
+  return {
+    async add(packages: string[], location: 'dependencies' | 'devDependencies' = 'dependencies') {
+      let packageManager = await packageManagerForBase.get(base)
+      let args = packages.slice()
+      if (location === 'devDependencies') {
+        args.push(SAVE_DEV[packageManager] || SAVE_DEV.default)
+      }
+      return exec(`${packageManager} add ${args.join(' ')}`, { cwd: base })
+    },
+    async remove(packages: string[]) {
+      let packageManager = await packageManagerForBase.get(base)
+      return exec(`${packageManager} remove ${packages.join(' ')}`, { cwd: base })
+    },
+  }
+}
+
+let didWarnAboutPackageManager = false
+let packageManagerForBase = new DefaultMap(async (base) => {
   do {
     // 1. Check package.json for a `packageManager` field
     let packageJsonPath = resolve(base, 'package.json')
@@ -67,6 +78,17 @@ async function detectPackageManager(base: string): Promise<null | string> {
     } catch {}
 
     // 3. If no lockfile is found, we might be in a monorepo
+    let previousBase = base
     base = dirname(base)
+
+    // Already at the root
+    if (previousBase === base) {
+      if (!didWarnAboutPackageManager) {
+        didWarnAboutPackageManager = true
+        warn('Could not detect a package manager. Please manually update `tailwindcss` to v4.')
+      }
+
+      return Promise.reject('No package manager detected')
+    }
   } while (true)
-}
+})

@@ -42,7 +42,10 @@ pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
         // folders.
         if pattern.is_empty() && base.is_file() {
             result.push(GlobEntry {
+                // SAFETY: `parent()` will be available because we verify `base` is a file, thus a
+                // parent folder exists.
                 base: base.parent().unwrap().to_string_lossy().to_string(),
+                // SAFETY: `file_name()` will be available because we verify `base` is a file.
                 pattern: base.file_name().unwrap().to_string_lossy().to_string(),
             });
         }
@@ -100,6 +103,7 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
             GlobEntry {
                 base,
                 pattern: match size {
+                    // SAFETY: we can unwrap here because we know that the size is 1.
                     1 => patterns.next().unwrap(),
                     _ => {
                         let mut patterns = patterns.collect::<Vec<_>>();
