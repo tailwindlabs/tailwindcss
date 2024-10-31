@@ -156,12 +156,12 @@ export function buildPluginApi(
           if (a.kind !== 'functional' || z.kind !== 'functional') {
             return 0
           }
-          if (!a.value || !z.value) {
-            return 0
-          }
 
-          let aValue = options?.values?.[a.value.value] ?? a.value.value
-          let zValue = options?.values?.[z.value.value] ?? z.value.value
+          let aValueKey = a.value ? a.value.value : 'DEFAULT'
+          let zValueKey = z.value ? z.value.value : 'DEFAULT'
+
+          let aValue = options?.values?.[aValueKey] ?? aValueKey
+          let zValue = options?.values?.[zValueKey] ?? zValueKey
 
           if (options && typeof options.sort === 'function') {
             return options.sort(
@@ -170,11 +170,19 @@ export function buildPluginApi(
             )
           }
 
-          let aOrder = defaultOptionKeys.indexOf(a.value.value)
-          let zOrder = defaultOptionKeys.indexOf(z.value.value)
+          let aOrder = defaultOptionKeys.indexOf(aValueKey)
+          let zOrder = defaultOptionKeys.indexOf(zValueKey)
 
-          if (aOrder - zOrder === 0) return aValue < zValue ? -1 : 1
-          return aOrder - zOrder
+          // Sort arbitrary values after configured values
+          aOrder = aOrder === -1 ? defaultOptionKeys.length : aOrder
+          zOrder = zOrder === -1 ? defaultOptionKeys.length : zOrder
+
+          if (aOrder !== zOrder) return aOrder - zOrder
+
+          // SAFETY: The values don't need to be checked for equality as they
+          // are guaranteed to be unique since we sort a list of de-duped
+          // variants and different (valid) variants cannot produce the same AST.
+          return aValue < zValue ? -1 : 1
         },
       )
     },

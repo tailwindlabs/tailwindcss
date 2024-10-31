@@ -198,6 +198,8 @@ export class Variants {
     if (z === null) return 1
 
     if (a.kind === 'arbitrary' && z.kind === 'arbitrary') {
+      // SAFETY: The selectors don't need to be checked for equality as they
+      // are guaranteed to be unique since we sort a list of de-duped variants
       return a.selector < z.selector ? -1 : 1
     } else if (a.kind === 'arbitrary') {
       return 1
@@ -213,21 +215,50 @@ export class Variants {
 
     if (a.kind === 'compound' && z.kind === 'compound') {
       let order = this.compare(a.variant, z.variant)
-      if (order === 0) {
-        if (a.modifier && z.modifier) {
-          return a.modifier.value < z.modifier.value ? -1 : 1
-        } else if (a.modifier) {
-          return 1
-        } else if (z.modifier) {
-          return -1
-        }
+      if (order !== 0) return order
+
+      if (a.modifier && z.modifier) {
+        // SAFETY: The modifiers don't need to be checked for equality as they
+        // are guaranteed to be unique since we sort a list of de-duped variants
+        return a.modifier.value < z.modifier.value ? -1 : 1
+      } else if (a.modifier) {
+        return 1
+      } else if (z.modifier) {
+        return -1
+      } else {
+        return 0
       }
-      return order
     }
 
     let compareFn = this.compareFns.get(aOrder)
-    if (compareFn === undefined) return a.root < z.root ? -1 : 1
-    return compareFn(a, z)
+    if (compareFn !== undefined) return compareFn(a, z)
+
+    if (a.root !== z.root) return a.root < z.root ? -1 : 1
+
+    // SAFETY: Variants `a` and `z` are both functional at this point. Static
+    // variants are de-duped by the `DefaultMap` and checked earlier.
+    let aValue = (a as Extract<Variant, { kind: 'functional' }>).value
+    let zValue = (z as Extract<Variant, { kind: 'functional' }>).value
+
+    // While no functional variant in core supports a "default" value the parser
+    // will see something like `data:flex` and still parse and store it as a
+    // functional variant even though it actually produces no CSS. This means
+    // that we need to handle the case where the value is `null` here. Even
+    // though _for valid utilities_ this never happens.
+    if (aValue === null) return -1
+    if (zValue === null) return 1
+
+    // Variants with arbitrary values should appear after any with named values
+    if (aValue.kind === 'arbitrary' && zValue.kind !== 'arbitrary') return 1
+    if (aValue.kind !== 'arbitrary' && zValue.kind === 'arbitrary') return -1
+
+    // SAFETY: The values don't need to be checked for equality as they are
+    // guaranteed to be unique since we sort a list of de-duped variants. The
+    // only way this could matter would be when two different variants parse to
+    // the same AST. That is only possible with arbitrary values when spaces are
+    // involved. e.g. `data-[a_b]:flex` and `data-[a ]:flex` but this is not a
+    // concern for us because spaces are not allowed in variant names.
+    return aValue.value < zValue.value ? -1 : 1
   }
 
   keys() {
