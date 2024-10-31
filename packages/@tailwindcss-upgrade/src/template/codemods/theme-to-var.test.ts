@@ -17,7 +17,7 @@ test.each([
   ['bg-[size:theme(spacing.4)]', 'bg-[size:var(--spacing-4)]'], // Arbitrary value + data type hint
 
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
-  ['bg-[theme(colors.red.500,red)]', 'bg-[var(--color-red-500,_red)]'],
+  ['bg-[theme(colors.red.500,red)]', 'bg-[var(--color-red-500,red)]'],
 
   // Keep `theme(…)` if we can't resolve the path
   ['bg-[theme(colors.foo.1000)]', 'bg-[theme(colors.foo.1000)]'],
@@ -41,11 +41,11 @@ test.each([
   //   to a candidate modifier _if_ all `theme(…)` calls use the same modifier.
   [
     '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]',
-    '[color:theme(--color-red-500/50,_theme(--color-blue-500/50))]',
+    '[color:theme(--color-red-500/50,theme(--color-blue-500/50))]',
   ],
   [
     '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]/50',
-    '[color:theme(--color-red-500/50,_theme(--color-blue-500/50))]/50',
+    '[color:theme(--color-red-500/50,theme(--color-blue-500/50))]/50',
   ],
 
   // Convert the `theme(…)`, but try to move the inline modifier (e.g. `50%`),
@@ -82,6 +82,10 @@ test.each([
   // This test in itself doesn't make much sense. But we need to make sure
   // that this doesn't end up as the modifier in the candidate itself.
   ['max-[theme(spacing.4/50)]:flex', 'max-[theme(--spacing-4/50)]:flex'],
+
+  // `theme(…)` calls in another CSS function is replaced correctly.
+  // Additionally we remove unnecessary whitespace.
+  ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
