@@ -491,6 +491,7 @@ function testIfPortTaken(port: number): Promise<boolean> {
   })
 }
 
+export let svg = dedent
 export let css = dedent
 export let html = dedent
 export let ts = dedent
