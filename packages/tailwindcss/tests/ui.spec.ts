@@ -214,7 +214,7 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
     page,
     html`<div
       id="x"
-      class="shadow shadow-[#f00] inset-shadow inset-shadow-[#0f0] ring ring-[#fff] inset-ring inset-ring-[#00f]"
+      class="shadow-sm shadow-[#f00] inset-shadow inset-shadow-[#0f0] ring ring-[#fff] inset-ring inset-ring-[#00f]"
     ></div>`,
   )
 
@@ -233,11 +233,11 @@ test('shadow colors', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`
-      <div id="a" class="shadow shadow-red"></div>
+      <div id="a" class="shadow-sm shadow-red"></div>
       <div id="b" class="shadow-xl shadow-red"></div>
       <div id="c" class="shadow-[0px_2px_4px] shadow-red"></div>
-      <div id="d" class="shadow shadow-red hover:shadow-xl">Hello world</div>
-      <div id="e" class="shadow shadow-red hover:shadow-xl hover:shadow-initial">Hello world</div>
+      <div id="d" class="shadow-sm shadow-red hover:shadow-xl">Hello world</div>
+      <div id="e" class="shadow-smshadow-red hover:shadow-xl hover:shadow-initial">Hello world</div>
     `,
   )
 
