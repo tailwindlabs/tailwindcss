@@ -51,9 +51,15 @@ test(
             @apply text-red-500;
           }
         </style>
-
+        <style scoped>
+          @import 'tailwindcss/utilities';
+          @import 'tailwindcss/theme' theme(reference);
+          :deep(.bar) {
+            color: red;
+          }
+        </style>
         <template>
-          <div class="underline foo">Hello Vue!</div>
+          <div class="underline foo bar">Hello Vue!</div>
         </template>
       `,
     },
@@ -65,5 +71,7 @@ test(
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`foo`])
+
+    await fs.expectFileNotToContain(files[0][0], [':deep(.bar)'])
   },
 )
