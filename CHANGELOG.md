@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 
+### Changed
+
+- Remove `--drop-shadow-none` from the default theme in favor of a static `drop-shadow-none` utility ([#14847](https://github.com/tailwindlabs/tailwindcss/pull/14847))
+
 ## [4.0.0-alpha.31] - 2024-10-29
 
 ### Added
