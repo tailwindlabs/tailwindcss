@@ -133,6 +133,10 @@ export default function tailwindcss(): Plugin[] {
     return css
   }
 
+  function isUsingLightningCSS() {
+    return config?.css.transformer === 'lightningcss'
+  }
+
   return [
     {
       // Step 1: Scan source files for candidates
@@ -227,6 +231,7 @@ export default function tailwindcss(): Plugin[] {
       // both of these issues with Tailwind's own import handling.
 
       async transform(src, id) {
+        if (isUsingLightningCSS()) return
         if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
@@ -246,6 +251,64 @@ export default function tailwindcss(): Plugin[] {
       // We must run before `enforce: post` so the updated chunks are picked up
       // by vite:css-post.
       async renderStart() {
+        if (isUsingLightningCSS()) return
+
+        for (let [id, root] of roots.entries()) {
+          let generated = await regenerateOptimizedCss(
+            root,
+            // During the renderStart phase, we can not add watch files since
+            // those would not be causing a refresh of the right CSS file. This
+            // should not be an issue since we did already process the CSS file
+            // before and the dependencies should not be changed (only the
+            // candidate list might have)
+            () => {},
+          )
+          if (!generated) {
+            roots.delete(id)
+            continue
+          }
+
+          // These plugins have side effects which, during build, results in CSS
+          // being written to the output dir. We need to run them here to ensure
+          // the CSS is written before the bundle is generated.
+          await transformWithPlugins(this, id, generated)
+        }
+      },
+    },
+
+    {
+      // NOTE: This is an exact copy of the above plugin but with `enforce: pre`
+      // when using Lightning CSS.
+
+      // Step 2 (full build): Generate CSS
+      name: '@tailwindcss/vite:generate:build',
+      apply: 'build',
+      enforce: 'pre',
+
+      async transform(src, id) {
+        if (!isUsingLightningCSS()) return
+
+        if (!isPotentialCssRootFile(id)) return
+
+        let root = roots.get(id)
+
+        // We do a first pass to generate valid CSS for the downstream plugins.
+        // However, since not all candidates are guaranteed to be extracted by
+        // this time, we have to re-run a transform for the root later.
+        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        if (!generated) {
+          roots.delete(id)
+          return src
+        }
+        return { code: generated }
+      },
+
+      // `renderStart` runs in the bundle generation stage after all transforms.
+      // We must run before `enforce: post` so the updated chunks are picked up
+      // by vite:css-post.
+      async renderStart() {
+        if (!isUsingLightningCSS()) return
+
         for (let [id, root] of roots.entries()) {
           let generated = await regenerateOptimizedCss(
             root,
