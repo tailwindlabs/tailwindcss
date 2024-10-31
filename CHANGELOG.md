@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Migrate `theme()` usage and JS config files to use the new `--spacing` multiplier where possible ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
+- _Upgrade (experimental)_: Migrate arbitrary values in variants to built-in values where possible ([#14841](https://github.com/tailwindlabs/tailwindcss/pull/14841))
 
 ### Fixed
 
