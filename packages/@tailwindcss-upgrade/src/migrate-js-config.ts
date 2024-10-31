@@ -1,9 +1,9 @@
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
-import { dirname } from 'path'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { type Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
 import { toCss, type AstNode } from '../../tailwindcss/src/ast'
 import {
