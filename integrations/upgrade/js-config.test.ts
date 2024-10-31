@@ -783,6 +783,158 @@ test(
   },
 )
 
+test(
+  'multi-root project',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+
+      // Project A
+      'project-a/tailwind.config.ts': ts`
+        export default {
+          content: {
+            relative: true,
+            files: ['./src/**/*.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                primary: 'red',
+              },
+            },
+          },
+        }
+      `,
+      'project-a/src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config "../tailwind.config.ts";
+      `,
+      'project-a/src/index.html': html`<div class="!text-primary"></div>`,
+
+      // Project B
+      'project-b/tailwind.config.ts': ts`
+        export default {
+          content: {
+            relative: true,
+            files: ['./src/**/*.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                primary: 'blue',
+              },
+            },
+          },
+        }
+      `,
+      'project-b/src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config "../tailwind.config.ts";
+      `,
+      'project-b/src/index.html': html`<div class="!text-primary"></div>`,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('project-{a,b}/**/*.{css,ts}')).toMatchInlineSnapshot(`
+      "
+      --- project-a/src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      /*
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've
+        added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add \`border-0\` to
+        any form elements that shouldn't have a border.
+      */
+      @layer base {
+        input:where(:not([type='button'], [type='reset'], [type='submit'])),
+        select,
+        textarea {
+          border-width: 0;
+        }
+      }
+
+      @theme {
+        --color-primary: red;
+      }
+
+      --- project-b/src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      /*
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've
+        added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add \`border-0\` to
+        any form elements that shouldn't have a border.
+      */
+      @layer base {
+        input:where(:not([type='button'], [type='reset'], [type='submit'])),
+        select,
+        textarea {
+          border-width: 0;
+        }
+      }
+
+      @theme {
+        --color-primary: blue;
+      }
+      "
+    `)
+  },
+)
+
 describe('border compatibility', () => {
   test(
     'migrate border compatibility',
