@@ -1900,6 +1900,8 @@ exports[`getClassList 1`] = `
   "divide-y-4",
   "divide-y-8",
   "divide-y-reverse",
+  "drop-shadow-none",
+  "drop-shadow-sm",
   "duration-100",
   "duration-1000",
   "duration-150",

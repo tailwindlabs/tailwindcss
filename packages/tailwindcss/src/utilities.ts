@@ -3655,6 +3655,11 @@ export function createUtilities(theme: Theme) {
       },
     ])
 
+    staticUtility('drop-shadow-none', [
+      filterProperties,
+      ['--tw-drop-shadow', ' '],
+      ['filter', cssFilterValue],
+    ])
     functionalUtility('drop-shadow', {
       themeKeys: ['--drop-shadow'],
       handle: (value) => [
