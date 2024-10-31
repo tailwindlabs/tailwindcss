@@ -209,7 +209,22 @@ export default function tailwindcss(): Plugin[] {
       // Step 2 (full build): Generate CSS
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
-      enforce: 'pre',
+
+      // NOTE:
+      // We used to use `enforce: 'pre'` here because Tailwind CSS can handle
+      // imports itself. However, this caused two problems:
+      //
+      // - Relative asset URL rewriting for was not happening so things like
+      // `background-image: url(../image.png)` could break if done in an
+      // imported CSS file.
+      //
+      // - Processing of Vue scoped style blocks didn't happen at the right time
+      // which caused `:deep(…)` to end up in the generated CSS rather than
+      // appropriately handled by Vue.
+      //
+      // This does mean that Tailwind is no longer handling the imports itself
+      // which is not ideal but it's a reasonable tradeoff until we can resolve
+      // both of these issues with Tailwind's own import handling.
 
       async transform(src, id) {
         if (!isPotentialCssRootFile(id)) return
