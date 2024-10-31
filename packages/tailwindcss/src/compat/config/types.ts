@@ -25,7 +25,7 @@ export interface ResolvedConfig {
 type ContentFile = string | { raw: string; extension?: string }
 
 export interface UserConfig {
-  content?: ContentFile[] | { files: ContentFile[] }
+  content?: ContentFile[] | { relative?: boolean; files: ContentFile[] }
 }
 
 type ResolvedContent = { base: string; pattern: string } | { raw: string; extension?: string }
