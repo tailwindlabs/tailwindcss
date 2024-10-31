@@ -29,7 +29,7 @@ interface ExecOptions {
 
 interface TestConfig {
   fs: {
-    [filePath: string]: string
+    [filePath: string]: string | Uint8Array
   }
 }
 interface TestContext {
@@ -279,8 +279,14 @@ export function test(
           })
         },
         fs: {
-          async write(filename: string, content: string): Promise<void> {
+          async write(filename: string, content: string | Uint8Array): Promise<void> {
             let full = path.join(root, filename)
+            let dir = path.dirname(full)
+            await fs.mkdir(dir, { recursive: true })
+
+            if (typeof content !== 'string') {
+              return await fs.writeFile(full, content)
+            }
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
@@ -291,8 +297,6 @@ export function test(
               content = content.replace(/\n/g, '\r\n')
             }
 
-            let dir = path.dirname(full)
-            await fs.mkdir(dir, { recursive: true })
             await fs.writeFile(full, content)
           },
 
@@ -493,6 +497,12 @@ export let js = dedent
 export let json = dedent
 export let yaml = dedent
 export let txt = dedent
+
+export function binary(str: string | TemplateStringsArray, ...values: unknown[]): Uint8Array {
+  let base64 = typeof str === 'string' ? str : String.raw(str, ...values)
+
+  return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
+}
 
 export function candidate(strings: TemplateStringsArray, ...values: any[]) {
   let output: string[] = []
