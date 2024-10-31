@@ -8,6 +8,7 @@ import { formatNodes } from './codemods/format-nodes'
 import { help } from './commands/help'
 import {
   analyze as analyzeStylesheets,
+  linkConfigs as linkConfigsToStylesheets,
   migrate as migrateStylesheet,
   split as splitStylesheets,
 } from './migrate'
@@ -128,6 +129,16 @@ async function run() {
     // Analyze the stylesheets
     try {
       await analyzeStylesheets(stylesheets)
+    } catch (e: unknown) {
+      error(`${e}`)
+    }
+
+    // Ensure stylesheets are linked to configs
+    try {
+      await linkConfigsToStylesheets(stylesheets, {
+        configPath: flags['--config'],
+        base,
+      })
     } catch (e: unknown) {
       error(`${e}`)
     }

@@ -94,7 +94,7 @@ const DEFAULT_CONFIG_FILES = [
   './tailwind.config.cts',
   './tailwind.config.mts',
 ]
-async function detectConfigPath(base: string) {
+export async function detectConfigPath(base: string) {
   for (let file of DEFAULT_CONFIG_FILES) {
     let fullPath = path.resolve(base, file)
     try {
