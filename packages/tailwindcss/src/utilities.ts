@@ -23,6 +23,7 @@ type SuggestionDefinition =
       values?: string[]
       modifiers?: string[]
       valueThemeKeys?: ThemeKey[]
+      ignoredThemeKeys?: ThemeKey[]
       modifierThemeKeys?: ThemeKey[]
       hasDefaultValue?: boolean
     }
@@ -203,8 +204,8 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
-    function* resolve(themeKeys: ThemeKey[]) {
-      for (let value of theme.keysInNamespaces(themeKeys)) {
+    function* resolve(themeKeys: ThemeKey[], ignoredThemeKeys: ThemeKey[] = []) {
+      for (let value of theme.keysInNamespaces(themeKeys, ignoredThemeKeys)) {
         yield value.replaceAll('_', '.')
       }
     }
@@ -220,7 +221,7 @@ export function createUtilities(theme: Theme) {
 
         let values: (string | null)[] = [
           ...(defn.values ?? []),
-          ...resolve(defn.valueThemeKeys ?? []),
+          ...resolve(defn.valueThemeKeys ?? [], defn.ignoredThemeKeys),
         ]
         let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
 
@@ -252,6 +253,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative?: boolean
     supportsFractions?: boolean
     themeKeys?: ThemeKey[]
+    ignoredThemeKeys?: ThemeKey[]
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string) => AstNode[] | undefined
@@ -285,6 +287,7 @@ export function createUtilities(theme: Theme) {
         value = theme.resolve(
           candidate.value.fraction ?? candidate.value.value,
           desc.themeKeys ?? [],
+          desc.ignoredThemeKeys,
         )
 
         // Automatically handle things like `w-1/2` without requiring `1/2` to
@@ -314,6 +317,7 @@ export function createUtilities(theme: Theme) {
       {
         supportsNegative: desc.supportsNegative,
         valueThemeKeys: desc.themeKeys ?? [],
+        ignoredThemeKeys: desc.ignoredThemeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
       },
     ])
