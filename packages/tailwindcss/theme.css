@@ -333,7 +333,8 @@
   --drop-shadow-2xl: 0 25px 25px rgb(0 0 0 / 0.15);
 
   /* Spacing */
-  --spacing-px: 1px;
+  --spacing: 0.25rem;
+  /* --spacing-px: 1px;
   --spacing-0: 0px;
   --spacing-0_5: 0.125rem;
   --spacing-1: 0.25rem;
@@ -367,7 +368,7 @@
   --spacing-64: 16rem;
   --spacing-72: 18rem;
   --spacing-80: 20rem;
-  --spacing-96: 24rem;
+  --spacing-96: 24rem; */
 
   /* Widths */
   --width-3xs: 16rem;

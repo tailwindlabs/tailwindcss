@@ -33,7 +33,7 @@ it('should migrate `theme(…)` to `var(…)`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@media theme(--spacing-4) {
+    "@media theme(spacing.4) {
       .foo {
         background-color: var(--color-red-900);
         color: theme(--color-red-900 / 75%);
