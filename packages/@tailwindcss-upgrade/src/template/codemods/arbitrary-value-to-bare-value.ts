@@ -14,6 +14,21 @@ export function arbitraryValueToBareValue(
     let clone = structuredClone(candidate)
     let changed = false
 
+    // Convert [subgrid] to subgrid
+    if (
+      clone.kind === 'functional' &&
+      clone.value?.kind === 'arbitrary' &&
+      clone.value.value === 'subgrid' &&
+      (clone.root === 'grid-cols' || clone.root == 'grid-rows')
+    ) {
+      changed = true
+      clone.value = {
+        kind: 'named',
+        value: 'subgrid',
+        fraction: null,
+      }
+    }
+
     // Convert utilities that accept bare values ending in %
     if (
       clone.kind === 'functional' &&

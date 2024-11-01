@@ -8,6 +8,9 @@ test.each([
   ['col-start-[7]', 'col-start-7'],
   ['flex-[2]', 'flex-2'], // `flex` is implemented as static and functional utilities
 
+  ['grid-cols-[subgrid]', 'grid-cols-subgrid'],
+  ['grid-rows-[subgrid]', 'grid-rows-subgrid'],
+
   // Only 50-200% (inclusive) are valid:
   // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
   ['font-stretch-[50%]', 'font-stretch-50%'],
