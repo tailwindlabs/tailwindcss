@@ -28,6 +28,7 @@ interface ExecOptions {
 }
 
 interface TestConfig {
+  todo?: boolean
   fs: {
     [filePath: string]: string | Uint8Array
   }
@@ -74,6 +75,10 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false }: TestFlags = {},
 ) {
+  if (config.todo) {
+    return defaultTest.todo(name)
+  }
+
   return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
     name,
     { timeout: TEST_TIMEOUT, retry: process.env.CI ? 2 : 0 },
