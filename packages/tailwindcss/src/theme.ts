@@ -59,11 +59,9 @@ export class Theme {
       for (let key of this.values.keys()) {
         if (!key.startsWith(namespace)) continue
 
-        if (isIgnoredThemeKey(key as ThemeKey, ignoredThemeKeys)) {
-          continue
-        }
+        if (key.indexOf('--', 2) !== -1) continue
 
-        if (key.indexOf('--', 2) !== -1) {
+        if (isIgnoredThemeKey(key as ThemeKey, ignoredThemeKeys)) {
           continue
         }
 
