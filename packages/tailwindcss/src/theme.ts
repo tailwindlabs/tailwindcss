@@ -132,9 +132,10 @@ export class Theme {
           ? (escape(`${key}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
           : key
 
-      if (this.values.has(themeKey) && !isIgnoredThemeKey(themeKey, ignoredThemeKeys)) {
-        return themeKey
-      }
+      if (!this.values.has(themeKey)) continue
+      if (isIgnoredThemeKey(themeKey, ignoredThemeKeys)) continue
+
+      return themeKey
     }
 
     return null
