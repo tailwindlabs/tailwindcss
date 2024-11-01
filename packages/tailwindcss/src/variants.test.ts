@@ -12,7 +12,7 @@ test('force', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['force/foo:flex'])).toEqual('')
+  expect(await run(['force/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('*', async () => {
@@ -21,7 +21,7 @@ test('*', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['*/foo:flex'])).toEqual('')
+  expect(await run(['*/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('first-letter', async () => {
@@ -30,7 +30,7 @@ test('first-letter', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['first-letter/foo:flex'])).toEqual('')
+  expect(await run(['first-letter/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('first-line', async () => {
@@ -39,7 +39,7 @@ test('first-line', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['first-line/foo:flex'])).toEqual('')
+  expect(await run(['first-line/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('marker', async () => {
@@ -48,7 +48,7 @@ test('marker', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['marker/foo:flex'])).toEqual('')
+  expect(await run(['marker/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('selection', async () => {
@@ -57,7 +57,7 @@ test('selection', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['selection/foo:flex'])).toEqual('')
+  expect(await run(['selection/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('file', async () => {
@@ -66,7 +66,7 @@ test('file', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['file/foo:flex'])).toEqual('')
+  expect(await run(['file/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('placeholder', async () => {
@@ -75,7 +75,7 @@ test('placeholder', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['placeholder/foo:flex'])).toEqual('')
+  expect(await run(['placeholder/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('backdrop', async () => {
@@ -84,7 +84,7 @@ test('backdrop', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['backdrop/foo:flex'])).toEqual('')
+  expect(await run(['backdrop/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('before', async () => {
@@ -108,7 +108,7 @@ test('before', async () => {
       initial-value: "";
     }"
   `)
-  expect(await run(['before/foo:flex'])).toEqual('')
+  expect(await run(['before/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('after', async () => {
@@ -132,7 +132,7 @@ test('after', async () => {
       initial-value: "";
     }"
   `)
-  expect(await run(['after/foo:flex'])).toEqual('')
+  expect(await run(['after/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('first', async () => {
@@ -149,7 +149,7 @@ test('first', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['first/foo:flex'])).toEqual('')
+  expect(await run(['first/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('last', async () => {
@@ -166,7 +166,7 @@ test('last', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['last/foo:flex'])).toEqual('')
+  expect(await run(['last/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('only', async () => {
@@ -183,7 +183,7 @@ test('only', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['only/foo:flex'])).toEqual('')
+  expect(await run(['only/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('odd', async () => {
@@ -200,7 +200,7 @@ test('odd', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['odd/foo:flex'])).toEqual('')
+  expect(await run(['odd/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('even', async () => {
@@ -217,7 +217,7 @@ test('even', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['even/foo:flex'])).toEqual('')
+  expect(await run(['even/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('first-of-type', async () => {
@@ -235,7 +235,7 @@ test('first-of-type', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['first-of-type/foo:flex'])).toEqual('')
+  expect(await run(['first-of-type/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('last-of-type', async () => {
@@ -253,7 +253,7 @@ test('last-of-type', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['last-of-type/foo:flex'])).toEqual('')
+  expect(await run(['last-of-type/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('only-of-type', async () => {
@@ -271,7 +271,7 @@ test('only-of-type', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['only-of-type/foo:flex'])).toEqual('')
+  expect(await run(['only-of-type/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('visited', async () => {
@@ -289,7 +289,7 @@ test('visited', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['visited/foo:flex'])).toEqual('')
+  expect(await run(['visited/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('target', async () => {
@@ -307,7 +307,7 @@ test('target', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['target/foo:flex'])).toEqual('')
+  expect(await run(['target/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('open', async () => {
@@ -324,7 +324,7 @@ test('open', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['open/foo:flex'])).toEqual('')
+  expect(await run(['open/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('default', async () => {
@@ -342,7 +342,7 @@ test('default', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['default/foo:flex'])).toEqual('')
+  expect(await run(['default/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('checked', async () => {
@@ -360,7 +360,7 @@ test('checked', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['checked/foo:flex'])).toEqual('')
+  expect(await run(['checked/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('indeterminate', async () => {
@@ -378,7 +378,7 @@ test('indeterminate', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['indeterminate/foo:flex'])).toEqual('')
+  expect(await run(['indeterminate/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('placeholder-shown', async () => {
@@ -401,7 +401,7 @@ test('placeholder-shown', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['placeholder-shown/foo:flex'])).toEqual('')
+  expect(await run(['placeholder-shown/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('autofill', async () => {
@@ -419,7 +419,7 @@ test('autofill', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['autofill/foo:flex'])).toEqual('')
+  expect(await run(['autofill/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('optional', async () => {
@@ -437,7 +437,7 @@ test('optional', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['optional/foo:flex'])).toEqual('')
+  expect(await run(['optional/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('required', async () => {
@@ -455,7 +455,7 @@ test('required', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['required/foo:flex'])).toEqual('')
+  expect(await run(['required/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('valid', async () => {
@@ -472,7 +472,7 @@ test('valid', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['valid/foo:flex'])).toEqual('')
+  expect(await run(['valid/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('invalid', async () => {
@@ -490,7 +490,7 @@ test('invalid', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['invalid/foo:flex'])).toEqual('')
+  expect(await run(['invalid/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('in-range', async () => {
@@ -508,7 +508,7 @@ test('in-range', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['in-range/foo:flex'])).toEqual('')
+  expect(await run(['in-range/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('out-of-range', async () => {
@@ -526,7 +526,7 @@ test('out-of-range', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['out-of-range/foo:flex'])).toEqual('')
+  expect(await run(['out-of-range/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('read-only', async () => {
@@ -544,7 +544,7 @@ test('read-only', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['read-only/foo:flex'])).toEqual('')
+  expect(await run(['read-only/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('empty', async () => {
@@ -561,7 +561,7 @@ test('empty', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['empty/foo:flex'])).toEqual('')
+  expect(await run(['empty/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('focus-within', async () => {
@@ -579,7 +579,7 @@ test('focus-within', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['focus-within/foo:flex'])).toEqual('')
+  expect(await run(['focus-within/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('hover', async () => {
@@ -602,7 +602,7 @@ test('hover', async () => {
       }
     }"
   `)
-  expect(await run(['hover/foo:flex'])).toEqual('')
+  expect(await run(['hover/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('focus', async () => {
@@ -619,7 +619,7 @@ test('focus', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['focus/foo:flex'])).toEqual('')
+  expect(await run(['focus/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('group-hover group-focus sorting', async () => {
@@ -662,7 +662,7 @@ test('focus-visible', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['focus-visible/foo:flex'])).toEqual('')
+  expect(await run(['focus-visible/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('active', async () => {
@@ -680,7 +680,7 @@ test('active', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['active/foo:flex'])).toEqual('')
+  expect(await run(['active/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('enabled', async () => {
@@ -698,7 +698,7 @@ test('enabled', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['enabled/foo:flex'])).toEqual('')
+  expect(await run(['enabled/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('disabled', async () => {
@@ -716,7 +716,7 @@ test('disabled', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['disabled/foo:flex'])).toEqual('')
+  expect(await run(['disabled/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('inert', async () => {
@@ -733,7 +733,7 @@ test('inert', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['inert/foo:flex'])).toEqual('')
+  expect(await run(['inert/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('group-[...]', async () => {
@@ -971,7 +971,7 @@ test('ltr', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['ltr/foo:flex'])).toEqual('')
+  expect(await run(['ltr/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('rtl', async () => {
@@ -980,7 +980,7 @@ test('rtl', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['rtl/foo:flex'])).toEqual('')
+  expect(await run(['rtl/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('motion-safe', async () => {
@@ -991,7 +991,7 @@ test('motion-safe', async () => {
       }
     }"
   `)
-  expect(await run(['motion-safe/foo:flex'])).toEqual('')
+  expect(await run(['motion-safe/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('motion-reduce', async () => {
@@ -1002,7 +1002,7 @@ test('motion-reduce', async () => {
       }
     }"
   `)
-  expect(await run(['motion-reduce/foo:flex'])).toEqual('')
+  expect(await run(['motion-reduce/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('dark', async () => {
@@ -1013,7 +1013,7 @@ test('dark', async () => {
       }
     }"
   `)
-  expect(await run(['dark/foo:flex'])).toEqual('')
+  expect(await run(['dark/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('starting', async () => {
@@ -1024,7 +1024,7 @@ test('starting', async () => {
       }
     }"
   `)
-  expect(await run(['starting/foo:flex'])).toEqual('')
+  expect(await run(['starting/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('print', async () => {
@@ -1035,7 +1035,7 @@ test('print', async () => {
       }
     }"
   `)
-  expect(await run(['print/foo:flex'])).toEqual('')
+  expect(await run(['print/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('default breakpoints', async () => {
@@ -1668,15 +1668,18 @@ test('supports', async () => {
     }"
   `)
   expect(
-    await run([
-      'supports-gap/foo:grid',
-      'supports-[display:grid]/foo:flex',
-      'supports-[selector(A_>_B)]/foo:flex',
-      'supports-[font-format(opentype)]/foo:grid',
-      'supports-[(display:grid)_and_font-format(opentype)]/foo:grid',
-      'supports-[font-tech(color-COLRv1)]/foo:flex',
-      'supports-[var(--test)]/foo:flex',
-    ]),
+    await run(
+      [
+        'supports-gap/foo:grid',
+        'supports-[display:grid]/foo:flex',
+        'supports-[selector(A_>_B)]/foo:flex',
+        'supports-[font-format(opentype)]/foo:grid',
+        'supports-[(display:grid)_and_font-format(opentype)]/foo:grid',
+        'supports-[font-tech(color-COLRv1)]/foo:flex',
+        'supports-[var(--test)]/foo:flex',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
@@ -2470,7 +2473,9 @@ test('aria', async () => {
       display: flex;
     }"
   `)
-  expect(await run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
+  expect(
+    await run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'], { optimize: false }),
+  ).toEqual('')
 })
 
 test('data', async () => {
@@ -2481,6 +2486,9 @@ test('data', async () => {
       'data-[potato_=_"salad"]:flex',
       'data-[potato_^=_"salad"]:flex',
       'data-[potato="^_="]:flex',
+      // Can't have spaces between `^` and `=`. We will generate CSS (garbage in
+      // garbage out), but Lightning CSS will throw it out.
+      'data-[foo_^_=_"bar"]:flex',
       'data-[foo=1]:flex',
       'data-[foo=bar_baz]:flex',
       "data-[foo$='bar'_i]:flex",
@@ -2596,11 +2604,7 @@ test('data', async () => {
     }"
   `)
   expect(
-    await run([
-      'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
-      'data-disabled/foo:flex',
-      'data-[potato=salad]/foo:flex',
-    ]),
+    await run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'], { optimize: false }),
   ).toEqual('')
 })
 
@@ -2612,7 +2616,7 @@ test('portrait', async () => {
       }
     }"
   `)
-  expect(await run(['portrait/foo:flex'])).toEqual('')
+  expect(await run(['portrait/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('landscape', async () => {
@@ -2623,7 +2627,7 @@ test('landscape', async () => {
       }
     }"
   `)
-  expect(await run(['landscape/foo:flex'])).toEqual('')
+  expect(await run(['landscape/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('contrast-more', async () => {
@@ -2634,7 +2638,7 @@ test('contrast-more', async () => {
       }
     }"
   `)
-  expect(await run(['contrast-more/foo:flex'])).toEqual('')
+  expect(await run(['contrast-more/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('contrast-less', async () => {
@@ -2645,7 +2649,7 @@ test('contrast-less', async () => {
       }
     }"
   `)
-  expect(await run(['contrast-less/foo:flex'])).toEqual('')
+  expect(await run(['contrast-less/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('forced-colors', async () => {
@@ -2656,7 +2660,7 @@ test('forced-colors', async () => {
       }
     }"
   `)
-  expect(await run(['forced-colors/foo:flex'])).toEqual('')
+  expect(await run(['forced-colors/foo:flex'], { optimize: false })).toEqual('')
 })
 
 test('nth', async () => {
@@ -2716,30 +2720,31 @@ test('nth', async () => {
   `)
 
   expect(
-    await run([
-      'nth-foo:flex',
-      'nth-of-type-foo:flex',
-      'nth-last-foo:flex',
-      'nth-last-of-type-foo:flex',
-    ]),
+    await run(
+      ['nth-foo:flex', 'nth-of-type-foo:flex', 'nth-last-foo:flex', 'nth-last-of-type-foo:flex'],
+      { optimize: false },
+    ),
   ).toEqual('')
   expect(
-    await run([
-      'nth--3:flex',
-      'nth-3/foo:flex',
-      'nth-[2n+1]/foo:flex',
-      'nth-[2n+1_of_.foo]/foo:flex',
-      'nth-last--3:flex',
-      'nth-last-3/foo:flex',
-      'nth-last-[2n+1]/foo:flex',
-      'nth-last-[2n+1_of_.foo]/foo:flex',
-      'nth-of-type--3:flex',
-      'nth-of-type-3/foo:flex',
-      'nth-of-type-[2n+1]/foo:flex',
-      'nth-last-of-type--3:flex',
-      'nth-last-of-type-3/foo:flex',
-      'nth-last-of-type-[2n+1]/foo:flex',
-    ]),
+    await run(
+      [
+        'nth--3:flex',
+        'nth-3/foo:flex',
+        'nth-[2n+1]/foo:flex',
+        'nth-[2n+1_of_.foo]/foo:flex',
+        'nth-last--3:flex',
+        'nth-last-3/foo:flex',
+        'nth-last-[2n+1]/foo:flex',
+        'nth-last-[2n+1_of_.foo]/foo:flex',
+        'nth-of-type--3:flex',
+        'nth-of-type-3/foo:flex',
+        'nth-of-type-[2n+1]/foo:flex',
+        'nth-last-of-type--3:flex',
+        'nth-last-of-type-3/foo:flex',
+        'nth-last-of-type-[2n+1]/foo:flex',
+      ],
+      { optimize: false },
+    ),
   ).toEqual('')
 })
 
