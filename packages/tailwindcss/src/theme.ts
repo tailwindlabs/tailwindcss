@@ -182,8 +182,9 @@ export class Theme {
     candidateValue: string,
     themeKeys: ThemeKey[],
     nestedKeys: `--${string}`[] = [],
+    ignoredThemeKeys: ThemeKey[] = [],
   ): [string, Record<string, string>] | null {
-    let themeKey = this.#resolveKey(candidateValue, themeKeys)
+    let themeKey = this.#resolveKey(candidateValue, themeKeys, ignoredThemeKeys)
 
     if (!themeKey) return null
 
