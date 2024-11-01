@@ -301,15 +301,11 @@ test('inset-x', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'inset-x-shadow-sm',
-        'inset-x-ring-thick',
         'inset-x-ringo-starr',
         'inset-x-auto',
         'inset-x-full',
@@ -323,8 +319,6 @@ test('inset-x', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -361,20 +355,32 @@ test('inset-x', async () => {
     }"
   `)
   expect(
-    await run([
-      'inset-x',
-      'inset-x--1',
-      'inset-x--1/2',
-      'inset-x--1/-2',
-      'inset-x-1/-2',
-      'inset-x-auto/foo',
-      'inset-x-full/foo',
-      '-inset-x-full/foo',
-      'inset-x-3/4/foo',
-      'inset-x-4/foo',
-      '-inset-x-4/foo',
-      'inset-x-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px #0000000d;
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-x-shadow-sm',
+        'inset-x-ring-thick',
+        'inset-x',
+        'inset-x--1',
+        'inset-x--1/2',
+        'inset-x--1/-2',
+        'inset-x-1/-2',
+        'inset-x-auto/foo',
+        'inset-x-full/foo',
+        '-inset-x-full/foo',
+        'inset-x-3/4/foo',
+        'inset-x-4/foo',
+        '-inset-x-4/foo',
+        'inset-x-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -384,15 +390,11 @@ test('inset-y', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'inset-y-shadow-sm',
-        'inset-y-ring-thick',
         'inset-y-ringo-starr',
         'inset-y-auto',
         'inset-y-full',
@@ -406,8 +408,6 @@ test('inset-y', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -444,20 +444,32 @@ test('inset-y', async () => {
     }"
   `)
   expect(
-    await run([
-      'inset-y',
-      'inset-y--1',
-      'inset-y--1/2',
-      'inset-y--1/-2',
-      'inset-1/-2',
-      'inset-y-auto/foo',
-      'inset-y-full/foo',
-      '-inset-y-full/foo',
-      'inset-y-3/4/foo',
-      'inset-y-4/foo',
-      '-inset-y-4/foo',
-      'inset-y-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-y-shadow-sm',
+        'inset-y-ring-thick',
+        'inset-y',
+        'inset-y--1',
+        'inset-y--1/2',
+        'inset-y--1/-2',
+        'inset-1/-2',
+        'inset-y-auto/foo',
+        'inset-y-full/foo',
+        '-inset-y-full/foo',
+        'inset-y-3/4/foo',
+        'inset-y-4/foo',
+        '-inset-y-4/foo',
+        'inset-y-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -467,15 +479,11 @@ test('start', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'start-shadow-sm',
-        'start-ring-thick',
         'start-ringo-starr',
         'start-auto',
         '-start-full',
@@ -489,8 +497,6 @@ test('start', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -527,20 +533,32 @@ test('start', async () => {
     }"
   `)
   expect(
-    await run([
-      'start',
-      'start--1',
-      'start--1/2',
-      'start--1/-2',
-      'start-1/-2',
-      'start-auto/foo',
-      '-start-full/foo',
-      'start-full/foo',
-      'start-3/4/foo',
-      'start-4/foo',
-      '-start-4/foo',
-      'start-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'start-shadow-sm',
+        'start-ring-thick',
+        'start',
+        'start--1',
+        'start--1/2',
+        'start--1/-2',
+        'start-1/-2',
+        'start-auto/foo',
+        '-start-full/foo',
+        'start-full/foo',
+        'start-3/4/foo',
+        'start-4/foo',
+        '-start-4/foo',
+        'start-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -550,15 +568,11 @@ test('end', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'end-shadow-sm',
-        'end-ring-thick',
         'end-ringo-starr',
         'end-auto',
         '-end-full',
@@ -572,8 +586,6 @@ test('end', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -610,20 +622,32 @@ test('end', async () => {
     }"
   `)
   expect(
-    await run([
-      'end',
-      'end--1',
-      'end--1/2',
-      'end--1/-2',
-      'end-1/-2',
-      'end-auto/foo',
-      '-end-full/foo',
-      'end-full/foo',
-      'end-3/4/foo',
-      'end-4/foo',
-      '-end-4/foo',
-      'end-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'end-shadow-sm',
+        'end-ring-thick',
+        'end',
+        'end--1',
+        'end--1/2',
+        'end--1/-2',
+        'end-1/-2',
+        'end-auto/foo',
+        '-end-full/foo',
+        'end-full/foo',
+        'end-3/4/foo',
+        'end-4/foo',
+        '-end-4/foo',
+        'end-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -633,16 +657,12 @@ test('top', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
 
       [
-        'top-shadow-sm',
-        'top-ring-thick',
         'top-ringo-starr',
         'top-auto',
         '-top-full',
@@ -656,8 +676,6 @@ test('top', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -694,20 +712,32 @@ test('top', async () => {
     }"
   `)
   expect(
-    await run([
-      'top',
-      'top--1',
-      'top--1/2',
-      'top--1/-2',
-      'top-1/-2',
-      'top-auto/foo',
-      '-top-full/foo',
-      'top-full/foo',
-      'top-3/4/foo',
-      'top-4/foo',
-      '-top-4/foo',
-      'top-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'top-shadow-sm',
+        'top-ring-thick',
+        'top',
+        'top--1',
+        'top--1/2',
+        'top--1/-2',
+        'top-1/-2',
+        'top-auto/foo',
+        '-top-full/foo',
+        'top-full/foo',
+        'top-3/4/foo',
+        'top-4/foo',
+        '-top-4/foo',
+        'top-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -717,15 +747,11 @@ test('right', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'right-shadow-sm',
-        'right-ring-thick',
         'right-ringo-starr',
         'right-auto',
         '-right-full',
@@ -739,8 +765,6 @@ test('right', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -777,20 +801,32 @@ test('right', async () => {
     }"
   `)
   expect(
-    await run([
-      'right',
-      'right--1',
-      'right--1/2',
-      'right--1/-2',
-      'right-1/-2',
-      'right-auto/foo',
-      '-right-full/foo',
-      'right-full/foo',
-      'right-3/4/foo',
-      'right-4/foo',
-      '-right-4/foo',
-      'right-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'right-shadow-sm',
+        'right-ring-thick',
+        'right',
+        'right--1',
+        'right--1/2',
+        'right--1/-2',
+        'right-1/-2',
+        'right-auto/foo',
+        '-right-full/foo',
+        'right-full/foo',
+        'right-3/4/foo',
+        'right-4/foo',
+        '-right-4/foo',
+        'right-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -800,15 +836,11 @@ test('bottom', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'bottom-shadow-sm',
-        'bottom-ring-thick',
         'bottom-ringo-starr',
         'bottom-auto',
         '-bottom-full',
@@ -822,8 +854,6 @@ test('bottom', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -860,20 +890,32 @@ test('bottom', async () => {
     }"
   `)
   expect(
-    await run([
-      'bottom',
-      'bottom--1',
-      'bottom--1/2',
-      'bottom--1/-2',
-      'bottom-1/-2',
-      'bottom-auto/foo',
-      '-bottom-full/foo',
-      'bottom-full/foo',
-      'bottom-3/4/foo',
-      'bottom-4/foo',
-      '-bottom-4/foo',
-      'bottom-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'bottom-shadow-sm',
+        'bottom-ring-thick',
+        'bottom',
+        'bottom--1',
+        'bottom--1/2',
+        'bottom--1/-2',
+        'bottom-1/-2',
+        'bottom-auto/foo',
+        '-bottom-full/foo',
+        'bottom-full/foo',
+        'bottom-3/4/foo',
+        'bottom-4/foo',
+        '-bottom-4/foo',
+        'bottom-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -883,15 +925,11 @@ test('left', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
           --inset-ringo-starr: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'left-shadow-sm',
-        'left-ring-thick',
         'left-ringo-starr',
         'left-auto',
         '-left-full',
@@ -905,8 +943,6 @@ test('left', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
       --inset-ringo-starr: 1940px;
     }
 
@@ -943,20 +979,32 @@ test('left', async () => {
     }"
   `)
   expect(
-    await run([
-      'left',
-      'left--1',
-      'left--1/2',
-      'left--1/-2',
-      'left-1/-2',
-      'left-auto/foo',
-      '-left-full/foo',
-      'left-full/foo',
-      'left-3/4/foo',
-      'left-4/foo',
-      '-left-4/foo',
-      'left-[4px]/foo',
-    ]),
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-ring-thick: 100px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'left-shadow-sm',
+        'left-ring-thick',
+        'left',
+        'left--1',
+        'left--1/2',
+        'left--1/-2',
+        'left-1/-2',
+        'left-auto/foo',
+        '-left-full/foo',
+        'left-full/foo',
+        'left-3/4/foo',
+        'left-4/foo',
+        '-left-4/foo',
+        'left-[4px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
