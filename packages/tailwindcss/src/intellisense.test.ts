@@ -23,6 +23,7 @@ function loadDesignSystem() {
   theme.add('--opacity-background', '0.3')
   theme.add('--drop-shadow-sm', '0 1px 1px rgb(0 0 0 / 0.05)')
   theme.add('--inset-shadow-sm', 'inset 0 1px 1px rgb(0 0 0 / 0.05)')
+  theme.add('--inset-ring-big', '100px')
   return buildDesignSystem(theme)
 }
 

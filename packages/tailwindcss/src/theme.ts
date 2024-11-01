@@ -8,6 +8,12 @@ export const enum ThemeOptions {
   DEFAULT = 1 << 2,
 }
 
+function isIgnoredThemeKey(themeKey: ThemeKey, ignoredThemeKeys: ThemeKey[]) {
+  return ignoredThemeKeys.some(
+    (ignoredThemeKey) => themeKey === ignoredThemeKey || themeKey.startsWith(`${ignoredThemeKey}-`),
+  )
+}
+
 export class Theme {
   public prefix: string | null = null
 
@@ -53,7 +59,7 @@ export class Theme {
       for (let key of this.values.keys()) {
         if (!key.startsWith(namespace)) continue
 
-        if (ignoredThemeKeys.some((ignoredThemeKey) => key.startsWith(ignoredThemeKey))) {
+        if (isIgnoredThemeKey(key as ThemeKey, ignoredThemeKeys)) {
           continue
         }
 
@@ -122,12 +128,11 @@ export class Theme {
   ): string | null {
     for (let key of themeKeys) {
       let themeKey =
-        candidateValue !== null ? escape(`${key}-${candidateValue.replaceAll('.', '_')}`) : key
+        candidateValue !== null
+          ? (escape(`${key}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
+          : key
 
-      if (
-        this.values.has(themeKey) &&
-        !ignoredThemeKeys.some((ignoredThemeKey) => themeKey.startsWith(ignoredThemeKey))
-      ) {
+      if (this.values.has(themeKey) && !isIgnoredThemeKey(themeKey, ignoredThemeKeys)) {
         return themeKey
       }
     }

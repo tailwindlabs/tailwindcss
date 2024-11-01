@@ -447,6 +447,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('inset-inline', value)],
   })
 
@@ -459,6 +460,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('inset-block', value)],
   })
 
@@ -471,6 +473,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('inset-inline-start', value)],
   })
 
@@ -483,6 +486,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('inset-inline-end', value)],
   })
 
@@ -495,6 +499,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('top', value)],
   })
 
@@ -507,6 +512,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('right', value)],
   })
 
@@ -519,6 +525,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('bottom', value)],
   })
 
@@ -531,6 +538,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative: true,
     supportsFractions: true,
     themeKeys: ['--inset', '--spacing'],
+    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     handle: (value) => [decl('left', value)],
   })
 
