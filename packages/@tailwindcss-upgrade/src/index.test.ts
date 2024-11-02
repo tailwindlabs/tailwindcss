@@ -95,8 +95,6 @@ it('should migrate a stylesheet', async () => {
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
 
-    @config './tailwind.config.js';
-
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
@@ -216,8 +214,7 @@ it('should migrate a stylesheet (with imports)', async () => {
       textarea {
         border-width: 0;
       }
-    }
-    @config './tailwind.config.js';"
+    }"
   `)
 })
 
@@ -242,7 +239,6 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     @layer foo, bar, baz;
     /**! My license comment */
     @import 'tailwindcss';
-    @config './tailwind.config.js';
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
