@@ -392,6 +392,10 @@ export function createUtilities(theme: Theme) {
       ignoredThemeKeys?: ThemeKey[]
     } = {},
   ) {
+    utilities.static(`${name}-px`, (candidate) => {
+      if (!supportsNegative && candidate.negative) return
+      return handle(candidate.negative ? '-1px' : '1px')
+    })
     functionalUtility(name, {
       themeKeys: ([] as ThemeKey[]).concat(themeNamespace, '--spacing'),
       ignoredThemeKeys,
