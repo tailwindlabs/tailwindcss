@@ -400,6 +400,10 @@ export function createUtilities(theme: Theme) {
       handleBareValue: ({ value }) => {
         let multiplier = theme.resolve(null, ['--spacing'])
         if (!multiplier) return null
+
+        let num = Number(value)
+        if (num < 0 || num % 0.25 !== 0 || String(num) !== value) return null
+
         return `calc(${multiplier} * ${value})`
       },
       handleNegativeBareValue: ({ value }) => {

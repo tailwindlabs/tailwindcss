@@ -1579,7 +1579,6 @@ test('mx', async () => {
 
     .mx-auto {
       margin-inline: auto;
-      margin-inline: calc(var(--spacing, .25rem) * auto);
     }
 
     .mx-big {
@@ -16205,6 +16204,34 @@ describe('spacing utilities', () => {
 
       .px-4 {
         padding-inline: var(--spacing-4, 1rem);
+      }"
+    `)
+  })
+
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: 4px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: 4px;
+      }
+
+      .px-0\\.25 {
+        padding-inline: calc(var(--spacing, 4px) * .25);
+      }
+
+      .px-1\\.5 {
+        padding-inline: calc(var(--spacing, 4px) * 1.5);
+      }
+
+      .px-2\\.75 {
+        padding-inline: calc(var(--spacing, 4px) * 2.75);
       }"
     `)
   })
