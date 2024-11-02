@@ -28,17 +28,15 @@ pub struct Cursor<'a> {
 
 impl<'a> Cursor<'a> {
     pub fn new(input: &'a [u8]) -> Self {
-        let mut cursor = Self {
+        Self {
             input,
             pos: 0,
             at_start: true,
             at_end: false,
             prev: 0x00,
-            curr: 0x00,
-            next: 0x00,
-        };
-        cursor.move_to(0);
-        cursor
+            curr: *input.get(0).unwrap_or(&0x00),
+            next: *input.get(1).unwrap_or(&0x00),
+        }
     }
 
     pub fn rewind_by(&mut self, amount: usize) {
