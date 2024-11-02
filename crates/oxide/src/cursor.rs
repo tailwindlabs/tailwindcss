@@ -32,7 +32,7 @@ impl<'a> Cursor<'a> {
             input,
             pos: 0,
             at_start: true,
-            at_end: false,
+            at_end: input.len() <= 1,
             prev: 0x00,
             curr: *input.get(0).unwrap_or(&0x00),
             next: *input.get(1).unwrap_or(&0x00),
