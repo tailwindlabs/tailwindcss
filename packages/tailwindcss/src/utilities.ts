@@ -3607,14 +3607,11 @@ export function createUtilities(theme: Theme) {
   staticUtility('forced-color-adjust-none', [['forced-color-adjust', 'none']])
   staticUtility('forced-color-adjust-auto', [['forced-color-adjust', 'auto']])
 
-  functionalUtility('leading', {
-    themeKeys: ['--line-height'],
-    handle: (value) => [
-      atRoot([property('--tw-leading')]),
-      decl('--tw-leading', value),
-      decl('line-height', value),
-    ],
-  })
+  spacingUtility('leading', ['--line-height'], (value) => [
+    atRoot([property('--tw-leading')]),
+    decl('--tw-leading', value),
+    decl('line-height', value),
+  ])
 
   functionalUtility('tracking', {
     supportsNegative: true,
