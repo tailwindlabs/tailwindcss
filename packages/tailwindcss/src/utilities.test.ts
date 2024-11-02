@@ -16166,6 +16166,50 @@ test('@container', async () => {
   ).toEqual('')
 })
 
+describe('spacing utilities', () => {
+  test('`--spacing: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4, 1rem);
+      }"
+    `)
+  })
+
+  test('`--spacing-*: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing-*: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4, 1rem);
+      }"
+    `)
+  })
+})
+
 describe('custom utilities', () => {
   test('custom static utility', async () => {
     let { build } = await compile(css`
