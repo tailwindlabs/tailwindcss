@@ -1079,15 +1079,8 @@ export function createUtilities(theme: Theme) {
       decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
     ]
 
-    /**
-     * @css `translate`
-     */
-
     spacingUtility(`translate-${axis}`, ['--translate'], (value) => handle(value), {
       supportsNegative: true,
-    })
-    utilities.static(`translate-${axis}-px`, (candidate) => {
-      return handle(candidate.negative ? '-1px' : '1px')
     })
     utilities.static(`translate-${axis}-full`, (candidate) => {
       return handle(candidate.negative ? '-100%' : '100%')
@@ -1115,9 +1108,6 @@ export function createUtilities(theme: Theme) {
     ]
   })
 
-  /**
-   * @css `translate`
-   */
   staticUtility('translate-3d', [
     translateProperties,
     ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],

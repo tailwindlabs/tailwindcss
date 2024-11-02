@@ -3837,7 +3837,6 @@ test('translate-x', async () => {
     .translate-x-px {
       --tw-translate-x: 1px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     @supports (-moz-orient: inline) {
@@ -3910,7 +3909,6 @@ test('translate-y', async () => {
     .translate-y-px {
       --tw-translate-y: 1px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     @supports (-moz-orient: inline) {
@@ -3960,7 +3958,6 @@ test('translate-z', async () => {
   expect(await run(['translate-y-px', '-translate-z-[var(--value)]'])).toMatchInlineSnapshot(`
     ".translate-y-px {
       --tw-translate-y: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
