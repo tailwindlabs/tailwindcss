@@ -204,7 +204,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
             // Clear all watchers
-            cleanupWatchers()
+            await cleanupWatchers()
 
             // Read the new `input`.
             let input = args['--input']
@@ -271,8 +271,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        cleanupWatchers()
-        process.exit(0)
+        cleanupWatchers().then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
       })
     }
 
@@ -322,9 +324,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
   // files to handle them in a single batch and to avoid multiple rebuilds.
-  function enqueueCallback() {
-    // Dispose all existing macrotask.
-    debounceQueue.dispose()
+  async function enqueueCallback() {
+    // Dispose all existing macrotasks.
+    await debounceQueue.dispose()
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
@@ -365,7 +367,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
       )
 
       // Handle the tracked files at some point in the future.
-      enqueueCallback()
+      await enqueueCallback()
     })
 
     // Ensure we cleanup the watcher when we're done.
@@ -373,9 +375,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 
   // Cleanup
-  return () => {
-    watchers.dispose()
-    debounceQueue.dispose()
+  return async () => {
+    await watchers.dispose()
+    await debounceQueue.dispose()
   }
 }
 
