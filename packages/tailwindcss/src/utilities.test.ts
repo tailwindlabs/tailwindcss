@@ -16215,7 +16215,7 @@ describe('spacing utilities', () => {
       }
       @tailwind utilities;
     `)
-    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50'])
+    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root {
