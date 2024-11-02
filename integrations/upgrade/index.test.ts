@@ -1304,7 +1304,7 @@ test(
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
-        @config "../tailwind.config.js";
+        @config "../tailwind.config.ts";
       `,
       'src/root.3.css': css`
         /* Inject missing @config above first @theme */
@@ -1421,7 +1421,7 @@ test(
           border-width: 0;
         }
       }
-      @config "../tailwind.config.js";
+      @config "../tailwind.config.ts";
 
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
