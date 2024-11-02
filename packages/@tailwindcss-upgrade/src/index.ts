@@ -45,6 +45,8 @@ async function run() {
   eprintln(header())
   eprintln()
 
+  let cleanup: (() => void)[] = []
+
   if (!flags['--force']) {
     if (isRepoDirty()) {
       error('Git directory is not clean. Please stash or commit your changes before migrating.')
@@ -54,42 +56,6 @@ async function run() {
       process.exit(1)
     }
   }
-
-  let config = await prepareConfig(flags['--config'], { base })
-
-  {
-    // Template migrations
-
-    info('Migrating templates using the provided configuration file.')
-
-    let set = new Set<string>()
-    for (let { pattern, base } of config.globs) {
-      let files = await globby([pattern], {
-        absolute: true,
-        gitignore: true,
-        cwd: base,
-      })
-
-      for (let file of files) {
-        set.add(file)
-      }
-    }
-
-    let files = Array.from(set)
-    files.sort()
-
-    // Migrate each file
-    await Promise.allSettled(
-      files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
-    )
-
-    success('Template migration complete.')
-  }
-
-  // Migrate JS config
-
-  info('Migrating JavaScript configuration files using the provided configuration file.')
-  let jsConfigMigration = await migrateJsConfig(config.designSystem, config.configFilePath, base)
 
   {
     // Stylesheet migrations
@@ -143,9 +109,81 @@ async function run() {
       error(`${e}`)
     }
 
-    // Migrate each file
+    // Migrate js config files, linked to stylesheets
+    info('Migrating JavaScript configuration files using the provided configuration file.')
+    let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
+    let jsConfigMigrationBySheet = new Map<
+      Stylesheet,
+      Awaited<ReturnType<typeof migrateJsConfig>>
+    >()
+    for (let sheet of stylesheets) {
+      if (!sheet.isTailwindRoot) continue
+
+      let config = await prepareConfig(sheet.linkedConfigPath, { base })
+      configBySheet.set(sheet, config)
+
+      let jsConfigMigration = await migrateJsConfig(
+        config.designSystem,
+        config.configFilePath,
+        base,
+      )
+      jsConfigMigrationBySheet.set(sheet, jsConfigMigration)
+
+      if (jsConfigMigration !== null) {
+        // Remove the JS config if it was fully migrated
+        cleanup.push(() => fs.rm(config.configFilePath))
+      }
+    }
+
+    // Migrate source files, linked to config files
+    {
+      // Template migrations
+
+      info('Migrating templates using the provided configuration file.')
+      for (let config of configBySheet.values()) {
+        let set = new Set<string>()
+        for (let { pattern, base } of config.globs) {
+          let files = await globby([pattern], {
+            absolute: true,
+            gitignore: true,
+            cwd: base,
+          })
+
+          for (let file of files) {
+            set.add(file)
+          }
+        }
+
+        let files = Array.from(set)
+        files.sort()
+
+        // Migrate each file
+        await Promise.allSettled(
+          files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
+        )
+      }
+
+      success('Template migration complete.')
+    }
+
+    // Migrate each CSS file
     let migrateResults = await Promise.allSettled(
-      stylesheets.map((sheet) => migrateStylesheet(sheet, { ...config, jsConfigMigration })),
+      stylesheets.map((sheet) => {
+        let config = configBySheet.get(sheet)!
+        let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
+
+        if (!config) {
+          for (let parent of sheet.ancestors()) {
+            if (parent.isTailwindRoot) {
+              config ??= configBySheet.get(parent)!
+              jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
+              break
+            }
+          }
+        }
+
+        return migrateStylesheet(sheet, { ...config, jsConfigMigration })
+      }),
     )
 
     for (let result of migrateResults) {
@@ -208,15 +246,13 @@ async function run() {
     await migratePrettierPlugin(base)
   }
 
+  // Run all cleanup functions because we completed the migration
+  await Promise.allSettled(cleanup.map((fn) => fn()))
+
   try {
     // Upgrade Tailwind CSS
     await pkg(base).add(['tailwindcss@next'])
   } catch {}
-
-  // Remove the JS config if it was fully migrated
-  if (jsConfigMigration !== null) {
-    await fs.rm(config.configFilePath)
-  }
 
   // Figure out if we made any changes
   if (isRepoDirty()) {
