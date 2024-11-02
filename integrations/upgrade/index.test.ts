@@ -858,6 +858,11 @@ test(
           prefix: 'tw__',
         }
       `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
       'src/index.html': html`
         <div class="tw__bg-gradient-to-t"></div>
       `,
