@@ -231,12 +231,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
 
             // Setup new watchers
-            // let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+            let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
 
             // Clear old watchers
-            // await cleanupWatchers()
+            await cleanupWatchers()
 
-            // cleanupWatchers = newCleanupWatchers
+            cleanupWatchers = newCleanupWatchers
 
             // Re-compile the CSS
             env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
