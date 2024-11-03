@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { Stylesheet } from '../stylesheet'
 import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
@@ -33,6 +34,7 @@ async function migrate(
 
   return postcss()
     .use(migrateAtLayerUtilities(stylesheet))
+    .use(sortBuckets())
     .use(formatNodes())
     .process(stylesheet.root!, { from: expect.getState().testPath })
     .then((result) => result.css)
@@ -145,7 +147,18 @@ it('should leave non-class utilities alone', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@layer utilities {
+    "@utility foo {
+      /* 2. */
+      /* 2.1. */
+      color: red;
+      /* 2.2. */
+      .bar {
+        /* 2.2.1. */
+        font-weight: bold;
+      }
+    }
+
+    @layer utilities {
       /* 1. */
       #before {
         /* 1.1. */
@@ -166,17 +179,6 @@ it('should leave non-class utilities alone', async () => {
           /* 3.2.1. */
           font-weight: bold;
         }
-      }
-    }
-
-    @utility foo {
-      /* 2. */
-      /* 2.1. */
-      color: red;
-      /* 2.2. */
-      .bar {
-        /* 2.2.1. */
-        font-weight: bold;
       }
     }"
   `)
@@ -776,11 +778,7 @@ describe('comments', () => {
         /* After */
       `),
     ).toMatchInlineSnapshot(`
-      "/* Above */
-      .before {
-        /* Inside */
-      }
-      /* After */
+      "/* After */
 
       /* Tailwind Utilities: */
       @utility no-scrollbar {
@@ -797,6 +795,11 @@ describe('comments', () => {
         /* Second comment */
         -ms-overflow-style: none; /* IE and Edge */
         scrollbar-width: none; /* Firefox */
+      }
+
+      /* Above */
+      .before {
+        /* Inside */
       }
 
       /* Above */
@@ -925,14 +928,13 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "
-      #main {
+      "@utility foo {
+        /* Utility #1 */
+        /* Declarations: */
         color: red;
       }
 
-      @utility foo {
-        /* Utility #1 */
-        /* Declarations: */
+      #main {
         color: red;
       }"
     `)
@@ -975,18 +977,7 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@layer utilities {
-
-        #main {
-          color: red;
-        }
-      }
-
-      #secondary {
-        color: red;
-      }
-
-      @utility foo {
+      "@utility foo {
         @layer utilities {
           @layer utilities {
             /* Utility #1 */
@@ -1007,6 +998,17 @@ describe('layered stylesheets', () => {
       @utility baz {
         /* Utility #3 */
         /* Declarations: */
+        color: red;
+      }
+
+      @layer utilities {
+
+        #main {
+          color: red;
+        }
+      }
+
+      #secondary {
         color: red;
       }"
     `)

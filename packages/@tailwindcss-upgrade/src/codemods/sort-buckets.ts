@@ -1,0 +1,142 @@
+import postcss, { type AtRule, type ChildNode, type Comment, type Plugin, type Root } from 'postcss'
+import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
+import { walk, WalkAction } from '../utils/walk'
+
+const BUCKET_ORDER = [
+  // Imports
+  'import', // @import
+
+  // Configuration
+  'config', // @config
+  'plugin', // @plugin
+  'source', // @source
+  'variant', // @variant
+  'theme', // @theme
+
+  // Styles
+  'compatibility', // @layer base with compatibility CSS
+  'utility', // @utility
+
+  // User CSS
+  'user',
+]
+
+export function sortBuckets(): Plugin {
+  async function migrate(root: Root) {
+    // 1. Move items that are not in a bucket, into a bucket
+    {
+      let comments: Comment[] = []
+
+      let buckets = new DefaultMap<string, AtRule>((name) => {
+        let bucket = postcss.atRule({ name: 'bucket', params: name, nodes: [] })
+        root.append(bucket)
+        return bucket
+      })
+
+      // Seed the buckets with existing buckets
+      root.walkAtRules('bucket', (node) => {
+        buckets.set(node.params, node)
+      })
+
+      let lastLayer = 'user'
+      function injectInto(name: string, ...nodes: ChildNode[]) {
+        lastLayer = name
+        buckets.get(name).nodes?.push(...comments.splice(0), ...nodes)
+      }
+
+      walk(root, (node) => {
+        // Already in a bucket, skip it
+        if (node.type === 'atrule' && node.name === 'bucket') {
+          return WalkAction.Skip
+        }
+
+        // Comments belong to the "next" bucket. If a bucket contains comments
+        // at the end, they belong to the next bucket.
+        if (node.type === 'comment') {
+          comments.push(node)
+          return
+        }
+
+        // Known at-rules
+        else if (node.type === 'atrule' && node.name === 'utility') {
+          injectInto('utility', node)
+        } else if (node.type === 'atrule' && node.name === 'variant') {
+          injectInto('variant', node)
+        } else if (node.type === 'atrule' && node.name === 'source') {
+          injectInto('source', node)
+        } else if (node.type === 'atrule' && node.name === 'theme') {
+          injectInto('theme', node)
+        } else if (node.type === 'atrule' && node.name === 'config') {
+          injectInto('config', node)
+        } else if (node.type === 'atrule' && node.name === 'plugin') {
+          injectInto('plugin', node)
+        }
+
+        // Imports bucket, which also contains the `@charset` and body-less `@layer`
+        else if (
+          (node.type === 'atrule' && node.name === 'layer' && !node.nodes) || // @layer foo, bar;
+          (node.type === 'atrule' && node.name === 'import') ||
+          (node.type === 'atrule' && node.name === 'charset') || // @charset "UTF-8";
+          (node.type === 'atrule' && node.name === 'tailwind')
+        ) {
+          injectInto('import', node)
+        }
+
+        // User CSS
+        else if (node.type === 'rule' || node.type === 'atrule') {
+          injectInto('user', node)
+        }
+
+        // Fallback
+        else {
+          injectInto('user', node)
+        }
+
+        return WalkAction.Skip
+      })
+
+      if (comments.length > 0) {
+        injectInto(lastLayer)
+      }
+    }
+
+    // 2. Merge `@bucket` with the same name together
+    let firstBuckets = new Map<string, AtRule>()
+    root.walkAtRules('bucket', (node) => {
+      let firstBucket = firstBuckets.get(node.params)
+      if (!firstBucket) {
+        firstBuckets.set(node.params, node)
+        return
+      }
+
+      if (node.nodes) {
+        firstBucket.append(...node.nodes)
+      }
+    })
+
+    // 3. Remove empty `@bucket`
+    root.walkAtRules('bucket', (node) => {
+      if (!node.nodes?.length) {
+        node.remove()
+      }
+    })
+
+    // 4. Sort the `@bucket` themselves
+    {
+      let sorted = Array.from(firstBuckets.values()).sort((a, z) => {
+        let aIndex = BUCKET_ORDER.indexOf(a.params)
+        let zIndex = BUCKET_ORDER.indexOf(z.params)
+        return aIndex - zIndex
+      })
+
+      // Re-inject the sorted buckets
+      root.removeAll()
+      root.append(sorted)
+    }
+  }
+
+  return {
+    postcssPlugin: '@tailwindcss/upgrade/sort-buckets',
+    OnceExit: migrate,
+  }
+}

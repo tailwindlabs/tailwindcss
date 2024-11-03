@@ -192,7 +192,6 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
       clone.params = cls
 
       // Mark the node as pretty so that it gets formatted by Prettier later.
-      clone.raws.tailwind_pretty = true
       clone.raws.before = `${clone.raws.before ?? ''}\n\n`
     }
 

@@ -3,12 +3,14 @@ import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './format-nodes'
 import { migrateTailwindDirectives } from './migrate-tailwind-directives'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
 function migrate(input: string, options: { newPrefix: string | null } = { newPrefix: null }) {
   return postcss()
     .use(migrateTailwindDirectives(options))
+    .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
@@ -412,7 +414,7 @@ it('should replace `@responsive` with its children', async () => {
     `),
   ).toMatchInlineSnapshot(`
     ".foo {
-      color: red;
-    }"
+        color: red;
+      }"
   `)
 })

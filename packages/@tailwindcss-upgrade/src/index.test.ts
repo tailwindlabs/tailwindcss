@@ -4,6 +4,7 @@ import path from 'node:path'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './codemods/format-nodes'
+import { sortBuckets } from './codemods/sort-buckets'
 import { migrateContents } from './migrate'
 
 const css = dedent
@@ -25,7 +26,7 @@ let config = {
 
 function migrate(input: string, config: any) {
   return migrateContents(input, config, expect.getState().testPath)
-    .then((result) => postcss([formatNodes()]).process(result.root, result.opts))
+    .then((result) => postcss([sortBuckets(), formatNodes()]).process(result.root, result.opts))
     .then((result) => result.css)
 }
 
@@ -103,7 +104,6 @@ it('should migrate a stylesheet', async () => {
       If we ever want to remove these styles, we need to add an explicit border
       color utility to any element that depends on these defaults.
     */
-
     @layer base {
       *,
       ::after,
@@ -130,6 +130,14 @@ it('should migrate a stylesheet', async () => {
       }
     }
 
+    @utility b {
+      z-index: 2;
+    }
+
+    @utility e {
+      z-index: 5;
+    }
+
     @layer base {
       html {
         overflow: hidden;
@@ -142,10 +150,6 @@ it('should migrate a stylesheet', async () => {
       }
     }
 
-    @utility b {
-      z-index: 2;
-    }
-
     @layer components {
       .c {
         z-index: 3;
@@ -156,10 +160,6 @@ it('should migrate a stylesheet', async () => {
       .d {
         z-index: 4;
       }
-    }
-
-    @utility e {
-      z-index: 5;
     }"
   `)
 })
@@ -200,6 +200,7 @@ it('should migrate a stylesheet (with imports)', async () => {
         border-color: var(--color-gray-200, currentColor);
       }
     }
+
     /*
       Form elements have a 1px border by default in Tailwind CSS v4, so we've
       added these compatibility styles to make sure everything still looks the
@@ -239,6 +240,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     @layer foo, bar, baz;
     /**! My license comment */
     @import 'tailwindcss';
+
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
@@ -256,6 +258,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
         border-color: var(--color-gray-200, currentColor);
       }
     }
+
     /*
       Form elements have a 1px border by default in Tailwind CSS v4, so we've
       added these compatibility styles to make sure everything still looks the
@@ -271,6 +274,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
         border-width: 0;
       }
     }
+
     @layer base {
       html {
         color: red;
@@ -296,12 +300,12 @@ it('should keep CSS as-is before existing `@layer` at-rules', async () => {
       config,
     ),
   ).toMatchInlineSnapshot(`
-    ".foo {
-      color: blue;
+    "@utility bar {
+      color: red;
     }
 
-    @utility bar {
-      color: red;
+    .foo {
+      color: blue;
     }"
   `)
 })
