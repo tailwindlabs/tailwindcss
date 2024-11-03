@@ -280,6 +280,7 @@ export function test(
         },
         fs: {
           async write(filename: string, content: string): Promise<void> {
+            console.log('Writing file:', filename)
             let full = path.join(root, filename)
 
             if (filename.endsWith('package.json')) {
@@ -293,7 +294,7 @@ export function test(
 
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
-            await fs.writeFile(full, content)
+            await fs.writeFile(full, content, 'utf-8')
           },
 
           async create(filenames: string[]): Promise<void> {

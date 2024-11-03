@@ -54,7 +54,10 @@ export function options() {
   } satisfies Arg
 }
 
+console.log('build/index.js#module')
 export async function handle(args: Result<ReturnType<typeof options>>) {
+  console.log('build/index.js#handle')
+
   let base = path.resolve(args['--cwd'])
 
   // Resolve the output as an absolute path.
@@ -166,6 +169,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     let cleanupWatchers = await createWatchers(
       watchDirectories(scanner),
       async function handle(files) {
+        console.log('Files changed:', files.length)
+        for (let file of files) {
+          console.log(`File changed: ${file}`)
+        }
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
@@ -181,6 +188,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // config/plugin files, then we need to do a full rebuild because
             // the theme might have changed.
             if (resolvedFullRebuildPaths.includes(file)) {
+              console.log(`Full rebuild required because ${file} changed`)
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we
@@ -203,9 +211,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
-            // Clear all watchers
-            await cleanupWatchers()
-
             // Read the new `input`.
             let input = args['--input']
               ? args['--input'] === '-'
@@ -226,7 +231,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+            // let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+
+            // Clear old watchers
+            // await cleanupWatchers()
+
+            // cleanupWatchers = newCleanupWatchers
 
             // Re-compile the CSS
             env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
@@ -271,6 +281,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
+        console.log('EEEEND')
         cleanupWatchers().then(
           () => process.exit(0),
           () => process.exit(1),
@@ -309,6 +320,7 @@ function watchDirectories(scanner: Scanner) {
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  console.log('createWatchers(…)')
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
@@ -336,6 +348,13 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 
   // Setup a watcher for every directory.
+  console.log(
+    `Watching:\n${dirs
+      .map((dir) => dir)
+      .map((x) => ` - ${x}`)
+      .join('\n')}`,
+  )
+
   for (let dir of dirs) {
     let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
       // Whenever an error occurs we want to let the user know about it but we
@@ -376,6 +395,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
   // Cleanup
   return async () => {
+    console.log('CLEANUP')
     await watchers.dispose()
     await debounceQueue.dispose()
   }

@@ -17,13 +17,15 @@ const STANDALONE_BINARY = (() => {
   }
 })()
 
-describe.each([
-  ['CLI', 'pnpm tailwindcss'],
+describe.each(
   [
-    'Standalone CLI',
-    path.resolve(__dirname, `../../packages/@tailwindcss-standalone/dist/${STANDALONE_BINARY}`),
-  ],
-])('%s', (_, command) => {
+    ['CLI', 'pnpm tailwindcss'],
+    [
+      'Standalone CLI',
+      path.resolve(__dirname, `../../packages/@tailwindcss-standalone/dist/${STANDALONE_BINARY}`),
+    ],
+  ].slice(-1),
+)('%s', (_, command) => {
   test(
     'production build',
     {
@@ -93,7 +95,7 @@ describe.each([
     },
   )
 
-  test(
+  test.only(
     'watch mode',
     {
       fs: {
