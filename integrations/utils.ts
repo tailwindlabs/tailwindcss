@@ -214,8 +214,9 @@ export function test(
           })
 
           options.onTestFailed(() => {
-            // In debug mode, messages are logged to the console immediately
-            if (debug) return
+            // In only or debug mode, messages are logged to the console
+            // immediately.
+            if (only || debug) return
 
             for (let [type, message] of combined) {
               if (type === 'stdout') {
