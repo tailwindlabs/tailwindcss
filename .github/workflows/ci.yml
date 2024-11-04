@@ -21,7 +21,7 @@ jobs:
         exclude:
           - on-next-branch: false
             runner: windows-latest
-          - on-next-branch: false
+          - on-next-branch: true
             runner: macos-14
 
     runs-on: ${{ matrix.runner }}
