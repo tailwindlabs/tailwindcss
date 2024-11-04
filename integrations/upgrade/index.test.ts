@@ -154,7 +154,7 @@ test(
       candidate`bg-linear-to-t`,
       candidate`bg-[var(--my-red)]`,
       candidate`max-w-[var(--breakpoint-md)]`,
-      candidate`ml-[var(--spacing-1\_5)`,
+      candidate`ml-[var(--breakpoint-md)`,
     ])
   },
 )
