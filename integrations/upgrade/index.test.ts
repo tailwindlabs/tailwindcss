@@ -30,7 +30,7 @@ test(
   },
   async ({ fs, exec }) => {
     let output = await exec('npx @tailwindcss/upgrade')
-    expect(output).toContain('Cannot find a CSS file where Tailwind CSS is setup.')
+    expect(output).toContain('Cannot find any CSS files that reference Tailwind CSS.')
 
     // Files should not be modified
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
