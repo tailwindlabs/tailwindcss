@@ -384,7 +384,7 @@ export function createUtilities(theme: Theme) {
     handle: (value: string) => AstNode[] | undefined,
     {
       supportsNegative = false,
-      supportsFractions = true,
+      supportsFractions = false,
       ignoredThemeKeys = [],
     }: {
       supportsNegative?: boolean
@@ -490,6 +490,7 @@ export function createUtilities(theme: Theme) {
     })
     spacingUtility(name, '--inset', (value) => [decl(property, value)], {
       supportsNegative: true,
+      supportsFractions: true,
       ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     })
   }
@@ -853,11 +854,14 @@ export function createUtilities(theme: Theme) {
   staticUtility(`min-h-none`, [['min-height', 'none']])
   staticUtility(`max-h-none`, [['max-height', 'none']])
 
-  spacingUtility('size', ['--size'], (value) => [
-    decl('--tw-sort', 'size'),
-    decl('width', value),
-    decl('height', value),
-  ])
+  spacingUtility(
+    'size',
+    ['--size'],
+    (value) => [decl('--tw-sort', 'size'), decl('width', value), decl('height', value)],
+    {
+      supportsFractions: true,
+    },
+  )
 
   for (let [name, namespaces, property] of [
     ['w', ['--width'], 'width'],
@@ -867,7 +871,9 @@ export function createUtilities(theme: Theme) {
     ['min-h', ['--min-height', '--height'], 'min-height'],
     ['max-h', ['--max-height', '--height'], 'max-height'],
   ] as [string, ThemeKey[], string][]) {
-    spacingUtility(name, namespaces, (value) => [decl(property, value)])
+    spacingUtility(name, namespaces, (value) => [decl(property, value)], {
+      supportsFractions: true,
+    })
   }
 
   /**
@@ -950,7 +956,9 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('basis-auto', [['flex-basis', 'auto']])
   staticUtility('basis-full', [['flex-basis', '100%']])
-  spacingUtility('basis', ['--flex-basis', '--width'], (value) => [decl('flex-basis', value)])
+  spacingUtility('basis', ['--flex-basis', '--width'], (value) => [decl('flex-basis', value)], {
+    supportsFractions: true,
+  })
 
   /**
    * @css `table-layout`
@@ -1069,7 +1077,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-translate-y', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ],
-    { supportsNegative: true },
+    { supportsNegative: true, supportsFractions: true },
   )
 
   for (let axis of ['x', 'y']) {
@@ -1081,6 +1089,7 @@ export function createUtilities(theme: Theme) {
 
     spacingUtility(`translate-${axis}`, ['--translate'], (value) => handle(value), {
       supportsNegative: true,
+      supportsFractions: true,
     })
     utilities.static(`translate-${axis}-full`, (candidate) => {
       return handle(candidate.negative ? '-100%' : '100%')
@@ -1097,7 +1106,6 @@ export function createUtilities(theme: Theme) {
     ],
     {
       supportsNegative: true,
-      supportsFractions: false,
     },
   )
   utilities.static(`translate-z-px`, (candidate) => {
