@@ -111,7 +111,7 @@ describe('compiling CSS', () => {
           ${defaultTheme}
           @tailwind utilities;
         `,
-        ['bg-red-500', 'w-4', 'sm:flex', 'shadow'],
+        ['bg-red-500', 'w-4', 'sm:flex', 'shadow-sm'],
       ),
     ).toMatchSnapshot()
   })

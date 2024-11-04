@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Remove `--drop-shadow-none` from the default theme in favor of a static `drop-shadow-none` utility ([#14847](https://github.com/tailwindlabs/tailwindcss/pull/14847))
+- Rename `shadow` to `shadow-sm`, `shadow-sm` to `shadow-xs`, and `shadow-xs` to `shadow-2xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Rename `inset-shadow` to `inset-shadow-sm`, `inset-shadow-sm` to `inset-shadow-xs`, and `inset-shadow-xs` to `inset-shadow-2xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
