@@ -304,7 +304,7 @@ export async function linkConfigs(
   let rootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot)
   if (rootStylesheets.length === 0) {
     throw new Error(
-      'Cannot find a CSS file where Tailwind CSS is setup.\nMake sure to create a CSS file where Tailwind CSS is setup and try again.',
+      'Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses `@tailwind`.',
     )
   }
   let withoutAtConfig = rootStylesheets.filter((sheet) => {
