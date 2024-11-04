@@ -320,6 +320,29 @@ function watchDirectories(scanner: Scanner) {
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  // Remove any directories that are children of an already watched directory.
+  // If we don't we may not get notified of certain filesystem events regardless
+  // of whether or not they are for the directory that is duplicated.
+
+  // 1. Sort in asc by length
+  dirs = dirs.sort((a, z) => a.length - z.length)
+
+  // 2. Remove any directories that are children of another directory
+  let toRemove = []
+
+  // /project-a 0
+  // /project-a/src 1
+
+  for (let i = 0; i < dirs.length; ++i) {
+    for (let j = 0; j < i; ++j) {
+      if (!dirs[i].startsWith(`${dirs[j]}/`)) continue
+
+      toRemove.push(dirs[i])
+    }
+  }
+
+  dirs = dirs.filter((dir) => !toRemove.includes(dir))
+
   console.log('createWatchers(…)')
   // Track all Parcel watchers for each glob.
   //
