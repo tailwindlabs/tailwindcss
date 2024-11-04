@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support derived spacing scales based on a single `--spacing` theme value ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Add `svh`, `dvh`, `svw`, `dvw`, and `auto` values to all width/height/size utilities ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - _Upgrade (experimental)_: Migrate `grid-cols-[subgrid]` and `grid-rows-[subgrid]` to `grid-cols-subgrid` and `grid-rows-subgrid` ([#14840](https://github.com/tailwindlabs/tailwindcss/pull/14840))
 - _Upgrade (experimental)_: Support migrating projects with multiple config files ([#14863](https://github.com/tailwindlabs/tailwindcss/pull/14863))
 
@@ -29,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Remove default `--spacing-*` scale in favor of `--spacing` multiplier ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Remove fixed line-height theme values and derive `leading-*` utilites from `--spacing-*` scale ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
