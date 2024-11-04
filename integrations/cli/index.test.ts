@@ -95,7 +95,7 @@ describe.each(
     },
   )
 
-  test.only(
+  test(
     'watch mode',
     {
       fs: {
