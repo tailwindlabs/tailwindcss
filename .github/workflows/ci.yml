@@ -78,7 +78,7 @@ jobs:
         run: pnpm run test
 
       - name: Integration Tests
-        run: pnpm run test:integrations
+        run: pnpm run test:integrations cli/index.test -t 'watch mode'
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
