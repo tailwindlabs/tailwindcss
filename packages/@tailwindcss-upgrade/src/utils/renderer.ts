@@ -40,7 +40,13 @@ export function relative(
 /**
  * Wrap `text` into multiple lines based on the `width`.
  */
-export function wordWrap(text: string, width: number) {
+export function wordWrap(text: string, width: number): string[] {
+  // Handle text with newlines by maintaining the newlines, then splitting
+  // each line separately.
+  if (text.includes('\n')) {
+    return text.split('\n').flatMap((line) => wordWrap(line, width))
+  }
+
   let words = text.split(' ')
   let lines = []
 

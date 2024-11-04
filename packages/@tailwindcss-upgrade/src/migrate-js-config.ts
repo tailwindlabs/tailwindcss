@@ -1,9 +1,9 @@
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
-import { dirname } from 'path'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { type Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import { fileURLToPath } from 'url'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
 import { toCss, type AstNode } from '../../tailwindcss/src/ast'
 import {
@@ -56,7 +56,7 @@ export async function migrateJsConfig(
   }
 
   if ('content' in unresolvedConfig) {
-    sources = await migrateContent(unresolvedConfig as any, base)
+    sources = await migrateContent(unresolvedConfig as any, fullConfigPath, base)
   }
 
   if ('theme' in unresolvedConfig) {
@@ -173,13 +173,31 @@ function createSectionKey(key: string[]): string {
 }
 
 async function migrateContent(
-  unresolvedConfig: Config & { content: any },
+  unresolvedConfig: Config,
+  configPath: string,
   base: string,
 ): Promise<{ base: string; pattern: string }[]> {
   let autoContentFiles = autodetectedSourceFiles(base)
 
   let sources = []
-  for (let content of unresolvedConfig.content) {
+  let contentIsRelative = (() => {
+    if (!unresolvedConfig.content) return false
+    if (Array.isArray(unresolvedConfig.content)) return false
+    if (unresolvedConfig.content.relative) return true
+    if (unresolvedConfig.future === 'all') return false
+    return unresolvedConfig.future?.relativeContentPathsByDefault ?? false
+  })()
+
+  let contentFiles = Array.isArray(unresolvedConfig.content)
+    ? unresolvedConfig.content
+    : (unresolvedConfig.content?.files ?? []).map((content) => {
+        if (typeof content === 'string' && contentIsRelative) {
+          return resolve(dirname(configPath), content)
+        }
+        return content
+      })
+
+  for (let content of contentFiles) {
     if (typeof content !== 'string') {
       throw new Error('Unsupported content value: ' + content)
     }

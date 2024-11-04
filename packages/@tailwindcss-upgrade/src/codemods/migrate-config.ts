@@ -31,24 +31,13 @@ export function migrateConfig(
 
     let cssConfig = new AtRule()
 
-    if (jsConfigMigration === null) {
-      // Skip if there is already a `@config` directive
-      {
-        let hasConfig = false
-        root.walkAtRules('config', () => {
-          hasConfig = true
-          return false
-        })
-        if (hasConfig) return
-      }
+    // Remove the `@config` directive if it exists and we couldn't migrate the
+    // config file.
+    if (jsConfigMigration !== null) {
+      root.walkAtRules('config', (node) => {
+        node.remove()
+      })
 
-      cssConfig.append(
-        new AtRule({
-          name: 'config',
-          params: `'${relativeToStylesheet(sheet, configFilePath)}'`,
-        }),
-      )
-    } else {
       let css = '\n\n'
       for (let source of jsConfigMigration.sources) {
         let absolute = path.resolve(source.base, source.pattern)

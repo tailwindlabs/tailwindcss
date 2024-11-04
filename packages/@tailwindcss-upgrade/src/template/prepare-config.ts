@@ -1,9 +1,8 @@
 import { __unstable__loadDesignSystem, compile } from '@tailwindcss/node'
 import fs from 'node:fs/promises'
-import path from 'node:path'
-import { dirname } from 'path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import type { Config } from 'tailwindcss'
-import { fileURLToPath } from 'url'
 import { loadModule } from '../../../@tailwindcss-node/src/compile'
 import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
@@ -16,7 +15,7 @@ const __dirname = dirname(__filename)
 const css = String.raw
 
 export async function prepareConfig(
-  configPath: string | null,
+  configFilePath: string | null,
   options: { base: string },
 ): Promise<{
   designSystem: DesignSystem
@@ -27,15 +26,16 @@ export async function prepareConfig(
   newPrefix: string | null
 }> {
   try {
-    if (configPath === null) {
-      configPath = await detectConfigPath(options.base)
+    if (configFilePath === null) {
+      configFilePath = await detectConfigPath(options.base)
+    } else if (!path.isAbsolute(configFilePath)) {
+      configFilePath = path.resolve(options.base, configFilePath)
     }
 
     // We create a relative path from the current file to the config file. This is
     // required so that the base for Tailwind CSS can bet inside the
     // @tailwindcss-upgrade package and we can require `tailwindcss` properly.
-    let fullConfigPath = path.resolve(options.base, configPath)
-    let relative = path.relative(__dirname, fullConfigPath)
+    let relative = path.relative(__dirname, configFilePath)
 
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
@@ -44,7 +44,7 @@ export async function prepareConfig(
       relative = './' + relative
     }
 
-    let userConfig = await createResolvedUserConfig(fullConfigPath)
+    let userConfig = await createResolvedUserConfig(configFilePath)
 
     let newPrefix = userConfig.prefix ? migratePrefix(userConfig.prefix) : null
     let input = css`
@@ -62,7 +62,7 @@ export async function prepareConfig(
       globs: compiler.globs,
       userConfig,
       newPrefix,
-      configFilePath: fullConfigPath,
+      configFilePath,
     }
   } catch (e: any) {
     error('Could not load the configuration file: ' + e.message)
@@ -94,7 +94,7 @@ const DEFAULT_CONFIG_FILES = [
   './tailwind.config.cts',
   './tailwind.config.mts',
 ]
-async function detectConfigPath(base: string) {
+export async function detectConfigPath(base: string) {
   for (let file of DEFAULT_CONFIG_FILES) {
     let fullPath = path.resolve(base, file)
     try {

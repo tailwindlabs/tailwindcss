@@ -1,3 +1,4 @@
+import { normalizePath } from '@tailwindcss/node'
 import path from 'node:path'
 import postcss from 'postcss'
 import type { Config } from 'tailwindcss'
@@ -16,6 +17,8 @@ import { migrateThemeToVar } from './codemods/migrate-theme-to-var'
 import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
 import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
+import { detectConfigPath } from './template/prepare-config'
+import { error } from './utils/renderer'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -194,12 +197,180 @@ export async function analyze(stylesheets: Stylesheet[]) {
     }
   }
 
-  if (lines.length === 0) return
+  if (lines.length === 0) {
+    let tailwindRootLeafs = new Set<Stylesheet>()
+
+    for (let sheet of stylesheets) {
+      // If the current file already contains `@config`, then we can assume it's
+      // a Tailwind CSS root file.
+      sheet.root.walkAtRules('config', () => {
+        sheet.isTailwindRoot = true
+        return false
+      })
+      if (sheet.isTailwindRoot) continue
+
+      // If an `@tailwind` at-rule, or `@import "tailwindcss"` is present,
+      // then we can assume it's a file where Tailwind CSS might be configured.
+      //
+      // However, if 2 or more stylesheets exist with these rules that share a
+      // common parent, then we want to mark the common parent as the root
+      // stylesheet instead.
+      sheet.root.walkAtRules((node) => {
+        if (
+          node.name === 'tailwind' ||
+          (node.name === 'import' && node.params.match(/^["']tailwindcss["']/)) ||
+          (node.name === 'import' && node.params.match(/^["']tailwindcss\/.*?["']$/))
+        ) {
+          sheet.isTailwindRoot = true
+          tailwindRootLeafs.add(sheet)
+        }
+      })
+    }
+
+    // Only a single Tailwind CSS root file exists, no need to do anything else.
+    if (tailwindRootLeafs.size <= 1) {
+      return
+    }
+
+    // Mark the common parent as the root file
+    {
+      // Group each sheet from tailwindRootLeafs by their common parent
+      let commonParents = new DefaultMap<Stylesheet, Set<Stylesheet>>(() => new Set<Stylesheet>())
+
+      // Seed common parents with leafs
+      for (let sheet of tailwindRootLeafs) {
+        commonParents.get(sheet).add(sheet)
+      }
+
+      // If any 2 common parents come from the same tree, then all children of
+      // parent A and parent B will be moved to the parent of parent A and
+      // parent B. Parent A and parent B will be removed.
+      let repeat = true
+      while (repeat) {
+        repeat = false
+
+        outer: for (let [sheetA, childrenA] of commonParents) {
+          for (let [sheetB, childrenB] of commonParents) {
+            if (sheetA === sheetB) continue
+
+            for (let parentA of sheetA.ancestors()) {
+              for (let parentB of sheetB.ancestors()) {
+                if (parentA !== parentB) continue
+
+                commonParents.delete(sheetA)
+                commonParents.delete(sheetB)
+
+                for (let child of childrenA) {
+                  commonParents.get(parentA).add(child)
+                }
+
+                for (let child of childrenB) {
+                  commonParents.get(parentA).add(child)
+                }
+
+                repeat = true
+                break outer
+              }
+            }
+          }
+        }
+      }
+
+      // Mark the common parent as the Tailwind CSS root file, and remove the
+      // flag from each leaf.
+      for (let [parent, children] of commonParents) {
+        parent.isTailwindRoot = true
+
+        for (let child of children) {
+          if (parent === child) continue
+
+          child.isTailwindRoot = false
+        }
+      }
+      return
+    }
+  }
 
   let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
   error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
 
   throw new Error(error + lines.join('\n'))
+}
+
+export async function linkConfigs(
+  stylesheets: Stylesheet[],
+  { configPath, base }: { configPath: string | null; base: string },
+) {
+  let rootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot)
+  if (rootStylesheets.length === 0) {
+    throw new Error(
+      'Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses `@tailwind`.',
+    )
+  }
+  let withoutAtConfig = rootStylesheets.filter((sheet) => {
+    let hasConfig = false
+    sheet.root.walkAtRules('config', (node) => {
+      let configPath = path.resolve(path.dirname(sheet.file!), node.params.slice(1, -1))
+      sheet.linkedConfigPath = configPath
+      hasConfig = true
+      return false
+    })
+    return !hasConfig
+  })
+
+  // All stylesheets have a `@config` directives
+  if (withoutAtConfig.length === 0) return
+
+  try {
+    if (configPath === null) {
+      configPath = await detectConfigPath(base)
+    } else if (!path.isAbsolute(configPath)) {
+      configPath = path.resolve(base, configPath)
+    }
+
+    // Link the `@config` directive to the root stylesheets
+    for (let sheet of withoutAtConfig) {
+      if (!sheet.file) continue
+
+      // Track the config file path on the stylesheet itself for easy access
+      // without traversing the CSS ast and finding the corresponding
+      // `@config` later.
+      sheet.linkedConfigPath = configPath
+
+      // Create a relative path from the current file to the config file.
+      let relative = path.relative(path.dirname(sheet.file), configPath)
+
+      // If the path points to a file in the same directory, `path.relative` will
+      // remove the leading `./` and we need to add it back in order to still
+      // consider the path relative
+      if (!relative.startsWith('.')) {
+        relative = './' + relative
+      }
+
+      relative = normalizePath(relative)
+
+      // Add the `@config` directive to the root stylesheet.
+      {
+        let target = sheet.root as postcss.Root | postcss.AtRule
+        let atConfig = postcss.atRule({ name: 'config', params: `'${relative}'` })
+
+        sheet.root.walkAtRules((node) => {
+          if (node.name === 'tailwind' || node.name === 'import') {
+            target = node
+          }
+        })
+
+        if (target.type === 'root') {
+          sheet.root.prepend(atConfig)
+        } else if (target.type === 'atrule') {
+          target.after(atConfig)
+        }
+      }
+    }
+  } catch (e: any) {
+    error('Could not load the configuration file: ' + e.message)
+    process.exit(1)
+  }
 }
 
 export async function split(stylesheets: Stylesheet[]) {

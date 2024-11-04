@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { Scanner } from '@tailwindcss/oxide'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import { compile } from '../src'
 import { optimizeCss } from '../src/test-utils/run'
 

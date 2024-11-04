@@ -2,6 +2,51 @@ import { expect } from 'vitest'
 import { candidate, css, html, js, json, test } from '../utils'
 
 test(
+  'error when no CSS file with @tailwind is used',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!flex"></div>
+      `,
+      'src/fonts.css': css`/* Unrelated CSS file */`,
+    },
+  },
+  async ({ fs, exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade')
+    expect(output).toContain('Cannot find any CSS files that reference Tailwind CSS.')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="!flex"></div>
+
+      --- ./src/fonts.css ---
+      /* Unrelated CSS file */
+      "
+    `)
+  },
+)
+
+test(
   `upgrades a v3 project to v4`,
   {
     fs: {
@@ -858,6 +903,11 @@ test(
           prefix: 'tw__',
         }
       `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
       'src/index.html': html`
         <div class="tw__bg-gradient-to-t"></div>
       `,
@@ -1304,7 +1354,7 @@ test(
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
-        @config "../tailwind.config.js";
+        @config "../tailwind.config.ts";
       `,
       'src/root.3.css': css`
         /* Inject missing @config above first @theme */
@@ -1421,7 +1471,7 @@ test(
           border-width: 0;
         }
       }
-      @config "../tailwind.config.js";
+      @config "../tailwind.config.ts";
 
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */

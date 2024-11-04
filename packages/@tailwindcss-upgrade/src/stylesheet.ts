@@ -26,6 +26,17 @@ export class Stylesheet {
   root: postcss.Root
 
   /**
+   * Whether or not this stylesheet is a Tailwind CSS root stylesheet.
+   */
+  isTailwindRoot = false
+
+  /**
+   * The Tailwind config path that is linked to this stylesheet. Essentially the
+   * contents of `@config`.
+   */
+  linkedConfigPath: string | null = null
+
+  /**
    * The path to the file that this stylesheet was loaded from.
    *
    * If this stylesheet was not loaded from a file this will be `null`.
