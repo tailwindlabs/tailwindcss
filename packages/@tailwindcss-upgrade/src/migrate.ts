@@ -302,6 +302,11 @@ export async function linkConfigs(
   { configPath, base }: { configPath: string | null; base: string },
 ) {
   let rootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot)
+  if (rootStylesheets.length === 0) {
+    throw new Error(
+      'Cannot find a CSS file where Tailwind CSS is setup.\nMake sure to create a CSS file where Tailwind CSS is setup and try again.',
+    )
+  }
   let withoutAtConfig = rootStylesheets.filter((sheet) => {
     let hasConfig = false
     sheet.root.walkAtRules('config', (node) => {

@@ -2,6 +2,51 @@ import { expect } from 'vitest'
 import { candidate, css, html, js, json, test } from '../utils'
 
 test(
+  'error when no CSS file with @tailwind is used',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <h1>🤠👋</h1>
+        <div class="!flex"></div>
+      `,
+      'src/fonts.css': css`/* Unrelated CSS file */`,
+    },
+  },
+  async ({ fs, exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade')
+    expect(output).toContain('Cannot find a CSS file where Tailwind CSS is setup.')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <h1>🤠👋</h1>
+      <div class="!flex"></div>
+
+      --- ./src/fonts.css ---
+      /* Unrelated CSS file */
+      "
+    `)
+  },
+)
+
+test(
   `upgrades a v3 project to v4`,
   {
     fs: {
