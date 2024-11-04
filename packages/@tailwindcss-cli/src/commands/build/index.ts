@@ -203,9 +203,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
-            // Clear all watchers
-            cleanupWatchers()
-
             // Read the new `input`.
             let input = args['--input']
               ? args['--input'] === '-'
@@ -226,7 +223,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+            let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+
+            // Clear old watchers
+            await cleanupWatchers()
+
+            cleanupWatchers = newCleanupWatchers
 
             // Re-compile the CSS
             env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
@@ -271,8 +273,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        cleanupWatchers()
-        process.exit(0)
+        cleanupWatchers().then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
       })
     }
 
@@ -307,6 +311,29 @@ function watchDirectories(scanner: Scanner) {
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  // Remove any directories that are children of an already watched directory.
+  // If we don't we may not get notified of certain filesystem events regardless
+  // of whether or not they are for the directory that is duplicated.
+
+  // 1. Sort in asc by length
+  dirs = dirs.sort((a, z) => a.length - z.length)
+
+  // 2. Remove any directories that are children of another directory
+  let toRemove = []
+
+  // /project-a 0
+  // /project-a/src 1
+
+  for (let i = 0; i < dirs.length; ++i) {
+    for (let j = 0; j < i; ++j) {
+      if (!dirs[i].startsWith(`${dirs[j]}/`)) continue
+
+      toRemove.push(dirs[i])
+    }
+  }
+
+  dirs = dirs.filter((dir) => !toRemove.includes(dir))
+
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
@@ -322,9 +349,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
   // files to handle them in a single batch and to avoid multiple rebuilds.
-  function enqueueCallback() {
-    // Dispose all existing macrotask.
-    debounceQueue.dispose()
+  async function enqueueCallback() {
+    // Dispose all existing macrotasks.
+    await debounceQueue.dispose()
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
@@ -365,7 +392,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
       )
 
       // Handle the tracked files at some point in the future.
-      enqueueCallback()
+      await enqueueCallback()
     })
 
     // Ensure we cleanup the watcher when we're done.
@@ -373,9 +400,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 
   // Cleanup
-  return () => {
-    watchers.dispose()
-    debounceQueue.dispose()
+  return async () => {
+    await watchers.dispose()
+    await debounceQueue.dispose()
   }
 }
 

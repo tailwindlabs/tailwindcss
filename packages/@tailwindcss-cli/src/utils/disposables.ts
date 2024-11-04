@@ -35,9 +35,9 @@ export class Disposables {
   /**
    * Dispose all disposables at once.
    */
-  dispose() {
+  async dispose() {
     for (let dispose of this.#disposables) {
-      dispose()
+      await dispose()
     }
 
     this.#disposables.clear()
