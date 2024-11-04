@@ -281,7 +281,6 @@ export function test(
         },
         fs: {
           async write(filename: string, content: string): Promise<void> {
-            console.log('Writing file:', filename)
             let full = path.join(root, filename)
 
             if (filename.endsWith('package.json')) {
