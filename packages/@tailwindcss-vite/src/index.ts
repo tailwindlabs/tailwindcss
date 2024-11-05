@@ -15,11 +15,6 @@ export default function tailwindcss(): Plugin[] {
   let isSSR = false
   let minify = false
 
-  // A list of css plugins defined in the Vite config. We need to retain these
-  // so that we can rerun the right transformations in build mode where we have
-  // to manually rebuild the css file after the compilation is done.
-  let cssPlugins: readonly Plugin[] = []
-
   // The Vite extension has two types of sources for candidates:
   //
   // 1. The module graph: These are all modules that vite transforms and we want
@@ -109,8 +104,26 @@ export default function tailwindcss(): Plugin[] {
       },
     }
 
-    for (let plugin of cssPlugins) {
+    for (let plugin of config!.plugins) {
       if (!plugin.transform) continue
+
+      if (plugin.name.startsWith('@tailwindcss/')) {
+        // We do not run any Tailwind transforms anymore
+        continue
+      } else if (
+        plugin.name.startsWith('vite:') &&
+        // Apply the vite:css plugin to generated CSS for transformations like
+        // URL path rewriting and image inlining.
+        plugin.name !== 'vite:css' &&
+        // In build mode, since `renderStart` runs after all transformations, we
+        // need to also apply vite:css-post.
+        plugin.name !== 'vite:css-post' &&
+        // The vite:vue plugin handles CSS specific post-processing for Vue
+        plugin.name !== 'vite:vue'
+      ) {
+        continue
+      }
+
       let transformHandler =
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
 
@@ -147,20 +160,6 @@ export default function tailwindcss(): Plugin[] {
         config = _config
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
-
-        let allowedPlugins = [
-          // Apply the vite:css plugin to generated CSS for transformations like
-          // URL path rewriting and image inlining.
-          'vite:css',
-
-          // In build mode, since renderChunk runs after all transformations, we
-          // need to also apply vite:css-post.
-          ...(config.command === 'build' ? ['vite:css-post'] : []),
-        ]
-
-        cssPlugins = config.plugins.filter((plugin) => {
-          return allowedPlugins.includes(plugin.name)
-        })
       },
 
       // Scan all non-CSS files for candidates
