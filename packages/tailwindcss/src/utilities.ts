@@ -1614,9 +1614,7 @@ export function createUtilities(theme: Theme) {
     ['scroll-pb', 'scroll-padding-bottom'],
     ['scroll-pl', 'scroll-padding-left'],
   ] as const) {
-    spacingUtility(namespace, '--scroll-padding', (value) => [decl(property, value)], {
-      supportsNegative: true,
-    })
+    spacingUtility(namespace, '--scroll-padding', (value) => [decl(property, value)])
   }
 
   staticUtility('list-inside', [['list-style-position', 'inside']])
