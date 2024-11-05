@@ -122,6 +122,11 @@ export default function tailwindcss(): Plugin[] {
         plugin.name !== 'vite:vue'
       ) {
         continue
+      } else if (plugin.name === 'ssr-styles') {
+        // The Nuxt ssr-styles plugin emits styles from server-side rendered
+        // components, we can't run it in the `renderStart` phase so we're
+        // skipping it.
+        continue
       }
 
       let transformHandler =
