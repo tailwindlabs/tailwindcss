@@ -5983,14 +5983,6 @@ test('scroll-p', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-p-4 {
-      scroll-padding: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-p-\\[var\\(--value\\)\\] {
-      scroll-padding: calc(var(--value) * -1);
-    }
-
     .scroll-p-4 {
       scroll-padding: var(--spacing-4, 1rem);
     }
@@ -6024,14 +6016,6 @@ test('scroll-px', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-px-4 {
-      scroll-padding-inline: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-px-\\[var\\(--value\\)\\] {
-      scroll-padding-inline: calc(var(--value) * -1);
     }
 
     .scroll-px-4 {
@@ -6069,14 +6053,6 @@ test('scroll-py', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-py-4 {
-      scroll-padding-block: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-py-\\[var\\(--value\\)\\] {
-      scroll-padding-block: calc(var(--value) * -1);
-    }
-
     .scroll-py-4 {
       scroll-padding-block: var(--spacing-4, 1rem);
     }
@@ -6110,14 +6086,6 @@ test('scroll-ps', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-ps-4 {
-      scroll-padding-inline-start: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-ps-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-start: calc(var(--value) * -1);
     }
 
     .scroll-ps-4 {
@@ -6155,14 +6123,6 @@ test('scroll-pe', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pe-4 {
-      scroll-padding-inline-end: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pe-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-end: calc(var(--value) * -1);
-    }
-
     .scroll-pe-4 {
       scroll-padding-inline-end: var(--spacing-4, 1rem);
     }
@@ -6196,14 +6156,6 @@ test('scroll-pt', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-pt-4 {
-      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pt-\\[var\\(--value\\)\\] {
-      scroll-padding-top: calc(var(--value) * -1);
     }
 
     .scroll-pt-4 {
@@ -6241,14 +6193,6 @@ test('scroll-pr', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pr-4 {
-      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pr-\\[var\\(--value\\)\\] {
-      scroll-padding-right: calc(var(--value) * -1);
-    }
-
     .scroll-pr-4 {
       scroll-padding-right: var(--spacing-4, 1rem);
     }
@@ -6284,14 +6228,6 @@ test('scroll-pb', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pb-4 {
-      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pb-\\[var\\(--value\\)\\] {
-      scroll-padding-bottom: calc(var(--value) * -1);
-    }
-
     .scroll-pb-4 {
       scroll-padding-bottom: var(--spacing-4, 1rem);
     }
@@ -6325,14 +6261,6 @@ test('scroll-pl', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-pl-4 {
-      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pl-\\[var\\(--value\\)\\] {
-      scroll-padding-left: calc(var(--value) * -1);
     }
 
     .scroll-pl-4 {
