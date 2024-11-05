@@ -362,7 +362,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 }
 
 .w-4 {
-  width: calc(var(--spacing, .25rem) * 4);
+  width: calc(var(--spacing) * 4);
 }
 
 .bg-red-500 {
