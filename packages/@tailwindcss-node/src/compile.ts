@@ -9,10 +9,19 @@ import {
   compile as _compile,
 } from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
+import { rewriteUrls } from './urls'
 
 export async function compile(
   css: string,
-  { base, onDependency }: { base: string; onDependency: (path: string) => void },
+  {
+    base,
+    onDependency,
+    shouldRewriteUrls,
+  }: {
+    base: string
+    onDependency: (path: string) => void
+    shouldRewriteUrls?: boolean
+  },
 ) {
   let compiler = await _compile(css, {
     base,
@@ -20,7 +29,17 @@ export async function compile(
       return loadModule(id, base, onDependency)
     },
     async loadStylesheet(id, base) {
-      return loadStylesheet(id, base, onDependency)
+      let sheet = await loadStylesheet(id, base, onDependency)
+
+      if (shouldRewriteUrls) {
+        sheet.content = await rewriteUrls({
+          css: sheet.content,
+          root: base,
+          base: sheet.base,
+        })
+      }
+
+      return sheet
     },
   })
 

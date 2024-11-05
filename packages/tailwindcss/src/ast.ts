@@ -202,7 +202,7 @@ export function walkDepth(
   }
 }
 
-export function toCss(ast: AstNode[]) {
+export function toCss(ast: AstNode[], { printUtilitiesNode = false } = {}) {
   let atRoots: string = ''
   let seenAtProperties = new Set<string>()
   let propertyFallbacksRoot: Declaration[] = []
@@ -224,6 +224,7 @@ export function toCss(ast: AstNode[]) {
     // AtRule
     else if (node.kind === 'at-rule') {
       if (
+        !printUtilitiesNode &&
         node.name === '@tailwind' &&
         (node.params === 'utilities' || node.params.startsWith('utilities'))
       ) {
