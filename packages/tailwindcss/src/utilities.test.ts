@@ -12300,7 +12300,7 @@ test('align', async () => {
   ).toEqual('')
 })
 
-test.only('font', async () => {
+test('font', async () => {
   expect(
     await compileCss(
       css`
