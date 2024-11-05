@@ -42,6 +42,7 @@ export function parse(input: string) {
 
   let buffer = ''
   let closingBracketStack = ''
+  let parenStack = 0
 
   let peekChar
 
@@ -331,10 +332,7 @@ export function parse(input: string) {
     // }
     // ```
     //
-    else if (
-      currentChar === SEMICOLON &&
-      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
-    ) {
+    else if (currentChar === SEMICOLON && parenStack <= 0) {
       let declaration = parseDeclaration(buffer)
       if (parent) {
         parent.nodes.push(declaration)
@@ -346,10 +344,7 @@ export function parse(input: string) {
     }
 
     // Start of a block.
-    else if (
-      currentChar === OPEN_CURLY &&
-      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
-    ) {
+    else if (currentChar === OPEN_CURLY && parenStack <= 0) {
       closingBracketStack += '}'
 
       // At this point `buffer` should resemble a selector or an at-rule.
@@ -374,10 +369,7 @@ export function parse(input: string) {
     }
 
     // End of a block.
-    else if (
-      currentChar === CLOSE_CURLY &&
-      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
-    ) {
+    else if (currentChar === CLOSE_CURLY && parenStack <= 0) {
       if (closingBracketStack === '') {
         throw new Error('Missing opening {')
       }
@@ -465,22 +457,20 @@ export function parse(input: string) {
       node = null
     }
 
-    //
-    else if (currentChar === OPEN_CURLY) {
-      closingBracketStack += '}'
-      buffer += '{'
-    } else if (currentChar === OPEN_PAREN) {
-      closingBracketStack += ')'
+    // `(`
+    else if (currentChar === OPEN_PAREN) {
+      parenStack += 1
       buffer += '('
-    } else if (currentChar === CLOSE_CURLY || currentChar === CLOSE_PAREN) {
-      if (
-        closingBracketStack.length > 0 &&
-        input[i] === closingBracketStack[closingBracketStack.length - 1]
-      ) {
-        closingBracketStack = closingBracketStack.slice(0, -1)
+    }
+
+    // `)`
+    else if (currentChar === CLOSE_PAREN) {
+      if (parenStack <= 0) {
+        throw new Error('Missing opening (')
       }
 
-      buffer += String.fromCharCode(currentChar)
+      parenStack -= 1
+      buffer += ')'
     }
 
     // Any other character is part of the current node.
