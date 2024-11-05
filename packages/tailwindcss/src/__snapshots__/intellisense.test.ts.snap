@@ -3049,6 +3049,7 @@ exports[`getClassList 1`] = `
   "duration-75",
   "duration-initial",
   "ease-initial",
+  "ease-linear",
   "end-0",
   "end-0.5",
   "end-1",
