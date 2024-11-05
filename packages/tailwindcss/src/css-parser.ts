@@ -331,7 +331,10 @@ export function parse(input: string) {
     // }
     // ```
     //
-    else if (currentChar === SEMICOLON) {
+    else if (
+      currentChar === SEMICOLON &&
+      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
+    ) {
       let declaration = parseDeclaration(buffer)
       if (parent) {
         parent.nodes.push(declaration)
@@ -343,7 +346,10 @@ export function parse(input: string) {
     }
 
     // Start of a block.
-    else if (currentChar === OPEN_CURLY) {
+    else if (
+      currentChar === OPEN_CURLY &&
+      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
+    ) {
       closingBracketStack += '}'
 
       // At this point `buffer` should resemble a selector or an at-rule.
@@ -368,7 +374,10 @@ export function parse(input: string) {
     }
 
     // End of a block.
-    else if (currentChar === CLOSE_CURLY) {
+    else if (
+      currentChar === CLOSE_CURLY &&
+      (closingBracketStack.length === 0 || !closingBracketStack.includes(')'))
+    ) {
       if (closingBracketStack === '') {
         throw new Error('Missing opening {')
       }
@@ -454,6 +463,24 @@ export function parse(input: string) {
       // Reset the state for the next node.
       buffer = ''
       node = null
+    }
+
+    //
+    else if (currentChar === OPEN_CURLY) {
+      closingBracketStack += '}'
+      buffer += '{'
+    } else if (currentChar === OPEN_PAREN) {
+      closingBracketStack += ')'
+      buffer += '('
+    } else if (currentChar === CLOSE_CURLY || currentChar === CLOSE_PAREN) {
+      if (
+        closingBracketStack.length > 0 &&
+        input[i] === closingBracketStack[closingBracketStack.length - 1]
+      ) {
+        closingBracketStack = closingBracketStack.slice(0, -1)
+      }
+
+      buffer += String.fromCharCode(currentChar)
     }
 
     // Any other character is part of the current node.
