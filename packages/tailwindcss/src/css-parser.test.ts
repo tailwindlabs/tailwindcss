@@ -505,6 +505,59 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    it('should parse url(…) without quotes and special characters such as `;`, `{}`, and `[]`', () => {
+      expect(
+        parse(css`
+          .foo {
+            /* ';' should be valid inside the 'url(…)' function */
+            background: url(data:image/png;base64,abc==);
+
+            /* '{', '}', '[' and ']' should be valid inside the 'url(…)' function */
+            /* '{' and '}' should not start a new block (nesting) */
+            background: url(https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]);
+
+            /* '{' and '}' don't need to be balanced */
+            background: url(https://example-image-search.org?curlies=}});
+
+            /* '(' and ')' are not valid, unless we are in a string with quotes */
+            background: url('https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]&format=(png|jpg)');
+          }
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(data:image/png;base64,abc==)',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(https://example-image-search.org?q={query;limit=5}&ids=[1,2,3])',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(https://example-image-search.org?curlies=}})',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value:
+                "url('https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]&format=(png|jpg)')",
+              important: false,
+            },
+          ],
+        },
+      ])
+    })
   })
 
   describe('selectors', () => {
