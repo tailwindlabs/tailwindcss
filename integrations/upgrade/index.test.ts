@@ -71,6 +71,14 @@ test(
         <div
           class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(screens.md)]"
         ></div>
+        <!-- Migrate to sm -->
+        <div class="blur shadow rounded inset-shadow drop-shadow"></div>
+
+        <!-- Migrate to xs -->
+        <div class="blur-sm shadow-sm rounded-sm inset-shadow-sm drop-shadow-sm"></div>
+
+        <!-- Migrate to 2xs -->
+        <div class="shadow-xs inset-shadow-xs"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -95,6 +103,14 @@ test(
       <div
         class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)] ml-[var(--breakpoint-md)]"
       ></div>
+      <!-- Migrate to sm -->
+      <div class="blur-sm shadow-sm rounded-sm inset-shadow-sm drop-shadow-sm"></div>
+
+      <!-- Migrate to xs -->
+      <div class="blur-xs shadow-xs rounded-xs inset-shadow-xs drop-shadow-xs"></div>
+
+      <!-- Migrate to 2xs -->
+      <div class="shadow-2xs inset-shadow-2xs"></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
