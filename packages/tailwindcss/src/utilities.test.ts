@@ -1511,40 +1511,78 @@ test('margin', async () => {
   ).toEqual('')
 })
 
-test('margin-x', async () => {
+test('mx', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mx-auto', 'mx-4', 'mx-[4px]', '-mx-4', '-mx-[var(--value)]'],
+      [
+        'mx-auto',
+        'mx-1',
+        'mx-4',
+        'mx-99',
+        'mx-big',
+        'mx-[4px]',
+        '-mx-4',
+        '-mx-big',
+        '-mx-[4px]',
+        'mx-[var(--my-var)]',
+        '-mx-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
     }
 
     .-mx-4 {
-      margin-inline: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-mx-\\[var\\(--value\\)\\] {
-      margin-inline: calc(var(--value) * -1);
+    .-mx-\\[4px\\] {
+      margin-inline: -4px;
+    }
+
+    .-mx-\\[var\\(--my-var\\)\\] {
+      margin-inline: calc(var(--my-var) * -1);
+    }
+
+    .-mx-big {
+      margin-inline: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .mx-1 {
+      margin-inline: calc(var(--spacing, .25rem) * 1);
     }
 
     .mx-4 {
-      margin-inline: var(--spacing-4, 1rem);
+      margin-inline: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .mx-99 {
+      margin-inline: calc(var(--spacing, .25rem) * 99);
     }
 
     .mx-\\[4px\\] {
       margin-inline: 4px;
     }
 
+    .mx-\\[var\\(--my-var\\)\\] {
+      margin-inline: var(--my-var);
+    }
+
     .mx-auto {
       margin-inline: auto;
+    }
+
+    .mx-big {
+      margin-inline: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1559,40 +1597,78 @@ test('margin-x', async () => {
   ).toEqual('')
 })
 
-test('margin-y', async () => {
+test('my', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['my-auto', 'my-4', 'my-[4px]', '-my-4', '-my-[var(--value)]'],
+      [
+        'my-1',
+        'my-99',
+        'my-2.5',
+        'my-big',
+        'my-[4px]',
+        '-my-4',
+        '-my-2.5',
+        '-my-big',
+        '-my-[4px]',
+        'my-[var(--my-var)]',
+        '-my-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-my-2\\.5 {
+      margin-block: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-my-4 {
-      margin-block: calc(var(--spacing-4, 1rem) * -1);
+      margin-block: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-my-\\[var\\(--value\\)\\] {
-      margin-block: calc(var(--value) * -1);
+    .-my-\\[4px\\] {
+      margin-block: -4px;
     }
 
-    .my-4 {
-      margin-block: var(--spacing-4, 1rem);
+    .-my-\\[var\\(--my-var\\)\\] {
+      margin-block: calc(var(--my-var) * -1);
+    }
+
+    .-my-big {
+      margin-block: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .my-1 {
+      margin-block: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .my-2\\.5 {
+      margin-block: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .my-99 {
+      margin-block: calc(var(--spacing, .25rem) * 99);
     }
 
     .my-\\[4px\\] {
       margin-block: 4px;
     }
 
-    .my-auto {
-      margin-block: auto;
+    .my-\\[var\\(--my-var\\)\\] {
+      margin-block: var(--my-var);
+    }
+
+    .my-big {
+      margin-block: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1607,40 +1683,78 @@ test('margin-y', async () => {
   ).toEqual('')
 })
 
-test('margin-top', async () => {
+test('mt', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mt-auto', 'mt-4', 'mt-[4px]', '-mt-4', '-mt-[var(--value)]'],
+      [
+        'mt-1',
+        'mt-99',
+        'mt-2.5',
+        'mt-big',
+        'mt-[4px]',
+        '-mt-4',
+        '-mt-2.5',
+        '-mt-big',
+        '-mt-[4px]',
+        'mt-[var(--my-var)]',
+        '-mt-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mt-2\\.5 {
+      margin-top: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-mt-4 {
-      margin-top: calc(var(--spacing-4, 1rem) * -1);
+      margin-top: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-mt-\\[var\\(--value\\)\\] {
-      margin-top: calc(var(--value) * -1);
+    .-mt-\\[4px\\] {
+      margin-top: -4px;
     }
 
-    .mt-4 {
-      margin-top: var(--spacing-4, 1rem);
+    .-mt-\\[var\\(--my-var\\)\\] {
+      margin-top: calc(var(--my-var) * -1);
+    }
+
+    .-mt-big {
+      margin-top: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .mt-1 {
+      margin-top: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .mt-2\\.5 {
+      margin-top: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .mt-99 {
+      margin-top: calc(var(--spacing, .25rem) * 99);
     }
 
     .mt-\\[4px\\] {
       margin-top: 4px;
     }
 
-    .mt-auto {
-      margin-top: auto;
+    .mt-\\[var\\(--my-var\\)\\] {
+      margin-top: var(--my-var);
+    }
+
+    .mt-big {
+      margin-top: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1655,40 +1769,78 @@ test('margin-top', async () => {
   ).toEqual('')
 })
 
-test('margin-inline-start', async () => {
+test('ms', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ms-auto', 'ms-4', 'ms-[4px]', '-ms-4', '-ms-[var(--value)]'],
+      [
+        'ms-1',
+        'ms-99',
+        'ms-2.5',
+        'ms-big',
+        'ms-[4px]',
+        '-ms-4',
+        '-ms-2.5',
+        '-ms-big',
+        '-ms-[4px]',
+        'ms-[var(--my-var)]',
+        '-ms-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-ms-2\\.5 {
+      margin-inline-start: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-ms-4 {
-      margin-inline-start: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline-start: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-ms-\\[var\\(--value\\)\\] {
-      margin-inline-start: calc(var(--value) * -1);
+    .-ms-\\[4px\\] {
+      margin-inline-start: -4px;
     }
 
-    .ms-4 {
-      margin-inline-start: var(--spacing-4, 1rem);
+    .-ms-\\[var\\(--my-var\\)\\] {
+      margin-inline-start: calc(var(--my-var) * -1);
+    }
+
+    .-ms-big {
+      margin-inline-start: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .ms-1 {
+      margin-inline-start: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .ms-2\\.5 {
+      margin-inline-start: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .ms-99 {
+      margin-inline-start: calc(var(--spacing, .25rem) * 99);
     }
 
     .ms-\\[4px\\] {
       margin-inline-start: 4px;
     }
 
-    .ms-auto {
-      margin-inline-start: auto;
+    .ms-\\[var\\(--my-var\\)\\] {
+      margin-inline-start: var(--my-var);
+    }
+
+    .ms-big {
+      margin-inline-start: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1703,40 +1855,78 @@ test('margin-inline-start', async () => {
   ).toEqual('')
 })
 
-test('margin-inline-end', async () => {
+test('me', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['me-auto', 'me-4', 'me-[4px]', '-me-4', '-me-[var(--value)]'],
+      [
+        'me-1',
+        'me-99',
+        'me-2.5',
+        'me-big',
+        'me-[4px]',
+        '-me-4',
+        '-me-2.5',
+        '-me-big',
+        '-me-[4px]',
+        'me-[var(--my-var)]',
+        '-me-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-me-2\\.5 {
+      margin-inline-end: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-me-4 {
-      margin-inline-end: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline-end: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-me-\\[var\\(--value\\)\\] {
-      margin-inline-end: calc(var(--value) * -1);
+    .-me-\\[4px\\] {
+      margin-inline-end: -4px;
     }
 
-    .me-4 {
-      margin-inline-end: var(--spacing-4, 1rem);
+    .-me-\\[var\\(--my-var\\)\\] {
+      margin-inline-end: calc(var(--my-var) * -1);
+    }
+
+    .-me-big {
+      margin-inline-end: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .me-1 {
+      margin-inline-end: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .me-2\\.5 {
+      margin-inline-end: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .me-99 {
+      margin-inline-end: calc(var(--spacing, .25rem) * 99);
     }
 
     .me-\\[4px\\] {
       margin-inline-end: 4px;
     }
 
-    .me-auto {
-      margin-inline-end: auto;
+    .me-\\[var\\(--my-var\\)\\] {
+      margin-inline-end: var(--my-var);
+    }
+
+    .me-big {
+      margin-inline-end: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1751,40 +1941,78 @@ test('margin-inline-end', async () => {
   ).toEqual('')
 })
 
-test('margin-right', async () => {
+test('mr', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mr-auto', 'mr-4', 'mr-[4px]', '-mr-4', '-mr-[var(--value)]'],
+      [
+        'mr-1',
+        'mr-99',
+        'mr-2.5',
+        'mr-big',
+        'mr-[4px]',
+        '-mr-4',
+        '-mr-2.5',
+        '-mr-big',
+        '-mr-[4px]',
+        'mr-[var(--my-var)]',
+        '-mr-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mr-2\\.5 {
+      margin-right: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-mr-4 {
-      margin-right: calc(var(--spacing-4, 1rem) * -1);
+      margin-right: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-mr-\\[var\\(--value\\)\\] {
-      margin-right: calc(var(--value) * -1);
+    .-mr-\\[4px\\] {
+      margin-right: -4px;
     }
 
-    .mr-4 {
-      margin-right: var(--spacing-4, 1rem);
+    .-mr-\\[var\\(--my-var\\)\\] {
+      margin-right: calc(var(--my-var) * -1);
+    }
+
+    .-mr-big {
+      margin-right: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .mr-1 {
+      margin-right: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .mr-2\\.5 {
+      margin-right: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .mr-99 {
+      margin-right: calc(var(--spacing, .25rem) * 99);
     }
 
     .mr-\\[4px\\] {
       margin-right: 4px;
     }
 
-    .mr-auto {
-      margin-right: auto;
+    .mr-\\[var\\(--my-var\\)\\] {
+      margin-right: var(--my-var);
+    }
+
+    .mr-big {
+      margin-right: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1799,40 +2027,78 @@ test('margin-right', async () => {
   ).toEqual('')
 })
 
-test('margin-bottom', async () => {
+test('mb', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mb-auto', 'mb-4', 'mb-[4px]', '-mb-4', '-mb-[var(--value)]'],
+      [
+        'mb-1',
+        'mb-99',
+        'mb-2.5',
+        'mb-big',
+        'mb-[4px]',
+        '-mb-4',
+        '-mb-2.5',
+        '-mb-big',
+        '-mb-[4px]',
+        'mb-[var(--my-var)]',
+        '-mb-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mb-2\\.5 {
+      margin-bottom: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-mb-4 {
-      margin-bottom: calc(var(--spacing-4, 1rem) * -1);
+      margin-bottom: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-mb-\\[var\\(--value\\)\\] {
-      margin-bottom: calc(var(--value) * -1);
+    .-mb-\\[4px\\] {
+      margin-bottom: -4px;
     }
 
-    .mb-4 {
-      margin-bottom: var(--spacing-4, 1rem);
+    .-mb-\\[var\\(--my-var\\)\\] {
+      margin-bottom: calc(var(--my-var) * -1);
+    }
+
+    .-mb-big {
+      margin-bottom: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .mb-1 {
+      margin-bottom: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .mb-2\\.5 {
+      margin-bottom: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .mb-99 {
+      margin-bottom: calc(var(--spacing, .25rem) * 99);
     }
 
     .mb-\\[4px\\] {
       margin-bottom: 4px;
     }
 
-    .mb-auto {
-      margin-bottom: auto;
+    .mb-\\[var\\(--my-var\\)\\] {
+      margin-bottom: var(--my-var);
+    }
+
+    .mb-big {
+      margin-bottom: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -1847,40 +2113,78 @@ test('margin-bottom', async () => {
   ).toEqual('')
 })
 
-test('margin-left', async () => {
+test('ml', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ml-auto', 'ml-4', 'ml-[4px]', '-ml-4', '-ml-[var(--value)]'],
+      [
+        'ml-1',
+        'ml-99',
+        'ml-2.5',
+        'ml-big',
+        'ml-[4px]',
+        '-ml-4',
+        '-ml-2.5',
+        '-ml-big',
+        '-ml-[4px]',
+        'ml-[var(--my-var)]',
+        '-ml-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-ml-2\\.5 {
+      margin-left: calc(var(--spacing, .25rem) * -2.5);
     }
 
     .-ml-4 {
-      margin-left: calc(var(--spacing-4, 1rem) * -1);
+      margin-left: calc(var(--spacing, .25rem) * -4);
     }
 
-    .-ml-\\[var\\(--value\\)\\] {
-      margin-left: calc(var(--value) * -1);
+    .-ml-\\[4px\\] {
+      margin-left: -4px;
     }
 
-    .ml-4 {
-      margin-left: var(--spacing-4, 1rem);
+    .-ml-\\[var\\(--my-var\\)\\] {
+      margin-left: calc(var(--my-var) * -1);
+    }
+
+    .-ml-big {
+      margin-left: calc(var(--spacing-big, 100rem) * -1);
+    }
+
+    .ml-1 {
+      margin-left: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .ml-2\\.5 {
+      margin-left: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .ml-99 {
+      margin-left: calc(var(--spacing, .25rem) * 99);
     }
 
     .ml-\\[4px\\] {
       margin-left: 4px;
     }
 
-    .ml-auto {
-      margin-left: auto;
+    .ml-\\[var\\(--my-var\\)\\] {
+      margin-left: var(--my-var);
+    }
+
+    .ml-big {
+      margin-left: var(--spacing-big, 100rem);
     }"
   `)
   expect(
@@ -3435,35 +3739,30 @@ test('translate', async () => {
     ".-translate-\\[var\\(--value\\)\\] {
       --tw-translate-x: calc(var(--value) * -1);
       --tw-translate-y: calc(var(--value) * -1);
-      --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .-translate-full {
       --tw-translate-x: -100%;
       --tw-translate-y: -100%;
-      --tw-translate-z: -100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-1\\/2 {
       --tw-translate-x: calc(1 / 2 * 100%);
       --tw-translate-y: calc(1 / 2 * 100%);
-      --tw-translate-z: calc(1 / 2 * 100%);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-\\[123px\\] {
       --tw-translate-x: 123px;
       --tw-translate-y: 123px;
-      --tw-translate-z: 123px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-full {
       --tw-translate-x: 100%;
       --tw-translate-y: 100%;
-      --tw-translate-z: 100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
@@ -5684,14 +5983,6 @@ test('scroll-p', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-p-4 {
-      scroll-padding: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-p-\\[var\\(--value\\)\\] {
-      scroll-padding: calc(var(--value) * -1);
-    }
-
     .scroll-p-4 {
       scroll-padding: var(--spacing-4, 1rem);
     }
@@ -5725,14 +6016,6 @@ test('scroll-px', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-px-4 {
-      scroll-padding-inline: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-px-\\[var\\(--value\\)\\] {
-      scroll-padding-inline: calc(var(--value) * -1);
     }
 
     .scroll-px-4 {
@@ -5770,14 +6053,6 @@ test('scroll-py', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-py-4 {
-      scroll-padding-block: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-py-\\[var\\(--value\\)\\] {
-      scroll-padding-block: calc(var(--value) * -1);
-    }
-
     .scroll-py-4 {
       scroll-padding-block: var(--spacing-4, 1rem);
     }
@@ -5811,14 +6086,6 @@ test('scroll-ps', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-ps-4 {
-      scroll-padding-inline-start: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-ps-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-start: calc(var(--value) * -1);
     }
 
     .scroll-ps-4 {
@@ -5856,14 +6123,6 @@ test('scroll-pe', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pe-4 {
-      scroll-padding-inline-end: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pe-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-end: calc(var(--value) * -1);
-    }
-
     .scroll-pe-4 {
       scroll-padding-inline-end: var(--spacing-4, 1rem);
     }
@@ -5897,14 +6156,6 @@ test('scroll-pt', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-pt-4 {
-      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pt-\\[var\\(--value\\)\\] {
-      scroll-padding-top: calc(var(--value) * -1);
     }
 
     .scroll-pt-4 {
@@ -5942,14 +6193,6 @@ test('scroll-pr', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pr-4 {
-      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pr-\\[var\\(--value\\)\\] {
-      scroll-padding-right: calc(var(--value) * -1);
-    }
-
     .scroll-pr-4 {
       scroll-padding-right: var(--spacing-4, 1rem);
     }
@@ -5985,14 +6228,6 @@ test('scroll-pb', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pb-4 {
-      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pb-\\[var\\(--value\\)\\] {
-      scroll-padding-bottom: calc(var(--value) * -1);
-    }
-
     .scroll-pb-4 {
       scroll-padding-bottom: var(--spacing-4, 1rem);
     }
@@ -6026,14 +6261,6 @@ test('scroll-pl', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-    }
-
-    .-scroll-pl-4 {
-      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pl-\\[var\\(--value\\)\\] {
-      scroll-padding-left: calc(var(--value) * -1);
     }
 
     .scroll-pl-4 {
@@ -11586,23 +11813,37 @@ test('p', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['p-4', 'p-[4px]'],
+      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .p-1 {
+      padding: calc(var(--spacing, .25rem) * 1);
     }
 
     .p-4 {
-      padding: var(--spacing-4, 1rem);
+      padding: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .p-99 {
+      padding: calc(var(--spacing, .25rem) * 99);
     }
 
     .p-\\[4px\\] {
       padding: 4px;
+    }
+
+    .p-big {
+      padding: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
@@ -11613,23 +11854,37 @@ test('px', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['px-4', 'px-[4px]'],
+      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
     }
 
-    .px-4 {
-      padding-inline: var(--spacing-4, 1rem);
+    .px-1 {
+      padding-inline: calc(var(--spacing, .25rem) * 1);
+    }
+
+    .px-2\\.5 {
+      padding-inline: calc(var(--spacing, .25rem) * 2.5);
+    }
+
+    .px-99 {
+      padding-inline: calc(var(--spacing, .25rem) * 99);
     }
 
     .px-\\[4px\\] {
       padding-inline: 4px;
+    }
+
+    .px-big {
+      padding-inline: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
@@ -11640,23 +11895,37 @@ test('py', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['py-4', 'py-[4px]'],
+      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .py-1 {
+      padding-block: calc(var(--spacing, .25rem) * 1);
     }
 
     .py-4 {
-      padding-block: var(--spacing-4, 1rem);
+      padding-block: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .py-99 {
+      padding-block: calc(var(--spacing, .25rem) * 99);
     }
 
     .py-\\[4px\\] {
       padding-block: 4px;
+    }
+
+    .py-big {
+      padding-block: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
@@ -11667,23 +11936,37 @@ test('pt', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pt-4', 'pt-[4px]'],
+      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pt-1 {
+      padding-top: calc(var(--spacing, .25rem) * 1);
     }
 
     .pt-4 {
-      padding-top: var(--spacing-4, 1rem);
+      padding-top: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .pt-99 {
+      padding-top: calc(var(--spacing, .25rem) * 99);
     }
 
     .pt-\\[4px\\] {
       padding-top: 4px;
+    }
+
+    .pt-big {
+      padding-top: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
@@ -11694,23 +11977,37 @@ test('ps', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ps-4', 'ps-[4px]'],
+      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .ps-1 {
+      padding-inline-start: calc(var(--spacing, .25rem) * 1);
     }
 
     .ps-4 {
-      padding-inline-start: var(--spacing-4, 1rem);
+      padding-inline-start: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .ps-99 {
+      padding-inline-start: calc(var(--spacing, .25rem) * 99);
     }
 
     .ps-\\[4px\\] {
       padding-inline-start: 4px;
+    }
+
+    .ps-big {
+      padding-inline-start: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
@@ -11721,23 +12018,37 @@ test('pe', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pe-4', 'pe-[4px]'],
+      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pe-1 {
+      padding-inline-end: calc(var(--spacing, .25rem) * 1);
     }
 
     .pe-4 {
-      padding-inline-end: var(--spacing-4, 1rem);
+      padding-inline-end: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .pe-99 {
+      padding-inline-end: calc(var(--spacing, .25rem) * 99);
     }
 
     .pe-\\[4px\\] {
       padding-inline-end: 4px;
+    }
+
+    .pe-big {
+      padding-inline-end: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
@@ -11748,23 +12059,37 @@ test('pr', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pr-4', 'pr-[4px]'],
+      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pr-1 {
+      padding-right: calc(var(--spacing, .25rem) * 1);
     }
 
     .pr-4 {
-      padding-right: var(--spacing-4, 1rem);
+      padding-right: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .pr-99 {
+      padding-right: calc(var(--spacing, .25rem) * 99);
     }
 
     .pr-\\[4px\\] {
       padding-right: 4px;
+    }
+
+    .pr-big {
+      padding-right: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
@@ -11775,23 +12100,37 @@ test('pb', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pb-4', 'pb-[4px]'],
+      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pb-1 {
+      padding-bottom: calc(var(--spacing, .25rem) * 1);
     }
 
     .pb-4 {
-      padding-bottom: var(--spacing-4, 1rem);
+      padding-bottom: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .pb-99 {
+      padding-bottom: calc(var(--spacing, .25rem) * 99);
     }
 
     .pb-\\[4px\\] {
       padding-bottom: 4px;
+    }
+
+    .pb-big {
+      padding-bottom: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
@@ -11802,23 +12141,37 @@ test('pl', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pl-4', 'pl-[4px]'],
+      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pl-1 {
+      padding-left: calc(var(--spacing, .25rem) * 1);
     }
 
     .pl-4 {
-      padding-left: var(--spacing-4, 1rem);
+      padding-left: calc(var(--spacing, .25rem) * 4);
+    }
+
+    .pl-99 {
+      padding-left: calc(var(--spacing, .25rem) * 99);
     }
 
     .pl-\\[4px\\] {
       padding-left: 4px;
+    }
+
+    .pl-big {
+      padding-left: var(--spacing-big, 100rem);
     }"
   `)
   expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
@@ -15738,6 +16091,78 @@ test('@container', async () => {
       '-@container-[size]/sidebar',
     ]),
   ).toEqual('')
+})
+
+describe('spacing utilities', () => {
+  test('`--spacing: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4, 1rem);
+      }"
+    `)
+  })
+
+  test('`--spacing-*: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing-*: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4, 1rem);
+      }"
+    `)
+  })
+
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: 4px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: 4px;
+      }
+
+      .px-0\\.25 {
+        padding-inline: calc(var(--spacing, 4px) * .25);
+      }
+
+      .px-1\\.5 {
+        padding-inline: calc(var(--spacing, 4px) * 1.5);
+      }
+
+      .px-2\\.75 {
+        padding-inline: calc(var(--spacing, 4px) * 2.75);
+      }"
+    `)
+  })
 })
 
 describe('custom utilities', () => {

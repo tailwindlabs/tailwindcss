@@ -69,7 +69,7 @@ test(
       'src/index.html': html`
         <h1>🤠👋</h1>
         <div
-          class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(spacing[1.5])]"
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(screens.md)]"
         ></div>
       `,
       'src/input.css': css`
@@ -93,7 +93,7 @@ test(
       --- ./src/index.html ---
       <h1>🤠👋</h1>
       <div
-        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)] ml-[var(--spacing-1_5)]"
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)] ml-[var(--breakpoint-md)]"
       ></div>
 
       --- ./src/input.css ---
@@ -154,7 +154,7 @@ test(
       candidate`bg-linear-to-t`,
       candidate`bg-[var(--my-red)]`,
       candidate`max-w-[var(--breakpoint-md)]`,
-      candidate`ml-[var(--spacing-1\_5)`,
+      candidate`ml-[var(--breakpoint-md)`,
     ])
   },
 )
