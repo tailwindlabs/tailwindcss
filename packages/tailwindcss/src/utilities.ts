@@ -2801,44 +2801,6 @@ export function createUtilities(theme: Theme) {
           decl('font-weight', value),
         ]
       }
-
-      switch (candidate.value.value) {
-        case 'thin':
-          value = '100'
-          break
-        case 'extralight':
-          value = '200'
-          break
-        case 'light':
-          value = '300'
-          break
-        case 'normal':
-          value = '400'
-          break
-        case 'medium':
-          value = '500'
-          break
-        case 'semibold':
-          value = '600'
-          break
-        case 'bold':
-          value = '700'
-          break
-        case 'extrabold':
-          value = '800'
-          break
-        case 'black':
-          value = '900'
-          break
-      }
-
-      if (value) {
-        return [
-          atRoot([property('--tw-font-weight')]),
-          decl('--tw-font-weight', value),
-          decl('font-weight', value),
-        ]
-      }
     }
   })
 
