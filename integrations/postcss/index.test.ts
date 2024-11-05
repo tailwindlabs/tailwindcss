@@ -404,7 +404,7 @@ test(
       candidate`hocus:underline`,
       css`
         .text-primary {
-          color: var(--color-primary, black);
+          color: var(--color-primary);
         }
       `,
     ])
@@ -446,7 +446,7 @@ test(
     await fs.expectFileToContain('project-a/dist/out.css', [
       css`
         .text-primary {
-          color: var(--color-primary, red);
+          color: var(--color-primary);
         }
       `,
     ])
