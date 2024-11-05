@@ -90,7 +90,7 @@ test.each([
   ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
-  ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
+  ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
   // `screens` values
   ['max-w-[theme(screens.md)]', 'max-w-[var(--breakpoint-md)]'],

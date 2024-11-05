@@ -386,6 +386,17 @@
   --font-size-9xl: 8rem;
   --font-size-9xl--line-height: 1;
 
+  /* Font weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
   /* Letter spacing */
   --letter-spacing-tighter: -0.05em;
   --letter-spacing-tight: -0.025em;

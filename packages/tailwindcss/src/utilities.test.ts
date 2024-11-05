@@ -12375,11 +12375,6 @@ test('font', async () => {
       font-weight: var(--my-family);
     }
 
-    .font-bold {
-      --tw-font-weight: 700;
-      font-weight: 700;
-    }
-
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
@@ -16430,7 +16425,7 @@ describe('custom utilities', () => {
           }
 
           @utility bar {
-            @apply dark:foo font-bold;
+            @apply dark:foo flex-wrap;
           }
 
           @tailwind utilities;
@@ -16439,8 +16434,7 @@ describe('custom utilities', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bar {
-        --tw-font-weight: 700;
-        font-weight: 700;
+        flex-wrap: wrap;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -16449,19 +16443,6 @@ describe('custom utilities', () => {
           text-decoration-line: underline;
           display: flex;
         }
-      }
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-font-weight: initial;
-          }
-        }
-      }
-
-      @property --tw-font-weight {
-        syntax: "*";
-        inherits: false
       }"
     `)
   })
@@ -16471,7 +16452,7 @@ describe('custom utilities', () => {
       compileCss(
         css`
           @utility foo {
-            @apply font-bold hover:bar;
+            @apply flex-wrap hover:bar;
           }
 
           @utility bar {
@@ -16495,7 +16476,7 @@ describe('custom utilities', () => {
             .bar {
               .baz {
                 .qux {
-                  @apply font-bold hover:bar;
+                  @apply flex-wrap hover:bar;
                 }
               }
             }
