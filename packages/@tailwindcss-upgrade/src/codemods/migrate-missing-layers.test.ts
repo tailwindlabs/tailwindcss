@@ -120,13 +120,13 @@ it('should migrate rules above the `@tailwind base` directive in an `@layer base
     "@charset "UTF-8";
     @layer foo, bar, baz;
 
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-
     /**! 
      * License header
      */
+
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
 
     @layer base {
       html {

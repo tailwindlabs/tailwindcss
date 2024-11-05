@@ -50,11 +50,26 @@ export function sortBuckets(): Plugin {
           return WalkAction.Skip
         }
 
-        // Comments belong to the "next" bucket. If a bucket contains comments
-        // at the end, they belong to the next bucket.
+        // Comments belong to the bucket of the nearest node, which is typically
+        // in the "next" bucket.
         if (node.type === 'comment') {
-          comments.push(node)
-          return
+          // We already have comments, which means that we already have nodes
+          // that belong in the next bucket, so we should move the current
+          // comment into the next bucket as well.
+          if (comments.length > 0) {
+            comments.push(node)
+            return
+          }
+
+          // Figure out the closest node to the comment
+          let prevDistance = distance(node.prev(), node) ?? Infinity
+          let nextDistance = distance(node, node.next()) ?? Infinity
+
+          if (prevDistance < nextDistance) {
+            buckets.get(lastLayer).nodes?.push(node)
+          } else {
+            comments.push(node)
+          }
         }
 
         // Known at-rules
@@ -139,4 +154,15 @@ export function sortBuckets(): Plugin {
     postcssPlugin: '@tailwindcss/upgrade/sort-buckets',
     OnceExit: migrate,
   }
+}
+
+function distance(before?: ChildNode, after?: ChildNode): number | null {
+  if (!before || !after) return null
+  if (!before.source || !after.source) return null
+  if (!before.source.start || !after.source.start) return null
+  if (!before.source.end || !after.source.end) return null
+
+  // Compare end of Before, to start of After
+  let d = Math.abs(before.source.end.line - after.source.start.line)
+  return d
 }

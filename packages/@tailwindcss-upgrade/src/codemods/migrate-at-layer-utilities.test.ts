@@ -778,9 +778,7 @@ describe('comments', () => {
         /* After */
       `),
     ).toMatchInlineSnapshot(`
-      "/* After */
-
-      /* Tailwind Utilities: */
+      "/* Tailwind Utilities: */
       @utility no-scrollbar {
         /* Chrome, Safari and Opera */
         /* Second comment */
@@ -801,6 +799,7 @@ describe('comments', () => {
       .before {
         /* Inside */
       }
+      /* After */
 
       /* Above */
       .after {
