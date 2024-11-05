@@ -69,8 +69,8 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('sm', ['--radius'])).toEqual('0.33rem')
   expect(theme.resolve('blink', ['--animate'])).toEqual('blink 1s linear infinite')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
-  expect(theme.resolve('sans', ['--font-family'])).toEqual('Inter, system-ui, sans-serif')
-  expect(theme.resolveWith('mono', ['--font-family'], ['--font-variation-settings'])).toEqual([
+  expect(theme.resolve('sans', ['--font'])).toEqual('Inter, system-ui, sans-serif')
+  expect(theme.resolveWith('mono', ['--font'], ['--font-variation-settings'])).toEqual([
     'Potato Mono',
     { '--font-variation-settings': '"XHGT" 0.7' },
   ])

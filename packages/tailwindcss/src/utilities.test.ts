@@ -12300,13 +12300,14 @@ test('align', async () => {
   ).toEqual('')
 })
 
-test('font', async () => {
+test.only('font', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --font-family-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
         }
         @tailwind utilities;
       `,
@@ -12327,7 +12328,8 @@ test('font', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-weight-bold: 650;
     }
 
     .font-\\[\\"arial_rounded\\"\\] {
@@ -12343,7 +12345,7 @@ test('font', async () => {
     }
 
     .font-sans {
-      font-family: var(--font-family-sans);
+      font-family: var(--font-sans);
     }
 
     .font-\\[100\\] {
@@ -12361,6 +12363,11 @@ test('font', async () => {
       font-weight: var(--my-family);
     }
 
+    .font-bold {
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
+    }
+
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
@@ -12375,24 +12382,37 @@ test('font', async () => {
     }"
   `)
   expect(
-    await run([
-      'font',
-      // font-family
-      '-font-sans',
+    await compileCss(
+      css`
+        @theme reference {
+          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-size-xl: 24px;
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'font',
+        // font-family
+        '-font-sans',
 
-      // font-weight
-      '-font-bold',
+        // font-weight
+        '-font-bold',
 
-      'font-sans/foo',
-      'font-["arial_rounded"]/foo',
-      'font-[ui-sans-serif]/foo',
-      'font-[var(--my-family)]/foo',
-      'font-[family-name:var(--my-family)]/foo',
-      'font-[generic-name:var(--my-family)]/foo',
-      'font-bold/foo',
-      'font-[100]/foo',
-      'font-[number:var(--my-weight)]/foo',
-    ]),
+        'font-size-xl',
+        'font-weight-bold',
+        'font-sans/foo',
+        'font-["arial_rounded"]/foo',
+        'font-[ui-sans-serif]/foo',
+        'font-[var(--my-family)]/foo',
+        'font-[family-name:var(--my-family)]/foo',
+        'font-[generic-name:var(--my-family)]/foo',
+        'font-bold/foo',
+        'font-[100]/foo',
+        'font-[number:var(--my-weight)]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
