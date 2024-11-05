@@ -91,7 +91,7 @@ test('CSS variables output by the theme are prefixed', async () => {
       --tw-breakpoint-sm: 640px;
     }
     .tw\\:text-red {
-      color: var(--tw-color-red, #f00);
+      color: var(--tw-color-red);
     }
     "
   `)
@@ -219,7 +219,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".tw\\:bg-potato {
-      background-color: var(--tw-color-potato, #7a4724);
+      background-color: var(--tw-color-potato);
     }
     .tw\\:custom {
       color: red;
@@ -279,27 +279,27 @@ test('a prefix can be configured via @import prefix(…)', async () => {
 
   expect(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom']))
     .toMatchInlineSnapshot(`
-    ":root {
-      --tw-color-potato: #7a4724;
-    }
-    .tw\\:bg-potato {
-      background-color: var(--tw-color-potato, #7a4724);
-    }
-    .tw\\:custom {
-      color: red;
-    }
-    .tw\\:underline {
-      text-decoration-line: underline;
-    }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
+      ":root {
+        --tw-color-potato: #7a4724;
+      }
+      .tw\\:bg-potato {
+        background-color: var(--tw-color-potato);
+      }
+      .tw\\:custom {
+        color: red;
+      }
+      .tw\\:underline {
+        text-decoration-line: underline;
+      }
+      .tw\\:hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
         }
       }
-    }
-    "
-  `)
+      "
+    `)
 
   // Non-prefixed utilities are ignored
   compiler = await compile(input, {
