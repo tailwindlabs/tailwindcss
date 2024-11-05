@@ -511,9 +511,7 @@ describe('variant stacking', () => {
         .before\\:hover\\:flex:before:hover {
           display: flex;
         }
-      }
 
-      @media (hover: hover) {
         .hover\\:before\\:flex:hover:before {
           content: var(--tw-content);
           display: flex;
@@ -914,32 +912,14 @@ describe('sorting', () => {
         .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
           display: flex;
         }
-      }
 
-      @media (hover: hover) {
         @media (hover: hover) {
-          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
+          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *), .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
             display: flex;
           }
         }
-      }
 
-      @media (hover: hover) {
-        @media (hover: hover) {
-          .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
-            display: flex;
-          }
-        }
-      }
-
-      @media (hover: hover) {
-        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
-          display: flex;
-        }
-      }
-
-      @media (hover: hover) {
-        .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *), .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
           display: flex;
         }
       }
@@ -949,22 +929,12 @@ describe('sorting', () => {
       }
 
       @media (hover: hover) {
-        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
+        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *), .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
           display: flex;
         }
       }
 
-      @media (hover: hover) {
-        .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
-          display: flex;
-        }
-      }
-
-      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
-        display: flex;
-      }
-
-      .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
+      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *), .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
         display: flex;
       }
 
@@ -2198,11 +2168,7 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-          display: flex;
-        }
-
-        .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 
@@ -2386,11 +2352,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-selected\\:underline:is(:where(.group)[data-selected] *) {
-            text-decoration-line: underline;
-          }
-
-          .selected\\:underline[data-selected] {
+          .group-selected\\:underline:is(:where(.group)[data-selected] *), .selected\\:underline[data-selected] {
             text-decoration-line: underline;
           }
         }"
@@ -2414,11 +2376,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
-            text-decoration-line: underline;
-          }
-
-          .hocus\\:underline:hover, .hocus\\:underline:focus {
+          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }"
@@ -2445,11 +2403,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
-            text-decoration-line: underline;
-          }
-
-          .hocus\\:underline:hover, .hocus\\:underline:focus {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }"
@@ -2583,13 +2537,7 @@ describe('@variant', () => {
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
           @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *) {
-              text-decoration-line: underline;
-            }
-          }
-
-          @media (hover: hover) {
-            .hocus\\:underline:hover {
+            .group-hocus\\:underline:is(:where(.group):hover *), .hocus\\:underline:hover {
               text-decoration-line: underline;
             }
           }
@@ -2745,11 +2693,7 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-          display: flex;
-        }
-
-        .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 

@@ -6386,16 +6386,22 @@ test('color-scheme', async () => {
     ".scheme-dark {
       --lightningcss-light: ;
       --lightningcss-dark: initial;
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
       color-scheme: dark;
     }
 
     .scheme-light {
       --lightningcss-light: initial;
       --lightningcss-dark: ;
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       color-scheme: light;
     }
 
     .scheme-light-dark {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       --lightningcss-light: initial;
       --lightningcss-dark: ;
       color-scheme: light dark;
@@ -6415,10 +6421,14 @@ test('color-scheme', async () => {
     .scheme-only-dark {
       --lightningcss-light: ;
       --lightningcss-dark: initial;
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
       color-scheme: dark only;
     }
 
     .scheme-only-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       --lightningcss-light: initial;
       --lightningcss-dark: ;
       color-scheme: light only;
@@ -8100,15 +8110,7 @@ test('divide-color', async () => {
       border-color: #08c;
     }
 
-    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)) {
-      border-color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
+    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: oklch(59.9824% .14119 241.555 / .5);
     }
 
@@ -8116,15 +8118,7 @@ test('divide-color', async () => {
       border-color: currentColor;
     }
 
-    :where(.divide-current\\/50 > :not(:last-child)) {
-      border-color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
+    :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
@@ -8136,15 +8130,7 @@ test('divide-color', async () => {
       border-color: var(--color-red-500);
     }
 
-    :where(.divide-red-500\\/50 > :not(:last-child)) {
-      border-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
-    }
-
-    :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
-    }
-
-    :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
+    :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
@@ -12553,15 +12539,7 @@ test('placeholder', async () => {
       color: #08c;
     }
 
-    .placeholder-\\[\\#0088cc\\]\\/50::placeholder {
-      color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder {
-      color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
+    .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
       color: oklch(59.9824% .14119 241.555 / .5);
     }
 
@@ -12569,15 +12547,7 @@ test('placeholder', async () => {
       color: currentColor;
     }
 
-    .placeholder-current\\/50::placeholder {
-      color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    .placeholder-current\\/\\[0\\.5\\]::placeholder {
-      color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    .placeholder-current\\/\\[50\\%\\]::placeholder {
+    .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
       color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
@@ -12589,15 +12559,7 @@ test('placeholder', async () => {
       color: var(--color-red-500);
     }
 
-    .placeholder-red-500\\/50::placeholder {
-      color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
-    }
-
-    .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
-      color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
-    }
-
-    .placeholder-red-500\\/\\[50\\%\\]::placeholder {
+    .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
       color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
@@ -12696,20 +12658,24 @@ test('decoration', async () => {
 
     .decoration-\\[color\\:var\\(--my-color\\)\\] {
       -webkit-text-decoration-color: var(--my-color);
+      -webkit-text-decoration-color: var(--my-color);
       text-decoration-color: var(--my-color);
     }
 
     .decoration-\\[color\\:var\\(--my-color\\)\\]\\/50, .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
     }
 
     .decoration-\\[var\\(--my-color\\)\\] {
       -webkit-text-decoration-color: var(--my-color);
+      -webkit-text-decoration-color: var(--my-color);
       text-decoration-color: var(--my-color);
     }
 
     .decoration-\\[var\\(--my-color\\)\\]\\/50, .decoration-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .decoration-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
     }
@@ -12720,20 +12686,24 @@ test('decoration', async () => {
 
     .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
       -webkit-text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
       text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
     .decoration-inherit {
+      -webkit-text-decoration-color: inherit;
       -webkit-text-decoration-color: inherit;
       text-decoration-color: inherit;
     }
 
     .decoration-red-500 {
       -webkit-text-decoration-color: var(--color-red-500);
+      -webkit-text-decoration-color: var(--color-red-500);
       text-decoration-color: var(--color-red-500);
     }
 
     .decoration-red-500\\/50, .decoration-red-500\\/\\[0\\.5\\], .decoration-red-500\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
       -webkit-text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
       text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
@@ -12787,7 +12757,7 @@ test('decoration', async () => {
     }
 
     .decoration-\\[50\\%\\] {
-      text-decoration-thickness: calc(1em / 2);
+      text-decoration-thickness: .5em;
     }
 
     .decoration-\\[length\\:var\\(--my-thickness\\)\\], .decoration-\\[percentage\\:var\\(--my-thickness\\)\\] {
@@ -13616,7 +13586,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
@@ -13683,7 +13653,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
     }
