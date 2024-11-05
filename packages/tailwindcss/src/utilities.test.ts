@@ -13781,8 +13781,8 @@ test('ease', async () => {
     await compileCss(
       css`
         @theme {
-          --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
-          --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);
+          --ease-in: cubic-bezier(0.4, 0, 1, 1);
+          --ease-out: cubic-bezier(0, 0, 0.2, 1);
         }
         @tailwind utilities;
       `,
@@ -13790,8 +13790,8 @@ test('ease', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --transition-timing-function-in: cubic-bezier(.4, 0, 1, 1);
-      --transition-timing-function-out: cubic-bezier(0, 0, .2, 1);
+      --ease-in: cubic-bezier(.4, 0, 1, 1);
+      --ease-out: cubic-bezier(0, 0, .2, 1);
     }
 
     .ease-\\[var\\(--value\\)\\] {
@@ -13800,13 +13800,13 @@ test('ease', async () => {
     }
 
     .ease-in {
-      --tw-ease: var(--transition-timing-function-in);
-      transition-timing-function: var(--transition-timing-function-in);
+      --tw-ease: var(--ease-in);
+      transition-timing-function: var(--ease-in);
     }
 
     .ease-out {
-      --tw-ease: var(--transition-timing-function-out);
-      transition-timing-function: var(--transition-timing-function-out);
+      --tw-ease: var(--ease-out);
+      transition-timing-function: var(--ease-out);
     }
 
     @supports (-moz-orient: inline) {

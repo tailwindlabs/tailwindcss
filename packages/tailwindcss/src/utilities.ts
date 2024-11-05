@@ -3538,7 +3538,7 @@ export function createUtilities(theme: Theme) {
       ['transition-timing-function', 'linear'],
     ])
     functionalUtility('ease', {
-      themeKeys: ['--transition-timing-function'],
+      themeKeys: ['--ease'],
       handle: (value) => [
         transitionTimingFunctionProperty(),
         decl('--tw-ease', value),
