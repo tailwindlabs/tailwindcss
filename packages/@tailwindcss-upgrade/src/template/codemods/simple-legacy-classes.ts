@@ -13,6 +13,23 @@ const LEGACY_CLASS_MAP = {
   'flex-shrink-0': 'shrink-0',
   'decoration-clone': 'box-decoration-clone',
   'decoration-slice': 'box-decoration-slice',
+
+  shadow: 'shadow-sm',
+  'shadow-sm': 'shadow-xs',
+  'shadow-xs': 'shadow-2xs',
+
+  'inset-shadow': 'inset-shadow-sm',
+  'inset-shadow-sm': 'inset-shadow-xs',
+  'inset-shadow-xs': 'inset-shadow-2xs',
+
+  'drop-shadow': 'drop-shadow-sm',
+  'drop-shadow-sm': 'drop-shadow-xs',
+
+  rounded: 'rounded-sm',
+  'rounded-sm': 'rounded-xs',
+
+  blur: 'blur-sm',
+  'blur-sm': 'blur-xs',
 }
 
 const SEEDED = new WeakSet<DesignSystem>()
