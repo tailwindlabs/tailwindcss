@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix crash when using `@source` containing `..` ([#14831](https://github.com/tailwindlabs/tailwindcss/pull/14831))
 - Ensure instances of the same variant with different values are always sorted deterministically (e.g. `data-focus:flex` and `data-active:flex`) ([#14835](https://github.com/tailwindlabs/tailwindcss/pull/14835))
 - Ensure `--inset-ring=*` and `--inset-shadow-*` variables are ignored by `inset-*` utilities ([#14855](https://github.com/tailwindlabs/tailwindcss/pull/14855))
+- Ensure `url(…)` containing special characters such as `;` or `{}` end up in one declaration ([#14879](https://github.com/tailwindlabs/tailwindcss/pull/14879))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 
