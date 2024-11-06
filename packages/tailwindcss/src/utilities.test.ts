@@ -13638,7 +13638,7 @@ test('transition', async () => {
   expect(
     await compileCss(
       css`
-        @theme inline {
+        @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
         }
@@ -13654,20 +13654,20 @@ test('transition', async () => {
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-timing-function: var(--tw-ease, ease);
-      transition-duration: var(--tw-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-all {
       transition-property: all;
-      transition-timing-function: var(--tw-ease, ease);
-      transition-duration: var(--tw-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-colors {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-      transition-timing-function: var(--tw-ease, ease);
-      transition-duration: var(--tw-duration, .1s);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }"
   `)
 
