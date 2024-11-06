@@ -453,7 +453,7 @@ async function parseCss(
     firstThemeRule.nodes = nodes
   }
 
-  // Replace the `@tailwind utilities` node with a conext since it prints
+  // Replace the `@tailwind utilities` node with a context since it prints
   // children directly.
   if (utilitiesNode) {
     let node = utilitiesNode as AstNode as Context
