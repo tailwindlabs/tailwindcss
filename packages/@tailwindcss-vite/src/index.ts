@@ -298,6 +298,8 @@ function optimizeCss(
     }).code
   }
 
+  // Running Lightning CSS twice to ensure that adjacent rules are merged after
+  // nesting is applied. This creates a more optimized output.
   return optimize(optimize(Buffer.from(input))).toString()
 }
 
