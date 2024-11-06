@@ -618,11 +618,10 @@ describe('theme function', () => {
           'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         ],
         ['width.xs', '20rem'],
-        ['transition.timing.function.in.out', 'cubic-bezier(.4, 0, .2, 1)'],
+        ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
-
         let compiled = await compileCss(css`
           ${defaultTheme}
           .custom {
