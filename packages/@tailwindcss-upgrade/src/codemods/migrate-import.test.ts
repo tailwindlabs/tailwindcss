@@ -1,22 +1,13 @@
-import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import type { UserConfig } from '../../../tailwindcss/src/compat/config/types'
 import { migrateImport } from './migrate-import'
 
 const css = dedent
 
-async function migrate(input: string, userConfig: UserConfig = {}) {
+async function migrate(input: string) {
   return postcss()
-    .use(
-      migrateImport({
-        designSystem: await __unstable__loadDesignSystem(`@import 'tailwindcss';`, {
-          base: __dirname,
-        }),
-        userConfig,
-      }),
-    )
+    .use(migrateImport())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
