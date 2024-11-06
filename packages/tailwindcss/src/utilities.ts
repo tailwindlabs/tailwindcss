@@ -2778,8 +2778,9 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolveWith(
         candidate.value.value,
-        ['--font-family'],
+        ['--font'],
         ['--font-feature-settings', '--font-variation-settings'],
+        ['--font-weight', '--font-size'],
       )
       if (value) {
         let [families, options = {}] = value
