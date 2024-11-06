@@ -92,8 +92,9 @@ test.each([
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
-  // `screens` values
+  // Renamed theme keys
   ['max-w-[theme(screens.md)]', 'max-w-[var(--breakpoint-md)]'],
+  ['w-[theme(maxWidth.md)]', 'w-[var(--container-md)]'],
 
   // Invalid cases
   ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
