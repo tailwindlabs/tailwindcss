@@ -14,7 +14,7 @@ export function formatNodes(): Plugin {
         child.raws.semicolon = true
       }
 
-      if (child.type === 'atrule' && child.name === 'bucket') {
+      if (child.type === 'atrule' && child.name === 'tw-bucket') {
         nodesToFormat.push(child)
       } else if (child.raws.tailwind_pretty) {
         // @ts-expect-error We might not have a parent
@@ -28,12 +28,12 @@ export function formatNodes(): Plugin {
     // Format the nodes
     for (let node of nodesToFormat) {
       let contents = (() => {
-        if (node.type === 'atrule' && node.name === 'bucket') {
-          // Remove the `@bucket` wrapping, and use the contents directly.
+        if (node.type === 'atrule' && node.name === 'tw-bucket') {
+          // Remove the `@tw-bucket` wrapping, and use the contents directly.
           return node
             .toString()
             .trim()
-            .replace(/@bucket(.*?){([\s\S]*)}/, '$2')
+            .replace(/@tw-bucket(.*?){([\s\S]*)}/, '$2')
         }
 
         return node.toString()
@@ -41,13 +41,13 @@ export function formatNodes(): Plugin {
 
       // Do not format the user bucket to ensure we keep the user's formatting
       // intact.
-      if (node.type === 'atrule' && node.name === 'bucket' && node.params === 'user') {
+      if (node.type === 'atrule' && node.name === 'tw-bucket' && node.params === 'user') {
         output.push(contents)
         continue
       }
 
       // Format buckets
-      if (node.type === 'atrule' && node.name === 'bucket') {
+      if (node.type === 'atrule' && node.name === 'tw-bucket') {
         output.push(await format(contents, { parser: 'css', semi: true, singleQuote: true }))
         continue
       }

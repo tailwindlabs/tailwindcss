@@ -102,7 +102,7 @@ async function migrateTheme(
   )
 
   let prevSectionKey = ''
-  let css = '\n@bucket theme {\n'
+  let css = '\n@tw-bucket theme {\n'
   css += `\n@theme {\n`
   let containsThemeKeys = false
   for (let [key, value] of themeableValues(resolvedConfig.theme)) {
@@ -145,7 +145,7 @@ async function migrateTheme(
   }
 
   css += '}\n' // @theme
-  css += '}\n' // @bucket
+  css += '}\n' // @tw-bucket
 
   return css
 }
@@ -159,7 +159,7 @@ function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
   if (variant === '') {
     return ''
   }
-  return `\n@bucket variant {\n@variant dark (${variant});\n}\n`
+  return `\n@tw-bucket variant {\n@variant dark (${variant});\n}\n`
 }
 
 // Returns a string identifier used to section theme declarations

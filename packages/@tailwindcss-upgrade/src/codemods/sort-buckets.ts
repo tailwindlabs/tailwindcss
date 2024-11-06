@@ -28,13 +28,13 @@ export function sortBuckets(): Plugin {
       let comments: Comment[] = []
 
       let buckets = new DefaultMap<string, AtRule>((name) => {
-        let bucket = postcss.atRule({ name: 'bucket', params: name, nodes: [] })
+        let bucket = postcss.atRule({ name: 'tw-bucket', params: name, nodes: [] })
         root.append(bucket)
         return bucket
       })
 
       // Seed the buckets with existing buckets
-      root.walkAtRules('bucket', (node) => {
+      root.walkAtRules('tw-bucket', (node) => {
         buckets.set(node.params, node)
       })
 
@@ -46,7 +46,7 @@ export function sortBuckets(): Plugin {
 
       walk(root, (node) => {
         // Already in a bucket, skip it
-        if (node.type === 'atrule' && node.name === 'bucket') {
+        if (node.type === 'atrule' && node.name === 'tw-bucket') {
           return WalkAction.Skip
         }
 
@@ -108,9 +108,9 @@ export function sortBuckets(): Plugin {
       }
     }
 
-    // 2. Merge `@bucket` with the same name together
+    // 2. Merge `@tw-bucket` with the same name together
     let firstBuckets = new Map<string, AtRule>()
-    root.walkAtRules('bucket', (node) => {
+    root.walkAtRules('tw-bucket', (node) => {
       let firstBucket = firstBuckets.get(node.params)
       if (!firstBucket) {
         firstBuckets.set(node.params, node)
@@ -122,14 +122,14 @@ export function sortBuckets(): Plugin {
       }
     })
 
-    // 3. Remove empty `@bucket`
-    root.walkAtRules('bucket', (node) => {
+    // 3. Remove empty `@tw-bucket`
+    root.walkAtRules('tw-bucket', (node) => {
       if (!node.nodes?.length) {
         node.remove()
       }
     })
 
-    // 4. Sort the `@bucket` themselves
+    // 4. Sort the `@tw-bucket` themselves
     {
       let sorted = Array.from(firstBuckets.values()).sort((a, z) => {
         let aIndex = BUCKET_ORDER.indexOf(a.params)

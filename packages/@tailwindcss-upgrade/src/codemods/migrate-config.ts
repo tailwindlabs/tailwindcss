@@ -38,14 +38,14 @@ export function migrateConfig(
       })
 
       let css = '\n\n'
-      css += '\n@bucket source {'
+      css += '\n@tw-bucket source {'
       for (let source of jsConfigMigration.sources) {
         let absolute = path.resolve(source.base, source.pattern)
         css += `@source '${relativeToStylesheet(sheet, absolute)}';\n`
       }
       css += '}\n'
 
-      css += '\n@bucket plugin {\n'
+      css += '\n@tw-bucket plugin {\n'
       for (let plugin of jsConfigMigration.plugins) {
         let relative =
           plugin.path[0] === '.'
@@ -73,7 +73,7 @@ export function migrateConfig(
           css += '}\n' // @plugin
         }
       }
-      css += '}\n' // @bucket
+      css += '}\n' // @tw-bucket
 
       cssConfig.append(postcss.parse(css + jsConfigMigration.css))
     }

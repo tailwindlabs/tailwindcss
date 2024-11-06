@@ -7,7 +7,7 @@ function markPretty(): Plugin {
   return {
     postcssPlugin: '@tailwindcss/upgrade/mark-pretty',
     OnceExit(root) {
-      root.walkAtRules('format', (atRule) => {
+      root.walkAtRules('tw-format', (atRule) => {
         atRule.raws.tailwind_pretty = true
       })
     },
@@ -34,9 +34,9 @@ it('should format PostCSS nodes', async () => {
 })
 
 it('should format PostCSS nodes in the `user` bucket', async () => {
-  expect(await migrate(`@bucket user { @format .bar { .foo { color: red; } } }`))
+  expect(await migrate(`@tw-bucket user { @tw-format .bar { .foo { color: red; } } }`))
     .toMatchInlineSnapshot(`
-      "@format .bar {
+      "@tw-format .bar {
         .foo {
           color: red;
         }

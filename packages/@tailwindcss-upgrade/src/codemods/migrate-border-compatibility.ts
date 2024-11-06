@@ -85,7 +85,7 @@ export function migrateBorderCompatibility({
     }
 
     compatibilityCssString += BORDER_WIDTH_COMPATIBILITY_CSS
-    compatibilityCssString = `\n@bucket compatibility {\n${compatibilityCssString}\n}\n`
+    compatibilityCssString = `\n@tw-bucket compatibility {\n${compatibilityCssString}\n}\n`
     let compatibilityCss = postcss.parse(compatibilityCssString)
 
     // Replace the `theme(…)` with v3 values if we can't resolve the theme
