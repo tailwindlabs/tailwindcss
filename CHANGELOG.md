@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove default `--spacing-*` scale in favor of `--spacing` multiplier ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Remove `var(…)` fallbacks from theme values in utilities ([#14881](https://github.com/tailwindlabs/tailwindcss/pull/14881))
 - Remove static `font-weight` utilities and add `--font-weight-*` values to the default theme ([#14883](https://github.com/tailwindlabs/tailwindcss/pull/14883))
+- Rename `--transition-timing-function-*` variables to `--ease-*` ([#14886](https://github.com/tailwindlabs/tailwindcss/pull/14886))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
