@@ -2,6 +2,8 @@ import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
 import { themeToVar } from './theme-to-var'
 
+let css = String.raw
+
 test.each([
   // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
   ['[color:red]', '[color:red]'],
@@ -88,7 +90,7 @@ test.each([
   ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
-  ['[--foo:theme(fontWeight.semibold)]', '[--foo:theme(fontWeight.semibold)]'],
+  ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
   // `screens` values
   ['max-w-[theme(screens.md)]', 'max-w-[var(--breakpoint-md)]'],
@@ -107,9 +109,51 @@ test.each([
     '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
   ],
 ])('%s => %s', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @theme {
+        --spacing-px: 1px;
+        --spacing-0: 0px;
+        --spacing-0_5: 0.125rem;
+        --spacing-1: 0.25rem;
+        --spacing-1_5: 0.375rem;
+        --spacing-2: 0.5rem;
+        --spacing-2_5: 0.625rem;
+        --spacing-3: 0.75rem;
+        --spacing-3_5: 0.875rem;
+        --spacing-4: 1rem;
+        --spacing-5: 1.25rem;
+        --spacing-6: 1.5rem;
+        --spacing-7: 1.75rem;
+        --spacing-8: 2rem;
+        --spacing-9: 2.25rem;
+        --spacing-10: 2.5rem;
+        --spacing-11: 2.75rem;
+        --spacing-12: 3rem;
+        --spacing-14: 3.5rem;
+        --spacing-16: 4rem;
+        --spacing-20: 5rem;
+        --spacing-24: 6rem;
+        --spacing-28: 7rem;
+        --spacing-32: 8rem;
+        --spacing-36: 9rem;
+        --spacing-40: 10rem;
+        --spacing-44: 11rem;
+        --spacing-48: 12rem;
+        --spacing-52: 13rem;
+        --spacing-56: 14rem;
+        --spacing-60: 15rem;
+        --spacing-64: 16rem;
+        --spacing-72: 18rem;
+        --spacing-80: 20rem;
+        --spacing-96: 24rem;
+      }
+    `,
+    {
+      base: __dirname,
+    },
+  )
 
   expect(themeToVar(designSystem, {}, candidate)).toEqual(result)
 })

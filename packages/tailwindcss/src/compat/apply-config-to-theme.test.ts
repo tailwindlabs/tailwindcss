@@ -56,6 +56,10 @@ test('config values can be merged into the theme', () => {
             '0.5': '60%',
             '100%': '100%',
           },
+
+          transitionTimingFunction: {
+            fast: 'cubic-bezier(0, 0.55, 0.45, 1)',
+          },
         },
       },
       base: '/root',
@@ -69,8 +73,8 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('sm', ['--radius'])).toEqual('0.33rem')
   expect(theme.resolve('blink', ['--animate'])).toEqual('blink 1s linear infinite')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
-  expect(theme.resolve('sans', ['--font-family'])).toEqual('Inter, system-ui, sans-serif')
-  expect(theme.resolveWith('mono', ['--font-family'], ['--font-variation-settings'])).toEqual([
+  expect(theme.resolve('sans', ['--font'])).toEqual('Inter, system-ui, sans-serif')
+  expect(theme.resolveWith('mono', ['--font'], ['--font-variation-settings'])).toEqual([
     'Potato Mono',
     { '--font-variation-settings': '"XHGT" 0.7' },
   ])
@@ -83,6 +87,7 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
   expect(theme.resolve('0.5', ['--width'])).toEqual('60%')
   expect(theme.resolve('100%', ['--width'])).toEqual('100%')
+  expect(theme.resolve('fast', ['--ease'])).toEqual('cubic-bezier(0, 0.55, 0.45, 1)')
 })
 
 test('will reset default theme values with overwriting theme values', () => {

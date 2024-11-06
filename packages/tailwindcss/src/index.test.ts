@@ -49,7 +49,7 @@ describe('compiling CSS', () => {
 
         @media (prefers-color-scheme: dark) {
           .dark\\:bg-black {
-            background-color: var(--color-black, #000);
+            background-color: var(--color-black);
           }
         }
       }"
@@ -241,30 +241,30 @@ describe('@apply', () => {
       .foo {
         --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
-        animation: var(--animate-spin, spin 1s linear infinite);
-        background-color: var(--color-red-500, #ef4444);
+        animation: var(--animate-spin);
+        background-color: var(--color-red-500);
         text-decoration-line: underline;
       }
 
       @media (hover: hover) {
         .foo:hover {
-          background-color: var(--color-blue-500, #3b82f6);
+          background-color: var(--color-blue-500);
         }
       }
 
       @media (width >= 768px) {
         .foo {
-          background-color: var(--color-green-500, #22c55e);
+          background-color: var(--color-green-500);
         }
       }
 
       .foo:hover:focus {
-        background-color: var(--color-red-200, #fecaca);
+        background-color: var(--color-red-200);
       }
 
       @media (width >= 768px) {
         .foo:hover:focus {
-          background-color: var(--color-green-200, #bbf7d0);
+          background-color: var(--color-green-200);
         }
       }
 
@@ -511,9 +511,7 @@ describe('variant stacking', () => {
         .before\\:hover\\:flex:before:hover {
           display: flex;
         }
-      }
 
-      @media (hover: hover) {
         .hover\\:before\\:flex:hover:before {
           content: var(--tw-content);
           display: flex;
@@ -577,7 +575,7 @@ describe('important', () => {
       }
 
       .animate-spin\\! {
-        animation: var(--animate-spin, spin 1s linear infinite) !important;
+        animation: var(--animate-spin) !important;
       }
 
       @keyframes spin {
@@ -623,15 +621,15 @@ describe('sorting', () => {
       }
 
       .p-1 {
-        padding: var(--spacing-1, .25rem);
+        padding: var(--spacing-1);
       }
 
       .px-1 {
-        padding-inline: var(--spacing-1, .25rem);
+        padding-inline: var(--spacing-1);
       }
 
       .pl-1 {
-        padding-left: var(--spacing-1, .25rem);
+        padding-left: var(--spacing-1);
       }"
     `)
   })
@@ -680,16 +678,16 @@ describe('sorting', () => {
       }
 
       .mx-0 {
-        margin-inline: var(--spacing-0, 0px);
+        margin-inline: var(--spacing-0);
       }
 
       .gap-4 {
-        gap: var(--spacing-4, 1rem);
+        gap: var(--spacing-4);
       }
 
       :where(.space-x-2 > :not(:last-child)) {
-        margin-inline-start: calc(var(--spacing-2, .5rem) * var(--tw-space-x-reverse));
-        margin-inline-end: calc(var(--spacing-2, .5rem) * calc(1 - var(--tw-space-x-reverse)));
+        margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
+        margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
       }
 
       @supports (-moz-orient: inline) {
@@ -749,51 +747,51 @@ describe('sorting', () => {
       }
 
       .mx-3 {
-        margin-inline: var(--spacing-3, 3px);
+        margin-inline: var(--spacing-3);
       }
 
       .ms-1 {
-        margin-inline-start: var(--spacing-1, 1px);
+        margin-inline-start: var(--spacing-1);
       }
 
       .me-2 {
-        margin-inline-end: var(--spacing-2, 2px);
+        margin-inline-end: var(--spacing-2);
       }
 
       .scroll-mx-3 {
-        scroll-margin-inline: var(--spacing-3, 3px);
+        scroll-margin-inline: var(--spacing-3);
       }
 
       .scroll-ms-1 {
-        scroll-margin-inline-start: var(--spacing-1, 1px);
+        scroll-margin-inline-start: var(--spacing-1);
       }
 
       .scroll-me-2 {
-        scroll-margin-inline-end: var(--spacing-2, 2px);
+        scroll-margin-inline-end: var(--spacing-2);
       }
 
       .scroll-px-3 {
-        scroll-padding-inline: var(--spacing-3, 3px);
+        scroll-padding-inline: var(--spacing-3);
       }
 
       .scroll-ps-1 {
-        scroll-padding-inline-start: var(--spacing-1, 1px);
+        scroll-padding-inline-start: var(--spacing-1);
       }
 
       .scroll-pe-2 {
-        scroll-padding-inline-end: var(--spacing-2, 2px);
+        scroll-padding-inline-end: var(--spacing-2);
       }
 
       .px-3 {
-        padding-inline: var(--spacing-3, 3px);
+        padding-inline: var(--spacing-3);
       }
 
       .ps-1 {
-        padding-inline-start: var(--spacing-1, 1px);
+        padding-inline-start: var(--spacing-1);
       }
 
       .pe-2 {
-        padding-inline-end: var(--spacing-2, 2px);
+        padding-inline-end: var(--spacing-2);
       }"
     `)
   })
@@ -914,32 +912,14 @@ describe('sorting', () => {
         .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
           display: flex;
         }
-      }
 
-      @media (hover: hover) {
         @media (hover: hover) {
-          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
+          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *), .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
             display: flex;
           }
         }
-      }
 
-      @media (hover: hover) {
-        @media (hover: hover) {
-          .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
-            display: flex;
-          }
-        }
-      }
-
-      @media (hover: hover) {
-        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
-          display: flex;
-        }
-      }
-
-      @media (hover: hover) {
-        .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *), .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
           display: flex;
         }
       }
@@ -949,22 +929,12 @@ describe('sorting', () => {
       }
 
       @media (hover: hover) {
-        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
+        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *), .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
           display: flex;
         }
       }
 
-      @media (hover: hover) {
-        .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
-          display: flex;
-        }
-      }
-
-      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
-        display: flex;
-      }
-
-      .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
+      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *), .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
         display: flex;
       }
 
@@ -996,7 +966,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-red-500 {
-        accent-color: var(--color-red-500, red);
+        accent-color: var(--color-red-500);
       }"
     `)
   })
@@ -1019,7 +989,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-red-500 {
-        accent-color: var(--color-red-500, #f10);
+        accent-color: var(--color-red-500);
       }"
     `)
   })
@@ -1045,11 +1015,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-blue-500 {
-        accent-color: var(--color-blue-500, #00f);
+        accent-color: var(--color-blue-500);
       }
 
       .accent-red-500 {
-        accent-color: var(--color-red-500, red);
+        accent-color: var(--color-red-500);
       }"
     `)
   })
@@ -1074,11 +1044,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .w-1\\/2 {
-        width: var(--width-1\\/2, 75%);
+        width: var(--width-1\\/2);
       }
 
       .w-75\\% {
-        width: var(--width-75\\%, 50%);
+        width: var(--width-75\\%);
       }"
     `)
   })
@@ -1111,11 +1081,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-lg {
-        font-size: var(--font-size-lg, 20px);
+        font-size: var(--font-size-lg);
       }
 
       .accent-red {
-        accent-color: var(--color-red, red);
+        accent-color: var(--color-red);
       }
 
       @keyframes foo {
@@ -1164,11 +1134,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-sm {
-        font-size: var(--font-size-sm, 13px);
+        font-size: var(--font-size-sm);
       }
 
       .accent-green {
-        accent-color: var(--color-green, #0f0);
+        accent-color: var(--color-green);
       }"
     `)
   })
@@ -1199,7 +1169,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-green {
-        accent-color: var(--color-green, #0f0);
+        accent-color: var(--color-green);
       }"
     `)
   })
@@ -1237,7 +1207,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .animate-foobar {
-        animation: var(--animate-foobar, foobar 1s infinite);
+        animation: var(--animate-foobar);
       }
 
       @keyframes foobar {
@@ -1268,11 +1238,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato, #ac855b);
+        background-color: var(--color-potato);
       }
 
       .bg-tomato {
-        background-color: var(--color-tomato, #e10c04);
+        background-color: var(--color-tomato);
       }"
     `)
   })
@@ -1293,7 +1263,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato, #c794aa);
+        background-color: var(--color-potato);
       }"
     `)
   })
@@ -1318,7 +1288,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato, #c794aa);
+        background-color: var(--color-potato);
       }"
     `)
   })
@@ -1348,15 +1318,15 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-avocado {
-        background-color: var(--color-avocado, #c0cc6d);
+        background-color: var(--color-avocado);
       }
 
       .bg-potato {
-        background-color: var(--color-potato, #ac855b);
+        background-color: var(--color-potato);
       }
 
       .bg-tomato {
-        background-color: var(--color-tomato, #e10c04);
+        background-color: var(--color-tomato);
       }"
     `)
   })
@@ -1532,7 +1502,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato, #ac855b);
+        background-color: var(--color-potato);
       }"
     `)
   })
@@ -1574,7 +1544,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato, #efb46b);
+        background-color: var(--color-potato);
       }"
     `)
   })
@@ -1625,11 +1595,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato, #ac855b);
+        background-color: var(--color-potato);
       }
 
       .bg-tomato {
-        background-color: var(--color-tomato, tomato);
+        background-color: var(--color-tomato);
       }"
     `)
   })
@@ -1671,7 +1641,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-orange {
-        color: var(--color-orange, orange);
+        color: var(--color-orange);
       }
 
       .text-red {
@@ -1717,7 +1687,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-orange {
-        color: var(--color-orange, orange);
+        color: var(--color-orange);
       }
 
       .text-red {
@@ -2198,11 +2168,7 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-          display: flex;
-        }
-
-        .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 
@@ -2386,11 +2352,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-selected\\:underline:is(:where(.group)[data-selected] *) {
-            text-decoration-line: underline;
-          }
-
-          .selected\\:underline[data-selected] {
+          .group-selected\\:underline:is(:where(.group)[data-selected] *), .selected\\:underline[data-selected] {
             text-decoration-line: underline;
           }
         }"
@@ -2414,11 +2376,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
-            text-decoration-line: underline;
-          }
-
-          .hocus\\:underline:hover, .hocus\\:underline:focus {
+          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }"
@@ -2445,11 +2403,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
-            text-decoration-line: underline;
-          }
-
-          .hocus\\:underline:hover, .hocus\\:underline:focus {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }"
@@ -2583,13 +2537,7 @@ describe('@variant', () => {
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
           @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *) {
-              text-decoration-line: underline;
-            }
-          }
-
-          @media (hover: hover) {
-            .hocus\\:underline:hover {
+            .group-hocus\\:underline:is(:where(.group):hover *), .hocus\\:underline:hover {
               text-decoration-line: underline;
             }
           }
@@ -2745,11 +2693,7 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-          display: flex;
-        }
-
-        .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 

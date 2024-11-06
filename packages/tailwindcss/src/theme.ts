@@ -144,7 +144,7 @@ export class Theme {
       return null
     }
 
-    return `var(${this.#prefixKey(themeKey)}, ${this.values.get(themeKey)?.value})`
+    return `var(${this.#prefixKey(themeKey)})`
   }
 
   resolve(

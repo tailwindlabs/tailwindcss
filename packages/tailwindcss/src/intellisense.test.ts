@@ -8,11 +8,6 @@ const css = String.raw
 
 function loadDesignSystem() {
   let theme = new Theme()
-  theme.add('--spacing-0_5', '0.125rem')
-  theme.add('--spacing-1', '0.25rem')
-  theme.add('--spacing-3', '0.75rem')
-  theme.add('--spacing-4', '1rem')
-  theme.add('--width-4', '1rem')
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')

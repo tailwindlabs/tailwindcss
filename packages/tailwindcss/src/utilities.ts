@@ -256,6 +256,7 @@ export function createUtilities(theme: Theme) {
     ignoredThemeKeys?: ThemeKey[]
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
+    handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string) => AstNode[] | undefined
   }
 
@@ -301,6 +302,12 @@ export function createUtilities(theme: Theme) {
 
         // If there is still no value but the utility supports bare values, then
         // use the bare candidate value as the value.
+        if (value === null && candidate.negative && desc.handleNegativeBareValue) {
+          value = desc.handleNegativeBareValue(candidate.value)
+          if (!value?.includes('/') && candidate.modifier) return
+          if (value !== null) return desc.handle(value)
+        }
+
         if (value === null && desc.handleBareValue) {
           value = desc.handleBareValue(candidate.value)
           if (!value?.includes('/') && candidate.modifier) return
@@ -371,6 +378,92 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
+  function spacingUtility(
+    name: string,
+    themeNamespace: ThemeKey | ThemeKey[],
+    handle: (value: string) => AstNode[] | undefined,
+    {
+      supportsNegative = false,
+      supportsFractions = false,
+      ignoredThemeKeys = [],
+    }: {
+      supportsNegative?: boolean
+      supportsFractions?: boolean
+      ignoredThemeKeys?: ThemeKey[]
+    } = {},
+  ) {
+    utilities.static(`${name}-px`, (candidate) => {
+      if (!supportsNegative && candidate.negative) return
+      return handle(candidate.negative ? '-1px' : '1px')
+    })
+    let themeKeys = ([] as ThemeKey[]).concat(themeNamespace, '--spacing')
+    functionalUtility(name, {
+      themeKeys,
+      ignoredThemeKeys,
+      supportsFractions,
+      supportsNegative,
+      handleBareValue: ({ value }) => {
+        let multiplier = theme.resolve(null, ['--spacing'])
+        if (!multiplier) return null
+
+        let num = Number(value)
+        if (num < 0 || num % 0.25 !== 0 || String(num) !== value) return null
+
+        return `calc(${multiplier} * ${value})`
+      },
+      handleNegativeBareValue: ({ value }) => {
+        let multiplier = theme.resolve(null, ['--spacing'])
+        if (!multiplier) return null
+        return `calc(${multiplier} * -${value})`
+      },
+      handle,
+    })
+
+    suggest(name, () => [
+      {
+        values: [
+          '0',
+          '0.5',
+          '1',
+          '1.5',
+          '2',
+          '2.5',
+          '3',
+          '3.5',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          '11',
+          '12',
+          '14',
+          '16',
+          '20',
+          '24',
+          '28',
+          '32',
+          '36',
+          '40',
+          '44',
+          '48',
+          '52',
+          '56',
+          '60',
+          '64',
+          '72',
+          '80',
+          '96',
+        ],
+        supportsNegative,
+        valueThemeKeys: themeKeys,
+        ignoredThemeKeys: ignoredThemeKeys ?? [],
+      },
+    ])
+  }
+
   /**
    * ----------------
    * Utility matchers
@@ -424,123 +517,28 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `inset`
    */
-  staticUtility('inset-auto', [['inset', 'auto']])
-  utilities.static('inset-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('inset', value)]
-  })
-  functionalUtility('inset', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('inset', value)],
-  })
-
-  staticUtility('inset-x-auto', [['inset-inline', 'auto']])
-
-  utilities.static('inset-x-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('inset-inline', value)]
-  })
-  functionalUtility('inset-x', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('inset-inline', value)],
-  })
-
-  staticUtility('inset-y-auto', [['inset-block', 'auto']])
-  utilities.static('inset-y-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('inset-block', value)]
-  })
-  functionalUtility('inset-y', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('inset-block', value)],
-  })
-
-  staticUtility('start-auto', [['inset-inline-start', 'auto']])
-  utilities.static('start-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('inset-inline-start', value)]
-  })
-  functionalUtility('start', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('inset-inline-start', value)],
-  })
-
-  staticUtility('end-auto', [['inset-inline-end', 'auto']])
-  utilities.static('end-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('inset-inline-end', value)]
-  })
-  functionalUtility('end', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('inset-inline-end', value)],
-  })
-
-  staticUtility('top-auto', [['top', 'auto']])
-  utilities.static('top-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('top', value)]
-  })
-  functionalUtility('top', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('top', value)],
-  })
-
-  staticUtility('right-auto', [['right', 'auto']])
-  utilities.static('right-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('right', value)]
-  })
-  functionalUtility('right', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('right', value)],
-  })
-
-  staticUtility('bottom-auto', [['bottom', 'auto']])
-  utilities.static('bottom-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('bottom', value)]
-  })
-  functionalUtility('bottom', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('bottom', value)],
-  })
-
-  staticUtility('left-auto', [['left', 'auto']])
-  utilities.static('left-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-    return [decl('left', value)]
-  })
-  functionalUtility('left', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--inset', '--spacing'],
-    ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
-    handle: (value) => [decl('left', value)],
-  })
+  for (let [name, property] of [
+    ['inset', 'inset'],
+    ['inset-x', 'inset-inline'],
+    ['inset-y', 'inset-block'],
+    ['start', 'inset-inline-start'],
+    ['end', 'inset-inline-end'],
+    ['top', 'top'],
+    ['right', 'right'],
+    ['bottom', 'bottom'],
+    ['left', 'left'],
+  ] as const) {
+    staticUtility(`${name}-auto`, [[property, 'auto']])
+    utilities.static(`${name}-full`, (candidate) => {
+      let value = candidate.negative ? '-100%' : '100%'
+      return [decl(property, value)]
+    })
+    spacingUtility(name, '--inset', (value) => [decl(property, value)], {
+      supportsNegative: true,
+      supportsFractions: true,
+      ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
+    })
+  }
 
   /**
    * @css `isolation`
@@ -753,25 +751,20 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `margin`
    */
-  for (let [namespace, properties] of [
-    ['m', ['margin']],
-    ['mx', ['margin-inline']],
-    ['my', ['margin-block']],
-    ['ms', ['margin-inline-start']],
-    ['me', ['margin-inline-end']],
-    ['mt', ['margin-top']],
-    ['mr', ['margin-right']],
-    ['mb', ['margin-bottom']],
-    ['ml', ['margin-left']],
+  for (let [namespace, property] of [
+    ['m', 'margin'],
+    ['mx', 'margin-inline'],
+    ['my', 'margin-block'],
+    ['ms', 'margin-inline-start'],
+    ['me', 'margin-inline-end'],
+    ['mt', 'margin-top'],
+    ['mr', 'margin-right'],
+    ['mb', 'margin-bottom'],
+    ['ml', 'margin-left'],
   ] as const) {
-    staticUtility(
-      `${namespace}-auto`,
-      properties.map((property) => [property, 'auto']),
-    )
-    functionalUtility(namespace, {
+    staticUtility(`${namespace}-auto`, [[property, 'auto']])
+    spacingUtility(namespace, '--margin', (value) => [decl(property, value)], {
       supportsNegative: true,
-      themeKeys: ['--margin', '--spacing'],
-      handle: (value) => [...properties.map((property) => decl(property, value))],
     })
   }
 
@@ -862,11 +855,21 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `size`
    * @css `width`
+   * @css `min-width`
+   * @css `max-width`
    * @css `height`
+   * @css `min-height`
+   * @css `max-height`
    */
   for (let [key, value] of [
     ['auto', 'auto'],
     ['full', '100%'],
+    ['svw', '100svw'],
+    ['lvw', '100lvw'],
+    ['dvw', '100dvw'],
+    ['svh', '100svh'],
+    ['lvh', '100lvh'],
+    ['dvh', '100dvh'],
     ['min', 'min-content'],
     ['max', 'max-content'],
     ['fit', 'fit-content'],
@@ -876,132 +879,47 @@ export function createUtilities(theme: Theme) {
       ['width', value],
       ['height', value],
     ])
-  }
-  functionalUtility('size', {
-    supportsFractions: true,
-    themeKeys: ['--size', '--spacing'],
-    handle: (value) => [decl('--tw-sort', 'size'), decl('width', value), decl('height', value)],
-  })
-
-  /**
-   * @css `width`
-   */
-  for (let [key, value] of [
-    ['auto', 'auto'],
-    ['full', '100%'],
-    ['screen', '100vw'],
-    ['svw', '100svw'],
-    ['lvw', '100lvw'],
-    ['dvw', '100dvw'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`w-${key}`, [['width', value]])
-  }
-  functionalUtility('w', {
-    supportsFractions: true,
-    themeKeys: ['--width', '--spacing'],
-    handle: (value) => [decl('width', value)],
-  })
-
-  /**
-   * @css `min-width`
-   */
-  for (let [key, value] of [
-    ['auto', 'auto'],
-    ['full', '100%'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`min-w-${key}`, [['min-width', value]])
-  }
-  functionalUtility('min-w', {
-    themeKeys: ['--min-width', '--width', '--spacing'],
-    handle: (value) => [decl('min-width', value)],
-  })
-
-  /**
-   * @css `max-width`
-   */
-  for (let [key, value] of [
-    ['none', 'none'],
-    ['full', '100%'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`max-w-${key}`, [['max-width', value]])
-  }
-  functionalUtility('max-w', {
-    themeKeys: ['--max-width', '--width', '--spacing'],
-    handle: (value) => [decl('max-width', value)],
-  })
-
-  /**
-   * @css `height`
-   */
-  for (let [key, value] of [
-    ['auto', 'auto'],
-    ['full', '100%'],
-    ['screen', '100vh'],
-    ['svh', '100svh'],
-    ['lvh', '100lvh'],
-    ['dvh', '100dvh'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`h-${key}`, [['height', value]])
-  }
-  functionalUtility('h', {
-    supportsFractions: true,
-    themeKeys: ['--height', '--spacing'],
-    handle: (value) => [decl('height', value)],
-  })
-
-  /**
-   * @css `min-height`
-   */
-  for (let [key, value] of [
-    ['auto', 'auto'],
-    ['full', '100%'],
-    ['screen', '100vh'],
-    ['svh', '100svh'],
-    ['lvh', '100lvh'],
-    ['dvh', '100dvh'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`min-h-${key}`, [['min-height', value]])
-  }
-  functionalUtility('min-h', {
-    themeKeys: ['--min-height', '--spacing'],
-    handle: (value) => [decl('min-height', value)],
-  })
-
-  /**
-   * @css `max-height`
-   */
-  for (let [key, value] of [
-    ['none', 'none'],
-    ['full', '100%'],
-    ['screen', '100vh'],
-    ['svh', '100svh'],
-    ['lvh', '100lvh'],
-    ['dvh', '100dvh'],
-    ['min', 'min-content'],
-    ['max', 'max-content'],
-    ['fit', 'fit-content'],
-  ]) {
     staticUtility(`max-h-${key}`, [['max-height', value]])
   }
-  functionalUtility('max-h', {
-    themeKeys: ['--max-height', '--spacing'],
-    handle: (value) => [decl('max-height', value)],
-  })
+
+  staticUtility(`w-screen`, [['width', '100vw']])
+  staticUtility(`min-w-screen`, [['min-width', '100vw']])
+  staticUtility(`max-w-screen`, [['max-width', '100vw']])
+  staticUtility(`h-screen`, [['height', '100vh']])
+  staticUtility(`min-h-screen`, [['min-height', '100vh']])
+  staticUtility(`max-h-screen`, [['max-height', '100vh']])
+
+  staticUtility(`min-w-none`, [['min-width', 'none']])
+  staticUtility(`max-w-none`, [['max-width', 'none']])
+  staticUtility(`min-h-none`, [['min-height', 'none']])
+  staticUtility(`max-h-none`, [['max-height', 'none']])
+
+  spacingUtility(
+    'size',
+    ['--size'],
+    (value) => [decl('--tw-sort', 'size'), decl('width', value), decl('height', value)],
+    {
+      supportsFractions: true,
+    },
+  )
+
+  for (let [name, namespaces, property] of [
+    ['w', ['--width'], 'width'],
+    ['min-w', ['--min-width', '--width'], 'min-width'],
+    ['max-w', ['--max-width', '--width'], 'max-width'],
+    ['h', ['--height'], 'height'],
+    ['min-h', ['--min-height', '--height'], 'min-height'],
+    ['max-h', ['--max-height', '--height'], 'max-height'],
+  ] as [string, ThemeKey[], string][]) {
+    spacingUtility(name, namespaces, (value) => [decl(property, value)], {
+      supportsFractions: true,
+    })
+  }
 
   /**
    * @css `flex`
@@ -1083,10 +1001,8 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('basis-auto', [['flex-basis', 'auto']])
   staticUtility('basis-full', [['flex-basis', '100%']])
-  functionalUtility('basis', {
+  spacingUtility('basis', ['--flex-basis', '--width'], (value) => [decl('flex-basis', value)], {
     supportsFractions: true,
-    themeKeys: ['--flex-basis', '--width', '--spacing'],
-    handle: (value) => [decl('flex-basis', value)],
   })
 
   /**
@@ -1116,39 +1032,24 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `border-spacing`
    */
-  functionalUtility('border-spacing', {
-    themeKeys: ['--border-spacing', '--spacing'],
-    handle: (value) => [
-      borderSpacingProperties(),
-      decl('--tw-border-spacing-x', value),
-      decl('--tw-border-spacing-y', value),
-      decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
-    ],
-  })
+  spacingUtility('border-spacing', ['--border-spacing'], (value) => [
+    borderSpacingProperties(),
+    decl('--tw-border-spacing-x', value),
+    decl('--tw-border-spacing-y', value),
+    decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
+  ])
 
-  /**
-   * @css `border-spacing`
-   */
-  functionalUtility('border-spacing-x', {
-    themeKeys: ['--border-spacing', '--spacing'],
-    handle: (value) => [
-      borderSpacingProperties(),
-      decl('--tw-border-spacing-x', value),
-      decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
-    ],
-  })
+  spacingUtility('border-spacing-x', ['--border-spacing'], (value) => [
+    borderSpacingProperties(),
+    decl('--tw-border-spacing-x', value),
+    decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
+  ])
 
-  /**
-   * @css `border-spacing`
-   */
-  functionalUtility('border-spacing-y', {
-    themeKeys: ['--border-spacing', '--spacing'],
-    handle: (value) => [
-      borderSpacingProperties(),
-      decl('--tw-border-spacing-y', value),
-      decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
-    ],
-  })
+  spacingUtility('border-spacing-y', ['--border-spacing'], (value) => [
+    borderSpacingProperties(),
+    decl('--tw-border-spacing-y', value),
+    decl('border-spacing', 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)'),
+  ])
 
   /**
    * @css `transform-origin`
@@ -1208,23 +1109,21 @@ export function createUtilities(theme: Theme) {
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
-      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ]
   })
 
-  functionalUtility('translate', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => [
+  spacingUtility(
+    'translate',
+    ['--translate'],
+    (value) => [
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
-      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ],
-  })
+    { supportsNegative: true, supportsFractions: true },
+  )
 
   for (let axis of ['x', 'y']) {
     let handle = (value: string) => [
@@ -1233,34 +1132,27 @@ export function createUtilities(theme: Theme) {
       decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
     ]
 
-    /**
-     * @css `translate`
-     */
-    functionalUtility(`translate-${axis}`, {
+    spacingUtility(`translate-${axis}`, ['--translate'], (value) => handle(value), {
       supportsNegative: true,
       supportsFractions: true,
-      themeKeys: ['--translate', '--spacing'],
-      handle,
-    })
-    utilities.static(`translate-${axis}-px`, (candidate) => {
-      return handle(candidate.negative ? '-1px' : '1px')
     })
     utilities.static(`translate-${axis}-full`, (candidate) => {
       return handle(candidate.negative ? '-100%' : '100%')
     })
   }
-  functionalUtility(`translate-z`, {
-    supportsNegative: true,
-    supportsFractions: false,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => {
-      return [
-        translateProperties(),
-        decl(`--tw-translate-z`, value),
-        decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
-      ]
+
+  spacingUtility(
+    `translate-z`,
+    ['--translate'],
+    (value) => [
+      translateProperties(),
+      decl(`--tw-translate-z`, value),
+      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
+    ],
+    {
+      supportsNegative: true,
     },
-  })
+  )
   utilities.static(`translate-z-px`, (candidate) => {
     return [
       translateProperties(),
@@ -1269,9 +1161,6 @@ export function createUtilities(theme: Theme) {
     ]
   })
 
-  /**
-   * @css `translate`
-   */
   staticUtility('translate-3d', [
     translateProperties,
     ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
@@ -1692,114 +1581,41 @@ export function createUtilities(theme: Theme) {
   staticUtility('snap-normal', [['scroll-snap-stop', 'normal']])
   staticUtility('snap-always', [['scroll-snap-stop', 'always']])
 
-  functionalUtility('scroll-m', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin', value)],
-  })
+  /**
+   * @css `scroll-margin`
+   */
+  for (let [namespace, property] of [
+    ['scroll-m', 'scroll-margin'],
+    ['scroll-mx', 'scroll-margin-inline'],
+    ['scroll-my', 'scroll-margin-block'],
+    ['scroll-ms', 'scroll-margin-inline-start'],
+    ['scroll-me', 'scroll-margin-inline-end'],
+    ['scroll-mt', 'scroll-margin-top'],
+    ['scroll-mr', 'scroll-margin-right'],
+    ['scroll-mb', 'scroll-margin-bottom'],
+    ['scroll-ml', 'scroll-margin-left'],
+  ] as const) {
+    spacingUtility(namespace, '--scroll-margin', (value) => [decl(property, value)], {
+      supportsNegative: true,
+    })
+  }
 
-  functionalUtility('scroll-mx', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-inline', value)],
-  })
-
-  functionalUtility('scroll-my', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-block', value)],
-  })
-
-  functionalUtility('scroll-ms', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-inline-start', value)],
-  })
-
-  functionalUtility('scroll-me', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-inline-end', value)],
-  })
-
-  functionalUtility('scroll-mt', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-top', value)],
-  })
-
-  functionalUtility('scroll-mr', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-right', value)],
-  })
-
-  functionalUtility('scroll-mb', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-bottom', value)],
-  })
-
-  functionalUtility('scroll-ml', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-margin', '--spacing'],
-    handle: (value) => [decl('scroll-margin-left', value)],
-  })
-
-  // scroll-padding
-  functionalUtility('scroll-p', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding', value)],
-  })
-
-  functionalUtility('scroll-px', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-inline', value)],
-  })
-
-  functionalUtility('scroll-py', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-block', value)],
-  })
-
-  functionalUtility('scroll-ps', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-inline-start', value)],
-  })
-
-  functionalUtility('scroll-pe', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-inline-end', value)],
-  })
-
-  functionalUtility('scroll-pt', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-top', value)],
-  })
-
-  functionalUtility('scroll-pr', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-right', value)],
-  })
-
-  functionalUtility('scroll-pb', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-bottom', value)],
-  })
-
-  functionalUtility('scroll-pl', {
-    supportsNegative: true,
-    themeKeys: ['--scroll-padding', '--spacing'],
-    handle: (value) => [decl('scroll-padding-left', value)],
-  })
+  /**
+   * @css `scroll-padding`
+   */
+  for (let [namespace, property] of [
+    ['scroll-p', 'scroll-padding'],
+    ['scroll-px', 'scroll-padding-inline'],
+    ['scroll-py', 'scroll-padding-block'],
+    ['scroll-ps', 'scroll-padding-inline-start'],
+    ['scroll-pe', 'scroll-padding-inline-end'],
+    ['scroll-pt', 'scroll-padding-top'],
+    ['scroll-pr', 'scroll-padding-right'],
+    ['scroll-pb', 'scroll-padding-bottom'],
+    ['scroll-pl', 'scroll-padding-left'],
+  ] as const) {
+    spacingUtility(namespace, '--scroll-padding', (value) => [decl(property, value)])
+  }
 
   staticUtility('list-inside', [['list-style-position', 'inside']])
   staticUtility('list-outside', [['list-style-position', 'outside']])
@@ -1980,25 +1796,14 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-items-end', [['justify-items', 'end']])
   staticUtility('justify-items-stretch', [['justify-items', 'stretch']])
 
-  functionalUtility('gap', {
-    themeKeys: ['--gap', '--spacing'],
-    handle: (value) => [decl('gap', value)],
-  })
+  spacingUtility('gap', ['--gap'], (value) => [decl('gap', value)])
+  spacingUtility('gap-x', ['--gap'], (value) => [decl('column-gap', value)])
+  spacingUtility('gap-y', ['--gap'], (value) => [decl('row-gap', value)])
 
-  functionalUtility('gap-x', {
-    themeKeys: ['--gap', '--spacing'],
-    handle: (value) => [decl('column-gap', value)],
-  })
-
-  functionalUtility('gap-y', {
-    themeKeys: ['--gap', '--spacing'],
-    handle: (value) => [decl('row-gap', value)],
-  })
-
-  functionalUtility('space-x', {
-    supportsNegative: true,
-    themeKeys: ['--space', '--spacing'],
-    handle: (value) => [
+  spacingUtility(
+    'space-x',
+    ['--space'],
+    (value) => [
       atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
 
       styleRule(':where(& > :not(:last-child))', [
@@ -2007,21 +1812,22 @@ export function createUtilities(theme: Theme) {
         decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
       ]),
     ],
-  })
+    { supportsNegative: true },
+  )
 
-  functionalUtility('space-y', {
-    supportsNegative: true,
-    themeKeys: ['--space', '--spacing'],
-    handle: (value) => [
+  spacingUtility(
+    'space-y',
+    ['--space'],
+    (value) => [
       atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
-
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
         decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
         decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
       ]),
     ],
-  })
+    { supportsNegative: true },
+  )
 
   staticUtility('space-x-reverse', [
     () => atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
@@ -2907,45 +2713,19 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('object-position', value)],
   })
 
-  functionalUtility('p', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding', value)],
-  })
-
-  functionalUtility('px', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-inline', value)],
-  })
-
-  functionalUtility('py', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-block', value)],
-  })
-
-  functionalUtility('pt', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-top', value)],
-  })
-  functionalUtility('ps', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-inline-start', value)],
-  })
-  functionalUtility('pe', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-inline-end', value)],
-  })
-  functionalUtility('pr', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-right', value)],
-  })
-  functionalUtility('pb', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-bottom', value)],
-  })
-  functionalUtility('pl', {
-    themeKeys: ['--padding', '--spacing'],
-    handle: (value) => [decl('padding-left', value)],
-  })
+  for (let [name, property] of [
+    ['p', 'padding'],
+    ['px', 'padding-inline'],
+    ['py', 'padding-block'],
+    ['ps', 'padding-inline-start'],
+    ['pe', 'padding-inline-end'],
+    ['pt', 'padding-top'],
+    ['pr', 'padding-right'],
+    ['pb', 'padding-bottom'],
+    ['pl', 'padding-left'],
+  ] as const) {
+    spacingUtility(name, '--padding', (value) => [decl(property, value)])
+  }
 
   staticUtility('text-left', [['text-align', 'left']])
   staticUtility('text-center', [['text-align', 'center']])
@@ -2954,10 +2734,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('text-start', [['text-align', 'start']])
   staticUtility('text-end', [['text-align', 'end']])
 
-  functionalUtility('indent', {
+  spacingUtility('indent', ['--text-indent'], (value) => [decl('text-indent', value)], {
     supportsNegative: true,
-    themeKeys: ['--text-indent', '--spacing'],
-    handle: (value) => [decl('text-indent', value)],
   })
 
   staticUtility('align-baseline', [['vertical-align', 'baseline']])
@@ -3000,8 +2778,9 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolveWith(
         candidate.value.value,
-        ['--font-family'],
+        ['--font'],
         ['--font-feature-settings', '--font-variation-settings'],
+        ['--font-weight', '--font-size'],
       )
       if (value) {
         let [families, options = {}] = value
@@ -3016,44 +2795,6 @@ export function createUtilities(theme: Theme) {
 
     {
       let value = theme.resolve(candidate.value.value, ['--font-weight'])
-      if (value) {
-        return [
-          atRoot([property('--tw-font-weight')]),
-          decl('--tw-font-weight', value),
-          decl('font-weight', value),
-        ]
-      }
-
-      switch (candidate.value.value) {
-        case 'thin':
-          value = '100'
-          break
-        case 'extralight':
-          value = '200'
-          break
-        case 'light':
-          value = '300'
-          break
-        case 'normal':
-          value = '400'
-          break
-        case 'medium':
-          value = '500'
-          break
-        case 'semibold':
-          value = '600'
-          break
-        case 'bold':
-          value = '700'
-          break
-        case 'extrabold':
-          value = '800'
-          break
-        case 'black':
-          value = '900'
-          break
-      }
-
       if (value) {
         return [
           atRoot([property('--tw-font-weight')]),
@@ -3792,9 +3533,13 @@ export function createUtilities(theme: Theme) {
     }
 
     staticUtility('ease-initial', [transitionTimingFunctionProperty, ['--tw-ease', 'initial']])
-
+    staticUtility('ease-linear', [
+      transitionTimingFunctionProperty,
+      ['--tw-ease', 'linear'],
+      ['transition-timing-function', 'linear'],
+    ])
     functionalUtility('ease', {
-      themeKeys: ['--transition-timing-function'],
+      themeKeys: ['--ease'],
       handle: (value) => [
         transitionTimingFunctionProperty(),
         decl('--tw-ease', value),
@@ -3880,14 +3625,11 @@ export function createUtilities(theme: Theme) {
   staticUtility('forced-color-adjust-none', [['forced-color-adjust', 'none']])
   staticUtility('forced-color-adjust-auto', [['forced-color-adjust', 'auto']])
 
-  functionalUtility('leading', {
-    themeKeys: ['--line-height'],
-    handle: (value) => [
-      atRoot([property('--tw-leading')]),
-      decl('--tw-leading', value),
-      decl('line-height', value),
-    ],
-  })
+  spacingUtility('leading', ['--line-height'], (value) => [
+    atRoot([property('--tw-leading')]),
+    decl('--tw-leading', value),
+    decl('line-height', value),
+  ])
 
   functionalUtility('tracking', {
     supportsNegative: true,

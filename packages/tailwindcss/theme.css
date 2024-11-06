@@ -2,12 +2,12 @@
   /* Defaults */
   --default-transition-duration: 150ms;
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --default-font-family: var(--font-family-sans);
-  --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
-  --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
-  --default-mono-font-family: var(--font-family-mono);
-  --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-  --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+  --default-font-family: var(--font-sans);
+  --default-font-feature-settings: var(--font-sans--font-feature-settings);
+  --default-font-variation-settings: var(--font-sans--font-variation-settings);
+  --default-mono-font-family: var(--font-mono);
+  --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+  --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
 
   /* Breakpoints */
   --breakpoint-sm: 40rem;
@@ -333,41 +333,7 @@
   --drop-shadow-2xl: 0 25px 25px rgb(0 0 0 / 0.15);
 
   /* Spacing */
-  --spacing-px: 1px;
-  --spacing-0: 0px;
-  --spacing-0_5: 0.125rem;
-  --spacing-1: 0.25rem;
-  --spacing-1_5: 0.375rem;
-  --spacing-2: 0.5rem;
-  --spacing-2_5: 0.625rem;
-  --spacing-3: 0.75rem;
-  --spacing-3_5: 0.875rem;
-  --spacing-4: 1rem;
-  --spacing-5: 1.25rem;
-  --spacing-6: 1.5rem;
-  --spacing-7: 1.75rem;
-  --spacing-8: 2rem;
-  --spacing-9: 2.25rem;
-  --spacing-10: 2.5rem;
-  --spacing-11: 2.75rem;
-  --spacing-12: 3rem;
-  --spacing-14: 3.5rem;
-  --spacing-16: 4rem;
-  --spacing-20: 5rem;
-  --spacing-24: 6rem;
-  --spacing-28: 7rem;
-  --spacing-32: 8rem;
-  --spacing-36: 9rem;
-  --spacing-40: 10rem;
-  --spacing-44: 11rem;
-  --spacing-48: 12rem;
-  --spacing-52: 13rem;
-  --spacing-56: 14rem;
-  --spacing-60: 15rem;
-  --spacing-64: 16rem;
-  --spacing-72: 18rem;
-  --spacing-80: 20rem;
-  --spacing-96: 24rem;
+  --spacing: 0.25rem;
 
   /* Widths */
   --width-3xs: 16rem;
@@ -386,10 +352,10 @@
   --width-prose: 65ch;
 
   /* Fonts */
-  --font-family-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-family-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 
   /* Type scale */
@@ -420,6 +386,17 @@
   --font-size-9xl: 8rem;
   --font-size-9xl--line-height: 1;
 
+  /* Font weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
   /* Letter spacing */
   --letter-spacing-tighter: -0.05em;
   --letter-spacing-tight: -0.025em;
@@ -435,14 +412,6 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.625;
   --line-height-loose: 2;
-  --line-height-3: 0.75rem;
-  --line-height-4: 1rem;
-  --line-height-5: 1.25rem;
-  --line-height-6: 1.5rem;
-  --line-height-7: 1.75rem;
-  --line-height-8: 2rem;
-  --line-height-9: 2.25rem;
-  --line-height-10: 2.5rem;
 
   /* 3D perspectives */
   --perspective-dramatic: 100px;
@@ -452,10 +421,9 @@
   --perspective-distant: 1200px;
 
   /* Transition timing functions */
-  --transition-timing-function-linear: linear;
-  --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
-  --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);
-  --transition-timing-function-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   @keyframes spin {
     to {

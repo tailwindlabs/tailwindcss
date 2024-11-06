@@ -24,7 +24,7 @@ async function migrate(input: string) {
 it('should migrate `theme(…)` to `var(…)`', async () => {
   expect(
     await migrate(css`
-      @media theme(spacing.4) {
+      @media theme(screens.sm) {
         .foo {
           background-color: theme(colors.red.900);
           color: theme(colors.red.900 / 75%);
@@ -33,7 +33,7 @@ it('should migrate `theme(…)` to `var(…)`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@media theme(--spacing-4) {
+    "@media theme(--breakpoint-sm) {
       .foo {
         background-color: var(--color-red-900);
         color: theme(--color-red-900 / 75%);

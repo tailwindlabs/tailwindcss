@@ -334,7 +334,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           candidate`flex`,
           css`
             .text-primary {
-              color: var(--color-primary, black);
+              color: var(--color-primary);
             }
           `,
         ])
@@ -356,7 +356,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
 
           expect(styles).toContain(css`
             .text-primary {
-              color: var(--color-primary, red);
+              color: var(--color-primary);
             }
           `)
         })

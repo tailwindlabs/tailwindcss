@@ -155,7 +155,7 @@ test('inset', async () => {
     }
 
     .-inset-4 {
-      inset: calc(var(--spacing-4, 1rem) * -1);
+      inset: calc(var(--spacing-4) * -1);
     }
 
     .-inset-full {
@@ -167,7 +167,7 @@ test('inset', async () => {
     }
 
     .inset-4 {
-      inset: var(--spacing-4, 1rem);
+      inset: var(--spacing-4);
     }
 
     .inset-\\[4px\\] {
@@ -183,7 +183,7 @@ test('inset', async () => {
     }
 
     .inset-ringo-starr {
-      inset: var(--inset-ringo-starr, 1940px);
+      inset: var(--inset-ringo-starr);
     }
 
     .inset-shadow-sm {
@@ -323,7 +323,7 @@ test('inset-x', async () => {
     }
 
     .-inset-x-4 {
-      inset-inline: calc(var(--spacing-4, 1rem) * -1);
+      inset-inline: calc(var(--spacing-4) * -1);
     }
 
     .-inset-x-full {
@@ -335,7 +335,7 @@ test('inset-x', async () => {
     }
 
     .inset-x-4 {
-      inset-inline: var(--spacing-4, 1rem);
+      inset-inline: var(--spacing-4);
     }
 
     .inset-x-\\[4px\\] {
@@ -351,7 +351,7 @@ test('inset-x', async () => {
     }
 
     .inset-x-ringo-starr {
-      inset-inline: var(--inset-ringo-starr, 1940px);
+      inset-inline: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -412,7 +412,7 @@ test('inset-y', async () => {
     }
 
     .-inset-y-4 {
-      inset-block: calc(var(--spacing-4, 1rem) * -1);
+      inset-block: calc(var(--spacing-4) * -1);
     }
 
     .-inset-y-full {
@@ -424,7 +424,7 @@ test('inset-y', async () => {
     }
 
     .inset-y-4 {
-      inset-block: var(--spacing-4, 1rem);
+      inset-block: var(--spacing-4);
     }
 
     .inset-y-\\[4px\\] {
@@ -440,7 +440,7 @@ test('inset-y', async () => {
     }
 
     .inset-y-ringo-starr {
-      inset-block: var(--inset-ringo-starr, 1940px);
+      inset-block: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -501,7 +501,7 @@ test('start', async () => {
     }
 
     .-start-4 {
-      inset-inline-start: calc(var(--spacing-4, 1rem) * -1);
+      inset-inline-start: calc(var(--spacing-4) * -1);
     }
 
     .-start-full {
@@ -513,7 +513,7 @@ test('start', async () => {
     }
 
     .start-4 {
-      inset-inline-start: var(--spacing-4, 1rem);
+      inset-inline-start: var(--spacing-4);
     }
 
     .start-\\[4px\\] {
@@ -529,7 +529,7 @@ test('start', async () => {
     }
 
     .start-ringo-starr {
-      inset-inline-start: var(--inset-ringo-starr, 1940px);
+      inset-inline-start: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -590,7 +590,7 @@ test('end', async () => {
     }
 
     .-end-4 {
-      inset-inline-end: calc(var(--spacing-4, 1rem) * -1);
+      inset-inline-end: calc(var(--spacing-4) * -1);
     }
 
     .-end-full {
@@ -602,7 +602,7 @@ test('end', async () => {
     }
 
     .end-4 {
-      inset-inline-end: var(--spacing-4, 1rem);
+      inset-inline-end: var(--spacing-4);
     }
 
     .end-\\[4px\\] {
@@ -618,7 +618,7 @@ test('end', async () => {
     }
 
     .end-ringo-starr {
-      inset-inline-end: var(--inset-ringo-starr, 1940px);
+      inset-inline-end: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -680,7 +680,7 @@ test('top', async () => {
     }
 
     .-top-4 {
-      top: calc(var(--spacing-4, 1rem) * -1);
+      top: calc(var(--spacing-4) * -1);
     }
 
     .-top-full {
@@ -692,7 +692,7 @@ test('top', async () => {
     }
 
     .top-4 {
-      top: var(--spacing-4, 1rem);
+      top: var(--spacing-4);
     }
 
     .top-\\[4px\\] {
@@ -708,7 +708,7 @@ test('top', async () => {
     }
 
     .top-ringo-starr {
-      top: var(--inset-ringo-starr, 1940px);
+      top: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -769,7 +769,7 @@ test('right', async () => {
     }
 
     .-right-4 {
-      right: calc(var(--spacing-4, 1rem) * -1);
+      right: calc(var(--spacing-4) * -1);
     }
 
     .-right-full {
@@ -781,7 +781,7 @@ test('right', async () => {
     }
 
     .right-4 {
-      right: var(--spacing-4, 1rem);
+      right: var(--spacing-4);
     }
 
     .right-\\[4px\\] {
@@ -797,7 +797,7 @@ test('right', async () => {
     }
 
     .right-ringo-starr {
-      right: var(--inset-ringo-starr, 1940px);
+      right: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -858,7 +858,7 @@ test('bottom', async () => {
     }
 
     .-bottom-4 {
-      bottom: calc(var(--spacing-4, 1rem) * -1);
+      bottom: calc(var(--spacing-4) * -1);
     }
 
     .-bottom-full {
@@ -870,7 +870,7 @@ test('bottom', async () => {
     }
 
     .bottom-4 {
-      bottom: var(--spacing-4, 1rem);
+      bottom: var(--spacing-4);
     }
 
     .bottom-\\[4px\\] {
@@ -886,7 +886,7 @@ test('bottom', async () => {
     }
 
     .bottom-ringo-starr {
-      bottom: var(--inset-ringo-starr, 1940px);
+      bottom: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -947,7 +947,7 @@ test('left', async () => {
     }
 
     .-left-4 {
-      left: calc(var(--spacing-4, 1rem) * -1);
+      left: calc(var(--spacing-4) * -1);
     }
 
     .-left-full {
@@ -959,7 +959,7 @@ test('left', async () => {
     }
 
     .left-4 {
-      left: var(--spacing-4, 1rem);
+      left: var(--spacing-4);
     }
 
     .left-\\[4px\\] {
@@ -975,7 +975,7 @@ test('left', async () => {
     }
 
     .left-ringo-starr {
-      left: var(--inset-ringo-starr, 1940px);
+      left: var(--inset-ringo-starr);
     }"
   `)
   expect(
@@ -1487,7 +1487,7 @@ test('margin', async () => {
     }
 
     .-m-4 {
-      margin: calc(var(--spacing-4, 1rem) * -1);
+      margin: calc(var(--spacing-4) * -1);
     }
 
     .-m-\\[var\\(--value\\)\\] {
@@ -1495,7 +1495,7 @@ test('margin', async () => {
     }
 
     .m-4 {
-      margin: var(--spacing-4, 1rem);
+      margin: var(--spacing-4);
     }
 
     .m-\\[4px\\] {
@@ -1511,40 +1511,78 @@ test('margin', async () => {
   ).toEqual('')
 })
 
-test('margin-x', async () => {
+test('mx', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mx-auto', 'mx-4', 'mx-[4px]', '-mx-4', '-mx-[var(--value)]'],
+      [
+        'mx-auto',
+        'mx-1',
+        'mx-4',
+        'mx-99',
+        'mx-big',
+        'mx-[4px]',
+        '-mx-4',
+        '-mx-big',
+        '-mx-[4px]',
+        'mx-[var(--my-var)]',
+        '-mx-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
     }
 
     .-mx-4 {
-      margin-inline: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline: calc(var(--spacing) * -4);
     }
 
-    .-mx-\\[var\\(--value\\)\\] {
-      margin-inline: calc(var(--value) * -1);
+    .-mx-\\[4px\\] {
+      margin-inline: -4px;
+    }
+
+    .-mx-\\[var\\(--my-var\\)\\] {
+      margin-inline: calc(var(--my-var) * -1);
+    }
+
+    .-mx-big {
+      margin-inline: calc(var(--spacing-big) * -1);
+    }
+
+    .mx-1 {
+      margin-inline: calc(var(--spacing) * 1);
     }
 
     .mx-4 {
-      margin-inline: var(--spacing-4, 1rem);
+      margin-inline: calc(var(--spacing) * 4);
+    }
+
+    .mx-99 {
+      margin-inline: calc(var(--spacing) * 99);
     }
 
     .mx-\\[4px\\] {
       margin-inline: 4px;
     }
 
+    .mx-\\[var\\(--my-var\\)\\] {
+      margin-inline: var(--my-var);
+    }
+
     .mx-auto {
       margin-inline: auto;
+    }
+
+    .mx-big {
+      margin-inline: var(--spacing-big);
     }"
   `)
   expect(
@@ -1559,40 +1597,78 @@ test('margin-x', async () => {
   ).toEqual('')
 })
 
-test('margin-y', async () => {
+test('my', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['my-auto', 'my-4', 'my-[4px]', '-my-4', '-my-[var(--value)]'],
+      [
+        'my-1',
+        'my-99',
+        'my-2.5',
+        'my-big',
+        'my-[4px]',
+        '-my-4',
+        '-my-2.5',
+        '-my-big',
+        '-my-[4px]',
+        'my-[var(--my-var)]',
+        '-my-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-my-2\\.5 {
+      margin-block: calc(var(--spacing) * -2.5);
     }
 
     .-my-4 {
-      margin-block: calc(var(--spacing-4, 1rem) * -1);
+      margin-block: calc(var(--spacing) * -4);
     }
 
-    .-my-\\[var\\(--value\\)\\] {
-      margin-block: calc(var(--value) * -1);
+    .-my-\\[4px\\] {
+      margin-block: -4px;
     }
 
-    .my-4 {
-      margin-block: var(--spacing-4, 1rem);
+    .-my-\\[var\\(--my-var\\)\\] {
+      margin-block: calc(var(--my-var) * -1);
+    }
+
+    .-my-big {
+      margin-block: calc(var(--spacing-big) * -1);
+    }
+
+    .my-1 {
+      margin-block: calc(var(--spacing) * 1);
+    }
+
+    .my-2\\.5 {
+      margin-block: calc(var(--spacing) * 2.5);
+    }
+
+    .my-99 {
+      margin-block: calc(var(--spacing) * 99);
     }
 
     .my-\\[4px\\] {
       margin-block: 4px;
     }
 
-    .my-auto {
-      margin-block: auto;
+    .my-\\[var\\(--my-var\\)\\] {
+      margin-block: var(--my-var);
+    }
+
+    .my-big {
+      margin-block: var(--spacing-big);
     }"
   `)
   expect(
@@ -1607,40 +1683,78 @@ test('margin-y', async () => {
   ).toEqual('')
 })
 
-test('margin-top', async () => {
+test('mt', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mt-auto', 'mt-4', 'mt-[4px]', '-mt-4', '-mt-[var(--value)]'],
+      [
+        'mt-1',
+        'mt-99',
+        'mt-2.5',
+        'mt-big',
+        'mt-[4px]',
+        '-mt-4',
+        '-mt-2.5',
+        '-mt-big',
+        '-mt-[4px]',
+        'mt-[var(--my-var)]',
+        '-mt-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mt-2\\.5 {
+      margin-top: calc(var(--spacing) * -2.5);
     }
 
     .-mt-4 {
-      margin-top: calc(var(--spacing-4, 1rem) * -1);
+      margin-top: calc(var(--spacing) * -4);
     }
 
-    .-mt-\\[var\\(--value\\)\\] {
-      margin-top: calc(var(--value) * -1);
+    .-mt-\\[4px\\] {
+      margin-top: -4px;
     }
 
-    .mt-4 {
-      margin-top: var(--spacing-4, 1rem);
+    .-mt-\\[var\\(--my-var\\)\\] {
+      margin-top: calc(var(--my-var) * -1);
+    }
+
+    .-mt-big {
+      margin-top: calc(var(--spacing-big) * -1);
+    }
+
+    .mt-1 {
+      margin-top: calc(var(--spacing) * 1);
+    }
+
+    .mt-2\\.5 {
+      margin-top: calc(var(--spacing) * 2.5);
+    }
+
+    .mt-99 {
+      margin-top: calc(var(--spacing) * 99);
     }
 
     .mt-\\[4px\\] {
       margin-top: 4px;
     }
 
-    .mt-auto {
-      margin-top: auto;
+    .mt-\\[var\\(--my-var\\)\\] {
+      margin-top: var(--my-var);
+    }
+
+    .mt-big {
+      margin-top: var(--spacing-big);
     }"
   `)
   expect(
@@ -1655,40 +1769,78 @@ test('margin-top', async () => {
   ).toEqual('')
 })
 
-test('margin-inline-start', async () => {
+test('ms', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ms-auto', 'ms-4', 'ms-[4px]', '-ms-4', '-ms-[var(--value)]'],
+      [
+        'ms-1',
+        'ms-99',
+        'ms-2.5',
+        'ms-big',
+        'ms-[4px]',
+        '-ms-4',
+        '-ms-2.5',
+        '-ms-big',
+        '-ms-[4px]',
+        'ms-[var(--my-var)]',
+        '-ms-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-ms-2\\.5 {
+      margin-inline-start: calc(var(--spacing) * -2.5);
     }
 
     .-ms-4 {
-      margin-inline-start: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline-start: calc(var(--spacing) * -4);
     }
 
-    .-ms-\\[var\\(--value\\)\\] {
-      margin-inline-start: calc(var(--value) * -1);
+    .-ms-\\[4px\\] {
+      margin-inline-start: -4px;
     }
 
-    .ms-4 {
-      margin-inline-start: var(--spacing-4, 1rem);
+    .-ms-\\[var\\(--my-var\\)\\] {
+      margin-inline-start: calc(var(--my-var) * -1);
+    }
+
+    .-ms-big {
+      margin-inline-start: calc(var(--spacing-big) * -1);
+    }
+
+    .ms-1 {
+      margin-inline-start: calc(var(--spacing) * 1);
+    }
+
+    .ms-2\\.5 {
+      margin-inline-start: calc(var(--spacing) * 2.5);
+    }
+
+    .ms-99 {
+      margin-inline-start: calc(var(--spacing) * 99);
     }
 
     .ms-\\[4px\\] {
       margin-inline-start: 4px;
     }
 
-    .ms-auto {
-      margin-inline-start: auto;
+    .ms-\\[var\\(--my-var\\)\\] {
+      margin-inline-start: var(--my-var);
+    }
+
+    .ms-big {
+      margin-inline-start: var(--spacing-big);
     }"
   `)
   expect(
@@ -1703,40 +1855,78 @@ test('margin-inline-start', async () => {
   ).toEqual('')
 })
 
-test('margin-inline-end', async () => {
+test('me', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['me-auto', 'me-4', 'me-[4px]', '-me-4', '-me-[var(--value)]'],
+      [
+        'me-1',
+        'me-99',
+        'me-2.5',
+        'me-big',
+        'me-[4px]',
+        '-me-4',
+        '-me-2.5',
+        '-me-big',
+        '-me-[4px]',
+        'me-[var(--my-var)]',
+        '-me-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-me-2\\.5 {
+      margin-inline-end: calc(var(--spacing) * -2.5);
     }
 
     .-me-4 {
-      margin-inline-end: calc(var(--spacing-4, 1rem) * -1);
+      margin-inline-end: calc(var(--spacing) * -4);
     }
 
-    .-me-\\[var\\(--value\\)\\] {
-      margin-inline-end: calc(var(--value) * -1);
+    .-me-\\[4px\\] {
+      margin-inline-end: -4px;
     }
 
-    .me-4 {
-      margin-inline-end: var(--spacing-4, 1rem);
+    .-me-\\[var\\(--my-var\\)\\] {
+      margin-inline-end: calc(var(--my-var) * -1);
+    }
+
+    .-me-big {
+      margin-inline-end: calc(var(--spacing-big) * -1);
+    }
+
+    .me-1 {
+      margin-inline-end: calc(var(--spacing) * 1);
+    }
+
+    .me-2\\.5 {
+      margin-inline-end: calc(var(--spacing) * 2.5);
+    }
+
+    .me-99 {
+      margin-inline-end: calc(var(--spacing) * 99);
     }
 
     .me-\\[4px\\] {
       margin-inline-end: 4px;
     }
 
-    .me-auto {
-      margin-inline-end: auto;
+    .me-\\[var\\(--my-var\\)\\] {
+      margin-inline-end: var(--my-var);
+    }
+
+    .me-big {
+      margin-inline-end: var(--spacing-big);
     }"
   `)
   expect(
@@ -1751,40 +1941,78 @@ test('margin-inline-end', async () => {
   ).toEqual('')
 })
 
-test('margin-right', async () => {
+test('mr', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mr-auto', 'mr-4', 'mr-[4px]', '-mr-4', '-mr-[var(--value)]'],
+      [
+        'mr-1',
+        'mr-99',
+        'mr-2.5',
+        'mr-big',
+        'mr-[4px]',
+        '-mr-4',
+        '-mr-2.5',
+        '-mr-big',
+        '-mr-[4px]',
+        'mr-[var(--my-var)]',
+        '-mr-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mr-2\\.5 {
+      margin-right: calc(var(--spacing) * -2.5);
     }
 
     .-mr-4 {
-      margin-right: calc(var(--spacing-4, 1rem) * -1);
+      margin-right: calc(var(--spacing) * -4);
     }
 
-    .-mr-\\[var\\(--value\\)\\] {
-      margin-right: calc(var(--value) * -1);
+    .-mr-\\[4px\\] {
+      margin-right: -4px;
     }
 
-    .mr-4 {
-      margin-right: var(--spacing-4, 1rem);
+    .-mr-\\[var\\(--my-var\\)\\] {
+      margin-right: calc(var(--my-var) * -1);
+    }
+
+    .-mr-big {
+      margin-right: calc(var(--spacing-big) * -1);
+    }
+
+    .mr-1 {
+      margin-right: calc(var(--spacing) * 1);
+    }
+
+    .mr-2\\.5 {
+      margin-right: calc(var(--spacing) * 2.5);
+    }
+
+    .mr-99 {
+      margin-right: calc(var(--spacing) * 99);
     }
 
     .mr-\\[4px\\] {
       margin-right: 4px;
     }
 
-    .mr-auto {
-      margin-right: auto;
+    .mr-\\[var\\(--my-var\\)\\] {
+      margin-right: var(--my-var);
+    }
+
+    .mr-big {
+      margin-right: var(--spacing-big);
     }"
   `)
   expect(
@@ -1799,40 +2027,78 @@ test('margin-right', async () => {
   ).toEqual('')
 })
 
-test('margin-bottom', async () => {
+test('mb', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['mb-auto', 'mb-4', 'mb-[4px]', '-mb-4', '-mb-[var(--value)]'],
+      [
+        'mb-1',
+        'mb-99',
+        'mb-2.5',
+        'mb-big',
+        'mb-[4px]',
+        '-mb-4',
+        '-mb-2.5',
+        '-mb-big',
+        '-mb-[4px]',
+        'mb-[var(--my-var)]',
+        '-mb-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mb-2\\.5 {
+      margin-bottom: calc(var(--spacing) * -2.5);
     }
 
     .-mb-4 {
-      margin-bottom: calc(var(--spacing-4, 1rem) * -1);
+      margin-bottom: calc(var(--spacing) * -4);
     }
 
-    .-mb-\\[var\\(--value\\)\\] {
-      margin-bottom: calc(var(--value) * -1);
+    .-mb-\\[4px\\] {
+      margin-bottom: -4px;
     }
 
-    .mb-4 {
-      margin-bottom: var(--spacing-4, 1rem);
+    .-mb-\\[var\\(--my-var\\)\\] {
+      margin-bottom: calc(var(--my-var) * -1);
+    }
+
+    .-mb-big {
+      margin-bottom: calc(var(--spacing-big) * -1);
+    }
+
+    .mb-1 {
+      margin-bottom: calc(var(--spacing) * 1);
+    }
+
+    .mb-2\\.5 {
+      margin-bottom: calc(var(--spacing) * 2.5);
+    }
+
+    .mb-99 {
+      margin-bottom: calc(var(--spacing) * 99);
     }
 
     .mb-\\[4px\\] {
       margin-bottom: 4px;
     }
 
-    .mb-auto {
-      margin-bottom: auto;
+    .mb-\\[var\\(--my-var\\)\\] {
+      margin-bottom: var(--my-var);
+    }
+
+    .mb-big {
+      margin-bottom: var(--spacing-big);
     }"
   `)
   expect(
@@ -1847,40 +2113,78 @@ test('margin-bottom', async () => {
   ).toEqual('')
 })
 
-test('margin-left', async () => {
+test('ml', async () => {
   expect(
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ml-auto', 'ml-4', 'ml-[4px]', '-ml-4', '-ml-[var(--value)]'],
+      [
+        'ml-1',
+        'ml-99',
+        'ml-2.5',
+        'ml-big',
+        'ml-[4px]',
+        '-ml-4',
+        '-ml-2.5',
+        '-ml-big',
+        '-ml-[4px]',
+        'ml-[var(--my-var)]',
+        '-ml-[var(--my-var)]',
+      ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-ml-2\\.5 {
+      margin-left: calc(var(--spacing) * -2.5);
     }
 
     .-ml-4 {
-      margin-left: calc(var(--spacing-4, 1rem) * -1);
+      margin-left: calc(var(--spacing) * -4);
     }
 
-    .-ml-\\[var\\(--value\\)\\] {
-      margin-left: calc(var(--value) * -1);
+    .-ml-\\[4px\\] {
+      margin-left: -4px;
     }
 
-    .ml-4 {
-      margin-left: var(--spacing-4, 1rem);
+    .-ml-\\[var\\(--my-var\\)\\] {
+      margin-left: calc(var(--my-var) * -1);
+    }
+
+    .-ml-big {
+      margin-left: calc(var(--spacing-big) * -1);
+    }
+
+    .ml-1 {
+      margin-left: calc(var(--spacing) * 1);
+    }
+
+    .ml-2\\.5 {
+      margin-left: calc(var(--spacing) * 2.5);
+    }
+
+    .ml-99 {
+      margin-left: calc(var(--spacing) * 99);
     }
 
     .ml-\\[4px\\] {
       margin-left: 4px;
     }
 
-    .ml-auto {
-      margin-left: auto;
+    .ml-\\[var\\(--my-var\\)\\] {
+      margin-left: var(--my-var);
+    }
+
+    .ml-big {
+      margin-left: var(--spacing-big);
     }"
   `)
   expect(
@@ -1912,39 +2216,39 @@ test('margin sort order', async () => {
     }
 
     .m-4 {
-      margin: var(--spacing-4, 1rem);
+      margin: var(--spacing-4);
     }
 
     .mx-4 {
-      margin-inline: var(--spacing-4, 1rem);
+      margin-inline: var(--spacing-4);
     }
 
     .my-4 {
-      margin-block: var(--spacing-4, 1rem);
+      margin-block: var(--spacing-4);
     }
 
     .ms-4 {
-      margin-inline-start: var(--spacing-4, 1rem);
+      margin-inline-start: var(--spacing-4);
     }
 
     .me-4 {
-      margin-inline-end: var(--spacing-4, 1rem);
+      margin-inline-end: var(--spacing-4);
     }
 
     .mt-4 {
-      margin-top: var(--spacing-4, 1rem);
+      margin-top: var(--spacing-4);
     }
 
     .mr-4 {
-      margin-right: var(--spacing-4, 1rem);
+      margin-right: var(--spacing-4);
     }
 
     .mb-4 {
-      margin-bottom: var(--spacing-4, 1rem);
+      margin-bottom: var(--spacing-4);
     }
 
     .ml-4 {
-      margin-left: var(--spacing-4, 1rem);
+      margin-left: var(--spacing-4);
     }"
   `)
   expect(
@@ -2261,8 +2565,8 @@ test('size', async () => {
     }
 
     .size-4 {
-      width: var(--spacing-4, 1rem);
-      height: var(--spacing-4, 1rem);
+      width: var(--spacing-4);
+      height: var(--spacing-4);
     }
 
     .size-\\[4px\\] {
@@ -2354,7 +2658,7 @@ test('width', async () => {
     }
 
     .w-4 {
-      width: var(--spacing-4, 1rem);
+      width: var(--spacing-4);
     }
 
     .w-\\[4px\\] {
@@ -2398,7 +2702,7 @@ test('width', async () => {
     }
 
     .w-xl {
-      width: var(--width-xl, 36rem);
+      width: var(--width-xl);
     }"
   `)
   expect(
@@ -2456,7 +2760,7 @@ test('min-width', async () => {
     }
 
     .min-w-4 {
-      min-width: var(--spacing-4, 1rem);
+      min-width: var(--spacing-4);
     }
 
     .min-w-\\[4px\\] {
@@ -2484,7 +2788,7 @@ test('min-width', async () => {
     }
 
     .min-w-xl {
-      min-width: var(--width-xl, 36rem);
+      min-width: var(--width-xl);
     }"
   `)
   expect(
@@ -2532,7 +2836,7 @@ test('max-width', async () => {
     }
 
     .max-w-4 {
-      max-width: var(--spacing-4, 1rem);
+      max-width: var(--spacing-4);
     }
 
     .max-w-\\[4px\\] {
@@ -2556,7 +2860,7 @@ test('max-width', async () => {
     }
 
     .max-w-xl {
-      max-width: var(--width-xl, 36rem);
+      max-width: var(--width-xl);
     }"
   `)
   expect(
@@ -2610,7 +2914,7 @@ test('height', async () => {
     }
 
     .h-4 {
-      height: var(--spacing-4, 1rem);
+      height: var(--spacing-4);
     }
 
     .h-\\[4px\\] {
@@ -2708,7 +3012,7 @@ test('min-height', async () => {
     }
 
     .min-h-4 {
-      min-height: var(--spacing-4, 1rem);
+      min-height: var(--spacing-4);
     }
 
     .min-h-\\[4px\\] {
@@ -2800,7 +3104,7 @@ test('max-height', async () => {
     }
 
     .max-h-4 {
-      max-height: var(--spacing-4, 1rem);
+      max-height: var(--spacing-4);
     }
 
     .max-h-\\[4px\\] {
@@ -3017,7 +3321,7 @@ test('flex-basis', async () => {
     }
 
     .basis-xl {
-      flex-basis: var(--width-xl, 36rem);
+      flex-basis: var(--width-xl);
     }"
   `)
   expect(
@@ -3105,8 +3409,8 @@ test('border-spacing', async () => {
     }
 
     .border-spacing-1 {
-      --tw-border-spacing-x: var(--spacing-1, .25rem);
-      --tw-border-spacing-y: var(--spacing-1, .25rem);
+      --tw-border-spacing-x: var(--spacing-1);
+      --tw-border-spacing-y: var(--spacing-1);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -3165,7 +3469,7 @@ test('border-spacing-x', async () => {
     }
 
     .border-spacing-x-1 {
-      --tw-border-spacing-x: var(--spacing-1, .25rem);
+      --tw-border-spacing-x: var(--spacing-1);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -3223,7 +3527,7 @@ test('border-spacing-y', async () => {
     }
 
     .border-spacing-y-1 {
-      --tw-border-spacing-y: var(--spacing-1, .25rem);
+      --tw-border-spacing-y: var(--spacing-1);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -3435,35 +3739,30 @@ test('translate', async () => {
     ".-translate-\\[var\\(--value\\)\\] {
       --tw-translate-x: calc(var(--value) * -1);
       --tw-translate-y: calc(var(--value) * -1);
-      --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .-translate-full {
       --tw-translate-x: -100%;
       --tw-translate-y: -100%;
-      --tw-translate-z: -100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-1\\/2 {
       --tw-translate-x: calc(1 / 2 * 100%);
       --tw-translate-y: calc(1 / 2 * 100%);
-      --tw-translate-z: calc(1 / 2 * 100%);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-\\[123px\\] {
       --tw-translate-x: 123px;
       --tw-translate-y: 123px;
-      --tw-translate-z: 123px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-full {
       --tw-translate-x: 100%;
       --tw-translate-y: 100%;
-      --tw-translate-z: 100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
@@ -4629,7 +4928,7 @@ test('perspective', async () => {
     }
 
     .perspective-dramatic {
-      perspective: var(--perspective-dramatic, 100px);
+      perspective: var(--perspective-dramatic);
     }
 
     .perspective-none {
@@ -4637,7 +4936,7 @@ test('perspective', async () => {
     }
 
     .perspective-normal {
-      perspective: var(--perspective-normal, 500px);
+      perspective: var(--perspective-normal);
     }"
   `)
   expect(
@@ -4746,7 +5045,7 @@ test('cursor', async () => {
     }
 
     .cursor-custom {
-      cursor: var(--cursor-custom, url("/my-cursor.png"));
+      cursor: var(--cursor-custom);
     }
 
     .cursor-default {
@@ -5298,7 +5597,7 @@ test('scroll-m', async () => {
     }
 
     .-scroll-m-4 {
-      scroll-margin: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-m-\\[var\\(--value\\)\\] {
@@ -5306,7 +5605,7 @@ test('scroll-m', async () => {
     }
 
     .scroll-m-4 {
-      scroll-margin: var(--spacing-4, 1rem);
+      scroll-margin: var(--spacing-4);
     }
 
     .scroll-m-\\[4px\\] {
@@ -5341,7 +5640,7 @@ test('scroll-mx', async () => {
     }
 
     .-scroll-mx-4 {
-      scroll-margin-inline: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-inline: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-mx-\\[var\\(--value\\)\\] {
@@ -5349,7 +5648,7 @@ test('scroll-mx', async () => {
     }
 
     .scroll-mx-4 {
-      scroll-margin-inline: var(--spacing-4, 1rem);
+      scroll-margin-inline: var(--spacing-4);
     }
 
     .scroll-mx-\\[4px\\] {
@@ -5384,7 +5683,7 @@ test('scroll-my', async () => {
     }
 
     .-scroll-my-4 {
-      scroll-margin-block: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-block: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-my-\\[var\\(--value\\)\\] {
@@ -5392,7 +5691,7 @@ test('scroll-my', async () => {
     }
 
     .scroll-my-4 {
-      scroll-margin-block: var(--spacing-4, 1rem);
+      scroll-margin-block: var(--spacing-4);
     }
 
     .scroll-my-\\[4px\\] {
@@ -5427,7 +5726,7 @@ test('scroll-ms', async () => {
     }
 
     .-scroll-ms-4 {
-      scroll-margin-inline-start: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-inline-start: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-ms-\\[var\\(--value\\)\\] {
@@ -5435,7 +5734,7 @@ test('scroll-ms', async () => {
     }
 
     .scroll-ms-4 {
-      scroll-margin-inline-start: var(--spacing-4, 1rem);
+      scroll-margin-inline-start: var(--spacing-4);
     }
 
     .scroll-ms-\\[4px\\] {
@@ -5470,7 +5769,7 @@ test('scroll-me', async () => {
     }
 
     .-scroll-me-4 {
-      scroll-margin-inline-end: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-inline-end: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-me-\\[var\\(--value\\)\\] {
@@ -5478,7 +5777,7 @@ test('scroll-me', async () => {
     }
 
     .scroll-me-4 {
-      scroll-margin-inline-end: var(--spacing-4, 1rem);
+      scroll-margin-inline-end: var(--spacing-4);
     }
 
     .scroll-me-\\[4px\\] {
@@ -5513,7 +5812,7 @@ test('scroll-mt', async () => {
     }
 
     .-scroll-mt-4 {
-      scroll-margin-top: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-top: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-mt-\\[var\\(--value\\)\\] {
@@ -5521,7 +5820,7 @@ test('scroll-mt', async () => {
     }
 
     .scroll-mt-4 {
-      scroll-margin-top: var(--spacing-4, 1rem);
+      scroll-margin-top: var(--spacing-4);
     }
 
     .scroll-mt-\\[4px\\] {
@@ -5556,7 +5855,7 @@ test('scroll-mr', async () => {
     }
 
     .-scroll-mr-4 {
-      scroll-margin-right: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-right: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-mr-\\[var\\(--value\\)\\] {
@@ -5564,7 +5863,7 @@ test('scroll-mr', async () => {
     }
 
     .scroll-mr-4 {
-      scroll-margin-right: var(--spacing-4, 1rem);
+      scroll-margin-right: var(--spacing-4);
     }
 
     .scroll-mr-\\[4px\\] {
@@ -5599,7 +5898,7 @@ test('scroll-mb', async () => {
     }
 
     .-scroll-mb-4 {
-      scroll-margin-bottom: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-bottom: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-mb-\\[var\\(--value\\)\\] {
@@ -5607,7 +5906,7 @@ test('scroll-mb', async () => {
     }
 
     .scroll-mb-4 {
-      scroll-margin-bottom: var(--spacing-4, 1rem);
+      scroll-margin-bottom: var(--spacing-4);
     }
 
     .scroll-mb-\\[4px\\] {
@@ -5642,7 +5941,7 @@ test('scroll-ml', async () => {
     }
 
     .-scroll-ml-4 {
-      scroll-margin-left: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-left: calc(var(--spacing-4) * -1);
     }
 
     .-scroll-ml-\\[var\\(--value\\)\\] {
@@ -5650,7 +5949,7 @@ test('scroll-ml', async () => {
     }
 
     .scroll-ml-4 {
-      scroll-margin-left: var(--spacing-4, 1rem);
+      scroll-margin-left: var(--spacing-4);
     }
 
     .scroll-ml-\\[4px\\] {
@@ -5684,16 +5983,8 @@ test('scroll-p', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-p-4 {
-      scroll-padding: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-p-\\[var\\(--value\\)\\] {
-      scroll-padding: calc(var(--value) * -1);
-    }
-
     .scroll-p-4 {
-      scroll-padding: var(--spacing-4, 1rem);
+      scroll-padding: var(--spacing-4);
     }
 
     .scroll-p-\\[4px\\] {
@@ -5727,16 +6018,8 @@ test('scroll-px', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-px-4 {
-      scroll-padding-inline: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-px-\\[var\\(--value\\)\\] {
-      scroll-padding-inline: calc(var(--value) * -1);
-    }
-
     .scroll-px-4 {
-      scroll-padding-inline: var(--spacing-4, 1rem);
+      scroll-padding-inline: var(--spacing-4);
     }
 
     .scroll-px-\\[4px\\] {
@@ -5770,16 +6053,8 @@ test('scroll-py', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-py-4 {
-      scroll-padding-block: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-py-\\[var\\(--value\\)\\] {
-      scroll-padding-block: calc(var(--value) * -1);
-    }
-
     .scroll-py-4 {
-      scroll-padding-block: var(--spacing-4, 1rem);
+      scroll-padding-block: var(--spacing-4);
     }
 
     .scroll-py-\\[4px\\] {
@@ -5813,16 +6088,8 @@ test('scroll-ps', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-ps-4 {
-      scroll-padding-inline-start: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-ps-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-start: calc(var(--value) * -1);
-    }
-
     .scroll-ps-4 {
-      scroll-padding-inline-start: var(--spacing-4, 1rem);
+      scroll-padding-inline-start: var(--spacing-4);
     }
 
     .scroll-ps-\\[4px\\] {
@@ -5856,16 +6123,8 @@ test('scroll-pe', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pe-4 {
-      scroll-padding-inline-end: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pe-\\[var\\(--value\\)\\] {
-      scroll-padding-inline-end: calc(var(--value) * -1);
-    }
-
     .scroll-pe-4 {
-      scroll-padding-inline-end: var(--spacing-4, 1rem);
+      scroll-padding-inline-end: var(--spacing-4);
     }
 
     .scroll-pe-\\[4px\\] {
@@ -5899,16 +6158,8 @@ test('scroll-pt', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pt-4 {
-      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pt-\\[var\\(--value\\)\\] {
-      scroll-padding-top: calc(var(--value) * -1);
-    }
-
     .scroll-pt-4 {
-      scroll-padding-top: var(--spacing-4, 1rem);
+      scroll-padding-top: var(--spacing-4);
     }
 
     .scroll-pt-\\[4px\\] {
@@ -5942,16 +6193,8 @@ test('scroll-pr', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pr-4 {
-      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pr-\\[var\\(--value\\)\\] {
-      scroll-padding-right: calc(var(--value) * -1);
-    }
-
     .scroll-pr-4 {
-      scroll-padding-right: var(--spacing-4, 1rem);
+      scroll-padding-right: var(--spacing-4);
     }
 
     .scroll-pr-\\[4px\\] {
@@ -5985,16 +6228,8 @@ test('scroll-pb', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pb-4 {
-      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pb-\\[var\\(--value\\)\\] {
-      scroll-padding-bottom: calc(var(--value) * -1);
-    }
-
     .scroll-pb-4 {
-      scroll-padding-bottom: var(--spacing-4, 1rem);
+      scroll-padding-bottom: var(--spacing-4);
     }
 
     .scroll-pb-\\[4px\\] {
@@ -6028,16 +6263,8 @@ test('scroll-pl', async () => {
       --spacing-4: 1rem;
     }
 
-    .-scroll-pl-4 {
-      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
-    }
-
-    .-scroll-pl-\\[var\\(--value\\)\\] {
-      scroll-padding-left: calc(var(--value) * -1);
-    }
-
     .scroll-pl-4 {
-      scroll-padding-left: var(--spacing-4, 1rem);
+      scroll-padding-left: var(--spacing-4);
     }
 
     .scroll-pl-\\[4px\\] {
@@ -6159,16 +6386,22 @@ test('color-scheme', async () => {
     ".scheme-dark {
       --lightningcss-light: ;
       --lightningcss-dark: initial;
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
       color-scheme: dark;
     }
 
     .scheme-light {
       --lightningcss-light: initial;
       --lightningcss-dark: ;
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       color-scheme: light;
     }
 
     .scheme-light-dark {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       --lightningcss-light: initial;
       --lightningcss-dark: ;
       color-scheme: light dark;
@@ -6188,10 +6421,14 @@ test('color-scheme', async () => {
     .scheme-only-dark {
       --lightningcss-light: ;
       --lightningcss-dark: initial;
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
       color-scheme: dark only;
     }
 
     .scheme-only-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
       --lightningcss-light: initial;
       --lightningcss-dark: ;
       color-scheme: light only;
@@ -6236,7 +6473,7 @@ test('columns', async () => {
     }
 
     .columns-3xs {
-      columns: var(--width-3xs, 16rem);
+      columns: var(--width-3xs);
     }
 
     .columns-4 {
@@ -6244,7 +6481,7 @@ test('columns', async () => {
     }
 
     .columns-7xl {
-      columns: var(--width-7xl, 80rem);
+      columns: var(--width-7xl);
     }
 
     .columns-99 {
@@ -7103,7 +7340,7 @@ test('gap', async () => {
     }
 
     .gap-4 {
-      gap: var(--spacing-4, 1rem);
+      gap: var(--spacing-4);
     }
 
     .gap-\\[4px\\] {
@@ -7130,7 +7367,7 @@ test('gap-x', async () => {
     }
 
     .gap-x-4 {
-      column-gap: var(--spacing-4, 1rem);
+      column-gap: var(--spacing-4);
     }
 
     .gap-x-\\[4px\\] {
@@ -7159,7 +7396,7 @@ test('gap-y', async () => {
     }
 
     .gap-y-4 {
-      row-gap: var(--spacing-4, 1rem);
+      row-gap: var(--spacing-4);
     }
 
     .gap-y-\\[4px\\] {
@@ -7188,13 +7425,13 @@ test('space-x', async () => {
     }
 
     :where(.-space-x-4 > :not(:last-child)) {
-      margin-inline-start: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-x-reverse)));
+      margin-inline-start: calc(calc(var(--spacing-4) * -1) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     :where(.space-x-4 > :not(:last-child)) {
-      margin-inline-start: calc(var(--spacing-4, 1rem) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-x-reverse)));
+      margin-inline-start: calc(var(--spacing-4) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     :where(.space-x-\\[4px\\] > :not(:last-child)) {
@@ -7236,13 +7473,13 @@ test('space-y', async () => {
     }
 
     :where(.-space-y-4 > :not(:last-child)) {
-      margin-block-start: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
-      margin-block-end: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(calc(var(--spacing-4) * -1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-4 > :not(:last-child)) {
-      margin-block-start: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
-      margin-block-end: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
+      margin-block-start: calc(var(--spacing-4) * var(--tw-space-y-reverse));
+      margin-block-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-\\[4px\\] > :not(:last-child)) {
@@ -7692,11 +7929,11 @@ test('accent', async () => {
     }
 
     .accent-red-500 {
-      accent-color: var(--color-red-500, #ef4444);
+      accent-color: var(--color-red-500);
     }
 
     .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
-      accent-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      accent-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .accent-transparent {
@@ -7792,11 +8029,11 @@ test('caret', async () => {
     }
 
     .caret-red-500 {
-      caret-color: var(--color-red-500, #ef4444);
+      caret-color: var(--color-red-500);
     }
 
     .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
-      caret-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      caret-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .caret-transparent {
@@ -7873,15 +8110,7 @@ test('divide-color', async () => {
       border-color: #08c;
     }
 
-    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)) {
-      border-color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
+    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: oklch(59.9824% .14119 241.555 / .5);
     }
 
@@ -7889,15 +8118,7 @@ test('divide-color', async () => {
       border-color: currentColor;
     }
 
-    :where(.divide-current\\/50 > :not(:last-child)) {
-      border-color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
+    :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
@@ -7906,19 +8127,11 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500 > :not(:last-child)) {
-      border-color: var(--color-red-500, #ef4444);
+      border-color: var(--color-red-500);
     }
 
-    :where(.divide-red-500\\/50 > :not(:last-child)) {
-      border-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
-    }
-
-    :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
-    }
-
-    :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+    :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     :where(.divide-transparent > :not(:last-child)) {
@@ -8547,7 +8760,7 @@ test('rounded', async () => {
     }
 
     .rounded {
-      border-radius: var(--radius, .25rem);
+      border-radius: var(--radius);
     }
 
     .rounded-\\[4px\\] {
@@ -8563,7 +8776,7 @@ test('rounded', async () => {
     }
 
     .rounded-sm {
-      border-radius: var(--radius-sm, .125rem);
+      border-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8605,8 +8818,8 @@ test('rounded-s', async () => {
     }
 
     .rounded-s {
-      border-start-start-radius: var(--radius, .25rem);
-      border-end-start-radius: var(--radius, .25rem);
+      border-start-start-radius: var(--radius);
+      border-end-start-radius: var(--radius);
     }
 
     .rounded-s-\\[4px\\] {
@@ -8615,18 +8828,18 @@ test('rounded-s', async () => {
     }
 
     .rounded-s-full {
-      border-start-start-radius: var(--radius-full, 9999px);
-      border-end-start-radius: var(--radius-full, 9999px);
+      border-start-start-radius: var(--radius-full);
+      border-end-start-radius: var(--radius-full);
     }
 
     .rounded-s-none {
-      border-start-start-radius: var(--radius-none, 0px);
-      border-end-start-radius: var(--radius-none, 0px);
+      border-start-start-radius: var(--radius-none);
+      border-end-start-radius: var(--radius-none);
     }
 
     .rounded-s-sm {
-      border-start-start-radius: var(--radius-sm, .125rem);
-      border-end-start-radius: var(--radius-sm, .125rem);
+      border-start-start-radius: var(--radius-sm);
+      border-end-start-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8668,8 +8881,8 @@ test('rounded-e', async () => {
     }
 
     .rounded-e {
-      border-start-end-radius: var(--radius, .25rem);
-      border-end-end-radius: var(--radius, .25rem);
+      border-start-end-radius: var(--radius);
+      border-end-end-radius: var(--radius);
     }
 
     .rounded-e-\\[4px\\] {
@@ -8678,18 +8891,18 @@ test('rounded-e', async () => {
     }
 
     .rounded-e-full {
-      border-start-end-radius: var(--radius-full, 9999px);
-      border-end-end-radius: var(--radius-full, 9999px);
+      border-start-end-radius: var(--radius-full);
+      border-end-end-radius: var(--radius-full);
     }
 
     .rounded-e-none {
-      border-start-end-radius: var(--radius-none, 0px);
-      border-end-end-radius: var(--radius-none, 0px);
+      border-start-end-radius: var(--radius-none);
+      border-end-end-radius: var(--radius-none);
     }
 
     .rounded-e-sm {
-      border-start-end-radius: var(--radius-sm, .125rem);
-      border-end-end-radius: var(--radius-sm, .125rem);
+      border-start-end-radius: var(--radius-sm);
+      border-end-end-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8731,8 +8944,8 @@ test('rounded-t', async () => {
     }
 
     .rounded-t {
-      border-top-left-radius: var(--radius, .25rem);
-      border-top-right-radius: var(--radius, .25rem);
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
     }
 
     .rounded-t-\\[4px\\] {
@@ -8743,20 +8956,20 @@ test('rounded-t', async () => {
     .rounded-t-full {
       border-top-left-radius: 3.40282e38px;
       border-top-right-radius: 3.40282e38px;
-      border-top-left-radius: var(--radius-full, 9999px);
-      border-top-right-radius: var(--radius-full, 9999px);
+      border-top-left-radius: var(--radius-full);
+      border-top-right-radius: var(--radius-full);
     }
 
     .rounded-t-none {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
-      border-top-left-radius: var(--radius-none, 0px);
-      border-top-right-radius: var(--radius-none, 0px);
+      border-top-left-radius: var(--radius-none);
+      border-top-right-radius: var(--radius-none);
     }
 
     .rounded-t-sm {
-      border-top-left-radius: var(--radius-sm, .125rem);
-      border-top-right-radius: var(--radius-sm, .125rem);
+      border-top-left-radius: var(--radius-sm);
+      border-top-right-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8798,8 +9011,8 @@ test('rounded-r', async () => {
     }
 
     .rounded-r {
-      border-top-right-radius: var(--radius, .25rem);
-      border-bottom-right-radius: var(--radius, .25rem);
+      border-top-right-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
     }
 
     .rounded-r-\\[4px\\] {
@@ -8810,20 +9023,20 @@ test('rounded-r', async () => {
     .rounded-r-full {
       border-top-right-radius: 3.40282e38px;
       border-bottom-right-radius: 3.40282e38px;
-      border-top-right-radius: var(--radius-full, 9999px);
-      border-bottom-right-radius: var(--radius-full, 9999px);
+      border-top-right-radius: var(--radius-full);
+      border-bottom-right-radius: var(--radius-full);
     }
 
     .rounded-r-none {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
-      border-top-right-radius: var(--radius-none, 0px);
-      border-bottom-right-radius: var(--radius-none, 0px);
+      border-top-right-radius: var(--radius-none);
+      border-bottom-right-radius: var(--radius-none);
     }
 
     .rounded-r-sm {
-      border-top-right-radius: var(--radius-sm, .125rem);
-      border-bottom-right-radius: var(--radius-sm, .125rem);
+      border-top-right-radius: var(--radius-sm);
+      border-bottom-right-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8865,8 +9078,8 @@ test('rounded-b', async () => {
     }
 
     .rounded-b {
-      border-bottom-right-radius: var(--radius, .25rem);
-      border-bottom-left-radius: var(--radius, .25rem);
+      border-bottom-right-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
     }
 
     .rounded-b-\\[4px\\] {
@@ -8877,20 +9090,20 @@ test('rounded-b', async () => {
     .rounded-b-full {
       border-bottom-right-radius: 3.40282e38px;
       border-bottom-left-radius: 3.40282e38px;
-      border-bottom-right-radius: var(--radius-full, 9999px);
-      border-bottom-left-radius: var(--radius-full, 9999px);
+      border-bottom-right-radius: var(--radius-full);
+      border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-b-none {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
-      border-bottom-right-radius: var(--radius-none, 0px);
-      border-bottom-left-radius: var(--radius-none, 0px);
+      border-bottom-right-radius: var(--radius-none);
+      border-bottom-left-radius: var(--radius-none);
     }
 
     .rounded-b-sm {
-      border-bottom-right-radius: var(--radius-sm, .125rem);
-      border-bottom-left-radius: var(--radius-sm, .125rem);
+      border-bottom-right-radius: var(--radius-sm);
+      border-bottom-left-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8932,8 +9145,8 @@ test('rounded-l', async () => {
     }
 
     .rounded-l {
-      border-top-left-radius: var(--radius, .25rem);
-      border-bottom-left-radius: var(--radius, .25rem);
+      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
     }
 
     .rounded-l-\\[4px\\] {
@@ -8944,20 +9157,20 @@ test('rounded-l', async () => {
     .rounded-l-full {
       border-top-left-radius: 3.40282e38px;
       border-bottom-left-radius: 3.40282e38px;
-      border-top-left-radius: var(--radius-full, 9999px);
-      border-bottom-left-radius: var(--radius-full, 9999px);
+      border-top-left-radius: var(--radius-full);
+      border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-l-none {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      border-top-left-radius: var(--radius-none, 0px);
-      border-bottom-left-radius: var(--radius-none, 0px);
+      border-top-left-radius: var(--radius-none);
+      border-bottom-left-radius: var(--radius-none);
     }
 
     .rounded-l-sm {
-      border-top-left-radius: var(--radius-sm, .125rem);
-      border-bottom-left-radius: var(--radius-sm, .125rem);
+      border-top-left-radius: var(--radius-sm);
+      border-bottom-left-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -8999,7 +9212,7 @@ test('rounded-ss', async () => {
     }
 
     .rounded-ss {
-      border-start-start-radius: var(--radius, .25rem);
+      border-start-start-radius: var(--radius);
     }
 
     .rounded-ss-\\[4px\\] {
@@ -9007,15 +9220,15 @@ test('rounded-ss', async () => {
     }
 
     .rounded-ss-full {
-      border-start-start-radius: var(--radius-full, 9999px);
+      border-start-start-radius: var(--radius-full);
     }
 
     .rounded-ss-none {
-      border-start-start-radius: var(--radius-none, 0px);
+      border-start-start-radius: var(--radius-none);
     }
 
     .rounded-ss-sm {
-      border-start-start-radius: var(--radius-sm, .125rem);
+      border-start-start-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9057,7 +9270,7 @@ test('rounded-se', async () => {
     }
 
     .rounded-se {
-      border-start-end-radius: var(--radius, .25rem);
+      border-start-end-radius: var(--radius);
     }
 
     .rounded-se-\\[4px\\] {
@@ -9065,15 +9278,15 @@ test('rounded-se', async () => {
     }
 
     .rounded-se-full {
-      border-start-end-radius: var(--radius-full, 9999px);
+      border-start-end-radius: var(--radius-full);
     }
 
     .rounded-se-none {
-      border-start-end-radius: var(--radius-none, 0px);
+      border-start-end-radius: var(--radius-none);
     }
 
     .rounded-se-sm {
-      border-start-end-radius: var(--radius-sm, .125rem);
+      border-start-end-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9115,7 +9328,7 @@ test('rounded-ee', async () => {
     }
 
     .rounded-ee {
-      border-end-end-radius: var(--radius, .25rem);
+      border-end-end-radius: var(--radius);
     }
 
     .rounded-ee-\\[4px\\] {
@@ -9123,15 +9336,15 @@ test('rounded-ee', async () => {
     }
 
     .rounded-ee-full {
-      border-end-end-radius: var(--radius-full, 9999px);
+      border-end-end-radius: var(--radius-full);
     }
 
     .rounded-ee-none {
-      border-end-end-radius: var(--radius-none, 0px);
+      border-end-end-radius: var(--radius-none);
     }
 
     .rounded-ee-sm {
-      border-end-end-radius: var(--radius-sm, .125rem);
+      border-end-end-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9173,7 +9386,7 @@ test('rounded-es', async () => {
     }
 
     .rounded-es {
-      border-end-start-radius: var(--radius, .25rem);
+      border-end-start-radius: var(--radius);
     }
 
     .rounded-es-\\[4px\\] {
@@ -9181,15 +9394,15 @@ test('rounded-es', async () => {
     }
 
     .rounded-es-full {
-      border-end-start-radius: var(--radius-full, 9999px);
+      border-end-start-radius: var(--radius-full);
     }
 
     .rounded-es-none {
-      border-end-start-radius: var(--radius-none, 0px);
+      border-end-start-radius: var(--radius-none);
     }
 
     .rounded-es-sm {
-      border-end-start-radius: var(--radius-sm, .125rem);
+      border-end-start-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9231,7 +9444,7 @@ test('rounded-tl', async () => {
     }
 
     .rounded-tl {
-      border-top-left-radius: var(--radius, .25rem);
+      border-top-left-radius: var(--radius);
     }
 
     .rounded-tl-\\[4px\\] {
@@ -9240,16 +9453,16 @@ test('rounded-tl', async () => {
 
     .rounded-tl-full {
       border-top-left-radius: 3.40282e38px;
-      border-top-left-radius: var(--radius-full, 9999px);
+      border-top-left-radius: var(--radius-full);
     }
 
     .rounded-tl-none {
       border-top-left-radius: 0;
-      border-top-left-radius: var(--radius-none, 0px);
+      border-top-left-radius: var(--radius-none);
     }
 
     .rounded-tl-sm {
-      border-top-left-radius: var(--radius-sm, .125rem);
+      border-top-left-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9291,7 +9504,7 @@ test('rounded-tr', async () => {
     }
 
     .rounded-tr {
-      border-top-right-radius: var(--radius, .25rem);
+      border-top-right-radius: var(--radius);
     }
 
     .rounded-tr-\\[4px\\] {
@@ -9300,16 +9513,16 @@ test('rounded-tr', async () => {
 
     .rounded-tr-full {
       border-top-right-radius: 3.40282e38px;
-      border-top-right-radius: var(--radius-full, 9999px);
+      border-top-right-radius: var(--radius-full);
     }
 
     .rounded-tr-none {
       border-top-right-radius: 0;
-      border-top-right-radius: var(--radius-none, 0px);
+      border-top-right-radius: var(--radius-none);
     }
 
     .rounded-tr-sm {
-      border-top-right-radius: var(--radius-sm, .125rem);
+      border-top-right-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9351,7 +9564,7 @@ test('rounded-br', async () => {
     }
 
     .rounded-br {
-      border-bottom-right-radius: var(--radius, .25rem);
+      border-bottom-right-radius: var(--radius);
     }
 
     .rounded-br-\\[4px\\] {
@@ -9360,16 +9573,16 @@ test('rounded-br', async () => {
 
     .rounded-br-full {
       border-bottom-right-radius: 3.40282e38px;
-      border-bottom-right-radius: var(--radius-full, 9999px);
+      border-bottom-right-radius: var(--radius-full);
     }
 
     .rounded-br-none {
       border-bottom-right-radius: 0;
-      border-bottom-right-radius: var(--radius-none, 0px);
+      border-bottom-right-radius: var(--radius-none);
     }
 
     .rounded-br-sm {
-      border-bottom-right-radius: var(--radius-sm, .125rem);
+      border-bottom-right-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9411,7 +9624,7 @@ test('rounded-bl', async () => {
     }
 
     .rounded-bl {
-      border-bottom-left-radius: var(--radius, .25rem);
+      border-bottom-left-radius: var(--radius);
     }
 
     .rounded-bl-\\[4px\\] {
@@ -9420,16 +9633,16 @@ test('rounded-bl', async () => {
 
     .rounded-bl-full {
       border-bottom-left-radius: 3.40282e38px;
-      border-bottom-left-radius: var(--radius-full, 9999px);
+      border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-bl-none {
       border-bottom-left-radius: 0;
-      border-bottom-left-radius: var(--radius-none, 0px);
+      border-bottom-left-radius: var(--radius-none);
     }
 
     .rounded-bl-sm {
-      border-bottom-left-radius: var(--radius-sm, .125rem);
+      border-bottom-left-radius: var(--radius-sm);
     }"
   `)
   expect(
@@ -9783,11 +9996,11 @@ test('bg', async () => {
     }
 
     .bg-red-500 {
-      background-color: var(--color-red-500, #ef4444);
+      background-color: var(--color-red-500);
     }
 
     .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
-      background-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      background-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .bg-transparent {
@@ -10255,12 +10468,12 @@ test('from', async () => {
     }
 
     .from-red-500 {
-      --tw-gradient-from: var(--color-red-500, #ef4444);
+      --tw-gradient-from: var(--color-red-500);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
-      --tw-gradient-from: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-gradient-from: color-mix(in oklch, var(--color-red-500) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -10499,13 +10712,13 @@ test('via', async () => {
     }
 
     .via-red-500 {
-      --tw-gradient-via: var(--color-red-500, #ef4444);
+      --tw-gradient-via: var(--color-red-500);
       --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
-      --tw-gradient-via: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-gradient-via: color-mix(in oklch, var(--color-red-500) 50%, transparent);
       --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -10735,12 +10948,12 @@ test('to', async () => {
     }
 
     .to-red-500 {
-      --tw-gradient-to: var(--color-red-500, #ef4444);
+      --tw-gradient-to: var(--color-red-500);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
-      --tw-gradient-to: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-gradient-to: color-mix(in oklch, var(--color-red-500) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11272,11 +11485,11 @@ test('fill', async () => {
     }
 
     .fill-red-500 {
-      fill: var(--color-red-500, #ef4444);
+      fill: var(--color-red-500);
     }
 
     .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
-      fill: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      fill: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .fill-transparent {
@@ -11398,11 +11611,11 @@ test('stroke', async () => {
     }
 
     .stroke-red-500 {
-      stroke: var(--color-red-500, #ef4444);
+      stroke: var(--color-red-500);
     }
 
     .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
-      stroke: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      stroke: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .stroke-transparent {
@@ -11586,23 +11799,37 @@ test('p', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['p-4', 'p-[4px]'],
+      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .p-1 {
+      padding: calc(var(--spacing) * 1);
     }
 
     .p-4 {
-      padding: var(--spacing-4, 1rem);
+      padding: calc(var(--spacing) * 4);
+    }
+
+    .p-99 {
+      padding: calc(var(--spacing) * 99);
     }
 
     .p-\\[4px\\] {
       padding: 4px;
+    }
+
+    .p-big {
+      padding: var(--spacing-big);
     }"
   `)
   expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
@@ -11613,23 +11840,37 @@ test('px', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['px-4', 'px-[4px]'],
+      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
     }
 
-    .px-4 {
-      padding-inline: var(--spacing-4, 1rem);
+    .px-1 {
+      padding-inline: calc(var(--spacing) * 1);
+    }
+
+    .px-2\\.5 {
+      padding-inline: calc(var(--spacing) * 2.5);
+    }
+
+    .px-99 {
+      padding-inline: calc(var(--spacing) * 99);
     }
 
     .px-\\[4px\\] {
       padding-inline: 4px;
+    }
+
+    .px-big {
+      padding-inline: var(--spacing-big);
     }"
   `)
   expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
@@ -11640,23 +11881,37 @@ test('py', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['py-4', 'py-[4px]'],
+      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .py-1 {
+      padding-block: calc(var(--spacing) * 1);
     }
 
     .py-4 {
-      padding-block: var(--spacing-4, 1rem);
+      padding-block: calc(var(--spacing) * 4);
+    }
+
+    .py-99 {
+      padding-block: calc(var(--spacing) * 99);
     }
 
     .py-\\[4px\\] {
       padding-block: 4px;
+    }
+
+    .py-big {
+      padding-block: var(--spacing-big);
     }"
   `)
   expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
@@ -11667,23 +11922,37 @@ test('pt', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pt-4', 'pt-[4px]'],
+      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pt-1 {
+      padding-top: calc(var(--spacing) * 1);
     }
 
     .pt-4 {
-      padding-top: var(--spacing-4, 1rem);
+      padding-top: calc(var(--spacing) * 4);
+    }
+
+    .pt-99 {
+      padding-top: calc(var(--spacing) * 99);
     }
 
     .pt-\\[4px\\] {
       padding-top: 4px;
+    }
+
+    .pt-big {
+      padding-top: var(--spacing-big);
     }"
   `)
   expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
@@ -11694,23 +11963,37 @@ test('ps', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['ps-4', 'ps-[4px]'],
+      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .ps-1 {
+      padding-inline-start: calc(var(--spacing) * 1);
     }
 
     .ps-4 {
-      padding-inline-start: var(--spacing-4, 1rem);
+      padding-inline-start: calc(var(--spacing) * 4);
+    }
+
+    .ps-99 {
+      padding-inline-start: calc(var(--spacing) * 99);
     }
 
     .ps-\\[4px\\] {
       padding-inline-start: 4px;
+    }
+
+    .ps-big {
+      padding-inline-start: var(--spacing-big);
     }"
   `)
   expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
@@ -11721,23 +12004,37 @@ test('pe', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pe-4', 'pe-[4px]'],
+      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pe-1 {
+      padding-inline-end: calc(var(--spacing) * 1);
     }
 
     .pe-4 {
-      padding-inline-end: var(--spacing-4, 1rem);
+      padding-inline-end: calc(var(--spacing) * 4);
+    }
+
+    .pe-99 {
+      padding-inline-end: calc(var(--spacing) * 99);
     }
 
     .pe-\\[4px\\] {
       padding-inline-end: 4px;
+    }
+
+    .pe-big {
+      padding-inline-end: var(--spacing-big);
     }"
   `)
   expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
@@ -11748,23 +12045,37 @@ test('pr', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pr-4', 'pr-[4px]'],
+      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pr-1 {
+      padding-right: calc(var(--spacing) * 1);
     }
 
     .pr-4 {
-      padding-right: var(--spacing-4, 1rem);
+      padding-right: calc(var(--spacing) * 4);
+    }
+
+    .pr-99 {
+      padding-right: calc(var(--spacing) * 99);
     }
 
     .pr-\\[4px\\] {
       padding-right: 4px;
+    }
+
+    .pr-big {
+      padding-right: var(--spacing-big);
     }"
   `)
   expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
@@ -11775,23 +12086,37 @@ test('pb', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pb-4', 'pb-[4px]'],
+      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pb-1 {
+      padding-bottom: calc(var(--spacing) * 1);
     }
 
     .pb-4 {
-      padding-bottom: var(--spacing-4, 1rem);
+      padding-bottom: calc(var(--spacing) * 4);
+    }
+
+    .pb-99 {
+      padding-bottom: calc(var(--spacing) * 99);
     }
 
     .pb-\\[4px\\] {
       padding-bottom: 4px;
+    }
+
+    .pb-big {
+      padding-bottom: var(--spacing-big);
     }"
   `)
   expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
@@ -11802,23 +12127,37 @@ test('pl', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-      ['pl-4', 'pl-[4px]'],
+      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pl-1 {
+      padding-left: calc(var(--spacing) * 1);
     }
 
     .pl-4 {
-      padding-left: var(--spacing-4, 1rem);
+      padding-left: calc(var(--spacing) * 4);
+    }
+
+    .pl-99 {
+      padding-left: calc(var(--spacing) * 99);
     }
 
     .pl-\\[4px\\] {
       padding-left: 4px;
+    }
+
+    .pl-big {
+      padding-left: var(--spacing-big);
     }"
   `)
   expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
@@ -11966,8 +12305,9 @@ test('font', async () => {
     await compileCss(
       css`
         @theme {
-          --font-family-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
         }
         @tailwind utilities;
       `,
@@ -11988,7 +12328,8 @@ test('font', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-weight-bold: 650;
     }
 
     .font-\\[\\"arial_rounded\\"\\] {
@@ -12004,7 +12345,7 @@ test('font', async () => {
     }
 
     .font-sans {
-      font-family: var(--font-family-sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+      font-family: var(--font-sans);
     }
 
     .font-\\[100\\] {
@@ -12023,8 +12364,8 @@ test('font', async () => {
     }
 
     .font-bold {
-      --tw-font-weight: 700;
-      font-weight: 700;
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
     }
 
     @supports (-moz-orient: inline) {
@@ -12041,24 +12382,37 @@ test('font', async () => {
     }"
   `)
   expect(
-    await run([
-      'font',
-      // font-family
-      '-font-sans',
+    await compileCss(
+      css`
+        @theme reference {
+          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-size-xl: 24px;
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'font',
+        // font-family
+        '-font-sans',
 
-      // font-weight
-      '-font-bold',
+        // font-weight
+        '-font-bold',
 
-      'font-sans/foo',
-      'font-["arial_rounded"]/foo',
-      'font-[ui-sans-serif]/foo',
-      'font-[var(--my-family)]/foo',
-      'font-[family-name:var(--my-family)]/foo',
-      'font-[generic-name:var(--my-family)]/foo',
-      'font-bold/foo',
-      'font-[100]/foo',
-      'font-[number:var(--my-weight)]/foo',
-    ]),
+        'font-size-xl',
+        'font-weight-bold',
+        'font-sans/foo',
+        'font-["arial_rounded"]/foo',
+        'font-[ui-sans-serif]/foo',
+        'font-[var(--my-family)]/foo',
+        'font-[family-name:var(--my-family)]/foo',
+        'font-[generic-name:var(--my-family)]/foo',
+        'font-bold/foo',
+        'font-[100]/foo',
+        'font-[number:var(--my-weight)]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -12205,15 +12559,7 @@ test('placeholder', async () => {
       color: #08c;
     }
 
-    .placeholder-\\[\\#0088cc\\]\\/50::placeholder {
-      color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder {
-      color: oklch(59.9824% .14119 241.555 / .5);
-    }
-
-    .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
+    .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
       color: oklch(59.9824% .14119 241.555 / .5);
     }
 
@@ -12221,15 +12567,7 @@ test('placeholder', async () => {
       color: currentColor;
     }
 
-    .placeholder-current\\/50::placeholder {
-      color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    .placeholder-current\\/\\[0\\.5\\]::placeholder {
-      color: color-mix(in oklch, currentColor 50%, transparent);
-    }
-
-    .placeholder-current\\/\\[50\\%\\]::placeholder {
+    .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
       color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
@@ -12238,19 +12576,11 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500::placeholder {
-      color: var(--color-red-500, #ef4444);
+      color: var(--color-red-500);
     }
 
-    .placeholder-red-500\\/50::placeholder {
-      color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
-    }
-
-    .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
-      color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
-    }
-
-    .placeholder-red-500\\/\\[50\\%\\]::placeholder {
-      color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+    .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .placeholder-transparent::placeholder {
@@ -12348,20 +12678,24 @@ test('decoration', async () => {
 
     .decoration-\\[color\\:var\\(--my-color\\)\\] {
       -webkit-text-decoration-color: var(--my-color);
+      -webkit-text-decoration-color: var(--my-color);
       text-decoration-color: var(--my-color);
     }
 
     .decoration-\\[color\\:var\\(--my-color\\)\\]\\/50, .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
     }
 
     .decoration-\\[var\\(--my-color\\)\\] {
       -webkit-text-decoration-color: var(--my-color);
+      -webkit-text-decoration-color: var(--my-color);
       text-decoration-color: var(--my-color);
     }
 
     .decoration-\\[var\\(--my-color\\)\\]\\/50, .decoration-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .decoration-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       -webkit-text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
       text-decoration-color: color-mix(in oklch, var(--my-color) 50%, transparent);
     }
@@ -12372,22 +12706,26 @@ test('decoration', async () => {
 
     .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
       -webkit-text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
       text-decoration-color: color-mix(in oklch, currentColor 50%, transparent);
     }
 
     .decoration-inherit {
       -webkit-text-decoration-color: inherit;
+      -webkit-text-decoration-color: inherit;
       text-decoration-color: inherit;
     }
 
     .decoration-red-500 {
-      -webkit-text-decoration-color: var(--color-red-500, #ef4444);
-      text-decoration-color: var(--color-red-500, #ef4444);
+      -webkit-text-decoration-color: var(--color-red-500);
+      -webkit-text-decoration-color: var(--color-red-500);
+      text-decoration-color: var(--color-red-500);
     }
 
     .decoration-red-500\\/50, .decoration-red-500\\/\\[0\\.5\\], .decoration-red-500\\/\\[50\\%\\] {
-      -webkit-text-decoration-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
-      text-decoration-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
+      text-decoration-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .decoration-transparent {
@@ -12439,7 +12777,7 @@ test('decoration', async () => {
     }
 
     .decoration-\\[50\\%\\] {
-      text-decoration-thickness: calc(1em / 2);
+      text-decoration-thickness: .5em;
     }
 
     .decoration-\\[length\\:var\\(--my-thickness\\)\\], .decoration-\\[percentage\\:var\\(--my-thickness\\)\\] {
@@ -12534,7 +12872,7 @@ test('animate', async () => {
     }
 
     .animate-spin {
-      animation: var(--animate-spin, spin 1s linear infinite);
+      animation: var(--animate-spin);
     }"
   `)
   expect(
@@ -12613,7 +12951,7 @@ test('filter', async () => {
     }
 
     .blur-xl {
-      --tw-blur: blur(var(--blur-xl, 24px));
+      --tw-blur: blur(var(--blur-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -12643,7 +12981,7 @@ test('filter', async () => {
     }
 
     .drop-shadow-xl {
-      --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl, 0 20px 13px #00000008, 0 8px 5px #00000014));
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -12936,7 +13274,7 @@ test('backdrop-filter', async () => {
     }
 
     .backdrop-blur-xl {
-      --tw-backdrop-blur: blur(var(--blur-xl, 24px));
+      --tw-backdrop-blur: blur(var(--blur-xl));
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
@@ -13268,48 +13606,48 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-\\[var\\(--value\\)\\] {
       transition-property: var(--value);
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-all {
       transition-property: all;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-colors {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-opacity {
       transition-property: opacity;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
-      transition-property: var(--transition-property-opacity, opacity);
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      transition-property: var(--transition-property-opacity);
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-shadow {
       transition-property: box-shadow;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-transform {
       transition-property: transform, translate, scale, rotate;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function, ease));
-      transition-duration: var(--tw-duration, var(--default-transition-duration, .1s));
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
 
     .transition-none {
@@ -13335,7 +13673,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
     }
@@ -13463,8 +13801,8 @@ test('ease', async () => {
     await compileCss(
       css`
         @theme {
-          --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
-          --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);
+          --ease-in: cubic-bezier(0.4, 0, 1, 1);
+          --ease-out: cubic-bezier(0, 0, 0.2, 1);
         }
         @tailwind utilities;
       `,
@@ -13472,8 +13810,8 @@ test('ease', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --transition-timing-function-in: cubic-bezier(.4, 0, 1, 1);
-      --transition-timing-function-out: cubic-bezier(0, 0, .2, 1);
+      --ease-in: cubic-bezier(.4, 0, 1, 1);
+      --ease-out: cubic-bezier(0, 0, .2, 1);
     }
 
     .ease-\\[var\\(--value\\)\\] {
@@ -13482,13 +13820,13 @@ test('ease', async () => {
     }
 
     .ease-in {
-      --tw-ease: var(--transition-timing-function-in, cubic-bezier(.4, 0, 1, 1));
-      transition-timing-function: var(--transition-timing-function-in, cubic-bezier(.4, 0, 1, 1));
+      --tw-ease: var(--ease-in);
+      transition-timing-function: var(--ease-in);
     }
 
     .ease-out {
-      --tw-ease: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
-      transition-timing-function: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
+      --tw-ease: var(--ease-out);
+      transition-timing-function: var(--ease-out);
     }
 
     @supports (-moz-orient: inline) {
@@ -13733,8 +14071,8 @@ test('leading', async () => {
     }
 
     .leading-6 {
-      --tw-leading: var(--line-height-6, 1.5rem);
-      line-height: var(--line-height-6, 1.5rem);
+      --tw-leading: var(--line-height-6);
+      line-height: var(--line-height-6);
     }
 
     .leading-\\[var\\(--value\\)\\] {
@@ -13743,8 +14081,8 @@ test('leading', async () => {
     }
 
     .leading-none {
-      --tw-leading: var(--line-height-none, 1);
-      line-height: var(--line-height-none, 1);
+      --tw-leading: var(--line-height-none);
+      line-height: var(--line-height-none);
     }
 
     @supports (-moz-orient: inline) {
@@ -13802,13 +14140,13 @@ test('tracking', async () => {
     }
 
     .tracking-normal {
-      --tw-tracking: var(--letter-spacing-normal, 0em);
-      letter-spacing: var(--letter-spacing-normal, 0em);
+      --tw-tracking: var(--letter-spacing-normal);
+      letter-spacing: var(--letter-spacing-normal);
     }
 
     .tracking-wide {
-      --tw-tracking: var(--letter-spacing-wide, .025em);
-      letter-spacing: var(--letter-spacing-wide, .025em);
+      --tw-tracking: var(--letter-spacing-wide);
+      letter-spacing: var(--letter-spacing-wide);
     }
 
     @supports (-moz-orient: inline) {
@@ -14126,11 +14464,11 @@ test('outline', async () => {
     }
 
     .outline-red-500 {
-      outline-color: var(--color-red-500, #ef4444);
+      outline-color: var(--color-red-500);
     }
 
     .outline-red-500\\/50, .outline-red-500\\/\\[0\\.5\\], .outline-red-500\\/\\[50\\%\\] {
-      outline-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      outline-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .outline-transparent {
@@ -14407,42 +14745,42 @@ test('text', async () => {
     }
 
     .text-sm {
-      font-size: var(--font-size-sm, .875rem);
-      line-height: var(--tw-leading, var(--font-size-sm--line-height, 1.25rem));
+      font-size: var(--font-size-sm);
+      line-height: var(--tw-leading, var(--font-size-sm--line-height));
     }
 
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--line-height-6);
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--line-height-6);
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: var(--line-height-9, 2.25rem);
+      line-height: var(--line-height-9);
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--line-height-6);
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: var(--line-height-6, 1.5rem);
+      line-height: var(--line-height-6);
     }
 
     .text-sm\\/6 {
-      font-size: var(--font-size-sm, .875rem);
-      line-height: var(--line-height-6, 1.5rem);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-6);
     }
 
     .text-sm\\/\\[4px\\] {
-      font-size: var(--font-size-sm, .875rem);
+      font-size: var(--font-size-sm);
       line-height: 4px;
     }
 
@@ -14515,11 +14853,11 @@ test('text', async () => {
     }
 
     .text-red-500 {
-      color: var(--color-red-500, #ef4444);
+      color: var(--color-red-500);
     }
 
     .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
-      color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .text-transparent {
@@ -14661,11 +14999,11 @@ test('shadow', async () => {
     }
 
     .shadow-red-500 {
-      --tw-shadow-color: var(--color-red-500, #ef4444);
+      --tw-shadow-color: var(--color-red-500);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .shadow-transparent {
@@ -14889,11 +15227,11 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500 {
-      --tw-inset-shadow-color: var(--color-red-500, #ef4444);
+      --tw-inset-shadow-color: var(--color-red-500);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .inset-shadow-transparent {
@@ -15131,11 +15469,11 @@ test('ring', async () => {
     }
 
     .ring-red-500 {
-      --tw-ring-color: var(--color-red-500, #ef4444);
+      --tw-ring-color: var(--color-red-500);
     }
 
     .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
-      --tw-ring-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .ring-transparent {
@@ -15394,11 +15732,11 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500 {
-      --tw-inset-ring-color: var(--color-red-500, #ef4444);
+      --tw-inset-ring-color: var(--color-red-500);
     }
 
     .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {
-      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .inset-ring-transparent {
@@ -15645,11 +15983,11 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500 {
-      --tw-ring-offset-color: var(--color-red-500, #ef4444);
+      --tw-ring-offset-color: var(--color-red-500);
     }
 
     .ring-offset-red-500\\/50, .ring-offset-red-500\\/\\[0\\.5\\], .ring-offset-red-500\\/\\[50\\%\\] {
-      --tw-ring-offset-color: color-mix(in oklch, var(--color-red-500, #ef4444) 50%, transparent);
+      --tw-ring-offset-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
 
     .ring-offset-transparent {
@@ -15738,6 +16076,78 @@ test('@container', async () => {
       '-@container-[size]/sidebar',
     ]),
   ).toEqual('')
+})
+
+describe('spacing utilities', () => {
+  test('`--spacing: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4);
+      }"
+    `)
+  })
+
+  test('`--spacing-*: initial` disables the spacing multiplier', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing-*: initial;
+        --spacing-4: 1rem;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-1', 'px-4'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-4: 1rem;
+      }
+
+      .px-4 {
+        padding-inline: var(--spacing-4);
+      }"
+    `)
+  })
+
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: 4px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: 4px;
+      }
+
+      .px-0\\.25 {
+        padding-inline: calc(var(--spacing) * .25);
+      }
+
+      .px-1\\.5 {
+        padding-inline: calc(var(--spacing) * 1.5);
+      }
+
+      .px-2\\.75 {
+        padding-inline: calc(var(--spacing) * 2.75);
+      }"
+    `)
+  })
 })
 
 describe('custom utilities', () => {
@@ -15849,8 +16259,8 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--font-size-sm, .875rem);
-          line-height: var(--tw-leading, var(--font-size-sm--line-height, 1.25rem));
+          font-size: var(--font-size-sm);
+          line-height: var(--tw-leading, var(--font-size-sm--line-height));
           font-size: var(--font-size-sm, .8755rem);
           line-height: var(--font-size-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
@@ -15886,7 +16296,7 @@ describe('custom utilities', () => {
         }
 
         .rounded-xl {
-          border-radius: var(--radius-xl, 16px);
+          border-radius: var(--radius-xl);
         }
       }"
     `)
@@ -16005,7 +16415,7 @@ describe('custom utilities', () => {
           }
 
           @utility bar {
-            @apply dark:foo font-bold;
+            @apply dark:foo flex-wrap;
           }
 
           @tailwind utilities;
@@ -16014,8 +16424,7 @@ describe('custom utilities', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bar {
-        --tw-font-weight: 700;
-        font-weight: 700;
+        flex-wrap: wrap;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -16024,19 +16433,6 @@ describe('custom utilities', () => {
           text-decoration-line: underline;
           display: flex;
         }
-      }
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-font-weight: initial;
-          }
-        }
-      }
-
-      @property --tw-font-weight {
-        syntax: "*";
-        inherits: false
       }"
     `)
   })
@@ -16046,7 +16442,7 @@ describe('custom utilities', () => {
       compileCss(
         css`
           @utility foo {
-            @apply font-bold hover:bar;
+            @apply flex-wrap hover:bar;
           }
 
           @utility bar {
@@ -16070,7 +16466,7 @@ describe('custom utilities', () => {
             .bar {
               .baz {
                 .qux {
-                  @apply font-bold hover:bar;
+                  @apply flex-wrap hover:bar;
                 }
               }
             }

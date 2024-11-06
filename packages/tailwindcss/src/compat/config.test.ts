@@ -402,7 +402,7 @@ describe('theme overrides order', () => {
         --color-blue: blue;
       }
       .bg-blue {
-        background-color: var(--color-blue, blue);
+        background-color: var(--color-blue);
       }
       .bg-red {
         background-color: very-red;
@@ -491,19 +491,19 @@ describe('theme overrides order', () => {
         --color-slate-500: #100500;
       }
       .bg-slate-100 {
-        background-color: var(--color-slate-100, #000100);
+        background-color: var(--color-slate-100);
       }
       .bg-slate-200 {
         background-color: #200200;
       }
       .bg-slate-300 {
-        background-color: var(--color-slate-300, #000300);
+        background-color: var(--color-slate-300);
       }
       .bg-slate-400 {
-        background-color: var(--color-slate-400, #100400);
+        background-color: var(--color-slate-400);
       }
       .bg-slate-500 {
-        background-color: var(--color-slate-500, #100500);
+        background-color: var(--color-slate-500);
       }
       .bg-slate-600 {
         background-color: #200600;
@@ -716,7 +716,7 @@ describe('default font family compatibility', () => {
       }
       @config "./config.js";
       @theme {
-        --font-family-sans: Sandwich Sans;
+        --font-sans: Sandwich Sans;
       }
       @tailwind utilities;
     `
@@ -739,10 +739,10 @@ describe('default font family compatibility', () => {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
         --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
-        --font-family-sans: Sandwich Sans;
+        --font-sans: Sandwich Sans;
       }
       .font-sans {
-        font-family: var(--font-family-sans, Sandwich Sans);
+        font-family: var(--font-sans);
       }
       "
     `)
@@ -945,9 +945,9 @@ describe('default font family compatibility', () => {
   }) => {
     let input = css`
       @theme default {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
       }
       @config "./config.js";
       @tailwind utilities;
@@ -989,13 +989,13 @@ describe('default font family compatibility', () => {
   }) => {
     let input = css`
       @theme default {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
       }
       @config "./config.js";
       @theme {
-        --font-family-mono: Sandwich Mono;
+        --font-mono: Sandwich Mono;
       }
       @tailwind utilities;
     `
@@ -1015,13 +1015,13 @@ describe('default font family compatibility', () => {
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
       ":root {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
-        --font-family-mono: Sandwich Mono;
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
+        --font-mono: Sandwich Mono;
       }
       .font-mono {
-        font-family: var(--font-family-mono, Sandwich Mono);
+        font-family: var(--font-mono);
       }
       "
     `)
@@ -1476,7 +1476,7 @@ test('blocklisted candidates are not generated', async () => {
     }
     .md\\:bg-white {
       @media (width >= 48rem) {
-        background-color: var(--color-white, #fff);
+        background-color: var(--color-white);
       }
     }
     "

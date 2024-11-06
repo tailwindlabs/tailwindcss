@@ -1592,11 +1592,7 @@ describe('addVariant', () => {
             .potato\\:flex:large-potato {
               display: flex;
             }
-          }
-        }
 
-        @media (width <= 400px) {
-          @supports (font: bold) {
             .potato\\:underline:large-potato {
               text-decoration-line: underline;
             }
@@ -1840,19 +1836,7 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .alphabet-d\\:underline[data-order="1"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-a\\:underline[data-order="2"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-c\\:underline[data-order="3"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-b\\:underline[data-order="4"] {
+        .alphabet-d\\:underline[data-order="1"], .alphabet-a\\:underline[data-order="2"], .alphabet-c\\:underline[data-order="3"], .alphabet-b\\:underline[data-order="4"] {
           text-decoration-line: underline;
         }
       }"
@@ -2059,9 +2043,7 @@ describe('matchVariant', () => {
               order: 3;
             }
           }
-        }
 
-        @media (width >= 100px) {
           @media (width <= 300px) {
             .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-4 {
               order: 4;
@@ -2116,11 +2098,7 @@ describe('matchVariant', () => {
                 text-decoration-line: underline;
               }
             }
-          }
-        }
 
-        @media (width >= 100px) {
-          @media (width <= 200px) {
             .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:focus\\:underline:focus {
               text-decoration-line: underline;
             }
@@ -2245,9 +2223,7 @@ describe('matchVariant', () => {
               text-decoration-line: underline;
             }
           }
-        }
 
-        @media (width <= 400px) {
           @media (width >= 200px) {
             .testmax-\\[400px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
@@ -2261,9 +2237,7 @@ describe('matchVariant', () => {
               text-decoration-line: underline;
             }
           }
-        }
 
-        @media (width <= 300px) {
           @media (width >= 200px) {
             .testmax-\\[300px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
@@ -2870,11 +2844,7 @@ describe('addUtilities()', () => {
 
     expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
       .toMatchInlineSnapshot(`
-        ".form-input {
-          background-color: red;
-        }
-
-        .form-input::placeholder {
+        ".form-input, .form-input::placeholder {
           background-color: red;
         }
 
@@ -3610,9 +3580,7 @@ describe('matchUtilities()', () => {
             --foo: 12px;
             display: flex;
           }
-        }
 
-        @media (width >= 1024px) {
           .lg\\:foo-bar {
             --foo: bar;
             display: flex;

@@ -9,8 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support derived spacing scales based on a single `--spacing` theme value ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Add `svh`, `dvh`, `svw`, `dvw`, and `auto` values to all width/height/size utilities ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - _Upgrade (experimental)_: Migrate `grid-cols-[subgrid]` and `grid-rows-[subgrid]` to `grid-cols-subgrid` and `grid-rows-subgrid` ([#14840](https://github.com/tailwindlabs/tailwindcss/pull/14840))
 - _Upgrade (experimental)_: Support migrating projects with multiple config files ([#14863](https://github.com/tailwindlabs/tailwindcss/pull/14863))
+- _Upgrade (experimental)_: Rename `shadow` to `shadow-sm`, `shadow-sm` to `shadow-xs`, and `shadow-xs` to `shadow-2xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
+- _Upgrade (experimental)_: Rename `inset-shadow` to `inset-shadow-sm`, `inset-shadow-sm` to `inset-shadow-xs`, and `inset-shadow-xs` to `inset-shadow-2xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
+- _Upgrade (experimental)_: Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
+- _Upgrade (experimental)_: Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
+- _Upgrade (experimental)_: Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 
 ### Fixed
 
@@ -18,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix crash when using `@source` containing `..` ([#14831](https://github.com/tailwindlabs/tailwindcss/pull/14831))
 - Ensure instances of the same variant with different values are always sorted deterministically (e.g. `data-focus:flex` and `data-active:flex`) ([#14835](https://github.com/tailwindlabs/tailwindcss/pull/14835))
 - Ensure `--inset-ring=*` and `--inset-shadow-*` variables are ignored by `inset-*` utilities ([#14855](https://github.com/tailwindlabs/tailwindcss/pull/14855))
+- Ensure `url(…)` containing special characters such as `;` or `{}` end up in one declaration ([#14879](https://github.com/tailwindlabs/tailwindcss/pull/14879))
+- Ensure adjacent rules are merged together after handling nesting when generating optimized CSS ([#14873](https://github.com/tailwindlabs/tailwindcss/pull/14873))
 - Rebase `url()` inside imported CSS files when using Vite ([#14877](https://github.com/tailwindlabs/tailwindcss/pull/14877))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
@@ -30,6 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
+- Remove fixed line-height theme values and derive `leading-*` utilites from `--spacing-*` scale ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Remove `--transition-timing-function-linear` from the default theme in favor of a static `ease-linear` utility ([#14880](https://github.com/tailwindlabs/tailwindcss/pull/14880))
+- Remove default `--spacing-*` scale in favor of `--spacing` multiplier ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Remove `var(…)` fallbacks from theme values in utilities ([#14881](https://github.com/tailwindlabs/tailwindcss/pull/14881))
+- Remove static `font-weight` utilities and add `--font-weight-*` values to the default theme ([#14883](https://github.com/tailwindlabs/tailwindcss/pull/14883))
+- Rename `--transition-timing-function-*` variables to `--ease-*` ([#14886](https://github.com/tailwindlabs/tailwindcss/pull/14886))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 

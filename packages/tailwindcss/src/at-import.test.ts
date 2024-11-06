@@ -438,7 +438,7 @@ test('supports theme(reference) imports', async () => {
     ),
   ).resolves.toMatchInlineSnapshot(`
     ".text-red-500 {
-      color: var(--color-red-500, red);
+      color: var(--color-red-500);
     }
     "
   `)

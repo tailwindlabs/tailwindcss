@@ -167,7 +167,7 @@ describe.each([
         candidate`hocus:underline`,
         css`
           .text-primary {
-            color: var(--color-primary, black);
+            color: var(--color-primary);
           }
         `,
       ])
@@ -207,7 +207,7 @@ describe.each([
       await fs.expectFileToContain('project-a/dist/out.css', [
         css`
           .text-primary {
-            color: var(--color-primary, red);
+            color: var(--color-primary);
           }
         `,
       ])
