@@ -202,7 +202,7 @@ export function walkDepth(
   }
 }
 
-export function toCss(ast: AstNode[], { printUtilitiesNode = false } = {}) {
+export function toCss(ast: AstNode[]) {
   let atRoots: string = ''
   let seenAtProperties = new Set<string>()
   let propertyFallbacksRoot: Declaration[] = []
@@ -223,17 +223,6 @@ export function toCss(ast: AstNode[], { printUtilitiesNode = false } = {}) {
 
     // AtRule
     else if (node.kind === 'at-rule') {
-      if (
-        !printUtilitiesNode &&
-        node.name === '@tailwind' &&
-        (node.params === 'utilities' || node.params.startsWith('utilities'))
-      ) {
-        for (let child of node.nodes) {
-          css += stringify(child, depth)
-        }
-        return css
-      }
-
       // Print at-rules without nodes with a `;` instead of an empty block.
       //
       // E.g.:
@@ -241,7 +230,7 @@ export function toCss(ast: AstNode[], { printUtilitiesNode = false } = {}) {
       // ```css
       // @layer base, components, utilities;
       // ```
-      else if (node.nodes.length === 0) {
+      if (node.nodes.length === 0) {
         return `${indent}${node.name} ${node.params};\n`
       }
 

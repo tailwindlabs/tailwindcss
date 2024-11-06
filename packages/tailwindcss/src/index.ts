@@ -13,6 +13,7 @@ import {
   WalkAction,
   type AstNode,
   type AtRule,
+  type Context,
   type StyleRule,
 } from './ast'
 import { substituteAtImports } from './at-import'
@@ -450,6 +451,23 @@ async function parseCss(
       }
     }
     firstThemeRule.nodes = nodes
+  }
+
+  // Replace the `@tailwind utilities` node with a conext since it prints
+  // children directly.
+  if (utilitiesNode) {
+    let node = utilitiesNode as AstNode as Context
+    node.kind = 'context'
+    node.context = {}
+
+    // Remove additional `@tailwind utilities` nodes
+    walk(ast, (node, { replaceWith }) => {
+      if (node.kind !== 'at-rule') return
+      if (node.name !== '@tailwind') return
+      if (!node.params.startsWith('utilities')) return
+
+      replaceWith([])
+    })
   }
 
   // Replace `@apply` rules with the actual utility classes.

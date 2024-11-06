@@ -86,9 +86,7 @@ export async function rewriteUrls({
     await Promise.all(promises)
   }
 
-  return toCss(ast, {
-    printUtilitiesNode: true,
-  })
+  return toCss(ast)
 }
 
 function rewriteCssUrls(css: string, replacer: CssUrlReplacer): Promise<string> {
