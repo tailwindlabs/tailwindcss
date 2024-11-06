@@ -247,8 +247,8 @@ test(
         --width-full-minus-96: calc(100% - 24rem);
         --width-225px: 225px;
 
-        --font-family-sans: Inter, system-ui, sans-serif;
-        --font-family-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,
+        --font-sans: Inter, system-ui, sans-serif;
+        --font-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,
           'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
         --radius-4xl: 2rem;
