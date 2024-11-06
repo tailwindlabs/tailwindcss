@@ -1022,7 +1022,7 @@ export function createVariants(theme: Theme): Variants {
     }
 
     {
-      let widths = theme.namespace('--width')
+      let widths = theme.namespace('--container')
 
       // Container queries
       let resolvedWidths = new DefaultMap((variant: Variant) => {
@@ -1035,7 +1035,7 @@ export function createVariants(theme: Theme): Variants {
             if (variant.value.kind === 'arbitrary') {
               value = variant.value.value
             } else if (variant.value.kind === 'named') {
-              value = theme.resolveValue(variant.value.value, ['--width'])
+              value = theme.resolveValue(variant.value.value, ['--container'])
             }
 
             if (!value) return null

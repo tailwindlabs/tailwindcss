@@ -135,6 +135,7 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'animation') path[0] = 'animate'
   if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
   if (path[0] === 'fontFamily') path[0] = 'font'
+  if (path[0] === 'maxWidth') path[0] = 'container'
 
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null

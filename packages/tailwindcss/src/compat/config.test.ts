@@ -1533,6 +1533,9 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
         --animate-a: 1;
         --animate-b: 2;
+
+        --container-a: 1;
+        --container-b: 2;
       }
 
       @plugin "./plugin.js";
@@ -1583,6 +1586,14 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
             expect(theme('boxShadow.a')).toEqual('1')
             expect(theme('boxShadow.b')).toEqual('2')
+
+            expect(theme('maxWidth')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('maxWidth.a')).toEqual('1')
+            expect(theme('maxWidth.b')).toEqual('2')
           }),
         }
       },
