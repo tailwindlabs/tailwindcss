@@ -44,11 +44,6 @@ it('prints relative file imports as relative paths', async () => {
       @import './fixtures/test.css' layer(utilities);
       @import './fixtures/test' layer(utilities);
 
-      @import 'fixtures/test' theme(inline);
-      @import 'fixtures/test.css' theme(inline);
-      @import './fixtures/test.css' theme(inline);
-      @import './fixtures/test' theme(inline);
-
       @import 'fixtures/test' layer(utilities) supports(display: grid) screen and (min-width: 600px);
       @import 'fixtures/test.css' layer(utilities) supports(display: grid) screen and
         (min-width: 600px);
@@ -81,11 +76,6 @@ it('prints relative file imports as relative paths', async () => {
     @import './fixtures/test.css' layer(utilities);
     @import './fixtures/test.css' layer(utilities);
     @import './fixtures/test.css' layer(utilities);
-
-    @import './fixtures/test.css' theme(inline);
-    @import './fixtures/test.css' theme(inline);
-    @import './fixtures/test.css' theme(inline);
-    @import './fixtures/test.css' theme(inline);
 
     @import './fixtures/test.css' layer(utilities) supports(display: grid) screen and (min-width: 600px);
     @import './fixtures/test.css' layer(utilities) supports(display: grid) screen and

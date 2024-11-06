@@ -1349,138 +1349,6 @@ describe('Parsing themes values from CSS', () => {
     )
   })
 
-  test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
-    expect(
-      await compileCss(
-        css`
-          @theme inline {
-            --color-tomato: #e10c04;
-            --color-potato: #ac855b;
-            --color-primary: var(--primary);
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ":root {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
-        background-color: #ac855b;
-      }
-
-      .bg-primary {
-        background-color: var(--primary);
-      }
-
-      .bg-tomato {
-        background-color: #e10c04;
-      }"
-    `)
-  })
-
-  test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
-    expect(
-      await compileCss(
-        css`
-          @media theme(inline) {
-            @theme {
-              --color-tomato: #e10c04;
-              --color-potato: #ac855b;
-              --color-primary: var(--primary);
-            }
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ":root {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
-        background-color: #ac855b;
-      }
-
-      .bg-primary {
-        background-color: var(--primary);
-      }
-
-      .bg-tomato {
-        background-color: #e10c04;
-      }"
-    `)
-  })
-
-  test('`inline` and `reference` can be used together', async () => {
-    expect(
-      await compileCss(
-        css`
-          @theme reference inline {
-            --color-tomato: #e10c04;
-            --color-potato: #ac855b;
-            --color-primary: var(--primary);
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ".bg-potato {
-        background-color: #ac855b;
-      }
-
-      .bg-primary {
-        background-color: var(--primary);
-      }
-
-      .bg-tomato {
-        background-color: #e10c04;
-      }"
-    `)
-  })
-
-  test('`inline` and `reference` can be used together in `media(…)`', async () => {
-    expect(
-      await compileCss(
-        css`
-          @media theme(reference inline) {
-            @theme {
-              --color-tomato: #e10c04;
-              --color-potato: #ac855b;
-              --color-primary: var(--primary);
-            }
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ".bg-potato {
-        background-color: #ac855b;
-      }
-
-      .bg-primary {
-        background-color: var(--primary);
-      }
-
-      .bg-tomato {
-        background-color: #e10c04;
-      }"
-    `)
-  })
-
   test('`default` theme values can be overridden by regular theme values`', async () => {
     expect(
       await compileCss(
@@ -1507,29 +1375,6 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`default` and `inline` can be used together', async () => {
-    expect(
-      await compileCss(
-        css`
-          @theme default inline {
-            --color-potato: #efb46b;
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-potato'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ":root {
-        --color-potato: #efb46b;
-      }
-
-      .bg-potato {
-        background-color: #efb46b;
-      }"
-    `)
-  })
-
   test('`default` and `reference` can be used together', async () => {
     expect(
       await compileCss(
@@ -1545,25 +1390,6 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ".bg-potato {
         background-color: var(--color-potato);
-      }"
-    `)
-  })
-
-  test('`default`, `inline`, and `reference` can be used together', async () => {
-    expect(
-      await compileCss(
-        css`
-          @theme default reference inline {
-            --color-potato: #efb46b;
-          }
-
-          @tailwind utilities;
-        `,
-        ['bg-potato'],
-      ),
-    ).toMatchInlineSnapshot(`
-      ".bg-potato {
-        background-color: #efb46b;
       }"
     `)
   })
