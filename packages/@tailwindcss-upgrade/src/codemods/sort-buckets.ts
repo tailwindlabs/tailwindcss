@@ -73,18 +73,11 @@ export function sortBuckets(): Plugin {
         }
 
         // Known at-rules
-        else if (node.type === 'atrule' && node.name === 'utility') {
-          injectInto('utility', node)
-        } else if (node.type === 'atrule' && node.name === 'variant') {
-          injectInto('variant', node)
-        } else if (node.type === 'atrule' && node.name === 'source') {
-          injectInto('source', node)
-        } else if (node.type === 'atrule' && node.name === 'theme') {
-          injectInto('theme', node)
-        } else if (node.type === 'atrule' && node.name === 'config') {
-          injectInto('config', node)
-        } else if (node.type === 'atrule' && node.name === 'plugin') {
-          injectInto('plugin', node)
+        else if (
+          node.type === 'atrule' &&
+          ['config', 'plugin', 'source', 'theme', 'utility', 'variant'].includes(node.name)
+        ) {
+          injectInto(node.name, node)
         }
 
         // Imports bucket, which also contains the `@charset` and body-less `@layer`
