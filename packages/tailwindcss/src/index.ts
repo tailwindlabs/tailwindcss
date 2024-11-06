@@ -56,8 +56,6 @@ function parseThemeOptions(params: string) {
   for (let option of segment(params, ' ')) {
     if (option === 'reference') {
       options |= ThemeOptions.REFERENCE
-    } else if (option === 'inline') {
-      options |= ThemeOptions.INLINE
     } else if (option === 'default') {
       options |= ThemeOptions.DEFAULT
     } else if (option.startsWith('prefix(') && option.endsWith(')')) {
