@@ -59,7 +59,7 @@ export function applyConfigToTheme(
     // Replace `--default-font-*` with `fontFamily.sans` values
     {
       let fontFamily = resolveThemeValue(theme.fontFamily.sans)
-      if (fontFamily && designSystem.theme.hasDefault('--font-family-sans')) {
+      if (fontFamily && designSystem.theme.hasDefault('--font-sans')) {
         designSystem.theme.add('--default-font-family', fontFamily, options)
         designSystem.theme.add(
           '--default-font-feature-settings',
@@ -77,7 +77,7 @@ export function applyConfigToTheme(
     // Replace `--default-mono-font-*` with `fontFamily.mono` values
     {
       let fontFamily = resolveThemeValue(theme.fontFamily.mono)
-      if (fontFamily && designSystem.theme.hasDefault('--font-family-mono')) {
+      if (fontFamily && designSystem.theme.hasDefault('--font-mono')) {
         designSystem.theme.add('--default-mono-font-family', fontFamily, options)
         designSystem.theme.add(
           '--default-mono-font-feature-settings',
@@ -133,6 +133,7 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'borderRadius') path[0] = 'radius'
   if (path[0] === 'boxShadow') path[0] = 'shadow'
   if (path[0] === 'animation') path[0] = 'animate'
+  if (path[0] === 'fontFamily') path[0] = 'font'
 
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null
