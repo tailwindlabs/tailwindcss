@@ -414,7 +414,7 @@ it('should replace `@responsive` with its children', async () => {
     `),
   ).toMatchInlineSnapshot(`
     ".foo {
-        color: red;
-      }"
+      color: red;
+    }"
   `)
 })
