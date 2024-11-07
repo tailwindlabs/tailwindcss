@@ -1,6 +1,12 @@
 import postcss, { type ChildNode, type Plugin, type Root } from 'postcss'
-import { format } from 'prettier'
+import { format, type Options } from 'prettier'
 import { walk } from '../utils/walk'
+
+const FORMAT_OPTIONS: Options = {
+  parser: 'css',
+  semi: true,
+  singleQuote: true,
+}
 
 // Prettier is used to generate cleaner output, but it's only used on the nodes
 // that were marked as `pretty` during the migration.
@@ -48,14 +54,14 @@ export function formatNodes(): Plugin {
 
       // Format buckets
       if (node.type === 'atrule' && node.name === 'tw-bucket') {
-        output.push(await format(contents, { parser: 'css', semi: true, singleQuote: true }))
+        output.push(await format(contents, FORMAT_OPTIONS))
         continue
       }
 
       // Format any other nodes
       node.replaceWith(
         postcss.parse(
-          `${node.raws.before ?? ''}${(await format(contents, { parser: 'css', semi: true, singleQuote: true })).trim()}`,
+          `${node.raws.before ?? ''}${(await format(contents, FORMAT_OPTIONS)).trim()}`,
         ),
       )
     }
