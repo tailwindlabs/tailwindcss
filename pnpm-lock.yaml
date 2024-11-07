@@ -10,7 +10,7 @@ catalogs:
       specifier: ^20.14.8
       version: 20.14.13
     lightningcss:
-      specifier: ^1.26.0
+      specifier: ^1.28.1
       version: 1.26.0
     vite:
       specifier: ^5.4.0
@@ -284,6 +284,9 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      braces:
+        specifier: ^3.0.3
+        version: 3.0.3
       dedent:
         specifier: 1.5.3
         version: 1.5.3
@@ -324,6 +327,9 @@ importers:
         specifier: ^0.23.0
         version: 0.23.0(tree-sitter@0.22.0)
     devDependencies:
+      '@types/braces':
+        specifier: ^3.0.4
+        version: 3.0.4
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
@@ -1303,6 +1309,9 @@ packages:
 
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
+
+  '@types/braces@3.0.4':
+    resolution: {integrity: sha512-0WR3b8eaISjEW7RpZnclONaLFDf7buaowRHdqLp4vLj54AsSAYWfh3DRbfiYJY9XDxMgx1B4sE1Afw2PGpuHOA==}
 
   '@types/bun@1.1.11':
     resolution: {integrity: sha512-0N7D/H/8sbf9JMkaG5F3+I/cB4TlhKTkO9EskEWP8XDr8aVcDe4EywSnU4cnyZy6tar1dq70NeFNkqMEUigthw==}
@@ -4119,6 +4128,8 @@ snapshots:
   '@types/babel__traverse@7.20.6':
     dependencies:
       '@babel/types': 7.25.2
+
+  '@types/braces@3.0.4': {}
 
   '@types/bun@1.1.11':
     dependencies:

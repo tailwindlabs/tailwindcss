@@ -21,6 +21,7 @@ import { migrate as migrateTemplate } from './template/migrate'
 import { prepareConfig } from './template/prepare-config'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
+import { hoistStaticGlobParts } from './utils/hoist-static-glob-parts'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, success } from './utils/renderer'
 
@@ -143,11 +144,11 @@ async function run() {
       info('Migrating templates using the provided configuration file.')
       for (let config of configBySheet.values()) {
         let set = new Set<string>()
-        for (let { pattern, base } of config.globs) {
-          let files = await globby([pattern], {
+        for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
+          let files = await globby([globEntry.pattern], {
             absolute: true,
             gitignore: true,
-            cwd: base,
+            cwd: globEntry.base,
           })
 
           for (let file of files) {
