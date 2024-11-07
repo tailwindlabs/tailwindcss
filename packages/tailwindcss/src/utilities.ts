@@ -3915,7 +3915,7 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolveWith(
         candidate.value.value,
-        ['--font-size'],
+        ['--text'],
         ['--line-height', '--letter-spacing', '--font-weight'],
       )
       if (value) {
@@ -3967,7 +3967,7 @@ export function createUtilities(theme: Theme) {
     },
     {
       values: [],
-      valueThemeKeys: ['--font-size'],
+      valueThemeKeys: ['--text'],
       modifiers: [],
       modifierThemeKeys: ['--line-height'],
     },

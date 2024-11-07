@@ -255,16 +255,16 @@ describe('theme callbacks', () => {
   }) => {
     let input = css`
       @theme default {
-        --font-size-base: 0rem;
-        --font-size-base--line-height: 1rem;
-        --font-size-md: 0rem;
-        --font-size-md--line-height: 1rem;
-        --font-size-xl: 0rem;
-        --font-size-xl--line-height: 1rem;
+        --text-base: 0rem;
+        --text-base--line-height: 1rem;
+        --text-md: 0rem;
+        --text-md--line-height: 1rem;
+        --text-xl: 0rem;
+        --text-xl--line-height: 1rem;
       }
       @theme {
-        --font-size-base: 100rem;
-        --font-size-md--line-height: 101rem;
+        --text-base: 100rem;
+        --text-md--line-height: 101rem;
       }
       @tailwind utilities;
       @config "./config.js";
@@ -323,8 +323,8 @@ describe('theme callbacks', () => {
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
         ":root {
-          --font-size-base: 100rem;
-          --font-size-md--line-height: 101rem;
+          --text-base: 100rem;
+          --text-md--line-height: 101rem;
         }
         .prose {
           [class~=lead-base] {

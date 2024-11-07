@@ -401,8 +401,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -459,8 +459,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -513,8 +513,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -560,8 +560,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation-simple-spin: spin 1s linear infinite;
-        --animation-simple-bounce: bounce 1s linear infinite;
+        --animate-simple-spin: spin 1s linear infinite;
+        --animate-simple-bounce: bounce 1s linear infinite;
       }
     `
 
@@ -884,8 +884,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
-        --transition-timing-function-in: ease-in;
-        --transition-timing-function-out: ease-out;
+        --ease-in: ease-in;
+        --ease-out: ease-out;
       }
     `
 

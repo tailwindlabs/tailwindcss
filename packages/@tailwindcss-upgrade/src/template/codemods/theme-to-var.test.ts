@@ -10,7 +10,7 @@ test.each([
 
   // Handle special cases around `.1` in the `theme(…)`
   ['[--value:theme(spacing.1)]', '[--value:var(--spacing-1)]'],
-  ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--font-size-xs--line-height)]'],
+  ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-xs--line-height)]'],
 
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
@@ -32,7 +32,7 @@ test.each([
   ],
 
   // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
-  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)*2)]'],
+  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--text-xs)*2)]'],
 
   // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
   // - Can't convert to `var(…)` because that would lose the modifier.

@@ -14,6 +14,16 @@ export const enum ThemeOptions {
 const ignoredThemeKeyMap = new Map([
   ['--font', ['--font-weight', '--font-size']],
   ['--inset', ['--inset-shadow', '--inset-ring']],
+  [
+    '--text',
+    [
+      '--text-color',
+      '--text-underline-offset',
+      '--text-indent',
+      '--text-decoration-thickness',
+      '--text-decoration-color',
+    ],
+  ],
 ])
 
 function isIgnoredThemeKey(themeKey: ThemeKey, namespace: ThemeKey) {
