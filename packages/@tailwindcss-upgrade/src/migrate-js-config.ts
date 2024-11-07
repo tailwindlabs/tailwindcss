@@ -341,10 +341,10 @@ function removeUnnecessarySpacingKeys(
       let [multiplier, unit] = splitNumberAndUnit(value as string)
       if (multiplier === null) continue
 
-      if (!isValidSpacingMultiplier(multiplier)) continue
+      if (!isValidSpacingMultiplier(key)) continue
       if (unit !== spacingUnit) continue
 
-      if (parseFloat(multiplier) === parseFloat(multiplier) * parseFloat(spacingMultiplier)) {
+      if (parseFloat(multiplier) === Number(key) * parseFloat(spacingMultiplier)) {
         delete resolvedConfig.theme.spacing[key]
         designSystem.theme.clearNamespace(escape(`--spacing-${key.replaceAll('.', '_')}`), 0)
       }
