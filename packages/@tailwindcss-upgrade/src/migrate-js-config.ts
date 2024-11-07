@@ -16,6 +16,7 @@ import type { ResolvedConfig, ThemeConfig } from '../../tailwindcss/src/compat/c
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
+import { isValidSpacingMultiplier } from '../../tailwindcss/src/utils/infer-data-type'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
@@ -340,12 +341,10 @@ function removeUnnecessarySpacingKeys(
       let [multiplier, unit] = splitNumberAndUnit(value as string)
       if (multiplier === null) continue
 
-      let num = Number(key)
-      if (num < 0 || num % 0.25 !== 0 || String(num) !== key) continue
-
+      if (!isValidSpacingMultiplier(multiplier)) continue
       if (unit !== spacingUnit) continue
 
-      if (parseFloat(multiplier) === num * parseFloat(spacingMultiplier)) {
+      if (parseFloat(multiplier) === parseFloat(multiplier) * parseFloat(spacingMultiplier)) {
         delete resolvedConfig.theme.spacing[key]
         designSystem.theme.clearNamespace(escape(`--spacing-${key.replaceAll('.', '_')}`), 0)
       }

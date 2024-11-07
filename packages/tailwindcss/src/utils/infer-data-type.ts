@@ -328,3 +328,11 @@ export function isPositiveInteger(value: any) {
   let num = Number(value)
   return Number.isInteger(num) && num >= 0 && String(num) === String(value)
 }
+
+/**
+ * Returns true if the value is either a positive whole number or a multiple of 0.25.
+ */
+export function isValidSpacingMultiplier(value: any) {
+  let num = Number(value)
+  return num >= 0 && num % 0.25 === 0 && String(num) === String(value)
+}
