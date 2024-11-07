@@ -35,6 +35,7 @@ export async function migrateJsConfig(
   designSystem: DesignSystem,
   fullConfigPath: string,
   base: string,
+  candidates: string[],
 ): Promise<JSConfigMigration> {
   let [unresolvedConfig, source] = await Promise.all([
     loadModule(fullConfigPath, __dirname, () => {}).then((result) => result.module) as Config,
@@ -60,8 +61,8 @@ export async function migrateJsConfig(
     sources = await migrateContent(unresolvedConfig as any, fullConfigPath, base)
   }
 
-  if ('theme' in unresolvedConfig) {
-    let themeConfig = await migrateTheme(designSystem, unresolvedConfig, base)
+  if ('theme' in unresolvedConfig || candidates.includes('shadow-inner')) {
+    let themeConfig = await migrateTheme(designSystem, unresolvedConfig, base, candidates)
     if (themeConfig) cssConfigs.push(themeConfig)
   }
 
@@ -89,6 +90,7 @@ async function migrateTheme(
   designSystem: DesignSystem,
   unresolvedConfig: Config,
   base: string,
+  candidates: string[],
 ): Promise<string | null> {
   // Resolve the config file without applying plugins and presets, as these are
   // migrated to CSS separately.
@@ -141,6 +143,18 @@ async function migrateTheme(
   if ('keyframes' in resolvedConfig.theme) {
     containsThemeKeys = true
     css += '\n' + keyframesToCss(resolvedConfig.theme.keyframes)
+  }
+
+  if (candidates.includes('shadow-inner')) {
+    containsThemeKeys = true
+    css += '\n' + '  /*'
+    css += '\n' + "    The `shadow-inner` class existed in Tailwind CSS v3 but doesn't exist by"
+    css += '\n' + '    default in v4.'
+    css += '\n'
+    css += '\n' + '    If we ever want to remove this, we need to update our use of `shadow-inner`'
+    css += '\n' + '    to `inset-shadow-sm` instead.'
+    css += '\n' + '  */'
+    css += '\n' + '  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);'
   }
 
   if (!containsThemeKeys) {

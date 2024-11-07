@@ -116,9 +116,9 @@ test(
       @import 'tailwindcss';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -134,12 +134,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -223,9 +223,9 @@ test(
       @import 'tailwindcss' prefix(tw);
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -241,12 +241,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -303,9 +303,9 @@ test(
       @import 'tailwindcss';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -321,12 +321,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -391,9 +391,9 @@ test(
       @import 'tailwindcss';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -409,12 +409,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -484,9 +484,9 @@ test(
       @import 'tailwindcss';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -502,12 +502,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -985,9 +985,9 @@ test(
       @import './utilities.css';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1003,12 +1003,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1425,9 +1425,9 @@ test(
       @config '../tailwind.config.ts';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1443,12 +1443,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1465,9 +1465,9 @@ test(
       @config "../tailwind.config.ts";
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1483,12 +1483,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1515,9 +1515,9 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1533,12 +1533,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1563,9 +1563,9 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1581,12 +1581,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1606,9 +1606,9 @@ test(
       @config '../../tailwind.config.ts';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1624,12 +1624,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),
@@ -1679,9 +1679,9 @@ test(
       @import './styles/components.css' layer(components);
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4, so
+        we've added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
 
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
@@ -1697,12 +1697,12 @@ test(
       }
 
       /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've added
+        these compatibility styles to make sure everything still looks the same as it
+        did with Tailwind CSS v3.
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+        If we ever want to remove these styles, we need to add \`border-0\` to any form
+        elements that shouldn't have a border.
       */
       @layer base {
         input:where(:not([type='button'], [type='reset'], [type='submit'])),

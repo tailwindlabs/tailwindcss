@@ -17,7 +17,8 @@ import { migrateJsConfig } from './migrate-js-config'
 import { migratePostCSSConfig } from './migrate-postcss'
 import { migratePrettierPlugin } from './migrate-prettier'
 import { Stylesheet } from './stylesheet'
-import { migrate as migrateTemplate } from './template/migrate'
+import { extractRawCandidates } from './template/candidates'
+import { migrateContents as migrateTemplateContents } from './template/migrate'
 import { prepareConfig } from './template/prepare-config'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
@@ -118,32 +119,28 @@ async function run() {
       Stylesheet,
       Awaited<ReturnType<typeof migrateJsConfig>>
     >()
+    let candidatesByFileBySheet = new Map<
+      Stylesheet,
+      Map<
+        string,
+        { candidates: { rawCandidate: string; start: number; end: number }[]; contents: string }
+      >
+    >()
     for (let sheet of stylesheets) {
       if (!sheet.isTailwindRoot) continue
 
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
 
-      let jsConfigMigration = await migrateJsConfig(
-        config.designSystem,
-        config.configFilePath,
-        base,
-      )
-      jsConfigMigrationBySheet.set(sheet, jsConfigMigration)
-
-      if (jsConfigMigration !== null) {
-        // Remove the JS config if it was fully migrated
-        cleanup.push(() => fs.rm(config.configFilePath))
-      }
-    }
-
-    // Migrate source files, linked to config files
-    {
-      // Template migrations
-
-      info('Migrating templates using the provided configuration file.')
+      // Prepare a list of all template files and their candidates
       for (let config of configBySheet.values()) {
         let set = new Set<string>()
+        let candidatesByFile = new Map<
+          string,
+          { candidates: { rawCandidate: string; start: number; end: number }[]; contents: string }
+        >()
+        candidatesByFileBySheet.set(sheet, candidatesByFile)
+
         for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
           let files = await globby([globEntry.pattern], {
             absolute: true,
@@ -159,11 +156,61 @@ async function run() {
         let files = Array.from(set)
         files.sort()
 
-        // Migrate each file
-        await Promise.allSettled(
-          files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
+        await Promise.all(
+          files.map(async (file) => {
+            let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
+            let contents = await fs.readFile(fullPath, 'utf-8')
+            let candidates = await extractRawCandidates(contents, path.extname(file))
+            candidatesByFile.set(file, { candidates, contents })
+          }),
         )
       }
+
+      let jsConfigMigration = await migrateJsConfig(
+        config.designSystem,
+        config.configFilePath,
+        base,
+        Array.from(candidatesByFileBySheet.values()).flatMap((candidatesByFile) =>
+          Array.from(candidatesByFile.values()).flatMap(({ candidates }) =>
+            candidates.map(({ rawCandidate }) => rawCandidate),
+          ),
+        ),
+      )
+      jsConfigMigrationBySheet.set(sheet, jsConfigMigration)
+
+      if (jsConfigMigration !== null) {
+        // Remove the JS config if it was fully migrated
+        cleanup.push(() => fs.rm(config.configFilePath))
+      }
+    }
+
+    // Migrate source files, linked to config files
+    {
+      // Template migrations
+
+      info('Migrating templates using the provided configuration file.')
+
+      let migrations: Promise<void>[] = []
+      for (let [stylesheet, candidatesByFile] of candidatesByFileBySheet.entries()) {
+        let config = configBySheet.get(stylesheet)!
+        for (let [file, { candidates, contents }] of candidatesByFile.entries()) {
+          migrations.push(
+            (async () => {
+              let newContents = await migrateTemplateContents(
+                candidates,
+                config.designSystem,
+                config.userConfig,
+                contents,
+              )
+
+              if (newContents !== contents) {
+                await fs.writeFile(file, newContents)
+              }
+            })(),
+          )
+        }
+      }
+      await Promise.all(migrations)
 
       success('Template migration complete.')
     }
