@@ -504,10 +504,10 @@ test('explicit leading utilities are respected when overriding font-size', async
     `,
     css`
       @theme {
-        --font-size-sm: 14px;
-        --font-size-sm--line-height: 16px;
-        --font-size-xl: 20px;
-        --font-size-xl--line-height: 24px;
+        --text-sm: 14px;
+        --text-sm--line-height: 16px;
+        --text-xl: 20px;
+        --text-xl--line-height: 24px;
         --line-height-tight: 8px;
       }
     `,
@@ -536,10 +536,10 @@ test('explicit leading utilities are overridden by line-height modifiers', async
     `,
     css`
       @theme {
-        --font-size-sm: 14px;
-        --font-size-sm--line-height: 16px;
-        --font-size-xl: 20px;
-        --font-size-xl--line-height: 24px;
+        --text-sm: 14px;
+        --text-sm--line-height: 16px;
+        --text-xl: 20px;
+        --text-xl--line-height: 24px;
         --line-height-tight: 8px;
       }
     `,
@@ -568,8 +568,8 @@ test('explicit tracking utilities are respected when overriding font-size', asyn
     `,
     css`
       @theme {
-        --font-size-sm--letter-spacing: 5px;
-        --font-size-xl--letter-spacing: 10px;
+        --text-sm--letter-spacing: 5px;
+        --text-xl--letter-spacing: 10px;
         --letter-spacing-tight: 1px;
       }
     `,
@@ -598,8 +598,8 @@ test('explicit font-weight utilities are respected when overriding font-size', a
     `,
     css`
       @theme {
-        --font-size-sm--font-weight: 100;
-        --font-size-xl--font-weight: 200;
+        --text-sm--font-weight: 100;
+        --text-xl--font-weight: 200;
       }
     `,
   )
