@@ -401,8 +401,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -459,8 +459,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -513,8 +513,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -560,8 +560,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation-simple-spin: spin 1s linear infinite;
-        --animation-simple-bounce: bounce 1s linear infinite;
+        --animate-simple-spin: spin 1s linear infinite;
+        --animate-simple-bounce: bounce 1s linear infinite;
       }
     `
 
@@ -590,7 +590,8 @@ describe('theme', async () => {
     })
 
     expect(fn).toHaveBeenCalledWith({
-      __CSS_VALUES__: { bounce: 2, spin: 2 },
+      __CSS_VALUES__: { DEFAULT: 7, bounce: 2, spin: 2 },
+      DEFAULT: 'simple 1s linear',
       spin: 'spin 1s linear infinite',
       bounce: 'bounce 1s linear infinite',
     })
