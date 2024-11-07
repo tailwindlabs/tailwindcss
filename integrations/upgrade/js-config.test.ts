@@ -158,13 +158,13 @@ test(
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
-        --font-size-*: initial;
-        --font-size-xs: 0.75rem;
-        --font-size-xs--line-height: 1rem;
-        --font-size-sm: 0.875rem;
-        --font-size-sm--line-height: 1.5rem;
-        --font-size-base: 1rem;
-        --font-size-base--line-height: 2rem;
+        --text-*: initial;
+        --text-xs: 0.75rem;
+        --text-xs--line-height: 1rem;
+        --text-sm: 0.875rem;
+        --text-sm--line-height: 1.5rem;
+        --text-base: 1rem;
+        --text-base--line-height: 2rem;
 
         --width-*: initial;
         --width-0: 0%;
@@ -1411,6 +1411,262 @@ describe('border compatibility', () => {
 
         --- src/utilities.css ---
         @import 'tailwindcss/utilities' layer(utilities);
+        "
+      `)
+    },
+  )
+
+  test(
+    'migrates extended spacing keys',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "@tailwindcss/upgrade": "workspace:^"
+            }
+          }
+        `,
+        'tailwind.config.ts': ts`
+          import { type Config } from 'tailwindcss'
+
+          export default {
+            content: ['./src/**/*.html'],
+            theme: {
+              extend: {
+                spacing: {
+                  2: '0.5rem',
+                  4.5: '1.125rem',
+                  5.5: '1.375em', // Units are different from --spacing scale
+                  13: '3.25rem',
+                  100: '100px',
+                  miami: '1337px',
+                },
+              },
+            },
+          } satisfies Config
+        `,
+        'src/input.css': css`
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+
+          .container {
+            width: theme(spacing.2);
+            width: theme(spacing[4.5]);
+            width: theme(spacing[5.5]);
+            width: theme(spacing[13]);
+            width: theme(spacing[100]);
+            width: theme(spacing.miami);
+          }
+        `,
+        'src/index.html': html`
+          <div
+            class="[width:theme(spacing.2)]
+              [width:theme(spacing[4.5])]
+              [width:theme(spacing[5.5])]
+              [width:theme(spacing[13])]
+              [width:theme(spacing[100])]
+              [width:theme(spacing.miami)]"
+          ></div>
+        `,
+      },
+    },
+    async ({ exec, fs }) => {
+      await exec('npx @tailwindcss/upgrade')
+
+      expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
+        "
+        --- src/index.html ---
+        <div
+          class="[width:calc(var(--spacing)*2)]
+            [width:calc(var(--spacing)*4.5)]
+            [width:var(--spacing-5_5)]
+            [width:calc(var(--spacing)*13)]
+            [width:var(--spacing-100)]
+            [width:var(--spacing-miami)]"
+        ></div>
+
+        --- src/input.css ---
+        @import 'tailwindcss';
+
+        @theme {
+          --spacing-100: 100px;
+          --spacing-5_5: 1.375em;
+          --spacing-miami: 1337px;
+        }
+
+        /*
+          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          so we've added these compatibility styles to make sure everything still
+          looks the same as it did with Tailwind CSS v3.
+
+          If we ever want to remove these styles, we need to add an explicit border
+          color utility to any element that depends on these defaults.
+        */
+        @layer base {
+          *,
+          ::after,
+          ::before,
+          ::backdrop,
+          ::file-selector-button {
+            border-color: var(--color-gray-200, currentColor);
+          }
+        }
+
+        /*
+          Form elements have a 1px border by default in Tailwind CSS v4, so we've
+          added these compatibility styles to make sure everything still looks the
+          same as it did with Tailwind CSS v3.
+
+          If we ever want to remove these styles, we need to add \`border-0\` to
+          any form elements that shouldn't have a border.
+        */
+        @layer base {
+          input:where(:not([type='button'], [type='reset'], [type='submit'])),
+          select,
+          textarea {
+            border-width: 0;
+          }
+        }
+
+        .container {
+          width: calc(var(--spacing) * 2);
+          width: calc(var(--spacing) * 4.5);
+          width: var(--spacing-5_5);
+          width: calc(var(--spacing) * 13);
+          width: var(--spacing-100);
+          width: var(--spacing-miami);
+        }
+        "
+      `)
+    },
+  )
+
+  test(
+    'retains overwriting spacing scale',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "@tailwindcss/upgrade": "workspace:^"
+            }
+          }
+        `,
+        'tailwind.config.ts': ts`
+          import { type Config } from 'tailwindcss'
+
+          export default {
+            content: ['./src/**/*.html'],
+            theme: {
+              spacing: {
+                2: '0.5rem',
+                4.5: '1.125rem',
+                5.5: '1.375em',
+                13: '3.25rem',
+                100: '100px',
+                miami: '1337px',
+              },
+            },
+          } satisfies Config
+        `,
+        'src/input.css': css`
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+
+          .container {
+            width: theme(spacing.2);
+            width: theme(spacing[4.5]);
+            width: theme(spacing[5.5]);
+            width: theme(spacing[13]);
+            width: theme(spacing[100]);
+            width: theme(spacing.miami);
+          }
+        `,
+        'src/index.html': html`
+          <div
+            class="[width:theme(spacing.2)]
+              [width:theme(spacing[4.5])]
+              [width:theme(spacing[5.5])]
+              [width:theme(spacing[13])]
+              [width:theme(spacing[100])]
+              [width:theme(spacing.miami)]"
+          ></div>
+        `,
+      },
+    },
+    async ({ exec, fs }) => {
+      await exec('npx @tailwindcss/upgrade')
+
+      expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
+        "
+        --- src/index.html ---
+        <div
+          class="[width:var(--spacing-2)]
+            [width:var(--spacing-4_5)]
+            [width:var(--spacing-5_5)]
+            [width:var(--spacing-13)]
+            [width:var(--spacing-100)]
+            [width:var(--spacing-miami)]"
+        ></div>
+
+        --- src/input.css ---
+        @import 'tailwindcss';
+
+        @theme {
+          --spacing-*: initial;
+          --spacing-2: 0.5rem;
+          --spacing-13: 3.25rem;
+          --spacing-100: 100px;
+          --spacing-4_5: 1.125rem;
+          --spacing-5_5: 1.375em;
+          --spacing-miami: 1337px;
+        }
+
+        /*
+          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          so we've added these compatibility styles to make sure everything still
+          looks the same as it did with Tailwind CSS v3.
+
+          If we ever want to remove these styles, we need to add an explicit border
+          color utility to any element that depends on these defaults.
+        */
+        @layer base {
+          *,
+          ::after,
+          ::before,
+          ::backdrop,
+          ::file-selector-button {
+            border-color: var(--color-gray-200, currentColor);
+          }
+        }
+
+        /*
+          Form elements have a 1px border by default in Tailwind CSS v4, so we've
+          added these compatibility styles to make sure everything still looks the
+          same as it did with Tailwind CSS v3.
+
+          If we ever want to remove these styles, we need to add \`border-0\` to
+          any form elements that shouldn't have a border.
+        */
+        @layer base {
+          input:where(:not([type='button'], [type='reset'], [type='submit'])),
+          select,
+          textarea {
+            border-width: 0;
+          }
+        }
+
+        .container {
+          width: var(--spacing-2);
+          width: var(--spacing-4_5);
+          width: var(--spacing-5_5);
+          width: var(--spacing-13);
+          width: var(--spacing-100);
+          width: var(--spacing-miami);
+        }
         "
       `)
     },

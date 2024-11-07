@@ -12368,7 +12368,6 @@ test('font', async () => {
         @theme reference {
           --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-size-xl: 24px;
           --font-weight-bold: 650;
         }
         @tailwind utilities;
@@ -12381,7 +12380,6 @@ test('font', async () => {
         // font-weight
         '-font-bold',
 
-        'font-size-xl',
         'font-weight-bold',
         'font-sans/foo',
         'font-["arial_rounded"]/foo',
@@ -14663,8 +14661,8 @@ test('text', async () => {
         @theme {
           --color-red-500: #ef4444;
           --line-height-6: 1.5rem;
-          --font-size-sm: 0.875rem;
-          --font-size-sm--line-height: 1.25rem;
+          --text-sm: 0.875rem;
+          --text-sm--line-height: 1.25rem;
           --line-height-9: 2.25rem;
         }
         @tailwind utilities;
@@ -14720,14 +14718,14 @@ test('text', async () => {
     ":root {
       --color-red-500: #ef4444;
       --line-height-6: 1.5rem;
-      --font-size-sm: .875rem;
-      --font-size-sm--line-height: 1.25rem;
+      --text-sm: .875rem;
+      --text-sm--line-height: 1.25rem;
       --line-height-9: 2.25rem;
     }
 
     .text-sm {
-      font-size: var(--font-size-sm);
-      line-height: var(--tw-leading, var(--font-size-sm--line-height));
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
 
     .text-\\[12px\\]\\/6 {
@@ -14756,12 +14754,12 @@ test('text', async () => {
     }
 
     .text-sm\\/6 {
-      font-size: var(--font-size-sm);
+      font-size: var(--text-sm);
       line-height: var(--line-height-6);
     }
 
     .text-sm\\/\\[4px\\] {
-      font-size: var(--font-size-sm);
+      font-size: var(--text-sm);
       line-height: 4px;
     }
 
@@ -16222,13 +16220,13 @@ describe('custom utilities', () => {
       }
 
       @theme reference {
-        --font-size-sm: 0.875rem;
-        --font-size-sm--line-height: 1.25rem;
+        --text-sm: 0.875rem;
+        --text-sm--line-height: 1.25rem;
       }
 
       @utility text-sm {
-        font-size: var(--font-size-sm, 0.8755rem);
-        line-height: var(--font-size-sm--line-height, 1.255rem);
+        font-size: var(--text-sm, 0.8755rem);
+        line-height: var(--text-sm--line-height, 1.255rem);
         text-rendering: optimizeLegibility;
       }
     `)
@@ -16237,10 +16235,10 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--font-size-sm);
-          line-height: var(--tw-leading, var(--font-size-sm--line-height));
-          font-size: var(--font-size-sm, .8755rem);
-          line-height: var(--font-size-sm--line-height, 1.255rem);
+          font-size: var(--text-sm);
+          line-height: var(--tw-leading, var(--text-sm--line-height));
+          font-size: var(--text-sm, .8755rem);
+          line-height: var(--text-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
         }
       }"

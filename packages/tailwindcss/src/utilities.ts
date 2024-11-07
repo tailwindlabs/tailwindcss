@@ -2,7 +2,7 @@ import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
-import { inferDataType, isPositiveInteger } from './utils/infer-data-type'
+import { inferDataType, isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
@@ -397,9 +397,7 @@ export function createUtilities(theme: Theme) {
       handleBareValue: ({ value }) => {
         let multiplier = theme.resolve(null, ['--spacing'])
         if (!multiplier) return null
-
-        let num = Number(value)
-        if (num < 0 || num % 0.25 !== 0 || String(num) !== value) return null
+        if (!isValidSpacingMultiplier(value)) return null
 
         return `calc(${multiplier} * ${value})`
       },
@@ -3915,7 +3913,7 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolveWith(
         candidate.value.value,
-        ['--font-size'],
+        ['--text'],
         ['--line-height', '--letter-spacing', '--font-weight'],
       )
       if (value) {
@@ -3967,7 +3965,7 @@ export function createUtilities(theme: Theme) {
     },
     {
       values: [],
-      valueThemeKeys: ['--font-size'],
+      valueThemeKeys: ['--text'],
       modifiers: [],
       modifierThemeKeys: ['--line-height'],
     },

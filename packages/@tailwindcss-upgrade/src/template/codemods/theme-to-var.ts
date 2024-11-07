@@ -7,6 +7,7 @@ import {
 } from '../../../../tailwindcss/src/candidate'
 import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
@@ -199,9 +200,17 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
 
   function toVar(path: string, fallback?: string) {
     let variable = pathToVariableName(path)
-    if (!variable) return null
+    if (variable) return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
 
-    return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
+    let keyPath = toKeyPath(path)
+    if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+      let multiplier = keyPath[1]
+      if (!isValidSpacingMultiplier(multiplier)) return null
+
+      return 'calc(var(--spacing) * ' + multiplier + ')'
+    }
+
+    return null
   }
 
   function toTheme(path: string, fallback?: string) {
