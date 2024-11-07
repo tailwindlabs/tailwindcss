@@ -9,14 +9,18 @@ test.each([
   ['[color:red]', '[color:red]'],
 
   // Handle special cases around `.1` in the `theme(…)`
-  ['[--value:theme(spacing.1)]', '[--value:var(--spacing-1)]'],
+  ['[--value:theme(spacing.1)]', '[--value:calc(var(--spacing)*1)]'],
   ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--font-size-xs--line-height)]'],
+  ['[--value:theme(spacing[1.25])]', '[--value:calc(var(--spacing)*1.25)]'],
+
+  // Should not convert invalid spacing values to calc
+  ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
 
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
   ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
   ['bg-[theme(colors.red.500)]', 'bg-[var(--color-red-500)]'], // Arbitrary value
-  ['bg-[size:theme(spacing.4)]', 'bg-[size:var(--spacing-4)]'], // Arbitrary value + data type hint
+  ['bg-[size:theme(spacing.4)]', 'bg-[size:calc(var(--spacing)*4)]'], // Arbitrary value + data type hint
 
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
   ['bg-[theme(colors.red.500,red)]', 'bg-[var(--color-red-500,red)]'],
@@ -79,15 +83,18 @@ test.each([
 
   // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
   // still upgrade the `theme(…)` to the modern syntax.
-  ['max-[theme(spacing.4)]:flex', 'max-[theme(--spacing-4)]:flex'],
+  ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
 
   // This test in itself doesn't make much sense. But we need to make sure
   // that this doesn't end up as the modifier in the candidate itself.
-  ['max-[theme(spacing.4/50)]:flex', 'max-[theme(--spacing-4/50)]:flex'],
+  ['max-[theme(spacing.4/50)]:flex', 'max-[theme(spacing.4/50)]:flex'],
 
   // `theme(…)` calls in another CSS function is replaced correctly.
   // Additionally we remove unnecessary whitespace.
-  ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,var(--spacing-80))_auto]'],
+  [
+    'grid-cols-[min(50%_,_theme(spacing.80))_auto]',
+    'grid-cols-[min(50%,calc(var(--spacing)*80))_auto]',
+  ],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
@@ -113,43 +120,6 @@ test.each([
   let designSystem = await __unstable__loadDesignSystem(
     css`
       @import 'tailwindcss';
-      @theme {
-        --spacing-px: 1px;
-        --spacing-0: 0px;
-        --spacing-0_5: 0.125rem;
-        --spacing-1: 0.25rem;
-        --spacing-1_5: 0.375rem;
-        --spacing-2: 0.5rem;
-        --spacing-2_5: 0.625rem;
-        --spacing-3: 0.75rem;
-        --spacing-3_5: 0.875rem;
-        --spacing-4: 1rem;
-        --spacing-5: 1.25rem;
-        --spacing-6: 1.5rem;
-        --spacing-7: 1.75rem;
-        --spacing-8: 2rem;
-        --spacing-9: 2.25rem;
-        --spacing-10: 2.5rem;
-        --spacing-11: 2.75rem;
-        --spacing-12: 3rem;
-        --spacing-14: 3.5rem;
-        --spacing-16: 4rem;
-        --spacing-20: 5rem;
-        --spacing-24: 6rem;
-        --spacing-28: 7rem;
-        --spacing-32: 8rem;
-        --spacing-36: 9rem;
-        --spacing-40: 10rem;
-        --spacing-44: 11rem;
-        --spacing-48: 12rem;
-        --spacing-52: 13rem;
-        --spacing-56: 14rem;
-        --spacing-60: 15rem;
-        --spacing-64: 16rem;
-        --spacing-72: 18rem;
-        --spacing-80: 20rem;
-        --spacing-96: 24rem;
-      }
     `,
     {
       base: __dirname,
@@ -157,4 +127,57 @@ test.each([
   )
 
   expect(themeToVar(designSystem, {}, candidate)).toEqual(result)
+})
+
+test('extended space scale converts to var or calc', async () => {
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @theme {
+        --spacing-2: 2px;
+        --spacing-miami: 0.875rem;
+      }
+    `,
+    {
+      base: __dirname,
+    },
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
+    '[--value:calc(var(--spacing)*1)]',
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
+    '[--value:var(--spacing-2)]',
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.miami)]')).toEqual(
+    '[--value:var(--spacing-miami)]',
+  )
+  // should error
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.nyc)]')).toEqual(
+    '[--value:theme(spacing.nyc)]',
+  )
+})
+
+test('custom space scale converts to var', async () => {
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @theme {
+        --spacing-*: initial;
+        --spacing-1: 0.25rem;
+        --spacing-2: 0.5rem;
+      }
+    `,
+    {
+      base: __dirname,
+    },
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
+    '[--value:var(--spacing-1)]',
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
+    '[--value:var(--spacing-2)]',
+  )
+  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.3)]')).toEqual(
+    '[--value:theme(spacing.3)]',
+  )
 })

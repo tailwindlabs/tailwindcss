@@ -191,17 +191,29 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
   }
 
   function pathToVariableName(path: string) {
-    let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
-    if (!designSystem.theme.get([variable])) return null
+    let keyPath = toKeyPath(path)
+    let variable = `--${keyPathToCssProperty(keyPath)}` as const
+    if (designSystem.theme.get([variable])) return variable
+    if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+    }
 
-    return variable
+    return null
   }
 
   function toVar(path: string, fallback?: string) {
     let variable = pathToVariableName(path)
-    if (!variable) return null
+    if (variable) return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
 
-    return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
+    let keyPath = toKeyPath(path)
+    if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+      let multiplier = keyPath[1]
+      let num = Number(multiplier)
+      if (num < 0 || num % 0.25 !== 0 || String(num) !== multiplier) return null
+
+      return 'calc(var(--spacing) * ' + multiplier + ')'
+    }
+
+    return null
   }
 
   function toTheme(path: string, fallback?: string) {
