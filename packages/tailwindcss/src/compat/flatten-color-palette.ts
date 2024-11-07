@@ -19,8 +19,8 @@ export function flattenColorPalette(colors: Colors) {
   }
 
   if ('__CSS_VALUES__' in colors) {
-    for (let [key, value] of Object.entries(colors.__CSS_VALUES__) as any as [string, number][]) {
-      if ((value & ThemeOptions.DEFAULT) === 0) {
+    for (let [key, value] of Object.entries(colors.__CSS_VALUES__)) {
+      if ((Number(value) & ThemeOptions.DEFAULT) === 0) {
         result[key] = colors[key] as string
       }
     }
