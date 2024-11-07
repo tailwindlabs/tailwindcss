@@ -86,7 +86,7 @@ export default async function migrateContents(
 }
 
 export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {
-  let fullPath = path.resolve(process.cwd(), file)
+  let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
   await fs.writeFile(
