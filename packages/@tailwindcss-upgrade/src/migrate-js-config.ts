@@ -12,10 +12,11 @@ import {
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
 import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
 import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/config/resolve-config'
-import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
+import type { ResolvedConfig, ThemeConfig } from '../../tailwindcss/src/compat/config/types'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
+import { isValidSpacingMultiplier } from '../../tailwindcss/src/utils/infer-data-type'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
@@ -100,6 +101,8 @@ async function migrateTheme(
   let resetNamespaces = new Map<string, boolean>(
     Array.from(replacedThemeKeys.entries()).map(([key]) => [key, false]),
   )
+
+  removeUnnecessarySpacingKeys(designSystem, resolvedConfig, replacedThemeKeys)
 
   let prevSectionKey = ''
   let css = '\n@tw-bucket theme {\n'
@@ -316,4 +319,43 @@ function patternSourceFiles(source: { base: string; pattern: string }): string[]
   let scanner = new Scanner({ sources: [source] })
   scanner.scan()
   return scanner.files
+}
+
+function removeUnnecessarySpacingKeys(
+  designSystem: DesignSystem,
+  resolvedConfig: ResolvedConfig,
+  replacedThemeKeys: Set<string>,
+) {
+  // We want to keep the spacing scale as-is if the user is overwriting
+  if (replacedThemeKeys.has('spacing')) return
+
+  // Ensure we have a spacing multiplier
+  let spacingScale = designSystem.theme.get(['--spacing'])
+  if (!spacingScale) return
+
+  let [spacingMultiplier, spacingUnit] = splitNumberAndUnit(spacingScale)
+  if (!spacingMultiplier || !spacingUnit) return
+
+  if (spacingScale && !replacedThemeKeys.has('spacing')) {
+    for (let [key, value] of Object.entries(resolvedConfig.theme.spacing ?? {})) {
+      let [multiplier, unit] = splitNumberAndUnit(value as string)
+      if (multiplier === null) continue
+
+      if (!isValidSpacingMultiplier(key)) continue
+      if (unit !== spacingUnit) continue
+
+      if (parseFloat(multiplier) === Number(key) * parseFloat(spacingMultiplier)) {
+        delete resolvedConfig.theme.spacing[key]
+        designSystem.theme.clearNamespace(escape(`--spacing-${key.replaceAll('.', '_')}`), 0)
+      }
+    }
+  }
+}
+
+function splitNumberAndUnit(value: string): [string, string] | [null, null] {
+  let match = value.match(/^([0-9.]+)(.*)$/)
+  if (!match) {
+    return [null, null]
+  }
+  return [match[1], match[2]]
 }
