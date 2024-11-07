@@ -14,11 +14,9 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
       colors: ({ theme }) => theme('color', {}),
 
       extend: {
-        fontSize: ({ theme }) => {
-          return {
-            ...theme('text', {}),
-          }
-        },
+        fontSize: ({ theme }) => ({
+          ...theme('text', {}),
+        }),
 
         boxShadow: ({ theme }) => ({
           ...theme('shadow', {}),
