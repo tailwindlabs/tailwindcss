@@ -314,32 +314,32 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --font-size-xs: .75rem;
-    --font-size-xs--line-height: 1rem;
-    --font-size-sm: .875rem;
-    --font-size-sm--line-height: 1.25rem;
-    --font-size-base: 1rem;
-    --font-size-base--line-height: 1.5rem;
-    --font-size-lg: 1.125rem;
-    --font-size-lg--line-height: 1.75rem;
-    --font-size-xl: 1.25rem;
-    --font-size-xl--line-height: 1.75rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-2xl--line-height: 2rem;
-    --font-size-3xl: 1.875rem;
-    --font-size-3xl--line-height: 2.25rem;
-    --font-size-4xl: 2.25rem;
-    --font-size-4xl--line-height: 2.5rem;
-    --font-size-5xl: 3rem;
-    --font-size-5xl--line-height: 1;
-    --font-size-6xl: 3.75rem;
-    --font-size-6xl--line-height: 1;
-    --font-size-7xl: 4.5rem;
-    --font-size-7xl--line-height: 1;
-    --font-size-8xl: 6rem;
-    --font-size-8xl--line-height: 1;
-    --font-size-9xl: 8rem;
-    --font-size-9xl--line-height: 1;
+    --text-xs: .75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: .875rem;
+    --text-sm--line-height: 1.25rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 1.75rem;
+    --text-xl: 1.25rem;
+    --text-xl--line-height: 1.75rem;
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: 2rem;
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: 2.25rem;
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: 2.5rem;
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
+    --text-7xl: 4.5rem;
+    --text-7xl--line-height: 1;
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 8rem;
+    --text-9xl--line-height: 1;
     --font-weight-thin: 100;
     --font-weight-extralight: 200;
     --font-weight-light: 300;
@@ -551,8 +551,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
 @layer utilities {
   .text-2xl {
-    font-size: var(--font-size-2xl);
-    line-height: var(--tw-leading, var(--font-size-2xl--line-height));
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
   .text-black\\/50 {

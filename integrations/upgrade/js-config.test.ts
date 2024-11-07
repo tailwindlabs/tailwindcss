@@ -158,13 +158,13 @@ test(
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
-        --font-size-*: initial;
-        --font-size-xs: 0.75rem;
-        --font-size-xs--line-height: 1rem;
-        --font-size-sm: 0.875rem;
-        --font-size-sm--line-height: 1.5rem;
-        --font-size-base: 1rem;
-        --font-size-base--line-height: 2rem;
+        --text-*: initial;
+        --text-xs: 0.75rem;
+        --text-xs--line-height: 1rem;
+        --text-sm: 0.875rem;
+        --text-sm--line-height: 1.5rem;
+        --text-base: 1rem;
+        --text-base--line-height: 2rem;
 
         --width-*: initial;
         --width-0: 0%;

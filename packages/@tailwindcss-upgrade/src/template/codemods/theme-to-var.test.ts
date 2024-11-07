@@ -10,7 +10,7 @@ test.each([
 
   // Handle special cases around `.1` in the `theme(…)`
   ['[--value:theme(spacing.1)]', '[--value:calc(var(--spacing)*1)]'],
-  ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--font-size-xs--line-height)]'],
+  ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-size-xs--line-height)]'],
   ['[--value:theme(spacing[1.25])]', '[--value:calc(var(--spacing)*1.25)]'],
 
   // Should not convert invalid spacing values to calc
@@ -36,7 +36,7 @@ test.each([
   ],
 
   // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
-  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--font-size-xs)*2)]'],
+  ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--text-xs)*2)]'],
 
   // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
   // - Can't convert to `var(…)` because that would lose the modifier.
