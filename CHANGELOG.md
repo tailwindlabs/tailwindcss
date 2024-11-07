@@ -19,8 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
-- _Upgrade (experimental)_: Migrate `theme()` calls of `spacing` multiplies to use `calc()` where possible ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
-- _Upgrade (experimental)_: Remove extending `spacing` theme keys that can be compute by the new `--spacing` multiplier ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
+- _Upgrade (experimental)_: Migrate `theme()` usage and JS config files to use the new `--spacing` multiplier where possible ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
 
 ### Fixed
 
