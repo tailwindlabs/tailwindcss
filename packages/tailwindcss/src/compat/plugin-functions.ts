@@ -73,7 +73,7 @@ export function createThemeFn(
           // CSS values from `@theme` win over values from the config
           configValueCopy[unescape(key)] = cssValue[key]
         }
-        // console.log(configValueCopy)
+
         return configValueCopy
       }
 

@@ -451,8 +451,6 @@ describe('theme overrides order', () => {
         } else {
           return {
             module: plugin(({ matchUtilities, theme }) => {
-              console.log('input', theme('colors'))
-              console.log('flattened', flattenColorPalette(theme('colors')))
               matchUtilities(
                 {
                   'hover-bg': (value) => {

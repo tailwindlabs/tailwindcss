@@ -590,8 +590,7 @@ describe('theme', async () => {
     })
 
     expect(fn).toHaveBeenCalledWith({
-      __CSS_VALUES__: { DEFAULT: 7, bounce: 2, spin: 2 },
-      DEFAULT: 'simple 1s linear',
+      __CSS_VALUES__: { bounce: 2, spin: 2 },
       spin: 'spin 1s linear infinite',
       bounce: 'bounce 1s linear infinite',
     })

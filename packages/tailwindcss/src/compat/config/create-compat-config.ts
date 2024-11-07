@@ -15,7 +15,6 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
 
       extend: {
         fontSize: ({ theme }) => {
-          console.log(theme('text', {}))
           return {
             ...theme('text', {}),
           }
