@@ -617,7 +617,7 @@ describe('theme function', () => {
           'fontFamily.sans',
           'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         ],
-        ['width.xs', '20rem'],
+        ['maxWidth.xs', '20rem'],
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {

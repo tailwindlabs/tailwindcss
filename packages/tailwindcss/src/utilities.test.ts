@@ -2738,7 +2738,7 @@ test('min-width', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -2756,7 +2756,7 @@ test('min-width', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .min-w-4 {
@@ -2788,7 +2788,7 @@ test('min-width', async () => {
     }
 
     .min-w-xl {
-      min-width: var(--width-xl);
+      min-width: var(--container-xl);
     }"
   `)
   expect(
@@ -2814,7 +2814,7 @@ test('max-width', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -2832,7 +2832,7 @@ test('max-width', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .max-w-4 {
@@ -2860,7 +2860,7 @@ test('max-width', async () => {
     }
 
     .max-w-xl {
-      max-width: var(--width-xl);
+      max-width: var(--container-xl);
     }"
   `)
   expect(
@@ -3293,7 +3293,7 @@ test('flex-basis', async () => {
     await compileCss(
       css`
         @theme {
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -3301,7 +3301,7 @@ test('flex-basis', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .basis-11\\/12 {
@@ -3321,7 +3321,7 @@ test('flex-basis', async () => {
     }
 
     .basis-xl {
-      flex-basis: var(--width-xl);
+      flex-basis: var(--container-xl);
     }"
   `)
   expect(
@@ -6451,8 +6451,8 @@ test('columns', async () => {
     await compileCss(
       css`
         @theme {
-          --width-3xs: 16rem;
-          --width-7xl: 80rem;
+          --container-3xs: 16rem;
+          --container-7xl: 80rem;
         }
         @tailwind utilities;
       `,
@@ -6468,12 +6468,12 @@ test('columns', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-3xs: 16rem;
-      --width-7xl: 80rem;
+      --container-3xs: 16rem;
+      --container-7xl: 80rem;
     }
 
     .columns-3xs {
-      columns: var(--width-3xs);
+      columns: var(--container-3xs);
     }
 
     .columns-4 {
@@ -6481,7 +6481,7 @@ test('columns', async () => {
     }
 
     .columns-7xl {
-      columns: var(--width-7xl);
+      columns: var(--container-7xl);
     }
 
     .columns-99 {

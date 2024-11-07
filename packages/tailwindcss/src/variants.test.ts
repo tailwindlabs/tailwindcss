@@ -1942,7 +1942,7 @@ test('container queries', async () => {
     await compileCss(
       css`
         @theme {
-          --width-lg: 1024px;
+          --container-lg: 1024px;
         }
         @tailwind utilities;
       `,
@@ -1965,7 +1965,7 @@ test('container queries', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-lg: 1024px;
+      --container-lg: 1024px;
     }
 
     @container name (width < 1024px) {

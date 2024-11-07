@@ -57,6 +57,10 @@ test('config values can be merged into the theme', () => {
             '100%': '100%',
           },
 
+          maxWidth: {
+            '9xs': '6rem',
+          },
+
           transitionTimingFunction: {
             fast: 'cubic-bezier(0, 0.55, 0.45, 1)',
           },
@@ -87,6 +91,7 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
   expect(theme.resolve('0.5', ['--width'])).toEqual('60%')
   expect(theme.resolve('100%', ['--width'])).toEqual('100%')
+  expect(theme.resolve('9xs', ['--container'])).toEqual('6rem')
   expect(theme.resolve('fast', ['--ease'])).toEqual('cubic-bezier(0, 0.55, 0.45, 1)')
 })
 

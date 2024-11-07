@@ -13,34 +13,34 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
       // and only allow colors from the CSS theme.
       colors: ({ theme }) => theme('color', {}),
 
-      boxShadow: ({ theme }) => ({
-        ...defaultTheme.boxShadow,
-        ...theme('shadow', {}),
-      }),
+      extend: {
+        boxShadow: ({ theme }) => ({
+          ...theme('shadow', {}),
+        }),
 
-      animation: ({ theme }) => ({
-        ...defaultTheme.animation,
-        ...theme('animate', {}),
-      }),
+        animation: ({ theme }) => ({
+          ...theme('animate', {}),
+        }),
 
-      borderRadius: ({ theme }) => ({
-        ...defaultTheme.borderRadius,
-        ...theme('radius', {}),
-      }),
+        borderRadius: ({ theme }) => ({
+          ...theme('radius', {}),
+        }),
 
-      screens: ({ theme }) => ({
-        ...defaultTheme.screens,
-        ...theme('breakpoint', {}),
-      }),
+        screens: ({ theme }) => ({
+          ...theme('breakpoint', {}),
+        }),
 
-      transitionDuration: {
-        ...defaultTheme.transitionDuration,
-        DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
-      },
+        transitionDuration: {
+          DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
+        },
 
-      transitionTimingFunction: {
-        ...defaultTheme.transitionTimingFunction,
-        DEFAULT: cssTheme.get(['--default-transition-timing-function']) ?? null,
+        transitionTimingFunction: {
+          DEFAULT: cssTheme.get(['--default-transition-timing-function']) ?? null,
+        },
+
+        maxWidth: ({ theme }) => ({
+          ...theme('container', {}),
+        }),
       },
     },
   }
