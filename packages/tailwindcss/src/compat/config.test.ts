@@ -250,7 +250,7 @@ test('Variants in CSS overwrite variants from plugins', async () => {
 })
 
 describe('theme callbacks', () => {
-  test.only('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
+  test('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
     expect,
   }) => {
     let input = css`
@@ -290,7 +290,6 @@ describe('theme callbacks', () => {
 
               // Tuple access
               typography: ({ theme }) => {
-                console.log(theme('fontSize'))
                 return {
                   '[class~=lead-base]': {
                     fontSize: theme('fontSize.base')[0],
@@ -452,6 +451,8 @@ describe('theme overrides order', () => {
         } else {
           return {
             module: plugin(({ matchUtilities, theme }) => {
+              console.log('input', theme('colors'))
+              console.log('flattened', flattenColorPalette(theme('colors')))
               matchUtilities(
                 {
                   'hover-bg': (value) => {

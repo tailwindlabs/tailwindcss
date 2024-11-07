@@ -225,12 +225,6 @@ function upgradeToFullPluginSupport({
     userConfig,
   )
 
-  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
-
-  for (let { handler } of resolvedConfig.plugins) {
-    handler(pluginApi)
-  }
-
   // Merge the user-configured theme keys into the design system. The compat
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
@@ -239,6 +233,11 @@ function upgradeToFullPluginSupport({
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
+
+  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
+  for (let { handler } of resolvedConfig.plugins) {
+    handler(pluginApi)
+  }
 
   // If a prefix has already been set in CSS don't override it
   if (!designSystem.theme.prefix && resolvedConfig.prefix) {

@@ -128,6 +128,8 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  path = structuredClone(path)
+
   if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'screens') path[0] = 'breakpoint'
   if (path[0] === 'borderRadius') path[0] = 'radius'

@@ -884,8 +884,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
-        --transition-timing-function-in: ease-in;
-        --transition-timing-function-out: ease-out;
+        --ease-in: ease-in;
+        --ease-out: ease-out;
       }
     `
 

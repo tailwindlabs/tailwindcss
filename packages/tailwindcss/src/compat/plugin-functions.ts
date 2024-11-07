@@ -4,6 +4,7 @@ import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
 import { unescape } from '../utils/escape'
 import { toKeyPath } from '../utils/to-key-path'
+import { keyPathToCssProperty } from './apply-config-to-theme'
 import { deepMerge } from './config/deep-merge'
 import type { UserConfig } from './config/types'
 
@@ -72,7 +73,7 @@ export function createThemeFn(
           // CSS values from `@theme` win over values from the config
           configValueCopy[unescape(key)] = cssValue[key]
         }
-
+        // console.log(configValueCopy)
         return configValueCopy
       }
 
@@ -127,21 +128,7 @@ function readFromCss(
     // A nested tuple with additional data
     | [main: string, extra: Record<string, string>]
 
-  let themeKey = path
-    // [1] should move into the nested object tuple. To create the CSS variable
-    // name for this, we replace it with an empty string that will result in two
-    // subsequent dashes when joined.
-    .map((path) => (path === '1' ? '' : path))
-
-    // Resolve the key path to a CSS variable segment
-    .map((part) =>
-      part.replaceAll('.', '_').replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
-    )
-
-    // Remove the `DEFAULT` key at the end of a path
-    // We're reading from CSS anyway so it'll be a string
-    .filter((part, index) => part !== 'DEFAULT' || index !== path.length - 1)
-    .join('-')
+  let themeKey = keyPathToCssProperty(path)
 
   let map = new Map<string | null, ThemeValue>()
   let nested = new DefaultMap<string | null, Map<string, [value: string, options: number]>>(

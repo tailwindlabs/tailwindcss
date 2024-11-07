@@ -82,9 +82,9 @@ test('config values can be merged into the theme', () => {
     'Potato Mono',
     { '--font-variation-settings': '"XHGT" 0.7' },
   ])
-  expect(theme.resolve('sm', ['--font-size'])).toEqual('0.875rem')
-  expect(theme.resolve('base', ['--font-size'])).toEqual('1rem')
-  expect(theme.resolveWith('base', ['--font-size'], ['--line-height'])).toEqual([
+  expect(theme.resolve('sm', ['--text'])).toEqual('0.875rem')
+  expect(theme.resolve('base', ['--text'])).toEqual('1rem')
+  expect(theme.resolveWith('base', ['--text'], ['--line-height'])).toEqual([
     '1rem',
     { '--line-height': '1.5' },
   ])
