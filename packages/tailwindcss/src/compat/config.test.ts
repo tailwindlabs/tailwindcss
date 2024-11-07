@@ -289,22 +289,20 @@ describe('theme callbacks', () => {
               }),
 
               // Tuple access
-              typography: ({ theme }) => {
-                return {
-                  '[class~=lead-base]': {
-                    fontSize: theme('fontSize.base')[0],
-                    ...theme('fontSize.base')[1],
-                  },
-                  '[class~=lead-md]': {
-                    fontSize: theme('fontSize.md')[0],
-                    ...theme('fontSize.md')[1],
-                  },
-                  '[class~=lead-xl]': {
-                    fontSize: theme('fontSize.xl')[0],
-                    ...theme('fontSize.xl')[1],
-                  },
-                }
-              },
+              typography: ({ theme }) => ({
+                '[class~=lead-base]': {
+                  fontSize: theme('fontSize.base')[0],
+                  ...theme('fontSize.base')[1],
+                },
+                '[class~=lead-md]': {
+                  fontSize: theme('fontSize.md')[0],
+                  ...theme('fontSize.md')[1],
+                },
+                '[class~=lead-xl]': {
+                  fontSize: theme('fontSize.xl')[0],
+                  ...theme('fontSize.xl')[1],
+                },
+              }),
             },
           },
 
