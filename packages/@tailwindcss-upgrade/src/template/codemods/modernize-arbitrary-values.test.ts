@@ -19,6 +19,17 @@ test.each([
   ['[&>[data-visible]]:flex', '[&>[data-visible]]:flex'],
   ['[&_>_[data-visible]]:flex', '[&_>_[data-visible]]:flex'],
 
+  ['[&:first-child]:flex', 'first:flex'],
+  ['[&:not(:first-child)]:flex', 'not-first:flex'],
+
+  ['[&:nth-child(2)]:flex', 'nth-2:flex'],
+  ['[&:not(:nth-child(2))]:flex', 'not-nth-2:flex'],
+
+  ['[&:nth-child(odd)]:flex', 'odd:flex'],
+  ['[&:not(:nth-child(odd))]:flex', 'even:flex'],
+  ['[&:nth-child(even)]:flex', 'even:flex'],
+  ['[&:not(:nth-child(even))]:flex', 'odd:flex'],
+
   // Keep multiple attribute selectors as-is
   ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],
 
@@ -40,6 +51,8 @@ test.each([
 
   ['has-[[aria-visible="true"]]:flex', 'has-aria-visible:flex'],
   ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
+
+  ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
