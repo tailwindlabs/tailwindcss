@@ -60,7 +60,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
 
 for (let transformer of ['postcss', 'lightningcss'] as const) {
   describe(transformer, () => {
-    test.only(`production build`, createSetup(transformer), async ({ fs, exec }) => {
+    test(`production build`, createSetup(transformer), async ({ fs, exec }) => {
       await exec('pnpm vite build')
 
       let files = await fs.glob('dist/**/*.css')
