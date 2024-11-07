@@ -53,7 +53,7 @@ export function hoistStaticGlobParts(entry: GlobEntry): GlobEntry[] {
 function splitPattern(pattern: string): [staticPart: string | null, dynamicPart: string | null] {
   // No dynamic parts, so we can just return the input as-is.
   if (!pattern.includes('*')) {
-    return [normalizePath(pattern), null]
+    return [pattern, null]
   }
 
   let lastSlashPosition: number | null = null
@@ -78,5 +78,5 @@ function splitPattern(pattern: string): [staticPart: string | null, dynamicPart:
   let staticPart = pattern.slice(0, lastSlashPosition).trim()
   let dynamicPart = pattern.slice(lastSlashPosition + 1).trim()
 
-  return [normalizePath(staticPart) || null, dynamicPart || null]
+  return [staticPart || null, dynamicPart || null]
 }
