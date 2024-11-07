@@ -21,6 +21,7 @@ interface SpawnedProcess {
 
 interface ChildProcessOptions {
   cwd?: string
+  env?: Record<string, string>
 }
 
 interface ExecOptions {
@@ -109,6 +110,7 @@ export function test(
               {
                 cwd,
                 ...childProcessOptions,
+                env: childProcessOptions.env,
               },
               (error, stdout, stderr) => {
                 if (error) {
@@ -145,10 +147,11 @@ export function test(
           let child = spawn(command, {
             cwd,
             shell: true,
+            ...childProcessOptions,
             env: {
               ...process.env,
+              ...childProcessOptions.env,
             },
-            ...childProcessOptions,
           })
 
           function dispose() {
