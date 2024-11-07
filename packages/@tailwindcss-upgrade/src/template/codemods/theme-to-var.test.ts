@@ -153,7 +153,6 @@ test('extended space scale converts to var or calc', async () => {
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.miami)]')).toEqual(
     '[--value:var(--spacing-miami)]',
   )
-  // should error
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.nyc)]')).toEqual(
     '[--value:theme(spacing.nyc)]',
   )
