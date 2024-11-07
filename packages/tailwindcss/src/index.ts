@@ -101,10 +101,15 @@ async function parseCss(
     // Find `@tailwind utilities` so that we can later replace it with the
     // actual generated utility class CSS.
     if (
-      utilitiesNode === null &&
       node.name === '@tailwind' &&
       (node.params === 'utilities' || node.params.startsWith('utilities'))
     ) {
+      // Any additional `@tailwind utilities` nodes can be removed
+      if (utilitiesNode !== null) {
+        replaceWith([])
+        return
+      }
+
       let params = segment(node.params, ' ')
       for (let param of params) {
         if (param.startsWith('source(')) {
@@ -459,15 +464,6 @@ async function parseCss(
     let node = utilitiesNode as AstNode as Context
     node.kind = 'context'
     node.context = {}
-
-    // Remove additional `@tailwind utilities` nodes
-    walk(ast, (node, { replaceWith }) => {
-      if (node.kind !== 'at-rule') return
-      if (node.name !== '@tailwind') return
-      if (!node.params.startsWith('utilities')) return
-
-      replaceWith([])
-    })
   }
 
   // Replace `@apply` rules with the actual utility classes.
