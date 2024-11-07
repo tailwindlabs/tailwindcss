@@ -1386,6 +1386,7 @@ describe('Parsing themes values from CSS', () => {
 
       .text-lg {
         font-size: var(--text-lg);
+        line-height: var(--tw-leading, var(--default-line-height));
       }
 
       .text-potato {
