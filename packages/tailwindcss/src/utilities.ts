@@ -23,7 +23,6 @@ type SuggestionDefinition =
       values?: string[]
       modifiers?: string[]
       valueThemeKeys?: ThemeKey[]
-      ignoredThemeKeys?: ThemeKey[]
       modifierThemeKeys?: ThemeKey[]
       hasDefaultValue?: boolean
     }
@@ -204,8 +203,8 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
-    function* resolve(themeKeys: ThemeKey[], ignoredThemeKeys: ThemeKey[] = []) {
-      for (let value of theme.keysInNamespaces(themeKeys, ignoredThemeKeys)) {
+    function* resolve(themeKeys: ThemeKey[]) {
+      for (let value of theme.keysInNamespaces(themeKeys)) {
         yield value.replaceAll('_', '.')
       }
     }
@@ -221,7 +220,7 @@ export function createUtilities(theme: Theme) {
 
         let values: (string | null)[] = [
           ...(defn.values ?? []),
-          ...resolve(defn.valueThemeKeys ?? [], defn.ignoredThemeKeys),
+          ...resolve(defn.valueThemeKeys ?? []),
         ]
         let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
 
@@ -253,7 +252,6 @@ export function createUtilities(theme: Theme) {
     supportsNegative?: boolean
     supportsFractions?: boolean
     themeKeys?: ThemeKey[]
-    ignoredThemeKeys?: ThemeKey[]
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
@@ -280,8 +278,7 @@ export function createUtilities(theme: Theme) {
         // `defaultValue` (for candidates like `grow` that have no theme values)
         // or a bare theme value (like `--radius` for `rounded`). No utility
         // will ever support both of these.
-        value =
-          desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [], desc.ignoredThemeKeys)
+        value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
       } else if (candidate.value.kind === 'arbitrary') {
         if (candidate.modifier) return
         value = candidate.value.value
@@ -289,7 +286,6 @@ export function createUtilities(theme: Theme) {
         value = theme.resolve(
           candidate.value.fraction ?? candidate.value.value,
           desc.themeKeys ?? [],
-          desc.ignoredThemeKeys,
         )
 
         // Automatically handle things like `w-1/2` without requiring `1/2` to
@@ -325,7 +321,6 @@ export function createUtilities(theme: Theme) {
       {
         supportsNegative: desc.supportsNegative,
         valueThemeKeys: desc.themeKeys ?? [],
-        ignoredThemeKeys: desc.ignoredThemeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
       },
     ])
@@ -385,11 +380,9 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative = false,
       supportsFractions = false,
-      ignoredThemeKeys = [],
     }: {
       supportsNegative?: boolean
       supportsFractions?: boolean
-      ignoredThemeKeys?: ThemeKey[]
     } = {},
   ) {
     utilities.static(`${name}-px`, (candidate) => {
@@ -399,7 +392,6 @@ export function createUtilities(theme: Theme) {
     let themeKeys = ([] as ThemeKey[]).concat(themeNamespace, '--spacing')
     functionalUtility(name, {
       themeKeys,
-      ignoredThemeKeys,
       supportsFractions,
       supportsNegative,
       handleBareValue: ({ value }) => {
@@ -459,7 +451,6 @@ export function createUtilities(theme: Theme) {
         ],
         supportsNegative,
         valueThemeKeys: themeKeys,
-        ignoredThemeKeys: ignoredThemeKeys ?? [],
       },
     ])
   }
@@ -536,7 +527,6 @@ export function createUtilities(theme: Theme) {
     spacingUtility(name, '--inset', (value) => [decl(property, value)], {
       supportsNegative: true,
       supportsFractions: true,
-      ignoredThemeKeys: ['--inset-ring', '--inset-shadow'],
     })
   }
 
@@ -2780,7 +2770,6 @@ export function createUtilities(theme: Theme) {
         candidate.value.value,
         ['--font'],
         ['--font-feature-settings', '--font-variation-settings'],
-        ['--font-weight', '--font-size'],
       )
       if (value) {
         let [families, options = {}] = value
