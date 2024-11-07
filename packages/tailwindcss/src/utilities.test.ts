@@ -16124,6 +16124,22 @@ describe('spacing utilities', () => {
       }"
     `)
   })
+
+  test('spacing utilities must have a value', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing: 4px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: 4px;
+      }"
+    `)
+  })
 })
 
 describe('custom utilities', () => {
