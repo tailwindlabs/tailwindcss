@@ -71,7 +71,6 @@ test(
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`foo`])
-
-    await fs.expectFileNotToContain(files[0][0], [':deep(.bar)'])
+    await fs.expectFileToContain(files[0][0], ['.bar{'])
   },
 )
