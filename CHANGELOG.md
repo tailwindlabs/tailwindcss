@@ -29,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure adjacent rules are merged together after handling nesting when generating optimized CSS ([#14873](https://github.com/tailwindlabs/tailwindcss/pull/14873))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
-- _Upgrade (experimental)_: Sort upgraded CSS ([#14866](https://github.com/tailwindlabs/tailwindcss/pull/14866))
 
 ### Changed
 
