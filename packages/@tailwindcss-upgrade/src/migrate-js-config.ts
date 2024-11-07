@@ -1,6 +1,6 @@
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { type Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
@@ -21,7 +21,7 @@ import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-sta
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = path.dirname(__filename)
 
 export type JSConfigMigration =
   // Could not convert the config file, need to inject it as-is in a @config directive
@@ -195,21 +195,21 @@ async function migrateContent(
     return unresolvedConfig.future?.relativeContentPathsByDefault ?? false
   })()
 
-  let contentFiles = Array.isArray(unresolvedConfig.content)
-    ? unresolvedConfig.content
-    : (unresolvedConfig.content?.files ?? []).map((content) => {
-        if (typeof content === 'string' && contentIsRelative) {
-          return resolve(dirname(configPath), content)
+  let sourceGlobs = Array.isArray(unresolvedConfig.content)
+    ? unresolvedConfig.content.map((pattern) => ({ base, pattern }))
+    : (unresolvedConfig.content?.files ?? []).map((pattern) => {
+        if (typeof pattern === 'string' && contentIsRelative) {
+          return { base: path.dirname(configPath), pattern: pattern }
         }
-        return content
+        return { base, pattern }
       })
 
-  for (let content of contentFiles) {
-    if (typeof content !== 'string') {
-      throw new Error('Unsupported content value: ' + content)
+  for (let { base, pattern } of sourceGlobs) {
+    if (typeof pattern !== 'string') {
+      throw new Error('Unsupported content value: ' + pattern)
     }
 
-    let sourceFiles = patternSourceFiles({ base, pattern: content })
+    let sourceFiles = patternSourceFiles({ base, pattern })
 
     let autoContentContainsAllSourceFiles = true
     for (let sourceFile of sourceFiles) {
@@ -220,7 +220,7 @@ async function migrateContent(
     }
 
     if (!autoContentContainsAllSourceFiles) {
-      sources.push({ base, pattern: content })
+      sources.push({ base, pattern })
     }
   }
   return sources

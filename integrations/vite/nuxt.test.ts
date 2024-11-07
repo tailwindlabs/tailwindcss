@@ -65,7 +65,11 @@ test('dev mode', SETUP, async ({ fs, spawn, getFreePort }) => {
 test('build', SETUP, async ({ spawn, getFreePort, exec }) => {
   let port = await getFreePort()
   await exec(`pnpm nuxt build`)
-  await spawn(`PORT=${port} pnpm nuxt preview`)
+  await spawn(`pnpm nuxt preview`, {
+    env: {
+      PORT: `${port}`,
+    },
+  })
 
   await retryAssertion(async () => {
     let css = await fetchStyles(port)

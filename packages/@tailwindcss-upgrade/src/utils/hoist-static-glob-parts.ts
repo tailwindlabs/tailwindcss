@@ -1,3 +1,4 @@
+import { normalizePath } from '@tailwindcss/node'
 import braces from 'braces'
 import path from 'node:path'
 
@@ -12,10 +13,12 @@ export function hoistStaticGlobParts(entry: GlobEntry): GlobEntry[] {
     let [staticPart, dynamicPart] = splitPattern(pattern)
 
     // Move static part into the `base`.
+    let absolutePosixPath = normalizePath(entry.base)
+
     if (staticPart !== null) {
-      clone.base = path.resolve(entry.base, staticPart)
+      clone.base = path.posix.join(absolutePosixPath, staticPart)
     } else {
-      clone.base = path.resolve(entry.base)
+      clone.base = absolutePosixPath
     }
 
     // Move dynamic part into the `pattern`.
@@ -56,7 +59,7 @@ function splitPattern(pattern: string): [staticPart: string | null, dynamicPart:
   let lastSlashPosition: number | null = null
 
   for (let i = 0; i < pattern.length; i++) {
-    let c = pattern[i];
+    let c = pattern[i]
     if (c === '/') {
       lastSlashPosition = i
     }
