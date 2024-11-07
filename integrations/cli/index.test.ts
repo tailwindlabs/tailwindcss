@@ -44,7 +44,7 @@ describe.each([
         `,
         'project-a/index.html': html`
           <div
-            class="underline 2xl:font-bold hocus:underline inverted:flex"
+            class="underline 2xl:font-bold hocus:underline inverted:flex *:flex **:flex"
           ></div>
         `,
         'project-a/plugin.js': js`
@@ -89,6 +89,8 @@ describe.each([
         candidate`content-['project-b/src/index.js']`,
         candidate`inverted:flex`,
         candidate`hocus:underline`,
+        candidate`*:flex`,
+        candidate`**:flex`,
       ])
     },
   )

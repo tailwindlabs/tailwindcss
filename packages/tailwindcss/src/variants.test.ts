@@ -24,6 +24,15 @@ test('*', async () => {
   expect(await run(['*/foo:flex'])).toEqual('')
 })
 
+test('**', async () => {
+  expect(await run(['**:flex'])).toMatchInlineSnapshot(`
+    ":where(.\\*\\*\\:flex *) {
+      display: flex;
+    }"
+  `)
+  expect(await run(['**/foo:flex'])).toEqual('')
+})
+
 test('first-letter', async () => {
   expect(await run(['first-letter:flex'])).toMatchInlineSnapshot(`
     ".first-letter\\:flex:first-letter {

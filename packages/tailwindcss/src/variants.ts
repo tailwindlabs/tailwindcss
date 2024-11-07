@@ -364,6 +364,7 @@ export function createVariants(theme: Theme): Variants {
 
   variants.static('force', () => {}, { compounds: Compounds.Never })
   staticVariant('*', [':where(& > *)'], { compounds: Compounds.Never })
+  staticVariant('**', [':where(& *)'], { compounds: Compounds.Never })
 
   function negateConditions(ruleName: string, conditions: string[]) {
     return conditions.map((condition) => {
