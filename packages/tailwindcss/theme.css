@@ -335,21 +335,21 @@
   /* Spacing */
   --spacing: 0.25rem;
 
-  /* Widths */
-  --width-3xs: 16rem;
-  --width-2xs: 18rem;
-  --width-xs: 20rem;
-  --width-sm: 24rem;
-  --width-md: 28rem;
-  --width-lg: 32rem;
-  --width-xl: 36rem;
-  --width-2xl: 42rem;
-  --width-3xl: 48rem;
-  --width-4xl: 56rem;
-  --width-5xl: 64rem;
-  --width-6xl: 72rem;
-  --width-7xl: 80rem;
-  --width-prose: 65ch;
+  /* Container sizes */
+  --container-3xs: 16rem;
+  --container-2xs: 18rem;
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-4xl: 56rem;
+  --container-5xl: 64rem;
+  --container-6xl: 72rem;
+  --container-7xl: 80rem;
+  --container-prose: 65ch;
 
   /* Fonts */
   --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',

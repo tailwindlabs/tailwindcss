@@ -5,6 +5,7 @@ import { expect, it } from 'vitest'
 import type { UserConfig } from '../../../tailwindcss/src/compat/config/types'
 import { formatNodes } from './format-nodes'
 import { migrateMediaScreen } from './migrate-media-screen'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
@@ -18,6 +19,7 @@ async function migrate(input: string, userConfig: UserConfig = {}) {
         userConfig,
       }),
     )
+    .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)

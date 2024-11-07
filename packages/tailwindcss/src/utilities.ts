@@ -909,9 +909,9 @@ export function createUtilities(theme: Theme) {
   )
 
   for (let [name, namespaces, property] of [
-    ['w', ['--width'], 'width'],
-    ['min-w', ['--min-width', '--width'], 'min-width'],
-    ['max-w', ['--max-width', '--width'], 'max-width'],
+    ['w', ['--width', '--container'], 'width'],
+    ['min-w', ['--min-width', '--container'], 'min-width'],
+    ['max-w', ['--max-width', '--container'], 'max-width'],
     ['h', ['--height'], 'height'],
     ['min-h', ['--min-height', '--height'], 'min-height'],
     ['max-h', ['--max-height', '--height'], 'max-height'],
@@ -1001,7 +1001,7 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('basis-auto', [['flex-basis', 'auto']])
   staticUtility('basis-full', [['flex-basis', '100%']])
-  spacingUtility('basis', ['--flex-basis', '--width'], (value) => [decl('flex-basis', value)], {
+  spacingUtility('basis', ['--flex-basis', '--container'], (value) => [decl('flex-basis', value)], {
     supportsFractions: true,
   })
 
@@ -1653,7 +1653,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('columns-auto', [['columns', 'auto']])
 
   functionalUtility('columns', {
-    themeKeys: ['--columns', '--width'],
+    themeKeys: ['--columns', '--container'],
     handleBareValue: ({ value }) => {
       if (!isPositiveInteger(value)) return null
       return value
@@ -1664,7 +1664,7 @@ export function createUtilities(theme: Theme) {
   suggest('columns', () => [
     {
       values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
-      valueThemeKeys: ['--columns', '--width'],
+      valueThemeKeys: ['--columns', '--container'],
     },
   ])
 

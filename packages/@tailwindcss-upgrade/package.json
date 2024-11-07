@@ -29,6 +29,7 @@
   "dependencies": {
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
+    "braces": "^3.0.3",
     "dedent": "1.5.3",
     "enhanced-resolve": "^5.17.1",
     "globby": "^14.0.2",
@@ -44,6 +45,7 @@
     "tree-sitter-typescript": "^0.23.0"
   },
   "devDependencies": {
+    "@types/braces": "^3.0.4",
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3"
   }

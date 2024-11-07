@@ -3,12 +3,14 @@ import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './format-nodes'
 import { migrateMissingLayers } from './migrate-missing-layers'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
 function migrate(input: string) {
   return postcss()
     .use(migrateMissingLayers())
+    .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
@@ -122,15 +124,15 @@ it('should migrate rules above the `@tailwind base` directive in an `@layer base
      * License header
      */
 
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
     @layer base {
       html {
         color: red;
       }
-    }
-
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;"
+    }"
   `)
 })
 
@@ -159,12 +161,14 @@ it('should migrate rules between tailwind directives', async () => {
   ).toMatchInlineSnapshot(`
     "@tailwind base;
 
+    @tailwind components;
+
+    @tailwind utilities;
+
     @layer base {
       .base {
       }
     }
-
-    @tailwind components;
 
     @layer components {
       .component-a {
@@ -172,8 +176,6 @@ it('should migrate rules between tailwind directives', async () => {
       .component-b {
       }
     }
-
-    @tailwind utilities;
 
     .utility-a {
     }

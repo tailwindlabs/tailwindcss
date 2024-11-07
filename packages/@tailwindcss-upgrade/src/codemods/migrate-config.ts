@@ -3,7 +3,6 @@ import postcss, { AtRule, type Plugin, Root } from 'postcss'
 import { normalizePath } from '../../../@tailwindcss-node/src/normalize-path'
 import type { JSConfigMigration } from '../migrate-js-config'
 import type { Stylesheet } from '../stylesheet'
-import { walk, WalkAction } from '../utils/walk'
 
 const ALREADY_INJECTED = new WeakMap<Stylesheet, string[]>()
 
@@ -39,14 +38,14 @@ export function migrateConfig(
       })
 
       let css = '\n\n'
+      css += '\n@tw-bucket source {'
       for (let source of jsConfigMigration.sources) {
         let absolute = path.resolve(source.base, source.pattern)
         css += `@source '${relativeToStylesheet(sheet, absolute)}';\n`
       }
-      if (jsConfigMigration.sources.length > 0) {
-        css = css + '\n'
-      }
+      css += '}\n'
 
+      css += '\n@tw-bucket plugin {\n'
       for (let plugin of jsConfigMigration.plugins) {
         let relative =
           plugin.path[0] === '.'
@@ -71,37 +70,16 @@ export function migrateConfig(
 
             css += `  ${property}: ${cssValue};\n`
           }
-          css += '}\n'
+          css += '}\n' // @plugin
         }
       }
-      if (jsConfigMigration.plugins.length > 0) {
-        css = css + '\n'
-      }
+      css += '}\n' // @tw-bucket
 
       cssConfig.append(postcss.parse(css + jsConfigMigration.css))
     }
 
-    // Inject the `@config` directive after the last `@import` or at the
-    // top of the file if no `@import` rules are present
-    let locationNode = null as AtRule | null
-
-    walk(root, (node) => {
-      if (node.type === 'atrule' && node.name === 'import') {
-        locationNode = node
-      }
-
-      return WalkAction.Skip
-    })
-
-    for (let node of cssConfig?.nodes ?? []) {
-      node.raws.tailwind_pretty = true
-    }
-
-    if (!locationNode) {
-      root.prepend(cssConfig.nodes)
-    } else if (locationNode.name === 'import') {
-      locationNode.after(cssConfig.nodes)
-    }
+    // Inject the `@config` directive
+    root.append(cssConfig.nodes)
   }
 
   function migrate(root: Root) {
