@@ -223,16 +223,6 @@ export function toCss(ast: AstNode[]) {
 
     // AtRule
     else if (node.kind === 'at-rule') {
-      if (
-        node.name === '@tailwind' &&
-        (node.params === 'utilities' || node.params.startsWith('utilities'))
-      ) {
-        for (let child of node.nodes) {
-          css += stringify(child, depth)
-        }
-        return css
-      }
-
       // Print at-rules without nodes with a `;` instead of an empty block.
       //
       // E.g.:
@@ -240,7 +230,7 @@ export function toCss(ast: AstNode[]) {
       // ```css
       // @layer base, components, utilities;
       // ```
-      else if (node.nodes.length === 0) {
+      if (node.nodes.length === 0) {
         return `${indent}${node.name} ${node.params};\n`
       }
 

@@ -385,6 +385,7 @@ class Root {
       env.DEBUG && console.time('[@tailwindcss/vite] Setup compiler')
       this.compiler = await compile(content, {
         base: inputBase,
+        shouldRewriteUrls: true,
         onDependency: (path) => {
           addWatchFile(path)
           this.dependencies.add(path)

@@ -13,6 +13,7 @@ import {
   WalkAction,
   type AstNode,
   type AtRule,
+  type Context,
   type StyleRule,
 } from './ast'
 import { substituteAtImports } from './at-import'
@@ -100,10 +101,15 @@ async function parseCss(
     // Find `@tailwind utilities` so that we can later replace it with the
     // actual generated utility class CSS.
     if (
-      utilitiesNode === null &&
       node.name === '@tailwind' &&
       (node.params === 'utilities' || node.params.startsWith('utilities'))
     ) {
+      // Any additional `@tailwind utilities` nodes can be removed
+      if (utilitiesNode !== null) {
+        replaceWith([])
+        return
+      }
+
       let params = segment(node.params, ' ')
       for (let param of params) {
         if (param.startsWith('source(')) {
@@ -450,6 +456,14 @@ async function parseCss(
       }
     }
     firstThemeRule.nodes = nodes
+  }
+
+  // Replace the `@tailwind utilities` node with a context since it prints
+  // children directly.
+  if (utilitiesNode) {
+    let node = utilitiesNode as AstNode as Context
+    node.kind = 'context'
+    node.context = {}
   }
 
   // Replace `@apply` rules with the actual utility classes.
