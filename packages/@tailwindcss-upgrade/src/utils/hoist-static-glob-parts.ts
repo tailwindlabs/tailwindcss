@@ -55,7 +55,8 @@ function splitPattern(pattern: string): [staticPart: string | null, dynamicPart:
 
   let lastSlashPosition: number | null = null
 
-  for (let [i, c] of pattern.split('').entries()) {
+  for (let i = 0; i < pattern.length; i++) {
+    let c = pattern[i];
     if (c === '/') {
       lastSlashPosition = i
     }
