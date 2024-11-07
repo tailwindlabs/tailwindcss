@@ -144,40 +144,6 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       @source '../node_modules/my-external-lib/**/*.{html}';
 
       @variant dark (&:where(.dark, .dark *));
@@ -274,6 +240,40 @@ test(
         }
       }
 
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      /*
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've
+        added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add \`border-0\` to
+        any form elements that shouldn't have a border.
+      */
+      @layer base {
+        input:where(:not([type='button'], [type='reset'], [type='submit'])),
+        select,
+        textarea {
+          border-width: 0;
+        }
+      }
+
       --- src/test.js ---
       export default {
         'shouldNotMigrate': !border.test + '',
@@ -346,6 +346,24 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
+      @plugin '@tailwindcss/typography';
+      @plugin '../custom-plugin' {
+        is-null: null;
+        is-true: true;
+        is-false: false;
+        is-int: 1234567;
+        is-float: 1.35;
+        is-sci: 0.0000135;
+        is-str-null: 'null';
+        is-str-true: 'true';
+        is-str-false: 'false';
+        is-str-int: '1234567';
+        is-str-float: '1.35';
+        is-str-sci: '1.35e-5';
+        is-arr: 'foo', 'bar';
+        is-arr-mixed: null, true, false, 1234567, 1.35, 'foo', 'bar', 'true';
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -378,24 +396,6 @@ test(
         textarea {
           border-width: 0;
         }
-      }
-
-      @plugin '@tailwindcss/typography';
-      @plugin '../custom-plugin' {
-        is-null: null;
-        is-true: true;
-        is-false: false;
-        is-int: 1234567;
-        is-float: 1.35;
-        is-sci: 0.0000135;
-        is-str-null: 'null';
-        is-str-true: 'true';
-        is-str-false: 'false';
-        is-str-int: '1234567';
-        is-str-float: '1.35';
-        is-str-sci: '1.35e-5';
-        is-arr: 'foo', 'bar';
-        is-arr-mixed: null, true, false, 1234567, 1.35, 'foo', 'bar', 'true';
       }
       "
     `)
@@ -447,6 +447,20 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
+      @theme {
+        --color-gray-50: oklch(0.985 0 0);
+        --color-gray-100: oklch(0.97 0 0);
+        --color-gray-200: oklch(0.922 0 0);
+        --color-gray-300: oklch(0.87 0 0);
+        --color-gray-400: oklch(0.708 0 0);
+        --color-gray-500: oklch(0.556 0 0);
+        --color-gray-600: oklch(0.439 0 0);
+        --color-gray-700: oklch(0.371 0 0);
+        --color-gray-800: oklch(0.269 0 0);
+        --color-gray-900: oklch(0.205 0 0);
+        --color-gray-950: oklch(0.145 0 0);
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -479,20 +493,6 @@ test(
         textarea {
           border-width: 0;
         }
-      }
-
-      @theme {
-        --color-gray-50: oklch(0.985 0 0);
-        --color-gray-100: oklch(0.97 0 0);
-        --color-gray-200: oklch(0.922 0 0);
-        --color-gray-300: oklch(0.87 0 0);
-        --color-gray-400: oklch(0.708 0 0);
-        --color-gray-500: oklch(0.556 0 0);
-        --color-gray-600: oklch(0.439 0 0);
-        --color-gray-700: oklch(0.371 0 0);
-        --color-gray-800: oklch(0.269 0 0);
-        --color-gray-900: oklch(0.205 0 0);
-        --color-gray-950: oklch(0.145 0 0);
       }
       "
     `)
@@ -548,6 +548,8 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
+      @config '../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -581,7 +583,6 @@ test(
           border-width: 0;
         }
       }
-      @config '../tailwind.config.ts';
       "
     `)
 
@@ -640,6 +641,8 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
+      @config '../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -673,7 +676,6 @@ test(
           border-width: 0;
         }
       }
-      @config '../tailwind.config.ts';
       "
     `)
 
@@ -728,6 +730,8 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
+      @config '../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -761,7 +765,6 @@ test(
           border-width: 0;
         }
       }
-      @config '../tailwind.config.ts';
       "
     `)
 
@@ -852,6 +855,10 @@ test(
       --- project-a/src/input.css ---
       @import 'tailwindcss';
 
+      @theme {
+        --color-primary: red;
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -884,15 +891,15 @@ test(
         textarea {
           border-width: 0;
         }
-      }
-
-      @theme {
-        --color-primary: red;
       }
 
       --- project-b/src/input.css ---
       @import 'tailwindcss';
 
+      @theme {
+        --color-primary: blue;
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -925,10 +932,6 @@ test(
         textarea {
           border-width: 0;
         }
-      }
-
-      @theme {
-        --color-primary: blue;
       }
       "
     `)

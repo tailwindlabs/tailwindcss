@@ -419,11 +419,7 @@ export async function split(stylesheets: Stylesheet[]) {
       }
     }
 
-    let utilities = postcss.root({
-      raws: {
-        tailwind_pretty: true,
-      },
-    })
+    let utilities = postcss.root()
 
     walk(sheet.root, (node) => {
       if (node.type !== 'atrule') return
@@ -511,7 +507,6 @@ export async function split(stylesheets: Stylesheet[]) {
       let newImport = node.clone({
         params: `${quote}${newFile}${quote}`,
         raws: {
-          after: '\n\n',
           tailwind_injected_layer: node.raws.tailwind_injected_layer,
           tailwind_original_params: `${quote}${id}${quote}`,
           tailwind_destination_sheet_id: utilityDestination.id,

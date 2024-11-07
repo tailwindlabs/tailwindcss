@@ -5,6 +5,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
 import { formatNodes } from './codemods/format-nodes'
+import { sortBuckets } from './codemods/sort-buckets'
 import { help } from './commands/help'
 import {
   analyze as analyzeStylesheets,
@@ -223,7 +224,7 @@ async function run() {
 
     // Format nodes
     for (let sheet of stylesheets) {
-      await postcss([formatNodes()]).process(sheet.root!, { from: sheet.file! })
+      await postcss([sortBuckets(), formatNodes()]).process(sheet.root!, { from: sheet.file! })
     }
 
     // Write all files to disk

@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './format-nodes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
@@ -16,6 +17,7 @@ async function migrate(input: string) {
         }),
       }),
     )
+    .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)

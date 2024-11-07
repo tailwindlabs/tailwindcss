@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './format-nodes'
 import { migrateBorderCompatibility } from './migrate-border-compatibility'
+import { sortBuckets } from './sort-buckets'
 
 const css = dedent
 
@@ -17,6 +18,7 @@ async function migrate(input: string) {
 
   return postcss()
     .use(migrateBorderCompatibility({ designSystem }))
+    .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
@@ -95,6 +97,7 @@ it('should add the compatibility CSS after the last `@import`', async () => {
         border-color: var(--color-gray-200, currentColor);
       }
     }
+
     /*
       Form elements have a 1px border by default in Tailwind CSS v4, so we've
       added these compatibility styles to make sure everything still looks the
@@ -156,6 +159,7 @@ it('should add the compatibility CSS after the last import, even if a body-less 
         border-color: var(--color-gray-200, currentColor);
       }
     }
+
     /*
       Form elements have a 1px border by default in Tailwind CSS v4, so we've
       added these compatibility styles to make sure everything still looks the
@@ -200,9 +204,6 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     @variant foo {
     }
 
-    @utility bar {
-    }
-
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
@@ -211,7 +212,6 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       If we ever want to remove these styles, we need to add an explicit border
       color utility to any element that depends on these defaults.
     */
-
     @layer base {
       *,
       ::after,
@@ -238,10 +238,13 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       }
     }
 
-    @layer base {
+    @utility bar {
     }
 
     @utility baz {
+    }
+
+    @layer base {
     }
 
     @layer base {
@@ -275,9 +278,6 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     @variant foo {
     }
 
-    @utility bar {
-    }
-
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
@@ -286,7 +286,6 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       If we ever want to remove these styles, we need to add an explicit border
       color utility to any element that depends on these defaults.
     */
-
     @layer base {
       *,
       ::after,
@@ -313,10 +312,13 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       }
     }
 
-    @layer base {
+    @utility bar {
     }
 
     @utility baz {
+    }
+
+    @layer base {
     }
 
     @layer base {
@@ -349,10 +351,10 @@ it('should not add the backwards compatibility CSS when no `@import "tailwindcss
     @utility bar {
     }
 
-    @layer base {
+    @utility baz {
     }
 
-    @utility baz {
+    @layer base {
     }
 
     @layer base {
@@ -389,10 +391,10 @@ it('should not add the backwards compatibility CSS when another `@import "tailwi
     @utility bar {
     }
 
-    @layer base {
+    @utility baz {
     }
 
-    @utility baz {
+    @layer base {
     }
 
     @layer base {

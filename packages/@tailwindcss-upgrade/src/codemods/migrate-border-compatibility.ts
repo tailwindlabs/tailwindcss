@@ -1,5 +1,5 @@
 import dedent from 'dedent'
-import postcss, { AtRule, type Plugin, type Root } from 'postcss'
+import postcss, { type Plugin, type Root } from 'postcss'
 import type { Config } from 'tailwindcss'
 import { keyPathToCssProperty } from '../../../tailwindcss/src/compat/apply-config-to-theme'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
@@ -77,19 +77,6 @@ export function migrateBorderCompatibility({
 
     if (!isTailwindRoot) return
 
-    let targetNode = null as AtRule | null
-
-    root.walkAtRules((node) => {
-      if (node.name === 'import') {
-        targetNode = node
-      } else if (node.name === 'layer' && node.params === 'base') {
-        targetNode = node
-        return false
-      }
-    })
-
-    if (!targetNode) return
-
     // Figure out the compatibility CSS to inject
     let compatibilityCssString = ''
     if (defaultBorderColor !== DEFAULT_BORDER_COLOR) {
@@ -98,6 +85,7 @@ export function migrateBorderCompatibility({
     }
 
     compatibilityCssString += BORDER_WIDTH_COMPATIBILITY_CSS
+    compatibilityCssString = `\n@tw-bucket compatibility {\n${compatibilityCssString}\n}\n`
     let compatibilityCss = postcss.parse(compatibilityCssString)
 
     // Replace the `theme(…)` with v3 values if we can't resolve the theme
@@ -129,19 +117,7 @@ export function migrateBorderCompatibility({
     })
 
     // Inject the compatibility CSS
-    if (targetNode.name === 'import') {
-      targetNode.after(compatibilityCss)
-
-      let next = targetNode.next()
-      if (next) next.raws.before = '\n\n'
-    } else {
-      let rawsBefore = compatibilityCss.last?.raws.before
-
-      targetNode.before(compatibilityCss)
-
-      let prev = targetNode.prev()
-      if (prev) prev.raws.before = rawsBefore
-    }
+    root.append(compatibilityCss)
   }
 
   return {

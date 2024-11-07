@@ -398,7 +398,6 @@ test(
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
       */
-
       @layer base {
         *,
         ::after,
@@ -1002,6 +1001,7 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
       /*
         Form elements have a 1px border by default in Tailwind CSS v4, so we've
         added these compatibility styles to make sure everything still looks the
@@ -1193,6 +1193,7 @@ test(
 
       --- ./src/a.1.utilities.1.css ---
       @import './a.1.utilities.utilities.css';
+
       @utility foo-from-a {
         color: red;
       }
@@ -1214,12 +1215,14 @@ test(
 
       --- ./src/b.1.css ---
       @import './b.1.components.css';
+
       @utility bar-from-b {
         color: red;
       }
 
       --- ./src/c.1.css ---
       @import './c.2.css' layer(utilities);
+
       .baz-from-c {
         color: green;
       }
@@ -1229,12 +1232,14 @@ test(
 
       --- ./src/c.2.css ---
       @import './c.3.css';
+
       #baz {
         --keep: me;
       }
 
       --- ./src/c.2.utilities.css ---
       @import './c.3.utilities.css';
+
       @utility baz-from-import {
         color: yellow;
       }
@@ -1417,6 +1422,8 @@ test(
       /* Inject missing @config */
       @import 'tailwindcss';
 
+      @config '../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1434,6 +1441,7 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
       /*
         Form elements have a 1px border by default in Tailwind CSS v4, so we've
         added these compatibility styles to make sure everything still looks the
@@ -1449,12 +1457,13 @@ test(
           border-width: 0;
         }
       }
-      @config '../tailwind.config.ts';
 
       --- ./src/root.2.css ---
       /* Already contains @config */
       @import 'tailwindcss';
 
+      @config "../tailwind.config.ts";
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1472,6 +1481,7 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
       /*
         Form elements have a 1px border by default in Tailwind CSS v4, so we've
         added these compatibility styles to make sure everything still looks the
@@ -1487,44 +1497,11 @@ test(
           border-width: 0;
         }
       }
-      @config "../tailwind.config.ts";
 
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
       @import 'tailwindcss';
 
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
       @config '../tailwind.config.ts';
 
       @variant hocus (&:hover, &:focus);
@@ -1537,10 +1514,45 @@ test(
         --color-blue-500: #00f;
       }
 
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      /*
+        Form elements have a 1px border by default in Tailwind CSS v4, so we've
+        added these compatibility styles to make sure everything still looks the
+        same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add \`border-0\` to
+        any form elements that shouldn't have a border.
+      */
+      @layer base {
+        input:where(:not([type='button'], [type='reset'], [type='submit'])),
+        select,
+        textarea {
+          border-width: 0;
+        }
+      }
+
       --- ./src/root.4.css ---
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
+
       @config '../tailwind.config.ts';
 
       --- ./src/root.5.css ---
@@ -1591,6 +1603,8 @@ test(
       /* Inject missing @config in this file, due to full import */
       @import 'tailwindcss';
 
+      @config '../../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1608,6 +1622,7 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
       /*
         Form elements have a 1px border by default in Tailwind CSS v4, so we've
         added these compatibility styles to make sure everything still looks the
@@ -1623,7 +1638,6 @@ test(
           border-width: 0;
         }
       }
-      @config '../../tailwind.config.ts';
       "
     `)
   },
@@ -1681,6 +1695,7 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
       /*
         Form elements have a 1px border by default in Tailwind CSS v4, so we've
         added these compatibility styles to make sure everything still looks the
