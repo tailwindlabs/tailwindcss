@@ -83,6 +83,8 @@ test.each([
 
   // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
   // still upgrade the `theme(…)` to the modern syntax.
+  ['max-[theme(screens.lg)]:flex', 'max-[theme(--breakpoint-lg)]:flex'],
+  // There are no variables for `--spacing` multiples, so we can't convert this
   ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
 
   // This test in itself doesn't make much sense. But we need to make sure
