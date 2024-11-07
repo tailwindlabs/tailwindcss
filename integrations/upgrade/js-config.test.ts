@@ -987,6 +987,12 @@ test(
       --- frontend/src/input.css ---
       @import 'tailwindcss';
 
+      @source '../../backend/mails/**/*.blade.php';
+
+      @theme {
+        --color-primary: red;
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1019,12 +1025,6 @@ test(
         textarea {
           border-width: 0;
         }
-      }
-
-      @source '../../backend/mails/**/*.blade.php';
-
-      @theme {
-        --color-primary: red;
       }
       "
     `)
