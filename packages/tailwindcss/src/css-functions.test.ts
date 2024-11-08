@@ -473,6 +473,26 @@ describe('theme function', () => {
           }"
         `)
       })
+
+      test('theme(\n\tfontFamily.unknown,\n\tHelvetica Neue,\n\tHelvetica,\n\tsans-serif\n)', async () => {
+        expect(
+          // prettier-ignore
+          await compileCss(css`
+            .fam {
+              font-family: theme(
+                fontFamily.unknown,
+                Helvetica Neue,
+                Helvetica,
+                sans-serif
+              );
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ".fam {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+          }"
+        `)
+      })
     })
 
     describe('recursive theme()', () => {

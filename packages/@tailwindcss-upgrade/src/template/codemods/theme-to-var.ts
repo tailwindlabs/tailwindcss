@@ -236,6 +236,11 @@ function substituteFunctionsInValue(
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
+      // Ignore whitespace before the first argument
+      if (node.nodes[0].kind === 'separator' && node.nodes[0].value.trim() === '') {
+        node.nodes.shift()
+      }
+
       let pathNode = node.nodes[0]
       if (pathNode.kind !== 'word') return
 
