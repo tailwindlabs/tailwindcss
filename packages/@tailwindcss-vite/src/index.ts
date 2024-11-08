@@ -4,6 +4,7 @@ import { Scanner } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { sveltePreprocess } from 'svelte-preprocess'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
@@ -53,9 +54,14 @@ export default function tailwindcss(): Plugin[] {
   function invalidateAllRoots(isSSR: boolean) {
     for (let server of servers) {
       let updates: Update[] = []
-      for (let id of roots.keys()) {
+      for (let [id, root] of roots.entries()) {
         let module = server.moduleGraph.getModuleById(id)
         if (!module) {
+          // The module for this root might not exist yet
+          if (root.builtBeforeTransform) {
+            return
+          }
+
           // Note: Removing this during SSR is not safe and will produce
           // inconsistent results based on the timing of the removal and
           // the order / timing of transforms.
@@ -152,6 +158,7 @@ export default function tailwindcss(): Plugin[] {
   }
 
   return [
+    svelteProcessor(roots),
     {
       // Step 1: Scan source files for candidates
       name: '@tailwindcss/vite:scan',
@@ -189,6 +196,19 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
+        if (root.builtBeforeTransform) {
+          root.builtBeforeTransform.forEach((file) => this.addWatchFile(file))
+          root.builtBeforeTransform = undefined
+          // When a root was built before this transform hook, the candidate
+          // list might be outdated already by the time the transform hook is
+          // called.
+          //
+          // This requires us to build the CSS file again. However, we do not
+          // expect dependencies to have changed, so we can avoid a full
+          // rebuild.
+          root.requiresRebuild = false
+        }
+
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
           // all candidates before generating CSS. This must not be called
@@ -219,6 +239,18 @@ export default function tailwindcss(): Plugin[] {
         if (!isPotentialCssRootFile(id)) return
 
         let root = roots.get(id)
+
+        if (root.builtBeforeTransform) {
+          root.builtBeforeTransform.forEach((file) => this.addWatchFile(file))
+          root.builtBeforeTransform = undefined
+          // When a root was built before this transform hook, the candidate
+          // list might be outdated already by the time the transform hook is
+          // called.
+          //
+          // Since we already do a second render pass in build mode, we don't
+          // need to do any more work here.
+          return
+        }
 
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
@@ -266,11 +298,13 @@ function getExtension(id: string) {
 }
 
 function isPotentialCssRootFile(id: string) {
+  if (id.includes('/.vite/')) return
   let extension = getExtension(id)
   let isCssFile =
     (extension === 'css' ||
       (extension === 'vue' && id.includes('&lang.css')) ||
-      (extension === 'astro' && id.includes('&lang.css'))) &&
+      (extension === 'astro' && id.includes('&lang.css')) ||
+      (extension === 'svelte' && id.includes('&lang.css'))) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id)
 
@@ -337,6 +371,14 @@ class Root {
   // contents of the root file so that we can restore it during the
   // `renderStart` hook.
   public lastContent: string = ''
+
+  // When set, indicates that the root was built before the Vite transform hook
+  // was being called. This can happen in scenarios like when preprocessing
+  // `<style>` tags for Svelte components.
+  //
+  // It can be set to a list of dependencies that will be added whenever the
+  // next `transform` hook is being called.
+  public builtBeforeTransform: string[] | undefined
 
   // The lazily-initialized Tailwind compiler components. These are persisted
   // throughout rebuilds but will be re-initialized if the rebuild strategy is
@@ -503,5 +545,57 @@ class Root {
     }
 
     return shared
+  }
+}
+
+// Register a plugin that can hook into the Svelte preprocessor if svelte is
+// enabled. This allows us to transform CSS in `<style>` tags and create a
+// stricter version of CSS that passes the Svelte compiler.
+//
+// Note that these files will undergo a second pass through the vite transpiler
+// later. This is necessary to compute `@tailwind utilities;` with the right
+// candidate list.
+//
+// In practice, it is not recommended to use `@tailwind utilities;` inside
+// Svelte components. Use an external `.css` file instead.
+function svelteProcessor(roots: DefaultMap<string, Root>) {
+  return {
+    name: '@tailwindcss/svelte',
+    api: {
+      sveltePreprocess: sveltePreprocess({
+        aliases: [
+          ['postcss', 'tailwindcss'],
+          ['css', 'tailwindcss'],
+        ],
+        async tailwindcss({
+          content,
+          attributes,
+          filename,
+        }: {
+          content: string
+          attributes: Record<string, string>
+          filename?: string
+        }) {
+          if (!filename) return
+          let id = filename + '?svelte&type=style&lang.css'
+
+          let root = roots.get(id)
+          // Mark this root as being built before the Vite transform hook is
+          // called. We capture all eventually added dependencies so that we can
+          // connect them to the vite module graph later, when the transform
+          // hook is called.
+          root.builtBeforeTransform = []
+          let generated = await root.generate(content, (file) =>
+            root?.builtBeforeTransform?.push(file),
+          )
+
+          if (!generated) {
+            roots.delete(id)
+            return { code: content, attributes }
+          }
+          return { code: generated, attributes }
+        },
+      }),
+    },
   }
 }
