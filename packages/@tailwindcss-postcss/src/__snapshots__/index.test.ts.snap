@@ -467,7 +467,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
-    background: none;
   }
 
   ::file-selector-button {
@@ -476,7 +475,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
-    background: none;
   }
 
   input:where(:not([type="button"], [type="reset"], [type="submit"])), select, textarea {
@@ -485,10 +483,12 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
+    background: none;
   }
 
   ::file-selector-button {
     appearance: button;
+    background: none;
   }
 
   :-moz-focusring {

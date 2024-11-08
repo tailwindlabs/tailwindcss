@@ -175,8 +175,7 @@ table {
 }
 
 /*
-  1. Inherit the font styles in all browsers.
-  2. Remove the default background color.
+  Inherit font styles in all browsers.
 */
 
 button,
@@ -185,12 +184,11 @@ optgroup,
 select,
 textarea,
 ::file-selector-button {
-  font: inherit; /* 1 */
-  font-feature-settings: inherit; /* 1 */
-  font-variation-settings: inherit; /* 1 */
-  letter-spacing: inherit; /* 1 */
-  color: inherit; /* 1 */
-  background: transparent; /* 2 */
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
 }
 
 /*
@@ -204,12 +202,15 @@ textarea {
 }
 
 /*
-  Correct the inability to style the border radius in iOS Safari.
+  1. Remove the default background color of buttons by default.
+  2. Correct the inability to style the border radius in iOS Safari.
 */
+
 button,
 input:where([type='button'], [type='reset'], [type='submit']),
 ::file-selector-button {
-  appearance: button;
+  background: transparent; /* 1 */
+  appearance: button; /* 2 */
 }
 
 /*
