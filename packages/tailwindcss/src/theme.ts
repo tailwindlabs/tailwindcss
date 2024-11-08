@@ -6,6 +6,7 @@ export const enum ThemeOptions {
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
+  DEPRECATED = 1 << 3,
 }
 
 // In the future we may want to replace this with just a `Set` of known theme
