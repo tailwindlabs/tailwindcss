@@ -64,7 +64,7 @@
   "pnpm": {
     "patchedDependencies": {
       "@parcel/watcher@2.4.1": "patches/@parcel__watcher@2.4.1.patch",
-      "lightningcss@1.26.0": "patches/lightningcss@1.26.0.patch"
+      "lightningcss@1.28.1": "patches/lightningcss@1.28.1.patch"
     }
   }
 }
