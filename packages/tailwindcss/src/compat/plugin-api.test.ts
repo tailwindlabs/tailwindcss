@@ -291,7 +291,7 @@ describe('theme', async () => {
         color: color-mix(in oklch, #ef4444 50%, transparent);
       }
       .variable {
-        color: color-mix(in oklch, #ef4444 calc(var(--opacity) * 100%), transparent);
+        color: color-mix(in oklch, #ef4444 var(--opacity), transparent);
       }
       :root {
         --color-red-500: #ef4444;
