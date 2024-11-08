@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rebase `url()` inside imported CSS files when using Vite ([#14877](https://github.com/tailwindlabs/tailwindcss/pull/14877))
 - Ensure that CSS transforms from other Vite plugins correctly work in full builds (e.g. `:deep()` in Vue) ([#14871](https://github.com/tailwindlabs/tailwindcss/pull/14871))
 - Don't unset keys like `--inset-shadow-*` when unsetting keys like `--inset-*` ([#14906](https://github.com/tailwindlabs/tailwindcss/pull/14906))
+- Fix opacity modifier using CSS variables ([#14916](https://github.com/tailwindlabs/tailwindcss/pull/14916))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 - _Upgrade (experimental)_: Fix crash during upgrade when content globs escape root of project ([#14896](https://github.com/tailwindlabs/tailwindcss/pull/14896))
