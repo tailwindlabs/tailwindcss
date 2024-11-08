@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 - _Upgrade (experimental)_: Fix crash during upgrade when content globs escape root of project ([#14896](https://github.com/tailwindlabs/tailwindcss/pull/14896))
 - _Upgrade (experimental)_: Don't convert `theme(…/15%)` to modifier unless it is the entire arbitrary value of a utility ([#14922](https://github.com/tailwindlabs/tailwindcss/pull/14922))
+- _Upgrade (experimental)_: Convert `,` to ` ` in `grid-cols-[…]`, `grid-rows-[…]`, and `object-[…]` ([#14927](https://github.com/tailwindlabs/tailwindcss/pull/14927))
 
 ### Changed
 
