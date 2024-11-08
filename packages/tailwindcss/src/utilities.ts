@@ -16,16 +16,14 @@ interface SuggestionGroup {
   modifiers: string[]
 }
 
-type SuggestionDefinition =
-  | string
-  | {
-      supportsNegative?: boolean
-      values?: string[]
-      modifiers?: string[]
-      valueThemeKeys?: ThemeKey[]
-      modifierThemeKeys?: ThemeKey[]
-      hasDefaultValue?: boolean
-    }
+type SuggestionDefinition = {
+  supportsNegative?: boolean
+  values?: string[]
+  modifiers?: string[]
+  valueThemeKeys?: ThemeKey[]
+  modifierThemeKeys?: ThemeKey[]
+  hasDefaultValue?: boolean
+}
 
 export type UtilityOptions = {
   types: string[]
@@ -213,11 +211,6 @@ export function createUtilities(theme: Theme) {
       let groups: SuggestionGroup[] = []
 
       for (let defn of defns()) {
-        if (typeof defn === 'string') {
-          groups.push({ values: [defn], modifiers: [] })
-          continue
-        }
-
         let values: (string | null)[] = [
           ...(defn.values ?? []),
           ...resolve(defn.valueThemeKeys ?? []),
