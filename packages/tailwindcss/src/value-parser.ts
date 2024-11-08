@@ -109,13 +109,15 @@ const CLOSE_PAREN = 0x29
 const COLON = 0x3a
 const COMMA = 0x2c
 const DOUBLE_QUOTE = 0x22
+const EQUALS = 0x3d
+const GREATER_THAN = 0x3e
+const LESS_THAN = 0x3c
+const NEWLINE = 0x0a
 const OPEN_PAREN = 0x28
 const SINGLE_QUOTE = 0x27
-const SPACE = 0x20
-const LESS_THAN = 0x3c
-const GREATER_THAN = 0x3e
-const EQUALS = 0x3d
 const SLASH = 0x2f
+const SPACE = 0x20
+const TAB = 0x09
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -144,11 +146,13 @@ export function parse(input: string) {
       // ```
       case COLON:
       case COMMA:
-      case SPACE:
-      case SLASH:
-      case LESS_THAN:
+      case EQUALS:
       case GREATER_THAN:
-      case EQUALS: {
+      case LESS_THAN:
+      case NEWLINE:
+      case SLASH:
+      case SPACE:
+      case TAB: {
         // 1. Handle everything before the separator as a word
         // Handle everything before the closing paren as a word
         if (buffer.length > 0) {
@@ -169,11 +173,13 @@ export function parse(input: string) {
           if (
             peekChar !== COLON &&
             peekChar !== COMMA &&
-            peekChar !== SPACE &&
-            peekChar !== SLASH &&
-            peekChar !== LESS_THAN &&
+            peekChar !== EQUALS &&
             peekChar !== GREATER_THAN &&
-            peekChar !== EQUALS
+            peekChar !== LESS_THAN &&
+            peekChar !== NEWLINE &&
+            peekChar !== SLASH &&
+            peekChar !== SPACE &&
+            peekChar !== TAB
           ) {
             break
           }
