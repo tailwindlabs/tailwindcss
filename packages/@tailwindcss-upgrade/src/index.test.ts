@@ -114,22 +114,6 @@ it('should migrate a stylesheet', async () => {
       }
     }
 
-    /*
-      Form elements have a 1px border by default in Tailwind CSS v4, so we've
-      added these compatibility styles to make sure everything still looks the
-      same as it did with Tailwind CSS v3.
-
-      If we ever want to remove these styles, we need to add \`border-0\` to
-      any form elements that shouldn't have a border.
-    */
-    @layer base {
-      input:where(:not([type='button'], [type='reset'], [type='submit'])),
-      select,
-      textarea {
-        border-width: 0;
-      }
-    }
-
     @utility b {
       z-index: 2;
     }
@@ -199,22 +183,6 @@ it('should migrate a stylesheet (with imports)', async () => {
       ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
       }
-    }
-
-    /*
-      Form elements have a 1px border by default in Tailwind CSS v4, so we've
-      added these compatibility styles to make sure everything still looks the
-      same as it did with Tailwind CSS v3.
-
-      If we ever want to remove these styles, we need to add \`border-0\` to
-      any form elements that shouldn't have a border.
-    */
-    @layer base {
-      input:where(:not([type='button'], [type='reset'], [type='submit'])),
-      select,
-      textarea {
-        border-width: 0;
-      }
     }"
   `)
 })
@@ -256,22 +224,6 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       ::backdrop,
       ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
-      }
-    }
-
-    /*
-      Form elements have a 1px border by default in Tailwind CSS v4, so we've
-      added these compatibility styles to make sure everything still looks the
-      same as it did with Tailwind CSS v3.
-
-      If we ever want to remove these styles, we need to add \`border-0\` to
-      any form elements that shouldn't have a border.
-    */
-    @layer base {
-      input:where(:not([type='button'], [type='reset'], [type='submit'])),
-      select,
-      textarea {
-        border-width: 0;
       }
     }
 
