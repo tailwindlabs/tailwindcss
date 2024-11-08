@@ -271,7 +271,10 @@ export function createUtilities(theme: Theme) {
         // `defaultValue` (for candidates like `grow` that have no theme values)
         // or a bare theme value (like `--radius` for `rounded`). No utility
         // will ever support both of these.
-        value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
+        value =
+          desc.defaultValue !== undefined
+            ? desc.defaultValue
+            : theme.resolve(null, desc.themeKeys ?? [])
       } else if (candidate.value.kind === 'arbitrary') {
         if (candidate.modifier) return
         value = candidate.value.value
@@ -387,6 +390,7 @@ export function createUtilities(theme: Theme) {
       themeKeys,
       supportsFractions,
       supportsNegative,
+      defaultValue: null,
       handleBareValue: ({ value }) => {
         let multiplier = theme.resolve(null, ['--spacing'])
         if (!multiplier) return null
