@@ -477,20 +477,18 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     color: inherit;
   }
 
-  button, input:where([type="button"]), input:where([type="reset"]), input:where([type="submit"]) {
-    background: none;
-  }
-
   input:where(:not([type="button"], [type="reset"], [type="submit"])), select, textarea {
     border-width: 1px;
   }
 
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
+    background: none;
   }
 
   ::file-selector-button {
     appearance: button;
+    background: none;
   }
 
   :-moz-focusring {
