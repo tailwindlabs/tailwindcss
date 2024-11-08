@@ -7,6 +7,7 @@ import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-va
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
+import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
 import { maxWidthScreen } from './codemods/max-width-screen'
 import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
@@ -31,6 +32,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   automaticVarInjection,
   bgGradient,
   simpleLegacyClasses,
+  legacyArbitraryValues,
   arbitraryValueToBareValue,
   maxWidthScreen,
   themeToVar,
