@@ -2,20 +2,82 @@ import { styleRule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
-interface ClassMetadata {
+export interface ClassMetadata {
   modifiers: string[]
   deprecated: boolean
 }
 
 export type ClassEntry = [string, ClassMetadata]
 
+export function getClassMetadata(
+  design: DesignSystem,
+  classes: string[],
+): (ClassMetadata | null)[] {
+  let list: (ClassMetadata | null)[] = []
+
+  for (let className of classes) {
+    let candidates = design.parseCandidate(className)
+    if (candidates.length === 0) {
+      list.push(null)
+      continue
+    }
+
+    let modifiers: string[] = []
+    let deprecated: boolean[] = []
+
+    for (let candidate of candidates) {
+      if (candidate.kind === 'arbitrary') continue
+      if (candidate.kind === 'static') continue
+
+      let utilities = design.utilities.get(candidate.root)
+      let completions = design.utilities.getCompletions(candidate.root)
+
+      let isDeprecated = utilities.every((utility) => utility.options?.deprecated ?? false)
+
+      for (let group of completions) {
+        if (group.values.length === 0) continue
+
+        for (let value of group.values) {
+          if (value === null && candidate.value === null) {
+            modifiers.push(...group.modifiers)
+
+            if (group.deprecated) isDeprecated = true
+          } else if (candidate.value?.kind === 'named' && value === candidate.value.value) {
+            modifiers.push(...group.modifiers)
+
+            if (group.deprecated) isDeprecated = true
+          }
+        }
+      }
+
+      deprecated.push(isDeprecated)
+    }
+
+    list.push({
+      modifiers,
+
+      // When multiple candidates are generated and only some are deprecated we
+      // we will not report that the class is deprecated because of ambiguity.
+      // Marking it as such is not useful because the user might be using it for
+      // the non-deprecated purpose from of a plugin.
+      deprecated: deprecated.length > 0 && deprecated.every((value) => value),
+    })
+  }
+
+  return list
+}
+
 export function getClassList(design: DesignSystem): ClassEntry[] {
   let list: [string, ClassMetadata][] = []
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
+    let utilities = design.utilities.get(utility)
     let completions = design.utilities.getCompletions(utility)
-    let deprecated = completions.length > 0 && completions.every((group) => group.deprecated)
+
+    let deprecated =
+      utilities.every((utility) => utility.options?.deprecated ?? false) ||
+      (completions.length > 0 && completions.every((group) => group.deprecated))
 
     list.push([
       utility,

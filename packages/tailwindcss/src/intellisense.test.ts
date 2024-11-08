@@ -441,3 +441,18 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
   expect(not.values).toContain('variant-3')
   expect(not.values).toContain('variant-4')
 })
+
+test.only('getClassMetadata(…)', async () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+
+  expect(design.classMetadata(['rounded'])).toEqual([
+    {
+      modifiers: [],
+      deprecated: true,
+    },
+  ])
+})

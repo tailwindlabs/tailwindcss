@@ -1,6 +1,6 @@
 import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
-import type { Theme, ThemeKey } from './theme'
+import { ThemeOptions, type Theme, type ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { inferDataType, isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
@@ -28,7 +28,8 @@ type SuggestionDefinition = {
 }
 
 export type UtilityOptions = {
-  types: string[]
+  types?: string[]
+  deprecated?: boolean
 }
 
 export type Utility = {
@@ -42,8 +43,8 @@ export class Utilities {
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
-  static(name: string, compileFn: CompileFn<'static'>) {
-    this.utilities.get(name).push({ kind: 'static', compileFn })
+  static(name: string, compileFn: CompileFn<'static'>, options?: UtilityOptions) {
+    this.utilities.get(name).push({ kind: 'static', compileFn, options })
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {
@@ -52,6 +53,10 @@ export class Utilities {
 
   has(name: string, kind: 'static' | 'functional') {
     return this.utilities.has(name) && this.utilities.get(name).some((fn) => fn.kind === kind)
+  }
+
+  isDeprecated(name: string, kind: 'static' | 'functional') {
+    return this.utilities.get(name).some((fn) => fn.kind === kind && fn.options?.deprecated)
   }
 
   get(name: string) {
@@ -203,9 +208,9 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
-    function* resolve(themeKeys: ThemeKey[]) {
+    function* resolve(themeKeys: ThemeKey[]): Iterable<[string, ThemeOptions]> {
       for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield value.replaceAll('_', '.')
+        yield [value.replaceAll('_', '.'), theme.getOptions(value)]
       }
     }
 
@@ -213,22 +218,44 @@ export function createUtilities(theme: Theme) {
       let groups: SuggestionGroup[] = []
 
       for (let defn of defns()) {
-        let values: (string | null)[] = [
-          ...(defn.values ?? []),
-          ...resolve(defn.valueThemeKeys ?? []),
-        ]
-        let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
+        let values: [string | null, boolean][] = []
+        let modifiers: [string, boolean][] = []
 
-        if (defn.hasDefaultValue) {
-          values.unshift(null)
+        for (let key of defn.values ?? []) {
+          values.push([key, false])
         }
 
-        groups.push({
-          supportsNegative: defn.supportsNegative,
-          values,
-          modifiers,
-          deprecated: defn.deprecated ?? false,
-        })
+        for (let [key, options] of resolve(defn.valueThemeKeys ?? [])) {
+          values.push([key, (options & ThemeOptions.DEPRECATED) === ThemeOptions.DEPRECATED])
+        }
+
+        for (let key of defn.modifiers ?? []) {
+          values.push([key, false])
+        }
+
+        for (let [key, options] of resolve(defn.modifierThemeKeys ?? [])) {
+          values.push([key, (options & ThemeOptions.DEPRECATED) === ThemeOptions.DEPRECATED])
+        }
+
+        if (defn.hasDefaultValue) {
+          values.unshift([null, false])
+        }
+
+        for (let valueIsDeprecated of [false, true]) {
+          for (let modifierIsDeprecated of [false, true]) {
+            let valueList = values.filter((v) => v[1] === valueIsDeprecated).map((v) => v[0])
+            let modifierList = modifiers
+              .filter((v) => v[1] === modifierIsDeprecated)
+              .map((v) => v[0])
+
+            groups.push({
+              supportsNegative: defn.supportsNegative,
+              values: valueList,
+              modifiers: modifierList,
+              deprecated: defn.deprecated ?? false,
+            })
+          }
+        }
       }
 
       return groups
@@ -238,14 +265,22 @@ export function createUtilities(theme: Theme) {
   /**
    * Register a static utility class like `justify-center`.
    */
-  function staticUtility(className: string, declarations: ([string, string] | (() => AstNode))[]) {
-    utilities.static(className, (candidate) => {
-      if (candidate.negative) return
+  function staticUtility(
+    className: string,
+    declarations: ([string, string] | (() => AstNode))[],
+    options?: UtilityOptions,
+  ) {
+    utilities.static(
+      className,
+      (candidate) => {
+        if (candidate.negative) return
 
-      return declarations.map((node) => {
-        return typeof node === 'function' ? node() : decl(node[0], node[1])
-      })
-    })
+        return declarations.map((node) => {
+          return typeof node === 'function' ? node() : decl(node[0], node[1])
+        })
+      },
+      options,
+    )
   }
 
   type UtilityDescription = {
@@ -256,6 +291,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string) => AstNode[] | undefined
+    deprecated?: boolean
   }
 
   /**
@@ -263,59 +299,65 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
-    utilities.functional(classRoot, (candidate) => {
-      // If the class candidate has a negative prefix (like `-mx-2`) but this
-      // utility doesn't support negative values (like the `width` utility),
-      // don't generate any rules.
-      if (candidate.negative && !desc.supportsNegative) return
+    utilities.functional(
+      classRoot,
+      (candidate) => {
+        // If the class candidate has a negative prefix (like `-mx-2`) but this
+        // utility doesn't support negative values (like the `width` utility),
+        // don't generate any rules.
+        if (candidate.negative && !desc.supportsNegative) return
 
-      let value: string | null = null
+        let value: string | null = null
 
-      if (!candidate.value) {
-        if (candidate.modifier) return
+        if (!candidate.value) {
+          if (candidate.modifier) return
 
-        // If the candidate has no value segment (like `rounded`), use the
-        // `defaultValue` (for candidates like `grow` that have no theme values)
-        // or a bare theme value (like `--radius` for `rounded`). No utility
-        // will ever support both of these.
-        value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
-      } else if (candidate.value.kind === 'arbitrary') {
-        if (candidate.modifier) return
-        value = candidate.value.value
-      } else {
-        value = theme.resolve(
-          candidate.value.fraction ?? candidate.value.value,
-          desc.themeKeys ?? [],
-        )
+          // If the candidate has no value segment (like `rounded`), use the
+          // `defaultValue` (for candidates like `grow` that have no theme values)
+          // or a bare theme value (like `--radius` for `rounded`). No utility
+          // will ever support both of these.
+          value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
+        } else if (candidate.value.kind === 'arbitrary') {
+          if (candidate.modifier) return
+          value = candidate.value.value
+        } else {
+          value = theme.resolve(
+            candidate.value.fraction ?? candidate.value.value,
+            desc.themeKeys ?? [],
+          )
 
-        // Automatically handle things like `w-1/2` without requiring `1/2` to
-        // exist as a theme value.
-        if (value === null && desc.supportsFractions && candidate.value.fraction) {
-          let [lhs, rhs] = segment(candidate.value.fraction, '/')
-          if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
-          value = `calc(${candidate.value.fraction} * 100%)`
+          // Automatically handle things like `w-1/2` without requiring `1/2` to
+          // exist as a theme value.
+          if (value === null && desc.supportsFractions && candidate.value.fraction) {
+            let [lhs, rhs] = segment(candidate.value.fraction, '/')
+            if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
+            value = `calc(${candidate.value.fraction} * 100%)`
+          }
+
+          // If there is still no value but the utility supports bare values, then
+          // use the bare candidate value as the value.
+          if (value === null && candidate.negative && desc.handleNegativeBareValue) {
+            value = desc.handleNegativeBareValue(candidate.value)
+            if (!value?.includes('/') && candidate.modifier) return
+            if (value !== null) return desc.handle(value)
+          }
+
+          if (value === null && desc.handleBareValue) {
+            value = desc.handleBareValue(candidate.value)
+            if (!value?.includes('/') && candidate.modifier) return
+          }
         }
 
-        // If there is still no value but the utility supports bare values, then
-        // use the bare candidate value as the value.
-        if (value === null && candidate.negative && desc.handleNegativeBareValue) {
-          value = desc.handleNegativeBareValue(candidate.value)
-          if (!value?.includes('/') && candidate.modifier) return
-          if (value !== null) return desc.handle(value)
-        }
+        // If there is no value, don't generate any rules.
+        if (value === null) return
 
-        if (value === null && desc.handleBareValue) {
-          value = desc.handleBareValue(candidate.value)
-          if (!value?.includes('/') && candidate.modifier) return
-        }
-      }
-
-      // If there is no value, don't generate any rules.
-      if (value === null) return
-
-      // Negate the value if the candidate has a negative prefix.
-      return desc.handle(withNegative(value, candidate))
-    })
+        // Negate the value if the candidate has a negative prefix.
+        return desc.handle(withNegative(value, candidate))
+      },
+      {
+        deprecated: desc.deprecated,
+      },
+    )
 
     suggest(classRoot, () => [
       {
@@ -1956,24 +1998,18 @@ export function createUtilities(theme: Theme) {
       staticUtility(
         `${root}-none`,
         properties.map((property) => [property, '0']),
+        { deprecated: true },
       )
       staticUtility(
         `${root}-full`,
         properties.map((property) => [property, 'calc(infinity * 1px)']),
+        { deprecated: true },
       )
       functionalUtility(root, {
+        deprecated: true,
         themeKeys: ['--radius', '--rounded'],
         handle: (value) => properties.map((property) => decl(property, value)),
       })
-
-      suggest(`${root}-none`, () => [{ deprecated: true }])
-      suggest(`${root}-full`, () => [{ deprecated: true }])
-      suggest(root, () => [
-        {
-          valueThemeKeys: ['--radius'],
-          deprecated: true,
-        },
-      ])
     }
 
     // `radius-*` utilities
