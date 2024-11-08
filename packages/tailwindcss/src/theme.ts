@@ -6,6 +6,7 @@ export const enum ThemeOptions {
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
+  DEPRECATED = 1 << 3,
 }
 
 // In the future we may want to replace this with just a `Set` of known theme
@@ -68,8 +69,8 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
-    let keys: string[] = []
+  keysInNamespaces(themeKeys: ThemeKey[]): [string, string][] {
+    let keys: [string, string][] = []
 
     for (let namespace of themeKeys) {
       let prefix = `${namespace}-`
@@ -83,7 +84,7 @@ export class Theme {
           continue
         }
 
-        keys.push(key.slice(prefix.length))
+        keys.push([key, key.slice(prefix.length)])
       }
     }
 

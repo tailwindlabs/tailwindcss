@@ -32,11 +32,23 @@ test('getClassList', () => {
   expect(classNames).toMatchSnapshot()
 })
 
+test('deprecated classes', () => {
+  let design = loadDesignSystem()
+  let classList = design.getClassList()
+  classList = classList.filter(([_, meta]) => meta.deprecated)
+  let classNames = classList.flatMap(([name, meta]) => [
+    name,
+    ...meta.modifiers.map((m) => `${name}/${m}`),
+  ])
+
+  expect(classNames).toMatchSnapshot()
+})
+
 test('Theme values with underscores are converted back to decimal points', () => {
   let design = loadDesignSystem()
   let classes = design.getClassList()
 
-  expect(classes).toContainEqual(['inset-0.5', { modifiers: [] }])
+  expect(classes).toContainEqual(['inset-0.5', { modifiers: [], deprecated: false }])
 })
 
 test('getVariants', () => {
@@ -428,4 +440,37 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
   expect(not.values).toContain('variant-2')
   expect(not.values).toContain('variant-3')
   expect(not.values).toContain('variant-4')
+})
+
+test('getClassMetadata(…)', async () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+
+  expect(design.classMetadata(['rounded'])).toEqual([
+    {
+      modifiers: [],
+      deprecated: true,
+    },
+  ])
+})
+
+test.only('Individual theme keys can be marked as deprecated', async () => {
+  let input = css`
+    @tailwind utilities;
+    @theme deprecated {
+      --shadow-sm: 0 0 0 rgba(0 0 0 / 0);
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+
+  expect(design.classMetadata(['shadow-sm'])).toEqual([
+    {
+      modifiers: [],
+      deprecated: true,
+    },
+  ])
 })

@@ -61,6 +61,8 @@ function parseThemeOptions(params: string) {
       options |= ThemeOptions.INLINE
     } else if (option === 'default') {
       options |= ThemeOptions.DEFAULT
+    } else if (option === 'deprecated') {
+      options |= ThemeOptions.DEPRECATED
     } else if (option.startsWith('prefix(') && option.endsWith(')')) {
       prefix = option.slice(7, -1)
     }
