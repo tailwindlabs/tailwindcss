@@ -32,6 +32,18 @@ test('getClassList', () => {
   expect(classNames).toMatchSnapshot()
 })
 
+test('deprecated classes', () => {
+  let design = loadDesignSystem()
+  let classList = design.getClassList()
+  classList = classList.filter(([_, meta]) => meta.deprecated)
+  let classNames = classList.flatMap(([name, meta]) => [
+    name,
+    ...meta.modifiers.map((m) => `${name}/${m}`),
+  ])
+
+  expect(classNames).toMatchSnapshot()
+})
+
 test('Theme values with underscores are converted back to decimal points', () => {
   let design = loadDesignSystem()
   let classes = design.getClassList()

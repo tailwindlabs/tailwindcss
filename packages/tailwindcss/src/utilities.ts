@@ -1965,6 +1965,15 @@ export function createUtilities(theme: Theme) {
         themeKeys: ['--radius', '--rounded'],
         handle: (value) => properties.map((property) => decl(property, value)),
       })
+
+      suggest(`${root}-none`, () => [{ deprecated: true }])
+      suggest(`${root}-full`, () => [{ deprecated: true }])
+      suggest(root, () => [
+        {
+          valueThemeKeys: ['--radius'],
+          deprecated: true,
+        },
+      ])
     }
 
     // `radius-*` utilities
