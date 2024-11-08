@@ -52,6 +52,22 @@ describe('parse', () => {
     ])
   })
 
+  it('should parse a function with multiple arguments across lines', () => {
+    expect(parse('theme(\n\tfoo,\n\tbar\n)')).toEqual([
+      {
+        kind: 'function',
+        value: 'theme',
+        nodes: [
+          { kind: 'separator', value: '\n\t' },
+          { kind: 'word', value: 'foo' },
+          { kind: 'separator', value: ',\n\t' },
+          { kind: 'word', value: 'bar' },
+          { kind: 'separator', value: '\n' },
+        ],
+      },
+    ])
+  })
+
   it('should parse a function with nested arguments', () => {
     expect(parse('theme(foo, theme(bar))')).toEqual([
       {
