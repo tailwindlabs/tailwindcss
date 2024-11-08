@@ -1,5 +1,5 @@
 diff --git a/node/index.js b/node/index.js
-index a9f2f6d5f3394329fcf8bc06af549030c01167a5..80d0915019e24cd03aa07a641a48f25a488848e3 100644
+index a9f2f6d5f3394329fcf8bc06af549030c01167a5..b92cc804adb694dbb17ee48368f13a03dd729267 100644
 --- a/node/index.js
 +++ b/node/index.js
 @@ -1,27 +1,32 @@
@@ -22,7 +22,7 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..80d0915019e24cd03aa07a641a48f25a
 +    // Bun polyfills `detect-libc` in compiled binaries. We rely on
 +    // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
 +    // there is a `familySync` function that we can use instead.
-+    if (typeof familySync === "function") family = familySync();
++    if (typeof familySync === 'function') family = familySync()
  
 -if (process.env.CSS_TRANSFORMER_WASM) {
 -  module.exports = require(`../pkg`);
