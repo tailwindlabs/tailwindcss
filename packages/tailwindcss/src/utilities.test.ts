@@ -14095,8 +14095,8 @@ test('tracking', async () => {
     await compileCss(
       css`
         @theme {
-          --letter-spacing-normal: 0em;
-          --letter-spacing-wide: 0.025em;
+          --tracking-normal: 0em;
+          --tracking-wide: 0.025em;
         }
         @tailwind utilities;
       `,
@@ -14104,8 +14104,8 @@ test('tracking', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --letter-spacing-normal: 0em;
-      --letter-spacing-wide: .025em;
+      --tracking-normal: 0em;
+      --tracking-wide: .025em;
     }
 
     .-tracking-\\[var\\(--value\\)\\] {
@@ -14119,13 +14119,13 @@ test('tracking', async () => {
     }
 
     .tracking-normal {
-      --tw-tracking: var(--letter-spacing-normal);
-      letter-spacing: var(--letter-spacing-normal);
+      --tw-tracking: var(--tracking-normal);
+      letter-spacing: var(--tracking-normal);
     }
 
     .tracking-wide {
-      --tw-tracking: var(--letter-spacing-wide);
-      letter-spacing: var(--letter-spacing-wide);
+      --tw-tracking: var(--tracking-wide);
+      letter-spacing: var(--tracking-wide);
     }
 
     @supports (-moz-orient: inline) {

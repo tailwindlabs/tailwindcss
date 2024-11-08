@@ -349,12 +349,12 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
     --font-weight-black: 900;
-    --letter-spacing-tighter: -.05em;
-    --letter-spacing-tight: -.025em;
-    --letter-spacing-normal: 0em;
-    --letter-spacing-wide: .025em;
-    --letter-spacing-wider: .05em;
-    --letter-spacing-widest: .1em;
+    --tracking-tighter: -.05em;
+    --tracking-tight: -.025em;
+    --tracking-normal: 0em;
+    --tracking-wide: .025em;
+    --tracking-wider: .05em;
+    --tracking-widest: .1em;
     --line-height-none: 1;
     --line-height-tight: 1.25;
     --line-height-snug: 1.375;

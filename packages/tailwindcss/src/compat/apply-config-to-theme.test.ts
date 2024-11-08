@@ -50,6 +50,10 @@ test('config values can be merged into the theme', () => {
             ],
           },
 
+          letterSpacing: {
+            superWide: '0.25em',
+          },
+
           width: {
             // Purposely setting to something different from the default
             '1/2': '60%',
@@ -88,6 +92,7 @@ test('config values can be merged into the theme', () => {
     '1rem',
     { '--line-height': '1.5' },
   ])
+  expect(theme.resolve('super-wide', ['--tracking'])).toEqual('0.25em')
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
   expect(theme.resolve('0.5', ['--width'])).toEqual('60%')
   expect(theme.resolve('100%', ['--width'])).toEqual('100%')
