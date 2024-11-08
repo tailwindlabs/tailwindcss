@@ -137,6 +137,7 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'fontFamily') path[0] = 'font'
   if (path[0] === 'fontSize') path[0] = 'text'
   if (path[0] === 'letterSpacing') path[0] = 'tracking'
+  if (path[0] === 'lineHeight') path[0] = 'leading'
   if (path[0] === 'maxWidth') path[0] = 'container'
   if (path[0] === 'screens') path[0] = 'breakpoint'
   if (path[0] === 'transitionTimingFunction') path[0] = 'ease'

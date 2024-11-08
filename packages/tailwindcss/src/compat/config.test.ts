@@ -1539,6 +1539,9 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
         --tracking-a: 1;
         --tracking-b: 2;
+
+        --leading-a: 1;
+        --leading-b: 2;
       }
 
       @plugin "./plugin.js";
@@ -1602,6 +1605,14 @@ test('old theme values are merged with their renamed counterparts in the CSS the
             expect(theme('letterSpacing.b')).toEqual('2')
 
             expect(theme('letterSpacing')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('lineHeight.a')).toEqual('1')
+            expect(theme('lineHeight.b')).toEqual('2')
+
+            expect(theme('lineHeight')).toMatchObject({
               a: '1',
               b: '2',
             })

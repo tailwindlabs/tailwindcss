@@ -3609,7 +3609,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('forced-color-adjust-none', [['forced-color-adjust', 'none']])
   staticUtility('forced-color-adjust-auto', [['forced-color-adjust', 'auto']])
 
-  spacingUtility('leading', ['--line-height'], (value) => [
+  spacingUtility('leading', ['--leading'], (value) => [
     atRoot([property('--tw-leading')]),
     decl('--tw-leading', value),
     decl('line-height', value),
@@ -3880,7 +3880,7 @@ export function createUtilities(theme: Theme) {
             let modifier =
               candidate.modifier.kind === 'arbitrary'
                 ? candidate.modifier.value
-                : theme.resolve(candidate.modifier.value, ['--line-height'])
+                : theme.resolve(candidate.modifier.value, ['--leading'])
 
             if (modifier) {
               return [decl('font-size', value), decl('line-height', modifier)]
@@ -3920,7 +3920,7 @@ export function createUtilities(theme: Theme) {
           let modifier =
             candidate.modifier.kind === 'arbitrary'
               ? candidate.modifier.value
-              : theme.resolve(candidate.modifier.value, ['--line-height'])
+              : theme.resolve(candidate.modifier.value, ['--leading'])
 
           let declarations = [decl('font-size', fontSize)]
           modifier && declarations.push(decl('line-height', modifier))
@@ -3964,7 +3964,7 @@ export function createUtilities(theme: Theme) {
       values: [],
       valueThemeKeys: ['--text'],
       modifiers: [],
-      modifierThemeKeys: ['--line-height'],
+      modifierThemeKeys: ['--leading'],
     },
   ])
 

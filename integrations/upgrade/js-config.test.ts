@@ -117,6 +117,9 @@ test(
               letterSpacing: {
                 superWide: '0.25em',
               },
+              lineHeight: {
+                superLoose: '3',
+              },
             },
           },
           plugins: [],
@@ -135,7 +138,7 @@ test(
       `,
       'src/index.html': html`
        <div
-          class="[letter-spacing:theme(letterSpacing.superWide)]"
+          class="[letter-spacing:theme(letterSpacing.superWide)] [line-height:theme(lineHeight.superLoose)]"
         ></div>
       `,
       'node_modules/my-external-lib/src/template.html': html`
@@ -152,7 +155,7 @@ test(
       "
       --- src/index.html ---
       <div
-         class="[letter-spacing:var(--tracking-super-wide)]"
+         class="[letter-spacing:var(--tracking-super-wide)] [line-height:var(--leading-super-loose)]"
        ></div>
 
       --- src/input.css ---
@@ -237,6 +240,8 @@ test(
         --animate-spin-counterclockwise: spin-counterclockwise 1s linear infinite;
 
         --tracking-super-wide: 0.25em;
+
+        --leading-super-loose: 3;
 
         @keyframes spin-clockwise {
           0% {
