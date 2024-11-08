@@ -405,13 +405,13 @@
   --tracking-wider: 0.05em;
   --tracking-widest: 0.1em;
 
-  /* Line-height */
-  --line-height-none: 1;
-  --line-height-tight: 1.25;
-  --line-height-snug: 1.375;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
-  --line-height-loose: 2;
+  /* Leading */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
 
   /* 3D perspectives */
   --perspective-dramatic: 100px;

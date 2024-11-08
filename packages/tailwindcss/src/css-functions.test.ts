@@ -640,6 +640,7 @@ describe('theme function', () => {
         ['maxWidth.xs', '20rem'],
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['letterSpacing.wide', '.025em'],
+        ['lineHeight.tight', '1.25'],
         ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')

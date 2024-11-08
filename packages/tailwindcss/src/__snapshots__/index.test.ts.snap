@@ -354,12 +354,12 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --tracking-wide: .025em;
   --tracking-wider: .05em;
   --tracking-widest: .1em;
-  --line-height-none: 1;
-  --line-height-tight: 1.25;
-  --line-height-snug: 1.375;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
-  --line-height-loose: 2;
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
   --perspective-dramatic: 100px;
   --perspective-near: 300px;
   --perspective-normal: 500px;

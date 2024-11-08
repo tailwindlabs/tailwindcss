@@ -14036,8 +14036,8 @@ test('leading', async () => {
     await compileCss(
       css`
         @theme {
-          --line-height-none: 1;
-          --line-height-6: 1.5rem;
+          --leading-none: 1;
+          --leading-6: 1.5rem;
         }
         @tailwind utilities;
       `,
@@ -14045,13 +14045,13 @@ test('leading', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --line-height-none: 1;
-      --line-height-6: 1.5rem;
+      --leading-none: 1;
+      --leading-6: 1.5rem;
     }
 
     .leading-6 {
-      --tw-leading: var(--line-height-6);
-      line-height: var(--line-height-6);
+      --tw-leading: var(--leading-6);
+      line-height: var(--leading-6);
     }
 
     .leading-\\[var\\(--value\\)\\] {
@@ -14060,8 +14060,8 @@ test('leading', async () => {
     }
 
     .leading-none {
-      --tw-leading: var(--line-height-none);
-      line-height: var(--line-height-none);
+      --tw-leading: var(--leading-none);
+      line-height: var(--leading-none);
     }
 
     @supports (-moz-orient: inline) {
@@ -14660,10 +14660,10 @@ test('text', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --line-height-6: 1.5rem;
+          --leading-6: 1.5rem;
           --text-sm: 0.875rem;
           --text-sm--line-height: 1.25rem;
-          --line-height-9: 2.25rem;
+          --leading-9: 2.25rem;
         }
         @tailwind utilities;
       `,
@@ -14717,10 +14717,10 @@ test('text', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
-      --line-height-6: 1.5rem;
+      --leading-6: 1.5rem;
       --text-sm: .875rem;
       --text-sm--line-height: 1.25rem;
-      --line-height-9: 2.25rem;
+      --leading-9: 2.25rem;
     }
 
     .text-sm {
@@ -14730,32 +14730,32 @@ test('text', async () => {
 
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: var(--line-height-6);
+      line-height: var(--leading-6);
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: var(--line-height-6);
+      line-height: var(--leading-6);
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: var(--line-height-9);
+      line-height: var(--leading-9);
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: var(--line-height-6);
+      line-height: var(--leading-6);
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: var(--line-height-6);
+      line-height: var(--leading-6);
     }
 
     .text-sm\\/6 {
       font-size: var(--text-sm);
-      line-height: var(--line-height-6);
+      line-height: var(--leading-6);
     }
 
     .text-sm\\/\\[4px\\] {

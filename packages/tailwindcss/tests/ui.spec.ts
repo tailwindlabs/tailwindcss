@@ -508,7 +508,7 @@ test('explicit leading utilities are respected when overriding font-size', async
         --text-sm--line-height: 16px;
         --text-xl: 20px;
         --text-xl--line-height: 24px;
-        --line-height-tight: 8px;
+        --leading-tight: 8px;
       }
     `,
   )
@@ -540,7 +540,7 @@ test('explicit leading utilities are overridden by line-height modifiers', async
         --text-sm--line-height: 16px;
         --text-xl: 20px;
         --text-xl--line-height: 24px;
-        --line-height-tight: 8px;
+        --leading-tight: 8px;
       }
     `,
   )

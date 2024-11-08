@@ -38,6 +38,10 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
           ...theme('tracking', {}),
         }),
 
+        lineHeight: ({ theme }) => ({
+          ...theme('leading', {}),
+        }),
+
         transitionDuration: {
           DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
         },

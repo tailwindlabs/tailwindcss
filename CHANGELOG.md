@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `--width-*` variables to `--container-*` ([#14898](https://github.com/tailwindlabs/tailwindcss/pull/14898))
 - Rename `--font-size-*` variables to `--text-*` ([#14909](https://github.com/tailwindlabs/tailwindcss/pull/14909))
 - Rename `--letter-spacing-*` variables to `--tracking-*` ([#14921](https://github.com/tailwindlabs/tailwindcss/pull/14921))
+- Rename `--line-height-*` variables to `--leading-*` ([#14925](https://github.com/tailwindlabs/tailwindcss/pull/14925))
 - Revert specificity of `*` variant to match v3 behavior ([#14920](https://github.com/tailwindlabs/tailwindcss/pull/14920))
 
 ## [4.0.0-alpha.31] - 2024-10-29
