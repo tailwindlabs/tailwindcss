@@ -3704,7 +3704,7 @@ export function createUtilities(theme: Theme) {
       return atRoot([property('--tw-outline-style', 'solid', '<custom-ident>')])
     }
 
-    staticUtility('outline-none', [
+    staticUtility('outline-hidden', [
       ['outline', '2px solid transparent'],
       ['outline-offset', '2px'],
     ])
@@ -3712,6 +3712,10 @@ export function createUtilities(theme: Theme) {
     /**
      * @css `outline-style`
      */
+    staticUtility('outline-none', [
+      ['--tw-outline-style', 'none'],
+      ['outline-style', 'none'],
+    ])
     staticUtility('outline-solid', [
       ['--tw-outline-style', 'solid'],
       ['outline-style', 'solid'],
@@ -3939,9 +3943,7 @@ export function createUtilities(theme: Theme) {
           ),
           decl(
             'letter-spacing',
-            options['--tracking']
-              ? `var(--tw-tracking, ${options['--tracking']})`
-              : undefined,
+            options['--tracking'] ? `var(--tw-tracking, ${options['--tracking']})` : undefined,
           ),
           decl(
             'font-weight',
