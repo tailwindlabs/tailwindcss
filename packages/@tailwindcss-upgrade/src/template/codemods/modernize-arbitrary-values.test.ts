@@ -22,9 +22,25 @@ test.each([
   ['[&:first-child]:flex', 'first:flex'],
   ['[&:not(:first-child)]:flex', 'not-first:flex'],
 
+  // nth-child
   ['[&:nth-child(2)]:flex', 'nth-2:flex'],
   ['[&:not(:nth-child(2))]:flex', 'not-nth-2:flex'],
 
+  ['[&:nth-child(-n+3)]:flex', 'nth-[-n+3]:flex'],
+  ['[&:not(:nth-child(-n+3))]:flex', 'not-nth-[-n+3]:flex'],
+  ['[&:nth-child(-n_+_3)]:flex', 'nth-[-n+3]:flex'],
+  ['[&:not(:nth-child(-n_+_3))]:flex', 'not-nth-[-n+3]:flex'],
+
+  // nth-last-child
+  ['[&:nth-last-child(2)]:flex', 'nth-last-2:flex'],
+  ['[&:not(:nth-last-child(2))]:flex', 'not-nth-last-2:flex'],
+
+  ['[&:nth-last-child(-n+3)]:flex', 'nth-last-[-n+3]:flex'],
+  ['[&:not(:nth-last-child(-n+3))]:flex', 'not-nth-last-[-n+3]:flex'],
+  ['[&:nth-last-child(-n_+_3)]:flex', 'nth-last-[-n+3]:flex'],
+  ['[&:not(:nth-last-child(-n_+_3))]:flex', 'not-nth-last-[-n+3]:flex'],
+
+  // nth-child odd/even
   ['[&:nth-child(odd)]:flex', 'odd:flex'],
   ['[&:not(:nth-child(odd))]:flex', 'even:flex'],
   ['[&:nth-child(even)]:flex', 'even:flex'],

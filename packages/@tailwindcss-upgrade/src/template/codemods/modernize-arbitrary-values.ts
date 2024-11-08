@@ -59,38 +59,90 @@ export function modernizeArbitraryValues(
         }
 
         let newVariant = ((value) => {
-          if (value === ':first-child') return 'first'
+          //
+          if (value === ':first-letter') return 'first-letter'
+          else if (value === ':first-line') return 'first-line'
+          //
+          else if (value === ':file-selector-button') return 'file'
+          else if (value === ':placeholder') return 'placeholder'
+          else if (value === ':backdrop') return 'backdrop'
+          // Positional
+          else if (value === ':first-child') return 'first'
           else if (value === ':last-child') return 'last'
           else if (value === ':only-child') return 'only'
           else if (value === ':first-of-type') return 'first-of-type'
           else if (value === ':last-of-type') return 'last-of-type'
           else if (value === ':only-of-type') return 'only-of-type'
-          else if (
+          // State
+          else if (value === ':visited') return 'visited'
+          else if (value === ':target') return 'target'
+          // Forms
+          else if (value === ':default') return 'default'
+          else if (value === ':checked') return 'checked'
+          else if (value === ':indeterminate') return 'indeterminate'
+          else if (value === ':placeholder-shown') return 'placeholder-shown'
+          else if (value === ':autofill') return 'autofill'
+          else if (value === ':optional') return 'optional'
+          else if (value === ':required') return 'required'
+          else if (value === ':valid') return 'valid'
+          else if (value === ':invalid') return 'invalid'
+          else if (value === ':in-range') return 'in-range'
+          else if (value === ':out-of-range') return 'out-of-range'
+          else if (value === ':read-only') return 'read-only'
+          // Content
+          else if (value === ':empty') return 'empty'
+          // Interactive
+          else if (value === ':focus-within') return 'focus-within'
+          else if (value === ':focus') return 'focus'
+          else if (value === ':focus-visible') return 'focus-visible'
+          else if (value === ':active') return 'active'
+          else if (value === ':enabled') return 'enabled'
+          else if (value === ':disabled') return 'disabled'
+          //
+          if (
             value === ':nth-child' &&
             targetNode.nodes.length === 1 &&
             targetNode.nodes[0].nodes.length === 1 &&
-            targetNode.nodes[0].nodes[0].type === 'tag'
+            targetNode.nodes[0].nodes[0].type === 'tag' &&
+            targetNode.nodes[0].nodes[0].value === 'odd'
           ) {
-            let tag = targetNode.nodes[0].nodes[0]
-            if (!isPositiveInteger(tag.value)) {
-              if (tag.value === 'odd') {
-                if (compoundNot) {
-                  compoundNot = false
-                  return 'even'
-                }
-                return 'odd'
-              }
-              if (tag.value === 'even') {
-                if (compoundNot) {
-                  compoundNot = false
-                  return 'odd'
-                }
-                return 'even'
-              }
-              return null
+            if (compoundNot) {
+              compoundNot = false
+              return 'even'
             }
+            return 'odd'
+          }
+          if (
+            value === ':nth-child' &&
+            targetNode.nodes.length === 1 &&
+            targetNode.nodes[0].nodes.length === 1 &&
+            targetNode.nodes[0].nodes[0].type === 'tag' &&
+            targetNode.nodes[0].nodes[0].value === 'even'
+          ) {
+            if (compoundNot) {
+              compoundNot = false
+              return 'odd'
+            }
+            return 'even'
+          }
 
-            return `nth-${tag.value}`
+          for (let [selector, variantName] of [
+            [':nth-child', 'nth'],
+            [':nth-last-child', 'nth-last'],
+            [':nth-of-type', 'nth-of-type'],
+            [':nth-last-of-type', 'nth-of-last-type'],
+          ]) {
+            if (value === selector && targetNode.nodes.length === 1) {
+              if (
+                targetNode.nodes[0].nodes.length === 1 &&
+                targetNode.nodes[0].nodes[0].type === 'tag' &&
+                isPositiveInteger(targetNode.nodes[0].nodes[0].value)
+              ) {
+                return `${variantName}-${targetNode.nodes[0].nodes[0].value}`
+              }
+
+              return `${variantName}-[${targetNode.nodes[0].toString()}]`
+            }
           }
 
           return null
