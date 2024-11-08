@@ -159,9 +159,8 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       // which means that we can typically convert them to a modifier on the
       // candidate itself.
       //
-      // If however the `theme(…)` is used with a color, and other ast nodes
-      // exists then we don't want to handle it as a modifier because it's not
-      // guaranteed that the value is a color.
+      // If there is more than one node in the AST though, `theme(…)` must not
+      // be the whole value so it's not safe to use a modifier instead.
       //
       // E.g.: `inset 0px 1px theme(colors.red.500/50%)` is a shadow, not a color.
       if (ast.length === 1 && parts.length === 2 && options & Convert.MigrateModifier) {
