@@ -467,7 +467,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
-    background: none;
   }
 
   ::file-selector-button {
@@ -476,6 +475,9 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
+  }
+
+  button, input:where([type="button"]), input:where([type="reset"]), input:where([type="submit"]) {
     background: none;
   }
 
