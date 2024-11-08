@@ -17,7 +17,7 @@ test('force', async () => {
 
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
-    ":where(.\\*\\:flex > *) {
+    ":is(.\\*\\:flex > *) {
       display: flex;
     }"
   `)
@@ -26,7 +26,7 @@ test('*', async () => {
 
 test('**', async () => {
   expect(await run(['**:flex'])).toMatchInlineSnapshot(`
-    ":where(.\\*\\*\\:flex *) {
+    ":is(.\\*\\*\\:flex *) {
       display: flex;
     }"
   `)
