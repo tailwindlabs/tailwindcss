@@ -192,17 +192,6 @@ textarea,
 }
 
 /*
-  Remove the default background color of buttons by default.
-*/
-
-button,
-input:where([type='button']),
-input:where([type='reset']),
-input:where([type='submit']) {
-  background: transparent;
-}
-
-/*
   Reset the default inset border style for form controls to solid.
 */
 
@@ -213,12 +202,15 @@ textarea {
 }
 
 /*
-  Correct the inability to style the border radius in iOS Safari.
+  1. Remove the default background color of buttons by default.
+  2. Correct the inability to style the border radius in iOS Safari.
 */
+
 button,
 input:where([type='button'], [type='reset'], [type='submit']),
 ::file-selector-button {
-  appearance: button;
+  background: transparent; /* 1 */
+  appearance: button; /* 2 */
 }
 
 /*
