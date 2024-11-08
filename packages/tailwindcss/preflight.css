@@ -245,7 +245,7 @@ progress {
 }
 
 /*
-  1. Ensure date/time inputs have the same height when empty in on iOS Safari.
+  1. Ensure date/time inputs have the same height when empty in iOS Safari.
   2. Ensure text alignment can be changed on date/time inputs in iOS Safari.
 */
 ::-webkit-date-and-time-value {
