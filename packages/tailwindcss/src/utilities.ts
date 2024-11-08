@@ -209,8 +209,8 @@ export function createUtilities(theme: Theme) {
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
     function* resolve(themeKeys: ThemeKey[]): Iterable<[string, ThemeOptions]> {
-      for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield [value.replaceAll('_', '.'), theme.getOptions(value)]
+      for (let [themeKey, value] of theme.keysInNamespaces(themeKeys)) {
+        yield [value.replaceAll('_', '.'), theme.getOptions(themeKey)]
       }
     }
 
@@ -220,6 +220,7 @@ export function createUtilities(theme: Theme) {
       for (let defn of defns()) {
         let values: [string | null, boolean][] = []
         let modifiers: [string, boolean][] = []
+        let isDeprecated = defn.deprecated ?? false
 
         for (let key of defn.values ?? []) {
           values.push([key, false])
@@ -248,11 +249,13 @@ export function createUtilities(theme: Theme) {
               .filter((v) => v[1] === modifierIsDeprecated)
               .map((v) => v[0])
 
+            if (valueList.length === 0) continue
+
             groups.push({
               supportsNegative: defn.supportsNegative,
               values: valueList,
               modifiers: modifierList,
-              deprecated: defn.deprecated ?? false,
+              deprecated: isDeprecated || valueIsDeprecated || modifierIsDeprecated,
             })
           }
         }

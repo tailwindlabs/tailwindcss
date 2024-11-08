@@ -69,8 +69,8 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
-    let keys: string[] = []
+  keysInNamespaces(themeKeys: ThemeKey[]): [string, string][] {
+    let keys: [string, string][] = []
 
     for (let namespace of themeKeys) {
       let prefix = `${namespace}-`
@@ -84,7 +84,7 @@ export class Theme {
           continue
         }
 
-        keys.push(key.slice(prefix.length))
+        keys.push([key, key.slice(prefix.length)])
       }
     }
 

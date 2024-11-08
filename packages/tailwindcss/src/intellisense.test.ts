@@ -442,7 +442,7 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
   expect(not.values).toContain('variant-4')
 })
 
-test.only('getClassMetadata(…)', async () => {
+test('getClassMetadata(…)', async () => {
   let input = css`
     @tailwind utilities;
   `
@@ -450,6 +450,24 @@ test.only('getClassMetadata(…)', async () => {
   let design = await __unstable__loadDesignSystem(input)
 
   expect(design.classMetadata(['rounded'])).toEqual([
+    {
+      modifiers: [],
+      deprecated: true,
+    },
+  ])
+})
+
+test.only('Individual theme keys can be marked as deprecated', async () => {
+  let input = css`
+    @tailwind utilities;
+    @theme deprecated {
+      --shadow-sm: 0 0 0 rgba(0 0 0 / 0);
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+
+  expect(design.classMetadata(['shadow-sm'])).toEqual([
     {
       modifiers: [],
       deprecated: true,
