@@ -34,6 +34,10 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
           ...theme('breakpoint', {}),
         }),
 
+        letterSpacing: ({ theme }) => ({
+          ...theme('tracking', {}),
+        }),
+
         transitionDuration: {
           DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
         },

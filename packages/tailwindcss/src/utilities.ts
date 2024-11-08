@@ -3617,7 +3617,7 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('tracking', {
     supportsNegative: true,
-    themeKeys: ['--letter-spacing'],
+    themeKeys: ['--tracking'],
     handle: (value) => [
       atRoot([property('--tw-tracking')]),
       decl('--tw-tracking', value),
@@ -3911,7 +3911,7 @@ export function createUtilities(theme: Theme) {
       let value = theme.resolveWith(
         candidate.value.value,
         ['--text'],
-        ['--line-height', '--letter-spacing', '--font-weight'],
+        ['--line-height', '--tracking', '--font-weight'],
       )
       if (value) {
         let [fontSize, options = {}] = Array.isArray(value) ? value : [value]
@@ -3939,8 +3939,8 @@ export function createUtilities(theme: Theme) {
           ),
           decl(
             'letter-spacing',
-            options['--letter-spacing']
-              ? `var(--tw-tracking, ${options['--letter-spacing']})`
+            options['--tracking']
+              ? `var(--tw-tracking, ${options['--tracking']})`
               : undefined,
           ),
           decl(

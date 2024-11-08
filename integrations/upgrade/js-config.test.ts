@@ -114,6 +114,9 @@ test(
                 'spin-clockwise': 'spin-clockwise 1s linear infinite',
                 'spin-counterclockwise': 'spin-counterclockwise 1s linear infinite',
               },
+              letterSpacing: {
+                superWide: '0.25em',
+              },
             },
           },
           plugins: [],
@@ -130,6 +133,11 @@ test(
           'shouldNotMigrate': !border.test + '',
         }
       `,
+      'src/index.html': html`
+       <div
+          class="[letter-spacing:theme(letterSpacing.superWide)]"
+        ></div>
+      `,
       'node_modules/my-external-lib/src/template.html': html`
         <div class="text-red-500">
           Hello world!
@@ -140,8 +148,13 @@ test(
   async ({ exec, fs }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    expect(await fs.dumpFiles('src/**/*.{css,js}')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('src/**/*.{css,js,html}')).toMatchInlineSnapshot(`
       "
+      --- src/index.html ---
+      <div
+         class="[letter-spacing:var(--tracking-super-wide)]"
+       ></div>
+
       --- src/input.css ---
       @import 'tailwindcss';
 
@@ -222,6 +235,8 @@ test(
 
         --animate-spin-clockwise: spin-clockwise 1s linear infinite;
         --animate-spin-counterclockwise: spin-counterclockwise 1s linear infinite;
+
+        --tracking-super-wide: 0.25em;
 
         @keyframes spin-clockwise {
           0% {
