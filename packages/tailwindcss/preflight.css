@@ -254,7 +254,7 @@ progress {
 }
 
 /*
-  Prevent height from changing on date/time inputs on macOS Safari when the input is set to `display: block`.
+  Prevent height from changing on date/time inputs in macOS Safari when the input is set to `display: block`.
 */
 ::-webkit-datetime-edit {
   display: inline-flex;
