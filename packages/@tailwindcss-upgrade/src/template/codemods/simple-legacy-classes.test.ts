@@ -32,6 +32,8 @@ test.each([
 
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
+
+  ['focus:outline-none', 'focus:outline-hidden'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
