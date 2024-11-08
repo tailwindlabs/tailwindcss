@@ -14355,11 +14355,6 @@ test('outline', async () => {
       --color-red-500: #ef4444;
     }
 
-    .outline-none {
-      outline-offset: 2px;
-      outline: 2px solid #0000;
-    }
-
     .outline {
       outline-style: var(--tw-outline-style);
       outline-width: 1px;
@@ -14467,6 +14462,11 @@ test('outline', async () => {
     .outline-double {
       --tw-outline-style: double;
       outline-style: double;
+    }
+
+    .outline-none {
+      --tw-outline-style: none;
+      outline-style: none;
     }
 
     .outline-solid {

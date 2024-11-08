@@ -30,6 +30,8 @@ const LEGACY_CLASS_MAP = {
 
   blur: 'blur-sm',
   'blur-sm': 'blur-xs',
+
+  'outline-none': 'outline-hidden',
 }
 
 const SEEDED = new WeakSet<DesignSystem>()

@@ -4561,6 +4561,7 @@ exports[`getClassList 1`] = `
   "outline-dashed",
   "outline-dotted",
   "outline-double",
+  "outline-hidden",
   "outline-inherit",
   "outline-inherit/0",
   "outline-inherit/5",

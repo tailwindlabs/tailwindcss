@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `--letter-spacing-*` variables to `--tracking-*` ([#14921](https://github.com/tailwindlabs/tailwindcss/pull/14921))
 - Rename `--line-height-*` variables to `--leading-*` ([#14925](https://github.com/tailwindlabs/tailwindcss/pull/14925))
 - Revert specificity of `*` variant to match v3 behavior ([#14920](https://github.com/tailwindlabs/tailwindcss/pull/14920))
+- Replace `outline-none` with `outline-hidden`, add new simplified `outline-none` utility ([#14926](https://github.com/tailwindlabs/tailwindcss/pull/14926))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
