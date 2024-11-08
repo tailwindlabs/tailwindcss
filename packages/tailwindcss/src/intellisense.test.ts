@@ -36,7 +36,7 @@ test('Theme values with underscores are converted back to decimal points', () =>
   let design = loadDesignSystem()
   let classes = design.getClassList()
 
-  expect(classes).toContainEqual(['inset-0.5', { modifiers: [] }])
+  expect(classes).toContainEqual(['inset-0.5', { modifiers: [], deprecated: false }])
 })
 
 test('getVariants', () => {

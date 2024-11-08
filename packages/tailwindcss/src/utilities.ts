@@ -14,6 +14,7 @@ interface SuggestionGroup {
   supportsNegative?: boolean
   values: (string | null)[]
   modifiers: string[]
+  deprecated: boolean
 }
 
 type SuggestionDefinition = {
@@ -23,6 +24,7 @@ type SuggestionDefinition = {
   valueThemeKeys?: ThemeKey[]
   modifierThemeKeys?: ThemeKey[]
   hasDefaultValue?: boolean
+  deprecated?: boolean
 }
 
 export type UtilityOptions = {
@@ -221,7 +223,12 @@ export function createUtilities(theme: Theme) {
           values.unshift(null)
         }
 
-        groups.push({ supportsNegative: defn.supportsNegative, values, modifiers })
+        groups.push({
+          supportsNegative: defn.supportsNegative,
+          values,
+          modifiers,
+          deprecated: defn.deprecated ?? false,
+        })
       }
 
       return groups

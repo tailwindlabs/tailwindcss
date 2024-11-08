@@ -4,6 +4,7 @@ import type { DesignSystem } from './design-system'
 
 interface ClassMetadata {
   modifiers: string[]
+  deprecated: boolean
 }
 
 export type ClassEntry = [string, ClassMetadata]
@@ -13,7 +14,16 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
-    list.push([utility, { modifiers: [] }])
+    let completions = design.utilities.getCompletions(utility)
+    let deprecated = completions.length > 0 && completions.every((group) => group.deprecated)
+
+    list.push([
+      utility,
+      {
+        modifiers: [],
+        deprecated,
+      },
+    ])
   }
 
   // Functional utilities have their own list of completions
@@ -24,10 +34,10 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
       for (let value of group.values) {
         let name = value === null ? utility : `${utility}-${value}`
 
-        list.push([name, { modifiers: group.modifiers }])
+        list.push([name, { modifiers: group.modifiers, deprecated: group.deprecated }])
 
         if (group.supportsNegative) {
-          list.push([`-${name}`, { modifiers: group.modifiers }])
+          list.push([`-${name}`, { modifiers: group.modifiers, deprecated: group.deprecated }])
         }
       }
     }
