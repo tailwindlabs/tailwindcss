@@ -7,8 +7,17 @@ test.each([
   ['[[data-visible]]:flex', 'data-visible:flex'],
   ['[&[data-visible]]:flex', 'data-visible:flex'],
   ['[[data-visible]&]:flex', 'data-visible:flex'],
-  ['[&>[data-visible]]:flex', '*:data-visible:flex'],
-  ['[&_>_[data-visible]]:flex', '*:data-visible:flex'],
+
+  // Keep as-is. Ideally this is converted to `*:data-visible:flex`, but that
+  // changes the specificity from (0, 2, 0) to (0, 1, 0)
+  //
+  // E.g.:
+  //
+  // - .\[\&\>\[data-visible\]\]\:flex > [data-visible]     (0, 2, 0)
+  // - [data-visible]:where(.\*\:data-visible\:flex > *)    (0, 1, 0)
+  //
+  ['[&>[data-visible]]:flex', '[&>[data-visible]]:flex'],
+  ['[&_>_[data-visible]]:flex', '[&_>_[data-visible]]:flex'],
 
   // Keep multiple attribute selectors as-is
   ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],
