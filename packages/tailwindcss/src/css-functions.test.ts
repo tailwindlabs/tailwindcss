@@ -215,7 +215,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red calc(var(--opacity) * 100%), transparent);
+            color: color-mix(in oklch, red var(--opacity), transparent);
           }"
         `)
       })
@@ -237,7 +237,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red calc(var(--opacity, 50%) * 100%), transparent);
+            color: color-mix(in oklch, red var(--opacity, 50%), transparent);
           }"
         `)
       })

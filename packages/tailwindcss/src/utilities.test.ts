@@ -9969,7 +9969,7 @@ test('bg', async () => {
     }
 
     .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
-      background-color: color-mix(in oklch, currentColor calc(var(--bg-opacity) * 100%), transparent);
+      background-color: color-mix(in oklch, currentColor var(--bg-opacity), transparent);
     }
 
     .bg-inherit {
