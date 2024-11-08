@@ -30,24 +30,6 @@ const BORDER_COLOR_COMPATIBILITY_CSS = css`
   }
 `
 
-const BORDER_WIDTH_COMPATIBILITY_CSS = css`
-  /*
-    Form elements have a 1px border by default in Tailwind CSS v4, so we've
-    added these compatibility styles to make sure everything still looks the
-    same as it did with Tailwind CSS v3.
-
-    If we ever want to remove these styles, we need to add \`border-0\` to
-    any form elements that shouldn't have a border.
-  */
-  @layer base {
-    input:where(:not([type='button'], [type='reset'], [type='submit'])),
-    select,
-    textarea {
-      border-width: 0;
-    }
-  }
-`
-
 export function migrateBorderCompatibility({
   designSystem,
   userConfig,
@@ -84,7 +66,6 @@ export function migrateBorderCompatibility({
       compatibilityCssString += '\n\n'
     }
 
-    compatibilityCssString += BORDER_WIDTH_COMPATIBILITY_CSS
     compatibilityCssString = `\n@tw-bucket compatibility {\n${compatibilityCssString}\n}\n`
     let compatibilityCss = postcss.parse(compatibilityCssString)
 

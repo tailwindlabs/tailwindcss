@@ -133,22 +133,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       @utility foo {
         color: red;
       }
@@ -240,22 +224,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
       }
@@ -317,22 +285,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 
@@ -405,22 +357,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 
@@ -498,22 +434,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 
@@ -1002,22 +922,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       --- ./src/utilities.css ---
       @utility no-scrollbar {
         &::-webkit-scrollbar {
@@ -1442,22 +1346,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       --- ./src/root.2.css ---
       /* Already contains @config */
       @import 'tailwindcss';
@@ -1479,22 +1367,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 
@@ -1532,22 +1404,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       --- ./src/root.4.css ---
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
@@ -1580,22 +1436,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       --- ./src/root.4/utilities.css ---
       @import 'tailwindcss/utilities' layer(utilities);
 
@@ -1620,22 +1460,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
       "
@@ -1693,22 +1517,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 

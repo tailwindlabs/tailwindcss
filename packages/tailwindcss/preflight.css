@@ -192,16 +192,6 @@ textarea,
 }
 
 /*
-  Reset the default inset border style for form controls to solid.
-*/
-
-input:where(:not([type='button'], [type='reset'], [type='submit'])),
-select,
-textarea {
-  border-width: 1px;
-}
-
-/*
   1. Remove the default background color of buttons by default.
   2. Correct the inability to style the border radius in iOS Safari.
 */
