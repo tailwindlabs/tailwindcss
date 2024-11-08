@@ -26,8 +26,7 @@ export function modernizeArbitraryValues(
       // Expecting a single selector node
       if (ast.nodes.length !== 1) continue
 
-      // Track whether we need to add a `*:` variant
-      let addStarVariant = false
+      let prefixedVariant: Variant | null = null
 
       // Track whether we need to add a `**:` variant
       let addStarStarVariant = false
@@ -46,7 +45,7 @@ export function modernizeArbitraryValues(
         ast.nodes[0].nodes[2].type === 'attribute'
       ) {
         ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
-        addStarVariant = true
+        prefixedVariant = designSystem.parseVariant('*')
       }
 
       // Handling a grand child combinator. E.g.: `[&_[data-visible]]` => `**:data-visible`
@@ -63,7 +62,7 @@ export function modernizeArbitraryValues(
         ast.nodes[0].nodes[2].type === 'attribute'
       ) {
         ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
-        addStarStarVariant = true
+        prefixedVariant = designSystem.parseVariant('**')
       }
 
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
@@ -252,20 +251,12 @@ export function modernizeArbitraryValues(
         }
       }
 
-      if (addStarVariant) {
+      if (prefixedVariant) {
         let idx = clone.variants.indexOf(variant)
         if (idx === -1) continue
 
-        // Ensure we have the `*:` variant
-        clone.variants.splice(idx, 1, variant, { kind: 'static', root: '*' })
-      }
-
-      if (addStarStarVariant) {
-        let idx = clone.variants.indexOf(variant)
-        if (idx === -1) continue
-
-        // Ensure we have the `**:` variant
-        clone.variants.splice(idx, 1, variant, { kind: 'static', root: '**' })
+        // Ensure we inject the prefixed variant
+        clone.variants.splice(idx, 1, variant, prefixedVariant)
       }
     }
 
