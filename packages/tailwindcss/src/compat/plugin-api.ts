@@ -380,6 +380,7 @@ export function buildPluginApi(
               supportsNegative: options?.supportsNegativeValues ?? false,
               values: Array.from(valueKeys),
               modifiers: modifierKeys,
+              deprecated: false,
             },
           ]
         })
