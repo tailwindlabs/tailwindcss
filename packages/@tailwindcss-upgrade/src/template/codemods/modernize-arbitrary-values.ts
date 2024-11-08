@@ -14,7 +14,7 @@ export function modernizeArbitraryValues(
     let clone = structuredClone(candidate)
     let changed = false
 
-    for (let variant of variants(clone)) {
+    for (let [variant, parent] of variants(clone)) {
       // Expecting an arbitrary variant
       if (variant.kind !== 'arbitrary') continue
 
@@ -25,6 +25,26 @@ export function modernizeArbitraryValues(
 
       // Expecting a single selector node
       if (ast.nodes.length !== 1) continue
+
+      // Track whether we need to add a `*:` variant
+      let addChildVariant = false
+
+      // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
+      if (
+        // Only top-level, so `has-[&>[data-visible]]` is not supported
+        parent === null &&
+        // [&_>_[data-visible]]:flex
+        //  ^ ^ ^^^^^^^^^^^^^^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'nesting' &&
+        ast.nodes[0].nodes[0].value === '&' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === '>' &&
+        ast.nodes[0].nodes[2].type === 'attribute'
+      ) {
+        ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
+        addChildVariant = true
+      }
 
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
       let selectorNodes = ast.nodes[0].filter((node) => node.type !== 'nesting')
@@ -211,6 +231,14 @@ export function modernizeArbitraryValues(
           } satisfies Variant)
         }
       }
+
+      if (addChildVariant) {
+        let idx = clone.variants.indexOf(variant)
+        if (idx === -1) continue
+
+        // Ensure we have the `*:` variant
+        clone.variants.splice(idx, 1, variant, { kind: 'static', root: '*' })
+      }
     }
 
     return changed ? printCandidate(designSystem, clone) : rawCandidate
@@ -220,15 +248,18 @@ export function modernizeArbitraryValues(
 }
 
 function* variants(candidate: Candidate) {
-  function* inner(variant: Variant): Iterable<Variant> {
-    yield variant
+  function* inner(
+    variant: Variant,
+    parent: Extract<Variant, { kind: 'compound' }> | null = null,
+  ): Iterable<[Variant, Extract<Variant, { kind: 'compound' }> | null]> {
+    yield [variant, parent]
 
     if (variant.kind === 'compound') {
-      yield* inner(variant.variant)
+      yield* inner(variant.variant, variant)
     }
   }
 
   for (let variant of candidate.variants) {
-    yield* inner(variant)
+    yield* inner(variant, null)
   }
 }
