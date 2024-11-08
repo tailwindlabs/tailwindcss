@@ -29,6 +29,9 @@ export function modernizeArbitraryValues(
       // Track whether we need to add a `*:` variant
       let addChildVariant = false
 
+      // Track whether we need to add a `**:` variant
+      let addAllChildVariant = false
+
       // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
       if (
         // Only top-level, so `has-[&>[data-visible]]` is not supported
@@ -44,6 +47,23 @@ export function modernizeArbitraryValues(
       ) {
         ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
         addChildVariant = true
+      }
+
+      // Handling a grand child combinator. E.g.: `[&_[data-visible]]` => `**:data-visible`
+      if (
+        // Only top-level, so `has-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [&_[data-visible]]:flex
+        //  ^ ^^^^^^^^^^^^^^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'nesting' &&
+        ast.nodes[0].nodes[0].value === '&' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === ' ' &&
+        ast.nodes[0].nodes[2].type === 'attribute'
+      ) {
+        ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
+        addAllChildVariant = true
       }
 
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
@@ -238,6 +258,14 @@ export function modernizeArbitraryValues(
 
         // Ensure we have the `*:` variant
         clone.variants.splice(idx, 1, variant, { kind: 'static', root: '*' })
+      }
+
+      if (addAllChildVariant) {
+        let idx = clone.variants.indexOf(variant)
+        if (idx === -1) continue
+
+        // Ensure we have the `**:` variant
+        clone.variants.splice(idx, 1, variant, { kind: 'static', root: '**' })
       }
     }
 

@@ -10,6 +10,8 @@ test.each([
   ['[&>[data-visible]]:flex', '*:data-visible:flex'],
   ['[&_>_[data-visible]]:flex', '*:data-visible:flex'],
 
+  ['[&_[data-visible]]:flex', '**:data-visible:flex'],
+
   ['[&:first-child]:flex', 'first:flex'],
   ['[&:not(:first-child)]:flex', 'not-first:flex'],
 
