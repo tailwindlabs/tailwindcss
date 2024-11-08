@@ -77,6 +77,13 @@ test.each([
   // Arbitrary property that already contains a modifier
   ['[color:theme(colors.red.500/50%)]/50', '[color:theme(--color-red-500/50%)]/50'],
 
+  // Values that don't only contain `theme(…)` calls should not be converted to
+  // a candidate modifier. Because this is not a color anymore.
+  [
+    'shadow-[shadow:inset_0px_1px_theme(colors.white/15%)]',
+    'shadow-[shadow:inset_0px_1px_theme(--color-white/15%)]',
+  ],
+
   // Arbitrary value, where the candidate already contains a modifier
   // This should still migrate the `theme(…)` syntax to the modern syntax.
   ['bg-[theme(colors.red.500/50%)]/50', 'bg-[theme(--color-red-500/50%)]/50'],
