@@ -285,7 +285,6 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
   --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
   --shadow-2xl: 0 25px 50px -12px #00000040;
-  --shadow-inner: inset 0 2px 4px 0 #0000000d;
   --inset-shadow-2xs: inset 0 1px #0000000d;
   --inset-shadow-xs: inset 0 1px 1px #0000000d;
   --inset-shadow-sm: inset 0 2px 4px #0000000d;
