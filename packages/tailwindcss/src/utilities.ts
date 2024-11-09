@@ -3609,6 +3609,11 @@ export function createUtilities(theme: Theme) {
   staticUtility('forced-color-adjust-none', [['forced-color-adjust', 'none']])
   staticUtility('forced-color-adjust-auto', [['forced-color-adjust', 'auto']])
 
+  staticUtility('leading-none', [
+    () => atRoot([property('--tw-leading')]),
+    ['--tw-leading', '1'],
+    ['line-height', '1'],
+  ])
   spacingUtility('leading', ['--leading'], (value) => [
     atRoot([property('--tw-leading')]),
     decl('--tw-leading', value),

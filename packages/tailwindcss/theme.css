@@ -406,7 +406,6 @@
   --tracking-widest: 0.1em;
 
   /* Leading */
-  --leading-none: 1;
   --leading-tight: 1.25;
   --leading-snug: 1.375;
   --leading-normal: 1.5;
