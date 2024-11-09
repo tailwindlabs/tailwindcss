@@ -353,7 +353,6 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --tracking-wide: .025em;
   --tracking-wider: .05em;
   --tracking-widest: .1em;
-  --leading-none: 1;
   --leading-tight: 1.25;
   --leading-snug: 1.375;
   --leading-normal: 1.5;

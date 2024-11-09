@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `outline-none` with `outline-hidden`, add new simplified `outline-none` utility ([#14926](https://github.com/tailwindlabs/tailwindcss/pull/14926))
 - Revert adding borders by default to form inputs ([#14929](https://github.com/tailwindlabs/tailwindcss/pull/14929))
 - Deprecate `shadow-inner` utility ([#14933](https://github.com/tailwindlabs/tailwindcss/pull/14933))
+- Remove `--leading-none` from the default theme in favor of a static `leading-none` utility ([#14934](https://github.com/tailwindlabs/tailwindcss/pull/14934))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 
