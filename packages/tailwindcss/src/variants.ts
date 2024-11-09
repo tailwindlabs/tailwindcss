@@ -443,7 +443,14 @@ export function createVariants(theme: Theme): Variants {
   variants.compound('not', Compounds.StyleRules | Compounds.AtRules, (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
-    if (variant.modifier) return null
+    if (variant.modifier) {
+      if (variant.variant.kind === 'compound' || variant.variant.kind === 'functional') {
+        variant.variant.modifier = variant.modifier
+        variant.modifier = null
+      } else {
+        return null
+      }
+    }
 
     let didApply = false
 
@@ -712,7 +719,14 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
   variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
-    if (variant.modifier) return null
+    if (variant.modifier) {
+      if (variant.variant.kind === 'compound' || variant.variant.kind === 'functional') {
+        variant.variant.modifier = variant.modifier
+        variant.modifier = null
+      } else {
+        return null
+      }
+    }
 
     let didApply = false
 
