@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure `flex` is suggested ([#15014](https://github.com/tailwindlabs/tailwindcss/pull/15014))
+- Forward modifier from `has-*` and `not-*` variants to compounded variant ([#14935](https://github.com/tailwindlabs/tailwindcss/pull/14935))
 - _Upgrade (experimental)_: Resolve imports when specifying a CSS entry point on the command-line ([#15010](https://github.com/tailwindlabs/tailwindcss/pull/15010))
 
 ### Changed
