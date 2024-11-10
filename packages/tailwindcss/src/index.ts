@@ -161,10 +161,7 @@ async function parseCss(
       }
 
       customUtilities.push((designSystem) => {
-        designSystem.utilities.static(name, (candidate) => {
-          if (candidate.negative) return
-          return structuredClone(node.nodes)
-        })
+        designSystem.utilities.static(name, () => structuredClone(node.nodes))
       })
 
       return

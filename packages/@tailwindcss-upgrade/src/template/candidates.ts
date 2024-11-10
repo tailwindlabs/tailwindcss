@@ -31,13 +31,6 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
 
   let base: string = ''
 
-  // Handle negative
-  if (candidate.kind === 'static' || candidate.kind === 'functional') {
-    if (candidate.negative) {
-      base += '-'
-    }
-  }
-
   // Handle static
   if (candidate.kind === 'static') {
     base += candidate.root
