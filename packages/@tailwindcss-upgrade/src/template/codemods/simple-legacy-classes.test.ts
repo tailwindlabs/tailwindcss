@@ -27,9 +27,6 @@ test.each([
   ['drop-shadow', 'drop-shadow-sm'],
   ['drop-shadow-sm', 'drop-shadow-xs'],
 
-  ['rounded', 'rounded-sm'],
-  ['rounded-sm', 'rounded-xs'],
-
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
 

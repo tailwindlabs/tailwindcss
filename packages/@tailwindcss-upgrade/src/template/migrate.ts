@@ -10,6 +10,7 @@ import { important } from './codemods/important'
 import { maxWidthScreen } from './codemods/max-width-screen'
 import { modernizeArbitraryValues } from './codemods/modernize-arbitrary-values'
 import { prefix } from './codemods/prefix'
+import { radius } from './codemods/radius'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { themeToVar } from './codemods/theme-to-var'
 import { variantOrder } from './codemods/variant-order'
@@ -31,6 +32,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   important,
   bgGradient,
   simpleLegacyClasses,
+  radius,
   maxWidthScreen,
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
