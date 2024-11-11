@@ -501,8 +501,8 @@ export function createUtilities(theme: Theme) {
     ['left', 'left'],
   ] as const) {
     staticUtility(`${name}-auto`, [[property, 'auto']])
-    utilities.static(`${name}-full`, () => [decl(property, '100%')])
-    utilities.static(`-${name}-full`, () => [decl(property, '-100%')])
+    staticUtility(`${name}-full`, [[property, '100%']])
+    staticUtility(`-${name}-full`, [[property, '-100%']])
     spacingUtility(name, '--inset', (value) => [decl(property, value)], {
       supportsNegative: true,
       supportsFractions: true,
@@ -1069,17 +1069,17 @@ export function createUtilities(theme: Theme) {
    * @css `translate`
    */
   staticUtility('translate-none', [['translate', 'none']])
-  utilities.static('-translate-full', () => [
-    translateProperties(),
-    decl('--tw-translate-x', '-100%'),
-    decl('--tw-translate-y', '-100%'),
-    decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
+  staticUtility('-translate-full', [
+    translateProperties,
+    ['--tw-translate-x', '-100%'],
+    ['--tw-translate-y', '-100%'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y)'],
   ])
-  utilities.static('translate-full', () => [
-    translateProperties(),
-    decl('--tw-translate-x', '100%'),
-    decl('--tw-translate-y', '100%'),
-    decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
+  staticUtility('translate-full', [
+    translateProperties,
+    ['--tw-translate-x', '100%'],
+    ['--tw-translate-y', '100%'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y)'],
   ])
 
   spacingUtility(
@@ -1095,18 +1095,29 @@ export function createUtilities(theme: Theme) {
   )
 
   for (let axis of ['x', 'y']) {
-    let handle = (value: string) => [
-      translateProperties(),
-      decl(`--tw-translate-${axis}`, value),
-      decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
-    ]
-
-    spacingUtility(`translate-${axis}`, ['--translate'], (value) => handle(value), {
-      supportsNegative: true,
-      supportsFractions: true,
-    })
-    utilities.static(`-translate-${axis}-full`, () => handle('-100%'))
-    utilities.static(`translate-${axis}-full`, () => handle('100%'))
+    staticUtility(`-translate-${axis}-full`, [
+      translateProperties,
+      [`--tw-translate-${axis}`, '-100%'],
+      ['translate', `var(--tw-translate-x) var(--tw-translate-y)`],
+    ])
+    staticUtility(`translate-${axis}-full`, [
+      translateProperties,
+      [`--tw-translate-${axis}`, '100%'],
+      ['translate', `var(--tw-translate-x) var(--tw-translate-y)`],
+    ])
+    spacingUtility(
+      `translate-${axis}`,
+      ['--translate'],
+      (value) => [
+        translateProperties(),
+        decl(`--tw-translate-${axis}`, value),
+        decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
+      ],
+      {
+        supportsNegative: true,
+        supportsFractions: true,
+      },
+    )
   }
 
   spacingUtility(
@@ -1121,15 +1132,15 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
     },
   )
-  utilities.static(`-translate-z-px`, () => [
-    translateProperties(),
-    decl(`--tw-translate-z`, '-1px'),
-    decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
+  staticUtility(`-translate-z-px`, [
+    translateProperties,
+    [`--tw-translate-z`, '-1px'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
   ])
-  utilities.static(`translate-z-px`, () => [
-    translateProperties(),
-    decl(`--tw-translate-z`, '1px'),
-    decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
+  staticUtility(`translate-z-px`, [
+    translateProperties,
+    [`--tw-translate-z`, '1px'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
   ])
 
   staticUtility('translate-3d', [
