@@ -387,6 +387,8 @@ export function createUtilities(theme: Theme) {
       handleNegativeBareValue: ({ value }) => {
         let multiplier = theme.resolve(null, ['--spacing'])
         if (!multiplier) return null
+        if (!isValidSpacingMultiplier(value)) return null
+
         return `calc(${multiplier} * -${value})`
       },
       handle,
