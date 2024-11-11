@@ -14036,16 +14036,16 @@ test('leading', async () => {
     await compileCss(
       css`
         @theme {
-          --leading-none: 1;
+          --leading-tight: 1.25;
           --leading-6: 1.5rem;
         }
         @tailwind utilities;
       `,
-      ['leading-none', 'leading-6', 'leading-[var(--value)]'],
+      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --leading-none: 1;
+      --leading-tight: 1.25;
       --leading-6: 1.5rem;
     }
 
@@ -14059,9 +14059,9 @@ test('leading', async () => {
       line-height: var(--value);
     }
 
-    .leading-none {
-      --tw-leading: var(--leading-none);
-      line-height: var(--leading-none);
+    .leading-tight {
+      --tw-leading: var(--leading-tight);
+      line-height: var(--leading-tight);
     }
 
     @supports (-moz-orient: inline) {
@@ -14080,10 +14080,10 @@ test('leading', async () => {
   expect(
     await run([
       'leading',
-      '-leading-none',
+      '-leading-tight',
       '-leading-6',
       '-leading-[var(--value)]',
-      'leading-none/foo',
+      'leading-tight/foo',
       'leading-6/foo',
       'leading-[var(--value)]/foo',
     ]),

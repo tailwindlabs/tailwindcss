@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Migrate `theme()` usage and JS config files to use the new `--spacing` multiplier where possible ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
+- _Upgrade (experimental)_: Migrate arbitrary values in variants to built-in values where possible ([#14841](https://github.com/tailwindlabs/tailwindcss/pull/14841))
 
 ### Fixed
 
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure spacing utilities with no value (e.g. `px` or `translate-y`) don't generate CSS ([#14911](https://github.com/tailwindlabs/tailwindcss/pull/14911))
 - Don't override user-agent background color for input elements in Preflight ([#14913](https://github.com/tailwindlabs/tailwindcss/pull/14913))
 - Don't attempt to convert CSS variables (which should already be percentages) to percentages when used as opacity modifiers ([#14916](https://github.com/tailwindlabs/tailwindcss/pull/14916))
+- Ensure custom utilities registered with the plugin API can start with `@` ([#14793](https://github.com/tailwindlabs/tailwindcss/pull/14793))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
 - _Upgrade (experimental)_: Fix crash during upgrade when content globs escape root of project ([#14896](https://github.com/tailwindlabs/tailwindcss/pull/14896))
@@ -65,6 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Revert specificity of `*` variant to match v3 behavior ([#14920](https://github.com/tailwindlabs/tailwindcss/pull/14920))
 - Replace `outline-none` with `outline-hidden`, add new simplified `outline-none` utility ([#14926](https://github.com/tailwindlabs/tailwindcss/pull/14926))
 - Revert adding borders by default to form inputs ([#14929](https://github.com/tailwindlabs/tailwindcss/pull/14929))
+- Deprecate `shadow-inner` utility ([#14933](https://github.com/tailwindlabs/tailwindcss/pull/14933))
+- Remove `--leading-none` from the default theme in favor of a static `leading-none` utility ([#14934](https://github.com/tailwindlabs/tailwindcss/pull/14934))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 

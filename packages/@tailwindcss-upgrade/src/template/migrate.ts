@@ -9,6 +9,7 @@ import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
 import { maxWidthScreen } from './codemods/max-width-screen'
+import { modernizeArbitraryValues } from './codemods/modernize-arbitrary-values'
 import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { themeToVar } from './codemods/theme-to-var'
@@ -29,14 +30,15 @@ export type Migration = (
 export const DEFAULT_MIGRATIONS: Migration[] = [
   prefix,
   important,
-  automaticVarInjection,
   bgGradient,
   simpleLegacyClasses,
-  legacyArbitraryValues,
-  arbitraryValueToBareValue,
   maxWidthScreen,
   themeToVar,
-  variantOrder,
+  variantOrder, // Has to happen before migrations that modify variants
+  automaticVarInjection,
+  legacyArbitraryValues,
+  arbitraryValueToBareValue,
+  modernizeArbitraryValues,
 ]
 
 export function migrateCandidate(

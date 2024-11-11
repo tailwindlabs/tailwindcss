@@ -3853,6 +3853,7 @@ exports[`getClassList 1`] = `
   "leading-80",
   "leading-9",
   "leading-96",
+  "leading-none",
   "leading-px",
   "left-0",
   "left-0.5",

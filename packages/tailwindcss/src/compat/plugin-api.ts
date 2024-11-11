@@ -75,7 +75,7 @@ export type PluginAPI = {
   prefix(className: string): string
 }
 
-const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_UTILITY_NAME = /^[a-z@][a-zA-Z0-9/%._-]*$/
 
 export function buildPluginApi(
   designSystem: DesignSystem,
