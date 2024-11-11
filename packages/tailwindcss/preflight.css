@@ -279,8 +279,7 @@ progress {
 ::-webkit-datetime-edit-second-field,
 ::-webkit-datetime-edit-millisecond-field,
 ::-webkit-datetime-edit-meridiem-field {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-block: 0;
 }
 
 /*
