@@ -118,22 +118,20 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
           }
         }
 
-        if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
-          if (selectorGroups.size === 0) {
-            universal.remove()
-            continue
-          }
+        if (selectorGroups.size === 0) {
+          universal.remove()
+          continue
+        }
 
-          for (let [, selectors] of selectorGroups) {
-            let universalRule = postcss.rule({
-              source: universal.source,
-            })
+        for (let [, selectors] of selectorGroups) {
+          let universalRule = postcss.rule({
+            source: universal.source,
+          })
 
-            universalRule.selectors = [...selectors]
+          universalRule.selectors = [...selectors]
 
-            universalRule.append(universal.nodes.map((node) => node.clone()))
-            universal.before(universalRule)
-          }
+          universalRule.append(universal.nodes.map((node) => node.clone()))
+          universal.before(universalRule)
         }
 
         universal.remove()

@@ -70,6 +70,7 @@ test('collapse adjacent rules', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       @font-face {
         font-family: Poppins;
         src: url('/fonts/Poppins.woff2') format('woff2'), url('/fonts/Poppins.woff') format('woff');
@@ -79,7 +80,6 @@ test('collapse adjacent rules', () => {
         src: url('/fonts/ProximaNova.woff2') format('woff2'),
           url('/fonts/ProximaNova.woff') format('woff');
       }
-      ${defaults}
       @font-face {
         font-family: Inter;
         src: url('/fonts/Inter.woff2') format('woff2'), url('/fonts/Inter.woff') format('woff');

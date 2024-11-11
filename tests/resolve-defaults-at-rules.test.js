@@ -770,6 +770,44 @@ test('no defaults and apply without @tailwind base', () => {
   })
 })
 
+test('apply to rule in base layer puts defaults first with optimizeUniversalDefaults', () => {
+  let config = {
+    experimental: { optimizeUniversalDefaults: true },
+    content: [{ raw: html`<div class="my-card"></div>` }],
+    corePlugins: ['boxShadow'],
+  }
+
+  // Optimize universal defaults doesn't work well with isolated modules
+  // We require you to use @tailwind base to inject the defaults
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer base {
+      input {
+        @apply shadow;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      input {
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+          0 1px 2px -1px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+    `)
+  })
+})
+
 test('optimize universal defaults groups :has separately', () => {
   let config = {
     experimental: { optimizeUniversalDefaults: true },

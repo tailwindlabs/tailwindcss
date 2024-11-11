@@ -239,13 +239,13 @@ test('plugins can add base styles with object syntax', () => {
 
   return run('@tailwind base', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       img {
         max-width: 100%;
       }
       button {
         font-family: inherit;
       }
-      ${defaults}
     `)
   })
 })
@@ -280,13 +280,13 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
 
   return run('@tailwind base', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       img {
         max-width: 100%;
       }
       button {
         font-family: inherit;
       }
-      ${defaults}
     `)
   })
 })

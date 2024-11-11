@@ -352,6 +352,7 @@ test('it works', () => {
           }
         }
       }
+      ${defaults}
       h1 {
         font-size: 1.5rem;
         font-weight: 700;
@@ -362,7 +363,6 @@ test('it works', () => {
       div {
         background: #654321;
       }
-      ${defaults}
       .container {
         width: 100%;
       }
