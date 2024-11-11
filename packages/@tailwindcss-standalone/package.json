@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/standalone",
-  "version": "4.0.0-alpha.31",
+  "version": "4.0.0-alpha.32",
   "private": true,
   "description": "Standalone CLI for Tailwind CSS",
   "license": "MIT",
