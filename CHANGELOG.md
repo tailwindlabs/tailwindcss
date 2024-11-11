@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Don't reset horizontal padding on date/time pseudo-elements ([#14959](https://github.com/tailwindlabs/tailwindcss/pull/14959))
 - Don't emit `calc()` with invalid values for bare values that aren't integers in spacing utilities ([#14962](https://github.com/tailwindlabs/tailwindcss/pull/14962))
+- Ensure spacing scale values work as line-height modifiers ([#14966](https://github.com/tailwindlabs/tailwindcss/pull/14966))
 
 ## [4.0.0-alpha.32] - 2024-11-11
 

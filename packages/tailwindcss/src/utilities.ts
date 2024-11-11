@@ -3902,6 +3902,12 @@ export function createUtilities(theme: Theme) {
                 ? candidate.modifier.value
                 : theme.resolve(candidate.modifier.value, ['--leading'])
 
+            if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
+              let multiplier = theme.resolve(null, ['--spacing'])
+              if (!multiplier) return null
+              modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+            }
+
             if (modifier) {
               return [decl('font-size', value), decl('line-height', modifier)]
             }
@@ -3941,6 +3947,12 @@ export function createUtilities(theme: Theme) {
             candidate.modifier.kind === 'arbitrary'
               ? candidate.modifier.value
               : theme.resolve(candidate.modifier.value, ['--leading'])
+
+          if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
+            let multiplier = theme.resolve(null, ['--spacing'])
+            if (!multiplier) return null
+            modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+          }
 
           let declarations = [decl('font-size', fontSize)]
           modifier && declarations.push(decl('line-height', modifier))
