@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support derived spacing scales based on a single `--spacing` theme value ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Add `svh`, `dvh`, `svw`, `dvw`, and `auto` values to all width/height/size utilities ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Add new `**` variant ([#14903](https://github.com/tailwindlabs/tailwindcss/pull/14903))
+- Add new `radius-*` utilities that use the `--spacing` scale by default ([#14912](https://github.com/tailwindlabs/tailwindcss/pull/14912))
 - Process `<style>` blocks inside Svelte files when using the Vite extension ([#14151](https://github.com/tailwindlabs/tailwindcss/pull/14151))
 - Normalize date/time input styles in Preflight ([#14931](https://github.com/tailwindlabs/tailwindcss/pull/14931))
 - _Upgrade (experimental)_: Migrate `grid-cols-[subgrid]` and `grid-rows-[subgrid]` to `grid-cols-subgrid` and `grid-rows-subgrid` ([#14840](https://github.com/tailwindlabs/tailwindcss/pull/14840))
@@ -50,7 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `shadow` to `shadow-sm`, `shadow-sm` to `shadow-xs`, and `shadow-xs` to `shadow-2xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `inset-shadow` to `inset-shadow-sm`, `inset-shadow-sm` to `inset-shadow-xs`, and `inset-shadow-xs` to `inset-shadow-2xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
-- Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Remove fixed line-height theme values and derive `leading-*` utilites from `--spacing-*` scale ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Remove `--transition-timing-function-linear` from the default theme in favor of a static `ease-linear` utility ([#14880](https://github.com/tailwindlabs/tailwindcss/pull/14880))
@@ -66,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `outline-none` with `outline-hidden`, add new simplified `outline-none` utility ([#14926](https://github.com/tailwindlabs/tailwindcss/pull/14926))
 - Revert adding borders by default to form inputs ([#14929](https://github.com/tailwindlabs/tailwindcss/pull/14929))
 - Deprecate `shadow-inner` utility ([#14933](https://github.com/tailwindlabs/tailwindcss/pull/14933))
+- Deprecate `rounded-*` utilities ([#14912](https://github.com/tailwindlabs/tailwindcss/pull/14912))
 - Remove `--leading-none` from the default theme in favor of a static `leading-none` utility ([#14934](https://github.com/tailwindlabs/tailwindcss/pull/14934))
 
 ## [4.0.0-alpha.31] - 2024-10-29

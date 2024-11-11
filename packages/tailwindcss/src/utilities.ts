@@ -1928,8 +1928,11 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'break-keep']])
 
+  /**
+   * @css `border-radius`
+   */
   {
-    // border-radius
+    // Deprecated: `rounded` utilities
     for (let [root, properties] of [
       ['rounded', ['border-radius']],
       ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
@@ -1956,9 +1959,37 @@ export function createUtilities(theme: Theme) {
         properties.map((property) => [property, 'calc(infinity * 1px)']),
       )
       functionalUtility(root, {
-        themeKeys: ['--radius'],
+        themeKeys: ['--radius', '--rounded'],
         handle: (value) => properties.map((property) => decl(property, value)),
       })
+    }
+
+    // `radius-*` utilities
+    for (let [root, properties] of [
+      ['radius', ['border-radius']],
+      ['radius-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['radius-e', ['border-start-end-radius', 'border-end-end-radius']],
+      ['radius-t', ['border-top-left-radius', 'border-top-right-radius']],
+      ['radius-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+      ['radius-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+      ['radius-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+      ['radius-ss', ['border-start-start-radius']],
+      ['radius-se', ['border-start-end-radius']],
+      ['radius-ee', ['border-end-end-radius']],
+      ['radius-es', ['border-end-start-radius']],
+      ['radius-tl', ['border-top-left-radius']],
+      ['radius-tr', ['border-top-right-radius']],
+      ['radius-br', ['border-bottom-right-radius']],
+      ['radius-bl', ['border-bottom-left-radius']],
+    ] as const) {
+      staticUtility(
+        `${root}-full`,
+        properties.map((property) => [property, 'calc(infinity * 1px)']),
+      )
+
+      spacingUtility(root, '--radius', (value) =>
+        properties.map((property) => decl(property, value)),
+      )
     }
   }
 
