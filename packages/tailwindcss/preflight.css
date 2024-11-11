@@ -248,6 +248,7 @@ progress {
   1. Ensure date/time inputs have the same height when empty in iOS Safari.
   2. Ensure text alignment can be changed on date/time inputs in iOS Safari.
 */
+
 ::-webkit-date-and-time-value {
   min-height: 1lh; /* 1 */
   text-align: inherit; /* 2 */
@@ -256,6 +257,7 @@ progress {
 /*
   Prevent height from changing on date/time inputs in macOS Safari when the input is set to `display: block`.
 */
+
 ::-webkit-datetime-edit {
   display: inline-flex;
 }
@@ -263,6 +265,11 @@ progress {
 /*
   Remove excess padding from pseudo-elements in date/time inputs to ensure consistent height across browsers.
 */
+
+::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
 ::-webkit-datetime-edit,
 ::-webkit-datetime-edit-year-field,
 ::-webkit-datetime-edit-month-field,
@@ -271,9 +278,8 @@ progress {
 ::-webkit-datetime-edit-minute-field,
 ::-webkit-datetime-edit-second-field,
 ::-webkit-datetime-edit-millisecond-field,
-::-webkit-datetime-edit-meridiem-field,
-::-webkit-datetime-edit-fields-wrapper {
-  padding: 0;
+::-webkit-datetime-edit-meridiem-field {
+  padding-block: 0;
 }
 
 /*

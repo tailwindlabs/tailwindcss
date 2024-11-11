@@ -518,44 +518,44 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     display: inline-flex;
   }
 
-  ::-webkit-datetime-edit {
+  ::-webkit-datetime-edit-fields-wrapper {
     padding: 0;
+  }
+
+  ::-webkit-datetime-edit {
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-year-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-month-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-day-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-hour-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-minute-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-second-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-millisecond-field {
-    padding: 0;
+    padding-block: 0;
   }
 
   ::-webkit-datetime-edit-meridiem-field {
-    padding: 0;
-  }
-
-  ::-webkit-datetime-edit-fields-wrapper {
-    padding: 0;
+    padding-block: 0;
   }
 
   summary {
