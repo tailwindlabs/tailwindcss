@@ -14811,11 +14811,10 @@ test('text', async () => {
     await compileCss(
       css`
         @theme {
+          --spacing: 0.25rem;
           --color-red-500: #ef4444;
-          --leading-6: 1.5rem;
           --text-sm: 0.875rem;
           --text-sm--line-height: 1.25rem;
-          --leading-9: 2.25rem;
         }
         @tailwind utilities;
       `,
@@ -14868,11 +14867,10 @@ test('text', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
+      --spacing: .25rem;
       --color-red-500: #ef4444;
-      --leading-6: 1.5rem;
       --text-sm: .875rem;
       --text-sm--line-height: 1.25rem;
-      --leading-9: 2.25rem;
     }
 
     .text-sm {
@@ -14882,32 +14880,32 @@ test('text', async () => {
 
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: var(--leading-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: var(--leading-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: var(--leading-9);
+      line-height: calc(var(--spacing) * 9);
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: var(--leading-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: var(--leading-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-sm\\/6 {
       font-size: var(--text-sm);
-      line-height: var(--leading-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-sm\\/\\[4px\\] {
