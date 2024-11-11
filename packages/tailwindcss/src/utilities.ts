@@ -134,16 +134,6 @@ export function asColor(value: string, modifier: CandidateModifier | null): stri
 }
 
 /**
- * Negate a numeric value — literals get simplified by Lightning CSS.
- */
-export function withNegative(
-  value: string,
-  candidate: Extract<Candidate, { kind: 'static' | 'functional' }>,
-) {
-  return candidate.negative ? `calc(${value} * -1)` : value
-}
-
-/**
  * Finds a color in the theme under one of the given theme keys that matches
  * `candidateValue`.
  *
@@ -232,9 +222,7 @@ export function createUtilities(theme: Theme) {
    * Register a static utility class like `justify-center`.
    */
   function staticUtility(className: string, declarations: ([string, string] | (() => AstNode))[]) {
-    utilities.static(className, (candidate) => {
-      if (candidate.negative) return
-
+    utilities.static(className, () => {
       return declarations.map((node) => {
         return typeof node === 'function' ? node() : decl(node[0], node[1])
       })
@@ -256,62 +244,64 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
-    utilities.functional(classRoot, (candidate) => {
-      // If the class candidate has a negative prefix (like `-mx-2`) but this
-      // utility doesn't support negative values (like the `width` utility),
-      // don't generate any rules.
-      if (candidate.negative && !desc.supportsNegative) return
+    function handleFunctionalUtility({ negative }: { negative: boolean }) {
+      return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+        let value: string | null = null
 
-      let value: string | null = null
+        if (!candidate.value) {
+          if (candidate.modifier) return
 
-      if (!candidate.value) {
-        if (candidate.modifier) return
+          // If the candidate has no value segment (like `rounded`), use the
+          // `defaultValue` (for candidates like `grow` that have no theme
+          // values) or a bare theme value (like `--radius` for `rounded`). No
+          // utility will ever support both of these.
+          value =
+            desc.defaultValue !== undefined
+              ? desc.defaultValue
+              : theme.resolve(null, desc.themeKeys ?? [])
+        } else if (candidate.value.kind === 'arbitrary') {
+          if (candidate.modifier) return
+          value = candidate.value.value
+        } else {
+          value = theme.resolve(
+            candidate.value.fraction ?? candidate.value.value,
+            desc.themeKeys ?? [],
+          )
 
-        // If the candidate has no value segment (like `rounded`), use the
-        // `defaultValue` (for candidates like `grow` that have no theme values)
-        // or a bare theme value (like `--radius` for `rounded`). No utility
-        // will ever support both of these.
-        value =
-          desc.defaultValue !== undefined
-            ? desc.defaultValue
-            : theme.resolve(null, desc.themeKeys ?? [])
-      } else if (candidate.value.kind === 'arbitrary') {
-        if (candidate.modifier) return
-        value = candidate.value.value
-      } else {
-        value = theme.resolve(
-          candidate.value.fraction ?? candidate.value.value,
-          desc.themeKeys ?? [],
-        )
+          // Automatically handle things like `w-1/2` without requiring `1/2` to
+          // exist as a theme value.
+          if (value === null && desc.supportsFractions && candidate.value.fraction) {
+            let [lhs, rhs] = segment(candidate.value.fraction, '/')
+            if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
+            value = `calc(${candidate.value.fraction} * 100%)`
+          }
 
-        // Automatically handle things like `w-1/2` without requiring `1/2` to
-        // exist as a theme value.
-        if (value === null && desc.supportsFractions && candidate.value.fraction) {
-          let [lhs, rhs] = segment(candidate.value.fraction, '/')
-          if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
-          value = `calc(${candidate.value.fraction} * 100%)`
+          // If there is still no value but the utility supports bare values,
+          // then use the bare candidate value as the value.
+          if (value === null && negative && desc.handleNegativeBareValue) {
+            value = desc.handleNegativeBareValue(candidate.value)
+            if (!value?.includes('/') && candidate.modifier) return
+            if (value !== null) return desc.handle(value)
+          }
+
+          if (value === null && desc.handleBareValue) {
+            value = desc.handleBareValue(candidate.value)
+            if (!value?.includes('/') && candidate.modifier) return
+          }
         }
 
-        // If there is still no value but the utility supports bare values, then
-        // use the bare candidate value as the value.
-        if (value === null && candidate.negative && desc.handleNegativeBareValue) {
-          value = desc.handleNegativeBareValue(candidate.value)
-          if (!value?.includes('/') && candidate.modifier) return
-          if (value !== null) return desc.handle(value)
-        }
+        // If there is no value, don't generate any rules.
+        if (value === null) return
 
-        if (value === null && desc.handleBareValue) {
-          value = desc.handleBareValue(candidate.value)
-          if (!value?.includes('/') && candidate.modifier) return
-        }
+        // Negate the value if the candidate has a negative prefix.
+        return desc.handle(negative ? `calc(${value} * -1)` : value)
       }
+    }
 
-      // If there is no value, don't generate any rules.
-      if (value === null) return
-
-      // Negate the value if the candidate has a negative prefix.
-      return desc.handle(withNegative(value, candidate))
-    })
+    if (desc.supportsNegative) {
+      utilities.functional(`-${classRoot}`, handleFunctionalUtility({ negative: true }))
+    }
+    utilities.functional(classRoot, handleFunctionalUtility({ negative: false }))
 
     suggest(classRoot, () => [
       {
@@ -336,10 +326,6 @@ export function createUtilities(theme: Theme) {
       // Color utilities have to have a value, like the `red-500` in
       // `bg-red-500`, otherwise they would be static utilities.
       if (!candidate.value) return
-
-      // Color utilities never support negative values as there's no sensible
-      // way to negate a color.
-      if (candidate.negative) return
 
       // Find the actual CSS value that the candidate value maps to.
       let value: string | null = null
@@ -381,10 +367,10 @@ export function createUtilities(theme: Theme) {
       supportsFractions?: boolean
     } = {},
   ) {
-    utilities.static(`${name}-px`, (candidate) => {
-      if (!supportsNegative && candidate.negative) return
-      return handle(candidate.negative ? '-1px' : '1px')
-    })
+    if (supportsNegative) {
+      utilities.static(`-${name}-px`, () => handle('-1px'))
+    }
+    utilities.static(`${name}-px`, () => handle('1px'))
     let themeKeys = ([] as ThemeKey[]).concat(themeNamespace, '--spacing')
     functionalUtility(name, {
       themeKeys,
@@ -515,10 +501,8 @@ export function createUtilities(theme: Theme) {
     ['left', 'left'],
   ] as const) {
     staticUtility(`${name}-auto`, [[property, 'auto']])
-    utilities.static(`${name}-full`, (candidate) => {
-      let value = candidate.negative ? '-100%' : '100%'
-      return [decl(property, value)]
-    })
+    staticUtility(`${name}-full`, [[property, '100%']])
+    staticUtility(`-${name}-full`, [[property, '-100%']])
     spacingUtility(name, '--inset', (value) => [decl(property, value)], {
       supportsNegative: true,
       supportsFractions: true,
@@ -917,8 +901,6 @@ export function createUtilities(theme: Theme) {
   // generate `flex: 1`. Our `functionalUtility` helper can't handle two properties
   // using the same namespace, so we handle this one manually.
   utilities.functional('flex', (candidate) => {
-    if (candidate.negative) return
-
     if (!candidate.value) {
       if (candidate.modifier) return
       return [decl('display', 'flex')]
@@ -1087,16 +1069,18 @@ export function createUtilities(theme: Theme) {
    * @css `translate`
    */
   staticUtility('translate-none', [['translate', 'none']])
-  utilities.static('translate-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-
-    return [
-      translateProperties(),
-      decl('--tw-translate-x', value),
-      decl('--tw-translate-y', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ]
-  })
+  staticUtility('-translate-full', [
+    translateProperties,
+    ['--tw-translate-x', '-100%'],
+    ['--tw-translate-y', '-100%'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y)'],
+  ])
+  staticUtility('translate-full', [
+    translateProperties,
+    ['--tw-translate-x', '100%'],
+    ['--tw-translate-y', '100%'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y)'],
+  ])
 
   spacingUtility(
     'translate',
@@ -1111,19 +1095,29 @@ export function createUtilities(theme: Theme) {
   )
 
   for (let axis of ['x', 'y']) {
-    let handle = (value: string) => [
-      translateProperties(),
-      decl(`--tw-translate-${axis}`, value),
-      decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
-    ]
-
-    spacingUtility(`translate-${axis}`, ['--translate'], (value) => handle(value), {
-      supportsNegative: true,
-      supportsFractions: true,
-    })
-    utilities.static(`translate-${axis}-full`, (candidate) => {
-      return handle(candidate.negative ? '-100%' : '100%')
-    })
+    staticUtility(`-translate-${axis}-full`, [
+      translateProperties,
+      [`--tw-translate-${axis}`, '-100%'],
+      ['translate', `var(--tw-translate-x) var(--tw-translate-y)`],
+    ])
+    staticUtility(`translate-${axis}-full`, [
+      translateProperties,
+      [`--tw-translate-${axis}`, '100%'],
+      ['translate', `var(--tw-translate-x) var(--tw-translate-y)`],
+    ])
+    spacingUtility(
+      `translate-${axis}`,
+      ['--translate'],
+      (value) => [
+        translateProperties(),
+        decl(`--tw-translate-${axis}`, value),
+        decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
+      ],
+      {
+        supportsNegative: true,
+        supportsFractions: true,
+      },
+    )
   }
 
   spacingUtility(
@@ -1138,13 +1132,16 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
     },
   )
-  utilities.static(`translate-z-px`, (candidate) => {
-    return [
-      translateProperties(),
-      decl(`--tw-translate-z`, candidate.negative ? '-1px' : '1px'),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
-    ]
-  })
+  staticUtility(`-translate-z-px`, [
+    translateProperties,
+    [`--tw-translate-z`, '-1px'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
+  ])
+  staticUtility(`translate-z-px`, [
+    translateProperties,
+    [`--tw-translate-z`, '1px'],
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
+  ])
 
   staticUtility('translate-3d', [
     translateProperties,
@@ -1162,29 +1159,33 @@ export function createUtilities(theme: Theme) {
    * @css `scale`
    */
   staticUtility('scale-none', [['scale', 'none']])
-  utilities.functional('scale', (candidate) => {
-    if (!candidate.value || candidate.modifier) return
+  function handleScale({ negative }: { negative: boolean }) {
+    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+      if (!candidate.value || candidate.modifier) return
 
-    let value
-    if (candidate.value.kind === 'arbitrary') {
-      value = candidate.value.value
-      return [decl('scale', value)]
-    } else {
-      value = theme.resolve(candidate.value.value, ['--scale'])
-      if (!value && isPositiveInteger(candidate.value.value)) {
-        value = `${candidate.value.value}%`
+      let value
+      if (candidate.value.kind === 'arbitrary') {
+        value = candidate.value.value
+        return [decl('scale', value)]
+      } else {
+        value = theme.resolve(candidate.value.value, ['--scale'])
+        if (!value && isPositiveInteger(candidate.value.value)) {
+          value = `${candidate.value.value}%`
+        }
+        if (!value) return
       }
-      if (!value) return
+      value = negative ? `calc(${value} * -1)` : value
+      return [
+        scaleProperties(),
+        decl('--tw-scale-x', value),
+        decl('--tw-scale-y', value),
+        decl('--tw-scale-z', value),
+        decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
+      ]
     }
-    value = withNegative(value, candidate)
-    return [
-      scaleProperties(),
-      decl('--tw-scale-x', value),
-      decl('--tw-scale-y', value),
-      decl('--tw-scale-z', value),
-      decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
-    ]
-  })
+  }
+  utilities.functional('-scale', handleScale({ negative: true }))
+  utilities.functional('scale', handleScale({ negative: false }))
 
   suggest('scale', () => [
     {
@@ -1240,28 +1241,33 @@ export function createUtilities(theme: Theme) {
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
   staticUtility('rotate-none', [['rotate', 'none']])
-  utilities.functional('rotate', (candidate) => {
-    if (!candidate.value || candidate.modifier) return
 
-    let value
-    if (candidate.value.kind === 'arbitrary') {
-      value = candidate.value.value
-      let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
-      if (type === 'vector') {
-        return [decl('rotate', `${value} var(--tw-rotate)`)]
-      } else if (type !== 'angle') {
-        return [decl('rotate', value)]
+  function handleRotate({ negative }: { negative: boolean }) {
+    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+      if (!candidate.value || candidate.modifier) return
+
+      let value
+      if (candidate.value.kind === 'arbitrary') {
+        value = candidate.value.value
+        let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
+        if (type === 'vector') {
+          return [decl('rotate', `${value} var(--tw-rotate)`)]
+        } else if (type !== 'angle') {
+          return [decl('rotate', value)]
+        }
+      } else {
+        value = theme.resolve(candidate.value.value, ['--rotate'])
+        if (!value && isPositiveInteger(candidate.value.value)) {
+          value = `${candidate.value.value}deg`
+        }
+        if (!value) return
       }
-    } else {
-      value = theme.resolve(candidate.value.value, ['--rotate'])
-      if (!value && isPositiveInteger(candidate.value.value)) {
-        value = `${candidate.value.value}deg`
-      }
-      if (!value) return
+      return [decl('rotate', negative ? `calc(${value} * -1)` : value)]
     }
-    value = withNegative(value, candidate)
-    return [decl('rotate', value)]
-  })
+  }
+
+  utilities.functional('-rotate', handleRotate({ negative: true }))
+  utilities.functional('rotate', handleRotate({ negative: false }))
 
   suggest('rotate', () => [
     {
@@ -1396,7 +1402,7 @@ export function createUtilities(theme: Theme) {
      * @css `transform`
      */
     utilities.functional('transform', (candidate) => {
-      if (candidate.negative || candidate.modifier) return
+      if (candidate.modifier) return
 
       let value: string | null = null
       if (!candidate.value) {
@@ -2000,8 +2006,6 @@ export function createUtilities(theme: Theme) {
 
     function borderSideUtility(classRoot: string, desc: BorderDescription) {
       utilities.functional(classRoot, (candidate) => {
-        if (candidate.negative) return
-
         if (!candidate.value) {
           if (candidate.modifier) return
           let value = theme.get(['--default-border-width']) ?? '1px'
@@ -2271,72 +2275,82 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
-  utilities.functional('bg-linear', (candidate) => {
-    if (!candidate.value || candidate.modifier) return
+  function handleBgLinear({ negative }: { negative: boolean }) {
+    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+      if (!candidate.value || candidate.modifier) return
 
-    let value = candidate.value.value
+      let value = candidate.value.value
 
-    if (candidate.value.kind === 'arbitrary') {
-      let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+      if (candidate.value.kind === 'arbitrary') {
+        let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
-      switch (type) {
-        case 'angle': {
-          value = withNegative(value, candidate)
+        switch (type) {
+          case 'angle': {
+            value = negative ? `calc(${value} * -1)` : `${value}`
 
-          return [
-            decl('--tw-gradient-position', `${value},`),
-            decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-          ]
+            return [
+              decl('--tw-gradient-position', `${value},`),
+              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+            ]
+          }
+          default: {
+            if (negative) return
+
+            return [
+              decl('--tw-gradient-position', `${value},`),
+              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+            ]
+          }
         }
-        default: {
-          if (candidate.negative) return
+      } else {
+        if (!isPositiveInteger(value)) return
 
-          return [
-            decl('--tw-gradient-position', `${value},`),
-            decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-          ]
-        }
+        value = negative ? `calc(${value}deg * -1)` : `${value}deg`
+
+        return [
+          decl('--tw-gradient-position', `${value} in oklch,`),
+          decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
+        ]
       }
-    } else {
-      if (!isPositiveInteger(value)) return
-
-      value = withNegative(`${value}deg`, candidate)
-
-      return [
-        decl('--tw-gradient-position', `${value} in oklch,`),
-        decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
-      ]
     }
-  })
+  }
 
-  utilities.functional('bg-conic', (candidate) => {
-    if (candidate.modifier) return
+  utilities.functional('-bg-linear', handleBgLinear({ negative: true }))
+  utilities.functional('bg-linear', handleBgLinear({ negative: false }))
 
-    if (!candidate.value) {
-      return [
-        decl('--tw-gradient-position', `in oklch,`),
-        decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
-      ]
+  function handleBgConic({ negative }: { negative: boolean }) {
+    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+      if (candidate.modifier) return
+
+      if (!candidate.value) {
+        return [
+          decl('--tw-gradient-position', `in oklch,`),
+          decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
+        ]
+      }
+
+      let value = candidate.value.value
+
+      if (candidate.value.kind === 'arbitrary') {
+        return [
+          decl('--tw-gradient-position', `${value},`),
+          decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+        ]
+      } else {
+        if (!isPositiveInteger(value)) return
+
+        value = negative ? `calc(${value} * -1)` : `${value}deg`
+
+        return [
+          decl('--tw-gradient-position', `from ${value} in oklch,`),
+          decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
+        ]
+      }
     }
+  }
 
-    let value = candidate.value.value
-
-    if (candidate.value.kind === 'arbitrary') {
-      return [
-        decl('--tw-gradient-position', `${value},`),
-        decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
-      ]
-    } else {
-      if (!isPositiveInteger(value)) return
-
-      value = withNegative(`${value}deg`, candidate)
-
-      return [
-        decl('--tw-gradient-position', `from ${value} in oklch,`),
-        decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
-      ]
-    }
-  })
+  utilities.functional('-bg-conic', handleBgConic({ negative: true }))
+  utilities.functional('bg-conic', handleBgConic({ negative: false }))
 
   utilities.functional('bg-radial', (candidate) => {
     if (candidate.modifier) return
@@ -2358,7 +2372,7 @@ export function createUtilities(theme: Theme) {
   })
 
   utilities.functional('bg', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (!candidate.value) return
 
     // Arbitrary values
     if (candidate.value.kind === 'arbitrary') {
@@ -2452,7 +2466,7 @@ export function createUtilities(theme: Theme) {
 
   function gradientStopUtility(classRoot: string, desc: GradientStopDescription) {
     utilities.functional(classRoot, (candidate) => {
-      if (candidate.negative || !candidate.value) return
+      if (!candidate.value) return
 
       // Arbitrary values
       if (candidate.value.kind === 'arbitrary') {
@@ -2601,7 +2615,7 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('fill-none', [['fill', 'none']])
   utilities.functional('fill', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value = asColor(candidate.value.value, candidate.modifier)
@@ -2625,7 +2639,7 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('stroke-none', [['stroke', 'none']])
   utilities.functional('stroke', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value: string | null = candidate.value.value
@@ -2738,7 +2752,7 @@ export function createUtilities(theme: Theme) {
   })
 
   utilities.functional('font', (candidate) => {
-    if (candidate.negative || !candidate.value || candidate.modifier) return
+    if (!candidate.value || candidate.modifier) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value = candidate.value.value
@@ -2872,7 +2886,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('decoration-from-font', [['text-decoration-thickness', 'from-font']])
 
   utilities.functional('decoration', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value: string | null = candidate.value.value
@@ -2988,7 +3002,7 @@ export function createUtilities(theme: Theme) {
     }
 
     utilities.functional('filter', (candidate) => {
-      if (candidate.negative || candidate.modifier) return
+      if (candidate.modifier) return
 
       if (candidate.value === null) {
         return [filterProperties(), decl('filter', cssFilterValue)]
@@ -3005,7 +3019,7 @@ export function createUtilities(theme: Theme) {
     })
 
     utilities.functional('backdrop-filter', (candidate) => {
-      if (candidate.negative || candidate.modifier) return
+      if (candidate.modifier) return
 
       if (candidate.value === null) {
         return [
@@ -3460,9 +3474,6 @@ export function createUtilities(theme: Theme) {
       staticUtility('duration-initial', [transitionDurationProperty, ['--tw-duration', 'initial']])
 
       utilities.functional('duration', (candidate) => {
-        // This utility doesn't support negative values.
-        if (candidate.negative) return
-
         // This utility doesn't support modifiers.
         if (candidate.modifier) return
 
@@ -3739,8 +3750,6 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('outline', (candidate) => {
-      if (candidate.negative) return
-
       if (candidate.value === null) {
         if (candidate.modifier) return
         return [
@@ -3871,7 +3880,7 @@ export function createUtilities(theme: Theme) {
   ])
 
   utilities.functional('text', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value: string | null = candidate.value.value
@@ -4007,8 +4016,6 @@ export function createUtilities(theme: Theme) {
     staticUtility('shadow-initial', [boxShadowProperties, ['--tw-shadow-color', 'initial']])
 
     utilities.functional('shadow', (candidate) => {
-      if (candidate.negative) return
-
       if (!candidate.value) {
         let value = theme.get(['--shadow'])
         if (value === null) return
@@ -4101,8 +4108,6 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('inset-shadow', (candidate) => {
-      if (candidate.negative) return
-
       if (!candidate.value) {
         let value = theme.get(['--inset-shadow'])
         if (value === null) return
@@ -4197,8 +4202,6 @@ export function createUtilities(theme: Theme) {
       return `var(--tw-ring-inset,) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
     }
     utilities.functional('ring', (candidate) => {
-      if (candidate.negative) return
-
       if (!candidate.value) {
         if (candidate.modifier) return
         let value = theme.get(['--default-ring-width']) ?? '1px'
@@ -4273,8 +4276,6 @@ export function createUtilities(theme: Theme) {
       return `inset 0 0 0 ${value} var(--tw-inset-ring-color, currentColor)`
     }
     utilities.functional('inset-ring', (candidate) => {
-      if (candidate.negative) return
-
       if (!candidate.value) {
         if (candidate.modifier) return
         return [
@@ -4347,7 +4348,7 @@ export function createUtilities(theme: Theme) {
     let ringOffsetShadowValue =
       'var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
     utilities.functional('ring-offset', (candidate) => {
-      if (candidate.negative || !candidate.value) return
+      if (!candidate.value) return
 
       if (candidate.value.kind === 'arbitrary') {
         let value: string | null = candidate.value.value
@@ -4411,8 +4412,6 @@ export function createUtilities(theme: Theme) {
   ])
 
   utilities.functional('@container', (candidate) => {
-    if (candidate.negative) return
-
     let value: string | null = null
     if (candidate.value === null) {
       value = 'inline-size'
