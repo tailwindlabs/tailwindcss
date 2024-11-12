@@ -3400,7 +3400,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
       handleBareValue: ({ value }) => {
-        if (!isPositiveInteger(value)) return null
+        if (!isMultipleOf(value, 0.25)) return null
         return `${value}%`
       },
       handle: (value) => [
