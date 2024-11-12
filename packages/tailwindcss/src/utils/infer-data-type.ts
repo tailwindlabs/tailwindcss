@@ -336,7 +336,14 @@ export function isValidSpacingMultiplier(value: any) {
   return isMultipleOf(value, 0.25)
 }
 
-export function isMultipleOf(value: string | number, divisor: number) {
+/**
+ * Returns true if the value is either a positive whole number or a multiple of 0.25.
+ */
+export function isValidOpacityValue(value: any) {
+  return isMultipleOf(value, 0.25)
+}
+
+function isMultipleOf(value: string | number, divisor: number) {
   let num = Number(value)
   return num >= 0 && num % divisor === 0 && String(num) === String(value)
 }

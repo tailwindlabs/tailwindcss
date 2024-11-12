@@ -4,8 +4,8 @@ import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
 import {
   inferDataType,
-  isMultipleOf,
   isPositiveInteger,
+  isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
@@ -130,7 +130,7 @@ export function asColor(value: string, modifier: CandidateModifier | null): stri
     return withAlpha(value, modifier.value)
   }
 
-  if (!isMultipleOf(modifier.value, 0.25)) {
+  if (!isValidOpacityValue(modifier.value)) {
     return null
   }
 
@@ -3400,7 +3400,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
       handleBareValue: ({ value }) => {
-        if (!isMultipleOf(value, 0.25)) return null
+        if (!isValidOpacityValue(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3854,7 +3854,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('opacity', {
     themeKeys: ['--opacity'],
     handleBareValue: ({ value }) => {
-      if (!isMultipleOf(value, 0.25)) return null
+      if (!isValidOpacityValue(value)) return null
       return `${value}%`
     },
     handle: (value) => [decl('opacity', value)],
