@@ -245,13 +245,23 @@ progress {
 }
 
 /*
-  1. Ensure date/time inputs have the same height when empty in iOS Safari.
-  2. Ensure text alignment can be changed on date/time inputs in iOS Safari.
+  Ensure the empty date/time inputs are correctly aligned in iOS Safari.
+*/
+input:where([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]) {
+  display: inline-block;
+}
+
+/*
+  1. Ensure the empty date/time inputs are correctly aligned in iOS Safari.
+  2. Ensure date/time inputs have the same height when empty in iOS Safari.
+  3. Ensure text alignment can be changed on date/time inputs in iOS Safari.
 */
 
 ::-webkit-date-and-time-value {
-  min-height: 1lh; /* 1 */
-  text-align: inherit; /* 2 */
+  vertical-align: middle; /* 1 */
+  min-height: 1lh; /* 2 */
+  text-align: inherit; /* 3 */
+  display: inline-block; /* 1 */
 }
 
 /*

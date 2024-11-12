@@ -509,9 +509,15 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     -webkit-appearance: none;
   }
 
+  input:where([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]) {
+    display: inline-block;
+  }
+
   ::-webkit-date-and-time-value {
+    vertical-align: middle;
     text-align: inherit;
     min-height: 1lh;
+    display: inline-block;
   }
 
   ::-webkit-datetime-edit {
