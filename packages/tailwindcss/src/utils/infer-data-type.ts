@@ -329,20 +329,18 @@ export function isPositiveInteger(value: any) {
   return Number.isInteger(num) && num >= 0 && String(num) === String(value)
 }
 
-/**
- * Returns true if the value is either a positive whole number or a multiple of 0.25.
- */
 export function isValidSpacingMultiplier(value: any) {
   return isMultipleOf(value, 0.25)
 }
 
-/**
- * Returns true if the value is either a positive whole number or a multiple of 0.25.
- */
 export function isValidOpacityValue(value: any) {
   return isMultipleOf(value, 0.25)
 }
 
+/**
+ * Ensures a number (or numeric string) is a multiple of another number, and
+ * that it has no unnecessary leading or trailing zeros.
+ */
 function isMultipleOf(value: string | number, divisor: number) {
   let num = Number(value)
   return num >= 0 && num % divisor === 0 && String(num) === String(value)
