@@ -39,5 +39,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(simpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
+  expect(await simpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
 })

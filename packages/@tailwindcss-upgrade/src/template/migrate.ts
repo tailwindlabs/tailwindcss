@@ -25,7 +25,7 @@ export type Migration = (
     start: number
     end: number
   },
-) => string
+) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
   prefix,
@@ -41,7 +41,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   modernizeArbitraryValues,
 ]
 
-export function migrateCandidate(
+export async function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
@@ -51,9 +51,9 @@ export function migrateCandidate(
     start: number
     end: number
   },
-): string {
+): Promise<string> {
   for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = migration(designSystem, userConfig, rawCandidate, location)
+    rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
   }
   return rawCandidate
 }
@@ -69,7 +69,7 @@ export default async function migrateContents(
   let changes: StringChange[] = []
 
   for (let { rawCandidate, start, end } of candidates) {
-    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate, {
+    let migratedCandidate = await migrateCandidate(designSystem, userConfig, rawCandidate, {
       contents,
       start,
       end,
