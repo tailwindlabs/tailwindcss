@@ -8,6 +8,7 @@ import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
+import { legacyClasses } from './codemods/legacy-classes'
 import { maxWidthScreen } from './codemods/max-width-screen'
 import { modernizeArbitraryValues } from './codemods/modernize-arbitrary-values'
 import { prefix } from './codemods/prefix'
@@ -32,6 +33,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   important,
   bgGradient,
   simpleLegacyClasses,
+  legacyClasses,
   maxWidthScreen,
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
