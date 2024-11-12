@@ -421,6 +421,20 @@ export function test(
 
       options.onTestFinished(dispose)
 
+      // Make it a git repository, and commit all files
+      if (only || debug) {
+        try {
+          await context.exec('git init', { cwd: root })
+          await context.exec('git add --all', { cwd: root })
+          await context.exec('git commit -m "before migration"', { cwd: root })
+        } catch (error: any) {
+          console.error(error)
+          console.error(error.stdout?.toString())
+          console.error(error.stderr?.toString())
+          throw error
+        }
+      }
+
       return await testCallback(context)
     },
   )
