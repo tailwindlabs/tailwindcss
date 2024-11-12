@@ -98,6 +98,18 @@ exports[`border-* 1`] = `
   border-color: var(--color-red-500);
 }
 
+.border-red-500\\/2\\.5 {
+  border-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-red-500\\/2\\.25 {
+  border-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-red-500\\/2\\.75 {
+  border-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+}
+
 .border-red-500\\/50 {
   border-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
 }
@@ -217,6 +229,18 @@ exports[`border-b-* 1`] = `
 
 .border-b-red-500 {
   border-bottom-color: var(--color-red-500);
+}
+
+.border-b-red-500\\/2\\.5 {
+  border-bottom-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-b-red-500\\/2\\.25 {
+  border-bottom-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-b-red-500\\/2\\.75 {
+  border-bottom-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-b-red-500\\/50 {
@@ -340,6 +364,18 @@ exports[`border-e-* 1`] = `
   border-inline-end-color: var(--color-red-500);
 }
 
+.border-e-red-500\\/2\\.5 {
+  border-inline-end-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-e-red-500\\/2\\.25 {
+  border-inline-end-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-e-red-500\\/2\\.75 {
+  border-inline-end-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+}
+
 .border-e-red-500\\/50 {
   border-inline-end-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
 }
@@ -459,6 +495,18 @@ exports[`border-l-* 1`] = `
 
 .border-l-red-500 {
   border-left-color: var(--color-red-500);
+}
+
+.border-l-red-500\\/2\\.5 {
+  border-left-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-l-red-500\\/2\\.25 {
+  border-left-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-l-red-500\\/2\\.75 {
+  border-left-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-l-red-500\\/50 {
@@ -582,6 +630,18 @@ exports[`border-r-* 1`] = `
   border-right-color: var(--color-red-500);
 }
 
+.border-r-red-500\\/2\\.5 {
+  border-right-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-r-red-500\\/2\\.25 {
+  border-right-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-r-red-500\\/2\\.75 {
+  border-right-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+}
+
 .border-r-red-500\\/50 {
   border-right-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
 }
@@ -701,6 +761,18 @@ exports[`border-s-* 1`] = `
 
 .border-s-red-500 {
   border-inline-start-color: var(--color-red-500);
+}
+
+.border-s-red-500\\/2\\.5 {
+  border-inline-start-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-s-red-500\\/2\\.25 {
+  border-inline-start-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-s-red-500\\/2\\.75 {
+  border-inline-start-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-s-red-500\\/50 {
@@ -824,6 +896,18 @@ exports[`border-t-* 1`] = `
   border-top-color: var(--color-red-500);
 }
 
+.border-t-red-500\\/2\\.5 {
+  border-top-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-t-red-500\\/2\\.25 {
+  border-top-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-t-red-500\\/2\\.75 {
+  border-top-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+}
+
 .border-t-red-500\\/50 {
   border-top-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
 }
@@ -945,6 +1029,18 @@ exports[`border-x-* 1`] = `
   border-inline-color: var(--color-red-500);
 }
 
+.border-x-red-500\\/2\\.5 {
+  border-inline-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-x-red-500\\/2\\.25 {
+  border-inline-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-x-red-500\\/2\\.75 {
+  border-inline-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+}
+
 .border-x-red-500\\/50 {
   border-inline-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
 }
@@ -1064,6 +1160,18 @@ exports[`border-y-* 1`] = `
 
 .border-y-red-500 {
   border-block-color: var(--color-red-500);
+}
+
+.border-y-red-500\\/2\\.5 {
+  border-block-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-y-red-500\\/2\\.25 {
+  border-block-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-y-red-500\\/2\\.75 {
+  border-block-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-y-red-500\\/50 {

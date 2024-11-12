@@ -2,7 +2,12 @@ import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
 import { DefaultMap } from './utils/default-map'
-import { inferDataType, isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
+import {
+  inferDataType,
+  isPositiveInteger,
+  isValidOpacityValue,
+  isValidSpacingMultiplier,
+} from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
@@ -125,7 +130,7 @@ export function asColor(value: string, modifier: CandidateModifier | null): stri
     return withAlpha(value, modifier.value)
   }
 
-  if (!isPositiveInteger(modifier.value)) {
+  if (!isValidOpacityValue(modifier.value)) {
     return null
   }
 
@@ -3395,7 +3400,7 @@ export function createUtilities(theme: Theme) {
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
       handleBareValue: ({ value }) => {
-        if (!isPositiveInteger(value)) return null
+        if (!isValidOpacityValue(value)) return null
         return `${value}%`
       },
       handle: (value) => [
@@ -3849,7 +3854,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('opacity', {
     themeKeys: ['--opacity'],
     handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
+      if (!isValidOpacityValue(value)) return null
       return `${value}%`
     },
     handle: (value) => [decl('opacity', value)],
