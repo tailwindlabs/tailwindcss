@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.32] - 2024-11-11
+
 ### Fixed
 
 - Don't reset horizontal padding on date/time pseudo-elements ([#14959](https://github.com/tailwindlabs/tailwindcss/pull/14959))
