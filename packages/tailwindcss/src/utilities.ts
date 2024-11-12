@@ -2292,11 +2292,28 @@ export function createUtilities(theme: Theme) {
 
     function handleBgLinear({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
-        if (!candidate.value || candidate.modifier) return
+        if (!candidate.value) return
 
         let value = candidate.value.value
+        let interpolationMethod = 'in oklch'
+
+        if (candidate.modifier?.kind === 'named') {
+          switch (candidate.modifier.value) {
+            case 'longer':
+            case 'shorter':
+            case 'increasing':
+            case 'decreasing':
+              interpolationMethod = `in oklch ${candidate.modifier.value} hue`
+              break
+            default:
+              interpolationMethod = `in ${candidate.modifier.value}`
+          }
+        } else if (candidate.modifier?.kind === 'arbitrary') {
+          interpolationMethod = candidate.modifier.value
+        }
 
         if (candidate.value.kind === 'arbitrary') {
+          if (candidate.modifier) return
           let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
           switch (type) {
@@ -2327,7 +2344,7 @@ export function createUtilities(theme: Theme) {
           }
 
           return [
-            decl('--tw-gradient-position', `${value} in oklch,`),
+            decl('--tw-gradient-position', `${value} ${interpolationMethod},`),
             decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
           ]
         }

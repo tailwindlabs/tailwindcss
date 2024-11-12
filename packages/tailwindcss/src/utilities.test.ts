@@ -10093,7 +10093,16 @@ test('bg', async () => {
         'bg-linear-to-r/srgb',
         'bg-linear-to-r/longer',
         'bg-linear-to-r/shorter',
+        'bg-linear-to-r/increasing',
+        'bg-linear-to-r/decreasing',
         'bg-linear-to-r/[in_hsl_longer_hue]',
+        'bg-linear-[125deg]/oklab',
+        '-bg-linear-[125deg]/oklab',
+        'bg-linear-[125deg]/shorter',
+        'bg-linear-[125deg]/[in_hsl_longer_hue]',
+        // Invalid but proves not converted to `in oklch longer hue` when used
+        // as an arbitrary value
+        'bg-linear-to-r/[longer]',
 
         'bg-[url(/image.png)]',
         'bg-[url:var(--my-url)]',
@@ -10312,6 +10321,56 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
+    .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: to right in hsl longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/\\[longer\\] {
+      --tw-gradient-position: to right longer, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/decreasing {
+      --tw-gradient-position: to right in oklch decreasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/hsl {
+      --tw-gradient-position: to right in hsl, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/increasing {
+      --tw-gradient-position: to right in oklch increasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/longer {
+      --tw-gradient-position: to right in oklch longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklab {
+      --tw-gradient-position: to right in oklab, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklch {
+      --tw-gradient-position: to right in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/shorter {
+      --tw-gradient-position: to right in oklch shorter hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/srgb {
+      --tw-gradient-position: to right in srgb, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-linear-to-t {
       --tw-gradient-position: to top in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
@@ -10507,31 +10566,11 @@ test('bg', async () => {
       '-bg-space',
 
       'bg-none/foo',
-      'bg-gradient-to-t/foo',
-      'bg-gradient-to-tr/foo',
-      'bg-gradient-to-r/foo',
-      'bg-gradient-to-br/foo',
-      'bg-gradient-to-b/foo',
-      'bg-gradient-to-bl/foo',
-      'bg-gradient-to-l/foo',
-      'bg-gradient-to-tl/foo',
-      'bg-linear-to-t/foo',
-      'bg-linear-to-tr/foo',
-      'bg-linear-to-r/foo',
-      'bg-linear-to-br/foo',
-      'bg-linear-to-b/foo',
-      'bg-linear-to-bl/foo',
-      'bg-linear-to-l/foo',
-      'bg-linear-to-tl/foo',
       'bg-[url(/image.png)]/foo',
       'bg-[url:var(--my-url)]/foo',
       'bg-[linear-gradient(to_bottom,red,blue)]/foo',
       'bg-[image:var(--my-gradient)]/foo',
-      'bg-linear-[125deg]/foo',
-      'bg-linear-[1.3rad]/foo',
       'bg-linear-[to_bottom]/foo',
-      '-bg-linear-[125deg]/foo',
-      '-bg-linear-[1.3rad]/foo',
       'bg-auto/foo',
       'bg-cover/foo',
       'bg-contain/foo',
