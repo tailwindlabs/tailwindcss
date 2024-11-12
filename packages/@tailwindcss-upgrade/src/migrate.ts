@@ -405,10 +405,6 @@ export async function split(stylesheets: Stylesheet[]) {
   let containsUtilities = new Set<Stylesheet>()
 
   for (let sheet of stylesheets) {
-    let layers = sheet.layers()
-    let isLayered = layers.has('utilities') || layers.has('components')
-    if (!isLayered) continue
-
     walk(sheet.root, (node) => {
       if (node.type !== 'atrule') return
       if (node.name !== 'utility') return
