@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support opacity values in increments of `0.25` by default ([#14980](https://github.com/tailwindlabs/tailwindcss/pull/14980))
 
+### Fixed
+
+- _Upgrade (experimental)_: Do not migrate legacy classes with custom values ([#14976](https://github.com/tailwindlabs/tailwindcss/pull/14976))
+
 ## [4.0.0-alpha.33] - 2024-11-11
 
 ### Fixed
