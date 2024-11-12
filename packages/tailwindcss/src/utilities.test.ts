@@ -10086,6 +10086,15 @@ test('bg', async () => {
         'bg-linear-45',
         '-bg-linear-45',
 
+        // With interpolation mode modifier
+        'bg-linear-to-r/oklch',
+        'bg-linear-to-r/oklab',
+        'bg-linear-to-r/hsl',
+        'bg-linear-to-r/srgb',
+        'bg-linear-to-r/longer',
+        'bg-linear-to-r/shorter',
+        'bg-linear-to-r/[in_hsl_longer_hue]',
+
         'bg-[url(/image.png)]',
         'bg-[url:var(--my-url)]',
         'bg-[linear-gradient(to_bottom,red,blue)]',

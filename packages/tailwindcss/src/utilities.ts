@@ -2261,69 +2261,88 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('bg-none', [['background-image', 'none']])
 
-  for (let [value, direction] of [
-    ['t', 'top'],
-    ['tr', 'top right'],
-    ['r', 'right'],
-    ['br', 'bottom right'],
-    ['b', 'bottom'],
-    ['bl', 'bottom left'],
-    ['l', 'left'],
-    ['tl', 'top left'],
-  ]) {
-    staticUtility(`bg-gradient-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction} in oklch,`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
+  {
+    // Deprecated
+    for (let [value, direction] of [
+      ['t', 'top'],
+      ['tr', 'top right'],
+      ['r', 'right'],
+      ['br', 'bottom right'],
+      ['b', 'bottom'],
+      ['bl', 'bottom left'],
+      ['l', 'left'],
+      ['tl', 'top left'],
+    ]) {
+      staticUtility(`bg-gradient-to-${value}`, [
+        ['--tw-gradient-position', `to ${direction} in oklch,`],
+        ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
+      ])
+    }
+
+    let linearGradientDirections = new Map([
+      ['to-t', 'to top'],
+      ['to-tr', 'to top right'],
+      ['to-r', 'to right'],
+      ['to-br', 'to bottom right'],
+      ['to-b', 'to bottom'],
+      ['to-bl', 'to bottom left'],
+      ['to-l', 'to left'],
+      ['to-tl', 'to top left'],
     ])
 
-    staticUtility(`bg-linear-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction} in oklch,`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
-    ])
-  }
+    function handleBgLinear({ negative }: { negative: boolean }) {
+      return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+        if (!candidate.value || candidate.modifier) return
 
-  function handleBgLinear({ negative }: { negative: boolean }) {
-    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
-      if (!candidate.value || candidate.modifier) return
+        let value = candidate.value.value
 
-      let value = candidate.value.value
+        if (candidate.value.kind === 'arbitrary') {
+          let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
-      if (candidate.value.kind === 'arbitrary') {
-        let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+          switch (type) {
+            case 'angle': {
+              value = negative ? `calc(${value} * -1)` : `${value}`
 
-        switch (type) {
-          case 'angle': {
-            value = negative ? `calc(${value} * -1)` : `${value}`
+              return [
+                decl('--tw-gradient-position', `${value},`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+              ]
+            }
+            default: {
+              if (negative) return
 
-            return [
-              decl('--tw-gradient-position', `${value},`),
-              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-            ]
+              return [
+                decl('--tw-gradient-position', `${value},`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+              ]
+            }
           }
-          default: {
-            if (negative) return
-
-            return [
-              decl('--tw-gradient-position', `${value},`),
-              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-            ]
+        } else {
+          if (!negative && linearGradientDirections.has(value)) {
+            value = linearGradientDirections.get(value)!
+          } else if (isPositiveInteger(value)) {
+            value = negative ? `calc(${value}deg * -1)` : `${value}deg`
+          } else {
+            return
           }
+
+          return [
+            decl('--tw-gradient-position', `${value} in oklch,`),
+            decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
+          ]
         }
-      } else {
-        if (!isPositiveInteger(value)) return
-
-        value = negative ? `calc(${value}deg * -1)` : `${value}deg`
-
-        return [
-          decl('--tw-gradient-position', `${value} in oklch,`),
-          decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
-        ]
       }
     }
-  }
 
-  utilities.functional('-bg-linear', handleBgLinear({ negative: true }))
-  utilities.functional('bg-linear', handleBgLinear({ negative: false }))
+    utilities.functional('-bg-linear', handleBgLinear({ negative: true }))
+    utilities.functional('bg-linear', handleBgLinear({ negative: false }))
+
+    suggest('bg-linear', () => [
+      {
+        values: [...linearGradientDirections.keys()],
+      },
+    ])
+  }
 
   function handleBgConic({ negative }: { negative: boolean }) {
     return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
