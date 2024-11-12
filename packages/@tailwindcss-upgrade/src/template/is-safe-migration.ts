@@ -1,5 +1,5 @@
 const QUOTES = ['"', "'", '`']
-const LOGICAL_OPERATORS = ['&&', '||', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
+const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
 const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Vue
   /v-else-if=['"]$/,
