@@ -29,7 +29,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@parcel/watcher": "^2.4.1",
+    "@parcel/watcher": "^2.5.0",
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "enhanced-resolve": "^5.17.1",
