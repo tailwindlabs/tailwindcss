@@ -3,6 +3,7 @@ import path from 'node:path'
 import url from 'node:url'
 import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { printCandidate } from '../candidates'
 
 const __filename = url.fileURLToPath(import.meta.url)
@@ -46,6 +47,9 @@ const THEME_KEYS = {
   'blur-xs': '--blur-xs',
 }
 
+const DESIGN_SYSTEMS = new DefaultMap((base) => {
+  return __unstable__loadDesignSystem('@import "tailwindcss";', { base })
+})
 const SEEDED = new WeakSet<DesignSystem>()
 
 export async function legacyClasses(
@@ -53,7 +57,8 @@ export async function legacyClasses(
   _userConfig: Config,
   rawCandidate: string,
 ): Promise<string> {
-  // Prepare design system with the unknown legacy classes
+  // Ensure the "old" classes exist as static utilities to make the migration
+  // easier because the "root" will point to the full class.
   if (!SEEDED.has(designSystem)) {
     for (let old in LEGACY_CLASS_MAP) {
       designSystem.utilities.static(old, () => [])
@@ -61,9 +66,7 @@ export async function legacyClasses(
     SEEDED.add(designSystem)
   }
 
-  let defaultDesignSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let defaultDesignSystem = await DESIGN_SYSTEMS.get(__dirname)
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
