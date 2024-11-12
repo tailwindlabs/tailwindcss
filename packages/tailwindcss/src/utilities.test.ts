@@ -8022,6 +8022,9 @@ test('accent', async () => {
       [
         'accent-red-500',
         'accent-red-500/50',
+        'accent-red-500/2.25',
+        'accent-red-500/2.5',
+        'accent-red-500/2.75',
         'accent-red-500/[0.5]',
         'accent-red-500/[50%]',
         'accent-current',
@@ -8063,6 +8066,18 @@ test('accent', async () => {
 
     .accent-red-500 {
       accent-color: var(--color-red-500);
+    }
+
+    .accent-red-500\\/2\\.5 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .accent-red-500\\/2\\.25 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .accent-red-500\\/2\\.75 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
@@ -8122,6 +8137,9 @@ test('caret', async () => {
       [
         'caret-red-500',
         'caret-red-500/50',
+        'caret-red-500/2.25',
+        'caret-red-500/2.5',
+        'caret-red-500/2.75',
         'caret-red-500/[0.5]',
         'caret-red-500/[50%]',
         'caret-current',
@@ -8163,6 +8181,18 @@ test('caret', async () => {
 
     .caret-red-500 {
       caret-color: var(--color-red-500);
+    }
+
+    .caret-red-500\\/2\\.5 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .caret-red-500\\/2\\.25 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .caret-red-500\\/2\\.75 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
@@ -8220,6 +8250,9 @@ test('divide-color', async () => {
       [
         'divide-red-500',
         'divide-red-500/50',
+        'divide-red-500/2.25',
+        'divide-red-500/2.5',
+        'divide-red-500/2.75',
         'divide-red-500/[0.5]',
         'divide-red-500/[50%]',
         'divide-current',
@@ -8261,6 +8294,18 @@ test('divide-color', async () => {
 
     :where(.divide-red-500 > :not(:last-child)) {
       border-color: var(--color-red-500);
+    }
+
+    :where(.divide-red-500\\/2\\.5 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    :where(.divide-red-500\\/2\\.25 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    :where(.divide-red-500\\/2\\.75 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
@@ -9889,6 +9934,9 @@ for (let prefix of prefixes) {
     // Color
     classes.push(`${prefix}-red-500`)
     classes.push(`${prefix}-red-500/50`)
+    classes.push(`${prefix}-red-500/2.25`)
+    classes.push(`${prefix}-red-500/2.5`)
+    classes.push(`${prefix}-red-500/2.75`)
     classes.push(`${prefix}-[#0088cc]`)
     classes.push(`${prefix}-[#0088cc]/50`)
     classes.push(`${prefix}-current`)
@@ -9988,6 +10036,9 @@ test('bg', async () => {
         // background-color
         'bg-red-500',
         'bg-red-500/50',
+        'bg-red-500/2.25',
+        'bg-red-500/2.5',
+        'bg-red-500/2.75',
         'bg-red-500/[0.5]',
         'bg-red-500/[50%]',
         'bg-current',
@@ -10130,6 +10181,18 @@ test('bg', async () => {
 
     .bg-red-500 {
       background-color: var(--color-red-500);
+    }
+
+    .bg-red-500\\/2\\.5 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .bg-red-500\\/2\\.25 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .bg-red-500\\/2\\.75 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
@@ -11578,6 +11641,9 @@ test('fill', async () => {
       [
         'fill-red-500',
         'fill-red-500/50',
+        'fill-red-500/2.25',
+        'fill-red-500/2.5',
+        'fill-red-500/2.75',
         'fill-red-500/[0.5]',
         'fill-red-500/[50%]',
         'fill-current',
@@ -11619,6 +11685,18 @@ test('fill', async () => {
 
     .fill-red-500 {
       fill: var(--color-red-500);
+    }
+
+    .fill-red-500\\/2\\.5 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .fill-red-500\\/2\\.25 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .fill-red-500\\/2\\.75 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
@@ -11664,6 +11742,9 @@ test('stroke', async () => {
         // Color
         'stroke-red-500',
         'stroke-red-500/50',
+        'stroke-red-500/2.25',
+        'stroke-red-500/2.5',
+        'stroke-red-500/2.75',
         'stroke-red-500/[0.5]',
         'stroke-red-500/[50%]',
         'stroke-current',
@@ -11745,6 +11826,18 @@ test('stroke', async () => {
 
     .stroke-red-500 {
       stroke: var(--color-red-500);
+    }
+
+    .stroke-red-500\\/2\\.5 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .stroke-red-500\\/2\\.25 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .stroke-red-500\\/2\\.75 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
@@ -12667,6 +12760,9 @@ test('placeholder', async () => {
       [
         'placeholder-red-500',
         'placeholder-red-500/50',
+        'placeholder-red-500/2.25',
+        'placeholder-red-500/2.5',
+        'placeholder-red-500/2.75',
         'placeholder-red-500/[0.5]',
         'placeholder-red-500/[50%]',
         'placeholder-current',
@@ -12708,6 +12804,18 @@ test('placeholder', async () => {
 
     .placeholder-red-500::placeholder {
       color: var(--color-red-500);
+    }
+
+    .placeholder-red-500\\/2\\.5::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .placeholder-red-500\\/2\\.25::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .placeholder-red-500\\/2\\.75::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
@@ -14720,8 +14828,28 @@ test('outline-offset', async () => {
 })
 
 test('opacity', async () => {
-  expect(await run(['opacity-15', 'opacity-[var(--value)]'])).toMatchInlineSnapshot(`
-    ".opacity-15 {
+  expect(
+    await run([
+      'opacity-15',
+      'opacity-2.5',
+      'opacity-3.25',
+      'opacity-4.75',
+      'opacity-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".opacity-2\\.5 {
+      opacity: .025;
+    }
+
+    .opacity-3\\.25 {
+      opacity: .0325;
+    }
+
+    .opacity-4\\.75 {
+      opacity: .0475;
+    }
+
+    .opacity-15 {
       opacity: .15;
     }
 
@@ -14733,6 +14861,7 @@ test('opacity', async () => {
     await run([
       'opacity',
       'opacity--15',
+      'opacity-1.125',
       '-opacity-15',
       '-opacity-[var(--value)]',
       'opacity-unknown',
@@ -14822,6 +14951,9 @@ test('text', async () => {
         // color
         'text-red-500',
         'text-red-500/50',
+        'text-red-500/2.25',
+        'text-red-500/2.5',
+        'text-red-500/2.75',
         'text-red-500/[0.5]',
         'text-red-500/[50%]',
         'text-current',
@@ -14985,6 +15117,18 @@ test('text', async () => {
       color: var(--color-red-500);
     }
 
+    .text-red-500\\/2\\.5 {
+      color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .text-red-500\\/2\\.25 {
+      color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .text-red-500\\/2\\.75 {
+      color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+    }
+
     .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
       color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
@@ -15044,6 +15188,9 @@ test('shadow', async () => {
         // Colors
         'shadow-red-500',
         'shadow-red-500/50',
+        'shadow-red-500/2.25',
+        'shadow-red-500/2.5',
+        'shadow-red-500/2.75',
         'shadow-red-500/[0.5]',
         'shadow-red-500/[50%]',
         'shadow-current',
@@ -15129,6 +15276,18 @@ test('shadow', async () => {
 
     .shadow-red-500 {
       --tw-shadow-color: var(--color-red-500);
+    }
+
+    .shadow-red-500\\/2\\.5 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .shadow-red-500\\/2\\.25 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .shadow-red-500\\/2\\.75 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
@@ -15272,6 +15431,9 @@ test('inset-shadow', async () => {
         // Colors
         'inset-shadow-red-500',
         'inset-shadow-red-500/50',
+        'inset-shadow-red-500/2.25',
+        'inset-shadow-red-500/2.5',
+        'inset-shadow-red-500/2.75',
         'inset-shadow-red-500/[0.5]',
         'inset-shadow-red-500/[50%]',
         'inset-shadow-current',
@@ -15357,6 +15519,18 @@ test('inset-shadow', async () => {
 
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: var(--color-red-500);
+    }
+
+    .inset-shadow-red-500\\/2\\.5 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .inset-shadow-red-500\\/2\\.25 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .inset-shadow-red-500\\/2\\.75 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
@@ -15490,6 +15664,9 @@ test('ring', async () => {
         'ring-inset',
         'ring-red-500',
         'ring-red-500/50',
+        'ring-red-500/2.25',
+        'ring-red-500/2.5',
+        'ring-red-500/2.75',
         'ring-red-500/[0.5]',
         'ring-red-500/[50%]',
         'ring-current',
@@ -15599,6 +15776,18 @@ test('ring', async () => {
 
     .ring-red-500 {
       --tw-ring-color: var(--color-red-500);
+    }
+
+    .ring-red-500\\/2\\.5 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .ring-red-500\\/2\\.25 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .ring-red-500\\/2\\.75 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
@@ -15750,6 +15939,9 @@ test('inset-ring', async () => {
         // ring color
         'inset-ring-red-500',
         'inset-ring-red-500/50',
+        'inset-ring-red-500/2.25',
+        'inset-ring-red-500/2.5',
+        'inset-ring-red-500/2.75',
         'inset-ring-red-500/[0.5]',
         'inset-ring-red-500/[50%]',
         'inset-ring-current',
@@ -15859,6 +16051,18 @@ test('inset-ring', async () => {
 
     .inset-ring-red-500 {
       --tw-inset-ring-color: var(--color-red-500);
+    }
+
+    .inset-ring-red-500\\/2\\.5 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .inset-ring-red-500\\/2\\.25 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .inset-ring-red-500\\/2\\.75 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {

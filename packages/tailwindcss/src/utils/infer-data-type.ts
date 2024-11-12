@@ -322,7 +322,7 @@ function isVector(value: string) {
 }
 
 /**
- * Returns true of the value can be parsed as a positive whole number.
+ * Returns true if the value can be parsed as a positive whole number.
  */
 export function isPositiveInteger(value: any) {
   let num = Number(value)
@@ -333,6 +333,10 @@ export function isPositiveInteger(value: any) {
  * Returns true if the value is either a positive whole number or a multiple of 0.25.
  */
 export function isValidSpacingMultiplier(value: any) {
+  return isMultipleOf(value, 0.25)
+}
+
+export function isMultipleOf(value: string | number, divisor: number) {
   let num = Number(value)
-  return num >= 0 && num % 0.25 === 0 && String(num) === String(value)
+  return num >= 0 && num % divisor === 0 && String(num) === String(value)
 }
