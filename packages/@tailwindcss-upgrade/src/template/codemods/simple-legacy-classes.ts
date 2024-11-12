@@ -34,14 +34,29 @@ const LEGACY_CLASS_MAP = {
   'outline-none': 'outline-hidden',
 }
 
+const THEME_KEYS = {
+  shadow: 'boxShadow',
+  'shadow-sm': 'boxShadow',
+  'shadow-xs': 'boxShadow',
+
+  'drop-shadow': 'dropShadow',
+  'drop-shadow-sm': 'dropShadow',
+
+  rounded: 'borderRadius',
+  'rounded-sm': 'borderRadius',
+
+  blur: 'blur',
+  'blur-sm': 'blur',
+}
+
 const SEEDED = new WeakSet<DesignSystem>()
 
 export function simpleLegacyClasses(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  userConfig: Config,
   rawCandidate: string,
 ): string {
-  // Prepare design system with the legacy classes
+  // Prepare design system with the unknown legacy classes
   if (!SEEDED.has(designSystem)) {
     for (let old in LEGACY_CLASS_MAP) {
       designSystem.utilities.static(old, () => [])
@@ -51,6 +66,17 @@ export function simpleLegacyClasses(
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
+      let themeKey = THEME_KEYS[candidate.root as keyof typeof THEME_KEYS]
+      if (
+        themeKey &&
+        // Theme was overwritten
+        (userConfig?.theme?.[themeKey] !== undefined ||
+          // Theme extend was overwritten
+          userConfig?.theme?.extend?.[themeKey] !== undefined)
+      ) {
+        continue
+      }
+
       return printCandidate(designSystem, {
         ...candidate,
         root: LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP],
