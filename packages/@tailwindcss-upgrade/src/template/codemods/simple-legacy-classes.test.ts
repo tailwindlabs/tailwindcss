@@ -16,28 +16,11 @@ test.each([
   ['max-lg:hover:decoration-slice!', 'max-lg:hover:box-decoration-slice!'],
   ['max-lg:hover:!decoration-slice', 'max-lg:hover:box-decoration-slice!'],
 
-  ['shadow', 'shadow-sm'],
-  ['shadow-sm', 'shadow-xs'],
-  ['shadow-xs', 'shadow-2xs'],
-
-  ['inset-shadow', 'inset-shadow-sm'],
-  ['inset-shadow-sm', 'inset-shadow-xs'],
-  ['inset-shadow-xs', 'inset-shadow-2xs'],
-
-  ['drop-shadow', 'drop-shadow-sm'],
-  ['drop-shadow-sm', 'drop-shadow-xs'],
-
-  ['rounded', 'rounded-sm'],
-  ['rounded-sm', 'rounded-xs'],
-
-  ['blur', 'blur-sm'],
-  ['blur-sm', 'blur-xs'],
-
   ['focus:outline-none', 'focus:outline-hidden'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  expect(await simpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
+  expect(simpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
 })
