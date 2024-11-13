@@ -175,7 +175,8 @@ table {
 }
 
 /*
-  Inherit font styles in all browsers.
+  1. Inherit font styles in all browsers.
+  2. Ensure the opacity of disabled controls is consistent in all browsers;
 */
 
 button,
@@ -184,11 +185,15 @@ optgroup,
 select,
 textarea,
 ::file-selector-button {
-  font: inherit;
-  font-feature-settings: inherit;
-  font-variation-settings: inherit;
-  letter-spacing: inherit;
-  color: inherit;
+  font: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
+  color: inherit; /* 1 */
+
+  &:where([disabled]) {
+    opacity: 1; /* 2 */
+  }
 }
 
 /*

@@ -475,6 +475,14 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     color: inherit;
   }
 
+  ::file-selector-button:where() {
+    opacity: 1;
+  }
+
+  :is(button, input, optgroup, select, textarea):where([disabled]) {
+    opacity: 1;
+  }
+
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
     background: none;
