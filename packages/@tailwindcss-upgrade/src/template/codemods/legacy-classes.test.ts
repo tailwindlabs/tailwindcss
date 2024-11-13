@@ -19,6 +19,14 @@ test.each([
 
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
+
+  ['blur!', 'blur-sm!'],
+  ['hover:blur', 'hover:blur-sm'],
+  ['hover:blur!', 'hover:blur-sm!'],
+
+  ['hover:blur-sm', 'hover:blur-xs'],
+  ['blur-sm!', 'blur-xs!'],
+  ['hover:blur-sm!', 'hover:blur-xs!'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,

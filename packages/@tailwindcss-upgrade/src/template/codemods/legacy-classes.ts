@@ -2,6 +2,7 @@ import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import path from 'node:path'
 import url from 'node:url'
 import type { Config } from 'tailwindcss'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { printCandidate } from '../candidates'
@@ -51,7 +52,6 @@ const THEME_KEYS = {
 const DESIGN_SYSTEMS = new DefaultMap((base) => {
   return __unstable__loadDesignSystem('@import "tailwindcss";', { base })
 })
-const SEEDED = new WeakSet<DesignSystem>()
 
 export async function legacyClasses(
   designSystem: DesignSystem,
@@ -63,56 +63,59 @@ export async function legacyClasses(
     end: number
   },
 ): Promise<string> {
-  // Ensure the "old" classes exist as static utilities to make the migration
-  // easier because the "root" will point to the full class.
-  if (!SEEDED.has(designSystem)) {
-    for (let old in LEGACY_CLASS_MAP) {
-      designSystem.utilities.static(old, () => [])
-    }
-    SEEDED.add(designSystem)
-  }
-
   let defaultDesignSystem = await DESIGN_SYSTEMS.get(__dirname)
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
-      let newRoot = LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP]
-
-      if (location && !candidate.root.includes('-') && !isSafeMigration(location)) {
-        continue
+    if (candidate.kind === 'functional') {
+      let parts = [candidate.root]
+      if (candidate.value?.kind === 'named') {
+        parts.push(candidate.value.value)
       }
 
-      let fromThemeKey = THEME_KEYS[candidate.root as keyof typeof THEME_KEYS]
-      let toThemeKey = THEME_KEYS[newRoot as keyof typeof THEME_KEYS]
+      let root = parts.join('-')
+      if (Object.hasOwn(LEGACY_CLASS_MAP, root)) {
+        let newRoot = LEGACY_CLASS_MAP[root as keyof typeof LEGACY_CLASS_MAP]
 
-      if (fromThemeKey && toThemeKey) {
-        // Migrating something that resolves to a value in the theme.
-        let customFrom = designSystem.resolveThemeValue(fromThemeKey)
-        let defaultFrom = defaultDesignSystem.resolveThemeValue(fromThemeKey)
-        let customTo = designSystem.resolveThemeValue(toThemeKey)
-        let defaultTo = defaultDesignSystem.resolveThemeValue(toThemeKey)
-
-        // The new theme value is not defined, which means we can't safely
-        // migrate the utility.
-        if (customTo === undefined) {
+        if (location && !root.includes('-') && !isSafeMigration(location)) {
           continue
         }
 
-        // The "from" theme value changed compared to the default theme value.
-        if (customFrom !== defaultFrom) {
-          continue
+        let fromThemeKey = THEME_KEYS[root as keyof typeof THEME_KEYS]
+        let toThemeKey = THEME_KEYS[newRoot as keyof typeof THEME_KEYS]
+
+        if (fromThemeKey && toThemeKey) {
+          // Migrating something that resolves to a value in the theme.
+          let customFrom = designSystem.resolveThemeValue(fromThemeKey)
+          let defaultFrom = defaultDesignSystem.resolveThemeValue(fromThemeKey)
+          let customTo = designSystem.resolveThemeValue(toThemeKey)
+          let defaultTo = defaultDesignSystem.resolveThemeValue(toThemeKey)
+
+          // The new theme value is not defined, which means we can't safely
+          // migrate the utility.
+          if (customTo === undefined) {
+            continue
+          }
+
+          // The "from" theme value changed compared to the default theme value.
+          if (customFrom !== defaultFrom) {
+            continue
+          }
+
+          // The "to" theme value changed compared to the default theme value.
+          if (customTo !== defaultTo) {
+            continue
+          }
         }
 
-        // The "to" theme value changed compared to the default theme value.
-        if (customTo !== defaultTo) {
-          continue
+        for (let newCandidate of designSystem.parseCandidate(newRoot)) {
+          let clone = structuredClone(newCandidate) as Candidate
+
+          clone.important = candidate.important
+          clone.variants = candidate.variants
+
+          return printCandidate(designSystem, clone)
         }
       }
-
-      return printCandidate(designSystem, {
-        ...candidate,
-        root: newRoot,
-      })
     }
   }
 
