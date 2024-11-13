@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support opacity values in increments of `0.25` by default ([#14980](https://github.com/tailwindlabs/tailwindcss/pull/14980))
+- Support specifying the color interpolation method for gradients via modifier ([#14984](https://github.com/tailwindlabs/tailwindcss/pull/14984))
 
 ## [4.0.0-alpha.33] - 2024-11-11
 
