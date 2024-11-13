@@ -17,12 +17,12 @@
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.14",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
     "fs-extra": "^10.1.0",
-    "jest": "^27.2.5",
+    "jest": "^27.5.1",
     "move-file-cli": "^3.0.0",
-    "pkg": "^5.8.0",
+    "pkg": "^5.8.1",
     "rimraf": "^3.0.2",
     "tailwindcss": "file:.."
   },

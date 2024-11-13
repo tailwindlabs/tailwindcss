@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Bump versions for security vulnerabilities ([#14697](https://github.com/tailwindlabs/tailwindcss/pull/14697))
+- Ensure the TypeScript types for the `boxShadow` theme configuration allows arrays ([#14856](https://github.com/tailwindlabs/tailwindcss/pull/14856))
+
+## [3.4.14] - 2024-10-15
+
+### Fixed
+
 - Don't set `display: none` on elements that use `hidden="until-found"` ([#14625](https://github.com/tailwindlabs/tailwindcss/pull/14625))
 
 ## [3.4.13] - 2024-09-23
@@ -2451,7 +2458,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...HEAD
+[3.4.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...v3.4.14
 [3.4.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...v3.4.13
 [3.4.12]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...v3.4.12
 [3.4.11]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.10...v3.4.11
