@@ -3148,6 +3148,168 @@ test('max-height', async () => {
   ).toEqual('')
 })
 
+describe('container', () => {
+  test('creates the right media queries and sorts it before width', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+
+  test('custom `@utility container` always follow the core utility ', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+
+          @utility container {
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 2rem;
+            padding-left: 2rem;
+
+            @media (min-width: 126rem) {
+              max-width: 126rem;
+            }
+          }
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+
+      @media (width >= 126rem) {
+        .container {
+          max-width: 126rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+})
+
 test('flex', async () => {
   expect(
     await run([
@@ -16680,7 +16842,7 @@ describe('spacing utilities', () => {
     `)
   })
 
-  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
     let { build } = await compile(css`
       @theme {
         --spacing: 4px;

@@ -28,6 +28,8 @@ export default [
   'float',
   'clear',
 
+  '--tw-container-component',
+
   // How do we make `mx-0` come before `mt-0`?
   // Idea: `margin-x` property that we compile away with a Visitor plugin?
   'margin',

@@ -897,6 +897,18 @@ export function createUtilities(theme: Theme) {
     })
   }
 
+  utilities.static('container', () => {
+    let breakpoints = [...theme.namespace('--breakpoint').values()]
+    breakpoints.sort((a, b) => parseInt(a) - parseInt(b))
+
+    let decls: AstNode[] = [decl('--tw-sort', '--tw-container-component'), decl('width', '100%')]
+    for (let breakpoint of breakpoints) {
+      decls.push(atRule('@media', `(min-width: ${breakpoint})`, [decl('max-width', breakpoint)]))
+    }
+
+    return decls
+  })
+
   /**
    * @css `flex`
    */
