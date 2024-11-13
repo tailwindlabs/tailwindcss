@@ -48,22 +48,50 @@ test(
           target: document.body,
         })
       `,
+      'src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+        @import 'tailwindcss/utilities';
+      `,
       'src/App.svelte': html`
         <script>
+          import './index.css'
           let name = 'world'
         </script>
 
-        <h1 class="foo underline">Hello {name}!</h1>
+        <h1 class="global local underline">Hello {name}!</h1>
 
-        <style global>
-          @import 'tailwindcss/utilities';
+        <style>
           @import 'tailwindcss/theme' theme(reference);
-          @import './components.css';
+          @import './other.css';
         </style>
       `,
-      'src/components.css': css`
-        .foo {
+      'src/other.css': css`
+        .local {
           @apply text-red-500;
+          animation: 2s ease-in-out 0s infinite localKeyframes;
+        }
+
+        :global(.global) {
+          @apply text-green-500;
+          animation: 2s ease-in-out 0s infinite globalKeyframes;
+        }
+
+        @keyframes -global-globalKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+
+        @keyframes localKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
         }
       `,
     },
@@ -74,7 +102,13 @@ test(
     let files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
 
-    await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`foo`])
+    await fs.expectFileToContain(files[0][0], [
+      candidate`underline`,
+      '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      /@keyframes globalKeyframes\{/,
+      /@keyframes svelte-.*-localKeyframes\{/,
+    ])
   },
 )
 
@@ -127,20 +161,48 @@ test(
       `,
       'src/App.svelte': html`
         <script>
+          import './index.css'
           let name = 'world'
         </script>
 
-        <h1 class="foo underline">Hello {name}!</h1>
+        <h1 class="local global underline">Hello {name}!</h1>
 
-        <style global>
-          @import 'tailwindcss/utilities';
+        <style>
           @import 'tailwindcss/theme' theme(reference);
-          @import './components.css';
+          @import './other.css';
         </style>
       `,
-      'src/components.css': css`
-        .foo {
+      'src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+        @import 'tailwindcss/utilities';
+      `,
+      'src/other.css': css`
+        .local {
           @apply text-red-500;
+          animation: 2s ease-in-out 0s infinite localKeyframes;
+        }
+
+        :global(.global) {
+          @apply text-green-500;
+          animation: 2s ease-in-out 0s infinite globalKeyframes;
+        }
+
+        @keyframes -global-globalKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+
+        @keyframes localKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
         }
       `,
     },
@@ -148,30 +210,45 @@ test(
   async ({ fs, spawn }) => {
     await spawn(`pnpm vite build --watch`)
 
-    let filename = ''
-    await retryAssertion(async () => {
-      let files = await fs.glob('dist/**/*.css')
-      expect(files).toHaveLength(1)
-      filename = files[0][0]
-    })
-
-    await fs.expectFileToContain(filename, [candidate`foo`, candidate`underline`])
-
-    await fs.write(
-      'src/components.css',
-      css`
-        .bar {
-          @apply text-green-500;
-        }
-      `,
-    )
     await retryAssertion(async () => {
       let files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
       let [, css] = files[0]
       expect(css).toContain(candidate`underline`)
-      expect(css).toContain(candidate`bar`)
-      expect(css).not.toContain(candidate`foo`)
+      expect(css).toContain(
+        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      )
+      expect(css).toMatch(
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      )
+      expect(css).toMatch(/@keyframes globalKeyframes\{/)
+      expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
+    })
+
+    await fs.write(
+      'src/App.svelte',
+      (await fs.read('src/App.svelte')).replace('underline', 'font-bold bar'),
+    )
+
+    await fs.write(
+      'src/other.css',
+      `${await fs.read('src/other.css')}\n.bar { @apply text-pink-500; }`,
+    )
+
+    await retryAssertion(async () => {
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [, css] = files[0]
+      expect(css).toContain(candidate`font-bold`)
+      expect(css).toContain(
+        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      )
+      expect(css).toMatch(
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      )
+      expect(css).toMatch(/@keyframes globalKeyframes\{/)
+      expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
+      expect(css).toMatch(/\.bar.svelte-.*\{color:var\(--color-pink-500\)\}/)
     })
   },
 )
