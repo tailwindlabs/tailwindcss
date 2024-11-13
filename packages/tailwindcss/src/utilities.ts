@@ -2405,6 +2405,16 @@ export function createUtilities(theme: Theme) {
 
     utilities.functional('-bg-conic', handleBgConic({ negative: true }))
     utilities.functional('bg-conic', handleBgConic({ negative: false }))
+
+    suggest('bg-conic', () => [
+      {
+        hasDefaultValue: true,
+      },
+      {
+        values: ['0', '30', '60', '90', '120', '150', '180', '210', '240', '270', '300', '330'],
+        supportsNegative: true,
+      },
+    ])
   }
 
   utilities.functional('bg-radial', (candidate) => {
