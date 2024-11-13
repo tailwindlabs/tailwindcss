@@ -1,6 +1,7 @@
 import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { Theme, ThemeKey } from './theme'
+import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import {
   inferDataType,
@@ -899,7 +900,7 @@ export function createUtilities(theme: Theme) {
 
   utilities.static('container', () => {
     let breakpoints = [...theme.namespace('--breakpoint').values()]
-    breakpoints.sort((a, b) => parseInt(a) - parseInt(b))
+    breakpoints.sort((a, z) => compareBreakpoints(a, z, 'asc'))
 
     let decls: AstNode[] = [decl('--tw-sort', '--tw-container-component'), decl('width', '100%')]
     for (let breakpoint of breakpoints) {

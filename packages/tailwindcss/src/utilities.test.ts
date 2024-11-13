@@ -3217,6 +3217,72 @@ describe('container', () => {
     `)
   })
 
+  test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-3xl: 1600px;
+            --breakpoint-sm: 40em;
+            --breakpoint-2xl: 96rem;
+            --breakpoint-xs: 30px;
+            --breakpoint-md: 48em;
+          }
+          @tailwind utilities;
+        `,
+        ['container'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".container {
+        width: 100%;
+      }
+
+      @media (width >= 40em) {
+        .container {
+          max-width: 40em;
+        }
+      }
+
+      @media (width >= 48em) {
+        .container {
+          max-width: 48em;
+        }
+      }
+
+      @media (width >= 30px) {
+        .container {
+          max-width: 30px;
+        }
+      }
+
+      @media (width >= 1600px) {
+        .container {
+          max-width: 1600px;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }"
+    `)
+  })
+
   test('custom `@utility container` always follow the core utility ', async () => {
     expect(
       await compileCss(
