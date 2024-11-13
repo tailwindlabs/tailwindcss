@@ -308,6 +308,8 @@ function isPotentialCssRootFile(id: string) {
     (extension === 'css' ||
       (extension === 'vue' && id.includes('&lang.css')) ||
       (extension === 'astro' && id.includes('&lang.css')) ||
+      // We want to process Svelte `<style>` tags to properly add dependency
+      // tracking for imported files.
       isSvelteStyle(id)) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id)
@@ -412,6 +414,8 @@ class Root {
   // The resolved path given to `source(…)`. When not given this is `null`.
   private basePath: string | null = null
 
+  public overwriteCandidates: string[] | null = null
+
   constructor(
     private id: string,
     private getSharedCandidates: () => Map<string, Set<string>>,
@@ -462,14 +466,16 @@ class Root {
       this.scanner = new Scanner({ sources })
     }
 
-    // This should not be here, but right now the Vite plugin is setup where we
-    // setup a new scanner and compiler every time we request the CSS file
-    // (regardless whether it actually changed or not).
-    env.DEBUG && console.time('[@tailwindcss/vite] Scan for candidates')
-    for (let candidate of this.scanner.scan()) {
-      this.candidates.add(candidate)
+    if (!this.overwriteCandidates) {
+      // This should not be here, but right now the Vite plugin is setup where we
+      // setup a new scanner and compiler every time we request the CSS file
+      // (regardless whether it actually changed or not).
+      env.DEBUG && console.time('[@tailwindcss/vite] Scan for candidates')
+      for (let candidate of this.scanner.scan()) {
+        this.candidates.add(candidate)
+      }
+      env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
     }
-    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
 
     // Watch individual files found via custom `@source` paths
     for (let file of this.scanner.files) {
@@ -515,7 +521,11 @@ class Root {
     this.requiresRebuild = true
 
     env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
-    let result = this.compiler.build([...this.sharedCandidates(), ...this.candidates])
+    let result = this.compiler.build(
+      this.overwriteCandidates
+        ? this.overwriteCandidates
+        : [...this.sharedCandidates(), ...this.candidates],
+    )
     env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
 
     return result
@@ -580,6 +590,7 @@ function svelteProcessor(roots: DefaultMap<string, Root>) {
         async style({
           content,
           filename,
+          markup,
           ...rest
         }: {
           content: string
@@ -587,7 +598,7 @@ function svelteProcessor(roots: DefaultMap<string, Root>) {
           attributes: Record<string, string | boolean>
           markup: string
         }) {
-          if (!filename) return preprocessor.style?.({ ...rest, content, filename })
+          if (!filename) return preprocessor.style?.({ ...rest, content, filename, markup })
 
           // Create the ID used by Vite to identify the `<style>` contents. This
           // way, the Vite `transform` hook can find the right root and thus
@@ -606,16 +617,24 @@ function svelteProcessor(roots: DefaultMap<string, Root>) {
           // hook is called.
           root.builtBeforeTransform = []
 
+          // We only want to consider candidates from the current template file,
+          // this ensures that no one can depend on this having the full candidate
+          // list in some builds (as this is undefined behavior).
+          let scanner = new Scanner({})
+          root.overwriteCandidates = scanner.scanFiles([
+            { content: markup, file: filename, extension: 'svelte' },
+          ])
+
           let generated = await root.generate(content, (file) =>
             root?.builtBeforeTransform?.push(file),
           )
 
           if (!generated) {
             roots.delete(id)
-            return preprocessor.style?.({ ...rest, content, filename })
+            return preprocessor.style?.({ ...rest, content, filename, markup })
           }
 
-          return preprocessor.style?.({ ...rest, content: generated, filename })
+          return preprocessor.style?.({ ...rest, content: generated, filename, markup })
         },
       },
     },
