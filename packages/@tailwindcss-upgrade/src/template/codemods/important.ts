@@ -37,12 +37,12 @@ export function important(
       if (location && !isSafeMigration(location)) {
         continue nextCandidate
       }
-    }
 
-    // The printCandidate function will already put the exclamation mark in the
-    // right place, so we just need to mark this candidate as requiring a
-    // migration.
-    return printCandidate(designSystem, candidate)
+      // The printCandidate function will already put the exclamation mark in
+      // the right place, so we just need to mark this candidate as requiring a
+      // migration.
+      return printCandidate(designSystem, candidate)
+    }
   }
 
   return rawCandidate
