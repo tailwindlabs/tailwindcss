@@ -10113,6 +10113,16 @@ test('bg', async () => {
         '-bg-conic-45/oklab',
         'bg-conic-45/shorter',
         'bg-conic-45/[in_hsl_longer_hue]',
+        'bg-radial/oklch',
+        'bg-radial/oklab',
+        'bg-radial/hsl',
+        'bg-radial/srgb',
+        'bg-radial/longer',
+        'bg-radial/shorter',
+        'bg-radial/increasing',
+        'bg-radial/decreasing',
+        'bg-radial/[in_hsl_longer_hue]',
+        'bg-radial-[circle_at_center]',
         // Invalid but proves not converted to `in oklch longer hue` when used
         // as an arbitrary value
         'bg-linear-to-r/[longer]',
@@ -10484,6 +10494,56 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
+    .bg-radial-\\[circle_at_center\\] {
+      --tw-gradient-position: circle at center, ;
+      background-image: radial-gradient(var(--tw-gradient-stops, circle at center));
+    }
+
+    .bg-radial\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: in hsl longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/decreasing {
+      --tw-gradient-position: in oklch decreasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/hsl {
+      --tw-gradient-position: in hsl, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/increasing {
+      --tw-gradient-position: in oklch increasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/longer {
+      --tw-gradient-position: in oklch longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklab {
+      --tw-gradient-position: in oklab, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklch {
+      --tw-gradient-position: in oklch, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/shorter {
+      --tw-gradient-position: in oklch shorter hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/srgb {
+      --tw-gradient-position: in srgb, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-\\[image\\:var\\(--my-gradient\\)\\] {
       background-image: var(--my-gradient);
     }
@@ -10670,6 +10730,7 @@ test('bg', async () => {
       'bg-[image:var(--my-gradient)]/foo',
       'bg-linear-[to_bottom]/hsl',
       'bg-conic-[45deg]/hsl',
+      'bg-conic-[circle_at_center]/hsl',
       'bg-auto/foo',
       'bg-cover/foo',
       'bg-contain/foo',
