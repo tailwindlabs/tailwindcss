@@ -46,7 +46,7 @@ interface TestContext {
     dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
       filePath: string,
-      contents: string | string[] | RegExp | RegExp[],
+      contents: string | RegExp | (string | RegExp)[],
     ): Promise<void>
     expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
   }
