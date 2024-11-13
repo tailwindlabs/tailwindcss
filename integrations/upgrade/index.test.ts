@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
   'error when no CSS file with @tailwind is used',
@@ -1742,6 +1742,98 @@ test(
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
         }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'make suffix-less migrations safe (e.g.: `blur`, `rounded`, `shadow`)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3.4.14",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        module.exports = {
+          content: ['./*.{html,tsx}'],
+        }
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'index.html': html`
+        <div class="rounded blur shadow"></div>
+      `,
+      'example-component.tsx': ts`
+        type Star = [
+          x: number,
+          y: number,
+          dim?: boolean,
+          blur?: boolean,
+          rounded?: boolean,
+          shadow?: boolean,
+        ]
+
+        function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+          return <svg class="rounded shadow blur" filter={blur ? 'url(…)' : undefined} />
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./*.{js,css,html,tsx}')).toMatchInlineSnapshot(`
+      "
+      --- index.html ---
+      <div class="rounded-sm blur-sm shadow-sm"></div>
+
+      --- index.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- example-component.tsx ---
+      type Star = [
+        x: number,
+        y: number,
+        dim?: boolean,
+        blur?: boolean,
+        rounded?: boolean,
+        shadow?: boolean,
+      ]
+
+      function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+        return <svg class="rounded-sm shadow-sm blur-sm" filter={blur ? 'url(…)' : undefined} />
       }
       "
     `)

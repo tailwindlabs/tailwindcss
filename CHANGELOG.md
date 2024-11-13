@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure that CSS inside Svelte `<style>` blocks always run the expected Svelte processors when using the Vite extension ([#14981](https://github.com/tailwindlabs/tailwindcss/pull/14981))
 - _Upgrade (experimental)_: Do not migrate legacy classes with custom values ([#14976](https://github.com/tailwindlabs/tailwindcss/pull/14976))
+- _Upgrade (experimental)_: Ensure it's safe to migrate `blur`, `rounded`, or `shadow` ([#14979](https://github.com/tailwindlabs/tailwindcss/pull/14979))
 
 ## [4.0.0-alpha.33] - 2024-11-11
 

@@ -5,6 +5,7 @@ import type { Config } from 'tailwindcss'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { printCandidate } from '../candidates'
+import { isSafeMigration } from '../is-safe-migration'
 
 const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -56,6 +57,11 @@ export async function legacyClasses(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
+  location?: {
+    contents: string
+    start: number
+    end: number
+  },
 ): Promise<string> {
   // Ensure the "old" classes exist as static utilities to make the migration
   // easier because the "root" will point to the full class.
@@ -70,13 +76,14 @@ export async function legacyClasses(
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
+      let newRoot = LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP]
+
+      if (location && !candidate.root.includes('-') && !isSafeMigration(location)) {
+        continue
+      }
+
       let fromThemeKey = THEME_KEYS[candidate.root as keyof typeof THEME_KEYS]
-      let toThemeKey =
-        THEME_KEYS[
-          LEGACY_CLASS_MAP[
-            candidate.root as keyof typeof LEGACY_CLASS_MAP
-          ] as keyof typeof THEME_KEYS
-        ]
+      let toThemeKey = THEME_KEYS[newRoot as keyof typeof THEME_KEYS]
 
       if (fromThemeKey && toThemeKey) {
         // Migrating something that resolves to a value in the theme.
@@ -104,7 +111,7 @@ export async function legacyClasses(
 
       return printCandidate(designSystem, {
         ...candidate,
-        root: LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP],
+        root: newRoot,
       })
     }
   }
