@@ -2973,8 +2973,7 @@ describe('matchUtilities()', () => {
       return compiled.build(candidates)
     }
 
-    expect(optimizeCss(await run(['@w-1','hover:@w-1'])).trim())
-      .toMatchInlineSnapshot(`
+    expect(optimizeCss(await run(['@w-1', 'hover:@w-1'])).trim()).toMatchInlineSnapshot(`
         ".\\@w-1 {
           width: 1px;
         }
