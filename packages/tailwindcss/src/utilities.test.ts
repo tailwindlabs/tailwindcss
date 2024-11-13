@@ -3297,13 +3297,11 @@ describe('container', () => {
           @tailwind utilities;
 
           @utility container {
-            margin-left: auto;
-            margin-right: auto;
-            padding-right: 2rem;
-            padding-left: 2rem;
+            margin-inline: auto;
+            padding-inline: 1rem;
 
-            @media (min-width: 126rem) {
-              max-width: 126rem;
+            @media (width >= theme(--breakpoint-sm)) {
+              padding-inline: 2rem;
             }
           }
         `,
@@ -3353,15 +3351,13 @@ describe('container', () => {
       }
 
       .container {
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        margin-inline: auto;
+        padding-inline: 1rem;
       }
 
-      @media (width >= 126rem) {
+      @media (width >= 40rem) {
         .container {
-          max-width: 126rem;
+          padding-inline: 2rem;
         }
       }
 
