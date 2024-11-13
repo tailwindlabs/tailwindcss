@@ -1,4 +1,6 @@
 export function compareBreakpoints(a: string, z: string, direction: 'asc' | 'desc') {
+  if (a === z) return 0
+
   // Assumption: when a `(` exists, we are dealing with a CSS function.
   //
   // E.g.: `calc(100% - 1rem)`

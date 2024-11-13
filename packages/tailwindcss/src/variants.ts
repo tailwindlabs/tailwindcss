@@ -883,8 +883,6 @@ export function createVariants(theme: Theme): Variants {
       let zValue = lookup.get(z)
       if (zValue === null) return direction === 'asc' ? 1 : -1
 
-      if (aValue === zValue) return 0
-
       return compareBreakpoints(aValue, zValue, direction)
     }
 
