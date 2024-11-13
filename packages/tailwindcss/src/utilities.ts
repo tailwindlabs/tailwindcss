@@ -2290,27 +2290,33 @@ export function createUtilities(theme: Theme) {
       ['to-tl', 'to top left'],
     ])
 
+    function resolveInterpolationModifier(modifier: CandidateModifier | null) {
+      let interpolationMethod = 'in oklch'
+
+      if (modifier?.kind === 'named') {
+        switch (modifier.value) {
+          case 'longer':
+          case 'shorter':
+          case 'increasing':
+          case 'decreasing':
+            interpolationMethod = `in oklch ${modifier.value} hue`
+            break
+          default:
+            interpolationMethod = `in ${modifier.value}`
+        }
+      } else if (modifier?.kind === 'arbitrary') {
+        interpolationMethod = modifier.value
+      }
+
+      return interpolationMethod
+    }
+
     function handleBgLinear({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         if (!candidate.value) return
 
         let value = candidate.value.value
-        let interpolationMethod = 'in oklch'
-
-        if (candidate.modifier?.kind === 'named') {
-          switch (candidate.modifier.value) {
-            case 'longer':
-            case 'shorter':
-            case 'increasing':
-            case 'decreasing':
-              interpolationMethod = `in oklch ${candidate.modifier.value} hue`
-              break
-            default:
-              interpolationMethod = `in ${candidate.modifier.value}`
-          }
-        } else if (candidate.modifier?.kind === 'arbitrary') {
-          interpolationMethod = candidate.modifier.value
-        }
+        let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         if (candidate.value.kind === 'arbitrary') {
           if (candidate.modifier) return
@@ -2363,41 +2369,43 @@ export function createUtilities(theme: Theme) {
         supportsNegative: true,
       },
     ])
-  }
 
-  function handleBgConic({ negative }: { negative: boolean }) {
-    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
-      if (candidate.modifier) return
+    function handleBgConic({ negative }: { negative: boolean }) {
+      return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+        if (candidate.value?.kind === 'arbitrary' && candidate.modifier) return
 
-      if (!candidate.value) {
-        return [
-          decl('--tw-gradient-position', `in oklch,`),
-          decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
-        ]
-      }
+        let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
-      let value = candidate.value.value
+        if (!candidate.value) {
+          return [
+            decl('--tw-gradient-position', `${interpolationMethod},`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
+          ]
+        }
 
-      if (candidate.value.kind === 'arbitrary') {
-        return [
-          decl('--tw-gradient-position', `${value},`),
-          decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
-        ]
-      } else {
+        let value = candidate.value.value
+
+        if (candidate.value.kind === 'arbitrary') {
+          return [
+            decl('--tw-gradient-position', `${value},`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+          ]
+        }
+
         if (!isPositiveInteger(value)) return
 
         value = negative ? `calc(${value} * -1)` : `${value}deg`
 
         return [
-          decl('--tw-gradient-position', `from ${value} in oklch,`),
+          decl('--tw-gradient-position', `from ${value} ${interpolationMethod},`),
           decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
         ]
       }
     }
-  }
 
-  utilities.functional('-bg-conic', handleBgConic({ negative: true }))
-  utilities.functional('bg-conic', handleBgConic({ negative: false }))
+    utilities.functional('-bg-conic', handleBgConic({ negative: true }))
+    utilities.functional('bg-conic', handleBgConic({ negative: false }))
+  }
 
   utilities.functional('bg-radial', (candidate) => {
     if (candidate.modifier) return
