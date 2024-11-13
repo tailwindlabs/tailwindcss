@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure that CSS inside Svelte `<style>` blocks always run the expected Svelte processors when using the Vite extension ([#14981](https://github.com/tailwindlabs/tailwindcss/pull/14981))
+- _Upgrade (experimental)_: Ensure `@config` is injected in nearest common ancestor stylesheet ([#14989](https://github.com/tailwindlabs/tailwindcss/pull/14989))
 
 ## [4.0.0-alpha.33] - 2024-11-11
 
