@@ -2261,122 +2261,205 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('bg-none', [['background-image', 'none']])
 
-  for (let [value, direction] of [
-    ['t', 'top'],
-    ['tr', 'top right'],
-    ['r', 'right'],
-    ['br', 'bottom right'],
-    ['b', 'bottom'],
-    ['bl', 'bottom left'],
-    ['l', 'left'],
-    ['tl', 'top left'],
-  ]) {
-    staticUtility(`bg-gradient-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction} in oklch,`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
+  {
+    // Deprecated
+    for (let [value, direction] of [
+      ['t', 'top'],
+      ['tr', 'top right'],
+      ['r', 'right'],
+      ['br', 'bottom right'],
+      ['b', 'bottom'],
+      ['bl', 'bottom left'],
+      ['l', 'left'],
+      ['tl', 'top left'],
+    ]) {
+      staticUtility(`bg-gradient-to-${value}`, [
+        ['--tw-gradient-position', `to ${direction} in oklch,`],
+        ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
+      ])
+    }
+
+    let suggestedModifiers = [
+      'oklab',
+      'oklch',
+      'srgb',
+      'hsl',
+      'longer',
+      'shorter',
+      'increasing',
+      'decreasing',
+    ]
+
+    let linearGradientDirections = new Map([
+      ['to-t', 'to top'],
+      ['to-tr', 'to top right'],
+      ['to-r', 'to right'],
+      ['to-br', 'to bottom right'],
+      ['to-b', 'to bottom'],
+      ['to-bl', 'to bottom left'],
+      ['to-l', 'to left'],
+      ['to-tl', 'to top left'],
     ])
 
-    staticUtility(`bg-linear-to-${value}`, [
-      ['--tw-gradient-position', `to ${direction} in oklch,`],
-      ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
-    ])
-  }
+    function resolveInterpolationModifier(modifier: CandidateModifier | null) {
+      let interpolationMethod = 'in oklch'
 
-  function handleBgLinear({ negative }: { negative: boolean }) {
-    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
-      if (!candidate.value || candidate.modifier) return
+      if (modifier?.kind === 'named') {
+        switch (modifier.value) {
+          case 'longer':
+          case 'shorter':
+          case 'increasing':
+          case 'decreasing':
+            interpolationMethod = `in oklch ${modifier.value} hue`
+            break
+          default:
+            interpolationMethod = `in ${modifier.value}`
+        }
+      } else if (modifier?.kind === 'arbitrary') {
+        interpolationMethod = modifier.value
+      }
 
-      let value = candidate.value.value
+      return interpolationMethod
+    }
 
-      if (candidate.value.kind === 'arbitrary') {
-        let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+    function handleBgLinear({ negative }: { negative: boolean }) {
+      return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+        if (!candidate.value) return
 
-        switch (type) {
-          case 'angle': {
-            value = negative ? `calc(${value} * -1)` : `${value}`
+        if (candidate.value.kind === 'arbitrary') {
+          if (candidate.modifier) return
 
-            return [
-              decl('--tw-gradient-position', `${value},`),
-              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-            ]
-          }
-          default: {
-            if (negative) return
+          let value = candidate.value.value
+          let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
 
-            return [
-              decl('--tw-gradient-position', `${value},`),
-              decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
-            ]
+          switch (type) {
+            case 'angle': {
+              value = negative ? `calc(${value} * -1)` : `${value}`
+
+              return [
+                decl('--tw-gradient-position', `${value},`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+              ]
+            }
+            default: {
+              if (negative) return
+
+              return [
+                decl('--tw-gradient-position', `${value},`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+              ]
+            }
           }
         }
-      } else {
-        if (!isPositiveInteger(value)) return
 
-        value = negative ? `calc(${value}deg * -1)` : `${value}deg`
+        let value = candidate.value.value
+
+        if (!negative && linearGradientDirections.has(value)) {
+          value = linearGradientDirections.get(value)!
+        } else if (isPositiveInteger(value)) {
+          value = negative ? `calc(${value}deg * -1)` : `${value}deg`
+        } else {
+          return
+        }
+
+        let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         return [
-          decl('--tw-gradient-position', `${value} in oklch,`),
+          decl('--tw-gradient-position', `${value} ${interpolationMethod},`),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
         ]
       }
     }
-  }
 
-  utilities.functional('-bg-linear', handleBgLinear({ negative: true }))
-  utilities.functional('bg-linear', handleBgLinear({ negative: false }))
+    utilities.functional('-bg-linear', handleBgLinear({ negative: true }))
+    utilities.functional('bg-linear', handleBgLinear({ negative: false }))
 
-  function handleBgConic({ negative }: { negative: boolean }) {
-    return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
-      if (candidate.modifier) return
+    suggest('bg-linear', () => [
+      {
+        values: [...linearGradientDirections.keys()],
+        modifiers: suggestedModifiers,
+      },
+      {
+        values: ['0', '30', '60', '90', '120', '150', '180', '210', '240', '270', '300', '330'],
+        supportsNegative: true,
+        modifiers: suggestedModifiers,
+      },
+    ])
 
-      if (!candidate.value) {
-        return [
-          decl('--tw-gradient-position', `in oklch,`),
-          decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
-        ]
-      }
+    function handleBgConic({ negative }: { negative: boolean }) {
+      return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+        if (candidate.value?.kind === 'arbitrary') {
+          if (candidate.modifier) return
+          let value = candidate.value.value
+          return [
+            decl('--tw-gradient-position', `${value},`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+          ]
+        }
 
-      let value = candidate.value.value
+        let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
-      if (candidate.value.kind === 'arbitrary') {
-        return [
-          decl('--tw-gradient-position', `${value},`),
-          decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
-        ]
-      } else {
+        if (!candidate.value) {
+          return [
+            decl('--tw-gradient-position', `${interpolationMethod},`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
+          ]
+        }
+
+        let value = candidate.value.value
+
         if (!isPositiveInteger(value)) return
 
         value = negative ? `calc(${value} * -1)` : `${value}deg`
 
         return [
-          decl('--tw-gradient-position', `from ${value} in oklch,`),
+          decl('--tw-gradient-position', `from ${value} ${interpolationMethod},`),
           decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
         ]
       }
     }
+
+    utilities.functional('-bg-conic', handleBgConic({ negative: true }))
+    utilities.functional('bg-conic', handleBgConic({ negative: false }))
+
+    suggest('bg-conic', () => [
+      {
+        hasDefaultValue: true,
+        modifiers: suggestedModifiers,
+      },
+      {
+        values: ['0', '30', '60', '90', '120', '150', '180', '210', '240', '270', '300', '330'],
+        supportsNegative: true,
+        modifiers: suggestedModifiers,
+      },
+    ])
+
+    utilities.functional('bg-radial', (candidate) => {
+      if (!candidate.value) {
+        let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
+        return [
+          decl('--tw-gradient-position', `${interpolationMethod},`),
+          decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
+        ]
+      }
+
+      if (candidate.value.kind === 'arbitrary') {
+        if (candidate.modifier) return
+        let value = candidate.value.value
+        return [
+          decl('--tw-gradient-position', `${value},`),
+          decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
+        ]
+      }
+    })
+
+    suggest('bg-radial', () => [
+      {
+        hasDefaultValue: true,
+        modifiers: suggestedModifiers,
+      },
+    ])
   }
-
-  utilities.functional('-bg-conic', handleBgConic({ negative: true }))
-  utilities.functional('bg-conic', handleBgConic({ negative: false }))
-
-  utilities.functional('bg-radial', (candidate) => {
-    if (candidate.modifier) return
-
-    if (!candidate.value) {
-      return [
-        decl('--tw-gradient-position', `in oklch,`),
-        decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
-      ]
-    }
-
-    if (candidate.value.kind === 'arbitrary') {
-      let value = candidate.value.value
-      return [
-        decl('--tw-gradient-position', `${value},`),
-        decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
-      ]
-    }
-  })
 
   utilities.functional('bg', (candidate) => {
     if (!candidate.value) return

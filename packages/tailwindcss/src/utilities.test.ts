@@ -10086,6 +10086,47 @@ test('bg', async () => {
         'bg-linear-45',
         '-bg-linear-45',
 
+        // With interpolation mode modifier
+        'bg-linear-to-r/oklch',
+        'bg-linear-to-r/oklab',
+        'bg-linear-to-r/hsl',
+        'bg-linear-to-r/srgb',
+        'bg-linear-to-r/longer',
+        'bg-linear-to-r/shorter',
+        'bg-linear-to-r/increasing',
+        'bg-linear-to-r/decreasing',
+        'bg-linear-to-r/[in_hsl_longer_hue]',
+        'bg-linear-45/oklab',
+        '-bg-linear-45/oklab',
+        'bg-linear-45/shorter',
+        'bg-linear-45/[in_hsl_longer_hue]',
+        'bg-conic/oklch',
+        'bg-conic/oklab',
+        'bg-conic/hsl',
+        'bg-conic/srgb',
+        'bg-conic/longer',
+        'bg-conic/shorter',
+        'bg-conic/increasing',
+        'bg-conic/decreasing',
+        'bg-conic/[in_hsl_longer_hue]',
+        'bg-conic-45/oklab',
+        '-bg-conic-45/oklab',
+        'bg-conic-45/shorter',
+        'bg-conic-45/[in_hsl_longer_hue]',
+        'bg-radial/oklch',
+        'bg-radial/oklab',
+        'bg-radial/hsl',
+        'bg-radial/srgb',
+        'bg-radial/longer',
+        'bg-radial/shorter',
+        'bg-radial/increasing',
+        'bg-radial/decreasing',
+        'bg-radial/[in_hsl_longer_hue]',
+        'bg-radial-[circle_at_center]',
+        // Invalid but proves not converted to `in oklch longer hue` when used
+        // as an arbitrary value
+        'bg-linear-to-r/[longer]',
+
         'bg-[url(/image.png)]',
         'bg-[url:var(--my-url)]',
         'bg-[linear-gradient(to_bottom,red,blue)]',
@@ -10203,8 +10244,18 @@ test('bg', async () => {
       background-color: #0000;
     }
 
+    .-bg-conic-45\\/oklab {
+      --tw-gradient-position: from calc(45 * -1) in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
     .-bg-linear-45 {
       --tw-gradient-position: calc(45deg * -1) in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .-bg-linear-45\\/oklab {
+      --tw-gradient-position: calc(45deg * -1) in oklab, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
@@ -10216,6 +10267,66 @@ test('bg', async () => {
     .-bg-linear-\\[125deg\\] {
       --tw-gradient-position: calc(125deg * -1), ;
       background-image: linear-gradient(var(--tw-gradient-stops, calc(125deg * -1)));
+    }
+
+    .bg-conic-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: from 45deg in hsl longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic-45\\/oklab {
+      --tw-gradient-position: from 45deg in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic-45\\/shorter {
+      --tw-gradient-position: from 45deg in oklch shorter hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: in hsl longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/decreasing {
+      --tw-gradient-position: in oklch decreasing hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/hsl {
+      --tw-gradient-position: in hsl, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/increasing {
+      --tw-gradient-position: in oklch increasing hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/longer {
+      --tw-gradient-position: in oklch longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/oklab {
+      --tw-gradient-position: in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/oklch {
+      --tw-gradient-position: in oklch, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/shorter {
+      --tw-gradient-position: in oklch shorter hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/srgb {
+      --tw-gradient-position: in srgb, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-b {
@@ -10263,6 +10374,21 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
+    .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: 45deg in hsl longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45\\/oklab {
+      --tw-gradient-position: 45deg in oklab, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45\\/shorter {
+      --tw-gradient-position: 45deg in oklch shorter hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-linear-\\[1\\.3rad\\] {
       --tw-gradient-position: 74.4845deg, ;
       background-image: linear-gradient(var(--tw-gradient-stops, 74.4845deg));
@@ -10303,6 +10429,56 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
+    .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: to right in hsl longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/\\[longer\\] {
+      --tw-gradient-position: to right longer, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/decreasing {
+      --tw-gradient-position: to right in oklch decreasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/hsl {
+      --tw-gradient-position: to right in hsl, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/increasing {
+      --tw-gradient-position: to right in oklch increasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/longer {
+      --tw-gradient-position: to right in oklch longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklab {
+      --tw-gradient-position: to right in oklab, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklch {
+      --tw-gradient-position: to right in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/shorter {
+      --tw-gradient-position: to right in oklch shorter hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/srgb {
+      --tw-gradient-position: to right in srgb, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-linear-to-t {
       --tw-gradient-position: to top in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
@@ -10316,6 +10492,56 @@ test('bg', async () => {
     .bg-linear-to-tr {
       --tw-gradient-position: to top right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial-\\[circle_at_center\\] {
+      --tw-gradient-position: circle at center, ;
+      background-image: radial-gradient(var(--tw-gradient-stops, circle at center));
+    }
+
+    .bg-radial\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: in hsl longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/decreasing {
+      --tw-gradient-position: in oklch decreasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/hsl {
+      --tw-gradient-position: in hsl, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/increasing {
+      --tw-gradient-position: in oklch increasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/longer {
+      --tw-gradient-position: in oklch longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklab {
+      --tw-gradient-position: in oklab, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklch {
+      --tw-gradient-position: in oklch, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/shorter {
+      --tw-gradient-position: in oklch shorter hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/srgb {
+      --tw-gradient-position: in srgb, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-\\[image\\:var\\(--my-gradient\\)\\] {
@@ -10498,31 +10724,13 @@ test('bg', async () => {
       '-bg-space',
 
       'bg-none/foo',
-      'bg-gradient-to-t/foo',
-      'bg-gradient-to-tr/foo',
-      'bg-gradient-to-r/foo',
-      'bg-gradient-to-br/foo',
-      'bg-gradient-to-b/foo',
-      'bg-gradient-to-bl/foo',
-      'bg-gradient-to-l/foo',
-      'bg-gradient-to-tl/foo',
-      'bg-linear-to-t/foo',
-      'bg-linear-to-tr/foo',
-      'bg-linear-to-r/foo',
-      'bg-linear-to-br/foo',
-      'bg-linear-to-b/foo',
-      'bg-linear-to-bl/foo',
-      'bg-linear-to-l/foo',
-      'bg-linear-to-tl/foo',
       'bg-[url(/image.png)]/foo',
       'bg-[url:var(--my-url)]/foo',
       'bg-[linear-gradient(to_bottom,red,blue)]/foo',
       'bg-[image:var(--my-gradient)]/foo',
-      'bg-linear-[125deg]/foo',
-      'bg-linear-[1.3rad]/foo',
-      'bg-linear-[to_bottom]/foo',
-      '-bg-linear-[125deg]/foo',
-      '-bg-linear-[1.3rad]/foo',
+      'bg-linear-[to_bottom]/hsl',
+      'bg-conic-[45deg]/hsl',
+      'bg-conic-[circle_at_center]/hsl',
       'bg-auto/foo',
       'bg-cover/foo',
       'bg-contain/foo',
