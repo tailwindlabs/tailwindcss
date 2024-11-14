@@ -454,6 +454,132 @@ test(
 )
 
 test(
+  'migrate imports with `layer(…)`',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+        @import './mix.css';
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+      `,
+      'src/components.css': css`
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+      `,
+      'src/mix.css': css`
+        html {
+          color: blue;
+        }
+
+        @layer components {
+          .foo-mix {
+            color: red;
+          }
+        }
+
+        @layer utilities {
+          .bar-mix {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css' layer(base);
+      @import './components.css';
+      @import './utilities.css';
+      @import './mix.css' layer(base);
+      @import './mix.utilities.css';
+
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/base.css ---
+      html {
+        color: red;
+      }
+
+      --- ./src/components.css ---
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/mix.css ---
+      html {
+        color: blue;
+      }
+
+      --- ./src/mix.utilities.css ---
+      @utility foo-mix {
+        color: red;
+      }
+
+      @utility bar-mix {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @utility bar {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'migrates a simple postcss setup',
   {
     fs: {
@@ -1571,7 +1697,7 @@ test(
       }
 
       --- ./src/components.css ---
-      @import './typography.css';
+      @import './typography.css' layer(components);
 
       @utility foo {
         color: red;
@@ -1706,7 +1832,7 @@ test(
       }
 
       --- ./src/components.css ---
-      @import './typography.css';
+      @import './typography.css' layer(components);
 
       @utility foo {
         color: red;

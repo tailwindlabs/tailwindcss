@@ -402,21 +402,48 @@ export async function split(stylesheets: Stylesheet[]) {
   }
 
   // Keep track of sheets that contain `@utility` rules
-  let containsUtilities = new Set<Stylesheet>()
+  let requiresSplit = new Set<Stylesheet>()
 
   for (let sheet of stylesheets) {
-    let layers = sheet.layers()
-    let isLayered = layers.has('utilities') || layers.has('components')
-    if (!isLayered) continue
+    // Root files don't need to be split
+    if (sheet.isTailwindRoot) continue
+
+    let containsUtility = false
+    let containsUnsafe = sheet.layers().size > 0
 
     walk(sheet.root, (node) => {
-      if (node.type !== 'atrule') return
-      if (node.name !== 'utility') return
+      if (node.type === 'atrule' && node.name === 'utility') {
+        containsUtility = true
+      }
 
-      containsUtilities.add(sheet)
+      // Safe to keep without splitting
+      else if (
+        // An `@import "…" layer(…)` is safe
+        (node.type === 'atrule' && node.name === 'import' && node.params.includes('layer(')) ||
+        // @layer blocks are safe
+        (node.type === 'atrule' && node.name === 'layer') ||
+        // Comments are safe
+        node.type === 'comment'
+      ) {
+        return WalkAction.Skip
+      }
 
-      return WalkAction.Stop
+      // Everything else is not safe, and requires a split
+      else {
+        containsUnsafe = true
+      }
+
+      // We already know we need to split this sheet
+      if (containsUtility && containsUnsafe) {
+        return WalkAction.Stop
+      }
+
+      return WalkAction.Skip
     })
+
+    if (containsUtility && containsUnsafe) {
+      requiresSplit.add(sheet)
+    }
   }
 
   // Split every imported stylesheet into two parts
@@ -429,8 +456,8 @@ export async function split(stylesheets: Stylesheet[]) {
 
     // Skip stylesheets that don't have utilities
     // and don't have any children that have utilities
-    if (!containsUtilities.has(sheet)) {
-      if (!Array.from(sheet.descendants()).some((child) => containsUtilities.has(child))) {
+    if (!requiresSplit.has(sheet)) {
+      if (!Array.from(sheet.descendants()).some((child) => requiresSplit.has(child))) {
         continue
       }
     }

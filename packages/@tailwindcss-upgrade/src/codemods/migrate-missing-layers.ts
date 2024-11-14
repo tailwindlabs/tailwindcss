@@ -75,14 +75,14 @@ export function migrateMissingLayers(): Plugin {
 
         // Add layer to `@import` at-rules
         if (node.name === 'import') {
-          if (lastLayer !== '' && !node.params.includes('layer(')) {
-            node.params += ` layer(${lastLayer})`
-            node.raws.tailwind_injected_layer = true
-          }
-
           if (bucket.length > 0) {
             buckets.push([lastLayer, bucket.splice(0)])
           }
+
+          // Create new bucket just for the import. This way every import exists
+          // in its own layer which allows us to add the `layer(…)` parameter
+          // later on.
+          buckets.push([lastLayer, [node]])
           return
         }
       }
@@ -102,7 +102,6 @@ export function migrateMissingLayers(): Plugin {
       bucket.push(node)
     })
 
-    // Wrap each bucket in an `@layer` at-rule
     for (let [layerName, nodes] of buckets) {
       let targetLayerName = layerName || firstLayerName || ''
       if (targetLayerName === '') {
@@ -114,6 +113,20 @@ export function migrateMissingLayers(): Plugin {
         continue
       }
 
+      // Add `layer(…)` to `@import` at-rules
+      if (nodes.every((node) => node.type === 'atrule' && node.name === 'import')) {
+        for (let node of nodes) {
+          if (node.type !== 'atrule' || node.name !== 'import') continue
+
+          if (!node.params.includes('layer(')) {
+            node.params += ` layer(${targetLayerName})`
+            node.raws.tailwind_injected_layer = true
+          }
+        }
+        continue
+      }
+
+      // Wrap each bucket in an `@layer` at-rule
       let target = nodes[0]
       let layerNode = new AtRule({
         name: 'layer',
