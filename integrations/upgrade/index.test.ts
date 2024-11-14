@@ -1667,7 +1667,6 @@ test(
 
       --- ./src/index.css ---
       @import './tailwind-setup.css';
-      @import './tailwind-setup.utilities.css';
 
       --- ./src/base.css ---
       @import 'tailwindcss/theme' layer(theme);
@@ -1708,13 +1707,11 @@ test(
       --- ./src/tailwind-setup.css ---
       @import './base.css';
       @import './components.css';
+      @import './components.utilities.css';
       @import './utilities.css';
+      @import './utilities.utilities.css';
 
       @config '../tailwind.config.ts';
-
-      --- ./src/tailwind-setup.utilities.css ---
-      @import './components.utilities.css';
-      @import './utilities.utilities.css'
 
       --- ./src/typography.css ---
       .typography {
@@ -1809,7 +1806,6 @@ test(
 
       --- ./src/index.css ---
       @import './tailwind-setup.css';
-      @import './tailwind-setup.utilities.css';
 
       --- ./src/base.css ---
       @import 'tailwindcss/theme' layer(theme);
@@ -1850,15 +1846,13 @@ test(
       --- ./src/tailwind-setup.css ---
       @import './base.css';
       @import './components.css';
+      @import './components.utilities.css';
       @import './utilities.css';
+      @import './utilities.utilities.css';
 
       @theme {
         --color-my-red: red;
       }
-
-      --- ./src/tailwind-setup.utilities.css ---
-      @import './components.utilities.css';
-      @import './utilities.utilities.css'
 
       --- ./src/typography.css ---
       .typography {
