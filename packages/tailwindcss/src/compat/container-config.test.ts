@@ -267,12 +267,7 @@ test('padding applies to custom `container` screens', async () => {
         max-width: none;
       }
       @media (width >= 48rem) {
-        max-width: var(--breakpoint-md);
-      }
-      @media (width >= 64rem) {
-        max-width: none;
-      }
-      @media (width >= 48rem) {
+        max-width: 48rem;
         padding-inline: 3rem;
       }
     }
@@ -493,10 +488,7 @@ test('combines custom padding and screen overwrites', async () => {
         max-width: none !important;
       }
       @media (width >= 48rem) {
-        max-width: var(--breakpoint-md) !important;
-      }
-      @media (width >= 64rem) {
-        max-width: none !important;
+        max-width: 48rem !important;
       }
       @media (width >= 1280px) {
         max-width: 1280px !important;
@@ -513,10 +505,7 @@ test('combines custom padding and screen overwrites', async () => {
         max-width: none;
       }
       @media (width >= 48rem) {
-        max-width: var(--breakpoint-md);
-      }
-      @media (width >= 64rem) {
-        max-width: none;
+        max-width: 48rem;
       }
       @media (width >= 1280px) {
         max-width: 1280px;

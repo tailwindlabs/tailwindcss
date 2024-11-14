@@ -56,47 +56,15 @@ export function buildCustomContainerUtilityRules(
 
     let breakpoints = Array.from(designSystem.theme.namespace('--breakpoint').entries())
     breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
-
-    let didUnsetPreviousRange = false
-    for (let [key, value] of breakpoints) {
-      // If we happen to find a `--breakpoint-*` variable with the same key and
-      // value, it will already be part of the core utility and we can skip it.
-      if (!key) continue
-      if (key in screens && (screens as Record<string, string>)[key] === value) {
-        if (didUnsetPreviousRange) {
-          rules.push(
-            atRule('@media', `(width >= theme(--breakpoint-${key}))`, [
-              decl('max-width', `var(--breakpoint-${key})`),
-            ]),
-          )
-          didUnsetPreviousRange = false
-        }
-
-        breakpointOverwrites.set(key, {
-          rule: `(width >= ${value})`,
-          nodes: [],
-        })
-        continue
-      }
-
-      if (!didUnsetPreviousRange) {
-        // We do not want to collect this core breakpoint in the `breakpointOverwrites`
-        // map, since it will not be relevant for subsequent
-        rules.push(
-          atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
-        )
-        didUnsetPreviousRange = true
-      }
+    if (breakpoints.length > 0) {
+      let [key] = breakpoints[0]
+      // Unset all default breakpoints
+      rules.push(
+        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
+      )
     }
 
     for (let [key, value] of Object.entries(screens)) {
-      // If we happen to find a `--breakpoint-*` variable with the same key and
-      // value, it will already be part of the core utility and we can skip it.
-      let coreBreakpoint = breakpoints.find(([k]) => k === key)
-      if (coreBreakpoint && value === coreBreakpoint[1]) {
-        continue
-      }
-
       // We're inlining the breakpoint values because the screens configured in
       // the `container` option do not have to match the ones defined in the
       // root `screen` setting.
