@@ -3148,6 +3148,230 @@ test('max-height', async () => {
   ).toEqual('')
 })
 
+describe('container', () => {
+  test('creates the right media queries and sorts it before width', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+
+  test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-3xl: 1600px;
+            --breakpoint-sm: 40em;
+            --breakpoint-2xl: 96rem;
+            --breakpoint-xs: 30px;
+            --breakpoint-md: 48em;
+          }
+          @tailwind utilities;
+        `,
+        ['container'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".container {
+        width: 100%;
+      }
+
+      @media (width >= 40em) {
+        .container {
+          max-width: 40em;
+        }
+      }
+
+      @media (width >= 48em) {
+        .container {
+          max-width: 48em;
+        }
+      }
+
+      @media (width >= 30px) {
+        .container {
+          max-width: 30px;
+        }
+      }
+
+      @media (width >= 1600px) {
+        .container {
+          max-width: 1600px;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }"
+    `)
+  })
+
+  test('custom `@utility container` always follow the core utility ', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+
+          @utility container {
+            margin-inline: auto;
+            padding-inline: 1rem;
+
+            @media (width >= theme(--breakpoint-sm)) {
+              padding-inline: 2rem;
+            }
+          }
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .container {
+        margin-inline: auto;
+        padding-inline: 1rem;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          padding-inline: 2rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+})
+
 test('flex', async () => {
   expect(
     await run([
@@ -16680,7 +16904,7 @@ describe('spacing utilities', () => {
     `)
   })
 
-  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
     let { build } = await compile(css`
       @theme {
         --spacing: 4px;

@@ -13,6 +13,7 @@ import {
 } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
+import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
@@ -869,7 +870,7 @@ export function createVariants(theme: Theme): Variants {
     // Helper to compare variants by their resolved values, this is used by the
     // responsive variants (`sm`, `md`, ...), `min-*`, `max-*` and container
     // queries (`@`).
-    function compareBreakpoints(
+    function compareBreakpointVariants(
       a: Variant,
       z: Variant,
       direction: 'asc' | 'desc',
@@ -882,54 +883,7 @@ export function createVariants(theme: Theme): Variants {
       let zValue = lookup.get(z)
       if (zValue === null) return direction === 'asc' ? 1 : -1
 
-      if (aValue === zValue) return 0
-
-      // Assumption: when a `(` exists, we are dealing with a CSS function.
-      //
-      // E.g.: `calc(100% - 1rem)`
-      let aIsCssFunction = aValue.indexOf('(')
-      let zIsCssFunction = zValue.indexOf('(')
-
-      let aBucket =
-        aIsCssFunction === -1
-          ? // No CSS function found, bucket by unit instead
-            aValue.replace(/[\d.]+/g, '')
-          : // CSS function found, bucket by function name
-            aValue.slice(0, aIsCssFunction)
-
-      let zBucket =
-        zIsCssFunction === -1
-          ? // No CSS function found, bucket by unit
-            zValue.replace(/[\d.]+/g, '')
-          : // CSS function found, bucket by function name
-            zValue.slice(0, zIsCssFunction)
-
-      let order =
-        // Compare by bucket name
-        (aBucket === zBucket ? 0 : aBucket < zBucket ? -1 : 1) ||
-        // If bucket names are the same, compare by value
-        (direction === 'asc'
-          ? parseInt(aValue) - parseInt(zValue)
-          : parseInt(zValue) - parseInt(aValue))
-
-      // If the groups are the same, and the contents are not numbers, the
-      // `order` will result in `NaN`. In this case, we want to make sorting
-      // stable by falling back to a string comparison.
-      //
-      // This can happen when using CSS functions such as `calc`.
-      //
-      // E.g.:
-      //
-      // - `min-[calc(100%-1rem)]` and `min-[calc(100%-2rem)]`
-      // - `@[calc(100%-1rem)]` and `@[calc(100%-2rem)]`
-      //
-      // In this scenario, we want to alphabetically sort `calc(100%-1rem)` and
-      // `calc(100%-2rem)` to make it deterministic.
-      if (Number.isNaN(order)) {
-        return aValue < zValue ? -1 : 1
-      }
-
-      return order
+      return compareBreakpoints(aValue, zValue, direction)
     }
 
     // Breakpoints
@@ -978,7 +932,7 @@ export function createVariants(theme: Theme): Variants {
             { compounds: Compounds.AtRules },
           )
         },
-        (a, z) => compareBreakpoints(a, z, 'desc', resolvedBreakpoints),
+        (a, z) => compareBreakpointVariants(a, z, 'desc', resolvedBreakpoints),
       )
 
       variants.suggest(
@@ -1013,7 +967,7 @@ export function createVariants(theme: Theme): Variants {
             { compounds: Compounds.AtRules },
           )
         },
-        (a, z) => compareBreakpoints(a, z, 'asc', resolvedBreakpoints),
+        (a, z) => compareBreakpointVariants(a, z, 'asc', resolvedBreakpoints),
       )
 
       variants.suggest(
@@ -1072,7 +1026,7 @@ export function createVariants(theme: Theme): Variants {
             { compounds: Compounds.AtRules },
           )
         },
-        (a, z) => compareBreakpoints(a, z, 'desc', resolvedWidths),
+        (a, z) => compareBreakpointVariants(a, z, 'desc', resolvedWidths),
       )
 
       variants.suggest(
@@ -1119,7 +1073,7 @@ export function createVariants(theme: Theme): Variants {
             { compounds: Compounds.AtRules },
           )
         },
-        (a, z) => compareBreakpoints(a, z, 'asc', resolvedWidths),
+        (a, z) => compareBreakpointVariants(a, z, 'asc', resolvedWidths),
       )
 
       variants.suggest(

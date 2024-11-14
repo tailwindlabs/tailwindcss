@@ -8,6 +8,7 @@ import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
 import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
+import { legacyClasses } from './codemods/legacy-classes'
 import { maxWidthScreen } from './codemods/max-width-screen'
 import { modernizeArbitraryValues } from './codemods/modernize-arbitrary-values'
 import { prefix } from './codemods/prefix'
@@ -25,13 +26,14 @@ export type Migration = (
     start: number
     end: number
   },
-) => string
+) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
   prefix,
   important,
   bgGradient,
   simpleLegacyClasses,
+  legacyClasses,
   maxWidthScreen,
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
@@ -41,7 +43,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   modernizeArbitraryValues,
 ]
 
-export function migrateCandidate(
+export async function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
@@ -51,9 +53,9 @@ export function migrateCandidate(
     start: number
     end: number
   },
-): string {
+): Promise<string> {
   for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = migration(designSystem, userConfig, rawCandidate, location)
+    rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
   }
   return rawCandidate
 }
@@ -69,7 +71,7 @@ export default async function migrateContents(
   let changes: StringChange[] = []
 
   for (let { rawCandidate, start, end } of candidates) {
-    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate, {
+    let migratedCandidate = await migrateCandidate(designSystem, userConfig, rawCandidate, {
       contents,
       start,
       end,

@@ -34,17 +34,26 @@ export function migrateAtApply({
       return [...variants, utility].join(':')
     })
 
-    // If we have a valid designSystem and config setup, we can run all
-    // candidate migrations on each utility
-    params = params.map((param) => migrateCandidate(designSystem, userConfig, param))
+    return async () => {
+      // If we have a valid designSystem and config setup, we can run all
+      // candidate migrations on each utility
+      params = await Promise.all(
+        params.map(async (param) => await migrateCandidate(designSystem, userConfig, param)),
+      )
 
-    atRule.params = params.join('').trim()
+      atRule.params = params.join('').trim()
+    }
   }
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-apply',
-    OnceExit(root) {
-      root.walkAtRules('apply', migrate)
+    async OnceExit(root) {
+      let migrations: (() => void)[] = []
+      root.walkAtRules('apply', (atRule) => {
+        migrations.push(migrate(atRule))
+      })
+
+      await Promise.allSettled(migrations.map((m) => m()))
     },
   }
 }
