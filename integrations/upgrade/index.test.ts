@@ -1699,7 +1699,6 @@ test(
       --- ./src/components.css ---
       @import './typography.css' layer(components);
 
-      --- ./src/components.utilities.css ---
       @utility foo {
         color: red;
       }
@@ -1707,9 +1706,7 @@ test(
       --- ./src/tailwind-setup.css ---
       @import './base.css';
       @import './components.css';
-      @import './components.utilities.css';
       @import './utilities.css';
-      @import './utilities.utilities.css';
 
       @config '../tailwind.config.ts';
 
@@ -1721,7 +1718,6 @@ test(
       --- ./src/utilities.css ---
       @import 'tailwindcss/utilities' layer(utilities);
 
-      --- ./src/utilities.utilities.css ---
       @utility bar {
         color: red;
       }
@@ -1838,7 +1834,6 @@ test(
       --- ./src/components.css ---
       @import './typography.css' layer(components);
 
-      --- ./src/components.utilities.css ---
       @utility foo {
         color: red;
       }
@@ -1846,9 +1841,7 @@ test(
       --- ./src/tailwind-setup.css ---
       @import './base.css';
       @import './components.css';
-      @import './components.utilities.css';
       @import './utilities.css';
-      @import './utilities.utilities.css';
 
       @theme {
         --color-my-red: red;
@@ -1862,7 +1855,6 @@ test(
       --- ./src/utilities.css ---
       @import 'tailwindcss/utilities' layer(utilities);
 
-      --- ./src/utilities.utilities.css ---
       @utility bar {
         color: red;
       }
