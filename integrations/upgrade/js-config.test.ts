@@ -1501,9 +1501,15 @@ describe('border compatibility', () => {
             max-width: none;
           }
           @media (width >= theme(--breakpoint-xl)) {
-            max-width: 1280px;
+            max-width: none;
           }
           @media (width >= theme(--breakpoint-2xl)) {
+            max-width: none;
+          }
+          @media (width >= 1280px) {
+            max-width: 1280px;
+          }
+          @media (width >= 1536px) {
             max-width: 1536px;
             padding-inline: 4rem;
           }

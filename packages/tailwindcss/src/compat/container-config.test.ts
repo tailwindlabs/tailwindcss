@@ -200,10 +200,174 @@ test('allows breakpoints to be overwritten', async () => {
         max-width: none;
       }
       @media (width >= 80rem) {
-        max-width: var(--breakpoint-xl);
+        max-width: none;
       }
       @media (width >= 96rem) {
-        max-width: var(--breakpoint-2xl);
+        max-width: none;
+      }
+      @media (width >= 1280px) {
+        max-width: 1280px;
+      }
+      @media (width >= 1536px) {
+        max-width: 1536px;
+      }
+    }
+    "
+  `)
+})
+
+test('padding applies to custom `container` screens', async () => {
+  let input = css`
+    @theme default {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          container: {
+            padding: {
+              sm: '2rem',
+              md: '3rem',
+            },
+            screens: {
+              md: '48rem',
+            },
+          },
+        },
+      },
+      base: '/root',
+    }),
+  })
+
+  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
+      width: 100%;
+      @media (width >= 40rem) {
+        max-width: 40rem;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem;
+      }
+    }
+    .container {
+      @media (width >= 40rem) {
+        max-width: none;
+      }
+      @media (width >= 64rem) {
+        max-width: none;
+      }
+      @media (width >= 80rem) {
+        max-width: none;
+      }
+      @media (width >= 96rem) {
+        max-width: none;
+      }
+      @media (width >= 48rem) {
+        padding-inline: 3rem;
+      }
+    }
+    "
+  `)
+})
+
+test("an empty `screen` config will undo all custom media screens and won't apply any breakpoint-specific padding", async () => {
+  let input = css`
+    @theme default {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          container: {
+            padding: {
+              DEFAULT: '1rem',
+              sm: '2rem',
+              md: '3rem',
+            },
+            screens: {},
+          },
+        },
+      },
+      base: '/root',
+    }),
+  })
+
+  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
+      width: 100%;
+      @media (width >= 40rem) {
+        max-width: 40rem;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem;
+      }
+    }
+    .container {
+      padding-inline: 1rem;
+      @media (width >= 40rem) {
+        max-width: none;
+      }
+      @media (width >= 48rem) {
+        max-width: none;
+      }
+      @media (width >= 64rem) {
+        max-width: none;
+      }
+      @media (width >= 80rem) {
+        max-width: none;
+      }
+      @media (width >= 96rem) {
+        max-width: none;
       }
     }
     "
@@ -294,7 +458,7 @@ test('combines custom padding and screen overwrites', async () => {
               '2xl': '4rem',
             },
             screens: {
-              md: '48rem',
+              md: '48rem', // Matches a default --breakpoint
               xl: '1280px',
               '2xl': '1536px',
             },
@@ -359,10 +523,17 @@ test('combines custom padding and screen overwrites', async () => {
         max-width: none !important;
       }
       @media (width >= 80rem) {
-        max-width: var(--breakpoint-xl) !important;
+        max-width: none !important;
       }
       @media (width >= 96rem) {
-        max-width: var(--breakpoint-2xl) !important;
+        max-width: none !important;
+      }
+      @media (width >= 48rem);
+      @media (width >= 1280px) {
+        max-width: 1280px !important;
+      }
+      @media (width >= 1536px) {
+        max-width: 1536px !important;
         padding-inline: 4rem !important;
       }
     }
@@ -376,10 +547,17 @@ test('combines custom padding and screen overwrites', async () => {
         max-width: none;
       }
       @media (width >= 80rem) {
-        max-width: var(--breakpoint-xl);
+        max-width: none;
       }
       @media (width >= 96rem) {
-        max-width: var(--breakpoint-2xl);
+        max-width: none;
+      }
+      @media (width >= 48rem);
+      @media (width >= 1280px) {
+        max-width: 1280px;
+      }
+      @media (width >= 1536px) {
+        max-width: 1536px;
         padding-inline: 4rem;
       }
     }

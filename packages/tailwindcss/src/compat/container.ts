@@ -32,17 +32,24 @@ export function buildCustomContainerUtilityRules(
   designSystem: DesignSystem,
 ): AstNode[] {
   let rules = []
-  let breakpointOverwrites = new Map<string, AstNode[]>()
+  let breakpointOverwrites: null | Map<string, { nodes: AstNode[]; rule: string }> = null
 
   if (center) {
     rules.push(decl('margin-inline', 'auto'))
   }
 
-  if (typeof padding === 'string') {
-    rules.push(decl('padding-inline', padding))
+  if (
+    typeof padding === 'string' ||
+    (typeof padding === 'object' && padding !== null && 'DEFAULT' in padding)
+  ) {
+    rules.push(
+      decl('padding-inline', typeof padding === 'string' ? padding : (padding.DEFAULT as string)),
+    )
   }
 
   if (typeof screens === 'object' && screens !== null) {
+    breakpointOverwrites = new Map()
+
     // When setting a the `screens` in v3, you were overwriting the default
     // screens config. To do this in v4, you have to manually unset all core
     // screens.
@@ -50,27 +57,45 @@ export function buildCustomContainerUtilityRules(
     let breakpoints = Array.from(designSystem.theme.namespace('--breakpoint').entries())
     breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
 
-    for (let [key] of breakpoints) {
+    for (let [key, value] of breakpoints) {
+      // If we happen to find a `--breakpoint-*` variable with the same key and
+      // value, it will already be part of the core utility and we can skip it.
       if (!key) continue
-      if (!(key in screens)) {
-        breakpointOverwrites.set(key, [decl('max-width', 'none')])
+
+      if (key in screens && (screens as Record<string, string>)[key] === value) {
+        breakpointOverwrites.set(key, {
+          rule: `(width >= ${value})`,
+          nodes: [],
+        })
+        continue
       }
+
+      // We do not want to collect this core breakpoint in the `breakpointOverwrites`
+      // map, since it will not be relevant for subsequent
+      rules.push(
+        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
+      )
     }
 
     for (let [key, value] of Object.entries(screens)) {
+      // If we happen to find a `--breakpoint-*` variable with the same key and
+      // value, it will already be part of the core utility and we can skip it.
       let coreBreakpoint = breakpoints.find(([k]) => k === key)
       if (coreBreakpoint && value === coreBreakpoint[1]) {
         continue
       }
-      breakpointOverwrites.set(key, [decl('max-width', `var(--breakpoint-${key})`)])
+
+      // We're inlining the breakpoint values because the screens configured in
+      // the `container` option do not have to match the ones defined in the
+      // root `screen` setting.
+      breakpointOverwrites.set(key, {
+        rule: `(width >= ${value})`,
+        nodes: [decl('max-width', value)],
+      })
     }
   }
 
   if (typeof padding === 'object' && padding !== null) {
-    if ('DEFAULT' in padding && typeof padding.DEFAULT === 'string') {
-      rules.push(decl('padding-inline', padding.DEFAULT))
-    }
-
     let breakpoints = Object.entries(padding)
       .filter(([key]) => key !== 'DEFAULT')
       .map(([key, value]) => {
@@ -80,18 +105,27 @@ export function buildCustomContainerUtilityRules(
     breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
 
     for (let [key, , value] of breakpoints) {
-      let rules: AstNode[] = []
-      if (breakpointOverwrites.has(key)) {
-        rules = breakpointOverwrites.get(key)!
+      if (breakpointOverwrites && breakpointOverwrites.has(key)) {
+        let overwrite = breakpointOverwrites.get(key)!
+        overwrite.nodes.push(decl('padding-inline', value))
+      } else if (breakpointOverwrites) {
+        // The breakpoint does not exist in the overwritten breakpoints list, so
+        // we skip rendering it.
+        continue
+      } else {
+        rules.push(
+          atRule('@media', `(width >= theme(--breakpoint-${key}))`, [
+            decl('padding-inline', value),
+          ]),
+        )
       }
-
-      rules.push(decl('padding-inline', value))
-      breakpointOverwrites.set(key, rules)
     }
   }
 
-  for (let [key, value] of breakpointOverwrites) {
-    rules.push(atRule('@media', `(width >= theme(--breakpoint-${key}))`, value))
+  if (breakpointOverwrites) {
+    for (let [, { rule, nodes }] of breakpointOverwrites) {
+      rules.push(atRule('@media', rule, nodes))
+    }
   }
 
   return rules
