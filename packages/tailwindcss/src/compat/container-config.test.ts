@@ -40,19 +40,19 @@ test('creates a custom utility to extend the built-in container', async () => {
     }
     .container {
       width: 100%;
-      @media (min-width: 40rem) {
+      @media (width >= 40rem) {
         max-width: 40rem;
       }
-      @media (min-width: 48rem) {
+      @media (width >= 48rem) {
         max-width: 48rem;
       }
-      @media (min-width: 64rem) {
+      @media (width >= 64rem) {
         max-width: 64rem;
       }
-      @media (min-width: 80rem) {
+      @media (width >= 80rem) {
         max-width: 80rem;
       }
-      @media (min-width: 96rem) {
+      @media (width >= 96rem) {
         max-width: 96rem;
       }
     }
@@ -105,19 +105,19 @@ test('allows padding to be defined at custom breakpoints', async () => {
     }
     .container {
       width: 100%;
-      @media (min-width: 40rem) {
+      @media (width >= 40rem) {
         max-width: 40rem;
       }
-      @media (min-width: 48rem) {
+      @media (width >= 48rem) {
         max-width: 48rem;
       }
-      @media (min-width: 64rem) {
+      @media (width >= 64rem) {
         max-width: 64rem;
       }
-      @media (min-width: 80rem) {
+      @media (width >= 80rem) {
         max-width: 80rem;
       }
-      @media (min-width: 96rem) {
+      @media (width >= 96rem) {
         max-width: 96rem;
       }
     }
@@ -173,37 +173,37 @@ test('allows breakpoints to be overwritten', async () => {
     }
     .container {
       width: 100%;
-      @media (min-width: 40rem) {
+      @media (width >= 40rem) {
         max-width: 40rem;
       }
-      @media (min-width: 48rem) {
+      @media (width >= 48rem) {
         max-width: 48rem;
       }
-      @media (min-width: 64rem) {
+      @media (width >= 64rem) {
         max-width: 64rem;
       }
-      @media (min-width: 80rem) {
+      @media (width >= 80rem) {
         max-width: 80rem;
       }
-      @media (min-width: 96rem) {
+      @media (width >= 96rem) {
         max-width: 96rem;
       }
     }
     .container {
       @media (width >= 40rem) {
-        padding-inline: none;
+        max-width: none;
       }
       @media (width >= 48rem) {
-        padding-inline: none;
+        max-width: none;
       }
       @media (width >= 64rem) {
-        padding-inline: none;
+        max-width: none;
       }
       @media (width >= 80rem) {
-        padding-inline: 1280px;
+        max-width: 1280px;
       }
       @media (width >= 96rem) {
-        padding-inline: 1536px;
+        max-width: 1536px;
       }
     }
     "
@@ -265,6 +265,90 @@ test('legacy container component does not interfere with new --container variabl
     }
     .max-w-sm {
       max-width: var(--container-sm);
+    }
+    "
+  `)
+})
+
+test('combines custom padding and screen overwrites', async () => {
+  let input = css`
+    @theme default {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          container: {
+            center: true,
+            padding: {
+              DEFAULT: '2rem',
+              '2xl': '4rem',
+            },
+            screens: {
+              xl: '1280px',
+              '2xl': '1536px',
+            },
+          },
+        },
+      },
+      base: '/root',
+    }),
+  })
+
+  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
+      width: 100%;
+      @media (width >= 40rem) {
+        max-width: 40rem;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem;
+      }
+    }
+    .container {
+      margin-inline: auto;
+      padding-inline: 2rem;
+      @media (width >= 40rem) {
+        max-width: none;
+      }
+      @media (width >= 48rem) {
+        max-width: none;
+      }
+      @media (width >= 64rem) {
+        max-width: none;
+      }
+      @media (width >= 80rem) {
+        max-width: 1280px;
+      }
+      @media (width >= 96rem) {
+        max-width: 1536px;
+        padding-inline: 4rem;
+      }
     }
     "
   `)

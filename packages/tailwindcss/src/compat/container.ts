@@ -32,6 +32,7 @@ export function buildCustomContainerUtilityRules(
   designSystem: DesignSystem,
 ): AstNode[] {
   let rules = []
+  let breakpointOverwrites = new Map<string, AstNode[]>()
 
   if (center) {
     rules.push(decl('margin-inline', 'auto'))
@@ -39,6 +40,26 @@ export function buildCustomContainerUtilityRules(
 
   if (typeof padding === 'string') {
     rules.push(decl('padding-inline', padding))
+  }
+
+  if (typeof screens === 'object' && screens !== null) {
+    // When setting a the `screens` in v3, you were overwriting the default
+    // screens config. To do this in v4, you have to manually unset all core
+    // screens.
+
+    let breakpoints = Array.from(designSystem.theme.namespace('--breakpoint').entries())
+    breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
+
+    for (let [key] of breakpoints) {
+      if (!key) continue
+      if (!(key in screens)) {
+        breakpointOverwrites.set(key, [decl('max-width', 'none')])
+      }
+    }
+
+    for (let [key, value] of Object.entries(screens)) {
+      breakpointOverwrites.set(key, [decl('max-width', value)])
+    }
   }
 
   if (typeof padding === 'object' && padding !== null) {
@@ -55,36 +76,18 @@ export function buildCustomContainerUtilityRules(
     breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
 
     for (let [key, , value] of breakpoints) {
-      rules.push(
-        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('padding-inline', value)]),
-      )
+      let rules: AstNode[] = []
+      if (breakpointOverwrites.has(key)) {
+        rules = breakpointOverwrites.get(key)!
+      }
+
+      rules.push(decl('padding-inline', value))
+      breakpointOverwrites.set(key, rules)
     }
   }
 
-  if (typeof screens === 'object' && screens !== null) {
-    // When setting a the `screens` in v3, you were overwriting the default
-    // screens config. To do this in v4, you have to manually unset all core
-    // screens.
-
-    let breakpoints = Array.from(designSystem.theme.namespace('--breakpoint').entries())
-    breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
-
-    for (let [key] of breakpoints) {
-      if (!key) continue
-      if (!(key in screens)) {
-        rules.push(
-          atRule('@media', `(width >= theme(--breakpoint-${key}))`, [
-            decl('padding-inline', 'none'),
-          ]),
-        )
-      }
-    }
-
-    for (let [key, value] of Object.entries(screens)) {
-      rules.push(
-        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('padding-inline', value)]),
-      )
-    }
+  for (let [key, value] of breakpointOverwrites) {
+    rules.push(atRule('@media', `(width >= theme(--breakpoint-${key}))`, value))
   }
 
   return rules
