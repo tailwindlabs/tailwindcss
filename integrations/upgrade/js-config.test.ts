@@ -1495,16 +1495,12 @@ describe('border compatibility', () => {
           @media (width >= theme(--breakpoint-sm)) {
             max-width: none;
           }
+          @media (width >= theme(--breakpoint-md)) {
+            max-width: var(--breakpoint-md);
+          }
           @media (width >= theme(--breakpoint-lg)) {
             max-width: none;
           }
-          @media (width >= theme(--breakpoint-xl)) {
-            max-width: none;
-          }
-          @media (width >= theme(--breakpoint-2xl)) {
-            max-width: none;
-          }
-          @media (width >= 48rem);
           @media (width >= 1280px) {
             max-width: 1280px;
           }

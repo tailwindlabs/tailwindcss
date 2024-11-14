@@ -57,12 +57,21 @@ export function buildCustomContainerUtilityRules(
     let breakpoints = Array.from(designSystem.theme.namespace('--breakpoint').entries())
     breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
 
+    let didUnsetPreviousRange = false
     for (let [key, value] of breakpoints) {
       // If we happen to find a `--breakpoint-*` variable with the same key and
       // value, it will already be part of the core utility and we can skip it.
       if (!key) continue
-
       if (key in screens && (screens as Record<string, string>)[key] === value) {
+        if (didUnsetPreviousRange) {
+          rules.push(
+            atRule('@media', `(width >= theme(--breakpoint-${key}))`, [
+              decl('max-width', `var(--breakpoint-${key})`),
+            ]),
+          )
+          didUnsetPreviousRange = false
+        }
+
         breakpointOverwrites.set(key, {
           rule: `(width >= ${value})`,
           nodes: [],
@@ -70,11 +79,14 @@ export function buildCustomContainerUtilityRules(
         continue
       }
 
-      // We do not want to collect this core breakpoint in the `breakpointOverwrites`
-      // map, since it will not be relevant for subsequent
-      rules.push(
-        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
-      )
+      if (!didUnsetPreviousRange) {
+        // We do not want to collect this core breakpoint in the `breakpointOverwrites`
+        // map, since it will not be relevant for subsequent
+        rules.push(
+          atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
+        )
+        didUnsetPreviousRange = true
+      }
     }
 
     for (let [key, value] of Object.entries(screens)) {

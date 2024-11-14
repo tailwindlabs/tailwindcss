@@ -193,18 +193,6 @@ test('allows breakpoints to be overwritten', async () => {
       @media (width >= 40rem) {
         max-width: none;
       }
-      @media (width >= 48rem) {
-        max-width: none;
-      }
-      @media (width >= 64rem) {
-        max-width: none;
-      }
-      @media (width >= 80rem) {
-        max-width: none;
-      }
-      @media (width >= 96rem) {
-        max-width: none;
-      }
       @media (width >= 1280px) {
         max-width: 1280px;
       }
@@ -278,13 +266,10 @@ test('padding applies to custom `container` screens', async () => {
       @media (width >= 40rem) {
         max-width: none;
       }
+      @media (width >= 48rem) {
+        max-width: var(--breakpoint-md);
+      }
       @media (width >= 64rem) {
-        max-width: none;
-      }
-      @media (width >= 80rem) {
-        max-width: none;
-      }
-      @media (width >= 96rem) {
         max-width: none;
       }
       @media (width >= 48rem) {
@@ -355,18 +340,6 @@ test("an empty `screen` config will undo all custom media screens and won't appl
     .container {
       padding-inline: 1rem;
       @media (width >= 40rem) {
-        max-width: none;
-      }
-      @media (width >= 48rem) {
-        max-width: none;
-      }
-      @media (width >= 64rem) {
-        max-width: none;
-      }
-      @media (width >= 80rem) {
-        max-width: none;
-      }
-      @media (width >= 96rem) {
         max-width: none;
       }
     }
@@ -519,13 +492,10 @@ test('combines custom padding and screen overwrites', async () => {
       @media (width >= 40rem) {
         max-width: none !important;
       }
+      @media (width >= 48rem) {
+        max-width: var(--breakpoint-md) !important;
+      }
       @media (width >= 64rem) {
-        max-width: none !important;
-      }
-      @media (width >= 80rem) {
-        max-width: none !important;
-      }
-      @media (width >= 96rem) {
         max-width: none !important;
       }
       @media (width >= 1280px) {
@@ -542,13 +512,10 @@ test('combines custom padding and screen overwrites', async () => {
       @media (width >= 40rem) {
         max-width: none;
       }
+      @media (width >= 48rem) {
+        max-width: var(--breakpoint-md);
+      }
       @media (width >= 64rem) {
-        max-width: none;
-      }
-      @media (width >= 80rem) {
-        max-width: none;
-      }
-      @media (width >= 96rem) {
         max-width: none;
       }
       @media (width >= 1280px) {
