@@ -1,4 +1,4 @@
-import { atRule, decl, type AstNode } from '../ast'
+import { atRule, decl, type AstNode, type AtRule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { compareBreakpoints } from '../utils/compare-breakpoints'
 import type { ResolvedConfig } from './config/types'
@@ -32,7 +32,7 @@ export function buildCustomContainerUtilityRules(
   designSystem: DesignSystem,
 ): AstNode[] {
   let rules = []
-  let breakpointOverwrites: null | Map<string, { nodes: AstNode[]; rule: string }> = null
+  let breakpointOverwrites: null | Map<string, AtRule> = null
 
   if (center) {
     rules.push(decl('margin-inline', 'auto'))
@@ -76,10 +76,10 @@ export function buildCustomContainerUtilityRules(
       // We're inlining the breakpoint values because the screens configured in
       // the `container` option do not have to match the ones defined in the
       // root `screen` setting.
-      breakpointOverwrites.set(key, {
-        rule: `(width >= ${value})`,
-        nodes: [decl('max-width', value)],
-      })
+      breakpointOverwrites.set(
+        key,
+        atRule('@media', `(width >= ${value})`, [decl('max-width', value)]),
+      )
     }
   }
 
@@ -111,8 +111,8 @@ export function buildCustomContainerUtilityRules(
   }
 
   if (breakpointOverwrites) {
-    for (let [, { rule, nodes }] of breakpointOverwrites) {
-      if (nodes.length > 0) rules.push(atRule('@media', rule, nodes))
+    for (let [, rule] of breakpointOverwrites) {
+      rules.push(rule)
     }
   }
 
