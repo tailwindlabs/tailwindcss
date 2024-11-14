@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+- Nothing yet!
+
+## [3.4.15] - 2024-11-14
 
 - Bump versions for security vulnerabilities ([#14697](https://github.com/tailwindlabs/tailwindcss/pull/14697))
 - Ensure the TypeScript types for the `boxShadow` theme configuration allows arrays ([#14856](https://github.com/tailwindlabs/tailwindcss/pull/14856))
@@ -2459,7 +2461,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...HEAD
+[3.4.15]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...v3.4.15
 [3.4.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...v3.4.14
 [3.4.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...v3.4.13
 [3.4.12]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.11...v3.4.12
