@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bump versions for security vulnerabilities ([#14697](https://github.com/tailwindlabs/tailwindcss/pull/14697))
 - Ensure the TypeScript types for the `boxShadow` theme configuration allows arrays ([#14856](https://github.com/tailwindlabs/tailwindcss/pull/14856))
+- Set fallback for opacity variables to ensure setting colors with the `selection:*` variant works in Chrome 131 ([#15003](https://github.com/tailwindlabs/tailwindcss/pull/15003))
 
 ## [3.4.14] - 2024-10-15
 

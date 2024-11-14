@@ -80,7 +80,7 @@ it('should support arbitrary values for various background utilities', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-\[\#ff0000\] {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity, 1));
       }
       .bg-\[color\:var\(--bg-color\)\] {
         background-color: var(--bg-color);
@@ -93,7 +93,7 @@ it('should support arbitrary values for various background utilities', () => {
       }
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       .bg-\[url\(\'\/image-1-0\.png\'\)\] {
         background-image: url('/image-1-0.png');

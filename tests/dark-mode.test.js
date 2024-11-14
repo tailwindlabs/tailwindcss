@@ -179,16 +179,16 @@ it('should use legacy sorting when using `darkMode: class`', () => {
     expect(result.css).toMatchFormattedCss(css`
       .hover\:text-green-200:hover {
         --tw-text-opacity: 1;
-        color: rgb(187 247 208 / var(--tw-text-opacity));
+        color: rgb(187 247 208 / var(--tw-text-opacity, 1));
       }
       .dark\:text-green-100:is(.dark *) {
         --tw-text-opacity: 1;
-        color: rgb(220 252 231 / var(--tw-text-opacity));
+        color: rgb(220 252 231 / var(--tw-text-opacity, 1));
       }
       @media (min-width: 1024px) {
         .lg\:text-green-300 {
           --tw-text-opacity: 1;
-          color: rgb(134 239 172 / var(--tw-text-opacity));
+          color: rgb(134 239 172 / var(--tw-text-opacity, 1));
         }
       }
     `)
@@ -214,17 +214,17 @@ it('should use modern sorting otherwise', () => {
     expect(result.css).toMatchFormattedCss(css`
       .hover\:text-green-200:hover {
         --tw-text-opacity: 1;
-        color: rgb(187 247 208 / var(--tw-text-opacity));
+        color: rgb(187 247 208 / var(--tw-text-opacity, 1));
       }
       @media (min-width: 1024px) {
         .lg\:text-green-300 {
           --tw-text-opacity: 1;
-          color: rgb(134 239 172 / var(--tw-text-opacity));
+          color: rgb(134 239 172 / var(--tw-text-opacity, 1));
         }
       }
       .dark\:text-green-100:where(.dark, .dark *) {
         --tw-text-opacity: 1;
-        color: rgb(220 252 231 / var(--tw-text-opacity));
+        color: rgb(220 252 231 / var(--tw-text-opacity, 1));
       }
     `)
   })

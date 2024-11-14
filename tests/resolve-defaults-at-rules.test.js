@@ -504,7 +504,7 @@ test('with borders', async () => {
       }
       .border-red-500 {
         --tw-border-opacity: 1;
-        border-color: rgb(239 68 68 / var(--tw-border-opacity));
+        border-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
       }
       @media (min-width: 768px) {
         .md\:border-2 {

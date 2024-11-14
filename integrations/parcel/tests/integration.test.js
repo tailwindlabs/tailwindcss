@@ -74,7 +74,7 @@ describe('static build', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
       .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -124,7 +124,7 @@ describe('static build', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
       .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -170,7 +170,7 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       .font-bold {
         font-weight: 700;
@@ -218,7 +218,7 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       .font-bold {
         font-weight: 700;
@@ -361,7 +361,7 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
       .btn {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
         border-radius: 0.25rem;
         padding: 0.25rem 0.5rem;
       }

@@ -18,12 +18,12 @@ test('it detects svelte based on the file extension', () => {
     expect(result.css).toMatchCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       @media (min-width: 1024px) {
         .lg\:hover\:bg-blue-500:hover {
           --tw-bg-opacity: 1;
-          background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+          background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
         }
       }
     `)
@@ -64,12 +64,12 @@ test('using raw with svelte extension', () => {
     expect(result.css).toMatchCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       @media (min-width: 1024px) {
         .lg\:hover\:bg-blue-500:hover {
           --tw-bg-opacity: 1;
-          background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+          background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
         }
       }
     `)
