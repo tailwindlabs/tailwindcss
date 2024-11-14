@@ -518,3 +518,86 @@ test('combines custom padding and screen overwrites', async () => {
     "
   `)
 })
+
+test('filters out complex breakpoints', async () => {
+  let input = css`
+    @theme default {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          container: {
+            center: true,
+            padding: {
+              DEFAULT: '2rem',
+              '2xl': '4rem',
+            },
+            screens: {
+              sm: '20px',
+              md: { min: '100px' },
+              lg: { max: '200px' },
+              xl: { min: '300px', max: '400px' },
+              '2xl': { raw: 'print' },
+            },
+          },
+        },
+      },
+      base: '/root',
+    }),
+  })
+
+  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
+      width: 100%;
+      @media (width >= 40rem) {
+        max-width: 40rem;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem;
+      }
+    }
+    .container {
+      margin-inline: auto;
+      padding-inline: 2rem;
+      @media (width >= 40rem) {
+        max-width: none;
+      }
+      @media (width >= 20px) {
+        max-width: 20px;
+      }
+      @media (width >= 100px) {
+        max-width: 100px;
+      }
+      @media (width >= 300px) {
+        max-width: 300px;
+      }
+    }
+    "
+  `)
+})

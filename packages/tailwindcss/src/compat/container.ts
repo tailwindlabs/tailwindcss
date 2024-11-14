@@ -65,6 +65,14 @@ export function buildCustomContainerUtilityRules(
     }
 
     for (let [key, value] of Object.entries(screens)) {
+      if (typeof value === 'object') {
+        if ('min' in value) {
+          value = value.min
+        } else {
+          continue
+        }
+      }
+
       // We're inlining the breakpoint values because the screens configured in
       // the `container` option do not have to match the ones defined in the
       // root `screen` setting.
