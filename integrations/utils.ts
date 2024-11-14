@@ -346,15 +346,21 @@ export function test(
                 let zParts = z[0].split('/')
 
                 let aFile = aParts.at(-1)
-                let zFile = aParts.at(-1)
+                let zFile = zParts.at(-1)
 
                 // Sort by depth, shallow first
                 if (aParts.length < zParts.length) return -1
                 if (aParts.length > zParts.length) return 1
 
+                // Sort by folder names, alphabetically
+                for (let i = 0; i < aParts.length - 1; i++) {
+                  let diff = aParts[i].localeCompare(zParts[i])
+                  if (diff !== 0) return diff
+                }
+
                 // Sort by filename, sort files named `index` before others
-                if (aFile?.startsWith('index')) return -1
-                if (zFile?.startsWith('index')) return 1
+                if (aFile?.startsWith('index') && !zFile?.startsWith('index')) return -1
+                if (zFile?.startsWith('index') && !aFile?.startsWith('index')) return 1
 
                 // Sort by filename, alphabetically
                 return a[0].localeCompare(z[0])

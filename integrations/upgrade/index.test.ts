@@ -1662,13 +1662,13 @@ test(
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
       --- ./src/index.html ---
       <div
         class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
       ></div>
-
-      --- ./src/index.css ---
-      @import './tailwind-setup.css';
 
       --- ./src/base.css ---
       @import 'tailwindcss/theme' layer(theme);
@@ -1797,13 +1797,13 @@ test(
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
       --- ./src/index.html ---
       <div
         class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
       ></div>
-
-      --- ./src/index.css ---
-      @import './tailwind-setup.css';
 
       --- ./src/base.css ---
       @import 'tailwindcss/theme' layer(theme);
@@ -2105,13 +2105,6 @@ test(
     // Files should not be modified
     expect(await fs.dumpFiles('./*.{js,css,html}')).toMatchInlineSnapshot(`
       "
-      --- index.html ---
-      <div>
-        <div class="shadow shadow-sm shadow-xs"></div>
-        <div class="blur blur-xs"></div>
-        <div class="rounded rounded-sm"></div>
-      </div>
-
       --- index.css ---
       @import 'tailwindcss';
 
@@ -2141,6 +2134,13 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
+      --- index.html ---
+      <div>
+        <div class="shadow shadow-sm shadow-xs"></div>
+        <div class="blur blur-xs"></div>
+        <div class="rounded rounded-sm"></div>
+      </div>
       "
     `)
   },
@@ -2196,9 +2196,6 @@ test(
     // Files should not be modified
     expect(await fs.dumpFiles('./*.{js,css,html,tsx}')).toMatchInlineSnapshot(`
       "
-      --- index.html ---
-      <div class="rounded-sm blur-sm shadow-sm"></div>
-
       --- index.css ---
       @import 'tailwindcss';
 
@@ -2219,6 +2216,9 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+
+      --- index.html ---
+      <div class="rounded-sm blur-sm shadow-sm"></div>
 
       --- example-component.tsx ---
       type Star = [
