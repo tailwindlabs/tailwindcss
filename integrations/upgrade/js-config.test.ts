@@ -1435,4 +1435,101 @@ describe('border compatibility', () => {
       `)
     },
   )
+
+  test.only(
+    'migrates `container` component configurations',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "@tailwindcss/upgrade": "workspace:^"
+            }
+          }
+        `,
+        'tailwind.config.ts': ts`
+          import { type Config } from 'tailwindcss'
+
+          export default {
+            content: ['./src/**/*.html'],
+            theme: {
+              container: {
+                center: true,
+                padding: {
+                  DEFAULT: '2rem',
+                  '2xl': '4rem',
+                },
+                screens: {
+                  xl: '1280px',
+                  '2xl': '1536px',
+                },
+              },
+            },
+          } satisfies Config
+        `,
+        'src/input.css': css`
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+        `,
+        'src/index.html': html`
+          <div class="container"></div>
+        `,
+      },
+    },
+    async ({ exec, fs }) => {
+      await exec('npx @tailwindcss/upgrade')
+
+      expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
+        "
+        --- src/index.html ---
+        <div class="container"></div>
+
+        --- src/input.css ---
+        @import 'tailwindcss';
+
+        @utility container {
+          margin-inline: auto;
+          padding-inline: 2rem;
+          @media (width >= theme(--breakpoint-2xl)) {
+            padding-inline: 4rem;
+          }
+          @media (width >= theme(--breakpoint-sm)) {
+            padding-inline: none;
+          }
+          @media (width >= theme(--breakpoint-md)) {
+            padding-inline: none;
+          }
+          @media (width >= theme(--breakpoint-lg)) {
+            padding-inline: none;
+          }
+          @media (width >= theme(--breakpoint-xl)) {
+            padding-inline: 1280px;
+          }
+          @media (width >= theme(--breakpoint-2xl)) {
+            padding-inline: 1536px;
+          }
+        }
+
+        /*
+          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          so we've added these compatibility styles to make sure everything still
+          looks the same as it did with Tailwind CSS v3.
+
+          If we ever want to remove these styles, we need to add an explicit border
+          color utility to any element that depends on these defaults.
+        */
+        @layer base {
+          *,
+          ::after,
+          ::before,
+          ::backdrop,
+          ::file-selector-button {
+            border-color: var(--color-gray-200, currentColor);
+          }
+        }
+        "
+      `)
+    },
+  )
 })
