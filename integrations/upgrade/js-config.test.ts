@@ -1436,7 +1436,7 @@ describe('border compatibility', () => {
     },
   )
 
-  test.only(
+  test(
     'migrates `container` component configurations',
     {
       fs: {
@@ -1491,23 +1491,21 @@ describe('border compatibility', () => {
         @utility container {
           margin-inline: auto;
           padding-inline: 2rem;
-          @media (width >= theme(--breakpoint-2xl)) {
-            padding-inline: 4rem;
-          }
           @media (width >= theme(--breakpoint-sm)) {
-            padding-inline: none;
+            max-width: none;
           }
           @media (width >= theme(--breakpoint-md)) {
-            padding-inline: none;
+            max-width: none;
           }
           @media (width >= theme(--breakpoint-lg)) {
-            padding-inline: none;
+            max-width: none;
           }
           @media (width >= theme(--breakpoint-xl)) {
-            padding-inline: 1280px;
+            max-width: 1280px;
           }
           @media (width >= theme(--breakpoint-2xl)) {
-            padding-inline: 1536px;
+            max-width: 1536px;
+            padding-inline: 4rem;
           }
         }
 

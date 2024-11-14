@@ -200,10 +200,10 @@ test('allows breakpoints to be overwritten', async () => {
         max-width: none;
       }
       @media (width >= 80rem) {
-        max-width: 1280px;
+        max-width: var(--breakpoint-xl);
       }
       @media (width >= 96rem) {
-        max-width: 1536px;
+        max-width: var(--breakpoint-2xl);
       }
     }
     "
@@ -294,6 +294,7 @@ test('combines custom padding and screen overwrites', async () => {
               '2xl': '4rem',
             },
             screens: {
+              md: '48rem',
               xl: '1280px',
               '2xl': '1536px',
             },
@@ -336,17 +337,14 @@ test('combines custom padding and screen overwrites', async () => {
       @media (width >= 40rem) {
         max-width: none;
       }
-      @media (width >= 48rem) {
-        max-width: none;
-      }
       @media (width >= 64rem) {
         max-width: none;
       }
       @media (width >= 80rem) {
-        max-width: 1280px;
+        max-width: var(--breakpoint-xl);
       }
       @media (width >= 96rem) {
-        max-width: 1536px;
+        max-width: var(--breakpoint-2xl);
         padding-inline: 4rem;
       }
     }

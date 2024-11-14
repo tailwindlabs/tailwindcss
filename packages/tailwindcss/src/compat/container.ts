@@ -58,7 +58,11 @@ export function buildCustomContainerUtilityRules(
     }
 
     for (let [key, value] of Object.entries(screens)) {
-      breakpointOverwrites.set(key, [decl('max-width', value)])
+      let coreBreakpoint = breakpoints.find(([k]) => k === key)
+      if (coreBreakpoint && value === coreBreakpoint[1]) {
+        continue
+      }
+      breakpointOverwrites.set(key, [decl('max-width', `var(--breakpoint-${key})`)])
     }
   }
 
