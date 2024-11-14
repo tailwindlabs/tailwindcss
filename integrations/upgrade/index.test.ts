@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
   'error when no CSS file with @tailwind is used',
@@ -1640,5 +1640,202 @@ test(
       'prettier-plugin-tailwindcss': expect.any(String),
     })
     expect(pkg.devDependencies['prettier-plugin-tailwindcss']).not.toEqual('0.5.0')
+  },
+)
+
+test(
+  'only migrate legacy classes when it is safe to do so',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3.4.14",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        module.exports = {
+          content: ['./*.html'],
+          theme: {
+            // Overrides the default boxShadow entirely so none of the
+            // migrations are safe.
+            boxShadow: {
+              DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+            },
+
+            extend: {
+              // Changes the "before" class definition. 'blur' -> 'blur-sm' is
+              // not safe because 'blur' has a custom value.
+              //
+              // But 'blur-sm' -> 'blur-xs' is safe because 'blur-xs' uses the
+              // default value.
+              blur: {
+                DEFAULT: 'var(--custom-default-blur)',
+              },
+
+              // Changes the "after" class definition. 'rounded' -> 'rounded-sm' is
+              // not safe because 'rounded-sm' has a custom value.
+              borderRadius: {
+                sm: 'var(--custom-rounded-sm)',
+              },
+            },
+          },
+        }
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'index.html': html`
+        <div>
+          <div class="shadow shadow-sm shadow-xs"></div>
+          <div class="blur blur-sm"></div>
+          <div class="rounded rounded-sm"></div>
+        </div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./*.{js,css,html}')).toMatchInlineSnapshot(`
+      "
+      --- index.html ---
+      <div>
+        <div class="shadow shadow-sm shadow-xs"></div>
+        <div class="blur blur-xs"></div>
+        <div class="rounded rounded-sm"></div>
+      </div>
+
+      --- index.css ---
+      @import 'tailwindcss';
+
+      @theme {
+        --shadow-*: initial;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+        --blur: var(--custom-default-blur);
+
+        --radius-sm: var(--custom-rounded-sm);
+      }
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'make suffix-less migrations safe (e.g.: `blur`, `rounded`, `shadow`)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3.4.14",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        module.exports = {
+          content: ['./*.{html,tsx}'],
+        }
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'index.html': html`
+        <div class="rounded blur shadow"></div>
+      `,
+      'example-component.tsx': ts`
+        type Star = [
+          x: number,
+          y: number,
+          dim?: boolean,
+          blur?: boolean,
+          rounded?: boolean,
+          shadow?: boolean,
+        ]
+
+        function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+          return <svg class="rounded shadow blur" filter={blur ? 'url(…)' : undefined} />
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./*.{js,css,html,tsx}')).toMatchInlineSnapshot(`
+      "
+      --- index.html ---
+      <div class="rounded-sm blur-sm shadow-sm"></div>
+
+      --- index.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- example-component.tsx ---
+      type Star = [
+        x: number,
+        y: number,
+        dim?: boolean,
+        blur?: boolean,
+        rounded?: boolean,
+        shadow?: boolean,
+      ]
+
+      function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+        return <svg class="rounded-sm shadow-sm blur-sm" filter={blur ? 'url(…)' : undefined} />
+      }
+      "
+    `)
   },
 )
