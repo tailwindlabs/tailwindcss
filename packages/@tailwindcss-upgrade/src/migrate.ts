@@ -253,22 +253,38 @@ export async function analyze(stylesheets: Stylesheet[]) {
           for (let [sheetB, childrenB] of commonParents) {
             if (sheetA === sheetB) continue
 
-            for (let parentA of sheetA.ancestors()) {
-              for (let parentB of sheetB.ancestors()) {
+            // Ancestors from self to root. Reversed order so we find the
+            // nearest common parent first
+            //
+            // Including self because if you compare a sheet with its parent,
+            // then the parent is still the common sheet between the two. In
+            // this case, the parent is the root file.
+            let ancestorsA = [sheetA].concat(Array.from(sheetA.ancestors()).reverse())
+            let ancestorsB = [sheetB].concat(Array.from(sheetB.ancestors()).reverse())
+
+            for (let parentA of ancestorsA) {
+              for (let parentB of ancestorsB) {
                 if (parentA !== parentB) continue
+
+                // Found the parent
+                let parent = parentA
 
                 commonParents.delete(sheetA)
                 commonParents.delete(sheetB)
 
                 for (let child of childrenA) {
-                  commonParents.get(parentA).add(child)
+                  commonParents.get(parent).add(child)
                 }
 
                 for (let child of childrenB) {
-                  commonParents.get(parentA).add(child)
+                  commonParents.get(parent).add(child)
                 }
 
-                repeat = true
+                repeat = parent !== sheetA && parent !== sheetB
+
+                // Found a common parent between sheet A and sheet B. We can
+                // stop looking for more common parents between A and B, and
+                // continue with the next sheet.
                 break outer
               }
             }

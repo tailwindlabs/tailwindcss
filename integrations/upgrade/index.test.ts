@@ -1468,6 +1468,276 @@ test(
 )
 
 test(
+  'injecting `@config` in the shared root, when a tailwind.config.{js,ts,…} is detected',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {
+              // custom stuff which is too complicated to migrate to CSS
+            },
+          ],
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
+      `,
+      'src/index.css': css`@import './tailwind-setup.css';`,
+      'src/tailwind-setup.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+        @tailwind base;
+      `,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/typography.css': css`
+        .typography {
+          color: red;
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+      ></div>
+
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      @layer base {
+        html {
+          color: red;
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css';
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/tailwind-setup.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+
+      @config '../tailwind.config.ts';
+
+      --- ./src/typography.css ---
+      .typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'injecting `@config` in the shared root (+ migrating), when a tailwind.config.{js,ts,…} is detected',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          theme: {
+            extend: {
+              colors: {
+                'my-red': 'red',
+              },
+            },
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
+      `,
+      'src/index.css': css`@import './tailwind-setup.css';`,
+      'src/tailwind-setup.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+        @tailwind base;
+      `,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/typography.css': css`
+        .typography {
+          color: red;
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+      ></div>
+
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      @layer base {
+        html {
+          color: red;
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css';
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/tailwind-setup.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+
+      @theme {
+        --color-my-red: red;
+      }
+
+      --- ./src/typography.css ---
+      .typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'relative imports without a relative path prefix are migrated to include a relative path prefix',
   {
     fs: {
