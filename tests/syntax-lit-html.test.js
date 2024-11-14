@@ -19,7 +19,7 @@ test('it detects classes in lit-html templates', () => {
       }
       .bg-blue-400 {
         --tw-bg-opacity: 1;
-        background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+        background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1));
       }
       .px-4 {
         padding-left: 1rem;
@@ -34,11 +34,11 @@ test('it detects classes in lit-html templates', () => {
       }
       .text-white {
         --tw-text-opacity: 1;
-        color: rgb(255 255 255 / var(--tw-text-opacity));
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
       }
       .hover\:bg-blue-600:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+        background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
       }
     `)
   })

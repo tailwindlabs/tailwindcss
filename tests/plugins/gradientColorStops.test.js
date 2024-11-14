@@ -60,11 +60,11 @@ test('opacity variables are given to colors defined as closures', () => {
       }
       .text-primary {
         --tw-text-opacity: 1;
-        color: rgba(31, 31, 31, var(--tw-text-opacity));
+        color: rgba(31, 31, 31, var(--tw-text-opacity, 1));
       }
       .text-secondary {
         --tw-text-opacity: 1;
-        color: hsl(10 50% 50% / var(--tw-text-opacity));
+        color: hsl(10 50% 50% / var(--tw-text-opacity, 1));
       }
       .text-opacity-50 {
         --tw-text-opacity: 0.5;

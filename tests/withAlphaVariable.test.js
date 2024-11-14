@@ -5,7 +5,7 @@ test('it adds the right custom property', () => {
     withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--tw-text-opacity' })
   ).toEqual({
     '--tw-text-opacity': '1',
-    color: 'rgb(255 0 0 / var(--tw-text-opacity))',
+    color: 'rgb(255 0 0 / var(--tw-text-opacity, 1))',
   })
   expect(
     withAlphaVariable({
@@ -15,7 +15,7 @@ test('it adds the right custom property', () => {
     })
   ).toEqual({
     '--tw-text-opacity': '1',
-    color: 'hsl(240 100% 50% / var(--tw-text-opacity))',
+    color: 'hsl(240 100% 50% / var(--tw-text-opacity, 1))',
   })
 })
 
@@ -179,7 +179,7 @@ test('it allows a closure to be passed', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
+    'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity, 1))',
   })
 })
 
@@ -192,7 +192,7 @@ test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity))',
+    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity, 1))',
   })
   expect(
     withAlphaVariable({
@@ -202,7 +202,7 @@ test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity))',
+    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity, 1))',
   })
   expect(
     withAlphaVariable({
@@ -212,7 +212,7 @@ test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity))',
+    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity, 1))',
   })
   expect(
     withAlphaVariable({
@@ -222,7 +222,7 @@ test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity))',
+    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity, 1))',
   })
 })
 
@@ -235,6 +235,6 @@ test('it transforms named colors to rgb', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgb(255 0 0 / var(--tw-bg-opacity))',
+    'background-color': 'rgb(255 0 0 / var(--tw-bg-opacity, 1))',
   })
 })
