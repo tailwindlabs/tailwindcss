@@ -128,6 +128,9 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  // The legacy container component config should not be included in the Theme
+  if (path[0] === 'container') return null
+
   path = structuredClone(path)
 
   if (path[0] === 'animation') path[0] = 'animate'

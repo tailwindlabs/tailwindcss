@@ -904,7 +904,7 @@ export function createUtilities(theme: Theme) {
 
     let decls: AstNode[] = [decl('--tw-sort', '--tw-container-component'), decl('width', '100%')]
     for (let breakpoint of breakpoints) {
-      decls.push(atRule('@media', `(min-width: ${breakpoint})`, [decl('max-width', breakpoint)]))
+      decls.push(atRule('@media', `(width >= ${breakpoint})`, [decl('max-width', breakpoint)]))
     }
 
     return decls

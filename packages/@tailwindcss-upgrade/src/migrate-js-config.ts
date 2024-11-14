@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { type Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
-import { toCss, type AstNode } from '../../tailwindcss/src/ast'
+import { atRule, toCss, type AstNode } from '../../tailwindcss/src/ast'
 import {
   keyPathToCssProperty,
   themeableValues,
@@ -13,6 +13,7 @@ import {
 import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
 import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/config/resolve-config'
 import type { ResolvedConfig, ThemeConfig } from '../../tailwindcss/src/compat/config/types'
+import { buildCustomContainerUtilityRules } from '../../tailwindcss/src/compat/container'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
@@ -148,6 +149,14 @@ async function migrateTheme(
   }
 
   css += '}\n' // @theme
+
+  if ('container' in resolvedConfig.theme) {
+    let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
+    if (rules.length > 0) {
+      css += '\n' + toCss([atRule('@utility', 'container', rules)])
+    }
+  }
+
   css += '}\n' // @tw-bucket
 
   return css
