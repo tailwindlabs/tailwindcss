@@ -1,3 +1,4 @@
+import { stripVTControlCharacters } from 'node:util'
 import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
@@ -1385,9 +1386,256 @@ test(
         export default {
           content: ['./src/**/*.{html,js}'],
           plugins: [
-            () => {
-              // custom stuff which is too complicated to migrate to CSS
-            },
+            () => {}, // custom stuff which is too complicated to migrate to CSS
+          ],
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
+      `,
+      'src/root.1/index.css': css`
+        /* Inject missing @config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/root.1/tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {}, // custom stuff which is too complicated to migrate to CSS
+          ],
+        }
+      `,
+      'src/root.2/index.css': css`
+        /* Already contains @config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        @config "../../tailwind.config.ts";
+      `,
+      'src/root.3/index.css': css`
+        /* Inject missing @config above first @theme */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @variant hocus (&:hover, &:focus);
+
+        @theme {
+          --color-red-500: #f00;
+        }
+
+        @theme {
+          --color-blue-500: #00f;
+        }
+      `,
+      'src/root.3/tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {}, // custom stuff which is too complicated to migrate to CSS
+          ],
+        }
+      `,
+      'src/root.4/index.css': css`
+        /* Inject missing @config due to nested imports with tailwind imports */
+        @import './base.css';
+        @import './utilities.css';
+      `,
+      'src/root.4/tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {}, // custom stuff which is too complicated to migrate to CSS
+          ],
+        }
+      `,
+      'src/root.4/base.css': css`@import 'tailwindcss/preflight';`,
+      'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
+
+      'src/root.5/index.css': css`@import './tailwind.css';`,
+      'src/root.5/tailwind.css': css`
+        /* Inject missing @config in this file, due to full import */
+        /* Should be located in the root: ../../ */
+        @import 'tailwindcss';
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
+      ></div>
+
+      --- ./src/root.1/index.css ---
+      /* Inject missing @config */
+      @import 'tailwindcss';
+
+      @config './tailwind.config.ts';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/root.2/index.css ---
+      /* Already contains @config */
+      @import 'tailwindcss';
+
+      @config "../../tailwind.config.ts";
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/root.3/index.css ---
+      /* Inject missing @config above first @theme */
+      @import 'tailwindcss';
+
+      @config './tailwind.config.ts';
+
+      @variant hocus (&:hover, &:focus);
+
+      @theme {
+        --color-red-500: #f00;
+      }
+
+      @theme {
+        --color-blue-500: #00f;
+      }
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/root.4/index.css ---
+      /* Inject missing @config due to nested imports with tailwind imports */
+      @import './base.css';
+      @import './utilities.css';
+
+      @config './tailwind.config.ts';
+
+      --- ./src/root.4/base.css ---
+      @import 'tailwindcss/preflight';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/root.4/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      --- ./src/root.5/index.css ---
+      @import './tailwind.css';
+
+      --- ./src/root.5/tailwind.css ---
+      /* Inject missing @config in this file, due to full import */
+      /* Should be located in the root: ../../ */
+      @import 'tailwindcss';
+
+      @config '../../tailwind.config.ts';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'multiple CSS roots that resolve to the same Tailwind config file requires manual intervention',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {}, // custom stuff which is too complicated to migrate to CSS
           ],
         }
       `,
@@ -1430,7 +1678,7 @@ test(
         @import './root.4/base.css';
         @import './root.4/utilities.css';
       `,
-      'src/root.4/base.css': css`@import 'tailwindcss/base';`,
+      'src/root.4/base.css': css`@import 'tailwindcss/preflight';`,
       'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
 
       'src/root.5.css': css`@import './root.5/tailwind.css';`,
@@ -1440,156 +1688,36 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+  async ({ exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade --force', {}, { ignoreStdErr: true }).catch(
+      (e) => e.toString(),
+    )
 
-    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
-      "
-      --- ./src/index.html ---
-      <div
-        class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
-      ></div>
+    output = stripVTControlCharacters(output)
+      .replace(/tailwindcss v(.*)/g, 'tailwindcss') // Remove the version number from the error message
+      .replace(/\\/g, '/') // Make Windows paths look like Unix paths
 
-      --- ./src/root.1.css ---
-      /* Inject missing @config */
-      @import 'tailwindcss';
+    expect(output).toMatchInlineSnapshot(`
+      "Error: Command failed: npx @tailwindcss/upgrade --force
+      ≈ tailwindcss
 
-      @config '../tailwind.config.ts';
+      │ Searching for CSS files in the current directory and its subdirectories…
 
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.1.css\`
 
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
+      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.3.css\`
 
-      --- ./src/root.2.css ---
-      /* Already contains @config */
-      @import 'tailwindcss';
+      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.4.css\`
 
-      @config "../tailwind.config.ts";
+      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.5/tailwind.css\`
 
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
+      │ You have multiple stylesheets that do not have an \`@config\`.
+      │ Please add a \`@config "…";\` referencing the correct Tailwind config file to:
+      │ - ./src/root.1.css
+      │ - ./src/root.3.css
+      │ - ./src/root.4.css
+      │ - ./src/root.5/tailwind.css
 
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      --- ./src/root.3.css ---
-      /* Inject missing @config above first @theme */
-      @import 'tailwindcss';
-
-      @config '../tailwind.config.ts';
-
-      @variant hocus (&:hover, &:focus);
-
-      @theme {
-        --color-red-500: #f00;
-      }
-
-      @theme {
-        --color-blue-500: #00f;
-      }
-
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      --- ./src/root.4.css ---
-      /* Inject missing @config due to nested imports with tailwind imports */
-      @import './root.4/base.css';
-      @import './root.4/utilities.css';
-
-      @config '../tailwind.config.ts';
-
-      --- ./src/root.5.css ---
-      @import './root.5/tailwind.css';
-
-      --- ./src/root.4/base.css ---
-      @import 'tailwindcss/theme' layer(theme);
-      @import 'tailwindcss/preflight' layer(base);
-
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      --- ./src/root.4/utilities.css ---
-      @import 'tailwindcss/utilities' layer(utilities);
-
-      --- ./src/root.5/tailwind.css ---
-      /* Inject missing @config in this file, due to full import */
-      @import 'tailwindcss';
-
-      @config '../../tailwind.config.ts';
-
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
       "
     `)
   },
