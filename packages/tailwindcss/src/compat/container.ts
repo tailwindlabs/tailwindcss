@@ -16,7 +16,7 @@ export function registerContainerCompat(userConfig: ResolvedConfig, designSystem
     return
   }
 
-  designSystem.utilities.static('container', () => rules)
+  designSystem.utilities.static('container', () => structuredClone(rules))
 }
 
 export function buildCustomContainerUtilityRules(

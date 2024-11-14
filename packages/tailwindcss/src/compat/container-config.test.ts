@@ -305,13 +305,31 @@ test('combines custom padding and screen overwrites', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
+  expect(compiler.build(['container', '!container'])).toMatchInlineSnapshot(`
     ":root {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
+    }
+    .\\!container {
+      width: 100% !important;
+      @media (width >= 40rem) {
+        max-width: 40rem !important;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem !important;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem !important;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem !important;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem !important;
+      }
     }
     .container {
       width: 100%;
@@ -329,6 +347,23 @@ test('combines custom padding and screen overwrites', async () => {
       }
       @media (width >= 96rem) {
         max-width: 96rem;
+      }
+    }
+    .\\!container {
+      margin-inline: auto !important;
+      padding-inline: 2rem !important;
+      @media (width >= 40rem) {
+        max-width: none !important;
+      }
+      @media (width >= 64rem) {
+        max-width: none !important;
+      }
+      @media (width >= 80rem) {
+        max-width: var(--breakpoint-xl) !important;
+      }
+      @media (width >= 96rem) {
+        max-width: var(--breakpoint-2xl) !important;
+        padding-inline: 4rem !important;
       }
     }
     .container {
