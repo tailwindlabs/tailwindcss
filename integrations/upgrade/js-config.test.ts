@@ -1460,6 +1460,7 @@ describe('border compatibility', () => {
                   '2xl': '4rem',
                 },
                 screens: {
+                  md: '48rem', // Matches a default --breakpoint
                   xl: '1280px',
                   '2xl': '1536px',
                 },
@@ -1494,9 +1495,6 @@ describe('border compatibility', () => {
           @media (width >= theme(--breakpoint-sm)) {
             max-width: none;
           }
-          @media (width >= theme(--breakpoint-md)) {
-            max-width: none;
-          }
           @media (width >= theme(--breakpoint-lg)) {
             max-width: none;
           }
@@ -1506,6 +1504,7 @@ describe('border compatibility', () => {
           @media (width >= theme(--breakpoint-2xl)) {
             max-width: none;
           }
+          @media (width >= 48rem);
           @media (width >= 1280px) {
             max-width: 1280px;
           }

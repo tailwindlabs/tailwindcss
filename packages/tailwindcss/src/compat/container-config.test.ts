@@ -528,7 +528,6 @@ test('combines custom padding and screen overwrites', async () => {
       @media (width >= 96rem) {
         max-width: none !important;
       }
-      @media (width >= 48rem);
       @media (width >= 1280px) {
         max-width: 1280px !important;
       }
@@ -552,7 +551,6 @@ test('combines custom padding and screen overwrites', async () => {
       @media (width >= 96rem) {
         max-width: none;
       }
-      @media (width >= 48rem);
       @media (width >= 1280px) {
         max-width: 1280px;
       }

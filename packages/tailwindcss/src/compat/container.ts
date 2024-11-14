@@ -124,7 +124,7 @@ export function buildCustomContainerUtilityRules(
 
   if (breakpointOverwrites) {
     for (let [, { rule, nodes }] of breakpointOverwrites) {
-      rules.push(atRule('@media', rule, nodes))
+      if (nodes.length > 0) rules.push(atRule('@media', rule, nodes))
     }
   }
 
