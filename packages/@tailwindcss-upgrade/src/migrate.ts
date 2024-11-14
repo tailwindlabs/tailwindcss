@@ -419,6 +419,9 @@ export async function split(stylesheets: Stylesheet[]) {
   let utilitySheets = new Map<Stylesheet, Stylesheet>()
 
   for (let sheet of stylesheets) {
+    // Root files don't need to be split
+    if (sheet.isTailwindRoot) continue
+
     // Ignore stylesheets that were not imported
     if (!sheet.file) continue
     if (sheet.parents.size === 0) continue
