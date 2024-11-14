@@ -1703,13 +1703,13 @@ test(
 
       │ Searching for CSS files in the current directory and its subdirectories…
 
-      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.1.css\`
+      │ Linked \`./tailwind.config.ts\` to \`./src/root.1.css\`
 
-      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.3.css\`
+      │ Linked \`./tailwind.config.ts\` to \`./src/root.3.css\`
 
-      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.4.css\`
+      │ Linked \`./tailwind.config.ts\` to \`./src/root.4.css\`
 
-      │ Found config file: \`./tailwind.config.ts\` for \`./src/root.5/tailwind.css\`
+      │ Linked \`./tailwind.config.ts\` to \`./src/root.5/tailwind.css\`
 
       │ You have multiple stylesheets that do not have an \`@config\`.
       │ Please add a \`@config "…";\` referencing the correct Tailwind config file to:

@@ -377,9 +377,7 @@ export async function linkConfigs(
       localConfigPath = path.resolve(base, localConfigPath)
     }
 
-    info(
-      `Found config file: \`${relative(localConfigPath, base)}\` for \`${relative(sheet.file, base)}\``,
-    )
+    info(`Linked \`${relative(localConfigPath, base)}\` to \`${relative(sheet.file, base)}\``)
     configPathBySheet.set(sheet, localConfigPath)
     sheetByConfigPath.get(localConfigPath).add(sheet)
   }

@@ -23,7 +23,7 @@ import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
 import { hoistStaticGlobParts } from './utils/hoist-static-glob-parts'
 import { pkg } from './utils/packages'
-import { eprintln, error, header, highlight, info, success } from './utils/renderer'
+import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
 
 const options = {
   '--config': { type: 'string', description: 'Path to the configuration file', alias: '-c' },
@@ -110,7 +110,6 @@ async function run() {
     }
 
     // Migrate js config files, linked to stylesheets
-    info('Migrating JavaScript configuration files using the provided configuration file.')
     let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
     let jsConfigMigrationBySheet = new Map<
       Stylesheet,
@@ -122,6 +121,7 @@ async function run() {
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
 
+      info(`Migrating JavaScript configuration file: \`${relative(config.configFilePath, base)}\``)
       let jsConfigMigration = await migrateJsConfig(
         config.designSystem,
         config.configFilePath,
@@ -138,9 +138,10 @@ async function run() {
     // Migrate source files, linked to config files
     {
       // Template migrations
-
-      info('Migrating templates using the provided configuration file.')
       for (let config of configBySheet.values()) {
+        info(
+          `Migrating templates using the provided configuration file: \`${relative(config.configFilePath, base)}\`.`,
+        )
         let set = new Set<string>()
         for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
           let files = await globby([globEntry.pattern], {
@@ -161,12 +162,13 @@ async function run() {
         await Promise.allSettled(
           files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
         )
-      }
 
-      success('Template migration complete.')
+        success('↳ Template migration complete.')
+      }
     }
 
     // Migrate each CSS file
+    info('Migrating stylesheets')
     let migrateResults = await Promise.allSettled(
       stylesheets.map((sheet) => {
         let config = configBySheet.get(sheet)!
@@ -233,7 +235,7 @@ async function run() {
       await fs.writeFile(sheet.file, sheet.root.toString())
     }
 
-    success('Stylesheet migration complete.')
+    success('↳ Stylesheet migration complete.')
   }
 
   {

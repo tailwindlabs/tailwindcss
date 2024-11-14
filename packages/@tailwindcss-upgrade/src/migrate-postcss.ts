@@ -105,7 +105,7 @@ export async function migratePostCSSConfig(base: string) {
     } catch {}
   }
 
-  success(`PostCSS config has been upgraded.`)
+  success(`↳ PostCSS config has been upgraded.`)
 }
 
 async function migratePostCSSJSConfig(
