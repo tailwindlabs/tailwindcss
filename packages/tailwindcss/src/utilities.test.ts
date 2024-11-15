@@ -2861,6 +2861,75 @@ test('max-width', async () => {
   ).toEqual('')
 })
 
+test('max-w-screen', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --breakpoint-sm: 40rem;
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+          --breakpoint-xl: 80rem;
+          --breakpoint-2xl: 96rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'max-w-screen-sm',
+        'max-w-screen-md',
+        'max-w-screen-lg',
+        'max-w-screen-xl',
+        'max-w-screen-2xl',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+
+    .max-w-screen-2xl {
+      max-width: var(--breakpoint-2xl);
+    }
+
+    .max-w-screen-lg {
+      max-width: var(--breakpoint-lg);
+    }
+
+    .max-w-screen-md {
+      max-width: var(--breakpoint-md);
+    }
+
+    .max-w-screen-sm {
+      max-width: var(--breakpoint-sm);
+    }
+
+    .max-w-screen-xl {
+      max-width: var(--breakpoint-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'max-w-screen-oh',
+      'max-w-screen-4',
+      'max-w-screen-[4px]',
+      '-max-w-screen-sm',
+      '-max-w-screen-[4px]',
+      'max-w-screen-none/foo',
+      'max-w-screen-full/foo',
+      'max-w-screen-max/foo',
+      'max-w-screen-max/foo',
+      'max-w-screen-fit/foo',
+      'max-w-screen-4/foo',
+      'max-w-screen-xl/foo',
+      'max-w-screen-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('height', async () => {
   expect(
     await compileCss(

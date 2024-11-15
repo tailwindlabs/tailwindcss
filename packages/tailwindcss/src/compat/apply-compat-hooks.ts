@@ -1,4 +1,4 @@
-import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
+import { decl, styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
@@ -114,6 +114,14 @@ export async function applyCompatibilityHooks({
       replaceWith([])
       return
     }
+  })
+
+  designSystem.utilities.functional('max-w-screen', (candidate) => {
+    if (!candidate.value) return
+    if (candidate.value.kind === 'arbitrary') return
+    let value = designSystem.theme.resolve(candidate.value.value, ['--breakpoint'])
+    if (!value) return
+    return [decl('max-width', value)]
   })
 
   // Override `resolveThemeValue` with a version that is backwards compatible
