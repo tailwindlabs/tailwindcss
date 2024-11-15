@@ -10998,7 +10998,19 @@ test('bg', async () => {
       `,
       ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
-  ).toEqual('')
+  ).toMatchInlineSnapshot(`
+    ".bg-current\\/custom {
+      background-color: color-mix(in oklch, currentColor var(--opacity-custom), transparent);
+    }
+
+    .bg-current\\/half {
+      background-color: color-mix(in oklch, currentColor var(--opacity-half), transparent);
+    }
+
+    .\\[color\\:red\\]\\/half {
+      color: color-mix(in oklch, red var(--opacity-half), transparent);
+    }"
+  `)
 })
 
 test('from', async () => {
