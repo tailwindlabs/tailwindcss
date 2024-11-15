@@ -1,6 +1,7 @@
 import { normalizePath } from '@tailwindcss/node'
+import { isGitIgnored } from 'globby'
 import path from 'node:path'
-import postcss from 'postcss'
+import postcss, { type Result } from 'postcss'
 import type { Config } from '../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
@@ -65,13 +66,28 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
 }
 
 export async function analyze(stylesheets: Stylesheet[]) {
-  let stylesheetsByFile = new Map<string, Stylesheet>()
-
-  for (let sheet of stylesheets) {
-    if (sheet.file) {
-      stylesheetsByFile.set(sheet.file, sheet)
+  let isIgnored = await isGitIgnored()
+  let processingQueue: (() => Promise<Result>)[] = []
+  let stylesheetsByFile = new DefaultMap<string, Stylesheet | null>((file) => {
+    // We don't want to process ignored files (like node_modules)
+    if (isIgnored(file)) {
+      return null
     }
-  }
+
+    try {
+      let sheet = Stylesheet.loadSync(file)
+
+      // Mutate incoming stylesheets to include the newly discovered sheet
+      stylesheets.push(sheet)
+
+      // Queue up the processing of this stylesheet
+      processingQueue.push(() => processor.process(sheet.root, { from: sheet.file! }))
+
+      return sheet
+    } catch {
+      return null
+    }
+  })
 
   // Step 1: Record which `@import` rules point to which stylesheets
   // and which stylesheets are parents/children of each other
@@ -147,11 +163,22 @@ export async function analyze(stylesheets: Stylesheet[]) {
     },
   ])
 
+  // Seed the map with all the known stylesheets, and queue up the processing of
+  // each incoming stylesheet.
   for (let sheet of stylesheets) {
-    if (!sheet.file) continue
-
-    await processor.process(sheet.root, { from: sheet.file })
+    if (sheet.file) {
+      stylesheetsByFile.set(sheet.file, sheet)
+      processingQueue.push(() => processor.process(sheet.root, { from: sheet.file ?? undefined }))
+    }
   }
+
+  // Process all the stylesheets from step 1
+  while (processingQueue.length > 0) {
+    let task = processingQueue.shift()!
+    await task()
+  }
+
+  // ---
 
   let commonPath = process.cwd()
 
