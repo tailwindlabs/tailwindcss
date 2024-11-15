@@ -1453,7 +1453,7 @@ test(
           ],
         }
       `,
-      'src/root.4/base.css': css`@import 'tailwindcss/preflight';`,
+      'src/root.4/base.css': css`@import 'tailwindcss/base';`,
       'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
 
       'src/root.5/index.css': css`@import './tailwind.css';`,
@@ -1564,7 +1564,8 @@ test(
       @config './tailwind.config.ts';
 
       --- ./src/root.4/base.css ---
-      @import 'tailwindcss/preflight';
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
 
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -1678,7 +1679,7 @@ test(
         @import './root.4/base.css';
         @import './root.4/utilities.css';
       `,
-      'src/root.4/base.css': css`@import 'tailwindcss/preflight';`,
+      'src/root.4/base.css': css`@import 'tailwindcss/base';`,
       'src/root.4/utilities.css': css`@import 'tailwindcss/utilities';`,
 
       'src/root.5.css': css`@import './root.5/tailwind.css';`,
