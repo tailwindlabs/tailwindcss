@@ -2236,3 +2236,125 @@ test(
     `)
   },
 )
+
+test(
+  'passing in a single CSS file should resolve all imports and migrate them',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3.4.14",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+        @import './generated/ignore-me.css';
+      `,
+      'src/generated/.gitignore': `
+        *
+        !.gitignore
+      `,
+      'src/generated/ignore-me.css': css`
+        /* This should not be converted */
+        @layer utilities {
+          .ignore-me {
+            color: red;
+          }
+        }
+      `,
+      'src/base.css': css`@import 'tailwindcss/base';`,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: blue;
+          }
+        }
+        @tailwind utilities;
+      `,
+      'src/typography.css': css`
+        @layer components {
+          .typography {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade ./src/index.css')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+      @import './generated/ignore-me.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css';
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/typography.css ---
+      @utility typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: blue;
+      }
+
+      --- ./src/generated/ignore-me.css ---
+      /* This should not be converted */
+      @layer utilities {
+        .ignore-me {
+          color: red;
+        }
+      }
+      "
+    `)
+  },
+)
