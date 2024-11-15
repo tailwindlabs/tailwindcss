@@ -557,6 +557,13 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         case 'compound': {
           if (value === null) return null
 
+          // Forward modifier from `not-*` and `has-*` variants to the
+          // compound variant.
+          if (modifier !== null && (root === 'not' || root === 'has')) {
+            value = `${value}/${modifier}`
+            modifier = null
+          }
+
           let subVariant = designSystem.parseVariant(value)
           if (subVariant === null) return null
 
