@@ -3718,6 +3718,7 @@ exports[`getClassList 1`] = `
   "fill-transparent/95",
   "fill-transparent/100",
   "fixed",
+  "flex",
   "flex-auto",
   "flex-col",
   "flex-col-reverse",
