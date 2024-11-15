@@ -239,7 +239,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1000,14 +1000,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
         @import './utilities.css' layer(utilities);
       `,
       'src/utilities.css': css`
@@ -1069,7 +1069,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1123,7 +1123,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1310,7 +1310,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1376,6 +1376,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1435,7 +1436,7 @@ test(
       'src/root.5.css': css`@import './root.5/tailwind.css';`,
       'src/root.5/tailwind.css': css`
         /* Inject missing @config in this file, due to full import */
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
       `,
     },
   },
@@ -1871,7 +1872,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1933,7 +1934,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -2017,7 +2018,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2047,7 +2048,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "^3.4.14",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2152,7 +2153,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "^3.4.14",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2244,7 +2245,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "^3.4.14",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
