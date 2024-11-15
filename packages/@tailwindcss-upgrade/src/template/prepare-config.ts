@@ -6,7 +6,7 @@ import { loadModule } from '../../../@tailwindcss-node/src/compile'
 import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { error, relative } from '../utils/renderer'
+import { error, highlight, relative } from '../utils/renderer'
 import { migratePrefix } from './codemods/prefix'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -106,7 +106,7 @@ export async function detectConfigPath(start: string, end: string = start) {
   }
 
   throw new Error(
-    `No configuration file found for \`${relative(start)}\`. Please provide a path to the Tailwind CSS v3 config file via the \`--config\` option.`,
+    `No configuration file found for ${highlight(relative(start))}. Please provide a path to the Tailwind CSS v3 config file via the ${highlight('--config')} option.`,
   )
 }
 
