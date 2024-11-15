@@ -263,7 +263,7 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
     // Assumption: If an arbitrary property has a modifier, then we assume it
     // is an opacity modifier.
     if (candidate.modifier) {
-      value = asColor(value, candidate.modifier)
+      value = asColor(value, candidate.modifier, designSystem.theme)
     }
 
     if (value === null) return []

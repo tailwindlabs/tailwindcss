@@ -124,11 +124,22 @@ export function withAlpha(value: string, alpha: string): string {
 /**
  * Resolve a color value + optional opacity modifier to a final color.
  */
-export function asColor(value: string, modifier: CandidateModifier | null): string | null {
+export function asColor(
+  value: string,
+  modifier: CandidateModifier | null,
+  theme: Theme,
+): string | null {
   if (!modifier) return value
 
   if (modifier.kind === 'arbitrary') {
     return withAlpha(value, modifier.value)
+  }
+
+  // Check if the modifier exists in the `opacity` theme configuration and use
+  // that value if so.
+  let alpha = theme.resolve(modifier.value, ['--opacity'])
+  if (alpha) {
+    return withAlpha(value, alpha)
   }
 
   if (!isValidOpacityValue(modifier.value)) {
@@ -182,7 +193,7 @@ function resolveThemeColor<T extends ThemeKey>(
     }
   }
 
-  return value ? asColor(value, candidate.modifier) : null
+  return value ? asColor(value, candidate.modifier, theme) : null
 }
 
 export function createUtilities(theme: Theme) {
@@ -340,7 +351,7 @@ export function createUtilities(theme: Theme) {
         value = candidate.value.value
 
         // Apply an opacity modifier to the value if appropriate.
-        value = asColor(value, candidate.modifier)
+        value = asColor(value, candidate.modifier, theme)
       } else {
         value = resolveThemeColor(candidate, theme, desc.themeKeys)
       }
@@ -2048,7 +2059,7 @@ export function createUtilities(theme: Theme) {
               return [borderProperties(), ...decls]
             }
             default: {
-              value = asColor(value, candidate.modifier)
+              value = asColor(value, candidate.modifier, theme)
               if (value === null) return
 
               return desc.color(value)
@@ -2510,7 +2521,7 @@ export function createUtilities(theme: Theme) {
           return [decl('background-image', value)]
         }
         default: {
-          value = asColor(value, candidate.modifier)
+          value = asColor(value, candidate.modifier, theme)
           if (value === null) return
 
           return [decl('background-color', value)]
@@ -2584,7 +2595,7 @@ export function createUtilities(theme: Theme) {
             return desc.position(value)
           }
           default: {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return desc.color(value)
@@ -2721,7 +2732,7 @@ export function createUtilities(theme: Theme) {
     if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
-      let value = asColor(candidate.value.value, candidate.modifier)
+      let value = asColor(candidate.value.value, candidate.modifier, theme)
       if (value === null) return
       return [decl('fill', value)]
     }
@@ -2758,7 +2769,7 @@ export function createUtilities(theme: Theme) {
           return [decl('stroke-width', value)]
         }
         default: {
-          value = asColor(candidate.value.value, candidate.modifier)
+          value = asColor(candidate.value.value, candidate.modifier, theme)
           if (value === null) return
 
           return [decl('stroke', value)]
@@ -3002,7 +3013,7 @@ export function createUtilities(theme: Theme) {
           return [decl('text-decoration-thickness', value)]
         }
         default: {
-          value = asColor(value, candidate.modifier)
+          value = asColor(value, candidate.modifier, theme)
           if (value === null) return
 
           return [decl('text-decoration-color', value)]
@@ -3880,7 +3891,7 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [decl('outline-color', value)]
@@ -4017,7 +4028,7 @@ export function createUtilities(theme: Theme) {
           return [decl('font-size', value)]
         }
         default: {
-          value = asColor(value, candidate.modifier)
+          value = asColor(value, candidate.modifier, theme)
           if (value === null) return
 
           return [decl('color', value)]
@@ -4151,7 +4162,7 @@ export function createUtilities(theme: Theme) {
 
         switch (type) {
           case 'color': {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [boxShadowProperties(), decl('--tw-shadow-color', value)]
@@ -4243,7 +4254,7 @@ export function createUtilities(theme: Theme) {
 
         switch (type) {
           case 'color': {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
@@ -4341,7 +4352,7 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [decl('--tw-ring-color', value)]
@@ -4414,7 +4425,7 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [decl('--tw-inset-ring-color', value)]
@@ -4478,7 +4489,7 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
-            value = asColor(value, candidate.modifier)
+            value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
             return [decl('--tw-ring-offset-color', value)]
