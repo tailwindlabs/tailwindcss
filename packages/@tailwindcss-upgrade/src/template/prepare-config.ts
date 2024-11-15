@@ -115,6 +115,10 @@ function* parentPaths(from: string, to: string = from) {
   let fromAbsolute = path.resolve(from)
   let toAbsolute = path.resolve(to)
 
+  if (!fromAbsolute.startsWith(toAbsolute)) {
+    throw new Error(`The path ${from} is not a parent of ${to}`)
+  }
+
   if (fromAbsolute === toAbsolute) {
     yield fromAbsolute
     return
