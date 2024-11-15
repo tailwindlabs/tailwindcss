@@ -1,4 +1,4 @@
-import { decl, styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
+import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
@@ -8,6 +8,7 @@ import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
 import { registerContainerCompat } from './container'
 import { darkModePlugin } from './dark-mode'
+import { registerLegacyUtilities } from './legacy-utilities'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
 import { registerScreensConfig } from './screens-config'
 import { registerThemeVariantOverrides } from './theme-variants'
@@ -116,13 +117,7 @@ export async function applyCompatibilityHooks({
     }
   })
 
-  designSystem.utilities.functional('max-w-screen', (candidate) => {
-    if (!candidate.value) return
-    if (candidate.value.kind === 'arbitrary') return
-    let value = designSystem.theme.resolve(candidate.value.value, ['--breakpoint'])
-    if (!value) return
-    return [decl('max-width', value)]
-  })
+  registerLegacyUtilities(designSystem)
 
   // Override `resolveThemeValue` with a version that is backwards compatible
   // with dot notation paths like `colors.red.500`. We could do this by default
