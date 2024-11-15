@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pkg } from './utils/packages'
-import { info, relative, success, warn } from './utils/renderer'
+import { highlight, info, relative, success, warn } from './utils/renderer'
 
 // Migrates simple PostCSS setups. This is to cover non-dynamic config files
 // similar to the ones we have all over our docs:
@@ -78,7 +78,7 @@ export async function migratePostCSSConfig(base: string) {
   }
 
   if (!didMigrate) {
-    info(`No PostCSS config found, skipping migration.`)
+    info('No PostCSS config found, skipping migration.')
     return
   }
 
@@ -126,7 +126,7 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
     return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
   }
 
-  info(`Attempt to upgrade the PostCSS config in file: \`${relative(configPath)}\``)
+  info(`Attempt to upgrade the PostCSS config in file: ${highlight(relative(configPath))}`)
 
   let isSimpleConfig = await isSimplePostCSSConfig(configPath)
   if (!isSimpleConfig) {

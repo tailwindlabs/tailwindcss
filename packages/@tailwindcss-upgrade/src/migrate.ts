@@ -19,7 +19,7 @@ import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
 import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { detectConfigPath } from './template/prepare-config'
-import { error, info, relative } from './utils/renderer'
+import { error, highlight, info, relative } from './utils/renderer'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -377,7 +377,9 @@ export async function linkConfigs(
       localConfigPath = path.resolve(base, localConfigPath)
     }
 
-    info(`Linked \`${relative(localConfigPath, base)}\` to \`${relative(sheet.file, base)}\``)
+    info(
+      `Linked ${highlight(relative(localConfigPath, base))} to ${highlight(relative(sheet.file, base))}`,
+    )
     configPathBySheet.set(sheet, localConfigPath)
     sheetByConfigPath.get(localConfigPath).add(sheet)
   }

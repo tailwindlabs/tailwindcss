@@ -121,7 +121,9 @@ async function run() {
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
 
-      info(`Migrating JavaScript configuration file: \`${relative(config.configFilePath, base)}\``)
+      info(
+        `Migrating JavaScript configuration file: ${highlight(relative(config.configFilePath, base))}`,
+      )
       let jsConfigMigration = await migrateJsConfig(
         config.designSystem,
         config.configFilePath,
@@ -140,7 +142,7 @@ async function run() {
       // Template migrations
       for (let config of configBySheet.values()) {
         info(
-          `Migrating templates using the provided configuration file: \`${relative(config.configFilePath, base)}\`.`,
+          `Migrating templates using the provided configuration file: ${highlight(relative(config.configFilePath, base))}.`,
         )
         let set = new Set<string>()
         for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
