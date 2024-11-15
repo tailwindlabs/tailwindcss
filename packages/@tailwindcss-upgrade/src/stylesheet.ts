@@ -1,3 +1,4 @@
+import * as fsSync from 'node:fs'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as util from 'node:util'
@@ -67,6 +68,15 @@ export class Stylesheet {
     filepath = path.resolve(process.cwd(), filepath)
 
     let css = await fs.readFile(filepath, 'utf-8')
+    let root = postcss.parse(css, { from: filepath })
+
+    return new Stylesheet(root, filepath)
+  }
+
+  static loadSync(filepath: string) {
+    filepath = path.resolve(process.cwd(), filepath)
+
+    let css = fsSync.readFileSync(filepath, 'utf-8')
     let root = postcss.parse(css, { from: filepath })
 
     return new Stylesheet(root, filepath)
