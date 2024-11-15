@@ -1,3 +1,4 @@
+import { stripVTControlCharacters } from 'node:util'
 import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
@@ -2461,5 +2462,43 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'requires Tailwind v3 before attempting an upgrade',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js` export default {} `,
+      'src/index.html': html`
+        <div class="underline"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec }) => {
+    let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
+      e.toString(),
+    )
+
+    output = stripVTControlCharacters(output)
+      .replace(/tailwindcss v(.*)/g, 'tailwindcss') // Remove the version number from the error message
+      .replace(/\\/g, '/') // Make Windows paths look like Unix paths
+
+    expect(output).toMatch(
+      /Tailwind CSS v.* found. The migration tool can only be run on v3 projects./,
+    )
   },
 )
