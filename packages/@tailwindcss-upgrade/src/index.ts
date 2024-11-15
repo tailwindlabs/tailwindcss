@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-import { globby, isGitIgnored } from 'globby'
+import { globby } from 'globby'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
-import atImport from 'postcss-import'
 import { formatNodes } from './codemods/format-nodes'
 import { sortBuckets } from './codemods/sort-buckets'
 import { help } from './commands/help'
@@ -79,44 +78,19 @@ async function run() {
     // Ensure we are only dealing with CSS files
     files = files.filter((file) => file.endsWith('.css'))
 
-    // Load the stylesheets and their imports
-    let sheetsByFile = new Map<string, Stylesheet>()
-    let isIgnored = await isGitIgnored()
-    let queue = files.slice()
-    while (queue.length > 0) {
-      let file = queue.shift()!
+    // Analyze the stylesheets
+    let loadResults = await Promise.allSettled(files.map((filepath) => Stylesheet.load(filepath)))
 
-      // Already handled
-      if (sheetsByFile.has(file)) continue
-
-      // We don't want to process ignored files (like node_modules)
-      if (isIgnored(file)) continue
-
-      let sheet = await Stylesheet.load(file).catch((e) => {
-        error(`${e}`)
-        return null
-      })
-      if (!sheet) continue
-
-      // Track the sheet by its file
-      sheetsByFile.set(file, sheet)
-
-      // We process the stylesheet which will also process its imports and
-      // inline everything. We still want to handle the imports separately, so
-      // we just use the postcss-import messages to find the imported files.
-      //
-      // We can't use the `sheet.root` directly because this will mutate the
-      // `sheet.root`
-      let processed = await postcss().use(atImport()).process(sheet.root.toString(), { from: file })
-
-      for (let msg of processed.messages) {
-        if (msg.type === 'dependency' && msg.plugin === 'postcss-import') {
-          queue.push(msg.file)
-        }
+    // Load and parse all stylesheets
+    for (let result of loadResults) {
+      if (result.status === 'rejected') {
+        error(`${result.reason}`)
       }
     }
 
-    let stylesheets = Array.from(sheetsByFile.values())
+    let stylesheets = loadResults
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value)
 
     // Analyze the stylesheets
     try {
