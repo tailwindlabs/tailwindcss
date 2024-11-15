@@ -239,7 +239,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1000,14 +1000,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
         @import './utilities.css' layer(utilities);
       `,
       'src/utilities.css': css`
@@ -1069,7 +1069,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1123,7 +1123,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1310,7 +1310,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1376,6 +1376,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1435,7 +1436,7 @@ test(
       'src/root.5.css': css`@import './root.5/tailwind.css';`,
       'src/root.5/tailwind.css': css`
         /* Inject missing @config in this file, due to full import */
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
       `,
     },
   },
@@ -1871,7 +1872,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1933,7 +1934,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -2017,7 +2018,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2047,7 +2048,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "^3.4.14",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2152,7 +2153,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "^3.4.14",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -2231,6 +2232,128 @@ test(
 
       function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
         return <svg class="rounded-sm shadow-sm blur-sm" filter={blur ? 'url(…)' : undefined} />
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'passing in a single CSS file should resolve all imports and migrate them',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+        @import './generated/ignore-me.css';
+      `,
+      'src/generated/.gitignore': `
+        *
+        !.gitignore
+      `,
+      'src/generated/ignore-me.css': css`
+        /* This should not be converted */
+        @layer utilities {
+          .ignore-me {
+            color: red;
+          }
+        }
+      `,
+      'src/base.css': css`@import 'tailwindcss/base';`,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: blue;
+          }
+        }
+        @tailwind utilities;
+      `,
+      'src/typography.css': css`
+        @layer components {
+          .typography {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade ./src/index.css')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+      @import './generated/ignore-me.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css';
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/typography.css ---
+      @utility typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: blue;
+      }
+
+      --- ./src/generated/ignore-me.css ---
+      /* This should not be converted */
+      @layer utilities {
+        .ignore-me {
+          color: red;
+        }
       }
       "
     `)

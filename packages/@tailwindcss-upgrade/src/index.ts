@@ -67,9 +67,7 @@ async function run() {
 
     // Discover CSS files in case no files were provided
     if (files.length === 0) {
-      info(
-        'No input stylesheets provided. Searching for CSS files in the current directory and its subdirectories…',
-      )
+      info('Searching for CSS files in the current directory and its subdirectories…')
 
       files = await globby(['**/*.css'], {
         absolute: true,
