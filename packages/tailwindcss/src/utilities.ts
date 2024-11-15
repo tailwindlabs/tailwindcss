@@ -812,6 +812,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('table-row-group', [['display', 'table-row-group']])
   staticUtility('table-row', [['display', 'table-row']])
   staticUtility('flow-root', [['display', 'flow-root']])
+  staticUtility('flex', [['display', 'flex']])
   staticUtility('grid', [['display', 'grid']])
   staticUtility('inline-grid', [['display', 'inline-grid']])
   staticUtility('contents', [['display', 'contents']])
@@ -932,10 +933,7 @@ export function createUtilities(theme: Theme) {
   // generate `flex: 1`. Our `functionalUtility` helper can't handle two properties
   // using the same namespace, so we handle this one manually.
   utilities.functional('flex', (candidate) => {
-    if (!candidate.value) {
-      if (candidate.modifier) return
-      return [decl('display', 'flex')]
-    }
+    if (!candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
       if (candidate.modifier) return
