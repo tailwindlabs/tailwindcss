@@ -24,7 +24,7 @@ export async function migratePostCSSConfig(base: string) {
   // Priority 1: Handle JS config files
   let jsConfigPath = await detectJSConfigPath(base)
   if (jsConfigPath) {
-    let result = await migratePostCSSJSConfig(base, jsConfigPath)
+    let result = await migratePostCSSJSConfig(jsConfigPath)
 
     if (result) {
       didMigrate = true
@@ -41,7 +41,7 @@ export async function migratePostCSSConfig(base: string) {
     packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
   } catch {}
   if (!didMigrate && packageJson && 'postcss' in packageJson) {
-    let result = await migratePostCSSJsonConfig(base, packageJson.postcss)
+    let result = await migratePostCSSJsonConfig(packageJson.postcss)
 
     if (result) {
       await fs.writeFile(
@@ -64,7 +64,7 @@ export async function migratePostCSSConfig(base: string) {
       jsonConfig = JSON.parse(await fs.readFile(jsonConfigPath, 'utf-8'))
     } catch {}
     if (jsonConfig) {
-      let result = await migratePostCSSJsonConfig(base, jsonConfig)
+      let result = await migratePostCSSJsonConfig(jsonConfig)
 
       if (result) {
         await fs.writeFile(jsonConfigPath, JSON.stringify(result.json, null, 2))
@@ -108,10 +108,7 @@ export async function migratePostCSSConfig(base: string) {
   success(`↳ PostCSS config has been upgraded.`)
 }
 
-async function migratePostCSSJSConfig(
-  base: string,
-  configPath: string,
-): Promise<{
+async function migratePostCSSJSConfig(configPath: string): Promise<{
   didAddPostcssClient: boolean
   didRemoveAutoprefixer: boolean
   didRemovePostCSSImport: boolean
@@ -131,7 +128,7 @@ async function migratePostCSSJSConfig(
 
   info(`Attempt to upgrade the PostCSS config in file: ${configPath}`)
 
-  let isSimpleConfig = await isSimplePostCSSConfig(base, configPath)
+  let isSimpleConfig = await isSimplePostCSSConfig(configPath)
   if (!isSimpleConfig) {
     warn(`The PostCSS config contains dynamic JavaScript and can not be automatically migrated.`)
     return null
@@ -141,8 +138,7 @@ async function migratePostCSSJSConfig(
   let didRemoveAutoprefixer = false
   let didRemovePostCSSImport = false
 
-  let fullPath = path.resolve(base, configPath)
-  let content = await fs.readFile(fullPath, 'utf-8')
+  let content = await fs.readFile(configPath, 'utf-8')
   let lines = content.split('\n')
   let newLines: string[] = []
   for (let i = 0; i < lines.length; i++) {
@@ -186,15 +182,12 @@ async function migratePostCSSJSConfig(
       newLines.push(line)
     }
   }
-  await fs.writeFile(fullPath, newLines.join('\n'))
+  await fs.writeFile(configPath, newLines.join('\n'))
 
   return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
 }
 
-async function migratePostCSSJsonConfig(
-  base: string,
-  json: any,
-): Promise<{
+async function migratePostCSSJsonConfig(json: any): Promise<{
   json: any
   didAddPostcssClient: boolean
   didRemoveAutoprefixer: boolean
@@ -291,7 +284,7 @@ async function detectJSConfigPath(base: string): Promise<null | string> {
     let fullPath = path.resolve(base, file)
     try {
       await fs.access(fullPath)
-      return file
+      return fullPath
     } catch {}
   }
   return null
@@ -308,15 +301,14 @@ async function detectJSONConfigPath(base: string): Promise<null | string> {
     let fullPath = path.resolve(base, file)
     try {
       await fs.access(fullPath)
-      return file
+      return fullPath
     } catch {}
   }
   return null
 }
 
-async function isSimplePostCSSConfig(base: string, configPath: string): Promise<boolean> {
-  let fullPath = path.resolve(base, configPath)
-  let content = await fs.readFile(fullPath, 'utf-8')
+async function isSimplePostCSSConfig(configPath: string): Promise<boolean> {
+  let content = await fs.readFile(configPath, 'utf-8')
   return (
     content.includes('tailwindcss:') &&
     !(
