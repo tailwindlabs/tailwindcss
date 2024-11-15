@@ -36,11 +36,9 @@
       "default": "./dist/esm-cache.loader.mjs"
     }
   },
-  "devDependencies": {
-    "tailwindcss": "workspace:^"
-  },
   "dependencies": {
     "enhanced-resolve": "^5.17.1",
-    "jiti": "^2.0.0-beta.3"
+    "jiti": "^2.0.0-beta.3",
+    "tailwindcss": "workspace:*"
   }
 }

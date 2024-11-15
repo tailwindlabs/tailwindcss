@@ -1,4 +1,3 @@
-import type { Config } from 'tailwindcss'
 import {
   parseCandidate,
   type Candidate,
@@ -6,6 +5,7 @@ import {
   type Variant,
 } from '../../../../tailwindcss/src/candidate'
 import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'

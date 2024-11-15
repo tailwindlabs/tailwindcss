@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
-import type { Config } from 'tailwindcss'
+import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates } from './candidates'
 import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
