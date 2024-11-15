@@ -40,9 +40,9 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^7.0.0",
     "prettier": "^3.3.3",
-    "tailwindcss": "workspace:^",
     "tree-sitter": "^0.22.0",
-    "tree-sitter-typescript": "^0.23.0"
+    "tree-sitter-typescript": "^0.23.0",
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
     "@types/braces": "^3.0.4",

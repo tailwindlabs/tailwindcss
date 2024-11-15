@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 

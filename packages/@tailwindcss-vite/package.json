@@ -32,7 +32,7 @@
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
     "svelte-preprocess": "^6.0.2",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

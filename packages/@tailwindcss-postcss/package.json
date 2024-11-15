@@ -35,7 +35,7 @@
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
     "postcss": "^8.4.41",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

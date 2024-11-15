@@ -162,7 +162,7 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       tailwindcss:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tailwindcss
 
   packages/@tailwindcss-node:
@@ -173,9 +173,8 @@ importers:
       jiti:
         specifier: ^2.0.0-beta.3
         version: 2.4.0
-    devDependencies:
       tailwindcss:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tailwindcss
 
   packages/@tailwindcss-postcss:
@@ -196,7 +195,7 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       tailwindcss:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tailwindcss
     devDependencies:
       '@types/node':
@@ -318,7 +317,7 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       tailwindcss:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tailwindcss
       tree-sitter:
         specifier: ^0.22.0
@@ -352,7 +351,7 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2(@babel/core@7.25.2)(postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0))(postcss@8.4.47)(svelte@4.2.18)(typescript@5.6.3)
       tailwindcss:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tailwindcss
     devDependencies:
       '@types/node':
@@ -1234,13 +1233,11 @@ packages:
   '@parcel/watcher-darwin-arm64@2.5.0':
     resolution: {integrity: sha512-hyZ3TANnzGfLpRA2s/4U1kbw2ZI4qGxaRJbBH2DCSREFfubMswheh8TeiC1sGZ3z2jUf3s37P0BBlrD3sjVTUw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   '@parcel/watcher-darwin-x64@2.5.0':
     resolution: {integrity: sha512-9rhlwd78saKf18fT869/poydQK8YqlU26TMiNg7AIu7eBp9adqbJZqmdFOsbZ5cnLp5XvRo9wcFmNHgHdWaGYA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   '@parcel/watcher-freebsd-x64@2.5.0':
@@ -1264,25 +1261,21 @@ packages:
   '@parcel/watcher-linux-arm64-glibc@2.5.0':
     resolution: {integrity: sha512-BfNjXwZKxBy4WibDb/LDCriWSKLz+jJRL3cM/DllnHH5QUyoiUNEp3GmL80ZqxeumoADfCCP19+qiYiC8gUBjA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-arm64-musl@2.5.0':
     resolution: {integrity: sha512-S1qARKOphxfiBEkwLUbHjCY9BWPdWnW9j7f7Hb2jPplu8UZ3nes7zpPOW9bkLbHRvWM0WDTsjdOTUgW0xLBN1Q==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-glibc@2.5.0':
     resolution: {integrity: sha512-d9AOkusyXARkFD66S6zlGXyzx5RvY+chTP9Jp0ypSTC9d4lzyRs9ovGf/80VCxjKddcUvnsGwCHWuF2EoPgWjw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     resolution: {integrity: sha512-iqOC+GoTDoFyk/VYSFHwjHhYrk8bljW6zOhPuhi5t9ulqiYq1togGJB5e3PwYVFFfeVgc6pbz3JdQyDoBszVaA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-win32-arm64@2.5.0':
@@ -1300,7 +1293,6 @@ packages:
   '@parcel/watcher-win32-x64@2.5.0':
     resolution: {integrity: sha512-lPrxve92zEHdgeff3aiu4gDOIt4u7sJYha6wbdEZDCDUhtjTsOMiaJzG5lMY4GkWH8p0fMmO2Ppq5G5XXG+DQw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [win32]
 
   '@parcel/watcher@2.5.0':
@@ -1734,7 +1726,6 @@ packages:
 
   bun@1.1.29:
     resolution: {integrity: sha512-SKhpyKNZtgxrVel9ec9xon3LDv8mgpiuFhARgcJo1YIbggY2PBrKHRNiwQ6Qlb+x3ivmRurfuwWgwGexjpgBRg==}
-    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -2639,13 +2630,11 @@ packages:
   lightningcss-darwin-arm64@1.26.0:
     resolution: {integrity: sha512-n4TIvHO1NY1ondKFYpL2ZX0bcC2y6yjXMD6JfyizgR8BCFNEeArINDzEaeqlfX9bXz73Bpz/Ow0nu+1qiDrBKg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   lightningcss-darwin-x64@1.26.0:
     resolution: {integrity: sha512-Rf9HuHIDi1R6/zgBkJh25SiJHF+dm9axUZW/0UoYCW1/8HV0gMI0blARhH4z+REmWiU1yYT/KyNF3h7tHyRXUg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   lightningcss-freebsd-x64@1.26.0:
@@ -2663,25 +2652,21 @@ packages:
   lightningcss-linux-arm64-gnu@1.26.0:
     resolution: {integrity: sha512-iJmZM7fUyVjH+POtdiCtExG+67TtPUTer7K/5A8DIfmPfrmeGvzfRyBltGhQz13Wi15K1lf2cPYoRaRh6vcwNA==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-arm64-musl@1.26.0:
     resolution: {integrity: sha512-XxoEL++tTkyuvu+wq/QS8bwyTXZv2y5XYCMcWL45b8XwkiS8eEEEej9BkMGSRwxa5J4K+LDeIhLrS23CpQyfig==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-x64-gnu@1.26.0:
     resolution: {integrity: sha512-1dkTfZQAYLj8MUSkd6L/+TWTG8V6Kfrzfa0T1fSlXCXQHrt1HC1/UepXHtKHDt/9yFwyoeayivxXAsApVxn6zA==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
   lightningcss-linux-x64-musl@1.26.0:
     resolution: {integrity: sha512-yX3Rk9m00JGCUzuUhFEojY+jf/6zHs3XU8S8Vk+FRbnr4St7cjyMXdNjuA2LjiT8e7j8xHRCH8hyZ4H/btRE4A==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
   lightningcss-win32-arm64-msvc@1.26.0:
@@ -2693,7 +2678,6 @@ packages:
   lightningcss-win32-x64-msvc@1.26.0:
     resolution: {integrity: sha512-pYS3EyGP3JRhfqEFYmfFDiZ9/pVNfy8jVIYtrx9TVNusVyDK3gpW1w/rbvroQ4bDJi7grdUtyrYU6V2xkY/bBw==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [win32]
 
   lightningcss@1.26.0:
@@ -5209,7 +5193,7 @@ snapshots:
       eslint: 9.11.1(jiti@2.4.0)
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0))
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))
       eslint-plugin-jsx-a11y: 6.9.0(eslint@9.11.1(jiti@2.4.0))
       eslint-plugin-react: 7.35.0(eslint@9.11.1(jiti@2.4.0))
       eslint-plugin-react-hooks: 4.6.2(eslint@9.11.1(jiti@2.4.0))
@@ -5232,8 +5216,8 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 9.11.1(jiti@2.4.0)
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0))
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0))
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))
       fast-glob: 3.3.2
       get-tsconfig: 4.7.6
       is-core-module: 2.15.0
@@ -5274,7 +5258,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0)):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -5285,7 +5269,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0)):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -5295,7 +5279,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.11.1(jiti@2.4.0)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@9.11.1(jiti@2.4.0))
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))
       hasown: 2.0.2
       is-core-module: 2.15.0
       is-glob: 4.0.3

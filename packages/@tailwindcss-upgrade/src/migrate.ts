@@ -1,7 +1,7 @@
 import { normalizePath } from '@tailwindcss/node'
 import path from 'node:path'
 import postcss from 'postcss'
-import type { Config } from 'tailwindcss'
+import type { Config } from '../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'

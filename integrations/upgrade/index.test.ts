@@ -8,10 +8,8 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
-          },
-          "devDependencies": {
-            "@tailwindcss/cli": "workspace:^"
           }
         }
       `,
@@ -53,6 +51,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -166,6 +165,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -246,7 +246,7 @@ test(
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
 
         .a {
           @apply flex;
@@ -311,7 +311,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -383,14 +383,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
 
         @layer components {
           .btn {
@@ -460,7 +460,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -907,6 +907,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }

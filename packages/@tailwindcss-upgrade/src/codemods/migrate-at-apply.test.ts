@@ -1,8 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import postcss from 'postcss'
-import type { Config } from 'tailwindcss'
 import { expect, it } from 'vitest'
+import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import { migrateAtApply } from './migrate-at-apply'
 
 const css = dedent
