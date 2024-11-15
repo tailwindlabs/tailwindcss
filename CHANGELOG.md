@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Ensure `flex` is suggested ([#15014](https://github.com/tailwindlabs/tailwindcss/pull/15014))
+
 ### Changed
 
 - Bring back support for color opacity modifiers to read from `--opacity-*` theme values ([#14278](https://github.com/tailwindlabs/tailwindcss/pull/14278))
