@@ -24,48 +24,40 @@ test('bg-gradient-*', async () => {
     ".bg-gradient-to-b {
       --tw-gradient-position: to bottom in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
-      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-bl {
       --tw-gradient-position: to bottom left in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-br {
       --tw-gradient-position: to bottom right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
-      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-l {
       --tw-gradient-position: to left in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-r {
       --tw-gradient-position: to right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
-      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-t {
       --tw-gradient-position: to top in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tl {
       --tw-gradient-position: to top left in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
-      background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-gradient-to-tr {
       --tw-gradient-position: to top right in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
       background-image: linear-gradient(var(--tw-gradient-stops));
     }"
   `)
