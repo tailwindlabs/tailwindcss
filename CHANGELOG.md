@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
+- Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace as deprecated utilities ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
 
 ## [4.0.0-alpha.34] - 2024-11-14
 
