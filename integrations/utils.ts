@@ -21,6 +21,7 @@ interface SpawnedProcess {
 
 interface ChildProcessOptions {
   cwd?: string
+  env?: Record<string, string>
 }
 
 interface ExecOptions {
@@ -29,7 +30,7 @@ interface ExecOptions {
 
 interface TestConfig {
   fs: {
-    [filePath: string]: string
+    [filePath: string]: string | Uint8Array
   }
 }
 interface TestContext {
@@ -45,7 +46,7 @@ interface TestContext {
     dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
       filePath: string,
-      contents: string | string[] | RegExp | RegExp[],
+      contents: string | RegExp | (string | RegExp)[],
     ): Promise<void>
     expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
   }
@@ -109,6 +110,7 @@ export function test(
               {
                 cwd,
                 ...childProcessOptions,
+                env: childProcessOptions.env,
               },
               (error, stdout, stderr) => {
                 if (error) {
@@ -145,10 +147,11 @@ export function test(
           let child = spawn(command, {
             cwd,
             shell: true,
+            ...childProcessOptions,
             env: {
               ...process.env,
+              ...childProcessOptions.env,
             },
-            ...childProcessOptions,
           })
 
           function dispose() {
@@ -280,8 +283,14 @@ export function test(
           })
         },
         fs: {
-          async write(filename: string, content: string): Promise<void> {
+          async write(filename: string, content: string | Uint8Array): Promise<void> {
             let full = path.join(root, filename)
+            let dir = path.dirname(full)
+            await fs.mkdir(dir, { recursive: true })
+
+            if (typeof content !== 'string') {
+              return await fs.writeFile(full, content)
+            }
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
@@ -292,8 +301,6 @@ export function test(
               content = content.replace(/\n/g, '\r\n')
             }
 
-            let dir = path.dirname(full)
-            await fs.mkdir(dir, { recursive: true })
             await fs.writeFile(full, content, 'utf-8')
           },
 
@@ -414,6 +421,20 @@ export function test(
 
       options.onTestFinished(dispose)
 
+      // Make it a git repository, and commit all files
+      if (only || debug) {
+        try {
+          await context.exec('git init', { cwd: root })
+          await context.exec('git add --all', { cwd: root })
+          await context.exec('git commit -m "before migration"', { cwd: root })
+        } catch (error: any) {
+          console.error(error)
+          console.error(error.stdout?.toString())
+          console.error(error.stderr?.toString())
+          throw error
+        }
+      }
+
       return await testCallback(context)
     },
   )
@@ -453,7 +474,14 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   json.pnpm ||= {}
   json.pnpm.overrides ||= {}
   for (let pkg of PUBLIC_PACKAGES) {
-    json.pnpm.overrides[pkg] = resolveVersion(pkg)
+    if (pkg === 'tailwindcss') {
+      // We want to be explicit about the `tailwindcss` package so our tests can
+      // also import v3 without conflicting v4 tarballs.
+      json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+    } else {
+      json.pnpm.overrides[pkg] = resolveVersion(pkg)
+    }
   }
 
   return JSON.stringify(json, null, 2)
@@ -487,6 +515,7 @@ function testIfPortTaken(port: number): Promise<boolean> {
   })
 }
 
+export let svg = dedent
 export let css = dedent
 export let html = dedent
 export let ts = dedent
@@ -494,6 +523,12 @@ export let js = dedent
 export let json = dedent
 export let yaml = dedent
 export let txt = dedent
+
+export function binary(str: string | TemplateStringsArray, ...values: unknown[]): Uint8Array {
+  let base64 = typeof str === 'string' ? str : String.raw(str, ...values)
+
+  return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
+}
 
 export function candidate(strings: TemplateStringsArray, ...values: any[]) {
   let output: string[] = []

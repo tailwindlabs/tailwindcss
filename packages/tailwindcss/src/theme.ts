@@ -8,8 +8,26 @@ export const enum ThemeOptions {
   DEFAULT = 1 << 2,
 }
 
-function isIgnoredThemeKey(themeKey: ThemeKey, ignoredThemeKeys: ThemeKey[]) {
-  return ignoredThemeKeys.some(
+// In the future we may want to replace this with just a `Set` of known theme
+// keys and let the computer sort out which keys should ignored which other keys
+// based on overlapping prefixes.
+const ignoredThemeKeyMap = new Map([
+  ['--font', ['--font-weight', '--font-size']],
+  ['--inset', ['--inset-shadow', '--inset-ring']],
+  [
+    '--text',
+    [
+      '--text-color',
+      '--text-underline-offset',
+      '--text-indent',
+      '--text-decoration-thickness',
+      '--text-decoration-color',
+    ],
+  ],
+])
+
+function isIgnoredThemeKey(themeKey: ThemeKey, namespace: ThemeKey) {
+  return (ignoredThemeKeyMap.get(namespace) ?? []).some(
     (ignoredThemeKey) => themeKey === ignoredThemeKey || themeKey.startsWith(`${ignoredThemeKey}-`),
   )
 }
@@ -50,22 +68,22 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[], ignoredThemeKeys: ThemeKey[] = []): string[] {
+  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
     let keys: string[] = []
 
-    for (let prefix of themeKeys) {
-      let namespace = `${prefix}-`
+    for (let namespace of themeKeys) {
+      let prefix = `${namespace}-`
 
       for (let key of this.values.keys()) {
-        if (!key.startsWith(namespace)) continue
+        if (!key.startsWith(prefix)) continue
 
         if (key.indexOf('--', 2) !== -1) continue
 
-        if (isIgnoredThemeKey(key as ThemeKey, ignoredThemeKeys)) {
+        if (isIgnoredThemeKey(key as ThemeKey, namespace)) {
           continue
         }
 
-        keys.push(key.slice(namespace.length))
+        keys.push(key.slice(prefix.length))
       }
     }
 
@@ -106,7 +124,9 @@ export class Theme {
   }
 
   clearNamespace(namespace: string, clearOptions: ThemeOptions) {
-    for (let key of this.values.keys()) {
+    let ignored = ignoredThemeKeyMap.get(namespace) ?? []
+
+    outer: for (let key of this.values.keys()) {
       if (key.startsWith(namespace)) {
         if (clearOptions !== ThemeOptions.NONE) {
           let options = this.getOptions(key)
@@ -114,24 +134,23 @@ export class Theme {
             continue
           }
         }
+        for (let ignoredNamespace of ignored) {
+          if (key.startsWith(ignoredNamespace)) continue outer
+        }
         this.values.delete(key)
       }
     }
   }
 
-  #resolveKey(
-    candidateValue: string | null,
-    themeKeys: ThemeKey[],
-    ignoredThemeKeys: ThemeKey[] = [],
-  ): string | null {
-    for (let key of themeKeys) {
+  #resolveKey(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
+    for (let namespace of themeKeys) {
       let themeKey =
         candidateValue !== null
-          ? (escape(`${key}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
-          : key
+          ? (escape(`${namespace}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
+          : namespace
 
       if (!this.values.has(themeKey)) continue
-      if (isIgnoredThemeKey(themeKey, ignoredThemeKeys)) continue
+      if (isIgnoredThemeKey(themeKey, namespace)) continue
 
       return themeKey
     }
@@ -147,12 +166,8 @@ export class Theme {
     return `var(${this.#prefixKey(themeKey)})`
   }
 
-  resolve(
-    candidateValue: string | null,
-    themeKeys: ThemeKey[],
-    ignoredThemeKeys: ThemeKey[] = [],
-  ): string | null {
-    let themeKey = this.#resolveKey(candidateValue, themeKeys, ignoredThemeKeys)
+  resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 
@@ -165,12 +180,8 @@ export class Theme {
     return this.#var(themeKey)
   }
 
-  resolveValue(
-    candidateValue: string | null,
-    themeKeys: ThemeKey[],
-    ignoredThemeKeys: ThemeKey[] = [],
-  ): string | null {
-    let themeKey = this.#resolveKey(candidateValue, themeKeys, ignoredThemeKeys)
+  resolveValue(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 
@@ -181,9 +192,8 @@ export class Theme {
     candidateValue: string,
     themeKeys: ThemeKey[],
     nestedKeys: `--${string}`[] = [],
-    ignoredThemeKeys: ThemeKey[] = [],
   ): [string, Record<string, string>] | null {
-    let themeKey = this.#resolveKey(candidateValue, themeKeys, ignoredThemeKeys)
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 

@@ -4,7 +4,7 @@ import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candida
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
-import { withAlpha, withNegative } from '../utilities'
+import { withAlpha } from '../utilities'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
@@ -75,7 +75,7 @@ export type PluginAPI = {
   prefix(className: string): string
 }
 
-const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_UTILITY_NAME = /^[a-z@][a-zA-Z0-9/%._-]*$/
 
 export function buildPluginApi(
   designSystem: DesignSystem,
@@ -228,8 +228,7 @@ export function buildPluginApi(
           )
         }
 
-        designSystem.utilities.static(name.slice(1), (candidate) => {
-          if (candidate.negative) return
+        designSystem.utilities.static(name.slice(1), () => {
           let ast = objectToAst(css)
           substituteAtApply(ast, designSystem)
           return ast
@@ -251,112 +250,117 @@ export function buildPluginApi(
           )
         }
 
-        function compileFn(candidate: Extract<Candidate, { kind: 'functional' }>) {
-          // A negative utility was provided but is unsupported
-          if (!options?.supportsNegativeValues && candidate.negative) return
-
-          // Throw out any candidate whose value is not a supported type
-          if (candidate.value?.kind === 'arbitrary' && types.length > 0 && !types.includes('any')) {
-            // The candidate has an explicit data type but it's not in the list
-            // of supported types by this utility. For example, a `scrollbar`
-            // utility that is only used to change the scrollbar color but is
-            // used with a `length` value: `scrollbar-[length:var(--whatever)]`
-            if (candidate.value.dataType && !types.includes(candidate.value.dataType)) {
-              return
-            }
-
-            // The candidate does not have an explicit data type and the value
-            // cannot be inferred as one of the supported types. For example, a
-            // `scrollbar` utility that is only used to change the scrollbar
-            // color but is used with a `length` value: `scrollbar-[33px]`
+        function compileFn({ negative }: { negative: boolean }) {
+          return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+            // Throw out any candidate whose value is not a supported type
             if (
-              !candidate.value.dataType &&
-              !inferDataType(candidate.value.value, types as any[])
+              candidate.value?.kind === 'arbitrary' &&
+              types.length > 0 &&
+              !types.includes('any')
             ) {
-              return
-            }
-          }
+              // The candidate has an explicit data type but it's not in the list
+              // of supported types by this utility. For example, a `scrollbar`
+              // utility that is only used to change the scrollbar color but is
+              // used with a `length` value: `scrollbar-[length:var(--whatever)]`
+              if (candidate.value.dataType && !types.includes(candidate.value.dataType)) {
+                return
+              }
 
-          let isColor = types.includes('color')
-
-          // Resolve the candidate value
-          let value: string | null = null
-          let ignoreModifier = false
-
-          {
-            let values = options?.values ?? {}
-
-            if (isColor) {
-              // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
-              // for backwards compatibility but still allow them to be overridden
-              values = Object.assign(
-                {
-                  inherit: 'inherit',
-                  transparent: 'transparent',
-                  current: 'currentColor',
-                },
-                values,
-              )
+              // The candidate does not have an explicit data type and the value
+              // cannot be inferred as one of the supported types. For example, a
+              // `scrollbar` utility that is only used to change the scrollbar
+              // color but is used with a `length` value: `scrollbar-[33px]`
+              if (
+                !candidate.value.dataType &&
+                !inferDataType(candidate.value.value, types as any[])
+              ) {
+                return
+              }
             }
 
-            if (!candidate.value) {
-              value = values.DEFAULT ?? null
-            } else if (candidate.value.kind === 'arbitrary') {
-              value = candidate.value.value
-            } else if (candidate.value.fraction && values[candidate.value.fraction]) {
-              value = values[candidate.value.fraction]
-              ignoreModifier = true
-            } else if (values[candidate.value.value]) {
-              value = values[candidate.value.value]
-            } else if (values.__BARE_VALUE__) {
-              value = values.__BARE_VALUE__(candidate.value) ?? null
-              ignoreModifier = (candidate.value.fraction !== null && value?.includes('/')) ?? false
+            let isColor = types.includes('color')
+
+            // Resolve the candidate value
+            let value: string | null = null
+            let ignoreModifier = false
+
+            {
+              let values = options?.values ?? {}
+
+              if (isColor) {
+                // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
+                // for backwards compatibility but still allow them to be overridden
+                values = Object.assign(
+                  {
+                    inherit: 'inherit',
+                    transparent: 'transparent',
+                    current: 'currentColor',
+                  },
+                  values,
+                )
+              }
+
+              if (!candidate.value) {
+                value = values.DEFAULT ?? null
+              } else if (candidate.value.kind === 'arbitrary') {
+                value = candidate.value.value
+              } else if (candidate.value.fraction && values[candidate.value.fraction]) {
+                value = values[candidate.value.fraction]
+                ignoreModifier = true
+              } else if (values[candidate.value.value]) {
+                value = values[candidate.value.value]
+              } else if (values.__BARE_VALUE__) {
+                value = values.__BARE_VALUE__(candidate.value) ?? null
+                ignoreModifier =
+                  (candidate.value.fraction !== null && value?.includes('/')) ?? false
+              }
             }
-          }
 
-          if (value === null) return
+            if (value === null) return
 
-          // Resolve the modifier value
-          let modifier: string | null
+            // Resolve the modifier value
+            let modifier: string | null
 
-          {
-            let modifiers = options?.modifiers ?? null
+            {
+              let modifiers = options?.modifiers ?? null
 
-            if (!candidate.modifier) {
-              modifier = null
-            } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
-              modifier = candidate.modifier.value
-            } else if (modifiers?.[candidate.modifier.value]) {
-              modifier = modifiers[candidate.modifier.value]
-            } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
-              modifier = `${candidate.modifier.value}%`
-            } else {
-              modifier = null
+              if (!candidate.modifier) {
+                modifier = null
+              } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
+                modifier = candidate.modifier.value
+              } else if (modifiers?.[candidate.modifier.value]) {
+                modifier = modifiers[candidate.modifier.value]
+              } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
+                modifier = `${candidate.modifier.value}%`
+              } else {
+                modifier = null
+              }
             }
-          }
 
-          // A modifier was provided but is invalid
-          if (candidate.modifier && modifier === null && !ignoreModifier) {
-            // For arbitrary values, return `null` to avoid falling through to the next utility
-            return candidate.value?.kind === 'arbitrary' ? null : undefined
-          }
+            // A modifier was provided but is invalid
+            if (candidate.modifier && modifier === null && !ignoreModifier) {
+              // For arbitrary values, return `null` to avoid falling through to the next utility
+              return candidate.value?.kind === 'arbitrary' ? null : undefined
+            }
 
-          if (isColor && modifier !== null) {
-            value = withAlpha(value, modifier)
-          }
+            if (isColor && modifier !== null) {
+              value = withAlpha(value, modifier)
+            }
 
-          if (candidate.negative) {
-            value = withNegative(value, candidate)
-          }
+            if (negative) {
+              value = `calc(${value} * -1)`
+            }
 
-          let ast = objectToAst(fn(value, { modifier }))
-          substituteAtApply(ast, designSystem)
-          return ast
+            let ast = objectToAst(fn(value, { modifier }))
+            substituteAtApply(ast, designSystem)
+            return ast
+          }
         }
 
-        designSystem.utilities.functional(name, compileFn, {
-          types,
-        })
+        if (options?.supportsNegativeValues) {
+          designSystem.utilities.functional(`-${name}`, compileFn({ negative: true }), { types })
+        }
+        designSystem.utilities.functional(name, compileFn({ negative: false }), { types })
 
         designSystem.utilities.suggest(name, () => {
           let values = options?.values ?? {}

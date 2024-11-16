@@ -11,14 +11,13 @@ function loadDesignSystem() {
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')
-  theme.add('--font-size-xs', '0.75rem')
-  theme.add('--font-size-xs--line-height', '1rem')
+  theme.add('--text-xs', '0.75rem')
+  theme.add('--text-xs--line-height', '1rem')
   theme.add('--perspective-dramatic', '100px')
   theme.add('--perspective-normal', '500px')
   theme.add('--opacity-background', '0.3')
   theme.add('--drop-shadow-sm', '0 1px 1px rgb(0 0 0 / 0.05)')
   theme.add('--inset-shadow-sm', 'inset 0 1px 1px rgb(0 0 0 / 0.05)')
-  theme.add('--inset-ring-big', '100px')
   return buildDesignSystem(theme)
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/vite",
-  "version": "4.0.0-alpha.31",
+  "version": "4.0.0-alpha.34",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -31,7 +31,8 @@
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
-    "tailwindcss": "workspace:^"
+    "svelte-preprocess": "^6.0.2",
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

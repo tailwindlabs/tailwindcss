@@ -17,11 +17,20 @@ test('force', async () => {
 
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
-    ":where(.\\*\\:flex > *) {
+    ":is(.\\*\\:flex > *) {
       display: flex;
     }"
   `)
   expect(await run(['*/foo:flex'])).toEqual('')
+})
+
+test('**', async () => {
+  expect(await run(['**:flex'])).toMatchInlineSnapshot(`
+    ":is(.\\*\\*\\:flex *) {
+      display: flex;
+    }"
+  `)
+  expect(await run(['**/foo:flex'])).toEqual('')
 })
 
 test('first-letter', async () => {
@@ -1942,7 +1951,7 @@ test('container queries', async () => {
     await compileCss(
       css`
         @theme {
-          --width-lg: 1024px;
+          --container-lg: 1024px;
         }
         @tailwind utilities;
       `,
@@ -1965,7 +1974,7 @@ test('container queries', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-lg: 1024px;
+      --container-lg: 1024px;
     }
 
     @container name (width < 1024px) {

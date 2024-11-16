@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, html, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
   'error when no CSS file with @tailwind is used',
@@ -8,10 +8,8 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
-          },
-          "devDependencies": {
-            "@tailwindcss/cli": "workspace:^"
           }
         }
       `,
@@ -53,6 +51,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -133,22 +132,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       @utility foo {
         color: red;
       }
@@ -182,6 +165,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -240,22 +224,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
       }
@@ -271,14 +239,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
 
         .a {
           @apply flex;
@@ -320,22 +288,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       .a {
         @apply flex;
       }
@@ -359,7 +311,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -398,7 +350,6 @@ test(
         If we ever want to remove these styles, we need to add an explicit border
         color utility to any element that depends on these defaults.
       */
-
       @layer base {
         *,
         ::after,
@@ -406,22 +357,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
         }
       }
 
@@ -448,14 +383,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
 
         @layer components {
           .btn {
@@ -502,22 +437,6 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       @utility btn {
         @apply rounded-md px-2 py-1 bg-blue-500 text-white;
       }
@@ -528,6 +447,132 @@ test(
         }
         -ms-overflow-style: none;
         scrollbar-width: none;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'migrate imports with `layer(…)`',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+        @import './mix.css';
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+      `,
+      'src/components.css': css`
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+      `,
+      'src/mix.css': css`
+        html {
+          color: blue;
+        }
+
+        @layer components {
+          .foo-mix {
+            color: red;
+          }
+        }
+
+        @layer utilities {
+          .bar-mix {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css' layer(base);
+      @import './components.css';
+      @import './utilities.css';
+      @import './mix.css' layer(base);
+      @import './mix.utilities.css';
+
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/base.css ---
+      html {
+        color: red;
+      }
+
+      --- ./src/components.css ---
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/mix.css ---
+      html {
+        color: blue;
+      }
+
+      --- ./src/mix.utilities.css ---
+      @utility foo-mix {
+        color: red;
+      }
+
+      @utility bar-mix {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @utility bar {
+        color: red;
       }
       "
     `)
@@ -862,6 +907,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -954,14 +1000,14 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
       `,
       'tailwind.config.js': js`module.exports = {}`,
       'src/index.css': css`
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
         @import './utilities.css' layer(utilities);
       `,
       'src/utilities.css': css`
@@ -1002,21 +1048,6 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
 
       --- ./src/utilities.css ---
       @utility no-scrollbar {
@@ -1038,7 +1069,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1092,7 +1123,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1193,6 +1224,7 @@ test(
 
       --- ./src/a.1.utilities.1.css ---
       @import './a.1.utilities.utilities.css';
+
       @utility foo-from-a {
         color: red;
       }
@@ -1214,12 +1246,14 @@ test(
 
       --- ./src/b.1.css ---
       @import './b.1.components.css';
+
       @utility bar-from-b {
         color: red;
       }
 
       --- ./src/c.1.css ---
       @import './c.2.css' layer(utilities);
+
       .baz-from-c {
         color: green;
       }
@@ -1229,12 +1263,14 @@ test(
 
       --- ./src/c.2.css ---
       @import './c.3.css';
+
       #baz {
         --keep: me;
       }
 
       --- ./src/c.2.utilities.css ---
       @import './c.3.utilities.css';
+
       @utility baz-from-import {
         color: yellow;
       }
@@ -1274,7 +1310,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/cli": "workspace:^",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -1340,6 +1376,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1399,7 +1436,7 @@ test(
       'src/root.5.css': css`@import './root.5/tailwind.css';`,
       'src/root.5/tailwind.css': css`
         /* Inject missing @config in this file, due to full import */
-        @import 'tailwindcss';
+        @import 'tailwindcss/tailwind.css';
       `,
     },
   },
@@ -1417,6 +1454,8 @@ test(
       /* Inject missing @config */
       @import 'tailwindcss';
 
+      @config '../tailwind.config.ts';
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1434,27 +1473,13 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-      @config '../tailwind.config.ts';
 
       --- ./src/root.2.css ---
       /* Already contains @config */
       @import 'tailwindcss';
 
+      @config "../tailwind.config.ts";
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
@@ -1472,59 +1497,11 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-      @config "../tailwind.config.ts";
 
       --- ./src/root.3.css ---
       /* Inject missing @config above first @theme */
       @import 'tailwindcss';
 
-      /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
-        so we've added these compatibility styles to make sure everything still
-        looks the same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add an explicit border
-        color utility to any element that depends on these defaults.
-      */
-      @layer base {
-        *,
-        ::after,
-        ::before,
-        ::backdrop,
-        ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
       @config '../tailwind.config.ts';
 
       @variant hocus (&:hover, &:focus);
@@ -1537,10 +1514,29 @@ test(
         --color-blue-500: #00f;
       }
 
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
       --- ./src/root.4.css ---
       /* Inject missing @config due to nested imports with tailwind imports */
       @import './root.4/base.css';
       @import './root.4/utilities.css';
+
       @config '../tailwind.config.ts';
 
       --- ./src/root.5.css ---
@@ -1568,28 +1564,14 @@ test(
         }
       }
 
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
-
       --- ./src/root.4/utilities.css ---
       @import 'tailwindcss/utilities' layer(utilities);
 
       --- ./src/root.5/tailwind.css ---
       /* Inject missing @config in this file, due to full import */
       @import 'tailwindcss';
+
+      @config '../../tailwind.config.ts';
 
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -1608,22 +1590,276 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
+      "
+    `)
+  },
+)
 
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
+test(
+  'injecting `@config` in the shared root, when a tailwind.config.{js,ts,…} is detected',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          plugins: [
+            () => {
+              // custom stuff which is too complicated to migrate to CSS
+            },
+          ],
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
+      `,
+      'src/index.css': css`@import './tailwind-setup.css';`,
+      'src/tailwind-setup.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+        @tailwind base;
+      `,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/typography.css': css`
+        .typography {
+          color: red;
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+      ></div>
+
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
       */
       @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
         }
       }
-      @config '../../tailwind.config.ts';
+
+      @layer base {
+        html {
+          color: red;
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css' layer(components);
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/tailwind-setup.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+
+      @config '../tailwind.config.ts';
+
+      --- ./src/typography.css ---
+      .typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'injecting `@config` in the shared root (+ migrating), when a tailwind.config.{js,ts,…} is detected',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`
+        export default {
+          content: ['./src/**/*.{html,js}'],
+          theme: {
+            extend: {
+              colors: {
+                'my-red': 'red',
+              },
+            },
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red]"
+        ></div>
+      `,
+      'src/index.css': css`@import './tailwind-setup.css';`,
+      'src/tailwind-setup.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+      `,
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+        @tailwind base;
+      `,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/typography.css': css`
+        .typography {
+          color: red;
+        }
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: red;
+          }
+        }
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+      ></div>
+
+      --- ./src/index.css ---
+      @import './tailwind-setup.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      @layer base {
+        html {
+          color: red;
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css' layer(components);
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/tailwind-setup.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+
+      @theme {
+        --color-my-red: red;
+      }
+
+      --- ./src/typography.css ---
+      .typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: red;
+      }
       "
     `)
   },
@@ -1636,7 +1872,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1681,21 +1917,6 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
-      /*
-        Form elements have a 1px border by default in Tailwind CSS v4, so we've
-        added these compatibility styles to make sure everything still looks the
-        same as it did with Tailwind CSS v3.
-
-        If we ever want to remove these styles, we need to add \`border-0\` to
-        any form elements that shouldn't have a border.
-      */
-      @layer base {
-        input:where(:not([type='button'], [type='reset'], [type='submit'])),
-        select,
-        textarea {
-          border-width: 0;
-        }
-      }
 
       --- ./src/styles/components.css ---
       .btn {
@@ -1713,7 +1934,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -1797,7 +2018,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
-            "tailwindcss": "workspace:^",
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           },
           "devDependencies": {
@@ -1817,5 +2038,324 @@ test(
       'prettier-plugin-tailwindcss': expect.any(String),
     })
     expect(pkg.devDependencies['prettier-plugin-tailwindcss']).not.toEqual('0.5.0')
+  },
+)
+
+test(
+  'only migrate legacy classes when it is safe to do so',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        module.exports = {
+          content: ['./*.html'],
+          theme: {
+            // Overrides the default boxShadow entirely so none of the
+            // migrations are safe.
+            boxShadow: {
+              DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+            },
+
+            extend: {
+              // Changes the "before" class definition. 'blur' -> 'blur-sm' is
+              // not safe because 'blur' has a custom value.
+              //
+              // But 'blur-sm' -> 'blur-xs' is safe because 'blur-xs' uses the
+              // default value.
+              blur: {
+                DEFAULT: 'var(--custom-default-blur)',
+              },
+
+              // Changes the "after" class definition. 'rounded' -> 'rounded-sm' is
+              // not safe because 'rounded-sm' has a custom value.
+              borderRadius: {
+                sm: 'var(--custom-rounded-sm)',
+              },
+            },
+          },
+        }
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'index.html': html`
+        <div>
+          <div class="shadow shadow-sm shadow-xs"></div>
+          <div class="blur blur-sm"></div>
+          <div class="rounded rounded-sm"></div>
+        </div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./*.{js,css,html}')).toMatchInlineSnapshot(`
+      "
+      --- index.html ---
+      <div>
+        <div class="shadow shadow-sm shadow-xs"></div>
+        <div class="blur blur-xs"></div>
+        <div class="rounded rounded-sm"></div>
+      </div>
+
+      --- index.css ---
+      @import 'tailwindcss';
+
+      @theme {
+        --shadow-*: initial;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+        --blur: var(--custom-default-blur);
+
+        --radius-sm: var(--custom-rounded-sm);
+      }
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'make suffix-less migrations safe (e.g.: `blur`, `rounded`, `shadow`)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "prettier-plugin-tailwindcss": "0.5.0"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        module.exports = {
+          content: ['./*.{html,tsx}'],
+        }
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'index.html': html`
+        <div class="rounded blur shadow"></div>
+      `,
+      'example-component.tsx': ts`
+        type Star = [
+          x: number,
+          y: number,
+          dim?: boolean,
+          blur?: boolean,
+          rounded?: boolean,
+          shadow?: boolean,
+        ]
+
+        function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+          return <svg class="rounded shadow blur" filter={blur ? 'url(…)' : undefined} />
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    // Files should not be modified
+    expect(await fs.dumpFiles('./*.{js,css,html,tsx}')).toMatchInlineSnapshot(`
+      "
+      --- index.html ---
+      <div class="rounded-sm blur-sm shadow-sm"></div>
+
+      --- index.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- example-component.tsx ---
+      type Star = [
+        x: number,
+        y: number,
+        dim?: boolean,
+        blur?: boolean,
+        rounded?: boolean,
+        shadow?: boolean,
+      ]
+
+      function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
+        return <svg class="rounded-sm shadow-sm blur-sm" filter={blur ? 'url(…)' : undefined} />
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'passing in a single CSS file should resolve all imports and migrate them',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`module.exports = {}`,
+      'src/index.css': css`
+        @import './base.css';
+        @import './components.css';
+        @import './utilities.css';
+        @import './generated/ignore-me.css';
+      `,
+      'src/generated/.gitignore': `
+        *
+        !.gitignore
+      `,
+      'src/generated/ignore-me.css': css`
+        /* This should not be converted */
+        @layer utilities {
+          .ignore-me {
+            color: red;
+          }
+        }
+      `,
+      'src/base.css': css`@import 'tailwindcss/base';`,
+      'src/components.css': css`
+        @import './typography.css';
+        @layer components {
+          .foo {
+            color: red;
+          }
+        }
+        @tailwind components;
+      `,
+      'src/utilities.css': css`
+        @layer utilities {
+          .bar {
+            color: blue;
+          }
+        }
+        @tailwind utilities;
+      `,
+      'src/typography.css': css`
+        @layer components {
+          .typography {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade ./src/index.css')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css';
+      @import './components.css';
+      @import './utilities.css';
+      @import './generated/ignore-me.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      --- ./src/components.css ---
+      @import './typography.css';
+
+      @utility foo {
+        color: red;
+      }
+
+      --- ./src/typography.css ---
+      @utility typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility bar {
+        color: blue;
+      }
+
+      --- ./src/generated/ignore-me.css ---
+      /* This should not be converted */
+      @layer utilities {
+        .ignore-me {
+          color: red;
+        }
+      }
+      "
+    `)
   },
 )

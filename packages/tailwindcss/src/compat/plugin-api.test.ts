@@ -291,7 +291,7 @@ describe('theme', async () => {
         color: color-mix(in oklch, #ef4444 50%, transparent);
       }
       .variable {
-        color: color-mix(in oklch, #ef4444 calc(var(--opacity) * 100%), transparent);
+        color: color-mix(in oklch, #ef4444 var(--opacity), transparent);
       }
       :root {
         --color-red-500: #ef4444;
@@ -401,8 +401,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -459,8 +459,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -513,8 +513,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -560,8 +560,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation-simple-spin: spin 1s linear infinite;
-        --animation-simple-bounce: bounce 1s linear infinite;
+        --animate-simple-spin: spin 1s linear infinite;
+        --animate-simple-bounce: bounce 1s linear infinite;
       }
     `
 
@@ -884,8 +884,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
-        --transition-timing-function-in: ease-in;
-        --transition-timing-function-out: ease-out;
+        --ease-in: ease-in;
+        --ease-out: ease-out;
       }
     `
 
@@ -2941,6 +2941,49 @@ describe('matchUtilities()', () => {
         ]),
       ).trim(),
     ).toEqual('')
+  })
+
+  test('custom functional utilities can start with @', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+
+        {
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  { '@w': (value) => ({ width: value }) },
+                  {
+                    values: {
+                      1: '1px',
+                    },
+                  },
+                )
+              },
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(optimizeCss(await run(['@w-1', 'hover:@w-1'])).trim()).toMatchInlineSnapshot(`
+        ".\\@w-1 {
+          width: 1px;
+        }
+
+        @media (hover: hover) {
+          .hover\\:\\@w-1:hover {
+            width: 1px;
+          }
+        }"
+      `)
   })
 
   test('custom functional utilities can return an array of rules', async () => {

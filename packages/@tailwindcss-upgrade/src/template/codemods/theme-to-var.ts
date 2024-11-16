@@ -1,4 +1,3 @@
-import type { Config } from 'tailwindcss'
 import {
   parseCandidate,
   type Candidate,
@@ -6,7 +5,9 @@ import {
   type Variant,
 } from '../../../../tailwindcss/src/candidate'
 import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
@@ -157,7 +158,12 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       // Currently, we are assuming that this is only being used for colors,
       // which means that we can typically convert them to a modifier on the
       // candidate itself.
-      if (parts.length === 2 && options & Convert.MigrateModifier) {
+      //
+      // If there is more than one node in the AST though, `theme(…)` must not
+      // be the whole value so it's not safe to use a modifier instead.
+      //
+      // E.g.: `inset 0px 1px theme(colors.red.500/50%)` is a shadow, not a color.
+      if (ast.length === 1 && parts.length === 2 && options & Convert.MigrateModifier) {
         let [pathPart, modifierPart] = parts
 
         // 50% -> /50
@@ -199,9 +205,17 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
 
   function toVar(path: string, fallback?: string) {
     let variable = pathToVariableName(path)
-    if (!variable) return null
+    if (variable) return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
 
-    return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
+    let keyPath = toKeyPath(path)
+    if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+      let multiplier = keyPath[1]
+      if (!isValidSpacingMultiplier(multiplier)) return null
+
+      return 'calc(var(--spacing) * ' + multiplier + ')'
+    }
+
+    return null
   }
 
   function toTheme(path: string, fallback?: string) {
@@ -226,6 +240,11 @@ function substituteFunctionsInValue(
   ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
+
+      // Ignore whitespace before the first argument
+      if (node.nodes[0].kind === 'separator' && node.nodes[0].value.trim() === '') {
+        node.nodes.shift()
+      }
 
       let pathNode = node.nodes[0]
       if (pathNode.kind !== 'word') return

@@ -1,26 +1,28 @@
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { type Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
 import { loadModule } from '../../@tailwindcss-node/src/compile'
-import { toCss, type AstNode } from '../../tailwindcss/src/ast'
+import defaultTheme from '../../tailwindcss/dist/default-theme'
+import { atRule, toCss, type AstNode } from '../../tailwindcss/src/ast'
 import {
   keyPathToCssProperty,
   themeableValues,
 } from '../../tailwindcss/src/compat/apply-config-to-theme'
 import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
 import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/config/resolve-config'
-import type { ThemeConfig } from '../../tailwindcss/src/compat/config/types'
+import type { ResolvedConfig, ThemeConfig } from '../../tailwindcss/src/compat/config/types'
+import { buildCustomContainerUtilityRules } from '../../tailwindcss/src/compat/container'
 import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
+import type { Config } from '../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
+import { isValidSpacingMultiplier } from '../../tailwindcss/src/utils/infer-data-type'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { info } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = path.dirname(__filename)
 
 export type JSConfigMigration =
   // Could not convert the config file, need to inject it as-is in a @config directive
@@ -101,8 +103,11 @@ async function migrateTheme(
     Array.from(replacedThemeKeys.entries()).map(([key]) => [key, false]),
   )
 
+  removeUnnecessarySpacingKeys(designSystem, resolvedConfig, replacedThemeKeys)
+
   let prevSectionKey = ''
-  let css = `@theme {`
+  let css = '\n@tw-bucket theme {\n'
+  css += `\n@theme {\n`
   let containsThemeKeys = false
   for (let [key, value] of themeableValues(resolvedConfig.theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
@@ -143,7 +148,18 @@ async function migrateTheme(
     return null
   }
 
-  return css + '}\n'
+  css += '}\n' // @theme
+
+  if ('container' in resolvedConfig.theme) {
+    let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
+    if (rules.length > 0) {
+      css += '\n' + toCss([atRule('@utility', 'container', rules)])
+    }
+  }
+
+  css += '}\n' // @tw-bucket
+
+  return css
 }
 
 function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
@@ -155,7 +171,7 @@ function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
   if (variant === '') {
     return ''
   }
-  return `@variant dark (${variant});\n`
+  return `\n@tw-bucket variant {\n@variant dark (${variant});\n}\n`
 }
 
 // Returns a string identifier used to section theme declarations
@@ -188,21 +204,21 @@ async function migrateContent(
     return unresolvedConfig.future?.relativeContentPathsByDefault ?? false
   })()
 
-  let contentFiles = Array.isArray(unresolvedConfig.content)
-    ? unresolvedConfig.content
-    : (unresolvedConfig.content?.files ?? []).map((content) => {
-        if (typeof content === 'string' && contentIsRelative) {
-          return resolve(dirname(configPath), content)
+  let sourceGlobs = Array.isArray(unresolvedConfig.content)
+    ? unresolvedConfig.content.map((pattern) => ({ base, pattern }))
+    : (unresolvedConfig.content?.files ?? []).map((pattern) => {
+        if (typeof pattern === 'string' && contentIsRelative) {
+          return { base: path.dirname(configPath), pattern: pattern }
         }
-        return content
+        return { base, pattern }
       })
 
-  for (let content of contentFiles) {
-    if (typeof content !== 'string') {
-      throw new Error('Unsupported content value: ' + content)
+  for (let { base, pattern } of sourceGlobs) {
+    if (typeof pattern !== 'string') {
+      throw new Error('Unsupported content value: ' + pattern)
     }
 
-    let sourceFiles = patternSourceFiles({ base, pattern: content })
+    let sourceFiles = patternSourceFiles({ base, pattern })
 
     let autoContentContainsAllSourceFiles = true
     for (let sourceFile of sourceFiles) {
@@ -213,7 +229,7 @@ async function migrateContent(
     }
 
     if (!autoContentContainsAllSourceFiles) {
-      sources.push({ base, pattern: content })
+      sources.push({ base, pattern })
     }
   }
   return sources
@@ -312,4 +328,43 @@ function patternSourceFiles(source: { base: string; pattern: string }): string[]
   let scanner = new Scanner({ sources: [source] })
   scanner.scan()
   return scanner.files
+}
+
+function removeUnnecessarySpacingKeys(
+  designSystem: DesignSystem,
+  resolvedConfig: ResolvedConfig,
+  replacedThemeKeys: Set<string>,
+) {
+  // We want to keep the spacing scale as-is if the user is overwriting
+  if (replacedThemeKeys.has('spacing')) return
+
+  // Ensure we have a spacing multiplier
+  let spacingScale = designSystem.theme.get(['--spacing'])
+  if (!spacingScale) return
+
+  let [spacingMultiplier, spacingUnit] = splitNumberAndUnit(spacingScale)
+  if (!spacingMultiplier || !spacingUnit) return
+
+  if (spacingScale && !replacedThemeKeys.has('spacing')) {
+    for (let [key, value] of Object.entries(resolvedConfig.theme.spacing ?? {})) {
+      let [multiplier, unit] = splitNumberAndUnit(value as string)
+      if (multiplier === null) continue
+
+      if (!isValidSpacingMultiplier(key)) continue
+      if (unit !== spacingUnit) continue
+
+      if (parseFloat(multiplier) === Number(key) * parseFloat(spacingMultiplier)) {
+        delete resolvedConfig.theme.spacing[key]
+        designSystem.theme.clearNamespace(escape(`--spacing-${key.replaceAll('.', '_')}`), 0)
+      }
+    }
+  }
+}
+
+function splitNumberAndUnit(value: string): [string, string] | [null, null] {
+  let match = value.match(/^([0-9.]+)(.*)$/)
+  if (!match) {
+    return [null, null]
+  }
+  return [match[1], match[2]]
 }

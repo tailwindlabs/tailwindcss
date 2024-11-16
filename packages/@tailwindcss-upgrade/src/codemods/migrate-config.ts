@@ -1,9 +1,8 @@
 import path from 'node:path'
-import postcss, { AtRule, type Plugin, Root } from 'postcss'
+import postcss, { AtRule, type Plugin } from 'postcss'
 import { normalizePath } from '../../../@tailwindcss-node/src/normalize-path'
 import type { JSConfigMigration } from '../migrate-js-config'
 import type { Stylesheet } from '../stylesheet'
-import { walk, WalkAction } from '../utils/walk'
 
 const ALREADY_INJECTED = new WeakMap<Stylesheet, string[]>()
 
@@ -14,7 +13,9 @@ export function migrateConfig(
     jsConfigMigration,
   }: { configFilePath: string; jsConfigMigration: JSConfigMigration },
 ): Plugin {
-  function injectInto(sheet: Stylesheet) {
+  function migrate() {
+    if (!sheet.isTailwindRoot) return
+
     let alreadyInjected = ALREADY_INJECTED.get(sheet)
     if (alreadyInjected && alreadyInjected.includes(configFilePath)) {
       return
@@ -39,14 +40,14 @@ export function migrateConfig(
       })
 
       let css = '\n\n'
+      css += '\n@tw-bucket source {'
       for (let source of jsConfigMigration.sources) {
         let absolute = path.resolve(source.base, source.pattern)
         css += `@source '${relativeToStylesheet(sheet, absolute)}';\n`
       }
-      if (jsConfigMigration.sources.length > 0) {
-        css = css + '\n'
-      }
+      css += '}\n'
 
+      css += '\n@tw-bucket plugin {\n'
       for (let plugin of jsConfigMigration.plugins) {
         let relative =
           plugin.path[0] === '.'
@@ -71,72 +72,16 @@ export function migrateConfig(
 
             css += `  ${property}: ${cssValue};\n`
           }
-          css += '}\n'
+          css += '}\n' // @plugin
         }
       }
-      if (jsConfigMigration.plugins.length > 0) {
-        css = css + '\n'
-      }
+      css += '}\n' // @tw-bucket
 
       cssConfig.append(postcss.parse(css + jsConfigMigration.css))
     }
 
-    // Inject the `@config` directive after the last `@import` or at the
-    // top of the file if no `@import` rules are present
-    let locationNode = null as AtRule | null
-
-    walk(root, (node) => {
-      if (node.type === 'atrule' && node.name === 'import') {
-        locationNode = node
-      }
-
-      return WalkAction.Skip
-    })
-
-    for (let node of cssConfig?.nodes ?? []) {
-      node.raws.tailwind_pretty = true
-    }
-
-    if (!locationNode) {
-      root.prepend(cssConfig.nodes)
-    } else if (locationNode.name === 'import') {
-      locationNode.after(cssConfig.nodes)
-    }
-  }
-
-  function migrate(root: Root) {
-    // We can only migrate if there is an `@import "tailwindcss"` (or sub-import)
-    let hasTailwindImport = false
-    let hasFullTailwindImport = false
-    root.walkAtRules('import', (node) => {
-      if (node.params.match(/['"]tailwindcss['"]/)) {
-        hasTailwindImport = true
-        hasFullTailwindImport = true
-        return false
-      } else if (node.params.match(/['"]tailwindcss\/.*?['"]/)) {
-        hasTailwindImport = true
-      }
-    })
-
-    if (!hasTailwindImport) return
-
-    // If a full `@import "tailwindcss"` is present or this is the root
-    // stylesheet, we can inject the `@config` directive directly into this
-    // file.
-    if (hasFullTailwindImport || sheet.parents.size <= 0) {
-      injectInto(sheet)
-      return
-    }
-
-    // Otherwise, if we are not the root file, we need to inject the `@config`
-    // into the root file.
-    if (sheet.parents.size > 0) {
-      for (let parent of sheet.ancestors()) {
-        if (parent.parents.size === 0) {
-          injectInto(parent)
-        }
-      }
-    }
+    // Inject the `@config` directive
+    root.append(cssConfig.nodes)
   }
 
   return {

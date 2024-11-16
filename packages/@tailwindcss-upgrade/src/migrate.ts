@@ -1,7 +1,8 @@
 import { normalizePath } from '@tailwindcss/node'
+import { isGitIgnored } from 'globby'
 import path from 'node:path'
-import postcss from 'postcss'
-import type { Config } from 'tailwindcss'
+import postcss, { type Result } from 'postcss'
+import type { Config } from '../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'
@@ -65,13 +66,28 @@ export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
 }
 
 export async function analyze(stylesheets: Stylesheet[]) {
-  let stylesheetsByFile = new Map<string, Stylesheet>()
-
-  for (let sheet of stylesheets) {
-    if (sheet.file) {
-      stylesheetsByFile.set(sheet.file, sheet)
+  let isIgnored = await isGitIgnored()
+  let processingQueue: (() => Promise<Result>)[] = []
+  let stylesheetsByFile = new DefaultMap<string, Stylesheet | null>((file) => {
+    // We don't want to process ignored files (like node_modules)
+    if (isIgnored(file)) {
+      return null
     }
-  }
+
+    try {
+      let sheet = Stylesheet.loadSync(file)
+
+      // Mutate incoming stylesheets to include the newly discovered sheet
+      stylesheets.push(sheet)
+
+      // Queue up the processing of this stylesheet
+      processingQueue.push(() => processor.process(sheet.root, { from: sheet.file! }))
+
+      return sheet
+    } catch {
+      return null
+    }
+  })
 
   // Step 1: Record which `@import` rules point to which stylesheets
   // and which stylesheets are parents/children of each other
@@ -147,11 +163,22 @@ export async function analyze(stylesheets: Stylesheet[]) {
     },
   ])
 
+  // Seed the map with all the known stylesheets, and queue up the processing of
+  // each incoming stylesheet.
   for (let sheet of stylesheets) {
-    if (!sheet.file) continue
-
-    await processor.process(sheet.root, { from: sheet.file })
+    if (sheet.file) {
+      stylesheetsByFile.set(sheet.file, sheet)
+      processingQueue.push(() => processor.process(sheet.root, { from: sheet.file ?? undefined }))
+    }
   }
+
+  // Process all the stylesheets from step 1
+  while (processingQueue.length > 0) {
+    let task = processingQueue.shift()!
+    await task()
+  }
+
+  // ---
 
   let commonPath = process.cwd()
 
@@ -253,22 +280,38 @@ export async function analyze(stylesheets: Stylesheet[]) {
           for (let [sheetB, childrenB] of commonParents) {
             if (sheetA === sheetB) continue
 
-            for (let parentA of sheetA.ancestors()) {
-              for (let parentB of sheetB.ancestors()) {
+            // Ancestors from self to root. Reversed order so we find the
+            // nearest common parent first
+            //
+            // Including self because if you compare a sheet with its parent,
+            // then the parent is still the common sheet between the two. In
+            // this case, the parent is the root file.
+            let ancestorsA = [sheetA].concat(Array.from(sheetA.ancestors()).reverse())
+            let ancestorsB = [sheetB].concat(Array.from(sheetB.ancestors()).reverse())
+
+            for (let parentA of ancestorsA) {
+              for (let parentB of ancestorsB) {
                 if (parentA !== parentB) continue
+
+                // Found the parent
+                let parent = parentA
 
                 commonParents.delete(sheetA)
                 commonParents.delete(sheetB)
 
                 for (let child of childrenA) {
-                  commonParents.get(parentA).add(child)
+                  commonParents.get(parent).add(child)
                 }
 
                 for (let child of childrenB) {
-                  commonParents.get(parentA).add(child)
+                  commonParents.get(parent).add(child)
                 }
 
-                repeat = true
+                repeat = parent !== sheetA && parent !== sheetB
+
+                // Found a common parent between sheet A and sheet B. We can
+                // stop looking for more common parents between A and B, and
+                // continue with the next sheet.
                 break outer
               }
             }
@@ -386,21 +429,48 @@ export async function split(stylesheets: Stylesheet[]) {
   }
 
   // Keep track of sheets that contain `@utility` rules
-  let containsUtilities = new Set<Stylesheet>()
+  let requiresSplit = new Set<Stylesheet>()
 
   for (let sheet of stylesheets) {
-    let layers = sheet.layers()
-    let isLayered = layers.has('utilities') || layers.has('components')
-    if (!isLayered) continue
+    // Root files don't need to be split
+    if (sheet.isTailwindRoot) continue
+
+    let containsUtility = false
+    let containsUnsafe = sheet.layers().size > 0
 
     walk(sheet.root, (node) => {
-      if (node.type !== 'atrule') return
-      if (node.name !== 'utility') return
+      if (node.type === 'atrule' && node.name === 'utility') {
+        containsUtility = true
+      }
 
-      containsUtilities.add(sheet)
+      // Safe to keep without splitting
+      else if (
+        // An `@import "…" layer(…)` is safe
+        (node.type === 'atrule' && node.name === 'import' && node.params.includes('layer(')) ||
+        // @layer blocks are safe
+        (node.type === 'atrule' && node.name === 'layer') ||
+        // Comments are safe
+        node.type === 'comment'
+      ) {
+        return WalkAction.Skip
+      }
 
-      return WalkAction.Stop
+      // Everything else is not safe, and requires a split
+      else {
+        containsUnsafe = true
+      }
+
+      // We already know we need to split this sheet
+      if (containsUtility && containsUnsafe) {
+        return WalkAction.Stop
+      }
+
+      return WalkAction.Skip
     })
+
+    if (containsUtility && containsUnsafe) {
+      requiresSplit.add(sheet)
+    }
   }
 
   // Split every imported stylesheet into two parts
@@ -413,17 +483,13 @@ export async function split(stylesheets: Stylesheet[]) {
 
     // Skip stylesheets that don't have utilities
     // and don't have any children that have utilities
-    if (!containsUtilities.has(sheet)) {
-      if (!Array.from(sheet.descendants()).some((child) => containsUtilities.has(child))) {
+    if (!requiresSplit.has(sheet)) {
+      if (!Array.from(sheet.descendants()).some((child) => requiresSplit.has(child))) {
         continue
       }
     }
 
-    let utilities = postcss.root({
-      raws: {
-        tailwind_pretty: true,
-      },
-    })
+    let utilities = postcss.root()
 
     walk(sheet.root, (node) => {
       if (node.type !== 'atrule') return
@@ -511,7 +577,6 @@ export async function split(stylesheets: Stylesheet[]) {
       let newImport = node.clone({
         params: `${quote}${newFile}${quote}`,
         raws: {
-          after: '\n\n',
           tailwind_injected_layer: node.raws.tailwind_injected_layer,
           tailwind_original_params: `${quote}${id}${quote}`,
           tailwind_destination_sheet_id: utilityDestination.id,

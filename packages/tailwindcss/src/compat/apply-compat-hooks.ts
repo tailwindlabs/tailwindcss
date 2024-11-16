@@ -6,7 +6,9 @@ import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
 import { resolveConfig } from './config/resolve-config'
 import type { UserConfig } from './config/types'
+import { registerContainerCompat } from './container'
 import { darkModePlugin } from './dark-mode'
+import { registerLegacyUtilities } from './legacy-utilities'
 import { buildPluginApi, type CssPluginOptions, type Plugin } from './plugin-api'
 import { registerScreensConfig } from './screens-config'
 import { registerThemeVariantOverrides } from './theme-variants'
@@ -114,6 +116,8 @@ export async function applyCompatibilityHooks({
       return
     }
   })
+
+  registerLegacyUtilities(designSystem)
 
   // Override `resolveThemeValue` with a version that is backwards compatible
   // with dot notation paths like `colors.red.500`. We could do this by default
@@ -239,6 +243,7 @@ function upgradeToFullPluginSupport({
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
+  registerContainerCompat(resolvedUserConfig, designSystem)
 
   // If a prefix has already been set in CSS don't override it
   if (!designSystem.theme.prefix && resolvedConfig.prefix) {

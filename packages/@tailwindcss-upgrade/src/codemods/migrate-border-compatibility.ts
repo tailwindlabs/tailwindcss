@@ -1,7 +1,7 @@
 import dedent from 'dedent'
-import postcss, { AtRule, type Plugin, type Root } from 'postcss'
-import type { Config } from 'tailwindcss'
+import postcss, { type Plugin, type Root } from 'postcss'
 import { keyPathToCssProperty } from '../../../tailwindcss/src/compat/apply-config-to-theme'
+import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { toKeyPath } from '../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../tailwindcss/src/value-parser'
@@ -26,24 +26,6 @@ const BORDER_COLOR_COMPATIBILITY_CSS = css`
     ::backdrop,
     ::file-selector-button {
       border-color: theme(borderColor.DEFAULT);
-    }
-  }
-`
-
-const BORDER_WIDTH_COMPATIBILITY_CSS = css`
-  /*
-    Form elements have a 1px border by default in Tailwind CSS v4, so we've
-    added these compatibility styles to make sure everything still looks the
-    same as it did with Tailwind CSS v3.
-
-    If we ever want to remove these styles, we need to add \`border-0\` to
-    any form elements that shouldn't have a border.
-  */
-  @layer base {
-    input:where(:not([type='button'], [type='reset'], [type='submit'])),
-    select,
-    textarea {
-      border-width: 0;
     }
   }
 `
@@ -77,19 +59,6 @@ export function migrateBorderCompatibility({
 
     if (!isTailwindRoot) return
 
-    let targetNode = null as AtRule | null
-
-    root.walkAtRules((node) => {
-      if (node.name === 'import') {
-        targetNode = node
-      } else if (node.name === 'layer' && node.params === 'base') {
-        targetNode = node
-        return false
-      }
-    })
-
-    if (!targetNode) return
-
     // Figure out the compatibility CSS to inject
     let compatibilityCssString = ''
     if (defaultBorderColor !== DEFAULT_BORDER_COLOR) {
@@ -97,7 +66,7 @@ export function migrateBorderCompatibility({
       compatibilityCssString += '\n\n'
     }
 
-    compatibilityCssString += BORDER_WIDTH_COMPATIBILITY_CSS
+    compatibilityCssString = `\n@tw-bucket compatibility {\n${compatibilityCssString}\n}\n`
     let compatibilityCss = postcss.parse(compatibilityCssString)
 
     // Replace the `theme(…)` with v3 values if we can't resolve the theme
@@ -129,19 +98,7 @@ export function migrateBorderCompatibility({
     })
 
     // Inject the compatibility CSS
-    if (targetNode.name === 'import') {
-      targetNode.after(compatibilityCss)
-
-      let next = targetNode.next()
-      if (next) next.raws.before = '\n\n'
-    } else {
-      let rawsBefore = compatibilityCss.last?.raws.before
-
-      targetNode.before(compatibilityCss)
-
-      let prev = targetNode.prev()
-      if (prev) prev.raws.before = rawsBefore
-    }
+    root.append(compatibilityCss)
   }
 
   return {
@@ -157,6 +114,11 @@ function substituteFunctionsInValue(
   ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
+
+      // Ignore whitespace before the first argument
+      if (node.nodes[0].kind === 'separator' && node.nodes[0].value.trim() === '') {
+        node.nodes.shift()
+      }
 
       let pathNode = node.nodes[0]
       if (pathNode.kind !== 'word') return

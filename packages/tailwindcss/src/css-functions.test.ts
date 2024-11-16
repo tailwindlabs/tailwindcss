@@ -215,7 +215,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red calc(var(--opacity) * 100%), transparent);
+            color: color-mix(in oklch, red var(--opacity), transparent);
           }"
         `)
       })
@@ -237,7 +237,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red calc(var(--opacity, 50%) * 100%), transparent);
+            color: color-mix(in oklch, red var(--opacity, 50%), transparent);
           }"
         `)
       })
@@ -352,8 +352,8 @@ describe('theme function', () => {
           expect(
             await compileCss(css`
               @theme {
-                --font-size-xs: 1337.75rem;
-                --font-size-xs--line-height: 1337rem;
+                --text-xs: 1337.75rem;
+                --text-xs--line-height: 1337rem;
               }
               .text {
                 font-size: theme(fontSize.xs);
@@ -362,8 +362,8 @@ describe('theme function', () => {
             `),
           ).toMatchInlineSnapshot(`
             ":root {
-              --font-size-xs: 1337.75rem;
-              --font-size-xs--line-height: 1337rem;
+              --text-xs: 1337.75rem;
+              --text-xs--line-height: 1337rem;
             }
 
             .text {
@@ -465,6 +465,26 @@ describe('theme function', () => {
           await compileCss(css`
             .fam {
               font-family: theme(fontFamily.unknown, Helvetica Neue, Helvetica, sans-serif);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ".fam {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+          }"
+        `)
+      })
+
+      test('theme(\n\tfontFamily.unknown,\n\tHelvetica Neue,\n\tHelvetica,\n\tsans-serif\n)', async () => {
+        expect(
+          // prettier-ignore
+          await compileCss(css`
+            .fam {
+              font-family: theme(
+                fontFamily.unknown,
+                Helvetica Neue,
+                Helvetica,
+                sans-serif
+              );
             }
           `),
         ).toMatchInlineSnapshot(`
@@ -617,8 +637,10 @@ describe('theme function', () => {
           'fontFamily.sans',
           'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         ],
-        ['width.xs', '20rem'],
+        ['maxWidth.xs', '20rem'],
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
+        ['letterSpacing.wide', '.025em'],
+        ['lineHeight.tight', '1.25'],
         ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')

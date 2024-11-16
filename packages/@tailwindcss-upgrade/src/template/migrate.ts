@@ -1,13 +1,16 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
-import type { Config } from 'tailwindcss'
+import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { extractRawCandidates } from './candidates'
 import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
 import { important } from './codemods/important'
+import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
+import { legacyClasses } from './codemods/legacy-classes'
 import { maxWidthScreen } from './codemods/max-width-screen'
+import { modernizeArbitraryValues } from './codemods/modernize-arbitrary-values'
 import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { themeToVar } from './codemods/theme-to-var'
@@ -23,21 +26,24 @@ export type Migration = (
     start: number
     end: number
   },
-) => string
+) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
   prefix,
   important,
-  automaticVarInjection,
   bgGradient,
   simpleLegacyClasses,
-  arbitraryValueToBareValue,
+  legacyClasses,
   maxWidthScreen,
   themeToVar,
-  variantOrder,
+  variantOrder, // Has to happen before migrations that modify variants
+  automaticVarInjection,
+  legacyArbitraryValues,
+  arbitraryValueToBareValue,
+  modernizeArbitraryValues,
 ]
 
-export function migrateCandidate(
+export async function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
@@ -47,9 +53,9 @@ export function migrateCandidate(
     start: number
     end: number
   },
-): string {
+): Promise<string> {
   for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = migration(designSystem, userConfig, rawCandidate, location)
+    rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
   }
   return rawCandidate
 }
@@ -65,7 +71,7 @@ export default async function migrateContents(
   let changes: StringChange[] = []
 
   for (let { rawCandidate, start, end } of candidates) {
-    let migratedCandidate = migrateCandidate(designSystem, userConfig, rawCandidate, {
+    let migratedCandidate = await migrateCandidate(designSystem, userConfig, rawCandidate, {
       contents,
       start,
       end,
@@ -86,7 +92,7 @@ export default async function migrateContents(
 }
 
 export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {
-  let fullPath = path.resolve(process.cwd(), file)
+  let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
   await fs.writeFile(

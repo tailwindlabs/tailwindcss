@@ -7,10 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Ensure `flex` is suggested ([#15014](https://github.com/tailwindlabs/tailwindcss/pull/15014))
+- _Upgrade (experimental)_: Resolve imports when specifying a CSS entry point on the command-line ([#15010](https://github.com/tailwindlabs/tailwindcss/pull/15010))
+
+### Changed
+
+- Bring back support for color opacity modifiers to read from `--opacity-*` theme values ([#14278](https://github.com/tailwindlabs/tailwindcss/pull/14278))
+
+### Added
+
+- Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace as deprecated utilities ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
+
+## [4.0.0-alpha.34] - 2024-11-14
+
+### Added
+
+- Support opacity values in increments of `0.25` by default ([#14980](https://github.com/tailwindlabs/tailwindcss/pull/14980))
+- Support specifying the color interpolation method for gradients via modifier ([#14984](https://github.com/tailwindlabs/tailwindcss/pull/14984))
+- Reintroduce `container` component as a utility ([#14993](https://github.com/tailwindlabs/tailwindcss/pull/14993), [#14999](https://github.com/tailwindlabs/tailwindcss/pull/14999))
+- _Upgrade (experimental)_: Migrate `container` component configuration to CSS ([#14999](https://github.com/tailwindlabs/tailwindcss/pull/14999))
+
+### Fixed
+
+- Ensure that CSS inside Svelte `<style>` blocks always run the expected Svelte processors when using the Vite extension ([#14981](https://github.com/tailwindlabs/tailwindcss/pull/14981))
+- _Upgrade (experimental)_: Ensure it's safe to migrate `blur`, `rounded`, or `shadow` ([#14979](https://github.com/tailwindlabs/tailwindcss/pull/14979))
+- _Upgrade (experimental)_: Do not rename classes using custom defined theme values ([#14976](https://github.com/tailwindlabs/tailwindcss/pull/14976))
+- _Upgrade (experimental)_: Ensure `@config` is injected in nearest common ancestor stylesheet ([#14989](https://github.com/tailwindlabs/tailwindcss/pull/14989))
+- _Upgrade (experimental)_: Add missing `layer(…)` to imports above Tailwind directives ([#14982](https://github.com/tailwindlabs/tailwindcss/pull/14982))
+
+## [4.0.0-alpha.33] - 2024-11-11
+
+### Fixed
+
+- Don't reset horizontal padding on date/time pseudo-elements ([#14959](https://github.com/tailwindlabs/tailwindcss/pull/14959))
+- Don't emit `calc()` with invalid values for bare values that aren't integers in spacing utilities ([#14962](https://github.com/tailwindlabs/tailwindcss/pull/14962))
+- Ensure spacing scale values work as line-height modifiers ([#14966](https://github.com/tailwindlabs/tailwindcss/pull/14966))
+
+## [4.0.0-alpha.32] - 2024-11-11
+
 ### Added
 
 - Support derived spacing scales based on a single `--spacing` theme value ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Add `svh`, `dvh`, `svw`, `dvw`, and `auto` values to all width/height/size utilities ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Add new `**` variant ([#14903](https://github.com/tailwindlabs/tailwindcss/pull/14903))
+- Process `<style>` blocks inside Svelte files when using the Vite extension ([#14151](https://github.com/tailwindlabs/tailwindcss/pull/14151))
+- Normalize date/time input styles in Preflight ([#14931](https://github.com/tailwindlabs/tailwindcss/pull/14931))
 - _Upgrade (experimental)_: Migrate `grid-cols-[subgrid]` and `grid-rows-[subgrid]` to `grid-cols-subgrid` and `grid-rows-subgrid` ([#14840](https://github.com/tailwindlabs/tailwindcss/pull/14840))
 - _Upgrade (experimental)_: Support migrating projects with multiple config files ([#14863](https://github.com/tailwindlabs/tailwindcss/pull/14863))
 - _Upgrade (experimental)_: Rename `shadow` to `shadow-sm`, `shadow-sm` to `shadow-xs`, and `shadow-xs` to `shadow-2xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
@@ -18,6 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
 - _Upgrade (experimental)_: Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14875](https://github.com/tailwindlabs/tailwindcss/pull/14875))
+- _Upgrade (experimental)_: Migrate `theme()` usage and JS config files to use the new `--spacing` multiplier where possible ([#14905](https://github.com/tailwindlabs/tailwindcss/pull/14905))
+- _Upgrade (experimental)_: Migrate arbitrary values in variants to built-in values where possible ([#14841](https://github.com/tailwindlabs/tailwindcss/pull/14841))
 
 ### Fixed
 
@@ -27,8 +72,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `--inset-ring=*` and `--inset-shadow-*` variables are ignored by `inset-*` utilities ([#14855](https://github.com/tailwindlabs/tailwindcss/pull/14855))
 - Ensure `url(…)` containing special characters such as `;` or `{}` end up in one declaration ([#14879](https://github.com/tailwindlabs/tailwindcss/pull/14879))
 - Ensure adjacent rules are merged together after handling nesting when generating optimized CSS ([#14873](https://github.com/tailwindlabs/tailwindcss/pull/14873))
+- Rebase `url()` inside imported CSS files when using Vite ([#14877](https://github.com/tailwindlabs/tailwindcss/pull/14877))
+- Ensure that CSS transforms from other Vite plugins correctly work in full builds (e.g. `:deep()` in Vue) ([#14871](https://github.com/tailwindlabs/tailwindcss/pull/14871))
+- Ensure the CSS `theme()` function handles newlines and tabs in its arguments list ([#14917](https://github.com/tailwindlabs/tailwindcss/pull/14917))
+- Don't unset keys like `--inset-shadow-*` when unsetting keys like `--inset-*` ([#14906](https://github.com/tailwindlabs/tailwindcss/pull/14906))
+- Ensure spacing utilities with no value (e.g. `px` or `translate-y`) don't generate CSS ([#14911](https://github.com/tailwindlabs/tailwindcss/pull/14911))
+- Don't override user-agent background color for input elements in Preflight ([#14913](https://github.com/tailwindlabs/tailwindcss/pull/14913))
+- Don't attempt to convert CSS variables (which should already be percentages) to percentages when used as opacity modifiers ([#14916](https://github.com/tailwindlabs/tailwindcss/pull/14916))
+- Ensure custom utilities registered with the plugin API can start with `@` ([#14793](https://github.com/tailwindlabs/tailwindcss/pull/14793))
 - _Upgrade (experimental)_: Install `@tailwindcss/postcss` next to `tailwindcss` ([#14830](https://github.com/tailwindlabs/tailwindcss/pull/14830))
 - _Upgrade (experimental)_: Remove whitespace around `,` separator when print arbitrary values ([#14838](https://github.com/tailwindlabs/tailwindcss/pull/14838))
+- _Upgrade (experimental)_: Fix crash during upgrade when content globs escape root of project ([#14896](https://github.com/tailwindlabs/tailwindcss/pull/14896))
+- _Upgrade (experimental)_: Don't convert `theme(…/15%)` to modifier unless it is the entire arbitrary value of a utility ([#14922](https://github.com/tailwindlabs/tailwindcss/pull/14922))
+- _Upgrade (experimental)_: Convert `,` to ` ` in arbitrary `grid-cols-*`, `grid-rows-*`, and `object-*` values ([#14927](https://github.com/tailwindlabs/tailwindcss/pull/14927))
 
 ### Changed
 
@@ -44,6 +100,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `var(…)` fallbacks from theme values in utilities ([#14881](https://github.com/tailwindlabs/tailwindcss/pull/14881))
 - Remove static `font-weight` utilities and add `--font-weight-*` values to the default theme ([#14883](https://github.com/tailwindlabs/tailwindcss/pull/14883))
 - Rename `--transition-timing-function-*` variables to `--ease-*` ([#14886](https://github.com/tailwindlabs/tailwindcss/pull/14886))
+- Rename `--width-*` variables to `--container-*` ([#14898](https://github.com/tailwindlabs/tailwindcss/pull/14898))
+- Rename `--font-size-*` variables to `--text-*` ([#14909](https://github.com/tailwindlabs/tailwindcss/pull/14909))
+- Rename `--font-family-*` variables to `--font-*` ([#14885](https://github.com/tailwindlabs/tailwindcss/pull/14885))
+- Rename `--letter-spacing-*` variables to `--tracking-*` ([#14921](https://github.com/tailwindlabs/tailwindcss/pull/14921))
+- Rename `--line-height-*` variables to `--leading-*` ([#14925](https://github.com/tailwindlabs/tailwindcss/pull/14925))
+- Revert specificity of `*` variant to match v3 behavior ([#14920](https://github.com/tailwindlabs/tailwindcss/pull/14920))
+- Replace `outline-none` with `outline-hidden`, add new simplified `outline-none` utility ([#14926](https://github.com/tailwindlabs/tailwindcss/pull/14926))
+- Revert adding borders by default to form inputs ([#14929](https://github.com/tailwindlabs/tailwindcss/pull/14929))
+- Deprecate `shadow-inner` utility ([#14933](https://github.com/tailwindlabs/tailwindcss/pull/14933))
+- Remove `--leading-none` from the default theme in favor of a static `leading-none` utility ([#14934](https://github.com/tailwindlabs/tailwindcss/pull/14934))
 
 ## [4.0.0-alpha.31] - 2024-10-29
 

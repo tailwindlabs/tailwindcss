@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/upgrade",
-  "version": "4.0.0-alpha.31",
+  "version": "4.0.0-alpha.34",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -29,6 +29,7 @@
   "dependencies": {
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
+    "braces": "^3.0.3",
     "dedent": "1.5.3",
     "enhanced-resolve": "^5.17.1",
     "globby": "^14.0.2",
@@ -39,11 +40,12 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^7.0.0",
     "prettier": "^3.3.3",
-    "tailwindcss": "workspace:^",
     "tree-sitter": "^0.22.0",
-    "tree-sitter-typescript": "^0.23.0"
+    "tree-sitter-typescript": "^0.23.0",
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
+    "@types/braces": "^3.0.4",
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3"
   }

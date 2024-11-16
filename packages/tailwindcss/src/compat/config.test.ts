@@ -255,16 +255,16 @@ describe('theme callbacks', () => {
   }) => {
     let input = css`
       @theme default {
-        --font-size-base: 0rem;
-        --font-size-base--line-height: 1rem;
-        --font-size-md: 0rem;
-        --font-size-md--line-height: 1rem;
-        --font-size-xl: 0rem;
-        --font-size-xl--line-height: 1rem;
+        --text-base: 0rem;
+        --text-base--line-height: 1rem;
+        --text-md: 0rem;
+        --text-md--line-height: 1rem;
+        --text-xl: 0rem;
+        --text-xl--line-height: 1rem;
       }
       @theme {
-        --font-size-base: 100rem;
-        --font-size-md--line-height: 101rem;
+        --text-base: 100rem;
+        --text-md--line-height: 101rem;
       }
       @tailwind utilities;
       @config "./config.js";
@@ -323,8 +323,8 @@ describe('theme callbacks', () => {
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
         ":root {
-          --font-size-base: 100rem;
-          --font-size-md--line-height: 101rem;
+          --text-base: 100rem;
+          --text-md--line-height: 101rem;
         }
         .prose {
           [class~=lead-base] {
@@ -1533,6 +1533,15 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
         --animate-a: 1;
         --animate-b: 2;
+
+        --container-a: 1;
+        --container-b: 2;
+
+        --tracking-a: 1;
+        --tracking-b: 2;
+
+        --leading-a: 1;
+        --leading-b: 2;
       }
 
       @plugin "./plugin.js";
@@ -1583,6 +1592,30 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
             expect(theme('boxShadow.a')).toEqual('1')
             expect(theme('boxShadow.b')).toEqual('2')
+
+            expect(theme('maxWidth')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('maxWidth.a')).toEqual('1')
+            expect(theme('maxWidth.b')).toEqual('2')
+
+            expect(theme('letterSpacing.a')).toEqual('1')
+            expect(theme('letterSpacing.b')).toEqual('2')
+
+            expect(theme('letterSpacing')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('lineHeight.a')).toEqual('1')
+            expect(theme('lineHeight.b')).toEqual('2')
+
+            expect(theme('lineHeight')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
           }),
         }
       },

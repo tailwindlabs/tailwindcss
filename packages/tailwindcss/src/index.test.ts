@@ -1067,7 +1067,7 @@ describe('Parsing themes values from CSS', () => {
               }
             }
 
-            --font-size-lg: 20px;
+            --text-lg: 20px;
           }
           @tailwind utilities;
         `,
@@ -1077,11 +1077,11 @@ describe('Parsing themes values from CSS', () => {
       ":root {
         --color-red: red;
         --animate-foo: foo 1s infinite;
-        --font-size-lg: 20px;
+        --text-lg: 20px;
       }
 
       .text-lg {
-        font-size: var(--font-size-lg);
+        font-size: var(--text-lg);
       }
 
       .accent-red {
@@ -1103,8 +1103,8 @@ describe('Parsing themes values from CSS', () => {
           @theme {
             --color-red: #f00;
             --color-blue: #00f;
-            --font-size-sm: 13px;
-            --font-size-md: 16px;
+            --text-sm: 13px;
+            --text-md: 16px;
 
             --animate-spin: spin 1s infinite linear;
 
@@ -1116,7 +1116,7 @@ describe('Parsing themes values from CSS', () => {
           }
           @theme {
             --color-*: initial;
-            --font-size-md: initial;
+            --text-md: initial;
             --animate-*: initial;
             --keyframes-*: initial;
           }
@@ -1129,12 +1129,12 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root {
-        --font-size-sm: 13px;
+        --text-sm: 13px;
         --color-green: #0f0;
       }
 
       .text-sm {
-        font-size: var(--font-size-sm);
+        font-size: var(--text-sm);
       }
 
       .accent-green {
@@ -1170,6 +1170,238 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-green {
         accent-color: var(--color-green);
+      }"
+    `)
+  })
+
+  test('unsetting `--font-*` does not unset `--font-weight-*`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --font-weight-bold: bold;
+            --font-sans: sans-serif;
+            --font-serif: serif;
+          }
+          @theme {
+            --font-*: initial;
+            --font-body: Inter;
+          }
+          @tailwind utilities;
+        `,
+        ['font-bold', 'font-sans', 'font-serif', 'font-body'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --font-weight-bold: bold;
+        --font-body: Inter;
+      }
+
+      .font-body {
+        font-family: var(--font-body);
+      }
+
+      .font-bold {
+        --tw-font-weight: var(--font-weight-bold);
+        font-weight: var(--font-weight-bold);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-font-weight: initial;
+          }
+        }
+      }
+
+      @property --tw-font-weight {
+        syntax: "*";
+        inherits: false
+      }"
+    `)
+  })
+
+  test('unsetting `--inset-*` does not unset `--inset-shadow-*`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --inset-shadow-sm: inset 0 2px 4px rgb(0 0 0 / 0.05);
+            --inset-lg: 100px;
+            --inset-sm: 10px;
+          }
+          @theme {
+            --inset-*: initial;
+            --inset-md: 50px;
+          }
+          @tailwind utilities;
+        `,
+        ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --inset-shadow-sm: inset 0 2px 4px #0000000d;
+        --inset-md: 50px;
+      }
+
+      .inset-md {
+        inset: var(--inset-md);
+      }
+
+      .inset-shadow-sm {
+        --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, #0000000d);
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+          }
+        }
+      }
+
+      @property --tw-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-shadow-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-inset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-inset-shadow-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-ring-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-inset-ring-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-inset-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-ring-inset {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-ring-offset-width {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0;
+      }
+
+      @property --tw-ring-offset-color {
+        syntax: "*";
+        inherits: false;
+        initial-value: #fff;
+      }
+
+      @property --tw-ring-offset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }"
+    `)
+  })
+
+  test('unsetting `--text-*` does not unset `--text-color-*`, `--text-underline-offset-*`, `--text-indent-*`, `--text-decoration-thickness-*` or `--text-decoration-color-*`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --text-color-potato: brown;
+            --text-underline-offset-potato: 4px;
+            --text-indent-potato: 6px;
+            --text-decoration-thickness-potato: 8px;
+            --text-decoration-color-salad: yellow;
+            --text-4xl: 60px;
+          }
+          @theme {
+            --text-*: initial;
+            --text-lg: 20px;
+          }
+          @tailwind utilities;
+        `,
+        [
+          'text-potato',
+          'underline-offset-potato',
+          'indent-potato',
+          'decoration-potato',
+          'decoration-salad',
+          'text-lg',
+        ],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --text-color-potato: brown;
+        --text-underline-offset-potato: 4px;
+        --text-indent-potato: 6px;
+        --text-decoration-thickness-potato: 8px;
+        --text-decoration-color-salad: yellow;
+        --text-lg: 20px;
+      }
+
+      .indent-potato {
+        text-indent: var(--text-indent-potato);
+      }
+
+      .text-lg {
+        font-size: var(--text-lg);
+      }
+
+      .text-potato {
+        color: var(--text-color-potato);
+      }
+
+      .decoration-salad {
+        -webkit-text-decoration-color: var(--text-decoration-color-salad);
+        -webkit-text-decoration-color: var(--text-decoration-color-salad);
+        text-decoration-color: var(--text-decoration-color-salad);
+      }
+
+      .decoration-potato {
+        text-decoration-thickness: var(--text-decoration-thickness-potato);
+      }
+
+      .underline-offset-potato {
+        text-underline-offset: var(--text-underline-offset-potato);
       }"
     `)
   })

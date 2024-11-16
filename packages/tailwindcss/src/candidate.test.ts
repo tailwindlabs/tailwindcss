@@ -41,7 +41,6 @@ it('should parse a simple utility', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "flex",
         "root": "flex",
         "variants": [],
@@ -59,7 +58,6 @@ it('should parse a simple utility that should be important', () => {
       {
         "important": true,
         "kind": "static",
-        "negative": false,
         "raw": "flex!",
         "root": "flex",
         "variants": [],
@@ -70,7 +68,7 @@ it('should parse a simple utility that should be important', () => {
 
 it('should parse a simple utility that can be negative', () => {
   let utilities = new Utilities()
-  utilities.functional('translate-x', () => [])
+  utilities.functional('-translate-x', () => [])
 
   expect(run('-translate-x-4', { utilities })).toMatchInlineSnapshot(`
     [
@@ -78,9 +76,8 @@ it('should parse a simple utility that can be negative', () => {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": true,
         "raw": "-translate-x-4",
-        "root": "translate-x",
+        "root": "-translate-x",
         "value": {
           "fraction": null,
           "kind": "named",
@@ -104,7 +101,6 @@ it('should parse a simple utility with a variant', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "hover:flex",
         "root": "flex",
         "variants": [
@@ -131,7 +127,6 @@ it('should parse a simple utility with stacked variants', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "focus:hover:flex",
         "root": "flex",
         "variants": [
@@ -158,7 +153,6 @@ it('should parse a simple utility with an arbitrary variant', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "[&_p]:flex",
         "root": "flex",
         "variants": [
@@ -185,7 +179,6 @@ it('should parse a simple utility with a parameterized variant', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "data-[disabled]:flex",
         "root": "flex",
         "variants": [
@@ -216,7 +209,6 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "group-[&_p]/parent-name:flex",
         "root": "flex",
         "variants": [
@@ -253,7 +245,6 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
         {
           "important": false,
           "kind": "static",
-          "negative": false,
           "raw": "group-aria-[disabled]/parent-name:flex",
           "root": "flex",
           "variants": [
@@ -294,7 +285,6 @@ it('should parse compound group with itself group-group-*', () => {
         {
           "important": false,
           "kind": "static",
-          "negative": false,
           "raw": "group-group-group-hover/parent-name:flex",
           "root": "flex",
           "variants": [
@@ -335,7 +325,6 @@ it('should parse a simple utility with an arbitrary media variant', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "[@media(width>=123px)]:flex",
         "root": "flex",
         "variants": [
@@ -370,7 +359,6 @@ it('should parse a utility with a modifier', () => {
           "kind": "named",
           "value": "50",
         },
-        "negative": false,
         "raw": "bg-red-500/50",
         "root": "bg",
         "value": {
@@ -397,7 +385,6 @@ it('should parse a utility with an arbitrary modifier', () => {
           "kind": "arbitrary",
           "value": "50%",
         },
-        "negative": false,
         "raw": "bg-red-500/[50%]",
         "root": "bg",
         "value": {
@@ -424,7 +411,6 @@ it('should parse a utility with a modifier that is important', () => {
           "kind": "named",
           "value": "50",
         },
-        "negative": false,
         "raw": "bg-red-500/50!",
         "root": "bg",
         "value": {
@@ -454,7 +440,6 @@ it('should parse a utility with a modifier and a variant', () => {
           "kind": "named",
           "value": "50",
         },
-        "negative": false,
         "raw": "hover:bg-red-500/50",
         "root": "bg",
         "value": {
@@ -513,7 +498,6 @@ it('should parse a utility with an arbitrary value', () => {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[#0088cc]",
         "root": "bg",
         "value": {
@@ -537,7 +521,6 @@ it('should parse a utility with an arbitrary value including a typehint', () => 
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[color:var(--value)]",
         "root": "bg",
         "value": {
@@ -564,7 +547,6 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
           "kind": "named",
           "value": "50",
         },
-        "negative": false,
         "raw": "bg-[#0088cc]/50",
         "root": "bg",
         "value": {
@@ -591,7 +573,6 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
           "kind": "arbitrary",
           "value": "50%",
         },
-        "negative": false,
         "raw": "bg-[#0088cc]/[50%]",
         "root": "bg",
         "value": {
@@ -615,7 +596,6 @@ it('should parse a utility with an arbitrary value that is important', () => {
         "important": true,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[#0088cc]!",
         "root": "bg",
         "value": {
@@ -639,7 +619,6 @@ it('should parse a utility with an implicit variable as the arbitrary value', ()
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[var(--value)]",
         "root": "bg",
         "value": {
@@ -663,7 +642,6 @@ it('should parse a utility with an implicit variable as the arbitrary value that
         "important": true,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[var(--value)]!",
         "root": "bg",
         "value": {
@@ -687,7 +665,6 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[var(--value)]",
         "root": "bg",
         "value": {
@@ -711,7 +688,6 @@ it('should parse a utility with an explicit variable as the arbitrary value that
         "important": true,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "bg-[var(--value)]!",
         "root": "bg",
         "value": {
@@ -768,7 +744,6 @@ it('should parse a utility with an implicit variable as the modifier', () => {
           "kind": "arbitrary",
           "value": "var(--value)",
         },
-        "negative": false,
         "raw": "bg-red-500/[var(--value)]",
         "root": "bg",
         "value": {
@@ -795,7 +770,6 @@ it('should parse a utility with an implicit variable as the modifier that is imp
           "kind": "arbitrary",
           "value": "var(--value)",
         },
-        "negative": false,
         "raw": "bg-red-500/[var(--value)]!",
         "root": "bg",
         "value": {
@@ -822,7 +796,6 @@ it('should parse a utility with an explicit variable as the modifier', () => {
           "kind": "arbitrary",
           "value": "var(--value)",
         },
-        "negative": false,
         "raw": "bg-red-500/[var(--value)]",
         "root": "bg",
         "value": {
@@ -849,7 +822,6 @@ it('should parse a utility with an explicit variable as the modifier that is imp
           "kind": "arbitrary",
           "value": "var(--value)",
         },
-        "negative": false,
         "raw": "bg-red-500/[var(--value)]!",
         "root": "bg",
         "value": {
@@ -875,7 +847,6 @@ it('should parse a static variant starting with @', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "@lg:flex",
         "root": "flex",
         "variants": [
@@ -901,7 +872,6 @@ it('should parse a functional variant with a modifier', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "foo-bar/50:flex",
         "root": "flex",
         "variants": [
@@ -935,7 +905,6 @@ it('should parse a functional variant starting with @', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "@lg:flex",
         "root": "flex",
         "variants": [
@@ -966,7 +935,6 @@ it('should parse a functional variant starting with @ and a modifier', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "@lg/name:flex",
         "root": "flex",
         "variants": [
@@ -998,7 +966,6 @@ it('should replace `_` with ` `', () => {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "content-["hello_world"]",
         "root": "content",
         "value": {
@@ -1022,7 +989,6 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "negative": false,
         "raw": "content-["hello\\_world"]",
         "root": "content",
         "value": {
@@ -1047,7 +1013,6 @@ it('should not replace `_` inside of `url()`', () => {
           "important": false,
           "kind": "functional",
           "modifier": null,
-          "negative": false,
           "raw": "bg-[no-repeat_url(https://example.com/some_page)]",
           "root": "bg",
           "value": {
@@ -1072,7 +1037,6 @@ it('should not replace `_` in the first argument to `var()`', () => {
           "important": false,
           "kind": "functional",
           "modifier": null,
-          "negative": false,
           "raw": "ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]",
           "root": "ml",
           "value": {
@@ -1097,7 +1061,6 @@ it('should not replace `_` in the first argument to `theme()`', () => {
           "important": false,
           "kind": "functional",
           "modifier": null,
-          "negative": false,
           "raw": "ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]",
           "root": "ml",
           "value": {
@@ -1272,7 +1235,6 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "string-['}[("\\'']:flex",
         "root": "flex",
         "variants": [
@@ -1307,7 +1269,6 @@ it('should parse candidates with a prefix', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "tw:flex",
         "root": "flex",
         "variants": [],
@@ -1319,7 +1280,6 @@ it('should parse candidates with a prefix', () => {
       {
         "important": false,
         "kind": "static",
-        "negative": false,
         "raw": "tw:hover:flex",
         "root": "flex",
         "variants": [

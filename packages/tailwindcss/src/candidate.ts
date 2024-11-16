@@ -183,7 +183,6 @@ export type Candidate =
       kind: 'static'
       root: string
       variants: Variant[]
-      negative: boolean
       important: boolean
       raw: string
     }
@@ -203,7 +202,6 @@ export type Candidate =
       value: ArbitraryUtilityValue | NamedUtilityValue | null
       modifier: ArbitraryModifier | NamedModifier | null
       variants: Variant[]
-      negative: boolean
       important: boolean
       raw: string
     }
@@ -240,7 +238,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   }
 
   let important = false
-  let negative = false
 
   // Candidates that end with an exclamation mark are the important version with
   // higher specificity of the non-important candidate, e.g. `mx-4!`.
@@ -255,13 +252,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     base = base.slice(1)
   }
 
-  // Candidates that start with a dash are the negative versions of another
-  // candidate, e.g. `-mx-4`.
-  if (base[0] === '-') {
-    negative = true
-    base = base.slice(1)
-  }
-
   // Check for an exact match of a static utility first as long as it does not
   // look like an arbitrary value.
   if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
@@ -269,7 +259,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       kind: 'static',
       root: base,
       variants: parsedCandidateVariants,
-      negative,
       important,
       raw: input,
     }
@@ -384,7 +373,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
       value: null,
       variants: parsedCandidateVariants,
-      negative,
       important,
       raw: input,
     }

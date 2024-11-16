@@ -1,0 +1,254 @@
+import { expect } from 'vitest'
+import { candidate, css, html, json, retryAssertion, test, ts } from '../utils'
+
+test(
+  'production build',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "svelte": "^4.2.18",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@tailwindcss/vite": "workspace:^",
+            "vite": "^5.3.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [
+            svelte({
+              preprocess: [vitePreprocess()],
+            }),
+            tailwindcss(),
+          ],
+        })
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <body>
+            <div id="app"></div>
+            <script type="module" src="./src/main.ts"></script>
+          </body>
+        </html>
+      `,
+      'src/main.ts': ts`
+        import App from './App.svelte'
+        const app = new App({
+          target: document.body,
+        })
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+        @import 'tailwindcss/utilities';
+      `,
+      'src/App.svelte': html`
+        <script>
+          import './index.css'
+          let name = 'world'
+        </script>
+
+        <h1 class="global local underline">Hello {name}!</h1>
+
+        <style>
+          @import 'tailwindcss/theme' theme(reference);
+          @import './other.css';
+        </style>
+      `,
+      'src/other.css': css`
+        .local {
+          @apply text-red-500;
+          animation: 2s ease-in-out 0s infinite localKeyframes;
+        }
+
+        :global(.global) {
+          @apply text-green-500;
+          animation: 2s ease-in-out 0s infinite globalKeyframes;
+        }
+
+        @keyframes -global-globalKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+
+        @keyframes localKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+
+    await fs.expectFileToContain(files[0][0], [
+      candidate`underline`,
+      '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      /@keyframes globalKeyframes\{/,
+      /@keyframes svelte-.*-localKeyframes\{/,
+    ])
+  },
+)
+
+test(
+  'watch mode',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "svelte": "^4.2.18",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@tailwindcss/vite": "workspace:^",
+            "vite": "^5.3.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [
+            svelte({
+              preprocess: [vitePreprocess()],
+            }),
+            tailwindcss(),
+          ],
+        })
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <body>
+            <div id="app"></div>
+            <script type="module" src="./src/main.ts"></script>
+          </body>
+        </html>
+      `,
+      'src/main.ts': ts`
+        import App from './App.svelte'
+        const app = new App({
+          target: document.body,
+        })
+      `,
+      'src/App.svelte': html`
+        <script>
+          import './index.css'
+          let name = 'world'
+        </script>
+
+        <h1 class="local global underline">Hello {name}!</h1>
+
+        <style>
+          @import 'tailwindcss/theme' theme(reference);
+          @import './other.css';
+        </style>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+        @import 'tailwindcss/utilities';
+      `,
+      'src/other.css': css`
+        .local {
+          @apply text-red-500;
+          animation: 2s ease-in-out 0s infinite localKeyframes;
+        }
+
+        :global(.global) {
+          @apply text-green-500;
+          animation: 2s ease-in-out 0s infinite globalKeyframes;
+        }
+
+        @keyframes -global-globalKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+
+        @keyframes localKeyframes {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn }) => {
+    await spawn(`pnpm vite build --watch`)
+
+    await retryAssertion(async () => {
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [, css] = files[0]
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(
+        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      )
+      expect(css).toMatch(
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      )
+      expect(css).toMatch(/@keyframes globalKeyframes\{/)
+      expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
+    })
+
+    await fs.write(
+      'src/App.svelte',
+      (await fs.read('src/App.svelte')).replace('underline', 'font-bold bar'),
+    )
+
+    await fs.write(
+      'src/other.css',
+      `${await fs.read('src/other.css')}\n.bar { @apply text-pink-500; }`,
+    )
+
+    await retryAssertion(async () => {
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [, css] = files[0]
+      expect(css).toContain(candidate`font-bold`)
+      expect(css).toContain(
+        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+      )
+      expect(css).toMatch(
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      )
+      expect(css).toMatch(/@keyframes globalKeyframes\{/)
+      expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
+      expect(css).toMatch(/\.bar.svelte-.*\{color:var\(--color-pink-500\)\}/)
+    })
+  },
+)

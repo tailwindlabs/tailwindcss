@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/postcss",
-  "version": "4.0.0-alpha.31",
+  "version": "4.0.0-alpha.34",
   "description": "PostCSS plugin for Tailwind CSS, a utility-first CSS framework for rapidly building custom user interfaces",
   "license": "MIT",
   "repository": {
@@ -35,7 +35,7 @@
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
     "postcss": "^8.4.41",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

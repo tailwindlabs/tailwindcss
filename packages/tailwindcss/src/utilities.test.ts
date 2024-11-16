@@ -128,16 +128,14 @@ test('inset', async () => {
         @theme {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
         'inset-auto',
         'inset-shadow-sm',
-        'inset-ring-thick',
-        'inset-ringo-starr',
+        'inset-shadowned',
         '-inset-full',
         'inset-full',
         'inset-3/4',
@@ -150,8 +148,7 @@ test('inset', async () => {
     ":root {
       --spacing-4: 1rem;
       --inset-shadow-sm: inset 0 1px 1px #0000000d;
-      --inset-ring-thick: 100px;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-inset-4 {
@@ -182,8 +179,8 @@ test('inset', async () => {
       inset: 100%;
     }
 
-    .inset-ringo-starr {
-      inset: var(--inset-ringo-starr);
+    .inset-shadowned {
+      inset: var(--inset-shadowned);
     }
 
     .inset-shadow-sm {
@@ -301,12 +298,12 @@ test('inset-x', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'inset-x-ringo-starr',
+        'inset-x-shadowned',
         'inset-x-auto',
         'inset-x-full',
         '-inset-x-full',
@@ -319,7 +316,7 @@ test('inset-x', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-inset-x-4 {
@@ -350,8 +347,8 @@ test('inset-x', async () => {
       inset-inline: 100%;
     }
 
-    .inset-x-ringo-starr {
-      inset-inline: var(--inset-ringo-starr);
+    .inset-x-shadowned {
+      inset-inline: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -360,13 +357,11 @@ test('inset-x', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px #0000000d;
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'inset-x-shadow-sm',
-        'inset-x-ring-thick',
         'inset-x',
         'inset-x--1',
         'inset-x--1/2',
@@ -390,12 +385,12 @@ test('inset-y', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'inset-y-ringo-starr',
+        'inset-y-shadowned',
         'inset-y-auto',
         'inset-y-full',
         '-inset-y-full',
@@ -408,7 +403,7 @@ test('inset-y', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-inset-y-4 {
@@ -439,8 +434,8 @@ test('inset-y', async () => {
       inset-block: 100%;
     }
 
-    .inset-y-ringo-starr {
-      inset-block: var(--inset-ringo-starr);
+    .inset-y-shadowned {
+      inset-block: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -449,13 +444,11 @@ test('inset-y', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'inset-y-shadow-sm',
-        'inset-y-ring-thick',
         'inset-y',
         'inset-y--1',
         'inset-y--1/2',
@@ -479,12 +472,12 @@ test('start', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'start-ringo-starr',
+        'start-shadowned',
         'start-auto',
         '-start-full',
         'start-full',
@@ -497,7 +490,7 @@ test('start', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-start-4 {
@@ -528,8 +521,8 @@ test('start', async () => {
       inset-inline-start: 100%;
     }
 
-    .start-ringo-starr {
-      inset-inline-start: var(--inset-ringo-starr);
+    .start-shadowned {
+      inset-inline-start: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -538,13 +531,11 @@ test('start', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'start-shadow-sm',
-        'start-ring-thick',
         'start',
         'start--1',
         'start--1/2',
@@ -568,12 +559,12 @@ test('end', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'end-ringo-starr',
+        'end-shadowned',
         'end-auto',
         '-end-full',
         'end-full',
@@ -586,7 +577,7 @@ test('end', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-end-4 {
@@ -617,8 +608,8 @@ test('end', async () => {
       inset-inline-end: 100%;
     }
 
-    .end-ringo-starr {
-      inset-inline-end: var(--inset-ringo-starr);
+    .end-shadowned {
+      inset-inline-end: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -627,13 +618,11 @@ test('end', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'end-shadow-sm',
-        'end-ring-thick',
         'end',
         'end--1',
         'end--1/2',
@@ -657,13 +646,13 @@ test('top', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
 
       [
-        'top-ringo-starr',
+        'top-shadowned',
         'top-auto',
         '-top-full',
         'top-full',
@@ -676,7 +665,7 @@ test('top', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-top-4 {
@@ -707,8 +696,8 @@ test('top', async () => {
       top: 100%;
     }
 
-    .top-ringo-starr {
-      top: var(--inset-ringo-starr);
+    .top-shadowned {
+      top: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -717,13 +706,11 @@ test('top', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'top-shadow-sm',
-        'top-ring-thick',
         'top',
         'top--1',
         'top--1/2',
@@ -747,12 +734,12 @@ test('right', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'right-ringo-starr',
+        'right-shadowned',
         'right-auto',
         '-right-full',
         'right-full',
@@ -765,7 +752,7 @@ test('right', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-right-4 {
@@ -796,8 +783,8 @@ test('right', async () => {
       right: 100%;
     }
 
-    .right-ringo-starr {
-      right: var(--inset-ringo-starr);
+    .right-shadowned {
+      right: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -806,13 +793,11 @@ test('right', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'right-shadow-sm',
-        'right-ring-thick',
         'right',
         'right--1',
         'right--1/2',
@@ -836,12 +821,12 @@ test('bottom', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'bottom-ringo-starr',
+        'bottom-shadowned',
         'bottom-auto',
         '-bottom-full',
         'bottom-full',
@@ -854,7 +839,7 @@ test('bottom', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-bottom-4 {
@@ -885,8 +870,8 @@ test('bottom', async () => {
       bottom: 100%;
     }
 
-    .bottom-ringo-starr {
-      bottom: var(--inset-ringo-starr);
+    .bottom-shadowned {
+      bottom: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -895,13 +880,11 @@ test('bottom', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'bottom-shadow-sm',
-        'bottom-ring-thick',
         'bottom',
         'bottom--1',
         'bottom--1/2',
@@ -925,12 +908,12 @@ test('left', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --inset-ringo-starr: 1940px;
+          --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
       [
-        'left-ringo-starr',
+        'left-shadowned',
         'left-auto',
         '-left-full',
         'left-full',
@@ -943,7 +926,7 @@ test('left', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --inset-ringo-starr: 1940px;
+      --inset-shadowned: 1940px;
     }
 
     .-left-4 {
@@ -974,8 +957,8 @@ test('left', async () => {
       left: 100%;
     }
 
-    .left-ringo-starr {
-      left: var(--inset-ringo-starr);
+    .left-shadowned {
+      left: var(--inset-shadowned);
     }"
   `)
   expect(
@@ -984,13 +967,11 @@ test('left', async () => {
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
       [
         'left-shadow-sm',
-        'left-ring-thick',
         'left',
         'left--1',
         'left--1/2',
@@ -2738,7 +2719,7 @@ test('min-width', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -2756,7 +2737,7 @@ test('min-width', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .min-w-4 {
@@ -2788,7 +2769,7 @@ test('min-width', async () => {
     }
 
     .min-w-xl {
-      min-width: var(--width-xl);
+      min-width: var(--container-xl);
     }"
   `)
   expect(
@@ -2814,7 +2795,7 @@ test('max-width', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -2832,7 +2813,7 @@ test('max-width', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .max-w-4 {
@@ -2860,7 +2841,7 @@ test('max-width', async () => {
     }
 
     .max-w-xl {
-      max-width: var(--width-xl);
+      max-width: var(--container-xl);
     }"
   `)
   expect(
@@ -3167,6 +3148,230 @@ test('max-height', async () => {
   ).toEqual('')
 })
 
+describe('container', () => {
+  test('creates the right media queries and sorts it before width', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+
+  test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-3xl: 1600px;
+            --breakpoint-sm: 40em;
+            --breakpoint-2xl: 96rem;
+            --breakpoint-xs: 30px;
+            --breakpoint-md: 48em;
+          }
+          @tailwind utilities;
+        `,
+        ['container'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".container {
+        width: 100%;
+      }
+
+      @media (width >= 40em) {
+        .container {
+          max-width: 40em;
+        }
+      }
+
+      @media (width >= 48em) {
+        .container {
+          max-width: 48em;
+        }
+      }
+
+      @media (width >= 30px) {
+        .container {
+          max-width: 30px;
+        }
+      }
+
+      @media (width >= 1600px) {
+        .container {
+          max-width: 1600px;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }"
+    `)
+  })
+
+  test('custom `@utility container` always follow the core utility ', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @tailwind utilities;
+
+          @utility container {
+            margin-inline: auto;
+            padding-inline: 1rem;
+
+            @media (width >= theme(--breakpoint-sm)) {
+              padding-inline: 2rem;
+            }
+          }
+        `,
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --breakpoint-sm: 40rem;
+        --breakpoint-md: 48rem;
+        --breakpoint-lg: 64rem;
+        --breakpoint-xl: 80rem;
+        --breakpoint-2xl: 96rem;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          max-width: 40rem;
+        }
+      }
+
+      @media (width >= 48rem) {
+        .container {
+          max-width: 48rem;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .container {
+          max-width: 64rem;
+        }
+      }
+
+      @media (width >= 80rem) {
+        .container {
+          max-width: 80rem;
+        }
+      }
+
+      @media (width >= 96rem) {
+        .container {
+          max-width: 96rem;
+        }
+      }
+
+      .container {
+        margin-inline: auto;
+        padding-inline: 1rem;
+      }
+
+      @media (width >= 40rem) {
+        .container {
+          padding-inline: 2rem;
+        }
+      }
+
+      .w-1\\/2 {
+        width: 50%;
+      }
+
+      .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+        max-width: var(--breakpoint-sm);
+      }"
+    `)
+  })
+})
+
 test('flex', async () => {
   expect(
     await run([
@@ -3293,7 +3498,7 @@ test('flex-basis', async () => {
     await compileCss(
       css`
         @theme {
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -3301,7 +3506,7 @@ test('flex-basis', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .basis-11\\/12 {
@@ -3321,7 +3526,7 @@ test('flex-basis', async () => {
     }
 
     .basis-xl {
-      flex-basis: var(--width-xl);
+      flex-basis: var(--container-xl);
     }"
   `)
   expect(
@@ -3880,6 +4085,82 @@ test('translate-x', async () => {
       '-translate-x-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --spacing: .25rem;
+    }
+
+    .-translate-x-\\[var\\(--value\\)\\] {
+      --tw-translate-x: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .-translate-x-full {
+      --tw-translate-x: -100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .translate-x-full {
+      --tw-translate-x: 100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .translate-x-px {
+      --tw-translate-x: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
+    }
+
+    @property --tw-translate-x {
+      syntax: "<length> | <percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length> | <percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(
+    await run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate-y', async () => {
@@ -3950,6 +4231,82 @@ test('translate-y', async () => {
       '-translate-y-full/foo',
       'translate-y-px/foo',
       '-translate-y-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --spacing: .25rem;
+    }
+
+    .-translate-y-\\[var\\(--value\\)\\] {
+      --tw-translate-y: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .-translate-y-full {
+      --tw-translate-y: -100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .translate-y-full {
+      --tw-translate-y: 100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .translate-y-px {
+      --tw-translate-y: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
+    }
+
+    @property --tw-translate-x {
+      syntax: "<length> | <percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length> | <percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(
+    await run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
     ]),
   ).toEqual('')
 })
@@ -6451,8 +6808,8 @@ test('columns', async () => {
     await compileCss(
       css`
         @theme {
-          --width-3xs: 16rem;
-          --width-7xl: 80rem;
+          --container-3xs: 16rem;
+          --container-7xl: 80rem;
         }
         @tailwind utilities;
       `,
@@ -6468,12 +6825,12 @@ test('columns', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --width-3xs: 16rem;
-      --width-7xl: 80rem;
+      --container-3xs: 16rem;
+      --container-7xl: 80rem;
     }
 
     .columns-3xs {
-      columns: var(--width-3xs);
+      columns: var(--container-3xs);
     }
 
     .columns-4 {
@@ -6481,7 +6838,7 @@ test('columns', async () => {
     }
 
     .columns-7xl {
-      columns: var(--width-7xl);
+      columns: var(--container-7xl);
     }
 
     .columns-99 {
@@ -7889,6 +8246,9 @@ test('accent', async () => {
       [
         'accent-red-500',
         'accent-red-500/50',
+        'accent-red-500/2.25',
+        'accent-red-500/2.5',
+        'accent-red-500/2.75',
         'accent-red-500/[0.5]',
         'accent-red-500/[50%]',
         'accent-current',
@@ -7930,6 +8290,18 @@ test('accent', async () => {
 
     .accent-red-500 {
       accent-color: var(--color-red-500);
+    }
+
+    .accent-red-500\\/2\\.5 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .accent-red-500\\/2\\.25 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .accent-red-500\\/2\\.75 {
+      accent-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
@@ -7989,6 +8361,9 @@ test('caret', async () => {
       [
         'caret-red-500',
         'caret-red-500/50',
+        'caret-red-500/2.25',
+        'caret-red-500/2.5',
+        'caret-red-500/2.75',
         'caret-red-500/[0.5]',
         'caret-red-500/[50%]',
         'caret-current',
@@ -8030,6 +8405,18 @@ test('caret', async () => {
 
     .caret-red-500 {
       caret-color: var(--color-red-500);
+    }
+
+    .caret-red-500\\/2\\.5 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .caret-red-500\\/2\\.25 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .caret-red-500\\/2\\.75 {
+      caret-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
@@ -8087,6 +8474,9 @@ test('divide-color', async () => {
       [
         'divide-red-500',
         'divide-red-500/50',
+        'divide-red-500/2.25',
+        'divide-red-500/2.5',
+        'divide-red-500/2.75',
         'divide-red-500/[0.5]',
         'divide-red-500/[50%]',
         'divide-current',
@@ -8128,6 +8518,18 @@ test('divide-color', async () => {
 
     :where(.divide-red-500 > :not(:last-child)) {
       border-color: var(--color-red-500);
+    }
+
+    :where(.divide-red-500\\/2\\.5 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    :where(.divide-red-500\\/2\\.25 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    :where(.divide-red-500\\/2\\.75 > :not(:last-child)) {
+      border-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
@@ -9756,6 +10158,9 @@ for (let prefix of prefixes) {
     // Color
     classes.push(`${prefix}-red-500`)
     classes.push(`${prefix}-red-500/50`)
+    classes.push(`${prefix}-red-500/2.25`)
+    classes.push(`${prefix}-red-500/2.5`)
+    classes.push(`${prefix}-red-500/2.75`)
     classes.push(`${prefix}-[#0088cc]`)
     classes.push(`${prefix}-[#0088cc]/50`)
     classes.push(`${prefix}-current`)
@@ -9855,6 +10260,9 @@ test('bg', async () => {
         // background-color
         'bg-red-500',
         'bg-red-500/50',
+        'bg-red-500/2.25',
+        'bg-red-500/2.5',
+        'bg-red-500/2.75',
         'bg-red-500/[0.5]',
         'bg-red-500/[50%]',
         'bg-current',
@@ -9880,16 +10288,6 @@ test('bg', async () => {
         // background-image
         'bg-none',
 
-        // Legacy linear-gradient API
-        'bg-gradient-to-t',
-        'bg-gradient-to-tr',
-        'bg-gradient-to-r',
-        'bg-gradient-to-br',
-        'bg-gradient-to-b',
-        'bg-gradient-to-bl',
-        'bg-gradient-to-l',
-        'bg-gradient-to-tl',
-
         // Modern linear-gradient API
         'bg-linear-to-t',
         'bg-linear-to-tr',
@@ -9901,6 +10299,47 @@ test('bg', async () => {
         'bg-linear-to-tl',
         'bg-linear-45',
         '-bg-linear-45',
+
+        // With interpolation mode modifier
+        'bg-linear-to-r/oklch',
+        'bg-linear-to-r/oklab',
+        'bg-linear-to-r/hsl',
+        'bg-linear-to-r/srgb',
+        'bg-linear-to-r/longer',
+        'bg-linear-to-r/shorter',
+        'bg-linear-to-r/increasing',
+        'bg-linear-to-r/decreasing',
+        'bg-linear-to-r/[in_hsl_longer_hue]',
+        'bg-linear-45/oklab',
+        '-bg-linear-45/oklab',
+        'bg-linear-45/shorter',
+        'bg-linear-45/[in_hsl_longer_hue]',
+        'bg-conic/oklch',
+        'bg-conic/oklab',
+        'bg-conic/hsl',
+        'bg-conic/srgb',
+        'bg-conic/longer',
+        'bg-conic/shorter',
+        'bg-conic/increasing',
+        'bg-conic/decreasing',
+        'bg-conic/[in_hsl_longer_hue]',
+        'bg-conic-45/oklab',
+        '-bg-conic-45/oklab',
+        'bg-conic-45/shorter',
+        'bg-conic-45/[in_hsl_longer_hue]',
+        'bg-radial/oklch',
+        'bg-radial/oklab',
+        'bg-radial/hsl',
+        'bg-radial/srgb',
+        'bg-radial/longer',
+        'bg-radial/shorter',
+        'bg-radial/increasing',
+        'bg-radial/decreasing',
+        'bg-radial/[in_hsl_longer_hue]',
+        'bg-radial-[circle_at_center]',
+        // Invalid but proves not converted to `in oklch longer hue` when used
+        // as an arbitrary value
+        'bg-linear-to-r/[longer]',
 
         'bg-[url(/image.png)]',
         'bg-[url:var(--my-url)]',
@@ -9988,7 +10427,7 @@ test('bg', async () => {
     }
 
     .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
-      background-color: color-mix(in oklch, currentColor calc(var(--bg-opacity) * 100%), transparent);
+      background-color: color-mix(in oklch, currentColor var(--bg-opacity), transparent);
     }
 
     .bg-inherit {
@@ -9999,6 +10438,18 @@ test('bg', async () => {
       background-color: var(--color-red-500);
     }
 
+    .bg-red-500\\/2\\.5 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .bg-red-500\\/2\\.25 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .bg-red-500\\/2\\.75 {
+      background-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+    }
+
     .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
       background-color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
@@ -10007,8 +10458,18 @@ test('bg', async () => {
       background-color: #0000;
     }
 
+    .-bg-conic-45\\/oklab {
+      --tw-gradient-position: from calc(45 * -1) in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
     .-bg-linear-45 {
       --tw-gradient-position: calc(45deg * -1) in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .-bg-linear-45\\/oklab {
+      --tw-gradient-position: calc(45deg * -1) in oklab, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
@@ -10022,48 +10483,83 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops, calc(125deg * -1)));
     }
 
-    .bg-gradient-to-b {
-      --tw-gradient-position: to bottom in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: from 45deg in hsl longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-bl {
-      --tw-gradient-position: to bottom left in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic-45\\/oklab {
+      --tw-gradient-position: from 45deg in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-br {
-      --tw-gradient-position: to bottom right in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic-45\\/shorter {
+      --tw-gradient-position: from 45deg in oklch shorter hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-l {
-      --tw-gradient-position: to left in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: in hsl longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-r {
-      --tw-gradient-position: to right in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic\\/decreasing {
+      --tw-gradient-position: in oklch decreasing hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-t {
-      --tw-gradient-position: to top in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic\\/hsl {
+      --tw-gradient-position: in hsl, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-tl {
-      --tw-gradient-position: to top left in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic\\/increasing {
+      --tw-gradient-position: in oklch increasing hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
-    .bg-gradient-to-tr {
-      --tw-gradient-position: to top right in oklch, ;
-      background-image: linear-gradient(var(--tw-gradient-stops));
+    .bg-conic\\/longer {
+      --tw-gradient-position: in oklch longer hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/oklab {
+      --tw-gradient-position: in oklab, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/oklch {
+      --tw-gradient-position: in oklch, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/shorter {
+      --tw-gradient-position: in oklch shorter hue, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-conic\\/srgb {
+      --tw-gradient-position: in srgb, ;
+      background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45 {
       --tw-gradient-position: 45deg in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: 45deg in hsl longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45\\/oklab {
+      --tw-gradient-position: 45deg in oklab, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-45\\/shorter {
+      --tw-gradient-position: 45deg in oklch shorter hue, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
@@ -10107,6 +10603,56 @@ test('bg', async () => {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
+    .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: to right in hsl longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/\\[longer\\] {
+      --tw-gradient-position: to right longer, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/decreasing {
+      --tw-gradient-position: to right in oklch decreasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/hsl {
+      --tw-gradient-position: to right in hsl, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/increasing {
+      --tw-gradient-position: to right in oklch increasing hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/longer {
+      --tw-gradient-position: to right in oklch longer hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklab {
+      --tw-gradient-position: to right in oklab, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/oklch {
+      --tw-gradient-position: to right in oklch, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/shorter {
+      --tw-gradient-position: to right in oklch shorter hue, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-linear-to-r\\/srgb {
+      --tw-gradient-position: to right in srgb, ;
+      background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
     .bg-linear-to-t {
       --tw-gradient-position: to top in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
@@ -10120,6 +10666,56 @@ test('bg', async () => {
     .bg-linear-to-tr {
       --tw-gradient-position: to top right in oklch, ;
       background-image: linear-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial-\\[circle_at_center\\] {
+      --tw-gradient-position: circle at center, ;
+      background-image: radial-gradient(var(--tw-gradient-stops, circle at center));
+    }
+
+    .bg-radial\\/\\[in_hsl_longer_hue\\] {
+      --tw-gradient-position: in hsl longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/decreasing {
+      --tw-gradient-position: in oklch decreasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/hsl {
+      --tw-gradient-position: in hsl, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/increasing {
+      --tw-gradient-position: in oklch increasing hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/longer {
+      --tw-gradient-position: in oklch longer hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklab {
+      --tw-gradient-position: in oklab, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/oklch {
+      --tw-gradient-position: in oklch, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/shorter {
+      --tw-gradient-position: in oklch shorter hue, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
+    }
+
+    .bg-radial\\/srgb {
+      --tw-gradient-position: in srgb, ;
+      background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-\\[image\\:var\\(--my-gradient\\)\\] {
@@ -10302,31 +10898,13 @@ test('bg', async () => {
       '-bg-space',
 
       'bg-none/foo',
-      'bg-gradient-to-t/foo',
-      'bg-gradient-to-tr/foo',
-      'bg-gradient-to-r/foo',
-      'bg-gradient-to-br/foo',
-      'bg-gradient-to-b/foo',
-      'bg-gradient-to-bl/foo',
-      'bg-gradient-to-l/foo',
-      'bg-gradient-to-tl/foo',
-      'bg-linear-to-t/foo',
-      'bg-linear-to-tr/foo',
-      'bg-linear-to-r/foo',
-      'bg-linear-to-br/foo',
-      'bg-linear-to-b/foo',
-      'bg-linear-to-bl/foo',
-      'bg-linear-to-l/foo',
-      'bg-linear-to-tl/foo',
       'bg-[url(/image.png)]/foo',
       'bg-[url:var(--my-url)]/foo',
       'bg-[linear-gradient(to_bottom,red,blue)]/foo',
       'bg-[image:var(--my-gradient)]/foo',
-      'bg-linear-[125deg]/foo',
-      'bg-linear-[1.3rad]/foo',
-      'bg-linear-[to_bottom]/foo',
-      '-bg-linear-[125deg]/foo',
-      '-bg-linear-[1.3rad]/foo',
+      'bg-linear-[to_bottom]/hsl',
+      'bg-conic-[45deg]/hsl',
+      'bg-conic-[circle_at_center]/hsl',
       'bg-auto/foo',
       'bg-cover/foo',
       'bg-contain/foo',
@@ -10370,7 +10948,19 @@ test('bg', async () => {
       `,
       ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
-  ).toEqual('')
+  ).toMatchInlineSnapshot(`
+    ".bg-current\\/custom {
+      background-color: color-mix(in oklch, currentColor var(--opacity-custom), transparent);
+    }
+
+    .bg-current\\/half {
+      background-color: color-mix(in oklch, currentColor var(--opacity-half), transparent);
+    }
+
+    .\\[color\\:red\\]\\/half {
+      color: color-mix(in oklch, red var(--opacity-half), transparent);
+    }"
+  `)
 })
 
 test('from', async () => {
@@ -11445,6 +12035,9 @@ test('fill', async () => {
       [
         'fill-red-500',
         'fill-red-500/50',
+        'fill-red-500/2.25',
+        'fill-red-500/2.5',
+        'fill-red-500/2.75',
         'fill-red-500/[0.5]',
         'fill-red-500/[50%]',
         'fill-current',
@@ -11486,6 +12079,18 @@ test('fill', async () => {
 
     .fill-red-500 {
       fill: var(--color-red-500);
+    }
+
+    .fill-red-500\\/2\\.5 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .fill-red-500\\/2\\.25 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .fill-red-500\\/2\\.75 {
+      fill: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
@@ -11531,6 +12136,9 @@ test('stroke', async () => {
         // Color
         'stroke-red-500',
         'stroke-red-500/50',
+        'stroke-red-500/2.25',
+        'stroke-red-500/2.5',
+        'stroke-red-500/2.75',
         'stroke-red-500/[0.5]',
         'stroke-red-500/[50%]',
         'stroke-current',
@@ -11612,6 +12220,18 @@ test('stroke', async () => {
 
     .stroke-red-500 {
       stroke: var(--color-red-500);
+    }
+
+    .stroke-red-500\\/2\\.5 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .stroke-red-500\\/2\\.25 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .stroke-red-500\\/2\\.75 {
+      stroke: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
@@ -12387,7 +13007,6 @@ test('font', async () => {
         @theme reference {
           --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-size-xl: 24px;
           --font-weight-bold: 650;
         }
         @tailwind utilities;
@@ -12400,7 +13019,6 @@ test('font', async () => {
         // font-weight
         '-font-bold',
 
-        'font-size-xl',
         'font-weight-bold',
         'font-sans/foo',
         'font-["arial_rounded"]/foo',
@@ -12536,6 +13154,9 @@ test('placeholder', async () => {
       [
         'placeholder-red-500',
         'placeholder-red-500/50',
+        'placeholder-red-500/2.25',
+        'placeholder-red-500/2.5',
+        'placeholder-red-500/2.75',
         'placeholder-red-500/[0.5]',
         'placeholder-red-500/[50%]',
         'placeholder-current',
@@ -12577,6 +13198,18 @@ test('placeholder', async () => {
 
     .placeholder-red-500::placeholder {
       color: var(--color-red-500);
+    }
+
+    .placeholder-red-500\\/2\\.5::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .placeholder-red-500\\/2\\.25::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .placeholder-red-500\\/2\\.75::placeholder {
+      color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
@@ -13246,6 +13879,9 @@ test('backdrop-filter', async () => {
         'backdrop-invert-[var(--value)]',
         'backdrop-opacity-50',
         'backdrop-opacity-71',
+        'backdrop-opacity-1.25',
+        'backdrop-opacity-2.5',
+        'backdrop-opacity-3.75',
         'backdrop-opacity-[0.5]',
         'backdrop-saturate-0',
         'backdrop-saturate-[1.75]',
@@ -13359,6 +13995,24 @@ test('backdrop-filter', async () => {
 
     .backdrop-invert-\\[var\\(--value\\)\\] {
       --tw-backdrop-invert: invert(var(--value));
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .backdrop-opacity-1\\.25 {
+      --tw-backdrop-opacity: opacity(1.25%);
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .backdrop-opacity-2\\.5 {
+      --tw-backdrop-opacity: opacity(2.5%);
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .backdrop-opacity-3\\.75 {
+      --tw-backdrop-opacity: opacity(3.75%);
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
@@ -14057,22 +14711,22 @@ test('leading', async () => {
     await compileCss(
       css`
         @theme {
-          --line-height-none: 1;
-          --line-height-6: 1.5rem;
+          --leading-tight: 1.25;
+          --leading-6: 1.5rem;
         }
         @tailwind utilities;
       `,
-      ['leading-none', 'leading-6', 'leading-[var(--value)]'],
+      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --line-height-none: 1;
-      --line-height-6: 1.5rem;
+      --leading-tight: 1.25;
+      --leading-6: 1.5rem;
     }
 
     .leading-6 {
-      --tw-leading: var(--line-height-6);
-      line-height: var(--line-height-6);
+      --tw-leading: var(--leading-6);
+      line-height: var(--leading-6);
     }
 
     .leading-\\[var\\(--value\\)\\] {
@@ -14080,9 +14734,9 @@ test('leading', async () => {
       line-height: var(--value);
     }
 
-    .leading-none {
-      --tw-leading: var(--line-height-none);
-      line-height: var(--line-height-none);
+    .leading-tight {
+      --tw-leading: var(--leading-tight);
+      line-height: var(--leading-tight);
     }
 
     @supports (-moz-orient: inline) {
@@ -14101,10 +14755,10 @@ test('leading', async () => {
   expect(
     await run([
       'leading',
-      '-leading-none',
+      '-leading-tight',
       '-leading-6',
       '-leading-[var(--value)]',
-      'leading-none/foo',
+      'leading-tight/foo',
       'leading-6/foo',
       'leading-[var(--value)]/foo',
     ]),
@@ -14116,8 +14770,8 @@ test('tracking', async () => {
     await compileCss(
       css`
         @theme {
-          --letter-spacing-normal: 0em;
-          --letter-spacing-wide: 0.025em;
+          --tracking-normal: 0em;
+          --tracking-wide: 0.025em;
         }
         @tailwind utilities;
       `,
@@ -14125,8 +14779,8 @@ test('tracking', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --letter-spacing-normal: 0em;
-      --letter-spacing-wide: .025em;
+      --tracking-normal: 0em;
+      --tracking-wide: .025em;
     }
 
     .-tracking-\\[var\\(--value\\)\\] {
@@ -14140,13 +14794,13 @@ test('tracking', async () => {
     }
 
     .tracking-normal {
-      --tw-tracking: var(--letter-spacing-normal);
-      letter-spacing: var(--letter-spacing-normal);
+      --tw-tracking: var(--tracking-normal);
+      letter-spacing: var(--tracking-normal);
     }
 
     .tracking-wide {
-      --tw-tracking: var(--letter-spacing-wide);
-      letter-spacing: var(--letter-spacing-wide);
+      --tw-tracking: var(--tracking-wide);
+      letter-spacing: var(--tracking-wide);
     }
 
     @supports (-moz-orient: inline) {
@@ -14376,11 +15030,6 @@ test('outline', async () => {
       --color-red-500: #ef4444;
     }
 
-    .outline-none {
-      outline-offset: 2px;
-      outline: 2px solid #0000;
-    }
-
     .outline {
       outline-style: var(--tw-outline-style);
       outline-width: 1px;
@@ -14490,6 +15139,11 @@ test('outline', async () => {
       outline-style: double;
     }
 
+    .outline-none {
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+
     .outline-solid {
       --tw-outline-style: solid;
       outline-style: solid;
@@ -14589,8 +15243,28 @@ test('outline-offset', async () => {
 })
 
 test('opacity', async () => {
-  expect(await run(['opacity-15', 'opacity-[var(--value)]'])).toMatchInlineSnapshot(`
-    ".opacity-15 {
+  expect(
+    await run([
+      'opacity-15',
+      'opacity-2.5',
+      'opacity-3.25',
+      'opacity-4.75',
+      'opacity-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".opacity-2\\.5 {
+      opacity: .025;
+    }
+
+    .opacity-3\\.25 {
+      opacity: .0325;
+    }
+
+    .opacity-4\\.75 {
+      opacity: .0475;
+    }
+
+    .opacity-15 {
       opacity: .15;
     }
 
@@ -14602,6 +15276,7 @@ test('opacity', async () => {
     await run([
       'opacity',
       'opacity--15',
+      'opacity-1.125',
       '-opacity-15',
       '-opacity-[var(--value)]',
       'opacity-unknown',
@@ -14680,11 +15355,10 @@ test('text', async () => {
     await compileCss(
       css`
         @theme {
+          --spacing: 0.25rem;
           --color-red-500: #ef4444;
-          --line-height-6: 1.5rem;
-          --font-size-sm: 0.875rem;
-          --font-size-sm--line-height: 1.25rem;
-          --line-height-9: 2.25rem;
+          --text-sm: 0.875rem;
+          --text-sm--line-height: 1.25rem;
         }
         @tailwind utilities;
       `,
@@ -14692,6 +15366,9 @@ test('text', async () => {
         // color
         'text-red-500',
         'text-red-500/50',
+        'text-red-500/2.25',
+        'text-red-500/2.5',
+        'text-red-500/2.75',
         'text-red-500/[0.5]',
         'text-red-500/[50%]',
         'text-current',
@@ -14737,50 +15414,49 @@ test('text', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
+      --spacing: .25rem;
       --color-red-500: #ef4444;
-      --line-height-6: 1.5rem;
-      --font-size-sm: .875rem;
-      --font-size-sm--line-height: 1.25rem;
-      --line-height-9: 2.25rem;
+      --text-sm: .875rem;
+      --text-sm--line-height: 1.25rem;
     }
 
     .text-sm {
-      font-size: var(--font-size-sm);
-      line-height: var(--tw-leading, var(--font-size-sm--line-height));
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
 
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: var(--line-height-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: var(--line-height-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: var(--line-height-9);
+      line-height: calc(var(--spacing) * 9);
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: var(--line-height-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: var(--line-height-6);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-sm\\/6 {
-      font-size: var(--font-size-sm);
-      line-height: var(--line-height-6);
+      font-size: var(--text-sm);
+      line-height: calc(var(--spacing) * 6);
     }
 
     .text-sm\\/\\[4px\\] {
-      font-size: var(--font-size-sm);
+      font-size: var(--text-sm);
       line-height: 4px;
     }
 
@@ -14856,6 +15532,18 @@ test('text', async () => {
       color: var(--color-red-500);
     }
 
+    .text-red-500\\/2\\.5 {
+      color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .text-red-500\\/2\\.25 {
+      color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .text-red-500\\/2\\.75 {
+      color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
+    }
+
     .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
       color: color-mix(in oklch, var(--color-red-500) 50%, transparent);
     }
@@ -14915,6 +15603,9 @@ test('shadow', async () => {
         // Colors
         'shadow-red-500',
         'shadow-red-500/50',
+        'shadow-red-500/2.25',
+        'shadow-red-500/2.5',
+        'shadow-red-500/2.75',
         'shadow-red-500/[0.5]',
         'shadow-red-500/[50%]',
         'shadow-current',
@@ -15000,6 +15691,18 @@ test('shadow', async () => {
 
     .shadow-red-500 {
       --tw-shadow-color: var(--color-red-500);
+    }
+
+    .shadow-red-500\\/2\\.5 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .shadow-red-500\\/2\\.25 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .shadow-red-500\\/2\\.75 {
+      --tw-shadow-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
@@ -15143,6 +15846,9 @@ test('inset-shadow', async () => {
         // Colors
         'inset-shadow-red-500',
         'inset-shadow-red-500/50',
+        'inset-shadow-red-500/2.25',
+        'inset-shadow-red-500/2.5',
+        'inset-shadow-red-500/2.75',
         'inset-shadow-red-500/[0.5]',
         'inset-shadow-red-500/[50%]',
         'inset-shadow-current',
@@ -15228,6 +15934,18 @@ test('inset-shadow', async () => {
 
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: var(--color-red-500);
+    }
+
+    .inset-shadow-red-500\\/2\\.5 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .inset-shadow-red-500\\/2\\.25 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .inset-shadow-red-500\\/2\\.75 {
+      --tw-inset-shadow-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
@@ -15361,6 +16079,9 @@ test('ring', async () => {
         'ring-inset',
         'ring-red-500',
         'ring-red-500/50',
+        'ring-red-500/2.25',
+        'ring-red-500/2.5',
+        'ring-red-500/2.75',
         'ring-red-500/[0.5]',
         'ring-red-500/[50%]',
         'ring-current',
@@ -15470,6 +16191,18 @@ test('ring', async () => {
 
     .ring-red-500 {
       --tw-ring-color: var(--color-red-500);
+    }
+
+    .ring-red-500\\/2\\.5 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .ring-red-500\\/2\\.25 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .ring-red-500\\/2\\.75 {
+      --tw-ring-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
@@ -15614,7 +16347,6 @@ test('inset-ring', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --inset-ring-thick: 100px;
         }
         @tailwind utilities;
       `,
@@ -15622,6 +16354,9 @@ test('inset-ring', async () => {
         // ring color
         'inset-ring-red-500',
         'inset-ring-red-500/50',
+        'inset-ring-red-500/2.25',
+        'inset-ring-red-500/2.5',
+        'inset-ring-red-500/2.75',
         'inset-ring-red-500/[0.5]',
         'inset-ring-red-500/[50%]',
         'inset-ring-current',
@@ -15649,7 +16384,6 @@ test('inset-ring', async () => {
         'inset-ring-1',
         'inset-ring-2',
         'inset-ring-4',
-        'inset-ring-thick',
         'inset-ring-[12px]',
         'inset-ring-[length:var(--my-width)]',
       ],
@@ -15657,7 +16391,6 @@ test('inset-ring', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
-      --inset-ring-thick: 100px;
     }
 
     .inset-ring {
@@ -15733,6 +16466,18 @@ test('inset-ring', async () => {
 
     .inset-ring-red-500 {
       --tw-inset-ring-color: var(--color-red-500);
+    }
+
+    .inset-ring-red-500\\/2\\.5 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .inset-ring-red-500\\/2\\.25 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .inset-ring-red-500\\/2\\.75 {
+      --tw-inset-ring-color: color-mix(in oklch, var(--color-red-500) 2.75%, transparent);
     }
 
     .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {
@@ -16121,7 +16866,7 @@ describe('spacing utilities', () => {
     `)
   })
 
-  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multipler', async () => {
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
     let { build } = await compile(css`
       @theme {
         --spacing: 4px;
@@ -16147,6 +16892,18 @@ describe('spacing utilities', () => {
         padding-inline: calc(var(--spacing) * 2.75);
       }"
     `)
+  })
+
+  test('spacing utilities must have a value', async () => {
+    let { build } = await compile(css`
+      @theme reference {
+        --spacing: 4px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['px'])
+
+    expect(optimizeCss(compiled).trim()).toEqual('')
   })
 })
 
@@ -16244,13 +17001,13 @@ describe('custom utilities', () => {
       }
 
       @theme reference {
-        --font-size-sm: 0.875rem;
-        --font-size-sm--line-height: 1.25rem;
+        --text-sm: 0.875rem;
+        --text-sm--line-height: 1.25rem;
       }
 
       @utility text-sm {
-        font-size: var(--font-size-sm, 0.8755rem);
-        line-height: var(--font-size-sm--line-height, 1.255rem);
+        font-size: var(--text-sm, 0.8755rem);
+        line-height: var(--text-sm--line-height, 1.255rem);
         text-rendering: optimizeLegibility;
       }
     `)
@@ -16259,10 +17016,10 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--font-size-sm);
-          line-height: var(--tw-leading, var(--font-size-sm--line-height));
-          font-size: var(--font-size-sm, .8755rem);
-          line-height: var(--font-size-sm--line-height, 1.255rem);
+          font-size: var(--text-sm);
+          line-height: var(--tw-leading, var(--text-sm--line-height));
+          font-size: var(--text-sm, .8755rem);
+          line-height: var(--text-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
         }
       }"

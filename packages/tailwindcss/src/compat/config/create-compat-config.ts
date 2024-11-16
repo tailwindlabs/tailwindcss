@@ -13,34 +13,46 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
       // and only allow colors from the CSS theme.
       colors: ({ theme }) => theme('color', {}),
 
-      boxShadow: ({ theme }) => ({
-        ...defaultTheme.boxShadow,
-        ...theme('shadow', {}),
-      }),
+      extend: {
+        fontSize: ({ theme }) => ({
+          ...theme('text', {}),
+        }),
 
-      animation: ({ theme }) => ({
-        ...defaultTheme.animation,
-        ...theme('animate', {}),
-      }),
+        boxShadow: ({ theme }) => ({
+          ...theme('shadow', {}),
+        }),
 
-      borderRadius: ({ theme }) => ({
-        ...defaultTheme.borderRadius,
-        ...theme('radius', {}),
-      }),
+        animation: ({ theme }) => ({
+          ...theme('animate', {}),
+        }),
 
-      screens: ({ theme }) => ({
-        ...defaultTheme.screens,
-        ...theme('breakpoint', {}),
-      }),
+        borderRadius: ({ theme }) => ({
+          ...theme('radius', {}),
+        }),
 
-      transitionDuration: {
-        ...defaultTheme.transitionDuration,
-        DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
-      },
+        screens: ({ theme }) => ({
+          ...theme('breakpoint', {}),
+        }),
 
-      transitionTimingFunction: {
-        ...defaultTheme.transitionTimingFunction,
-        DEFAULT: cssTheme.get(['--default-transition-timing-function']) ?? null,
+        letterSpacing: ({ theme }) => ({
+          ...theme('tracking', {}),
+        }),
+
+        lineHeight: ({ theme }) => ({
+          ...theme('leading', {}),
+        }),
+
+        transitionDuration: {
+          DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
+        },
+
+        transitionTimingFunction: {
+          DEFAULT: cssTheme.get(['--default-transition-timing-function']) ?? null,
+        },
+
+        maxWidth: ({ theme }) => ({
+          ...theme('container', {}),
+        }),
       },
     },
   }

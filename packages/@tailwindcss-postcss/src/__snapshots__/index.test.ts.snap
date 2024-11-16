@@ -3,76 +3,9 @@
 exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 "@layer theme {
   :root {
-    --default-transition-duration: .15s;
-    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-    --default-font-family: var(--font-sans);
-    --default-font-feature-settings: var(--font-sans--font-feature-settings);
-    --default-font-variation-settings: var(--font-sans--font-variation-settings);
-    --default-mono-font-family: var(--font-mono);
-    --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
-    --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
-    --breakpoint-sm: 40rem;
-    --breakpoint-md: 48rem;
-    --breakpoint-lg: 64rem;
-    --breakpoint-xl: 80rem;
-    --breakpoint-2xl: 96rem;
-    --color-black: #000;
-    --color-white: #fff;
-    --color-slate-50: oklch(.984 .003 247.858);
-    --color-slate-100: oklch(.968 .007 247.896);
-    --color-slate-200: oklch(.929 .013 255.508);
-    --color-slate-300: oklch(.869 .022 252.894);
-    --color-slate-400: oklch(.704 .04 256.788);
-    --color-slate-500: oklch(.554 .046 257.417);
-    --color-slate-600: oklch(.446 .043 257.281);
-    --color-slate-700: oklch(.372 .044 257.287);
-    --color-slate-800: oklch(.279 .041 260.031);
-    --color-slate-900: oklch(.208 .042 265.755);
-    --color-slate-950: oklch(.129 .042 264.695);
-    --color-gray-50: oklch(.985 .002 247.839);
-    --color-gray-100: oklch(.967 .003 264.542);
-    --color-gray-200: oklch(.928 .006 264.531);
-    --color-gray-300: oklch(.872 .01 258.338);
-    --color-gray-400: oklch(.707 .022 261.325);
-    --color-gray-500: oklch(.551 .027 264.364);
-    --color-gray-600: oklch(.446 .03 256.802);
-    --color-gray-700: oklch(.373 .034 259.733);
-    --color-gray-800: oklch(.278 .033 256.848);
-    --color-gray-900: oklch(.21 .034 264.665);
-    --color-gray-950: oklch(.13 .028 261.692);
-    --color-zinc-50: oklch(.985 0 0);
-    --color-zinc-100: oklch(.967 .001 286.375);
-    --color-zinc-200: oklch(.92 .004 286.32);
-    --color-zinc-300: oklch(.871 .006 286.286);
-    --color-zinc-400: oklch(.705 .015 286.067);
-    --color-zinc-500: oklch(.552 .016 285.938);
-    --color-zinc-600: oklch(.442 .017 285.786);
-    --color-zinc-700: oklch(.37 .013 285.805);
-    --color-zinc-800: oklch(.274 .006 286.033);
-    --color-zinc-900: oklch(.21 .006 285.885);
-    --color-zinc-950: oklch(.141 .005 285.823);
-    --color-neutral-50: oklch(.985 0 0);
-    --color-neutral-100: oklch(.97 0 0);
-    --color-neutral-200: oklch(.922 0 0);
-    --color-neutral-300: oklch(.87 0 0);
-    --color-neutral-400: oklch(.708 0 0);
-    --color-neutral-500: oklch(.556 0 0);
-    --color-neutral-600: oklch(.439 0 0);
-    --color-neutral-700: oklch(.371 0 0);
-    --color-neutral-800: oklch(.269 0 0);
-    --color-neutral-900: oklch(.205 0 0);
-    --color-neutral-950: oklch(.145 0 0);
-    --color-stone-50: oklch(.985 .001 106.423);
-    --color-stone-100: oklch(.97 .001 106.424);
-    --color-stone-200: oklch(.923 .003 48.717);
-    --color-stone-300: oklch(.869 .005 56.366);
-    --color-stone-400: oklch(.709 .01 56.259);
-    --color-stone-500: oklch(.553 .013 58.071);
-    --color-stone-600: oklch(.444 .011 73.639);
-    --color-stone-700: oklch(.374 .01 67.558);
-    --color-stone-800: oklch(.268 .007 34.298);
-    --color-stone-900: oklch(.216 .006 56.043);
-    --color-stone-950: oklch(.147 .004 49.25);
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --color-red-50: oklch(.971 .013 17.38);
     --color-red-100: oklch(.936 .032 17.717);
     --color-red-200: oklch(.885 .062 18.334);
@@ -260,17 +193,129 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --color-rose-800: oklch(.455 .188 13.697);
     --color-rose-900: oklch(.41 .159 10.272);
     --color-rose-950: oklch(.271 .105 12.094);
-    --animate-spin: spin 1s linear infinite;
-    --animate-ping: ping 1s cubic-bezier(0, 0, .2, 1) infinite;
-    --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
-    --animate-bounce: bounce 1s infinite;
-    --blur-xs: 4px;
-    --blur-sm: 8px;
-    --blur-md: 12px;
-    --blur-lg: 16px;
-    --blur-xl: 24px;
-    --blur-2xl: 40px;
-    --blur-3xl: 64px;
+    --color-slate-50: oklch(.984 .003 247.858);
+    --color-slate-100: oklch(.968 .007 247.896);
+    --color-slate-200: oklch(.929 .013 255.508);
+    --color-slate-300: oklch(.869 .022 252.894);
+    --color-slate-400: oklch(.704 .04 256.788);
+    --color-slate-500: oklch(.554 .046 257.417);
+    --color-slate-600: oklch(.446 .043 257.281);
+    --color-slate-700: oklch(.372 .044 257.287);
+    --color-slate-800: oklch(.279 .041 260.031);
+    --color-slate-900: oklch(.208 .042 265.755);
+    --color-slate-950: oklch(.129 .042 264.695);
+    --color-gray-50: oklch(.985 .002 247.839);
+    --color-gray-100: oklch(.967 .003 264.542);
+    --color-gray-200: oklch(.928 .006 264.531);
+    --color-gray-300: oklch(.872 .01 258.338);
+    --color-gray-400: oklch(.707 .022 261.325);
+    --color-gray-500: oklch(.551 .027 264.364);
+    --color-gray-600: oklch(.446 .03 256.802);
+    --color-gray-700: oklch(.373 .034 259.733);
+    --color-gray-800: oklch(.278 .033 256.848);
+    --color-gray-900: oklch(.21 .034 264.665);
+    --color-gray-950: oklch(.13 .028 261.692);
+    --color-zinc-50: oklch(.985 0 0);
+    --color-zinc-100: oklch(.967 .001 286.375);
+    --color-zinc-200: oklch(.92 .004 286.32);
+    --color-zinc-300: oklch(.871 .006 286.286);
+    --color-zinc-400: oklch(.705 .015 286.067);
+    --color-zinc-500: oklch(.552 .016 285.938);
+    --color-zinc-600: oklch(.442 .017 285.786);
+    --color-zinc-700: oklch(.37 .013 285.805);
+    --color-zinc-800: oklch(.274 .006 286.033);
+    --color-zinc-900: oklch(.21 .006 285.885);
+    --color-zinc-950: oklch(.141 .005 285.823);
+    --color-neutral-50: oklch(.985 0 0);
+    --color-neutral-100: oklch(.97 0 0);
+    --color-neutral-200: oklch(.922 0 0);
+    --color-neutral-300: oklch(.87 0 0);
+    --color-neutral-400: oklch(.708 0 0);
+    --color-neutral-500: oklch(.556 0 0);
+    --color-neutral-600: oklch(.439 0 0);
+    --color-neutral-700: oklch(.371 0 0);
+    --color-neutral-800: oklch(.269 0 0);
+    --color-neutral-900: oklch(.205 0 0);
+    --color-neutral-950: oklch(.145 0 0);
+    --color-stone-50: oklch(.985 .001 106.423);
+    --color-stone-100: oklch(.97 .001 106.424);
+    --color-stone-200: oklch(.923 .003 48.717);
+    --color-stone-300: oklch(.869 .005 56.366);
+    --color-stone-400: oklch(.709 .01 56.259);
+    --color-stone-500: oklch(.553 .013 58.071);
+    --color-stone-600: oklch(.444 .011 73.639);
+    --color-stone-700: oklch(.374 .01 67.558);
+    --color-stone-800: oklch(.268 .007 34.298);
+    --color-stone-900: oklch(.216 .006 56.043);
+    --color-stone-950: oklch(.147 .004 49.25);
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: .25rem;
+    --breakpoint-sm: 40rem;
+    --breakpoint-md: 48rem;
+    --breakpoint-lg: 64rem;
+    --breakpoint-xl: 80rem;
+    --breakpoint-2xl: 96rem;
+    --container-3xs: 16rem;
+    --container-2xs: 18rem;
+    --container-xs: 20rem;
+    --container-sm: 24rem;
+    --container-md: 28rem;
+    --container-lg: 32rem;
+    --container-xl: 36rem;
+    --container-2xl: 42rem;
+    --container-3xl: 48rem;
+    --container-4xl: 56rem;
+    --container-5xl: 64rem;
+    --container-6xl: 72rem;
+    --container-7xl: 80rem;
+    --container-prose: 65ch;
+    --text-xs: .75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: .875rem;
+    --text-sm--line-height: 1.25rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 1.75rem;
+    --text-xl: 1.25rem;
+    --text-xl--line-height: 1.75rem;
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: 2rem;
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: 2.25rem;
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: 2.5rem;
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
+    --text-7xl: 4.5rem;
+    --text-7xl--line-height: 1;
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 8rem;
+    --text-9xl--line-height: 1;
+    --font-weight-thin: 100;
+    --font-weight-extralight: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    --tracking-tighter: -.05em;
+    --tracking-tight: -.025em;
+    --tracking-normal: 0em;
+    --tracking-wide: .025em;
+    --tracking-wider: .05em;
+    --tracking-widest: .1em;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose: 2;
     --radius-xs: .125rem;
     --radius-sm: .25rem;
     --radius-md: .375rem;
@@ -286,7 +331,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
     --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
     --shadow-2xl: 0 25px 50px -12px #00000040;
-    --shadow-inner: inset 0 2px 4px 0 #0000000d;
     --inset-shadow-2xs: inset 0 1px #0000000d;
     --inset-shadow-xs: inset 0 1px 1px #0000000d;
     --inset-shadow-sm: inset 0 2px 4px #0000000d;
@@ -296,79 +340,33 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --drop-shadow-lg: 0 10px 8px #0000000a, 0 4px 3px #0000001a;
     --drop-shadow-xl: 0 20px 13px #00000008, 0 8px 5px #00000014;
     --drop-shadow-2xl: 0 25px 25px #00000026;
-    --spacing: .25rem;
-    --width-3xs: 16rem;
-    --width-2xs: 18rem;
-    --width-xs: 20rem;
-    --width-sm: 24rem;
-    --width-md: 28rem;
-    --width-lg: 32rem;
-    --width-xl: 36rem;
-    --width-2xl: 42rem;
-    --width-3xl: 48rem;
-    --width-4xl: 56rem;
-    --width-5xl: 64rem;
-    --width-6xl: 72rem;
-    --width-7xl: 80rem;
-    --width-prose: 65ch;
-    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --font-size-xs: .75rem;
-    --font-size-xs--line-height: 1rem;
-    --font-size-sm: .875rem;
-    --font-size-sm--line-height: 1.25rem;
-    --font-size-base: 1rem;
-    --font-size-base--line-height: 1.5rem;
-    --font-size-lg: 1.125rem;
-    --font-size-lg--line-height: 1.75rem;
-    --font-size-xl: 1.25rem;
-    --font-size-xl--line-height: 1.75rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-2xl--line-height: 2rem;
-    --font-size-3xl: 1.875rem;
-    --font-size-3xl--line-height: 2.25rem;
-    --font-size-4xl: 2.25rem;
-    --font-size-4xl--line-height: 2.5rem;
-    --font-size-5xl: 3rem;
-    --font-size-5xl--line-height: 1;
-    --font-size-6xl: 3.75rem;
-    --font-size-6xl--line-height: 1;
-    --font-size-7xl: 4.5rem;
-    --font-size-7xl--line-height: 1;
-    --font-size-8xl: 6rem;
-    --font-size-8xl--line-height: 1;
-    --font-size-9xl: 8rem;
-    --font-size-9xl--line-height: 1;
-    --font-weight-thin: 100;
-    --font-weight-extralight: 200;
-    --font-weight-light: 300;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-weight-extrabold: 800;
-    --font-weight-black: 900;
-    --letter-spacing-tighter: -.05em;
-    --letter-spacing-tight: -.025em;
-    --letter-spacing-normal: 0em;
-    --letter-spacing-wide: .025em;
-    --letter-spacing-wider: .05em;
-    --letter-spacing-widest: .1em;
-    --line-height-none: 1;
-    --line-height-tight: 1.25;
-    --line-height-snug: 1.375;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.625;
-    --line-height-loose: 2;
+    --ease-in: cubic-bezier(.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, .2, 1);
+    --ease-in-out: cubic-bezier(.4, 0, .2, 1);
+    --animate-spin: spin 1s linear infinite;
+    --animate-ping: ping 1s cubic-bezier(0, 0, .2, 1) infinite;
+    --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
+    --animate-bounce: bounce 1s infinite;
+    --blur-xs: 4px;
+    --blur-sm: 8px;
+    --blur-md: 12px;
+    --blur-lg: 16px;
+    --blur-xl: 24px;
+    --blur-2xl: 40px;
+    --blur-3xl: 64px;
     --perspective-dramatic: 100px;
     --perspective-near: 300px;
     --perspective-normal: 500px;
     --perspective-midrange: 800px;
     --perspective-distant: 1200px;
-    --ease-in: cubic-bezier(.4, 0, 1, 1);
-    --ease-out: cubic-bezier(0, 0, .2, 1);
-    --ease-in-out: cubic-bezier(.4, 0, .2, 1);
+    --default-transition-duration: .15s;
+    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    --default-font-family: var(--font-sans);
+    --default-font-feature-settings: var(--font-sans--font-feature-settings);
+    --default-font-variation-settings: var(--font-sans--font-variation-settings);
+    --default-mono-font-family: var(--font-mono);
+    --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+    --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
   }
 }
 
@@ -467,7 +465,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
-    background: none;
   }
 
   ::file-selector-button {
@@ -476,19 +473,16 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
-    background: none;
-  }
-
-  input:where(:not([type="button"], [type="reset"], [type="submit"])), select, textarea {
-    border-width: 1px;
   }
 
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
+    background: none;
   }
 
   ::file-selector-button {
     appearance: button;
+    background: none;
   }
 
   :-moz-focusring {
@@ -513,6 +507,55 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::-webkit-search-decoration {
     -webkit-appearance: none;
+  }
+
+  ::-webkit-date-and-time-value {
+    text-align: inherit;
+    min-height: 1lh;
+  }
+
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  ::-webkit-datetime-edit {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-year-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-month-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-day-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-hour-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-minute-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-second-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-millisecond-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
   }
 
   summary {
@@ -551,8 +594,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
 @layer utilities {
   .text-2xl {
-    font-size: var(--font-size-2xl);
-    line-height: var(--tw-leading, var(--font-size-2xl--line-height));
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
   .text-black\\/50 {

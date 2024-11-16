@@ -128,13 +128,22 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
-  if (path[0] === 'colors') path[0] = 'color'
-  if (path[0] === 'screens') path[0] = 'breakpoint'
+  // The legacy container component config should not be included in the Theme
+  if (path[0] === 'container') return null
+
+  path = structuredClone(path)
+
+  if (path[0] === 'animation') path[0] = 'animate'
   if (path[0] === 'borderRadius') path[0] = 'radius'
   if (path[0] === 'boxShadow') path[0] = 'shadow'
-  if (path[0] === 'animation') path[0] = 'animate'
-  if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
+  if (path[0] === 'colors') path[0] = 'color'
   if (path[0] === 'fontFamily') path[0] = 'font'
+  if (path[0] === 'fontSize') path[0] = 'text'
+  if (path[0] === 'letterSpacing') path[0] = 'tracking'
+  if (path[0] === 'lineHeight') path[0] = 'leading'
+  if (path[0] === 'maxWidth') path[0] = 'container'
+  if (path[0] === 'screens') path[0] = 'breakpoint'
+  if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
 
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null
