@@ -41,6 +41,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
       'lg:flex',
       'min-sm:max-md:underline',
       'min-md:max-lg:underline',
+      'max-w-screen-sm',
       // Ensure other core variants appear at the end
       'print:items-end',
     ]),
@@ -50,6 +51,9 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
       --breakpoint-lg: 64rem;
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
+    }
+    .max-w-screen-sm {
+      max-width: 44rem;
     }
     .sm\\:flex {
       @media (width >= 44rem) {

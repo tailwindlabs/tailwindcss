@@ -2284,23 +2284,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-none', [['background-image', 'none']])
 
   {
-    // Deprecated
-    for (let [value, direction] of [
-      ['t', 'top'],
-      ['tr', 'top right'],
-      ['r', 'right'],
-      ['br', 'bottom right'],
-      ['b', 'bottom'],
-      ['bl', 'bottom left'],
-      ['l', 'left'],
-      ['tl', 'top left'],
-    ]) {
-      staticUtility(`bg-gradient-to-${value}`, [
-        ['--tw-gradient-position', `to ${direction} in oklch,`],
-        ['background-image', `linear-gradient(var(--tw-gradient-stops))`],
-      ])
-    }
-
     let suggestedModifiers = [
       'oklab',
       'oklch',
