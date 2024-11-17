@@ -978,6 +978,18 @@ mod test {
     }
 
     #[test]
+    fn it_can_parse_utilities_with_arbitrary_var_shorthand() {
+        let candidates = run("m-(--my-var)", false);
+        assert_eq!(candidates, vec!["m-(--my-var)"]);
+    }
+
+    #[test]
+    fn it_can_parse_utilities_with_arbitrary_var_shorthand_as_modifier() {
+        let candidates = run("bg-(--my-color)/(--my-opacity)", false);
+        assert_eq!(candidates, vec!["bg-(--my-color)/(--my-opacity)"]);
+    }
+
+    #[test]
     fn it_throws_away_arbitrary_values_that_are_unbalanced() {
         let candidates = run("m-[calc(100px*2]", false);
         assert!(candidates.is_empty());
