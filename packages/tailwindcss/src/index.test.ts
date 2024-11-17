@@ -127,7 +127,7 @@ describe('compiling CSS', () => {
           @tailwind utilities;
         `,
         [
-          'bg-[no-repeat_url(./my_file.jpg)',
+          'bg-[no-repeat_url(./my_file.jpg)]',
           'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]',
           'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]',
         ],
@@ -146,8 +146,8 @@ describe('compiling CSS', () => {
         margin-left: var(--spacing-1_5, var(--spacing-2_5, 1rem));
       }
 
-      .bg-\\[no-repeat_url\\(\\.\\/my_file\\.jpg\\) {
-        background-color: no-repeat url("./")my file. jpg;
+      .bg-\\[no-repeat_url\\(\\.\\/my_file\\.jpg\\)\\] {
+        background-color: no-repeat url("./my_file.jpg");
       }"
     `)
   })
