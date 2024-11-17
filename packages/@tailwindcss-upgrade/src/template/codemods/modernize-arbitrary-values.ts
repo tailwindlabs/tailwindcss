@@ -28,9 +28,6 @@ export function modernizeArbitraryValues(
 
       let prefixedVariant: Variant | null = null
 
-      // Track whether we need to add a `**:` variant
-      let addStarStarVariant = false
-
       // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
       if (
         // Only top-level, so `has-[&>[data-visible]]` is not supported
