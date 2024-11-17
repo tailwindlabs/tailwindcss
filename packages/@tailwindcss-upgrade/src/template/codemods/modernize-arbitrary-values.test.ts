@@ -18,6 +18,10 @@ test.each([
   ['[&:first-child]:flex', 'first:flex'],
   ['[&:not(:first-child)]:flex', 'not-first:flex'],
 
+  // in-* variants
+  ['[p_&]:flex', 'in-p:flex'],
+  ['[.foo_&]:flex', 'in-[.foo]:flex'],
+
   // nth-child
   ['[&:nth-child(2)]:flex', 'nth-2:flex'],
   ['[&:not(:nth-child(2))]:flex', 'not-nth-2:flex'],

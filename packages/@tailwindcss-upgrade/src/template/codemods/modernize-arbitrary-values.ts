@@ -98,6 +98,42 @@ export function modernizeArbitraryValues(
         prefixedVariant = designSystem.parseVariant('**')
       }
 
+      // `in-*` variant
+      if (
+        // Only top-level, so `has-[p_&]` is not supported
+        parent === null &&
+        // `[data-*]` and `[aria-*]` are handled separately
+        !(
+          ast.nodes[0].nodes[0].type === 'attribute' &&
+          (ast.nodes[0].nodes[0].attribute.startsWith('data-') ||
+            ast.nodes[0].nodes[0].attribute.startsWith('aria-'))
+        ) &&
+        // [.foo___&]:flex
+        //  ^^^^ ^ ^
+        ast.nodes[0].nodes.at(-1)?.type === 'nesting'
+      ) {
+        let selector = ast.nodes[0]
+        let nodes = selector.nodes
+
+        nodes.pop() // Remove the last node `&`
+
+        // Remove trailing whitespace
+        let last = nodes.at(-1)
+        while (last?.type === 'combinator' && last.value === ' ') {
+          nodes.pop()
+          last = nodes.at(-1)
+        }
+
+        changed = true
+        if (nodes.length === 1 && nodes[0].type === 'tag') {
+          Object.assign(variant, designSystem.parseVariant(`in-${selector.toString().trim()}`))
+        } else {
+          Object.assign(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
+        }
+
+        continue
+      }
+
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
       let selectorNodes = ast.nodes[0].filter((node) => node.type !== 'nesting')
 
