@@ -346,9 +346,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^           -> Root
   //    ^^^^^^^^^ -> Arbitrary value
   //
-  // bg-red-[#0088cc]
-  // ^^^^^^           -> Root
-  //        ^^^^^^^^^ -> Arbitrary value
+  // border-l-[#0088cc]
+  // ^^^^^^^^           -> Root
+  //          ^^^^^^^^^ -> Arbitrary value
   // ```
   if (baseWithoutModifier[baseWithoutModifier.length - 1] === ']') {
     let idx = baseWithoutModifier.indexOf('-[')
