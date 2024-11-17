@@ -39,6 +39,18 @@ pub struct ExtractorOptions {
     pub preserve_spaces_in_arbitrary: bool,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone)]
+enum Arbitrary {
+    /// Not inside any arbitrary value
+    None,
+
+    /// In arbitrary value mode with square brackets
+    ///
+    /// E.g.: `bg-[…]`
+    ///           ^
+    Brackets(usize),
+}
+
 pub struct Extractor<'a> {
     opts: ExtractorOptions,
 
@@ -48,9 +60,9 @@ pub struct Extractor<'a> {
     idx_start: usize,
     idx_end: usize,
     idx_last: usize,
-    idx_arbitrary_start: usize,
 
-    in_arbitrary: bool,
+    arbitrary: Arbitrary,
+
     in_candidate: bool,
     in_escape: bool,
 
@@ -105,9 +117,8 @@ impl<'a> Extractor<'a> {
 
             idx_start: 0,
             idx_end: 0,
-            idx_arbitrary_start: 0,
 
-            in_arbitrary: false,
+            arbitrary: Arbitrary::None,
             in_candidate: false,
             in_escape: false,
 
@@ -501,12 +512,14 @@ impl<'a> Extractor<'a> {
                         return ParseAction::Consume;
                     }
 
-                    trace!("Arbitrary::End\t");
-                    self.in_arbitrary = false;
+                    if let Arbitrary::Brackets(start_idx) = self.arbitrary {
+                        trace!("Arbitrary::End\t");
+                        self.arbitrary = Arbitrary::None;
 
-                    if self.cursor.pos - self.idx_arbitrary_start == 1 {
-                        // We have an empty arbitrary value, which is not allowed
-                        return ParseAction::Skip;
+                        if self.cursor.pos - start_idx == 1 {
+                            // We have an empty arbitrary value, which is not allowed
+                            return ParseAction::Skip;
+                        }
                     }
                 }
 
@@ -531,9 +544,11 @@ impl<'a> Extractor<'a> {
             b' ' if !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
-                // Restart the parser ahead of the arbitrary value
-                // It may pick up more candidates
-                return ParseAction::RestartAt(self.idx_arbitrary_start + 1);
+                if let Arbitrary::Brackets(start_idx) = self.arbitrary {
+                    // Restart the parser ahead of the arbitrary value It may pick up more
+                    // candidates
+                    return ParseAction::RestartAt(start_idx + 1);
+                }
             }
 
             // Arbitrary values allow any character inside them
@@ -550,11 +565,10 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_start(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
-            // Enter arbitrary value mode
+            // Enter arbitrary property mode
             b'[' => {
                 trace!("Arbitrary::Start\t");
-                self.in_arbitrary = true;
-                self.idx_arbitrary_start = self.cursor.pos;
+                self.arbitrary = Arbitrary::Brackets(self.cursor.pos);
 
                 ParseAction::Consume
             }
@@ -584,22 +598,20 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_continue(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
-            // Enter arbitrary value mode
+            // Enter arbitrary value mode. E.g.: `bg-[rgba(0, 0, 0)]`
+            //                                       ^
             b'[' if matches!(
                 self.cursor.prev,
                 b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0'
             ) =>
             {
                 trace!("Arbitrary::Start\t");
-                self.in_arbitrary = true;
-                self.idx_arbitrary_start = self.cursor.pos;
+                self.arbitrary = Arbitrary::Brackets(self.cursor.pos);
             }
 
-            // Can't enter arbitrary value mode
-            // This can't be a candidate
+            // Can't enter arbitrary value mode. This can't be a candidate.
             b'[' => {
                 trace!("Arbitrary::Skip_Start\t");
-
                 return ParseAction::Skip;
             }
 
@@ -684,7 +696,7 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn can_be_candidate(&mut self) -> bool {
         self.in_candidate
-            && !self.in_arbitrary
+            && matches!(self.arbitrary, Arbitrary::None)
             && (0..=127).contains(&self.cursor.curr)
             && (self.idx_start == 0 || self.input[self.idx_start - 1] <= 127)
     }
@@ -696,13 +708,13 @@ impl<'a> Extractor<'a> {
         self.idx_start = self.cursor.pos;
         self.idx_end = self.cursor.pos;
         self.in_candidate = false;
-        self.in_arbitrary = false;
+        self.arbitrary = Arbitrary::None;
         self.in_escape = false;
     }
 
     #[inline(always)]
     fn parse_char(&mut self) -> ParseAction<'a> {
-        if self.in_arbitrary {
+        if !matches!(self.arbitrary, Arbitrary::None) {
             self.parse_arbitrary()
         } else if self.in_candidate {
             self.parse_continue()
@@ -732,9 +744,8 @@ impl<'a> Extractor<'a> {
 
         self.idx_start = pos;
         self.idx_end = pos;
-        self.idx_arbitrary_start = 0;
 
-        self.in_arbitrary = false;
+        self.arbitrary = Arbitrary::None;
         self.in_candidate = false;
         self.in_escape = false;
 
