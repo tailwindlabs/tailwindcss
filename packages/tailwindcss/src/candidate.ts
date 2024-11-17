@@ -14,6 +14,9 @@ type ArbitraryUtilityValue = {
    * ```
    * bg-[color:var(--my-color)]
    *     ^^^^^
+   *
+   * bg-(color:--my-color)
+   *     ^^^^^
    * ```
    */
   dataType: string | null
@@ -25,6 +28,9 @@ type ArbitraryUtilityValue = {
    *
    * bg-[var(--my_variable)]
    *     ^^^^^^^^^^^^^^^^^^
+   *
+   * bg-(--my_variable)
+   *     ^^^^^^^^^^^^^^
    * ```
    */
   value: string
@@ -359,6 +365,43 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     roots = [[root, value]]
   }
 
+  // If the base of the utility ends with a `)`, then we know it's an arbitrary
+  // value that encapsulates a CSS variable. This also means that everything
+  // before the `(…)` part should be the root of the utility.
+  //
+  // E.g.:
+  //
+  // bg-(--my-var)
+  // ^^            -> Root
+  //    ^^^^^^^^^^ -> Arbitrary value
+  // ```
+  else if (baseWithoutModifier[baseWithoutModifier.length - 1] === ')') {
+    let idx = baseWithoutModifier.indexOf('-(')
+    if (idx === -1) return
+
+    let root = baseWithoutModifier.slice(0, idx)
+
+    // The root of the utility should exist as-is in the utilities map. If not,
+    // it's an invalid utility and we can skip continue parsing.
+    if (!designSystem.utilities.has(root, 'functional')) return
+
+    let value = baseWithoutModifier.slice(idx + 2, -1)
+
+    let parts = segment(value, ':')
+
+    let dataType = null
+    if (parts.length === 2) {
+      dataType = parts[0]
+      value = parts[1]
+    }
+
+    // An arbitrary value with `(…)` should always start with `--` since it
+    // represents a CSS variable.
+    if (value[0] !== '-' && value[1] !== '-') return
+
+    roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
+  }
+
   // Not an arbitrary value
   else {
     roots = findRoots(baseWithoutModifier, (root: string) => {
@@ -443,6 +486,15 @@ function parseModifier(modifier: string): CandidateModifier {
     return {
       kind: 'arbitrary',
       value: decodeArbitraryValue(arbitraryValue),
+    }
+  }
+
+  if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
+    let arbitraryValue = modifier.slice(1, -1)
+
+    return {
+      kind: 'arbitrary',
+      value: decodeArbitraryValue(`var(${arbitraryValue})`),
     }
   }
 
@@ -542,6 +594,18 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
               value: {
                 kind: 'arbitrary',
                 value: decodeArbitraryValue(value.slice(1, -1)),
+              },
+            }
+          }
+
+          if (value[0] === '(' && value[value.length - 1] === ')') {
+            return {
+              kind: 'functional',
+              root,
+              modifier: modifier === null ? null : parseModifier(modifier),
+              value: {
+                kind: 'arbitrary',
+                value: decodeArbitraryValue(`var(${value.slice(1, -1)})`),
               },
             }
           }

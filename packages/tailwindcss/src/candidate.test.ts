@@ -167,6 +167,35 @@ it('should parse a simple utility with an arbitrary variant', () => {
   `)
 })
 
+it('should parse an arbitrary variant using the automatic var shorthand', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  let variants = new Variants()
+  variants.functional('supports', () => {})
+
+  expect(run('supports-(--test):flex', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "raw": "supports-(--test):flex",
+        "root": "flex",
+        "variants": [
+          {
+            "kind": "functional",
+            "modifier": null,
+            "root": "supports",
+            "value": {
+              "kind": "arbitrary",
+              "value": "var(--test)",
+            },
+          },
+        ],
+      },
+    ]
+  `)
+})
+
 it('should parse a simple utility with a parameterized variant', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -511,6 +540,29 @@ it('should parse a utility with an arbitrary value', () => {
   `)
 })
 
+it('should parse a utility with an arbitrary value with parens', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(--my-color)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "bg-(--my-color)",
+        "root": "bg",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--my-color)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
 it('should parse a utility with an arbitrary value including a typehint', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -527,6 +579,52 @@ it('should parse a utility with an arbitrary value including a typehint', () => 
           "dataType": "color",
           "kind": "arbitrary",
           "value": "var(--value)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should parse a utility with an arbitrary value with parens including a typehint', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(color:--my-color)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "bg-(color:--my-color)",
+        "root": "bg",
+        "value": {
+          "dataType": "color",
+          "kind": "arbitrary",
+          "value": "var(--my-color)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should parse a utility with an arbitrary value with parens and a fallback', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(color:--my-color,#0088cc)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "bg-(color:--my-color,#0088cc)",
+        "root": "bg",
+        "value": {
+          "dataType": "color",
+          "kind": "arbitrary",
+          "value": "var(--my-color,#0088cc)",
         },
         "variants": [],
       },
@@ -745,6 +843,32 @@ it('should parse a utility with an implicit variable as the modifier', () => {
           "value": "var(--value)",
         },
         "raw": "bg-red-500/[var(--value)]",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-500/(--value)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--value)",
+        },
+        "raw": "bg-red-500/(--value)",
         "root": "bg",
         "value": {
           "fraction": null,
