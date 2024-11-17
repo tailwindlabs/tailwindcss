@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace as deprecated utilities ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
+- _Upgrade (experimental)_: Migrate the `[&>*]` variant to the `*` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
+- _Upgrade (experimental)_: Migrate the `[&_*]` variant to the `**` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 
 ### Fixed
 
