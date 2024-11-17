@@ -1693,6 +1693,16 @@ test('not', async () => {
   ).toEqual('')
 })
 
+test('in', async () => {
+  expect(await run(['in-p:flex', 'in-[p]:flex', 'in-[.group]:flex', 'not-in-p:flex']))
+    .toMatchInlineSnapshot(`
+      ".not-in-p\\:flex:not(:where(p) *), :where(p) .in-p\\:flex, :where(.group) .in-\\[\\.group\\]\\:flex, :where(p) .in-\\[p\\]\\:flex {
+        display: flex;
+      }"
+    `)
+  expect(await run(['in-foo-bar:flex'])).toEqual('')
+})
+
 test('has', async () => {
   expect(
     await compileCss(

@@ -711,6 +711,18 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
+  variants.functional('in', (ruleNode, variant) => {
+    if (!variant.value || variant.modifier) return null
+
+    // Named values should be alphanumeric. This prevents `in-foo-bar` from
+    // being used as a variant.
+    if (variant.value.kind === 'named' && !/^[a-zA-Z]+$/i.test(variant.value.value)) {
+      return null
+    }
+
+    ruleNode.nodes = [styleRule(`:where(${variant.value.value}) &`, ruleNode.nodes)]
+  })
+
   variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
     if (variant.modifier) return null
 
