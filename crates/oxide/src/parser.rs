@@ -49,6 +49,12 @@ enum Arbitrary {
     /// E.g.: `bg-[…]`
     ///           ^
     Brackets(usize),
+
+    /// In arbitrary value mode with parens
+    ///
+    /// E.g.: `bg-(…)`
+    ///           ^
+    Parens(usize),
 }
 
 pub struct Extractor<'a> {
@@ -490,9 +496,29 @@ impl<'a> Extractor<'a> {
                     self.bracket_stack.pop();
                 }
 
-                // Last bracket is different compared to what we expect, therefore we are not in a
-                // valid arbitrary value.
-                _ if !self.in_quotes() => return ParseAction::Skip,
+                // This is the last bracket meaning the end of arbitrary content
+                _ if !self.in_quotes() => {
+                    if matches!(self.cursor.next, b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9') {
+                        return ParseAction::Consume;
+                    }
+
+                    if let Arbitrary::Parens(start_idx) = self.arbitrary {
+                        trace!("Arbitrary::End\t");
+                        self.arbitrary = Arbitrary::None;
+
+                        if self.cursor.pos - start_idx == 1 {
+                            // We have an empty arbitrary value, which is not allowed
+                            return ParseAction::Skip;
+                        }
+
+                        // We have a valid arbitrary value
+                        return ParseAction::Consume;
+                    }
+
+                    // Last parenthesis is different compared to what we expect, therefore we are
+                    // not in a valid arbitrary value.
+                    return ParseAction::Skip;
+                }
 
                 // We're probably in quotes or nested brackets, so we keep going
                 _ => {}
@@ -544,7 +570,9 @@ impl<'a> Extractor<'a> {
             b' ' if !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
-                if let Arbitrary::Brackets(start_idx) = self.arbitrary {
+                if let Arbitrary::Brackets(start_idx) | Arbitrary::Parens(start_idx) =
+                    self.arbitrary
+                {
                     // Restart the parser ahead of the arbitrary value It may pick up more
                     // candidates
                     return ParseAction::RestartAt(start_idx + 1);
@@ -609,8 +637,15 @@ impl<'a> Extractor<'a> {
                 self.arbitrary = Arbitrary::Brackets(self.cursor.pos);
             }
 
+            // Enter arbitrary value mode. E.g.: `bg-(--my-color)`
+            //                                       ^
+            b'(' if matches!(self.cursor.prev, b'-' | b'/') => {
+                trace!("Arbitrary::Start\t");
+                self.arbitrary = Arbitrary::Parens(self.cursor.pos);
+            }
+
             // Can't enter arbitrary value mode. This can't be a candidate.
-            b'[' => {
+            b'[' | b'(' => {
                 trace!("Arbitrary::Skip_Start\t");
                 return ParseAction::Skip;
             }
