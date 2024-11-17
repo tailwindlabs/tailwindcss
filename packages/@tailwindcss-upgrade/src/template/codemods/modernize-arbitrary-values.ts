@@ -28,6 +28,42 @@ export function modernizeArbitraryValues(
 
       let prefixedVariant: Variant | null = null
 
+      // `[&>*]` can be replaced with `*`
+      if (
+        // Only top-level, so `has-[&>*]` is not supported
+        parent === null &&
+        // [&_>_*]:flex
+        //  ^ ^ ^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'nesting' &&
+        ast.nodes[0].nodes[0].value === '&' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === '>' &&
+        ast.nodes[0].nodes[2].type === 'universal'
+      ) {
+        changed = true
+        Object.assign(variant, designSystem.parseVariant('*'))
+        continue
+      }
+
+      // `[&_*]` can be replaced with `**`
+      if (
+        // Only top-level, so `has-[&_*]` is not supported
+        parent === null &&
+        // [&_*]:flex
+        //  ^ ^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'nesting' &&
+        ast.nodes[0].nodes[0].value === '&' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === ' ' &&
+        ast.nodes[0].nodes[2].type === 'universal'
+      ) {
+        changed = true
+        Object.assign(variant, designSystem.parseVariant('**'))
+        continue
+      }
+
       // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
       if (
         // Only top-level, so `has-[&>[data-visible]]` is not supported
