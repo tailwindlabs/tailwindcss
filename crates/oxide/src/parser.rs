@@ -461,7 +461,7 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_arbitrary(&mut self) -> ParseAction<'a> {
-        // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
+        // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary values
         if self.in_escape {
             return self.parse_escaped();
         }

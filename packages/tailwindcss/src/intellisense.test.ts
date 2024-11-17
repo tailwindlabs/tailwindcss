@@ -365,7 +365,7 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 
   expect(classNames).not.toContain('custom-2-unknown')
 
-  // matchUtilities with a any modifiers
+  // matchUtilities with any modifiers
   expect(classNames).toContain('custom-3-red')
   expect(classMap.get('custom-3-red')?.modifiers).toEqual([])
 
