@@ -15,6 +15,41 @@ export function modernizeArbitraryValues(
     let changed = false
 
     for (let [variant, parent] of variants(clone)) {
+      // Forward modifier from the root to the compound variant
+      if (variant.kind === 'compound' && (variant.root === 'has' || variant.root === 'not')) {
+        if (variant.modifier !== null) {
+          if ('modifier' in variant.variant) {
+            variant.variant.modifier = variant.modifier
+            variant.modifier = null
+          }
+        }
+      }
+
+      // Promote `group-[]:flex` to `in-[.group]:flex`
+      //                ^^ Yes, this is empty
+      // Promote `group-[]/name:flex` to `in-[.group\/name]:flex`
+      if (
+        variant.kind === 'compound' &&
+        variant.root === 'group' &&
+        variant.variant.kind === 'arbitrary' &&
+        variant.variant.selector === '&:is()'
+      ) {
+        // `group-[]`
+        if (variant.modifier === null) {
+          changed = true
+          Object.assign(variant, designSystem.parseVariant('in-[.group]'))
+        }
+
+        // `group-[]/name`
+        else if (variant.modifier.kind === 'named') {
+          changed = true
+          Object.assign(
+            variant,
+            designSystem.parseVariant(`in-[.group\\/${variant.modifier.value}]`),
+          )
+        }
+      }
+
       // Expecting an arbitrary variant
       if (variant.kind !== 'arbitrary') continue
 

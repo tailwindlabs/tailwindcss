@@ -21,6 +21,16 @@ test.each([
   // in-* variants
   ['[p_&]:flex', 'in-p:flex'],
   ['[.foo_&]:flex', 'in-[.foo]:flex'],
+  // Some extreme examples of what happens in the wild:
+  ['group-[]:flex', 'in-[.group]:flex'],
+  ['group-[]/name:flex', 'in-[.group\\/name]:flex'],
+
+  // These shouldn't happen in the real world (because compound variants are
+  // new). But this could happen once we allow codemods to run in v4+ projects.
+  ['has-group-[]:flex', 'has-in-[.group]:flex'],
+  ['has-group-[]/name:flex', 'has-in-[.group\\/name]:flex'],
+  ['not-group-[]:flex', 'not-in-[.group]:flex'],
+  ['not-group-[]/name:flex', 'not-in-[.group\\/name]:flex'],
 
   // nth-child
   ['[&:nth-child(2)]:flex', 'nth-2:flex'],
