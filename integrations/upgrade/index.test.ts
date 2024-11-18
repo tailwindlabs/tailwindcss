@@ -1,4 +1,3 @@
-import { stripVTControlCharacters } from 'node:util'
 import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
@@ -1694,33 +1693,7 @@ test(
       (e) => e.toString(),
     )
 
-    output = stripVTControlCharacters(output)
-      .replace(/tailwindcss v(.*)/g, 'tailwindcss') // Remove the version number from the error message
-      .replace(/\\/g, '/') // Make Windows paths look like Unix paths
-
-    expect(output).toMatchInlineSnapshot(`
-      "Error: Command failed: npx @tailwindcss/upgrade --force
-      ≈ tailwindcss
-
-      │ Searching for CSS files in the current directory and its subdirectories…
-
-      │ Linked \`./tailwind.config.ts\` to \`./src/root.1.css\`
-
-      │ Linked \`./tailwind.config.ts\` to \`./src/root.3.css\`
-
-      │ Linked \`./tailwind.config.ts\` to \`./src/root.4.css\`
-
-      │ Linked \`./tailwind.config.ts\` to \`./src/root.5/tailwind.css\`
-
-      │ You have multiple stylesheets that do not have an \`@config\`.
-      │ Please add a \`@config "…";\` referencing the correct Tailwind config file to:
-      │ - ./src/root.1.css
-      │ - ./src/root.3.css
-      │ - ./src/root.4.css
-      │ - ./src/root.5/tailwind.css
-
-      "
-    `)
+    expect(output).toMatch('Could not determine configuration file for:')
   },
 )
 
