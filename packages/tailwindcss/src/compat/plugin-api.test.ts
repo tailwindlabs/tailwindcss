@@ -2859,7 +2859,7 @@ describe('addUtilities()', () => {
     `)
   })
 
-  test.only('nests complex utility names', async () => {
+  test('nests complex utility names', async () => {
     let compiled = await compile(
       css`
         @plugin "my-plugin";
@@ -2948,6 +2948,62 @@ describe('addUtilities()', () => {
             color: red;
           }
         }
+      }"
+    `,
+    )
+  })
+
+  test('prefixes nested class names with the configured theme prefix', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+        @theme prefix(tw) {
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c.d': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['tw:a', 'tw:b', 'tw:c', 'tw:d']).trim()).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .tw\\:a {
+          & .tw\\:b:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:b {
+          .tw\\:a &:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:c {
+          .tw\\:a .tw\\:b:hover &.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:d {
+          .tw\\:a .tw\\:b:hover .tw\\:c& {
+            color: red;
+          }
+        }
+      }
+      :root {
       }"
     `,
     )

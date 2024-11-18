@@ -1,5 +1,5 @@
 import { substituteAtApply } from '../apply'
-import { atRule, decl, rule, type AstNode } from '../ast'
+import { atRule, decl, rule, walk, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -222,7 +222,8 @@ export function buildPluginApi(
             let selector = SelectorParser.toCss(selectorAst)
 
             let className = value.slice(1)
-            utils.get(className).push(rule(selector, objectToAst(css)))
+            let contents = selector === '&' ? objectToAst(css) : [rule(selector, objectToAst(css))]
+            utils.get(className).push(...contents)
             foundValidUtility = true
 
             node.value = value
@@ -242,6 +243,21 @@ export function buildPluginApi(
       }
 
       for (let [className, ast] of utils) {
+        // Prefix all class selector with the configured theme prefix
+        if (designSystem.theme.prefix) {
+          walk(ast, (node) => {
+            if (node.kind === 'rule') {
+              let selectorAst = SelectorParser.parse(node.selector)
+              SelectorParser.walk(selectorAst, (node) => {
+                if (node.kind === 'selector' && node.value[0] === '.') {
+                  node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
+                }
+              })
+              node.selector = SelectorParser.toCss(selectorAst)
+            }
+          })
+        }
+
         designSystem.utilities.static(className, () => {
           let clonedAst = structuredClone(ast)
           substituteAtApply(clonedAst, designSystem)
