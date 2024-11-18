@@ -2885,6 +2885,9 @@ describe('addUtilities()', () => {
                 '.h~.i': {
                   color: 'red',
                 },
+                '.j.j': {
+                  color: 'red',
+                },
               })
             },
           }
@@ -2893,7 +2896,7 @@ describe('addUtilities()', () => {
     )
 
     expect(
-      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']).trim(),
+      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']).trim(),
     ).toMatchInlineSnapshot(
       `
       "@layer utilities {
@@ -2934,6 +2937,14 @@ describe('addUtilities()', () => {
         }
         .i {
           .h~& {
+            color: red;
+          }
+        }
+        .j {
+          &.j {
+            color: red;
+          }
+          .j& {
             color: red;
           }
         }

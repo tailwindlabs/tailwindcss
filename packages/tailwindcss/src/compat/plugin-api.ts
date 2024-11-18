@@ -208,13 +208,9 @@ export function buildPluginApi(
           continue
         }
 
-        if (name[0] === '.' && IS_VALID_UTILITY_NAME.test(name.slice(1))) {
-          utils.get(name.slice(1)).push(...objectToAst(css))
-          continue
-        }
-
         let selectorAst = SelectorParser.parse(name)
         let foundValidUtility = false
+
         SelectorParser.walk(selectorAst, (node) => {
           if (
             node.kind === 'selector' &&
