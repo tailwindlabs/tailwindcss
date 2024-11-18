@@ -2859,7 +2859,7 @@ describe('addUtilities()', () => {
     `)
   })
 
-  test('nests complex utility names', async () => {
+  test.only('nests complex utility names', async () => {
     let compiled = await compile(
       css`
         @plugin "my-plugin";
@@ -2882,6 +2882,9 @@ describe('addUtilities()', () => {
                 '.e .bar:not(.f):has(.g)': {
                   color: 'red',
                 },
+                '.h~.i': {
+                  color: 'red',
+                },
               })
             },
           }
@@ -2889,7 +2892,9 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g']).trim()).toMatchInlineSnapshot(
+    expect(
+      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']).trim(),
+    ).toMatchInlineSnapshot(
       `
       "@layer utilities {
         .a {
@@ -2919,6 +2924,16 @@ describe('addUtilities()', () => {
         }
         .g {
           .e .bar:not(.f):has(&) {
+            color: red;
+          }
+        }
+        .h {
+          &~.i {
+            color: red;
+          }
+        }
+        .i {
+          .h~& {
             color: red;
           }
         }

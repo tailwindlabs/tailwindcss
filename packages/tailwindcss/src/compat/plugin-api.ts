@@ -9,10 +9,10 @@ import { DefaultMap } from '../utils/default-map'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
-import * as ValueParser from '../value-parser'
 import { compoundsForSelectors, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
+import * as SelectorParser from './selector-parser'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -213,17 +213,17 @@ export function buildPluginApi(
           continue
         }
 
-        let selectorAst = ValueParser.parse(name)
+        let selectorAst = SelectorParser.parse(name)
         let foundValidUtility = false
-        ValueParser.walk(selectorAst, (node) => {
+        SelectorParser.walk(selectorAst, (node) => {
           if (
-            node.kind === 'word' &&
+            node.kind === 'selector' &&
             node.value[0] === '.' &&
             IS_VALID_UTILITY_NAME.test(node.value.slice(1))
           ) {
             let value = node.value
             node.value = '&'
-            let selector = ValueParser.toCss(selectorAst)
+            let selector = SelectorParser.toCss(selectorAst)
 
             let className = value.slice(1)
             utils.get(className).push(rule(selector, objectToAst(css)))
@@ -233,8 +233,8 @@ export function buildPluginApi(
             return
           }
 
-          if (node.kind === 'function' && node.value === 'not') {
-            return ValueParser.ValueWalkAction.Skip
+          if (node.kind === 'function' && node.value === ':not') {
+            return SelectorParser.SelectorWalkAction.Skip
           }
         })
 
