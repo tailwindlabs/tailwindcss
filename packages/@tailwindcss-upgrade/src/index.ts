@@ -142,7 +142,7 @@ async function run() {
       // Template migrations
       for (let config of configBySheet.values()) {
         info(
-          `Migrating templates using the provided configuration file: ${highlight(relative(config.configFilePath, base))}.`,
+          `Migrating templates found using configuration file: ${highlight(relative(config.configFilePath, base))}.`,
         )
         let set = new Set<string>()
         for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
