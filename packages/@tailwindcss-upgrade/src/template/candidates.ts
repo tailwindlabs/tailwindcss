@@ -42,12 +42,16 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
 
     if (candidate.value) {
       if (candidate.value.kind === 'arbitrary') {
-        if (candidate.value === null) {
-          base += ''
-        } else if (candidate.value.dataType) {
-          base += `-[${candidate.value.dataType}:${printArbitraryValue(candidate.value.value)}]`
-        } else {
-          base += `-[${printArbitraryValue(candidate.value.value)}]`
+        if (candidate.value !== null) {
+          let isVarValue = isVar(candidate.value.value)
+          let value = isVarValue ? candidate.value.value.slice(4, -1) : candidate.value.value
+          let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
+
+          if (candidate.value.dataType) {
+            base += `-${open}${candidate.value.dataType}:${printArbitraryValue(value)}${close}`
+          } else {
+            base += `-${open}${printArbitraryValue(value)}${close}`
+          }
         }
       } else if (candidate.value.kind === 'named') {
         base += `-${candidate.value.value}`
@@ -63,8 +67,12 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
   // Handle modifier
   if (candidate.kind === 'arbitrary' || candidate.kind === 'functional') {
     if (candidate.modifier) {
+      let isVarValue = isVar(candidate.modifier.value)
+      let value = isVarValue ? candidate.modifier.value.slice(4, -1) : candidate.modifier.value
+      let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
+
       if (candidate.modifier.kind === 'arbitrary') {
-        base += `/[${printArbitraryValue(candidate.modifier.value)}]`
+        base += `/${open}${printArbitraryValue(value)}${close}`
       } else if (candidate.modifier.kind === 'named') {
         base += `/${candidate.modifier.value}`
       }
@@ -99,7 +107,11 @@ function printVariant(variant: Variant) {
     base += variant.root
     if (variant.value) {
       if (variant.value.kind === 'arbitrary') {
-        base += `-[${printArbitraryValue(variant.value.value)}]`
+        let isVarValue = isVar(variant.value.value)
+        let value = isVarValue ? variant.value.value.slice(4, -1) : variant.value.value
+        let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
+
+        base += `-${open}${printArbitraryValue(value)}${close}`
       } else if (variant.value.kind === 'named') {
         base += `-${variant.value.value}`
       }
@@ -246,14 +258,25 @@ function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
         break
       }
       case 'separator':
-      case 'word': {
         node.value = escapeUnderscore(node.value)
+        break
+      case 'word': {
+        // Dashed idents and variables `var(--my-var)` and `--my-var` should not
+        // have underscores escaped
+        if (node.value[0] !== '-' && node.value[1] !== '-') {
+          node.value = escapeUnderscore(node.value)
+        }
         break
       }
       default:
         never(node)
     }
   }
+}
+
+function isVar(value: string) {
+  let ast = ValueParser.parse(value)
+  return ast.length === 1 && ast[0].kind === 'function' && ast[0].value === 'var'
 }
 
 function never(value: never): never {
