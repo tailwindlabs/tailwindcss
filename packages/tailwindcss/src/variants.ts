@@ -16,6 +16,7 @@ import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
+import { isAlpha } from './utils/is-alpha'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
@@ -714,9 +715,9 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('in', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    // Named values should be alphanumeric. This prevents `in-foo-bar` from
-    // being used as a variant.
-    if (variant.value.kind === 'named' && !/^[a-zA-Z]+$/i.test(variant.value.value)) {
+    // Named values should be alpha (tag selector). This prevents `in-foo-bar`
+    // from being used as a variant.
+    if (variant.value.kind === 'named' && !isAlpha(variant.value.value)) {
       return null
     }
 
