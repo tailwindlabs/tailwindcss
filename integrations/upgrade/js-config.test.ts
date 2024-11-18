@@ -9,6 +9,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -297,6 +298,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/typography": "^0.5.15",
             "@tailwindcss/upgrade": "workspace:^"
           }
@@ -404,6 +406,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -485,6 +488,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -572,6 +576,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -640,6 +645,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -718,6 +724,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -838,6 +845,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
@@ -915,6 +923,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -973,6 +982,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1034,6 +1044,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1077,6 +1088,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1136,6 +1148,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1219,6 +1232,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1330,6 +1344,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }
@@ -1443,6 +1458,7 @@ describe('border compatibility', () => {
         'package.json': json`
           {
             "dependencies": {
+              "tailwindcss": "^3",
               "@tailwindcss/upgrade": "workspace:^"
             }
           }

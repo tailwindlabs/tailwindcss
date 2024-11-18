@@ -954,6 +954,7 @@ test(
       'package.json': json`
         {
           "dependencies": {
+            "tailwindcss": "^3",
             "@tailwindcss/upgrade": "workspace:^"
           }
         }
