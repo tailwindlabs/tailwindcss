@@ -19,7 +19,7 @@ import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
 import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { detectConfigPath } from './template/prepare-config'
-import { error, highlight, info, relative } from './utils/renderer'
+import { error, highlight, relative, success } from './utils/renderer'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -377,9 +377,6 @@ export async function linkConfigs(
       localConfigPath = path.resolve(base, localConfigPath)
     }
 
-    info(
-      `Linked ${highlight(relative(localConfigPath, base))} to ${highlight(relative(sheet.file, base))}`,
-    )
     configPathBySheet.set(sheet, localConfigPath)
     sheetByConfigPath.get(localConfigPath).add(sheet)
   }
@@ -396,20 +393,22 @@ export async function linkConfigs(
   // There are multiple "root" files without `@config` directives. Manual
   // intervention is needed to link to the correct Tailwind config files.
   if (problematicStylesheets.size > 1) {
-    let msg = `You have multiple stylesheets that do not have an \`@config\`.\n`
-    msg += `Please add a \`@config "…";\` referencing the correct Tailwind config file to:\n`
-
     for (let sheet of problematicStylesheets) {
-      msg += `- ${relative(sheet.file!, base)}\n`
+      error(
+        `Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\nUpdate your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+      )
     }
 
-    error(msg)
     process.exit(1)
   }
 
+  let relativePath = relative
   for (let [sheet, configPath] of configPathBySheet) {
     try {
       if (!sheet || !sheet.file) return
+      success(
+        `↳ Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+      )
 
       // Link the `@config` directive to the root stylesheets
 

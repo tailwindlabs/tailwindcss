@@ -110,6 +110,7 @@ async function run() {
     }
 
     // Migrate js config files, linked to stylesheets
+    info('Migrating JavaScript configuration files…')
     let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
     let jsConfigMigrationBySheet = new Map<
       Stylesheet,
@@ -121,9 +122,6 @@ async function run() {
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
 
-      info(
-        `Migrating JavaScript configuration file: ${highlight(relative(config.configFilePath, base))}`,
-      )
       let jsConfigMigration = await migrateJsConfig(
         config.designSystem,
         config.configFilePath,
@@ -135,15 +133,19 @@ async function run() {
         // Remove the JS config if it was fully migrated
         cleanup.push(() => fs.rm(config.configFilePath))
       }
+
+      if (jsConfigMigration !== null) {
+        success(
+          `↳ Migrated configuration file: ${highlight(relative(config.configFilePath, base))}`,
+        )
+      }
     }
 
     // Migrate source files, linked to config files
+    info('Migrating templates…')
     {
       // Template migrations
       for (let config of configBySheet.values()) {
-        info(
-          `Migrating templates found using configuration file: ${highlight(relative(config.configFilePath, base))}.`,
-        )
         let set = new Set<string>()
         for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
           let files = await globby([globEntry.pattern], {
@@ -165,12 +167,14 @@ async function run() {
           files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
         )
 
-        success('↳ Template migration complete.')
+        success(
+          `↳ Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+        )
       }
     }
 
     // Migrate each CSS file
-    info('Migrating stylesheets')
+    info('Migrating stylesheets…')
     let migrateResults = await Promise.allSettled(
       stylesheets.map((sheet) => {
         let config = configBySheet.get(sheet)!
@@ -235,9 +239,11 @@ async function run() {
       if (!sheet.file) continue
 
       await fs.writeFile(sheet.file, sheet.root.toString())
-    }
 
-    success('↳ Stylesheet migration complete.')
+      if (sheet.isTailwindRoot) {
+        success(`↳ Migrated stylesheet: ${highlight(relative(sheet.file, base))}`)
+      }
+    }
   }
 
   {
@@ -245,18 +251,20 @@ async function run() {
     await migratePostCSSConfig(base)
   }
 
+  info('Updating dependencies…')
   {
     // Migrate the prettier plugin to the latest version
     await migratePrettierPlugin(base)
   }
 
-  // Run all cleanup functions because we completed the migration
-  await Promise.allSettled(cleanup.map((fn) => fn()))
-
   try {
     // Upgrade Tailwind CSS
     await pkg(base).add(['tailwindcss@next'])
+    success(`↳ Updated package: ${highlight('tailwindcss')}`)
   } catch {}
+
+  // Run all cleanup functions because we completed the migration
+  await Promise.allSettled(cleanup.map((fn) => fn()))
 
   // Figure out if we made any changes
   if (isRepoDirty()) {

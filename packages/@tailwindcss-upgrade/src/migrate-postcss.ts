@@ -92,6 +92,7 @@ export async function migratePostCSSConfig(base: string) {
     if (location !== null) {
       try {
         await pkg(base).add(['@tailwindcss/postcss@next'], location)
+        success(`↳ Installed package: ${highlight('@tailwindcss/postcss')}`)
       } catch {}
     }
   }
@@ -102,10 +103,15 @@ export async function migratePostCSSConfig(base: string) {
         didRemovePostCSSImport ? 'postcss-import' : null,
       ].filter(Boolean) as string[]
       await pkg(base).remove(packagesToRemove)
+      for (let pkg of packagesToRemove) {
+        success(`↳ Removed package: ${highlight(pkg)}`)
+      }
     } catch {}
   }
 
-  success(`↳ PostCSS config has been upgraded.`)
+  if (didMigrate && jsConfigPath) {
+    success(`↳ Migrated PostCSS configuration: ${highlight(relative(jsConfigPath, base))}`)
+  }
 }
 
 async function migratePostCSSJSConfig(configPath: string): Promise<{
@@ -126,11 +132,11 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
     return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
   }
 
-  info(`Upgrading the PostCSS config in file: ${highlight(relative(configPath))}`)
+  info('Migrating PostCSS configuration…')
 
   let isSimpleConfig = await isSimplePostCSSConfig(configPath)
   if (!isSimpleConfig) {
-    warn(`The PostCSS config contains dynamic JavaScript and can not be automatically migrated.`)
+    warn('The PostCSS config contains dynamic JavaScript and can not be automatically migrated.')
     return null
   }
 
