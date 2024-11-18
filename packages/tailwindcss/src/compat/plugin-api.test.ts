@@ -2760,7 +2760,7 @@ describe('addUtilities()', () => {
               base,
               module: ({ addUtilities }: PluginAPI) => {
                 addUtilities({
-                  '.text-trim > *': {
+                  ':hover > *': {
                     'text-box-trim': 'both',
                     'text-box-edge': 'cap alphabetic',
                   },
@@ -2842,18 +2842,89 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
-      .toMatchInlineSnapshot(`
-        ".form-input, .form-input::placeholder {
+    expect(compiled.build(['form-input', 'lg:form-textarea']).trim()).toMatchInlineSnapshot(`
+      ".form-input {
+        background-color: red;
+        &::placeholder {
           background-color: red;
         }
-
+      }
+      .lg\\:form-textarea {
         @media (width >= 1024px) {
-          .lg\\:form-textarea:hover:focus {
+          &:hover:focus {
             background-color: red;
           }
-        }"
-      `)
+        }
+      }"
+    `)
+  })
+
+  test('nests complex utility names', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c': {
+                  color: 'red',
+                },
+                '.d > *': {
+                  color: 'red',
+                },
+                '.e .bar:not(.f):has(.g)': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g']).trim()).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .a {
+          & .b:hover .c {
+            color: red;
+          }
+        }
+        .b {
+          .a &:hover .c {
+            color: red;
+          }
+        }
+        .c {
+          .a .b:hover & {
+            color: red;
+          }
+        }
+        .d {
+          & > * {
+            color: red;
+          }
+        }
+        .e {
+          & .bar:not(.f):has(.g) {
+            color: red;
+          }
+        }
+        .g {
+          .e .bar:not(.f):has(&) {
+            color: red;
+          }
+        }
+      }"
+    `,
+    )
   })
 })
 

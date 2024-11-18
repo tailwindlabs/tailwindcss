@@ -5,9 +5,11 @@ import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
 import { withAlpha } from '../utilities'
+import { DefaultMap } from '../utils/default-map'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
+import * as ValueParser from '../value-parser'
 import { compoundsForSelectors, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
@@ -198,40 +200,56 @@ export function buildPluginApi(
       )
 
       // Merge entries for the same class
-      let utils: Record<string, CssInJs[]> = {}
+      let utils = new DefaultMap<string, AstNode[]>(() => [])
 
       for (let [name, css] of entries) {
-        let [className, ...parts] = segment(name, ':')
-
-        // Modify classes using pseudo-classes or pseudo-elements to use nested rules
-        if (parts.length > 0) {
-          let pseudos = parts.map((p) => `:${p.trim()}`).join('')
-          css = {
-            [`&${pseudos}`]: css,
-          }
-        }
-
-        utils[className] ??= []
-        css = Array.isArray(css) ? css : [css]
-        utils[className].push(...css)
-      }
-
-      for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
           ast.push(rule(name, objectToAst(css)))
           continue
         }
 
-        if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
+        if (name[0] === '.' && IS_VALID_UTILITY_NAME.test(name.slice(1))) {
+          utils.get(name.slice(1)).push(...objectToAst(css))
+          continue
+        }
+
+        let selectorAst = ValueParser.parse(name)
+        let foundValidUtility = false
+        ValueParser.walk(selectorAst, (node) => {
+          if (
+            node.kind === 'word' &&
+            node.value[0] === '.' &&
+            IS_VALID_UTILITY_NAME.test(node.value.slice(1))
+          ) {
+            let value = node.value
+            node.value = '&'
+            let selector = ValueParser.toCss(selectorAst)
+
+            let className = value.slice(1)
+            utils.get(className).push(rule(selector, objectToAst(css)))
+            foundValidUtility = true
+
+            node.value = value
+            return
+          }
+
+          if (node.kind === 'function' && node.value === 'not') {
+            return ValueParser.ValueWalkAction.Skip
+          }
+        })
+
+        if (!foundValidUtility) {
           throw new Error(
             `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
           )
         }
+      }
 
-        designSystem.utilities.static(name.slice(1), () => {
-          let ast = objectToAst(css)
-          substituteAtApply(ast, designSystem)
-          return ast
+      for (let [className, ast] of utils) {
+        designSystem.utilities.static(className, () => {
+          let clonedAst = structuredClone(ast)
+          substituteAtApply(clonedAst, designSystem)
+          return clonedAst
         })
       }
     },
