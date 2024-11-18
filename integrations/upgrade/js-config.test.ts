@@ -29,6 +29,8 @@ test(
                 400: '#f87171',
                 500: 'red',
               },
+              steel: 'rgb(70 130 180 / <alpha-value>)',
+              smoke: 'rgba(245, 245, 245, var(--smoke-alpha, <alpha-value>))',
             },
             fontSize: {
               xs: ['0.75rem', { lineHeight: '1rem' }],
@@ -173,6 +175,9 @@ test(
         --color-red-400: #f87171;
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
+
+        --color-steel: rgb(70 130 180);
+        --color-smoke: rgba(245, 245, 245, var(--smoke-alpha, 1));
 
         --text-*: initial;
         --text-xs: 0.75rem;

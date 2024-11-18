@@ -114,6 +114,16 @@ async function migrateTheme(
       continue
     }
 
+    if (typeof value === 'string') {
+      // This is more advanced than the version in core as ideally something
+      // like `rgba(0 0 0 / <alpha-value>)` becomes `rgba(0 0 0)`. Since we know
+      // from the `/` that it's used in an alpha channel and we can remove it.
+      //
+      // In other cases we may not know exactly how its used, so we'll just
+      // replace it with `1` like core does.
+      value = value.replace(/\s*\/\s*<alpha-value>/, '').replace(/<alpha-value>/, '1')
+    }
+
     if (key[0] === 'keyframes') {
       continue
     }
