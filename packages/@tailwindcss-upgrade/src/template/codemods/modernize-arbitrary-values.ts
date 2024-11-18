@@ -28,31 +28,6 @@ export function modernizeArbitraryValues(
         }
       }
 
-      // Promote `group-[]:flex` to `in-[.group]:flex`
-      //                ^^ Yes, this is empty
-      // Promote `group-[]/name:flex` to `in-[.group\/name]:flex`
-      if (
-        variant.kind === 'compound' &&
-        variant.root === 'group' &&
-        variant.variant.kind === 'arbitrary' &&
-        variant.variant.selector === '&:is()'
-      ) {
-        // `group-[]`
-        if (variant.modifier === null) {
-          changed = true
-          Object.assign(variant, designSystem.parseVariant('in-[.group]'))
-        }
-
-        // `group-[]/name`
-        else if (variant.modifier.kind === 'named') {
-          changed = true
-          Object.assign(
-            variant,
-            designSystem.parseVariant(`in-[.group\\/${variant.modifier.value}]`),
-          )
-        }
-      }
-
       // Expecting an arbitrary variant
       if (variant.kind !== 'arbitrary') continue
 
