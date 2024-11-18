@@ -19,8 +19,9 @@ test.each([
   ['[&:not(:first-child)]:flex', 'not-first:flex'],
 
   // in-* variants
-  ['[p_&]:flex', 'in-p:flex'],
+  ['[p_&]:flex', 'in-[p]:flex'],
   ['[.foo_&]:flex', 'in-[.foo]:flex'],
+  ['[[data-visible]_&]:flex', 'in-data-visible:flex'],
   // Some extreme examples of what happens in the wild:
   ['group-[]:flex', 'in-[.group]:flex'],
   ['group-[]/name:flex', 'in-[.group\\/name]:flex'],

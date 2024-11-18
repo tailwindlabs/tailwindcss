@@ -16,7 +16,10 @@ export function modernizeArbitraryValues(
 
     for (let [variant, parent] of variants(clone)) {
       // Forward modifier from the root to the compound variant
-      if (variant.kind === 'compound' && (variant.root === 'has' || variant.root === 'not')) {
+      if (
+        variant.kind === 'compound' &&
+        (variant.root === 'has' || variant.root === 'not' || variant.root === 'in')
+      ) {
         if (variant.modifier !== null) {
           if ('modifier' in variant.variant) {
             variant.variant.modifier = variant.modifier
@@ -133,6 +136,30 @@ export function modernizeArbitraryValues(
         prefixedVariant = designSystem.parseVariant('**')
       }
 
+      // Handling a child/parent combinator. E.g.: `[[data-visible]_&]` => `in-data-visible`
+      if (
+        // Only top-level, so `has-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [[data-visible]___&]:flex
+        //  ^^^^^^^^^^^^^^ ^ ^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'attribute' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === ' ' &&
+        ast.nodes[0].nodes[2].type === 'nesting' &&
+        ast.nodes[0].nodes[2].value === '&'
+      ) {
+        ast.nodes[0].nodes = [ast.nodes[0].nodes[0]]
+        changed = true
+        // When handling a compound like `in-[[data-visible]]`, we will first
+        // handle `[[data-visible]]`, then the parent `in-*` part. This means
+        // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
+        //
+        // Later this gets converted to `in-data-visible`.
+        Object.assign(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
+        continue
+      }
+
       // `in-*` variant
       if (
         // Only top-level, so `has-[p_&]` is not supported
@@ -160,12 +187,7 @@ export function modernizeArbitraryValues(
         }
 
         changed = true
-        if (nodes.length === 1 && nodes[0].type === 'tag') {
-          Object.assign(variant, designSystem.parseVariant(`in-${selector.toString().trim()}`))
-        } else {
-          Object.assign(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
-        }
-
+        Object.assign(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
         continue
       }
 
