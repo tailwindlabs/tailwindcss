@@ -1694,13 +1694,20 @@ test('not', async () => {
 })
 
 test('in', async () => {
-  expect(await run(['in-p:flex', 'in-[p]:flex', 'in-[.group]:flex', 'not-in-p:flex']))
-    .toMatchInlineSnapshot(`
-      ".not-in-p\\:flex:not(:where(p) *), :where(p) .in-p\\:flex, :where(.group) .in-\\[\\.group\\]\\:flex, :where(p) .in-\\[p\\]\\:flex {
-        display: flex;
-      }"
-    `)
-  expect(await run(['in-foo-bar:flex'])).toEqual('')
+  expect(
+    await run([
+      'in-[p]:flex',
+      'in-[.group]:flex',
+      'not-in-[p]:flex',
+      'not-in-[.group]:flex',
+      'in-data-visible:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".not-in-\\[\\.group\\]\\:flex:not(:where(.group) *), .not-in-\\[p\\]\\:flex:not(:where(:is(p)) *), :where([data-visible]) .in-data-visible\\:flex, :where(.group) .in-\\[\\.group\\]\\:flex, :where(:is(p)) .in-\\[p\\]\\:flex {
+      display: flex;
+    }"
+  `)
+  expect(await run(['in-p:flex', 'in-foo-bar:flex'])).toEqual('')
 })
 
 test('has', async () => {

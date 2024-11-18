@@ -16,7 +16,6 @@ import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
-import { isAlpha } from './utils/is-alpha'
 import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
@@ -712,16 +711,33 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
-  variants.functional('in', (ruleNode, variant) => {
-    if (!variant.value || variant.modifier) return null
+  variants.compound('in', Compounds.StyleRules, (ruleNode, variant) => {
+    if (variant.modifier) return null
 
-    // Named values should be alpha (tag selector). This prevents `in-foo-bar`
-    // from being used as a variant.
-    if (variant.value.kind === 'named' && !isAlpha(variant.value.value)) {
-      return null
-    }
+    let didApply = false
 
-    ruleNode.nodes = [styleRule(`:where(${variant.value.value}) &`, ruleNode.nodes)]
+    walk([ruleNode], (node, { path }) => {
+      if (node.kind !== 'rule') return WalkAction.Continue
+
+      // Throw out any candidates with variants using nested style rules
+      for (let parent of path.slice(0, -1)) {
+        if (parent.kind !== 'rule') continue
+
+        didApply = false
+        return WalkAction.Stop
+      }
+
+      // Replace `&` in target variant with `*`, so variants like `&:hover`
+      // become `:where(*:hover) &`. The `*` will often be optimized away.
+      node.selector = `:where(${node.selector.replaceAll('&', '*')}) &`
+
+      // Track that the variant was actually applied
+      didApply = true
+    })
+
+    // If the node wasn't modified, this variant is not compatible with
+    // `in-*` so discard the candidate.
+    if (!didApply) return null
   })
 
   variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
