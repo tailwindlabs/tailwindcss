@@ -299,6 +299,93 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('plugin theme colors can use <alpha-value>', async () => {
+    let input = css`
+      @tailwind utilities;
+      @theme {
+        /* This should not work */
+        --color-custom-css: rgba(255 0 0 / <alpha-value>);
+      }
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ addUtilities, theme }) {
+              addUtilities({
+                '.css-percentage': {
+                  color: theme('colors.custom-css / 50%'),
+                },
+                '.css-fraction': {
+                  color: theme('colors.custom-css / 0.5'),
+                },
+                '.css-variable': {
+                  color: theme('colors.custom-css / var(--opacity)'),
+                },
+                '.js-percentage': {
+                  color: theme('colors.custom-js / 50%'),
+                },
+                '.js-fraction': {
+                  color: theme('colors.custom-js / 0.5'),
+                },
+                '.js-variable': {
+                  color: theme('colors.custom-js / var(--opacity)'),
+                },
+              })
+            },
+            {
+              theme: {
+                colors: {
+                  /* This should work */
+                  'custom-js': 'rgb(255 0 0 / <alpha-value>)',
+                },
+              },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(
+      compiler.build([
+        'bg-custom',
+        'css-percentage',
+        'css-fraction',
+        'css-variable',
+        'js-percentage',
+        'js-fraction',
+        'js-variable',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ".css-fraction {
+        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+      }
+      .css-percentage {
+        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+      }
+      .css-variable {
+        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+      }
+      .js-fraction {
+        color: color-mix(in oklch, rgb(255 0 0 / 1) 50%, transparent);
+      }
+      .js-percentage {
+        color: color-mix(in oklch, rgb(255 0 0 / 1) 50%, transparent);
+      }
+      .js-variable {
+        color: color-mix(in oklch, rgb(255 0 0 / 1) var(--opacity), transparent);
+      }
+      :root {
+        --color-custom-css: rgba(255 0 0 / <alpha-value>);
+      }
+      "
+    `)
+  })
+
   test('theme value functions are resolved correctly regardless of order', async () => {
     let input = css`
       @tailwind utilities;

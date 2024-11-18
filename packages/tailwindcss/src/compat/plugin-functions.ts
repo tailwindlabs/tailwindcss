@@ -30,6 +30,10 @@ export function createThemeFn(
 
       let configValue = resolveValue(get(configTheme() ?? {}, keypath) ?? null)
 
+      if (typeof configValue === 'string') {
+        configValue = configValue.replace('<alpha-value>', '1')
+      }
+
       // Resolved to a primitive value.
       if (typeof cssValue !== 'object') {
         if (typeof options !== 'object' && options & ThemeOptions.DEFAULT) {
