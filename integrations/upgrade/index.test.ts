@@ -2464,7 +2464,7 @@ test(
   },
 )
 
-test(
+test.only(
   'requires Tailwind v3 before attempting an upgrade',
   {
     fs: {

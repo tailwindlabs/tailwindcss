@@ -62,6 +62,7 @@ async function run() {
 
     // Require an installed `tailwindcss` version < 4
     let tailwindVersion = await getPackageVersion('tailwindcss', base)
+    console.error({ tailwindVersion })
     if (tailwindVersion && Number(tailwindVersion.split('.')[0]) !== 3) {
       error(
         `Tailwind CSS v${tailwindVersion} found. The migration tool can only be run on v3 projects.`,
