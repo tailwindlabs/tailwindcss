@@ -126,7 +126,7 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
     return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
   }
 
-  info(`Attempt to upgrade the PostCSS config in file: ${highlight(relative(configPath))}`)
+  info(`Upgrading the PostCSS config in file: ${highlight(relative(configPath))}`)
 
   let isSimpleConfig = await isSimplePostCSSConfig(configPath)
   if (!isSimpleConfig) {
