@@ -15,6 +15,19 @@ export function modernizeArbitraryValues(
     let changed = false
 
     for (let [variant, parent] of variants(clone)) {
+      // Forward modifier from the root to the compound variant
+      if (
+        variant.kind === 'compound' &&
+        (variant.root === 'has' || variant.root === 'not' || variant.root === 'in')
+      ) {
+        if (variant.modifier !== null) {
+          if ('modifier' in variant.variant) {
+            variant.variant.modifier = variant.modifier
+            variant.modifier = null
+          }
+        }
+      }
+
       // Expecting an arbitrary variant
       if (variant.kind !== 'arbitrary') continue
 
@@ -96,6 +109,61 @@ export function modernizeArbitraryValues(
       ) {
         ast.nodes[0].nodes = [ast.nodes[0].nodes[2]]
         prefixedVariant = designSystem.parseVariant('**')
+      }
+
+      // Handling a child/parent combinator. E.g.: `[[data-visible]_&]` => `in-data-visible`
+      if (
+        // Only top-level, so `has-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [[data-visible]___&]:flex
+        //  ^^^^^^^^^^^^^^ ^ ^
+        ast.nodes[0].length === 3 &&
+        ast.nodes[0].nodes[0].type === 'attribute' &&
+        ast.nodes[0].nodes[1].type === 'combinator' &&
+        ast.nodes[0].nodes[1].value === ' ' &&
+        ast.nodes[0].nodes[2].type === 'nesting' &&
+        ast.nodes[0].nodes[2].value === '&'
+      ) {
+        ast.nodes[0].nodes = [ast.nodes[0].nodes[0]]
+        changed = true
+        // When handling a compound like `in-[[data-visible]]`, we will first
+        // handle `[[data-visible]]`, then the parent `in-*` part. This means
+        // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
+        //
+        // Later this gets converted to `in-data-visible`.
+        Object.assign(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
+        continue
+      }
+
+      // `in-*` variant
+      if (
+        // Only top-level, so `has-[p_&]` is not supported
+        parent === null &&
+        // `[data-*]` and `[aria-*]` are handled separately
+        !(
+          ast.nodes[0].nodes[0].type === 'attribute' &&
+          (ast.nodes[0].nodes[0].attribute.startsWith('data-') ||
+            ast.nodes[0].nodes[0].attribute.startsWith('aria-'))
+        ) &&
+        // [.foo___&]:flex
+        //  ^^^^ ^ ^
+        ast.nodes[0].nodes.at(-1)?.type === 'nesting'
+      ) {
+        let selector = ast.nodes[0]
+        let nodes = selector.nodes
+
+        nodes.pop() // Remove the last node `&`
+
+        // Remove trailing whitespace
+        let last = nodes.at(-1)
+        while (last?.type === 'combinator' && last.value === ' ') {
+          nodes.pop()
+          last = nodes.at(-1)
+        }
+
+        changed = true
+        Object.assign(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
+        continue
       }
 
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
