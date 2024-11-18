@@ -19,11 +19,11 @@ test.each([
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
   ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
-  ['bg-[theme(colors.red.500)]', 'bg-[var(--color-red-500)]'], // Arbitrary value
+  ['bg-[theme(colors.red.500)]', 'bg-(--color-red-500)'], // Arbitrary value
   ['bg-[size:theme(spacing.4)]', 'bg-[size:calc(var(--spacing)*4)]'], // Arbitrary value + data type hint
 
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
-  ['bg-[theme(colors.red.500,red)]', 'bg-[var(--color-red-500,red)]'],
+  ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
 
   // Keep `theme(…)` if we can't resolve the path
   ['bg-[theme(colors.foo.1000)]', 'bg-[theme(colors.foo.1000)]'],
@@ -66,13 +66,13 @@ test.each([
   // Arbitrary property, with more complex modifier (we only allow whole numbers
   // as bare modifiers). Convert the complex numbers to arbitrary values instead.
   ['[color:theme(colors.red.500/12.34%)]', '[color:var(--color-red-500)]/[12.34%]'],
-  ['[color:theme(colors.red.500/var(--opacity))]', '[color:var(--color-red-500)]/[var(--opacity)]'],
+  ['[color:theme(colors.red.500/var(--opacity))]', '[color:var(--color-red-500)]/(--opacity)'],
   ['[color:theme(colors.red.500/.12345)]', '[color:var(--color-red-500)]/[12.345]'],
   ['[color:theme(colors.red.500/50.25%)]', '[color:var(--color-red-500)]/[50.25%]'],
 
   // Arbitrary value
-  ['bg-[theme(colors.red.500/75%)]', 'bg-[var(--color-red-500)]/75'],
-  ['bg-[theme(colors.red.500/12.34%)]', 'bg-[var(--color-red-500)]/[12.34%]'],
+  ['bg-[theme(colors.red.500/75%)]', 'bg-(--color-red-500)/75'],
+  ['bg-[theme(colors.red.500/12.34%)]', 'bg-(--color-red-500)/[12.34%]'],
 
   // Arbitrary property that already contains a modifier
   ['[color:theme(colors.red.500/50%)]/50', '[color:theme(--color-red-500/50%)]/50'],
@@ -109,8 +109,8 @@ test.each([
   ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
   // Renamed theme keys
-  ['max-w-[theme(screens.md)]', 'max-w-[var(--breakpoint-md)]'],
-  ['w-[theme(maxWidth.md)]', 'w-[var(--container-md)]'],
+  ['max-w-[theme(screens.md)]', 'max-w-(--breakpoint-md)'],
+  ['w-[theme(maxWidth.md)]', 'w-(--container-md)'],
 
   // Invalid cases
   ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],

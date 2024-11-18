@@ -100,7 +100,7 @@ test(
       --- ./src/index.html ---
       <h1>🤠👋</h1>
       <div
-        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)] max-w-[var(--breakpoint-md)] ml-[var(--breakpoint-md)]"
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red) max-w-(--breakpoint-md) ml-(--breakpoint-md)"
       ></div>
       <!-- Migrate to sm -->
       <div class="blur-sm shadow-sm rounded-sm inset-shadow-sm drop-shadow-sm"></div>
@@ -151,9 +151,9 @@ test(
       candidate`flex!`,
       candidate`sm:block!`,
       candidate`bg-linear-to-t`,
-      candidate`bg-[var(--my-red)]`,
-      candidate`max-w-[var(--breakpoint-md)]`,
-      candidate`ml-[var(--breakpoint-md)`,
+      candidate`bg-(--my-red)`,
+      candidate`max-w-(--breakpoint-md)`,
+      candidate`ml-(--breakpoint-md)`,
     ])
   },
 )
@@ -639,7 +639,7 @@ test(
       'src/index.html',
       // prettier-ignore
       js`
-        <div class="bg-[var(--my-red)]"></div>
+        <div class="bg-(--my-red)"></div>
       `,
     )
 
@@ -798,7 +798,7 @@ test(
       'src/index.html',
       // prettier-ignore
       js`
-        <div class="bg-[var(--my-red)]"></div>
+        <div class="bg-(--my-red)"></div>
       `,
     )
 
@@ -873,7 +873,7 @@ test(
       'src/index.html',
       // prettier-ignore
       js`
-        <div class="bg-[var(--my-red)]"></div>
+        <div class="bg-(--my-red)"></div>
       `,
     )
 
@@ -1447,7 +1447,7 @@ test(
       "
       --- ./src/index.html ---
       <div
-        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
       ></div>
 
       --- ./src/root.1.css ---
@@ -1664,7 +1664,7 @@ test(
       "
       --- ./src/index.html ---
       <div
-        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
       ></div>
 
       --- ./src/index.css ---
@@ -1799,7 +1799,7 @@ test(
       "
       --- ./src/index.html ---
       <div
-        class="flex! sm:block! bg-linear-to-t bg-[var(--my-red)]"
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red)"
       ></div>
 
       --- ./src/index.css ---
