@@ -1,4 +1,3 @@
-import { stripVTControlCharacters } from 'node:util'
 import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
@@ -2492,10 +2491,6 @@ test(
     let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
       e.toString(),
     )
-
-    output = stripVTControlCharacters(output)
-      .replace(/tailwindcss v(.*)/g, 'tailwindcss') // Remove the version number from the error message
-      .replace(/\\/g, '/') // Make Windows paths look like Unix paths
 
     expect(output).toMatch(
       /Tailwind CSS v.* found. The migration tool can only be run on v3 projects./,
