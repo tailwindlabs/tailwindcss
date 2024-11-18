@@ -35,11 +35,11 @@ importers:
         specifier: 'catalog:'
         version: 20.14.13
       postcss:
-        specifier: 8.4.47
-        version: 8.4.47
+        specifier: 8.4.49
+        version: 8.4.49
       postcss-import:
         specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.47)
+        version: 16.1.0(postcss@8.4.49)
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -51,7 +51,7 @@ importers:
         version: 4.0.0(prettier@3.3.3)(typescript@5.5.4)
       tsup:
         specifier: ^8.2.4
-        version: 8.2.4(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
+        version: 8.2.4(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
       turbo:
         specifier: ^2.2.3
         version: 2.2.3
@@ -349,7 +349,7 @@ importers:
         version: 1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4)
       svelte-preprocess:
         specifier: ^6.0.2
-        version: 6.0.2(@babel/core@7.25.2)(postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0))(postcss@8.4.47)(svelte@4.2.18)(typescript@5.6.3)
+        version: 6.0.2(@babel/core@7.25.2)(postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(yaml@2.6.0))(postcss@8.4.49)(svelte@4.2.18)(typescript@5.6.3)
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -3071,6 +3071,10 @@ packages:
 
   postcss@8.4.47:
     resolution: {integrity: sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.4.49:
+    resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -6304,9 +6308,9 @@ snapshots:
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-import@16.1.0(postcss@8.4.47):
+  postcss-import@16.1.0(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.47
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
@@ -6323,12 +6327,12 @@ snapshots:
     optionalDependencies:
       postcss: 8.4.47
 
-  postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0):
+  postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(yaml@2.6.0):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
       jiti: 2.4.0
-      postcss: 8.4.47
+      postcss: 8.4.49
       tsx: 4.19.1
       yaml: 2.6.0
 
@@ -6362,6 +6366,12 @@ snapshots:
       source-map-js: 1.2.0
 
   postcss@8.4.47:
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  postcss@8.4.49:
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.1.1
@@ -6674,13 +6684,13 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-preprocess@6.0.2(@babel/core@7.25.2)(postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0))(postcss@8.4.47)(svelte@4.2.18)(typescript@5.6.3):
+  svelte-preprocess@6.0.2(@babel/core@7.25.2)(postcss-load-config@6.0.1(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(yaml@2.6.0))(postcss@8.4.49)(svelte@4.2.18)(typescript@5.6.3):
     dependencies:
       svelte: 4.2.18
     optionalDependencies:
       '@babel/core': 7.25.2
-      postcss: 8.4.47
-      postcss-load-config: 6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0)
+      postcss: 8.4.49
+      postcss-load-config: 6.0.1(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(yaml@2.6.0)
       typescript: 5.6.3
 
   svelte@4.2.18:
@@ -6808,7 +6818,7 @@ snapshots:
 
   tslib@2.8.0: {}
 
-  tsup@8.2.4(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0):
+  tsup@8.2.4(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -6820,14 +6830,14 @@ snapshots:
       globby: 11.1.0
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.0)(postcss@8.4.47)(tsx@4.19.1)(yaml@2.6.0)
+      postcss-load-config: 6.0.1(jiti@2.4.0)(postcss@8.4.49)(tsx@4.19.1)(yaml@2.6.0)
       resolve-from: 5.0.0
       rollup: 4.20.0
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tree-kill: 1.2.2
     optionalDependencies:
-      postcss: 8.4.47
+      postcss: 8.4.49
       typescript: 5.5.4
     transitivePeerDependencies:
       - jiti
