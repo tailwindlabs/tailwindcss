@@ -59,18 +59,15 @@ async function run() {
       )
       process.exit(1)
     }
+  }
 
-    // Require an installed `tailwindcss` version < 4
-    let tailwindVersion = await getPackageVersion('tailwindcss', base)
-    if (tailwindVersion && Number(tailwindVersion.split('.')[0]) !== 3) {
-      error(
-        `Tailwind CSS v${tailwindVersion} found. The migration tool can only be run on v3 projects.`,
-      )
-      info(
-        `You may use the ${highlight('--force')} flag to silence this warning and perform the migration.`,
-      )
-      process.exit(1)
-    }
+  // Require an installed `tailwindcss` version < 4
+  let tailwindVersion = await getPackageVersion('tailwindcss', base)
+  if (tailwindVersion && Number(tailwindVersion.split('.')[0]) !== 3) {
+    error(
+      `Tailwind CSS v${tailwindVersion} found. The migration tool can only be run on v3 projects.`,
+    )
+    process.exit(1)
   }
 
   {
