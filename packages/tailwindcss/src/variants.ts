@@ -740,6 +740,12 @@ export function createVariants(theme: Theme): Variants {
     if (!didApply) return null
   })
 
+  variants.suggest('in', () => {
+    return Array.from(variants.keys()).filter((name) => {
+      return variants.compoundsWith('in', name)
+    })
+  })
+
   variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
     if (variant.modifier) return null
 
