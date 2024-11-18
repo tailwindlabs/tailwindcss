@@ -44,7 +44,7 @@ export async function migrateJsConfig(
 
   if (!canMigrateConfig(unresolvedConfig, source)) {
     info(
-      `Your configuration file at ${highlight(relative(fullConfigPath, base))} could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.`,
+      `The configuration file at ${highlight(relative(fullConfigPath, base))} could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.`,
     )
     return null
   }
