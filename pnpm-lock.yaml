@@ -323,8 +323,8 @@ importers:
         specifier: ^0.22.0
         version: 0.22.0
       tree-sitter-typescript:
-        specifier: ^0.23.0
-        version: 0.23.0(tree-sitter@0.22.0)
+        specifier: ^0.23.2
+        version: 0.23.2(tree-sitter@0.22.0)
     devDependencies:
       '@types/braces':
         specifier: ^3.0.4
@@ -2832,6 +2832,10 @@ packages:
     resolution: {integrity: sha512-vmEOvxwiH8tlOcv4SyE8RH34rI5/nWVaigUeAUPawC6f0+HoDthwI0vkMu4tbtsZrXq6QXFfrkhjofzKEs5tpA==}
     engines: {node: ^18 || ^20 || >= 21}
 
+  node-addon-api@8.2.2:
+    resolution: {integrity: sha512-9emqXAKhVoNrQ792nLI/wpzPpJ/bj/YXxW0CvAau1+RdGBcCRF1Dmz7719zgVsQNrzHl9Tzn3ImZ4qWFarWL0A==}
+    engines: {node: ^18 || ^20 || >= 21}
+
   node-gyp-build@4.8.2:
     resolution: {integrity: sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==}
     hasBin: true
@@ -3449,13 +3453,20 @@ packages:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
 
-  tree-sitter-typescript@0.23.0:
-    resolution: {integrity: sha512-hRy5O9d+9ON4HxIWWxkI4zonrw2v/WNN1JoiGW5HkXfC9K2R3p53ugMvs6Vs4T7ASCwggsoQ75LNdgpExC/zgQ==}
+  tree-sitter-javascript@0.23.1:
+    resolution: {integrity: sha512-/bnhbrTD9frUYHQTiYnPcxyHORIw157ERBa6dqzaKxvR/x3PC4Yzd+D1pZIMS6zNg2v3a8BZ0oK7jHqsQo9fWA==}
+    peerDependencies:
+      tree-sitter: ^0.21.1
+    peerDependenciesMeta:
+      tree-sitter:
+        optional: true
+
+  tree-sitter-typescript@0.23.2:
+    resolution: {integrity: sha512-e04JUUKxTT53/x3Uq1zIL45DoYKVfHH4CZqwgZhPg5qYROl5nQjV+85ruFzFGZxu+QeFVbRTPDRnqL9UbU4VeA==}
     peerDependencies:
       tree-sitter: ^0.21.0
-      tree_sitter: '*'
     peerDependenciesMeta:
-      tree_sitter:
+      tree-sitter:
         optional: true
 
   tree-sitter@0.22.0:
@@ -6140,6 +6151,8 @@ snapshots:
 
   node-addon-api@8.2.1: {}
 
+  node-addon-api@8.2.2: {}
+
   node-gyp-build@4.8.2: {}
 
   node-releases@2.0.18: {}
@@ -6766,10 +6779,19 @@ snapshots:
 
   tree-kill@1.2.2: {}
 
-  tree-sitter-typescript@0.23.0(tree-sitter@0.22.0):
+  tree-sitter-javascript@0.23.1(tree-sitter@0.22.0):
     dependencies:
-      node-addon-api: 8.2.1
+      node-addon-api: 8.2.2
       node-gyp-build: 4.8.2
+    optionalDependencies:
+      tree-sitter: 0.22.0
+
+  tree-sitter-typescript@0.23.2(tree-sitter@0.22.0):
+    dependencies:
+      node-addon-api: 8.2.2
+      node-gyp-build: 4.8.2
+      tree-sitter-javascript: 0.23.1(tree-sitter@0.22.0)
+    optionalDependencies:
       tree-sitter: 0.22.0
 
   tree-sitter@0.22.0:
