@@ -19,7 +19,7 @@ import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
 import { isValidSpacingMultiplier } from '../../tailwindcss/src/utils/infer-data-type'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
-import { info } from './utils/renderer'
+import { highlight, info, relative } from './utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -44,7 +44,7 @@ export async function migrateJsConfig(
 
   if (!canMigrateConfig(unresolvedConfig, source)) {
     info(
-      'Your configuration file could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.',
+      `↳ The configuration file at ${highlight(relative(fullConfigPath, base))} could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.`,
     )
     return null
   }

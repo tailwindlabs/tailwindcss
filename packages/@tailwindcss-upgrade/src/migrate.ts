@@ -19,7 +19,7 @@ import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
 import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { detectConfigPath } from './template/prepare-config'
-import { error } from './utils/renderer'
+import { error, highlight, relative, success } from './utils/renderer'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
 
@@ -364,16 +364,53 @@ export async function linkConfigs(
   // All stylesheets have a `@config` directives
   if (withoutAtConfig.length === 0) return
 
-  try {
+  // Find the config file path for each stylesheet
+  let configPathBySheet = new Map<Stylesheet, string>()
+  let sheetByConfigPath = new DefaultMap<string, Set<Stylesheet>>(() => new Set())
+  for (let sheet of withoutAtConfig) {
+    if (!sheet.file) continue
+
+    let localConfigPath = configPath as string
     if (configPath === null) {
-      configPath = await detectConfigPath(base)
-    } else if (!path.isAbsolute(configPath)) {
-      configPath = path.resolve(base, configPath)
+      localConfigPath = await detectConfigPath(path.dirname(sheet.file), base)
+    } else if (!path.isAbsolute(localConfigPath)) {
+      localConfigPath = path.resolve(base, localConfigPath)
     }
 
-    // Link the `@config` directive to the root stylesheets
-    for (let sheet of withoutAtConfig) {
-      if (!sheet.file) continue
+    configPathBySheet.set(sheet, localConfigPath)
+    sheetByConfigPath.get(localConfigPath).add(sheet)
+  }
+
+  let problematicStylesheets = new Set<Stylesheet>()
+  for (let sheets of sheetByConfigPath.values()) {
+    if (sheets.size > 1) {
+      for (let sheet of sheets) {
+        problematicStylesheets.add(sheet)
+      }
+    }
+  }
+
+  // There are multiple "root" files without `@config` directives. Manual
+  // intervention is needed to link to the correct Tailwind config files.
+  if (problematicStylesheets.size > 1) {
+    for (let sheet of problematicStylesheets) {
+      error(
+        `Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\nUpdate your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+      )
+    }
+
+    process.exit(1)
+  }
+
+  let relativePath = relative
+  for (let [sheet, configPath] of configPathBySheet) {
+    try {
+      if (!sheet || !sheet.file) return
+      success(
+        `↳ Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+      )
+
+      // Link the `@config` directive to the root stylesheets
 
       // Track the config file path on the stylesheet itself for easy access
       // without traversing the CSS ast and finding the corresponding
@@ -409,10 +446,10 @@ export async function linkConfigs(
           target.after(atConfig)
         }
       }
+    } catch (e: any) {
+      error('Could not load the configuration file: ' + e.message)
+      process.exit(1)
     }
-  } catch (e: any) {
-    error('Could not load the configuration file: ' + e.message)
-    process.exit(1)
   }
 }
 

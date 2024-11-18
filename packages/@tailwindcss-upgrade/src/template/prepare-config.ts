@@ -6,7 +6,7 @@ import { loadModule } from '../../../@tailwindcss-node/src/compile'
 import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
 import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { error } from '../utils/renderer'
+import { error, highlight, relative } from '../utils/renderer'
 import { migratePrefix } from './codemods/prefix'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -94,15 +94,40 @@ const DEFAULT_CONFIG_FILES = [
   './tailwind.config.cts',
   './tailwind.config.mts',
 ]
-export async function detectConfigPath(base: string) {
-  for (let file of DEFAULT_CONFIG_FILES) {
-    let fullPath = path.resolve(base, file)
-    try {
-      await fs.access(fullPath)
-      return file
-    } catch {}
+export async function detectConfigPath(start: string, end: string = start) {
+  for (let base of parentPaths(start, end)) {
+    for (let file of DEFAULT_CONFIG_FILES) {
+      let fullPath = path.resolve(base, file)
+      try {
+        await fs.access(fullPath)
+        return fullPath
+      } catch {}
+    }
   }
+
   throw new Error(
-    'No configuration file found. Please provide a path to the Tailwind CSS v3 config file via the `--config` option.',
+    `No configuration file found for ${highlight(relative(start))}. Please provide a path to the Tailwind CSS v3 config file via the ${highlight('--config')} option.`,
   )
+}
+
+// Yields all parent paths from `from` to `to` (inclusive on both ends)
+function* parentPaths(from: string, to: string = from) {
+  let fromAbsolute = path.resolve(from)
+  let toAbsolute = path.resolve(to)
+
+  if (!fromAbsolute.startsWith(toAbsolute)) {
+    throw new Error(`The path ${from} is not a parent of ${to}`)
+  }
+
+  if (fromAbsolute === toAbsolute) {
+    yield fromAbsolute
+    return
+  }
+
+  let current = fromAbsolute
+  do {
+    yield current
+    current = path.dirname(current)
+  } while (current !== toAbsolute)
+  yield toAbsolute
 }
