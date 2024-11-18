@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace as deprecated utilities ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
 - Support using CSS variables as arbitrary values without `var(…)` by using parentheses instead of square brackets (e.g. `bg-(--my-color)`) ([#15020](https://github.com/tailwindlabs/tailwindcss/pull/15020))
 - Add new `in-*` variant ([#15025](https://github.com/tailwindlabs/tailwindcss/pull/15025))
+- Support colors that use `<alpha-value>` in JS configs and plugins ([#15033](https://github.com/tailwindlabs/tailwindcss/pull/15033))
 - _Upgrade (experimental)_: Migrate `[&>*]` to the `*` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 - _Upgrade (experimental)_: Migrate `[&_*]` to the `**` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
+- _Upgrade (experimental)_: Migrate colors that use `<alpha-value>` in JS configs ([#15033](https://github.com/tailwindlabs/tailwindcss/pull/15033))
 
 ### Fixed
 
