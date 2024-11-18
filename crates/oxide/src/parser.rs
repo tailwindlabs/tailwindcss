@@ -48,13 +48,13 @@ enum Arbitrary {
     ///
     /// E.g.: `bg-[…]`
     ///           ^
-    Brackets(usize),
+    Brackets { start_idx: usize },
 
     /// In arbitrary value mode with parens
     ///
     /// E.g.: `bg-(…)`
     ///           ^
-    Parens(usize),
+    Parens { start_idx: usize },
 }
 
 pub struct Extractor<'a> {
@@ -502,7 +502,7 @@ impl<'a> Extractor<'a> {
                         return ParseAction::Consume;
                     }
 
-                    if let Arbitrary::Parens(start_idx) = self.arbitrary {
+                    if let Arbitrary::Parens { start_idx } = self.arbitrary {
                         trace!("Arbitrary::End\t");
                         self.arbitrary = Arbitrary::None;
 
@@ -538,7 +538,7 @@ impl<'a> Extractor<'a> {
                         return ParseAction::Consume;
                     }
 
-                    if let Arbitrary::Brackets(start_idx) = self.arbitrary {
+                    if let Arbitrary::Brackets { start_idx } = self.arbitrary {
                         trace!("Arbitrary::End\t");
                         self.arbitrary = Arbitrary::None;
 
@@ -570,7 +570,7 @@ impl<'a> Extractor<'a> {
             b' ' if !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
-                if let Arbitrary::Brackets(start_idx) | Arbitrary::Parens(start_idx) =
+                if let Arbitrary::Brackets { start_idx } | Arbitrary::Parens { start_idx } =
                     self.arbitrary
                 {
                     // Restart the parser ahead of the arbitrary value It may pick up more
@@ -596,7 +596,9 @@ impl<'a> Extractor<'a> {
             // Enter arbitrary property mode
             b'[' => {
                 trace!("Arbitrary::Start\t");
-                self.arbitrary = Arbitrary::Brackets(self.cursor.pos);
+                self.arbitrary = Arbitrary::Brackets {
+                    start_idx: self.cursor.pos,
+                };
 
                 ParseAction::Consume
             }
@@ -634,14 +636,18 @@ impl<'a> Extractor<'a> {
             ) =>
             {
                 trace!("Arbitrary::Start\t");
-                self.arbitrary = Arbitrary::Brackets(self.cursor.pos);
+                self.arbitrary = Arbitrary::Brackets {
+                    start_idx: self.cursor.pos,
+                };
             }
 
             // Enter arbitrary value mode. E.g.: `bg-(--my-color)`
             //                                       ^
             b'(' if matches!(self.cursor.prev, b'-' | b'/') => {
                 trace!("Arbitrary::Start\t");
-                self.arbitrary = Arbitrary::Parens(self.cursor.pos);
+                self.arbitrary = Arbitrary::Parens {
+                    start_idx: self.cursor.pos,
+                };
             }
 
             // Can't enter arbitrary value mode. This can't be a candidate.
