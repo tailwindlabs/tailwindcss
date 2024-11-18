@@ -98,6 +98,7 @@ export async function loadModule(id: string, base: string, onDependency: (path: 
   if (!resolvedPath) {
     throw new Error(`Could not resolve '${id}' from '${base}'`)
   }
+
   let [module, moduleDependencies] = await Promise.all([
     importModule(pathToFileURL(resolvedPath).href + '?id=' + Date.now()),
     getModuleDependencies(resolvedPath),
@@ -140,6 +141,13 @@ async function loadStylesheet(id: string, base: string, onDependency: (path: str
 // can be resolved properly.
 let jiti: null | Jiti = null
 async function importModule(path: string): Promise<any> {
+  if (typeof globalThis.__tw_load === 'function') {
+    let module = await globalThis.__tw_load(path)
+    if (module) {
+      return module
+    }
+  }
+
   try {
     return await import(path)
   } catch (error) {
@@ -174,6 +182,12 @@ const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
 })
 
 function resolveJsId(id: string, base: string): Promise<string | false | undefined> {
+  if (typeof globalThis.__tw_resolve === 'function') {
+    let resolved = globalThis.__tw_resolve(id, base)
+    if (resolved) {
+      return Promise.resolve(resolved)
+    }
+  }
   return runResolver(jsResolver, id, base)
 }
 
