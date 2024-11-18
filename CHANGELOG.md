@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new `in-*` variant ([#15025](https://github.com/tailwindlabs/tailwindcss/pull/15025))
 - _Upgrade (experimental)_: Migrate `[&>*]` to the `*` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 - _Upgrade (experimental)_: Migrate `[&_*]` to the `**` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
+- _Upgrade (experimental)_: Warn when trying to migrating a project that is not on Tailwind CSS v3 ([#15015](https://github.com/tailwindlabs/tailwindcss/pull/15015))
 
 ### Fixed
 
