@@ -23,6 +23,7 @@
   5. Use the user's configured `sans` font-feature-settings by default.
   6. Use the user's configured `sans` font-variation-settings by default.
   7. Disable tap highlights on iOS.
+  8. Set a default `color-scheme`.
 */
 
 html,
@@ -43,6 +44,7 @@ html,
   font-feature-settings: var(--default-font-feature-settings, normal); /* 5 */
   font-variation-settings: var(--default-font-variation-settings, normal); /* 6 */
   -webkit-tap-highlight-color: transparent; /* 7 */
+  color-scheme: light dark; /* 8 */
 }
 
 /*
@@ -188,7 +190,7 @@ textarea,
   font-feature-settings: inherit;
   font-variation-settings: inherit;
   letter-spacing: inherit;
-  color: inherit;
+  /* color: inherit;  this can be removed because we overwrite the color for all excepte optgroup? */
 }
 
 /*
@@ -199,8 +201,54 @@ textarea,
 button,
 input:where([type='button'], [type='reset'], [type='submit']),
 ::file-selector-button {
-  background: transparent; /* 1 */
+  /*background: transparent this can be removed becuase we overwrite the bacgkround color */
   appearance: button; /* 2 */
+}
+
+/*
+  Add default form styles that make all form inputs usable.
+*/
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, currentcolor 50%, transparent);
+}
+
+input:where(:not([type='checkbox'], [type='radio'], [type='file'])),
+textarea,
+select:where([multiple]),
+select:where([size]) {
+  border: 1px solid light-dark(#666, #777);
+  border-radius: 3px;
+  padding-inline: 0.25em;
+  padding-block: 0.125em;
+  background-color: light-dark(#fff, #222);
+  color: light-dark(#000, #fff);
+}
+
+button,
+select:where(:not([multiple], [size])),
+::file-selector-button {
+  padding-inline: 0.25em;
+  padding-block: 0.125em;
+  background-color: light-dark(#eee, #555);
+  border: 1px solid light-dark(#666, #777);
+  border-radius: 4px;
+  color: light-dark(#000, #fff);
+}
+button:where(:hover),
+select:where(:not([multiple], [size]):hover),
+::file-selector-button:where(:hover) {
+  background-color: light-dark(#ddd, #666);
+}
+button:where(:active),
+select:where(:not([multiple], [size]):active),
+::file-selector-button:where(:active) {
+  background-color: light-dark(#ccc, #777);
+}
+
+::file-selector-button {
+  margin-inline-end: 4px;
 }
 
 /*
