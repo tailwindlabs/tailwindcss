@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure `flex` is suggested ([#15014](https://github.com/tailwindlabs/tailwindcss/pull/15014))
 - Improve module resolution for `cjs`-only and `esm`-only plugins ([#15041](https://github.com/tailwindlabs/tailwindcss/pull/15041))
+- Fix `-rotate-*` utilities ([#15044](https://github.com/tailwindlabs/tailwindcss/pull/15044))
 - _Upgrade (experimental)_: Resolve imports when specifying a CSS entry point on the command-line ([#15010](https://github.com/tailwindlabs/tailwindcss/pull/15010))
 - _Upgrade (experimental)_: Resolve nearest Tailwind config file when CSS file does not contain `@config` ([#15001](https://github.com/tailwindlabs/tailwindcss/pull/15001))
 - _Upgrade (experimental)_: Improve output when CSS imports can not be found ([#15038](https://github.com/tailwindlabs/tailwindcss/pull/15038))
