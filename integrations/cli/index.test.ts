@@ -2,7 +2,7 @@ import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
 import { describe, expect } from 'vitest'
-import { candidate, css, html, js, json, test, yaml } from '../utils'
+import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -255,6 +255,161 @@ describe.each([
       await exec(`${command} --input=- --output dist/out.css < src/index.css`)
 
       await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+    },
+  )
+
+  test(
+    'module resolution using CJS, ESM, CTS, and MTS',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-cjs
+            - project-esm
+            - plugin-cjs
+            - plugin-esm
+            - plugin-cts
+            - plugin-mts
+        `,
+        'project-cjs/package.json': json`
+          {
+            "type": "commonjs",
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^",
+              "plugin-cjs": "workspace:*",
+              "plugin-esm": "workspace:*",
+              "plugin-cts": "workspace:*",
+              "plugin-mts": "workspace:*"
+            }
+          }
+        `,
+        'project-cjs/index.html': html`
+          <div class="cjs esm cts mts"></div>
+        `,
+        'project-cjs/src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @plugin 'plugin-cjs';
+          @plugin 'plugin-esm';
+          @plugin 'plugin-cts';
+          @plugin 'plugin-mts';
+        `,
+
+        'project-esm/package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^",
+              "plugin-cjs": "workspace:*",
+              "plugin-esm": "workspace:*",
+              "plugin-cts": "workspace:*",
+              "plugin-mts": "workspace:*"
+            }
+          }
+        `,
+        'project-esm/index.html': html`
+          <div class="cjs esm cts mts"></div>
+        `,
+        'project-esm/src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @plugin 'plugin-cjs';
+          @plugin 'plugin-esm';
+          @plugin 'plugin-cts';
+          @plugin 'plugin-mts';
+        `,
+
+        'plugin-cjs/package.json': json`
+          {
+            "name": "plugin-cjs",
+            "type": "commonjs",
+            "exports": {
+              ".": {
+                "require": "./index.cjs"
+              }
+            }
+          }
+        `,
+        'plugin-cjs/index.cjs': js`
+          module.exports = function ({ addUtilities }) {
+            addUtilities({ '.cjs': { content: '"cjs"' } })
+          }
+        `,
+
+        'plugin-esm/package.json': json`
+          {
+            "name": "plugin-esm",
+            "type": "module",
+            "exports": {
+              ".": {
+                "import": "./index.mjs"
+              }
+            }
+          }
+        `,
+        'plugin-esm/index.mjs': js`
+          export default function ({ addUtilities }) {
+            addUtilities({ '.esm': { content: '"esm"' } })
+          }
+        `,
+
+        'plugin-cts/package.json': json`
+          {
+            "name": "plugin-cts",
+            "type": "commonjs",
+            "exports": {
+              ".": {
+                "require": "./index.cts"
+              }
+            }
+          }
+        `,
+        'plugin-cts/index.cts': ts`
+          export default function ({ addUtilities }) {
+            addUtilities({ '.cts': { content: '"cts"' as const } })
+          }
+        `,
+
+        'plugin-mts/package.json': json`
+          {
+            "name": "plugin-mts",
+            "type": "module",
+            "exports": {
+              ".": {
+                "import": "./index.mts"
+              }
+            }
+          }
+        `,
+        'plugin-mts/index.mts': ts`
+          export default function ({ addUtilities }) {
+            addUtilities({ '.mts': { content: '"mts"' as const } })
+          }
+        `,
+      },
+    },
+    async ({ root, fs, exec }) => {
+      await exec(`${command} --input src/index.css --output dist/out.css`, {
+        cwd: path.join(root, 'project-cjs'),
+      })
+      await exec(`${command} --input src/index.css --output dist/out.css`, {
+        cwd: path.join(root, 'project-esm'),
+      })
+
+      await fs.expectFileToContain('./project-cjs/dist/out.css', [
+        candidate`cjs`,
+        candidate`esm`,
+        candidate`cts`,
+        candidate`mts`,
+      ])
+      await fs.expectFileToContain('./project-esm/dist/out.css', [
+        candidate`cjs`,
+        candidate`esm`,
+        candidate`cts`,
+        candidate`mts`,
+      ])
     },
   )
 })
