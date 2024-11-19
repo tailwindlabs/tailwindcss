@@ -2847,7 +2847,7 @@ describe('addUtilities()', () => {
               base,
               module: ({ addUtilities }: PluginAPI) => {
                 addUtilities({
-                  '.text-trim > *': {
+                  ':hover > *': {
                     'text-box-trim': 'both',
                     'text-box-edge': 'cap alphabetic',
                   },
@@ -2929,18 +2929,171 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
-      .toMatchInlineSnapshot(`
-        ".form-input, .form-input::placeholder {
+    expect(compiled.build(['form-input', 'lg:form-textarea']).trim()).toMatchInlineSnapshot(`
+      ".form-input {
+        background-color: red;
+        &::placeholder {
           background-color: red;
         }
-
+      }
+      .lg\\:form-textarea {
         @media (width >= 1024px) {
-          .lg\\:form-textarea:hover:focus {
+          &:hover:focus {
             background-color: red;
           }
-        }"
-      `)
+        }
+      }"
+    `)
+  })
+
+  test('nests complex utility names', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c': {
+                  color: 'red',
+                },
+                '.d > *': {
+                  color: 'red',
+                },
+                '.e .bar:not(.f):has(.g)': {
+                  color: 'red',
+                },
+                '.h~.i': {
+                  color: 'red',
+                },
+                '.j.j': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(
+      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']).trim(),
+    ).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .a {
+          & .b:hover .c {
+            color: red;
+          }
+        }
+        .b {
+          .a &:hover .c {
+            color: red;
+          }
+        }
+        .c {
+          .a .b:hover & {
+            color: red;
+          }
+        }
+        .d {
+          & > * {
+            color: red;
+          }
+        }
+        .e {
+          & .bar:not(.f):has(.g) {
+            color: red;
+          }
+        }
+        .g {
+          .e .bar:not(.f):has(&) {
+            color: red;
+          }
+        }
+        .h {
+          &~.i {
+            color: red;
+          }
+        }
+        .i {
+          .h~& {
+            color: red;
+          }
+        }
+        .j {
+          &.j {
+            color: red;
+          }
+          .j& {
+            color: red;
+          }
+        }
+      }"
+    `,
+    )
+  })
+
+  test('prefixes nested class names with the configured theme prefix', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+        @theme prefix(tw) {
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c.d': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['tw:a', 'tw:b', 'tw:c', 'tw:d']).trim()).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .tw\\:a {
+          & .tw\\:b:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:b {
+          .tw\\:a &:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:c {
+          .tw\\:a .tw\\:b:hover &.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:d {
+          .tw\\:a .tw\\:b:hover .tw\\:c& {
+            color: red;
+          }
+        }
+      }
+      :root {
+      }"
+    `,
+    )
   })
 })
 

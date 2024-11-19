@@ -92,7 +92,7 @@ export async function migratePostCSSConfig(base: string) {
     if (location !== null) {
       try {
         await pkg(base).add(['@tailwindcss/postcss@next'], location)
-        success(`↳ Installed package: ${highlight('@tailwindcss/postcss')}`)
+        success(`Installed package: ${highlight('@tailwindcss/postcss')}`, { prefix: '↳ ' })
       } catch {}
     }
   }
@@ -104,13 +104,15 @@ export async function migratePostCSSConfig(base: string) {
       ].filter(Boolean) as string[]
       await pkg(base).remove(packagesToRemove)
       for (let pkg of packagesToRemove) {
-        success(`↳ Removed package: ${highlight(pkg)}`)
+        success(`Removed package: ${highlight(pkg)}`, { prefix: '↳ ' })
       }
     } catch {}
   }
 
   if (didMigrate && jsConfigPath) {
-    success(`↳ Migrated PostCSS configuration: ${highlight(relative(jsConfigPath, base))}`)
+    success(`Migrated PostCSS configuration: ${highlight(relative(jsConfigPath, base))}`, {
+      prefix: '↳ ',
+    })
   }
 }
 

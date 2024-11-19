@@ -1,22 +1,13 @@
-import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import type { UserConfig } from '../../../tailwindcss/src/compat/config/types'
 import { migrateImport } from './migrate-import'
 
 const css = dedent
 
-async function migrate(input: string, userConfig: UserConfig = {}) {
+async function migrate(input: string) {
   return postcss()
-    .use(
-      migrateImport({
-        designSystem: await __unstable__loadDesignSystem(`@import 'tailwindcss';`, {
-          base: __dirname,
-        }),
-        userConfig,
-      }),
-    )
+    .use(migrateImport())
     .process(input, { from: expect.getState().testPath })
     .then((result) => result.css)
 }
@@ -24,6 +15,8 @@ async function migrate(input: string, userConfig: UserConfig = {}) {
 it('prints relative file imports as relative paths', async () => {
   expect(
     await migrate(css`
+      @import url('https://example.com');
+
       @import 'fixtures/test';
       @import 'fixtures/test.css';
       @import './fixtures/test.css';
@@ -62,7 +55,9 @@ it('prints relative file imports as relative paths', async () => {
       @import 'tailwindcss/theme';
     `),
   ).toMatchInlineSnapshot(`
-    "@import './fixtures/test.css';
+    "@import url('https://example.com');
+
+    @import './fixtures/test.css';
     @import './fixtures/test.css';
     @import './fixtures/test.css';
     @import './fixtures/test.css';
