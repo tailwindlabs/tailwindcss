@@ -254,7 +254,6 @@ export function createUtilities(theme: Theme) {
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string) => AstNode[] | undefined
-    handleNegative?: (value: string) => AstNode[] | undefined
   }
 
   /**
@@ -312,14 +311,6 @@ export function createUtilities(theme: Theme) {
         if (value === null) return
 
         // Negate the value if the candidate has a negative prefix.
-        if (desc.handleNegative) {
-          if (negative) {
-            return desc.handleNegative(value)
-          }
-
-          return desc.handle(value)
-        }
-
         return desc.handle(negative ? `calc(${value} * -1)` : value)
       }
     }
@@ -1348,11 +1339,6 @@ export function createUtilities(theme: Theme) {
         handle: (value) => [
           transformProperties(),
           decl(`--tw-rotate-${axis}`, `rotate${axis.toUpperCase()}(${value})`),
-          decl('transform', transformValue),
-        ],
-        handleNegative: (value) => [
-          transformProperties(),
-          decl(`--tw-rotate-${axis}`, `rotate${axis.toUpperCase()}(calc(-1 * ${value}))`),
           decl('transform', transformValue),
         ],
       })

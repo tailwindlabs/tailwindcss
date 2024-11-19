@@ -4518,7 +4518,7 @@ test('rotate-y', async () => {
       }
 
       .-rotate-y-\\[123deg\\] {
-        --tw-rotate-y: rotateY(calc(-1 * 123deg));
+        --tw-rotate-y: rotateY(calc(123deg * -1));
         transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
       }
 
@@ -4590,68 +4590,68 @@ test('rotate-y', async () => {
 test('rotate-z', async () => {
   expect(await run(['rotate-z-45', '-rotate-z-45', 'rotate-z-[123deg]', '-rotate-z-[123deg]']))
     .toMatchInlineSnapshot(`
-    ".-rotate-z-45 {
-      --tw-rotate-z: rotateZ(-45deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
-    }
+      ".-rotate-z-45 {
+        --tw-rotate-z: rotateZ(-45deg);
+        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      }
 
-    .-rotate-z-\\[123deg\\] {
-      --tw-rotate-z: rotateZ(calc(-1 * 123deg));
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
-    }
+      .-rotate-z-\\[123deg\\] {
+        --tw-rotate-z: rotateZ(calc(123deg * -1));
+        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      }
 
-    .rotate-z-45 {
-      --tw-rotate-z: rotateZ(45deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
-    }
+      .rotate-z-45 {
+        --tw-rotate-z: rotateZ(45deg);
+        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      }
 
-    .rotate-z-\\[123deg\\] {
-      --tw-rotate-z: rotateZ(123deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
-    }
+      .rotate-z-\\[123deg\\] {
+        --tw-rotate-z: rotateZ(123deg);
+        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      }
 
-    @supports (-moz-orient: inline) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-rotate-x: rotateX(0);
+            --tw-rotate-y: rotateY(0);
+            --tw-rotate-z: rotateZ(0);
+            --tw-skew-x: skewX(0);
+            --tw-skew-y: skewY(0);
+          }
         }
       }
-    }
 
-    @property --tw-rotate-x {
-      syntax: "<transform-function>";
-      inherits: false;
-      initial-value: rotateX(0);
-    }
+      @property --tw-rotate-x {
+        syntax: "<transform-function>";
+        inherits: false;
+        initial-value: rotateX(0);
+      }
 
-    @property --tw-rotate-y {
-      syntax: "<transform-function>";
-      inherits: false;
-      initial-value: rotateY(0);
-    }
+      @property --tw-rotate-y {
+        syntax: "<transform-function>";
+        inherits: false;
+        initial-value: rotateY(0);
+      }
 
-    @property --tw-rotate-z {
-      syntax: "<transform-function>";
-      inherits: false;
-      initial-value: rotateZ(0);
-    }
+      @property --tw-rotate-z {
+        syntax: "<transform-function>";
+        inherits: false;
+        initial-value: rotateZ(0);
+      }
 
-    @property --tw-skew-x {
-      syntax: "<transform-function>";
-      inherits: false;
-      initial-value: skewX(0);
-    }
+      @property --tw-skew-x {
+        syntax: "<transform-function>";
+        inherits: false;
+        initial-value: skewX(0);
+      }
 
-    @property --tw-skew-y {
-      syntax: "<transform-function>";
-      inherits: false;
-      initial-value: skewY(0);
-    }"
-  `)
+      @property --tw-skew-y {
+        syntax: "<transform-function>";
+        inherits: false;
+        initial-value: skewY(0);
+      }"
+    `)
   expect(
     await run([
       'rotate-z',
