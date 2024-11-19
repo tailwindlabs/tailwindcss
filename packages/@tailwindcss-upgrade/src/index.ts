@@ -84,7 +84,7 @@ async function run() {
     // Load and parse all stylesheets
     for (let result of loadResults) {
       if (result.status === 'rejected') {
-        error(`${result.reason}`)
+        error(`${result.reason?.message ?? result.reason}`, { prefix: '↳ ' })
       }
     }
 
@@ -95,8 +95,8 @@ async function run() {
     // Analyze the stylesheets
     try {
       await analyzeStylesheets(stylesheets)
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Ensure stylesheets are linked to configs
@@ -105,12 +105,14 @@ async function run() {
         configPath: flags['--config'],
         base,
       })
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Migrate js config files, linked to stylesheets
-    info('Migrating JavaScript configuration files…')
+    if (stylesheets.some((sheet) => sheet.isTailwindRoot)) {
+      info('Migrating JavaScript configuration files…')
+    }
     let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
     let jsConfigMigrationBySheet = new Map<
       Stylesheet,
@@ -136,13 +138,16 @@ async function run() {
 
       if (jsConfigMigration !== null) {
         success(
-          `↳ Migrated configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          `Migrated configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          { prefix: '↳ ' },
         )
       }
     }
 
     // Migrate source files, linked to config files
-    info('Migrating templates…')
+    if (configBySheet.size > 0) {
+      info('Migrating templates…')
+    }
     {
       // Template migrations
       for (let config of configBySheet.values()) {
@@ -168,43 +173,44 @@ async function run() {
         )
 
         success(
-          `↳ Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          { prefix: '↳ ' },
         )
       }
     }
 
     // Migrate each CSS file
-    info('Migrating stylesheets…')
-    let migrateResults = await Promise.allSettled(
-      stylesheets.map((sheet) => {
-        let config = configBySheet.get(sheet)!
-        let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
+    if (stylesheets.length > 0) {
+      info('Migrating stylesheets…')
+    }
+    await Promise.all(
+      stylesheets.map(async (sheet) => {
+        try {
+          let config = configBySheet.get(sheet)!
+          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
 
-        if (!config) {
-          for (let parent of sheet.ancestors()) {
-            if (parent.isTailwindRoot) {
-              config ??= configBySheet.get(parent)!
-              jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
-              break
+          if (!config) {
+            for (let parent of sheet.ancestors()) {
+              if (parent.isTailwindRoot) {
+                config ??= configBySheet.get(parent)!
+                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
+                break
+              }
             }
           }
-        }
 
-        return migrateStylesheet(sheet, { ...config, jsConfigMigration })
+          await migrateStylesheet(sheet, { ...config, jsConfigMigration })
+        } catch (e: any) {
+          error(`${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`, { prefix: '↳ ' })
+        }
       }),
     )
-
-    for (let result of migrateResults) {
-      if (result.status === 'rejected') {
-        error(`${result.reason}`)
-      }
-    }
 
     // Split up stylesheets (as needed)
     try {
       await splitStylesheets(stylesheets)
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Cleanup `@import "…" layer(utilities)`
@@ -241,7 +247,7 @@ async function run() {
       await fs.writeFile(sheet.file, sheet.root.toString())
 
       if (sheet.isTailwindRoot) {
-        success(`↳ Migrated stylesheet: ${highlight(relative(sheet.file, base))}`)
+        success(`Migrated stylesheet: ${highlight(relative(sheet.file, base))}`, { prefix: '↳ ' })
       }
     }
   }
@@ -260,7 +266,7 @@ async function run() {
   try {
     // Upgrade Tailwind CSS
     await pkg(base).add(['tailwindcss@next'])
-    success(`↳ Updated package: ${highlight('tailwindcss')}`)
+    success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
   } catch {}
 
   // Run all cleanup functions because we completed the migration

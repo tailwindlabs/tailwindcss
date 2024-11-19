@@ -120,8 +120,10 @@ export async function analyze(stylesheets: Stylesheet[]) {
               resolvedPath = resolveCssId(id, basePath)
             }
           } catch (err) {
-            console.warn(`Failed to resolve import: ${id}. Skipping.`)
-            console.error(err)
+            error(
+              `Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
+              { prefix: '↳ ' },
+            )
             return
           }
 
@@ -334,10 +336,12 @@ export async function analyze(stylesheets: Stylesheet[]) {
     }
   }
 
-  let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
-  error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
+  {
+    let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
+    error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
 
-  throw new Error(error + lines.join('\n'))
+    throw new Error(error + lines.join('\n'))
+  }
 }
 
 export async function linkConfigs(
@@ -347,7 +351,7 @@ export async function linkConfigs(
   let rootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot)
   if (rootStylesheets.length === 0) {
     throw new Error(
-      'Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses `@tailwind`.',
+      `Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses ${highlight('@tailwind')}.`,
     )
   }
   let withoutAtConfig = rootStylesheets.filter((sheet) => {
@@ -396,6 +400,7 @@ export async function linkConfigs(
     for (let sheet of problematicStylesheets) {
       error(
         `Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\nUpdate your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+        { prefix: '↳ ' },
       )
     }
 
@@ -407,7 +412,8 @@ export async function linkConfigs(
     try {
       if (!sheet || !sheet.file) return
       success(
-        `↳ Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+        `Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+        { prefix: '↳ ' },
       )
 
       // Link the `@config` directive to the root stylesheets
@@ -447,7 +453,7 @@ export async function linkConfigs(
         }
       }
     } catch (e: any) {
-      error('Could not load the configuration file: ' + e.message)
+      error('Could not load the configuration file: ' + e.message, { prefix: '↳ ' })
       process.exit(1)
     }
   }
