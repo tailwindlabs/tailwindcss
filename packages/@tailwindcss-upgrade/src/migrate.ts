@@ -120,8 +120,9 @@ export async function analyze(stylesheets: Stylesheet[]) {
               resolvedPath = resolveCssId(id, basePath)
             }
           } catch (err) {
-            console.warn(`Failed to resolve import: ${id}. Skipping.`)
-            console.error(err)
+            error(
+              `Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
+            )
             return
           }
 
@@ -334,10 +335,12 @@ export async function analyze(stylesheets: Stylesheet[]) {
     }
   }
 
-  let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
-  error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
+  {
+    let error = `You have one or more stylesheets that are imported into a utility layer and non-utility layer.\n`
+    error += `We cannot convert stylesheets under these conditions. Please look at the following stylesheets:\n`
 
-  throw new Error(error + lines.join('\n'))
+    throw new Error(error + lines.join('\n'))
+  }
 }
 
 export async function linkConfigs(
