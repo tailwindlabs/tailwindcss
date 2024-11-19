@@ -443,8 +443,6 @@ export function createVariants(theme: Theme): Variants {
   variants.compound('not', Compounds.StyleRules | Compounds.AtRules, (ruleNode, variant) => {
     if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
 
-    if (variant.modifier) return null
-
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
@@ -747,8 +745,6 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.compound('has', Compounds.StyleRules, (ruleNode, variant) => {
-    if (variant.modifier) return null
-
     let didApply = false
 
     walk([ruleNode], (node, { path }) => {
