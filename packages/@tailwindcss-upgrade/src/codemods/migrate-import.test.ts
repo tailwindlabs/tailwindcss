@@ -15,6 +15,8 @@ async function migrate(input: string) {
 it('prints relative file imports as relative paths', async () => {
   expect(
     await migrate(css`
+      @import url('https://example.com');
+
       @import 'fixtures/test';
       @import 'fixtures/test.css';
       @import './fixtures/test.css';
@@ -53,7 +55,9 @@ it('prints relative file imports as relative paths', async () => {
       @import 'tailwindcss/theme';
     `),
   ).toMatchInlineSnapshot(`
-    "@import './fixtures/test.css';
+    "@import url('https://example.com');
+
+    @import './fixtures/test.css';
     @import './fixtures/test.css';
     @import './fixtures/test.css';
     @import './fixtures/test.css';
