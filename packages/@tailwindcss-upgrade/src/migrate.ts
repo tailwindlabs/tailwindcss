@@ -121,7 +121,7 @@ export async function analyze(stylesheets: Stylesheet[]) {
             }
           } catch (err) {
             error(
-              `Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
+              `↳ Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
             )
             return
           }
@@ -350,7 +350,7 @@ export async function linkConfigs(
   let rootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot)
   if (rootStylesheets.length === 0) {
     throw new Error(
-      'Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses `@tailwind`.',
+      `Cannot find any CSS files that reference Tailwind CSS.\nBefore your project can be upgraded you need to create a CSS file that imports Tailwind CSS or uses ${highlight('@tailwind')}.`,
     )
   }
   let withoutAtConfig = rootStylesheets.filter((sheet) => {
@@ -398,7 +398,7 @@ export async function linkConfigs(
   if (problematicStylesheets.size > 1) {
     for (let sheet of problematicStylesheets) {
       error(
-        `Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\nUpdate your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+        `↳ Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\n↳Update your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
       )
     }
 
@@ -450,7 +450,7 @@ export async function linkConfigs(
         }
       }
     } catch (e: any) {
-      error('Could not load the configuration file: ' + e.message)
+      error('↳ Could not load the configuration file: ' + e.message)
       process.exit(1)
     }
   }

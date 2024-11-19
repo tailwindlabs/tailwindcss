@@ -85,7 +85,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
     }
 
     if (node.kind === 'function' && node.value.toLowerCase() === 'url') {
-      throw new Error('url functions are not supported')
+      throw new Error('`url(…)` functions are not supported')
     }
 
     if (!uri) throw new Error('Unable to find uri')
@@ -95,7 +95,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       node.value.toLowerCase() === 'layer'
     ) {
       if (layer) throw new Error('Multiple layers')
-      if (supports) throw new Error('layers must be defined before support conditions')
+      if (supports) throw new Error('`layer(…)` must be defined before `supports(…)` conditions')
 
       if ('nodes' in node) {
         layer = ValueParser.toCss(node.nodes)

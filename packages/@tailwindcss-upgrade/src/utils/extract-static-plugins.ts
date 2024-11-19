@@ -272,8 +272,8 @@ export function findStaticPlugins(source: string): [string, null | StaticPluginO
       }
     }
     return plugins
-  } catch (error) {
-    console.error(error)
+  } catch (error: any) {
+    error(`↳ ${error?.message ?? error}`)
     return null
   }
 }

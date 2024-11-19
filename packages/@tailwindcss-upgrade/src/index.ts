@@ -84,7 +84,7 @@ async function run() {
     // Load and parse all stylesheets
     for (let result of loadResults) {
       if (result.status === 'rejected') {
-        error(`${result.reason}`)
+        error(`↳ ${result.reason?.message ?? result.reason}`)
       }
     }
 
@@ -95,8 +95,8 @@ async function run() {
     // Analyze the stylesheets
     try {
       await analyzeStylesheets(stylesheets)
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`↳ ${e?.message ?? e}`)
     }
 
     // Ensure stylesheets are linked to configs
@@ -105,8 +105,8 @@ async function run() {
         configPath: flags['--config'],
         base,
       })
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`↳ ${e?.message ?? e}`)
     }
 
     // Migrate js config files, linked to stylesheets
@@ -199,7 +199,7 @@ async function run() {
 
           await migrateStylesheet(sheet, { ...config, jsConfigMigration })
         } catch (e: any) {
-          error(`${e} in ${highlight(relative(sheet.file!, base))}`)
+          error(`↳ ${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`)
         }
       }),
     )
@@ -207,8 +207,8 @@ async function run() {
     // Split up stylesheets (as needed)
     try {
       await splitStylesheets(stylesheets)
-    } catch (e: unknown) {
-      error(`${e}`)
+    } catch (e: any) {
+      error(`↳ ${e?.message ?? e}`)
     }
 
     // Cleanup `@import "…" layer(utilities)`
