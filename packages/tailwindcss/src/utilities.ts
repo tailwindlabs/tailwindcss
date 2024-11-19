@@ -1330,11 +1330,11 @@ export function createUtilities(theme: Theme) {
         themeKeys: ['--rotate'],
         handleBareValue: ({ value }) => {
           if (!isPositiveInteger(value)) return null
-          return `rotate${axis.toUpperCase()}(${value}deg)`
+          return `${value}deg`
         },
         handle: (value) => [
           transformProperties(),
-          decl(`--tw-rotate-${axis}`, value),
+          decl(`--tw-rotate-${axis}`, `rotate${axis.toUpperCase()}(${value})`),
           decl('transform', transformValue),
         ],
       })
