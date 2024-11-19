@@ -110,7 +110,9 @@ async function run() {
     }
 
     // Migrate js config files, linked to stylesheets
-    info('Migrating JavaScript configuration files…')
+    if (stylesheets.some((sheet) => sheet.isTailwindRoot)) {
+      info('Migrating JavaScript configuration files…')
+    }
     let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
     let jsConfigMigrationBySheet = new Map<
       Stylesheet,
@@ -142,7 +144,9 @@ async function run() {
     }
 
     // Migrate source files, linked to config files
-    info('Migrating templates…')
+    if (configBySheet.size > 0) {
+      info('Migrating templates…')
+    }
     {
       // Template migrations
       for (let config of configBySheet.values()) {
@@ -174,7 +178,9 @@ async function run() {
     }
 
     // Migrate each CSS file
-    info('Migrating stylesheets…')
+    if (stylesheets.length > 0) {
+      info('Migrating stylesheets…')
+    }
     let migrateResults = await Promise.allSettled(
       stylesheets.map((sheet) => {
         let config = configBySheet.get(sheet)!
