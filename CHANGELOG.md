@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Upgrade (experimental)_: Ignore analyzing imports with external URLs (e.g.: `@import "https://fonts.google.com"`) ([#15040](https://github.com/tailwindlabs/tailwindcss/pull/15040))
 - _Upgrade (experimental)_: Ignore analyzing imports with `url(…)` (e.g.: `@import url("https://fonts.google.com")`) ([#15040](https://github.com/tailwindlabs/tailwindcss/pull/15040))
 - _Upgrade (experimental)_: Use `resolveJsId` when resolving `tailwindcss/package.json` ([#15041](https://github.com/tailwindlabs/tailwindcss/pull/15041))
+- _Upgrade (experimental)_: Ensure children of Tailwind root file are not considered Tailwind root files ([#15048](https://github.com/tailwindlabs/tailwindcss/pull/15048))
 
 ### Changed
 
