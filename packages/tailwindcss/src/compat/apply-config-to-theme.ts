@@ -37,6 +37,10 @@ export function applyConfigToTheme(
       continue
     }
 
+    if (typeof value === 'string') {
+      value = value.replace(/<alpha-value>/g, '1')
+    }
+
     let name = keyPathToCssProperty(path)
     if (!name) continue
 
