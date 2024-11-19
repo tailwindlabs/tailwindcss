@@ -180,6 +180,7 @@ const esmResolver = EnhancedResolve.ResolverFactory.createResolver({
   extensions: ['.js', '.json', '.node', '.ts'],
   conditionNames: ['node', 'import'],
 })
+
 const cjsResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
