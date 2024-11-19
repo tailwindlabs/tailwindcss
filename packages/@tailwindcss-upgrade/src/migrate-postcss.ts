@@ -16,15 +16,23 @@ import { highlight, info, relative, success, warn } from './utils/renderer'
 //   }
 // }
 export async function migratePostCSSConfig(base: string) {
+  let ranMigration = false
   let didMigrate = false
   let didAddPostcssClient = false
   let didRemoveAutoprefixer = false
   let didRemovePostCSSImport = false
 
+  let packageJsonPath = path.resolve(base, 'package.json')
+  let packageJson
+  try {
+    packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
+  } catch {}
+
   // Priority 1: Handle JS config files
   let jsConfigPath = await detectJSConfigPath(base)
   if (jsConfigPath) {
     let result = await migratePostCSSJSConfig(jsConfigPath)
+    ranMigration = true
 
     if (result) {
       didMigrate = true
@@ -35,39 +43,16 @@ export async function migratePostCSSConfig(base: string) {
   }
 
   // Priority 2: Handle package.json config
-  let packageJsonPath = path.resolve(base, 'package.json')
-  let packageJson
-  try {
-    packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
-  } catch {}
-  if (!didMigrate && packageJson && 'postcss' in packageJson) {
-    let result = await migratePostCSSJsonConfig(packageJson.postcss)
-
-    if (result) {
-      await fs.writeFile(
-        packageJsonPath,
-        JSON.stringify({ ...packageJson, postcss: result?.json }, null, 2),
-      )
-
-      didMigrate = true
-      didAddPostcssClient = result.didAddPostcssClient
-      didRemoveAutoprefixer = result.didRemoveAutoprefixer
-      didRemovePostCSSImport = result.didRemovePostCSSImport
-    }
-  }
-
-  // Priority 3: JSON based postcss config files
-  let jsonConfigPath = await detectJSONConfigPath(base)
-  let jsonConfig: null | any = null
-  if (!didMigrate && jsonConfigPath) {
-    try {
-      jsonConfig = JSON.parse(await fs.readFile(jsonConfigPath, 'utf-8'))
-    } catch {}
-    if (jsonConfig) {
-      let result = await migratePostCSSJsonConfig(jsonConfig)
+  if (!ranMigration) {
+    if (packageJson && 'postcss' in packageJson) {
+      let result = await migratePostCSSJsonConfig(packageJson.postcss)
+      ranMigration = true
 
       if (result) {
-        await fs.writeFile(jsonConfigPath, JSON.stringify(result.json, null, 2))
+        await fs.writeFile(
+          packageJsonPath,
+          JSON.stringify({ ...packageJson, postcss: result?.json }, null, 2),
+        )
 
         didMigrate = true
         didAddPostcssClient = result.didAddPostcssClient
@@ -77,8 +62,34 @@ export async function migratePostCSSConfig(base: string) {
     }
   }
 
-  if (!didMigrate) {
-    info('No PostCSS config found, skipping migration.')
+  // Priority 3: JSON based postcss config files
+  if (!ranMigration) {
+    let jsonConfigPath = await detectJSONConfigPath(base)
+    let jsonConfig: null | any = null
+    if (jsonConfigPath) {
+      try {
+        jsonConfig = JSON.parse(await fs.readFile(jsonConfigPath, 'utf-8'))
+      } catch {}
+      if (jsonConfig) {
+        let result = await migratePostCSSJsonConfig(jsonConfig)
+        ranMigration = true
+
+        if (result) {
+          await fs.writeFile(jsonConfigPath, JSON.stringify(result.json, null, 2))
+
+          didMigrate = true
+          didAddPostcssClient = result.didAddPostcssClient
+          didRemoveAutoprefixer = result.didRemoveAutoprefixer
+          didRemovePostCSSImport = result.didRemovePostCSSImport
+        }
+      }
+    }
+  }
+
+  if (!ranMigration) {
+    info('No PostCSS config found, skipping migration.', {
+      prefix: '↳ ',
+    })
     return
   }
 
@@ -96,16 +107,18 @@ export async function migratePostCSSConfig(base: string) {
       } catch {}
     }
   }
-  if (didRemoveAutoprefixer || didRemovePostCSSImport) {
+
+  if (didRemoveAutoprefixer) {
     try {
-      let packagesToRemove = [
-        didRemoveAutoprefixer ? 'autoprefixer' : null,
-        didRemovePostCSSImport ? 'postcss-import' : null,
-      ].filter(Boolean) as string[]
-      await pkg(base).remove(packagesToRemove)
-      for (let pkg of packagesToRemove) {
-        success(`Removed package: ${highlight(pkg)}`, { prefix: '↳ ' })
-      }
+      await pkg(base).remove(['autoprefixer'])
+      success(`Removed package: ${highlight('autoprefixer')}`, { prefix: '↳ ' })
+    } catch {}
+  }
+
+  if (didRemovePostCSSImport) {
+    try {
+      await pkg(base).remove(['postcss-import'])
+      success(`Removed package: ${highlight('postcss-import')}`, { prefix: '↳ ' })
     } catch {}
   }
 
@@ -138,7 +151,9 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
 
   let isSimpleConfig = await isSimplePostCSSConfig(configPath)
   if (!isSimpleConfig) {
-    warn('The PostCSS config contains dynamic JavaScript and can not be automatically migrated.')
+    warn('The PostCSS config contains dynamic JavaScript and can not be automatically migrated.', {
+      prefix: '↳ ',
+    })
     return null
   }
 
