@@ -22,6 +22,12 @@ export async function migratePostCSSConfig(base: string) {
   let didRemoveAutoprefixer = false
   let didRemovePostCSSImport = false
 
+  let packageJsonPath = path.resolve(base, 'package.json')
+  let packageJson
+  try {
+    packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
+  } catch {}
+
   // Priority 1: Handle JS config files
   let jsConfigPath = await detectJSConfigPath(base)
   if (jsConfigPath) {
@@ -38,11 +44,6 @@ export async function migratePostCSSConfig(base: string) {
 
   // Priority 2: Handle package.json config
   if (!ranMigration) {
-    let packageJsonPath = path.resolve(base, 'package.json')
-    let packageJson
-    try {
-      packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'))
-    } catch {}
     if (packageJson && 'postcss' in packageJson) {
       let result = await migratePostCSSJsonConfig(packageJson.postcss)
       ranMigration = true
