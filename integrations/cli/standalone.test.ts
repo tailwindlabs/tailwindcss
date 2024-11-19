@@ -40,7 +40,7 @@ test(
 
         @plugin '@tailwindcss/forms';
         @plugin '@tailwindcss/typography';
-        /* @plugin '@tailwindcss/aspect-ratio'; */
+        @plugin '@tailwindcss/aspect-ratio';
       `,
     },
   },
@@ -52,7 +52,7 @@ test(
     await fs.expectFileToContain('dist/out.css', [
       candidate`form-input`,
       candidate`prose`,
-      // candidate`aspect-w-16`,
+      candidate`aspect-w-16`,
     ])
   },
 )
