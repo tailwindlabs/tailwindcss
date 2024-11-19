@@ -174,11 +174,18 @@ async function resolveCssId(id: string, base: string): Promise<string | false | 
   return runResolver(cssResolver, id, base)
 }
 
-const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
+const esmResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
-  conditionNames: import.meta.url ? ['node', 'import'] : ['node', 'require'],
+  conditionNames: ['node', 'import'],
+})
+
+const cjsResolver = EnhancedResolve.ResolverFactory.createResolver({
+  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  useSyncFileSystemCalls: true,
+  extensions: ['.js', '.json', '.node', '.ts'],
+  conditionNames: ['node', 'require'],
 })
 
 function resolveJsId(id: string, base: string): Promise<string | false | undefined> {
@@ -188,7 +195,7 @@ function resolveJsId(id: string, base: string): Promise<string | false | undefin
       return Promise.resolve(resolved)
     }
   }
-  return runResolver(jsResolver, id, base)
+  return runResolver(esmResolver, id, base).catch(() => runResolver(cjsResolver, id, base))
 }
 
 function runResolver(
