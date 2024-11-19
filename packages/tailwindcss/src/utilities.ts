@@ -1332,10 +1332,6 @@ export function createUtilities(theme: Theme) {
           if (!isPositiveInteger(value)) return null
           return `${value}deg`
         },
-        handleNegativeBareValue: ({ value }) => {
-          if (!isPositiveInteger(value)) return null
-          return `${-value}deg`
-        },
         handle: (value) => [
           transformProperties(),
           decl(`--tw-rotate-${axis}`, `rotate${axis.toUpperCase()}(${value})`),
