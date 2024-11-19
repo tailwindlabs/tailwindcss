@@ -273,7 +273,7 @@ export function findStaticPlugins(source: string): [string, null | StaticPluginO
     }
     return plugins
   } catch (error: any) {
-    error(`↳ ${error?.message ?? error}`)
+    error(`${error?.message ?? error}`, { prefix: '↳ ' })
     return null
   }
 }

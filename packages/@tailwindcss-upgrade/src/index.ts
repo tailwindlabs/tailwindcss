@@ -84,7 +84,7 @@ async function run() {
     // Load and parse all stylesheets
     for (let result of loadResults) {
       if (result.status === 'rejected') {
-        error(`↳ ${result.reason?.message ?? result.reason}`)
+        error(`${result.reason?.message ?? result.reason}`, { prefix: '↳ ' })
       }
     }
 
@@ -96,7 +96,7 @@ async function run() {
     try {
       await analyzeStylesheets(stylesheets)
     } catch (e: any) {
-      error(`↳ ${e?.message ?? e}`)
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Ensure stylesheets are linked to configs
@@ -106,7 +106,7 @@ async function run() {
         base,
       })
     } catch (e: any) {
-      error(`↳ ${e?.message ?? e}`)
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Migrate js config files, linked to stylesheets
@@ -138,7 +138,8 @@ async function run() {
 
       if (jsConfigMigration !== null) {
         success(
-          `↳ Migrated configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          `Migrated configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          { prefix: '↳ ' },
         )
       }
     }
@@ -172,7 +173,8 @@ async function run() {
         )
 
         success(
-          `↳ Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          { prefix: '↳ ' },
         )
       }
     }
@@ -199,7 +201,7 @@ async function run() {
 
           await migrateStylesheet(sheet, { ...config, jsConfigMigration })
         } catch (e: any) {
-          error(`↳ ${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`)
+          error(`${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`, { prefix: '↳ ' })
         }
       }),
     )
@@ -208,7 +210,7 @@ async function run() {
     try {
       await splitStylesheets(stylesheets)
     } catch (e: any) {
-      error(`↳ ${e?.message ?? e}`)
+      error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
     // Cleanup `@import "…" layer(utilities)`
@@ -245,7 +247,7 @@ async function run() {
       await fs.writeFile(sheet.file, sheet.root.toString())
 
       if (sheet.isTailwindRoot) {
-        success(`↳ Migrated stylesheet: ${highlight(relative(sheet.file, base))}`)
+        success(`Migrated stylesheet: ${highlight(relative(sheet.file, base))}`, { prefix: '↳ ' })
       }
     }
   }
@@ -264,7 +266,7 @@ async function run() {
   try {
     // Upgrade Tailwind CSS
     await pkg(base).add(['tailwindcss@next'])
-    success(`↳ Updated package: ${highlight('tailwindcss')}`)
+    success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
   } catch {}
 
   // Run all cleanup functions because we completed the migration

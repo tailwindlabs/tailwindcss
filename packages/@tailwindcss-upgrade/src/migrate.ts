@@ -121,7 +121,8 @@ export async function analyze(stylesheets: Stylesheet[]) {
             }
           } catch (err) {
             error(
-              `↳ Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
+              `Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
+              { prefix: '↳ ' },
             )
             return
           }
@@ -398,7 +399,8 @@ export async function linkConfigs(
   if (problematicStylesheets.size > 1) {
     for (let sheet of problematicStylesheets) {
       error(
-        `↳ Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\n↳Update your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+        `Could not determine configuration file for: ${highlight(relative(sheet.file!, base))}\nUpdate your stylesheet to use ${highlight('@config')} to specify the correct configuration file explicitly and then run the upgrade tool again.`,
+        { prefix: '↳ ' },
       )
     }
 
@@ -410,7 +412,8 @@ export async function linkConfigs(
     try {
       if (!sheet || !sheet.file) return
       success(
-        `↳ Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+        `Linked ${highlight(relativePath(configPath, base))} to ${highlight(relativePath(sheet.file, base))}`,
+        { prefix: '↳ ' },
       )
 
       // Link the `@config` directive to the root stylesheets
@@ -450,7 +453,7 @@ export async function linkConfigs(
         }
       }
     } catch (e: any) {
-      error('↳ Could not load the configuration file: ' + e.message)
+      error('Could not load the configuration file: ' + e.message, { prefix: '↳ ' })
       process.exit(1)
     }
   }
