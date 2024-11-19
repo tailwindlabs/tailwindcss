@@ -10,6 +10,7 @@ import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
 import { migrateBorderCompatibility } from './codemods/migrate-border-compatibility'
 import { migrateConfig } from './codemods/migrate-config'
+import { migrateFormsReset } from './codemods/migrate-forms-reset'
 import { migrateImport } from './codemods/migrate-import'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
@@ -51,6 +52,7 @@ export async function migrateContents(
     .use(migrateTailwindDirectives(options))
     .use(migrateConfig(stylesheet, options))
     .use(migrateBorderCompatibility(options))
+    .use(migrateFormsReset())
     .use(migrateThemeToVar(options))
     .process(stylesheet.root, { from: stylesheet.file ?? undefined })
 }
