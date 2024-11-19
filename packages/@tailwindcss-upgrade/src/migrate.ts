@@ -120,6 +120,13 @@ export async function analyze(stylesheets: Stylesheet[]) {
               resolvedPath = resolveCssId(id, basePath)
             }
           } catch (err) {
+            // Import is a URL, we don't want to process these, but also don't
+            // want to show an error message for them.
+            if (id.startsWith('http://') || id.startsWith('https://') || id.startsWith('//')) {
+              return
+            }
+
+            // Something went wrong, we can't resolve the import.
             error(
               `Failed to resolve import: ${highlight(id)} in ${highlight(relative(node.source?.input.file!, basePath))}. Skipping.`,
               { prefix: '↳ ' },
