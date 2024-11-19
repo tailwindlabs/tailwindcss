@@ -13,6 +13,24 @@ export function resolve(id: string) {
   return localResolve(id)
 }
 
+const jsResolver = EnhancedResolve.ResolverFactory.createResolver({
+  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  useSyncFileSystemCalls: true,
+  extensions: ['.js', '.json', '.node', '.ts'],
+  conditionNames: import.meta.url ? ['node', 'import'] : ['node', 'require'],
+})
+
+export function resolveJsId(id: string, base: string) {
+  if (typeof globalThis.__tw_resolve === 'function') {
+    let resolved = globalThis.__tw_resolve(id, base)
+    if (resolved) {
+      return resolved
+    }
+  }
+
+  return jsResolver.resolveSync({}, base, id)
+}
+
 const resolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
