@@ -65,7 +65,7 @@ export async function prepareConfig(
       configFilePath,
     }
   } catch (e: any) {
-    error('Could not load the configuration file: ' + e.message)
+    error('Could not load the configuration file: ' + e.message, { prefix: '↳ ' })
     process.exit(1)
   }
 }

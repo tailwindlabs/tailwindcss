@@ -9,7 +9,7 @@ export async function migratePrettierPlugin(base: string) {
     let packageJson = await fs.readFile(packageJsonPath, 'utf-8')
     if (packageJson.includes('prettier-plugin-tailwindcss')) {
       await pkg(base).add(['prettier-plugin-tailwindcss@latest'])
-      success(`↳ Updated package: ${highlight('prettier-plugin-tailwindcss')}`)
+      success(`Updated package: ${highlight('prettier-plugin-tailwindcss')}`, { prefix: '↳ ' })
     }
   } catch {}
 }

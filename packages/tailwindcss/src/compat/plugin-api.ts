@@ -1,16 +1,18 @@
 import { substituteAtApply } from '../apply'
-import { atRule, decl, rule, type AstNode } from '../ast'
+import { atRule, decl, rule, walk, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
 import { withAlpha } from '../utilities'
+import { DefaultMap } from '../utils/default-map'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
 import { compoundsForSelectors, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
+import * as SelectorParser from './selector-parser'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
@@ -198,40 +200,68 @@ export function buildPluginApi(
       )
 
       // Merge entries for the same class
-      let utils: Record<string, CssInJs[]> = {}
+      let utils = new DefaultMap<string, AstNode[]>(() => [])
 
       for (let [name, css] of entries) {
-        let [className, ...parts] = segment(name, ':')
-
-        // Modify classes using pseudo-classes or pseudo-elements to use nested rules
-        if (parts.length > 0) {
-          let pseudos = parts.map((p) => `:${p.trim()}`).join('')
-          css = {
-            [`&${pseudos}`]: css,
-          }
-        }
-
-        utils[className] ??= []
-        css = Array.isArray(css) ? css : [css]
-        utils[className].push(...css)
-      }
-
-      for (let [name, css] of Object.entries(utils)) {
         if (name.startsWith('@keyframes ')) {
           ast.push(rule(name, objectToAst(css)))
           continue
         }
 
-        if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
+        let selectorAst = SelectorParser.parse(name)
+        let foundValidUtility = false
+
+        SelectorParser.walk(selectorAst, (node) => {
+          if (
+            node.kind === 'selector' &&
+            node.value[0] === '.' &&
+            IS_VALID_UTILITY_NAME.test(node.value.slice(1))
+          ) {
+            let value = node.value
+            node.value = '&'
+            let selector = SelectorParser.toCss(selectorAst)
+
+            let className = value.slice(1)
+            let contents = selector === '&' ? objectToAst(css) : [rule(selector, objectToAst(css))]
+            utils.get(className).push(...contents)
+            foundValidUtility = true
+
+            node.value = value
+            return
+          }
+
+          if (node.kind === 'function' && node.value === ':not') {
+            return SelectorParser.SelectorWalkAction.Skip
+          }
+        })
+
+        if (!foundValidUtility) {
           throw new Error(
             `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
           )
         }
+      }
 
-        designSystem.utilities.static(name.slice(1), () => {
-          let ast = objectToAst(css)
-          substituteAtApply(ast, designSystem)
-          return ast
+      for (let [className, ast] of utils) {
+        // Prefix all class selector with the configured theme prefix
+        if (designSystem.theme.prefix) {
+          walk(ast, (node) => {
+            if (node.kind === 'rule') {
+              let selectorAst = SelectorParser.parse(node.selector)
+              SelectorParser.walk(selectorAst, (node) => {
+                if (node.kind === 'selector' && node.value[0] === '.') {
+                  node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
+                }
+              })
+              node.selector = SelectorParser.toCss(selectorAst)
+            }
+          })
+        }
+
+        designSystem.utilities.static(className, () => {
+          let clonedAst = structuredClone(ast)
+          substituteAtApply(clonedAst, designSystem)
+          return clonedAst
         })
       }
     },

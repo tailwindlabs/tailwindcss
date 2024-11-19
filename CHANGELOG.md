@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support using CSS variables as arbitrary values without `var(…)` by using parentheses instead of square brackets (e.g. `bg-(--my-color)`) ([#15020](https://github.com/tailwindlabs/tailwindcss/pull/15020))
 - Add new `in-*` variant ([#15025](https://github.com/tailwindlabs/tailwindcss/pull/15025))
 - Bundle `@tailwindcss/forms` and `@tailwindcss/typography` with the standalone CLI ([#15028](https://github.com/tailwindlabs/tailwindcss/pull/15028))
+- Allow `addUtilities()` and `addComponents()` to work with child combinators and other complex selectors ([#15029](https://github.com/tailwindlabs/tailwindcss/pull/15029))
 - _Upgrade (experimental)_: Migrate `[&>*]` to the `*` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 - _Upgrade (experimental)_: Migrate `[&_*]` to the `**` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 
@@ -21,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `flex` is suggested ([#15014](https://github.com/tailwindlabs/tailwindcss/pull/15014))
 - _Upgrade (experimental)_: Resolve imports when specifying a CSS entry point on the command-line ([#15010](https://github.com/tailwindlabs/tailwindcss/pull/15010))
 - _Upgrade (experimental)_: Resolve nearest Tailwind config file when CSS file does not contain `@config` ([#15001](https://github.com/tailwindlabs/tailwindcss/pull/15001))
+- _Upgrade (experimental)_: Improve output when CSS imports can not be found ([#15038](https://github.com/tailwindlabs/tailwindcss/pull/15038))
+- _Upgrade (experimental)_: Ignore analyzing imports with external URLs (e.g.: `@import "https://fonts.google.com"`) ([#15040](https://github.com/tailwindlabs/tailwindcss/pull/15040))
+- _Upgrade (experimental)_: Ignore analyzing imports with `url(…)` (e.g.: `@import url("https://fonts.google.com")`) ([#15040](https://github.com/tailwindlabs/tailwindcss/pull/15040))
 
 ### Changed
 

@@ -12,27 +12,33 @@ export function migrateImport(): Plugin {
 
     let promises: Promise<void>[] = []
     root.walkAtRules('import', (rule) => {
-      let [firstParam, ...rest] = segment(rule.params, ' ')
+      try {
+        let [firstParam, ...rest] = segment(rule.params, ' ')
 
-      let params = parseImportParams(ValueParser.parse(firstParam))
+        let params = parseImportParams(ValueParser.parse(firstParam))
 
-      let isRelative = params.uri[0] === '.'
-      let hasCssExtension = params.uri.endsWith('.css')
+        let isRelative = params.uri[0] === '.'
+        let hasCssExtension = params.uri.endsWith('.css')
 
-      if (isRelative && hasCssExtension) {
-        return
+        if (isRelative && hasCssExtension) {
+          return
+        }
+
+        let fullPath = resolve(dirname(file), params.uri)
+        if (!hasCssExtension) fullPath += '.css'
+
+        promises.push(
+          fs.stat(fullPath).then(() => {
+            let ext = hasCssExtension ? '' : '.css'
+            let path = isRelative ? params.uri : `./${params.uri}`
+            rule.params = [`'${path}${ext}'`, ...rest].join(' ')
+          }),
+        )
+      } catch {
+        // When an error occurs while parsing the `@import` statement, we skip
+        // the import. This will happen in cases where you import an external
+        // URL.
       }
-
-      let fullPath = resolve(dirname(file), params.uri)
-      if (!hasCssExtension) fullPath += '.css'
-
-      promises.push(
-        fs.stat(fullPath).then(() => {
-          let ext = hasCssExtension ? '' : '.css'
-          let path = isRelative ? params.uri : `./${params.uri}`
-          rule.params = [`'${path}${ext}'`, ...rest].join(' ')
-        }),
-      )
     })
 
     await Promise.allSettled(promises)
