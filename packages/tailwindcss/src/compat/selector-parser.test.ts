@@ -56,20 +56,18 @@ describe('parse', () => {
   })
 
   it('parses :nth-child()', () => {
-    expect(parse(':nth-child(n+1)')).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "function",
-          "nodes": [
-            {
-              "kind": "value",
-              "value": "n+1",
-            },
-          ],
-          "value": ":nth-child",
-        },
-      ]
-    `)
+    expect(parse(':nth-child(n+1)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          {
+            kind: 'value',
+            value: 'n+1',
+          },
+        ],
+      },
+    ])
   })
 })
 
