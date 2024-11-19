@@ -282,10 +282,10 @@ export async function analyze(stylesheets: Stylesheet[]) {
       // parent A and parent B will be moved to the parent of parent A and
       // parent B. Parent A and parent B will be removed.
       let repeat = true
-      while (repeat) {
+      repeat: while (repeat) {
         repeat = false
 
-        outer: for (let [sheetA, childrenA] of commonParents) {
+        for (let [sheetA, childrenA] of commonParents) {
           for (let [sheetB, childrenB] of commonParents) {
             if (sheetA === sheetB) continue
 
@@ -316,12 +316,11 @@ export async function analyze(stylesheets: Stylesheet[]) {
                   commonParents.get(parent).add(child)
                 }
 
-                repeat = parent !== sheetA && parent !== sheetB
-
                 // Found a common parent between sheet A and sheet B. We can
                 // stop looking for more common parents between A and B, and
                 // continue with the next sheet.
-                break outer
+                repeat = true
+                continue repeat
               }
             }
           }

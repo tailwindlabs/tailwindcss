@@ -1971,6 +1971,107 @@ test(
 )
 
 test(
+  'finds the correct root Tailwind CSS file',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': js`export default {}`,
+
+      /* Considered a Tailwind root because of: `@import 'tailwindcss/components'` */
+      'src/index.css': css`
+        @import 'base.css';
+        @import 'other.css';
+        @import 'tailwindcss/components';
+        @import 'utilities.css';
+      `,
+
+      /* Considered a Tailwind root because of: `@tailwind base` */
+      'src/base.css': css`
+        html {
+          color: red;
+        }
+        @tailwind base;
+      `,
+      'src/other.css': css`
+        .typography {
+          color: red;
+        }
+      `,
+
+      /* Considered a Tailwind root because of: `@tailwind utilities` */
+      'src/utilities.css': css`
+        @layer utilities {
+          .foo {
+            color: red;
+          }
+        }
+
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade --force')
+
+    expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.css ---
+      @import './base.css' layer(components);
+      @import './other.css' layer(components);
+      @import './utilities.css';
+
+      --- ./src/base.css ---
+      @import 'tailwindcss/theme' layer(theme);
+      @import 'tailwindcss/preflight' layer(base);
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+
+      @layer base {
+        html {
+          color: red;
+        }
+      }
+
+      --- ./src/other.css ---
+      .typography {
+        color: red;
+      }
+
+      --- ./src/utilities.css ---
+      @import 'tailwindcss/utilities' layer(utilities);
+
+      @utility foo {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'relative imports without a relative path prefix are migrated to include a relative path prefix',
   {
     fs: {
