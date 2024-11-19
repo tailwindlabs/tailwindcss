@@ -51,6 +51,14 @@ describe('parse', () => {
     ])
   })
 
+  it('should handle next-children combinator', () => {
+    expect(parse('.foo + p')).toEqual([
+      { kind: 'selector', value: '.foo' },
+      { kind: 'combinator', value: ' + ' },
+      { kind: 'selector', value: 'p' },
+    ])
+  })
+
   it('should handle escaped characters', () => {
     expect(parse('foo\\.bar')).toEqual([{ kind: 'selector', value: 'foo\\.bar' }])
   })

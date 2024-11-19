@@ -207,6 +207,7 @@ export function parse(input: string) {
             peekChar !== GREATER_THAN &&
             peekChar !== NEWLINE &&
             peekChar !== SPACE &&
+            peekChar !== PLUS &&
             peekChar !== TAB &&
             peekChar !== TILDE
           ) {
