@@ -123,6 +123,46 @@ test(
 )
 
 test(
+  'builds the `@tailwindcss/aspect-ratio` plugin utilities',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/aspect-ratio": "^0.4.2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div class="aspect-w-16 aspect-h-9">
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin '@tailwindcss/aspect-ratio';
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`aspect-w-16`,
+      candidate`aspect-h-9`,
+    ])
+  },
+)
+
+test(
   'builds the `tailwindcss-animate` plugin utilities',
   {
     fs: {
