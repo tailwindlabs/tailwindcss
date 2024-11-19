@@ -181,30 +181,28 @@ async function run() {
     if (stylesheets.length > 0) {
       info('Migrating stylesheets…')
     }
-    let migrateResults = await Promise.allSettled(
-      stylesheets.map((sheet) => {
-        let config = configBySheet.get(sheet)!
-        let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
+    await Promise.all(
+      stylesheets.map(async (sheet) => {
+        try {
+          let config = configBySheet.get(sheet)!
+          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
 
-        if (!config) {
-          for (let parent of sheet.ancestors()) {
-            if (parent.isTailwindRoot) {
-              config ??= configBySheet.get(parent)!
-              jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
-              break
+          if (!config) {
+            for (let parent of sheet.ancestors()) {
+              if (parent.isTailwindRoot) {
+                config ??= configBySheet.get(parent)!
+                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
+                break
+              }
             }
           }
-        }
 
-        return migrateStylesheet(sheet, { ...config, jsConfigMigration })
+          await migrateStylesheet(sheet, { ...config, jsConfigMigration })
+        } catch (e: any) {
+          error(`${e} in ${highlight(relative(sheet.file!, base))}`)
+        }
       }),
     )
-
-    for (let result of migrateResults) {
-      if (result.status === 'rejected') {
-        error(`${result.reason}`)
-      }
-    }
 
     // Split up stylesheets (as needed)
     try {
