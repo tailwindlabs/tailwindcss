@@ -22,6 +22,7 @@ import { prepareConfig } from './template/prepare-config'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
 import { hoistStaticGlobParts } from './utils/hoist-static-glob-parts'
+import { getPackageVersion } from './utils/package-version'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
 
@@ -50,6 +51,7 @@ async function run() {
   let cleanup: (() => void)[] = []
 
   if (!flags['--force']) {
+    // Require a clean git directory
     if (isRepoDirty()) {
       error('Git directory is not clean. Please stash or commit your changes before migrating.')
       info(
@@ -57,6 +59,15 @@ async function run() {
       )
       process.exit(1)
     }
+  }
+
+  // Require an installed `tailwindcss` version < 4
+  let tailwindVersion = await getPackageVersion('tailwindcss', base)
+  if (tailwindVersion && Number(tailwindVersion.split('.')[0]) !== 3) {
+    error(
+      `Tailwind CSS v${tailwindVersion} found. The migration tool can only be run on v3 projects.`,
+    )
+    process.exit(1)
   }
 
   {
