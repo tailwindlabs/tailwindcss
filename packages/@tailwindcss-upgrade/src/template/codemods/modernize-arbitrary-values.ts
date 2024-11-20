@@ -5,6 +5,14 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { printCandidate } from '../candidates'
 
+function memcpy<T extends object, U extends object | null>(target: T, source: U): U {
+  // Clear out the target object, otherwise inspecting the final object will
+  // look very confusing.
+  for (let key in target) delete target[key]
+
+  return Object.assign(target, source)
+}
+
 export function modernizeArbitraryValues(
   designSystem: DesignSystem,
   _userConfig: Config,
@@ -55,7 +63,7 @@ export function modernizeArbitraryValues(
         ast.nodes[0].nodes[2].type === 'universal'
       ) {
         changed = true
-        Object.assign(variant, designSystem.parseVariant('*'))
+        memcpy(variant, designSystem.parseVariant('*'))
         continue
       }
 
@@ -73,7 +81,7 @@ export function modernizeArbitraryValues(
         ast.nodes[0].nodes[2].type === 'universal'
       ) {
         changed = true
-        Object.assign(variant, designSystem.parseVariant('**'))
+        memcpy(variant, designSystem.parseVariant('**'))
         continue
       }
 
@@ -131,7 +139,7 @@ export function modernizeArbitraryValues(
         // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
         //
         // Later this gets converted to `in-data-visible`.
-        Object.assign(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
+        memcpy(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
         continue
       }
 
@@ -162,7 +170,7 @@ export function modernizeArbitraryValues(
         }
 
         changed = true
-        Object.assign(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
+        memcpy(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
         continue
       }
 
@@ -298,7 +306,7 @@ export function modernizeArbitraryValues(
 
         // Update original variant
         changed = true
-        Object.assign(variant, parsed)
+        memcpy(variant, parsed)
       }
 
       // Expecting an attribute selector
@@ -323,7 +331,7 @@ export function modernizeArbitraryValues(
         if (attributeKey.startsWith('data-')) {
           changed = true
           attributeKey = attributeKey.slice(5) // Remove `data-`
-          Object.assign(variant, {
+          memcpy(variant, {
             kind: 'functional',
             root: 'data',
             modifier: null,
@@ -338,7 +346,7 @@ export function modernizeArbitraryValues(
         else if (attributeKey.startsWith('aria-')) {
           changed = true
           attributeKey = attributeKey.slice(5) // Remove `aria-`
-          Object.assign(variant, {
+          memcpy(variant, {
             kind: 'functional',
             root: 'aria',
             modifier: null,
