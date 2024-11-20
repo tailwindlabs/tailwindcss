@@ -602,11 +602,11 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     background-color: field;
   }
 
-  :where(select[multiple], select[size]) optgroup {
+  :where(select:is([multiple], [size])) optgroup {
     font-weight: bold;
   }
 
-  :where(select[multiple], select[size]) optgroup option {
+  :where(select:is([multiple], [size])) optgroup option {
     padding-inline-start: 20px;
   }
 
