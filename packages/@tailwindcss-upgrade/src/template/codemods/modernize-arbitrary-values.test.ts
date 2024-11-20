@@ -25,7 +25,7 @@ test.each([
   ['[[data-visible]_&]:flex', 'in-data-visible:flex'],
   // Multiple selectors, should stay as-is
   ['[[data-foo][data-bar]_&]:flex', '[[data-foo][data-bar]_&]:flex'],
-  // Using `>` instead of ` ` should not be transformed
+  // Using `>` instead of ` ` should not be transformed:
   ['[figure>&]:my-0', '[figure>&]:my-0'],
   // Some extreme examples of what happens in the wild:
   ['group-[]:flex', 'in-[.group]:flex'],
@@ -100,6 +100,9 @@ test.each([
   // Should migrate `.group` classes
   ['group-[]:tw-flex', 'tw:in-[.tw\\:group]:flex'],
   ['group-[]/name:tw-flex', 'tw:in-[.tw\\:group\\/name]:flex'],
+
+  // However, `.group` inside of an arbitrary variant should not be prefixed:
+  ['[.group_&]:tw-flex', 'tw:in-[.group]:flex'],
 
   // These shouldn't happen in the real world (because compound variants are
   // new). But this could happen once we allow codemods to run in v4+ projects.
