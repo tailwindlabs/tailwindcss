@@ -23,6 +23,8 @@ test.each([
   ['[p_&]:flex', 'in-[p]:flex'],
   ['[.foo_&]:flex', 'in-[.foo]:flex'],
   ['[[data-visible]_&]:flex', 'in-data-visible:flex'],
+  // Multiple selectors, should stay as-is
+  ['[[data-foo][data-bar]_&]:flex', '[[data-foo][data-bar]_&]:flex'],
   // Using `>` instead of ` ` should not be transformed
   ['[figure>&]:my-0', '[figure>&]:my-0'],
   // Some extreme examples of what happens in the wild:

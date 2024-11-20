@@ -130,11 +130,14 @@ export function modernizeArbitraryValues(
           parent === null &&
           // [[data-visible]___&]:flex
           //  ^^^^^^^^^^^^^^ ^ ^
-          ast.nodes[0].nodes.at(-2)?.type === 'combinator' &&
-          ast.nodes[0].nodes.at(-2)?.value === ' ' &&
-          ast.nodes[0].nodes.at(-1)?.type === 'nesting'
+          ast.nodes[0].nodes.length === 3 &&
+          ast.nodes[0].nodes[1].type === 'combinator' &&
+          ast.nodes[0].nodes[1].value === ' ' &&
+          ast.nodes[0].nodes[2].type === 'nesting'
         ) {
-          ast.nodes[0].nodes = [ast.nodes[0].nodes[0]]
+          ast.nodes[0].nodes.pop() // Remove the nesting node
+          ast.nodes[0].nodes.pop() // Remove the combinator
+
           changed = true
           // When handling a compound like `in-[[data-visible]]`, we will first
           // handle `[[data-visible]]`, then the parent `in-*` part. This means
