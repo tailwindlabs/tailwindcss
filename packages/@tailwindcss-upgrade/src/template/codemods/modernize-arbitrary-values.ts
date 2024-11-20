@@ -83,8 +83,6 @@ export function modernizeArbitraryValues(
         // Expecting a single selector node
         if (ast.nodes.length !== 1) continue
 
-        let prefixedVariant: Variant | null = null
-
         // `[&>*]` can be replaced with `*`
         if (
           // Only top-level, so `has-[&>*]` is not supported
@@ -147,6 +145,8 @@ export function modernizeArbitraryValues(
           memcpy(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
           continue
         }
+
+        let prefixedVariant: Variant | null = null
 
         // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
         if (
