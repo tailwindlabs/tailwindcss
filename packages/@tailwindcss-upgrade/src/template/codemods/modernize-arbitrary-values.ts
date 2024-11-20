@@ -70,6 +70,7 @@ export function modernizeArbitraryValues(
             ),
           )
         }
+        continue
       }
 
       // Expecting an arbitrary variant
