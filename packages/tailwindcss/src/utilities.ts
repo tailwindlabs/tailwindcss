@@ -3552,6 +3552,9 @@ export function createUtilities(theme: Theme) {
       ],
     })
 
+    staticUtility('transition-discrete', [['transition-behavior', 'allow-discrete']])
+    staticUtility('transition-normal', [['transition-behavior', 'normal']])
+
     functionalUtility('delay', {
       handleBareValue: ({ value }) => {
         if (!isPositiveInteger(value)) return null

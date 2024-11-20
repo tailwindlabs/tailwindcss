@@ -9,12 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- _Upgrade (experimental)_: Convert `group-[]:flex` to `in-[.group]:flex` ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
+
+### Fixed
+
+- _Upgrade (experimental)_: Ensure migrating to the `in-*` requires a descendant selector ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
+
+## [4.0.0-alpha.35] - 2024-11-20
+
+### Added
+
 - Reintroduce `max-w-screen-*` utilities that read from the `--breakpoint` namespace as deprecated utilities ([#15013](https://github.com/tailwindlabs/tailwindcss/pull/15013))
 - Support using CSS variables as arbitrary values without `var(…)` by using parentheses instead of square brackets (e.g. `bg-(--my-color)`) ([#15020](https://github.com/tailwindlabs/tailwindcss/pull/15020))
 - Add new `in-*` variant ([#15025](https://github.com/tailwindlabs/tailwindcss/pull/15025))
 - Bundle `@tailwindcss/forms`, `@tailwindcss/typography`, and `@tailwindcss/aspect-ratio` with the standalone CLI ([#15028](https://github.com/tailwindlabs/tailwindcss/pull/15028))
 - Allow `addUtilities()` and `addComponents()` to work with child combinators and other complex selectors ([#15029](https://github.com/tailwindlabs/tailwindcss/pull/15029))
 - Support colors that use `<alpha-value>` in JS configs and plugins ([#15033](https://github.com/tailwindlabs/tailwindcss/pull/15033))
+- Add new `transition-discrete` and `transition-normal` utilities for `transition-behavior` ([#15051](https://github.com/tailwindlabs/tailwindcss/pull/15051))
 - _Upgrade (experimental)_: Migrate `[&>*]` to the `*` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 - _Upgrade (experimental)_: Migrate `[&_*]` to the `**` variant ([#15022](https://github.com/tailwindlabs/tailwindcss/pull/15022))
 - _Upgrade (experimental)_: Warn when trying to migrating a project that is not on Tailwind CSS v3 ([#15015](https://github.com/tailwindlabs/tailwindcss/pull/15015))
