@@ -172,7 +172,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // the files that cause a rebuild to only those that match it.
           for (let { base: globBase, pattern } of context.scanner.globs) {
             // Avoid adding a dependency on the base directory itself, since it
-            // causes Nextjs to start an endless recursion if the `distDir` is
+            // causes Next.js to start an endless recursion if the `distDir` is
             // configured to anything other than the default `.next` dir.
             if (pattern === '*' && base === globBase) {
               continue
