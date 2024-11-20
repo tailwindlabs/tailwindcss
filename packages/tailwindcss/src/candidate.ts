@@ -288,6 +288,14 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // - `bg-red-500/50/50`
   if (additionalModifier) return
 
+  let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
+
+  // Empty arbitrary values are invalid. E.g.: `[color:red]/[]` or `[color:red]/()`.
+  //                                                        ^^                  ^^
+  //                                           `bg-[#0088cc]/[]` or `bg-[#0088cc]/()`.
+  //                                                         ^^                   ^^
+  if (modifierSegment !== null && parsedModifier === null) return
+
   // Arbitrary properties
   if (baseWithoutModifier[0] === '[') {
     // Arbitrary properties should end with a `]`.
@@ -317,12 +325,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
     let property = baseWithoutModifier.slice(0, idx)
     let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
-
-    let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
-
-    // Empty arbitrary values are invalid. E.g.: `[color:red]/[]` or `[color:red]/()`.
-    //                                                        ^^                  ^^
-    if (modifierSegment !== null && parsedModifier === null) return
 
     yield {
       kind: 'arbitrary',
@@ -414,12 +416,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       return designSystem.utilities.has(root, 'functional')
     })
   }
-
-  let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
-
-  // Empty arbitrary values are invalid. E.g.: `bg-[#0088cc]/[]` or `bg-[#0088cc]/()`.
-  //                                                         ^^                   ^^
-  if (modifierSegment !== null && parsedModifier === null) return
 
   for (let [root, value] of roots) {
     let candidate: Candidate = {
