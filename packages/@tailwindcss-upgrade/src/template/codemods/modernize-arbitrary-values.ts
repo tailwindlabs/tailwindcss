@@ -85,6 +85,30 @@ export function modernizeArbitraryValues(
         continue
       }
 
+      // `in-*` variant. If the selector ends with ` &`, we can convert it to an
+      // `in-*` variant.
+      //
+      // E.g.: `[[data-visible]_&]` => `in-data-visible`
+      if (
+        // Only top-level, so `in-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [[data-visible]___&]:flex
+        //  ^^^^^^^^^^^^^^ ^ ^
+        ast.nodes[0].nodes.at(-2)?.type === 'combinator' &&
+        ast.nodes[0].nodes.at(-2)?.value === ' ' &&
+        ast.nodes[0].nodes.at(-1)?.type === 'nesting'
+      ) {
+        ast.nodes[0].nodes = [ast.nodes[0].nodes[0]]
+        changed = true
+        // When handling a compound like `in-[[data-visible]]`, we will first
+        // handle `[[data-visible]]`, then the parent `in-*` part. This means
+        // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
+        //
+        // Later this gets converted to `in-data-visible`.
+        memcpy(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
+        continue
+      }
+
       // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
       if (
         // Only top-level, so `has-[&>[data-visible]]` is not supported
