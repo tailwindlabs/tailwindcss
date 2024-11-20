@@ -485,6 +485,9 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
       // also import v3 without conflicting v4 tarballs.
       json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
       json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
     } else {
       json.pnpm.overrides[pkg] = resolveVersion(pkg)
     }
