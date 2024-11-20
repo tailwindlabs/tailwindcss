@@ -85,7 +85,7 @@ test.each([
   ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
 
   ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
-])('%s => %s', async (candidate, result) => {
+])('%s => %s (%#)', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
@@ -110,7 +110,7 @@ test.each([
   ['has-group-[]/name:tw-flex', 'tw:has-in-[.tw\\:group\\/name]:flex'],
   ['not-group-[]:tw-flex', 'tw:not-in-[.tw\\:group]:flex'],
   ['not-group-[]/name:tw-flex', 'tw:not-in-[.tw\\:group\\/name]:flex'],
-])('%s => %s', async (candidate, result) => {
+])('%s => %s (%#)', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
     base: __dirname,
   })
