@@ -250,6 +250,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative?: boolean
     supportsFractions?: boolean
     themeKeys?: ThemeKey[]
+    inlineThemeValues?: boolean
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
@@ -280,10 +281,17 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           value = candidate.value.value
         } else {
-          value = theme.resolve(
-            candidate.value.fraction ?? candidate.value.value,
-            desc.themeKeys ?? [],
-          )
+          if (desc.inlineThemeValues) {
+            value = theme.resolveValue(
+              candidate.value.fraction ?? candidate.value.value,
+              desc.themeKeys ?? [],
+            )
+          } else {
+            value = theme.resolve(
+              candidate.value.fraction ?? candidate.value.value,
+              desc.themeKeys ?? [],
+            )
+          }
 
           // Automatically handle things like `w-1/2` without requiring `1/2` to
           // exist as a theme value.
@@ -3473,6 +3481,7 @@ export function createUtilities(theme: Theme) {
     ])
     functionalUtility('drop-shadow', {
       themeKeys: ['--drop-shadow'],
+      inlineThemeValues: true,
       handle: (value) => [
         filterProperties(),
         decl(

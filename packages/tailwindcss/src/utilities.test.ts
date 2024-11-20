@@ -13698,7 +13698,7 @@ test('filter', async () => {
     }
 
     .drop-shadow-xl {
-      --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
+      --tw-drop-shadow: drop-shadow(0 20px 13px #00000008) drop-shadow(0 8px 5px #00000014);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
