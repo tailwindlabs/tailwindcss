@@ -380,7 +380,7 @@ input:where(
   background-color: Field;
 }
 
-:where(select[multiple], select[size]) optgroup {
+:where(select:is([multiple], [size])) optgroup {
   font-weight: bold;
 }
 
