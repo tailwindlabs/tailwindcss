@@ -143,61 +143,6 @@ export function modernizeArbitraryValues(
         prefixedVariant = designSystem.parseVariant('**')
       }
 
-      // Handling a child/parent combinator. E.g.: `[[data-visible]_&]` => `in-data-visible`
-      if (
-        // Only top-level, so `has-[&_[data-visible]]` is not supported
-        parent === null &&
-        // [[data-visible]___&]:flex
-        //  ^^^^^^^^^^^^^^ ^ ^
-        ast.nodes[0].length === 3 &&
-        ast.nodes[0].nodes[0].type === 'attribute' &&
-        ast.nodes[0].nodes[1].type === 'combinator' &&
-        ast.nodes[0].nodes[1].value === ' ' &&
-        ast.nodes[0].nodes[2].type === 'nesting' &&
-        ast.nodes[0].nodes[2].value === '&'
-      ) {
-        ast.nodes[0].nodes = [ast.nodes[0].nodes[0]]
-        changed = true
-        // When handling a compound like `in-[[data-visible]]`, we will first
-        // handle `[[data-visible]]`, then the parent `in-*` part. This means
-        // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
-        //
-        // Later this gets converted to `in-data-visible`.
-        memcpy(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
-        continue
-      }
-
-      // `in-*` variant
-      if (
-        // Only top-level, so `has-[p_&]` is not supported
-        parent === null &&
-        // `[data-*]` and `[aria-*]` are handled separately
-        !(
-          ast.nodes[0].nodes[0].type === 'attribute' &&
-          (ast.nodes[0].nodes[0].attribute.startsWith('data-') ||
-            ast.nodes[0].nodes[0].attribute.startsWith('aria-'))
-        ) &&
-        // [.foo___&]:flex
-        //  ^^^^ ^ ^
-        ast.nodes[0].nodes.at(-1)?.type === 'nesting'
-      ) {
-        let selector = ast.nodes[0]
-        let nodes = selector.nodes
-
-        nodes.pop() // Remove the last node `&`
-
-        // Remove trailing whitespace
-        let last = nodes.at(-1)
-        while (last?.type === 'combinator' && last.value === ' ') {
-          nodes.pop()
-          last = nodes.at(-1)
-        }
-
-        changed = true
-        memcpy(variant, designSystem.parseVariant(`in-[${selector.toString().trim()}]`))
-        continue
-      }
-
       // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
       let selectorNodes = ast.nodes[0].filter((node) => node.type !== 'nesting')
 
