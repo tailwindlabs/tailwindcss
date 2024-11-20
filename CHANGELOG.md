@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix `drop-shadow-*` when multiple shadows are used in the theme ([#15056](https://github.com/tailwindlabs/tailwindcss/pull/15056))
 - _Upgrade (experimental)_: Ensure migrating to the `in-*` requires a descendant selector ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
 
 ## [4.0.0-alpha.35] - 2024-11-20
