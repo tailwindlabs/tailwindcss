@@ -318,11 +318,17 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     let property = baseWithoutModifier.slice(0, idx)
     let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
+    let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
+
+    // Empty arbitrary values are invalid. E.g.: `[color:red]/[]` or `[color:red]/()`.
+    //                                                        ^^                  ^^
+    if (modifierSegment !== null && parsedModifier === null) return
+
     yield {
       kind: 'arbitrary',
       property,
       value,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier: parsedModifier,
       variants: parsedCandidateVariants,
       important,
       raw: input,
@@ -409,11 +415,17 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     })
   }
 
+  let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
+
+  // Empty arbitrary values are invalid. E.g.: `bg-[#0088cc]/[]` or `bg-[#0088cc]/()`.
+  //                                                         ^^                   ^^
+  if (modifierSegment !== null && parsedModifier === null) return
+
   for (let [root, value] of roots) {
     let candidate: Candidate = {
       kind: 'functional',
       root,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier: parsedModifier,
       value: null,
       variants: parsedCandidateVariants,
       important,
@@ -430,7 +442,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       let valueIsArbitrary = startArbitraryIdx !== -1
 
       if (valueIsArbitrary) {
-        let arbitraryValue = value.slice(startArbitraryIdx + 1, -1)
+        let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
         let typehint = ''
@@ -453,10 +465,16 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           break
         }
 
+        // Empty arbitrary values are invalid. E.g.: `p-[]`
+        //                                              ^^
+        if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) {
+          continue
+        }
+
         candidate.value = {
           kind: 'arbitrary',
           dataType: typehint || null,
-          value: decodeArbitraryValue(arbitraryValue),
+          value: arbitraryValue,
         }
       } else {
         // Some utilities support fractions as values, e.g. `w-1/2`. Since it's
@@ -479,22 +497,30 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   }
 }
 
-function parseModifier(modifier: string): CandidateModifier {
+function parseModifier(modifier: string): CandidateModifier | null {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
-    let arbitraryValue = modifier.slice(1, -1)
+    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+
+    // Empty arbitrary values are invalid. E.g.: `data-[]:`
+    //                                                 ^^
+    if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
     return {
       kind: 'arbitrary',
-      value: decodeArbitraryValue(arbitraryValue),
+      value: arbitraryValue,
     }
   }
 
   if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
-    let arbitraryValue = modifier.slice(1, -1)
+    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+
+    // Empty arbitrary values are invalid. E.g.: `data-():`
+    //                                                 ^^
+    if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
     return {
       kind: 'arbitrary',
-      value: decodeArbitraryValue(`var(${arbitraryValue})`),
+      value: `var(${arbitraryValue})`,
     }
   }
 
@@ -523,6 +549,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     if (variant[1] === '@' && variant.includes('&')) return null
 
     let selector = decodeArbitraryValue(variant.slice(1, -1))
+
+    // Empty arbitrary values are invalid. E.g.: `[]:`
+    //                                            ^^
+    if (selector.length === 0 || selector.trim().length === 0) return null
 
     let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
 
@@ -577,35 +607,52 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         }
 
         case 'functional': {
+          let parsedModifier = modifier === null ? null : parseModifier(modifier)
+          // Empty arbitrary values are invalid. E.g.: `@max-md/[]:` or `@max-md/():`
+          //                                                    ^^               ^^
+          if (modifier !== null && parsedModifier === null) return null
+
           if (value === null) {
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier: parsedModifier,
               value: null,
             }
           }
 
           if (value[0] === '[' && value[value.length - 1] === ']') {
+            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+
+            // Empty arbitrary values are invalid. E.g.: `data-[]:`
+            //                                                 ^^
+            if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier: parsedModifier,
               value: {
                 kind: 'arbitrary',
-                value: decodeArbitraryValue(value.slice(1, -1)),
+                value: arbitraryValue,
               },
             }
           }
 
           if (value[0] === '(' && value[value.length - 1] === ')') {
+            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+
+            // Empty arbitrary values are invalid. E.g.: `data-():`
+            //                                                 ^^
+            if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier: parsedModifier,
               value: {
                 kind: 'arbitrary',
-                value: decodeArbitraryValue(`var(${value.slice(1, -1)})`),
+                value: `var(${arbitraryValue})`,
               },
             }
           }
@@ -613,7 +660,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           return {
             kind: 'functional',
             root,
-            modifier: modifier === null ? null : parseModifier(modifier),
+            modifier: parsedModifier,
             value: { kind: 'named', value },
           }
         }
@@ -627,10 +674,15 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           // These two variants must be compatible when compounded
           if (!designSystem.variants.compoundsWith(root, subVariant)) return null
 
+          let parsedModifier = modifier === null ? null : parseModifier(modifier)
+          // Empty arbitrary values are invalid. E.g.: `group-focus/[]:` or `group-focus/():`
+          //                                                        ^^                   ^^
+          if (modifier !== null && parsedModifier === null) return null
+
           return {
             kind: 'compound',
             root,
-            modifier: modifier === null ? null : { kind: 'named', value: modifier },
+            modifier: parsedModifier,
             variant: subVariant,
           }
         }
