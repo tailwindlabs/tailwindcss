@@ -285,8 +285,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -409,8 +409,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -506,8 +506,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -595,8 +595,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -688,8 +688,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -777,8 +777,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -904,8 +904,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -944,8 +944,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -1036,8 +1036,8 @@ test(
         }
       }
       /*
-        In Tailwind CSS v4, form elements have basic styling applied to them. For
-        compatibility with v3, we've applied the following resets:
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
       */
       @layer base {
         input,
@@ -1111,8 +1111,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1188,8 +1188,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1248,8 +1248,8 @@ describe('border compatibility', () => {
         @import 'tailwindcss';
 
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1323,8 +1323,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1407,8 +1407,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1540,8 +1540,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1669,8 +1669,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
@@ -1787,8 +1787,8 @@ describe('border compatibility', () => {
           }
         }
         /*
-          In Tailwind CSS v4, form elements have basic styling applied to them. For
-          compatibility with v3, we've applied the following resets:
+          In Tailwind CSS v4, basic styles are applied to form elements by default. To
+          maintain compatibility with v3, the following resets have been added:
         */
         @layer base {
           input,
