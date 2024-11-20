@@ -131,6 +131,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       @utility foo {
         color: red;
@@ -223,6 +238,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       .btn {
         @apply tw:rounded-md! tw:px-2 tw:py-1 tw:bg-blue-500 tw:text-white;
@@ -285,6 +315,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -357,6 +402,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -434,6 +494,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -543,6 +618,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -1049,6 +1139,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       --- ./src/utilities.css ---
       @utility no-scrollbar {
@@ -1497,6 +1602,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       --- ./src/root.2/index.css ---
       /* Already contains @config */
@@ -1519,6 +1639,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -1555,6 +1690,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       --- ./src/root.4/index.css ---
       /* Inject missing @config due to nested imports with tailwind imports */
@@ -1582,6 +1732,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -1613,6 +1778,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
       "
@@ -1795,6 +1975,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       @layer base {
         html {
@@ -1929,6 +2124,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -2121,6 +2331,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -2340,6 +2565,21 @@ test(
           border-color: var(--color-gray-200, currentColor);
         }
       }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
 
       --- index.html ---
       <div>
@@ -2420,6 +2660,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
@@ -2532,6 +2787,21 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      /*
+        In Tailwind CSS v4, form elements have basic styling applied to them. For
+        compatibility with v3, we've applied the following resets:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          background-color: transparent;
         }
       }
 
