@@ -384,7 +384,7 @@ input:where(
   font-weight: bold;
 }
 
-:where(select[multiple], select[size]) optgroup option {
+:where(select:is([multiple], [size])) optgroup option {
   padding-inline-start: 20px;
 }
 
