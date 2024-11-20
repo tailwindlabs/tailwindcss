@@ -13639,6 +13639,7 @@ test('filter', async () => {
         'invert',
         'invert-0',
         'invert-[var(--value)]',
+        'drop-shadow',
         'drop-shadow-xl',
         'drop-shadow-[0_0_red]',
         'saturate-0',
@@ -13689,6 +13690,11 @@ test('filter', async () => {
 
     .contrast-\\[1\\.23\\] {
       --tw-contrast: contrast(1.23);
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow {
+      --tw-drop-shadow: drop-shadow(0 1px 2px #0000001a) drop-shadow(0 1px 1px #0000000f);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 

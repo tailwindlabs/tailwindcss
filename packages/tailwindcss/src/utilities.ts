@@ -276,7 +276,9 @@ export function createUtilities(theme: Theme) {
           value =
             desc.defaultValue !== undefined
               ? desc.defaultValue
-              : theme.resolve(null, desc.themeKeys ?? [])
+              : desc.inlineThemeValues
+                ? theme.resolveValue(null, desc.themeKeys ?? [])
+                : theme.resolve(null, desc.themeKeys ?? [])
         } else if (candidate.value.kind === 'arbitrary') {
           if (candidate.modifier) return
           value = candidate.value.value
