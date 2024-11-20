@@ -22,6 +22,8 @@ test.each([
   ['[p_&]:flex', 'in-[p]:flex'],
   ['[.foo_&]:flex', 'in-[.foo]:flex'],
   ['[[data-visible]_&]:flex', 'in-data-visible:flex'],
+  // Using `>` instead of ` ` should not be transformed
+  ['[figure>&]:my-0', '[figure>&]:my-0'],
 
   // nth-child
   ['[&:nth-child(2)]:flex', 'nth-2:flex'],
