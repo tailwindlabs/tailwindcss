@@ -339,6 +339,7 @@ export default [
   'backdrop-filter',
 
   'transition-property',
+  'transition-behavior',
   'transition-delay',
   'transition-duration',
   'transition-timing-function',

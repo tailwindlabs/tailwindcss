@@ -14463,6 +14463,20 @@ test('transition', async () => {
   ).toEqual('')
 })
 
+test('transition-behavior', async () => {
+  expect(await run(['transition-discrete', 'transition-normal'])).toMatchInlineSnapshot(`
+    ".transition-discrete {
+      transition-behavior: allow-discrete;
+    }
+
+    .transition-normal {
+      transition-behavior: normal;
+    }"
+  `)
+
+  expect(await run(['-transition-discrete', '-transition-normal'])).toEqual('')
+})
+
 test('delay', async () => {
   expect(await run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
     ".delay-123 {
