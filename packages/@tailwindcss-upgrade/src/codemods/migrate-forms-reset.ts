@@ -5,8 +5,8 @@ const css = dedent
 
 const FORMS_RESET_CSS = css`
   /*
-    In Tailwind CSS v4, form elements have basic styling applied to them. For
-    compatibility with v3, we've applied the following resets:
+    In Tailwind CSS v4, basic styles are applied to form elements by default. To
+    maintain compatibility with v3, the following resets have been added:
   */
   @layer base {
     input,
