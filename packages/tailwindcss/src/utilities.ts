@@ -992,6 +992,42 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  /** @deprecated */
+  functionalUtility('flex-shrink', {
+    defaultValue: '1',
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('flex-shrink', value)],
+  })
+
+  /** @deprecated */
+  functionalUtility('flex-grow', {
+    defaultValue: '1',
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('flex-grow', value)],
+  })
+
+  suggest('flex-shrink', () => [
+    {
+      values: ['0'],
+      valueThemeKeys: [],
+      hasDefaultValue: true,
+    },
+  ])
+
+  suggest('flex-grow', () => [
+    {
+      values: ['0'],
+      valueThemeKeys: [],
+      hasDefaultValue: true,
+    },
+  ])
+
   /**
    * @css `flex-basis`
    */
