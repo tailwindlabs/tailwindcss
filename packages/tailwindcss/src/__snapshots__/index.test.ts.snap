@@ -334,10 +334,10 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --inset-shadow-xs: inset 0 1px 1px #0000000d;
   --inset-shadow-sm: inset 0 2px 4px #0000000d;
   --drop-shadow-xs: 0 1px 1px #0000000d;
-  --drop-shadow-sm: 0 1px 2px #0000001a, 0 1px 1px #0000000f;
-  --drop-shadow-md: 0 4px 3px #00000012, 0 2px 2px #0000000f;
-  --drop-shadow-lg: 0 10px 8px #0000000a, 0 4px 3px #0000001a;
-  --drop-shadow-xl: 0 20px 13px #00000008, 0 8px 5px #00000014;
+  --drop-shadow-sm: 0 1px 2px #00000026;
+  --drop-shadow-md: 0 3px 3px #0000001f;
+  --drop-shadow-lg: 0 4px 4px #00000026;
+  --drop-shadow-xl: 0 9px 7px #0000001a;
   --drop-shadow-2xl: 0 25px 25px #00000026;
   --ease-in: cubic-bezier(.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, .2, 1);

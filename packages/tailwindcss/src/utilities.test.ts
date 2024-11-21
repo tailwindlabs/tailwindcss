@@ -13613,8 +13613,8 @@ test('filter', async () => {
       css`
         @theme {
           --blur-xl: 24px;
-          --drop-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 1px 1px rgb(0 0 0 / 0.06);
-          --drop-shadow-xl: 0 20px 13px rgb(0 0 0 / 0.03), 0 8px 5px rgb(0 0 0 / 0.08);
+          --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+          --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
         }
         @tailwind utilities;
       `,
@@ -13639,6 +13639,7 @@ test('filter', async () => {
         'invert',
         'invert-0',
         'invert-[var(--value)]',
+        'drop-shadow',
         'drop-shadow-xl',
         'drop-shadow-[0_0_red]',
         'saturate-0',
@@ -13653,8 +13654,8 @@ test('filter', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --blur-xl: 24px;
-      --drop-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f;
-      --drop-shadow-xl: 0 20px 13px #00000008, 0 8px 5px #00000014;
+      --drop-shadow: 0 1px 1px #0000000d;
+      --drop-shadow-xl: 0 9px 7px #0000001a;
     }
 
     .blur-\\[4px\\] {
@@ -13689,6 +13690,11 @@ test('filter', async () => {
 
     .contrast-\\[1\\.23\\] {
       --tw-contrast: contrast(1.23);
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow {
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
