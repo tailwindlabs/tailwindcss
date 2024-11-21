@@ -3,7 +3,7 @@ import { parseCandidate, type Candidate, type Variant } from '../../../../tailwi
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
-import { cleanupCandidate, prepareRawCandidate, printCandidate } from '../candidates'
+import { printCandidate } from '../candidates'
 
 function memcpy<T extends object, U extends object | null>(target: T, source: U): U {
   // Clear out the target object, otherwise inspecting the final object will
@@ -18,8 +18,6 @@ export function modernizeArbitraryValues(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  rawCandidate = prepareRawCandidate(rawCandidate)
-
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
@@ -45,7 +43,7 @@ export function modernizeArbitraryValues(
         variant.kind === 'compound' &&
         variant.root === 'group' &&
         variant.variant.kind === 'arbitrary' &&
-        variant.variant.selector === '&:is(--tw-custom-placeholder)'
+        variant.variant.selector === '&'
       ) {
         // `group-[]`
         if (variant.modifier === null) {
@@ -380,7 +378,7 @@ export function modernizeArbitraryValues(
       }
     }
 
-    return cleanupCandidate(changed ? printCandidate(designSystem, clone) : rawCandidate)
+    return changed ? printCandidate(designSystem, clone) : rawCandidate
   }
 
   return rawCandidate

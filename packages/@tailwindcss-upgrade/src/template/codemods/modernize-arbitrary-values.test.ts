@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { handleEmptyArbitraryValues } from './handle-empty-arbitrary-values'
 import { modernizeArbitraryValues } from './modernize-arbitrary-values'
 import { prefix } from './prefix'
 
@@ -31,13 +32,9 @@ test.each([
   ['group-[]:flex', 'in-[.group]:flex'],
   ['group-[]/name:flex', 'in-[.group\\/name]:flex'],
 
-  // There is no good equivalent for this one right now:
-  ['group-hover/[]:flex', 'group-hover/[]:flex'],
-
-  // Keep `peer-*` as-is
-  ['peer-[]:flex', 'peer-[]:flex'],
-  ['peer-[]/name:flex', 'peer-[]/name:flex'],
-  ['peer-hover/[]:flex', 'peer-hover/[]:flex'],
+  // Migrate `peer-[]` to a parsable `peer-[&]` instead:
+  ['peer-[]:flex', 'peer-[&]:flex'],
+  ['peer-[]/name:flex', 'peer-[&]/name:flex'],
 
   // These shouldn't happen in the real world (because compound variants are
   // new). But this could happen once we allow codemods to run in v4+ projects.
@@ -98,7 +95,12 @@ test.each([
     base: __dirname,
   })
 
-  expect(modernizeArbitraryValues(designSystem, {}, candidate)).toEqual(result)
+  expect(
+    [handleEmptyArbitraryValues, modernizeArbitraryValues].reduce(
+      (acc, step) => step(designSystem, {}, acc),
+      candidate,
+    ),
+  ).toEqual(result)
 })
 
 test.each([
@@ -109,13 +111,9 @@ test.each([
   ['group-[]:tw-flex', 'tw:in-[.tw\\:group]:flex'],
   ['group-[]/name:tw-flex', 'tw:in-[.tw\\:group\\/name]:flex'],
 
-  // There is no good equivalent for this one right now:
-  ['group-hover/[]:tw-flex', 'tw:group-hover/[]:flex'],
-
-  // Keep `peer-*` as-is
-  ['peer-[]:tw-flex', 'tw:peer-[]:flex'],
-  ['peer-[]/name:tw-flex', 'tw:peer-[]/name:flex'],
-  ['peer-hover/[]:tw-flex', 'tw:peer-hover/[]:flex'],
+  // Migrate `peer-[]` to a parsable `peer-[&]` instead:
+  ['peer-[]:tw-flex', 'tw:peer-[&]:flex'],
+  ['peer-[]/name:tw-flex', 'tw:peer-[&]/name:flex'],
 
   // However, `.group` inside of an arbitrary variant should not be prefixed:
   ['[.group_&]:tw-flex', 'tw:in-[.group]:flex'],
@@ -132,7 +130,7 @@ test.each([
   })
 
   expect(
-    [prefix, modernizeArbitraryValues].reduce(
+    [handleEmptyArbitraryValues, prefix, modernizeArbitraryValues].reduce(
       (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
       candidate,
     ),

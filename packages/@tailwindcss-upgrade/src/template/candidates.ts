@@ -3,28 +3,6 @@ import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import * as ValueParser from '../../../tailwindcss/src/value-parser'
 
-// Some valid candidates in v3 won't parse in v4. E.g.: `group-[]:flex`
-// Some of these candidates can be migrated, but that means that they should be
-// able to be parsed in v4. This function prepares a raw candidate for parsing
-// by replacing invalid parts with a placeholder.
-export function prepareRawCandidate(input: string) {
-  // Empty arbitrary values don't parse anymore. This is a little bit of a hack
-  // to work around that behavior so we can still perform the migration:
-  input = input.replaceAll('-[]:', '-[--tw-custom-placeholder]:') // End of variant
-  input = input.replaceAll('-[]/', '-[--tw-custom-placeholder]/') // With modifier
-  input = input.replaceAll('/[]:', '/[--tw-custom-placeholder]:') // Empty modifier
-  return input
-}
-
-// This does the cleanup from `prepareRawCandidate` in case we couldn't migrate
-// the candidate.
-export function cleanupCandidate(input: string) {
-  input = input.replaceAll('-[--tw-custom-placeholder]:', '-[]:') // End of variant
-  input = input.replaceAll('-[--tw-custom-placeholder]/', '-[]/') // With modifier
-  input = input.replaceAll('/[--tw-custom-placeholder]:', '/[]:') // Empty modifier
-  return input
-}
-
 export async function extractRawCandidates(
   content: string,
   extension: string = 'html',

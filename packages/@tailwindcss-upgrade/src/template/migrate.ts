@@ -6,6 +6,7 @@ import { extractRawCandidates } from './candidates'
 import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './codemods/automatic-var-injection'
 import { bgGradient } from './codemods/bg-gradient'
+import { handleEmptyArbitraryValues } from './codemods/handle-empty-arbitrary-values'
 import { important } from './codemods/important'
 import { legacyArbitraryValues } from './codemods/legacy-arbitrary-values'
 import { legacyClasses } from './codemods/legacy-classes'
@@ -29,6 +30,7 @@ export type Migration = (
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
+  handleEmptyArbitraryValues,
   prefix,
   important,
   bgGradient,

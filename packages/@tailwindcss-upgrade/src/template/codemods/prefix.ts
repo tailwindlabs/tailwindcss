@@ -2,7 +2,7 @@ import { parseCandidate, type Candidate } from '../../../../tailwindcss/src/cand
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
-import { cleanupCandidate, prepareRawCandidate, printCandidate } from '../candidates'
+import { printCandidate } from '../candidates'
 
 export function prefix(
   designSystem: DesignSystem,
@@ -11,9 +11,7 @@ export function prefix(
 ): string {
   if (!designSystem.theme.prefix) return rawCandidate
 
-  let cleanedRawCandidate = prepareRawCandidate(rawCandidate)
-
-  let v3Base = extractV3Base(designSystem, userConfig, cleanedRawCandidate)
+  let v3Base = extractV3Base(designSystem, userConfig, rawCandidate)
 
   if (!v3Base) return rawCandidate
 
@@ -24,9 +22,7 @@ export function prefix(
     designSystem.theme.prefix = null
 
     let unprefixedCandidate =
-      cleanedRawCandidate.slice(0, v3Base.start) +
-      v3Base.base +
-      cleanedRawCandidate.slice(v3Base.end)
+      rawCandidate.slice(0, v3Base.start) + v3Base.base + rawCandidate.slice(v3Base.end)
 
     // Note: This is not a valid candidate in the original DesignSystem, so we
     // can not use the `DesignSystem#parseCandidate` API here or otherwise this
@@ -41,7 +37,7 @@ export function prefix(
 
   if (!candidate) return rawCandidate
 
-  return cleanupCandidate(printCandidate(designSystem, candidate))
+  return printCandidate(designSystem, candidate)
 }
 
 // Parses a raw candidate with v3 compatible prefix syntax. This won't match if
