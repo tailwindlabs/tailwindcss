@@ -125,6 +125,21 @@ async function migrateTheme(
       value = value.replace(/\s*\/\s*<alpha-value>/, '').replace(/<alpha-value>/, '1')
     }
 
+    // Convert `opacity` namespace from decimal to percentage values.
+    // Additionally we can drop values that resolve to the same value as the
+    // named modifier with the same name.
+    if (key[0] === 'opacity' && (typeof value === 'number' || typeof value === 'string')) {
+      let numValue = typeof value === 'string' ? parseFloat(value) : value
+
+      if (numValue >= 0 && numValue <= 1) {
+        value = numValue * 100 + '%'
+      }
+
+      if (typeof value === 'string' && key[1] === value.replace(/%$/, '')) {
+        continue
+      }
+    }
+
     if (key[0] === 'keyframes') {
       continue
     }

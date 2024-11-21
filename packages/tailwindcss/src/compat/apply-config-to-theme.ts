@@ -37,8 +37,18 @@ export function applyConfigToTheme(
       continue
     }
 
+    // Replace `<alpha-value>` with `1`
     if (typeof value === 'string') {
       value = value.replace(/<alpha-value>/g, '1')
+    }
+
+    // Convert `opacity` namespace from decimal to percentage values
+    if (path[0] === 'opacity' && (typeof value === 'number' || typeof value === 'string')) {
+      let numValue = typeof value === 'string' ? parseFloat(value) : value
+
+      if (numValue >= 0 && numValue <= 1) {
+        value = numValue * 100 + '%'
+      }
     }
 
     let name = keyPathToCssProperty(path)
