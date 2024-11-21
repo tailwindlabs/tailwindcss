@@ -2671,6 +2671,18 @@ export function createUtilities(theme: Theme) {
     ['box-decoration-break', 'clone'],
   ])
 
+  /** @deprecated */
+  staticUtility('decoration-slice', [
+    ['-webkit-box-decoration-break', 'slice'],
+    ['box-decoration-break', 'slice'],
+  ])
+
+  /** @deprecated */
+  staticUtility('decoration-clone', [
+    ['-webkit-box-decoration-break', 'clone'],
+    ['box-decoration-break', 'clone'],
+  ])
+
   /**
    * @css `background-clip`
    */
