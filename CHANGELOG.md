@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.36] - 2024-11-21
+
 ### Added
 
 - Add consistent base styles for buttons and form controls ([#15036](https://github.com/tailwindlabs/tailwindcss/pull/15036))
