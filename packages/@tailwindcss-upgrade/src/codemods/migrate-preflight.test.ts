@@ -62,7 +62,8 @@ it("should add compatibility CSS after the `@import 'tailwindcss'`", async () =>
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }"
@@ -111,7 +112,8 @@ it('should add the compatibility CSS after the last `@import`', async () => {
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }"
@@ -174,7 +176,8 @@ it('should add the compatibility CSS after the last import, even if a body-less 
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }"
@@ -237,7 +240,8 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }
@@ -312,7 +316,8 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }

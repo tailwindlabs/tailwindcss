@@ -126,7 +126,8 @@ it('should migrate a stylesheet', async () => {
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }
@@ -214,7 +215,8 @@ it('should migrate a stylesheet (with imports)', async () => {
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }"
@@ -273,7 +275,8 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       ::after,
       ::before,
       ::backdrop,
-      ::file-selector-button {
+      ::file-selector-button,
+      :is(input, textarea, select, button) {
         border-color: var(--color-gray-200, currentColor);
       }
     }

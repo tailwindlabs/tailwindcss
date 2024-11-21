@@ -297,7 +297,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -423,7 +424,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -522,7 +524,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -613,7 +616,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -708,7 +712,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -799,7 +804,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -928,7 +934,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -970,7 +977,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -1064,7 +1072,8 @@ test(
         ::after,
         ::before,
         ::backdrop,
-        ::file-selector-button {
+        ::file-selector-button,
+        :is(input, textarea, select, button) {
           border-color: var(--color-gray-200, currentColor);
         }
       }
@@ -1141,7 +1150,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
@@ -1220,7 +1230,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: oklch(0.623 0.214 259.815);
           }
         }
@@ -1358,7 +1369,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
@@ -1444,7 +1456,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
@@ -1579,7 +1592,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
@@ -1710,7 +1724,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
@@ -1830,7 +1845,8 @@ describe('border compatibility', () => {
           ::after,
           ::before,
           ::backdrop,
-          ::file-selector-button {
+          ::file-selector-button,
+          :is(input, textarea, select, button) {
             border-color: var(--color-gray-200, currentColor);
           }
         }
