@@ -1421,28 +1421,28 @@ it.each([
   // Empty arbitrary value
   'bg-[]',
   'bg-()',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'bg-[_]',
   'bg-(_)',
 
   // Empty arbitrary value, with typehint
   'bg-[color:]',
   'bg-(color:)',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'bg-[color:_]',
   'bg-(color:_)',
 
   // Empty arbitrary modifier
   'bg-red-500/[]',
   'bg-red-500/()',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'bg-red-500/[_]',
   'bg-red-500/(_)',
 
   // Empty arbitrary modifier for arbitrary properties
   '[color:red]/[]',
   '[color:red]/()',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   '[color:red]/[_]',
   '[color:red]/(_)',
 
@@ -1451,7 +1451,7 @@ it.each([
   'bg-()/[]',
   'bg-[]/()',
   'bg-()/()',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'bg-[_]/[]',
   'bg-(_)/[]',
   'bg-[_]/()',
@@ -1469,14 +1469,14 @@ it.each([
   // Empty arbitrary value in variant
   'data-[]:flex',
   'data-():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'data-[_]:flex',
   'data-(_):flex',
 
   // Empty arbitrary modifier in variant
   'data-foo/[]:flex',
   'data-foo/():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'data-foo/[_]:flex',
   'data-foo/(_):flex',
 
@@ -1485,7 +1485,7 @@ it.each([
   'data-()/[]:flex',
   'data-[]/():flex',
   'data-()/():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'data-[_]/[]:flex',
   'data-(_)/[]:flex',
   'data-[_]/():flex',
@@ -1503,14 +1503,14 @@ it.each([
   // Empty arbitrary value in variant
   'group-data-[]:flex',
   'group-data-():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'group-data-[_]:flex',
   'group-data-(_):flex',
 
   // Empty arbitrary modifier in variant
   'group-data-foo/[]:flex',
   'group-data-foo/():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'group-data-foo/[_]:flex',
   'group-data-foo/(_):flex',
 
@@ -1519,7 +1519,7 @@ it.each([
   'group-data-()/[]:flex',
   'group-data-[]/():flex',
   'group-data-()/():flex',
-  //  Tricking the parser with a space is not allowed
+  // — Tricking the parser with a space is not allowed
   'group-data-[_]/[]:flex',
   'group-data-(_)/[]:flex',
   'group-data-[_]/():flex',
