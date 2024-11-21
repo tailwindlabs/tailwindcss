@@ -131,3 +131,83 @@ test('max-w-screen', async () => {
     ]),
   ).toEqual('')
 })
+
+test('box-decoration', async () => {
+  expect(await run(['decoration-slice', 'decoration-clone'])).toMatchInlineSnapshot(`
+    ".decoration-clone {
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    .decoration-slice {
+      -webkit-box-decoration-break: slice;
+      box-decoration-break: slice;
+    }"
+  `)
+})
+
+test('overflow-ellipsis', async () => {
+  expect(await run(['overflow-ellipsis'])).toMatchInlineSnapshot(`
+    ".overflow-ellipsis {
+      text-overflow: ellipsis;
+    }"
+  `)
+})
+
+test('flex-grow', async () => {
+  expect(await run(['flex-grow', 'flex-grow-0', 'flex-grow-[123]'])).toMatchInlineSnapshot(`
+    ".flex-grow {
+      flex-grow: 1;
+    }
+
+    .flex-grow-0 {
+      flex-grow: 0;
+    }
+
+    .flex-grow-\\[123\\] {
+      flex-grow: 123;
+    }"
+  `)
+  expect(
+    await run([
+      '-flex-grow',
+      'flex-grow--1',
+      'flex-grow-1.5',
+      '-flex-grow-0',
+      '-flex-grow-[123]',
+      'flex-grow-unknown',
+      'flex-grow/foo',
+      'flex-grow-0/foo',
+      'flex-grow-[123]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('flex-shrink', async () => {
+  expect(await run(['flex-shrink', 'flex-shrink-0', 'flex-shrink-[123]'])).toMatchInlineSnapshot(`
+    ".flex-shrink {
+      flex-shrink: 1;
+    }
+
+    .flex-shrink-0 {
+      flex-shrink: 0;
+    }
+
+    .flex-shrink-\\[123\\] {
+      flex-shrink: 123;
+    }"
+  `)
+  expect(
+    await run([
+      '-flex-shrink',
+      'flex-shrink--1',
+      'flex-shrink-1.5',
+      '-flex-shrink-0',
+      '-flex-shrink-[123]',
+      'flex-shrink-unknown',
+      'flex-shrink/foo',
+      'flex-shrink-0/foo',
+      'flex-shrink-[123]/foo',
+    ]),
+  ).toEqual('')
+})
