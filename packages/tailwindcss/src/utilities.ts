@@ -992,42 +992,6 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  /** @deprecated */
-  functionalUtility('flex-shrink', {
-    defaultValue: '1',
-    handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
-      return value
-    },
-    handle: (value) => [decl('flex-shrink', value)],
-  })
-
-  /** @deprecated */
-  functionalUtility('flex-grow', {
-    defaultValue: '1',
-    handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
-      return value
-    },
-    handle: (value) => [decl('flex-grow', value)],
-  })
-
-  suggest('flex-shrink', () => [
-    {
-      values: ['0'],
-      valueThemeKeys: [],
-      hasDefaultValue: true,
-    },
-  ])
-
-  suggest('flex-grow', () => [
-    {
-      values: ['0'],
-      valueThemeKeys: [],
-      hasDefaultValue: true,
-    },
-  ])
-
   /**
    * @css `flex-basis`
    */
@@ -1966,9 +1930,6 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('text-ellipsis', [['text-overflow', 'ellipsis']])
 
-  /** @deprecated */
-  staticUtility('overflow-ellipsis', [['text-overflow', 'ellipsis']])
-
   staticUtility('text-clip', [['text-overflow', 'clip']])
 
   staticUtility('hyphens-none', [
@@ -2707,18 +2668,6 @@ export function createUtilities(theme: Theme) {
     ['box-decoration-break', 'slice'],
   ])
   staticUtility('box-decoration-clone', [
-    ['-webkit-box-decoration-break', 'clone'],
-    ['box-decoration-break', 'clone'],
-  ])
-
-  /** @deprecated */
-  staticUtility('decoration-slice', [
-    ['-webkit-box-decoration-break', 'slice'],
-    ['box-decoration-break', 'slice'],
-  ])
-
-  /** @deprecated */
-  staticUtility('decoration-clone', [
     ['-webkit-box-decoration-break', 'clone'],
     ['box-decoration-break', 'clone'],
   ])
