@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Bring back support for `decoration-clone`, `decoration-slice`, `overflow-ellipsis`, `flex-grow-*`, and `flex-shrink-*` ([#15069](https://github.com/tailwindlabs/tailwindcss/pull/15069))
 - _Upgrade (experimental)_: Include `color` in the form reset snippet ([#15064](https://github.com/tailwindlabs/tailwindcss/pull/15064))
 
 ## [4.0.0-alpha.36] - 2024-11-21
