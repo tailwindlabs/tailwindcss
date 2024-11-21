@@ -31,6 +31,14 @@ test.each([
   ['group-[]:flex', 'in-[.group]:flex'],
   ['group-[]/name:flex', 'in-[.group\\/name]:flex'],
 
+  // There is no good equivalent for this one right now:
+  ['group-hover/[]:flex', 'group-hover/[]:flex'],
+
+  // Keep `peer-*` as-is
+  ['peer-[]:flex', 'peer-[]:flex'],
+  ['peer-[]/name:flex', 'peer-[]/name:flex'],
+  ['peer-hover/[]:flex', 'peer-hover/[]:flex'],
+
   // These shouldn't happen in the real world (because compound variants are
   // new). But this could happen once we allow codemods to run in v4+ projects.
   ['has-group-[]:flex', 'has-in-[.group]:flex'],
@@ -100,6 +108,14 @@ test.each([
   // Should migrate `.group` classes
   ['group-[]:tw-flex', 'tw:in-[.tw\\:group]:flex'],
   ['group-[]/name:tw-flex', 'tw:in-[.tw\\:group\\/name]:flex'],
+
+  // There is no good equivalent for this one right now:
+  ['group-hover/[]:tw-flex', 'tw:group-hover/[]:flex'],
+
+  // Keep `peer-*` as-is
+  ['peer-[]:tw-flex', 'tw:peer-[]:flex'],
+  ['peer-[]/name:tw-flex', 'tw:peer-[]/name:flex'],
+  ['peer-hover/[]:tw-flex', 'tw:peer-hover/[]:flex'],
 
   // However, `.group` inside of an arbitrary variant should not be prefixed:
   ['[.group_&]:tw-flex', 'tw:in-[.group]:flex'],
