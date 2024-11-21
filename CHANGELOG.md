@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add consistent base styles for buttons and form controls ([#15036](https://github.com/tailwindlabs/tailwindcss/pull/15036))
 - _Upgrade (experimental)_: Convert `group-[]:flex` to `in-[.group]:flex` ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
 - _Upgrade (experimental)_: Add form reset styles to CSS files for compatibility with v3 ([#15036](https://github.com/tailwindlabs/tailwindcss/pull/15036))
+- _Upgrade (experimental)_: Migrate `ring` to `ring-3` ([#15063](https://github.com/tailwindlabs/tailwindcss/pull/15063))
 
 ### Fixed
 
