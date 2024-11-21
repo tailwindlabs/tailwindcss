@@ -28,6 +28,8 @@ const LEGACY_CLASS_MAP = new Map([
 
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
+
+  ['ring', 'ring-3'],
 ])
 
 const THEME_KEYS = new Map([
@@ -47,6 +49,9 @@ const THEME_KEYS = new Map([
   ['blur', '--blur'],
   ['blur-sm', '--blur-sm'],
   ['blur-xs', '--blur-xs'],
+
+  ['ring', '--ring-width'],
+  ['ring-3', '--ring-width-3'],
 ])
 
 const DESIGN_SYSTEMS = new DefaultMap((base) => {
@@ -134,7 +139,7 @@ export async function legacyClasses(
 
       // The new theme value is not defined, which means we can't safely
       // migrate the utility.
-      if (customTo === undefined) {
+      if (customTo === undefined && defaultTo !== undefined) {
         continue
       }
 

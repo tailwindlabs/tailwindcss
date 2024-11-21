@@ -78,6 +78,9 @@ test(
 
         <!-- Migrate to 2xs -->
         <div class="shadow-xs inset-shadow-xs"></div>
+
+        <!-- Migrate to -3 -->
+        <div class="ring"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -110,6 +113,9 @@ test(
 
       <!-- Migrate to 2xs -->
       <div class="shadow-2xs inset-shadow-2xs"></div>
+
+      <!-- Migrate to -3 -->
+      <div class="ring-3"></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
@@ -2512,6 +2518,10 @@ test(
               DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
             },
 
+            ringWidth: {
+              DEFAULT: '4px',
+            },
+
             extend: {
               // Changes the "before" class definition. 'blur' -> 'blur-sm' is
               // not safe because 'blur' has a custom value.
@@ -2541,6 +2551,7 @@ test(
           <div class="shadow shadow-sm shadow-xs"></div>
           <div class="blur blur-sm"></div>
           <div class="rounded rounded-sm"></div>
+          <div class="ring"></div>
         </div>
       `,
     },
@@ -2557,6 +2568,9 @@ test(
       @theme {
         --shadow-*: initial;
         --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+        --ring-width-*: initial;
+        --ring-width: 4px;
 
         --blur: var(--custom-default-blur);
 
@@ -2601,6 +2615,7 @@ test(
         <div class="shadow shadow-sm shadow-xs"></div>
         <div class="blur blur-xs"></div>
         <div class="rounded rounded-sm"></div>
+        <div class="ring"></div>
       </div>
       "
     `)
@@ -2608,7 +2623,7 @@ test(
 )
 
 test(
-  'make suffix-less migrations safe (e.g.: `blur`, `rounded`, `shadow`)',
+  'make suffix-less migrations safe (e.g.: `blur`, `rounded`, `shadow`, `ring`)',
   {
     fs: {
       'package.json': json`
@@ -2633,7 +2648,7 @@ test(
         @tailwind utilities;
       `,
       'index.html': html`
-        <div class="rounded blur shadow"></div>
+        <div class="rounded blur shadow ring"></div>
       `,
       'example-component.tsx': ts`
         type Star = [
@@ -2643,10 +2658,11 @@ test(
           blur?: boolean,
           rounded?: boolean,
           shadow?: boolean,
+          ring?: boolean,
         ]
 
-        function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
-          return <svg class="rounded shadow blur" filter={blur ? 'url(…)' : undefined} />
+        function Star({ point: [cx, cy, dim, blur, rounded, shadow, ring] }: { point: Star }) {
+          return <svg class="rounded shadow blur ring" filter={blur ? 'url(…)' : undefined} />
         }
       `,
     },
@@ -2694,7 +2710,7 @@ test(
       }
 
       --- index.html ---
-      <div class="rounded-sm blur-sm shadow-sm"></div>
+      <div class="rounded-sm blur-sm shadow-sm ring-3"></div>
 
       --- example-component.tsx ---
       type Star = [
@@ -2704,10 +2720,11 @@ test(
         blur?: boolean,
         rounded?: boolean,
         shadow?: boolean,
+        ring?: boolean,
       ]
 
-      function Star({ point: [cx, cy, dim, blur, rounded, shadow] }: { point: Star }) {
-        return <svg class="rounded-sm shadow-sm blur-sm" filter={blur ? 'url(…)' : undefined} />
+      function Star({ point: [cx, cy, dim, blur, rounded, shadow, ring] }: { point: Star }) {
+        return <svg class="rounded-sm shadow-sm blur-sm ring-3" filter={blur ? 'url(…)' : undefined} />
       }
       "
     `)
