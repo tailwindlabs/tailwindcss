@@ -3,7 +3,7 @@ import { parseCandidate, type Candidate, type Variant } from '../../../../tailwi
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
-import { printCandidate } from '../candidates'
+import { cleanupCandidate, prepareRawCandidate, printCandidate } from '../candidates'
 
 function memcpy<T extends object, U extends object | null>(target: T, source: U): U {
   // Clear out the target object, otherwise inspecting the final object will
@@ -18,13 +18,7 @@ export function modernizeArbitraryValues(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
-  // Empty arbitrary values don't parse anymore. This is a little bit of a hack
-  // to work around that behavior so we can still perform the migration:
-  if (rawCandidate.includes('group-')) {
-    rawCandidate = rawCandidate.replaceAll('-[]:', '-[--tw-custom-placeholder]:') // End of variant
-    rawCandidate = rawCandidate.replaceAll('-[]/', '-[--tw-custom-placeholder]/') // With modifier
-    rawCandidate = rawCandidate.replaceAll('/[]:', '/[--tw-custom-placeholder]:') // Empty modifier
-  }
+  rawCandidate = prepareRawCandidate(rawCandidate)
 
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
@@ -386,16 +380,7 @@ export function modernizeArbitraryValues(
       }
     }
 
-    let newCandidate = changed ? printCandidate(designSystem, clone) : rawCandidate
-
-    // Empty arbitrary values don't parse anymore. This is a little bit of a hack
-    // to work around that behavior so we can still perform the migration:
-    if (newCandidate.includes('group-')) {
-      newCandidate = newCandidate.replaceAll('-[--tw-custom-placeholder]:', '-[]:') // End of variant
-      newCandidate = newCandidate.replaceAll('-[--tw-custom-placeholder]/', '-[]/') // With modifier
-      newCandidate = newCandidate.replaceAll('/[--tw-custom-placeholder]:', '/[]:') // Empty modifier
-    }
-    return newCandidate
+    return cleanupCandidate(changed ? printCandidate(designSystem, clone) : rawCandidate)
   }
 
   return rawCandidate
