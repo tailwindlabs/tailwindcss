@@ -2939,3 +2939,137 @@ test(
     )
   },
 )
+
+test(
+  `upgrades opacity namespace values to percentages`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          theme: {
+            opacity: {
+              0: '0',
+              2.5: '.025',
+              5: '.05',
+              7.5: 0.075,
+              10: 0.1,
+
+              semitransparent: '0.5',
+              transparent: 1,
+
+              50: '50%',
+              50.5: '50.5%',
+              '50.50': '50.5%',
+              '75%': '75%',
+              '100%': '100%',
+            },
+          },
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div
+          class="text-red-500/0
+            text-red-500/2.5
+            text-red-500/5
+            text-red-500/7.5
+            text-red-500/10
+            text-red-500/semitransparent
+            text-red-500/transparent
+            text-red-500/50
+            text-red-500/50.5
+            text-red-500/50.50
+            text-red-500/50%
+            text-red-500/100%"
+        ></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div
+        class="text-red-500/0
+          text-red-500/2.5
+          text-red-500/5
+          text-red-500/7.5
+          text-red-500/10
+          text-red-500/semitransparent
+          text-red-500/transparent
+          text-red-500/50
+          text-red-500/50.5
+          text-red-500/50.50
+          text-red-500/50%
+          text-red-500/100%"
+      ></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      @theme {
+        --opacity-*: initial;
+        --opacity-semitransparent: 50%;
+        --opacity-transparent: 100%;
+        --opacity-50_50: 50.5%;
+        --opacity-75\\%: 75%;
+        --opacity-100\\%: 100%;
+      }
+
+      /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      "
+    `)
+  },
+)
