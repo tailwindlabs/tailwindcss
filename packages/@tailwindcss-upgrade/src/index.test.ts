@@ -113,6 +113,21 @@ it('should migrate a stylesheet', async () => {
         border-color: var(--color-gray-200, currentColor);
       }
     }
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        background-color: transparent;
+      }
+    }
 
     @utility b {
       z-index: 2;
@@ -183,6 +198,21 @@ it('should migrate a stylesheet (with imports)', async () => {
       ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
       }
+    }
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        background-color: transparent;
+      }
     }"
   `)
 })
@@ -224,6 +254,21 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       ::backdrop,
       ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
+      }
+    }
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        background-color: transparent;
       }
     }
 

@@ -393,6 +393,11 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
+    --lightningcss-light: initial;
+    --lightningcss-dark: ;
+    --lightningcss-light: initial;
+    --lightningcss-dark: ;
+    color-scheme: light;
   }
 
   body {
@@ -459,50 +464,55 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     border-collapse: collapse;
   }
 
-  button, input, optgroup, select, textarea {
-    font: inherit;
-    font-feature-settings: inherit;
-    font-variation-settings: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-  }
-
-  ::file-selector-button {
-    font: inherit;
-    font-feature-settings: inherit;
-    font-variation-settings: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-  }
-
-  button, input:where([type="button"], [type="reset"], [type="submit"]) {
-    appearance: button;
-    background: none;
-  }
-
-  ::file-selector-button {
-    appearance: button;
-    background: none;
-  }
-
   :-moz-focusring {
     outline: auto;
-  }
-
-  :-moz-ui-invalid {
-    box-shadow: none;
   }
 
   progress {
     vertical-align: baseline;
   }
 
-  ::-webkit-inner-spin-button {
+  summary {
+    display: list-item;
+  }
+
+  ol, ul, menu {
+    list-style: none;
+  }
+
+  img, svg, video, canvas, audio, iframe, embed, object {
+    vertical-align: middle;
+    display: block;
+  }
+
+  img, video {
+    max-width: 100%;
     height: auto;
   }
 
-  ::-webkit-outer-spin-button {
-    height: auto;
+  button, input, select, optgroup, textarea {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+
+  ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+
+  ::placeholder {
+    opacity: 1;
+    color: color-mix(in oklch, currentColor 50%, transparent);
+  }
+
+  textarea {
+    resize: vertical;
   }
 
   ::-webkit-search-decoration {
@@ -558,31 +568,107 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     padding-block: 0;
   }
 
-  summary {
-    display: list-item;
+  :-moz-ui-invalid {
+    box-shadow: none;
   }
 
-  ol, ul, menu {
-    list-style: none;
+  button, input:where([type="button"], [type="reset"], [type="submit"]) {
+    appearance: button;
   }
 
-  textarea {
-    resize: vertical;
+  ::file-selector-button {
+    appearance: button;
   }
 
-  ::placeholder {
-    opacity: 1;
-    color: color-mix(in oklch, currentColor 50%, transparent);
-  }
-
-  img, svg, video, canvas, audio, iframe, embed, object {
-    vertical-align: middle;
-    display: block;
-  }
-
-  img, video {
-    max-width: 100%;
+  ::-webkit-inner-spin-button {
     height: auto;
+  }
+
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  select, textarea, input:where([type="text"], [type="email"], [type="password"], [type="date"], [type="datetime-local"], [type="month"], [type="number"], [type="search"], [type="time"], [type="week"], [type="tel"], [type="url"]) {
+    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
+    background-color: var(--lightningcss-light, #fff) var(--lightningcss-dark, #ffffff1a);
+    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff40);
+    border-radius: 3px;
+    padding-block: 2px;
+    padding-inline: 4px;
+  }
+
+  :where(select:not([multiple], [size])) option, :where(select:not([multiple], [size])) optgroup {
+    color: fieldtext;
+    background-color: field;
+  }
+
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bold;
+  }
+
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+
+  select:where(:disabled), textarea:where(:disabled), input:where([type="text"], [type="email"], [type="password"], [type="date"], [type="datetime-local"], [type="month"], [type="number"], [type="search"], [type="time"], [type="week"], [type="tel"], [type="url"]):where(:disabled) {
+    opacity: 1;
+    color: var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff80);
+    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff1a);
+    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff26);
+  }
+
+  button, input:where([type="button"], [type="reset"], [type="submit"]) {
+    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
+    background-color: var(--lightningcss-light, #0000000d) var(--lightningcss-dark, #fff6);
+    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff1a);
+    border-radius: 4px;
+    padding-block: 2px;
+    padding-inline: 4px;
+  }
+
+  ::file-selector-button {
+    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
+    background-color: var(--lightningcss-light, #0000000d) var(--lightningcss-dark, #fff6);
+    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff1a);
+    border-radius: 4px;
+    padding-block: 2px;
+    padding-inline: 4px;
+  }
+
+  button:where(:hover), input:where([type="button"], [type="reset"], [type="submit"]):where(:hover) {
+    background-color: var(--lightningcss-light, #0000001a) var(--lightningcss-dark, #ffffff73);
+  }
+
+  ::file-selector-button:where(:hover) {
+    background-color: var(--lightningcss-light, #0000001a) var(--lightningcss-dark, #ffffff73);
+  }
+
+  button:where(:active), input:where([type="button"], [type="reset"], [type="submit"]):where(:active) {
+    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff4d);
+  }
+
+  ::file-selector-button:where(:active) {
+    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff4d);
+  }
+
+  button:where(:disabled), input:where([type="button"], [type="reset"], [type="submit"]):where(:disabled) {
+    opacity: 1;
+    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff40);
+    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff1a);
+  }
+
+  :where(input:disabled)::file-selector-button {
+    opacity: 1;
+    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff40);
+    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff1a);
+  }
+
+  input:where([type="file"]:disabled) {
+    color: var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff80);
+  }
+
+  ::file-selector-button {
+    margin-inline-end: 4px;
   }
 
   [hidden]:where(:not([hidden="until-found"])) {

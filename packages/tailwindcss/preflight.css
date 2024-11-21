@@ -23,6 +23,7 @@
   5. Use the user's configured `sans` font-feature-settings by default.
   6. Use the user's configured `sans` font-variation-settings by default.
   7. Disable tap highlights on iOS.
+  8. Set a default `color-scheme`.
 */
 
 html,
@@ -43,6 +44,7 @@ html,
   font-feature-settings: var(--default-font-feature-settings, normal); /* 5 */
   font-variation-settings: var(--default-font-variation-settings, normal); /* 6 */
   -webkit-tap-highlight-color: transparent; /* 7 */
+  color-scheme: light; /* 8 */
 }
 
 /*
@@ -175,48 +177,11 @@ table {
 }
 
 /*
-  Inherit font styles in all browsers.
-*/
-
-button,
-input,
-optgroup,
-select,
-textarea,
-::file-selector-button {
-  font: inherit;
-  font-feature-settings: inherit;
-  font-variation-settings: inherit;
-  letter-spacing: inherit;
-  color: inherit;
-}
-
-/*
-  1. Remove the default background color of buttons by default.
-  2. Correct the inability to style the border radius in iOS Safari.
-*/
-
-button,
-input:where([type='button'], [type='reset'], [type='submit']),
-::file-selector-button {
-  background: transparent; /* 1 */
-  appearance: button; /* 2 */
-}
-
-/*
   Use the modern Firefox focus style for all focusable elements.
 */
 
 :-moz-focusring {
   outline: auto;
-}
-
-/*
-  Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
-*/
-
-:-moz-ui-invalid {
-  box-shadow: none;
 }
 
 /*
@@ -228,12 +193,84 @@ progress {
 }
 
 /*
-  Correct the cursor style of increment and decrement buttons in Safari.
+  Add the correct display in Chrome and Safari.
 */
 
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
+summary {
+  display: list-item;
+}
+
+/*
+  Make lists unstyled by default.
+*/
+
+ol,
+ul,
+menu {
+  list-style: none;
+}
+
+/*
+  1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+  2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+      This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block; /* 1 */
+  vertical-align: middle; /* 2 */
+}
+
+/*
+  Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
   height: auto;
+}
+
+/*
+  Inherit font styles in all browsers.
+*/
+
+button,
+input,
+select,
+optgroup,
+textarea,
+::file-selector-button {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+/*
+  1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+  2. Set the default placeholder color to a semi-transparent version of the current text color.
+*/
+
+::placeholder {
+  opacity: 1; /* 1 */
+  color: color-mix(in oklch, currentColor 50%, transparent); /* 2 */
+}
+
+/*
+  Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
 }
 
 /*
@@ -283,67 +320,137 @@ progress {
 }
 
 /*
-  Add the correct display in Chrome and Safari.
+  Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
 */
 
-summary {
-  display: list-item;
+:-moz-ui-invalid {
+  box-shadow: none;
 }
 
 /*
-  Make lists unstyled by default.
+  Correct the inability to style the border radius in iOS Safari.
 */
 
-ol,
-ul,
-menu {
-  list-style: none;
+button,
+input:where([type='button'], [type='reset'], [type='submit']),
+::file-selector-button {
+  appearance: button;
 }
 
 /*
-  Prevent resizing textareas horizontally by default.
+  Correct the cursor style of increment and decrement buttons in Safari.
 */
 
-textarea {
-  resize: vertical;
-}
-
-/*
-  1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
-  2. Set the default placeholder color to a semi-transparent version of the current text color.
-*/
-
-::placeholder {
-  opacity: 1; /* 1 */
-  color: color-mix(in oklch, currentColor 50%, transparent); /* 2 */
-}
-
-/*
-  1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
-  2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
-     This can trigger a poorly considered lint error in some tools but is included by design.
-*/
-
-img,
-svg,
-video,
-canvas,
-audio,
-iframe,
-embed,
-object {
-  display: block; /* 1 */
-  vertical-align: middle; /* 2 */
-}
-
-/*
-  Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
-*/
-
-img,
-video {
-  max-width: 100%;
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
   height: auto;
+}
+
+/*
+  Apply consistent base form control styles across browsers.
+*/
+
+select,
+textarea,
+input:where(
+    [type='text'],
+    [type='email'],
+    [type='password'],
+    [type='date'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='number'],
+    [type='search'],
+    [type='time'],
+    [type='week'],
+    [type='tel'],
+    [type='url']
+  ) {
+  border-radius: 3px;
+  padding-inline: 4px;
+  padding-block: 2px;
+  color: light-dark(black, white);
+  background-color: light-dark(white, rgb(255 255 255 / 10%));
+  border: 1px solid light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 25%));
+}
+
+:where(select:not([multiple], [size])) option,
+:where(select:not([multiple], [size])) optgroup {
+  color: FieldText;
+  background-color: Field;
+}
+
+:where(select:is([multiple], [size])) optgroup {
+  font-weight: bold;
+}
+
+:where(select:is([multiple], [size])) optgroup option {
+  padding-inline-start: 20px;
+}
+
+select:where(:disabled),
+textarea:where(:disabled),
+input:where(
+    [type='text'],
+    [type='email'],
+    [type='password'],
+    [type='date'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='number'],
+    [type='search'],
+    [type='time'],
+    [type='week'],
+    [type='tel'],
+    [type='url']
+  ):where(:disabled) {
+  opacity: 1;
+  color: light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 50%));
+  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 10%));
+  border-color: light-dark(rgb(0 0 0 / 20%), rgb(255 255 255 / 15%));
+}
+
+/*
+  Apply consistent base button styles across browsers.
+*/
+
+button,
+::file-selector-button,
+input:where([type='button'], [type='reset'], [type='submit']) {
+  border-radius: 4px;
+  padding-inline: 4px;
+  padding-block: 2px;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(rgb(0 0 0 / 5%), rgb(255 255 255 / 40%));
+  border: 1px solid light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 10%));
+}
+
+button:where(:hover),
+::file-selector-button:where(:hover),
+input:where([type='button'], [type='reset'], [type='submit']):where(:hover) {
+  background-color: light-dark(rgb(0 0 0 / 10%), rgb(255 255 255 / 45%));
+}
+
+button:where(:active),
+::file-selector-button:where(:active),
+input:where([type='button'], [type='reset'], [type='submit']):where(:active) {
+  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 30%));
+}
+
+button:where(:disabled),
+:where(input:disabled)::file-selector-button,
+input:where([type='button'], [type='reset'], [type='submit']):where(:disabled) {
+  opacity: 1;
+  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 25%));
+  border-color: light-dark(rgb(0 0 0 / 20%), rgb(255 255 255 / 10%));
+}
+
+input:where([type='file']:disabled) {
+  color: light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 50%));
+}
+
+::file-selector-button {
+  margin-inline-end: 4px;
 }
 
 /*
