@@ -8,12 +8,11 @@ import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'
 import { migrateAtApply } from './codemods/migrate-at-apply'
 import { migrateAtLayerUtilities } from './codemods/migrate-at-layer-utilities'
-import { migrateBorderCompatibility } from './codemods/migrate-border-compatibility'
 import { migrateConfig } from './codemods/migrate-config'
-import { migrateFormsReset } from './codemods/migrate-forms-reset'
 import { migrateImport } from './codemods/migrate-import'
 import { migrateMediaScreen } from './codemods/migrate-media-screen'
 import { migrateMissingLayers } from './codemods/migrate-missing-layers'
+import { migratePreflight } from './codemods/migrate-preflight'
 import { migrateTailwindDirectives } from './codemods/migrate-tailwind-directives'
 import { migrateThemeToVar } from './codemods/migrate-theme-to-var'
 import { migrateVariantsDirective } from './codemods/migrate-variants-directive'
@@ -51,8 +50,7 @@ export async function migrateContents(
     .use(migrateMissingLayers())
     .use(migrateTailwindDirectives(options))
     .use(migrateConfig(stylesheet, options))
-    .use(migrateBorderCompatibility(options))
-    .use(migrateFormsReset())
+    .use(migratePreflight(options))
     .use(migrateThemeToVar(options))
     .process(stylesheet.root, { from: stylesheet.file ?? undefined })
 }

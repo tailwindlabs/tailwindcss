@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- _Upgrade (experimental)_: Include `color` in the form reset snippet ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
 
 ## [4.0.0-alpha.36] - 2024-11-21
 
