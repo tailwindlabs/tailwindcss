@@ -11,6 +11,14 @@ export function prefix(
 ): string {
   if (!designSystem.theme.prefix) return rawCandidate
 
+  // Empty arbitrary values don't parse anymore. This is a little bit of a hack
+  // to work around that behavior so we can still perform the migration:
+  if (rawCandidate.includes('group-')) {
+    rawCandidate = rawCandidate.replaceAll('-[]:', '-[--tw-custom-placeholder]:') // End of variant
+    rawCandidate = rawCandidate.replaceAll('-[]/', '-[--tw-custom-placeholder]/') // With modifier
+    rawCandidate = rawCandidate.replaceAll('/[]:', '/[--tw-custom-placeholder]:') // Empty modifier
+  }
+
   let v3Base = extractV3Base(designSystem, userConfig, rawCandidate)
 
   if (!v3Base) return rawCandidate

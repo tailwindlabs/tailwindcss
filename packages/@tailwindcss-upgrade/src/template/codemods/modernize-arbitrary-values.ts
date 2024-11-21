@@ -18,6 +18,14 @@ export function modernizeArbitraryValues(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
+  // Empty arbitrary values don't parse anymore. This is a little bit of a hack
+  // to work around that behavior so we can still perform the migration:
+  if (rawCandidate.includes('group-')) {
+    rawCandidate = rawCandidate.replaceAll('-[]:', '-[--tw-custom-placeholder]:') // End of variant
+    rawCandidate = rawCandidate.replaceAll('-[]/', '-[--tw-custom-placeholder]/') // With modifier
+    rawCandidate = rawCandidate.replaceAll('/[]:', '/[--tw-custom-placeholder]:') // Empty modifier
+  }
+
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
@@ -43,7 +51,7 @@ export function modernizeArbitraryValues(
         variant.kind === 'compound' &&
         variant.root === 'group' &&
         variant.variant.kind === 'arbitrary' &&
-        variant.variant.selector === '&:is()'
+        variant.variant.selector === '&:is(--tw-custom-placeholder)'
       ) {
         // `group-[]`
         if (variant.modifier === null) {
@@ -378,7 +386,16 @@ export function modernizeArbitraryValues(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    let newCandidate = changed ? printCandidate(designSystem, clone) : rawCandidate
+
+    // Empty arbitrary values don't parse anymore. This is a little bit of a hack
+    // to work around that behavior so we can still perform the migration:
+    if (newCandidate.includes('group-')) {
+      newCandidate = newCandidate.replaceAll('-[--tw-custom-placeholder]:', '-[]:') // End of variant
+      newCandidate = newCandidate.replaceAll('-[--tw-custom-placeholder]/', '-[]/') // With modifier
+      newCandidate = newCandidate.replaceAll('/[--tw-custom-placeholder]:', '/[]:') // Empty modifier
+    }
+    return newCandidate
   }
 
   return rawCandidate
