@@ -33,7 +33,7 @@ it('should safelist strings', () => {
       }
       .text-gray-200 {
         --tw-text-opacity: 1;
-        color: rgb(229 231 235 / var(--tw-text-opacity));
+        color: rgb(229 231 235 / var(--tw-text-opacity, 1));
       }
       .hover\:underline:hover {
         text-decoration-line: underline;
@@ -57,22 +57,22 @@ it('should safelist based on a pattern regex', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-100 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .bg-red-200 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
       .uppercase {
         text-transform: uppercase;
       }
       .hover\:bg-red-100:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .hover\:bg-red-200:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -102,22 +102,22 @@ it('should not generate duplicates', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-100 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .bg-red-200 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
       .uppercase {
         text-transform: uppercase;
       }
       .hover\:bg-red-100:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .hover\:bg-red-200:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -138,11 +138,11 @@ it('should safelist when using a custom prefix', () => {
     expect(result.css).toMatchFormattedCss(css`
       .tw-bg-red-100 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .tw-bg-red-200 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
       .tw-uppercase {
         text-transform: uppercase;
@@ -196,11 +196,11 @@ it('should not safelist any invalid variants if provided', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-100 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
       }
       .bg-red-200 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
       }
       .uppercase {
         text-transform: uppercase;
@@ -254,7 +254,7 @@ it('should safelist negatives based on a pattern regex', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-400 {
         --tw-bg-opacity: 1;
-        background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+        background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
       }
       .bg-red-400\/40 {
         background-color: #f8717166;
@@ -264,7 +264,7 @@ it('should safelist negatives based on a pattern regex', () => {
       }
       .bg-red-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       .bg-red-500\/40 {
         background-color: #ef444466;
@@ -286,7 +286,7 @@ it('should safelist negatives based on a pattern regex', () => {
       }
       .hover\:bg-red-400:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+        background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
       }
       .hover\:bg-red-400\/40:hover {
         background-color: #f8717166;
@@ -296,7 +296,7 @@ it('should safelist negatives based on a pattern regex', () => {
       }
       .hover\:bg-red-500:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
       }
       .hover\:bg-red-500\/40:hover {
         background-color: #ef444466;
@@ -381,38 +381,38 @@ it('should safelist pattern regex having !important selector with variants', () 
     expect(result.css).toMatchFormattedCss(css`
       .\!bg-gray-500 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1)) !important;
       }
       .\!bg-gray-600 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1)) !important;
       }
       .\!bg-gray-700 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1)) !important;
       }
       .\!bg-gray-800 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1)) !important;
       }
       .uppercase {
         text-transform: uppercase;
       }
       .hover\:\!bg-gray-500:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-600:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-700:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-800:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1)) !important;
       }
     `)
   })
@@ -437,54 +437,54 @@ it('should safelist multiple patterns with !important selector', () => {
     expect(result.css).toMatchFormattedCss(css`
       .\!bg-gray-200 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
       }
       .\!bg-gray-300 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1)) !important;
       }
       .\!bg-gray-400 {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(156 163 175 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1)) !important;
       }
       .uppercase {
         text-transform: uppercase;
       }
       .\!text-gray-700 {
         --tw-text-opacity: 1 !important;
-        color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
+        color: rgb(55 65 81 / var(--tw-text-opacity, 1)) !important;
       }
       .\!text-gray-800 {
         --tw-text-opacity: 1 !important;
-        color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
+        color: rgb(31 41 55 / var(--tw-text-opacity, 1)) !important;
       }
       .\!text-gray-900 {
         --tw-text-opacity: 1 !important;
-        color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
+        color: rgb(17 24 39 / var(--tw-text-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-200:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-300:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!bg-gray-400:hover {
         --tw-bg-opacity: 1 !important;
-        background-color: rgb(156 163 175 / var(--tw-bg-opacity)) !important;
+        background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1)) !important;
       }
       .hover\:\!text-gray-700:hover {
         --tw-text-opacity: 1 !important;
-        color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
+        color: rgb(55 65 81 / var(--tw-text-opacity, 1)) !important;
       }
       .hover\:\!text-gray-800:hover {
         --tw-text-opacity: 1 !important;
-        color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
+        color: rgb(31 41 55 / var(--tw-text-opacity, 1)) !important;
       }
       .hover\:\!text-gray-900:hover {
         --tw-text-opacity: 1 !important;
-        color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
+        color: rgb(17 24 39 / var(--tw-text-opacity, 1)) !important;
       }
     `)
   })

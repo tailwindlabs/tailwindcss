@@ -29,7 +29,7 @@ test('partial arbitrary variants', () => {
       }
       .potato-yellow .potato-\[yellow\]\:bg-yellow-200 {
         --tw-bg-opacity: 1;
-        background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+        background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -64,7 +64,7 @@ test('partial arbitrary variants with at-rules', () => {
       @media (potato: yellow) {
         .potato-\[yellow\]\:bg-yellow-200 {
           --tw-bg-opacity: 1;
-          background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+          background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1));
         }
       }
     `)
@@ -100,7 +100,7 @@ test('partial arbitrary variants with at-rules and placeholder', () => {
       @media (potato: yellow) {
         .potato-\[yellow\]\:bg-yellow-200:potato {
           --tw-bg-opacity: 1;
-          background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+          background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1));
         }
       }
     `)

@@ -213,7 +213,7 @@ test('pseudo-elements are appended after the `:is()`', () => {
       #app .dark\:before\:bg-black:where(.dark, .dark *)::before {
         content: var(--tw-content);
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
     `)
   })

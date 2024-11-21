@@ -13,11 +13,11 @@ let sharedHtml = html`
 let expected = css`
   .bg-white {
     --tw-bg-opacity: 1;
-    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
   }
   .text-indigo-500 {
     --tw-text-opacity: 1;
-    color: rgb(99 102 241 / var(--tw-text-opacity));
+    color: rgb(99 102 241 / var(--tw-text-opacity, 1));
   }
 `
 

@@ -161,7 +161,7 @@ test('@apply', () => {
     expect(result.css).toMatchFormattedCss(css`
       .basic-example {
         --tw-bg-opacity: 1;
-        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
         border-radius: 0.375rem;
         padding: 0.5rem 1rem;
       }
@@ -243,7 +243,7 @@ test('@apply', () => {
       .multiple,
       .selectors {
         --tw-bg-opacity: 1;
-        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
         border-radius: 0.375rem;
         padding: 0.5rem 1rem;
       }
@@ -307,16 +307,16 @@ test('@apply', () => {
       }
       .btn-blue {
         --tw-bg-opacity: 1;
-        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
         --tw-text-opacity: 1;
-        color: rgb(255 255 255 / var(--tw-text-opacity));
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
         border-radius: 0.25rem;
         padding: 0.5rem 1rem;
         font-weight: 700;
       }
       .btn-blue:hover {
         --tw-bg-opacity: 1;
-        background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+        background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
       }
       .recursive-apply-a {
         font-weight: 900;
@@ -651,22 +651,22 @@ test('@apply classes from outside a @layer', async () => {
       }
       .bar {
         --tw-text-opacity: 1;
-        color: rgb(239 68 68 / var(--tw-text-opacity));
+        color: rgb(239 68 68 / var(--tw-text-opacity, 1));
         font-weight: 700;
       }
       .bar:hover {
         --tw-text-opacity: 1;
-        color: rgb(34 197 94 / var(--tw-text-opacity));
+        color: rgb(34 197 94 / var(--tw-text-opacity, 1));
       }
       .baz {
         --tw-text-opacity: 1;
-        color: rgb(239 68 68 / var(--tw-text-opacity));
+        color: rgb(239 68 68 / var(--tw-text-opacity, 1));
         font-weight: 700;
         text-decoration-line: underline;
       }
       .baz:hover {
         --tw-text-opacity: 1;
-        color: rgb(34 197 94 / var(--tw-text-opacity));
+        color: rgb(34 197 94 / var(--tw-text-opacity, 1));
       }
       .keep-me-even-though-I-am-not-used-in-content {
         color: green;
@@ -891,7 +891,7 @@ it('should not throw when the selector is different (but contains the base parti
       .bg-gray-500,
       .focus\:bg-gray-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -1444,13 +1444,13 @@ describe('multiple instances', () => {
         .a {
           color: red;
           --tw-text-opacity: 1;
-          color: rgb(34 197 94 / var(--tw-text-opacity));
+          color: rgb(34 197 94 / var(--tw-text-opacity, 1));
           color: #00f;
           text-decoration: underline;
         }
         .b {
           --tw-text-opacity: 1;
-          color: rgb(34 197 94 / var(--tw-text-opacity));
+          color: rgb(34 197 94 / var(--tw-text-opacity, 1));
           text-decoration: underline;
         }
       `)
@@ -1567,7 +1567,7 @@ it('should work outside of layer', async () => {
   expect(result.css).toMatchFormattedCss(css`
     .input-text {
       --tw-bg-opacity: 1;
-      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
       background-color: red;
     }
   `)
@@ -1577,7 +1577,7 @@ it('should work outside of layer', async () => {
   expect(result.css).toMatchFormattedCss(css`
     .input-text {
       --tw-bg-opacity: 1;
-      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
       background-color: red;
     }
   `)
@@ -1605,7 +1605,7 @@ it('should work in layer', async () => {
   expect(result.css).toMatchFormattedCss(css`
     .input-text {
       --tw-bg-opacity: 1;
-      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
       background-color: red;
     }
   `)
@@ -1644,14 +1644,14 @@ it('apply partitioning works with media queries', async () => {
     html,
     body {
       --tw-text-opacity: 1;
-      color: rgb(22 163 74 / var(--tw-text-opacity));
+      color: rgb(22 163 74 / var(--tw-text-opacity, 1));
       font-size: 1rem;
     }
     @media print {
       html,
       body {
         --tw-text-opacity: 1;
-        color: rgb(220 38 38 / var(--tw-text-opacity));
+        color: rgb(220 38 38 / var(--tw-text-opacity, 1));
         font-size: 2rem;
       }
     }
@@ -1980,7 +1980,7 @@ it('should maintain the correct selector when applying other utilities', () => {
       .foo:hover.bar .baz,
       .foo:hover.bar > .baz {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
         color: red;
       }
     `)
@@ -2235,19 +2235,19 @@ test('applying classes with class-based dark variant to pseudo elements', async 
   expect(result.css).toMatchFormattedCss(css`
     ::-webkit-scrollbar-track {
       --tw-bg-opacity: 1;
-      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
     }
     :is(.dark *)::-webkit-scrollbar-track {
       --tw-bg-opacity: 1;
-      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
     }
     ::-webkit-scrollbar-track:hover {
       --tw-bg-opacity: 1;
-      background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+      background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
     }
     :is(.dark *)::-webkit-scrollbar-track:hover {
       --tw-bg-opacity: 1;
-      background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+      background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
     }
   `)
 })

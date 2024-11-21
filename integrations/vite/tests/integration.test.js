@@ -78,7 +78,7 @@ describe('static build', () => {
       css`
         .bg-primary {
           --tw-bg-opacity: 1;
-          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
         }
       `
     )
@@ -122,7 +122,7 @@ describe('static build', () => {
       css`
         .bg-primary {
           --tw-bg-opacity: 1;
-          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
         }
       `
     )
@@ -173,7 +173,7 @@ describe('watcher', () => {
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
         }
         .font-bold {
           font-weight: 700;
@@ -226,7 +226,7 @@ describe('watcher', () => {
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
         }
         .font-bold {
           font-weight: 700;
@@ -379,7 +379,7 @@ describe('watcher', () => {
         .btn {
           border-radius: 0.25rem;
           --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;

@@ -253,7 +253,7 @@ test('it works', () => {
       }
       .apply-test {
         --tw-bg-opacity: 1;
-        background-color: rgb(236 72 153 / var(--tw-bg-opacity));
+        background-color: rgb(236 72 153 / var(--tw-bg-opacity, 1));
         margin-top: 1.5rem;
       }
       .apply-test:hover,
@@ -263,11 +263,11 @@ test('it works', () => {
       @media (min-width: 640px) {
         .apply-test {
           --tw-bg-opacity: 1;
-          background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+          background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
         }
         .apply-test:nth-child(2n):focus {
           --tw-bg-opacity: 1;
-          background-color: rgb(251 207 232 / var(--tw-bg-opacity));
+          background-color: rgb(251 207 232 / var(--tw-bg-opacity, 1));
         }
       }
       .apply-components {
@@ -315,7 +315,7 @@ test('it works', () => {
       @media (min-width: 640px) {
         .apply-with-existing:hover {
           --tw-bg-opacity: 1;
-          background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+          background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
         }
       }
       .multiple,
@@ -343,7 +343,7 @@ test('it works', () => {
       }
       .group:hover .apply-dark-group-example-a:where(.dark, .dark *) {
         --tw-bg-opacity: 1;
-        background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+        background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
       }
       @media (min-width: 640px) {
         @media (prefers-reduced-motion: no-preference) {
@@ -499,23 +499,23 @@ test('it works', () => {
       }
       .border-black {
         --tw-border-opacity: 1;
-        border-color: rgb(0 0 0 / var(--tw-border-opacity));
+        border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
       }
       .border-e-red-400 {
         --tw-border-opacity: 1;
-        border-inline-end-color: rgb(248 113 113 / var(--tw-border-opacity));
+        border-inline-end-color: rgb(248 113 113 / var(--tw-border-opacity, 1));
       }
       .border-s-green-500 {
         --tw-border-opacity: 1;
-        border-inline-start-color: rgb(34 197 94 / var(--tw-border-opacity));
+        border-inline-start-color: rgb(34 197 94 / var(--tw-border-opacity, 1));
       }
       .bg-black {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
       .bg-green-500 {
         --tw-bg-opacity: 1;
-        background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+        background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
       }
       .bg-opacity-50 {
         --tw-bg-opacity: 0.5;
@@ -701,7 +701,7 @@ test('it works', () => {
       }
       .focus\:ring-blue-500:focus {
         --tw-ring-opacity: 1;
-        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
       }
       .focus\:hover\:font-light:hover:focus {
         font-weight: 300;

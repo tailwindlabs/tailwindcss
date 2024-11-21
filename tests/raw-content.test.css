@@ -368,7 +368,7 @@
 }
 .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-divide-opacity));
+  border-color: rgb(229 231 235 / var(--tw-divide-opacity, 1));
 }
 .divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 0.5;
@@ -419,14 +419,14 @@
 }
 .border-black {
   --tw-border-opacity: 1;
-  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+  border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
 }
 .border-opacity-10 {
   --tw-border-opacity: 0.1;
 }
 .bg-green-500 {
   --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
 }
 .bg-opacity-20 {
   --tw-bg-opacity: 0.2;
@@ -525,7 +525,7 @@
 }
 .font-sans {
   font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-     Segoe UI Symbol, Noto Color Emoji;
+    Segoe UI Symbol, Noto Color Emoji;
 }
 .text-2xl {
   font-size: 1.5rem;
@@ -566,7 +566,7 @@
 }
 .text-indigo-500 {
   --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity));
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 .text-opacity-10 {
   --tw-text-opacity: 0.1;
@@ -580,7 +580,7 @@
 }
 .placeholder-green-300::placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(134 239 172 / var(--tw-placeholder-opacity));
+  color: rgb(134 239 172 / var(--tw-placeholder-opacity, 1));
 }
 .placeholder-opacity-60::placeholder {
   --tw-placeholder-opacity: 0.6;
@@ -635,7 +635,7 @@
 }
 .ring-white {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity, 1));
 }
 .ring-opacity-40 {
   --tw-ring-opacity: 0.4;

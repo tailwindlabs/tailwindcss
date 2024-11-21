@@ -30,7 +30,7 @@ test('colors with slashes are matched first', async () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\/50 {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -207,21 +207,21 @@ test('opacity modifier in combination with partial custom properties', async () 
     expect(result.css).toMatchFormattedCss(css`
       .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\] {
         --tw-bg-opacity: 1;
-        background-color: hsl(123 50% var(--foo) / var(--tw-bg-opacity));
+        background-color: hsl(123 50% var(--foo) / var(--tw-bg-opacity, 1));
       }
       .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\]\/50 {
         background-color: hsl(123 50% var(--foo) / 0.5);
       }
       .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\] {
         --tw-bg-opacity: 1;
-        background-color: hsl(123 var(--foo) 50% / var(--tw-bg-opacity));
+        background-color: hsl(123 var(--foo) 50% / var(--tw-bg-opacity, 1));
       }
       .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\]\/50 {
         background-color: hsl(123 var(--foo) 50% / 0.5);
       }
       .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\] {
         --tw-bg-opacity: 1;
-        background-color: hsl(var(--foo) 50% 50% / var(--tw-bg-opacity));
+        background-color: hsl(var(--foo) 50% 50% / var(--tw-bg-opacity, 1));
       }
       .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\]\/50 {
         background-color: hsl(var(--foo) 50% 50% / 0.5);
