@@ -1465,7 +1465,7 @@ it.each([
   'bg-[_]/(_)',
   'bg-(_)/(_)',
 
-  // Functional components
+  // Functional variants
   // Empty arbitrary value in variant
   'data-[]:flex',
   'data-():flex',
@@ -1499,7 +1499,7 @@ it.each([
   'data-[_]/(_):flex',
   'data-(_)/(_):flex',
 
-  // Compound components
+  // Compound variants
   // Empty arbitrary value in variant
   'group-data-[]:flex',
   'group-data-():flex',
