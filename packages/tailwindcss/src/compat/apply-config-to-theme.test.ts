@@ -186,3 +186,34 @@ describe('keyPathToCssProperty', () => {
     expect(`--${keyPathToCssProperty(keyPath)}`).toEqual(expected)
   })
 })
+
+test('converts opacity modifiers from decimal to percentage values', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          opacity: {
+            0: '0',
+            5: '0.05',
+            10: '0.1',
+            15: '0.15',
+            20: 0.2,
+            25: 0.25,
+          },
+        },
+      },
+      base: '/root',
+    },
+  ])
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.resolve('0', ['--opacity'])).toEqual('0%')
+  expect(theme.resolve('5', ['--opacity'])).toEqual('5%')
+  expect(theme.resolve('10', ['--opacity'])).toEqual('10%')
+  expect(theme.resolve('15', ['--opacity'])).toEqual('15%')
+  expect(theme.resolve('20', ['--opacity'])).toEqual('20%')
+  expect(theme.resolve('25', ['--opacity'])).toEqual('25%')
+})
