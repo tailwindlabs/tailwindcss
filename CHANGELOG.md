@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- _Upgrade (experimental)_: Drop unnecessary `opacity` theme values when migrating to CSS ([#15067](https://github.com/tailwindlabs/tailwindcss/pull/15067))
+
 ### Fixed
 
+- Ensure `opacity` theme values configured as decimal numbers via JS config files work with color utilities ([#15067](https://github.com/tailwindlabs/tailwindcss/pull/15067))
 - _Upgrade (experimental)_: Include `color` in the form reset snippet ([#15064](https://github.com/tailwindlabs/tailwindcss/pull/15064))
 
 ## [4.0.0-alpha.36] - 2024-11-21
