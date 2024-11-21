@@ -149,7 +149,7 @@ test('box-decoration', async () => {
 test('overflow-ellipsis', async () => {
   expect(await run(['overflow-ellipsis'])).toMatchInlineSnapshot(`
     ".overflow-ellipsis {
-      text-overflow: linear-gradient(var(--tw-gradient-stops));
+      text-overflow: ellipsis;
     }"
   `)
 })

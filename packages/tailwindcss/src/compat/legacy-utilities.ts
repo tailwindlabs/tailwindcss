@@ -27,9 +27,7 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
     return [decl('max-width', value)]
   })
 
-  designSystem.utilities.static(`overflow-ellipsis`, () => [
-    decl('text-overflow', `linear-gradient(var(--tw-gradient-stops))`),
-  ])
+  designSystem.utilities.static(`overflow-ellipsis`, () => [decl('text-overflow', `ellipsis`)])
 
   designSystem.utilities.static(`decoration-slice`, () => [
     decl('-webkit-box-decoration-break', `slice`),
@@ -59,6 +57,7 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
 
   designSystem.utilities.functional('flex-grow', (candidate) => {
     if (candidate.modifier) return
+
     if (!candidate.value) {
       return [decl('flex-grow', '1')]
     }
