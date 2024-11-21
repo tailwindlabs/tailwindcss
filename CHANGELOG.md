@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- _Upgrade (experimental)_: Ensure migrating to the `in-*` requires a descendant selector ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
+- _Upgrade (experimental)_: Don't migrate arbitrary variants to `in-*` that use the child combinator instead of the descendant combinator ([#15054](https://github.com/tailwindlabs/tailwindcss/pull/15054))
 
 ### Changed
 
