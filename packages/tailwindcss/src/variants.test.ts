@@ -517,7 +517,7 @@ test('group-[...]', async () => {
       css`
         @tailwind utilities;
       `,
-      ['group-[@media_foo]:flex', 'group-[>img]:flex'],
+      ['group-[]:flex', 'group-hover/[]:flex', 'group-[@media_foo]:flex', 'group-[>img]:flex'],
     ),
   ).toEqual('')
 })
@@ -609,7 +609,7 @@ test('peer-[...]', async () => {
       css`
         @tailwind utilities;
       `,
-      ['peer-[@media_foo]:flex', 'peer-[>img]:flex'],
+      ['peer-[]:flex', 'peer-hover/[]:flex', 'peer-[@media_foo]:flex', 'peer-[>img]:flex'],
     ),
   ).toEqual('')
 })
@@ -1853,6 +1853,7 @@ test('data', async () => {
   `)
   expect(
     await run([
+      'data-[]:flex',
       'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
       'data-disabled/foo:flex',
       'data-[potato=salad]/foo:flex',

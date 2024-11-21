@@ -43,7 +43,7 @@ export function modernizeArbitraryValues(
         variant.kind === 'compound' &&
         variant.root === 'group' &&
         variant.variant.kind === 'arbitrary' &&
-        variant.variant.selector === '&:is()'
+        variant.variant.selector === '&'
       ) {
         // `group-[]`
         if (variant.modifier === null) {

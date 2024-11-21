@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use single drop shadow values instead of multiple ([#15056](https://github.com/tailwindlabs/tailwindcss/pull/15056))
+- Do not parse invalid candidates with empty arbitrary values ([#15055](https://github.com/tailwindlabs/tailwindcss/pull/15055))
 
 ## [4.0.0-alpha.35] - 2024-11-20
 

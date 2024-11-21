@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
+import { handleEmptyArbitraryValues } from './handle-empty-arbitrary-values'
 import { modernizeArbitraryValues } from './modernize-arbitrary-values'
 import { prefix } from './prefix'
 
@@ -30,6 +31,10 @@ test.each([
   // Some extreme examples of what happens in the wild:
   ['group-[]:flex', 'in-[.group]:flex'],
   ['group-[]/name:flex', 'in-[.group\\/name]:flex'],
+
+  // Migrate `peer-[]` to a parsable `peer-[&]` instead:
+  ['peer-[]:flex', 'peer-[&]:flex'],
+  ['peer-[]/name:flex', 'peer-[&]/name:flex'],
 
   // These shouldn't happen in the real world (because compound variants are
   // new). But this could happen once we allow codemods to run in v4+ projects.
@@ -85,12 +90,17 @@ test.each([
   ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
 
   ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
-])('%s => %s', async (candidate, result) => {
+])('%s => %s (%#)', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  expect(modernizeArbitraryValues(designSystem, {}, candidate)).toEqual(result)
+  expect(
+    [handleEmptyArbitraryValues, modernizeArbitraryValues].reduce(
+      (acc, step) => step(designSystem, {}, acc),
+      candidate,
+    ),
+  ).toEqual(result)
 })
 
 test.each([
@@ -101,6 +111,10 @@ test.each([
   ['group-[]:tw-flex', 'tw:in-[.tw\\:group]:flex'],
   ['group-[]/name:tw-flex', 'tw:in-[.tw\\:group\\/name]:flex'],
 
+  // Migrate `peer-[]` to a parsable `peer-[&]` instead:
+  ['peer-[]:tw-flex', 'tw:peer-[&]:flex'],
+  ['peer-[]/name:tw-flex', 'tw:peer-[&]/name:flex'],
+
   // However, `.group` inside of an arbitrary variant should not be prefixed:
   ['[.group_&]:tw-flex', 'tw:in-[.group]:flex'],
 
@@ -110,13 +124,13 @@ test.each([
   ['has-group-[]/name:tw-flex', 'tw:has-in-[.tw\\:group\\/name]:flex'],
   ['not-group-[]:tw-flex', 'tw:not-in-[.tw\\:group]:flex'],
   ['not-group-[]/name:tw-flex', 'tw:not-in-[.tw\\:group\\/name]:flex'],
-])('%s => %s', async (candidate, result) => {
+])('%s => %s (%#)', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
     base: __dirname,
   })
 
   expect(
-    [prefix, modernizeArbitraryValues].reduce(
+    [handleEmptyArbitraryValues, prefix, modernizeArbitraryValues].reduce(
       (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
       candidate,
     ),

@@ -68,7 +68,7 @@ test(
       'src/index.html': html`
         <h1>🤠👋</h1>
         <div
-          class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(screens.md)]"
+          class="!flex sm:!block bg-gradient-to-t bg-[--my-red] max-w-screen-md ml-[theme(screens.md)] group-[]:flex"
         ></div>
         <!-- Migrate to sm -->
         <div class="blur shadow rounded inset-shadow drop-shadow"></div>
@@ -100,7 +100,7 @@ test(
       --- ./src/index.html ---
       <h1>🤠👋</h1>
       <div
-        class="flex! sm:block! bg-linear-to-t bg-(--my-red) max-w-(--breakpoint-md) ml-(--breakpoint-md)"
+        class="flex! sm:block! bg-linear-to-t bg-(--my-red) max-w-(--breakpoint-md) ml-(--breakpoint-md) in-[.group]:flex"
       ></div>
       <!-- Migrate to sm -->
       <div class="blur-sm shadow-sm rounded-sm inset-shadow-sm drop-shadow-sm"></div>
@@ -194,7 +194,7 @@ test(
       `,
       'src/index.html': html`
         <div
-          class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red]"
+          class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red] group-[]:tw__flex"
         ></div>
       `,
       'src/input.css': css`
@@ -215,7 +215,7 @@ test(
       "
       --- ./src/index.html ---
       <div
-        class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red]"
+        class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red] tw:in-[.tw\\:group]:flex"
       ></div>
 
       --- ./src/input.css ---

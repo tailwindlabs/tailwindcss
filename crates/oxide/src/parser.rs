@@ -538,14 +538,17 @@ impl<'a> Extractor<'a> {
                         return ParseAction::Consume;
                     }
 
-                    if let Arbitrary::Brackets { start_idx } = self.arbitrary {
+                    if let Arbitrary::Brackets { start_idx: _ } = self.arbitrary {
                         trace!("Arbitrary::End\t");
                         self.arbitrary = Arbitrary::None;
 
-                        if self.cursor.pos - start_idx == 1 {
-                            // We have an empty arbitrary value, which is not allowed
-                            return ParseAction::Skip;
-                        }
+                        // TODO: This is temporarily disabled such that the upgrade tool can work
+                        // with legacy arbitrary values. This will be re-enabled in the future (or
+                        // with a flag)
+                        // if self.cursor.pos - start_idx == 1 {
+                        //     // We have an empty arbitrary value, which is not allowed
+                        //     return ParseAction::Skip;
+                        // }
                     }
                 }
 
@@ -1516,5 +1519,24 @@ mod test {
                 .collect();
 
         assert_eq!(candidates, vec![("div", 1), ("class", 5), ("flex", 12),]);
+    }
+
+    #[test]
+    fn empty_arbitrary_values_are_allowed_for_codemods() {
+        let candidates = run(
+            r#"<div class="group-[]:flex group-[]/name:flex peer-[]:flex peer-[]/name:flex"></div>"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "div",
+                "class",
+                "group-[]:flex",
+                "group-[]/name:flex",
+                "peer-[]:flex",
+                "peer-[]/name:flex"
+            ]
+        );
     }
 }
