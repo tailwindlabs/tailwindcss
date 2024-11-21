@@ -1929,6 +1929,10 @@ export function createUtilities(theme: Theme) {
   ])
 
   staticUtility('text-ellipsis', [['text-overflow', 'ellipsis']])
+
+  /** @deprecated */
+  staticUtility('overflow-ellipsis', [['text-overflow', 'ellipsis']])
+
   staticUtility('text-clip', [['text-overflow', 'clip']])
 
   staticUtility('hyphens-none', [
