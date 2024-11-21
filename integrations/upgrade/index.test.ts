@@ -2970,6 +2970,8 @@ test(
               transparent: 1,
 
               50: '50%',
+              50.5: '50.5%',
+              '50.50': '50.5%',
               '75%': '75%',
               '100%': '100%',
             },
@@ -2987,6 +2989,8 @@ test(
             text-red-500/semitransparent
             text-red-500/transparent
             text-red-500/50
+            text-red-500/50.5
+            text-red-500/50.50
             text-red-500/50%
             text-red-500/100%"
         ></div>
@@ -3013,6 +3017,8 @@ test(
           text-red-500/semitransparent
           text-red-500/transparent
           text-red-500/50
+          text-red-500/50.5
+          text-red-500/50.50
           text-red-500/50%
           text-red-500/100%"
       ></div>
@@ -3024,6 +3030,7 @@ test(
         --opacity-*: initial;
         --opacity-semitransparent: 50%;
         --opacity-transparent: 100%;
+        --opacity-50_50: 50.5%;
         --opacity-75\\%: 75%;
         --opacity-100\\%: 100%;
       }

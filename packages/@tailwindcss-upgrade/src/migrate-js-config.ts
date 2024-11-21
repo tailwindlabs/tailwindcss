@@ -17,7 +17,10 @@ import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
 import type { Config } from '../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { escape } from '../../tailwindcss/src/utils/escape'
-import { isValidSpacingMultiplier } from '../../tailwindcss/src/utils/infer-data-type'
+import {
+  isValidOpacityValue,
+  isValidSpacingMultiplier,
+} from '../../tailwindcss/src/utils/infer-data-type'
 import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
 import { highlight, info, relative } from './utils/renderer'
 
@@ -135,7 +138,11 @@ async function migrateTheme(
         value = numValue * 100 + '%'
       }
 
-      if (typeof value === 'string' && key[1] === value.replace(/%$/, '')) {
+      if (
+        typeof value === 'string' &&
+        key[1] === value.replace(/%$/, '') &&
+        isValidOpacityValue(key[1])
+      ) {
         continue
       }
     }
