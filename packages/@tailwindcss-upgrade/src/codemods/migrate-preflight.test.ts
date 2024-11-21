@@ -3,7 +3,7 @@ import dedent from 'dedent'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
 import { formatNodes } from './format-nodes'
-import { migrateBorderCompatibility } from './migrate-border-compatibility'
+import { migratePreflight } from './migrate-preflight'
 import { sortBuckets } from './sort-buckets'
 
 const css = dedent
@@ -17,7 +17,7 @@ async function migrate(input: string) {
   )
 
   return postcss()
-    .use(migrateBorderCompatibility({ designSystem }))
+    .use(migratePreflight({ designSystem }))
     .use(sortBuckets())
     .use(formatNodes())
     .process(input, { from: expect.getState().testPath })
@@ -31,6 +31,23 @@ it("should add compatibility CSS after the `@import 'tailwindcss'`", async () =>
     `),
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
+
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+      }
+    }
 
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -63,6 +80,23 @@ it('should add the compatibility CSS after the last `@import`', async () => {
     "@import 'tailwindcss';
     @import './foo.css';
     @import './bar.css';
+
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+      }
+    }
 
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
@@ -111,6 +145,23 @@ it('should add the compatibility CSS after the last import, even if a body-less 
     @import './bar.css';
 
     /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+      }
+    }
+
+    /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
@@ -154,6 +205,23 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     "@import 'tailwindcss';
 
     @variant foo {
+    }
+
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+      }
     }
 
     /*
@@ -212,6 +280,23 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     "@import 'tailwindcss/preflight';
 
     @variant foo {
+    }
+
+    /*
+      In Tailwind CSS v4, basic styles are applied to form elements by default. To
+      maintain compatibility with v3, the following resets have been added:
+    */
+    @layer base {
+      input,
+      textarea,
+      select,
+      button {
+        border: 0px solid;
+        border-radius: 0;
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+      }
     }
 
     /*

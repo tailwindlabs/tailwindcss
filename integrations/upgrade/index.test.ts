@@ -121,6 +121,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -135,21 +152,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -228,6 +230,23 @@ test(
       @import 'tailwindcss' prefix(tw);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -242,21 +261,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -307,6 +311,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -321,21 +342,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -394,6 +400,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -408,21 +431,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -486,6 +494,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -500,21 +525,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -610,6 +620,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -624,21 +651,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1129,6 +1141,23 @@ test(
       @import './utilities.css';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1143,21 +1172,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1592,6 +1606,23 @@ test(
       @config './tailwind.config.ts';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1606,21 +1637,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1631,6 +1647,23 @@ test(
       @config "../../tailwind.config.ts";
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1645,21 +1678,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1680,6 +1698,23 @@ test(
       }
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1694,21 +1729,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1724,6 +1744,23 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1738,21 +1775,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -1770,6 +1792,23 @@ test(
       @config '../../tailwind.config.ts';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1784,21 +1823,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
       "
@@ -1965,6 +1989,23 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -1979,21 +2020,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2116,6 +2142,23 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2130,21 +2173,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2248,6 +2276,23 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2262,21 +2307,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2338,6 +2368,23 @@ test(
       @import './styles/components.css' layer(components);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2352,21 +2399,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2578,6 +2610,23 @@ test(
       }
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2592,21 +2641,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2677,6 +2711,23 @@ test(
       @import 'tailwindcss';
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2691,21 +2742,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
@@ -2805,6 +2841,23 @@ test(
       @import 'tailwindcss/preflight' layer(base);
 
       /*
+        In Tailwind CSS v4, basic styles are applied to form elements by default. To
+        maintain compatibility with v3, the following resets have been added:
+      */
+      @layer base {
+        input,
+        textarea,
+        select,
+        button {
+          border: 0px solid;
+          border-radius: 0;
+          padding: 0;
+          color: inherit;
+          background-color: transparent;
+        }
+      }
+
+      /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
@@ -2819,21 +2872,6 @@ test(
         ::backdrop,
         ::file-selector-button {
           border-color: var(--color-gray-200, currentColor);
-        }
-      }
-      /*
-        In Tailwind CSS v4, basic styles are applied to form elements by default. To
-        maintain compatibility with v3, the following resets have been added:
-      */
-      @layer base {
-        input,
-        textarea,
-        select,
-        button {
-          border: 0px solid;
-          border-radius: 0;
-          padding: 0;
-          background-color: transparent;
         }
       }
 
