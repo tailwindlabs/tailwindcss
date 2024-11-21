@@ -24,7 +24,8 @@ const BORDER_COLOR_COMPATIBILITY_CSS = css`
     ::after,
     ::before,
     ::backdrop,
-    ::file-selector-button {
+    ::file-selector-button,
+    :is(input, textarea, select, button) {
       border-color: theme(borderColor.DEFAULT);
     }
   }
