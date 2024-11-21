@@ -245,6 +245,16 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # During a beta release of v4, we want to:
+      #
+      # - Publish the release on the `next` tag as well
+      # - Publish the `@tailwindcss/upgrade` package on the `latest` tag
+      - name: Publish other tags
+        if: ${{ inputs.release_channel == 'beta' }}
+        run: |
+          pnpm --recursive publish --tag next --no-git-checks --tag-version-prefix=""
+          pnpm --filter \"./packages/@tailwindcss-upgrade\" publish --tag latest --no-git-checks --tag-version-prefix=""
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
