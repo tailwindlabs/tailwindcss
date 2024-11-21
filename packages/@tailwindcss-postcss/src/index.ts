@@ -170,19 +170,26 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, pattern } of context.scanner.globs) {
+          for (let { base: globBase, pattern } of context.scanner.globs) {
+            // Avoid adding a dependency on the base directory itself, since it
+            // causes Next.js to start an endless recursion if the `distDir` is
+            // configured to anything other than the default `.next` dir.
+            if (pattern === '*' && base === globBase) {
+              continue
+            }
+
             if (pattern === '') {
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file: base,
+                file: globBase,
                 parent: result.opts.from,
               })
             } else {
               result.messages.push({
                 type: 'dir-dependency',
                 plugin: '@tailwindcss/postcss',
-                dir: base,
+                dir: globBase,
                 glob: pattern,
                 parent: result.opts.from,
               })
