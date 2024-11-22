@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -35,7 +34,7 @@ test(
       `,
     },
   },
-  async ({ fs, spawn, getFreePort }) => {
+  async ({ fs, spawn, getFreePort, expect }) => {
     let port = await getFreePort()
     await spawn(`pnpm astro dev --port ${port}`)
 

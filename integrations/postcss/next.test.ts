@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, fetchStyles, js, json, retryAssertion, test } from '../utils'
 
 test(
@@ -56,7 +55,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm next build')
 
     let files = await fs.glob('.next/static/css/**/*.css')
@@ -126,7 +125,7 @@ test(
         `,
       },
     },
-    async ({ fs, spawn, getFreePort }) => {
+    async ({ fs, spawn, getFreePort, expect }) => {
       let port = await getFreePort()
       await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
 

@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 const STANDALONE_BINARY = (() => {
@@ -491,7 +491,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm tailwindcss --input index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
@@ -722,7 +722,7 @@ test(
         ></div>`,
     },
   },
-  async ({ fs, exec, spawn, root }) => {
+  async ({ fs, exec, spawn, root, expect }) => {
     await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
       cwd: path.join(root, 'project-a'),
     })
@@ -962,7 +962,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm tailwindcss --input index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`

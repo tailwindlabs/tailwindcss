@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -93,7 +92,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -201,7 +200,7 @@ test(
       `,
     },
   },
-  async ({ fs, spawn }) => {
+  async ({ fs, spawn, expect }) => {
     await spawn(`pnpm vite build --watch`)
 
     await retryAssertion(async () => {

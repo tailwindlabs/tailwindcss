@@ -1,5 +1,5 @@
 import dedent from 'dedent'
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { css, fetchStyles, html, retryAssertion, test, ts, txt } from '../utils'
 
 function createSetup(transformer: 'postcss' | 'lightningcss') {
@@ -60,7 +60,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
 
 for (let transformer of ['postcss', 'lightningcss'] as const) {
   describe(transformer, () => {
-    test(`production build`, createSetup(transformer), async ({ fs, exec }) => {
+    test(`production build`, createSetup(transformer), async ({ fs, exec, expect }) => {
       await exec('pnpm vite build')
 
       let files = await fs.glob('dist/**/*.css')
@@ -82,7 +82,7 @@ for (let transformer of ['postcss', 'lightningcss'] as const) {
       ])
     })
 
-    test(`dev mode`, createSetup(transformer), async ({ spawn, getFreePort, fs }) => {
+    test(`dev mode`, createSetup(transformer), async ({ spawn, getFreePort, fs, expect }) => {
       let port = await getFreePort()
       await spawn(`pnpm vite dev --port ${port}`)
 
@@ -123,7 +123,7 @@ for (let transformer of ['postcss', 'lightningcss'] as const) {
       })
     })
 
-    test('watch mode', createSetup(transformer), async ({ spawn, fs }) => {
+    test('watch mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
       await spawn(`pnpm vite build --watch`)
 
       await retryAssertion(async () => {
