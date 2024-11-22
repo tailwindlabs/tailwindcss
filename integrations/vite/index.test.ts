@@ -93,7 +93,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
       },
     )
 
-    test(
+    test.sequential(
       `dev mode`,
       {
         fs: {
@@ -689,7 +689,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
   })
 }
 
-test(
+test.sequential(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
   {
     fs: {
@@ -764,7 +764,7 @@ test(
   },
 )
 
-test(
+test.sequential(
   `does not interfere with ?raw and ?url static asset handling`,
   {
     fs: {
