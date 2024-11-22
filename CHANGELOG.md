@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use configured `--letter-spacing` values for custom font size utilities ([#15099](https://github.com/tailwindlabs/tailwindcss/pull/15099))
 - Ensure `space-x/y-*` and `divide-x/y-*` with variants can undo `space-x/y-reverse` and `divide-x/y-reverse` ([#15094](https://github.com/tailwindlabs/tailwindcss/pull/15094))
+- _Upgrade (experimental)_: Always add `layer(…)` as the first param to `@import` ([#15102](https://github.com/tailwindlabs/tailwindcss/pull/15102))
 
 ### Changed
 
