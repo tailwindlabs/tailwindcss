@@ -255,7 +255,7 @@ impl<'a> Extractor<'a> {
         if candidate.iter().all(|c| c.is_ascii_alphanumeric())
             && candidate
                 .iter()
-                .any(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+                .any(|c| c.is_ascii_uppercase())
         {
             return ValidationResult::Invalid;
         }
@@ -263,7 +263,7 @@ impl<'a> Extractor<'a> {
         // Reject candidates that look like SVG path data, e.g.: `m32.368 m7.5`
         if !candidate.contains(&b'-')
             && !candidate.contains(&b':')
-            && candidate.iter().any(|c| c == &b'.' || c.is_ascii_digit())
+            && candidate.iter().any(|c| c == &b'.')
         {
             return ValidationResult::Invalid;
         }
@@ -1536,6 +1536,23 @@ mod test {
                 "group-[]/name:flex",
                 "peer-[]:flex",
                 "peer-[]/name:flex"
+            ]
+        );
+    }
+
+    #[test]
+    fn simple_utility_names_with_numbers_work() {
+        let candidates = run(
+            r#"<div class="h2 hz"></div>"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "div",
+                "class",
+                "h2",
+                "hz",
             ]
         );
     }
