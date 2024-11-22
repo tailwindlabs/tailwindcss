@@ -40,6 +40,22 @@ it('should add missing `layer(…)` to imported files', async () => {
   `)
 })
 
+it('should add missing `layer(…)` as the first param after the import itself', async () => {
+  expect(
+    await migrate(css`
+      @import 'tailwindcss/utilities' supports(--foo); /* Expected no layer */
+      @import './foo.css' supports(--foo); /* Expected layer(utilities) supports(--foo) */
+      @import './bar.css' supports(--foo); /* Expected layer(utilities) supports(--foo) */
+      @import 'tailwindcss/components' supports(--foo); /* Expected no layer */
+    `),
+  ).toMatchInlineSnapshot(`
+    "@import 'tailwindcss/utilities' supports(--foo); /* Expected no layer */
+    @import './foo.css' layer(utilities) supports(--foo); /* Expected layer(utilities) supports(--foo) */
+    @import './bar.css' layer(utilities) supports(--foo); /* Expected layer(utilities) supports(--foo) */
+    @import 'tailwindcss/components' supports(--foo); /* Expected no layer */"
+  `)
+})
+
 it('should not migrate anything if no `@tailwind` directives (or imports) are found', async () => {
   expect(
     await migrate(css`
