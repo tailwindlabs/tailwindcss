@@ -1,4 +1,5 @@
 import { AtRule, type ChildNode, type Plugin, type Root } from 'postcss'
+import { segment } from '../../../tailwindcss/src/utils/segment'
 
 export function migrateMissingLayers(): Plugin {
   function migrate(root: Root) {
@@ -119,7 +120,9 @@ export function migrateMissingLayers(): Plugin {
           if (node.type !== 'atrule' || node.name !== 'import') continue
 
           if (!node.params.includes('layer(')) {
-            node.params += ` layer(${targetLayerName})`
+            let params = segment(node.params, ' ')
+            params.splice(1, 0, `layer(${targetLayerName})`)
+            node.params = params.join(' ')
             node.raws.tailwind_injected_layer = true
           }
         }
