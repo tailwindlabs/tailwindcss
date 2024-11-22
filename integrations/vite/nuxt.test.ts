@@ -36,7 +36,7 @@ const SETUP = {
   },
 }
 
-test('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) => {
+test.sequential('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) => {
   let port = await getFreePort()
   await spawn(`pnpm nuxt dev --port ${port}`)
 
@@ -61,7 +61,7 @@ test('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) => {
   })
 })
 
-test('build', SETUP, async ({ spawn, getFreePort, exec, expect }) => {
+test.sequential('build', SETUP, async ({ spawn, getFreePort, exec, expect }) => {
   let port = await getFreePort()
   await exec(`pnpm nuxt build`)
   await spawn(`pnpm nuxt preview`, {
