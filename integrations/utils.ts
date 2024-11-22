@@ -76,7 +76,17 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false }: TestFlags = {},
 ) {
-  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
+  let testMethod = defaultTest
+
+  if (only || (!process.env.CI && debug)) {
+    testMethod = testMethod.only as TestAPI
+  }
+
+  if (true) {
+    testMethod = testMethod.concurrent as TestAPI
+  }
+
+  return testMethod(
     name,
     { timeout: TEST_TIMEOUT, retry: process.env.CI ? 2 : 0 },
     async (options) => {
@@ -522,7 +532,7 @@ function testIfPortTaken(port: number): Promise<boolean> {
       }
       client.end()
     })
-    client.connect({ port: port, host: 'localhost' })
+    client.connect({ port, host: 'localhost' })
   })
 }
 
