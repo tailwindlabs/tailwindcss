@@ -337,6 +337,11 @@ async function parseCss(
           important = true
         }
 
+        // Handle layer(…)
+        else if (param.startsWith('layer(')) {
+          node.nodes = [atRule('@layer', param.slice(6, -1), node.nodes)]
+        }
+
         //
         else {
           unknownParams.push(param)
