@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest, type ExpectStatic, type TestAPI } from 'vitest'
+import { test as defaultTest, inject, type ExpectStatic } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -77,19 +77,15 @@ export function test(
   testCallback: TestCallback,
   { only = false, debug = false, sequential = false }: TestFlags = {},
 ) {
-  let testMethod = defaultTest
-
-  if (only || (!process.env.CI && debug)) {
-    testMethod = testMethod.only as TestAPI
-  }
-
-  if (!sequential) {
-    testMethod = testMethod.concurrent as TestAPI
-  }
-
-  return testMethod(
+  return defaultTest(
     name,
-    { timeout: TEST_TIMEOUT, retry: process.env.CI ? 2 : 0 },
+    {
+      timeout: TEST_TIMEOUT,
+      retry: process.env.CI ? 2 : 0,
+      only: only || (!process.env.CI && debug),
+      concurrent: !sequential,
+      sequential: sequential,
+    },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
@@ -260,40 +256,31 @@ export function test(
           }
         },
         async getFreePort(): Promise<number> {
-          return new Promise((resolve, reject) => {
-            let server = net.createServer()
-            server.listen(0, () => {
-              let address = server.address()
-              let port = address === null || typeof address === 'string' ? null : address.port
+          return fetch(inject('port-resolver'))
+            .then((res) => res.json())
+            .then(({ port }) => {
+              disposables.push(async () => {
+                // Wait for 10ms in case the process was just killed
+                await new Promise((resolve) => setTimeout(resolve, 10))
 
-              server.close(() => {
-                if (port === null) {
-                  reject(new Error(`Failed to get a free port: address is ${address}`))
-                } else {
-                  disposables.push(async () => {
-                    // Wait for 10ms in case the process was just killed
-                    await new Promise((resolve) => setTimeout(resolve, 10))
+                // kill-port uses `lsof` on macOS which is expensive and can
+                // block for multiple seconds. In order to avoid that for a
+                // server that is no longer running, we check if the port is
+                // still in use first.
+                let isPortTaken = await testIfPortTaken(port)
+                if (!isPortTaken) {
+                  return
+                }
 
-                    // kill-port uses `lsof` on macOS which is expensive and can
-                    // block for multiple seconds. In order to avoid that for a
-                    // server that is no longer running, we check if the port is
-                    // still in use first.
-                    let isPortTaken = await testIfPortTaken(port)
-                    if (!isPortTaken) {
-                      return
-                    }
-
-                    try {
-                      await killPort(port)
-                    } catch {
-                      // If the process can not be killed, we can't do anything
-                    }
-                  })
-                  resolve(port)
+                try {
+                  await killPort(port)
+                } catch {
+                  // If the process can not be killed, we can't do anything
                 }
               })
+
+              return port
             })
-          })
         },
         fs: {
           async write(filename: string, content: string | Uint8Array): Promise<void> {

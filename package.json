@@ -38,7 +38,7 @@
     "postbuild": "node ./scripts/pack-packages.mjs",
     "dev": "turbo dev --filter=!./playgrounds/*",
     "test": "cargo test && vitest run --hideSkippedTests",
-    "test:integrations": "vitest --root=./integrations --no-file-parallelism --hideSkippedTests",
+    "test:integrations": "vitest --root=./integrations --no-file-parallelism",
     "test:ui": "pnpm run --filter=tailwindcss test:ui",
     "tdd": "vitest --hideSkippedTests",
     "bench": "vitest bench",
