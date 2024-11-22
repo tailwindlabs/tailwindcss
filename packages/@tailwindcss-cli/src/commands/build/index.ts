@@ -54,6 +54,17 @@ export function options() {
   } satisfies Arg
 }
 
+async function handleError<T>(fn: () => T): Promise<T> {
+  try {
+    return await fn()
+  } catch (err) {
+    if (err instanceof Error) {
+      eprintln(err.toString())
+    }
+    process.exit(1)
+  }
+}
+
 export async function handle(args: Result<ReturnType<typeof options>>) {
   let base = path.resolve(args['--cwd'])
 
@@ -159,7 +170,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     return [compiler, scanner] as const
   }
 
-  let [compiler, scanner] = await createCompiler(input)
+  let [compiler, scanner] = await handleError(() => createCompiler(input))
 
   // Watch for changes
   if (args['--watch']) {
@@ -288,7 +299,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let candidates = scanner.scan()
   env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
   env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
-  let output = compiler.build(candidates)
+  let output = await handleError(() => compiler.build(candidates))
   env.DEBUG && console.timeEnd('[@tailwindcss/cli] Build CSS')
   await write(output, args)
 
