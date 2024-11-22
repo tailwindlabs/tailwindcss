@@ -1,3 +1,4 @@
+import { describe } from 'vitest'
 import { css, js, json, test } from '../utils'
 
 const variantConfig = {
@@ -28,9 +29,9 @@ const variantConfig = {
   },
 }
 
-for (let variant of Object.keys(variantConfig)) {
+describe.each(Object.keys(variantConfig))('%s', (variant) => {
   test(
-    `can not use \`tailwindcss\` as a postcss module (${variant})`,
+    `can not use \`tailwindcss\` as a postcss module`,
     {
       fs: {
         ...variantConfig[variant],
@@ -54,4 +55,4 @@ for (let variant of Object.keys(variantConfig)) {
       )
     },
   )
-}
+})
