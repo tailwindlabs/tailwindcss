@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure `@import layer(…) source(…)` work together ([#15084](https://github.com/tailwindlabs/tailwindcss/pull/15084))
 
 ## [4.0.0-beta.1] - 2024-11-21
 
