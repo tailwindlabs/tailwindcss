@@ -7,13 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-beta.2] - 2024-11-22
+
 ### Fixed
 
 - Use configured `--letter-spacing` values for custom font size utilities ([#15099](https://github.com/tailwindlabs/tailwindcss/pull/15099))
 - Ensure `space-x/y-*` and `divide-x/y-*` with variants can undo `space-x/y-reverse` and `divide-x/y-reverse` ([#15094](https://github.com/tailwindlabs/tailwindcss/pull/15094))
 - Don't print minified code when the build fails in the CLI ([#15106](https://github.com/tailwindlabs/tailwindcss/pull/15106))
 - Generate the correct CSS for the `break-keep` utility ([#15108](https://github.com/tailwindlabs/tailwindcss/pull/15108))
-- Pick up utilities with numbers when scanning files ([#15110](https://github.com/tailwindlabs/tailwindcss/pull/15110))
+- Detect single word utilities that include numbers (e.g. `h1`) when scanning files ([#15110](https://github.com/tailwindlabs/tailwindcss/pull/15110))
 - _Upgrade (experimental)_: Always add `layer(…)` as the first param to `@import` ([#15102](https://github.com/tailwindlabs/tailwindcss/pull/15102))
 
 ### Changed
