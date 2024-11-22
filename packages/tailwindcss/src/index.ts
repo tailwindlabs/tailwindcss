@@ -355,7 +355,7 @@ async function parseCss(
             expected.splice(2, 0, ...expected.splice(layer, 1))
 
             let errorMessage = [
-              'A `layer(…)` in an `@import` should come first:',
+              '`layer(…)` in an `@import` should come before any other functions or conditions:',
               '',
               '```diff',
               `- ${actual};`,
