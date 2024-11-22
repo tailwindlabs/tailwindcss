@@ -686,6 +686,7 @@ describe('sorting', () => {
       }
 
       :where(.space-x-2 > :not(:last-child)) {
+        --tw-space-x-reverse: 0;
         margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
         margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
       }

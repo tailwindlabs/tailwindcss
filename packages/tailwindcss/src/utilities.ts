@@ -1828,6 +1828,7 @@ export function createUtilities(theme: Theme) {
 
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
+        decl('--tw-space-x-reverse', '0'),
         decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
         decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
       ]),
@@ -1842,6 +1843,7 @@ export function createUtilities(theme: Theme) {
       atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
+        decl('--tw-space-y-reverse', '0'),
         decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
         decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
       ]),
@@ -2190,6 +2192,7 @@ export function createUtilities(theme: Theme) {
         styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-x-width'),
           borderProperties(),
+          decl('--tw-divide-x-reverse', '0'),
           decl('border-inline-style', 'var(--tw-border-style)'),
           decl('border-inline-start-width', `calc(${value} * var(--tw-divide-x-reverse))`),
           decl('border-inline-end-width', `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`),
@@ -2210,6 +2213,7 @@ export function createUtilities(theme: Theme) {
         styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-y-width'),
           borderProperties(),
+          decl('--tw-divide-y-reverse', '0'),
           decl('border-bottom-style', 'var(--tw-border-style)'),
           decl('border-top-style', 'var(--tw-border-style)'),
           decl('border-top-width', `calc(${value} * var(--tw-divide-y-reverse))`),
