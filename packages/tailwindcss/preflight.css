@@ -23,7 +23,6 @@
   5. Use the user's configured `sans` font-feature-settings by default.
   6. Use the user's configured `sans` font-variation-settings by default.
   7. Disable tap highlights on iOS.
-  8. Set a default `color-scheme`.
 */
 
 html,
@@ -44,7 +43,6 @@ html,
   font-feature-settings: var(--default-font-feature-settings, normal); /* 5 */
   font-variation-settings: var(--default-font-variation-settings, normal); /* 6 */
   -webkit-tap-highlight-color: transparent; /* 7 */
-  color-scheme: light; /* 8 */
 }
 
 /*
@@ -239,7 +237,10 @@ video {
 }
 
 /*
-  Inherit font styles in all browsers.
+  1. Inherit font styles in all browsers.
+  2. Remove border radius in all browsers.
+  3. Remove background color in all browsers.
+  4. Ensure consistent opacity for disabled states in all browsers.
 */
 
 button,
@@ -248,11 +249,38 @@ select,
 optgroup,
 textarea,
 ::file-selector-button {
-  font: inherit;
-  font-feature-settings: inherit;
-  font-variation-settings: inherit;
-  letter-spacing: inherit;
-  color: inherit;
+  font: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
+  color: inherit; /* 1 */
+  border-radius: 0; /* 2 */
+  background-color: transparent; /* 3 */
+  opacity: 1; /* 4 */
+}
+
+/*
+  Restore default font weight.
+*/
+
+:where(select:is([multiple], [size])) optgroup {
+  font-weight: bolder;
+}
+
+/*
+  Restore indentation.
+*/
+
+:where(select:is([multiple], [size])) optgroup option {
+  padding-inline-start: 20px;
+}
+
+/*
+  Restore space after button.
+*/
+
+::file-selector-button {
+  margin-inline-end: 4px;
 }
 
 /*
@@ -344,113 +372,6 @@ input:where([type='button'], [type='reset'], [type='submit']),
 ::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   height: auto;
-}
-
-/*
-  Apply consistent base form control styles across browsers.
-*/
-
-select,
-textarea,
-input:where(
-    [type='text'],
-    [type='email'],
-    [type='password'],
-    [type='date'],
-    [type='datetime-local'],
-    [type='month'],
-    [type='number'],
-    [type='search'],
-    [type='time'],
-    [type='week'],
-    [type='tel'],
-    [type='url']
-  ) {
-  border-radius: 3px;
-  padding-inline: 4px;
-  padding-block: 2px;
-  color: light-dark(black, white);
-  background-color: light-dark(white, rgb(255 255 255 / 10%));
-  border: 1px solid light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 25%));
-}
-
-:where(select:not([multiple], [size])) option,
-:where(select:not([multiple], [size])) optgroup {
-  color: FieldText;
-  background-color: Field;
-}
-
-:where(select:is([multiple], [size])) optgroup {
-  font-weight: bold;
-}
-
-:where(select:is([multiple], [size])) optgroup option {
-  padding-inline-start: 20px;
-}
-
-select:where(:disabled),
-textarea:where(:disabled),
-input:where(
-    [type='text'],
-    [type='email'],
-    [type='password'],
-    [type='date'],
-    [type='datetime-local'],
-    [type='month'],
-    [type='number'],
-    [type='search'],
-    [type='time'],
-    [type='week'],
-    [type='tel'],
-    [type='url']
-  ):where(:disabled) {
-  opacity: 1;
-  color: light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 50%));
-  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 10%));
-  border-color: light-dark(rgb(0 0 0 / 20%), rgb(255 255 255 / 15%));
-}
-
-/*
-  Apply consistent base button styles across browsers.
-*/
-
-button,
-::file-selector-button,
-input:where([type='button'], [type='reset'], [type='submit']) {
-  border-radius: 4px;
-  padding-inline: 4px;
-  padding-block: 2px;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(rgb(0 0 0 / 5%), rgb(255 255 255 / 40%));
-  border: 1px solid light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 10%));
-}
-
-button:where(:hover),
-::file-selector-button:where(:hover),
-input:where([type='button'], [type='reset'], [type='submit']):where(:hover) {
-  background-color: light-dark(rgb(0 0 0 / 10%), rgb(255 255 255 / 45%));
-}
-
-button:where(:active),
-::file-selector-button:where(:active),
-input:where([type='button'], [type='reset'], [type='submit']):where(:active) {
-  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 30%));
-}
-
-button:where(:disabled),
-:where(input:disabled)::file-selector-button,
-input:where([type='button'], [type='reset'], [type='submit']):where(:disabled) {
-  opacity: 1;
-  background-color: light-dark(rgb(0 0 0 / 2.5%), rgb(255 255 255 / 25%));
-  border-color: light-dark(rgb(0 0 0 / 20%), rgb(255 255 255 / 10%));
-}
-
-input:where([type='file']:disabled) {
-  color: light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 50%));
-}
-
-::file-selector-button {
-  margin-inline-end: 4px;
 }
 
 /*
