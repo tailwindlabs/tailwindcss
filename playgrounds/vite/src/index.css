@@ -1,1 +1,8 @@
 @import 'tailwindcss';
+
+@theme {
+  --text-heading3xl: 2.25rem;
+  --text-heading3xl--line-height: 3rem;
+  --text-heading3xl--font-weight: 700;
+  --text-heading3xl--letter-spacing: -0.08375rem;
+}
