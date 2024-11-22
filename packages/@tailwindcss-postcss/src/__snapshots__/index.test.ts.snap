@@ -393,11 +393,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
-    --lightningcss-light: initial;
-    --lightningcss-dark: ;
-    --lightningcss-light: initial;
-    --lightningcss-dark: ;
-    color-scheme: light;
   }
 
   body {
@@ -496,6 +491,9 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
+    opacity: 1;
+    background-color: #0000;
+    border-radius: 0;
   }
 
   ::file-selector-button {
@@ -504,6 +502,21 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     letter-spacing: inherit;
     color: inherit;
+    opacity: 1;
+    background-color: #0000;
+    border-radius: 0;
+  }
+
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+
+  ::file-selector-button {
+    margin-inline-end: 4px;
   }
 
   ::placeholder {
@@ -586,89 +599,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::-webkit-outer-spin-button {
     height: auto;
-  }
-
-  select, textarea, input:where([type="text"], [type="email"], [type="password"], [type="date"], [type="datetime-local"], [type="month"], [type="number"], [type="search"], [type="time"], [type="week"], [type="tel"], [type="url"]) {
-    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
-    background-color: var(--lightningcss-light, #fff) var(--lightningcss-dark, #ffffff1a);
-    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff40);
-    border-radius: 3px;
-    padding-block: 2px;
-    padding-inline: 4px;
-  }
-
-  :where(select:not([multiple], [size])) option, :where(select:not([multiple], [size])) optgroup {
-    color: fieldtext;
-    background-color: field;
-  }
-
-  :where(select:is([multiple], [size])) optgroup {
-    font-weight: bold;
-  }
-
-  :where(select:is([multiple], [size])) optgroup option {
-    padding-inline-start: 20px;
-  }
-
-  select:where(:disabled), textarea:where(:disabled), input:where([type="text"], [type="email"], [type="password"], [type="date"], [type="datetime-local"], [type="month"], [type="number"], [type="search"], [type="time"], [type="week"], [type="tel"], [type="url"]):where(:disabled) {
-    opacity: 1;
-    color: var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff80);
-    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff1a);
-    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff26);
-  }
-
-  button, input:where([type="button"], [type="reset"], [type="submit"]) {
-    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
-    background-color: var(--lightningcss-light, #0000000d) var(--lightningcss-dark, #fff6);
-    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff1a);
-    border-radius: 4px;
-    padding-block: 2px;
-    padding-inline: 4px;
-  }
-
-  ::file-selector-button {
-    color: var(--lightningcss-light, #000) var(--lightningcss-dark, #fff);
-    background-color: var(--lightningcss-light, #0000000d) var(--lightningcss-dark, #fff6);
-    border: 1px solid var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff1a);
-    border-radius: 4px;
-    padding-block: 2px;
-    padding-inline: 4px;
-  }
-
-  button:where(:hover), input:where([type="button"], [type="reset"], [type="submit"]):where(:hover) {
-    background-color: var(--lightningcss-light, #0000001a) var(--lightningcss-dark, #ffffff73);
-  }
-
-  ::file-selector-button:where(:hover) {
-    background-color: var(--lightningcss-light, #0000001a) var(--lightningcss-dark, #ffffff73);
-  }
-
-  button:where(:active), input:where([type="button"], [type="reset"], [type="submit"]):where(:active) {
-    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff4d);
-  }
-
-  ::file-selector-button:where(:active) {
-    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff4d);
-  }
-
-  button:where(:disabled), input:where([type="button"], [type="reset"], [type="submit"]):where(:disabled) {
-    opacity: 1;
-    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff40);
-    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff1a);
-  }
-
-  :where(input:disabled)::file-selector-button {
-    opacity: 1;
-    background-color: var(--lightningcss-light, #00000006) var(--lightningcss-dark, #ffffff40);
-    border-color: var(--lightningcss-light, #0003) var(--lightningcss-dark, #ffffff1a);
-  }
-
-  input:where([type="file"]:disabled) {
-    color: var(--lightningcss-light, #00000080) var(--lightningcss-dark, #ffffff80);
-  }
-
-  ::file-selector-button {
-    margin-inline-end: 4px;
   }
 
   [hidden]:where(:not([hidden="until-found"])) {

@@ -97,23 +97,6 @@ it('should migrate a stylesheet', async () => {
     "@import 'tailwindcss';
 
     /*
-      In Tailwind CSS v4, basic styles are applied to form elements by default. To
-      maintain compatibility with v3, the following resets have been added:
-    */
-    @layer base {
-      input,
-      textarea,
-      select,
-      button {
-        border: 0px solid;
-        border-radius: 0;
-        padding: 0;
-        color: inherit;
-        background-color: transparent;
-      }
-    }
-
-    /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
@@ -185,23 +168,6 @@ it('should migrate a stylesheet (with imports)', async () => {
     @import './my-utilities.css' layer(utilities);
 
     /*
-      In Tailwind CSS v4, basic styles are applied to form elements by default. To
-      maintain compatibility with v3, the following resets have been added:
-    */
-    @layer base {
-      input,
-      textarea,
-      select,
-      button {
-        border: 0px solid;
-        border-radius: 0;
-        padding: 0;
-        color: inherit;
-        background-color: transparent;
-      }
-    }
-
-    /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
@@ -242,23 +208,6 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     @layer foo, bar, baz;
     /**! My license comment */
     @import 'tailwindcss';
-
-    /*
-      In Tailwind CSS v4, basic styles are applied to form elements by default. To
-      maintain compatibility with v3, the following resets have been added:
-    */
-    @layer base {
-      input,
-      textarea,
-      select,
-      button {
-        border: 0px solid;
-        border-radius: 0;
-        padding: 0;
-        color: inherit;
-        background-color: transparent;
-      }
-    }
 
     /*
       The default border color has changed to \`currentColor\` in Tailwind CSS v4,
