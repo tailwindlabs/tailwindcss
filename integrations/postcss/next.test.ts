@@ -70,7 +70,7 @@ test(
   },
 )
 ;['turbo', 'webpack'].forEach((bundler) => {
-  test(
+  test.sequential(
     `dev mode (${bundler})`,
     {
       fs: {

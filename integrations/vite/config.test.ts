@@ -128,7 +128,7 @@ test(
   },
 )
 
-test(
+test.sequential(
   'Config files (CJS, dev mode)',
   {
     fs: {
@@ -200,7 +200,7 @@ test(
   },
 )
 
-test(
+test.sequential(
   'Config files (ESM, dev mode)',
   {
     fs: {
