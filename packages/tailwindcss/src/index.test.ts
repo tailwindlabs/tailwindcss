@@ -3045,3 +3045,26 @@ test('addBase', async () => {
     }"
   `)
 })
+
+test('source(…) and layer(…) work together', async () => {
+  let { build } = await compile(
+    css`
+      @import 'tailwindcss/utilities' source('./paths') layer(utilities);
+    `,
+    {
+      async loadStylesheet(_id, _base) {
+        return { base: '', content: '@tailwind utilities;' }
+      },
+    },
+  )
+
+  let compiled = build(['underline'])
+
+  expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    "@layer utilities {
+      .underline {
+        text-decoration-line: underline;
+      }
+    }"
+  `)
+})
