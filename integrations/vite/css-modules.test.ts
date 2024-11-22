@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { css, html, test, ts, txt } from '../utils'
 
 for (let transformer of ['postcss', 'lightningcss']) {
@@ -53,7 +53,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ exec, fs }) => {
+      async ({ exec, fs, expect }) => {
         await exec(`pnpm vite build`)
 
         let files = await fs.glob('dist/**/*.css')

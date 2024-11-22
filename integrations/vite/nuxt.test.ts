@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 const SETUP = {
@@ -37,7 +36,7 @@ const SETUP = {
   },
 }
 
-test('dev mode', SETUP, async ({ fs, spawn, getFreePort }) => {
+test('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) => {
   let port = await getFreePort()
   await spawn(`pnpm nuxt dev --port ${port}`)
 
@@ -62,7 +61,7 @@ test('dev mode', SETUP, async ({ fs, spawn, getFreePort }) => {
   })
 })
 
-test('build', SETUP, async ({ spawn, getFreePort, exec }) => {
+test('build', SETUP, async ({ spawn, getFreePort, exec, expect }) => {
   let port = await getFreePort()
   await exec(`pnpm nuxt build`)
   await spawn(`pnpm nuxt preview`, {

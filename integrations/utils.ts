@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest, expect } from 'vitest'
+import { test as defaultTest, type ExpectStatic, type TestAPI } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -35,6 +35,7 @@ interface TestConfig {
 }
 interface TestContext {
   root: string
+  expect: ExpectStatic
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   getFreePort(): Promise<number>
@@ -92,6 +93,7 @@ export function test(
 
       let context = {
         root,
+        expect: options.expect,
         async exec(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
@@ -374,9 +376,9 @@ export function test(
               let fileContent = await this.read(filePath)
               for (let content of Array.isArray(contents) ? contents : [contents]) {
                 if (content instanceof RegExp) {
-                  expect(fileContent).toMatch(content)
+                  options.expect(fileContent).toMatch(content)
                 } else {
-                  expect(fileContent).toContain(content)
+                  options.expect(fileContent).toContain(content)
                 }
               }
             })
@@ -385,7 +387,7 @@ export function test(
             return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of contents) {
-                expect(fileContent).not.toContain(content)
+                options.expect(fileContent).not.toContain(content)
               }
             })
           },
