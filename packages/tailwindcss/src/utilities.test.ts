@@ -7866,16 +7866,19 @@ test('space-x', async () => {
     }
 
     :where(.-space-x-4 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
       margin-inline-start: calc(calc(var(--spacing-4) * -1) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     :where(.space-x-4 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
       margin-inline-start: calc(var(--spacing-4) * var(--tw-space-x-reverse));
       margin-inline-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     :where(.space-x-\\[4px\\] > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
       margin-inline-start: calc(4px * var(--tw-space-x-reverse));
       margin-inline-end: calc(4px * calc(1 - var(--tw-space-x-reverse)));
     }
@@ -7914,16 +7917,19 @@ test('space-y', async () => {
     }
 
     :where(.-space-y-4 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing-4) * -1) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-4 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
       margin-block-start: calc(var(--spacing-4) * var(--tw-space-y-reverse));
       margin-block-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-\\[4px\\] > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
       margin-block-start: calc(4px * var(--tw-space-y-reverse));
       margin-block-end: calc(4px * calc(1 - var(--tw-space-y-reverse)));
     }
