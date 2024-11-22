@@ -1,4 +1,4 @@
-import { atRule, context, walk, WalkAction, type AstNode } from './ast'
+import { atRule, context, toCss, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
@@ -39,7 +39,17 @@ export async function substituteAtImports(
             await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
 
             contextNode.nodes = buildImportNodes(
-              [context({ base: loaded.base }, ast)],
+              [
+                context(
+                  {
+                    base: loaded.base,
+                    get source() {
+                      return toCss([node])
+                    },
+                  },
+                  ast,
+                ),
+              ],
               layer,
               media,
               supports,

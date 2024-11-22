@@ -337,6 +337,77 @@ async function parseCss(
           important = true
         }
 
+        // Handle `layer(…)`
+        else if (param.startsWith('layer(')) {
+          // Whenever we see an `@media layer(…)`, it means one of two things:
+          //
+          // 1. Somebody added a manual `@media layer(…)` rule, which is not
+          //    supported.
+          // 2. Somebody used an `@import 'url' something(else) layer(…)` rule,
+          //    which is not supported by spec because a `layer(…)` has to be
+          //    first.
+
+          // It was an `@import layer(…)`
+          if (node.nodes?.[0]?.kind === 'context') {
+            let actual = node.nodes[0].context.source.trim().slice(0, -1)
+            let expected = segment(actual, ' ')
+            let layer = expected.findIndex((part) => part.startsWith('layer('))
+            expected.splice(2, 0, ...expected.splice(layer, 1))
+
+            let errorMessage = [
+              'A `layer(…)` in an `@import` should come first:',
+              '',
+              '```diff',
+              `- ${actual};`,
+              `+ ${expected.join(' ')};`,
+              '```',
+            ].join('\n')
+
+            throw new Error(errorMessage)
+          }
+
+          // It was an `@media layer(…)`
+          else {
+            let afterNode = structuredClone(node)
+            let afterAst = [afterNode]
+            walk(afterAst, (node, { replaceWith }) => {
+              if (
+                node.kind === 'at-rule' &&
+                node.name === '@media' &&
+                node.params.includes('layer(')
+              ) {
+                let layer = segment(node.params, ' ')
+                  .find((part) => part.startsWith('layer('))
+                  ?.slice(6, -1)
+                replaceWith(atRule('@layer', layer, node.nodes))
+              }
+            })
+
+            let beforeLines = toCss([node]).trim().split('\n')
+            let afterLines = toCss(afterAst).trim().split('\n')
+
+            let lines = []
+            for (let i = beforeLines.length - 1; i >= 0; i--) {
+              if (beforeLines[i] !== afterLines[i]) {
+                lines.unshift(`+ ${afterLines[i]}`)
+                lines.unshift(`- ${beforeLines[i]}`)
+              } else {
+                lines.unshift(`  ${beforeLines[i]}`)
+              }
+            }
+
+            let errorMessage = [
+              'A `@media layer(…)` is invalid, did you mean to use `@layer`?',
+              '',
+              '```css',
+              ...lines,
+              '```',
+            ].join('\n')
+
+            throw new Error(errorMessage)
+          }
+        }
+
         //
         else {
           unknownParams.push(param)

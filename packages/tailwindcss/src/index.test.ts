@@ -3046,3 +3046,70 @@ test('addBase', async () => {
     }"
   `)
 })
+
+it('should error when `layer(…)` is not the first param', async () => {
+  expect(async () => {
+    return await compileCss(
+      css`
+        @import './bar.css' source(--foo) layer(utilities);
+      `,
+      [],
+      {
+        async loadStylesheet() {
+          return {
+            base: '/bar.css',
+            content: css`
+              .foo {
+                @apply underline;
+              }
+            `,
+          }
+        },
+      },
+    )
+  }).rejects.toThrowErrorMatchingInlineSnapshot(`
+    [Error: A \`layer(…)\` in an \`@import\` should come first:
+
+    \`\`\`diff
+    - @import './bar.css' source(--foo) layer(utilities);
+    + @import './bar.css' layer(utilities) source(--foo);
+    \`\`\`]
+  `)
+})
+
+it('should error when `layer(…)` is part of an `@media`', async () => {
+  expect(
+    async () =>
+      await compileCss(css`
+        @media layer(utilities) {
+          .foo {
+            color: red;
+            @media layer(other) {
+              .bar {
+                color: blue;
+              }
+            }
+          }
+        }
+      `),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `
+    [Error: A \`@media layer(…)\` is invalid, did you mean to use \`@layer\`?
+
+    \`\`\`css
+    - @media layer(utilities) {
+    + @layer utilities {
+        .foo {
+          color: red;
+    -     @media layer(other) {
+    +     @layer other {
+            .bar {
+              color: blue;
+            }
+          }
+        }
+      }
+    \`\`\`]
+  `,
+  )
+})
