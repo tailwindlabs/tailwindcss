@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Use configured `--letter-spacing` values for custom font size utilities ([#15099](https://github.com/tailwindlabs/tailwindcss/pull/15099))
 
 ## [4.0.0-beta.1] - 2024-11-21
 

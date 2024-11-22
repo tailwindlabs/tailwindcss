@@ -4033,7 +4033,7 @@ export function createUtilities(theme: Theme) {
       let value = theme.resolveWith(
         candidate.value.value,
         ['--text'],
-        ['--line-height', '--tracking', '--font-weight'],
+        ['--line-height', '--letter-spacing', '--font-weight'],
       )
       if (value) {
         let [fontSize, options = {}] = Array.isArray(value) ? value : [value]
@@ -4067,7 +4067,9 @@ export function createUtilities(theme: Theme) {
           ),
           decl(
             'letter-spacing',
-            options['--tracking'] ? `var(--tw-tracking, ${options['--tracking']})` : undefined,
+            options['--letter-spacing']
+              ? `var(--tw-tracking, ${options['--letter-spacing']})`
+              : undefined,
           ),
           decl(
             'font-weight',
