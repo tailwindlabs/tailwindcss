@@ -108,7 +108,7 @@ test(
   },
 )
 
-test(
+test.sequential(
   'watch mode',
   {
     fs: {
