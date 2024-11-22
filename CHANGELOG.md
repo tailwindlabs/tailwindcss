@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Reset reverse state when using `space-x-*` and `space-y-*` ([#15094](https://github.com/tailwindlabs/tailwindcss/pull/15094))
+- Reset reverse state when using `space-x/y-*` and `divide-x/y-*` ([#15094](https://github.com/tailwindlabs/tailwindcss/pull/15094))
 
 ## [4.0.0-beta.1] - 2024-11-21
 
