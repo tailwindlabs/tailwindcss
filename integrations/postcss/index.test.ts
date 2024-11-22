@@ -666,7 +666,7 @@ test(
         /* - Only './src' should be auto-scanned, not the current working directory */
         /* - .gitignore'd paths should be ignored (node_modules) */
         /* - Binary extensions should be ignored (jpg, zip) */
-        @import 'tailwindcss/utilities' source('./src');
+        @import 'tailwindcss/utilities' source('./src') layer(utilities);
 
         /* (2) */
         /* - All HTML and JSX files in 'ignored/components' should be scanned */
@@ -730,37 +730,39 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
-        --tw-content: "components/my-component.tsx";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"components\\/nested\\/my-component\\.tsx\\"\\] {
-        --tw-content: "components/nested/my-component.tsx";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"ignored\\/components\\/my-component\\.html\\"\\] {
-        --tw-content: "ignored/components/my-component.html";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"ignored\\/components\\/my-component\\.jsx\\"\\] {
-        --tw-content: "ignored/components/my-component.jsx";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"pages\\/foo\\.html\\"\\] {
-        --tw-content: "pages/foo.html";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"pages\\/nested\\/foo\\.html\\"\\] {
-        --tw-content: "pages/nested/foo.html";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"src\\/index\\.html\\"\\] {
-        --tw-content: "src/index.html";
-        content: var(--tw-content);
-      }
-      .content-\\[\\"src\\/nested\\/index\\.html\\"\\] {
-        --tw-content: "src/nested/index.html";
-        content: var(--tw-content);
+      @layer utilities {
+        .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
+          --tw-content: "components/my-component.tsx";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"components\\/nested\\/my-component\\.tsx\\"\\] {
+          --tw-content: "components/nested/my-component.tsx";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"ignored\\/components\\/my-component\\.html\\"\\] {
+          --tw-content: "ignored/components/my-component.html";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"ignored\\/components\\/my-component\\.jsx\\"\\] {
+          --tw-content: "ignored/components/my-component.jsx";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"pages\\/foo\\.html\\"\\] {
+          --tw-content: "pages/foo.html";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"pages\\/nested\\/foo\\.html\\"\\] {
+          --tw-content: "pages/nested/foo.html";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"src\\/index\\.html\\"\\] {
+          --tw-content: "src/index.html";
+          content: var(--tw-content);
+        }
+        .content-\\[\\"src\\/nested\\/index\\.html\\"\\] {
+          --tw-content: "src/nested/index.html";
+          content: var(--tw-content);
+        }
       }
       @supports (-moz-orient: inline) {
         @layer base {

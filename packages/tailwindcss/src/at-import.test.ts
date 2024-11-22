@@ -414,6 +414,38 @@ test('@layer', async () => {
     }
     "
   `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' layer(utilities) source(none);
+      `,
+      { loadStylesheet, optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@layer utilities {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  await expect(
+    run(
+      css`
+        @import 'example.css' source(none) layer(utilities);
+      `,
+      { loadStylesheet, optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    "@layer utilities {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
 })
 
 test('supports theme(reference) imports', async () => {

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+### Fixed
+
+- Allow Tailwind CSS specific `@import` parameters to appear before `layer(…)` and `supports(…)` ([#15087](https://github.com/tailwindlabs/tailwindcss/pull/15087))
+
 ## [4.0.0-beta.1] - 2024-11-21
 
 ### Added

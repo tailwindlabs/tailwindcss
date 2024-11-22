@@ -55,7 +55,7 @@ export function walk(
   visit: (
     node: ValueAstNode,
     utils: {
-      parent: ValueParentNode
+      parent: ValueParentNode | null
       replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
     },
   ) => void | ValueWalkAction,

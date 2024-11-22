@@ -71,6 +71,36 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
   let media: string | null = null
   let supports: string | null = null
 
+  // Extract CSS functions at any place in the params list. This is an extension
+  // to the CSS spec where `layer()` or `supports()` must come before @media
+  // queries but it will make the API more intuitive for Tailwind CSS users as
+  // we rely on some custom functions to configure Tailwind.
+  //
+  // E.g.: `@import "tailwindcss/utilities" source(none) layer(utilities);`
+  ValueParser.walk(params, (node, { replaceWith, parent }) => {
+    if (parent !== null) return
+    if (
+      (node.kind === 'word' || node.kind === 'function') &&
+      node.value.toLowerCase() === 'layer'
+    ) {
+      if (layer) throw new Error('Multiple layers')
+      if (supports) throw new Error('`layer(…)` must be defined before `supports(…)` conditions')
+
+      if ('nodes' in node) {
+        layer = ValueParser.toCss(node.nodes)
+      } else {
+        layer = ''
+      }
+      return replaceWith([])
+    }
+
+    if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
+      if (supports) throw new Error('Multiple support conditions')
+      supports = ValueParser.toCss(node.nodes)
+      return replaceWith([])
+    }
+  })
+
   for (let i = 0; i < params.length; i++) {
     const node = params[i]
 
@@ -90,29 +120,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
 
     if (!uri) throw new Error('Unable to find uri')
 
-    if (
-      (node.kind === 'word' || node.kind === 'function') &&
-      node.value.toLowerCase() === 'layer'
-    ) {
-      if (layer) throw new Error('Multiple layers')
-      if (supports) throw new Error('`layer(…)` must be defined before `supports(…)` conditions')
-
-      if ('nodes' in node) {
-        layer = ValueParser.toCss(node.nodes)
-      } else {
-        layer = ''
-      }
-
-      continue
-    }
-
-    if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
-      if (supports) throw new Error('Multiple support conditions')
-      supports = ValueParser.toCss(node.nodes)
-      continue
-    }
-
-    media = ValueParser.toCss(params.slice(i))
+    media = ValueParser.toCss(params.slice(i)).trim()
     break
   }
 
