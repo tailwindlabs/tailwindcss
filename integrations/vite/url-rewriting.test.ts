@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { binary, css, html, svg, test, ts, txt } from '../utils'
 
 const SIMPLE_IMAGE = `iVBORw0KGgoAAAANSUhEUgAAADAAAAAlAQAAAAAsYlcCAAAACklEQVR4AWMYBQABAwABRUEDtQAAAABJRU5ErkJggg==`
@@ -79,7 +79,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ fs, exec }) => {
+      async ({ fs, exec, expect }) => {
         await exec('pnpm vite build')
 
         let files = await fs.glob('dist/**/*.css')

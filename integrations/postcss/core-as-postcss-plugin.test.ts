@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { css, js, json, test } from '../utils'
 
 const variantConfig = {
@@ -47,7 +46,7 @@ for (let variant of Object.keys(variantConfig)) {
         'src/index.css': css`@import 'tailwindcss';`,
       },
     },
-    async ({ exec }) => {
+    async ({ exec, expect }) => {
       expect(
         exec('pnpm postcss src/index.css --output dist/out.css', undefined, { ignoreStdErr: true }),
       ).rejects.toThrowError(

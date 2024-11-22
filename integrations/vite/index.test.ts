@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import {
   candidate,
   css,
@@ -77,7 +77,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, fs, exec }) => {
+      async ({ root, fs, exec, expect }) => {
         await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
         let files = await fs.glob('project-a/dist/**/*.css')
@@ -162,7 +162,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, spawn, getFreePort, fs }) => {
+      async ({ root, spawn, getFreePort, fs, expect }) => {
         let port = await getFreePort()
         await spawn(`pnpm vite dev --port ${port}`, {
           cwd: path.join(root, 'project-a'),
@@ -317,7 +317,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, spawn, fs }) => {
+      async ({ root, spawn, fs, expect }) => {
         await spawn(`pnpm vite build --watch`, {
           cwd: path.join(root, 'project-a'),
         })
@@ -482,7 +482,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, fs, exec }) => {
+      async ({ root, fs, exec, expect }) => {
         await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
         let files = await fs.glob('project-a/dist/**/*.css')
@@ -575,7 +575,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, fs, exec }) => {
+      async ({ root, fs, exec, expect }) => {
         await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
         let files = await fs.glob('project-a/dist/**/*.css')
@@ -677,7 +677,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, fs, exec }) => {
+      async ({ root, fs, exec, expect }) => {
         await expect(() =>
           exec('pnpm vite build', { cwd: path.join(root, 'project-a') }, { ignoreStdErr: true }),
         ).rejects.toThrowError('The `source(../i-do-not-exist)` does not exist')
@@ -733,7 +733,7 @@ test(
       'src/index.css': css`@import 'tailwindcss';`,
     },
   },
-  async ({ spawn, getFreePort, fs }) => {
+  async ({ spawn, getFreePort, fs, expect }) => {
     let port = await getFreePort()
     await spawn(`pnpm vite dev --port ${port}`)
 
@@ -801,7 +801,7 @@ test(
       'src/index.css': css`@import 'tailwindcss';`,
     },
   },
-  async ({ spawn, getFreePort }) => {
+  async ({ spawn, getFreePort, expect }) => {
     let port = await getFreePort()
     await spawn(`pnpm vite dev --port ${port}`)
 
