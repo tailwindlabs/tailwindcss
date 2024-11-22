@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Use configured `--letter-spacing` values for custom font size utilities ([#15099](https://github.com/tailwindlabs/tailwindcss/pull/15099))
+
 ### Changed
 
 - Revert the new base styles for buttons and form controls ([#15100](https://github.com/tailwindlabs/tailwindcss/pull/15100))

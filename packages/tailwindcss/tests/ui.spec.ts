@@ -568,8 +568,8 @@ test('explicit tracking utilities are respected when overriding font-size', asyn
     `,
     css`
       @theme {
-        --text-sm--tracking: 5px;
-        --text-xl--tracking: 10px;
+        --text-sm--letter-spacing: 5px;
+        --text-xl--letter-spacing: 10px;
         --tracking-tight: 1px;
       }
     `,
