@@ -30,25 +30,6 @@ const BORDER_COLOR_COMPATIBILITY_CSS = css`
   }
 `
 
-const FORMS_RESET_CSS = css`
-  /*
-    In Tailwind CSS v4, basic styles are applied to form elements by default. To
-    maintain compatibility with v3, the following resets have been added:
-  */
-  @layer base {
-    input,
-    textarea,
-    select,
-    button {
-      border: 0px solid;
-      border-radius: 0;
-      padding: 0;
-      color: inherit;
-      background-color: transparent;
-    }
-  }
-`
-
 export function migratePreflight({
   designSystem,
   userConfig,
@@ -79,7 +60,7 @@ export function migratePreflight({
     if (!isTailwindRoot) return
 
     // Figure out the compatibility CSS to inject
-    let compatibilityCssString = FORMS_RESET_CSS + '\n\n'
+    let compatibilityCssString = ''
     if (defaultBorderColor !== DEFAULT_BORDER_COLOR) {
       compatibilityCssString += BORDER_COLOR_COMPATIBILITY_CSS
       compatibilityCssString += '\n\n'
