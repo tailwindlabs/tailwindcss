@@ -299,7 +299,7 @@ test('stacked peer variants', async () => {
   expect(result.css).toIncludeCss(css`
     .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:border-blue-500 {
       --tw-border-opacity: 1;
-      border-color: rgb(59 130 246 / var(--tw-border-opacity));
+      border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
     }
   `)
 })
@@ -1050,7 +1050,7 @@ test('variants with slashes in them work', () => {
       @media (min-aspect-ratio: 1 / 10) {
         .ar-1\/10\:text-red-500 {
           --tw-text-opacity: 1;
-          color: rgb(239 68 68 / var(--tw-text-opacity));
+          color: rgb(239 68 68 / var(--tw-text-opacity, 1));
         }
       }
     `)
@@ -1087,7 +1087,7 @@ test('variants with slashes support modifiers', () => {
       @media (min-aspect-ratio: 1 / 10) and (foo: 20) {
         .ar-1\/10\/20\:text-red-500 {
           --tw-text-opacity: 1;
-          color: rgb(239 68 68 / var(--tw-text-opacity));
+          color: rgb(239 68 68 / var(--tw-text-opacity, 1));
         }
       }
     `)

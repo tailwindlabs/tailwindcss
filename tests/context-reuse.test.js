@@ -52,14 +52,14 @@ test('re-uses the context across multiple files with the same config', async () 
   expect(results[1].css).toMatchFormattedCss(css`
     body {
       --tw-bg-opacity: 1;
-      background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+      background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1));
     }
   `)
 
   expect(results[2].css).toMatchFormattedCss(css`
     body {
       --tw-text-opacity: 1;
-      color: rgb(248 113 113 / var(--tw-text-opacity));
+      color: rgb(248 113 113 / var(--tw-text-opacity, 1));
     }
   `)
 

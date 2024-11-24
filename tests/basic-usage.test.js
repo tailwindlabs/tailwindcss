@@ -243,7 +243,7 @@ test('all plugins are executed that match a candidate', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-green-light {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 128 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 128 0 / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -291,11 +291,11 @@ test('per-plugin colors with the same key can differ when using a custom colors 
     expect(result.css).toMatchFormattedCss(css`
       .bg-theme {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity, 1));
       }
       .text-theme {
         --tw-text-opacity: 1;
-        color: rgb(0 128 0 / var(--tw-text-opacity));
+        color: rgb(0 128 0 / var(--tw-text-opacity, 1));
       }
     `)
   })
@@ -858,7 +858,7 @@ it('Ring color utilities are generated when using respectDefaultRingColorOpacity
       }
       .ring-blue-500 {
         --tw-ring-opacity: 1;
-        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
       }
     `)
   })

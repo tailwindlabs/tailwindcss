@@ -119,42 +119,42 @@ it('can use <alpha-value> defining custom properties for colors (opacity plugins
     expect(result.css).toMatchFormattedCss(css`
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-opacity: 1;
-        border-color: rgb(var(--color-primary) / var(--tw-divide-opacity));
+        border-color: rgb(var(--color-primary) / var(--tw-divide-opacity, 1));
       }
       .divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-opacity: 0.5;
       }
       .border-primary {
         --tw-border-opacity: 1;
-        border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
+        border-color: rgb(var(--color-primary) / var(--tw-border-opacity, 1));
       }
       .border-opacity-50 {
         --tw-border-opacity: 0.5;
       }
       .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
+        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity, 1));
       }
       .bg-opacity-50 {
         --tw-bg-opacity: 0.5;
       }
       .text-primary {
         --tw-text-opacity: 1;
-        color: rgb(var(--color-primary) / var(--tw-text-opacity));
+        color: rgb(var(--color-primary) / var(--tw-text-opacity, 1));
       }
       .text-opacity-50 {
         --tw-text-opacity: 0.5;
       }
       .placeholder-primary::placeholder {
         --tw-placeholder-opacity: 1;
-        color: rgb(var(--color-primary) / var(--tw-placeholder-opacity));
+        color: rgb(var(--color-primary) / var(--tw-placeholder-opacity, 1));
       }
       .placeholder-opacity-50::placeholder {
         --tw-placeholder-opacity: 0.5;
       }
       .ring-primary {
         --tw-ring-opacity: 1;
-        --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity));
+        --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity, 1));
       }
       .ring-opacity-50 {
         --tw-ring-opacity: 0.5;
@@ -271,42 +271,42 @@ it('can use hsl helper when defining custom properties for colors (opacity plugi
     expect(result.css).toMatchFormattedCss(css`
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-opacity: 1;
-        border-color: hsl(var(--color-primary) / var(--tw-divide-opacity));
+        border-color: hsl(var(--color-primary) / var(--tw-divide-opacity, 1));
       }
       .divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-opacity: 0.5;
       }
       .border-primary {
         --tw-border-opacity: 1;
-        border-color: hsl(var(--color-primary) / var(--tw-border-opacity));
+        border-color: hsl(var(--color-primary) / var(--tw-border-opacity, 1));
       }
       .border-opacity-50 {
         --tw-border-opacity: 0.5;
       }
       .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: hsl(var(--color-primary) / var(--tw-bg-opacity));
+        background-color: hsl(var(--color-primary) / var(--tw-bg-opacity, 1));
       }
       .bg-opacity-50 {
         --tw-bg-opacity: 0.5;
       }
       .text-primary {
         --tw-text-opacity: 1;
-        color: hsl(var(--color-primary) / var(--tw-text-opacity));
+        color: hsl(var(--color-primary) / var(--tw-text-opacity, 1));
       }
       .text-opacity-50 {
         --tw-text-opacity: 0.5;
       }
       .placeholder-primary::placeholder {
         --tw-placeholder-opacity: 1;
-        color: hsl(var(--color-primary) / var(--tw-placeholder-opacity));
+        color: hsl(var(--color-primary) / var(--tw-placeholder-opacity, 1));
       }
       .placeholder-opacity-50::placeholder {
         --tw-placeholder-opacity: 0.5;
       }
       .ring-primary {
         --tw-ring-opacity: 1;
-        --tw-ring-color: hsl(var(--color-primary) / var(--tw-ring-opacity));
+        --tw-ring-color: hsl(var(--color-primary) / var(--tw-ring-opacity, 1));
       }
       .ring-opacity-50 {
         --tw-ring-opacity: 0.5;
@@ -643,7 +643,7 @@ it('should be possible to use an <alpha-value> as part of the color definition',
     expect(result.css).toMatchFormattedCss(css`
       .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
+        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity, 1));
       }
     `)
   })
@@ -769,7 +769,7 @@ it('Theme functions can reference values with slashes in brackets', () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-foo1 {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
       .bg-foo2 {
         background-color: #00000080;
@@ -823,7 +823,7 @@ it('works with opacity values defined as a placeholder or a function in when col
       }
       .bg-foo20 {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity, 1));
       }
       .bg-foo21 {
         background-color: #ff640080;
@@ -836,7 +836,7 @@ it('works with opacity values defined as a placeholder or a function in when col
       }
       .bg-foo40 {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity, 1));
       }
       .bg-foo41 {
         background-color: #ff640080;
@@ -967,7 +967,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
     expect(result.css).toMatchFormattedCss(css`
       .divide-blue-300 > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-opacity: 1;
-        border-color: rgb(147 197 253 / var(--tw-divide-opacity));
+        border-color: rgb(147 197 253 / var(--tw-divide-opacity, 1));
       }
       .divide-blue-300\/50 > :not([hidden]) ~ :not([hidden]) {
         border-color: #93c5fd80;
@@ -980,7 +980,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
       }
       .border-blue-300 {
         --tw-border-opacity: 1;
-        border-color: rgb(147 197 253 / var(--tw-border-opacity));
+        border-color: rgb(147 197 253 / var(--tw-border-opacity, 1));
       }
       .border-blue-300\/50 {
         border-color: #93c5fd80;
@@ -993,7 +993,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
       }
       .bg-blue-300 {
         --tw-bg-opacity: 1;
-        background-color: rgb(147 197 253 / var(--tw-bg-opacity));
+        background-color: rgb(147 197 253 / var(--tw-bg-opacity, 1));
       }
       .bg-blue-300\/50 {
         background-color: #93c5fd80;
@@ -1006,7 +1006,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
       }
       .text-blue-300 {
         --tw-text-opacity: 1;
-        color: rgb(147 197 253 / var(--tw-text-opacity));
+        color: rgb(147 197 253 / var(--tw-text-opacity, 1));
       }
       .text-blue-300\/50 {
         color: #93c5fd80;
@@ -1019,7 +1019,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
       }
       .placeholder-blue-300::placeholder {
         --tw-placeholder-opacity: 1;
-        color: rgb(147 197 253 / var(--tw-placeholder-opacity));
+        color: rgb(147 197 253 / var(--tw-placeholder-opacity, 1));
       }
       .placeholder-blue-300\/50::placeholder {
         color: #93c5fd80;
@@ -1032,7 +1032,7 @@ it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesB
       }
       .ring-blue-300 {
         --tw-ring-opacity: 1;
-        --tw-ring-color: rgb(147 197 253 / var(--tw-ring-opacity));
+        --tw-ring-color: rgb(147 197 253 / var(--tw-ring-opacity, 1));
       }
       .ring-blue-300\/50 {
         --tw-ring-color: #93c5fd80;

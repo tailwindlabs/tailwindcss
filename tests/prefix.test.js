@@ -174,7 +174,7 @@ test('prefix', () => {
       }
       .dark\:tw-bg-\[rgb\(255\,0\,0\)\]:where(.tw-dark, .tw-dark *) {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity, 1));
       }
       .dark\:focus\:tw-text-left:focus:where(.tw-dark, .tw-dark *) {
         text-align: left;
@@ -530,7 +530,7 @@ test('supports non-word prefixes (1)', async () => {
   expect(result.css).toMatchFormattedCss(css`
     .\@bg-black {
       --tw-bg-opacity: 1;
-      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
     }
     .\@underline {
       text-decoration-line: underline;
@@ -540,7 +540,7 @@ test('supports non-word prefixes (1)', async () => {
     }
     .foo {
       --tw-text-opacity: 1;
-      color: rgb(255 255 255 / var(--tw-text-opacity));
+      color: rgb(255 255 255 / var(--tw-text-opacity, 1));
       background-color: red;
     }
     .hover\:before\:\@content-\[\'Hovering\'\]:hover:before {
@@ -592,7 +592,7 @@ test('supports non-word prefixes (2)', async () => {
   expect(result.css).toMatchFormattedCss(css`
     .\@\]\$bg-black {
       --tw-bg-opacity: 1;
-      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
     }
     .\@\]\$underline {
       text-decoration-line: underline;
@@ -602,7 +602,7 @@ test('supports non-word prefixes (2)', async () => {
     }
     .foo {
       --tw-text-opacity: 1;
-      color: rgb(255 255 255 / var(--tw-text-opacity));
+      color: rgb(255 255 255 / var(--tw-text-opacity, 1));
       background-color: red;
     }
   `)

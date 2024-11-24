@@ -70,7 +70,7 @@ test('using @import instead of @tailwind', () => {
       }
       .bg-black {
         --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
       }
       @media (min-width: 768px) {
         .md\:hover\:text-center:hover {
