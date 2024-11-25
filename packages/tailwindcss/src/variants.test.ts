@@ -62,7 +62,11 @@ test('marker', async () => {
 
 test('selection', async () => {
   expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
-    ".selection\\:flex ::selection, .selection\\:flex::selection {
+    ".selection\\:flex ::selection {
+      display: flex;
+    }
+
+    .selection\\:flex::selection {
       display: flex;
     }"
   `)
@@ -676,7 +680,7 @@ test('peer-*', async () => {
 
 test('ltr', async () => {
   expect(await run(['ltr:flex'])).toMatchInlineSnapshot(`
-    ".ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    ".ltr\\:flex:where(:not(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="ltr"], [dir="ltr"] *) {
       display: flex;
     }"
   `)
@@ -685,7 +689,7 @@ test('ltr', async () => {
 
 test('rtl', async () => {
   expect(await run(['rtl:flex'])).toMatchInlineSnapshot(`
-    ".rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+    ".rtl\\:flex:where(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="rtl"], [dir="rtl"] *) {
       display: flex;
     }"
   `)
@@ -1565,7 +1569,7 @@ test('not', async () => {
       }
     }
 
-    .not-ltr\\:flex:not(:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)), .not-rtl\\:flex:not(:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)) {
+    .not-ltr\\:flex:not(:where(:not(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="ltr"], [dir="ltr"] *)), .not-rtl\\:flex:not(:where(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="rtl"], [dir="rtl"] *)) {
       display: flex;
     }
 
@@ -2161,7 +2165,15 @@ test('variant order', async () => {
       }
     }
 
-    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line, .marker\\:flex ::marker, .marker\\:flex::marker, .selection\\:flex ::selection, .selection\\:flex::selection {
+    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line, .marker\\:flex ::marker, .marker\\:flex::marker {
+      display: flex;
+    }
+
+    .selection\\:flex ::selection {
+      display: flex;
+    }
+
+    .selection\\:flex::selection {
       display: flex;
     }
 
@@ -2264,7 +2276,7 @@ test('variant order', async () => {
       }
     }
 
-    .ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *), .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+    .ltr\\:flex:where(:not(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="ltr"], [dir="ltr"] *), .rtl\\:flex:where(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="rtl"], [dir="rtl"] *) {
       display: flex;
     }
 

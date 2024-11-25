@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Generate correct prefixes for iOS Safari, Firefox, and Chrome ([]())
 
 ## [4.0.0-beta.2] - 2024-11-22
 
