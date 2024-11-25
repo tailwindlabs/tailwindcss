@@ -1543,4 +1543,43 @@ mod test {
         let candidates = run(r#"<div class="h2 hz"></div>"#, false);
         assert_eq!(candidates, vec!["div", "class", "h2", "hz",]);
     }
+
+    #[test]
+    fn classes_in_js_arrays_multi_line() {
+        let candidates = run(
+            "let classes = [\n\t'bg-black',\n\t'hover:px-0.5',\n\t'text-[13px]',\n\t'[--my-var:1_/_2]',\n\t'[.foo_&]:px-[0]',\n\t'[.foo_&]:[color:red]'\n]",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+
+        let candidates = run(
+            "\n          <script>\n            const classes = [\n              'text-red-500',\n              'text-green-500',\n              'text-blue-500',\n            ]\n          </script>\n        ",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "script",
+                "const",
+                "classes",
+                "text-red-500",
+                "text-green-500",
+                "text-blue-500"
+            ]
+        );
+    }
 }
