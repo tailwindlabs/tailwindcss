@@ -518,8 +518,8 @@ export function createVariants(theme: Theme): Variants {
     // Name the group by appending the modifier to `group` class itself if
     // present.
     let variantSelector = variant.modifier
-      ? `:where(.group\\/${variant.modifier.value})`
-      : ':where(.group)'
+      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}group\\/${variant.modifier.value})`
+      : `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}group)`
 
     let didApply = false
 
@@ -570,8 +570,8 @@ export function createVariants(theme: Theme): Variants {
     // Name the peer by appending the modifier to `peer` class itself if
     // present.
     let variantSelector = variant.modifier
-      ? `:where(.peer\\/${variant.modifier.value})`
-      : ':where(.peer)'
+      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}peer\\/${variant.modifier.value})`
+      : `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}peer)`
 
     let didApply = false
 
