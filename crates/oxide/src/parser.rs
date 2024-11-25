@@ -568,7 +568,7 @@ impl<'a> Extractor<'a> {
                 }
             },
 
-            b' ' if !self.opts.preserve_spaces_in_arbitrary => {
+            c if c.is_ascii_whitespace() && !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
                 if let Arbitrary::Brackets { start_idx } | Arbitrary::Parens { start_idx } =
@@ -631,10 +631,8 @@ impl<'a> Extractor<'a> {
         match self.cursor.curr {
             // Enter arbitrary value mode. E.g.: `bg-[rgba(0, 0, 0)]`
             //                                       ^
-            b'[' if matches!(
-                self.cursor.prev,
-                b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0'
-            ) =>
+            b'[' if matches!(self.cursor.prev, b'@' | b'-' | b':' | b'/' | b'!' | b'\0')
+                || self.cursor.prev.is_ascii_whitespace() =>
             {
                 trace!("Arbitrary::Start\t");
                 self.arbitrary = Arbitrary::Brackets {
@@ -666,7 +664,8 @@ impl<'a> Extractor<'a> {
                     (true, _) => ParseAction::Consume,
 
                     // Looks like the end of a candidate == okay
-                    (_, b' ' | b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, c) if c.is_ascii_whitespace() => ParseAction::Consume,
 
                     // Otherwise, not a valid character in a candidate
                     _ => ParseAction::Skip,
