@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, html, js, json, retryAssertion, test, ts } from '../utils'
+import { candidate, css, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
   'production build',
@@ -253,6 +253,9 @@ test(
   },
 )
 
+// Context: when using `svelte()` before `tailwindcss()` it means that
+// `tailwindcss()` sees the contents after the svelte compiler ran. The svelte
+// compiler outputs tabs instead of spaces which we didn't handle correctly.
 test(
   'https://github.com/tailwindlabs/tailwindcss/issues/15148',
   {
@@ -275,21 +278,12 @@ test(
       'vite.config.ts': ts`
         import { defineConfig } from 'vite'
         import tailwindcss from '@tailwindcss/vite'
-        import { svelte } from '@sveltejs/vite-plugin-svelte'
+        import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
         // https://vite.dev/config/
         export default defineConfig({
-          plugins: [svelte(), tailwindcss()],
+          plugins: [svelte({ preprocess: [vitePreprocess()] }), tailwindcss()],
         })
-      `,
-      'svelte.config.js': js`
-        import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-
-        export default {
-          // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
-          // for more information about preprocessors
-          preprocess: vitePreprocess(),
-        }
       `,
       'index.html': html`
         <!doctype html>
@@ -355,10 +349,7 @@ test(
         {#each classes as cls}
         <div class="{cls}"></div>
         {/each}
-      `
-
-        // Replace all spaces with tabs
-        .replace(/\[[\s\S]*\]/gm, (m) => m.replace(/[ ]+/g, '\t')),
+      `,
     },
   },
   async ({ fs, exec }) => {
