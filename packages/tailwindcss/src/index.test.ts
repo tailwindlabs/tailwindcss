@@ -2401,7 +2401,7 @@ describe('plugins', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 
@@ -2926,7 +2926,7 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rtl\\:flex:where(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
           display: flex;
         }
 

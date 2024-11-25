@@ -11816,7 +11816,6 @@ test('bg-clip', async () => {
       }
 
       .bg-clip-text {
-        -webkit-background-clip: text;
         background-clip: text;
       }"
     `)
