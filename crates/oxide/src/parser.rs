@@ -253,9 +253,7 @@ impl<'a> Extractor<'a> {
 
         // Reject candidates that are single camelCase words, e.g.: `useEffect`
         if candidate.iter().all(|c| c.is_ascii_alphanumeric())
-            && candidate
-                .iter()
-                .any(|c| c.is_ascii_uppercase())
+            && candidate.iter().any(|c| c.is_ascii_uppercase())
         {
             return ValidationResult::Invalid;
         }
@@ -1542,18 +1540,7 @@ mod test {
 
     #[test]
     fn simple_utility_names_with_numbers_work() {
-        let candidates = run(
-            r#"<div class="h2 hz"></div>"#,
-            false,
-        );
-        assert_eq!(
-            candidates,
-            vec![
-                "div",
-                "class",
-                "h2",
-                "hz",
-            ]
-        );
+        let candidates = run(r#"<div class="h2 hz"></div>"#, false);
+        assert_eq!(candidates, vec!["div", "class", "h2", "hz",]);
     }
 }
