@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { candidate, css, html, json, retryAssertion, test, ts } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts } from '../utils'
 
 test(
   'production build',
@@ -250,5 +250,128 @@ test(
       expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
       expect(css).toMatch(/\.bar.svelte-.*\{color:var\(--color-pink-500\)\}/)
     })
+  },
+)
+
+test(
+  'https://github.com/tailwindlabs/tailwindcss/issues/15148',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "svelte": "^4.2.18",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@tailwindcss/vite": "workspace:^",
+            "vite": "^5.3.5",
+            "svelte": "^5.1.3"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import tailwindcss from '@tailwindcss/vite'
+        import { svelte } from '@sveltejs/vite-plugin-svelte'
+
+        // https://vite.dev/config/
+        export default defineConfig({
+          plugins: [svelte(), tailwindcss()],
+        })
+      `,
+      'svelte.config.js': js`
+        import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+
+        export default {
+          // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
+          // for more information about preprocessors
+          preprocess: vitePreprocess(),
+        }
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <body>
+            <div id="app"></div>
+            <script type="module" src="./src/main.ts"></script>
+          </body>
+        </html>
+      `,
+      'src/main.ts': ts`
+        import App from './App.svelte'
+        import './app.css'
+        const app = new App({ target: document.body })
+      `,
+      'src/app.css': css`
+        @import 'tailwindcss';
+
+        @utility test-red {
+          width: 10rem;
+          height: 10rem;
+          background-color: red;
+        }
+
+        @utility test-green {
+          width: 10rem;
+          height: 10rem;
+          background-color: green;
+        }
+
+        @utility test-blue {
+          width: 10rem;
+          height: 10rem;
+          background-color: blue;
+        }
+
+        @utility test-tomato {
+          width: 10rem;
+          height: 10rem;
+          background-color: tomato;
+        }
+      `,
+      'src/App.svelte': html`
+        <script>
+          const classes = [
+            'test-red',
+            'test-green',
+            'test-blue',
+            'test-tomato',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+            'multiple-entries-to-keep-newlines',
+          ]
+        </script>
+
+        {#each classes as cls}
+        <div class="{cls}"></div>
+        {/each}
+      `
+
+        // Replace all spaces with tabs
+        .replace(/\[[\s\S]*\]/gm, (m) => m.replace(/[ ]+/g, '\t')),
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+
+    await fs.expectFileToContain(files[0][0], [
+      candidate`test-red`,
+      candidate`test-green`,
+      candidate`test-blue`,
+      candidate`test-tomato`,
+    ])
   },
 )
