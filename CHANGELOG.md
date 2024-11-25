@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Generate correct prefixes for iOS Safari, Firefox, and Chrome ([]())
+- Generate correct prefixes for iOS Safari, Firefox, and Chrome ([#15166](https://github.com/tailwindlabs/tailwindcss/pull/15166))
 
 ## [4.0.0-beta.2] - 2024-11-22
 
