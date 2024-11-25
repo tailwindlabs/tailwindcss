@@ -25,6 +25,8 @@ jobs:
           # Windows
           - os: windows-latest
             target: x86_64-pc-windows-msvc
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
           # macOS
           - os: macos-latest
             target: x86_64-apple-darwin
@@ -208,6 +210,7 @@ jobs:
         run: |
           cd ${{ env.OXIDE_LOCATION }}
           cp bindings-x86_64-pc-windows-msvc/* ./npm/win32-x64-msvc/
+          cp bindings-aarch64-pc-windows-msvc/* ./npm/win32-arm64-msvc/
           cp bindings-x86_64-apple-darwin/* ./npm/darwin-x64/
           cp bindings-aarch64-apple-darwin/* ./npm/darwin-arm64/
           cp bindings-aarch64-linux-android/* ./npm/android-arm64/
