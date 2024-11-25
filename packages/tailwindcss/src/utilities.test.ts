@@ -1086,6 +1086,8 @@ test('order', async () => {
 test('col', async () => {
   expect(
     await run([
+      'col-11',
+      '-col-12',
       'col-auto',
       'col-span-4',
       'col-span-17',
@@ -1094,7 +1096,15 @@ test('col', async () => {
       'col-span-[var(--my-variable)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".col-\\[span_123\\/span_123\\] {
+    ".-col-12 {
+      grid-column: calc(12 * -1);
+    }
+
+    .col-11 {
+      grid-column: 11;
+    }
+
+    .col-\\[span_123\\/span_123\\] {
       grid-column: span 123 / span 123;
     }
 
@@ -1213,6 +1223,8 @@ test('col-end', async () => {
 test('row', async () => {
   expect(
     await run([
+      'row-11',
+      '-row-12',
       'row-auto',
       'row-span-4',
       'row-span-17',
@@ -1221,7 +1233,15 @@ test('row', async () => {
       'row-span-[var(--my-variable)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".row-\\[span_123\\/span_123\\] {
+    ".-row-12 {
+      grid-row: calc(12 * -1);
+    }
+
+    .row-11 {
+      grid-row: 11;
+    }
+
+    .row-\\[span_123\\/span_123\\] {
       grid-row: span 123 / span 123;
     }
 
