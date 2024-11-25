@@ -17,13 +17,34 @@ test('utilities must be prefixed', async () => {
   let compiler = await compile(input)
 
   // Prefixed utilities are generated
-  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
-    .toMatchInlineSnapshot(`
+  expect(
+    compiler.build([
+      'tw:underline',
+      'tw:hover:line-through',
+      'tw:custom',
+      'tw:group-hover:flex',
+      'tw:peer-hover:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".tw\\:custom {
       color: red;
     }
     .tw\\:underline {
       text-decoration-line: underline;
+    }
+    .tw\\:group-hover\\:flex {
+      &:is(:where(.tw\\:group):hover *) {
+        @media (hover: hover) {
+          display: flex;
+        }
+      }
+    }
+    .tw\\:peer-hover\\:flex {
+      &:is(:where(.tw\\:peer):hover ~ *) {
+        @media (hover: hover) {
+          display: flex;
+        }
+      }
     }
     .tw\\:hover\\:line-through {
       &:hover {
