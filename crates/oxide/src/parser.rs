@@ -1544,9 +1544,9 @@ mod test {
     }
 
     #[test]
-    fn classes_in_js_arrays_multi_line() {
+    fn classes_in_an_array_without_whitespace() {
         let candidates = run(
-            "let classes = [\n\t'bg-black',\n\t'hover:px-0.5',\n\t'text-[13px]',\n\t'[--my-var:1_/_2]',\n\t'[.foo_&]:px-[0]',\n\t'[.foo_&]:[color:red]'\n]",
+            "let classes = ['bg-black','hover:px-0.5','text-[13px]','[--my-var:1_/_2]','[.foo_&]:px-[0]','[.foo_&]:[color:red]']",
             false,
         );
 
@@ -1564,20 +1564,73 @@ mod test {
                 "[.foo_&]:[color:red]",
             ]
         );
+    }
 
+    #[test]
+    fn classes_in_an_array_with_spaces() {
         let candidates = run(
-            "\n          <script>\n            const classes = [\n              'text-red-500',\n              'text-green-500',\n              'text-blue-500',\n            ]\n          </script>\n        ",
+            "let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]', '[.foo_&]:px-[0]', '[.foo_&]:[color:red]']",
             false,
         );
+
         assert_eq!(
             candidates,
             vec![
-                "script",
-                "const",
+                "let",
                 "classes",
-                "text-red-500",
-                "text-green-500",
-                "text-blue-500"
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_tabs() {
+        let candidates = run(
+            "let classes = ['bg-black',\t'hover:px-0.5',\t'text-[13px]',\t'[--my-var:1_/_2]',\t'[.foo_&]:px-[0]',\t'[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_newlines() {
+        let candidates = run(
+            "let classes = [\n'bg-black',\n'hover:px-0.5',\n'text-[13px]',\n'[--my-var:1_/_2]',\n'[.foo_&]:px-[0]',\n'[.foo_&]:[color:red]'\n]",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
             ]
         );
     }
