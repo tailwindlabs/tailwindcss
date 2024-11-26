@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Ensure any necessary vendor prefixes are generated for iOS Safari, Firefox, and Chrome ([#15166](https://github.com/tailwindlabs/tailwindcss/pull/15166))
 - Ensure `.group` and `.peer` are prefixed when using the `prefix(…)` option ([#15174](https://github.com/tailwindlabs/tailwindcss/pull/15174))
 - Ensure 3D transforms render correctly in Safari ([#15179](https://github.com/tailwindlabs/tailwindcss/pull/15179))
 

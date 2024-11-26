@@ -11803,22 +11803,22 @@ test('box-decoration', async () => {
 test('bg-clip', async () => {
   expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
     .toMatchInlineSnapshot(`
-    ".bg-clip-border {
-      background-clip: border-box;
-    }
+      ".bg-clip-border {
+        background-clip: border-box;
+      }
 
-    .bg-clip-content {
-      background-clip: content-box;
-    }
+      .bg-clip-content {
+        background-clip: content-box;
+      }
 
-    .bg-clip-padding {
-      background-clip: padding-box;
-    }
+      .bg-clip-padding {
+        background-clip: padding-box;
+      }
 
-    .bg-clip-text {
-      background-clip: text;
-    }"
-  `)
+      .bg-clip-text {
+        background-clip: text;
+      }"
+    `)
   expect(
     await run([
       'bg-clip',
