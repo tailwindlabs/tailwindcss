@@ -151,6 +151,23 @@ describe('compiling CSS', () => {
       }"
     `)
   })
+
+  test('adds vendor prefixes', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+        `,
+        ['[text-size-adjust:none]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".\\[text-size-adjust\\:none\\] {
+        -webkit-text-size-adjust: none;
+        -moz-text-size-adjust: none;
+        text-size-adjust: none;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {
