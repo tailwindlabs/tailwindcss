@@ -14,7 +14,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
           },
           "devDependencies": {
             ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,

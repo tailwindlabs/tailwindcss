@@ -18,7 +18,7 @@ for (let transformer of ['postcss', 'lightningcss']) {
               "devDependencies": {
                 ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
                 "@tailwindcss/vite": "workspace:^",
-                "vite": "^5.3.5"
+                "vite": "^6"
               }
             }
           `,
