@@ -4467,31 +4467,31 @@ test('rotate-x', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4545,31 +4545,31 @@ test('rotate-y', async () => {
       }
 
       @property --tw-rotate-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateX(0);
       }
 
       @property --tw-rotate-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateY(0);
       }
 
       @property --tw-rotate-z {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateZ(0);
       }
 
       @property --tw-skew-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewX(0);
       }
 
       @property --tw-skew-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewY(0);
       }"
@@ -4623,31 +4623,31 @@ test('rotate-z', async () => {
       }
 
       @property --tw-rotate-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateX(0);
       }
 
       @property --tw-rotate-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateY(0);
       }
 
       @property --tw-rotate-z {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateZ(0);
       }
 
       @property --tw-skew-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewX(0);
       }
 
       @property --tw-skew-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewY(0);
       }"
@@ -4698,31 +4698,31 @@ test('skew', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4769,31 +4769,31 @@ test('skew-x', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4840,31 +4840,31 @@ test('skew-y', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -5244,31 +5244,31 @@ test('transform', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -11803,22 +11803,22 @@ test('box-decoration', async () => {
 test('bg-clip', async () => {
   expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
     .toMatchInlineSnapshot(`
-    ".bg-clip-border {
-      background-clip: border-box;
-    }
+      ".bg-clip-border {
+        background-clip: border-box;
+      }
 
-    .bg-clip-content {
-      background-clip: content-box;
-    }
+      .bg-clip-content {
+        background-clip: content-box;
+      }
 
-    .bg-clip-padding {
-      background-clip: padding-box;
-    }
+      .bg-clip-padding {
+        background-clip: padding-box;
+      }
 
-    .bg-clip-text {
-      background-clip: text;
-    }"
-  `)
+      .bg-clip-text {
+        background-clip: text;
+      }"
+    `)
   expect(
     await run([
       'bg-clip',

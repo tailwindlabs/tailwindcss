@@ -40,7 +40,7 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^7.0.0",
     "prettier": "^3.3.3",
-    "tree-sitter": "^0.22.0",
+    "tree-sitter": "^0.22.1",
     "tree-sitter-typescript": "^0.23.2",
     "tailwindcss": "workspace:*"
   },

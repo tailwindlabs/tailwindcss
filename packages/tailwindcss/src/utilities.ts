@@ -1321,11 +1321,11 @@ export function createUtilities(theme: Theme) {
 
     let transformProperties = () =>
       atRoot([
-        property('--tw-rotate-x', 'rotateX(0)', '<transform-function>'),
-        property('--tw-rotate-y', 'rotateY(0)', '<transform-function>'),
-        property('--tw-rotate-z', 'rotateZ(0)', '<transform-function>'),
-        property('--tw-skew-x', 'skewX(0)', '<transform-function>'),
-        property('--tw-skew-y', 'skewY(0)', '<transform-function>'),
+        property('--tw-rotate-x', 'rotateX(0)'),
+        property('--tw-rotate-y', 'rotateY(0)'),
+        property('--tw-rotate-z', 'rotateZ(0)'),
+        property('--tw-skew-x', 'skewX(0)'),
+        property('--tw-skew-y', 'skewY(0)'),
       ])
 
     for (let axis of ['x', 'y', 'z']) {
