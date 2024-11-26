@@ -329,11 +329,11 @@ importers:
         specifier: workspace:*
         version: link:../tailwindcss
       tree-sitter:
-        specifier: ^0.22.0
-        version: 0.22.0
+        specifier: ^0.22.1
+        version: 0.22.1
       tree-sitter-typescript:
         specifier: ^0.23.2
-        version: 0.23.2(tree-sitter@0.22.0)
+        version: 0.23.2(tree-sitter@0.22.1)
     devDependencies:
       '@types/braces':
         specifier: ^3.0.4
@@ -2862,10 +2862,6 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
-  node-addon-api@8.2.1:
-    resolution: {integrity: sha512-vmEOvxwiH8tlOcv4SyE8RH34rI5/nWVaigUeAUPawC6f0+HoDthwI0vkMu4tbtsZrXq6QXFfrkhjofzKEs5tpA==}
-    engines: {node: ^18 || ^20 || >= 21}
-
   node-addon-api@8.2.2:
     resolution: {integrity: sha512-9emqXAKhVoNrQ792nLI/wpzPpJ/bj/YXxW0CvAau1+RdGBcCRF1Dmz7719zgVsQNrzHl9Tzn3ImZ4qWFarWL0A==}
     engines: {node: ^18 || ^20 || >= 21}
@@ -3507,8 +3503,8 @@ packages:
       tree-sitter:
         optional: true
 
-  tree-sitter@0.22.0:
-    resolution: {integrity: sha512-tjRAT4tlIXrRw0zgqkA6j9z526icVDas6g/0whwlllu2hF3j6HuMI3WDUfcxTkf1oTbpd+kwJE/0owNJMN73QA==}
+  tree-sitter@0.22.1:
+    resolution: {integrity: sha512-gRO+jk2ljxZlIn20QRskIvpLCMtzuLl5T0BY6L9uvPYD17uUrxlxWkvYCiVqED2q2q7CVtY52Uex4WcYo2FEXw==}
 
   ts-api-utils@1.3.0:
     resolution: {integrity: sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==}
@@ -6210,8 +6206,6 @@ snapshots:
 
   node-addon-api@7.1.1: {}
 
-  node-addon-api@8.2.1: {}
-
   node-addon-api@8.2.2: {}
 
   node-gyp-build@4.8.2: {}
@@ -6845,24 +6839,24 @@ snapshots:
 
   tree-kill@1.2.2: {}
 
-  tree-sitter-javascript@0.23.1(tree-sitter@0.22.0):
+  tree-sitter-javascript@0.23.1(tree-sitter@0.22.1):
     dependencies:
       node-addon-api: 8.2.2
       node-gyp-build: 4.8.2
     optionalDependencies:
-      tree-sitter: 0.22.0
+      tree-sitter: 0.22.1
 
-  tree-sitter-typescript@0.23.2(tree-sitter@0.22.0):
+  tree-sitter-typescript@0.23.2(tree-sitter@0.22.1):
     dependencies:
       node-addon-api: 8.2.2
       node-gyp-build: 4.8.2
-      tree-sitter-javascript: 0.23.1(tree-sitter@0.22.0)
+      tree-sitter-javascript: 0.23.1(tree-sitter@0.22.1)
     optionalDependencies:
-      tree-sitter: 0.22.0
+      tree-sitter: 0.22.1
 
-  tree-sitter@0.22.0:
+  tree-sitter@0.22.1:
     dependencies:
-      node-addon-api: 8.2.1
+      node-addon-api: 8.2.2
       node-gyp-build: 4.8.2
 
   ts-api-utils@1.3.0(typescript@5.5.4):
