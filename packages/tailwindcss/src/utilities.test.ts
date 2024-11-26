@@ -17025,6 +17025,40 @@ describe('spacing utilities', () => {
 
     expect(optimizeCss(compiled).trim()).toEqual('')
   })
+
+  test('--spacing-* variables take precedence over --container-* variables', async () => {
+    let { build } = await compile(css`
+      @theme {
+        --spacing-sm: 8px;
+        --container-sm: 256px;
+      }
+      @tailwind utilities;
+    `)
+    let compiled = build(['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-sm: 8px;
+        --container-sm: 256px;
+      }
+
+      .w-sm {
+        width: var(--spacing-sm);
+      }
+
+      .max-w-sm {
+        max-width: var(--spacing-sm);
+      }
+
+      .min-w-sm {
+        min-width: var(--spacing-sm);
+      }
+
+      .basis-sm {
+        flex-basis: var(--spacing-sm);
+      }"
+    `)
+  })
 })
 
 describe('custom utilities', () => {
