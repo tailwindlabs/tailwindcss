@@ -4467,31 +4467,31 @@ test('rotate-x', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4545,31 +4545,31 @@ test('rotate-y', async () => {
       }
 
       @property --tw-rotate-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateX(0);
       }
 
       @property --tw-rotate-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateY(0);
       }
 
       @property --tw-rotate-z {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateZ(0);
       }
 
       @property --tw-skew-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewX(0);
       }
 
       @property --tw-skew-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewY(0);
       }"
@@ -4623,31 +4623,31 @@ test('rotate-z', async () => {
       }
 
       @property --tw-rotate-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateX(0);
       }
 
       @property --tw-rotate-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateY(0);
       }
 
       @property --tw-rotate-z {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: rotateZ(0);
       }
 
       @property --tw-skew-x {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewX(0);
       }
 
       @property --tw-skew-y {
-        syntax: "<transform-function>";
+        syntax: "*";
         inherits: false;
         initial-value: skewY(0);
       }"
@@ -4698,31 +4698,31 @@ test('skew', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4769,31 +4769,31 @@ test('skew-x', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -4840,31 +4840,31 @@ test('skew-y', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
@@ -5244,31 +5244,31 @@ test('transform', async () => {
     }
 
     @property --tw-rotate-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateX(0);
     }
 
     @property --tw-rotate-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateY(0);
     }
 
     @property --tw-rotate-z {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: rotateZ(0);
     }
 
     @property --tw-skew-x {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<transform-function>";
+      syntax: "*";
       inherits: false;
       initial-value: skewY(0);
     }"
