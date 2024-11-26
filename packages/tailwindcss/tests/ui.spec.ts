@@ -30,40 +30,40 @@ test('touch action', async ({ page }) => {
 for (let [classes, expected] of [
   [
     'bg-linear-to-r from-red',
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
   ],
   [
     'bg-linear-to-r via-red',
-    'linear-gradient(to right in oklch, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgba(0, 0, 0, 0) 100%)',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgba(0, 0, 0, 0) 100%)',
   ],
   [
     'bg-linear-to-r to-red',
-    'linear-gradient(to right in oklch, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 100%)',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 100%)',
   ],
   [
     'bg-linear-to-r from-red to-blue',
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   ],
   [
     'bg-linear-45 from-red to-blue',
-    'linear-gradient(45deg in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(45deg in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   ],
   [
     '-bg-linear-45 from-red to-blue',
     // Chrome reports a different (but also correct) computed value than Firefox/WebKit so we check
     // for both options.
     [
-      'linear-gradient(-45deg in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
-      'linear-gradient(calc(-45deg) in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+      'linear-gradient(-45deg in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+      'linear-gradient(calc(-45deg) in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
     ],
   ],
   [
     'bg-linear-to-r via-red to-blue',
-    'linear-gradient(to right in oklch, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)',
   ],
   [
     'bg-linear-to-r from-red via-green to-blue',
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
   ],
   [
     'bg-linear-[to_right,var(--color-red),var(--color-green),var(--color-blue)]',
@@ -91,13 +91,13 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
   )
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   )
 
   await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
   )
 })
 
@@ -112,21 +112,21 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
   )
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
   )
 
   await page.locator('#x').hover()
 
   expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right in oklch, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
   )
 })
 
 for (let [classes, expected] of [
-  ['bg-conic from-red', 'conic-gradient(in oklch, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)'],
+  ['bg-conic from-red', 'conic-gradient(in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)'],
   [
     'bg-conic-45 from-red',
-    'conic-gradient(from 45deg in oklch, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+    'conic-gradient(from 45deg in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
   ],
   [
     'bg-conic-[from_45deg] from-red',
@@ -148,7 +148,7 @@ for (let [classes, expected] of [
 }
 
 for (let [classes, expected] of [
-  ['bg-radial from-red', 'radial-gradient(in oklch, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)'],
+  ['bg-radial from-red', 'radial-gradient(in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)'],
   [
     'bg-radial-[at_0%_0%] from-red',
     'radial-gradient(at 0% 0%, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',

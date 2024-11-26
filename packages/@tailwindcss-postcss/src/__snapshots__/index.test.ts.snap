@@ -521,7 +521,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::placeholder {
     opacity: 1;
-    color: color-mix(in oklch, currentColor 50%, transparent);
+    color: color-mix(in oklab, currentColor 50%, transparent);
   }
 
   textarea {
@@ -615,7 +615,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: color-mix(in oklch, var(--color-black) 50%, transparent);
+    color: color-mix(in oklab, var(--color-black) 50%, transparent);
   }
 
   .underline {
