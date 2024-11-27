@@ -13,7 +13,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -77,7 +77,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -141,7 +141,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -213,7 +213,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,

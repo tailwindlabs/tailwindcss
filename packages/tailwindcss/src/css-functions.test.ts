@@ -152,7 +152,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -173,7 +173,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -194,7 +194,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -215,7 +215,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red var(--opacity), transparent);
+            color: color-mix(in oklab, red var(--opacity), transparent);
           }"
         `)
       })
@@ -237,7 +237,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: color-mix(in oklch, red var(--opacity, 50%), transparent);
+            color: color-mix(in oklab, red var(--opacity, 50%), transparent);
           }"
         `)
       })
@@ -455,7 +455,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -533,11 +533,11 @@ describe('theme function', () => {
         ).toMatchInlineSnapshot(`
           ":root {
             --color-red-500: red;
-            --color-foo: oklch(62.7955% .257683 29.2339 / .5);
+            --color-foo: oklab(62.7955% .22486 .12584 / .5);
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -581,7 +581,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklch(62.7955% .257683 29.2339 / .5);
+            color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
       })
@@ -909,8 +909,8 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklch(87% .07 7 / .1);
-          outline-color: oklch(79% .17 70 / .15);
+          border-color: oklab(87% .06947 .00853 / .1);
+          outline-color: oklab(79% .05814 .15974 / .15);
         }
       }
 

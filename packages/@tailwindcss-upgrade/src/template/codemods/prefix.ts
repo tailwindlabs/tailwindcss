@@ -4,12 +4,20 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from '../candidates'
 
+let seenDesignSystems = new WeakSet<DesignSystem>()
+
 export function prefix(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,
 ): string {
   if (!designSystem.theme.prefix) return rawCandidate
+
+  if (!seenDesignSystems.has(designSystem)) {
+    designSystem.utilities.functional('group', () => null)
+    designSystem.utilities.functional('peer', () => null)
+    seenDesignSystems.add(designSystem)
+  }
 
   let v3Base = extractV3Base(designSystem, userConfig, rawCandidate)
 

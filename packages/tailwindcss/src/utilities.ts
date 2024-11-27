@@ -118,7 +118,7 @@ export function withAlpha(value: string, alpha: string): string {
     alpha = `${alphaAsNumber * 100}%`
   }
 
-  return `color-mix(in oklch, ${value} ${alpha}, transparent)`
+  return `color-mix(in oklab, ${value} ${alpha}, transparent)`
 }
 
 /**
@@ -1093,9 +1093,9 @@ export function createUtilities(theme: Theme) {
 
   let translateProperties = () =>
     atRoot([
-      property('--tw-translate-x', '0', '<length> | <percentage>'),
-      property('--tw-translate-y', '0', '<length> | <percentage>'),
-      property('--tw-translate-z', '0', '<length>'),
+      property('--tw-translate-x', '0'),
+      property('--tw-translate-y', '0'),
+      property('--tw-translate-z', '0'),
     ])
 
   /**
@@ -1183,9 +1183,9 @@ export function createUtilities(theme: Theme) {
 
   let scaleProperties = () =>
     atRoot([
-      property('--tw-scale-x', '1', '<number> | <percentage>'),
-      property('--tw-scale-y', '1', '<number> | <percentage>'),
-      property('--tw-scale-z', '1', '<number> | <percentage>'),
+      property('--tw-scale-x', '1'),
+      property('--tw-scale-y', '1'),
+      property('--tw-scale-z', '1'),
     ])
 
   /**
@@ -1833,7 +1833,7 @@ export function createUtilities(theme: Theme) {
     'space-x',
     ['--space', '--spacing'],
     (value) => [
-      atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
+      atRoot([property('--tw-space-x-reverse', '0')]),
 
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
@@ -1849,7 +1849,7 @@ export function createUtilities(theme: Theme) {
     'space-y',
     ['--space', '--spacing'],
     (value) => [
-      atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
+      atRoot([property('--tw-space-y-reverse', '0')]),
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
         decl('--tw-space-y-reverse', '0'),
@@ -1861,7 +1861,7 @@ export function createUtilities(theme: Theme) {
   )
 
   staticUtility('space-x-reverse', [
-    () => atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
+    () => atRoot([property('--tw-space-x-reverse', '0')]),
     () =>
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
@@ -1870,7 +1870,7 @@ export function createUtilities(theme: Theme) {
   ])
 
   staticUtility('space-y-reverse', [
-    () => atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
+    () => atRoot([property('--tw-space-y-reverse', '0')]),
     () =>
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
@@ -2041,7 +2041,7 @@ export function createUtilities(theme: Theme) {
     }
 
     let borderProperties = () => {
-      return atRoot([property('--tw-border-style', 'solid', '<custom-ident>')])
+      return atRoot([property('--tw-border-style', 'solid')])
     }
 
     function borderSideUtility(classRoot: string, desc: BorderDescription) {
@@ -2196,7 +2196,7 @@ export function createUtilities(theme: Theme) {
         return `${value}px`
       },
       handle: (value) => [
-        atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
+        atRoot([property('--tw-divide-x-reverse', '0')]),
 
         styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-x-width'),
@@ -2217,7 +2217,7 @@ export function createUtilities(theme: Theme) {
         return `${value}px`
       },
       handle: (value) => [
-        atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
+        atRoot([property('--tw-divide-y-reverse', '0')]),
 
         styleRule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-y-width'),
@@ -2248,12 +2248,12 @@ export function createUtilities(theme: Theme) {
     ])
 
     staticUtility('divide-x-reverse', [
-      () => atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
+      () => atRoot([property('--tw-divide-x-reverse', '0')]),
       () => styleRule(':where(& > :not(:last-child))', [decl('--tw-divide-x-reverse', '1')]),
     ])
 
     staticUtility('divide-y-reverse', [
-      () => atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
+      () => atRoot([property('--tw-divide-y-reverse', '0')]),
       () => styleRule(':where(& > :not(:last-child))', [decl('--tw-divide-y-reverse', '1')]),
     ])
 
@@ -2320,7 +2320,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     function resolveInterpolationModifier(modifier: CandidateModifier | null) {
-      let interpolationMethod = 'in oklch'
+      let interpolationMethod = 'in oklab'
 
       if (modifier?.kind === 'named') {
         switch (modifier.value) {
@@ -2561,9 +2561,9 @@ export function createUtilities(theme: Theme) {
       property('--tw-gradient-to', '#0000', '<color>'),
       property('--tw-gradient-stops'),
       property('--tw-gradient-via-stops'),
-      property('--tw-gradient-from-position', '0%', '<length> | <percentage>'),
-      property('--tw-gradient-via-position', '50%', '<length> | <percentage>'),
-      property('--tw-gradient-to-position', '100%', '<length> | <percentage>'),
+      property('--tw-gradient-from-position', '0%', '<length-percentage>'),
+      property('--tw-gradient-via-position', '50%', '<length-percentage>'),
+      property('--tw-gradient-to-position', '100%', '<length-percentage>'),
     ])
   }
 
@@ -3833,7 +3833,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let outlineProperties = () => {
-      return atRoot([property('--tw-outline-style', 'solid', '<custom-ident>')])
+      return atRoot([property('--tw-outline-style', 'solid')])
     }
 
     staticUtility('outline-hidden', [

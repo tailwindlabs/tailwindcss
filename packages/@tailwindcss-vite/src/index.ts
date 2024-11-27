@@ -35,9 +35,31 @@ export default function tailwindcss(): Plugin[] {
   let moduleGraphCandidates = new DefaultMap<string, Set<string>>(() => new Set<string>())
   let moduleGraphScanner = new Scanner({})
 
-  let roots: DefaultMap<string, Root> = new DefaultMap(
-    (id) => new Root(id, () => moduleGraphCandidates, config!.base),
-  )
+  let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
+    let cssResolver = config!.createResolver({
+      ...config!.resolve,
+      extensions: ['.css'],
+      mainFields: ['style'],
+      conditions: ['style', 'development|production'],
+      tryIndex: false,
+      preferRelative: true,
+    })
+    function customCssResolver(id: string, base: string) {
+      return cssResolver(id, base, false, isSSR)
+    }
+
+    let jsResolver = config!.createResolver(config!.resolve)
+    function customJsResolver(id: string, base: string) {
+      return jsResolver(id, base, true, isSSR)
+    }
+    return new Root(
+      id,
+      () => moduleGraphCandidates,
+      config!.base,
+      customCssResolver,
+      customJsResolver,
+    )
+  })
 
   function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
     let updated = false
@@ -423,6 +445,9 @@ class Root {
     private id: string,
     private getSharedCandidates: () => Map<string, Set<string>>,
     private base: string,
+
+    private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
+    private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
   ) {}
 
   // Generate the CSS for the root file. This can return false if the file is
@@ -448,6 +473,9 @@ class Root {
           addWatchFile(path)
           this.dependencies.add(path)
         },
+
+        customCssResolver: this.customCssResolver,
+        customJsResolver: this.customJsResolver,
       })
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Setup compiler')
 

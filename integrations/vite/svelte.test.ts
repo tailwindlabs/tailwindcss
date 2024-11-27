@@ -15,7 +15,7 @@ test(
           "devDependencies": {
             "@sveltejs/vite-plugin-svelte": "^3.1.1",
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -126,7 +126,7 @@ test(
           "devDependencies": {
             "@sveltejs/vite-plugin-svelte": "^3.1.1",
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,

@@ -14,47 +14,47 @@ export async function substituteAtImports(
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-rule' && node.name === '@import') {
-      try {
-        let { uri, layer, media, supports } = parseImportParams(ValueParser.parse(node.params))
+      let parsed = parseImportParams(ValueParser.parse(node.params))
+      if (parsed === null) return
 
-        // Skip importing data or remote URIs
-        if (uri.startsWith('data:')) return
-        if (uri.startsWith('http://') || uri.startsWith('https://')) return
+      let { uri, layer, media, supports } = parsed
 
-        let contextNode = context({}, [])
+      // Skip importing data or remote URIs
+      if (uri.startsWith('data:')) return
+      if (uri.startsWith('http://') || uri.startsWith('https://')) return
 
-        promises.push(
-          (async () => {
-            // Since we do not have fully resolved paths in core, we can't reliably detect circular
-            // imports. Instead, we try to limit the recursion depth to a number that is too large
-            // to be reached in practice.
-            if (recurseCount > 100) {
-              throw new Error(
-                `Exceeded maximum recursion depth while resolving \`${uri}\` in \`${base}\`)`,
-              )
-            }
+      let contextNode = context({}, [])
 
-            const loaded = await loadStylesheet(uri, base)
-            let ast = CSS.parse(loaded.content)
-            await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
-
-            contextNode.nodes = buildImportNodes(
-              [context({ base: loaded.base }, ast)],
-              layer,
-              media,
-              supports,
+      promises.push(
+        (async () => {
+          // Since we do not have fully resolved paths in core, we can't
+          // reliably detect circular imports. Instead, we try to limit the
+          // recursion depth to a number that is too large to be reached in
+          // practice.
+          if (recurseCount > 100) {
+            throw new Error(
+              `Exceeded maximum recursion depth while resolving \`${uri}\` in \`${base}\`)`,
             )
-          })(),
-        )
+          }
 
-        replaceWith(contextNode)
-        // The resolved Stylesheets already have their transitive @imports
-        // resolved, so we can skip walking them.
-        return WalkAction.Skip
-      } catch (e: any) {
-        // When an error occurs while parsing the `@import` statement, we skip
-        // the import.
-      }
+          let loaded = await loadStylesheet(uri, base)
+          let ast = CSS.parse(loaded.content)
+          await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
+
+          contextNode.nodes = buildImportNodes(
+            [context({ base: loaded.base }, ast)],
+            layer,
+            media,
+            supports,
+          )
+        })(),
+      )
+
+      replaceWith(contextNode)
+
+      // The resolved Stylesheets already have their transitive @imports
+      // resolved, so we can skip walking them.
+      return WalkAction.Skip
     }
   })
 
@@ -72,30 +72,37 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
   let supports: string | null = null
 
   for (let i = 0; i < params.length; i++) {
-    const node = params[i]
+    let node = params[i]
 
     if (node.kind === 'separator') continue
 
     if (node.kind === 'word' && !uri) {
-      if (!node.value) throw new Error(`Unable to find uri`)
-      if (node.value[0] !== '"' && node.value[0] !== "'") throw new Error('Unable to find uri')
+      if (!node.value) return null
+      if (node.value[0] !== '"' && node.value[0] !== "'") return null
 
       uri = node.value.slice(1, -1)
       continue
     }
 
     if (node.kind === 'function' && node.value.toLowerCase() === 'url') {
-      throw new Error('`url(…)` functions are not supported')
+      // `@import` with `url(…)` functions are not inlined but skipped and kept
+      // in the final CSS instead.
+      // E.g.: `@import url("https://fonts.google.com")`
+      return null
     }
 
-    if (!uri) throw new Error('Unable to find uri')
+    if (!uri) return null
 
     if (
       (node.kind === 'word' || node.kind === 'function') &&
       node.value.toLowerCase() === 'layer'
     ) {
-      if (layer) throw new Error('Multiple layers')
-      if (supports) throw new Error('`layer(…)` must be defined before `supports(…)` conditions')
+      if (layer) return null
+      if (supports) {
+        throw new Error(
+          '`layer(…)` in an `@import` should come before any other functions or conditions',
+        )
+      }
 
       if ('nodes' in node) {
         layer = ValueParser.toCss(node.nodes)
@@ -107,7 +114,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
     }
 
     if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
-      if (supports) throw new Error('Multiple support conditions')
+      if (supports) return null
       supports = ValueParser.toCss(node.nodes)
       continue
     }
@@ -116,7 +123,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
     break
   }
 
-  if (!uri) throw new Error('Unable to find uri')
+  if (!uri) return null
 
   return { uri, layer, media, supports }
 }

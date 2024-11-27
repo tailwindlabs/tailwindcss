@@ -285,13 +285,13 @@ describe('theme', async () => {
 
     expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
       ".fraction {
-        color: color-mix(in oklch, #ef4444 50%, transparent);
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .percentage {
-        color: color-mix(in oklch, #ef4444 50%, transparent);
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .variable {
-        color: color-mix(in oklch, #ef4444 var(--opacity), transparent);
+        color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
       }
       :root {
         --color-red-500: #ef4444;
@@ -362,22 +362,22 @@ describe('theme', async () => {
       ]),
     ).toMatchInlineSnapshot(`
       ".css-fraction {
-        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
       }
       .css-percentage {
-        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
       }
       .css-variable {
-        color: color-mix(in oklch, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
       }
       .js-fraction {
-        color: color-mix(in oklch, rgb(255 0 0 / 1) 50%, transparent);
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
       }
       .js-percentage {
-        color: color-mix(in oklch, rgb(255 0 0 / 1) 50%, transparent);
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
       }
       .js-variable {
-        color: color-mix(in oklch, rgb(255 0 0 / 1) var(--opacity), transparent);
+        color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
       }
       :root {
         --color-custom-css: rgba(255 0 0 / <alpha-value>);
@@ -3462,7 +3462,7 @@ describe('matchUtilities()', () => {
         }
 
         .scrollbar-\\[\\#08c\\]\\/50 {
-          scrollbar-color: oklch(59.9824% .14119 241.555 / .5);
+          scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
         }
 
         .scrollbar-\\[2px\\] {
@@ -3625,7 +3625,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[\\#fff\\]\\/50 {
-        scrollbar-color: oklch(100% 5.96046e-8 none / .5);
+        scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
       }
 
       .scrollbar-\\[2px\\] {
@@ -3637,7 +3637,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
@@ -3649,7 +3649,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in oklch, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-black {
@@ -3657,7 +3657,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/50 {
-        scrollbar-color: oklch(0% none none / .5);
+        scrollbar-color: oklab(0% none none / .5);
       }"
     `)
 
@@ -3723,7 +3723,7 @@ describe('matchUtilities()', () => {
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
-        scrollbar-color: color-mix(in oklch, var(--my-color) 25%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 25%, transparent);
       }
 
       .scrollbar-black {
@@ -3731,11 +3731,11 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/33 {
-        scrollbar-color: oklch(0% none none / .33);
+        scrollbar-color: oklab(0% none none / .33);
       }
 
       .scrollbar-black\\/\\[50\\%\\] {
-        scrollbar-color: oklch(0% none none / .5);
+        scrollbar-color: oklab(0% none none / .5);
       }
 
       .scrollbar-current {
@@ -3743,7 +3743,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-current\\/45 {
-        scrollbar-color: color-mix(in oklch, currentColor 45%, transparent);
+        scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
       }"
     `)
   })
