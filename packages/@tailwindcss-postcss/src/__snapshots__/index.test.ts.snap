@@ -43,10 +43,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     -webkit-tap-highlight-color: transparent;
   }
 
-  body {
-    line-height: inherit;
-  }
-
   hr {
     height: 0;
     color: inherit;
