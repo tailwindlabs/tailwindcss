@@ -151,6 +151,23 @@ describe('compiling CSS', () => {
       }"
     `)
   })
+
+  test('adds vendor prefixes', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+        `,
+        ['[text-size-adjust:none]'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".\\[text-size-adjust\\:none\\] {
+        -webkit-text-size-adjust: none;
+        -moz-text-size-adjust: none;
+        text-size-adjust: none;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {
@@ -165,7 +182,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklch(62.7955% .257683 29.2339 / .5);
+        color: oklab(62.7955% .224863 .125846 / .5);
       }"
     `)
   })
@@ -177,7 +194,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with variables and with modifiers', async () => {
     expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        color: color-mix(in oklch, var(--my-color) 50%, transparent);
+        color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }"
     `)
   })

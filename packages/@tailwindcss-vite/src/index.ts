@@ -342,6 +342,9 @@ function optimizeCss(
       exclude: Features.LogicalProperties,
       targets: {
         safari: (16 << 16) | (4 << 8),
+        ios_saf: (16 << 16) | (4 << 8),
+        firefox: 128 << 16,
+        chrome: 120 << 16,
       },
       errorRecovery: true,
     }).code

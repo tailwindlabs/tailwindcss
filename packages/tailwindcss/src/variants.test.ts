@@ -62,7 +62,11 @@ test('marker', async () => {
 
 test('selection', async () => {
   expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
-    ".selection\\:flex ::selection, .selection\\:flex::selection {
+    ".selection\\:flex ::selection {
+      display: flex;
+    }
+
+    .selection\\:flex::selection {
       display: flex;
     }"
   `)
@@ -2161,7 +2165,15 @@ test('variant order', async () => {
       }
     }
 
-    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line, .marker\\:flex ::marker, .marker\\:flex::marker, .selection\\:flex ::selection, .selection\\:flex::selection {
+    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line, .marker\\:flex ::marker, .marker\\:flex::marker {
+      display: flex;
+    }
+
+    .selection\\:flex ::selection {
+      display: flex;
+    }
+
+    .selection\\:flex::selection {
       display: flex;
     }
 
