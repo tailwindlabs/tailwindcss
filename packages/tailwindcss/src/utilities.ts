@@ -118,7 +118,7 @@ export function withAlpha(value: string, alpha: string): string {
     alpha = `${alphaAsNumber * 100}%`
   }
 
-  return `color-mix(in oklch, ${value} ${alpha}, transparent)`
+  return `color-mix(in oklab, ${value} ${alpha}, transparent)`
 }
 
 /**
@@ -2320,7 +2320,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     function resolveInterpolationModifier(modifier: CandidateModifier | null) {
-      let interpolationMethod = 'in oklch'
+      let interpolationMethod = 'in oklab'
 
       if (modifier?.kind === 'named') {
         switch (modifier.value) {
