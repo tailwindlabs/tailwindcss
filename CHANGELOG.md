@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Ensure the Vite plugin resolves CSS and JS files according to the configured resolver conditions ([#15173])(https://github.com/tailwindlabs/tailwindcss/pull/15173)
 - _Upgrade (experimental)_: Migrate prefixes for `.group` and `.peer` classes ([#15208](https://github.com/tailwindlabs/tailwindcss/pull/15208))
 
 ### Fixed
