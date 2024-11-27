@@ -152,7 +152,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -173,7 +173,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -194,7 +194,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -455,7 +455,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -533,11 +533,11 @@ describe('theme function', () => {
         ).toMatchInlineSnapshot(`
           ":root {
             --color-red-500: red;
-            --color-foo: oklab(62.7955% .224863 .125846 / .5);
+            --color-foo: oklab(62.7955% .22486 .12584 / .5);
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -581,7 +581,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .5);
+            color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
       })
@@ -873,13 +873,7 @@ describe('in plugins', () => {
           --color-red: oklch(62% 0.25 30);
           --color-orange: oklch(79% 0.17 70);
           --color-blue: oklch(45% 0.31 264);
-
-          /*
-            Using oklab because Lightning converts the color to oklab when using
-            color-mix() and the results are off by 0.00000001 between macOS and
-            Linux.
-          */
-          --color-pink: oklab(87% 0.07 0);
+          --color-pink: oklch(87% 0.07 7);
         }
         @layer utilities {
           @tailwind utilities;
@@ -915,8 +909,8 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklab(87% .07 0 / .1);
-          outline-color: oklab(79% .0581434 .159748 / .15);
+          border-color: oklab(87% .06947 .00853 / .1);
+          outline-color: oklab(79% .05814 .15974 / .15);
         }
       }
 

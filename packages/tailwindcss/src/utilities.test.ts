@@ -8373,7 +8373,7 @@ test('accent', async () => {
     }
 
     .accent-\\[\\#0088cc\\]\\/50, .accent-\\[\\#0088cc\\]\\/\\[0\\.5\\], .accent-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      accent-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      accent-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .accent-current {
@@ -8488,7 +8488,7 @@ test('caret', async () => {
     }
 
     .caret-\\[\\#0088cc\\]\\/50, .caret-\\[\\#0088cc\\]\\/\\[0\\.5\\], .caret-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      caret-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      caret-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .caret-current {
@@ -8601,7 +8601,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      border-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     :where(.divide-current > :not(:last-child)) {
@@ -10499,7 +10499,7 @@ test('bg', async () => {
     }
 
     .bg-\\[\\#0088cc\\]\\/50, .bg-\\[\\#0088cc\\]\\/\\[0\\.5\\], .bg-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      background-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      background-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .bg-\\[color\\:var\\(--some-var\\)\\] {
@@ -11113,7 +11113,7 @@ test('from', async () => {
     }
 
     .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-from: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11349,7 +11349,7 @@ test('via', async () => {
     }
 
     .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-via: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11593,7 +11593,7 @@ test('to', async () => {
     }
 
     .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-to: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12157,7 +12157,7 @@ test('fill', async () => {
     }
 
     .fill-\\[\\#0088cc\\]\\/50, .fill-\\[\\#0088cc\\]\\/\\[0\\.5\\], .fill-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      fill: oklab(59.9824% -.0672516 -.124144 / .5);
+      fill: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .fill-current {
@@ -12278,7 +12278,7 @@ test('stroke', async () => {
     }
 
     .stroke-\\[\\#0088cc\\]\\/50, .stroke-\\[\\#0088cc\\]\\/\\[0\\.5\\], .stroke-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      stroke: oklab(59.9824% -.0672516 -.124144 / .5);
+      stroke: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .stroke-\\[color\\:var\\(--my-color\\)\\] {
@@ -13276,7 +13276,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
-      color: oklab(59.9824% -.0672516 -.124144 / .5);
+      color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .placeholder-current::placeholder {
@@ -13401,7 +13401,7 @@ test('decoration', async () => {
     }
 
     .decoration-\\[\\#0088cc\\]\\/50, .decoration-\\[\\#0088cc\\]\\/\\[0\\.5\\], .decoration-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      text-decoration-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      text-decoration-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .decoration-\\[color\\:var\\(--my-color\\)\\] {
@@ -15180,7 +15180,7 @@ test('outline', async () => {
     }
 
     .outline-\\[\\#0088cc\\]\\/50, .outline-\\[\\#0088cc\\]\\/\\[0\\.5\\], .outline-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      outline-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      outline-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .outline-\\[black\\] {
@@ -15612,7 +15612,7 @@ test('text', async () => {
     }
 
     .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      color: oklab(59.9824% -.0672516 -.124144 / .5);
+      color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .text-\\[color\\:var\\(--my-color\\)\\] {
@@ -15781,7 +15781,7 @@ test('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-shadow-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .shadow-\\[color\\:var\\(--value\\)\\] {
@@ -16024,7 +16024,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-inset-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .inset-shadow-\\[color\\:var\\(--value\\)\\] {
@@ -16273,7 +16273,7 @@ test('ring', async () => {
     }
 
     .ring-\\[\\#0088cc\\]\\/50, .ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-ring-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -16548,7 +16548,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-\\[\\#0088cc\\]\\/50, .inset-ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-inset-ring-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-inset-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .inset-ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -16811,7 +16811,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-\\[\\#0088cc\\]\\/50, .ring-offset-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-offset-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-ring-offset-color: oklab(59.9824% -.0672516 -.124144 / .5);
+      --tw-ring-offset-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .ring-offset-\\[color\\:var\\(--my-color\\)\\] {
