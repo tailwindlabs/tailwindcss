@@ -182,7 +182,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklch(62.7955% .257683 29.2339 / .5);
+        color: oklab(62.7955% .22486 .12584 / .5);
       }"
     `)
   })
@@ -194,7 +194,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with variables and with modifiers', async () => {
     expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        color: color-mix(in oklch, var(--my-color) 50%, transparent);
+        color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }"
     `)
   })
@@ -302,19 +302,19 @@ describe('@apply', () => {
       }
 
       @property --tw-translate-x {
-        syntax: "<length> | <percentage>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-y {
-        syntax: "<length> | <percentage>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-z {
-        syntax: "<length>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }"
@@ -717,7 +717,7 @@ describe('sorting', () => {
       }
 
       @property --tw-space-x-reverse {
-        syntax: "<number>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }"
@@ -3062,4 +3062,29 @@ test('addBase', async () => {
       }
     }"
   `)
+})
+
+it("should error when `layer(…)` is used, but it's not the first param", async () => {
+  expect(async () => {
+    return await compileCss(
+      css`
+        @import './bar.css' supports(display: grid) layer(utilities);
+      `,
+      [],
+      {
+        async loadStylesheet() {
+          return {
+            base: '/bar.css',
+            content: css`
+              .foo {
+                @apply underline;
+              }
+            `,
+          }
+        },
+      },
+    )
+  }).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: \`layer(…)\` in an \`@import\` should come before any other functions or conditions]`,
+  )
 })

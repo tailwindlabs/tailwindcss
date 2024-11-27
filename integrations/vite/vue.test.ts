@@ -15,7 +15,7 @@ test(
           "devDependencies": {
             "@vitejs/plugin-vue": "^5.1.2",
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,

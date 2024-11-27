@@ -253,9 +253,7 @@ impl<'a> Extractor<'a> {
 
         // Reject candidates that are single camelCase words, e.g.: `useEffect`
         if candidate.iter().all(|c| c.is_ascii_alphanumeric())
-            && candidate
-                .iter()
-                .any(|c| c.is_ascii_uppercase())
+            && candidate.iter().any(|c| c.is_ascii_uppercase())
         {
             return ValidationResult::Invalid;
         }
@@ -570,7 +568,7 @@ impl<'a> Extractor<'a> {
                 }
             },
 
-            b' ' if !self.opts.preserve_spaces_in_arbitrary => {
+            c if c.is_ascii_whitespace() && !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
                 if let Arbitrary::Brackets { start_idx } | Arbitrary::Parens { start_idx } =
@@ -633,10 +631,8 @@ impl<'a> Extractor<'a> {
         match self.cursor.curr {
             // Enter arbitrary value mode. E.g.: `bg-[rgba(0, 0, 0)]`
             //                                       ^
-            b'[' if matches!(
-                self.cursor.prev,
-                b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0'
-            ) =>
+            b'[' if matches!(self.cursor.prev, b'@' | b'-' | b':' | b'/' | b'!' | b'\0')
+                || self.cursor.prev.is_ascii_whitespace() =>
             {
                 trace!("Arbitrary::Start\t");
                 self.arbitrary = Arbitrary::Brackets {
@@ -668,7 +664,8 @@ impl<'a> Extractor<'a> {
                     (true, _) => ParseAction::Consume,
 
                     // Looks like the end of a candidate == okay
-                    (_, b' ' | b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, c) if c.is_ascii_whitespace() => ParseAction::Consume,
 
                     // Otherwise, not a valid character in a candidate
                     _ => ParseAction::Skip,
@@ -1542,17 +1539,98 @@ mod test {
 
     #[test]
     fn simple_utility_names_with_numbers_work() {
+        let candidates = run(r#"<div class="h2 hz"></div>"#, false);
+        assert_eq!(candidates, vec!["div", "class", "h2", "hz",]);
+    }
+
+    #[test]
+    fn classes_in_an_array_without_whitespace() {
         let candidates = run(
-            r#"<div class="h2 hz"></div>"#,
+            "let classes = ['bg-black','hover:px-0.5','text-[13px]','[--my-var:1_/_2]','[.foo_&]:px-[0]','[.foo_&]:[color:red]']",
             false,
         );
+
         assert_eq!(
             candidates,
             vec![
-                "div",
-                "class",
-                "h2",
-                "hz",
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_spaces() {
+        let candidates = run(
+            "let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]', '[.foo_&]:px-[0]', '[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_tabs() {
+        let candidates = run(
+            "let classes = ['bg-black',\t'hover:px-0.5',\t'text-[13px]',\t'[--my-var:1_/_2]',\t'[.foo_&]:px-[0]',\t'[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_newlines() {
+        let candidates = run(
+            "let classes = [\n'bg-black',\n'hover:px-0.5',\n'text-[13px]',\n'[--my-var:1_/_2]',\n'[.foo_&]:px-[0]',\n'[.foo_&]:[color:red]'\n]",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
             ]
         );
     }

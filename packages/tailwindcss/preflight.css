@@ -290,7 +290,7 @@ textarea,
 
 ::placeholder {
   opacity: 1; /* 1 */
-  color: color-mix(in oklch, currentColor 50%, transparent); /* 2 */
+  color: color-mix(in oklab, currentColor 50%, transparent); /* 2 */
 }
 
 /*
