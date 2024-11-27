@@ -17,7 +17,7 @@ jobs:
         runner: [namespace-profile-default, windows-latest, macos-14]
         # Exclude windows and macos from being built on feature branches
         on-next-branch:
-          - ${{ github.ref == 'refs/heads/next' }}
+          - ${{ github.ref != 'refs/heads/next' }}
         exclude:
           - on-next-branch: false
             runner: windows-latest

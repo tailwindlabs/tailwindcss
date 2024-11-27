@@ -182,7 +182,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklab(62.7955% .224863 .125846 / .5);
+        color: oklab(62.7955% .22486 .12584 / .5);
       }"
     `)
   })

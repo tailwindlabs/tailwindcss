@@ -152,7 +152,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -173,7 +173,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -194,7 +194,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .75);
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -455,7 +455,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -533,11 +533,11 @@ describe('theme function', () => {
         ).toMatchInlineSnapshot(`
           ":root {
             --color-red-500: red;
-            --color-foo: oklab(62.7955% .224863 .125846 / .5);
+            --color-foo: oklab(62.7955% .22486 .12584 / .5);
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .25);
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -581,7 +581,7 @@ describe('theme function', () => {
           }
 
           .red {
-            color: oklab(62.7955% .224863 .125846 / .5);
+            color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
       })
