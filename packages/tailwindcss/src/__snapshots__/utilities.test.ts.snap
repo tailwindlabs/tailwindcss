@@ -127,7 +127,7 @@ exports[`border-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -260,7 +260,7 @@ exports[`border-b-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -393,7 +393,7 @@ exports[`border-e-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -526,7 +526,7 @@ exports[`border-l-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -659,7 +659,7 @@ exports[`border-r-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -792,7 +792,7 @@ exports[`border-s-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -925,7 +925,7 @@ exports[`border-t-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -1058,7 +1058,7 @@ exports[`border-x-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
@@ -1191,7 +1191,7 @@ exports[`border-y-* 1`] = `
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"

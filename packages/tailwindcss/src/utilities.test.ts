@@ -3982,19 +3982,19 @@ test('translate', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4055,19 +4055,19 @@ test('translate-x', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4132,19 +4132,19 @@ test('translate-x', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4203,19 +4203,19 @@ test('translate-y', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4280,19 +4280,19 @@ test('translate-y', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4334,19 +4334,19 @@ test('translate-z', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4384,19 +4384,19 @@ test('translate-3d', async () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-z {
-      syntax: "<length>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -4884,56 +4884,56 @@ test('skew-y', async () => {
 test('scale', async () => {
   expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
     .toMatchInlineSnapshot(`
-    ".-scale-50 {
-      --tw-scale-x: calc(50% * -1);
-      --tw-scale-y: calc(50% * -1);
-      --tw-scale-z: calc(50% * -1);
-      scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
+      ".-scale-50 {
+        --tw-scale-x: calc(50% * -1);
+        --tw-scale-y: calc(50% * -1);
+        --tw-scale-z: calc(50% * -1);
+        scale: var(--tw-scale-x) var(--tw-scale-y);
+      }
 
-    .scale-50 {
-      --tw-scale-x: 50%;
-      --tw-scale-y: 50%;
-      --tw-scale-z: 50%;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
+      .scale-50 {
+        --tw-scale-x: 50%;
+        --tw-scale-y: 50%;
+        --tw-scale-z: 50%;
+        scale: var(--tw-scale-x) var(--tw-scale-y);
+      }
 
-    .scale-\\[2\\] {
-      scale: 2;
-    }
+      .scale-\\[2\\] {
+        scale: 2;
+      }
 
-    .scale-\\[2_1\\.5_3\\] {
-      scale: 2 1.5 3;
-    }
+      .scale-\\[2_1\\.5_3\\] {
+        scale: 2 1.5 3;
+      }
 
-    @supports (-moz-orient: inline) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-          --tw-scale-z: 1;
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-scale-z: 1;
+          }
         }
       }
-    }
 
-    @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
-      inherits: false;
-      initial-value: 1;
-    }
+      @property --tw-scale-x {
+        syntax: "*";
+        inherits: false;
+        initial-value: 1;
+      }
 
-    @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
-      inherits: false;
-      initial-value: 1;
-    }
+      @property --tw-scale-y {
+        syntax: "*";
+        inherits: false;
+        initial-value: 1;
+      }
 
-    @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
-      inherits: false;
-      initial-value: 1;
-    }"
-  `)
+      @property --tw-scale-z {
+        syntax: "*";
+        inherits: false;
+        initial-value: 1;
+      }"
+    `)
   expect(
     await run([
       'scale',
@@ -4965,19 +4965,19 @@ test('scale-3d', async () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }"
@@ -5013,19 +5013,19 @@ test('scale-x', async () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }"
@@ -5054,19 +5054,19 @@ test('scale-x', async () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }"
@@ -5114,19 +5114,19 @@ test('scale-y', async () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }"
@@ -5172,19 +5172,19 @@ test('scale-z', async () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-z {
-      syntax: "<number> | <percentage>";
+      syntax: "*";
       inherits: false;
       initial-value: 1;
     }"
@@ -7892,7 +7892,7 @@ test('space-x', async () => {
     }
 
     @property --tw-space-x-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -7943,7 +7943,7 @@ test('space-y', async () => {
     }
 
     @property --tw-space-y-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -7966,7 +7966,7 @@ test('space-x-reverse', async () => {
     }
 
     @property --tw-space-x-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -7989,7 +7989,7 @@ test('space-y-reverse', async () => {
     }
 
     @property --tw-space-y-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -8044,13 +8044,13 @@ test('divide-x', async () => {
     }
 
     @property --tw-divide-x-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-border-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"
@@ -8103,13 +8103,13 @@ test('divide-x with custom default border width', async () => {
     }
 
     @property --tw-divide-x-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-border-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"
@@ -8168,13 +8168,13 @@ test('divide-y', async () => {
     }
 
     @property --tw-divide-y-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-border-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"
@@ -8228,13 +8228,13 @@ test('divide-y with custom default border width', async () => {
     }
 
     @property --tw-divide-y-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-border-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"
@@ -8257,7 +8257,7 @@ test('divide-x-reverse', async () => {
     }
 
     @property --tw-divide-x-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -8280,7 +8280,7 @@ test('divide-y-reverse', async () => {
     }
 
     @property --tw-divide-y-reverse {
-      syntax: "<number>";
+      syntax: "*";
       inherits: false;
       initial-value: 0;
     }"
@@ -10339,7 +10339,7 @@ test('border with custom default border width', async () => {
     }
 
     @property --tw-border-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"
@@ -11241,19 +11241,19 @@ test('from', async () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -11488,19 +11488,19 @@ test('via', async () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -11721,19 +11721,19 @@ test('to', async () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length> | <percentage>";
+      syntax: "<length-percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -15273,7 +15273,7 @@ test('outline', async () => {
     }
 
     @property --tw-outline-style {
-      syntax: "<custom-ident>";
+      syntax: "*";
       inherits: false;
       initial-value: solid;
     }"

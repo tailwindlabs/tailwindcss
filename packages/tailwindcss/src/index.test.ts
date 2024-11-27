@@ -302,19 +302,19 @@ describe('@apply', () => {
       }
 
       @property --tw-translate-x {
-        syntax: "<length> | <percentage>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-y {
-        syntax: "<length> | <percentage>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-z {
-        syntax: "<length>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }"
@@ -717,7 +717,7 @@ describe('sorting', () => {
       }
 
       @property --tw-space-x-reverse {
-        syntax: "<number>";
+        syntax: "*";
         inherits: false;
         initial-value: 0;
       }"
