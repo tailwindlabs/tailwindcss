@@ -20,6 +20,12 @@ describe('for projects with configured prefix', () => {
 
     // Adds prefix to arbitrary candidates
     ['[color:red]', 'tw:[color:red]'],
+
+    // `.group` and `.peer` classes
+    ['tw-group', 'tw:group'],
+    ['tw-group/foo', 'tw:group/foo'],
+    ['tw-peer', 'tw:peer'],
+    ['tw-peer/foo', 'tw:peer/foo'],
   ])('%s => %s', async (candidate, result) => {
     let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
       base: __dirname,

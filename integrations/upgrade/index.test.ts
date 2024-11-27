@@ -187,6 +187,9 @@ test(
         <div
           class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex [color:red] group-[]:tw__flex"
         ></div>
+        <div
+          class="tw__group tw__group/foo tw__peer tw__peer/foo group-hover:tw__flex group-hover/foo:tw__flex peer-hover:tw__flex peer-hover/foo:tw__flex"
+        ></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -207,6 +210,9 @@ test(
       --- ./src/index.html ---
       <div
         class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red] tw:in-[.tw\\:group]:flex"
+      ></div>
+      <div
+        class="tw:group tw:group/foo tw:peer tw:peer/foo tw:group-hover:flex tw:group-hover/foo:flex tw:peer-hover:flex tw:peer-hover/foo:flex"
       ></div>
 
       --- ./src/input.css ---
