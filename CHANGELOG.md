@@ -15,11 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `--spacing-*` variables take precedence over `--container-*` variables ([#15180](https://github.com/tailwindlabs/tailwindcss/pull/15180))
 - Fix scanning classes delimited by tab characters ([#15169](https://github.com/tailwindlabs/tailwindcss/pull/15169))
 - Ensure opacity modifiers and semi-transparent gradients render correctly by default in Safari ([#15201](https://github.com/tailwindlabs/tailwindcss/pull/15201))
+- Ensure `translate-*` utilities work with arbitrary values that use `calc(…)` ([#15215](https://github.com/tailwindlabs/tailwindcss/pull/15215))
+- Ensure gradient stop position utilities work with arbitrary values that use `calc(…)` ([#15215](https://github.com/tailwindlabs/tailwindcss/pull/15215))
 
 ### Changed
 
 - Interpolate gradients using OKLAB instead of OKLCH by default ([#15201](https://github.com/tailwindlabs/tailwindcss/pull/15201))
 - Error when `layer(…)` in `@import` is not first in the list of functions/conditions ([#15109](https://github.com/tailwindlabs/tailwindcss/pull/15109))
+- Don't register custom properties with explicit types unless those custom properties need to be animateable ([#15215](https://github.com/tailwindlabs/tailwindcss/pull/15215))
 
 ## [4.0.0-beta.2] - 2024-11-22
 
