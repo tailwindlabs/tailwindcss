@@ -3063,3 +3063,28 @@ test('addBase', async () => {
     }"
   `)
 })
+
+it("should error when `layer(…)` is used, but it's not the first param", async () => {
+  expect(async () => {
+    return await compileCss(
+      css`
+        @import './bar.css' supports(display: grid) layer(utilities);
+      `,
+      [],
+      {
+        async loadStylesheet() {
+          return {
+            base: '/bar.css',
+            content: css`
+              .foo {
+                @apply underline;
+              }
+            `,
+          }
+        },
+      },
+    )
+  }).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: \`layer(…)\` in an \`@import\` should come before any other functions or conditions]`,
+  )
+})
