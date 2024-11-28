@@ -1,3 +1,4 @@
+import dedent from 'dedent'
 import { unlink, writeFile } from 'node:fs/promises'
 import postcss from 'postcss'
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
@@ -11,7 +12,7 @@ import tailwindcss from './index'
 // @import 'tailwindcss' to work.
 const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
 
-const css = String.raw
+const css = dedent
 
 test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
   let processor = postcss([
@@ -49,8 +50,6 @@ test('output is optimized by Lightning CSS', async () => {
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
   ])
 
-  // `@apply` is used because Lightning is skipped if neither `@tailwind` nor
-  // `@apply` is used.
   let result = await processor.process(
     css`
       @layer utilities {
@@ -86,8 +85,6 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
   ])
 
-  // `@apply` is used because Lightning is skipped if neither `@tailwind` nor
-  // `@apply` is used.
   let result = await processor.process(
     css`
       @import 'tailwindcss/theme.css' theme(reference);
@@ -221,4 +218,29 @@ describe('plugins', () => {
       }"
     `)
   })
+})
+
+test('bail early when Tailwind is not used', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    css`
+      .custom-css {
+        color: red;
+      }
+    `,
+    { from: INPUT_CSS_PATH },
+  )
+
+  // `fixtures/example-project` includes an `underline` candidate. But since we
+  // didn't use `@tailwind utilities` we didn't scan for utilities.
+  expect(result.css).not.toContain('.underline {')
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ".custom-css {
+      color: red;
+    }"
+  `)
 })
