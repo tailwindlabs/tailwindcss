@@ -59,6 +59,50 @@ test('can resolve relative @imports', async () => {
   `)
 })
 
+test('can resolve @imports as reference', async () => {
+  let loadStylesheet = async (id: string, base: string) => {
+    expect(base).toBe('/root')
+    expect(id).toBe('./foo/bar.css')
+    return {
+      content: css`
+        .foo {
+          color: red;
+        }
+        @utility foo {
+          color: red;
+        }
+        @theme {
+          --breakpoint-md: 768px;
+        }
+        @variant hocus (&:hover, &:focus);
+      `,
+      base: '/root/foo',
+    }
+  }
+
+  await expect(
+    run(
+      css`
+        @import './foo/bar.css' reference;
+
+        .bar {
+          @apply md:hocus:foo;
+        }
+      `,
+      { loadStylesheet, optimize: false },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ".bar {
+      @media (width >= 768px) {
+        &:hover, &:focus {
+          color: red;
+        }
+      }
+    }
+    "
+  `)
+})
+
 test('can recursively resolve relative @imports', async () => {
   let loadStylesheet = async (id: string, base: string) => {
     if (base === '/root' && id === './foo/bar.css') {
