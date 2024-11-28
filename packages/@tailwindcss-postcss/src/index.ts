@@ -63,7 +63,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           async function createCompiler() {
             env.DEBUG && console.time('[@tailwindcss/postcss] Setup compiler')
-            clearRequireCache(context.fullRebuildPaths)
+            if (context.fullRebuildPaths.length > 0 && !isInitialBuild) {
+              clearRequireCache(context.fullRebuildPaths)
+            }
 
             context.fullRebuildPaths = []
 
