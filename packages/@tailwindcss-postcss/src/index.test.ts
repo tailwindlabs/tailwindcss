@@ -10,7 +10,11 @@ import tailwindcss from './index'
 // We place it in packages/ because Vitest runs in the monorepo root,
 // and packages/tailwindcss must be a sub-folder for
 // @import 'tailwindcss' to work.
-const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
+function inputCssFilePath() {
+  // Including the current test name to ensure that the cache is invalidated per
+  // test otherwise the cache will be used across tests.
+  return `${__dirname}/fixtures/example-project/input.css?test=${expect.getState().currentTestName}`
+}
 
 const css = dedent
 
@@ -19,7 +23,7 @@ test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
   ])
 
-  let result = await processor.process(`@import 'tailwindcss'`, { from: INPUT_CSS_PATH })
+  let result = await processor.process(`@import 'tailwindcss'`, { from: inputCssFilePath() })
 
   expect(result.css.trim()).toMatchSnapshot()
 
@@ -64,7 +68,7 @@ test('output is optimized by Lightning CSS', async () => {
         }
       }
     `,
-    { from: INPUT_CSS_PATH },
+    { from: inputCssFilePath() },
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
@@ -92,7 +96,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
         @apply text-red-500;
       }
     `,
-    { from: INPUT_CSS_PATH },
+    { from: inputCssFilePath() },
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
@@ -113,7 +117,7 @@ describe('processing without specifying a base path', () => {
   test('the current working directory is used by default', async () => {
     let processor = postcss([tailwindcss({ optimize: { minify: false } })])
 
-    let result = await processor.process(`@import "tailwindcss"`, { from: INPUT_CSS_PATH })
+    let result = await processor.process(`@import "tailwindcss"`, { from: inputCssFilePath() })
 
     expect(result.css).toContain(
       ".md\\:\\[\\&\\:hover\\]\\:content-\\[\\'testing_default_base_path\\'\\]",
@@ -139,7 +143,7 @@ describe('plugins', () => {
         @import 'tailwindcss/utilities';
         @plugin './plugin.js';
       `,
-      { from: INPUT_CSS_PATH },
+      { from: inputCssFilePath() },
     )
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
@@ -199,7 +203,7 @@ describe('plugins', () => {
         @import 'tailwindcss/utilities';
         @plugin 'internal-example-plugin';
       `,
-      { from: INPUT_CSS_PATH },
+      { from: inputCssFilePath() },
     )
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
@@ -231,7 +235,7 @@ test('bail early when Tailwind is not used', async () => {
         color: red;
       }
     `,
-    { from: INPUT_CSS_PATH },
+    { from: inputCssFilePath() },
   )
 
   // `fixtures/example-project` includes an `underline` candidate. But since we
