@@ -530,7 +530,7 @@ export async function compile(
 }> {
   let { designSystem, ast, globs, root, utilitiesNode, tailwindCssType } = await parseCss(css, opts)
 
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV !== 'test' && tailwindCssType === 'full') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
   }
 
