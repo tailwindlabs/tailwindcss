@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
 - Ensure the TypeScript types for `PluginsConfig` allow `undefined` values ([#14668](https://github.com/tailwindlabs/tailwindcss/pull/14668))
 
 ## [3.4.15] - 2024-11-14
