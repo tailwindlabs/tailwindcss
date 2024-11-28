@@ -10,10 +10,13 @@ export async function substituteAtImports(
   loadStylesheet: LoadStylesheet,
   recurseCount = 0,
 ) {
+  let usesAtImport = false
   let promises: Promise<void>[] = []
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-rule' && node.name === '@import') {
+      usesAtImport = true
+
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
 
@@ -58,7 +61,11 @@ export async function substituteAtImports(
     }
   })
 
-  await Promise.all(promises)
+  if (promises.length > 0) {
+    await Promise.all(promises)
+  }
+
+  return usesAtImport
 }
 
 // Modified and inlined version of `parse-statements` from

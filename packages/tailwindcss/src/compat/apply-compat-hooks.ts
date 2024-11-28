@@ -32,6 +32,7 @@ export async function applyCompatibilityHooks({
   ) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
+  let usesStatic = false
   let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
   let configPaths: { id: string; base: string }[] = []
 
@@ -98,6 +99,7 @@ export async function applyCompatibilityHooks({
       ])
 
       replaceWith([])
+      usesStatic = true
       return
     }
 
@@ -113,6 +115,7 @@ export async function applyCompatibilityHooks({
 
       configPaths.push({ id: node.params.slice(1, -1), base: context.base })
       replaceWith([])
+      usesStatic = true
       return
     }
   })
@@ -179,6 +182,8 @@ export async function applyCompatibilityHooks({
     configs,
     pluginDetails,
   })
+
+  return usesStatic
 }
 
 function upgradeToFullPluginSupport({
