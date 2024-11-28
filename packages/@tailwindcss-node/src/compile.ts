@@ -16,6 +16,7 @@ export type Resolver = (id: string, base: string) => Promise<string | false | un
 export async function compile(
   css: string,
   {
+    buildAst = false,
     base,
     onDependency,
     shouldRewriteUrls,
@@ -23,6 +24,7 @@ export async function compile(
     customCssResolver,
     customJsResolver,
   }: {
+    buildAst?: boolean
     base: string
     onDependency: (path: string) => void
     shouldRewriteUrls?: boolean
@@ -32,6 +34,7 @@ export async function compile(
   },
 ) {
   let compiler = await _compile(css, {
+    buildAst,
     base,
     async loadModule(id, base) {
       return loadModule(id, base, onDependency, customJsResolver)

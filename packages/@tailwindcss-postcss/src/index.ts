@@ -5,13 +5,20 @@ import { Scanner } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
-import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import postcss, {
+  type AcceptedPlugin,
+  type PluginCreator,
+  type Container as PostCSSContainerNode,
+  type Node as PostCSSNode,
+} from 'postcss'
+import { type AstNode } from '../../tailwindcss/src/ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
 interface CacheEntry {
   mtimes: Map<string, number>
   compiler: null | Awaited<ReturnType<typeof compile>>
   scanner: null | Scanner
+  ast: AstNode[] | null
   css: string
   optimizedCss: string
   fullRebuildPaths: string[]
@@ -25,6 +32,7 @@ function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry
     mtimes: new Map<string, number>(),
     compiler: null,
     scanner: null,
+    ast: null,
     css: '',
     optimizedCss: '',
     fullRebuildPaths: [] as string[],
@@ -43,7 +51,8 @@ export type PluginOptions = {
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
-  let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
+  let inDevelopment = process.env.NODE_ENV !== 'production'
+  let optimize = opts.optimize ?? !inDevelopment
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -70,6 +79,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             context.fullRebuildPaths = []
 
             let compiler = await compile(root.toString(), {
+              buildAst: inDevelopment,
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
@@ -128,6 +138,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
+          let ast = null as AstNode[] | null
           let css = ''
 
           if (
@@ -205,28 +216,176 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
-          css = context.compiler.build(candidates)
+          let output = context.compiler.build(candidates)
+          if (typeof output === 'string') {
+            css = output
+          } else {
+            ast = output
+          }
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build CSS')
 
           // Replace CSS
-          if (css !== context.css && optimize) {
-            env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
-            context.optimizedCss = optimizeCss(css, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
-            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+          if (inDevelopment) {
+            if (ast !== context.ast) {
+              context.ast = ast
+            }
+          } else {
+            if (css !== context.css && optimize) {
+              env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
+              context.optimizedCss = optimizeCss(css, {
+                minify: typeof optimize === 'object' ? optimize.minify : true,
+              })
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+            }
           }
-          context.css = css
+
+          let postCssAst = null as PostCSSContainerNode | null
+          if (inDevelopment && context.ast) {
+            env.DEBUG && console.time('[@tailwindcss/postcss] Our AST -> PostCSS AST')
+            postCssAst = transformIntoPostCssAst(context.ast)
+            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Our AST -> PostCSS AST')
+          } else {
+            console.time('[@tailwindcss/postcss] string -> PostCSS AST')
+            postCssAst = postcss.parse(optimize ? context.optimizedCss : context.css, result.opts)
+            console.timeEnd('[@tailwindcss/postcss] string -> PostCSS AST')
+          }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
-          root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+          root.append(postCssAst)
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
         },
       },
     ],
   }
+}
+
+function transformIntoPostCssAst(ast: AstNode[]): PostCSSContainerNode {
+  let seenAtProperties = new Set<string>()
+  let propertyFallbacksRoot = [] as PostCSSNode[]
+  let propertyFallbacksUniversal = [] as PostCSSNode[]
+  let newRoot = postcss.root()
+  function transformNode(node: AstNode, parent: PostCSSContainerNode | null = null) {
+    let postCssNode = null as PostCSSNode | null
+
+    if (node.kind === 'comment') {
+      postCssNode = postcss.comment({ text: node.value })
+    } else if (node.kind === 'declaration') {
+      if (node.property === '--tw-sort') return
+      if (node.value === undefined) return
+      if (node.value === null) return
+
+      postCssNode = postcss.decl({
+        prop: node.property,
+        value: node.value ?? '',
+        important: node.important,
+      })
+    } else if (node.kind === 'at-rule') {
+      if (node.name === '@property') {
+        if (seenAtProperties.has(node.params)) return
+
+        // Collect fallbacks for `@property` rules for Firefox support
+        // We turn these into rules on `:root` or `*` and some pseudo-elements
+        // based on the value of `inherits``
+        let property = node.params
+        let initialValue = null
+        let inherits = false
+
+        for (let prop of node.nodes) {
+          if (prop.kind !== 'declaration') continue
+          if (prop.property === 'initial-value') {
+            initialValue = prop.value
+          } else if (prop.property === 'inherits') {
+            inherits = prop.value === 'true'
+          }
+        }
+
+        if (inherits) {
+          propertyFallbacksRoot.push(
+            postcss.decl({
+              prop: property,
+              value: initialValue ?? 'initial',
+            }),
+          )
+        } else {
+          propertyFallbacksUniversal.push(
+            postcss.decl({
+              prop: property,
+              value: initialValue ?? 'initial',
+            }),
+          )
+        }
+
+        seenAtProperties.add(node.params)
+      } else {
+        postCssNode = postcss.atRule({ name: node.name.slice(1), params: node.params })
+      }
+    } else if (node.kind === 'rule') {
+      postCssNode = postcss.rule({ selector: node.selector })
+    } else if (node.kind === 'at-root') {
+      let tmpRoot = postcss.root()
+      for (let child of node.nodes) {
+        transformNode(child, tmpRoot)
+      }
+      newRoot.append(tmpRoot)
+      return
+    } else if (node.kind === 'context') {
+      for (let child of node.nodes) {
+        transformNode(child, parent)
+      }
+      return
+    }
+
+    // Add the node to its parent's `nodes` array
+    if (parent && parent.append && postCssNode !== null) {
+      parent.append(postCssNode)
+    }
+
+    // Recursively transform children
+    if ('nodes' in node) {
+      for (let child of node.nodes) {
+        transformNode(child, postCssNode as PostCSSContainerNode)
+      }
+    }
+  }
+  for (let node of ast) {
+    transformNode(node, newRoot)
+  }
+  let fallbackAst = []
+  if (propertyFallbacksRoot.length) {
+    fallbackAst.push(
+      postcss.rule({
+        selector: ':root',
+        nodes: propertyFallbacksRoot,
+      }),
+    )
+  }
+  if (propertyFallbacksUniversal.length) {
+    fallbackAst.push(
+      postcss.rule({
+        selector: '*, ::before, ::after, ::backdrop',
+        nodes: propertyFallbacksUniversal,
+      }),
+    )
+  }
+  if (fallbackAst.length) {
+    newRoot.append(
+      postcss.atRule({
+        name: 'supports',
+        params: '(-moz-orient: inline)',
+        nodes: [
+          postcss.atRule({
+            name: 'layer',
+            params: 'base',
+            nodes: fallbackAst,
+          }),
+        ],
+      }),
+    )
+  }
+
+  return newRoot
 }
 
 function optimizeCss(
