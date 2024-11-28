@@ -131,7 +131,11 @@ export function walk(
     // whenever we encounter one, we immediately walk through its children and
     // furthermore we also don't update the parent.
     if (node.kind === 'context') {
-      walk(node.nodes, visit, parentPath, { ...context, ...node.context })
+      if (
+        walk(node.nodes, visit, parentPath, { ...context, ...node.context }) === WalkAction.Stop
+      ) {
+        return WalkAction.Stop
+      }
       continue
     }
 
@@ -150,13 +154,15 @@ export function walk(
       }) ?? WalkAction.Continue
 
     // Stop the walk entirely
-    if (status === WalkAction.Stop) return
+    if (status === WalkAction.Stop) return WalkAction.Stop
 
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule' || node.kind === 'at-rule') {
-      walk(node.nodes, visit, path, context)
+      if (walk(node.nodes, visit, path, context) === WalkAction.Stop) {
+        return WalkAction.Stop
+      }
     }
   }
 }

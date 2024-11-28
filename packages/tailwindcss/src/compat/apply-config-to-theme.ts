@@ -241,10 +241,12 @@ function walk(
     let result = callback(value, keyPath) ?? WalkAction.Continue
 
     if (result === WalkAction.Skip) continue
-    if (result === WalkAction.Stop) break
+    if (result === WalkAction.Stop) return WalkAction.Stop
 
     if (!Array.isArray(value) && typeof value !== 'object') continue
 
-    walk(value as any, keyPath, callback)
+    if (walk(value as any, keyPath, callback) === WalkAction.Stop) {
+      return WalkAction.Stop
+    }
   }
 }
