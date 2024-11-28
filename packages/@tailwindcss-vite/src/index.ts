@@ -497,7 +497,11 @@ class Root {
       this.scanner = new Scanner({ sources })
     }
 
-    if (!this.overwriteCandidates) {
+    if (this.compiler.tailwindCssType === 'none') {
+      return false
+    }
+
+    if (!this.overwriteCandidates || this.compiler.tailwindCssType === 'full') {
       // This should not be here, but right now the Vite plugin is setup where we
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
@@ -508,44 +512,46 @@ class Root {
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
     }
 
-    // Watch individual files found via custom `@source` paths
-    for (let file of this.scanner.files) {
-      addWatchFile(file)
-    }
-
-    // Watch globs found via custom `@source` paths
-    for (let glob of this.scanner.globs) {
-      if (glob.pattern[0] === '!') continue
-
-      let relative = path.relative(this.base, glob.base)
-      if (relative[0] !== '.') {
-        relative = './' + relative
+    if (this.compiler.tailwindCssType === 'full') {
+      // Watch individual files found via custom `@source` paths
+      for (let file of this.scanner.files) {
+        addWatchFile(file)
       }
-      // Ensure relative is a posix style path since we will merge it with the
-      // glob.
-      relative = normalizePath(relative)
 
-      addWatchFile(path.posix.join(relative, glob.pattern))
+      // Watch globs found via custom `@source` paths
+      for (let glob of this.scanner.globs) {
+        if (glob.pattern[0] === '!') continue
 
-      let root = this.compiler.root
-
-      if (root !== 'none' && root !== null) {
-        let basePath = normalizePath(path.resolve(root.base, root.pattern))
-
-        let isDir = await fs.stat(basePath).then(
-          (stats) => stats.isDirectory(),
-          () => false,
-        )
-
-        if (!isDir) {
-          throw new Error(
-            `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
-          )
+        let relative = path.relative(this.base, glob.base)
+        if (relative[0] !== '.') {
+          relative = './' + relative
         }
+        // Ensure relative is a posix style path since we will merge it with the
+        // glob.
+        relative = normalizePath(relative)
 
-        this.basePath = basePath
-      } else if (root === null) {
-        this.basePath = null
+        addWatchFile(path.posix.join(relative, glob.pattern))
+
+        let root = this.compiler.root
+
+        if (root !== 'none' && root !== null) {
+          let basePath = normalizePath(path.resolve(root.base, root.pattern))
+
+          let isDir = await fs.stat(basePath).then(
+            (stats) => stats.isDirectory(),
+            () => false,
+          )
+
+          if (!isDir) {
+            throw new Error(
+              `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
+            )
+          }
+
+          this.basePath = basePath
+        } else if (root === null) {
+          this.basePath = null
+        }
       }
     }
 
