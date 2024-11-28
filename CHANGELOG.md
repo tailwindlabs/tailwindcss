@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Improve performance of `@tailwindcss/postcss` and `@tailwindcss/vite` ([#15226](https://github.com/tailwindlabs/tailwindcss/pull/15226))
 
 ## [4.0.0-beta.3] - 2024-11-27
 
