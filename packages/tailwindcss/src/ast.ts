@@ -251,13 +251,13 @@ export function toCss(ast: AstNode[]) {
         // We turn these into rules on `:root` or `*` and some pseudo-elements
         // based on the value of `inherits``
         let property = node.params
-        let initialValue = null as string | null
+        let initialValue = null
         let inherits = false
 
         for (let prop of node.nodes) {
           if (prop.kind !== 'declaration') continue
           if (prop.property === 'initial-value') {
-            initialValue = prop.value ?? null
+            initialValue = prop.value
           } else if (prop.property === 'inherits') {
             inherits = prop.value === 'true'
           }

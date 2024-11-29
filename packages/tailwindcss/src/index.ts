@@ -33,7 +33,6 @@ const IS_VALID_PREFIX = /^[a-z]+$/
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
-  buildAst?: boolean
   base?: string
   loadModule?: (
     id: string,
@@ -529,7 +528,7 @@ export async function compile(
   globs: { base: string; pattern: string }[]
   root: Root
   features: Features
-  build(candidates: string[]): any
+  build(candidates: string[]): string
 }> {
   let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(css, opts)
 
@@ -546,7 +545,7 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = features & Features.None && !opts.buildAst ? toCss(ast) : ''
+  let compiledCss = features & Features.None ? toCss(ast) : ''
   let previousAstNodeCount = 0
 
   return {
@@ -568,7 +567,7 @@ export async function compile(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        return opts.buildAst ? ast : compiledCss
+        return compiledCss
       }
 
       if (utilitiesNode) {
@@ -580,21 +579,16 @@ export async function compile(
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
         if (previousAstNodeCount === newNodes.length) {
-          return opts.buildAst ? ast : compiledCss
+          return compiledCss
         }
 
         previousAstNodeCount = newNodes.length
 
         utilitiesNode.nodes = newNodes
-
-        if (!opts.buildAst) {
-          compiledCss = toCss(ast)
-        }
+        compiledCss = toCss(ast)
       }
 
-      return opts.buildAst
-        ? ast.slice() // Return a new AST with shared nodes
-        : compiledCss
+      return compiledCss
     },
   }
 }
