@@ -3,7 +3,6 @@ import { expect, test } from 'vitest'
 import { simpleLegacyClasses } from './simple-legacy-classes'
 
 test.each([
-  ['overflow-clip', 'text-clip'],
   ['overflow-ellipsis', 'text-ellipsis'],
   ['flex-grow', 'grow'],
   ['flex-grow-0', 'grow-0'],
@@ -17,6 +16,9 @@ test.each([
   ['max-lg:hover:!decoration-slice', 'max-lg:hover:box-decoration-slice!'],
 
   ['focus:outline-none', 'focus:outline-hidden'],
+
+  // Should not convert v2 utilities
+  ['overflow-clip', 'overflow-clip'],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,

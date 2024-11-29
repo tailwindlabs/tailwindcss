@@ -5,7 +5,6 @@ import { printCandidate } from '../candidates'
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
 // CSS v4 anymore.
 const LEGACY_CLASS_MAP = {
-  'overflow-clip': 'text-clip',
   'overflow-ellipsis': 'text-ellipsis',
 
   'flex-grow': 'grow',
