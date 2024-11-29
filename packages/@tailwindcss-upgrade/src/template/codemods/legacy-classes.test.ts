@@ -20,6 +20,9 @@ test.each([
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
 
+  ['backdrop-blur', 'backdrop-blur-sm'],
+  ['backdrop-blur-sm', 'backdrop-blur-xs'],
+
   ['ring', 'ring-3'],
 
   ['blur!', 'blur-sm!'],

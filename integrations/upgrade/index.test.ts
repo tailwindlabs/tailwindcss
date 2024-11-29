@@ -2297,6 +2297,9 @@ test(
               blur: {
                 DEFAULT: 'var(--custom-default-blur)',
               },
+              backdropBlur: {
+                DEFAULT: 'var(--custom-default-blur)',
+              },
 
               // Changes the "after" class definition. 'rounded' -> 'rounded-sm' is
               // not safe because 'rounded-sm' has a custom value.
@@ -2316,6 +2319,7 @@ test(
         <div>
           <div class="shadow shadow-sm shadow-xs"></div>
           <div class="blur blur-sm"></div>
+          <div class="backdrop-blur backdrop-blur-sm"></div>
           <div class="rounded rounded-sm"></div>
           <div class="ring"></div>
         </div>
@@ -2339,6 +2343,8 @@ test(
         --ring-width: 4px;
 
         --blur: var(--custom-default-blur);
+
+        --backdrop-blur: var(--custom-default-blur);
 
         --radius-sm: var(--custom-rounded-sm);
       }
@@ -2365,6 +2371,7 @@ test(
       <div>
         <div class="shadow shadow-sm shadow-xs"></div>
         <div class="blur blur-xs"></div>
+        <div class="backdrop-blur backdrop-blur-xs"></div>
         <div class="rounded rounded-sm"></div>
         <div class="ring"></div>
       </div>
