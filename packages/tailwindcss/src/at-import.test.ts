@@ -59,22 +59,28 @@ test('can resolve relative @imports', async () => {
   `)
 })
 
-test('can resolve @imports as reference', async () => {
+test('recursively removes style rules for `@import "…" reference`', async () => {
   let loadStylesheet = async (id: string, base: string) => {
-    expect(base).toBe('/root')
-    expect(id).toBe('./foo/bar.css')
+    if (id === './foo/baz.css') {
+      return {
+        content: css`
+          .foo {
+            color: red;
+          }
+          @utility foo {
+            color: red;
+          }
+          @theme {
+            --breakpoint-md: 768px;
+          }
+          @variant hocus (&:hover, &:focus);
+        `,
+        base: '/root/foo',
+      }
+    }
     return {
       content: css`
-        .foo {
-          color: red;
-        }
-        @utility foo {
-          color: red;
-        }
-        @theme {
-          --breakpoint-md: 768px;
-        }
-        @variant hocus (&:hover, &:focus);
+        @import './foo/baz.css';
       `,
       base: '/root/foo',
     }

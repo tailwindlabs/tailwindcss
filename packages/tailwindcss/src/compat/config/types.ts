@@ -18,7 +18,7 @@ export type ThemeConfig = Record<string, ThemeValue> & {
 
 export interface ResolvedConfig {
   theme: Record<string, Record<string, unknown>>
-  plugins: PluginWithConfig[]
+  plugins: { plugin: PluginWithConfig; reference: boolean }[]
 }
 
 // Content support

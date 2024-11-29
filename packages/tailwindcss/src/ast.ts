@@ -29,7 +29,7 @@ export type Comment = {
 
 export type Context = {
   kind: 'context'
-  context: Record<string, string>
+  context: Record<string, string | boolean>
   nodes: AstNode[]
 }
 
@@ -82,7 +82,7 @@ export function comment(value: string): Comment {
   }
 }
 
-export function context(context: Record<string, string>, nodes: AstNode[]): Context {
+export function context(context: Record<string, string | boolean>, nodes: AstNode[]): Context {
   return {
     kind: 'context',
     context,
@@ -115,12 +115,12 @@ export function walk(
     utils: {
       parent: AstNode | null
       replaceWith(newNode: AstNode | AstNode[]): void
-      context: Record<string, string>
+      context: Record<string, string | boolean>
       path: AstNode[]
     },
   ) => void | WalkAction,
   parentPath: AstNode[] = [],
-  context: Record<string, string> = {},
+  context: Record<string, string | boolean> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
@@ -175,12 +175,12 @@ export function walkDepth(
     utils: {
       parent: AstNode | null
       path: AstNode[]
-      context: Record<string, string>
+      context: Record<string, string | boolean>
       replaceWith(newNode: AstNode[]): void
     },
   ) => void,
   parentPath: AstNode[] = [],
-  context: Record<string, string> = {},
+  context: Record<string, string | boolean> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]

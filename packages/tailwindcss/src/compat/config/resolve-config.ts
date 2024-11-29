@@ -15,12 +15,13 @@ export interface ConfigFile {
   path?: string
   base: string
   config: UserConfig
+  reference: boolean
 }
 
 interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
-  plugins: PluginWithConfig[]
+  plugins: { plugin: PluginWithConfig; reference: boolean }[]
   content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
@@ -128,25 +129,28 @@ export type PluginUtils = {
   colors: typeof colors
 }
 
-function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFile): void {
-  let plugins: PluginWithConfig[] = []
+function extractConfigs(
+  ctx: ResolutionContext,
+  { config, base, path, reference }: ConfigFile,
+): void {
+  let plugins: { plugin: PluginWithConfig; reference: boolean }[] = []
 
   // Normalize plugins so they share the same shape
   for (let plugin of config.plugins ?? []) {
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugins.push(plugin())
+      plugins.push({ plugin: plugin(), reference })
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugins.push(plugin)
+      plugins.push({ plugin, reference })
     } else {
       // Just a plain function without using the plugin(…) API
-      plugins.push({ handler: plugin })
+      plugins.push({ plugin: { handler: plugin }, reference })
     }
   }
 
@@ -158,15 +162,15 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   }
 
   for (let preset of config.presets ?? []) {
-    extractConfigs(ctx, { path, base, config: preset })
+    extractConfigs(ctx, { path, base, config: preset, reference })
   }
 
   // Apply configs from plugins
   for (let plugin of plugins) {
     ctx.plugins.push(plugin)
 
-    if (plugin.config) {
-      extractConfigs(ctx, { path, base, config: plugin.config })
+    if (plugin.plugin.config) {
+      extractConfigs(ctx, { path, base, config: plugin.plugin.config, reference })
     }
   }
 

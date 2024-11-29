@@ -1490,6 +1490,52 @@ describe('theme', async () => {
   })
 })
 
+describe('addBase', () => {
+  test('does not create rules when imported via `@import "…" reference`', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "outside";
+      @import './inside.css' reference;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        if (id === 'inside') {
+          return {
+            base,
+            module: plugin(function ({ addBase }) {
+              addBase({ inside: { color: 'red' } })
+            }),
+          }
+        }
+        return {
+          base,
+          module: plugin(function ({ addBase }) {
+            addBase({ outside: { color: 'red' } })
+          }),
+        }
+      },
+      async loadStylesheet() {
+        return {
+          content: css`
+            @plugin "inside";
+          `,
+          base: '',
+        }
+      },
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@layer base {
+        outside {
+          color: red;
+        }
+      }
+      "
+    `)
+  })
+})
+
 describe('addVariant', () => {
   test('addVariant with string selector', async () => {
     let { build } = await compile(
