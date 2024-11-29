@@ -1,10 +1,11 @@
+import dedent from 'dedent'
 import { expect, test, vi } from 'vitest'
 import type { Plugin } from './compat/plugin-api'
 import { compile, type Config } from './index'
 import plugin from './plugin'
 import { optimizeCss } from './test-utils/run'
 
-const css = String.raw
+const css = dedent
 
 async function run(
   css: string,
@@ -161,10 +162,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('example.css');"`)
 
   await expect(
     run(
@@ -173,10 +171,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('./example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('./example.css');"`)
 
   await expect(
     run(
@@ -185,10 +180,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('/example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('/example.css');"`)
 
   await expect(
     run(
@@ -197,10 +189,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(example.css);"`)
 
   await expect(
     run(
@@ -209,10 +198,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(./example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(./example.css);"`)
 
   await expect(
     run(
@@ -221,10 +207,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(/example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(/example.css);"`)
 })
 
 test('handles case-insensitive @import directive', async () => {

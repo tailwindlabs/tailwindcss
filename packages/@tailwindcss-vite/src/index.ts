@@ -1,7 +1,7 @@
-import { compile, env, normalizePath } from '@tailwindcss/node'
+import { compile, env, Features, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
+import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { sveltePreprocess } from 'svelte-preprocess'
@@ -360,8 +360,8 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: Features.Nesting,
-      exclude: Features.LogicalProperties,
+      include: LightningCssFeatures.Nesting,
+      exclude: LightningCssFeatures.LogicalProperties,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
@@ -497,7 +497,16 @@ class Root {
       this.scanner = new Scanner({ sources })
     }
 
-    if (!this.overwriteCandidates) {
+    if (
+      !(
+        this.compiler.features &
+        (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
+      )
+    ) {
+      return false
+    }
+
+    if (!this.overwriteCandidates || this.compiler.features & Features.Utilities) {
       // This should not be here, but right now the Vite plugin is setup where we
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
@@ -508,44 +517,46 @@ class Root {
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
     }
 
-    // Watch individual files found via custom `@source` paths
-    for (let file of this.scanner.files) {
-      addWatchFile(file)
-    }
-
-    // Watch globs found via custom `@source` paths
-    for (let glob of this.scanner.globs) {
-      if (glob.pattern[0] === '!') continue
-
-      let relative = path.relative(this.base, glob.base)
-      if (relative[0] !== '.') {
-        relative = './' + relative
+    if (this.compiler.features & Features.Utilities) {
+      // Watch individual files found via custom `@source` paths
+      for (let file of this.scanner.files) {
+        addWatchFile(file)
       }
-      // Ensure relative is a posix style path since we will merge it with the
-      // glob.
-      relative = normalizePath(relative)
 
-      addWatchFile(path.posix.join(relative, glob.pattern))
+      // Watch globs found via custom `@source` paths
+      for (let glob of this.scanner.globs) {
+        if (glob.pattern[0] === '!') continue
 
-      let root = this.compiler.root
-
-      if (root !== 'none' && root !== null) {
-        let basePath = normalizePath(path.resolve(root.base, root.pattern))
-
-        let isDir = await fs.stat(basePath).then(
-          (stats) => stats.isDirectory(),
-          () => false,
-        )
-
-        if (!isDir) {
-          throw new Error(
-            `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
-          )
+        let relative = path.relative(this.base, glob.base)
+        if (relative[0] !== '.') {
+          relative = './' + relative
         }
+        // Ensure relative is a posix style path since we will merge it with the
+        // glob.
+        relative = normalizePath(relative)
 
-        this.basePath = basePath
-      } else if (root === null) {
-        this.basePath = null
+        addWatchFile(path.posix.join(relative, glob.pattern))
+
+        let root = this.compiler.root
+
+        if (root !== 'none' && root !== null) {
+          let basePath = normalizePath(path.resolve(root.base, root.pattern))
+
+          let isDir = await fs.stat(basePath).then(
+            (stats) => stats.isDirectory(),
+            () => false,
+          )
+
+          if (!isDir) {
+            throw new Error(
+              `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
+            )
+          }
+
+          this.basePath = basePath
+        } else if (root === null) {
+          this.basePath = null
+        }
       }
     }
 

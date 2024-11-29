@@ -1,4 +1,4 @@
-export enum WalkAction {
+export const enum WalkAction {
   // Continue walking the tree. Default behavior.
   Continue,
 

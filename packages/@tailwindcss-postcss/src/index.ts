@@ -1,8 +1,8 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compile, env } from '@tailwindcss/node'
+import { compile, env, Features } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
+import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
@@ -63,7 +63,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           async function createCompiler() {
             env.DEBUG && console.time('[@tailwindcss/postcss] Setup compiler')
-            clearRequireCache(context.fullRebuildPaths)
+            if (context.fullRebuildPaths.length > 0 && !isInitialBuild) {
+              clearRequireCache(context.fullRebuildPaths)
+            }
 
             context.fullRebuildPaths = []
 
@@ -85,6 +87,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
           context.compiler ??= await createCompiler()
+
+          if (context.compiler.features === Features.None) {
+            return
+          }
 
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
@@ -154,45 +160,48 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
-          let candidates = context.scanner.scan()
+          let candidates =
+            context.compiler.features & Features.Utilities ? context.scanner.scan() : []
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Scan for candidates')
 
-          // Add all found files as direct dependencies
-          for (let file of context.scanner.files) {
-            result.messages.push({
-              type: 'dependency',
-              plugin: '@tailwindcss/postcss',
-              file,
-              parent: result.opts.from,
-            })
-          }
-
-          // Register dependencies so changes in `base` cause a rebuild while
-          // giving tools like Vite or Parcel a glob that can be used to limit
-          // the files that cause a rebuild to only those that match it.
-          for (let { base: globBase, pattern } of context.scanner.globs) {
-            // Avoid adding a dependency on the base directory itself, since it
-            // causes Next.js to start an endless recursion if the `distDir` is
-            // configured to anything other than the default `.next` dir.
-            if (pattern === '*' && base === globBase) {
-              continue
-            }
-
-            if (pattern === '') {
+          if (context.compiler.features & Features.Utilities) {
+            // Add all found files as direct dependencies
+            for (let file of context.scanner.files) {
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file: globBase,
+                file,
                 parent: result.opts.from,
               })
-            } else {
-              result.messages.push({
-                type: 'dir-dependency',
-                plugin: '@tailwindcss/postcss',
-                dir: globBase,
-                glob: pattern,
-                parent: result.opts.from,
-              })
+            }
+
+            // Register dependencies so changes in `base` cause a rebuild while
+            // giving tools like Vite or Parcel a glob that can be used to limit
+            // the files that cause a rebuild to only those that match it.
+            for (let { base: globBase, pattern } of context.scanner.globs) {
+              // Avoid adding a dependency on the base directory itself, since it
+              // causes Next.js to start an endless recursion if the `distDir` is
+              // configured to anything other than the default `.next` dir.
+              if (pattern === '*' && base === globBase) {
+                continue
+              }
+
+              if (pattern === '') {
+                result.messages.push({
+                  type: 'dependency',
+                  plugin: '@tailwindcss/postcss',
+                  file: globBase,
+                  parent: result.opts.from,
+                })
+              } else {
+                result.messages.push({
+                  type: 'dir-dependency',
+                  plugin: '@tailwindcss/postcss',
+                  dir: globBase,
+                  glob: pattern,
+                  parent: result.opts.from,
+                })
+              }
             }
           }
 
@@ -237,8 +246,8 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: Features.Nesting,
-      exclude: Features.LogicalProperties,
+      include: LightningCssFeatures.Nesting,
+      exclude: LightningCssFeatures.LogicalProperties,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),

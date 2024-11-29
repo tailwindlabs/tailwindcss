@@ -13,7 +13,7 @@ import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { printCandidate } from '../candidates'
 
-export enum Convert {
+export const enum Convert {
   All = 0,
   MigrateModifier = 1 << 0,
   MigrateThemeOnly = 1 << 1,

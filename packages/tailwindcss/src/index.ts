@@ -69,6 +69,35 @@ function parseThemeOptions(params: string) {
   return [options, prefix] as const
 }
 
+type Root =
+  // Unknown root
+  | null
+
+  // Explicitly no root specified via `source(none)`
+  | 'none'
+
+  // Specified via `source(…)`, relative to the `base`
+  | { base: string; pattern: string }
+
+export const enum Features {
+  None = 0,
+
+  // `@apply` was used
+  AtApply = 1 << 0,
+
+  // `@import` was used
+  AtImport = 1 << 1,
+
+  // `@plugin` or `@config` was used
+  JsPluginCompat = 1 << 2,
+
+  // `theme(…)` was used
+  ThemeFunction = 1 << 3,
+
+  // `@tailwind utilities` was used
+  Utilities = 1 << 4,
+}
+
 async function parseCss(
   css: string,
   {
@@ -77,9 +106,10 @@ async function parseCss(
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
 ) {
+  let features = Features.None
   let ast = [contextNode({ base }, CSS.parse(css))] as AstNode[]
 
-  await substituteAtImports(ast, base, loadStylesheet)
+  features |= await substituteAtImports(ast, base, loadStylesheet)
 
   let important = null as boolean | null
   let theme = new Theme()
@@ -88,11 +118,7 @@ async function parseCss(
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let globs: { base: string; pattern: string }[] = []
-  let root:
-    | null // Unknown root
-    | 'none' // Explicitly no root specified via `source(none)`
-    // Specified via `source(…)`, relative to the `base`
-    | { base: string; pattern: string } = null
+  let root = null as Root
 
   // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
@@ -138,6 +164,7 @@ async function parseCss(
       }
 
       utilitiesNode = node
+      features |= Features.Utilities
     }
 
     // Collect custom `@utility` at-rules
@@ -414,7 +441,13 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs })
+  features |= await applyCompatibilityHooks({
+    designSystem,
+    base,
+    ast,
+    loadModule,
+    globs,
+  })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -464,9 +497,9 @@ async function parseCss(
   }
 
   // Replace `@apply` rules with the actual utility classes.
-  substituteAtApply(ast, designSystem)
+  features |= substituteAtApply(ast, designSystem)
 
-  substituteFunctions(ast, designSystem.resolveThemeValue)
+  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
@@ -488,6 +521,7 @@ async function parseCss(
     globs,
     root,
     utilitiesNode,
+    features,
   }
 }
 
@@ -496,13 +530,11 @@ export async function compile(
   opts: CompileOptions = {},
 ): Promise<{
   globs: { base: string; pattern: string }[]
-  root:
-    | null // Unknown root
-    | 'none' // Explicitly no root specified via `source(none)`
-    | { base: string; pattern: string } // Specified via `source(…)`, relative to the `base`
+  root: Root
+  features: Features
   build(candidates: string[]): string
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode } = await parseCss(css, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(css, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -517,12 +549,13 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = toCss(ast)
+  let compiledCss = features !== Features.None ? toCss(ast) : css
   let previousAstNodeCount = 0
 
   return {
     globs,
     root,
+    features,
     build(newRawCandidates: string[]) {
       let didChange = false
 
