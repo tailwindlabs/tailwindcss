@@ -39,7 +39,7 @@ function separator(value: string): ValueSeparatorNode {
   }
 }
 
-export enum ValueWalkAction {
+export const enum ValueWalkAction {
   /** Continue walking, which is the default */
   Continue,
 

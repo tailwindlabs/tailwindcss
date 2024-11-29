@@ -97,7 +97,7 @@ export function atRoot(nodes: AstNode[]): AtRoot {
   }
 }
 
-export enum WalkAction {
+export const enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
 

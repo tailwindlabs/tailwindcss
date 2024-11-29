@@ -213,7 +213,7 @@ function isValidThemeTuple(value: unknown): value is [string, Record<string, str
   return true
 }
 
-enum WalkAction {
+const enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
 

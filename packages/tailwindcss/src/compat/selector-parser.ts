@@ -68,7 +68,7 @@ function value(value: string): SelectorValueNode {
   }
 }
 
-export enum SelectorWalkAction {
+export const enum SelectorWalkAction {
   /** Continue walking, which is the default */
   Continue,
 
