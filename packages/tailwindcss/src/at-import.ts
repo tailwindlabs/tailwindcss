@@ -16,10 +16,10 @@ export async function substituteAtImports(
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-rule' && node.name === '@import') {
-      features |= Features.AtImport
-
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
+
+      features |= Features.AtImport
 
       let { uri, layer, media, supports } = parsed
 

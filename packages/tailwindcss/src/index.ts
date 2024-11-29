@@ -549,7 +549,7 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = features !== Features.None ? toCss(ast) : ''
+  let compiledCss = features !== Features.None ? toCss(ast) : css
   let previousAstNodeCount = 0
 
   return {
