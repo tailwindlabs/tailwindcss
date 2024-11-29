@@ -392,7 +392,6 @@ async function parseCss(
               // `@import` resolution.
             }
           })
-          console.dir(node.nodes, { depth: null })
           node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
