@@ -1,7 +1,6 @@
 import { Features } from '.'
 import { atRule, context, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
-import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
 type LoadStylesheet = (id: string, basedir: string) => Promise<{ base: string; content: string }>
@@ -46,9 +45,9 @@ export async function substituteAtImports(
           let loaded = await loadStylesheet(uri, base)
           let ast = CSS.parse(loaded.content)
 
-          if (reference) {
-            ast = stripStyleRules(ast)
-          }
+          // if (reference) {
+          //   ast = stripStyleRules(ast)
+          // }
 
           ast = buildImportNodes(
             [context({ base: loaded.base }, ast)],
@@ -178,33 +177,4 @@ function buildImportNodes(
   }
 
   return root
-}
-
-function stripStyleRules(ast: AstNode[]) {
-  let newAst = []
-  for (let node of ast) {
-    if (node.kind !== 'at-rule') {
-      continue
-    }
-    switch (node.name) {
-      case '@theme': {
-        let themeParams = segment(node.params, ' ')
-        if (!themeParams.includes('reference')) {
-          node.params += ' reference'
-        }
-        newAst.push(node)
-        continue
-      }
-      case '@import':
-      case '@config':
-      case '@plugin':
-      case '@variant':
-      case '@utility': {
-        newAst.push(node)
-        continue
-      }
-    }
-  }
-
-  return newAst
 }

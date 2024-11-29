@@ -59,56 +59,6 @@ test('can resolve relative @imports', async () => {
   `)
 })
 
-test('recursively removes style rules for `@import "…" reference`', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
-    if (id === './foo/baz.css') {
-      return {
-        content: css`
-          .foo {
-            color: red;
-          }
-          @utility foo {
-            color: red;
-          }
-          @theme {
-            --breakpoint-md: 768px;
-          }
-          @variant hocus (&:hover, &:focus);
-        `,
-        base: '/root/foo',
-      }
-    }
-    return {
-      content: css`
-        @import './foo/baz.css';
-      `,
-      base: '/root/foo',
-    }
-  }
-
-  await expect(
-    run(
-      css`
-        @import './foo/bar.css' reference;
-
-        .bar {
-          @apply md:hocus:foo;
-        }
-      `,
-      { loadStylesheet, optimize: false },
-    ),
-  ).resolves.toMatchInlineSnapshot(`
-    ".bar {
-      @media (width >= 768px) {
-        &:hover, &:focus {
-          color: red;
-        }
-      }
-    }
-    "
-  `)
-})
-
 test('can recursively resolve relative @imports', async () => {
   let loadStylesheet = async (id: string, base: string) => {
     if (base === '/root' && id === './foo/bar.css') {
