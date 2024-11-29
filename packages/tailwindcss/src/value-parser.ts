@@ -39,7 +39,7 @@ function separator(value: string): ValueSeparatorNode {
   }
 }
 
-export enum ValueWalkAction {
+export const enum ValueWalkAction {
   /** Continue walking, which is the default */
   Continue,
 
@@ -76,13 +76,15 @@ export function walk(
       }) ?? ValueWalkAction.Continue
 
     // Stop the walk entirely
-    if (status === ValueWalkAction.Stop) return
+    if (status === ValueWalkAction.Stop) return ValueWalkAction.Stop
 
     // Skip visiting the children of this node
     if (status === ValueWalkAction.Skip) continue
 
     if (node.kind === 'function') {
-      walk(node.nodes, visit, node)
+      if (walk(node.nodes, visit, node) === ValueWalkAction.Stop) {
+        return ValueWalkAction.Stop
+      }
     }
   }
 }

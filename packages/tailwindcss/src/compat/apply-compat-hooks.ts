@@ -1,3 +1,4 @@
+import { Features } from '..'
 import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
@@ -32,6 +33,7 @@ export async function applyCompatibilityHooks({
   ) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
 }) {
+  let features = Features.None
   let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
   let configPaths: { id: string; base: string }[] = []
 
@@ -98,6 +100,7 @@ export async function applyCompatibilityHooks({
       ])
 
       replaceWith([])
+      features |= Features.JsPluginCompat
       return
     }
 
@@ -113,6 +116,7 @@ export async function applyCompatibilityHooks({
 
       configPaths.push({ id: node.params.slice(1, -1), base: context.base })
       replaceWith([])
+      features |= Features.JsPluginCompat
       return
     }
   })
@@ -132,7 +136,7 @@ export async function applyCompatibilityHooks({
 
     // If the theme value is not found in the simple resolver, we upgrade to the full backward
     // compatibility support implementation of the `resolveThemeValue` function.
-    upgradeToFullPluginSupport({
+    features |= upgradeToFullPluginSupport({
       designSystem,
       base,
       ast,
@@ -145,7 +149,7 @@ export async function applyCompatibilityHooks({
 
   // If there are no plugins or configs registered, we don't need to register
   // any additional backwards compatibility hooks.
-  if (!pluginPaths.length && !configPaths.length) return
+  if (!pluginPaths.length && !configPaths.length) return Features.None
 
   let [configs, pluginDetails] = await Promise.all([
     Promise.all(
@@ -171,7 +175,7 @@ export async function applyCompatibilityHooks({
     ),
   ])
 
-  upgradeToFullPluginSupport({
+  features |= upgradeToFullPluginSupport({
     designSystem,
     base,
     ast,
@@ -179,6 +183,8 @@ export async function applyCompatibilityHooks({
     configs,
     pluginDetails,
   })
+
+  return features
 }
 
 function upgradeToFullPluginSupport({
@@ -205,6 +211,7 @@ function upgradeToFullPluginSupport({
     options: CssPluginOptions | null
   }[]
 }) {
+  let features = Features.None
   let pluginConfigs = pluginDetails.map((detail) => {
     if (!detail.options) {
       return { config: { plugins: [detail.plugin] }, base: detail.base }
@@ -229,7 +236,11 @@ function upgradeToFullPluginSupport({
     userConfig,
   )
 
-  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
+  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig, {
+    set current(value: number) {
+      features |= value
+    },
+  })
 
   for (let { handler } of resolvedConfig.plugins) {
     handler(pluginApi)
@@ -323,4 +334,5 @@ function upgradeToFullPluginSupport({
 
     globs.push(file)
   }
+  return features
 }

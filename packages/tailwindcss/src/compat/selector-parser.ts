@@ -68,7 +68,7 @@ function value(value: string): SelectorValueNode {
   }
 }
 
-export enum SelectorWalkAction {
+export const enum SelectorWalkAction {
   /** Continue walking, which is the default */
   Continue,
 
@@ -105,13 +105,15 @@ export function walk(
       }) ?? SelectorWalkAction.Continue
 
     // Stop the walk entirely
-    if (status === SelectorWalkAction.Stop) return
+    if (status === SelectorWalkAction.Stop) return SelectorWalkAction.Stop
 
     // Skip visiting the children of this node
     if (status === SelectorWalkAction.Skip) continue
 
     if (node.kind === 'function') {
-      walk(node.nodes, visit, node)
+      if (walk(node.nodes, visit, node) === SelectorWalkAction.Stop) {
+        return SelectorWalkAction.Stop
+      }
     }
   }
 }

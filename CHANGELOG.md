@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- _Upgrade (experimental)_: Do not migrate `overflow-clip` utility ([#15244](https://github.com/tailwindlabs/tailwindcss/pull/15244))
+- Don't scan source files for utilities unless `@tailwind utilities` is present in the CSS in `@tailwindcss/postcss` and `@tailwindcss/vite` ([#15226](https://github.com/tailwindlabs/tailwindcss/pull/15226))
+- Skip reserializing CSS files that don't use Tailwind features in `@tailwindcss/postcss` and `@tailwindcss/vite` ([#15226](https://github.com/tailwindlabs/tailwindcss/pull/15226))
+- _Upgrade (experimental)_: Do not migrate the `overflow-clip` utility ([#15244](https://github.com/tailwindlabs/tailwindcss/pull/15244))
 
 ## [4.0.0-beta.3] - 2024-11-27
 
