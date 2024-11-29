@@ -3138,23 +3138,23 @@ describe('`@import "…" reference`', () => {
     `)
   })
 
-  test.only('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
+  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
     await expect(
       compileCss(
         `
           @media reference {
-             @media print {
+            @layer theme {
+              @theme {
+                --breakpoint-md: 48rem;
+              }
               .foo {
                 color: red;
               }
-              @utility foo {
-                color: red;
-              }
-              @theme {
-                --breakpoint-md: 768px;
-              }
-              @variant hocus (&:hover, &:focus);
             }
+            @utility foo {
+              color: red;
+            }
+            @variant hocus (&:hover, &:focus);
           }
 
           .bar {
@@ -3164,7 +3164,9 @@ describe('`@import "…" reference`', () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 768px) {
+      "@layer theme;
+
+      @media (width >= 48rem) {
         .bar:hover, .bar:focus {
           color: red;
         }

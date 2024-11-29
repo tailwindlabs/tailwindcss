@@ -157,7 +157,7 @@ async function parseCss(
           }
 
           root = {
-            base: context.sourceBase ?? context.base,
+            base: (context.sourceBase as string) ?? (context.base as string),
             pattern: path.slice(1, -1),
           }
         }
@@ -212,7 +212,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ base: context.base, pattern: path.slice(1, -1) })
+      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }
@@ -366,32 +366,34 @@ async function parseCss(
 
         // Handle `@import "…" reference`
         else if (param === 'reference') {
-          let newAst = []
-          for (let node of ast) {
-            if (node.kind !== 'at-rule') {
-              continue
+          walk(node.nodes, (child, { replaceWith }) => {
+            if (child.kind !== 'at-rule') {
+              replaceWith([])
+              return WalkAction.Skip
             }
-            switch (node.name) {
+            switch (child.name) {
               case '@theme': {
-                let themeParams = segment(node.params, ' ')
+                let themeParams = segment(child.params, ' ')
                 if (!themeParams.includes('reference')) {
-                  node.params += ' reference'
+                  child.params = (child.params === '' ? '' : ' ') + 'reference'
                 }
-                newAst.push(node)
-                continue
+                return WalkAction.Skip
               }
               case '@import':
               case '@config':
               case '@plugin':
               case '@variant':
               case '@utility': {
-                newAst.push(node)
-                continue
+                return WalkAction.Skip
               }
-            }
-          }
 
-          node.nodes = [contextNode({ reference: true }, newAst)]
+              // Other at-rules, like `@media`, `@supports`, or `@layer` should
+              // be recursively traversed as these might be inserted by the
+              // `@import` resolution.
+            }
+          })
+          console.dir(node.nodes, { depth: null })
+          node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
         //
@@ -636,10 +638,4 @@ export default function postcssPluginWarning() {
   throw new Error(
     `It looks like you're trying to use \`tailwindcss\` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install \`@tailwindcss/postcss\` and update your PostCSS configuration.`,
   )
-}
-
-function stripStyleRules(ast: AstNode[]) {
-  let newAst = []
-
-  return newAst
 }

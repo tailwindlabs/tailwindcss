@@ -14,7 +14,7 @@ export async function substituteAtImports(
   let features = Features.None
   let promises: Promise<void>[] = []
 
-  walk(ast, (node, { replaceWith, context: { reference } }) => {
+  walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-rule' && node.name === '@import') {
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
@@ -22,7 +22,6 @@ export async function substituteAtImports(
       features |= Features.AtImport
 
       let { uri, layer, media, supports } = parsed
-      reference ||= parsed.reference ?? false
 
       // Skip importing data or remote URIs
       if (uri.startsWith('data:')) return
@@ -44,22 +43,14 @@ export async function substituteAtImports(
 
           let loaded = await loadStylesheet(uri, base)
           let ast = CSS.parse(loaded.content)
+          await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
 
-          // if (reference) {
-          //   ast = stripStyleRules(ast)
-          // }
-
-          ast = buildImportNodes(
+          contextNode.nodes = buildImportNodes(
             [context({ base: loaded.base }, ast)],
             layer,
             media,
             supports,
-            !!reference,
           )
-
-          await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
-
-          contextNode.nodes = ast
         })(),
       )
 
@@ -87,7 +78,6 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
   let layer: string | null = null
   let media: string | null = null
   let supports: string | null = null
-  let reference: true | null = null
 
   for (let i = 0; i < params.length; i++) {
     let node = params[i]
@@ -137,18 +127,13 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       continue
     }
 
-    if (node.kind === 'word' && node.value.toLocaleLowerCase() === 'reference') {
-      reference = true
-      continue
-    }
-
     media = ValueParser.toCss(params.slice(i))
     break
   }
 
   if (!uri) return null
 
-  return { uri, layer, media, supports, reference }
+  return { uri, layer, media, supports }
 }
 
 function buildImportNodes(
@@ -156,7 +141,6 @@ function buildImportNodes(
   layer: string | null,
   media: string | null,
   supports: string | null,
-  reference: boolean | null,
 ): AstNode[] {
   let root = importedAst
 
@@ -170,10 +154,6 @@ function buildImportNodes(
 
   if (supports !== null) {
     root = [atRule('@supports', supports[0] === '(' ? supports : `(${supports})`, root)]
-  }
-
-  if (reference !== null) {
-    root = [context({ reference }, root)]
   }
 
   return root
