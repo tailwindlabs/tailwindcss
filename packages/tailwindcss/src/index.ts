@@ -80,15 +80,26 @@ type Root =
   // Specified via `source(…)`, relative to the `base`
   | { base: string; pattern: string }
 
-type TailwindCssType =
-  // No Tailwind specific CSS used
-  | 'none'
+export const enum Features {
+  None = 0,
 
-  // Some Tailwind specific CSS used, such as `@apply`, but no `@tailwind utilities`
-  | 'static'
+  // `@apply` was used
+  AtApply = 1 << 0,
 
-  // Full Tailwind CSS build required
-  | 'full'
+  // `@import` was used
+  AtImport = 1 << 1,
+
+  // `@plugin` or `@config` was used
+  JsPluginCompat = 1 << 2,
+
+  // `theme(…)` was used
+  ThemeFunction = 1 << 3,
+
+  // `@tailwind utilities` was used
+  Utilities = 1 << 4,
+}
+
+export type FeaturesRef = { current: Features }
 
 async function parseCss(
   css: string,
@@ -98,9 +109,10 @@ async function parseCss(
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
 ) {
+  let featuresRef = { current: Features.None }
   let ast = [contextNode({ base }, CSS.parse(css))] as AstNode[]
 
-  let usesAtImport = await substituteAtImports(ast, base, loadStylesheet)
+  await substituteAtImports(ast, base, loadStylesheet, featuresRef)
 
   let important = null as boolean | null
   let theme = new Theme()
@@ -110,7 +122,6 @@ async function parseCss(
   let utilitiesNode = null as AtRule | null
   let globs: { base: string; pattern: string }[] = []
   let root = null as Root
-  let tailwindCssType = (usesAtImport ? 'static' : 'none') as TailwindCssType
 
   // Handle at-rules
   walk(ast, (node, { parent, replaceWith, context }) => {
@@ -156,7 +167,7 @@ async function parseCss(
       }
 
       utilitiesNode = node
-      tailwindCssType = 'full'
+      featuresRef.current |= Features.Utilities
     }
 
     // Collect custom `@utility` at-rules
@@ -433,10 +444,7 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  let usesStatic = await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs })
-  if (usesStatic && tailwindCssType === 'none') {
-    tailwindCssType = 'static'
-  }
+  await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs, featuresRef })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -486,15 +494,9 @@ async function parseCss(
   }
 
   // Replace `@apply` rules with the actual utility classes.
-  let usesAtApply = substituteAtApply(ast, designSystem)
-  if (tailwindCssType === 'none' && usesAtApply) {
-    tailwindCssType = 'static'
-  }
+  substituteAtApply(ast, designSystem, featuresRef)
 
-  let usesCssFunctions = substituteFunctions(ast, designSystem.resolveThemeValue)
-  if (tailwindCssType === 'none' && usesCssFunctions) {
-    tailwindCssType = 'static'
-  }
+  substituteFunctions(ast, designSystem.resolveThemeValue, featuresRef)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
@@ -516,7 +518,7 @@ async function parseCss(
     globs,
     root,
     utilitiesNode,
-    tailwindCssType,
+    features: featuresRef.current,
   }
 }
 
@@ -526,12 +528,12 @@ export async function compile(
 ): Promise<{
   globs: { base: string; pattern: string }[]
   root: Root
-  tailwindCssType: TailwindCssType
+  features: Features
   build(candidates: string[]): any
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, tailwindCssType } = await parseCss(css, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(css, opts)
 
-  if (process.env.NODE_ENV !== 'test' && tailwindCssType === 'full') {
+  if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
   }
 
@@ -544,13 +546,13 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = tailwindCssType !== 'none' && !opts.buildAst ? toCss(ast) : ''
+  let compiledCss = features & Features.None && !opts.buildAst ? toCss(ast) : ''
   let previousAstNodeCount = 0
 
   return {
     globs,
     root,
-    tailwindCssType,
+    features,
     build(newRawCandidates: string[]) {
       let didChange = false
 

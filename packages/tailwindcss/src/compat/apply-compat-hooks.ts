@@ -1,3 +1,4 @@
+import { Features, type FeaturesRef } from '..'
 import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { segment } from '../utils/segment'
@@ -21,6 +22,7 @@ export async function applyCompatibilityHooks({
   ast,
   loadModule,
   globs,
+  featuresRef,
 }: {
   designSystem: DesignSystem
   base: string
@@ -31,8 +33,8 @@ export async function applyCompatibilityHooks({
     resourceHint: 'plugin' | 'config',
   ) => Promise<{ module: any; base: string }>
   globs: { origin?: string; pattern: string }[]
+  featuresRef: FeaturesRef
 }) {
-  let usesStatic = false
   let pluginPaths: [{ id: string; base: string }, CssPluginOptions | null][] = []
   let configPaths: { id: string; base: string }[] = []
 
@@ -99,7 +101,7 @@ export async function applyCompatibilityHooks({
       ])
 
       replaceWith([])
-      usesStatic = true
+      featuresRef.current |= Features.JsPluginCompat
       return
     }
 
@@ -115,7 +117,7 @@ export async function applyCompatibilityHooks({
 
       configPaths.push({ id: node.params.slice(1, -1), base: context.base })
       replaceWith([])
-      usesStatic = true
+      featuresRef.current |= Features.JsPluginCompat
       return
     }
   })
@@ -142,6 +144,7 @@ export async function applyCompatibilityHooks({
       globs,
       configs: [],
       pluginDetails: [],
+      featuresRef,
     })
     return designSystem.resolveThemeValue(path)
   }
@@ -181,9 +184,8 @@ export async function applyCompatibilityHooks({
     globs,
     configs,
     pluginDetails,
+    featuresRef,
   })
-
-  return usesStatic
 }
 
 function upgradeToFullPluginSupport({
@@ -193,6 +195,7 @@ function upgradeToFullPluginSupport({
   globs,
   configs,
   pluginDetails,
+  featuresRef,
 }: {
   designSystem: DesignSystem
   base: string
@@ -209,6 +212,7 @@ function upgradeToFullPluginSupport({
     plugin: Plugin
     options: CssPluginOptions | null
   }[]
+  featuresRef: FeaturesRef
 }) {
   let pluginConfigs = pluginDetails.map((detail) => {
     if (!detail.options) {
@@ -234,7 +238,7 @@ function upgradeToFullPluginSupport({
     userConfig,
   )
 
-  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig)
+  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig, featuresRef)
 
   for (let { handler } of resolvedConfig.plugins) {
     handler(pluginApi)

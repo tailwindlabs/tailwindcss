@@ -1,7 +1,7 @@
-import { compile, env, normalizePath } from '@tailwindcss/node'
+import { compile, env, Features, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
+import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { sveltePreprocess } from 'svelte-preprocess'
@@ -360,8 +360,8 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: Features.Nesting,
-      exclude: Features.LogicalProperties,
+      include: LightningCssFeatures.Nesting,
+      exclude: LightningCssFeatures.LogicalProperties,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
@@ -497,11 +497,16 @@ class Root {
       this.scanner = new Scanner({ sources })
     }
 
-    if (this.compiler.tailwindCssType === 'none') {
+    if (
+      !(
+        this.compiler.features &
+        (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
+      )
+    ) {
       return false
     }
 
-    if (!this.overwriteCandidates || this.compiler.tailwindCssType === 'full') {
+    if (!this.overwriteCandidates || this.compiler.features & Features.Utilities) {
       // This should not be here, but right now the Vite plugin is setup where we
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
@@ -512,7 +517,7 @@ class Root {
       env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
     }
 
-    if (this.compiler.tailwindCssType === 'full') {
+    if (this.compiler.features & Features.Utilities) {
       // Watch individual files found via custom `@source` paths
       for (let file of this.scanner.files) {
         addWatchFile(file)

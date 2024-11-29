@@ -1,3 +1,4 @@
+import { Features, type FeaturesRef } from '.'
 import { walk, type AstNode } from './ast'
 import * as ValueParser from './value-parser'
 import { type ValueAstNode } from './value-parser'
@@ -6,12 +7,15 @@ export const THEME_FUNCTION_INVOCATION = 'theme('
 
 type ResolveThemeValue = (path: string) => string | undefined
 
-export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
-  let usesFunctions = false
+export function substituteFunctions(
+  ast: AstNode[],
+  resolveThemeValue: ResolveThemeValue,
+  featuresRef: FeaturesRef,
+) {
   walk(ast, (node) => {
     // Find all declaration values
     if (node.kind === 'declaration' && node.value?.includes(THEME_FUNCTION_INVOCATION)) {
-      usesFunctions = true
+      featuresRef.current |= Features.ThemeFunction
       node.value = substituteFunctionsInValue(node.value, resolveThemeValue)
       return
     }
@@ -25,12 +29,11 @@ export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveTh
           node.name === '@supports') &&
         node.params.includes(THEME_FUNCTION_INVOCATION)
       ) {
-        usesFunctions = true
+        featuresRef.current |= Features.ThemeFunction
         node.params = substituteFunctionsInValue(node.params, resolveThemeValue)
       }
     }
   })
-  return usesFunctions
 }
 
 export function substituteFunctionsInValue(

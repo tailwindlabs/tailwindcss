@@ -7,9 +7,12 @@ import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
   compile as _compile,
+  Features,
 } from 'tailwindcss'
 import { getModuleDependencies } from './get-module-dependencies'
 import { rewriteUrls } from './urls'
+
+export { Features }
 
 export type Resolver = (id: string, base: string) => Promise<string | false | undefined>
 

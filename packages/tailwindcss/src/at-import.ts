@@ -1,3 +1,4 @@
+import { Features, type FeaturesRef } from '.'
 import { atRule, context, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
@@ -8,17 +9,17 @@ export async function substituteAtImports(
   ast: AstNode[],
   base: string,
   loadStylesheet: LoadStylesheet,
+  featuresRef: FeaturesRef,
   recurseCount = 0,
 ) {
-  let usesAtImport = false
   let promises: Promise<void>[] = []
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'at-rule' && node.name === '@import') {
-      usesAtImport = true
-
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
+
+      featuresRef.current |= Features.AtImport
 
       let { uri, layer, media, supports } = parsed
 
@@ -42,7 +43,7 @@ export async function substituteAtImports(
 
           let loaded = await loadStylesheet(uri, base)
           let ast = CSS.parse(loaded.content)
-          await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1)
+          await substituteAtImports(ast, loaded.base, loadStylesheet, featuresRef, recurseCount + 1)
 
           contextNode.nodes = buildImportNodes(
             [context({ base: loaded.base }, ast)],
@@ -64,8 +65,6 @@ export async function substituteAtImports(
   if (promises.length > 0) {
     await Promise.all(promises)
   }
-
-  return usesAtImport
 }
 
 // Modified and inlined version of `parse-statements` from

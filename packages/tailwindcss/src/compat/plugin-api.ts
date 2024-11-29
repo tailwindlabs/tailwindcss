@@ -1,3 +1,4 @@
+import type { FeaturesRef } from '..'
 import { substituteAtApply } from '../apply'
 import { atRule, decl, rule, walk, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
@@ -83,11 +84,12 @@ export function buildPluginApi(
   designSystem: DesignSystem,
   ast: AstNode[],
   resolvedConfig: ResolvedConfig,
+  featuresRef: FeaturesRef,
 ): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
       let baseNodes = objectToAst(css)
-      substituteFunctions(baseNodes, api.theme)
+      substituteFunctions(baseNodes, api.theme, featuresRef)
       ast.push(atRule('@layer', 'base', baseNodes))
     },
 
@@ -260,7 +262,7 @@ export function buildPluginApi(
 
         designSystem.utilities.static(className, () => {
           let clonedAst = structuredClone(ast)
-          substituteAtApply(clonedAst, designSystem)
+          substituteAtApply(clonedAst, designSystem, featuresRef)
           return clonedAst
         })
       }
@@ -382,7 +384,7 @@ export function buildPluginApi(
             }
 
             let ast = objectToAst(fn(value, { modifier }))
-            substituteAtApply(ast, designSystem)
+            substituteAtApply(ast, designSystem, featuresRef)
             return ast
           }
         }

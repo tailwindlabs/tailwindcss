@@ -1,8 +1,8 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compile, env } from '@tailwindcss/node'
+import { compile, env, Features } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
+import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
 import postcss, {
@@ -98,7 +98,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // guarantee a `build()` function is available.
           context.compiler ??= await createCompiler()
 
-          if (context.compiler.tailwindCssType === 'none') {
+          if (context.compiler.features === Features.None) {
             return
           }
 
@@ -171,10 +171,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Scan for candidates')
-          let candidates = context.compiler.tailwindCssType === 'full' ? context.scanner.scan() : []
+          let candidates =
+            context.compiler.features & Features.Utilities ? context.scanner.scan() : []
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Scan for candidates')
 
-          if (context.compiler.tailwindCssType === 'full') {
+          if (context.compiler.features & Features.Utilities) {
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
               result.messages.push({
@@ -404,8 +405,8 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: Features.Nesting,
-      exclude: Features.LogicalProperties,
+      include: LightningCssFeatures.Nesting,
+      exclude: LightningCssFeatures.LogicalProperties,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
