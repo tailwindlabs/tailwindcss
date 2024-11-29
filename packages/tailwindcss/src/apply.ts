@@ -1,14 +1,11 @@
-import { Features, type FeaturesRef } from '.'
+import { Features } from '.'
 import { walk, WalkAction, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import { escape } from './utils/escape'
 
-export function substituteAtApply(
-  ast: AstNode[],
-  designSystem: DesignSystem,
-  featuresRef: FeaturesRef,
-) {
+export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
+  let features = Features.None
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'at-rule') return
 
@@ -23,7 +20,7 @@ export function substituteAtApply(
     }
 
     if (node.name !== '@apply') return
-    featuresRef.current |= Features.AtApply
+    features |= Features.AtApply
 
     let candidates = node.params.split(/\s+/g)
 
@@ -81,4 +78,5 @@ export function substituteAtApply(
       replaceWith(newNodes)
     }
   })
+  return features
 }

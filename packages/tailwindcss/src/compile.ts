@@ -63,7 +63,6 @@ export function compileCandidates(
         substituteFunctions(
           rules.map(({ node }) => node),
           designSystem.resolveThemeValue,
-          { current: 0 },
         )
       } catch (err) {
         // If substitution fails then the candidate likely contains a call to

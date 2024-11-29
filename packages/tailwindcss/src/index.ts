@@ -98,8 +98,6 @@ export const enum Features {
   Utilities = 1 << 4,
 }
 
-export type FeaturesRef = { current: Features }
-
 async function parseCss(
   css: string,
   {
@@ -108,10 +106,10 @@ async function parseCss(
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
 ) {
-  let featuresRef = { current: Features.None }
+  let features = Features.None
   let ast = [contextNode({ base }, CSS.parse(css))] as AstNode[]
 
-  await substituteAtImports(ast, base, loadStylesheet, featuresRef)
+  features |= await substituteAtImports(ast, base, loadStylesheet)
 
   let important = null as boolean | null
   let theme = new Theme()
@@ -166,7 +164,7 @@ async function parseCss(
       }
 
       utilitiesNode = node
-      featuresRef.current |= Features.Utilities
+      features |= Features.Utilities
     }
 
     // Collect custom `@utility` at-rules
@@ -443,7 +441,13 @@ async function parseCss(
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
   // compatible without polluting core.
-  await applyCompatibilityHooks({ designSystem, base, ast, loadModule, globs, featuresRef })
+  features |= await applyCompatibilityHooks({
+    designSystem,
+    base,
+    ast,
+    loadModule,
+    globs,
+  })
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
@@ -493,9 +497,9 @@ async function parseCss(
   }
 
   // Replace `@apply` rules with the actual utility classes.
-  substituteAtApply(ast, designSystem, featuresRef)
+  features |= substituteAtApply(ast, designSystem)
 
-  substituteFunctions(ast, designSystem.resolveThemeValue, featuresRef)
+  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
@@ -517,7 +521,7 @@ async function parseCss(
     globs,
     root,
     utilitiesNode,
-    features: featuresRef.current,
+    features,
   }
 }
 
@@ -545,7 +549,7 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = features & Features.None ? toCss(ast) : ''
+  let compiledCss = features !== Features.None ? toCss(ast) : ''
   let previousAstNodeCount = 0
 
   return {
