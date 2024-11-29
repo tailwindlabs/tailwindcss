@@ -29,6 +29,9 @@ const LEGACY_CLASS_MAP = new Map([
   ['blur', 'blur-sm'],
   ['blur-sm', 'blur-xs'],
 
+  ['backdrop-blur', 'backdrop-blur-sm'],
+  ['backdrop-blur-sm', 'backdrop-blur-xs'],
+
   ['ring', 'ring-3'],
 ])
 
@@ -49,6 +52,10 @@ const THEME_KEYS = new Map([
   ['blur', '--blur'],
   ['blur-sm', '--blur-sm'],
   ['blur-xs', '--blur-xs'],
+
+  ['backdrop-blur', '--backdrop-blur'],
+  ['backdrop-blur-sm', '--backdrop-blur-sm'],
+  ['backdrop-blur-xs', '--backdrop-blur-xs'],
 
   ['ring', '--ring-width'],
   ['ring-3', '--ring-width-3'],
