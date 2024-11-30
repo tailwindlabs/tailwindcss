@@ -9210,11 +9210,15 @@ test('text-wrap', async () => {
 })
 
 test('overflow-wrap', async () => {
-  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
+  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep', 'break-anywhere']))
     .toMatchInlineSnapshot(`
       ".break-normal {
         overflow-wrap: normal;
         word-break: normal;
+      }
+
+      .break-anywhere {
+        overflow-wrap: anywhere;
       }
 
       .break-words {
