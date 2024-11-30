@@ -9239,10 +9239,12 @@ test('overflow-wrap', async () => {
       '-break-words',
       '-break-all',
       '-break-keep',
+      '-break-anywhere',
       'break-normal/foo',
       'break-words/foo',
       'break-all/foo',
       'break-keep/foo',
+      'break-anywhere/foo',
     ]),
   ).toEqual('')
 })

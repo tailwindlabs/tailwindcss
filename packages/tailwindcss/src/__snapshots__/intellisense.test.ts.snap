@@ -3202,6 +3202,7 @@ exports[`getClassList 1`] = `
   "break-after-page",
   "break-after-right",
   "break-all",
+  "break-anywhere",
   "break-before-all",
   "break-before-auto",
   "break-before-avoid",
