@@ -456,7 +456,7 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let mut result: Vec<_> = blobs
         .par_iter()
-        .flat_map(|blob| blob.par_split(|x| matches!(x, b'\n' | b'\r')))
+        .flat_map(|blob| blob.par_split(|x| matches!(x, b'\n')))
         .map(|blob| Extractor::unique(blob, Default::default()))
         .reduce(Default::default, |mut a, b| {
             a.extend(b);
