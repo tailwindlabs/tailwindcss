@@ -31,7 +31,6 @@
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "catalog:",
-    "svelte-preprocess": "^6.0.2",
     "tailwindcss": "workspace:*"
   },
   "devDependencies": {
@@ -39,6 +38,6 @@
     "vite": "catalog:"
   },
   "peerDependencies": {
-    "vite": "^5.2.0"
+    "vite": "^5 || ^6"
   }
 }

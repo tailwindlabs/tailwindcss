@@ -4,7 +4,7 @@ import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { sveltePreprocess } from 'svelte-preprocess'
+
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
@@ -609,8 +609,8 @@ class Root {
   }
 }
 
-// Register a plugin that can hook into the Svelte preprocessor if svelte is
-// enabled. This allows us to transform CSS in `<style>` tags and create a
+// Register a plugin that can hook into the Svelte preprocessor if Svelte is
+// configured. This allows us to transform CSS in `<style>` tags and create a
 // stricter version of CSS that passes the Svelte compiler.
 //
 // Note that these files will not undergo a second pass through the vite
@@ -620,27 +620,21 @@ class Root {
 // In practice, it is discouraged to use `@tailwind utilities;` inside Svelte
 // components, as the styles it create would be scoped anyways. Use an external
 // `.css` file instead.
-function svelteProcessor(roots: DefaultMap<string, Root>) {
-  let preprocessor = sveltePreprocess()
-
+function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
   return {
     name: '@tailwindcss/svelte',
     api: {
       sveltePreprocess: {
-        markup: preprocessor.markup,
-        script: preprocessor.script,
         async style({
           content,
           filename,
           markup,
-          ...rest
         }: {
           content: string
           filename?: string
-          attributes: Record<string, string | boolean>
           markup: string
         }) {
-          if (!filename) return preprocessor.style?.({ ...rest, content, filename, markup })
+          if (!filename) return
 
           // Create the ID used by Vite to identify the `<style>` contents. This
           // way, the Vite `transform` hook can find the right root and thus
@@ -673,12 +667,12 @@ function svelteProcessor(roots: DefaultMap<string, Root>) {
 
           if (!generated) {
             roots.delete(id)
-            return preprocessor.style?.({ ...rest, content, filename, markup })
+            return
           }
 
-          return preprocessor.style?.({ ...rest, content: generated, filename, markup })
+          return { code: generated }
         },
       },
     },
-  }
+  } satisfies Plugin
 }
