@@ -51,6 +51,8 @@ export async function rewriteUrls({
   let promises: Promise<void>[] = []
 
   function replacerForDeclaration(url: string) {
+    if (url[0] === '/') return url
+
     let absoluteUrl = path.posix.join(normalizePath(base), url)
     let relativeUrl = path.posix.relative(normalizePath(root), absoluteUrl)
 
