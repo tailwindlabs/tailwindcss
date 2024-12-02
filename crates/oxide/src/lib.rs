@@ -102,7 +102,6 @@ impl Scanner {
     pub fn scan(&mut self) -> Vec<String> {
         init_tracing();
         self.prepare();
-        self.check_for_new_files();
         self.compute_candidates();
 
         let mut candidates: Vec<String> = self.candidates.clone().into_iter().collect();
@@ -209,6 +208,7 @@ impl Scanner {
     // content for candidates.
     fn prepare(&mut self) {
         if self.ready {
+            self.check_for_new_files();
             return;
         }
 
