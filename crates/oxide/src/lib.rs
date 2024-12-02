@@ -104,10 +104,9 @@ impl Scanner {
         self.prepare();
         self.compute_candidates();
 
-        let mut candidates: Vec<String> = self.candidates.clone().into_iter().collect();
+        let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
 
-        candidates.sort();
-
+        candidates.par_sort();
         candidates
     }
 
@@ -139,7 +138,7 @@ impl Scanner {
         let extractor = Extractor::with_positions(&content[..], Default::default());
 
         let candidates: Vec<(String, usize)> = extractor
-            .into_iter()
+            .into_par_iter()
             .map(|(s, i)| {
                 // SAFETY: When we parsed the candidates, we already guaranteed that the byte slices
                 // are valid, therefore we don't have to re-check here when we want to convert it back
@@ -155,7 +154,7 @@ impl Scanner {
         self.prepare();
 
         self.files
-            .iter()
+            .par_iter()
             .filter_map(|x| Path::from(x.clone()).canonicalize().ok())
             .map(|x| x.to_string())
             .collect()
@@ -200,7 +199,7 @@ impl Scanner {
 
         if !changed_content.is_empty() {
             let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.extend(candidates);
+            self.candidates.par_extend(candidates);
         }
     }
 
@@ -473,6 +472,7 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
             unsafe { String::from_utf8_unchecked(s.to_vec()) }
         })
         .collect();
-    result.sort();
+
+    result.par_sort();
     result
 }
