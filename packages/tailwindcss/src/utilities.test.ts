@@ -1360,26 +1360,26 @@ test('row-end', async () => {
 test('float', async () => {
   expect(await run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
     .toMatchInlineSnapshot(`
-    ".float-end {
-      float: end;
-    }
+      ".float-end {
+        float: inline-end;
+      }
 
-    .float-left {
-      float: left;
-    }
+      .float-left {
+        float: left;
+      }
 
-    .float-none {
-      float: none;
-    }
+      .float-none {
+        float: none;
+      }
 
-    .float-right {
-      float: right;
-    }
+      .float-right {
+        float: right;
+      }
 
-    .float-start {
-      float: start;
-    }"
-  `)
+      .float-start {
+        float: inline-start;
+      }"
+    `)
   expect(
     await run([
       'float',
@@ -1413,7 +1413,7 @@ test('clear', async () => {
     }
 
     .clear-end {
-      clear: end;
+      clear: inline-end;
     }
 
     .clear-left {
@@ -1429,7 +1429,7 @@ test('clear', async () => {
     }
 
     .clear-start {
-      clear: start;
+      clear: inline-start;
     }"
   `)
   expect(

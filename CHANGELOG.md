@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Ensure absolute `url()`s inside imported CSS files are not rebased when using `@tailwindcss/vite`
 - Ensure other plugins can run after `@tailwindcss/postcss` ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
 - Rebase `url()` inside imported CSS files when using Vite with the `@tailwindcss/postcss` extension ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
+
+### Added
+
+- Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
 
 ## [4.0.0-beta.4] - 2024-11-29
 

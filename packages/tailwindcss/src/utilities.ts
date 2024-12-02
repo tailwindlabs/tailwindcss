@@ -719,8 +719,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `float`
    */
-  staticUtility('float-start', [['float', 'start']])
-  staticUtility('float-end', [['float', 'end']])
+  staticUtility('float-start', [['float', 'inline-start']])
+  staticUtility('float-end', [['float', 'inline-end']])
   staticUtility('float-right', [['float', 'right']])
   staticUtility('float-left', [['float', 'left']])
   staticUtility('float-none', [['float', 'none']])
@@ -728,8 +728,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `clear`
    */
-  staticUtility('clear-start', [['clear', 'start']])
-  staticUtility('clear-end', [['clear', 'end']])
+  staticUtility('clear-start', [['clear', 'inline-start']])
+  staticUtility('clear-end', [['clear', 'inline-end']])
   staticUtility('clear-right', [['clear', 'right']])
   staticUtility('clear-left', [['clear', 'left']])
   staticUtility('clear-both', [['clear', 'both']])
