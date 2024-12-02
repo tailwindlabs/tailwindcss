@@ -38,6 +38,6 @@
     "vite": "catalog:"
   },
   "peerDependencies": {
-    "vite": "^5 || ^6"
+    "vite": "^5.2.0 || ^6"
   }
 }
