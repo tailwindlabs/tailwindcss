@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure absolute `url()`s inside imported CSS files are not rebased when using `@tailwindcss/vite`
 
 ## [4.0.0-beta.4] - 2024-11-29
 
