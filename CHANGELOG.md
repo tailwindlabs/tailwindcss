@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix issues with dev servers using Svelte 5 with the Vite plugin ([#15250](https://github.com/tailwindlabs/tailwindcss/issues/15250))
 - Support Vite 6 in the Vite plugin ([#15250](https://github.com/tailwindlabs/tailwindcss/issues/15250))
+- Ensure absolute `url()`s inside imported CSS files are not rebased when using `@tailwindcss/vite`
+
+### Added
+
+- Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
 
 ## [4.0.0-beta.4] - 2024-11-29
 
