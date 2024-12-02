@@ -42,15 +42,31 @@ export default function tailwindcss(): Plugin[] {
       conditions: ['style', 'development|production'],
       tryIndex: false,
       preferRelative: true,
+
+      // If the `ssr.resolve.conditions` config option is set it overrides the
+      // `conditions` option above when building for SSR. As a result, we may
+      // resolve to JS files instead of CSS files. To work around this we use
+      // `ssrConfig` to ensure correct behavior during SSR.
+      //
+      // This workaround is for Vite 5.x. Vite 6.x works correctly without
+      // this setting but keeping it around does not break anything.
+      ssrConfig: {
+        resolve: {
+          conditions: ['style', 'development|production'],
+        },
+      },
     })
+
     function customCssResolver(id: string, base: string) {
       return cssResolver(id, base, false, isSSR)
     }
 
     let jsResolver = config!.createResolver(config!.resolve)
+
     function customJsResolver(id: string, base: string) {
       return jsResolver(id, base, true, isSSR)
     }
+
     return new Root(
       id,
       () => moduleGraphCandidates,
