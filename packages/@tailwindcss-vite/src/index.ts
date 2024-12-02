@@ -661,7 +661,7 @@ function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
           ])
 
           let generated = await root.generate(content, (file) =>
-            root?.builtBeforeTransform?.push(file),
+            root.builtBeforeTransform?.push(file),
           )
 
           if (!generated) {
