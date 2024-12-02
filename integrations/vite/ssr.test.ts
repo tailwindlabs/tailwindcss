@@ -34,7 +34,7 @@ describe('SSR + Vite 5', () => {
         `,
         'index.html': html`
           <body>
-            <div class="underline m-2">Hello, world!</div>
+            <div id="app"></div>
             <script type="module" src="./src/index.ts"></script>
           </body>
         `,
@@ -102,7 +102,7 @@ describe('SSR + Vite 5', () => {
         `,
         'index.html': html`
           <body>
-            <div class="underline m-2">Hello, world!</div>
+            <div id="app"></div>
             <script type="module" src="./src/index.ts"></script>
           </body>
         `,
