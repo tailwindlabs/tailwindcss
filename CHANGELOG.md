@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure absolute `url()`s inside imported CSS files are not rebased when using `@tailwindcss/vite`
 - Fix issues with dev servers using Svelte 5 with the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Fix resolution of imported CSS files in Vite SSR builds ([#15279](https://github.com/tailwindlabs/tailwindcss/issues/15279))
 
 ### Added
 
