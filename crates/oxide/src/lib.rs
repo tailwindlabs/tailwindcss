@@ -454,12 +454,10 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
 #[tracing::instrument(skip_all)]
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
-    let input: Vec<_> = blobs.iter().map(|blob| &blob[..]).collect();
-    let input = &input[..];
-
-    let mut result: Vec<String> = input
+    let mut result: Vec<_> = blobs
         .par_iter()
-        .map(|input| Extractor::unique(input, Default::default()))
+        .flat_map(|blob| blob.par_split(|x| x.is_ascii_whitespace()))
+        .map(|blob| Extractor::unique(blob, Default::default()))
         .reduce(Default::default, |mut a, b| {
             a.extend(b);
             a
