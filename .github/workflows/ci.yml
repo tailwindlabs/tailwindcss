@@ -19,9 +19,9 @@ jobs:
         on-next-branch:
           - ${{ github.ref == 'refs/heads/next' }}
         exclude:
-          - on-next-branch: true
+          - on-next-branch: false
             runner: windows-latest
-          - on-next-branch: true
+          - on-next-branch: false
             runner: macos-14
 
     runs-on: ${{ matrix.runner }}
