@@ -44,7 +44,7 @@ export default function tailwindcss(): Plugin[] {
       preferRelative: true,
     })
     function customCssResolver(id: string, base: string) {
-      return cssResolver(id, base, false, isSSR)
+      return cssResolver(id, base, true, isSSR)
     }
 
     let jsResolver = config!.createResolver(config!.resolve)
