@@ -21,7 +21,7 @@ export interface ConfigFile {
 interface ResolutionContext {
   design: DesignSystem
   configs: UserConfig[]
-  plugins: { plugin: PluginWithConfig; reference: boolean }[]
+  plugins: PluginWithConfig[]
   content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
   extend: Record<string, ThemeValue[]>
@@ -133,24 +133,24 @@ function extractConfigs(
   ctx: ResolutionContext,
   { config, base, path, reference }: ConfigFile,
 ): void {
-  let plugins: { plugin: PluginWithConfig; reference: boolean }[] = []
+  let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
   for (let plugin of config.plugins ?? []) {
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugins.push({ plugin: plugin(), reference })
+      plugins.push({ ...plugin(), reference })
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugins.push({ plugin, reference })
+      plugins.push({ ...plugin, reference })
     } else {
       // Just a plain function without using the plugin(…) API
-      plugins.push({ plugin: { handler: plugin }, reference })
+      plugins.push({ handler: plugin, reference })
     }
   }
 
@@ -169,8 +169,8 @@ function extractConfigs(
   for (let plugin of plugins) {
     ctx.plugins.push(plugin)
 
-    if (plugin.plugin.config) {
-      extractConfigs(ctx, { path, base, config: plugin.plugin.config, reference })
+    if (plugin.config) {
+      extractConfigs(ctx, { path, base, config: plugin.config, reference: !!plugin.reference })
     }
   }
 

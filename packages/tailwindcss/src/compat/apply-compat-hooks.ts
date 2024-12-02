@@ -259,10 +259,7 @@ function upgradeToFullPluginSupport({
     },
   })
 
-  for (let {
-    plugin: { handler },
-    reference,
-  } of resolvedConfig.plugins) {
+  for (let { handler, reference } of resolvedConfig.plugins) {
     handler(reference ? { ...pluginApi, addBase: () => {} } : pluginApi)
   }
 
