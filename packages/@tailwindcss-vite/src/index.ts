@@ -4,7 +4,6 @@ import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
@@ -674,5 +673,5 @@ function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
         },
       },
     },
-  } satisfies Plugin
+  }
 }
