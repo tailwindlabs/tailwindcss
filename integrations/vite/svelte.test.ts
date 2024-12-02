@@ -9,11 +9,11 @@ test(
         {
           "type": "module",
           "dependencies": {
-            "svelte": "^4.2.18",
+            "svelte": "^5",
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@sveltejs/vite-plugin-svelte": "^5",
             "@tailwindcss/vite": "workspace:^",
             "vite": "^6"
           }
@@ -120,11 +120,11 @@ test(
         {
           "type": "module",
           "dependencies": {
-            "svelte": "^4.2.18",
+            "svelte": "^5",
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@sveltejs/vite-plugin-svelte": "^5",
             "@tailwindcss/vite": "workspace:^",
             "vite": "^6"
           }
