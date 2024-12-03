@@ -55,7 +55,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
       {
         postcssPlugin: 'tailwindcss',
-        async OnceExit(root, { result }) {
+        async Once(root, { result }) {
           env.DEBUG && console.time('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
           let inputFile = result.opts.from ?? ''
           let context = getContextFromCache(inputFile, opts)

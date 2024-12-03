@@ -2,7 +2,6 @@ import dedent from 'dedent'
 import { unlink, writeFile } from 'node:fs/promises'
 import postcss from 'postcss'
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
-// @ts-ignore
 import tailwindcss from './index'
 
 // We give this file path to PostCSS for processing.
@@ -244,6 +243,65 @@ test('bail early when Tailwind is not used', async () => {
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
     ".custom-css {
+      color: red;
+    }"
+  `)
+})
+
+test('runs `Once` plugins in the right order', async () => {
+  let before = ''
+  let after = ''
+  let processor = postcss([
+    {
+      postcssPlugin: 'before',
+      Once(root) {
+        before = root.toString()
+      },
+    },
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+    {
+      postcssPlugin: 'after',
+      Once(root) {
+        after = root.toString()
+      },
+    },
+  ])
+
+  let result = await processor.process(
+    css`
+      @theme {
+        --color-red-500: red;
+      }
+      .custom-css {
+        color: theme(--color-red-500);
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ":root {
+      --color-red-500: red;
+    }
+
+    .custom-css {
+      color: red;
+    }"
+  `)
+  expect(before).toMatchInlineSnapshot(`
+    "@theme {
+      --color-red-500: red;
+    }
+    .custom-css {
+      color: theme(--color-red-500);
+    }"
+  `)
+  expect(after).toMatchInlineSnapshot(`
+    ":root {
+      --color-red-500: red;
+    }
+
+    .custom-css {
       color: red;
     }"
   `)
