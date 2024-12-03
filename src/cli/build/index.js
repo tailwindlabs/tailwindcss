@@ -37,8 +37,6 @@ export async function build(args) {
       process.stdin.on('end', () => process.exit(0))
     }
 
-    process.stdin.resume()
-
     await processor.watch()
   } else {
     await processor.build().catch((e) => {
