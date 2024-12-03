@@ -1329,6 +1329,8 @@ export let corePlugins = {
       '.items-end': { 'align-items': 'flex-end' },
       '.items-center': { 'align-items': 'center' },
       '.items-baseline': { 'align-items': 'baseline' },
+      '.items-first-baseline': { 'align-items': 'first baseline' },
+      '.items-last-baseline': { 'align-items': 'last baseline' },
       '.items-stretch': { 'align-items': 'stretch' },
     })
   },
