@@ -11,9 +11,12 @@ export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
   function transform(node: AstNode, parent: PostCssContainerNode) {
     // Declaration
     if (node.kind === 'declaration') {
-      parent.append(
-        postcss.decl({ prop: node.property, value: node.value ?? '', important: node.important }),
-      )
+      let astNode = postcss.decl({
+        prop: node.property,
+        value: node.value ?? '',
+        important: node.important,
+      })
+      parent.append(astNode)
     }
 
     // Rule
@@ -36,7 +39,8 @@ export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
 
     // Comment
     else if (node.kind === 'comment') {
-      parent.append(postcss.comment({ text: node.value }))
+      let astNode = postcss.comment({ text: node.value })
+      parent.append(astNode)
     }
 
     // AtRoot & Context should not happen
