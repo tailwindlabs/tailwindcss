@@ -6,6 +6,7 @@ import {
   comment,
   context as contextNode,
   decl,
+  optimizeAst,
   rule,
   styleRule,
   toCss,
@@ -580,7 +581,7 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = features !== Features.None ? toCss(ast) : css
+  let compiledCss = features !== Features.None ? toCss(optimizeAst(ast)) : css
   let previousAstNodeCount = 0
 
   return {
@@ -620,7 +621,8 @@ export async function compile(
         previousAstNodeCount = newNodes.length
 
         utilitiesNode.nodes = newNodes
-        compiledCss = toCss(ast)
+
+        compiledCss = toCss(optimizeAst(ast))
       }
 
       return compiledCss

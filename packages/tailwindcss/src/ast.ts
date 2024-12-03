@@ -208,18 +208,151 @@ export function walkDepth(
   }
 }
 
-export function toCss(ast: AstNode[]) {
-  let atRoots: string = ''
+// Optimize the AST for printing where all the special nodes that require custom
+// handling are handled such that the printing is a 1-to-1 transformation.
+export function optimizeAst(ast: AstNode[]) {
+  let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let propertyFallbacksRoot: Declaration[] = []
   let propertyFallbacksUniversal: Declaration[] = []
 
+  function transform(
+    node: AstNode,
+    parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    depth = 0,
+  ) {
+    // Declaration
+    if (node.kind === 'declaration') {
+      if (node.property === '--tw-sort' || node.value === undefined || node.value === null) {
+        return
+      }
+      parent.push(node)
+    }
+
+    // Rule
+    else if (node.kind === 'rule') {
+      let copy = { ...node, nodes: [] }
+      for (let child of node.nodes) {
+        transform(child, copy.nodes, depth + 1)
+      }
+      parent.push(copy)
+    }
+
+    // AtRule `@property`
+    else if (node.kind === 'at-rule' && node.name === '@property' && depth === 0) {
+      // Don't output duplicate `@property` rules
+      if (seenAtProperties.has(node.params)) {
+        return
+      }
+
+      // Collect fallbacks for `@property` rules for Firefox support
+      // We turn these into rules on `:root` or `*` and some pseudo-elements
+      // based on the value of `inherits``
+      let property = node.params
+      let initialValue = null
+      let inherits = false
+
+      for (let prop of node.nodes) {
+        if (prop.kind !== 'declaration') continue
+        if (prop.property === 'initial-value') {
+          initialValue = prop.value
+        } else if (prop.property === 'inherits') {
+          inherits = prop.value === 'true'
+        }
+      }
+
+      if (inherits) {
+        propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+      } else {
+        propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+      }
+
+      seenAtProperties.add(node.params)
+
+      let copy = { ...node, nodes: [] }
+      for (let child of node.nodes) {
+        transform(child, copy.nodes, depth + 1)
+      }
+      parent.push(copy)
+    }
+
+    // AtRule
+    else if (node.kind === 'at-rule') {
+      let copy = { ...node, nodes: [] }
+      for (let child of node.nodes) {
+        transform(child, copy.nodes, depth + 1)
+      }
+      parent.push(copy)
+    }
+
+    // AtRoot
+    else if (node.kind === 'at-root') {
+      for (let child of node.nodes) {
+        let newParent: AstNode[] = []
+        transform(child, newParent, 0)
+        for (let child of newParent) {
+          atRoots.push(child)
+        }
+      }
+    }
+
+    // Context
+    else if (node.kind === 'context') {
+      for (let child of node.nodes) {
+        transform(child, parent, depth)
+      }
+    }
+
+    // Comment
+    else if (node.kind === 'comment') {
+      parent.push(node)
+    }
+
+    // Unknown
+    else {
+      node satisfies never
+    }
+  }
+
+  let newAst: AstNode[] = []
+  for (let node of ast) {
+    transform(node, newAst, 0)
+  }
+
+  // Fallbacks
+  {
+    let fallbackAst = []
+
+    if (propertyFallbacksRoot.length > 0) {
+      fallbackAst.push(rule(':root', propertyFallbacksRoot))
+    }
+
+    if (propertyFallbacksUniversal.length > 0) {
+      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    }
+
+    if (fallbackAst.length > 0) {
+      newAst.push(
+        atRule('@supports', '(-moz-orient: inline)', [atRule('@layer', 'base', fallbackAst)]),
+      )
+    }
+  }
+
+  return newAst.concat(atRoots)
+}
+
+export function toCss(ast: AstNode[]) {
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
     let indent = '  '.repeat(depth)
 
+    // Declaration
+    if (node.kind === 'declaration') {
+      css += `${indent}${node.property}: ${node.value}${node.important ? ' !important' : ''};\n`
+    }
+
     // Rule
-    if (node.kind === 'rule') {
+    else if (node.kind === 'rule') {
       css += `${indent}${node.selector} {\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
@@ -240,38 +373,6 @@ export function toCss(ast: AstNode[]) {
         return `${indent}${node.name} ${node.params};\n`
       }
 
-      //
-      else if (node.name === '@property' && depth === 0) {
-        // Don't output duplicate `@property` rules
-        if (seenAtProperties.has(node.params)) {
-          return ''
-        }
-
-        // Collect fallbacks for `@property` rules for Firefox support
-        // We turn these into rules on `:root` or `*` and some pseudo-elements
-        // based on the value of `inherits``
-        let property = node.params
-        let initialValue = null
-        let inherits = false
-
-        for (let prop of node.nodes) {
-          if (prop.kind !== 'declaration') continue
-          if (prop.property === 'initial-value') {
-            initialValue = prop.value
-          } else if (prop.property === 'inherits') {
-            inherits = prop.value === 'true'
-          }
-        }
-
-        if (inherits) {
-          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
-        } else {
-          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
-        }
-
-        seenAtProperties.add(node.params)
-      }
-
       css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
@@ -284,24 +385,16 @@ export function toCss(ast: AstNode[]) {
       css += `${indent}/*${node.value}*/\n`
     }
 
-    // Context Node
-    else if (node.kind === 'context') {
-      for (let child of node.nodes) {
-        css += stringify(child, depth)
-      }
+    // These should've been handled already by `prepareAstForPrinting` which
+    // means we can safely ignore them here. We return an empty string
+    // immediately to signal that something went wrong.
+    else if (node.kind === 'context' || node.kind === 'at-root') {
+      return ''
     }
 
-    // AtRoot Node
-    else if (node.kind === 'at-root') {
-      for (let child of node.nodes) {
-        atRoots += stringify(child, 0)
-      }
-      return css
-    }
-
-    // Declaration
-    else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      css += `${indent}${node.property}: ${node.value}${node.important ? ' !important' : ''};\n`
+    // Unknown
+    else {
+      node satisfies never
     }
 
     return css
@@ -316,23 +409,5 @@ export function toCss(ast: AstNode[]) {
     }
   }
 
-  let fallbackAst = []
-
-  if (propertyFallbacksRoot.length) {
-    fallbackAst.push(rule(':root', propertyFallbacksRoot))
-  }
-
-  if (propertyFallbacksUniversal.length) {
-    fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
-  }
-
-  let fallback = ''
-
-  if (fallbackAst.length) {
-    fallback = stringify(
-      atRule('@supports', '(-moz-orient: inline)', [atRule('@layer', 'base', fallbackAst)]),
-    )
-  }
-
-  return `${css}${fallback}${atRoots}`
+  return css
 }
