@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure other plugins can run after `@tailwindcss/postcss` ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
 - Rebase `url()` inside imported CSS files when using Vite with the `@tailwindcss/postcss` extension ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
 - Fix missing font family suggestions in IntelliSense ([#15288](https://github.com/tailwindlabs/tailwindcss/pull/15288))
+- Fix missing `@container` suggestion in IntelliSense ([#15288](https://github.com/tailwindlabs/tailwindcss/pull/15288))
 
 ## [4.0.0-beta.4] - 2024-11-29
 

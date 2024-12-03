@@ -1593,6 +1593,7 @@ exports[`getClassList 1`] = `
   "-z-30",
   "-z-40",
   "-z-50",
+  "@container",
   "@container-normal",
   "absolute",
   "accent-auto",

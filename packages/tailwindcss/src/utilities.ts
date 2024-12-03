@@ -4564,7 +4564,7 @@ export function createUtilities(theme: Theme) {
     {
       values: ['normal'],
       valueThemeKeys: [],
-      hasDefaultValue: false,
+      hasDefaultValue: true,
     },
   ])
 
