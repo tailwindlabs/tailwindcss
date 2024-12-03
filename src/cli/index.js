@@ -44,6 +44,7 @@ let commands = {
     args: {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
+      '--classes-output': { type: String, description: 'Output file for detected classes' },
       '--watch': {
         type: oneOf(String, Boolean),
         description: 'Watch for changes and rebuild as needed',
