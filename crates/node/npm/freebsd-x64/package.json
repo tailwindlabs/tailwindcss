@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-freebsd-x64",
-  "version": "4.0.0-beta.4",
+  "version": "4.0.0-beta.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",

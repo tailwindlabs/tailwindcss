@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-beta.5] - 2024-12-04
+
 ### Added
 
 - Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
-- Support Vite 6 in the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Add Vite 6 as a supported version for the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
 - Add a new `@import "…" reference` syntax for only importing the Tailwind CSS configurations of a stylesheets ([#15228](https://github.com/tailwindlabs/tailwindcss/pull/15228))
 
 ### Fixed
