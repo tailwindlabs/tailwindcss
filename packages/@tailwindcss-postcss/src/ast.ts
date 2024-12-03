@@ -2,11 +2,13 @@ import postcss, {
   type ChildNode as PostCssChildNode,
   type Container as PostCssContainerNode,
   type Root as PostCssRoot,
+  type Source as PostcssSource,
 } from 'postcss'
 import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src/ast'
 
-export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
+export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undefined): PostCssRoot {
   let root = postcss.root()
+  root.source = source
 
   function transform(node: AstNode, parent: PostCssContainerNode) {
     // Declaration
@@ -16,12 +18,14 @@ export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
         value: node.value ?? '',
         important: node.important,
       })
+      astNode.source = source
       parent.append(astNode)
     }
 
     // Rule
     else if (node.kind === 'rule') {
       let astNode = postcss.rule({ selector: node.selector })
+      astNode.source = source
       parent.append(astNode)
       for (let child of node.nodes) {
         transform(child, astNode)
@@ -31,6 +35,7 @@ export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
     // AtRule
     else if (node.kind === 'at-rule') {
       let astNode = postcss.atRule({ name: node.name.slice(1), params: node.params })
+      astNode.source = source
       parent.append(astNode)
       for (let child of node.nodes) {
         transform(child, astNode)
@@ -40,6 +45,7 @@ export function cssAstToPostCssAst(ast: AstNode[]): PostCssRoot {
     // Comment
     else if (node.kind === 'comment') {
       let astNode = postcss.comment({ text: node.value })
+      astNode.source = source
       parent.append(astNode)
     }
 
