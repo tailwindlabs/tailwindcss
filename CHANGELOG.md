@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
-- Support Vite 6 with Svelte 5 in the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Support Vite 6 in the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
 
 ## [4.0.0-beta.4] - 2024-11-29
 
