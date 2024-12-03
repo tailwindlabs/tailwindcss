@@ -17,7 +17,13 @@ import * as SelectorParser from './selector-parser'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
-export type PluginWithConfig = { handler: PluginFn; config?: UserConfig; reference?: boolean }
+export type PluginWithConfig = { 
+  handler: PluginFn;
+  config?: UserConfig;
+  
+  /** @internal */
+  reference?: boolean
+}
 export type PluginWithOptions<T> = {
   (options?: T): PluginWithConfig
   __isOptionsFunction: true
