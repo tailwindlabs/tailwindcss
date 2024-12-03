@@ -1,16 +1,18 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compile, env, Features } from '@tailwindcss/node'
+import { compileAst, env, Features } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import type { AstNode } from '../../tailwindcss/src/ast'
+import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
 interface CacheEntry {
   mtimes: Map<string, number>
-  compiler: null | Awaited<ReturnType<typeof compile>>
+  compiler: null | Awaited<ReturnType<typeof compileAst>>
   scanner: null | Scanner
   css: string
   optimizedCss: string
@@ -69,7 +71,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             context.fullRebuildPaths = []
 
-            let compiler = await compile(root.toString(), {
+            let compiler = await compileAst(postCssAstToCssAst(root), {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
@@ -128,6 +130,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
+          let ast: AstNode[] = []
           let css = ''
 
           if (
@@ -206,24 +209,30 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
-          css = context.compiler.build(candidates)
+          ast = context.compiler.build(candidates)
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build CSS')
 
-          // Replace CSS
-          if (css !== context.css && optimize) {
-            env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
-            context.optimizedCss = optimizeCss(css, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
-            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
-          }
-          context.css = css
+          if (optimize) {
+            // Replace CSS
+            if (css !== context.css && optimize) {
+              env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
+              context.optimizedCss = optimizeCss(css, {
+                minify: typeof optimize === 'object' ? optimize.minify : true,
+              })
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+            }
+            context.css = css
 
-          env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
-          root.removeAll()
-          root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
-          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
-          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
+            env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
+            root.removeAll()
+            root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
+            env.DEBUG &&
+              console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
+          } else {
+            root.removeAll()
+            root.append(cssAstToPostCssAst(ast))
+          }
         },
       },
     ],
