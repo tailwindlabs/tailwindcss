@@ -7,14 +7,79 @@ import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
   compile as _compile,
+  compileAst as _compileAst,
   Features,
 } from 'tailwindcss'
+import type { AstNode } from '../../tailwindcss/src/ast'
 import { getModuleDependencies } from './get-module-dependencies'
 import { rewriteUrls } from './urls'
 
 export { Features }
 
 export type Resolver = (id: string, base: string) => Promise<string | false | undefined>
+
+export async function compileAst(
+  ast: AstNode[],
+  {
+    base,
+    onDependency,
+    shouldRewriteUrls,
+
+    customCssResolver,
+    customJsResolver,
+  }: {
+    base: string
+    onDependency: (path: string) => void
+    shouldRewriteUrls?: boolean
+
+    customCssResolver?: Resolver
+    customJsResolver?: Resolver
+  },
+) {
+  let compiler = await _compileAst(ast, {
+    base,
+    async loadModule(id, base) {
+      return loadModule(id, base, onDependency, customJsResolver)
+    },
+    async loadStylesheet(id, base) {
+      let sheet = await loadStylesheet(id, base, onDependency, customCssResolver)
+
+      if (shouldRewriteUrls) {
+        sheet.content = await rewriteUrls({
+          css: sheet.content,
+          root: base,
+          base: sheet.base,
+        })
+      }
+
+      return sheet
+    },
+  })
+
+  // Verify if the `source(…)` path exists (until the glob pattern starts)
+  if (compiler.root && compiler.root !== 'none') {
+    let globSymbols = /[*{]/
+    let basePath = []
+    for (let segment of compiler.root.pattern.split('/')) {
+      if (globSymbols.test(segment)) {
+        break
+      }
+
+      basePath.push(segment)
+    }
+
+    let exists = await fsPromises
+      .stat(path.resolve(base, basePath.join('/')))
+      .then((stat) => stat.isDirectory())
+      .catch(() => false)
+
+    if (!exists) {
+      throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
+    }
+  }
+
+  return compiler
+}
 
 export async function compile(
   css: string,
