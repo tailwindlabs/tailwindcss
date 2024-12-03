@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.16] - 2024-12-03
+
 ### Fixed
 
 - Ensure the TypeScript types for `PluginsConfig` allow `undefined` values ([#14668](https://github.com/tailwindlabs/tailwindcss/pull/14668))
@@ -2467,7 +2471,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...HEAD
+[3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
 [3.4.15]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...v3.4.15
 [3.4.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...v3.4.14
 [3.4.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...v3.4.13
