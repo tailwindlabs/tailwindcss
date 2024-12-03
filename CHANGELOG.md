@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
+- Support Vite 6 in the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Add a new `@import "…" reference` syntax for only importing the Tailwind CSS configurations of a stylesheets ([#15228](https://github.com/tailwindlabs/tailwindcss/pull/15228))
+
 ### Fixed
 
 - Ensure absolute `url()`s inside imported CSS files are not rebased when using `@tailwindcss/vite` ([#15275](https://github.com/tailwindlabs/tailwindcss/pull/15275))
@@ -14,11 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix resolution of imported CSS files in Vite SSR builds ([#15279](https://github.com/tailwindlabs/tailwindcss/issues/15279))
 - Ensure other plugins can run after `@tailwindcss/postcss` ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
 - Rebase `url()` inside imported CSS files when using Vite with the `@tailwindcss/postcss` extension ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
-
-### Added
-
-- Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
-- Support Vite 6 in the Vite plugin ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
 
 ## [4.0.0-beta.4] - 2024-11-29
 

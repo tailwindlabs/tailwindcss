@@ -3088,3 +3088,89 @@ it("should error when `layer(…)` is used, but it's not the first param", async
     `[Error: \`layer(…)\` in an \`@import\` should come before any other functions or conditions]`,
   )
 })
+
+describe('`@import "…" reference`', () => {
+  test('recursively removes styles', async () => {
+    let loadStylesheet = async (id: string, base: string) => {
+      if (id === './foo/baz.css') {
+        return {
+          content: css`
+            .foo {
+              color: red;
+            }
+            @utility foo {
+              color: red;
+            }
+            @theme {
+              --breakpoint-md: 768px;
+            }
+            @variant hocus (&:hover, &:focus);
+          `,
+          base: '/root/foo',
+        }
+      }
+      return {
+        content: css`
+          @import './foo/baz.css';
+        `,
+        base: '/root/foo',
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+          @import './foo/bar.css' reference;
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@media (width >= 768px) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
+    await expect(
+      compileCss(
+        `
+          @media reference {
+            @layer theme {
+              @theme {
+                --breakpoint-md: 48rem;
+              }
+              .foo {
+                color: red;
+              }
+            }
+            @utility foo {
+              color: red;
+            }
+            @variant hocus (&:hover, &:focus);
+          }
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer theme;
+
+      @media (width >= 48rem) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
+      }"
+    `)
+  })
+})

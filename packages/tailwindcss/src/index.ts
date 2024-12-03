@@ -157,7 +157,7 @@ async function parseCss(
           }
 
           root = {
-            base: context.sourceBase ?? context.base,
+            base: (context.sourceBase as string) ?? (context.base as string),
             pattern: path.slice(1, -1),
           }
         }
@@ -212,7 +212,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ base: context.base, pattern: path.slice(1, -1) })
+      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
       replaceWith([])
       return
     }
@@ -362,6 +362,37 @@ async function parseCss(
         // Handle important
         else if (param === 'important') {
           important = true
+        }
+
+        // Handle `@import "…" reference`
+        else if (param === 'reference') {
+          walk(node.nodes, (child, { replaceWith }) => {
+            if (child.kind !== 'at-rule') {
+              replaceWith([])
+              return WalkAction.Skip
+            }
+            switch (child.name) {
+              case '@theme': {
+                let themeParams = segment(child.params, ' ')
+                if (!themeParams.includes('reference')) {
+                  child.params = (child.params === '' ? '' : ' ') + 'reference'
+                }
+                return WalkAction.Skip
+              }
+              case '@import':
+              case '@config':
+              case '@plugin':
+              case '@variant':
+              case '@utility': {
+                return WalkAction.Skip
+              }
+
+              // Other at-rules, like `@media`, `@supports`, or `@layer` should
+              // be recursively traversed as these might be inserted by the
+              // `@import` resolution.
+            }
+          })
+          node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
         //

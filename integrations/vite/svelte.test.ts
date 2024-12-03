@@ -48,10 +48,7 @@ test(
           target: document.body,
         })
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
-        @import 'tailwindcss/utilities';
-      `,
+      'src/index.css': css`@import 'tailwindcss' reference;`,
       'src/App.svelte': html`
         <script>
           import './index.css'
