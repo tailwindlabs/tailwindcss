@@ -66,12 +66,12 @@ export function rule(selector: string, nodes: AstNode[] = []): StyleRule | AtRul
   return styleRule(selector, nodes)
 }
 
-export function decl(property: string, value: string | undefined): Declaration {
+export function decl(property: string, value: string | undefined, important = false): Declaration {
   return {
     kind: 'declaration',
     property,
     value,
-    important: false,
+    important,
   }
 }
 
