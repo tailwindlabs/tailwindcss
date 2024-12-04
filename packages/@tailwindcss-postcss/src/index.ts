@@ -6,7 +6,7 @@ import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
-import type { AstNode } from '../../tailwindcss/src/ast'
+import { toCss, type AstNode } from '../../tailwindcss/src/ast'
 import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
@@ -212,9 +212,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
-          env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
+          env.DEBUG && console.time('[@tailwindcss/postcss] Build AST')
           ast = context.compiler.build(candidates)
-          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build CSS')
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build AST')
 
           if (context.ast !== ast) {
             // Convert our AST to a PostCSS AST
@@ -223,7 +223,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             if (optimize) {
               env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
               context.optimizedAst = postcss.parse(
-                optimizeCss(context.cachedAst.toString(), {
+                optimizeCss(toCss(ast), {
                   minify: typeof optimize === 'object' ? optimize.minify : true,
                 }),
                 result.opts,
