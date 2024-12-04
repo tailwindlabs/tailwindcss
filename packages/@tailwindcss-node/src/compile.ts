@@ -18,30 +18,29 @@ export { Features }
 
 export type Resolver = (id: string, base: string) => Promise<string | false | undefined>
 
-export async function compileAst(
-  ast: AstNode[],
-  {
-    base,
-    onDependency,
-    shouldRewriteUrls,
+export interface CompileOptions {
+  base: string
+  onDependency: (path: string) => void
+  shouldRewriteUrls?: boolean
 
-    customCssResolver,
-    customJsResolver,
-  }: {
-    base: string
-    onDependency: (path: string) => void
-    shouldRewriteUrls?: boolean
+  customCssResolver?: Resolver
+  customJsResolver?: Resolver
+}
 
-    customCssResolver?: Resolver
-    customJsResolver?: Resolver
-  },
-) {
-  let compiler = await _compileAst(ast, {
+function createCompileOptions({
+  base,
+  onDependency,
+  shouldRewriteUrls,
+
+  customCssResolver,
+  customJsResolver,
+}: CompileOptions) {
+  return {
     base,
-    async loadModule(id, base) {
+    async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },
-    async loadStylesheet(id, base) {
+    async loadStylesheet(id: string, base: string) {
       let sheet = await loadStylesheet(id, base, onDependency, customCssResolver)
 
       if (shouldRewriteUrls) {
@@ -54,8 +53,13 @@ export async function compileAst(
 
       return sheet
     },
-  })
+  }
+}
 
+async function ensureSourceDetectionRootExists(
+  compiler: { root: Awaited<ReturnType<typeof compile>>['root'] },
+  base: string,
+) {
   // Verify if the `source(…)` path exists (until the glob pattern starts)
   if (compiler.root && compiler.root !== 'none') {
     let globSymbols = /[*{]/
@@ -77,70 +81,17 @@ export async function compileAst(
       throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
     }
   }
+}
 
+export async function compileAst(ast: AstNode[], options: CompileOptions) {
+  let compiler = await _compileAst(ast, createCompileOptions(options))
+  await ensureSourceDetectionRootExists(compiler, options.base)
   return compiler
 }
 
-export async function compile(
-  css: string,
-  {
-    base,
-    onDependency,
-    shouldRewriteUrls,
-
-    customCssResolver,
-    customJsResolver,
-  }: {
-    base: string
-    onDependency: (path: string) => void
-    shouldRewriteUrls?: boolean
-
-    customCssResolver?: Resolver
-    customJsResolver?: Resolver
-  },
-) {
-  let compiler = await _compile(css, {
-    base,
-    async loadModule(id, base) {
-      return loadModule(id, base, onDependency, customJsResolver)
-    },
-    async loadStylesheet(id, base) {
-      let sheet = await loadStylesheet(id, base, onDependency, customCssResolver)
-
-      if (shouldRewriteUrls) {
-        sheet.content = await rewriteUrls({
-          css: sheet.content,
-          root: base,
-          base: sheet.base,
-        })
-      }
-
-      return sheet
-    },
-  })
-
-  // Verify if the `source(…)` path exists (until the glob pattern starts)
-  if (compiler.root && compiler.root !== 'none') {
-    let globSymbols = /[*{]/
-    let basePath = []
-    for (let segment of compiler.root.pattern.split('/')) {
-      if (globSymbols.test(segment)) {
-        break
-      }
-
-      basePath.push(segment)
-    }
-
-    let exists = await fsPromises
-      .stat(path.resolve(base, basePath.join('/')))
-      .then((stat) => stat.isDirectory())
-      .catch(() => false)
-
-    if (!exists) {
-      throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
-    }
-  }
-
+export async function compile(css: string, options: CompileOptions) {
+  let compiler = await _compile(css, createCompileOptions(options))
+  await ensureSourceDetectionRootExists(compiler, options.base)
   return compiler
 }
 
