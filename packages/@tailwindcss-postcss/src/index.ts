@@ -135,7 +135,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           let ast: AstNode[] = []
-          let css = ''
 
           if (
             rebuildStrategy === 'full' &&
