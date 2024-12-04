@@ -60,6 +60,10 @@ describe('parseColor', () => {
     ${'rgba(var(--foo), var(--alpha))'}          | ${{ mode: 'rgba', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
     ${'hsla(var(--foo), 0.1)'}                   | ${{ mode: 'hsla', color: ['var(--foo)'], alpha: '0.1' }}
     ${'hsla(var(--foo), var(--alpha))'}          | ${{ mode: 'hsla', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
+    ${'lch(0% 30 60)'}                           | ${{ mode: 'lch', color: ['0%', '30', '60'], alpha: undefined }}
+    ${'lab(0% 30 60 / 0.5)'}                     | ${{ mode: 'lab', color: ['0%', '30', '60'], alpha: '0.5' }}
+    ${'oklch(0% 30 var(--foo) / 0.5)'}           | ${{ mode: 'oklch', color: ['0%', '30', 'var(--foo)'], alpha: '0.5' }}
+    ${'oklab(0% 30 var(--foo) / var(--alpha))'}  | ${{ mode: 'oklab', color: ['0%', '30', 'var(--foo)'], alpha: 'var(--alpha)' }}
     ${'transparent'}                             | ${{ mode: 'rgb', color: ['0', '0', '0'], alpha: '0' }}
   `('should parse "$color" to the correct value', ({ color, output }) => {
     expect(parseColor(color)).toEqual(output)
@@ -75,6 +79,17 @@ describe('parseColor', () => {
     ${'unset'}
   `('should return `null` for unparseable color "$color"', ({ color }) => {
     expect(parseColor(color)).toBe(null)
+  })
+})
+
+describe('parseColorLoose', () => {
+  it.each`
+    color                                 | output
+    ${'hsl(var(--foo) / var(--alpha))'}   | ${{ mode: 'hsl', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
+    ${'oklch(var(--foo) / 0.5)'}          | ${{ mode: 'oklch', color: ['var(--foo)'], alpha: '0.5' }}
+    ${'oklab(var(--foo) / var(--alpha))'} | ${{ mode: 'oklab', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
+  `('should parse "$color" to the correct value', ({ color, output }) => {
+    expect(parseColor(color, { loose: true })).toEqual(output)
   })
 })
 

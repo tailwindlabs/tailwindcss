@@ -13,6 +13,9 @@ let RGB = new RegExp(
 let HSL = new RegExp(
   `^(hsla?)\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
+let OTHER_MODES = new RegExp(
+  `^(lch|lab|oklab|oklch)\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+)
 
 // In "loose" mode the color may contain fewer than 3 parts, as long as at least
 // one of the parts is variable.
@@ -44,7 +47,7 @@ export function parseColor(value, { loose = false } = {}) {
     }
   }
 
-  let match = value.match(RGB) ?? value.match(HSL)
+  let match = value.match(RGB) ?? value.match(HSL) ?? value.match(OTHER_MODES)
 
   if (match === null) {
     return null
