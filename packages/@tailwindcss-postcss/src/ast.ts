@@ -6,6 +6,8 @@ import postcss, {
 } from 'postcss'
 import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src/ast'
 
+const EXCLAMATION_MARK = 0x21
+
 export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undefined): PostCssRoot {
   let root = postcss.root()
   root.source = source
@@ -47,6 +49,10 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
     // Comment
     else if (node.kind === 'comment') {
       let astNode = postcss.comment({ text: node.value })
+      // Spaces are encoded in our node.value already, no need to add additional
+      // spaces.
+      astNode.raws.left = ''
+      astNode.raws.right = ''
       astNode.source = source
       parent.append(astNode)
     }
@@ -94,6 +100,7 @@ export function postCssAstToCssAst(root: PostCssRoot): AstNode[] {
 
     // Comment
     else if (node.type === 'comment') {
+      if (node.text.charCodeAt(0) !== EXCLAMATION_MARK) return
       parent.push(comment(node.text))
     }
 
