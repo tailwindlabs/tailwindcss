@@ -26,6 +26,7 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
     else if (node.kind === 'rule') {
       let astNode = postcss.rule({ selector: node.selector })
       astNode.source = source
+      astNode.raws.semicolon = true
       parent.append(astNode)
       for (let child of node.nodes) {
         transform(child, astNode)
@@ -36,6 +37,7 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
     else if (node.kind === 'at-rule') {
       let astNode = postcss.atRule({ name: node.name.slice(1), params: node.params })
       astNode.source = source
+      astNode.raws.semicolon = true
       parent.append(astNode)
       for (let child of node.nodes) {
         transform(child, astNode)

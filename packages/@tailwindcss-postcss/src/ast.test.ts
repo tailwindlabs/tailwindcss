@@ -93,13 +93,13 @@ it('should convert a Tailwind CSS AST into a PostCSS AST', () => {
     .foo {
         color: red;
         &:hover {
-            color: blue
+            color: blue;
         }
         .bar {
             color: green !important;
             background-color: yellow;
             @media (min-width: 640px) {
-                color: orange
+                color: orange;
             }
         }
     }"
