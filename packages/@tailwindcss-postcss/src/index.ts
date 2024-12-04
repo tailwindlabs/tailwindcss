@@ -118,6 +118,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           context.compiler ??= await createCompiler()
 
           if (context.compiler.features === Features.None) {
+            env.DEBUG &&
+              console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
             return
           }
 
