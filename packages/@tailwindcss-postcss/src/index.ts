@@ -22,7 +22,7 @@ interface CacheEntry {
 let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
@@ -231,6 +231,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 console.timeEnd('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
             }
           }
+
+          context.tailwindCssAst = tailwindCssAst
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
