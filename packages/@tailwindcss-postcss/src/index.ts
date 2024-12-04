@@ -104,12 +104,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             let ast = postCssAstToCssAst(root)
             env.DEBUG && I.end('PostCSS AST -> Tailwind CSS AST')
 
+            env.DEBUG && I.start('Create compiler')
             let compiler = await compileAst(ast, {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
             })
+            env.DEBUG && I.end('Create compiler')
 
             env.DEBUG && I.end('Setup compiler')
             return compiler
@@ -131,6 +133,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
           // Track file modification times to CSS files
+          env.DEBUG && I.start('Register full rebuild paths')
           {
             for (let file of context.fullRebuildPaths) {
               result.messages.push({
@@ -163,6 +166,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               context.mtimes.set(file, changedTime)
             }
           }
+          env.DEBUG && I.end('Register full rebuild paths')
 
           if (
             rebuildStrategy === 'full' &&
@@ -174,6 +178,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           if (context.scanner === null || rebuildStrategy === 'full') {
+            env.DEBUG && I.start('Setup scanner')
             let sources = (() => {
               // Disable auto source detection
               if (context.compiler.root === 'none') {
@@ -191,6 +196,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             // Look for candidates used to generate the CSS
             context.scanner = new Scanner({ sources })
+            env.DEBUG && I.end('Setup scanner')
           }
 
           env.DEBUG && I.start('Scan for candidates')
@@ -199,6 +205,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           env.DEBUG && I.end('Scan for candidates')
 
           if (context.compiler.features & Features.Utilities) {
+            env.DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
               result.messages.push({
@@ -237,6 +244,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 })
               }
             }
+            env.DEBUG && I.end('Register dependency messages')
           }
 
           env.DEBUG && I.start('Build utilities')
@@ -283,8 +291,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
           // as the default instead of 4.
           root.raws.indent = '  '
-
           env.DEBUG && I.end('Update PostCSS AST')
+
           env.DEBUG && I.end(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
           env.DEBUG && I.report()
         },
