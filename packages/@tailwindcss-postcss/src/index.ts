@@ -14,9 +14,9 @@ interface CacheEntry {
   mtimes: Map<string, number>
   compiler: null | Awaited<ReturnType<typeof compileAst>>
   scanner: null | Scanner
-  ast: AstNode[]
-  cachedAst: postcss.Root
-  optimizedAst: postcss.Root
+  tailwindCssAst: AstNode[]
+  cachedPostCssAst: postcss.Root
+  optimizedPostCssAst: postcss.Root
   fullRebuildPaths: string[]
 }
 let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
@@ -29,9 +29,9 @@ function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry
     compiler: null,
     scanner: null,
 
-    ast: [],
-    cachedAst: postcss.root(),
-    optimizedAst: postcss.root(),
+    tailwindCssAst: [],
+    cachedPostCssAst: postcss.root(),
+    optimizedPostCssAst: postcss.root(),
 
     fullRebuildPaths: [] as string[],
   }
@@ -134,8 +134,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
-          let ast: AstNode[] = []
-
           if (
             rebuildStrategy === 'full' &&
             // We can re-use the compiler if it was created during the
@@ -212,14 +210,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Build AST')
-          ast = context.compiler.build(candidates)
+          let tailwindCssAst = context.compiler.build(candidates)
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build AST')
 
-          if (context.ast !== ast) {
+          if (context.tailwindCssAst !== tailwindCssAst) {
             if (optimize) {
               env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
-              context.optimizedAst = postcss.parse(
-                optimizeCss(toCss(ast), {
+              context.optimizedPostCssAst = postcss.parse(
+                optimizeCss(toCss(tailwindCssAst), {
                   minify: typeof optimize === 'object' ? optimize.minify : true,
                 }),
                 result.opts,
@@ -227,13 +225,13 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
             } else {
               // Convert our AST to a PostCSS AST
-              context.cachedAst = cssAstToPostCssAst(ast, root.source)
+              context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
             }
           }
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
-          root.append(optimize ? context.optimizedAst.nodes : context.cachedAst.nodes)
+          root.append(optimize ? context.optimizedPostCssAst.nodes : context.cachedPostCssAst.nodes)
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
         },
