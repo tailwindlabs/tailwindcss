@@ -171,11 +171,18 @@ impl Scanner {
     fn compute_candidates(&mut self) {
         let mut changed_content = vec![];
 
-        for path in &self.files {
-            let current_time = fs::metadata(path)
-                .and_then(|m| m.modified())
-                .unwrap_or(SystemTime::now());
+        let current_mtimes = self
+            .files
+            .par_iter()
+            .map(|path| {
+                fs::metadata(path)
+                    .and_then(|m| m.modified())
+                    .unwrap_or(SystemTime::now())
+            })
+            .collect::<Vec<_>>();
 
+        for (idx, path) in self.files.iter().enumerate() {
+            let current_time = current_mtimes[idx];
             let previous_time = self.mtimes.insert(path.clone(), current_time);
 
             let should_scan_file = match previous_time {
@@ -218,14 +225,21 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     fn check_for_new_files(&mut self) {
+        let current_mtimes = self
+            .dirs
+            .par_iter()
+            .map(|path| {
+                fs::metadata(path)
+                    .and_then(|m| m.modified())
+                    .unwrap_or(SystemTime::now())
+            })
+            .collect::<Vec<_>>();
+
         let mut modified_dirs: Vec<PathBuf> = vec![];
 
         // Check all directories to see if they were modified
-        for path in &self.dirs {
-            let current_time = fs::metadata(path)
-                .and_then(|m| m.modified())
-                .unwrap_or(SystemTime::now());
-
+        for (idx, path) in self.dirs.iter().enumerate() {
+            let current_time = current_mtimes[idx];
             let previous_time = self.mtimes.insert(path.clone(), current_time);
 
             let should_scan = match previous_time {
