@@ -225,7 +225,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
             } else {
               // Convert our AST to a PostCSS AST
+              env.DEBUG && console.time('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
               context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
+              env.DEBUG &&
+                console.timeEnd('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
             }
           }
 
