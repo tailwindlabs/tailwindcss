@@ -594,7 +594,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        if (compiled === null) compiled = optimizeAst(ast)
+        compiled ??= optimizeAst(ast)
         return compiled
       }
 
@@ -612,7 +612,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        if (compiled === null) compiled = optimizeAst(ast)
+        compiled ??= optimizeAst(ast)
         return compiled
       }
 
@@ -624,7 +624,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length) {
-        if (compiled === null) compiled = optimizeAst(ast)
+        compiled ??= optimizeAst(ast)
         return compiled
       }
 
