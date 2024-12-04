@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
 - Add new `@import "…" reference` option for importing Tailwind CSS configuration details into another CSS entry point without duplicating CSS ([#15228](https://github.com/tailwindlabs/tailwindcss/pull/15228))
+- Improve performance of `@tailwindcss/postcss` by translating between internal data structures and PostCSS nodes directly without additional parsing or stringification ([#15297](https://github.com/tailwindlabs/tailwindcss/pull/15297))
 
 ### Fixed
 
