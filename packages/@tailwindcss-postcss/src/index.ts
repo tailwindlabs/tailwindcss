@@ -217,9 +217,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build AST')
 
           if (context.ast !== ast) {
-            // Convert our AST to a PostCSS AST
-            context.cachedAst = cssAstToPostCssAst(ast, root.source)
-
             if (optimize) {
               env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
               context.optimizedAst = postcss.parse(
@@ -229,6 +226,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 result.opts,
               )
               env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+            } else {
+              // Convert our AST to a PostCSS AST
+              context.cachedAst = cssAstToPostCssAst(ast, root.source)
             }
           }
 
