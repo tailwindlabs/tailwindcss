@@ -65,8 +65,28 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           env.DEBUG && I.reset()
 
           let inputFile = result.opts.from ?? ''
-
           env.DEBUG && I.start(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
+
+          env.DEBUG && I.start('Quick bail check')
+          let canBail = true
+          root.walkAtRules((node) => {
+            if (
+              node.name === 'import' ||
+              node.name === 'theme' ||
+              node.name === 'config' ||
+              node.name === 'plugin' ||
+              node.name === 'apply'
+            ) {
+              canBail = false
+              return false
+            }
+          })
+          if (canBail) {
+            env.DEBUG && I.report()
+            return
+          }
+          env.DEBUG && I.end('Quick bail check')
+
           let context = getContextFromCache(inputFile, opts)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
