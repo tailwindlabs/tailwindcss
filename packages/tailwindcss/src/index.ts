@@ -581,7 +581,7 @@ export async function compileAst(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiled = features !== Features.None ? optimizeAst(ast) : input
+  let compiled = null as AstNode[] | null
   let previousAstNodeCount = 0
 
   return {
@@ -589,6 +589,15 @@ export async function compileAst(
     root,
     features,
     build(newRawCandidates: string[]) {
+      if (features === Features.None) {
+        return input
+      }
+
+      if (!utilitiesNode) {
+        if (compiled === null) compiled = optimizeAst(ast)
+        return compiled
+      }
+
       let didChange = false
 
       // Add all new candidates unless we know that they are invalid.
@@ -603,28 +612,27 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
+        if (compiled === null) compiled = optimizeAst(ast)
         return compiled
       }
 
-      if (utilitiesNode) {
-        let newNodes = compileCandidates(allValidCandidates, designSystem, {
-          onInvalidCandidate,
-        }).astNodes
+      let newNodes = compileCandidates(allValidCandidates, designSystem, {
+        onInvalidCandidate,
+      }).astNodes
 
-        // If no new ast nodes were generated, then we can return the original
-        // CSS. This currently assumes that we only add new ast nodes and never
-        // remove any.
-        if (previousAstNodeCount === newNodes.length) {
-          return compiled
-        }
-
-        previousAstNodeCount = newNodes.length
-
-        utilitiesNode.nodes = newNodes
-
-        compiled = optimizeAst(ast)
+      // If no new ast nodes were generated, then we can return the original
+      // CSS. This currently assumes that we only add new ast nodes and never
+      // remove any.
+      if (previousAstNodeCount === newNodes.length) {
+        if (compiled === null) compiled = optimizeAst(ast)
+        return compiled
       }
 
+      previousAstNodeCount = newNodes.length
+
+      utilitiesNode.nodes = newNodes
+
+      compiled = optimizeAst(ast)
       return compiled
     },
   }
