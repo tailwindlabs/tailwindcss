@@ -24,7 +24,7 @@ pub mod paths;
 pub mod scanner;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
-    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind")),
+    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
 );
 
 fn init_tracing() {
