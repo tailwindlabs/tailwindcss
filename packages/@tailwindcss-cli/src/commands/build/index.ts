@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { compile, env } from '@tailwindcss/node'
+import { compile, env, instrumentation as I } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
@@ -66,6 +66,9 @@ async function handleError<T>(fn: () => T): Promise<T> {
 }
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
+  env.DEBUG && I.reset()
+  env.DEBUG && I.start('[@tailwindcss/cli]')
+
   let base = path.resolve(args['--cwd'])
 
   // Resolve the output as an absolute path.
@@ -109,12 +112,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // Optimize the output
     if (args['--minify'] || args['--optimize']) {
       if (css !== previous.css) {
-        env.DEBUG && console.time('[@tailwindcss/cli] Optimize CSS')
+        env.DEBUG && I.start('Optimize CSS')
         let optimizedCss = optimizeCss(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
         })
-        env.DEBUG && console.timeEnd('[@tailwindcss/cli] Optimize CSS')
+        env.DEBUG && I.end('Optimize CSS')
         previous.css = css
         previous.optimizedCss = optimizedCss
         output = optimizedCss
@@ -124,13 +127,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
 
     // Write the output
-    env.DEBUG && console.time('[@tailwindcss/cli] Write output')
+    env.DEBUG && I.start('Write output')
     if (args['--output']) {
       await outputFile(args['--output'], output)
     } else {
       println(output)
     }
-    env.DEBUG && console.timeEnd('[@tailwindcss/cli] Write output')
+    env.DEBUG && I.end('Write output')
   }
 
   let inputFilePath =
@@ -141,7 +144,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let fullRebuildPaths: string[] = inputFilePath ? [inputFilePath] : []
 
   async function createCompiler(css: string) {
-    env.DEBUG && console.time('[@tailwindcss/cli] Setup compiler')
+    env.DEBUG && I.start('Setup compiler')
     let compiler = await compile(css, {
       base: inputBasePath,
       onDependency(path) {
@@ -165,7 +168,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     })().concat(compiler.globs)
 
     let scanner = new Scanner({ sources })
-    env.DEBUG && console.timeEnd('[@tailwindcss/cli] Setup compiler')
+    env.DEBUG && I.end('Setup compiler')
 
     return [compiler, scanner] as const
   }
@@ -177,6 +180,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     let cleanupWatchers = await createWatchers(
       watchDirectories(scanner),
       async function handle(files) {
+        env.DEBUG && I.reset()
+
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
@@ -229,9 +234,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             ;[compiler, scanner] = await createCompiler(input)
 
             // Scan the directory for candidates
-            env.DEBUG && console.time('[@tailwindcss/cli] Scan for candidates')
+            env.DEBUG && I.start('Scan for candidates')
             let candidates = scanner.scan()
-            env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
+            env.DEBUG && I.end('Scan for candidates')
 
             // Setup new watchers
             let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
@@ -242,16 +247,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             cleanupWatchers = newCleanupWatchers
 
             // Re-compile the CSS
-            env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
+            env.DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(candidates)
-            env.DEBUG && console.timeEnd('[@tailwindcss/cli] Build CSS')
+            env.DEBUG && I.end('Build CSS')
           }
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
-            env.DEBUG && console.time('[@tailwindcss/cli] Scan for candidates')
+            env.DEBUG && I.start('Scan for candidates')
             let newCandidates = scanner.scanFiles(changedFiles)
-            env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
+            env.DEBUG && I.end('Scan for candidates')
 
             // No new candidates found which means we don't need to write to
             // disk, and can return early.
@@ -261,21 +266,23 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               return
             }
 
-            env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
+            env.DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(newCandidates)
-            env.DEBUG && console.timeEnd('[@tailwindcss/cli] Build CSS')
+            env.DEBUG && I.end('Build CSS')
           }
 
           await write(compiledCss, args)
 
           let end = process.hrtime.bigint()
           eprintln(`Done in ${formatDuration(end - start)}`)
+          env.DEBUG && I.report()
         } catch (err) {
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
           if (err instanceof Error) {
             eprintln(err.toString())
           }
+          env.DEBUG && I.report()
         }
       },
     )
@@ -295,18 +302,20 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  env.DEBUG && console.time('[@tailwindcss/cli] Scan for candidates')
+  env.DEBUG && I.start('Scan for candidates')
   let candidates = scanner.scan()
-  env.DEBUG && console.timeEnd('[@tailwindcss/cli] Scan for candidates')
-  env.DEBUG && console.time('[@tailwindcss/cli] Build CSS')
+  env.DEBUG && I.end('Scan for candidates')
+  env.DEBUG && I.start('Build CSS')
   let output = await handleError(() => compiler.build(candidates))
-  env.DEBUG && console.timeEnd('[@tailwindcss/cli] Build CSS')
+  env.DEBUG && I.end('Build CSS')
   await write(output, args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
   eprintln()
   eprintln(`Done in ${formatDuration(end - start)}`)
+  env.DEBUG && I.end('[@tailwindcss/cli]')
+  env.DEBUG && I.report()
 }
 
 function watchDirectories(scanner: Scanner) {
