@@ -1,32 +1,38 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compile, env, Features } from '@tailwindcss/node'
+import { compileAst, env, Features } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import { toCss, type AstNode } from '../../tailwindcss/src/ast'
+import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
 interface CacheEntry {
   mtimes: Map<string, number>
-  compiler: null | Awaited<ReturnType<typeof compile>>
+  compiler: null | Awaited<ReturnType<typeof compileAst>>
   scanner: null | Scanner
-  css: string
-  optimizedCss: string
+  tailwindCssAst: AstNode[]
+  cachedPostCssAst: postcss.Root
+  optimizedPostCssAst: postcss.Root
   fullRebuildPaths: string[]
 }
 let cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${opts.optimize ?? ''}`
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
     compiler: null,
     scanner: null,
-    css: '',
-    optimizedCss: '',
+
+    tailwindCssAst: [],
+    cachedPostCssAst: postcss.root(),
+    optimizedPostCssAst: postcss.root(),
+
     fullRebuildPaths: [] as string[],
   }
   cache.set(key, entry)
@@ -69,7 +75,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             context.fullRebuildPaths = []
 
-            let compiler = await compile(root.toString(), {
+            let compiler = await compileAst(postCssAstToCssAst(root), {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
@@ -127,8 +133,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               context.mtimes.set(file, changedTime)
             }
           }
-
-          let css = ''
 
           if (
             rebuildStrategy === 'full' &&
@@ -205,23 +209,43 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
-          env.DEBUG && console.time('[@tailwindcss/postcss] Build CSS')
-          css = context.compiler.build(candidates)
-          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build CSS')
+          env.DEBUG && console.time('[@tailwindcss/postcss] Build AST')
+          let tailwindCssAst = context.compiler.build(candidates)
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build AST')
 
-          // Replace CSS
-          if (css !== context.css && optimize) {
-            env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
-            context.optimizedCss = optimizeCss(css, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
-            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+          if (context.tailwindCssAst !== tailwindCssAst) {
+            if (optimize) {
+              env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
+              context.optimizedPostCssAst = postcss.parse(
+                optimizeCss(toCss(tailwindCssAst), {
+                  minify: typeof optimize === 'object' ? optimize.minify : true,
+                }),
+                result.opts,
+              )
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+            } else {
+              // Convert our AST to a PostCSS AST
+              env.DEBUG && console.time('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
+              context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
+              env.DEBUG &&
+                console.timeEnd('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
+            }
           }
-          context.css = css
+
+          context.tailwindCssAst = tailwindCssAst
 
           env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
-          root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+          root.append(
+            optimize
+              ? context.optimizedPostCssAst.clone().nodes
+              : context.cachedPostCssAst.clone().nodes,
+          )
+
+          // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
+          // as the default instead of 4.
+          root.raws.indent = '  '
+
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
         },

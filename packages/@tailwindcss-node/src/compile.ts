@@ -7,8 +7,10 @@ import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
   compile as _compile,
+  compileAst as _compileAst,
   Features,
 } from 'tailwindcss'
+import type { AstNode } from '../../tailwindcss/src/ast'
 import { getModuleDependencies } from './get-module-dependencies'
 import { rewriteUrls } from './urls'
 
@@ -16,30 +18,29 @@ export { Features }
 
 export type Resolver = (id: string, base: string) => Promise<string | false | undefined>
 
-export async function compile(
-  css: string,
-  {
-    base,
-    onDependency,
-    shouldRewriteUrls,
+export interface CompileOptions {
+  base: string
+  onDependency: (path: string) => void
+  shouldRewriteUrls?: boolean
 
-    customCssResolver,
-    customJsResolver,
-  }: {
-    base: string
-    onDependency: (path: string) => void
-    shouldRewriteUrls?: boolean
+  customCssResolver?: Resolver
+  customJsResolver?: Resolver
+}
 
-    customCssResolver?: Resolver
-    customJsResolver?: Resolver
-  },
-) {
-  let compiler = await _compile(css, {
+function createCompileOptions({
+  base,
+  onDependency,
+  shouldRewriteUrls,
+
+  customCssResolver,
+  customJsResolver,
+}: CompileOptions) {
+  return {
     base,
-    async loadModule(id, base) {
+    async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },
-    async loadStylesheet(id, base) {
+    async loadStylesheet(id: string, base: string) {
       let sheet = await loadStylesheet(id, base, onDependency, customCssResolver)
 
       if (shouldRewriteUrls) {
@@ -52,8 +53,13 @@ export async function compile(
 
       return sheet
     },
-  })
+  }
+}
 
+async function ensureSourceDetectionRootExists(
+  compiler: { root: Awaited<ReturnType<typeof compile>>['root'] },
+  base: string,
+) {
   // Verify if the `source(…)` path exists (until the glob pattern starts)
   if (compiler.root && compiler.root !== 'none') {
     let globSymbols = /[*{]/
@@ -75,7 +81,17 @@ export async function compile(
       throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
     }
   }
+}
 
+export async function compileAst(ast: AstNode[], options: CompileOptions) {
+  let compiler = await _compileAst(ast, createCompileOptions(options))
+  await ensureSourceDetectionRootExists(compiler, options.base)
+  return compiler
+}
+
+export async function compile(css: string, options: CompileOptions) {
+  let compiler = await _compile(css, createCompileOptions(options))
+  await ensureSourceDetectionRootExists(compiler, options.base)
   return compiler
 }
 

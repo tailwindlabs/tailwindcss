@@ -6,6 +6,7 @@ import {
   comment,
   context as contextNode,
   decl,
+  optimizeAst,
   rule,
   styleRule,
   toCss,
@@ -99,7 +100,7 @@ export const enum Features {
 }
 
 async function parseCss(
-  css: string,
+  ast: AstNode[],
   {
     base = '',
     loadModule = throwOnLoadModule,
@@ -107,7 +108,7 @@ async function parseCss(
   }: CompileOptions = {},
 ) {
   let features = Features.None
-  let ast = [contextNode({ base }, CSS.parse(css))] as AstNode[]
+  ast = [contextNode({ base }, ast)] as AstNode[]
 
   features |= await substituteAtImports(ast, base, loadStylesheet)
 
@@ -556,16 +557,16 @@ async function parseCss(
   }
 }
 
-export async function compile(
-  css: string,
+export async function compileAst(
+  input: AstNode[],
   opts: CompileOptions = {},
 ): Promise<{
   globs: { base: string; pattern: string }[]
   root: Root
   features: Features
-  build(candidates: string[]): string
+  build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(css, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -580,7 +581,7 @@ export async function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = features !== Features.None ? toCss(ast) : css
+  let compiled = null as AstNode[] | null
   let previousAstNodeCount = 0
 
   return {
@@ -588,6 +589,15 @@ export async function compile(
     root,
     features,
     build(newRawCandidates: string[]) {
+      if (features === Features.None) {
+        return input
+      }
+
+      if (!utilitiesNode) {
+        compiled ??= optimizeAst(ast)
+        return compiled
+      }
+
       let didChange = false
 
       // Add all new candidates unless we know that they are invalid.
@@ -602,26 +612,57 @@ export async function compile(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
+        compiled ??= optimizeAst(ast)
+        return compiled
+      }
+
+      let newNodes = compileCandidates(allValidCandidates, designSystem, {
+        onInvalidCandidate,
+      }).astNodes
+
+      // If no new ast nodes were generated, then we can return the original
+      // CSS. This currently assumes that we only add new ast nodes and never
+      // remove any.
+      if (previousAstNodeCount === newNodes.length) {
+        compiled ??= optimizeAst(ast)
+        return compiled
+      }
+
+      previousAstNodeCount = newNodes.length
+
+      utilitiesNode.nodes = newNodes
+
+      compiled = optimizeAst(ast)
+      return compiled
+    },
+  }
+}
+
+export async function compile(
+  css: string,
+  opts: CompileOptions = {},
+): Promise<{
+  globs: { base: string; pattern: string }[]
+  root: Root
+  features: Features
+  build(candidates: string[]): string
+}> {
+  let ast = CSS.parse(css)
+  let api = await compileAst(ast, opts)
+  let compiledAst = ast
+  let compiledCss = css
+
+  return {
+    ...api,
+    build(newCandidates) {
+      let newAst = api.build(newCandidates)
+
+      if (newAst === compiledAst) {
         return compiledCss
       }
 
-      if (utilitiesNode) {
-        let newNodes = compileCandidates(allValidCandidates, designSystem, {
-          onInvalidCandidate,
-        }).astNodes
-
-        // If no new ast nodes were generated, then we can return the original
-        // CSS. This currently assumes that we only add new ast nodes and never
-        // remove any.
-        if (previousAstNodeCount === newNodes.length) {
-          return compiledCss
-        }
-
-        previousAstNodeCount = newNodes.length
-
-        utilitiesNode.nodes = newNodes
-        compiledCss = toCss(ast)
-      }
+      compiledCss = toCss(newAst)
+      compiledAst = newAst
 
       return compiledCss
     },
@@ -629,7 +670,7 @@ export async function compile(
 }
 
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
-  let result = await parseCss(css, opts)
+  let result = await parseCss(CSS.parse(css), opts)
   return result.designSystem
 }
 
