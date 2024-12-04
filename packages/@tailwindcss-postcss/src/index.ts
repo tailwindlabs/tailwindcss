@@ -237,6 +237,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           env.DEBUG && console.time('[@tailwindcss/postcss] Update PostCSS AST')
           root.removeAll()
           root.append(optimize ? context.optimizedPostCssAst.nodes : context.cachedPostCssAst.nodes)
+
+          // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
+          // as the default instead of 4.
+          root.raws.indent = '  '
+
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Update PostCSS AST')
           env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Total time in @tailwindcss/postcss')
         },
