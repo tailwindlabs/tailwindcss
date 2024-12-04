@@ -11,6 +11,8 @@ function loadDesignSystem() {
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')
+  theme.add('--font-sans', 'sans-serif')
+  theme.add('--font-weight-superbold', '900')
   theme.add('--text-xs', '0.75rem')
   theme.add('--text-xs--line-height', '1rem')
   theme.add('--perspective-dramatic', '100px')

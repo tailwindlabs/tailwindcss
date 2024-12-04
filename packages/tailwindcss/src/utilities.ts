@@ -2919,7 +2919,7 @@ export function createUtilities(theme: Theme) {
   suggest('font', () => [
     {
       values: [],
-      valueThemeKeys: ['--font-family'],
+      valueThemeKeys: ['--font'],
     },
     {
       values: [
@@ -4564,7 +4564,7 @@ export function createUtilities(theme: Theme) {
     {
       values: ['normal'],
       valueThemeKeys: [],
-      hasDefaultValue: false,
+      hasDefaultValue: true,
     },
   ])
 
