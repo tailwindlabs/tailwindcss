@@ -98,7 +98,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             context.fullRebuildPaths = []
 
-            let compiler = await compileAst(postCssAstToCssAst(root), {
+            env.DEBUG && console.time('[@tailwindcss/postcss] PostCSS AST -> Tailwind CSS AST')
+            let ast = postCssAstToCssAst(root)
+            env.DEBUG && console.timeEnd('[@tailwindcss/postcss] PostCSS AST -> Tailwind CSS AST')
+
+            let compiler = await compileAst(ast, {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
@@ -234,26 +238,39 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             }
           }
 
-          env.DEBUG && console.time('[@tailwindcss/postcss] Build AST')
+          env.DEBUG && console.time('[@tailwindcss/postcss] Build utilities')
           let tailwindCssAst = context.compiler.build(candidates)
-          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build AST')
+          env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Build utilities')
 
           if (context.tailwindCssAst !== tailwindCssAst) {
             if (optimize) {
-              env.DEBUG && console.time('[@tailwindcss/postcss] Optimize CSS')
-              context.optimizedPostCssAst = postcss.parse(
-                optimizeCss(toCss(tailwindCssAst), {
-                  minify: typeof optimize === 'object' ? optimize.minify : true,
-                }),
-                result.opts,
-              )
-              env.DEBUG && console.timeEnd('[@tailwindcss/postcss] Optimize CSS')
+              env.DEBUG && console.time('[@tailwindcss/postcss][Optimization] Total')
+
+              env.DEBUG && console.time('[@tailwindcss/postcss][Optimization] AST -> CSS')
+              let css = toCss(tailwindCssAst)
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss][Optimization] AST -> CSS')
+
+              env.DEBUG && console.time('[@tailwindcss/postcss][Optimization] Lightning CSS')
+              let ast = optimizeCss(css, {
+                minify: typeof optimize === 'object' ? optimize.minify : true,
+              })
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss][Optimization] Lightning CSS')
+
+              env.DEBUG && console.time('[@tailwindcss/postcss][Optimization] CSS -> PostCSS AST')
+              context.optimizedPostCssAst = postcss.parse(ast, result.opts)
+              env.DEBUG &&
+                console.timeEnd('[@tailwindcss/postcss][Optimization] CSS -> PostCSS AST')
+
+              env.DEBUG && console.timeEnd('[@tailwindcss/postcss][Optimization] Total')
             } else {
               // Convert our AST to a PostCSS AST
-              env.DEBUG && console.time('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
+              env.DEBUG &&
+                console.time('[@tailwindcss/postcss] Transform Tailwind CSS AST into PostCSS AST')
               context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
               env.DEBUG &&
-                console.timeEnd('[@tailwindcss/postcss] Transform CSS AST into PostCSS AST')
+                console.timeEnd(
+                  '[@tailwindcss/postcss] Transform Tailwind CSS AST into PostCSS AST',
+                )
             }
           }
 
