@@ -248,6 +248,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Alias packages to `latest`
+        run: |
+          npm dist-tag add @tailwindcss/postcss@${{ env.TAG_NAME }} latest
+          npm dist-tag add @tailwindcss/vite@${{ env.TAG_NAME }} latest
+          npm dist-tag add @tailwindcss/upgrade@${{ env.TAG_NAME }} latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
