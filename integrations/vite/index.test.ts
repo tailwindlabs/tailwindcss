@@ -92,7 +92,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  test.sequential(
+  test(
     `dev mode`,
     {
       fs: {
@@ -161,16 +161,22 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         `,
       },
     },
-    async ({ root, spawn, getFreePort, fs, expect }) => {
-      let port = await getFreePort()
-      await spawn(`pnpm vite dev --port ${port}`, {
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev', {
         cwd: path.join(root, 'project-a'),
+      })
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
       })
 
       // Candidates are resolved lazily, so the first visit of index.html
       // will only have candidates from this file.
       await retryAssertion(async () => {
-        let styles = await fetchStyles(port, '/index.html')
+        let styles = await fetchStyles(url, '/index.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).not.toContain(candidate`font-bold`)
@@ -179,7 +185,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       // Going to about.html will extend the candidate list to include
       // candidates from about.html.
       await retryAssertion(async () => {
-        let styles = await fetchStyles(port, '/about.html')
+        let styles = await fetchStyles(url, '/about.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -199,7 +205,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(port)
+        let styles = await fetchStyles(url)
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -216,7 +222,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(port)
+        let styles = await fetchStyles(url)
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -238,7 +244,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(port)
+        let styles = await fetchStyles(url)
         expect(styles).toContain(candidate`red`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`m-2`)
@@ -317,9 +323,10 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       },
     },
     async ({ root, spawn, fs, expect }) => {
-      await spawn(`pnpm vite build --watch`, {
+      let process = await spawn('pnpm vite build --watch', {
         cwd: path.join(root, 'project-a'),
       })
+      await process.onStdout((m) => m.includes('built in'))
 
       let filename = ''
       await retryAssertion(async () => {
@@ -687,7 +694,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 })
 
-test.sequential(
+test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
   {
     fs: {
@@ -731,14 +738,20 @@ test.sequential(
       'src/index.css': css`@import 'tailwindcss';`,
     },
   },
-  async ({ spawn, getFreePort, fs, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     // Candidates are resolved lazily, so the first visit of index.html
     // will only have candidates from this file.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/index.html')
+      let styles = await fetchStyles(url, '/index.html')
       expect(styles).toContain(candidate`underline`)
       expect(styles).not.toContain(candidate`font-bold`)
     })
@@ -746,7 +759,7 @@ test.sequential(
     // Going to about.html will extend the candidate list to include
     // candidates from about.html.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/about.html')
+      let styles = await fetchStyles(url, '/about.html')
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
@@ -755,14 +768,14 @@ test.sequential(
       // We change the CSS file so it is no longer a valid Tailwind root.
       await fs.write('src/index.css', css`@import 'tailwindcss';`)
 
-      let styles = await fetchStyles(port)
+      let styles = await fetchStyles(url)
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
   },
 )
 
-test.sequential(
+test(
   `does not interfere with ?raw and ?url static asset handling`,
   {
     fs: {
@@ -799,18 +812,24 @@ test.sequential(
       'src/index.css': css`@import 'tailwindcss';`,
     },
   },
-  async ({ spawn, getFreePort, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+
+    let baseUrl = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) baseUrl = match[1]
+      return Boolean(baseUrl)
+    })
 
     await retryAssertion(async () => {
       // We have to load the .js file first so that the static assets are
       // resolved
-      await fetch(`http://localhost:${port}/src/index.js`).then((r) => r.text())
+      await fetch(`${baseUrl}/src/index.js`).then((r) => r.text())
 
       let [raw, url] = await Promise.all([
-        fetch(`http://localhost:${port}/src/index.css?raw`).then((r) => r.text()),
-        fetch(`http://localhost:${port}/src/index.css?url`).then((r) => r.text()),
+        fetch(`${baseUrl}/src/index.css?raw`).then((r) => r.text()),
+        fetch(`${baseUrl}/src/index.css?url`).then((r) => r.text()),
       ])
 
       expect(firstLine(raw)).toBe(`export default "@import 'tailwindcss';"`)
