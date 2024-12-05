@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
+- Skip creating a compiler for CSS files that should not be processed ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
 
 ## [4.0.0-beta.5] - 2024-12-04
 
