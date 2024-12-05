@@ -388,11 +388,21 @@ async function parseCss(
                 return WalkAction.Skip
               }
 
-              // Other at-rules, like `@media`, `@supports`, or `@layer` should
-              // be recursively traversed as these might be inserted by the
-              // `@import` resolution.
+              case '@media':
+              case '@supports':
+              case '@layer': {
+                // These rules should be recursively traversed as these might be
+                // inserted by the `@import` resolution.
+                return
+              }
+
+              default: {
+                replaceWith([])
+                return WalkAction.Skip
+              }
             }
           })
+
           node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
