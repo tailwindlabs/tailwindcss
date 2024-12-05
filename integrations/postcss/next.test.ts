@@ -71,7 +71,7 @@ test(
   },
 )
 
-describe.concurrent.each(['turbo', 'webpack'])('%s', (bundler) => {
+describe.each(['turbo', 'webpack'])('%s', (bundler) => {
   test(
     'dev mode',
     {

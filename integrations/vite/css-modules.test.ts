@@ -1,7 +1,7 @@
 import { describe } from 'vitest'
 import { css, html, test, ts, txt } from '../utils'
 
-describe.concurrent.each(['postcss', 'lightningcss'])('%s', (transformer) => {
+describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     `dev mode`,
     {

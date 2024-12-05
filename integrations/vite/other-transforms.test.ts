@@ -58,7 +58,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
   }
 }
 
-describe.concurrent.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
+describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
   test(`production build`, createSetup(transformer), async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 

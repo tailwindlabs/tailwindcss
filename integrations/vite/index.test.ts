@@ -14,7 +14,7 @@ import {
   yaml,
 } from '../utils'
 
-describe.concurrent.each(['postcss', 'lightningcss'])('%s', (transformer) => {
+describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     `production build`,
     {

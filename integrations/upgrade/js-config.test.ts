@@ -920,7 +920,7 @@ test(
   },
 )
 
-describe.concurrent('border compatibility', () => {
+describe('border compatibility', () => {
   test(
     'migrate border compatibility',
     {
