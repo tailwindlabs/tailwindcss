@@ -46,8 +46,8 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Local:\s*(http.*)/.exec(m)
-    if (match) url = match[1].replace(/\/$/, '')
+    let match = /Local:\s*(http.*)\//.exec(m)
+    if (match) url = match[1]
     return m.includes('server warmed up in')
   })
 
@@ -83,8 +83,8 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Listening on\s*(http.*)/.exec(m)
-    if (match) url = match[1].replace(/\/$/, '')
+    let match = /Listening on\s*(http.*)\//.exec(m)
+    if (match) url = match[1]
     return m.includes('Listening on')
   })
 
