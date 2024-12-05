@@ -36,12 +36,23 @@ const SETUP = {
   },
 }
 
-test.sequential('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) => {
-  let port = await getFreePort()
-  await spawn(`pnpm nuxt dev --port ${port}`)
+test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+  let process = await spawn('pnpm nuxt dev', {
+    env: {
+      TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
+      NODE_ENV: 'development',
+    },
+  })
+
+  let url = ''
+  await process.onStdout((m) => {
+    let match = /Local:\s*(http.*)/.exec(m)
+    if (match) url = match[1].replace(/\/$/, '')
+    return m.includes('server warmed up in')
+  })
 
   await retryAssertion(async () => {
-    let css = await fetchStyles(port)
+    let css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
   })
 
@@ -49,29 +60,36 @@ test.sequential('dev mode', SETUP, async ({ fs, spawn, getFreePort, expect }) =>
     await fs.write(
       'app.vue',
       html`
-          <template>
+        <template>
           <div class="underline font-bold">Hello world!</div>
         </template>
-        `,
+      `,
     )
 
-    let css = await fetchStyles(port)
+    let css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
     expect(css).toContain(candidate`font-bold`)
   })
 })
 
-test.sequential('build', SETUP, async ({ spawn, getFreePort, exec, expect }) => {
-  let port = await getFreePort()
+test('build', SETUP, async ({ spawn, exec, expect }) => {
   await exec(`pnpm nuxt build`)
-  await spawn(`pnpm nuxt preview`, {
+  let process = await spawn('pnpm nuxt preview', {
     env: {
-      PORT: `${port}`,
+      TEST: 'false',
+      NODE_ENV: 'development',
     },
   })
 
+  let url = ''
+  await process.onStdout((m) => {
+    let match = /Listening on\s*(http.*)/.exec(m)
+    if (match) url = match[1].replace(/\/$/, '')
+    return m.includes('Listening on')
+  })
+
   await retryAssertion(async () => {
-    let css = await fetchStyles(port)
+    let css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
   })
 })
