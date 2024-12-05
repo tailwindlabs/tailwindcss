@@ -17,7 +17,7 @@ const STANDALONE_BINARY = (() => {
   }
 })()
 
-describe.concurrent.each([
+describe.each([
   ['CLI', 'pnpm tailwindcss'],
   [
     'Standalone CLI',

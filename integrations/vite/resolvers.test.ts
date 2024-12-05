@@ -1,7 +1,7 @@
 import { describe, expect } from 'vitest'
 import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
 
-describe.concurrent.each(['postcss', 'lightningcss'])('%', (transformer) => {
+describe.each(['postcss', 'lightningcss'])('%', (transformer) => {
   test(
     `resolves aliases in production build`,
     {
