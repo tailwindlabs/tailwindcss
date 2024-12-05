@@ -6,6 +6,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
+const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
 
 export default function tailwindcss(): Plugin[] {
@@ -120,9 +121,9 @@ export default function tailwindcss(): Plugin[] {
     if (generated === false) {
       return
     }
-    env.DEBUG && I.start('Optimize CSS')
+    DEBUG && I.start('Optimize CSS')
     let result = optimizeCss(generated, { minify })
-    env.DEBUG && I.end('Optimize CSS')
+    DEBUG && I.end('Optimize CSS')
     return result
   }
 
@@ -479,7 +480,7 @@ class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
-      env.DEBUG && I.start('Setup compiler')
+      DEBUG && I.start('Setup compiler')
       this.compiler = await compile(content, {
         base: inputBase,
         shouldRewriteUrls: true,
@@ -491,7 +492,7 @@ class Root {
         customCssResolver: this.customCssResolver,
         customJsResolver: this.customJsResolver,
       })
-      env.DEBUG && I.end('Setup compiler')
+      DEBUG && I.end('Setup compiler')
 
       let sources = (() => {
         // Disable auto source detection
@@ -524,11 +525,11 @@ class Root {
       // This should not be here, but right now the Vite plugin is setup where we
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
-      env.DEBUG && I.start('Scan for candidates')
+      DEBUG && I.start('Scan for candidates')
       for (let candidate of this.scanner.scan()) {
         this.candidates.add(candidate)
       }
-      env.DEBUG && I.end('Scan for candidates')
+      DEBUG && I.end('Scan for candidates')
     }
 
     if (this.compiler.features & Features.Utilities) {
@@ -576,13 +577,13 @@ class Root {
 
     this.requiresRebuild = true
 
-    env.DEBUG && I.start('Build CSS')
+    DEBUG && I.start('Build CSS')
     let result = this.compiler.build(
       this.overwriteCandidates
         ? this.overwriteCandidates
         : [...this.sharedCandidates(), ...this.candidates],
     )
-    env.DEBUG && I.end('Build CSS')
+    DEBUG && I.end('Build CSS')
 
     return result
   }
@@ -650,7 +651,7 @@ function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
         }) {
           if (!filename) return
           using I = new Instrumentation()
-          env.DEBUG && I.start('[@tailwindcss/vite] Preprocess svelte')
+          DEBUG && I.start('[@tailwindcss/vite] Preprocess svelte')
 
           // Create the ID used by Vite to identify the `<style>` contents. This
           // way, the Vite `transform` hook can find the right root and thus
