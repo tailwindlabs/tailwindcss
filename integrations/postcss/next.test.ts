@@ -70,7 +70,7 @@ test(
   },
 )
 ;['turbo', 'webpack'].forEach((bundler) => {
-  test.sequential(
+  test(
     `dev mode (${bundler})`,
     {
       fs: {
@@ -125,12 +125,18 @@ test(
         `,
       },
     },
-    async ({ fs, spawn, getFreePort, expect }) => {
-      let port = await getFreePort()
-      await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
+    async ({ fs, spawn, expect }) => {
+      let process = await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''}`)
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)/.exec(m)
+        if (match) url = match[1]
+        return m.includes('Ready in')
+      })
 
       await retryAssertion(async () => {
-        let css = await fetchStyles(port)
+        let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
       })
 
@@ -144,7 +150,7 @@ test(
           `,
         )
 
-        let css = await fetchStyles(port)
+        let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
       })
