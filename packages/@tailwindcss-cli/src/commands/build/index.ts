@@ -1,12 +1,11 @@
 import watcher from '@parcel/watcher'
-import { compile, env } from '@tailwindcss/node'
+import { compile, env, Instrumentation } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import { existsSync, type Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { Instrumentation } from '../../../../@tailwindcss-node/src/instrumentation'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
 import {
