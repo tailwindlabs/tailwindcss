@@ -39,8 +39,8 @@ test(
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local\s*(http.*)/.exec(m)
-      if (match) url = match[1].replace(/\/$/, '')
+      let match = /Local\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
       return m.includes('watching for file changes')
     })
 
