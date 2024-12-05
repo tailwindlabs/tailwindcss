@@ -3138,6 +3138,36 @@ describe('`@import "…" reference`', () => {
     `)
   })
 
+  test('does not generate utilities', async () => {
+    let loadStylesheet = async (id: string, base: string) => {
+      if (id === './foo/baz.css') {
+        return {
+          content: css`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          base: '/root/foo',
+        }
+      }
+      return {
+        content: css`
+          @import './foo/baz.css';
+        `,
+        base: '/root/foo',
+      }
+    }
+
+    let { build } = await compile(
+      css`
+        @import './foo/bar.css' reference;
+      `,
+      { loadStylesheet },
+    )
+
+    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+  })
+
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
     await expect(
       compileCss(
