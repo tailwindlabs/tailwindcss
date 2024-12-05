@@ -23,12 +23,14 @@ it('should add instrumentation', () => {
 
   I.report((output) => {
     expect(stripVTControlCharacters(output).replace(/\[.*\]/g, '[0.xxms]')).toMatchInlineSnapshot(`
-      "Hits:
+      "
+      Hits:
         Potato × 4
 
       Timers:
       [0.xxms] Foo
-      [0.xxms]   ↳ Bar × 100"
+      [0.xxms]   ↳ Bar × 100
+      "
     `)
   })
 })
@@ -49,9 +51,11 @@ it('should auto end pending timers when reporting', () => {
 
   I.report((output) => {
     expect(stripVTControlCharacters(output).replace(/\[.*\]/g, '[0.xxms]')).toMatchInlineSnapshot(`
-      "[0.xxms] Foo
+      "
+      [0.xxms] Foo
       [0.xxms]   ↳ Bar × 100
-      [0.xxms]   ↳ Baz"
+      [0.xxms]   ↳ Baz
+      "
     `)
   })
 })
