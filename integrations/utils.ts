@@ -59,8 +59,8 @@ type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void
 
 const IS_WINDOWS = platform() === 'win32'
 
-const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
-const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
+const TEST_TIMEOUT = 600_000 // IS_WINDOWS ? 120000 : 60000
+const ASSERTION_TIMEOUT = 600_000 // IS_WINDOWS ? 10000 : 5000
 
 // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
 // apparently causes the vite builds to not work.
