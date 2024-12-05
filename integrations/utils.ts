@@ -79,7 +79,7 @@ export function test(
       timeout: TEST_TIMEOUT,
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
-      concurrent: true,
+      // concurrent: true,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
