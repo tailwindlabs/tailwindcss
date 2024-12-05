@@ -1,4 +1,5 @@
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
+import * as env from './env'
 
 export class Instrumentation implements Disposable {
   #hits = new DefaultMap(() => ({ value: 0 }))
@@ -88,11 +89,11 @@ export class Instrumentation implements Disposable {
       )
     }
 
-    flush(output.join('\n'))
+    flush(`\n${output.join('\n')}\n`)
   }
 
   [Symbol.dispose]() {
-    this.report()
+    env.DEBUG && this.report()
   }
 }
 
