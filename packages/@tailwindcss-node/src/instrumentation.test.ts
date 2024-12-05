@@ -1,9 +1,9 @@
 import { stripVTControlCharacters } from 'util'
 import { expect, it } from 'vitest'
-import * as I from './instrumentation'
+import { Instrumentation } from './instrumentation'
 
 it('should add instrumentation', () => {
-  I.reset()
+  let I = new Instrumentation()
 
   I.start('Foo')
   let x = 1
@@ -34,7 +34,7 @@ it('should add instrumentation', () => {
 })
 
 it('should auto end pending timers when reporting', () => {
-  I.reset()
+  let I = new Instrumentation()
 
   I.start('Foo')
   let x = 1
