@@ -128,12 +128,18 @@ for (let transformer of ['postcss', 'lightningcss']) {
           `,
         },
       },
-      async ({ root, spawn, getFreePort, fs }) => {
-        let port = await getFreePort()
-        await spawn(`pnpm vite dev --port ${port}`)
+      async ({ spawn }) => {
+        let process = await spawn('pnpm vite dev')
+
+        let url = ''
+        await process.onStdout((m) => {
+          let match = /Local:\s*(http.*)\//.exec(m)
+          if (match) url = match[1]
+          return Boolean(url)
+        })
 
         await retryAssertion(async () => {
-          let styles = await fetchStyles(port, '/index.html')
+          let styles = await fetchStyles(url, '/index.html')
           expect(styles).toContain(candidate`underline`)
           expect(styles).toContain(candidate`custom-underline`)
         })
