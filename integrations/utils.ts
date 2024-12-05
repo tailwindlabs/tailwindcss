@@ -430,16 +430,14 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   let json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  ;['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'].forEach(
-    (key) => {
-      let dependencies = json[key] || {}
-      for (let dependency in dependencies) {
-        if (dependencies[dependency] === 'workspace:^') {
-          dependencies[dependency] = resolveVersion(dependency)
-        }
+  for (let key of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+    let dependencies = json[key] || {}
+    for (let dependency in dependencies) {
+      if (dependencies[dependency] === 'workspace:^') {
+        dependencies[dependency] = resolveVersion(dependency)
       }
-    },
-  )
+    }
+  }
 
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
