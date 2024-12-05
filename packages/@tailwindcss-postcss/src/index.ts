@@ -1,5 +1,5 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compileAst, env, Features, instrumentation as I } from '@tailwindcss/node'
+import { compileAst, env, Features, Instrumentation } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
@@ -62,7 +62,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       {
         postcssPlugin: 'tailwindcss',
         async Once(root, { result }) {
-          env.DEBUG && I.reset()
+          using I = new Instrumentation()
 
           let inputFile = result.opts.from ?? ''
           env.DEBUG && I.start(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
@@ -81,10 +81,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               return false
             }
           })
-          if (canBail) {
-            env.DEBUG && I.report()
-            return
-          }
+          if (canBail) return
+
           env.DEBUG && I.end('Quick bail check')
 
           let context = getContextFromCache(inputFile, opts)
@@ -124,7 +122,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           context.compiler ??= await createCompiler()
 
           if (context.compiler.features === Features.None) {
-            env.DEBUG && I.report()
             return
           }
 
@@ -292,7 +289,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           env.DEBUG && I.end('Update PostCSS AST')
 
           env.DEBUG && I.end(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
-          env.DEBUG && I.report()
         },
       },
     ],
