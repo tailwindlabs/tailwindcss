@@ -646,8 +646,8 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(port: number, path = '/'): Promise<string> {
-  let index = await fetch(`http://localhost:${port}${path}`)
+export async function fetchStyles(base: string, path = '/'): Promise<string> {
+  let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
   let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
@@ -666,7 +666,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`http://localhost:${port}${path}`, {
+        let css = await fetch(`${base}${path}`, {
           headers: {
             Accept: 'text/css',
           },
