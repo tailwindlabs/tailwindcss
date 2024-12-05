@@ -1,3 +1,4 @@
+import { describe } from 'vitest'
 import { candidate, css, fetchStyles, js, json, retryAssertion, test } from '../utils'
 
 test(
@@ -69,9 +70,10 @@ test(
     ])
   },
 )
-;['turbo', 'webpack'].forEach((bundler) => {
+
+describe.concurrent.each(['turbo', 'webpack'])('%s', (bundler) => {
   test(
-    `dev mode (${bundler})`,
+    'dev mode',
     {
       fs: {
         'package.json': json`
