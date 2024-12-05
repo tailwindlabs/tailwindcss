@@ -1019,7 +1019,6 @@ test(
         cwd: path.join(root, 'project-a'),
       },
     )
-
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     // Changes to project-a should not be included in the output, we changed the
