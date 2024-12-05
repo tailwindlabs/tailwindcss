@@ -1,6 +1,6 @@
 import dedent from 'dedent'
-import { describe } from 'vitest'
-import { css, fetchStyles, html, retryAssertion, test, ts, txt } from '../utils'
+import {describe} from 'vitest'
+import {css, fetchStyles, html, retryAssertion, test, ts, txt} from '../utils'
 
 function createSetup(transformer: 'postcss' | 'lightningcss') {
   return {
@@ -59,7 +59,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
 }
 
 describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
-  test(`production build`, createSetup(transformer), async ({ fs, exec, expect }) => {
+  test(`production build`, createSetup(transformer), async ({fs, exec, expect}) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -81,12 +81,19 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
     ])
   })
 
-  test(`dev mode`, createSetup(transformer), async ({ spawn, getFreePort, fs, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  test(`dev mode`, createSetup(transformer), async ({spawn, fs, expect}) => {
+    let process = await spawn('pnpm vite dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
 
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/index.html')
+      let styles = await fetchStyles(url, '/index.html')
       expect(styles).toContain(css`
         .foo {
           color: blue;
@@ -113,7 +120,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
         `,
       )
 
-      let styles = await fetchStyles(port)
+      let styles = await fetchStyles(url)
       expect(styles).toContain(css`
         .foo {
           background-color: blue;
@@ -122,7 +129,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
     })
   })
 
-  test('watch mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
+  test('watch mode', createSetup(transformer), async ({spawn, fs, expect}) => {
     await spawn(`pnpm vite build --watch`)
 
     await retryAssertion(async () => {
