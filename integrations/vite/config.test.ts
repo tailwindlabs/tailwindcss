@@ -128,7 +128,7 @@ test(
   },
 )
 
-test.sequential(
+test(
   'Config files (CJS, dev mode)',
   {
     fs: {
@@ -180,12 +180,18 @@ test.sequential(
       `,
     },
   },
-  async ({ fs, getFreePort, spawn, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -193,14 +199,14 @@ test.sequential(
     await retryAssertion(async () => {
       await fs.write('my-color.cjs', js`module.exports = 'red'`)
 
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })
   },
 )
 
-test.sequential(
+test(
   'Config files (ESM, dev mode)',
   {
     fs: {
@@ -252,12 +258,18 @@ test.sequential(
       `,
     },
   },
-  async ({ fs, getFreePort, spawn, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -265,7 +277,7 @@ test.sequential(
     await retryAssertion(async () => {
       await fs.write('my-color.mjs', js`export default 'red'`)
 
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })
