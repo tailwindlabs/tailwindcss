@@ -1,6 +1,6 @@
 import dedent from 'dedent'
-import {describe} from 'vitest'
-import {css, fetchStyles, html, retryAssertion, test, ts, txt} from '../utils'
+import { describe } from 'vitest'
+import { css, fetchStyles, html, retryAssertion, test, ts, txt } from '../utils'
 
 function createSetup(transformer: 'postcss' | 'lightningcss') {
   return {
@@ -81,7 +81,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
     ])
   })
 
-  test(`dev mode`, createSetup(transformer), async ({spawn, fs, expect}) => {
+  test(`dev mode`, createSetup(transformer), async ({ spawn, fs, expect }) => {
     let process = await spawn('pnpm vite dev')
 
     let url = ''
@@ -90,7 +90,6 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
       if (match) url = match[1]
       return Boolean(url)
     })
-
 
     await retryAssertion(async () => {
       let styles = await fetchStyles(url, '/index.html')
@@ -129,8 +128,9 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
     })
   })
 
-  test('watch mode', createSetup(transformer), async ({spawn, fs, expect}) => {
-    await spawn(`pnpm vite build --watch`)
+  test('watch mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite build --watch')
+    await process.onStdout((m) => m.includes('built in'))
 
     await retryAssertion(async () => {
       let files = await fs.glob('dist/**/*.css')
