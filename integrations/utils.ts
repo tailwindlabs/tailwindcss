@@ -159,7 +159,9 @@ export function test(
           })
 
           function dispose() {
-            child.kill()
+            if (!child.kill()) {
+              child.kill('SIGKILL')
+            }
 
             let timer = setTimeout(
               () =>
