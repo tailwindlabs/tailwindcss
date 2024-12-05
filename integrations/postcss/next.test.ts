@@ -142,16 +142,17 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
         expect(css).toContain(candidate`underline`)
       })
 
-      await retryAssertion(async () => {
-        await fs.write(
-          'app/page.js',
-          js`
-            export default function Page() {
-              return <h1 className="underline text-red-500">Hello, Next.js!</h1>
-            }
-          `,
-        )
+      await fs.write(
+        'app/page.js',
+        js`
+          export default function Page() {
+            return <h1 className="underline text-red-500">Hello, Next.js!</h1>
+          }
+        `,
+      )
+      await process.onStdout((m) => m.includes('Compiled in'))
 
+      await retryAssertion(async () => {
         let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
