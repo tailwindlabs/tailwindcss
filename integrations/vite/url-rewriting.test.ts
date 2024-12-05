@@ -3,7 +3,7 @@ import { binary, css, html, svg, test, ts, txt } from '../utils'
 
 const SIMPLE_IMAGE = `iVBORw0KGgoAAAANSUhEUgAAADAAAAAlAQAAAAAsYlcCAAAACklEQVR4AWMYBQABAwABRUEDtQAAAABJRU5ErkJggg==`
 
-describe.concurrent.each(['postcss', 'lightningcss'])('%s', (transformer) => {
+describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     'can rewrite urls in production builds',
     {
