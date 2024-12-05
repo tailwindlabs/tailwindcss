@@ -53,7 +53,6 @@ type TestCallback = (context: TestContext) => Promise<void> | void
 interface TestFlags {
   only?: boolean
   debug?: boolean
-  sequential?: boolean
 }
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
@@ -72,7 +71,7 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, debug = false, sequential = false }: TestFlags = {},
+  { only = false, debug = false }: TestFlags = {},
 ) {
   return defaultTest(
     name,
@@ -80,8 +79,7 @@ export function test(
       timeout: TEST_TIMEOUT,
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
-      concurrent: !sequential,
-      sequential: sequential,
+      concurrent: true,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -420,10 +418,6 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
-}
-
-test.sequential = (name: string, config: TestConfig, testCallback: TestCallback) => {
-  return test(name, config, testCallback, { sequential: true })
 }
 
 // Maps package names to their tarball filenames. See scripts/pack-packages.ts
