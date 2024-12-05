@@ -29,7 +29,7 @@ const variantConfig = {
   },
 }
 
-describe.each(Object.keys(variantConfig))('%s', (variant) => {
+describe.concurrent.each(Object.keys(variantConfig))('%s', (variant) => {
   test(
     `can not use \`tailwindcss\` as a postcss module`,
     {

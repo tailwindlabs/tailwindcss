@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest'
 import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
 
 for (let transformer of ['postcss', 'lightningcss']) {
-  describe(transformer, () => {
+  describe.concurrent(transformer, () => {
     test(
       `resolves aliases in production build`,
       {
