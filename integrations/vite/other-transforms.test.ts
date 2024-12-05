@@ -58,8 +58,8 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
   }
 }
 
-describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
-  test(`production build`, createSetup(transformer), async ({fs, exec, expect}) => {
+describe.concurrent.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
+  test(`production build`, createSetup(transformer), async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
