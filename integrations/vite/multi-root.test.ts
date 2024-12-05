@@ -84,7 +84,7 @@ test(
   },
 )
 
-test.sequential(
+test(
   `dev mode`,
   {
     fs: {
@@ -140,14 +140,20 @@ test.sequential(
       `,
     },
   },
-  async ({ spawn, getFreePort, expect }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     // Candidates are resolved lazily, so the first visit of index.html
     // will only have candidates from this file.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/root1.html')
+      let styles = await fetchStyles(url, '/root1.html')
       expect(styles).toContain(candidate`one:underline`)
       expect(styles).not.toContain(candidate`two:underline`)
     })
@@ -155,7 +161,7 @@ test.sequential(
     // Going to about.html will extend the candidate list to include
     // candidates from about.html.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/root2.html')
+      let styles = await fetchStyles(url, '/root2.html')
       expect(styles).not.toContain(candidate`one:underline`)
       expect(styles).toContain(candidate`two:underline`)
     })
