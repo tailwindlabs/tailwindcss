@@ -156,9 +156,10 @@ describe.each([
       },
     },
     async ({ root, fs, spawn }) => {
-      await spawn(`${command} --input src/index.css --output dist/out.css --watch`, {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`, {
         cwd: path.join(root, 'project-a'),
       })
+      await process.onStderr((m) => m.includes('Done in'))
 
       await fs.expectFileToContain('project-a/dist/out.css', [
         candidate`underline`,
@@ -790,9 +791,13 @@ test(
     `)
 
     // Watch mode tests
-    await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
-      cwd: path.join(root, 'project-a'),
-    })
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+      {
+        cwd: path.join(root, 'project-a'),
+      },
+    )
+    await process.onStderr((m) => m.includes('Done in'))
 
     // Changes to project-a should not be included in the output, we changed the
     // base folder to project-b.
