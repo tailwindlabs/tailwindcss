@@ -201,7 +201,8 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    await spawn(`pnpm vite build --watch`)
+    let process = await spawn(`pnpm vite build --watch`)
+    await process.onStdout((m) => m.includes('built in'))
 
     await retryAssertion(async () => {
       let files = await fs.glob('dist/**/*.css')
