@@ -48,7 +48,7 @@ test(
           target: document.body,
         })
       `,
-      'src/index.css': css`@import 'tailwindcss' reference;`,
+      'src/index.css': css`@import 'tailwindcss';`,
       'src/App.svelte': html`
         <script>
           import './index.css'
@@ -58,7 +58,7 @@ test(
         <h1 class="global local underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss' reference;
           @import './other.css';
         </style>
       `,
@@ -165,14 +165,11 @@ test(
         <h1 class="local global underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss' reference;
           @import './other.css';
         </style>
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
-        @import 'tailwindcss/utilities';
-      `,
+      'src/index.css': css` @import 'tailwindcss'; `,
       'src/other.css': css`
         .local {
           @apply text-red-500;
