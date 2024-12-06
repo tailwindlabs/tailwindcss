@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
 - Skip creating a compiler for CSS files that should not be processed ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
+- Ensure `@import "…" reference` never generates utilities ([#15307](https://github.com/tailwindlabs/tailwindcss/pull/15307))
+- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
 
 ## [4.0.0-beta.5] - 2024-12-04
 

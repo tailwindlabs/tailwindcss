@@ -45,7 +45,7 @@ test(
       `,
       'src/App.vue': html`
         <style>
-          @import 'tailwindcss' reference;
+          @import 'tailwindcss';
           .foo {
             @apply text-red-500;
           }
