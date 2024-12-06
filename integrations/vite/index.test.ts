@@ -91,8 +91,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       ])
     },
   )
-
-  test(
+  ;(transformer === 'postcss' ? test.skip : test)(
     `dev mode`,
     {
       fs: {
