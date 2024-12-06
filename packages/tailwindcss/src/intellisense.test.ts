@@ -431,3 +431,115 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
   expect(not.values).toContain('variant-3')
   expect(not.values).toContain('variant-4')
 })
+
+test('Can get a list of suggestable theme variables and namespaces', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  let entries = design.getThemeEntries()
+
+  expect(entries).toMatchInlineSnapshot(`
+    [
+      {
+        "kind": "variable",
+        "name": "--default-transition-duration",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-transition-timing-function",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-font-family",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-font-feature-settings",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-font-variation-settings",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-mono-font-family",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-mono-font-feature-settings",
+      },
+      {
+        "kind": "variable",
+        "name": "--default-mono-font-variation-settings",
+      },
+      {
+        "kind": "namespace",
+        "name": "--breakpoint",
+      },
+      {
+        "kind": "namespace",
+        "name": "--color",
+      },
+      {
+        "kind": "namespace",
+        "name": "--animate",
+      },
+      {
+        "kind": "namespace",
+        "name": "--blur",
+      },
+      {
+        "kind": "namespace",
+        "name": "--radius",
+      },
+      {
+        "kind": "namespace",
+        "name": "--shadow",
+      },
+      {
+        "kind": "namespace",
+        "name": "--inset-shadow",
+      },
+      {
+        "kind": "namespace",
+        "name": "--drop-shadow",
+      },
+      {
+        "kind": "variable",
+        "name": "--spacing",
+      },
+      {
+        "kind": "namespace",
+        "name": "--container",
+      },
+      {
+        "kind": "namespace",
+        "name": "--font",
+      },
+      {
+        "kind": "namespace",
+        "name": "--font-size",
+      },
+      {
+        "kind": "namespace",
+        "name": "--tracking",
+      },
+      {
+        "kind": "namespace",
+        "name": "--leading",
+      },
+      {
+        "kind": "namespace",
+        "name": "--ease",
+      },
+    ]
+  `)
+})

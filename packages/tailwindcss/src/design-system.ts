@@ -1,7 +1,14 @@
 import { toCss } from './ast'
 import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
-import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
+import {
+  getClassList,
+  getThemeEntries,
+  getVariants,
+  type ClassEntry,
+  type ThemeEntry,
+  type VariantEntry,
+} from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme, ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
@@ -31,6 +38,7 @@ export type DesignSystem = {
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
+  getThemeEntries(): ThemeEntry[]
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -83,6 +91,9 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     getVariants() {
       return getVariants(this)
+    },
+    getThemeEntries() {
+      return getThemeEntries()
     },
 
     parseCandidate(candidate: string) {
