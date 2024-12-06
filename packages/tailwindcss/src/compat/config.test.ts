@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile, type Config } from '..'
 import { default as plugin } from '../plugin'
-import { flattenColorPalette } from './flatten-color-palette'
+import flattenColorPalette from './flatten-color-palette'
 
 const css = String.raw
 
