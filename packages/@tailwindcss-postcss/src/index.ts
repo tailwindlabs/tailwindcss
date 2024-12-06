@@ -106,7 +106,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file,
+                file: path.resolve(file),
                 parent: result.opts.from,
               })
             }
@@ -174,7 +174,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file,
+                file: path.resolve(file),
                 parent: result.opts.from,
               })
             }
@@ -194,14 +194,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 result.messages.push({
                   type: 'dependency',
                   plugin: '@tailwindcss/postcss',
-                  file: globBase,
+                  file: path.resolve(globBase),
                   parent: result.opts.from,
                 })
               } else {
                 result.messages.push({
                   type: 'dir-dependency',
                   plugin: '@tailwindcss/postcss',
-                  dir: globBase,
+                  dir: path.resolve(globBase),
                   glob: pattern,
                   parent: result.opts.from,
                 })
