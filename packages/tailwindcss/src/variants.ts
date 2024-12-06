@@ -628,6 +628,7 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('file', ['&::file-selector-button'])
   staticVariant('placeholder', ['&::placeholder'])
   staticVariant('backdrop', ['&::backdrop'])
+  staticVariant('details-content', ['&::details-content'])
 
   {
     function contentProperties() {

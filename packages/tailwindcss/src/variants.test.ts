@@ -95,6 +95,15 @@ test('backdrop', async () => {
   expect(await run(['backdrop/foo:flex'])).toEqual('')
 })
 
+test('details-content', async () => {
+  expect(await run(['details-content:flex'])).toMatchInlineSnapshot(`
+    ".details-content\\:flex::details-content {
+      display: flex;
+    }"
+  `)
+  expect(await run(['details-content/foo:flex'])).toEqual('')
+})
+
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
     ".before\\:flex:before {
@@ -2092,6 +2101,7 @@ test('variant order', async () => {
         'data-custom:flex',
         'data-[custom=true]:flex',
         'default:flex',
+        'details-content:flex',
         'disabled:flex',
         'empty:flex',
         'enabled:flex',
@@ -2175,6 +2185,10 @@ test('variant order', async () => {
     }
 
     .placeholder\\:flex::placeholder, .backdrop\\:flex::backdrop {
+      display: flex;
+    }
+
+    .details-content\\:flex::details-content {
       display: flex;
     }
 
