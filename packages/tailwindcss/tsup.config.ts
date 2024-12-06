@@ -10,6 +10,7 @@ export default defineConfig([
       plugin: 'src/plugin.ts',
       colors: 'src/compat/colors.ts',
       'default-theme': 'src/compat/default-theme.ts',
+      flattenColorPalette: 'src/compat/flatten-color-palette.ts',
     },
   },
   {
@@ -21,6 +22,7 @@ export default defineConfig([
       lib: 'src/index.cts',
       colors: 'src/compat/colors.cts',
       'default-theme': 'src/compat/default-theme.cts',
+      flattenColorPalette: 'src/compat/flatten-color-palette.cts',
     },
   },
 ])
