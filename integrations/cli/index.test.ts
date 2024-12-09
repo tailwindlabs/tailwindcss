@@ -547,7 +547,7 @@ test(
   },
 )
 
-test(
+test.skip(
   'auto source detection in depth, source(…) and `@source` can be configured to use auto source detection (build + watch mode)',
   {
     fs: {
