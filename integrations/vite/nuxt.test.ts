@@ -36,62 +36,64 @@ const SETUP = {
   },
 }
 
-test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
-  let process = await spawn('pnpm nuxt dev', {
-    env: {
-      TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
-      NODE_ENV: 'development',
-    },
+export function sequentials() {
+  test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm nuxt dev', {
+      env: {
+        TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
+        NODE_ENV: 'development',
+      },
+    })
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((m) => m.includes('server warmed up in'))
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`underline`)
+    })
+
+    await retryAssertion(async () => {
+      await fs.write(
+        'app.vue',
+        html`
+          <template>
+            <div class="underline font-bold">Hello world!</div>
+          </template>
+        `,
+      )
+
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`underline`)
+      expect(css).toContain(candidate`font-bold`)
+    })
   })
 
-  let url = ''
-  await process.onStdout((m) => {
-    let match = /Local:\s*(http.*)\//.exec(m)
-    if (match) url = match[1]
-    return Boolean(url)
+  test.sequential('build', SETUP, async ({ spawn, exec, expect }) => {
+    await exec(`pnpm nuxt build`)
+    let process = await spawn('pnpm nuxt preview', {
+      env: {
+        TEST: 'false',
+        NODE_ENV: 'development',
+      },
+    })
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Listening on\s*(http.*)\//.exec(m)
+      if (match) url = match[1].replace('http://[::]', 'http://127.0.0.1')
+      return m.includes('Listening on')
+    })
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`underline`)
+    })
   })
-
-  await process.onStdout((m) => m.includes('server warmed up in'))
-
-  await retryAssertion(async () => {
-    let css = await fetchStyles(url)
-    expect(css).toContain(candidate`underline`)
-  })
-
-  await retryAssertion(async () => {
-    await fs.write(
-      'app.vue',
-      html`
-        <template>
-          <div class="underline font-bold">Hello world!</div>
-        </template>
-      `,
-    )
-
-    let css = await fetchStyles(url)
-    expect(css).toContain(candidate`underline`)
-    expect(css).toContain(candidate`font-bold`)
-  })
-})
-
-test('build', SETUP, async ({ spawn, exec, expect }) => {
-  await exec(`pnpm nuxt build`)
-  let process = await spawn('pnpm nuxt preview', {
-    env: {
-      TEST: 'false',
-      NODE_ENV: 'development',
-    },
-  })
-
-  let url = ''
-  await process.onStdout((m) => {
-    let match = /Listening on\s*(http.*)\//.exec(m)
-    if (match) url = match[1].replace('http://[::]', 'http://127.0.0.1')
-    return m.includes('Listening on')
-  })
-
-  await retryAssertion(async () => {
-    let css = await fetchStyles(url)
-    expect(css).toContain(candidate`underline`)
-  })
-})
+}

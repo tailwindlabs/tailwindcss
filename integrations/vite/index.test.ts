@@ -92,170 +92,6 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  test.sequential(
-    'dev mode',
-    {
-      fs: {
-        'package.json': json`{}`,
-        'pnpm-workspace.yaml': yaml`
-          #
-          packages:
-            - project-a
-        `,
-        'project-a/package.json': txt`
-          {
-            "type": "module",
-            "dependencies": {
-              "@tailwindcss/vite": "workspace:^",
-              "tailwindcss": "workspace:^"
-            },
-            "devDependencies": {
-              ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
-              "vite": "^6"
-            }
-          }
-        `,
-        'project-a/vite.config.ts': ts`
-          import tailwindcss from '@tailwindcss/vite'
-          import { defineConfig } from 'vite'
-
-          export default defineConfig({
-            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
-            build: { cssMinify: false },
-            plugins: [tailwindcss()],
-          })
-        `,
-        'project-a/index.html': html`
-          <head>
-            <link rel="stylesheet" href="./src/index.css" />
-          </head>
-          <body>
-            <div class="underline">Hello, world!</div>
-          </body>
-        `,
-        'project-a/about.html': html`
-          <head>
-            <link rel="stylesheet" href="./src/index.css" />
-          </head>
-          <body>
-            <div class="font-bold">Tailwind Labs</div>
-          </body>
-        `,
-        'project-a/tailwind.config.js': js`
-          export default {
-            content: ['../project-b/src/**/*.js'],
-          }
-        `,
-        'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
-          @import 'tailwindcss/utilities';
-          @config '../tailwind.config.js';
-          @source '../../project-b/src/**/*.html';
-        `,
-        'project-b/src/index.html': html`
-          <div class="flex" />
-        `,
-        'project-b/src/index.js': js`
-          const className = "content-['project-b/src/index.js']"
-          module.exports = { className }
-        `,
-      },
-    },
-    async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite dev', {
-        cwd: path.join(root, 'project-a'),
-      })
-      await process.onStdout((m) => m.includes('ready in'))
-
-      let url = ''
-      await process.onStdout((m) => {
-        let match = /Local:\s*(http.*)\//.exec(m)
-        if (match) url = match[1]
-        return Boolean(url)
-      })
-
-      // Candidates are resolved lazily, so the first visit of index.html
-      // will only have candidates from this file.
-      await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/index.html')
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).not.toContain(candidate`font-bold`)
-      })
-
-      // Going to about.html will extend the candidate list to include
-      // candidates from about.html.
-      await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/about.html')
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`font-bold`)
-      })
-
-      await retryAssertion(async () => {
-        // Updates are additive and cause new candidates to be added.
-        await fs.write(
-          'project-a/index.html',
-          html`
-            <head>
-              <link rel="stylesheet" href="./src/index.css" />
-            </head>
-            <body>
-              <div class="underline m-2">Hello, world!</div>
-            </body>
-          `,
-        )
-
-        let styles = await fetchStyles(url)
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`font-bold`)
-        expect(styles).toContain(candidate`m-2`)
-      })
-
-      await retryAssertion(async () => {
-        // Manually added `@source`s are watched and trigger a rebuild
-        await fs.write(
-          'project-b/src/index.js',
-          js`
-            const className = "[.changed_&]:content-['project-b/src/index.js']"
-            module.exports = { className }
-          `,
-        )
-
-        let styles = await fetchStyles(url)
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`font-bold`)
-        expect(styles).toContain(candidate`m-2`)
-        expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
-      })
-
-      await retryAssertion(async () => {
-        // After updates to the CSS file, all previous candidates should still be in
-        // the generated CSS
-        await fs.write(
-          'project-a/src/index.css',
-          css`
-            ${await fs.read('project-a/src/index.css')}
-
-            .red {
-              color: red;
-            }
-          `,
-        )
-
-        let styles = await fetchStyles(url)
-        expect(styles).toContain(candidate`red`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`m-2`)
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
-        expect(styles).toContain(candidate`font-bold`)
-      })
-    },
-  )
-
   test(
     'watch mode',
     {
@@ -695,151 +531,319 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 })
 
-test.sequential(
-  `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
-  {
-    fs: {
-      'package.json': json`
-        {
-          "type": "module",
-          "dependencies": {
-            "@tailwindcss/vite": "workspace:^",
-            "tailwindcss": "workspace:^"
-          },
-          "devDependencies": {
-            "vite": "^6"
-          }
-        }
-      `,
-      'vite.config.ts': ts`
-        import tailwindcss from '@tailwindcss/vite'
-        import { defineConfig } from 'vite'
+export function sequentials() {
+  describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
+    test.sequential(
+      'dev mode',
+      {
+        fs: {
+          'package.json': json`{}`,
+          'pnpm-workspace.yaml': yaml`
+            #
+            packages:
+              - project-a
+          `,
+          'project-a/package.json': txt`
+            {
+              "type": "module",
+              "dependencies": {
+                "@tailwindcss/vite": "workspace:^",
+                "tailwindcss": "workspace:^"
+              },
+              "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
+                "vite": "^6"
+              }
+            }
+          `,
+          'project-a/vite.config.ts': ts`
+            import tailwindcss from '@tailwindcss/vite'
+            import { defineConfig } from 'vite'
 
-        export default defineConfig({
-          build: { cssMinify: false },
-          plugins: [tailwindcss()],
+            export default defineConfig({
+              css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+              build: { cssMinify: false },
+              plugins: [tailwindcss()],
+            })
+          `,
+          'project-a/index.html': html`
+            <head>
+              <link rel="stylesheet" href="./src/index.css" />
+            </head>
+            <body>
+              <div class="underline">Hello, world!</div>
+            </body>
+          `,
+          'project-a/about.html': html`
+            <head>
+              <link rel="stylesheet" href="./src/index.css" />
+            </head>
+            <body>
+              <div class="font-bold">Tailwind Labs</div>
+            </body>
+          `,
+          'project-a/tailwind.config.js': js`
+            export default {
+              content: ['../project-b/src/**/*.js'],
+            }
+          `,
+          'project-a/src/index.css': css`
+            @import 'tailwindcss/theme' theme(reference);
+            @import 'tailwindcss/utilities';
+            @config '../tailwind.config.js';
+            @source '../../project-b/src/**/*.html';
+          `,
+          'project-b/src/index.html': html`
+            <div class="flex" />
+          `,
+          'project-b/src/index.js': js`
+            const className = "content-['project-b/src/index.js']"
+            module.exports = { className }
+          `,
+        },
+      },
+      async ({ root, spawn, fs, expect }) => {
+        let process = await spawn('pnpm vite dev', {
+          cwd: path.join(root, 'project-a'),
         })
-      `,
-      'index.html': html`
-        <head>
-          <link rel="stylesheet" href="./src/index.css" />
-        </head>
-        <body>
-          <div class="underline">Hello, world!</div>
-        </body>
-      `,
-      'about.html': html`
-        <head>
-          <link rel="stylesheet" href="./src/index.css" />
-        </head>
-        <body>
-          <div class="font-bold">Tailwind Labs</div>
-        </body>
-      `,
-      'src/index.css': css`@import 'tailwindcss';`,
-    },
-  },
-  async ({ spawn, fs, expect }) => {
-    let process = await spawn('pnpm vite dev')
-    await process.onStdout((m) => m.includes('ready in'))
+        await process.onStdout((m) => m.includes('ready in'))
 
-    let url = ''
-    await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
-      if (match) url = match[1]
-      return Boolean(url)
-    })
-
-    // Candidates are resolved lazily, so the first visit of index.html
-    // will only have candidates from this file.
-    await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/index.html')
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).not.toContain(candidate`font-bold`)
-    })
-
-    // Going to about.html will extend the candidate list to include
-    // candidates from about.html.
-    await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/about.html')
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).toContain(candidate`font-bold`)
-    })
-
-    await retryAssertion(async () => {
-      // We change the CSS file so it is no longer a valid Tailwind root.
-      await fs.write('src/index.css', css`@import 'tailwindcss';`)
-
-      let styles = await fetchStyles(url)
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).toContain(candidate`font-bold`)
-    })
-  },
-)
-
-test.sequential(
-  `does not interfere with ?raw and ?url static asset handling`,
-  {
-    fs: {
-      'package.json': json`
-        {
-          "type": "module",
-          "dependencies": {
-            "@tailwindcss/vite": "workspace:^",
-            "tailwindcss": "workspace:^"
-          },
-          "devDependencies": {
-            "vite": "^6"
-          }
-        }
-      `,
-      'vite.config.ts': ts`
-        import tailwindcss from '@tailwindcss/vite'
-        import { defineConfig } from 'vite'
-
-        export default defineConfig({
-          build: { cssMinify: false },
-          plugins: [tailwindcss()],
+        let url = ''
+        await process.onStdout((m) => {
+          let match = /Local:\s*(http.*)\//.exec(m)
+          if (match) url = match[1]
+          return Boolean(url)
         })
-      `,
-      'index.html': html`
-        <head>
-          <script type="module" src="./src/index.js"></script>
-        </head>
-      `,
-      'src/index.js': js`
-        import url from './index.css?url'
-        import raw from './index.css?raw'
-      `,
-      'src/index.css': css`@import 'tailwindcss';`,
+
+        // Candidates are resolved lazily, so the first visit of index.html
+        // will only have candidates from this file.
+        await retryAssertion(async () => {
+          let styles = await fetchStyles(url, '/index.html')
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).not.toContain(candidate`font-bold`)
+        })
+
+        // Going to about.html will extend the candidate list to include
+        // candidates from about.html.
+        await retryAssertion(async () => {
+          let styles = await fetchStyles(url, '/about.html')
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
+        })
+
+        await retryAssertion(async () => {
+          // Updates are additive and cause new candidates to be added.
+          await fs.write(
+            'project-a/index.html',
+            html`
+              <head>
+                <link rel="stylesheet" href="./src/index.css" />
+              </head>
+              <body>
+                <div class="underline m-2">Hello, world!</div>
+              </body>
+            `,
+          )
+
+          let styles = await fetchStyles(url)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
+          expect(styles).toContain(candidate`m-2`)
+        })
+
+        await retryAssertion(async () => {
+          // Manually added `@source`s are watched and trigger a rebuild
+          await fs.write(
+            'project-b/src/index.js',
+            js`
+              const className = "[.changed_&]:content-['project-b/src/index.js']"
+              module.exports = { className }
+            `,
+          )
+
+          let styles = await fetchStyles(url)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`font-bold`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+        })
+
+        await retryAssertion(async () => {
+          // After updates to the CSS file, all previous candidates should still be in
+          // the generated CSS
+          await fs.write(
+            'project-a/src/index.css',
+            css`
+              ${await fs.read('project-a/src/index.css')}
+
+              .red {
+                color: red;
+              }
+            `,
+          )
+
+          let styles = await fetchStyles(url)
+          expect(styles).toContain(candidate`red`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+          expect(styles).toContain(candidate`font-bold`)
+        })
+      },
+    )
+  })
+
+  test.sequential(
+    `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
+    {
+      fs: {
+        'package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              "vite": "^6"
+            }
+          }
+        `,
+        'vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+          })
+        `,
+        'index.html': html`
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <div class="underline">Hello, world!</div>
+          </body>
+        `,
+        'about.html': html`
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <div class="font-bold">Tailwind Labs</div>
+          </body>
+        `,
+        'src/index.css': css`@import 'tailwindcss';`,
+      },
     },
-  },
-  async ({ spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
-    await process.onStdout((m) => m.includes('ready in'))
+    async ({ spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev')
+      await process.onStdout((m) => m.includes('ready in'))
 
-    let baseUrl = ''
-    await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
-      if (match) baseUrl = match[1]
-      return Boolean(baseUrl)
-    })
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
 
-    await retryAssertion(async () => {
-      // We have to load the .js file first so that the static assets are
-      // resolved
-      await fetch(`${baseUrl}/src/index.js`).then((r) => r.text())
+      // Candidates are resolved lazily, so the first visit of index.html
+      // will only have candidates from this file.
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).not.toContain(candidate`font-bold`)
+      })
 
-      let [raw, url] = await Promise.all([
-        fetch(`${baseUrl}/src/index.css?raw`).then((r) => r.text()),
-        fetch(`${baseUrl}/src/index.css?url`).then((r) => r.text()),
-      ])
+      // Going to about.html will extend the candidate list to include
+      // candidates from about.html.
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/about.html')
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`font-bold`)
+      })
 
-      expect(firstLine(raw)).toBe(`export default "@import 'tailwindcss';"`)
-      expect(firstLine(url)).toBe(`export default "/src/index.css"`)
-    })
-  },
-)
+      await retryAssertion(async () => {
+        // We change the CSS file so it is no longer a valid Tailwind root.
+        await fs.write('src/index.css', css`@import 'tailwindcss';`)
+
+        let styles = await fetchStyles(url)
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`font-bold`)
+      })
+    },
+  )
+
+  test.sequential(
+    `does not interfere with ?raw and ?url static asset handling`,
+    {
+      fs: {
+        'package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              "vite": "^6"
+            }
+          }
+        `,
+        'vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+          })
+        `,
+        'index.html': html`
+          <head>
+            <script type="module" src="./src/index.js"></script>
+          </head>
+        `,
+        'src/index.js': js`
+          import url from './index.css?url'
+          import raw from './index.css?raw'
+        `,
+        'src/index.css': css`@import 'tailwindcss';`,
+      },
+    },
+    async ({ spawn, expect }) => {
+      let process = await spawn('pnpm vite dev')
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let baseUrl = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) baseUrl = match[1]
+        return Boolean(baseUrl)
+      })
+
+      await retryAssertion(async () => {
+        // We have to load the .js file first so that the static assets are
+        // resolved
+        await fetch(`${baseUrl}/src/index.js`).then((r) => r.text())
+
+        let [raw, url] = await Promise.all([
+          fetch(`${baseUrl}/src/index.css?raw`).then((r) => r.text()),
+          fetch(`${baseUrl}/src/index.css?url`).then((r) => r.text()),
+        ])
+
+        expect(firstLine(raw)).toBe(`export default "@import 'tailwindcss';"`)
+        expect(firstLine(url)).toBe(`export default "/src/index.css"`)
+      })
+    },
+  )
+}
 
 function firstLine(str: string) {
   return str.split('\n')[0]
