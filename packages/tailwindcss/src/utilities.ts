@@ -4230,6 +4230,9 @@ export function createUtilities(theme: Theme) {
         valueThemeKeys: ['--shadow'],
         hasDefaultValue: true,
       },
+      {
+        values: ['none'],
+      }
     ])
 
     staticUtility('inset-shadow-initial', [
