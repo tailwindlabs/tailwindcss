@@ -15,9 +15,9 @@ import {
   yaml,
 } from '../utils'
 
-describe.sequential(() => {
+describe('PostCSS / Next.js', () => {
   describe.each(['turbo', 'webpack'])('%s', (bundler) => {
-    test(
+    test.sequential(
       'dev mode',
       {
         fs: {
@@ -107,8 +107,10 @@ describe.sequential(() => {
       },
     )
   })
+})
 
-  test(
+describe('Vite / astro', () => {
+  test.sequential(
     'dev mode',
     {
       fs: {
@@ -178,8 +180,10 @@ describe.sequential(() => {
       })
     },
   )
+})
 
-  test(
+describe('Vite', () => {
+  test.sequential(
     'Config files (CJS, dev mode)',
     {
       fs: {
@@ -258,7 +262,7 @@ describe.sequential(() => {
     },
   )
 
-  test(
+  test.sequential(
     'Config files (ESM, dev mode)',
     {
       fs: {
@@ -336,9 +340,11 @@ describe.sequential(() => {
       })
     },
   )
+})
 
+describe('Vite', () => {
   describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
-    test(
+    test.sequential(
       'dev mode',
       {
         fs: {
@@ -502,8 +508,10 @@ describe.sequential(() => {
       },
     )
   })
+})
 
-  test(
+describe('Vite', () => {
+  test.sequential(
     `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
     {
       fs: {
@@ -649,7 +657,7 @@ describe.sequential(() => {
     },
   )
 
-  test(
+  test.sequential(
     'dev mode',
     {
       fs: {
@@ -733,7 +741,9 @@ describe.sequential(() => {
       })
     },
   )
+})
 
+describe('Vite / Nuxt', () => {
   const SETUP = {
     fs: {
       'package.json': json`
@@ -770,7 +780,7 @@ describe.sequential(() => {
     },
   }
 
-  test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+  test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
     let process = await spawn('pnpm nuxt dev', {
       env: {
         TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
@@ -808,7 +818,7 @@ describe.sequential(() => {
     })
   })
 
-  test('build', SETUP, async ({ spawn, exec, expect }) => {
+  test.sequential('build', SETUP, async ({ spawn, exec, expect }) => {
     await exec(`pnpm nuxt build`)
     let process = await spawn('pnpm nuxt preview', {
       env: {
@@ -829,23 +839,25 @@ describe.sequential(() => {
       expect(css).toContain(candidate`underline`)
     })
   })
+})
 
+describe('Vite', () => {
   function createSetup(transformer: 'postcss' | 'lightningcss') {
     return {
       fs: {
         'package.json': txt`
-        {
-          "type": "module",
-          "dependencies": {
-            "@tailwindcss/vite": "workspace:^",
-            "tailwindcss": "workspace:^"
-          },
-          "devDependencies": {
-            ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
-            "vite": "^6"
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
+              "vite": "^6"
+            }
           }
-        }
-      `,
+        `,
         'vite.config.ts': ts`
           import tailwindcss from '@tailwindcss/vite'
           import { defineConfig } from 'vite'
@@ -887,7 +899,7 @@ describe.sequential(() => {
   }
 
   describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
-    test('dev mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
+    test.sequential('dev mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
       let process = await spawn('pnpm vite dev')
       await process.onStdout((m) => m.includes('ready in'))
 
@@ -937,7 +949,7 @@ describe.sequential(() => {
   })
 
   describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
-    test(
+    test.sequential(
       'resolves aliases in dev mode',
       {
         fs: {
