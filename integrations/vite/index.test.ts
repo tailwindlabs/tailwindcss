@@ -93,7 +93,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 
   test(
-    `dev mode`,
+    'dev mode',
     {
       fs: {
         'package.json': json`{}`,
