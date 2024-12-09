@@ -35,7 +35,7 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn(`pnpm astro dev`)
+    let process = await spawn('pnpm astro dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''

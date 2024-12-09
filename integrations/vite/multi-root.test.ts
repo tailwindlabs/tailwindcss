@@ -85,7 +85,7 @@ test(
 )
 
 test(
-  `dev mode`,
+  'dev mode',
   {
     fs: {
       'package.json': json`
