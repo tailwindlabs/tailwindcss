@@ -157,6 +157,7 @@ export function test(
             shell: true,
             ...childProcessOptions,
             env: {
+              SO_REUSEPORT: 'false', // Do not re-use ports
               ...process.env,
               ...childProcessOptions.env,
             },
