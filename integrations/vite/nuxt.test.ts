@@ -36,7 +36,7 @@ const SETUP = {
   },
 }
 
-test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
   let process = await spawn('pnpm nuxt dev', {
     env: {
       TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT

@@ -70,7 +70,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  test(
+  test.sequential(
     'resolves aliases in dev mode',
     {
       fs: {
