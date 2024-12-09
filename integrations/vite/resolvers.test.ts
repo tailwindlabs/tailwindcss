@@ -1,9 +1,9 @@
 import { describe, expect } from 'vitest'
 import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
 
-describe.each(['postcss', 'lightningcss'])('%', (transformer) => {
+describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
-    `resolves aliases in production build`,
+    'resolves aliases in production build',
     {
       fs: {
         'package.json': txt`
@@ -71,7 +71,7 @@ describe.each(['postcss', 'lightningcss'])('%', (transformer) => {
   )
 
   test(
-    `resolves aliases in dev mode`,
+    'resolves aliases in dev mode',
     {
       fs: {
         'package.json': txt`
@@ -129,6 +129,7 @@ describe.each(['postcss', 'lightningcss'])('%', (transformer) => {
     },
     async ({ spawn }) => {
       let process = await spawn('pnpm vite dev')
+      await process.onStdout((m) => m.includes('ready in'))
 
       let url = ''
       await process.onStdout((m) => {

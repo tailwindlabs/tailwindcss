@@ -36,13 +36,16 @@ test(
   },
   async ({ fs, spawn, expect }) => {
     let process = await spawn(`pnpm astro dev`)
+    await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
       let match = /Local\s*(http.*)\//.exec(m)
       if (match) url = match[1]
-      return m.includes('watching for file changes')
+      return Boolean(url)
     })
+
+    await process.onStdout((m) => m.includes('watching for file changes'))
 
     await retryAssertion(async () => {
       let css = await fetchStyles(url)

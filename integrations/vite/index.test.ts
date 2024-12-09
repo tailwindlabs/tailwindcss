@@ -165,6 +165,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       let process = await spawn('pnpm vite dev', {
         cwd: path.join(root, 'project-a'),
       })
+      await process.onStdout((m) => m.includes('ready in'))
 
       let url = ''
       await process.onStdout((m) => {
@@ -740,6 +741,7 @@ test(
   },
   async ({ spawn, fs, expect }) => {
     let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
@@ -814,6 +816,7 @@ test(
   },
   async ({ spawn, expect }) => {
     let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
 
     let baseUrl = ''
     await process.onStdout((m) => {

@@ -1,4 +1,4 @@
-import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
+import {candidate, css, fetchStyles, html, json, retryAssertion, test, ts} from '../utils'
 
 const SETUP = {
   fs: {
@@ -36,7 +36,7 @@ const SETUP = {
   },
 }
 
-test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+test('dev mode', SETUP, async ({fs, spawn, expect}) => {
   let process = await spawn('pnpm nuxt dev', {
     env: {
       TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
@@ -48,8 +48,10 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
   await process.onStdout((m) => {
     let match = /Local:\s*(http.*)\//.exec(m)
     if (match) url = match[1]
-    return m.includes('server warmed up in')
+    return Boolean(url)
   })
+
+  await process.onStdout((m) => m.includes('server warmed up in'))
 
   await retryAssertion(async () => {
     let css = await fetchStyles(url)
@@ -72,7 +74,7 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
   })
 })
 
-test('build', SETUP, async ({ spawn, exec, expect }) => {
+test('build', SETUP, async ({spawn, exec, expect}) => {
   await exec(`pnpm nuxt build`)
   let process = await spawn('pnpm nuxt preview', {
     env: {

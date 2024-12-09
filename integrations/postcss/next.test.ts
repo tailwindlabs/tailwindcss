@@ -134,8 +134,10 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       await process.onStdout((m) => {
         let match = /Local:\s*(http.*)/.exec(m)
         if (match) url = match[1]
-        return m.includes('Ready in')
+        return Boolean(url)
       })
+
+      await process.onStdout((m) => m.includes('Ready in'))
 
       await retryAssertion(async () => {
         let css = await fetchStyles(url)
