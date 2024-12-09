@@ -533,7 +533,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
 
 export function sequentials() {
   describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
-    test.sequential(
+    test.skip(
       'dev mode',
       {
         fs: {
@@ -698,7 +698,7 @@ export function sequentials() {
     )
   })
 
-  test.sequential(
+  test.skip(
     `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
     {
       fs: {

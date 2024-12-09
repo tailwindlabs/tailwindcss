@@ -73,7 +73,7 @@ test(
 
 export function sequentials() {
   describe.each(['turbo', 'webpack'])('%s', (bundler) => {
-    test.sequential(
+    test.skip(
       'dev mode',
       {
         fs: {

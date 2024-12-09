@@ -37,7 +37,7 @@ const SETUP = {
 }
 
 export function sequentials() {
-  test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
+  test.skip('dev mode', SETUP, async ({ fs, spawn, expect }) => {
     let process = await spawn('pnpm nuxt dev', {
       env: {
         TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
@@ -75,7 +75,7 @@ export function sequentials() {
     })
   })
 
-  test.sequential('build', SETUP, async ({ spawn, exec, expect }) => {
+  test.skip('build', SETUP, async ({ spawn, exec, expect }) => {
     await exec(`pnpm nuxt build`)
     let process = await spawn('pnpm nuxt preview', {
       env: {

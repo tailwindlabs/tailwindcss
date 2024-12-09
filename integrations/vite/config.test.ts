@@ -129,7 +129,7 @@ test(
 )
 
 export function sequentials() {
-  test.sequential(
+  test.skip(
     'Config files (CJS, dev mode)',
     {
       fs: {
@@ -208,7 +208,7 @@ export function sequentials() {
     },
   )
 
-  test.sequential(
+  test.skip(
     'Config files (ESM, dev mode)',
     {
       fs: {

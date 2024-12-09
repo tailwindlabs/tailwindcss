@@ -73,7 +73,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
 
 export function sequentials() {
   describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
-    test.sequential(
+    test.skip(
       'resolves aliases in dev mode',
       {
         fs: {

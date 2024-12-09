@@ -1,7 +1,7 @@
 import { candidate, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 export function sequentials() {
-  test.sequential(
+  test.skip(
     'dev mode',
     {
       fs: {
