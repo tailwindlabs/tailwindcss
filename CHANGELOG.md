@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet
+### Added
+
+- Target `:open` in existing `open` variant ([#15349](https://github.com/tailwindlabs/tailwindcss/pull/15349))
 
 ## [4.0.0] - 2025-01-21
 ## [4.0.0-beta.10] - 2025-01-21
