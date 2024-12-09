@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
+    "target": "es2022",
+    "lib": ["es2022", "esnext.disposable", "dom"],
+
     "module": "ESNext",
     "moduleDetection": "force",
     "allowJs": true,
