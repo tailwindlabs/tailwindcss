@@ -142,6 +142,7 @@ test(
   },
   async ({ spawn, expect }) => {
     let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
