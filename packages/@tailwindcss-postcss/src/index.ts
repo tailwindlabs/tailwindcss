@@ -72,6 +72,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Bail out early if this is guaranteed to be a non-Tailwind CSS file.
           {
+            DEBUG && I.start('Quick bail check')
             let canBail = true
             root.walkAtRules((node) => {
               if (
@@ -86,6 +87,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               }
             })
             if (canBail) return
+            DEBUG && I.end('Quick bail check')
           }
 
           let context = getContextFromCache(inputFile, opts)
