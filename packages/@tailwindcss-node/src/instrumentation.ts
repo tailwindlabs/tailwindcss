@@ -90,6 +90,7 @@ export class Instrumentation implements Disposable {
     }
 
     flush(`\n${output.join('\n')}\n`)
+    this.reset()
   }
 
   [Symbol.dispose]() {
