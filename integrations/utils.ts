@@ -207,14 +207,18 @@ export function test(
             let content = result.toString()
             if (debug || only) console.log(content)
             combined.push(['stdout', content])
-            stdoutMessages.push(content)
+            for (let line of content.split('\n')) {
+              stdoutMessages.push(line)
+            }
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
             if (debug || only) console.error(content)
             combined.push(['stderr', content])
-            stderrMessages.push(content)
+            for (let line of content.split('\n')) {
+              stderrMessages.push(line)
+            }
             notifyNext(stderrActors, stderrMessages)
           })
           child.on('exit', onExit)
