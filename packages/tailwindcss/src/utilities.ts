@@ -4226,7 +4226,7 @@ export function createUtilities(theme: Theme) {
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       },
       {
-        values: [],
+        values: ['none'],
         valueThemeKeys: ['--shadow'],
         hasDefaultValue: true,
       },

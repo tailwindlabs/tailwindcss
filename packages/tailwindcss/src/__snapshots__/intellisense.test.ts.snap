@@ -6654,6 +6654,7 @@ exports[`getClassList 1`] = `
   "shadow-inherit/95",
   "shadow-inherit/100",
   "shadow-initial",
+  "shadow-none",
   "shadow-transparent",
   "shadow-transparent/0",
   "shadow-transparent/5",
