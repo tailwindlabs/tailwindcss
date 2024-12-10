@@ -74,12 +74,13 @@ test.sequential('dev mode', SETUP, async ({ fs, spawn, expect }) => {
   })
 })
 
-test('build', SETUP, async ({ spawn, exec, expect }) => {
-  await exec(`pnpm nuxt build`)
+test.sequential('build', SETUP, async ({ spawn, exec, expect, getFreePort }) => {
+  await exec('pnpm nuxt build')
   let process = await spawn('pnpm nuxt preview', {
     env: {
       TEST: 'false',
       NODE_ENV: 'development',
+      PORT: `${await getFreePort()}`,
     },
   })
 
