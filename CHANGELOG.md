@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add support for `tailwindcss/lib/util/flattenColorPalette` exports ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
+
+### Fixed
+
+- Fix dependency related warnings when using `@tailwindcss/postcss` on Windows ([#15321](https://github.com/tailwindlabs/tailwindcss/pull/15321))
+- Skip creating a compiler for CSS files that should not be processed ([#15340](https://github.com/tailwindlabs/tailwindcss/pull/15340))
+- Fix missing `shadow-none` suggestion in IntelliSense ([#15342](https://github.com/tailwindlabs/tailwindcss/pull/15342))
+- Optimize AST before printing for IntelliSense ([#15347](https://github.com/tailwindlabs/tailwindcss/pull/15347))
+
+## [4.0.0-beta.6] - 2024-12-06
+
 ### Fixed
 
 - Ensure `@import "…" reference` never generates utilities ([#15307](https://github.com/tailwindlabs/tailwindcss/pull/15307))
@@ -739,3 +752,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+

@@ -118,21 +118,26 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
   let design = loadDesignSystem()
   design.invalidCandidates = new Set(['bg-[#fff]'])
 
-  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']))
+  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]', 'text-xs']))
     .toMatchInlineSnapshot(`
-    [
-      ".underline {
-      text-decoration-line: underline;
-    }
-    ",
-      null,
-      null,
-      ".bg-\\[\\#000\\] {
-      background-color: #000;
-    }
-    ",
-    ]
-  `)
+      [
+        ".underline {
+        text-decoration-line: underline;
+      }
+      ",
+        null,
+        null,
+        ".bg-\\[\\#000\\] {
+        background-color: #000;
+      }
+      ",
+        ".text-xs {
+        font-size: var(--text-xs);
+        line-height: var(--tw-leading, var(--text-xs--line-height));
+      }
+      ",
+      ]
+    `)
 })
 
 test('Utilities do not show wrapping selector in intellisense', async () => {

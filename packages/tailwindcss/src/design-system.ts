@@ -1,4 +1,4 @@
-import { toCss } from './ast'
+import { optimizeAst, toCss } from './ast'
 import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
@@ -60,10 +60,12 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
         let wasInvalid = false
 
         let { astNodes } = compileCandidates([className], this, {
-          onInvalidCandidate(candidate) {
+          onInvalidCandidate() {
             wasInvalid = true
           },
         })
+
+        astNodes = optimizeAst(astNodes)
 
         if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
