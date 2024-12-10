@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for `tailwindcss/lib/util/flattenColorPalette` exports ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
+- Rename `--aspect-ratio` theme key to `--aspect` ([#15365](https://github.com/tailwindlabs/tailwindcss/pull/15365))
 
 ### Fixed
 
