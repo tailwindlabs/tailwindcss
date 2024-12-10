@@ -2485,8 +2485,22 @@ test('field-sizing', async () => {
 })
 
 test('aspect-ratio', async () => {
-  expect(await run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
-    ".aspect-4\\/3 {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --aspect-video: 16 / 9;
+        }
+        @tailwind utilities;
+      `,
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --aspect-video: 16 / 9;
+    }
+
+    .aspect-4\\/3 {
       aspect-ratio: 4 / 3;
     }
 
@@ -2495,7 +2509,7 @@ test('aspect-ratio', async () => {
     }
 
     .aspect-video {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--aspect-video);
     }"
   `)
   expect(

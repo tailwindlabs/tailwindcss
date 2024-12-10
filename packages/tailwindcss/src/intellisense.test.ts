@@ -11,6 +11,7 @@ function loadDesignSystem() {
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')
+  theme.add('--aspect-video', '16 / 9')
   theme.add('--font-sans', 'sans-serif')
   theme.add('--font-weight-superbold', '900')
   theme.add('--text-xs', '0.75rem')

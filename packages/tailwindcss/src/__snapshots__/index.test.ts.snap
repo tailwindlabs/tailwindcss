@@ -315,6 +315,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
+  --aspect-video: 16 / 9;
   --radius-xs: .125rem;
   --radius-sm: .25rem;
   --radius-md: .375rem;
