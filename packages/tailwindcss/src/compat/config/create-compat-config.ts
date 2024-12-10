@@ -26,6 +26,10 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
           ...theme('animate', {}),
         }),
 
+        aspectRatio: ({ theme }) => ({
+          ...theme('aspect', {}),
+        }),
+
         borderRadius: ({ theme }) => ({
           ...theme('radius', {}),
         }),

@@ -429,6 +429,8 @@
   --perspective-midrange: 800px;
   --perspective-distant: 1200px;
 
+  --aspect-video: 16 / 9;
+
   --default-transition-duration: 150ms;
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   --default-font-family: var(--font-sans);
