@@ -1534,6 +1534,9 @@ test('old theme values are merged with their renamed counterparts in the CSS the
         --animate-a: 1;
         --animate-b: 2;
 
+        --aspect-a: 1;
+        --aspect-b: 2;
+
         --container-a: 1;
         --container-b: 2;
 
@@ -1584,6 +1587,14 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
             expect(theme('animation.a')).toEqual('1')
             expect(theme('animation.b')).toEqual('2')
+
+            expect(theme('aspectRatio')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('aspectRatio.a')).toEqual('1')
+            expect(theme('aspectRatio.b')).toEqual('2')
 
             expect(theme('boxShadow')).toMatchObject({
               a: '1',
