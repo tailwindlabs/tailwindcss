@@ -85,7 +85,7 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Listening on\s*(http.*)\//.exec(m)
+    let match = /Listening on\s*(http.*)\/?/.exec(m)
     if (match) url = match[1].replace('http://[::]', 'http://127.0.0.1')
     return m.includes('Listening on')
   })
