@@ -180,8 +180,8 @@ test.sequential(
       `,
     },
   },
-  async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
+  async ({ fs, spawn, expect, getFreePort }) => {
+    let process = await spawn(`pnpm vite dev --port ${await getFreePort()}`)
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''

@@ -1,4 +1,4 @@
-import {candidate, css, fetchStyles, html, json, retryAssertion, test, ts} from '../utils'
+import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
   `production build`,
@@ -64,7 +64,7 @@ test(
       `,
     },
   },
-  async ({fs, exec, expect}) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -140,8 +140,8 @@ test.sequential(
       `,
     },
   },
-  async ({spawn, expect}) => {
-    let process = await spawn('pnpm vite dev')
+  async ({ spawn, expect, getFreePort }) => {
+    let process = await spawn(`pnpm vite dev --port ${await getFreePort()}`)
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''

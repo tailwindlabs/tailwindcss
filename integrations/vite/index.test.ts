@@ -161,8 +161,8 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         `,
       },
     },
-    async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite dev', {
+    async ({ root, spawn, fs, expect, getFreePort }) => {
+      let process = await spawn(`pnpm vite dev --port ${await getFreePort()}`, {
         cwd: path.join(root, 'project-a'),
       })
       await process.onStdout((m) => m.includes('ready in'))
