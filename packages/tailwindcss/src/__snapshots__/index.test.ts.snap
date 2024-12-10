@@ -315,7 +315,6 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
-  --aspect-video: 16 / 9;
   --radius-xs: .125rem;
   --radius-sm: .25rem;
   --radius-md: .375rem;
@@ -359,6 +358,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --perspective-normal: 500px;
   --perspective-midrange: 800px;
   --perspective-distant: 1200px;
+  --aspect-video: 16 / 9;
   --default-transition-duration: .15s;
   --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   --default-font-family: var(--font-sans);
