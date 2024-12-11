@@ -35,10 +35,12 @@ jobs:
         on-next-branch:
           - ${{ github.ref == 'refs/heads/next' }}
         exclude:
-          - on-next-branch: true
-            runner: windows-latest
-          - on-next-branch: true
-            runner: macos-14
+          - on-next-branch: false
+            runner:
+              name: Windows
+          - on-next-branch: false
+            runner:
+              name: macOS
 
     runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
