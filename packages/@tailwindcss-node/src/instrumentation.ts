@@ -6,7 +6,7 @@ export class Instrumentation implements Disposable {
   #timers = new DefaultMap(() => ({ value: 0n }))
   #timerStack: { id: string; label: string; namespace: string; value: bigint }[] = []
 
-  constructor(private defaultFlush = console.error) {}
+  constructor(private defaultFlush = (message: string) => process.stderr.write(`${message}\n`)) {}
 
   hit(label: string) {
     this.#hits.get(label).value++
@@ -81,7 +81,7 @@ export class Instrumentation implements Disposable {
     for (let label of this.#timers.keys()) {
       let depth = label.split('//').length
       output.push(
-        `${dim(`[${computed.get(label)!.padStart(max, ' ')}]`)}${'  '.repeat(depth - 1)}${depth === 1 ? ' ' : ' ↳ '}${label.split('//').pop()} ${
+        `${dim(`[${computed.get(label)!.padStart(max, ' ')}]`)}${'  '.repeat(depth - 1)}${depth === 1 ? ' ' : dim(' ↳ ')}${label.split('//').pop()} ${
           this.#hits.get(label).value === 1 ? '' : dim(blue(`× ${this.#hits.get(label).value}`))
         }`.trimEnd(),
       )
