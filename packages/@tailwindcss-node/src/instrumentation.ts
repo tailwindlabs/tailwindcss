@@ -59,7 +59,7 @@ export class Instrumentation implements Disposable {
       if (this.#timers.has(label)) continue
       if (output.length === 0) {
         hasHits = true
-        output.push(white('Hits:'))
+        output.push('Hits:')
       }
 
       let depth = label.split('//').length
@@ -67,7 +67,7 @@ export class Instrumentation implements Disposable {
     }
 
     if (this.#timers.size > 0 && hasHits) {
-      output.push(white('\nTimers:'))
+      output.push('\nTimers:')
     }
 
     let max = -Infinity
@@ -81,11 +81,9 @@ export class Instrumentation implements Disposable {
     for (let label of this.#timers.keys()) {
       let depth = label.split('//').length
       output.push(
-        white(
-          `${dim(`[${computed.get(label)!.padStart(max, ' ')}]`)}${'  '.repeat(depth - 1)}${depth === 1 ? ' ' : ' ↳ '}${label.split('//').pop()} ${
-            this.#hits.get(label).value === 1 ? '' : dim(blue(`× ${this.#hits.get(label).value}`))
-          }`.trimEnd(),
-        ),
+        `${dim(`[${computed.get(label)!.padStart(max, ' ')}]`)}${'  '.repeat(depth - 1)}${depth === 1 ? ' ' : ' ↳ '}${label.split('//').pop()} ${
+          this.#hits.get(label).value === 1 ? '' : dim(blue(`× ${this.#hits.get(label).value}`))
+        }`.trimEnd(),
       )
     }
 
@@ -96,10 +94,6 @@ export class Instrumentation implements Disposable {
   [Symbol.dispose]() {
     env.DEBUG && this.report()
   }
-}
-
-function white(input: string) {
-  return `\u001b[37m${input}\u001b[39m`
 }
 
 function dim(input: string) {
