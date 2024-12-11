@@ -1,4 +1,4 @@
-name: CI
+name: Integration Tests
 
 on:
   push:
@@ -14,18 +14,40 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        runner: [namespace-profile-default, windows-latest, macos-14]
+
+        runner:
+          - name: Windows
+            os: windows-latest
+
+          - name: Linux
+            os: namespace-profile-default
+
+          - name: macOS
+            os: macos-14
+
+        integration-type:
+          - concurrent
+          - sequential
+
+        integration:
+          - upgrade
+          - vite
+          - cli
+          - postcss
+
         # Exclude windows and macos from being built on feature branches
         on-next-branch:
           - ${{ github.ref == 'refs/heads/next' }}
         exclude:
-          - on-next-branch: false
+          - on-next-branch: true
             runner: windows-latest
-          - on-next-branch: false
+          - on-next-branch: true
             runner: macos-14
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
+
+    name: ${{ matrix.runner.name }} / ${{ matrix.integration-type }} / ${{ matrix.integration }}
 
     steps:
       - uses: actions/checkout@v4
@@ -69,19 +91,19 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
-      - name: Lint
-        run: pnpm run lint
-        # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner == 'ubuntu-latest'
+      - name: Test ${{ matrix.integration }} (concurrent)
+        if: matrix.integration-type == 'concurrent'
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }}
+        env:
+          INTEGRATION_TESTS: concurrent
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
-      - name: Test
-        run: pnpm run test
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: npm run test:ui
+      - name: Test ${{ matrix.integration }} (sequential)
+        if: matrix.integration-type == 'sequential'
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }} --no-file-parallelism --testNamePattern sequential
+        env:
+          INTEGRATION_TESTS: sequential
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Notify Discord
         if: failure() && github.ref == 'refs/heads/next'
