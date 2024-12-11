@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
@@ -26,7 +25,7 @@ test(
       'src/fonts.css': css`/* Unrelated CSS file */`,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     let output = await exec('npx @tailwindcss/upgrade')
     expect(output).toContain('Cannot find any CSS files that reference Tailwind CSS.')
 
@@ -95,7 +94,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
@@ -202,7 +201,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
@@ -274,7 +273,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -346,7 +345,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -423,7 +422,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -526,7 +525,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -633,7 +632,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain(
@@ -704,7 +703,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     let packageJsonContent = await fs.read('package.json')
@@ -751,7 +750,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     let packageJsonContent = await fs.read('package.json')
@@ -802,7 +801,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
@@ -877,7 +876,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
@@ -944,7 +943,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
@@ -991,7 +990,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
@@ -1035,7 +1034,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -1107,7 +1106,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -1218,7 +1217,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -1352,7 +1351,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     let output = await exec('npx @tailwindcss/upgrade --force')
 
     expect(output).toMatch(
@@ -1476,7 +1475,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
@@ -1701,7 +1700,7 @@ test(
       `,
     },
   },
-  async ({ exec }) => {
+  async ({ exec, expect }) => {
     let output = await exec('npx @tailwindcss/upgrade --force', {}, { ignoreStdErr: true }).catch(
       (e) => e.toString(),
     )
@@ -1773,7 +1772,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
@@ -1909,7 +1908,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
@@ -2029,7 +2028,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
@@ -2109,7 +2108,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -2193,7 +2192,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
@@ -2247,7 +2246,7 @@ test(
       'tailwind.config.js': js`module.exports = {}`,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     let pkg = JSON.parse(await fs.read('package.json'))
@@ -2326,7 +2325,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     // Files should not be modified
@@ -2425,7 +2424,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
     // Files should not be modified
@@ -2532,7 +2531,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade ./src/index.css')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
@@ -2619,7 +2618,7 @@ test(
       `,
     },
   },
-  async ({ exec }) => {
+  async ({ exec, expect }) => {
     let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
       e.toString(),
     )
@@ -2692,7 +2691,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
