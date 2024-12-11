@@ -828,9 +828,8 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('aspect-auto', [['aspect-ratio', 'auto']])
   staticUtility('aspect-square', [['aspect-ratio', '1 / 1']])
-  staticUtility('aspect-video', [['aspect-ratio', '16 / 9']])
   functionalUtility('aspect', {
-    themeKeys: ['--aspect-ratio'],
+    themeKeys: ['--aspect'],
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')

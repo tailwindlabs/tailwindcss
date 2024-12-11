@@ -11,6 +11,7 @@ function loadDesignSystem() {
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')
+  theme.add('--aspect-video', '16 / 9')
   theme.add('--font-sans', 'sans-serif')
   theme.add('--font-weight-superbold', '900')
   theme.add('--text-xs', '0.75rem')
@@ -118,21 +119,26 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
   let design = loadDesignSystem()
   design.invalidCandidates = new Set(['bg-[#fff]'])
 
-  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]']))
+  expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]', 'text-xs']))
     .toMatchInlineSnapshot(`
-    [
-      ".underline {
-      text-decoration-line: underline;
-    }
-    ",
-      null,
-      null,
-      ".bg-\\[\\#000\\] {
-      background-color: #000;
-    }
-    ",
-    ]
-  `)
+      [
+        ".underline {
+        text-decoration-line: underline;
+      }
+      ",
+        null,
+        null,
+        ".bg-\\[\\#000\\] {
+        background-color: #000;
+      }
+      ",
+        ".text-xs {
+        font-size: var(--text-xs);
+        line-height: var(--tw-leading, var(--text-xs--line-height));
+      }
+      ",
+      ]
+    `)
 })
 
 test('Utilities do not show wrapping selector in intellisense', async () => {
