@@ -1,9 +1,7 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import killPort from 'kill-port'
 import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
-import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
@@ -38,7 +36,6 @@ interface TestContext {
   expect: ExpectStatic
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
-  getFreePort(): Promise<number>
   fs: {
     write(filePath: string, content: string): Promise<void>
     create(filePaths: string[]): Promise<void>
@@ -247,42 +244,6 @@ export function test(
               })
             },
           }
-        },
-        async getFreePort(): Promise<number> {
-          return new Promise((resolve, reject) => {
-            let server = net.createServer()
-            server.listen(0, () => {
-              let address = server.address()
-              let port = address === null || typeof address === 'string' ? null : address.port
-
-              server.close(() => {
-                if (port === null) {
-                  reject(new Error(`Failed to get a free port: address is ${address}`))
-                } else {
-                  disposables.push(async () => {
-                    // Wait for 10ms in case the process was just killed
-                    await new Promise((resolve) => setTimeout(resolve, 10))
-
-                    // kill-port uses `lsof` on macOS which is expensive and can
-                    // block for multiple seconds. In order to avoid that for a
-                    // server that is no longer running, we check if the port is
-                    // still in use first.
-                    let isPortTaken = await testIfPortTaken(port)
-                    if (!isPortTaken) {
-                      return
-                    }
-
-                    try {
-                      await killPort(port)
-                    } catch {
-                      // If the process can not be killed, we can't do anything
-                    }
-                  })
-                  resolve(port)
-                }
-              })
-            })
-          })
         },
         fs: {
           async write(filename: string, content: string | Uint8Array): Promise<void> {
@@ -507,25 +468,6 @@ export function stripTailwindComment(content: string) {
   return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
 }
 
-function testIfPortTaken(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    let client = new net.Socket()
-    client.once('connect', () => {
-      resolve(true)
-      client.end()
-    })
-    client.once('error', (error: any) => {
-      if (error.code !== 'ECONNREFUSED') {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-      client.end()
-    })
-    client.connect({ port: port, host: 'localhost' })
-  })
-}
-
 export let svg = dedent
 export let css = dedent
 export let html = dedent
@@ -644,8 +586,12 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(port: number, path = '/'): Promise<string> {
-  let index = await fetch(`http://localhost:${port}${path}`)
+export async function fetchStyles(base: string, path = '/'): Promise<string> {
+  while (base.endsWith('/')) {
+    base = base.slice(0, -1)
+  }
+
+  let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
   let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
@@ -664,7 +610,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`http://localhost:${port}${path}`, {
+        let css = await fetch(`${base}${path}`, {
           headers: {
             Accept: 'text/css',
           },
