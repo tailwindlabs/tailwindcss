@@ -92,7 +92,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  test.sequential(
+  test(
     'dev mode',
     {
       fs: {
@@ -695,7 +695,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 })
 
-test.sequential(
+test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
   {
     fs: {
@@ -777,7 +777,7 @@ test.sequential(
   },
 )
 
-test.sequential(
+test(
   `does not interfere with ?raw and ?url static asset handling`,
   {
     fs: {

@@ -54,7 +54,6 @@ type TestCallback = (context: TestContext) => Promise<void> | void
 interface TestFlags {
   only?: boolean
   skip?: boolean
-  sequential?: boolean
   debug?: boolean
 }
 
@@ -74,7 +73,7 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, skip = false, sequential = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, debug = false }: TestFlags = {},
 ) {
   return defaultTest(
     name,
@@ -83,8 +82,7 @@ export function test(
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
       skip,
-      sequential,
-      concurrent: !sequential,
+      concurrent: true,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -429,12 +427,6 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
 }
 test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { skip: true })
-}
-test.sequential = (name: string, config: TestConfig, testCallback: TestCallback) => {
-  return test(`sequential: ${name}`, config, testCallback, {
-    sequential: true,
-    skip: process.env.INTEGRATION_TESTS === 'concurrent',
-  })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })

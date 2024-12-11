@@ -81,7 +81,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
     ])
   })
 
-  test.sequential('dev mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
+  test('dev mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
     let process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 

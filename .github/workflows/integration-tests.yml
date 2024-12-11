@@ -25,10 +25,6 @@ jobs:
           - name: macOS
             os: macos-14
 
-        integration-type:
-          - concurrent
-          - sequential
-
         integration:
           - upgrade
           - vite
@@ -47,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
 
-    name: ${{ matrix.runner.name }} / ${{ matrix.integration-type }} / ${{ matrix.integration }}
+    name: ${{ matrix.runner.name }} /  ${{ matrix.integration }}
 
     steps:
       - uses: actions/checkout@v4
@@ -91,18 +87,9 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
-      - name: Test ${{ matrix.integration }} (concurrent)
-        if: matrix.integration-type == 'concurrent'
+      - name: Test ${{ matrix.integration }}
         run: pnpm run test:integrations ./integrations/${{ matrix.integration }}
         env:
-          INTEGRATION_TESTS: concurrent
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-
-      - name: Test ${{ matrix.integration }} (sequential)
-        if: matrix.integration-type == 'sequential'
-        run: pnpm run test:integrations ./integrations/${{ matrix.integration }} --no-file-parallelism --testNamePattern sequential
-        env:
-          INTEGRATION_TESTS: sequential
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Notify Discord

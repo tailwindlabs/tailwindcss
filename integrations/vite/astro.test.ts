@@ -1,6 +1,6 @@
 import { candidate, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
-test.sequential(
+test(
   'dev mode',
   {
     fs: {

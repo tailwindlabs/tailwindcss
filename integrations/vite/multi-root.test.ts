@@ -84,7 +84,7 @@ test(
   },
 )
 
-test.sequential(
+test(
   'dev mode',
   {
     fs: {
