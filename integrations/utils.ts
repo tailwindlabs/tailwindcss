@@ -52,6 +52,8 @@ interface TestContext {
 type TestCallback = (context: TestContext) => Promise<void> | void
 interface TestFlags {
   only?: boolean
+  skip?: boolean
+  sequential?: boolean
   debug?: boolean
 }
 
@@ -71,11 +73,18 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, sequential = false, debug = false }: TestFlags = {},
 ) {
-  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
+  return defaultTest(
     name,
-    { timeout: TEST_TIMEOUT, retry: process.env.CI ? 2 : 0 },
+    {
+      timeout: TEST_TIMEOUT,
+      retry: process.env.CI ? 2 : 0,
+      only: only || (!process.env.CI && debug),
+      skip,
+      sequential,
+      concurrent: !sequential,
+    },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
@@ -411,6 +420,15 @@ export function test(
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
 }
+test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { skip: true })
+}
+test.sequential = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(`sequential: ${name}`, config, testCallback, {
+    sequential: true,
+    skip: process.env.INTEGRATION_TESTS === 'concurrent',
+  })
+}
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
 }
@@ -425,16 +443,14 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   let json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  ;['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'].forEach(
-    (key) => {
-      let dependencies = json[key] || {}
-      for (let dependency in dependencies) {
-        if (dependencies[dependency] === 'workspace:^') {
-          dependencies[dependency] = resolveVersion(dependency)
-        }
+  for (let key of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+    let dependencies = json[key] || {}
+    for (let dependency in dependencies) {
+      if (dependencies[dependency] === 'workspace:^') {
+        dependencies[dependency] = resolveVersion(dependency)
       }
-    },
-  )
+    }
+  }
 
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
