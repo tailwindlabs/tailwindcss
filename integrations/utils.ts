@@ -4,6 +4,7 @@ import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
+import { stripVTControlCharacters } from 'node:util'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
@@ -207,14 +208,18 @@ export function test(
             let content = result.toString()
             if (debug || only) console.log(content)
             combined.push(['stdout', content])
-            stdoutMessages.push(content)
+            for (let line of content.split('\n')) {
+              stdoutMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
             if (debug || only) console.error(content)
             combined.push(['stderr', content])
-            stderrMessages.push(content)
+            for (let line of content.split('\n')) {
+              stderrMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stderrActors, stderrMessages)
           })
           child.on('exit', onExit)
