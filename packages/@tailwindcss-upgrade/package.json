@@ -33,7 +33,7 @@
     "dedent": "1.5.3",
     "enhanced-resolve": "^5.17.1",
     "globby": "^14.0.2",
-    "jiti": "^2.0.0-beta.3",
+    "jiti": "^2.4.1",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
     "postcss": "^8.4.41",
