@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
 
 describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
@@ -59,7 +59,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         `,
       },
     },
-    async ({ fs, exec }) => {
+    async ({ fs, exec, expect }) => {
       await exec('pnpm vite build')
 
       let files = await fs.glob('dist/**/*.css')
@@ -127,7 +127,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         `,
       },
     },
-    async ({ spawn }) => {
+    async ({ spawn, expect }) => {
       let process = await spawn('pnpm vite dev')
       await process.onStdout((m) => m.includes('ready in'))
 
