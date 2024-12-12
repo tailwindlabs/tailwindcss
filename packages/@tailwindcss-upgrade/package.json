@@ -36,10 +36,10 @@
     "jiti": "^2.4.1",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
-    "postcss": "^8.4.41",
+    "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^7.0.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "tree-sitter": "^0.22.1",
     "tree-sitter-typescript": "^0.23.2",
     "tailwindcss": "workspace:*"
