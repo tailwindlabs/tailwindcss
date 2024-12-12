@@ -14,18 +14,31 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        runner: [namespace-profile-default, windows-latest, macos-14]
+        runner:
+          - name: Windows
+            os: windows-latest
+
+          - name: Linux
+            os: namespace-profile-default
+
+          - name: macOS
+            os: macos-14
+
         # Exclude windows and macos from being built on feature branches
         on-next-branch:
           - ${{ github.ref == 'refs/heads/next' }}
         exclude:
           - on-next-branch: false
-            runner: windows-latest
+            runner:
+              name: Windows
           - on-next-branch: false
-            runner: macos-14
+            runner:
+              name: macOS
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
+
+    name: ${{ matrix.runner.name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +85,7 @@ jobs:
       - name: Lint
         run: pnpm run lint
         # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner == 'ubuntu-latest'
+        if: matrix.runner.os == 'ubuntu-latest'
 
       - name: Test
         run: pnpm run test
