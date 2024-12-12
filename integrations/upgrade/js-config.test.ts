@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { css, html, json, test, ts } from '../utils'
 
 test(
@@ -151,7 +151,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.{css,js,html}')).toMatchInlineSnapshot(`
@@ -350,7 +350,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -436,7 +436,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.{css,ts}')).toMatchInlineSnapshot(`
@@ -522,7 +522,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -600,7 +600,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -674,7 +674,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -784,7 +784,7 @@ test(
       'project-b/src/index.html': html`<div class="!text-primary"></div>`,
     },
   },
-  async ({ exec, fs }) => {
+  async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     expect(await fs.dumpFiles('project-{a,b}/**/*.{css,ts}')).toMatchInlineSnapshot(`
@@ -882,7 +882,7 @@ test(
       'backend/mails/welcome.blade.php': html`<div class="!text-primary"></div>`,
     },
   },
-  async ({ root, exec, fs }) => {
+  async ({ root, exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade', {
       cwd: path.join(root, 'frontend'),
     })
@@ -950,7 +950,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -1012,7 +1012,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -1074,7 +1074,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -1113,7 +1113,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -1184,7 +1184,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
@@ -1287,7 +1287,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
@@ -1397,7 +1397,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
@@ -1499,7 +1499,7 @@ describe('border compatibility', () => {
         `,
       },
     },
-    async ({ exec, fs }) => {
+    async ({ exec, fs, expect }) => {
       await exec('npx @tailwindcss/upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`

@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -35,12 +34,21 @@ test(
       `,
     },
   },
-  async ({ fs, spawn, getFreePort }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm astro dev --port ${port}`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm astro dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((m) => m.includes('watching for file changes'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(port)
+      let css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
     })
 
@@ -56,7 +64,7 @@ test(
       `,
       )
 
-      let css = await fetchStyles(port)
+      let css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`font-bold`)
     })
