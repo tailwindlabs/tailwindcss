@@ -460,6 +460,11 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     border-collapse: collapse;
   }
 
+  th {
+    text-align: inherit;
+    font-weight: inherit;
+  }
+
   :-moz-focusring {
     outline: auto;
   }
