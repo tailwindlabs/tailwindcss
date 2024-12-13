@@ -249,7 +249,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Alias packages to `latest`
-        if: ${{ inputs.release_channel == "next" }}
+        if: ${{ inputs.release_channel == 'next' }}
         run: |
           npm dist-tag add @tailwindcss/upgrade@${{ env.TAG_NAME }} latest
         env:
