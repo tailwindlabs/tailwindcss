@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-beta.7] - 2024-12-13
+
 ### Added
 
 - Add support for `tailwindcss/lib/util/flattenColorPalette` exports ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
