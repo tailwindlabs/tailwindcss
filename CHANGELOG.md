@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add support for `tailwindcss/lib/util/flattenColorPalette` exports ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
+- Export `tailwindcss/lib/util/flattenColorPalette` for backward compatibility ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
+- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
 
 ### Fixed
 
@@ -21,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip creating a compiler for CSS files that should not be processed ([#15340](https://github.com/tailwindlabs/tailwindcss/pull/15340))
 - Fix missing `shadow-none` suggestion in IntelliSense ([#15342](https://github.com/tailwindlabs/tailwindcss/pull/15342))
 - Optimize AST before printing for IntelliSense ([#15347](https://github.com/tailwindlabs/tailwindcss/pull/15347))
-- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
 - Generate vendor prefixes for Chrome 111+ (e.g. `-webkit-background-clip: text`) ([#15389](https://github.com/tailwindlabs/tailwindcss/pull/15389))
 
 ### Changed
