@@ -344,9 +344,12 @@ export interface PluginAPI {
 export type PluginCreator = (api: PluginAPI) => void
 export type PluginsConfig = (
   | PluginCreator
-  | { handler: PluginCreator; config?: Partial<Config> }
+  | { handler: PluginCreator; config?: Partial<Config> | undefined }
   | {
-      (options: any): { handler: PluginCreator; config?: Partial<Config> }
+      (options: any): {
+        handler: PluginCreator;
+        config?: Partial<Config> | undefined;
+      };
       __isOptionsFunction: true
     }
 )[]

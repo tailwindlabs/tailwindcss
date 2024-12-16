@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "3.4.15",
+  "version": "3.4.16",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -73,7 +73,7 @@
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
     "jiti": "^1.21.6",
-    "lilconfig": "^2.1.0",
+    "lilconfig": "^3.1.3",
     "micromatch": "^4.0.8",
     "normalize-path": "^3.0.0",
     "object-hash": "^3.0.0",

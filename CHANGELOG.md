@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [3.4.16] - 2024-12-03
+
+### Fixed
+
+- Ensure the TypeScript types for `PluginsConfig` allow `undefined` values ([#14668](https://github.com/tailwindlabs/tailwindcss/pull/14668))
+
+# Changed
+
+- Bumped lilconfig to v3.x ([#15289](https://github.com/tailwindlabs/tailwindcss/pull/15289))
+
 ## [3.4.15] - 2024-11-14
 
 - Bump versions for security vulnerabilities ([#14697](https://github.com/tailwindlabs/tailwindcss/pull/14697))
@@ -2461,7 +2471,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...HEAD
+[3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
 [3.4.15]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...v3.4.15
 [3.4.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...v3.4.14
 [3.4.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.12...v3.4.13
