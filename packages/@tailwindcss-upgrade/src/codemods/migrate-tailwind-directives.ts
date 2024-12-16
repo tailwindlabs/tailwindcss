@@ -107,13 +107,13 @@ export function migrateTailwindDirectives(options: { newPrefix: string | null })
     // from the default.
     {
       // Determine if the order is different from the default.
-      let sortedLayerOrder = layerOrder.slice().sort((a, z) => {
+      let sortedLayerOrder = layerOrder.toSorted((a, z) => {
         return DEFAULT_LAYER_ORDER.indexOf(a) - DEFAULT_LAYER_ORDER.indexOf(z)
       })
 
       if (layerOrder.some((layer, index) => layer !== sortedLayerOrder[index])) {
         // Create a new `@layer` rule with the sorted order.
-        let newLayerOrder = DEFAULT_LAYER_ORDER.slice().sort((a, z) => {
+        let newLayerOrder = DEFAULT_LAYER_ORDER.toSorted((a, z) => {
           return layerOrder.indexOf(a) - layerOrder.indexOf(z)
         })
         root.prepend({ name: 'layer', params: newLayerOrder.join(', ') })

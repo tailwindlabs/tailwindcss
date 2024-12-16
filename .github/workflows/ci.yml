@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ['18.17.0']
+        node-version: [20]
         runner:
           - name: Windows
             os: windows-latest
