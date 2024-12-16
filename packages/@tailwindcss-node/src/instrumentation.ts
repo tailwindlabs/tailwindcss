@@ -1,12 +1,20 @@
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import * as env from './env'
 
+// See: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#:~:text=Symbol.dispose,-??=%20Symbol(%22Symbol.dispose
+// @ts-expect-error — Ensure Symbol.dispose exists
+Symbol.dispose ??= Symbol('Symbol.dispose')
+// @ts-expect-error — Ensure Symbol.asyncDispose exists
+Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose')
+
 export class Instrumentation implements Disposable {
   #hits = new DefaultMap(() => ({ value: 0 }))
   #timers = new DefaultMap(() => ({ value: 0n }))
   #timerStack: { id: string; label: string; namespace: string; value: bigint }[] = []
 
-  constructor(private defaultFlush = (message: string) => process.stderr.write(`${message}\n`)) {}
+  constructor(
+    private defaultFlush = (message: string) => void process.stderr.write(`${message}\n`),
+  ) {}
 
   hit(label: string) {
     this.#hits.get(label).value++
