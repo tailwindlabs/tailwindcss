@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.17] - 2024-12-17
+
 ### Fixed
 
 - Work around Node v22.12+ issue ([#15421](https://github.com/tailwindlabs/tailwindcss/pull/15421))
@@ -2473,7 +2477,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...HEAD
+[3.4.17]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...v3.4.17
 [3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
 [3.4.15]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...v3.4.15
 [3.4.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.13...v3.4.14
