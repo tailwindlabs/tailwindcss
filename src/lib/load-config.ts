@@ -33,6 +33,8 @@ function lazyJiti() {
 
 export function loadConfig(path: string): Config {
   let config = (function () {
+    if (!path) return {}
+
     // Always use jiti for now. There is a a bug that occurs in Node v22.12+
     // where imported files return invalid results
     return lazyJiti()(path)
