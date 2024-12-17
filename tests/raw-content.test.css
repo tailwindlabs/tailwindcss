@@ -312,6 +312,12 @@
 .items-start {
   align-items: flex-start;
 }
+.items-first-baseline {
+  align-items: first baseline;
+}
+.items-last-baseline {
+  align-items: last baseline;
+}
 .justify-center {
   justify-content: center;
 }
