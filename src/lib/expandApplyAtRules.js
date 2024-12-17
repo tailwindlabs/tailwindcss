@@ -565,10 +565,12 @@ function processApply(root, context, localCache) {
             // We do *not* want to do this for user CSS that happens to be structured the same
             let isGenerated = parent.raws.tailwind !== undefined
 
-            let parentSelector =
-              isGenerated && importantSelector && parent.selector.indexOf(importantSelector) === 0
-                ? parent.selector.slice(importantSelector.length)
-                : parent.selector
+            let parentSelector = parent.selector
+            if (isGenerated && importantSelector && parent.selector.includes(importantSelector)) {
+              const parts = parent.selector.split(',')
+              const filteredParts = parts.filter((_, i) => i % 2 === 0).join(',')
+              parentSelector = filteredParts.replace(importantSelector, '')
+            }
 
             // If the selector becomes empty after replacing the important selector
             // This means that it's the same as the parent selector and we don't want to replace it
