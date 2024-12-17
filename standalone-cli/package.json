@@ -8,7 +8,7 @@
   },
   "bin": "standalone.js",
   "scripts": {
-    "build": "pkg . --compress Brotli --no-bytecode --public-packages \"*\" --public",
+    "build": "pkg . --compress Brotli --no-bytecode --public-packages \"*\" --public --options experimental-network-imports",
     "prebuild": "rimraf dist",
     "postbuild": "move-file dist/tailwindcss-standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/tailwindcss-standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/tailwindcss-standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/tailwindcss-standalone-win-arm64.exe dist/tailwindcss-windows-arm64.exe && move-file dist/tailwindcss-standalone-linuxstatic-x64 dist/tailwindcss-linux-x64 && move-file dist/tailwindcss-standalone-linuxstatic-arm64 dist/tailwindcss-linux-arm64 && move-file dist/tailwindcss-standalone-linuxstatic-armv7 dist/tailwindcss-linux-armv7 && npm run generate-checksums",
     "generate-checksums": "node ./scripts/checksum.mjs",
