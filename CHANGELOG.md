@@ -769,3 +769,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+
+- First 4.0.0-alpha.1 release
