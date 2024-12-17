@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Work around Node v22.12+ issue ([#15421](https://github.com/tailwindlabs/tailwindcss/pull/15421))
 
 ## [3.4.16] - 2024-12-03
 
