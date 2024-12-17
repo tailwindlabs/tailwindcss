@@ -41,7 +41,10 @@ export function parseCandidateFiles(context, tailwindConfig) {
   files = files.map(normalizePath)
 
   // Split into included and excluded globs
-  let tasks = fastGlob.generateTasks(files)
+  let tasks = [];
+  if (files.length) {
+    tasks.push(...fastGlob.generateTasks(files))
+  }
 
   /** @type {ContentPath[]} */
   let included = []
@@ -56,14 +59,16 @@ export function parseCandidateFiles(context, tailwindConfig) {
 
   let paths = [...included, ...excluded]
 
-  // Resolve paths relative to the config file or cwd
-  paths = resolveRelativePaths(context, paths)
+  if (paths.length) {
+    // Resolve paths relative to the config file or cwd
+    paths = resolveRelativePaths(context, paths)
 
-  // Resolve symlinks if possible
-  paths = paths.flatMap(resolvePathSymlinks)
+    // Resolve symlinks if possible
+    paths = paths.flatMap(resolvePathSymlinks)
 
-  // Update cached patterns
-  paths = paths.map(resolveGlobPattern)
+    // Update cached patterns
+    paths = paths.map(resolveGlobPattern)
+  }
 
   return paths
 }
@@ -278,7 +283,10 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(paths, { absolute: true })
+  let files = [];
+  if (paths.length) {
+    files.push(...fastGlob.sync(paths, { absolute: true }))
+  }
   for (let file of files) {
     checkBroadPattern(file)
 
