@@ -79,11 +79,6 @@ export default function tailwindcss(): Plugin[] {
       for (let [id, root] of roots.entries()) {
         let module = server.moduleGraph.getModuleById(id)
         if (!module) {
-          // The module for this root might not exist yet
-          if (root.builtBeforeTransform) {
-            continue
-          }
-
           // Note: Removing this during SSR is not safe and will produce
           // inconsistent results based on the timing of the removal and
           // the order / timing of transforms.
@@ -184,7 +179,6 @@ export default function tailwindcss(): Plugin[] {
   }
 
   return [
-    svelteProcessor(roots),
     {
       // Step 1: Scan source files for candidates
       name: '@tailwindcss/vite:scan',
@@ -225,19 +219,6 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        // If the root was built outside of the transform hook (e.g. in the
-        // Svelte preprocessor), we still want to mark all dependencies of the
-        // root as watched files.
-        if (root.builtBeforeTransform) {
-          root.builtBeforeTransform.forEach((file) => this.addWatchFile(file))
-          root.builtBeforeTransform = undefined
-        }
-
-        // We only process Svelte `<style>` tags in the `sveltePreprocessor`
-        if (isSvelteStyle(id)) {
-          return src
-        }
-
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
           // all candidates before generating CSS. This must not be called
@@ -272,19 +253,6 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        // If the root was built outside of the transform hook (e.g. in the
-        // Svelte preprocessor), we still want to mark all dependencies of the
-        // root as watched files.
-        if (root.builtBeforeTransform) {
-          root.builtBeforeTransform.forEach((file) => this.addWatchFile(file))
-          root.builtBeforeTransform = undefined
-        }
-
-        // We only process Svelte `<style>` tags in the `sveltePreprocessor`
-        if (isSvelteStyle(id)) {
-          return src
-        }
-
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
         // this time, we have to re-run a transform for the root later.
@@ -304,9 +272,6 @@ export default function tailwindcss(): Plugin[] {
         I.start('[@tailwindcss/vite] (render start)')
 
         for (let [id, root] of roots.entries()) {
-          // Do not do a second render pass on Svelte `<style>` tags.
-          if (isSvelteStyle(id)) continue
-
           let generated = await regenerateOptimizedCss(
             root,
             // During the renderStart phase, we can not add watch files since
@@ -344,18 +309,11 @@ function isPotentialCssRootFile(id: string) {
     (extension === 'css' ||
       (extension === 'vue' && id.includes('&lang.css')) ||
       (extension === 'astro' && id.includes('&lang.css')) ||
-      // We want to process Svelte `<style>` tags to properly add dependency
-      // tracking for imported files.
-      isSvelteStyle(id)) &&
+      (extension === 'svelte' && id.includes('&lang.css')))
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id)
 
   return isCssFile
-}
-
-function isSvelteStyle(id: string) {
-  let extension = getExtension(id)
-  return extension === 'svelte' && id.includes('&lang.css')
 }
 
 function optimizeCss(
@@ -421,14 +379,6 @@ class Root {
   // contents of the root file so that we can restore it during the
   // `renderStart` hook.
   public lastContent: string = ''
-
-  // When set, indicates that the root was built before the Vite transform hook
-  // was being called. This can happen in scenarios like when preprocessing
-  // `<style>` tags for Svelte components.
-  //
-  // It can be set to a list of dependencies that will be added whenever the
-  // next `transform` hook is being called.
-  public builtBeforeTransform: string[] | undefined
 
   // The lazily-initialized Tailwind compiler components. These are persisted
   // throughout rebuilds but will be re-initialized if the rebuild strategy is
@@ -621,77 +571,5 @@ class Root {
     }
 
     return shared
-  }
-}
-
-// Register a plugin that can hook into the Svelte preprocessor if Svelte is
-// configured. This allows us to transform CSS in `<style>` tags and create a
-// stricter version of CSS that passes the Svelte compiler.
-//
-// Note that these files will not undergo a second pass through the vite
-// transpiler later. This means that `@tailwind utilities;` will not be up to
-// date.
-//
-// In practice, it is discouraged to use `@tailwind utilities;` inside Svelte
-// components, as the styles it create would be scoped anyways. Use an external
-// `.css` file instead.
-function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
-  return {
-    name: '@tailwindcss/svelte',
-    api: {
-      sveltePreprocess: {
-        async style({
-          content,
-          filename,
-          markup,
-        }: {
-          content: string
-          filename?: string
-          markup: string
-        }) {
-          if (!filename) return
-          using I = new Instrumentation()
-          DEBUG && I.start('[@tailwindcss/vite] Preprocess svelte')
-
-          // Create the ID used by Vite to identify the `<style>` contents. This
-          // way, the Vite `transform` hook can find the right root and thus
-          // track the right dependencies.
-          let id = filename + '?svelte&type=style&lang.css'
-
-          let root = roots.get(id)
-
-          // Since a Svelte pre-processor call means that the CSS has changed,
-          // we need to trigger a rebuild.
-          root.requiresRebuild = true
-
-          // Mark this root as being built before the Vite transform hook is
-          // called. We capture all eventually added dependencies so that we can
-          // connect them to the vite module graph later, when the transform
-          // hook is called.
-          root.builtBeforeTransform = []
-
-          // We only want to consider candidates from the current template file,
-          // this ensures that no one can depend on this having the full candidate
-          // list in some builds (as this is undefined behavior).
-          let scanner = new Scanner({})
-          root.overwriteCandidates = scanner.scanFiles([
-            { content: markup, file: filename, extension: 'svelte' },
-          ])
-
-          let generated = await root.generate(
-            content,
-            (file) => root.builtBeforeTransform?.push(file),
-            I,
-          )
-
-          if (!generated) {
-            roots.delete(id)
-            return
-          }
-
-          return { code: generated }
-        },
-      },
-    },
   }
 }
