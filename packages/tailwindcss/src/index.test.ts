@@ -162,8 +162,6 @@ describe('compiling CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".\\[text-size-adjust\\:none\\] {
-        -webkit-text-size-adjust: none;
-        -moz-text-size-adjust: none;
         text-size-adjust: none;
       }"
     `)
@@ -1409,7 +1407,6 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .decoration-salad {
-        -webkit-text-decoration-color: var(--text-decoration-color-salad);
         -webkit-text-decoration-color: var(--text-decoration-color-salad);
         text-decoration-color: var(--text-decoration-color-salad);
       }
