@@ -175,6 +175,15 @@ table {
 }
 
 /*
+  Remove default alignment and font-weight table header elements.
+*/
+
+th {
+  text-align: inherit;
+  font-weight: inherit;
+}
+
+/*
   Use the modern Firefox focus style for all focusable elements.
 */
 
