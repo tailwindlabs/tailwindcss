@@ -17259,7 +17259,7 @@ describe('custom utilities', () => {
   test('custom utilities must use a valid name definitions', async () => {
     await expect(() =>
       compile(css`
-        @utility push-* {
+        @utility push-| {
           right: 100%;
         }
       `),
