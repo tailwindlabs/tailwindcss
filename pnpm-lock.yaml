@@ -266,8 +266,8 @@ importers:
         specifier: ^1.25.1
         version: 1.26.0
       lightningcss-darwin-x64:
-        specifier: ^1.25.1
-        version: 1.26.0
+        specifier: ^1.28.2
+        version: 1.28.2
       lightningcss-linux-arm64-gnu:
         specifier: ^1.25.1
         version: 1.26.0
@@ -365,7 +365,7 @@ importers:
         version: 20.14.13
       vite:
         specifier: 'catalog:'
-        version: 6.0.0(@types/node@20.14.13)(jiti@2.4.0)(lightningcss@1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
+        version: 5.4.0(@types/node@20.14.13)(lightningcss@1.26.0(patch_hash=5hwfyehqvg5wjb7mwtdvubqbl4))(terser@5.31.6)
 
   packages/internal-example-plugin: {}
 
@@ -2908,6 +2908,12 @@ packages:
 
   lightningcss-darwin-x64@1.26.0:
     resolution: {integrity: sha512-Rf9HuHIDi1R6/zgBkJh25SiJHF+dm9axUZW/0UoYCW1/8HV0gMI0blARhH4z+REmWiU1yYT/KyNF3h7tHyRXUg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  lightningcss-darwin-x64@1.28.2:
+    resolution: {integrity: sha512-R7sFrXlgKjvoEG8umpVt/yutjxOL0z8KWf0bfPT3cYMOW4470xu5qSHpFdIOpRWwl3FKNMUdbKtMUjYt0h2j4g==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [darwin]
@@ -6394,7 +6400,10 @@ snapshots:
 
   lightningcss-darwin-arm64@1.26.0: {}
 
-  lightningcss-darwin-x64@1.26.0: {}
+  lightningcss-darwin-x64@1.26.0:
+    optional: true
+
+  lightningcss-darwin-x64@1.28.2: {}
 
   lightningcss-freebsd-x64@1.26.0:
     optional: true
