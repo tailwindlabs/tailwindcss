@@ -28,12 +28,12 @@ export function optimizeCss(
         deepSelectorCombinator: true,
       },
       include: Features.Nesting,
-      exclude: Features.LogicalProperties | Features.DirSelector,
+      exclude: Features.LogicalProperties | Features.DirSelector | Features.VendorPrefixes,
       targets: {
-        safari: (16 << 16) | (4 << 8),
-        ios_saf: (16 << 16) | (4 << 8),
+        safari: (17 << 16) | (5 << 8),
+        ios_saf: (17 << 16) | (5 << 8),
         firefox: 128 << 16,
-        chrome: 111 << 16,
+        chrome: 123 << 16,
       },
       errorRecovery: true,
     }).code

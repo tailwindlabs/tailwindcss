@@ -2686,7 +2686,10 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `background-clip`
    */
-  staticUtility('bg-clip-text', [['background-clip', 'text']])
+  staticUtility('bg-clip-text', [
+    ['background-clip', 'text'],
+    ['-webkit-background-clip', 'text'],
+  ])
   staticUtility('bg-clip-border', [['background-clip', 'border-box']])
   staticUtility('bg-clip-padding', [['background-clip', 'padding-box']])
   staticUtility('bg-clip-content', [['background-clip', 'content-box']])
@@ -3037,7 +3040,7 @@ export function createUtilities(theme: Theme) {
     {
       let value = resolveThemeColor(candidate, theme, ['--text-decoration-color', '--color'])
       if (value) {
-        return [decl('text-decoration-color', value)]
+        return [decl('-webkit-text-decoration-color', value), decl('text-decoration-color', value)]
       }
     }
   })
@@ -3537,7 +3540,7 @@ export function createUtilities(theme: Theme) {
     staticUtility('transition-colors', [
       [
         'transition-property',
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
+        'color, background-color, border-color, -webkit-text-decoration-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
       ],
       ['transition-timing-function', defaultTimingFunction],
       ['transition-duration', defaultDuration],
@@ -3560,7 +3563,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('transition', {
       defaultValue:
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
+        'color, background-color, border-color, -webkit-text-decoration-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
       themeKeys: ['--transition-property'],
       handle: (value) => [
         decl('transition-property', value),
