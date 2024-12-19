@@ -17514,6 +17514,18 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-foo'])).toEqual('')
     })
 
+    test('resolving unsupported bare values', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: value(color);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-#0088cc', 'tab-foo'])).toEqual('')
+    })
+
     test('resolving arbitrary values', async () => {
       let input = css`
         @utility tab-* {
