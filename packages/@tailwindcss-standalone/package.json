@@ -42,7 +42,7 @@
     "@parcel/watcher-linux-x64-glibc": "^2.5.0",
     "@parcel/watcher-linux-x64-musl": "^2.5.0",
     "@parcel/watcher-win32-x64": "^2.5.0",
-    "@types/bun": "^1.1.13",
+    "@types/bun": "^1.1.14",
     "bun": "1.1.40",
     "lightningcss-darwin-arm64": "^1.25.1",
     "lightningcss-darwin-x64": "^1.25.1",
