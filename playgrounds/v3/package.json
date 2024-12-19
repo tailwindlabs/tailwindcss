@@ -21,6 +21,6 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.0.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   }
 }
