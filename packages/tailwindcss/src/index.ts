@@ -26,12 +26,15 @@ import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
+import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import * as ValueParser from './value-parser'
 import { compoundsForSelectors } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
 
 type CompileOptions = {
   base?: string
@@ -176,7 +179,7 @@ async function parseCss(
 
       let name = node.params
 
-      if (!IS_VALID_UTILITY_NAME.test(name)) {
+      if (!IS_VALID_UTILITY_NAME.test(name) && !IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
         throw new Error(
           `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
         )
@@ -188,9 +191,228 @@ async function parseCss(
         )
       }
 
-      customUtilities.push((designSystem) => {
-        designSystem.utilities.static(name, () => structuredClone(node.nodes))
-      })
+      // Functional utilities. E.g.: `tab-size-*`
+      if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
+        customUtilities.push((designSystem) => {
+          designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
+            let ast = structuredClone(node.nodes)
+
+            // A value is required for functional utilities, if you want to
+            // accept just `tab-size`, you'd have to use a static utility.
+            if (candidate.value === null) return
+
+            // Whether `value(…)` was used
+            let usedValueFn = false
+
+            // Whether any of the declarations successfully resolved a `value(…)`.
+            // E.g:
+            // ```css
+            // @utility tab-size-* {
+            //   tab-size: value(integer);
+            //   tab-size: value(--tab-size);
+            //   tab-size: value([integer]);
+            // }
+            // ```
+            // Any of these `tab-size` declarations have to resolve to a valid
+            // in order to make the utility valid.
+            let resolvedValueFn = false
+
+            // Whether `modifier(…)` was used
+            let usedModifierFn = false
+
+            // Whether any of the declarations successfully resolved a `modifier(…)`
+            let resolvedModifierFn = false
+
+            walk(ast, (node, { replaceWith: replaceDeclarationWith }) => {
+              if (node.kind !== 'declaration') return
+              if (!node.value) return
+
+              let valueAst = ValueParser.parse(node.value.replace(/\s+\*/g, '*'))
+              let result =
+                ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
+                  if (valueNode.kind !== 'function') return
+
+                  // Value function, e.g.: `value(integer)`
+                  if (valueNode.value === 'value') {
+                    usedValueFn = true
+
+                    for (let arg of valueNode.nodes) {
+                      // Resolving theme value, e.g.: `value(--color)`
+                      if (
+                        candidate.value?.kind === 'named' &&
+                        arg.kind === 'word' &&
+                        arg.value[0] === '-' &&
+                        arg.value[1] === '-'
+                      ) {
+                        if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
+
+                        let value = designSystem.resolveThemeValue(
+                          arg.value.replace('*', candidate.value.value),
+                        )
+                        if (value !== undefined) {
+                          resolvedValueFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+
+                      // Bare value, e.g.: `value(integer)`
+                      else if (candidate.value?.kind === 'named' && arg.kind === 'word') {
+                        let value =
+                          arg.value === 'ratio' ? candidate.value.fraction : candidate.value.value
+                        if (!value) continue
+
+                        let type = inferDataType(value, [arg.value as any])
+                        if (type !== null) {
+                          resolvedValueFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+
+                      // Arbitrary value, e.g.: `value([integer])`
+                      else if (
+                        candidate.value?.kind === 'arbitrary' &&
+                        arg.kind === 'word' &&
+                        arg.value[0] === '[' &&
+                        arg.value[arg.value.length - 1] === ']'
+                      ) {
+                        let dataType = arg.value.slice(1, -1)
+
+                        // Allow any data type, e.g.: `value([*])`
+                        if (dataType === '*') {
+                          resolvedValueFn = true
+                          replaceWith(ValueParser.parse(candidate.value.value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+
+                        // The forced arbitrary value hint must match the
+                        // expected data type.
+                        //
+                        // ```css
+                        // @utility tab-* {
+                        //   tab-size: value([integer]);
+                        // }
+                        // ```
+                        //
+                        // Given a candidate like `tab-(color:var(--my-value))`,
+                        // should not match because `color` and `integer` don't
+                        // match.
+                        if (candidate.value.dataType && candidate.value.dataType !== dataType) {
+                          continue
+                        }
+
+                        let value = candidate.value.value
+                        let type =
+                          candidate.value.dataType ?? inferDataType(value, [dataType as any])
+
+                        if (type !== null) {
+                          resolvedValueFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+                    }
+
+                    // Drop the declaration in case we couldn't resolve the value
+                    usedValueFn ||= false
+                    replaceDeclarationWith([])
+                    return ValueParser.ValueWalkAction.Stop
+                  }
+
+                  // Modifier function, e.g.: `modifier(integer)`
+                  else if (valueNode.value === 'modifier') {
+                    // If there is no modifier present in the candidate, then
+                    // the declaration can be removed.
+                    if (candidate.modifier === null) {
+                      replaceDeclarationWith([])
+                      return ValueParser.ValueWalkAction.Skip
+                    }
+
+                    usedModifierFn = true
+
+                    for (let arg of valueNode.nodes) {
+                      // Resolving theme value, e.g.: `modifier(--color)`
+                      if (
+                        candidate.modifier?.kind === 'named' &&
+                        arg.kind === 'word' &&
+                        arg.value[0] === '-' &&
+                        arg.value[1] === '-'
+                      ) {
+                        if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
+                        let themeKey = arg.value.replace('*', candidate.modifier.value)
+
+                        let value = designSystem.resolveThemeValue(themeKey)
+                        if (value !== undefined) {
+                          resolvedModifierFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+
+                      // Bare value, e.g.: `modifier(integer)`
+                      else if (candidate.modifier?.kind === 'named' && arg.kind === 'word') {
+                        let value = candidate.modifier.value
+                        let type = inferDataType(value, [arg.value as any])
+                        if (type !== null) {
+                          resolvedModifierFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+
+                      // Arbitrary value, e.g.: `modifier([integer])`
+                      else if (
+                        candidate.modifier?.kind === 'arbitrary' &&
+                        arg.kind === 'word' &&
+                        arg.value[0] === '[' &&
+                        arg.value[arg.value.length - 1] === ']'
+                      ) {
+                        let dataType = arg.value.slice(1, -1)
+
+                        // Allow any data type, e.g.: `value([*])`
+                        if (dataType === '*') {
+                          resolvedModifierFn = true
+                          replaceWith(ValueParser.parse(candidate.modifier.value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+
+                        let value = candidate.modifier.value
+                        let type = inferDataType(value, [dataType as any])
+
+                        if (type !== null) {
+                          resolvedModifierFn = true
+                          replaceWith(ValueParser.parse(value))
+                          return ValueParser.ValueWalkAction.Skip
+                        }
+                      }
+                    }
+
+                    // Drop the declaration in case we couldn't resolve the value
+                    usedModifierFn ||= false
+                    replaceDeclarationWith([])
+                    return ValueParser.ValueWalkAction.Stop
+                  }
+                }) ?? ValueParser.ValueWalkAction.Continue
+
+              if (result === ValueParser.ValueWalkAction.Continue) {
+                node.value = ValueParser.toCss(valueAst)
+              }
+            })
+
+            if (usedValueFn && !resolvedValueFn) return null
+            if (usedModifierFn && !resolvedModifierFn) return null
+
+            return ast
+          })
+        })
+      }
+
+      if (IS_VALID_UTILITY_NAME.test(name)) {
+        customUtilities.push((designSystem) => {
+          designSystem.utilities.static(name, () => structuredClone(node.nodes))
+        })
+      }
 
       return
     }
