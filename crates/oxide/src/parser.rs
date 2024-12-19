@@ -595,7 +595,7 @@ impl<'a> Extractor<'a> {
     fn parse_start(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
             // Enter arbitrary property mode
-            b'[' => {
+            b'[' if self.cursor.prev != b'\\' => {
                 trace!("Arbitrary::Start\t");
                 self.arbitrary = Arbitrary::Brackets {
                     start_idx: self.cursor.pos,
@@ -755,7 +755,7 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_char(&mut self) -> ParseAction<'a> {
-        if !matches!(self.arbitrary, Arbitrary::None) {
+      if !matches!(self.arbitrary, Arbitrary::None) {
             self.parse_arbitrary()
         } else if self.in_candidate {
             self.parse_continue()
@@ -1633,5 +1633,16 @@ mod test {
                 "[.foo_&]:[color:red]",
             ]
         );
+    }
+
+    #[test]
+    fn wip2() {
+        _please_trace();
+        let candidates = run(
+            r"<!-- [!code word:group-has-\\[a\\]\\:block] -->",
+            false,
+        );
+
+        assert_eq!(candidates, vec!["!code", "a"]);
     }
 }
