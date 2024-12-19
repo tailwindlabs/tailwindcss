@@ -406,7 +406,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   abbr:where([title]) {
-    -webkit-text-decoration: underline dotted;
     text-decoration: underline dotted;
   }
 
@@ -417,8 +416,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   a {
     color: inherit;
-    -webkit-text-decoration: inherit;
-    -webkit-text-decoration: inherit;
     -webkit-text-decoration: inherit;
     text-decoration: inherit;
   }
