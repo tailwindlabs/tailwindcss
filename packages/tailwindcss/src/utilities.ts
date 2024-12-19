@@ -1780,9 +1780,9 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-content-center', [['place-content', 'center']])
   staticUtility('place-content-start', [['place-content', 'start']])
   staticUtility('place-content-end', [['place-content', 'end']])
-  staticUtility('place-content-between', [['place-content', 'between']])
-  staticUtility('place-content-around', [['place-content', 'around']])
-  staticUtility('place-content-evenly', [['place-content', 'evenly']])
+  staticUtility('place-content-between', [['place-content', 'space-between']])
+  staticUtility('place-content-around', [['place-content', 'space-around']])
+  staticUtility('place-content-evenly', [['place-content', 'space-evenly']])
   staticUtility('place-content-baseline', [['place-content', 'baseline']])
   staticUtility('place-content-stretch', [['place-content', 'stretch']])
 

@@ -7454,7 +7454,7 @@ test('place-content', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".place-content-around {
-      place-content: around;
+      place-content: space-around;
     }
 
     .place-content-baseline {
@@ -7462,7 +7462,7 @@ test('place-content', async () => {
     }
 
     .place-content-between {
-      place-content: between;
+      place-content: space-between;
     }
 
     .place-content-center {
@@ -7474,7 +7474,7 @@ test('place-content', async () => {
     }
 
     .place-content-evenly {
-      place-content: evenly;
+      place-content: space-evenly;
     }
 
     .place-content-start {
