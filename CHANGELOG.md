@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed definition of `place-content-between`, `place-content-around`, `place-content-evenly` ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
+- Use the correct property value for `place-content-between`, `place-content-around`, and `place-content-evenly` utilities ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
 
 ## [4.0.0-beta.8] - 2024-12-17
 
