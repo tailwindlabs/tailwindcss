@@ -263,8 +263,8 @@ importers:
         specifier: 1.1.40
         version: 1.1.40
       lightningcss-darwin-arm64:
-        specifier: ^1.25.1
-        version: 1.26.0
+        specifier: ^1.28.2
+        version: 1.28.2
       lightningcss-darwin-x64:
         specifier: ^1.25.1
         version: 1.26.0
@@ -2902,6 +2902,12 @@ packages:
 
   lightningcss-darwin-arm64@1.26.0:
     resolution: {integrity: sha512-n4TIvHO1NY1ondKFYpL2ZX0bcC2y6yjXMD6JfyizgR8BCFNEeArINDzEaeqlfX9bXz73Bpz/Ow0nu+1qiDrBKg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  lightningcss-darwin-arm64@1.28.2:
+    resolution: {integrity: sha512-/8cPSqZiusHSS+WQz0W4NuaqFjquys1x+NsdN/XOHb+idGHJSoJ7SoQTVl3DZuAgtPZwFZgRfb/vd1oi8uX6+g==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [darwin]
@@ -6392,7 +6398,10 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  lightningcss-darwin-arm64@1.26.0: {}
+  lightningcss-darwin-arm64@1.26.0:
+    optional: true
+
+  lightningcss-darwin-arm64@1.28.2: {}
 
   lightningcss-darwin-x64@1.26.0: {}
 
