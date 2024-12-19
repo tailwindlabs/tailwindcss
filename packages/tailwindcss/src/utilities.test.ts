@@ -17427,9 +17427,24 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(
-        await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']),
-      ).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+        ".tab-1 {
+          tab-size: 1;
+        }
+
+        .tab-2 {
+          tab-size: 2;
+        }
+
+        .tab-4 {
+          tab-size: 4;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
     })
 
@@ -17453,9 +17468,24 @@ describe('custom utilities', () => {
           @tailwind utilities;
         `
 
-      expect(
-        await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']),
-      ).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+          ".tab-1 {
+            tab-size: 1;
+          }
+
+          .tab-2 {
+            tab-size: 2;
+          }
+
+          .tab-4 {
+            tab-size: 4;
+          }
+
+          .tab-github {
+            tab-size: 8;
+          }"
+        `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
     })
 
@@ -17468,7 +17498,19 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-1', 'tab-76', 'tab-971'])).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['tab-1', 'tab-76', 'tab-971'])).toMatchInlineSnapshot(`
+        ".tab-1 {
+          tab-size: 1;
+        }
+
+        .tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-971 {
+          tab-size: 971;
+        }"
+      `)
       expect(await compileCss(input, ['tab-foo'])).toEqual('')
     })
 
@@ -17489,7 +17531,23 @@ describe('custom utilities', () => {
           'tab-[integer:var(--my-value)]',
           'tab-(integer:my-value)',
         ]),
-      ).toMatchInlineSnapshot()
+      ).toMatchInlineSnapshot(`
+        ".tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[integer\\:var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
       expect(
         await compileCss(input, [
           'tab-[#0088cc]',
@@ -17519,15 +17577,27 @@ describe('custom utilities', () => {
           'tab-[var(--my-value)]',
           'tab-(--my-value)',
         ]),
-      ).toMatchInlineSnapshot()
-      expect(
-        await compileCss(input, [
-          'tab-[#0088cc]',
-          'tab-[1px]',
-          'tab-[var(--my-value)]',
-          'tab-(--my-value)',
-        ]),
-      ).toEqual('')
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
     })
 
     test('resolving theme, bare and arbitrary values all at once', async () => {
@@ -17545,7 +17615,19 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-github', 'tab-76', 'tab-[123]'])).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['tab-github', 'tab-76', 'tab-[123]'])).toMatchInlineSnapshot(`
+        ".tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-\\[123\\] {
+          tab-size: 123;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
       expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
     })
 
@@ -17564,9 +17646,20 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(
-        await compileCss(input, ['example-full', 'example-12', 'example-[20%]']),
-      ).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['example-full', 'example-12', 'example-[20%]']))
+        .toMatchInlineSnapshot(`
+          ".example-12 {
+            --value: calc(12 * 1%);
+          }
+
+          .example-\\[20\\%\\] {
+            --value: 20%;
+          }
+
+          .example-full {
+            --value: 100%;
+          }"
+        `)
       expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
     })
 
@@ -17598,7 +17691,31 @@ describe('custom utilities', () => {
           'example-[50%]',
           'example-full',
         ]),
-      ).toMatchInlineSnapshot()
+      ).toMatchInlineSnapshot(`
+        ".example-37 {
+          --value: calc(37 * 1%);
+        }
+
+        .example-\\[50\\%\\] {
+          --value: 50%;
+        }
+
+        .example-full {
+          --value: 100%;
+        }
+
+        .tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-\\[123\\] {
+          tab-size: 123;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
       expect(
         await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]', 'example-foo', 'example-[13px]']),
       ).toEqual('')
@@ -17630,7 +17747,31 @@ describe('custom utilities', () => {
           'example-[20%]',
           '-example-[20%]',
         ]),
-      ).toMatchInlineSnapshot()
+      ).toMatchInlineSnapshot(`
+        ".-example-\\[10px\\] {
+          --value: calc(10px * -1);
+        }
+
+        .-example-\\[20\\%\\] {
+          --value: calc(20% * -1);
+        }
+
+        .-example-full {
+          --value: calc(100% * -1);
+        }
+
+        .example-\\[10px\\] {
+          --value: 10px;
+        }
+
+        .example-\\[20\\%\\] {
+          --value: 20%;
+        }
+
+        .example-full {
+          --value: 100%;
+        }"
+      `)
       expect(await compileCss(input, ['example-10'])).toEqual('')
     })
 
@@ -17643,7 +17784,11 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+        ".example-12 {
+          --value: calc(var(--spacing) * 12) calc(var(--spacing) * 12);
+        }"
+      `)
     })
 
     test('modifiers', async () => {
@@ -17669,7 +17814,27 @@ describe('custom utilities', () => {
           'example-[12px]',
           'example-[12px]/[16px]',
         ]),
-      ).toMatchInlineSnapshot()
+      ).toMatchInlineSnapshot(`
+        ".example-\\[12px\\] {
+          --value: 12px;
+        }
+
+        .example-\\[12px\\]\\/\\[16px\\] {
+          --value: 12px;
+          --modifier: 16px;
+          --modifier-with-calc: calc(16px * 2);
+        }
+
+        .example-sm {
+          --value: 14px;
+        }
+
+        .example-sm\\/7 {
+          --value: 14px;
+          --modifier: 28px;
+          --modifier-with-calc: calc(28px * 2);
+        }"
+      `)
       expect(
         await compileCss(input, ['example-foo', 'example-foo/[12px]', 'example-foo/12']),
       ).toEqual('')
@@ -17688,9 +17853,20 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(
-        await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']),
-      ).toMatchInlineSnapshot()
+      expect(await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']))
+        .toMatchInlineSnapshot(`
+        ".example-1\\/1 {
+          --value: 1 / 1;
+        }
+
+        .example-\\[7\\/9\\] {
+          --value: 7 / 9;
+        }
+
+        .example-video {
+          --value: 16 / 9;
+        }"
+      `)
       expect(await compileCss(input, ['example-foo'])).toEqual('')
     })
   })
