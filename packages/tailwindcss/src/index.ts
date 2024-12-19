@@ -258,6 +258,17 @@ async function parseCss(
 
                       // Bare value, e.g.: `value(integer)`
                       else if (candidate.value?.kind === 'named' && arg.kind === 'word') {
+                        // Limit the bare value types, to prevent new syntax
+                        // that we don't want to support.
+                        if (
+                          arg.value !== 'number' &&
+                          arg.value !== 'integer' &&
+                          arg.value !== 'ratio' &&
+                          arg.value !== 'percentage'
+                        ) {
+                          continue
+                        }
+
                         let value =
                           arg.value === 'ratio' ? candidate.value.fraction : candidate.value.value
                         if (!value) continue
@@ -352,6 +363,17 @@ async function parseCss(
 
                       // Bare value, e.g.: `modifier(integer)`
                       else if (candidate.modifier?.kind === 'named' && arg.kind === 'word') {
+                        // Limit the bare value types, to prevent new syntax
+                        // that we don't want to support.
+                        if (
+                          arg.value !== 'number' &&
+                          arg.value !== 'integer' &&
+                          arg.value !== 'ratio' &&
+                          arg.value !== 'percentage'
+                        ) {
+                          continue
+                        }
+
                         let value = candidate.modifier.value
                         let type = inferDataType(value, [arg.value as any])
                         if (type !== null) {
