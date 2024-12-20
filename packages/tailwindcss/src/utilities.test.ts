@@ -17514,6 +17514,47 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-foo'])).toEqual('')
     })
 
+    test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
+      let input = css`
+        @utility example-* {
+          --value-as-number: value(number);
+          --value-as-percentage: value(percentage);
+          --value-as-ratio: value(ratio);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
+        .toMatchInlineSnapshot(`
+        ".example-0\\.5 {
+          --value-as-number: .5;
+        }
+
+        .example-1 {
+          --value-as-number: 1;
+        }
+
+        .example-2\\/3 {
+          --value-as-number: 2;
+          --value-as-ratio: 2 / 3;
+        }
+
+        .example-20\\% {
+          --value-as-percentage: 20%;
+        }"
+      `)
+      expect(
+        await compileCss(input, [
+          'example-1.23',
+          'example-12.34%',
+          'example-1.2/3',
+          'example-1/2.3',
+          'example-1.2/3.4',
+        ]),
+      ).toEqual('')
+    })
+
     test('resolving unsupported bare values', async () => {
       let input = css`
         @utility tab-* {
