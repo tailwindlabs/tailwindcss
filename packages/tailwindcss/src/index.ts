@@ -26,7 +26,7 @@ import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
-import { inferDataType } from './utils/infer-data-type'
+import { inferDataType, isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 import { compoundsForSelectors } from './variants'
@@ -217,6 +217,9 @@ async function parseCss(
             // in order to make the utility valid.
             let resolvedValueFn = false
 
+            // The resolved value type, e.g.: `integer`
+            let resolvedValueType = null as string | null
+
             // Whether `modifier(…)` was used
             let usedModifierFn = false
 
@@ -277,6 +280,27 @@ async function parseCss(
 
                         let type = inferDataType(value, [arg.value as any])
                         if (type !== null) {
+                          // Ratio must be a valid fraction, e.g.: <integer>/<integer>
+                          if (type === 'ratio') {
+                            let [lhs, rhs] = segment(value, '/')
+                            if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
+                          }
+
+                          // Non-integer numbers should be a valid multiplier,
+                          // e.g.: `1.5`
+                          else if (type === 'number' && !isValidSpacingMultiplier(value)) {
+                            continue
+                          }
+
+                          // Percentages must be an integer, e.g.: `50%`
+                          else if (
+                            type === 'percentage' &&
+                            !isPositiveInteger(value.slice(0, -1))
+                          ) {
+                            continue
+                          }
+
+                          resolvedValueType = type
                           resolvedValueFn = true
                           replaceWith(ValueParser.parse(value))
                           return ValueParser.ValueWalkAction.Skip
@@ -379,6 +403,20 @@ async function parseCss(
                         let value = candidate.modifier.value
                         let type = inferDataType(value, [arg.value as any])
                         if (type !== null) {
+                          // Non-integer numbers should be a valid multiplier,
+                          // e.g.: `1.5`
+                          if (type === 'number' && !isValidSpacingMultiplier(value)) {
+                            continue
+                          }
+
+                          // Percentages must be an integer, e.g.: `50%`
+                          else if (
+                            type === 'percentage' &&
+                            !isPositiveInteger(value.slice(0, -1))
+                          ) {
+                            continue
+                          }
+
                           resolvedModifierFn = true
                           replaceWith(ValueParser.parse(value))
                           return ValueParser.ValueWalkAction.Skip
@@ -423,6 +461,23 @@ async function parseCss(
                 node.value = ValueParser.toCss(valueAst)
               }
             })
+
+            // Ensure that the modifier was resolved if present on the
+            // candidate. We also have to make sure that the value is _not_
+            // using a fraction.
+            //
+            // E.g.:
+            //
+            // - `w-1/2`, can be a value of `1` and modifier of `2`
+            // - `w-1/2`, can be a fraction of `1/2` and no modifier
+            if (
+              candidate.value.kind === 'named' &&
+              resolvedValueType !== 'ratio' &&
+              !usedModifierFn &&
+              candidate.modifier !== null
+            ) {
+              return null
+            }
 
             if (usedValueFn && !resolvedValueFn) return null
             if (usedModifierFn && !resolvedModifierFn) return null
