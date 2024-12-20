@@ -1636,7 +1636,7 @@ mod test {
     }
 
     #[test]
-    fn wip2() {
+    fn arbitrary_properties_are_not_picked_up_after_an_escape() {
         _please_trace();
         let candidates = run(
             r#"
