@@ -595,7 +595,7 @@ impl<'a> Extractor<'a> {
     fn parse_start(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
             // Enter arbitrary property mode
-            b'[' => {
+            b'[' if self.cursor.prev != b'\\' => {
                 trace!("Arbitrary::Start\t");
                 self.arbitrary = Arbitrary::Brackets {
                     start_idx: self.cursor.pos,
@@ -1633,5 +1633,19 @@ mod test {
                 "[.foo_&]:[color:red]",
             ]
         );
+    }
+
+    #[test]
+    fn arbitrary_properties_are_not_picked_up_after_an_escape() {
+        _please_trace();
+        let candidates = run(
+            r#"
+              <!-- [!code word:group-has-\\[a\\]\\:block] -->
+              \\[a\\]\\:block]
+            "#,
+            false,
+        );
+
+        assert_eq!(candidates, vec!["!code", "a"]);
     }
 }

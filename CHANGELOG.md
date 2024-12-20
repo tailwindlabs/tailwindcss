@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Use the correct property value for `place-content-between`, `place-content-around`, and `place-content-evenly` utilities ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
+- Don’t detect arbitrary properties when preceded by an escape ([#15456](https://github.com/tailwindlabs/tailwindcss/pull/15456))
 
 ### Changed
 
