@@ -1639,7 +1639,10 @@ mod test {
     fn wip2() {
         _please_trace();
         let candidates = run(
-            r"<!-- [!code word:group-has-\\[a\\]\\:block] -->",
+            r#"
+              <!-- [!code word:group-has-\\[a\\]\\:block] -->
+              \\[a\\]\\:block]
+            "#,
             false,
         );
 
