@@ -755,7 +755,7 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_char(&mut self) -> ParseAction<'a> {
-      if !matches!(self.arbitrary, Arbitrary::None) {
+        if !matches!(self.arbitrary, Arbitrary::None) {
             self.parse_arbitrary()
         } else if self.in_candidate {
             self.parse_continue()
