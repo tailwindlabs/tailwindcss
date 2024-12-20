@@ -259,7 +259,9 @@ async function parseCss(
                       // Bare value, e.g.: `value(integer)`
                       else if (candidate.value?.kind === 'named' && arg.kind === 'word') {
                         // Limit the bare value types, to prevent new syntax
-                        // that we don't want to support.
+                        // that we don't want to support. E.g.: `text-#000` is
+                        // something we don't want to support, but could be
+                        // built this way.
                         if (
                           arg.value !== 'number' &&
                           arg.value !== 'integer' &&
