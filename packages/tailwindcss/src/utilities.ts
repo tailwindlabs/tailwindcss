@@ -2290,8 +2290,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-no-repeat', [['background-repeat', 'no-repeat']])
   staticUtility('bg-repeat-x', [['background-repeat', 'repeat-x']])
   staticUtility('bg-repeat-y', [['background-repeat', 'repeat-y']])
-  staticUtility('bg-round', [['background-repeat', 'round']])
-  staticUtility('bg-space', [['background-repeat', 'space']])
+  staticUtility('bg-repeat-round', [['background-repeat', 'round']])
+  staticUtility('bg-repeat-space', [['background-repeat', 'space']])
 
   staticUtility('bg-none', [['background-image', 'none']])
 

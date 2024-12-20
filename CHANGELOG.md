@@ -11,11 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use the correct property value for `place-content-between`, `place-content-around`, and `place-content-evenly` utilities ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
 - Don’t detect arbitrary properties when preceded by an escape ([#15456](https://github.com/tailwindlabs/tailwindcss/pull/15456))
+- Fix incorrectly named `bg-round` and `bg-space` utilities to `bg-repeat-round` to `bg-repeat-space` ([#15462](https://github.com/tailwindlabs/tailwindcss/pull/15462))
 
 ### Changed
 
 - Removed `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
-
 
 ## [4.0.0-beta.8] - 2024-12-17
 
