@@ -10499,8 +10499,8 @@ test('bg', async () => {
         'bg-no-repeat',
         'bg-repeat-x',
         'bg-repeat-y',
-        'bg-round',
-        'bg-space',
+        'bg-repeat-round',
+        'bg-repeat-space',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -10935,20 +10935,20 @@ test('bg', async () => {
       background-repeat: repeat;
     }
 
+    .bg-repeat-round {
+      background-repeat: round;
+    }
+
+    .bg-repeat-space {
+      background-repeat: space;
+    }
+
     .bg-repeat-x {
       background-repeat: repeat-x;
     }
 
     .bg-repeat-y {
       background-repeat: repeat-y;
-    }
-
-    .bg-round {
-      background-repeat: round;
-    }
-
-    .bg-space {
-      background-repeat: space;
     }"
   `)
   expect(
