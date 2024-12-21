@@ -1,4 +1,4 @@
-name: CI
+name: Integration Tests
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
+
         runner:
           - name: Windows
             os: windows-latest
@@ -23,6 +24,12 @@ jobs:
 
           - name: macOS
             os: macos-14
+
+        integration:
+          - upgrade
+          - vite
+          - cli
+          - postcss
 
         # Exclude windows and macos from being built on feature branches
         on-next-branch:
@@ -38,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
 
-    name: ${{ matrix.runner.name }}
+    name: ${{ matrix.runner.name }} /  ${{ matrix.integration }}
 
     steps:
       - uses: actions/checkout@v4
@@ -82,19 +89,10 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
-      - name: Lint
-        run: pnpm run lint
-        # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner.os == 'ubuntu-latest'
-
-      - name: Test
-        run: pnpm run test
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: npm run test:ui
+      - name: Test ${{ matrix.integration }}
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }}
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Notify Discord
         if: failure() && github.ref == 'refs/heads/next'

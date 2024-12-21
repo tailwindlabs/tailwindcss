@@ -24,7 +24,7 @@ pub mod paths;
 pub mod scanner;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
-    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || value.eq("1") || value.eq("true") || value.contains("tailwind")),
+    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
 );
 
 fn init_tracing() {
@@ -102,13 +102,11 @@ impl Scanner {
     pub fn scan(&mut self) -> Vec<String> {
         init_tracing();
         self.prepare();
-        self.check_for_new_files();
         self.compute_candidates();
 
-        let mut candidates: Vec<String> = self.candidates.clone().into_iter().collect();
+        let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
 
-        candidates.sort();
-
+        candidates.par_sort();
         candidates
     }
 
@@ -140,7 +138,7 @@ impl Scanner {
         let extractor = Extractor::with_positions(&content[..], Default::default());
 
         let candidates: Vec<(String, usize)> = extractor
-            .into_iter()
+            .into_par_iter()
             .map(|(s, i)| {
                 // SAFETY: When we parsed the candidates, we already guaranteed that the byte slices
                 // are valid, therefore we don't have to re-check here when we want to convert it back
@@ -156,7 +154,7 @@ impl Scanner {
         self.prepare();
 
         self.files
-            .iter()
+            .par_iter()
             .filter_map(|x| Path::from(x.clone()).canonicalize().ok())
             .map(|x| x.to_string())
             .collect()
@@ -173,11 +171,18 @@ impl Scanner {
     fn compute_candidates(&mut self) {
         let mut changed_content = vec![];
 
-        for path in &self.files {
-            let current_time = fs::metadata(path)
-                .and_then(|m| m.modified())
-                .unwrap_or(SystemTime::now());
+        let current_mtimes = self
+            .files
+            .par_iter()
+            .map(|path| {
+                fs::metadata(path)
+                    .and_then(|m| m.modified())
+                    .unwrap_or(SystemTime::now())
+            })
+            .collect::<Vec<_>>();
 
+        for (idx, path) in self.files.iter().enumerate() {
+            let current_time = current_mtimes[idx];
             let previous_time = self.mtimes.insert(path.clone(), current_time);
 
             let should_scan_file = match previous_time {
@@ -201,7 +206,7 @@ impl Scanner {
 
         if !changed_content.is_empty() {
             let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.extend(candidates);
+            self.candidates.par_extend(candidates);
         }
     }
 
@@ -209,6 +214,7 @@ impl Scanner {
     // content for candidates.
     fn prepare(&mut self) {
         if self.ready {
+            self.check_for_new_files();
             return;
         }
 
@@ -219,14 +225,21 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     fn check_for_new_files(&mut self) {
+        let current_mtimes = self
+            .dirs
+            .par_iter()
+            .map(|path| {
+                fs::metadata(path)
+                    .and_then(|m| m.modified())
+                    .unwrap_or(SystemTime::now())
+            })
+            .collect::<Vec<_>>();
+
         let mut modified_dirs: Vec<PathBuf> = vec![];
 
         // Check all directories to see if they were modified
-        for path in &self.dirs {
-            let current_time = fs::metadata(path)
-                .and_then(|m| m.modified())
-                .unwrap_or(SystemTime::now());
-
+        for (idx, path) in self.dirs.iter().enumerate() {
+            let current_time = current_mtimes[idx];
             let previous_time = self.mtimes.insert(path.clone(), current_time);
 
             let should_scan = match previous_time {
@@ -455,12 +468,10 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
 #[tracing::instrument(skip_all)]
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
-    let input: Vec<_> = blobs.iter().map(|blob| &blob[..]).collect();
-    let input = &input[..];
-
-    let mut result: Vec<String> = input
+    let mut result: Vec<_> = blobs
         .par_iter()
-        .map(|input| Extractor::unique(input, Default::default()))
+        .flat_map(|blob| blob.par_split(|x| matches!(x, b'\n')))
+        .map(|blob| Extractor::unique(blob, Default::default()))
         .reduce(Default::default, |mut a, b| {
             a.extend(b);
             a
@@ -473,6 +484,7 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
             unsafe { String::from_utf8_unchecked(s.to_vec()) }
         })
         .collect();
-    result.sort();
+
+    result.par_sort();
     result
 }

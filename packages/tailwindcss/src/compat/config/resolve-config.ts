@@ -15,6 +15,7 @@ export interface ConfigFile {
   path?: string
   base: string
   config: UserConfig
+  reference: boolean
 }
 
 interface ResolutionContext {
@@ -128,7 +129,10 @@ export type PluginUtils = {
   colors: typeof colors
 }
 
-function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFile): void {
+function extractConfigs(
+  ctx: ResolutionContext,
+  { config, base, path, reference }: ConfigFile,
+): void {
   let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
@@ -136,17 +140,17 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugins.push(plugin())
+      plugins.push({ ...plugin(), reference })
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugins.push(plugin)
+      plugins.push({ ...plugin, reference })
     } else {
       // Just a plain function without using the plugin(…) API
-      plugins.push({ handler: plugin })
+      plugins.push({ handler: plugin, reference })
     }
   }
 
@@ -158,7 +162,7 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   }
 
   for (let preset of config.presets ?? []) {
-    extractConfigs(ctx, { path, base, config: preset })
+    extractConfigs(ctx, { path, base, config: preset, reference })
   }
 
   // Apply configs from plugins
@@ -166,7 +170,7 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      extractConfigs(ctx, { path, base, config: plugin.config })
+      extractConfigs(ctx, { path, base, config: plugin.config, reference: !!plugin.reference })
     }
   }
 

@@ -1,12 +1,12 @@
-import { compile, env, Features, normalizePath } from '@tailwindcss/node'
+import { compile, env, Features, Instrumentation, normalizePath } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { sveltePreprocess } from 'svelte-preprocess'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
+const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
 
 export default function tailwindcss(): Plugin[] {
@@ -45,7 +45,7 @@ export default function tailwindcss(): Plugin[] {
       preferRelative: true,
     })
     function customCssResolver(id: string, base: string) {
-      return cssResolver(id, base, false, isSSR)
+      return cssResolver(id, base, true, isSSR)
     }
 
     let jsResolver = config!.createResolver(config!.resolve)
@@ -111,15 +111,19 @@ export default function tailwindcss(): Plugin[] {
     }
   }
 
-  async function regenerateOptimizedCss(root: Root, addWatchFile: (file: string) => void) {
+  async function regenerateOptimizedCss(
+    root: Root,
+    addWatchFile: (file: string) => void,
+    I: Instrumentation,
+  ) {
     let content = root.lastContent
-    let generated = await root.generate(content, addWatchFile)
+    let generated = await root.generate(content, addWatchFile, I)
     if (generated === false) {
       return
     }
-    env.DEBUG && console.time('[@tailwindcss/vite] Optimize CSS')
+    DEBUG && I.start('Optimize CSS')
     let result = optimizeCss(generated, { minify })
-    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Optimize CSS')
+    DEBUG && I.end('Optimize CSS')
     return result
   }
 
@@ -216,6 +220,9 @@ export default function tailwindcss(): Plugin[] {
       async transform(src, id, options) {
         if (!isPotentialCssRootFile(id)) return
 
+        using I = new Instrumentation()
+        I.start('[@tailwindcss/vite] Generate CSS (serve)')
+
         let root = roots.get(id)
 
         // If the root was built outside of the transform hook (e.g. in the
@@ -242,7 +249,7 @@ export default function tailwindcss(): Plugin[] {
           await Promise.all(servers.map((server) => server.waitForRequestsIdle(id)))
         }
 
-        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
         if (!generated) {
           roots.delete(id)
           return src
@@ -259,6 +266,9 @@ export default function tailwindcss(): Plugin[] {
 
       async transform(src, id) {
         if (!isPotentialCssRootFile(id)) return
+
+        using I = new Instrumentation()
+        I.start('[@tailwindcss/vite] Generate CSS (build)')
 
         let root = roots.get(id)
 
@@ -278,7 +288,7 @@ export default function tailwindcss(): Plugin[] {
         // We do a first pass to generate valid CSS for the downstream plugins.
         // However, since not all candidates are guaranteed to be extracted by
         // this time, we have to re-run a transform for the root later.
-        let generated = await root.generate(src, (file) => this.addWatchFile(file))
+        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
         if (!generated) {
           roots.delete(id)
           return src
@@ -290,6 +300,9 @@ export default function tailwindcss(): Plugin[] {
       // We must run before `enforce: post` so the updated chunks are picked up
       // by vite:css-post.
       async renderStart() {
+        using I = new Instrumentation()
+        I.start('[@tailwindcss/vite] (render start)')
+
         for (let [id, root] of roots.entries()) {
           // Do not do a second render pass on Svelte `<style>` tags.
           if (isSvelteStyle(id)) continue
@@ -302,6 +315,7 @@ export default function tailwindcss(): Plugin[] {
             // before and the dependencies should not be changed (only the
             // candidate list might have)
             () => {},
+            I,
           )
           if (!generated) {
             roots.delete(id)
@@ -361,12 +375,12 @@ function optimizeCss(
         deepSelectorCombinator: true,
       },
       include: LightningCssFeatures.Nesting,
-      exclude: LightningCssFeatures.LogicalProperties,
+      exclude: LightningCssFeatures.LogicalProperties | LightningCssFeatures.DirSelector,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
         firefox: 128 << 16,
-        chrome: 120 << 16,
+        chrome: 111 << 16,
       },
       errorRecovery: true,
     }).code
@@ -455,6 +469,7 @@ class Root {
   public async generate(
     content: string,
     addWatchFile: (file: string) => void,
+    I: Instrumentation,
   ): Promise<string | false> {
     this.lastContent = content
 
@@ -465,7 +480,7 @@ class Root {
       clearRequireCache(Array.from(this.dependencies))
       this.dependencies = new Set([idToPath(inputPath)])
 
-      env.DEBUG && console.time('[@tailwindcss/vite] Setup compiler')
+      DEBUG && I.start('Setup compiler')
       this.compiler = await compile(content, {
         base: inputBase,
         shouldRewriteUrls: true,
@@ -477,7 +492,7 @@ class Root {
         customCssResolver: this.customCssResolver,
         customJsResolver: this.customJsResolver,
       })
-      env.DEBUG && console.timeEnd('[@tailwindcss/vite] Setup compiler')
+      DEBUG && I.end('Setup compiler')
 
       let sources = (() => {
         // Disable auto source detection
@@ -510,11 +525,11 @@ class Root {
       // This should not be here, but right now the Vite plugin is setup where we
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
-      env.DEBUG && console.time('[@tailwindcss/vite] Scan for candidates')
+      DEBUG && I.start('Scan for candidates')
       for (let candidate of this.scanner.scan()) {
         this.candidates.add(candidate)
       }
-      env.DEBUG && console.timeEnd('[@tailwindcss/vite] Scan for candidates')
+      DEBUG && I.end('Scan for candidates')
     }
 
     if (this.compiler.features & Features.Utilities) {
@@ -562,13 +577,13 @@ class Root {
 
     this.requiresRebuild = true
 
-    env.DEBUG && console.time('[@tailwindcss/vite] Build CSS')
+    DEBUG && I.start('Build CSS')
     let result = this.compiler.build(
       this.overwriteCandidates
         ? this.overwriteCandidates
         : [...this.sharedCandidates(), ...this.candidates],
     )
-    env.DEBUG && console.timeEnd('[@tailwindcss/vite] Build CSS')
+    DEBUG && I.end('Build CSS')
 
     return result
   }
@@ -609,8 +624,8 @@ class Root {
   }
 }
 
-// Register a plugin that can hook into the Svelte preprocessor if svelte is
-// enabled. This allows us to transform CSS in `<style>` tags and create a
+// Register a plugin that can hook into the Svelte preprocessor if Svelte is
+// configured. This allows us to transform CSS in `<style>` tags and create a
 // stricter version of CSS that passes the Svelte compiler.
 //
 // Note that these files will not undergo a second pass through the vite
@@ -620,27 +635,23 @@ class Root {
 // In practice, it is discouraged to use `@tailwind utilities;` inside Svelte
 // components, as the styles it create would be scoped anyways. Use an external
 // `.css` file instead.
-function svelteProcessor(roots: DefaultMap<string, Root>) {
-  let preprocessor = sveltePreprocess()
-
+function svelteProcessor(roots: DefaultMap<string, Root>): Plugin {
   return {
     name: '@tailwindcss/svelte',
     api: {
       sveltePreprocess: {
-        markup: preprocessor.markup,
-        script: preprocessor.script,
         async style({
           content,
           filename,
           markup,
-          ...rest
         }: {
           content: string
           filename?: string
-          attributes: Record<string, string | boolean>
           markup: string
         }) {
-          if (!filename) return preprocessor.style?.({ ...rest, content, filename, markup })
+          if (!filename) return
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/vite] Preprocess svelte')
 
           // Create the ID used by Vite to identify the `<style>` contents. This
           // way, the Vite `transform` hook can find the right root and thus
@@ -667,16 +678,18 @@ function svelteProcessor(roots: DefaultMap<string, Root>) {
             { content: markup, file: filename, extension: 'svelte' },
           ])
 
-          let generated = await root.generate(content, (file) =>
-            root?.builtBeforeTransform?.push(file),
+          let generated = await root.generate(
+            content,
+            (file) => root.builtBeforeTransform?.push(file),
+            I,
           )
 
           if (!generated) {
             roots.delete(id)
-            return preprocessor.style?.({ ...rest, content, filename, markup })
+            return
           }
 
-          return preprocessor.style?.({ ...rest, content: generated, filename, markup })
+          return { code: generated }
         },
       },
     },

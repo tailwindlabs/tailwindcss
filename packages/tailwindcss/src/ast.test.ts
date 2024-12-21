@@ -1,9 +1,10 @@
 import { expect, it } from 'vitest'
-import { context, decl, styleRule, toCss, walk, WalkAction } from './ast'
+import { context, decl, optimizeAst, styleRule, toCss, walk, WalkAction } from './ast'
 import * as CSS from './css-parser'
 
 it('should pretty print an AST', () => {
-  expect(toCss(CSS.parse('.foo{color:red;&:hover{color:blue;}}'))).toMatchInlineSnapshot(`
+  expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'))))
+    .toMatchInlineSnapshot(`
     ".foo {
       color: red;
       &:hover {
@@ -51,7 +52,7 @@ it('allows the placement of context nodes', () => {
   expect(blueContext).toEqual({ context: 'a' })
   expect(greenContext).toEqual({ context: 'b' })
 
-  expect(toCss(ast)).toMatchInlineSnapshot(`
+  expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
     ".foo {
       color: red;
     }

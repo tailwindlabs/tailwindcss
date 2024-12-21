@@ -1360,26 +1360,26 @@ test('row-end', async () => {
 test('float', async () => {
   expect(await run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
     .toMatchInlineSnapshot(`
-    ".float-end {
-      float: end;
-    }
+      ".float-end {
+        float: inline-end;
+      }
 
-    .float-left {
-      float: left;
-    }
+      .float-left {
+        float: left;
+      }
 
-    .float-none {
-      float: none;
-    }
+      .float-none {
+        float: none;
+      }
 
-    .float-right {
-      float: right;
-    }
+      .float-right {
+        float: right;
+      }
 
-    .float-start {
-      float: start;
-    }"
-  `)
+      .float-start {
+        float: inline-start;
+      }"
+    `)
   expect(
     await run([
       'float',
@@ -1413,7 +1413,7 @@ test('clear', async () => {
     }
 
     .clear-end {
-      clear: end;
+      clear: inline-end;
     }
 
     .clear-left {
@@ -1429,7 +1429,7 @@ test('clear', async () => {
     }
 
     .clear-start {
-      clear: start;
+      clear: inline-start;
     }"
   `)
   expect(
@@ -2485,8 +2485,22 @@ test('field-sizing', async () => {
 })
 
 test('aspect-ratio', async () => {
-  expect(await run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
-    ".aspect-4\\/3 {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --aspect-video: 16 / 9;
+        }
+        @tailwind utilities;
+      `,
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --aspect-video: 16 / 9;
+    }
+
+    .aspect-4\\/3 {
       aspect-ratio: 4 / 3;
     }
 
@@ -2495,7 +2509,7 @@ test('aspect-ratio', async () => {
     }
 
     .aspect-video {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--aspect-video);
     }"
   `)
   expect(
@@ -7440,7 +7454,7 @@ test('place-content', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".place-content-around {
-      place-content: around;
+      place-content: space-around;
     }
 
     .place-content-baseline {
@@ -7448,7 +7462,7 @@ test('place-content', async () => {
     }
 
     .place-content-between {
-      place-content: between;
+      place-content: space-between;
     }
 
     .place-content-center {
@@ -7460,7 +7474,7 @@ test('place-content', async () => {
     }
 
     .place-content-evenly {
-      place-content: evenly;
+      place-content: space-evenly;
     }
 
     .place-content-start {
@@ -10491,8 +10505,8 @@ test('bg', async () => {
         'bg-no-repeat',
         'bg-repeat-x',
         'bg-repeat-y',
-        'bg-round',
-        'bg-space',
+        'bg-repeat-round',
+        'bg-repeat-space',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -10927,20 +10941,20 @@ test('bg', async () => {
       background-repeat: repeat;
     }
 
+    .bg-repeat-round {
+      background-repeat: round;
+    }
+
+    .bg-repeat-space {
+      background-repeat: space;
+    }
+
     .bg-repeat-x {
       background-repeat: repeat-x;
     }
 
     .bg-repeat-y {
       background-repeat: repeat-y;
-    }
-
-    .bg-round {
-      background-repeat: round;
-    }
-
-    .bg-space {
-      background-repeat: space;
     }"
   `)
   expect(
@@ -11817,6 +11831,7 @@ test('bg-clip', async () => {
       }
 
       .bg-clip-text {
+        -webkit-background-clip: text;
         background-clip: text;
       }"
     `)

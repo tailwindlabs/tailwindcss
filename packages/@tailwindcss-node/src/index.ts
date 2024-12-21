@@ -1,7 +1,8 @@
 import * as Module from 'node:module'
 import { pathToFileURL } from 'node:url'
 import * as env from './env'
-export { __unstable__loadDesignSystem, compile, Features } from './compile'
+export { __unstable__loadDesignSystem, compile, compileAst, Features } from './compile'
+export * from './instrumentation'
 export * from './normalize-path'
 export { env }
 

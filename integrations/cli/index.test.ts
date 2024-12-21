@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
-import { describe, expect } from 'vitest'
+import { describe } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 const STANDALONE_BINARY = (() => {
@@ -156,9 +156,10 @@ describe.each([
       },
     },
     async ({ root, fs, spawn }) => {
-      await spawn(`${command} --input src/index.css --output dist/out.css --watch`, {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`, {
         cwd: path.join(root, 'project-a'),
       })
+      await process.onStderr((m) => m.includes('Done in'))
 
       await fs.expectFileToContain('project-a/dist/out.css', [
         candidate`underline`,
@@ -491,7 +492,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm tailwindcss --input index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
@@ -722,7 +723,7 @@ test(
         ></div>`,
     },
   },
-  async ({ fs, exec, spawn, root }) => {
+  async ({ fs, exec, spawn, root, expect }) => {
     await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
       cwd: path.join(root, 'project-a'),
     })
@@ -790,9 +791,13 @@ test(
     `)
 
     // Watch mode tests
-    await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
-      cwd: path.join(root, 'project-a'),
-    })
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+      {
+        cwd: path.join(root, 'project-a'),
+      },
+    )
+    await process.onStderr((m) => m.includes('Done in'))
 
     // Changes to project-a should not be included in the output, we changed the
     // base folder to project-b.
@@ -962,7 +967,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm tailwindcss --input index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`

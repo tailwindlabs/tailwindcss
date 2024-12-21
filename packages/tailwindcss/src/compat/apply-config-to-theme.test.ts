@@ -23,6 +23,10 @@ test('config values can be merged into the theme', () => {
             sm: '1234px',
           },
 
+          aspectRatio: {
+            retro: '4 / 3',
+          },
+
           boxShadow: {
             normal: '0 1px 3px black',
           },
@@ -75,6 +79,7 @@ test('config values can be merged into the theme', () => {
         },
       },
       base: '/root',
+      reference: false,
     },
   ])
   applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
@@ -82,6 +87,7 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('primary', ['--color'])).toEqual('#c0ffee')
   expect(theme.resolve('sm', ['--breakpoint'])).toEqual('1234px')
   expect(theme.resolve('normal', ['--shadow'])).toEqual('0 1px 3px black')
+  expect(theme.resolve('retro', ['--aspect'])).toEqual('4 / 3')
   expect(theme.resolve('sm', ['--radius'])).toEqual('0.33rem')
   expect(theme.resolve('blink', ['--animate'])).toEqual('blink 1s linear infinite')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')

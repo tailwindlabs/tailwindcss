@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, html, json, test, ts } from '../utils'
 
 test(
@@ -45,15 +44,13 @@ test(
       `,
       'src/App.vue': html`
         <style>
-          @import 'tailwindcss/utilities';
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss';
           .foo {
             @apply text-red-500;
           }
         </style>
         <style scoped>
-          @import 'tailwindcss/utilities';
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss' reference;
           :deep(.bar) {
             color: red;
           }
@@ -64,7 +61,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')

@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -9,11 +8,11 @@ test(
         {
           "type": "module",
           "dependencies": {
-            "svelte": "^4.2.18",
+            "svelte": "^5",
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@sveltejs/vite-plugin-svelte": "^5",
             "@tailwindcss/vite": "workspace:^",
             "vite": "^6"
           }
@@ -48,10 +47,7 @@ test(
           target: document.body,
         })
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
-        @import 'tailwindcss/utilities';
-      `,
+      'src/index.css': css`@import 'tailwindcss';`,
       'src/App.svelte': html`
         <script>
           import './index.css'
@@ -61,7 +57,7 @@ test(
         <h1 class="global local underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss' reference;
           @import './other.css';
         </style>
       `,
@@ -96,7 +92,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ exec, fs, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -120,11 +116,11 @@ test(
         {
           "type": "module",
           "dependencies": {
-            "svelte": "^4.2.18",
+            "svelte": "^5",
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "@sveltejs/vite-plugin-svelte": "^3.1.1",
+            "@sveltejs/vite-plugin-svelte": "^5",
             "@tailwindcss/vite": "workspace:^",
             "vite": "^6"
           }
@@ -168,14 +164,11 @@ test(
         <h1 class="local global underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss/theme' theme(reference);
+          @import 'tailwindcss' reference;
           @import './other.css';
         </style>
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
-        @import 'tailwindcss/utilities';
-      `,
+      'src/index.css': css` @import 'tailwindcss'; `,
       'src/other.css': css`
         .local {
           @apply text-red-500;
@@ -207,8 +200,9 @@ test(
       `,
     },
   },
-  async ({ fs, spawn }) => {
-    await spawn(`pnpm vite build --watch`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn(`pnpm vite build --watch`)
+    await process.onStdout((m) => m.includes('built in'))
 
     await retryAssertion(async () => {
       let files = await fs.glob('dist/**/*.css')

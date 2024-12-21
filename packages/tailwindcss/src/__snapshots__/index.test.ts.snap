@@ -268,7 +268,6 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --container-5xl: 64rem;
   --container-6xl: 72rem;
   --container-7xl: 80rem;
-  --container-prose: 65ch;
   --text-xs: .75rem;
   --text-xs--line-height: calc(1 / .75);
   --text-sm: .875rem;
@@ -358,6 +357,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --perspective-normal: 500px;
   --perspective-midrange: 800px;
   --perspective-distant: 1200px;
+  --aspect-video: 16 / 9;
   --default-transition-duration: .15s;
   --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   --default-font-family: var(--font-sans);

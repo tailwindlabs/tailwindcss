@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -65,7 +64,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -86,7 +85,7 @@ test(
 )
 
 test(
-  `dev mode`,
+  'dev mode',
   {
     fs: {
       'package.json': json`
@@ -141,14 +140,21 @@ test(
       `,
     },
   },
-  async ({ root, spawn, getFreePort, fs }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     // Candidates are resolved lazily, so the first visit of index.html
     // will only have candidates from this file.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/root1.html')
+      let styles = await fetchStyles(url, '/root1.html')
       expect(styles).toContain(candidate`one:underline`)
       expect(styles).not.toContain(candidate`two:underline`)
     })
@@ -156,7 +162,7 @@ test(
     // Going to about.html will extend the candidate list to include
     // candidates from about.html.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(port, '/root2.html')
+      let styles = await fetchStyles(url, '/root2.html')
       expect(styles).not.toContain(candidate`one:underline`)
       expect(styles).toContain(candidate`two:underline`)
     })

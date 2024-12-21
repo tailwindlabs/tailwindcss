@@ -1,6 +1,5 @@
 import dedent from 'dedent'
 import path from 'node:path'
-import { expect } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 test(
@@ -724,7 +723,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm postcss index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
@@ -954,7 +953,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec, spawn, root }) => {
+  async ({ fs, exec, spawn, root, expect }) => {
     await exec('pnpm postcss src/index.css --output dist/out.css --verbose', {
       cwd: path.join(root, 'project-a'),
     })
@@ -1020,7 +1019,6 @@ test(
         cwd: path.join(root, 'project-a'),
       },
     )
-
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     // Changes to project-a should not be included in the output, we changed the
@@ -1215,7 +1213,7 @@ test(
       'pages/nested/foo.jsx': 'content-["pages/nested/foo.jsx"] content-["BAD"]',
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm postcss index.css --output dist/out.css')
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`

@@ -148,6 +148,7 @@ export function keyPathToCssProperty(path: string[]) {
   path = structuredClone(path)
 
   if (path[0] === 'animation') path[0] = 'animate'
+  if (path[0] === 'aspectRatio') path[0] = 'aspect'
   if (path[0] === 'borderRadius') path[0] = 'radius'
   if (path[0] === 'boxShadow') path[0] = 'shadow'
   if (path[0] === 'colors') path[0] = 'color'

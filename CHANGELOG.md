@@ -7,7 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Use the correct property value for `place-content-between`, `place-content-around`, and `place-content-evenly` utilities ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
+- Don’t detect arbitrary properties when preceded by an escape ([#15456](https://github.com/tailwindlabs/tailwindcss/pull/15456))
+- Fix incorrectly named `bg-round` and `bg-space` utilities to `bg-repeat-round` to `bg-repeat-space` ([#15462](https://github.com/tailwindlabs/tailwindcss/pull/15462))
+
+### Changed
+
+- Removed `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
+
+## [4.0.0-beta.8] - 2024-12-17
+
+### Fixed
+
+- Ensure `Symbol.dispose` and `Symbol.asyncDispose` are polyfilled ([#15404](https://github.com/tailwindlabs/tailwindcss/pull/15404))
+
+## [4.0.0-beta.7] - 2024-12-13
+
+### Added
+
+- Export `tailwindcss/lib/util/flattenColorPalette` for backward compatibility ([#15318](https://github.com/tailwindlabs/tailwindcss/pull/15318))
+- Improve debug logs to get better insights ([#15303](https://github.com/tailwindlabs/tailwindcss/pull/15303))
+
+### Fixed
+
+- Fix dependency related warnings when using `@tailwindcss/postcss` on Windows ([#15321](https://github.com/tailwindlabs/tailwindcss/pull/15321))
+- Skip creating a compiler for CSS files that should not be processed ([#15340](https://github.com/tailwindlabs/tailwindcss/pull/15340))
+- Fix missing `shadow-none` suggestion in IntelliSense ([#15342](https://github.com/tailwindlabs/tailwindcss/pull/15342))
+- Optimize AST before printing for IntelliSense ([#15347](https://github.com/tailwindlabs/tailwindcss/pull/15347))
+- Generate vendor prefixes for Chrome 111+ (e.g. `-webkit-background-clip: text`) ([#15389](https://github.com/tailwindlabs/tailwindcss/pull/15389))
+
+### Changed
+
+- Rename `--aspect-ratio-*` theme key to `--aspect-*` ([#15365](https://github.com/tailwindlabs/tailwindcss/pull/15365))
+- Derive `aspect-video` utility from theme ([#15365](https://github.com/tailwindlabs/tailwindcss/pull/15365))
+
+## [4.0.0-beta.6] - 2024-12-06
+
+### Fixed
+
+- Ensure `@import "…" reference` never generates utilities ([#15307](https://github.com/tailwindlabs/tailwindcss/pull/15307))
+
+## [4.0.0-beta.5] - 2024-12-04
+
+### Added
+
+- Parallelize parsing of individual source files ([#15270](https://github.com/tailwindlabs/tailwindcss/pull/15270))
+- Add new `@import "…" reference` option for importing Tailwind CSS configuration details into another CSS entry point without duplicating CSS ([#15228](https://github.com/tailwindlabs/tailwindcss/pull/15228))
+- Improve performance of `@tailwindcss/postcss` by translating between internal data structures and PostCSS nodes directly without additional parsing or stringification ([#15297](https://github.com/tailwindlabs/tailwindcss/pull/15297))
+
+### Fixed
+
+- Ensure absolute URLs inside imported CSS files are not rebased when using `@tailwindcss/vite` ([#15275](https://github.com/tailwindlabs/tailwindcss/pull/15275))
+- Fix issues with dev servers using Svelte 5 with `@tailwindcss/vite` ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Support installing `@tailwindcss/vite` in Vite 6 projects ([#15274](https://github.com/tailwindlabs/tailwindcss/issues/15274))
+- Fix resolution of imported CSS files in SSR builds with `@tailwindcss/vite` ([#15279](https://github.com/tailwindlabs/tailwindcss/issues/15279))
+- Ensure other plugins can run after `@tailwindcss/postcss` ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
+- Rebase URLs inside imported CSS files when using Vite with the `@tailwindcss/postcss` extension ([#15273](https://github.com/tailwindlabs/tailwindcss/pull/15273))
+- Fix missing font family suggestions in IntelliSense ([#15288](https://github.com/tailwindlabs/tailwindcss/pull/15288))
+- Fix missing `@container` suggestion in IntelliSense ([#15288](https://github.com/tailwindlabs/tailwindcss/pull/15288))
 
 ## [4.0.0-beta.4] - 2024-11-29
 
@@ -718,3 +777,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+
+- First 4.0.0-alpha.1 release

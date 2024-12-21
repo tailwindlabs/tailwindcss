@@ -1,12 +1,11 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import killPort from 'kill-port'
 import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
-import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest, expect } from 'vitest'
+import { stripVTControlCharacters } from 'node:util'
+import { test as defaultTest, type ExpectStatic } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -35,9 +34,9 @@ interface TestConfig {
 }
 interface TestContext {
   root: string
+  expect: ExpectStatic
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
-  getFreePort(): Promise<number>
   fs: {
     write(filePath: string, content: string): Promise<void>
     create(filePaths: string[]): Promise<void>
@@ -54,6 +53,7 @@ interface TestContext {
 type TestCallback = (context: TestContext) => Promise<void> | void
 interface TestFlags {
   only?: boolean
+  skip?: boolean
   debug?: boolean
 }
 
@@ -73,11 +73,17 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, debug = false }: TestFlags = {},
 ) {
-  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
+  return defaultTest(
     name,
-    { timeout: TEST_TIMEOUT, retry: process.env.CI ? 2 : 0 },
+    {
+      timeout: TEST_TIMEOUT,
+      retry: process.env.CI ? 2 : 0,
+      only: only || (!process.env.CI && debug),
+      skip,
+      concurrent: true,
+    },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
@@ -92,6 +98,7 @@ export function test(
 
       let context = {
         root,
+        expect: options.expect,
         async exec(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
@@ -155,7 +162,9 @@ export function test(
           })
 
           function dispose() {
-            child.kill()
+            if (!child.kill()) {
+              child.kill('SIGKILL')
+            }
 
             let timer = setTimeout(
               () =>
@@ -199,14 +208,18 @@ export function test(
             let content = result.toString()
             if (debug || only) console.log(content)
             combined.push(['stdout', content])
-            stdoutMessages.push(content)
+            for (let line of content.split('\n')) {
+              stdoutMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
             if (debug || only) console.error(content)
             combined.push(['stderr', content])
-            stderrMessages.push(content)
+            for (let line of content.split('\n')) {
+              stderrMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stderrActors, stderrMessages)
           })
           child.on('exit', onExit)
@@ -245,42 +258,6 @@ export function test(
               })
             },
           }
-        },
-        async getFreePort(): Promise<number> {
-          return new Promise((resolve, reject) => {
-            let server = net.createServer()
-            server.listen(0, () => {
-              let address = server.address()
-              let port = address === null || typeof address === 'string' ? null : address.port
-
-              server.close(() => {
-                if (port === null) {
-                  reject(new Error(`Failed to get a free port: address is ${address}`))
-                } else {
-                  disposables.push(async () => {
-                    // Wait for 10ms in case the process was just killed
-                    await new Promise((resolve) => setTimeout(resolve, 10))
-
-                    // kill-port uses `lsof` on macOS which is expensive and can
-                    // block for multiple seconds. In order to avoid that for a
-                    // server that is no longer running, we check if the port is
-                    // still in use first.
-                    let isPortTaken = await testIfPortTaken(port)
-                    if (!isPortTaken) {
-                      return
-                    }
-
-                    try {
-                      await killPort(port)
-                    } catch {
-                      // If the process can not be killed, we can't do anything
-                    }
-                  })
-                  resolve(port)
-                }
-              })
-            })
-          })
         },
         fs: {
           async write(filename: string, content: string | Uint8Array): Promise<void> {
@@ -374,9 +351,9 @@ export function test(
               let fileContent = await this.read(filePath)
               for (let content of Array.isArray(contents) ? contents : [contents]) {
                 if (content instanceof RegExp) {
-                  expect(fileContent).toMatch(content)
+                  options.expect(fileContent).toMatch(content)
                 } else {
-                  expect(fileContent).toContain(content)
+                  options.expect(fileContent).toContain(content)
                 }
               }
             })
@@ -385,7 +362,7 @@ export function test(
             return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of contents) {
-                expect(fileContent).not.toContain(content)
+                options.expect(fileContent).not.toContain(content)
               }
             })
           },
@@ -448,6 +425,9 @@ export function test(
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
 }
+test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { skip: true })
+}
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
 }
@@ -462,16 +442,14 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   let json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  ;['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'].forEach(
-    (key) => {
-      let dependencies = json[key] || {}
-      for (let dependency in dependencies) {
-        if (dependencies[dependency] === 'workspace:^') {
-          dependencies[dependency] = resolveVersion(dependency)
-        }
+  for (let key of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+    let dependencies = json[key] || {}
+    for (let dependency in dependencies) {
+      if (dependencies[dependency] === 'workspace:^') {
+        dependencies[dependency] = resolveVersion(dependency)
       }
-    },
-  )
+    }
+  }
 
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
@@ -503,25 +481,6 @@ function resolveVersion(dependency: string) {
 
 export function stripTailwindComment(content: string) {
   return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
-}
-
-function testIfPortTaken(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    let client = new net.Socket()
-    client.once('connect', () => {
-      resolve(true)
-      client.end()
-    })
-    client.once('error', (error: any) => {
-      if (error.code !== 'ECONNREFUSED') {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-      client.end()
-    })
-    client.connect({ port: port, host: 'localhost' })
-  })
 }
 
 export let svg = dedent
@@ -642,8 +601,12 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(port: number, path = '/'): Promise<string> {
-  let index = await fetch(`http://localhost:${port}${path}`)
+export async function fetchStyles(base: string, path = '/'): Promise<string> {
+  while (base.endsWith('/')) {
+    base = base.slice(0, -1)
+  }
+
+  let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
   let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
@@ -662,7 +625,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`http://localhost:${port}${path}`, {
+        let css = await fetch(`${base}${path}`, {
           headers: {
             Accept: 'text/css',
           },

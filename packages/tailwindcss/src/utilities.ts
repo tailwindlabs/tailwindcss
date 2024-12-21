@@ -719,8 +719,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `float`
    */
-  staticUtility('float-start', [['float', 'start']])
-  staticUtility('float-end', [['float', 'end']])
+  staticUtility('float-start', [['float', 'inline-start']])
+  staticUtility('float-end', [['float', 'inline-end']])
   staticUtility('float-right', [['float', 'right']])
   staticUtility('float-left', [['float', 'left']])
   staticUtility('float-none', [['float', 'none']])
@@ -728,8 +728,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `clear`
    */
-  staticUtility('clear-start', [['clear', 'start']])
-  staticUtility('clear-end', [['clear', 'end']])
+  staticUtility('clear-start', [['clear', 'inline-start']])
+  staticUtility('clear-end', [['clear', 'inline-end']])
   staticUtility('clear-right', [['clear', 'right']])
   staticUtility('clear-left', [['clear', 'left']])
   staticUtility('clear-both', [['clear', 'both']])
@@ -828,9 +828,8 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('aspect-auto', [['aspect-ratio', 'auto']])
   staticUtility('aspect-square', [['aspect-ratio', '1 / 1']])
-  staticUtility('aspect-video', [['aspect-ratio', '16 / 9']])
   functionalUtility('aspect', {
-    themeKeys: ['--aspect-ratio'],
+    themeKeys: ['--aspect'],
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
@@ -1781,9 +1780,9 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-content-center', [['place-content', 'center']])
   staticUtility('place-content-start', [['place-content', 'start']])
   staticUtility('place-content-end', [['place-content', 'end']])
-  staticUtility('place-content-between', [['place-content', 'between']])
-  staticUtility('place-content-around', [['place-content', 'around']])
-  staticUtility('place-content-evenly', [['place-content', 'evenly']])
+  staticUtility('place-content-between', [['place-content', 'space-between']])
+  staticUtility('place-content-around', [['place-content', 'space-around']])
+  staticUtility('place-content-evenly', [['place-content', 'space-evenly']])
   staticUtility('place-content-baseline', [['place-content', 'baseline']])
   staticUtility('place-content-stretch', [['place-content', 'stretch']])
 
@@ -2292,8 +2291,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-no-repeat', [['background-repeat', 'no-repeat']])
   staticUtility('bg-repeat-x', [['background-repeat', 'repeat-x']])
   staticUtility('bg-repeat-y', [['background-repeat', 'repeat-y']])
-  staticUtility('bg-round', [['background-repeat', 'round']])
-  staticUtility('bg-space', [['background-repeat', 'space']])
+  staticUtility('bg-repeat-round', [['background-repeat', 'round']])
+  staticUtility('bg-repeat-space', [['background-repeat', 'space']])
 
   staticUtility('bg-none', [['background-image', 'none']])
 
@@ -2920,7 +2919,7 @@ export function createUtilities(theme: Theme) {
   suggest('font', () => [
     {
       values: [],
-      valueThemeKeys: ['--font-family'],
+      valueThemeKeys: ['--font'],
     },
     {
       values: [
@@ -4227,7 +4226,7 @@ export function createUtilities(theme: Theme) {
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       },
       {
-        values: [],
+        values: ['none'],
         valueThemeKeys: ['--shadow'],
         hasDefaultValue: true,
       },
@@ -4565,7 +4564,7 @@ export function createUtilities(theme: Theme) {
     {
       values: ['normal'],
       valueThemeKeys: [],
-      hasDefaultValue: false,
+      hasDefaultValue: true,
     },
   ])
 
