@@ -4246,6 +4246,7 @@ exports[`getClassList 1`] = `
   "inset-shadow-inherit/95",
   "inset-shadow-inherit/100",
   "inset-shadow-initial",
+  "inset-shadow-sm",
   "inset-shadow-transparent",
   "inset-shadow-transparent/0",
   "inset-shadow-transparent/5",

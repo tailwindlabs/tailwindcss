@@ -4319,7 +4319,7 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: [],
-        valueThemeKeys: ['--shadow'],
+        valueThemeKeys: ['--inset-shadow'],
         hasDefaultValue: true,
       },
     ])
