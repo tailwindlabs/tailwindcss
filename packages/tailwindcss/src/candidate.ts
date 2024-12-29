@@ -438,6 +438,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       let valueIsArbitrary = startArbitraryIdx !== -1
 
       if (valueIsArbitrary) {
+        // Arbitrary values must end with a `]`.
+        if (value[value.length - 1] !== ']') return
+
         let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
