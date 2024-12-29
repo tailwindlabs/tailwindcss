@@ -540,6 +540,13 @@ it('should parse a utility with an arbitrary value', () => {
   `)
 })
 
+it('should not parse a utility with an incomplete arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-[#0088cc', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
 it('should parse a utility with an arbitrary value with parens', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
