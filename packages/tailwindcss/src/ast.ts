@@ -119,26 +119,24 @@ export function walk(
       path: AstNode[]
     },
   ) => void | WalkAction,
-  parentPath: AstNode[] = [],
+  path: AstNode[] = [],
   context: Record<string, string | boolean> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
-    let path = [...parentPath, node]
-    let parent = parentPath.at(-1) ?? null
+    let parent = path[path.length - 1] ?? null
 
     // We want context nodes to be transparent in walks. This means that
     // whenever we encounter one, we immediately walk through its children and
     // furthermore we also don't update the parent.
     if (node.kind === 'context') {
-      if (
-        walk(node.nodes, visit, parentPath, { ...context, ...node.context }) === WalkAction.Stop
-      ) {
+      if (walk(node.nodes, visit, path, { ...context, ...node.context }) === WalkAction.Stop) {
         return WalkAction.Stop
       }
       continue
     }
 
+    path.push(node)
     let status =
       visit(node, {
         parent,
@@ -152,6 +150,7 @@ export function walk(
           i--
         },
       }) ?? WalkAction.Continue
+    path.pop()
 
     // Stop the walk entirely
     if (status === WalkAction.Stop) return WalkAction.Stop
@@ -160,7 +159,11 @@ export function walk(
     if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule' || node.kind === 'at-rule') {
-      if (walk(node.nodes, visit, path, context) === WalkAction.Stop) {
+      path.push(node)
+      let result = walk(node.nodes, visit, path, context)
+      path.pop()
+
+      if (result === WalkAction.Stop) {
         return WalkAction.Stop
       }
     }
@@ -179,21 +182,23 @@ export function walkDepth(
       replaceWith(newNode: AstNode[]): void
     },
   ) => void,
-  parentPath: AstNode[] = [],
+  path: AstNode[] = [],
   context: Record<string, string | boolean> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
-    let path = [...parentPath, node]
-    let parent = parentPath.at(-1) ?? null
+    let parent = path[path.length - 1] ?? null
 
     if (node.kind === 'rule' || node.kind === 'at-rule') {
+      path.push(node)
       walkDepth(node.nodes, visit, path, context)
+      path.pop()
     } else if (node.kind === 'context') {
-      walkDepth(node.nodes, visit, parentPath, { ...context, ...node.context })
+      walkDepth(node.nodes, visit, path, { ...context, ...node.context })
       continue
     }
 
+    path.push(node)
     visit(node, {
       parent,
       context,
@@ -205,6 +210,7 @@ export function walkDepth(
         i += newNode.length - 1
       },
     })
+    path.pop()
   }
 }
 
