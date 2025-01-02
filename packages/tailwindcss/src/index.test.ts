@@ -481,11 +481,9 @@ describe('@apply', () => {
         ['flex', 'my-flex'],
       ),
     ).toMatchInlineSnapshot(`
-      ".flex {
+      ".flex, .my-flex {
         display: flex;
       }
-
-      @apply flex;
 
       @layer base {
         body {

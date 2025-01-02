@@ -538,17 +538,24 @@ async function parseCss(
     node.context = {}
   }
 
-  // Replace `@apply` rules with the actual utility classes.
-  features |= substituteAtApply(ast, designSystem)
-
-  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
-
-  // Remove `@utility`, we couldn't replace it before yet because we had to
-  // handle the nested `@apply` at-rules first.
+  // Post-process `@utility` nodes.
+  //
+  // We have to do this as a separate step because if we replace the `@utility`
+  // nodes when we collect it in the system, then we can't substitute the
+  // `@apply` at-rules anymore.
+  //
+  // We also can't substitute the `@apply` at-rules while collecting the
+  // `@utility` rules, because if it relies on a utility that is defined later,
+  // then we wouldn't be able to resolve the applied utility.
+  //
+  // Lastly, we can't rely on the single `substituteAtApply` call at the end
+  // because this replaces `@apply`, but won't replace `@apply` if we injected
+  // an `@apply`.
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'at-rule') return
 
     if (node.name === '@utility') {
+      substituteAtApply(node.nodes, designSystem)
       replaceWith([])
     }
 
@@ -556,6 +563,11 @@ async function parseCss(
     // into nested trees.
     return WalkAction.Skip
   })
+
+  // Replace `@apply` rules with the actual utility classes.
+  features |= substituteAtApply(ast, designSystem)
+
+  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
 
   return {
     designSystem,
