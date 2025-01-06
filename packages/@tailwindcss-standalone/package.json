@@ -47,7 +47,7 @@
     "lightningcss-darwin-arm64": "^1.25.1",
     "lightningcss-darwin-x64": "^1.25.1",
     "lightningcss-linux-arm64-gnu": "^1.25.1",
-    "lightningcss-linux-arm64-musl": "^1.25.1",
+    "lightningcss-linux-arm64-musl": "^1.28.2",
     "lightningcss-linux-x64-gnu": "^1.25.1",
     "lightningcss-linux-x64-musl": "^1.25.1",
     "lightningcss-win32-x64-msvc": "^1.25.1"
