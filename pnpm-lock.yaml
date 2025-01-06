@@ -135,7 +135,7 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
 
-  packages/@tailwindcss-cdn:
+  packages/@tailwindcss-browser:
     devDependencies:
       h3:
         specifier: ^1.13.0

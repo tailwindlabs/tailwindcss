@@ -121,7 +121,7 @@ async function createServer() {
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Document</title>
-          <script src="/cdn.js"></script>
+          <script src="/tailwindcss.js"></script>
           <style type="text/tailwindcss">
             @theme {
               --color-red: #ff0000;
@@ -149,8 +149,8 @@ async function createServer() {
   const router = createRouter()
 
   router.get(
-    '/cdn.js',
-    defineEventHandler(() => readFile(require.resolve('@tailwindcss/cdn'))),
+    '/tailwindcss.js',
+    defineEventHandler(() => readFile(require.resolve('@tailwindcss/browser'))),
   )
 
   app.use(router)

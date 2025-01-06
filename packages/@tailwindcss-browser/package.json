@@ -1,12 +1,12 @@
 {
-  "name": "@tailwindcss/cdn",
+  "name": "@tailwindcss/browser",
   "version": "4.0.0-beta.8",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tailwindlabs/tailwindcss.git",
-    "directory": "packages/@tailwindcss-cdn"
+    "directory": "packages/@tailwindcss-browser"
   },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",

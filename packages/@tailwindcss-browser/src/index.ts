@@ -2,10 +2,10 @@ import * as tailwindcss from 'tailwindcss'
 import * as assets from './assets'
 import { Instrumentation } from './instrumentation'
 
-// Warn users about using the CDN in production as early as possible. It can
-// take time for the script to do its work so this must be at the top.
+// Warn users about using the browser build in production as early as possible.
+// It can take time for the script to do its work so this must be at the top.
 console.warn(
-  'The CDN build of Tailwind CSS should not be used in production. To use Tailwind CSS in production, use the Tailwind CLI, Vite plugin, or PostCSS plugin: https://tailwindcss.com/docs/installation',
+  'The browser build of Tailwind CSS should not be used in production. To use Tailwind CSS in production, use the Tailwind CLI, Vite plugin, or PostCSS plugin: https://tailwindcss.com/docs/installation',
 )
 
 /**
@@ -138,7 +138,7 @@ async function createCompiler() {
             }
           }
 
-          throw new Error(`The CDN does not support @import for "${id}"`)
+          throw new Error(`The browser build does not support @import for "${id}"`)
         }
 
         let sheet: ReturnType<typeof resolve> | undefined
@@ -164,7 +164,7 @@ async function createCompiler() {
       },
 
       loadModule() {
-        throw new Error(`The CDN does not support plugins or config files.`)
+        throw new Error(`The browser build does not support plugins or config files.`)
       },
     })
   } finally {

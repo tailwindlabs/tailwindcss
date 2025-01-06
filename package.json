@@ -39,7 +39,7 @@
     "dev": "turbo dev --filter=!./playgrounds/*",
     "test": "cargo test && vitest run --hideSkippedTests",
     "test:integrations": "vitest --root=./integrations",
-    "test:ui": "pnpm run --filter=tailwindcss test:ui && pnpm run --filter=@tailwindcss/cdn test:ui",
+    "test:ui": "pnpm run --filter=tailwindcss test:ui && pnpm run --filter=@tailwindcss/browser test:ui",
     "tdd": "vitest --hideSkippedTests",
     "bench": "vitest bench",
     "version-packages": "node ./scripts/version-packages.mjs",
