@@ -17375,7 +17375,7 @@ describe('custom utilities', () => {
         ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
     )
   })
 
@@ -17406,7 +17406,7 @@ describe('custom utilities', () => {
         ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
     )
   })
 })
