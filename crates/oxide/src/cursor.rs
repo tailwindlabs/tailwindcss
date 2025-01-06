@@ -67,7 +67,7 @@ impl<'a> Cursor<'a> {
     }
 }
 
-impl<'a> Display for Cursor<'a> {
+impl Display for Cursor<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let len = self.input.len().to_string();
 
