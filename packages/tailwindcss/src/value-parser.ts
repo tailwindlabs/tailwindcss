@@ -67,7 +67,18 @@ export function walk(
       visit(node, {
         parent,
         replaceWith(newNode) {
-          ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
+          if (Array.isArray(newNode)) {
+            if (newNode.length === 0) {
+              ast.splice(i, 1)
+            } else if (newNode.length === 1) {
+              ast[i] = newNode[0]
+            } else {
+              ast.splice(i, 1, ...newNode)
+            }
+          } else {
+            ast[i] = newNode
+          }
+
           // We want to visit the newly replaced node(s), which start at the
           // current index (i). By decrementing the index here, the next loop
           // will process this position (containing the replaced node) again.
