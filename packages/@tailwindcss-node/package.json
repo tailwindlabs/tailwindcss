@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "enhanced-resolve": "^5.17.1",
-    "jiti": "^2.4.0",
+    "jiti": "^2.4.2",
     "tailwindcss": "workspace:*"
   }
 }
