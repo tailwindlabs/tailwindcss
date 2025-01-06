@@ -1,160 +1,112 @@
-import { styleRule, walkDepth } from './ast'
-import { applyVariant } from './compile'
-import type { DesignSystem } from './design-system'
-
-interface ClassMetadata {
-  modifiers: string[]
-}
-
-export type ClassEntry = [string, ClassMetadata]
-
-export function getClassList(design: DesignSystem): ClassEntry[] {
-  let list: [string, ClassMetadata][] = []
-
-  // Static utilities only work as-is
-  for (let utility of design.utilities.keys('static')) {
-    list.push([utility, { modifiers: [] }])
-  }
-
-  // Functional utilities have their own list of completions
-  for (let utility of design.utilities.keys('functional')) {
-    let completions = design.utilities.getCompletions(utility)
-
-    for (let group of completions) {
-      for (let value of group.values) {
-        let name = value === null ? utility : `${utility}-${value}`
-
-        list.push([name, { modifiers: group.modifiers }])
-
-        if (group.supportsNegative) {
-          list.push([`-${name}`, { modifiers: group.modifiers }])
-        }
-      }
-    }
-  }
-
-  list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] < b[0] ? -1 : 1))
-
-  return list
-}
+import { styleRule, walkDepth } from './ast';
+import { applyVariant } from './compile';
+import type { DesignSystem } from './design-system';
 
 interface SelectorOptions {
-  modifier?: string
-  value?: string
+  modifier?: string | null;
+  value?: string | null;
 }
 
 export interface VariantEntry {
-  name: string
-  isArbitrary: boolean
-  values: string[]
-  hasDash: boolean
-  selectors: (options: SelectorOptions) => string[]
+  name: string;
+  isArbitrary: boolean;
+  values: string[];
+  hasDash: boolean;
+  selectors: (options: SelectorOptions) => string[];
 }
 
-export function getVariants(design: DesignSystem) {
-  let list: VariantEntry[] = []
+interface Node {
+  kind: 'rule' | 'at-rule' | 'declaration' | 'other-kinds';
+  selector?: string | null;
+  name?: string;
+  params?: string;
+  nodes?: Node[] | null;
+}
 
-  for (let [root, variant] of design.variants.entries()) {
-    if (variant.kind === 'arbitrary') continue
+interface Variant {
+  kind: 'static' | 'functional' | 'compound' | 'arbitrary';
+}
 
-    let values = design.variants.getCompletions(root)
+function generateVariantName(root: string, value?: string, modifier?: string): string {
+  let name = root;
+  if (value) name += `-${value}`;
+  if (modifier) name += `/${modifier}`;
+  return name;
+}
 
-    function selectors({ value, modifier }: SelectorOptions = {}) {
-      let name = root
-      if (value) name += `-${value}`
-      if (modifier) name += `/${modifier}`
+function parseAndApplyVariant(name: string, design: DesignSystem): ReturnType<typeof styleRule> | null {
+  const variant = design.parseVariant(name);
+  if (!variant) return null;
 
-      let variant = design.parseVariant(name)
+  const node = styleRule('.__placeholder__', []);
+  if (applyVariant(node, variant, design.variants) === null) {
+    return null;
+  }
 
-      if (!variant) return []
+  return node;
+}
 
-      // Apply the variant to a placeholder rule
-      let node = styleRule('.__placeholder__', [])
+function processNodePath(path: Node[]): string[] {
+  return path.flatMap((node) => {
+    if (node.kind === 'rule') {
+      return node.selector && node.selector !== '&' ? [node.selector] : [];
+    }
+    if (node.kind === 'at-rule') {
+      return node.name && node.params ? [`${node.name} ${node.params}`] : [];
+    }
+    return [];
+  });
+}
 
-      // If the rule produces no nodes it means the variant does not apply
-      if (applyVariant(node, variant, design.variants) === null) {
-        return []
-      }
+function buildSelector(group: string[]): string {
+  return group.reduceRight((selector, current) => {
+    return selector === '' ? current : `${current} { ${selector} }`;
+  }, '');
+}
 
-      // Now look at the selector(s) inside the rule
-      let selectors: string[] = []
+export function getVariants(design: DesignSystem): VariantEntry[] {
+  const list: VariantEntry[] = [];
 
-      // Produce v3-style selector strings in the face of nested rules
-      // this is more visible for things like group-*, not-*, etc…
-      walkDepth(node.nodes, (node, { path }) => {
-        if (node.kind !== 'rule' && node.kind !== 'at-rule') return
-        if (node.nodes.length > 0) return
+  for (let [root, variant] of (design.variants.entries() as [string, Variant][] || [])) {
+    if (!variant || variant.kind === 'arbitrary') continue;
 
-        // Sort at-rules before style rules
-        path.sort((a, b) => {
-          let aIsAtRule = a.kind === 'at-rule'
-          let bIsAtRule = b.kind === 'at-rule'
+    const values = design.variants.getCompletions(root) || [];
+    if (!values.length) continue;
 
-          if (aIsAtRule && !bIsAtRule) return -1
-          if (!aIsAtRule && bIsAtRule) return 1
+    function selectors({ value, modifier }: SelectorOptions = {}): string[] {
+      const name = generateVariantName(root, value, modifier);
+      const node = parseAndApplyVariant(name, design);
+      if (!node) return [];
 
-          return 0
-        })
+      const selectors: string[] = [];
+      walkDepth(node.nodes as Node[], (node, { path }) => {
+        if (node.kind !== 'rule' && node.kind !== 'at-rule') return;
+        if (node.nodes && node.nodes.length > 0) return;
 
-        // A list of the selectors / at rules encountered to get to this point
-        let group = path.flatMap((node) => {
-          if (node.kind === 'rule') {
-            return node.selector === '&' ? [] : [node.selector]
-          }
+        const group = processNodePath(path as Node[]);
+        selectors.push(buildSelector(group));
+      });
 
-          if (node.kind === 'at-rule') {
-            return [`${node.name} ${node.params}`]
-          }
-
-          return []
-        })
-
-        // Build a v3-style nested selector
-        let selector = ''
-
-        for (let i = group.length - 1; i >= 0; i--) {
-          selector = selector === '' ? group[i] : `${group[i]} { ${selector} }`
-        }
-
-        selectors.push(selector)
-      })
-
-      return selectors
+      return selectors;
     }
 
     switch (variant.kind) {
-      case 'static': {
+      case 'static':
+      case 'functional':
+      case 'compound':
         list.push({
           name: root,
           values,
-          isArbitrary: false,
+          isArbitrary: variant.kind !== 'static',
           hasDash: true,
           selectors,
-        })
-        break
-      }
-      case 'functional': {
-        list.push({
-          name: root,
-          values,
-          isArbitrary: true,
-          hasDash: true,
-          selectors,
-        })
-        break
-      }
-      case 'compound': {
-        list.push({
-          name: root,
-          values,
-          isArbitrary: true,
-          hasDash: true,
-          selectors,
-        })
-        break
-      }
+        });
+        break;
+      default:
+        console.warn(`Unknown variant kind: ${variant.kind}`);
+        continue;
     }
   }
 
-  return list
+  return list;
 }
