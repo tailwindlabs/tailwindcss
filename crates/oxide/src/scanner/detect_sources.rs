@@ -95,13 +95,8 @@ impl DetectSources {
             )
             .into_iter();
 
-        loop {
-            // We are only interested in valid entries
-            let entry = match it.next() {
-                Some(Ok(entry)) => entry,
-                _ => break,
-            };
-
+        // We are only interested in valid entries
+        while let Some(Ok(entry)) = it.next() {
             // Ignore known directories that we don't want to traverse into.
             if entry.file_type().is_dir() && entry.file_name() == ".git" {
                 it.skip_current_dir();

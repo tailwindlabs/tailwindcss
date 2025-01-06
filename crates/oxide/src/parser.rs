@@ -204,7 +204,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
+    fn split_candidate(candidate: &'a [u8]) -> SplitCandidate<'a> {
         let mut brackets = 0;
         let mut idx_end = 0;
 
