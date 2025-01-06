@@ -470,24 +470,40 @@ describe('@apply', () => {
 
           @layer base {
             body {
-              @apply my-flex;
+              @apply a;
             }
+          }
+
+          @utility a {
+            @apply b;
+          }
+
+          @utility b {
+            @apply focus:c;
+          }
+
+          @utility c {
+            @apply my-flex!;
           }
 
           @utility my-flex {
             @apply flex;
           }
         `,
-        ['flex', 'my-flex'],
+        ['a', 'b', 'c', 'flex', 'my-flex'],
       ),
     ).toMatchInlineSnapshot(`
-      ".flex, .my-flex {
+      ".a:focus, .b:focus, .c {
+        display: flex !important;
+      }
+
+      .flex, .my-flex {
         display: flex;
       }
 
       @layer base {
-        body {
-          display: flex;
+        body:focus {
+          display: flex !important;
         }
       }"
     `)
