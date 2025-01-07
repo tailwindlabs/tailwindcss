@@ -17565,7 +17565,6 @@ describe('custom utilities', () => {
         }
 
         .example-2\\/3 {
-          --value-as-number: 2;
           --value-as-ratio: 2 / 3;
         }
 
