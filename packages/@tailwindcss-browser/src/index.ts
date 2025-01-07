@@ -254,7 +254,7 @@ new MutationObserver((records) => {
   for (let record of records) {
     // New stylesheets == tracking + full rebuild
     for (let node of record.addedNodes as Iterable<HTMLElement>) {
-      if (node.nodeType !== 1) continue
+      if (node.nodeType !== Node.ELEMENT_NODE) continue
       if (node.tagName !== 'STYLE') continue
       if (node.getAttribute('type') !== STYLE_TYPE) continue
 
