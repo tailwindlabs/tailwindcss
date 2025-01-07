@@ -17409,4 +17409,33 @@ describe('custom utilities', () => {
       `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
     )
   })
+
+  test('custom utilities with `@apply` causing circular dependencies should error (multiple levels)', async () => {
+    await expect(() =>
+      compileCss(
+        css`
+          body {
+            @apply foo;
+          }
+
+          @utility foo {
+            @apply flex-wrap hover:bar;
+          }
+
+          @utility bar {
+            @apply flex dark:baz;
+          }
+
+          @utility baz {
+            @apply flex-wrap hover:foo;
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
+    )
+  })
 })
