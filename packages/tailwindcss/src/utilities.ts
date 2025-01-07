@@ -4760,6 +4760,37 @@ function resolveValueFunction(
   fn: ValueParser.ValueFunctionNode,
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  // Merge arguments separated by a space, e.g.: `--value(--text-*--line-height)`
+  //
+  // Results in:
+  // [
+  //   { kind: 'word', value: '--text-*' },
+  //   { kind: 'separator', value: ' ' },
+  //   { kind: 'word', value: '--line-height' },
+  // ]
+  //
+  // But should be:
+  // [
+  //   { kind: 'word', value: '--text-*--line-height' },
+  // ]
+  for (let i = fn.nodes.length - 1; i >= 2; --i) {
+    let lhs = fn.nodes[i - 2]
+    let sep = fn.nodes[i - 1]
+    let rhs = fn.nodes[i]
+    if (
+      rhs.kind === 'word' &&
+      sep.kind === 'separator' &&
+      sep.value === ' ' &&
+      lhs.kind === 'word'
+    ) {
+      // Ensure `--value(--foo --bar)` results in `--value(--foo-*--bar)`
+      if (lhs.value[lhs.value.length - 1] !== '*') lhs.value += '-*'
+
+      lhs.value = `${lhs.value}${rhs.value}`
+      fn.nodes.splice(i - 1, 2)
+    }
+  }
+
   for (let arg of fn.nodes) {
     // Resolving theme value, e.g.: `--value(--color)`
     if (
@@ -4768,7 +4799,7 @@ function resolveValueFunction(
       arg.value[0] === '-' &&
       arg.value[1] === '-'
     ) {
-      if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
+      if (!arg.value.includes('*')) arg.value += '-*'
 
       let resolved = designSystem.resolveThemeValue(arg.value.replace('*', value.value))
       if (resolved) return { nodes: ValueParser.parse(resolved) }
