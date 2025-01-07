@@ -137,6 +137,7 @@ test(
       'src/test.js': ts`
         export default {
           'shouldNotMigrate': !border.test + '',
+          'filter': 'drop-shadow(0 0 0.5rem #000)',
         }
       `,
       'src/index.html': html`
@@ -288,6 +289,7 @@ test(
       --- src/test.js ---
       export default {
         'shouldNotMigrate': !border.test + '',
+        'filter': 'drop-shadow(0 0 0.5rem #000)',
       }
       "
     `)

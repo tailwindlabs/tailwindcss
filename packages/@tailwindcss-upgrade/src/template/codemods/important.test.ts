@@ -38,31 +38,31 @@ test('does not match false positives', async () => {
   ).toEqual('!border')
 })
 
-test('does not match false positives', async () => {
+test('does not replace classes in invalid positions', async () => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
 
-  function shouldNotDetect(example: string, candidate = '!border') {
+  function shouldNotReplace(example: string, candidate = '!border') {
     expect(
       important(designSystem, {}, candidate, {
         contents: example,
         start: example.indexOf(candidate),
         end: example.indexOf(candidate) + candidate.length,
       }),
-    ).toEqual('!border')
+    ).toEqual(candidate)
   }
 
-  shouldNotDetect(`let notBorder = !border    \n`)
-  shouldNotDetect(`{ "foo": !border.something + ""}\n`)
-  shouldNotDetect(`<div v-if="something && !border"></div>\n`)
-  shouldNotDetect(`<div v-else-if="something && !border"></div>\n`)
-  shouldNotDetect(`<div v-show="something && !border"></div>\n`)
-  shouldNotDetect(`<div v-if="!border || !border"></div>\n`)
-  shouldNotDetect(`<div v-else-if="!border || !border"></div>\n`)
-  shouldNotDetect(`<div v-show="!border || !border"></div>\n`)
-  shouldNotDetect(`<div v-if="!border"></div>\n`)
-  shouldNotDetect(`<div v-else-if="!border"></div>\n`)
-  shouldNotDetect(`<div v-show="!border"></div>\n`)
-  shouldNotDetect(`<div x-if="!border"></div>\n`)
+  shouldNotReplace(`let notBorder = !border    \n`)
+  shouldNotReplace(`{ "foo": !border.something + ""}\n`)
+  shouldNotReplace(`<div v-if="something && !border"></div>\n`)
+  shouldNotReplace(`<div v-else-if="something && !border"></div>\n`)
+  shouldNotReplace(`<div v-show="something && !border"></div>\n`)
+  shouldNotReplace(`<div v-if="!border || !border"></div>\n`)
+  shouldNotReplace(`<div v-else-if="!border || !border"></div>\n`)
+  shouldNotReplace(`<div v-show="!border || !border"></div>\n`)
+  shouldNotReplace(`<div v-if="!border"></div>\n`)
+  shouldNotReplace(`<div v-else-if="!border"></div>\n`)
+  shouldNotReplace(`<div v-show="!border"></div>\n`)
+  shouldNotReplace(`<div x-if="!border"></div>\n`)
 })
