@@ -1,11 +1,17 @@
 import { Features } from '.'
-import { toCss, walk, WalkAction, type AstNode } from './ast'
+import { rule, toCss, walk, WalkAction, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import { DefaultMap } from './utils/default-map'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
+
+  // Wrap the whole AST in a root rule to make sure there is always a parent
+  // available for `@apply` at-rules. In some cases, the incoming `ast` just
+  // contains `@apply` at-rules which means that there is no proper parent to
+  // rely on.
+  let root = rule('&', ast)
 
   // Track all nodes containing `@apply`
   let parents = new Set<AstNode>()
@@ -17,7 +23,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let definitions = new DefaultMap(() => new Set<AstNode>())
 
   // Collect all new `@utility` definitions and all `@apply` rules first
-  walk(ast, (node, { parent }) => {
+  walk([root], (node, { parent }) => {
     if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.

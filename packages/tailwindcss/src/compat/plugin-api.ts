@@ -268,9 +268,8 @@ export function buildPluginApi(
 
         designSystem.utilities.static(className, () => {
           let clonedAst = structuredClone(ast)
-          let parent = rule('&', clonedAst)
-          featuresRef.current |= substituteAtApply([parent], designSystem)
-          return parent.nodes
+          featuresRef.current |= substituteAtApply(clonedAst, designSystem)
+          return clonedAst
         })
       }
     },
@@ -391,9 +390,8 @@ export function buildPluginApi(
             }
 
             let ast = objectToAst(fn(value, { modifier }))
-            let parent = rule('&', ast)
-            featuresRef.current |= substituteAtApply([parent], designSystem)
-            return parent.nodes
+            featuresRef.current |= substituteAtApply(ast, designSystem)
+            return ast
           }
         }
 
