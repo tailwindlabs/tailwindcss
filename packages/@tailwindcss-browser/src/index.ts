@@ -101,71 +101,8 @@ async function createCompiler() {
   try {
     compiler = await tailwindcss.compile(css, {
       base: '/',
-      async loadStylesheet(id, base) {
-        // The CSS might be using imports so we'll resolve those here
-        function resolve() {
-          if (id === 'tailwindcss') {
-            return {
-              base,
-              content: assets.css.index,
-            }
-          } else if (
-            id === 'tailwindcss/preflight' ||
-            id === 'tailwindcss/preflight.css' ||
-            id === './preflight.css'
-          ) {
-            return {
-              base,
-              content: assets.css.preflight,
-            }
-          } else if (
-            id === 'tailwindcss/theme' ||
-            id === 'tailwindcss/theme.css' ||
-            id === './theme.css'
-          ) {
-            return {
-              base,
-              content: assets.css.theme,
-            }
-          } else if (
-            id === 'tailwindcss/utilities' ||
-            id === 'tailwindcss/utilities.css' ||
-            id === './utilities.css'
-          ) {
-            return {
-              base,
-              content: assets.css.utilities,
-            }
-          }
-
-          throw new Error(`The browser build does not support @import for "${id}"`)
-        }
-
-        let sheet: ReturnType<typeof resolve> | undefined
-
-        try {
-          sheet = resolve()
-          I.hit(`Loaded stylesheet`, {
-            id,
-            base,
-            size: sheet.content.length,
-          })
-        } catch (err) {
-          I.hit(`Failed to load stylesheet`, {
-            id,
-            base,
-            error: (err as Error).message ?? err,
-          })
-
-          throw err
-        }
-
-        return sheet
-      },
-
-      loadModule() {
-        throw new Error(`The browser build does not support plugins or config files.`)
-      },
+      loadStylesheet,
+      loadModule,
     })
   } finally {
     I.end('Compile CSS')
@@ -173,6 +110,70 @@ async function createCompiler() {
   }
 
   classes.clear()
+}
+
+async function loadStylesheet(id: string, base: string) {
+  function load() {
+    if (id === 'tailwindcss') {
+      return {
+        base,
+        content: assets.css.index,
+      }
+    } else if (
+      id === 'tailwindcss/preflight' ||
+      id === 'tailwindcss/preflight.css' ||
+      id === './preflight.css'
+    ) {
+      return {
+        base,
+        content: assets.css.preflight,
+      }
+    } else if (
+      id === 'tailwindcss/theme' ||
+      id === 'tailwindcss/theme.css' ||
+      id === './theme.css'
+    ) {
+      return {
+        base,
+        content: assets.css.theme,
+      }
+    } else if (
+      id === 'tailwindcss/utilities' ||
+      id === 'tailwindcss/utilities.css' ||
+      id === './utilities.css'
+    ) {
+      return {
+        base,
+        content: assets.css.utilities,
+      }
+    }
+
+    throw new Error(`The browser build does not support @import for "${id}"`)
+  }
+
+  try {
+    let sheet = load()
+
+    I.hit(`Loaded stylesheet`, {
+      id,
+      base,
+      size: sheet.content.length,
+    })
+
+    return sheet
+  } catch (err) {
+    I.hit(`Failed to load stylesheet`, {
+      id,
+      base,
+      error: (err as Error).message ?? err,
+    })
+
+    throw err
+  }
+}
+
+async function loadModule(): Promise<never> {
+  throw new Error(`The browser build does not support plugins or config files.`)
 }
 
 async function build(kind: 'full' | 'incremental') {
