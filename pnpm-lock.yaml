@@ -278,8 +278,8 @@ importers:
         specifier: ^1.25.1
         version: 1.26.0
       lightningcss-linux-x64-musl:
-        specifier: ^1.25.1
-        version: 1.26.0
+        specifier: ^1.28.2
+        version: 1.28.2
       lightningcss-win32-x64-msvc:
         specifier: ^1.25.1
         version: 1.26.0
@@ -2898,6 +2898,12 @@ packages:
 
   lightningcss-linux-x64-musl@1.26.0:
     resolution: {integrity: sha512-yX3Rk9m00JGCUzuUhFEojY+jf/6zHs3XU8S8Vk+FRbnr4St7cjyMXdNjuA2LjiT8e7j8xHRCH8hyZ4H/btRE4A==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  lightningcss-linux-x64-musl@1.28.2:
+    resolution: {integrity: sha512-alb/j1NMrgQmSFyzTbN1/pvMPM+gdDw7YBuQ5VSgcFDypN3Ah0BzC2dTZbzwzaMdUVDszX6zH5MzjfVN1oGuww==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
@@ -6301,7 +6307,10 @@ snapshots:
 
   lightningcss-linux-x64-gnu@1.26.0: {}
 
-  lightningcss-linux-x64-musl@1.26.0: {}
+  lightningcss-linux-x64-musl@1.26.0:
+    optional: true
+
+  lightningcss-linux-x64-musl@1.28.2: {}
 
   lightningcss-win32-arm64-msvc@1.26.0:
     optional: true
