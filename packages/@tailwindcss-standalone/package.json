@@ -50,6 +50,6 @@
     "lightningcss-linux-arm64-musl": "^1.25.1",
     "lightningcss-linux-x64-gnu": "^1.25.1",
     "lightningcss-linux-x64-musl": "^1.25.1",
-    "lightningcss-win32-x64-msvc": "^1.25.1"
+    "lightningcss-win32-x64-msvc": "^1.28.2"
   }
 }
