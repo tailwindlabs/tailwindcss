@@ -201,16 +201,16 @@ async function parseCss(
             // accept just `tab-size`, you'd have to use a static utility.
             if (candidate.value === null) return
 
-            // Whether `value(…)` was used
+            // Whether `--value(…)` was used
             let usedValueFn = false
 
-            // Whether any of the declarations successfully resolved a `value(…)`.
+            // Whether any of the declarations successfully resolved a `--value(…)`.
             // E.g:
             // ```css
             // @utility tab-size-* {
-            //   tab-size: value(integer);
-            //   tab-size: value(--tab-size);
-            //   tab-size: value([integer]);
+            //   tab-size: --value(integer);
+            //   tab-size: --value(--tab-size);
+            //   tab-size: --value([integer]);
             // }
             // ```
             // Any of these `tab-size` declarations have to resolve to a valid
@@ -220,10 +220,10 @@ async function parseCss(
             // The resolved value type, e.g.: `integer`
             let resolvedValueType = null as string | null
 
-            // Whether `modifier(…)` was used
+            // Whether `--modifier(…)` was used
             let usedModifierFn = false
 
-            // Whether any of the declarations successfully resolved a `modifier(…)`
+            // Whether any of the declarations successfully resolved a `--modifier(…)`
             let resolvedModifierFn = false
 
             walk(ast, (node, { replaceWith: replaceDeclarationWith }) => {
@@ -235,12 +235,12 @@ async function parseCss(
                 ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
                   if (valueNode.kind !== 'function') return
 
-                  // Value function, e.g.: `value(integer)`
-                  if (valueNode.value === 'value') {
+                  // Value function, e.g.: `--value(integer)`
+                  if (valueNode.value === '--value') {
                     usedValueFn = true
 
                     for (let arg of valueNode.nodes) {
-                      // Resolving theme value, e.g.: `value(--color)`
+                      // Resolving theme value, e.g.: `--value(--color)`
                       if (
                         candidate.value?.kind === 'named' &&
                         arg.kind === 'word' &&
@@ -259,7 +259,7 @@ async function parseCss(
                         }
                       }
 
-                      // Bare value, e.g.: `value(integer)`
+                      // Bare value, e.g.: `--value(integer)`
                       else if (candidate.value?.kind === 'named' && arg.kind === 'word') {
                         // Limit the bare value types, to prevent new syntax
                         // that we don't want to support. E.g.: `text-#000` is
@@ -307,7 +307,7 @@ async function parseCss(
                         }
                       }
 
-                      // Arbitrary value, e.g.: `value([integer])`
+                      // Arbitrary value, e.g.: `--value([integer])`
                       else if (
                         candidate.value?.kind === 'arbitrary' &&
                         arg.kind === 'word' &&
@@ -316,7 +316,7 @@ async function parseCss(
                       ) {
                         let dataType = arg.value.slice(1, -1)
 
-                        // Allow any data type, e.g.: `value([*])`
+                        // Allow any data type, e.g.: `--value([*])`
                         if (dataType === '*') {
                           resolvedValueFn = true
                           replaceWith(ValueParser.parse(candidate.value.value))
@@ -328,7 +328,7 @@ async function parseCss(
                         //
                         // ```css
                         // @utility tab-* {
-                        //   tab-size: value([integer]);
+                        //   tab-size: --value([integer]);
                         // }
                         // ```
                         //
@@ -357,8 +357,8 @@ async function parseCss(
                     return ValueParser.ValueWalkAction.Stop
                   }
 
-                  // Modifier function, e.g.: `modifier(integer)`
-                  else if (valueNode.value === 'modifier') {
+                  // Modifier function, e.g.: `--modifier(integer)`
+                  else if (valueNode.value === '--modifier') {
                     // If there is no modifier present in the candidate, then
                     // the declaration can be removed.
                     if (candidate.modifier === null) {
@@ -369,7 +369,7 @@ async function parseCss(
                     usedModifierFn = true
 
                     for (let arg of valueNode.nodes) {
-                      // Resolving theme value, e.g.: `modifier(--color)`
+                      // Resolving theme value, e.g.: `--modifier(--color)`
                       if (
                         candidate.modifier?.kind === 'named' &&
                         arg.kind === 'word' &&
@@ -387,7 +387,7 @@ async function parseCss(
                         }
                       }
 
-                      // Bare value, e.g.: `modifier(integer)`
+                      // Bare value, e.g.: `--modifier(integer)`
                       else if (candidate.modifier?.kind === 'named' && arg.kind === 'word') {
                         // Limit the bare value types, to prevent new syntax
                         // that we don't want to support.
@@ -423,7 +423,7 @@ async function parseCss(
                         }
                       }
 
-                      // Arbitrary value, e.g.: `modifier([integer])`
+                      // Arbitrary value, e.g.: `--modifier([integer])`
                       else if (
                         candidate.modifier?.kind === 'arbitrary' &&
                         arg.kind === 'word' &&
@@ -432,7 +432,7 @@ async function parseCss(
                       ) {
                         let dataType = arg.value.slice(1, -1)
 
-                        // Allow any data type, e.g.: `value([*])`
+                        // Allow any data type, e.g.: `--value([*])`
                         if (dataType === '*') {
                           resolvedModifierFn = true
                           replaceWith(ValueParser.parse(candidate.modifier.value))

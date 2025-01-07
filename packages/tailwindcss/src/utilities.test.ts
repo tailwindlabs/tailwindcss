@@ -17450,7 +17450,7 @@ describe('custom utilities', () => {
         }
 
         @utility tab-* {
-          tab-size: value(--tab-size);
+          tab-size: --value(--tab-size);
         }
 
         @tailwind utilities;
@@ -17491,7 +17491,7 @@ describe('custom utilities', () => {
           }
 
           @utility tab-* {
-            tab-size: value(--tab-size-*);
+            tab-size: --value(--tab-size-*);
           }
 
           @tailwind utilities;
@@ -17521,7 +17521,7 @@ describe('custom utilities', () => {
     test('resolving bare values', async () => {
       let input = css`
         @utility tab-* {
-          tab-size: value(integer);
+          tab-size: --value(integer);
         }
 
         @tailwind utilities;
@@ -17546,9 +17546,9 @@ describe('custom utilities', () => {
     test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
       let input = css`
         @utility example-* {
-          --value-as-number: value(number);
-          --value-as-percentage: value(percentage);
-          --value-as-ratio: value(ratio);
+          --value-as-number: --value(number);
+          --value-as-percentage: --value(percentage);
+          --value-as-ratio: --value(ratio);
         }
 
         @tailwind utilities;
@@ -17587,7 +17587,7 @@ describe('custom utilities', () => {
     test('resolving unsupported bare values', async () => {
       let input = css`
         @utility tab-* {
-          tab-size: value(color);
+          tab-size: --value(color);
         }
 
         @tailwind utilities;
@@ -17599,7 +17599,7 @@ describe('custom utilities', () => {
     test('resolving arbitrary values', async () => {
       let input = css`
         @utility tab-* {
-          tab-size: value([integer]);
+          tab-size: --value([integer]);
         }
 
         @tailwind utilities;
@@ -17645,7 +17645,7 @@ describe('custom utilities', () => {
     test('resolving any arbitrary values', async () => {
       let input = css`
         @utility tab-* {
-          tab-size: value([ *]);
+          tab-size: --value([ *]);
         }
 
         @tailwind utilities;
@@ -17689,9 +17689,9 @@ describe('custom utilities', () => {
         }
 
         @utility tab-* {
-          tab-size: value([integer]);
-          tab-size: value(integer);
-          tab-size: value(--tab-size);
+          tab-size: --value([integer]);
+          tab-size: --value(integer);
+          tab-size: --value(--tab-size);
         }
 
         @tailwind utilities;
@@ -17720,9 +17720,9 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: value([percentage]);
-          --value: calc(value(integer) * 1%);
-          --value: value(--example);
+          --value: --value([percentage]);
+          --value: calc(--value(integer) * 1%);
+          --value: --value(--example);
         }
 
         @tailwind utilities;
@@ -17753,12 +17753,12 @@ describe('custom utilities', () => {
         }
 
         @utility tab-* {
-          tab-size: value(--tab-size, integer, [integer]);
+          tab-size: --value(--tab-size, integer, [integer]);
         }
 
         @utility example-* {
-          --value: calc(value(integer) * 1%);
-          --value: value(--example, [percentage]);
+          --value: calc(--value(integer) * 1%);
+          --value: --value(--example, [percentage]);
         }
 
         @tailwind utilities;
@@ -17810,11 +17810,11 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: value(--example, [percentage], [length]);
+          --value: --value(--example, [percentage], [length]);
         }
 
         @utility -example-* {
-          --value: calc(value(--example, [percentage], [length]) * -1);
+          --value: calc(--value(--example, [percentage], [length]) * -1);
         }
 
         @tailwind utilities;
@@ -17860,7 +17860,7 @@ describe('custom utilities', () => {
     test('using the same value multiple times', async () => {
       let input = css`
         @utility example-* {
-          --value: calc(var(--spacing) * value(number)) calc(var(--spacing) * value(number));
+          --value: calc(var(--spacing) * --value(number)) calc(var(--spacing) * --value(number));
         }
 
         @tailwind utilities;
@@ -17881,9 +17881,9 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: value(--value, [length]);
-          --modifier: modifier(--modifier, [length]);
-          --modifier-with-calc: calc(modifier(--modifier, [length]) * 2);
+          --value: --value(--value, [length]);
+          --modifier: --modifier(--modifier, [length]);
+          --modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
         }
 
         @tailwind utilities;
@@ -17929,7 +17929,7 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: value(--example, ratio, [ratio]);
+          --value: --value(--example, ratio, [ratio]);
         }
 
         @tailwind utilities;
