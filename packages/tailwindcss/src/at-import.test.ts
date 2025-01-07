@@ -553,3 +553,36 @@ test('it crashes when inside a cycle', async () => {
     `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
   )
 })
+
+test('resolves @reference as `@import "…" reference`', async () => {
+  let loadStylesheet = async (id: string, base: string) => {
+    expect(base).toBe('/root')
+    expect(id).toBe('./foo/bar.css')
+    return {
+      content: css`
+        @theme {
+          --color-red-500: red;
+        }
+        .foo {
+          color: red;
+        }
+      `,
+      base: '/root/foo',
+    }
+  }
+
+  await expect(
+    run(
+      css`
+        @reference './foo/bar.css';
+        @tailwind utilities;
+      `,
+      { loadStylesheet, candidates: ['text-red-500'] },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ".text-red-500 {
+      color: var(--color-red-500);
+    }
+    "
+  `)
+})
