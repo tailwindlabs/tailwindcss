@@ -1,4 +1,14 @@
-import { atRoot, atRule, decl, styleRule, walk, type AstNode, type AtRule } from './ast'
+import {
+  atRoot,
+  atRule,
+  decl,
+  styleRule,
+  walk,
+  type AstNode,
+  type AtRule,
+  type Declaration,
+  type Rule,
+} from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
@@ -4607,7 +4617,7 @@ export function createCssUtility(node: AtRule) {
 
     return (designSystem: DesignSystem) => {
       designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
-        let ast = structuredClone(node.nodes)
+        let atRule = structuredClone(node)
 
         // A value is required for functional utilities, if you want to accept
         // just `tab-size`, you'd have to use a static utility.
@@ -4629,16 +4639,22 @@ export function createCssUtility(node: AtRule) {
         // order to make the utility valid.
         let resolvedValueFn = false
 
-        // The resolved value type, e.g.: `integer`
-        let resolvedValueType = null as string | null
-
         // Whether `--modifier(…)` was used
         let usedModifierFn = false
 
         // Whether any of the declarations successfully resolved a `--modifier(…)`
         let resolvedModifierFn = false
 
-        walk(ast, (node, { replaceWith: replaceDeclarationWith }) => {
+        // A map of all the resolved value data types for a given declaration.
+        // E.g.: `tab-size: --value(integer)` would resolve to `integer` _if_ it
+        // properly resolves.
+        let resolvedDeclarations = new Map<Declaration, AtRule | Rule>()
+
+        // Whether or not `--value(ratio)` was resolved
+        let resolvedRatioValue = false
+
+        walk([atRule], (node, { parent, replaceWith: replaceDeclarationWith }) => {
+          if (parent?.kind !== 'rule' && parent?.kind !== 'at-rule') return
           if (node.kind !== 'declaration') return
           if (!node.value) return
 
@@ -4651,111 +4667,16 @@ export function createCssUtility(node: AtRule) {
               if (valueNode.value === '--value') {
                 usedValueFn = true
 
-                for (let arg of valueNode.nodes) {
-                  // Resolving theme value, e.g.: `--value(--color)`
-                  if (
-                    candidate.value?.kind === 'named' &&
-                    arg.kind === 'word' &&
-                    arg.value[0] === '-' &&
-                    arg.value[1] === '-'
-                  ) {
-                    if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
-
-                    let value = designSystem.resolveThemeValue(
-                      arg.value.replace('*', candidate.value.value),
-                    )
-                    if (value !== undefined) {
-                      resolvedValueFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
+                let resolved = resolveValueFunction(candidate.value!, valueNode, designSystem)
+                if (resolved) {
+                  resolvedValueFn = true
+                  if (resolved.ratio) {
+                    resolvedRatioValue = true
+                  } else {
+                    resolvedDeclarations.set(node, parent)
                   }
-
-                  // Bare value, e.g.: `--value(integer)`
-                  else if (candidate.value?.kind === 'named' && arg.kind === 'word') {
-                    // Limit the bare value types, to prevent new syntax that we
-                    // don't want to support. E.g.: `text-#000` is something we
-                    // don't want to support, but could be built this way.
-                    if (
-                      arg.value !== 'number' &&
-                      arg.value !== 'integer' &&
-                      arg.value !== 'ratio' &&
-                      arg.value !== 'percentage'
-                    ) {
-                      continue
-                    }
-
-                    let value =
-                      arg.value === 'ratio' ? candidate.value.fraction : candidate.value.value
-                    if (!value) continue
-
-                    let type = inferDataType(value, [arg.value as any])
-                    if (type !== null) {
-                      // Ratio must be a valid fraction, e.g.: <integer>/<integer>
-                      if (type === 'ratio') {
-                        let [lhs, rhs] = segment(value, '/')
-                        if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
-                      }
-
-                      // Non-integer numbers should be a valid multiplier,
-                      // e.g.: `1.5`
-                      else if (type === 'number' && !isValidSpacingMultiplier(value)) {
-                        continue
-                      }
-
-                      // Percentages must be an integer, e.g.: `50%`
-                      else if (type === 'percentage' && !isPositiveInteger(value.slice(0, -1))) {
-                        continue
-                      }
-
-                      resolvedValueType = type
-                      resolvedValueFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-                  }
-
-                  // Arbitrary value, e.g.: `--value([integer])`
-                  else if (
-                    candidate.value?.kind === 'arbitrary' &&
-                    arg.kind === 'word' &&
-                    arg.value[0] === '[' &&
-                    arg.value[arg.value.length - 1] === ']'
-                  ) {
-                    let dataType = arg.value.slice(1, -1)
-
-                    // Allow any data type, e.g.: `--value([*])`
-                    if (dataType === '*') {
-                      resolvedValueFn = true
-                      replaceWith(ValueParser.parse(candidate.value.value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-
-                    // The forced arbitrary value hint must match the expected
-                    // data type.
-                    //
-                    // ```css
-                    // @utility tab-* {
-                    //   tab-size: --value([integer]);
-                    // }
-                    // ```
-                    //
-                    // Given a candidate like `tab-(color:var(--my-value))`,
-                    // should not match because `color` and `integer` don't
-                    // match.
-                    if (candidate.value.dataType && candidate.value.dataType !== dataType) {
-                      continue
-                    }
-
-                    let value = candidate.value.value
-                    let type = candidate.value.dataType ?? inferDataType(value, [dataType as any])
-
-                    if (type !== null) {
-                      resolvedValueFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-                  }
+                  replaceWith(resolved.nodes)
+                  return ValueParser.ValueWalkAction.Skip
                 }
 
                 // Drop the declaration in case we couldn't resolve the value
@@ -4775,83 +4696,11 @@ export function createCssUtility(node: AtRule) {
 
                 usedModifierFn = true
 
-                for (let arg of valueNode.nodes) {
-                  // Resolving theme value, e.g.: `--modifier(--color)`
-                  if (
-                    candidate.modifier?.kind === 'named' &&
-                    arg.kind === 'word' &&
-                    arg.value[0] === '-' &&
-                    arg.value[1] === '-'
-                  ) {
-                    if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
-                    let themeKey = arg.value.replace('*', candidate.modifier.value)
-
-                    let value = designSystem.resolveThemeValue(themeKey)
-                    if (value !== undefined) {
-                      resolvedModifierFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-                  }
-
-                  // Bare value, e.g.: `--modifier(integer)`
-                  else if (candidate.modifier?.kind === 'named' && arg.kind === 'word') {
-                    // Limit the bare value types, to prevent new syntax that we
-                    // don't want to support.
-                    if (
-                      arg.value !== 'number' &&
-                      arg.value !== 'integer' &&
-                      arg.value !== 'ratio' &&
-                      arg.value !== 'percentage'
-                    ) {
-                      continue
-                    }
-
-                    let value = candidate.modifier.value
-                    let type = inferDataType(value, [arg.value as any])
-                    if (type !== null) {
-                      // Non-integer numbers should be a valid multiplier,
-                      // e.g.: `1.5`
-                      if (type === 'number' && !isValidSpacingMultiplier(value)) {
-                        continue
-                      }
-
-                      // Percentages must be an integer, e.g.: `50%`
-                      else if (type === 'percentage' && !isPositiveInteger(value.slice(0, -1))) {
-                        continue
-                      }
-
-                      resolvedModifierFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-                  }
-
-                  // Arbitrary value, e.g.: `--modifier([integer])`
-                  else if (
-                    candidate.modifier?.kind === 'arbitrary' &&
-                    arg.kind === 'word' &&
-                    arg.value[0] === '[' &&
-                    arg.value[arg.value.length - 1] === ']'
-                  ) {
-                    let dataType = arg.value.slice(1, -1)
-
-                    // Allow any data type, e.g.: `--value([*])`
-                    if (dataType === '*') {
-                      resolvedModifierFn = true
-                      replaceWith(ValueParser.parse(candidate.modifier.value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-
-                    let value = candidate.modifier.value
-                    let type = inferDataType(value, [dataType as any])
-
-                    if (type !== null) {
-                      resolvedModifierFn = true
-                      replaceWith(ValueParser.parse(value))
-                      return ValueParser.ValueWalkAction.Skip
-                    }
-                  }
+                let replacement = resolveValueFunction(candidate.modifier!, valueNode, designSystem)
+                if (replacement) {
+                  resolvedModifierFn = true
+                  replaceWith(replacement.nodes)
+                  return ValueParser.ValueWalkAction.Skip
                 }
 
                 // Drop the declaration in case we couldn't resolve the value
@@ -4866,26 +4715,30 @@ export function createCssUtility(node: AtRule) {
           }
         })
 
-        // Ensure that the modifier was resolved if present on the candidate. We
-        // also have to make sure that the value is _not_ using a fraction.
-        //
-        // E.g.:
-        //
-        // - `w-1/2`, can be a value of `1` and modifier of `2`
-        // - `w-1/2`, can be a fraction of `1/2` and no modifier
-        if (
-          candidate.value.kind === 'named' &&
-          resolvedValueType !== 'ratio' &&
-          !usedModifierFn &&
-          candidate.modifier !== null
-        ) {
-          return null
-        }
-
+        // Used `--value(…)` but nothing resolved
         if (usedValueFn && !resolvedValueFn) return null
+
+        // Used `--modifier(…)` but nothing resolved
         if (usedModifierFn && !resolvedModifierFn) return null
 
-        return ast
+        // Resolved `--value(ratio)` and `--modifier(…)`, which is invalid
+        if (resolvedRatioValue && resolvedModifierFn) return null
+
+        // When a candidate has a modifier, then the `--modifier(…)` must
+        // resolve correctly or the `--value(ratio)` must resolve correctly.
+        if (candidate.modifier && !resolvedRatioValue && !resolvedModifierFn) return null
+
+        // Resolved `--value(ratio)`, so all other declarations that didn't use
+        // `--value(ratio)` should be removed. E.g.: `--value(number)` would
+        // otherwise resolve for `foo-1/2`.
+        if (resolvedRatioValue) {
+          for (let [declaration, parent] of resolvedDeclarations) {
+            let idx = parent.nodes.indexOf(declaration)
+            if (idx !== -1) parent.nodes.splice(idx, 1)
+          }
+        }
+
+        return atRule.nodes
       })
     }
   }
@@ -4897,4 +4750,110 @@ export function createCssUtility(node: AtRule) {
   }
 
   return null
+}
+
+function resolveValueFunction(
+  value: NonNullable<
+    | Extract<Candidate, { kind: 'functional' }>['value']
+    | Extract<Candidate, { kind: 'functional' }>['modifier']
+  >,
+  fn: ValueParser.ValueFunctionNode,
+  designSystem: DesignSystem,
+): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  for (let arg of fn.nodes) {
+    // Resolving theme value, e.g.: `--value(--color)`
+    if (
+      value.kind === 'named' &&
+      arg.kind === 'word' &&
+      arg.value[0] === '-' &&
+      arg.value[1] === '-'
+    ) {
+      if (arg.value[arg.value.length - 1] !== '*') arg.value += '-*'
+
+      let resolved = designSystem.resolveThemeValue(arg.value.replace('*', value.value))
+      if (resolved) return { nodes: ValueParser.parse(resolved) }
+    }
+
+    // Bare value, e.g.: `--value(integer)`
+    else if (value.kind === 'named' && arg.kind === 'word') {
+      // Limit the bare value types, to prevent new syntax that we
+      // don't want to support. E.g.: `text-#000` is something we
+      // don't want to support, but could be built this way.
+      if (
+        arg.value !== 'number' &&
+        arg.value !== 'integer' &&
+        arg.value !== 'ratio' &&
+        arg.value !== 'percentage'
+      ) {
+        continue
+      }
+
+      let resolved = arg.value === 'ratio' && 'fraction' in value ? value.fraction : value.value
+      if (!resolved) continue
+
+      let type = inferDataType(resolved, [arg.value as any])
+      if (type === null) continue
+
+      // Ratio must be a valid fraction, e.g.: <integer>/<integer>
+      if (type === 'ratio') {
+        let [lhs, rhs] = segment(resolved, '/')
+        if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
+      }
+
+      // Non-integer numbers should be a valid multiplier,
+      // e.g.: `1.5`
+      else if (type === 'number' && !isValidSpacingMultiplier(resolved)) {
+        continue
+      }
+
+      // Percentages must be an integer, e.g.: `50%`
+      else if (type === 'percentage' && !isPositiveInteger(resolved.slice(0, -1))) {
+        continue
+      }
+
+      return { nodes: ValueParser.parse(resolved), ratio: type === 'ratio' }
+    }
+
+    // Arbitrary value, e.g.: `--value([integer])`
+    else if (
+      value.kind === 'arbitrary' &&
+      arg.kind === 'word' &&
+      arg.value[0] === '[' &&
+      arg.value[arg.value.length - 1] === ']'
+    ) {
+      let dataType = arg.value.slice(1, -1)
+
+      // Allow any data type, e.g.: `--value([*])`
+      if (dataType === '*') {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+
+      // The forced arbitrary value hint must match the expected
+      // data type.
+      //
+      // ```css
+      // @utility tab-* {
+      //   tab-size: --value([integer]);
+      // }
+      // ```
+      //
+      // Given a candidate like `tab-(color:var(--my-value))`,
+      // should not match because `color` and `integer` don't
+      // match.
+      if ('dataType' in value && value.dataType && value.dataType !== dataType) {
+        continue
+      }
+
+      // Use the provided data type hint
+      if ('dataType' in value && value.dataType) {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+
+      // No data type hitn provided, so we have to infer it
+      let type = inferDataType(value.value, [dataType as any])
+      if (type !== null) {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+    }
+  }
 }
