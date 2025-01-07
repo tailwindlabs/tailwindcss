@@ -4645,12 +4645,12 @@ export function createCssUtility(node: AtRule) {
         // Whether any of the declarations successfully resolved a `--modifier(…)`
         let resolvedModifierFn = false
 
-        // A map of all the resolved value data types for a given declaration.
-        // E.g.: `tab-size: --value(integer)` would resolve to `integer` _if_ it
-        // properly resolves.
+        // A map of all declarations we replaced and their parent rules. We
+        // might need to remove some later on. E.g.: remove declarations that
+        // used `--value(number)` when `--value(ratio)` was resolved.
         let resolvedDeclarations = new Map<Declaration, AtRule | Rule>()
 
-        // Whether or not `--value(ratio)` was resolved
+        // Whether `--value(ratio)` was resolved
         let resolvedRatioValue = false
 
         walk([atRule], (node, { parent, replaceWith: replaceDeclarationWith }) => {
