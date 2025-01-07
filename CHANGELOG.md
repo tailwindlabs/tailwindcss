@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `@tailwindcss/browser` package to run Tailwind CSS in the browser ([#15558](https://github.com/tailwindlabs/tailwindcss/pull/15558))
+- Add `@reference "…"` API as a replacement for the previous `@import "…" reference` option ([#15565](https://github.com/tailwindlabs/tailwindcss/pull/15565))
 
 ### Fixed
 

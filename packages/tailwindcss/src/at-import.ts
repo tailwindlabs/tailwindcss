@@ -15,9 +15,12 @@ export async function substituteAtImports(
   let promises: Promise<void>[] = []
 
   walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'at-rule' && node.name === '@import') {
+    if (node.kind === 'at-rule' && (node.name === '@import' || node.name === '@reference')) {
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
+      if (node.name === '@reference') {
+        parsed.media = 'reference'
+      }
 
       features |= Features.AtImport
 
