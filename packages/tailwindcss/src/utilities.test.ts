@@ -17518,6 +17518,43 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
     })
 
+    test('resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)', async () => {
+      let input = css`
+        @theme reference {
+          --tab-size-1: 1;
+          --tab-size-2: 2;
+          --tab-size-4: 4;
+          --tab-size-github: 8;
+        }
+
+        @utility tab-* {
+          tab-size: --value(--tab-size-\*);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+          ".tab-1 {
+            tab-size: 1;
+          }
+
+          .tab-2 {
+            tab-size: 2;
+          }
+
+          .tab-4 {
+            tab-size: 4;
+          }
+
+          .tab-github {
+            tab-size: 8;
+          }"
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
     test('resolving bare values', async () => {
       let input = css`
         @utility tab-* {
@@ -17961,6 +17998,36 @@ describe('custom utilities', () => {
         @utility example-* {
           font-size: --value(--text);
           line-height: --value(--text- * --line-height);
+          line-height: --modifier(number);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+        ".example-xs {
+          font-size: .75rem;
+          line-height: 1.33333;
+        }
+
+        .example-xs\\/6 {
+          font-size: .75rem;
+          line-height: 6;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('resolve theme values with sub-namespace (--text-\\* --line-height)', async () => {
+      let input = css`
+        @theme reference {
+          --text-xs: 0.75rem;
+          --text-xs--line-height: calc(1 / 0.75);
+        }
+
+        @utility example-* {
+          font-size: --value(--text);
+          line-height: --value(--text-\* --line-height);
           line-height: --modifier(number);
         }
 

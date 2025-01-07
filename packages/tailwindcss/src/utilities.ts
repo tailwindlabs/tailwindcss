@@ -4658,7 +4658,7 @@ export function createCssUtility(node: AtRule) {
           if (node.kind !== 'declaration') return
           if (!node.value) return
 
-          let valueAst = ValueParser.parse(node.value.replace(/\s+\*/g, '*'))
+          let valueAst = ValueParser.parse(node.value.replace(/(?:\s+|\\)\*/g, '*'))
           let result =
             ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
               if (valueNode.kind !== 'function') return
