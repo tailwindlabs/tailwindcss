@@ -4604,7 +4604,7 @@ export function createCssUtility(node: AtRule) {
     //   removed.
     // - If a `--value(ratio)` resolves, the `--modifier(…)` cannot be used.
     // - If a candidate looks like `foo-2/3`, then the `--value(ratio)` should
-    //   be used OR the `--value(…)` and `--modifier(:)` must be used. But not
+    //   be used OR the `--value(…)` and `--modifier(…)` must be used. But not
     //   both.
     // - All parts of the candidate must resolve, otherwise it's not a valid
     //   utility. E.g.:`
@@ -4883,7 +4883,7 @@ function resolveValueFunction(
         return { nodes: ValueParser.parse(value.value) }
       }
 
-      // No data type hitn provided, so we have to infer it
+      // No data type hint provided, so we have to infer it
       let type = inferDataType(value.value, [dataType as any])
       if (type !== null) {
         return { nodes: ValueParser.parse(value.value) }
