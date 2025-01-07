@@ -10,7 +10,15 @@ async function buildForPlatform(triple: string, outfile: string) {
   // We wrap this in a retry because occasionally the atomic rename fails for some reason
   for (let i = 0; i < 5; ++i) {
     try {
-      return await $`bun build --compile --target=${triple} ./src/index.ts --outfile=${outfile}`
+      let cmd = $`bun build --compile --target=${triple} ./src/index.ts --outfile=${outfile} --env inline`
+
+      // This env var is used by our patched versions of Lightning CSS and Parcel Watcher
+      // to statically bundle the proper binaries for musl vs glibc
+      cmd = cmd.env({
+        PLATFORM_LIBC: triple.includes('-musl') ? 'musl' : 'glibc',
+      })
+
+      return await cmd
     } catch (err) {
       if (i < 5) continue
 
