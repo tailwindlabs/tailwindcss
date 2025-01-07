@@ -29,19 +29,24 @@ export function isSafeMigration(location: { contents: string; start: number; end
     currentLineAfterCandidate += char
   }
 
-  // Heuristic 1: Require the candidate to be inside quotes
+  // Heuristic: Require the candidate to be inside quotes
   let isQuoteBeforeCandidate = QUOTES.some((quote) => currentLineBeforeCandidate.includes(quote))
   let isQuoteAfterCandidate = QUOTES.some((quote) => currentLineAfterCandidate.includes(quote))
   if (!isQuoteBeforeCandidate || !isQuoteAfterCandidate) {
     return false
   }
 
-  // Heuristic 2: Disallow object access immediately following the candidate
+  // Heuristic: Disallow object access immediately following the candidate
   if (currentLineAfterCandidate[0] === '.') {
     return false
   }
 
-  // Heuristic 3: Disallow logical operators preceding or following the candidate
+  // Heuristic: Disallow function call expressions immediately following the candidate
+  if (currentLineAfterCandidate.trim().startsWith('(')) {
+    return false
+  }
+
+  // Heuristic: Disallow logical operators preceding or following the candidate
   for (let operator of LOGICAL_OPERATORS) {
     if (
       currentLineAfterCandidate.trim().startsWith(operator) ||
@@ -51,7 +56,7 @@ export function isSafeMigration(location: { contents: string; start: number; end
     }
   }
 
-  // Heuristic 4: Disallow conditional template syntax
+  // Heuristic: Disallow conditional template syntax
   for (let rule of CONDITIONAL_TEMPLATE_SYNTAX) {
     if (rule.test(currentLineBeforeCandidate)) {
       return false

@@ -39,3 +39,33 @@ test.each([
 
   expect(await legacyClasses(designSystem, {}, candidate)).toEqual(result)
 })
+
+test('does not replace classes in invalid positions', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
+    base: __dirname,
+  })
+
+  async function shouldNotReplace(example: string, candidate = 'shadow') {
+    expect(
+      await legacyClasses(designSystem, {}, candidate, {
+        contents: example,
+        start: example.indexOf(candidate),
+        end: example.indexOf(candidate) + candidate.length,
+      }),
+    ).toEqual(candidate)
+  }
+
+  await shouldNotReplace(`let notShadow = shadow    \n`)
+  await shouldNotReplace(`{ "foo": shadow.something + ""}\n`)
+  await shouldNotReplace(`<div v-if="something && shadow"></div>\n`)
+  await shouldNotReplace(`<div v-else-if="something && shadow"></div>\n`)
+  await shouldNotReplace(`<div v-show="something && shadow"></div>\n`)
+  await shouldNotReplace(`<div v-if="shadow || shadow"></div>\n`)
+  await shouldNotReplace(`<div v-else-if="shadow || shadow"></div>\n`)
+  await shouldNotReplace(`<div v-show="shadow || shadow"></div>\n`)
+  await shouldNotReplace(`<div v-if="shadow"></div>\n`)
+  await shouldNotReplace(`<div v-else-if="shadow"></div>\n`)
+  await shouldNotReplace(`<div v-show="shadow"></div>\n`)
+  await shouldNotReplace(`<div x-if="shadow"></div>\n`)
+  await shouldNotReplace(`<div style={{filter: 'drop-shadow(30px 10px 4px #4444dd)'}}/>\n`)
+})
