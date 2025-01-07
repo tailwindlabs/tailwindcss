@@ -26,7 +26,7 @@ import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
-import { generateCssUtilities } from './utilities'
+import { createCssUtility } from './utilities'
 import { segment } from './utils/segment'
 import { compoundsForSelectors } from './variants'
 export type Config = UserConfig
@@ -174,9 +174,20 @@ async function parseCss(
         throw new Error('`@utility` cannot be nested.')
       }
 
-      for (let utility of generateCssUtilities(node)) {
-        customUtilities.push(utility)
+      if (node.nodes.length === 0) {
+        throw new Error(
+          `\`@utility ${node.params}\` is empty. Utilities should include at least one property.`,
+        )
       }
+
+      let utility = createCssUtility(node)
+      if (utility === null) {
+        throw new Error(
+          `\`@utility ${node.params}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+        )
+      }
+
+      customUtilities.push(utility)
     }
 
     // Collect paths from `@source` at-rules

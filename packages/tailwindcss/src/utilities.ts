@@ -4575,24 +4575,37 @@ export function createUtilities(theme: Theme) {
   return utilities
 }
 
-export function* generateCssUtilities(node: AtRule) {
+export function createCssUtility(node: AtRule) {
   let name = node.params
-
-  if (!IS_VALID_UTILITY_NAME.test(name) && !IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
-    throw new Error(
-      `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
-    )
-  }
-
-  if (node.nodes.length === 0) {
-    throw new Error(
-      `\`@utility ${name}\` is empty. Utilities should include at least one property.`,
-    )
-  }
 
   // Functional utilities. E.g.: `tab-size-*`
   if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
-    yield (designSystem: DesignSystem) => {
+    // API:
+    //
+    // - `--value(number)`            resolves a bare value of type number
+    // - `--value([number])`          resolves an arbitrary value of type number
+    // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(number, [number])`  resolves a bare value of type number or an
+    //                                arbitrary value of type number in order.
+    //
+    // Rules:
+    //
+    // - If `--value(…)` does not resolve to a valid value, the declaration is
+    //   removed.
+    // - If a `--value(ratio)` resolves, the `--modifier(…)` cannot be used.
+    // - If a candidate looks like `foo-2/3`, then the `--value(ratio)` should
+    //   be used OR the `--value(…)` and `--modifier(:)` must be used. But not
+    //   both.
+    // - All parts of the candidate must resolve, otherwise it's not a valid
+    //   utility. E.g.:`
+    //   ```
+    //   @utility foo-* {
+    //     test: value(number)
+    //   }
+    //   ```
+    //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
+
+    return (designSystem: DesignSystem) => {
       designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
         let ast = structuredClone(node.nodes)
 
@@ -4878,8 +4891,10 @@ export function* generateCssUtilities(node: AtRule) {
   }
 
   if (IS_VALID_UTILITY_NAME.test(name)) {
-    yield (designSystem: DesignSystem) => {
+    return (designSystem: DesignSystem) => {
       designSystem.utilities.static(name, () => structuredClone(node.nodes))
     }
   }
+
+  return null
 }
