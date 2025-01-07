@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2022", "esnext.disposable", "dom", "dom.iterable"],
+  },
+}
