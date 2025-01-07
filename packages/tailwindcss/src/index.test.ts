@@ -461,6 +461,53 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should recursively apply with custom `@utility`, which is used before it is defined', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+
+          @layer base {
+            body {
+              @apply a;
+            }
+          }
+
+          @utility a {
+            @apply b;
+          }
+
+          @utility b {
+            @apply focus:c;
+          }
+
+          @utility c {
+            @apply my-flex!;
+          }
+
+          @utility my-flex {
+            @apply flex;
+          }
+        `,
+        ['a', 'b', 'c', 'flex', 'my-flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a:focus, .b:focus, .c {
+        display: flex !important;
+      }
+
+      .flex, .my-flex {
+        display: flex;
+      }
+
+      @layer base {
+        body:focus {
+          display: flex !important;
+        }
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {

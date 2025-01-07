@@ -538,10 +538,8 @@ async function parseCss(
     node.context = {}
   }
 
-  // Replace `@apply` rules with the actual utility classes.
-  features |= substituteAtApply(ast, designSystem)
-
   features |= substituteFunctions(ast, designSystem.resolveThemeValue)
+  features |= substituteAtApply(ast, designSystem)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
