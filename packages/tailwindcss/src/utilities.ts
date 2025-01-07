@@ -4619,9 +4619,12 @@ export function createCssUtility(node: AtRule) {
       designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
         let atRule = structuredClone(node)
 
+        let value = candidate.value
+        let modifier = candidate.modifier
+
         // A value is required for functional utilities, if you want to accept
         // just `tab-size`, you'd have to use a static utility.
-        if (candidate.value === null) return
+        if (value === null) return
 
         // Whether `--value(…)` was used
         let usedValueFn = false
@@ -4667,7 +4670,7 @@ export function createCssUtility(node: AtRule) {
               if (valueNode.value === '--value') {
                 usedValueFn = true
 
-                let resolved = resolveValueFunction(candidate.value!, valueNode, designSystem)
+                let resolved = resolveValueFunction(value, valueNode, designSystem)
                 if (resolved) {
                   resolvedValueFn = true
                   if (resolved.ratio) {
@@ -4689,14 +4692,14 @@ export function createCssUtility(node: AtRule) {
               else if (valueNode.value === '--modifier') {
                 // If there is no modifier present in the candidate, then the
                 // declaration can be removed.
-                if (candidate.modifier === null) {
+                if (modifier === null) {
                   replaceDeclarationWith([])
                   return ValueParser.ValueWalkAction.Skip
                 }
 
                 usedModifierFn = true
 
-                let replacement = resolveValueFunction(candidate.modifier!, valueNode, designSystem)
+                let replacement = resolveValueFunction(modifier, valueNode, designSystem)
                 if (replacement) {
                   resolvedModifierFn = true
                   replaceWith(replacement.nodes)
@@ -4726,7 +4729,7 @@ export function createCssUtility(node: AtRule) {
 
         // When a candidate has a modifier, then the `--modifier(…)` must
         // resolve correctly or the `--value(ratio)` must resolve correctly.
-        if (candidate.modifier && !resolvedRatioValue && !resolvedModifierFn) return null
+        if (modifier && !resolvedRatioValue && !resolvedModifierFn) return null
 
         // Resolved `--value(ratio)`, so all other declarations that didn't use
         // `--value(ratio)` should be removed. E.g.: `--value(number)` would
