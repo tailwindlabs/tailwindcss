@@ -46,7 +46,9 @@ await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 // Build platform binaries and checksum them
 let results = await Promise.all([
   build('bun-linux-arm64', './tailwindcss-linux-arm64'),
+  build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
   build('bun-linux-x64', './tailwindcss-linux-x64'),
+  build('bun-linux-x64-musl', './tailwindcss-linux-x64-musl'),
   // build('linux-armv7', 'tailwindcss-linux-armv7'),
   build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
   build('bun-darwin-x64', './tailwindcss-macos-x64'),
