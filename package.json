@@ -52,7 +52,7 @@
     "@types/node": "catalog:",
     "postcss": "8.4.49",
     "postcss-import": "^16.1.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "prettier-plugin-embed": "^0.4.15",
     "prettier-plugin-organize-imports": "^4.0.0",
     "tsup": "^8.2.4",
