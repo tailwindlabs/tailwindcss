@@ -7,7 +7,30 @@ import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
-describe('theme function', () => {
+describe('--theme(…)', () => {
+  test('theme(--color-red-500)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: red;
+      }"
+    `)
+  })
+})
+
+describe('theme(…)', () => {
   describe('in declaration values', () => {
     describe('without fallback values', () => {
       test('theme(colors.red.500)', async () => {

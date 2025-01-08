@@ -5,6 +5,7 @@ import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
 const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => any> = {
+  '--theme': theme,
   theme,
 }
 
