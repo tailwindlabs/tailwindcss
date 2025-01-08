@@ -4343,7 +4343,7 @@ export function createUtilities(theme: Theme) {
 
     let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentColor'
     function ringShadowValue(value: string) {
-      return `var(--tw-ring-inset,) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
+      return `var(--tw-ring-inset) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
     }
     utilities.functional('ring', (candidate) => {
       if (!candidate.value) {
@@ -4490,7 +4490,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     let ringOffsetShadowValue =
-      'var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
+      'var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
     utilities.functional('ring-offset', (candidate) => {
       if (!candidate.value) return
 
