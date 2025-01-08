@@ -112,7 +112,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The --spacing(…) function requires that the \`--spacing\` theme variable be set, but it was not found.]`,
+      `[Error: The --spacing(…) function requires that the \`--spacing\` theme variable exists, but it was not found.]`,
     )
   })
 

@@ -42,7 +42,7 @@ function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
   let multiplier = designSystem.theme.resolve(null, ['--spacing'])
   if (!multiplier) {
     throw new Error(
-      'The --spacing(…) function requires that the `--spacing` theme variable be set, but it was not found.',
+      'The --spacing(…) function requires that the `--spacing` theme variable exists, but it was not found.',
     )
   }
 
