@@ -17106,6 +17106,27 @@ describe('custom utilities', () => {
     `)
   })
 
+  test('custom static utility (negative)', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility -example {
+        value: -1;
+      }
+    `)
+    let compiled = build(['-example', 'lg:-example'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .-example {
+          value: -1;
+        }
+      }"
+    `)
+  })
+
   test('Multiple static utilities are merged', async () => {
     let { build } = await compile(css`
       @layer utilities {
