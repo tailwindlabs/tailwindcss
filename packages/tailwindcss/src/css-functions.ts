@@ -1,19 +1,44 @@
 import { Features } from '.'
 import { walk, type AstNode } from './ast'
+import type { DesignSystem } from './design-system'
+import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
-import { type ValueAstNode } from './value-parser'
 
-export const THEME_FUNCTION_INVOCATION = 'theme('
+const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => any> = {
+  theme,
+}
 
-type ResolveThemeValue = (path: string) => string | undefined
+function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+  path = eventuallyUnquote(path)
 
-export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
+  let resolvedValue = designSystem.resolveThemeValue(path)
+
+  if (!resolvedValue && fallback.length > 0) {
+    return fallback.join(', ')
+  }
+
+  if (!resolvedValue) {
+    throw new Error(
+      `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
+    )
+  }
+
+  return resolvedValue
+}
+
+export const THEME_FUNCTION_INVOCATION = new RegExp(
+  Object.keys(functions)
+    .map((x) => `${x}\\(`)
+    .join('|'),
+)
+
+export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
   walk(ast, (node) => {
     // Find all declaration values
-    if (node.kind === 'declaration' && node.value?.includes(THEME_FUNCTION_INVOCATION)) {
+    if (node.kind === 'declaration' && node.value && THEME_FUNCTION_INVOCATION.test(node.value)) {
       features |= Features.ThemeFunction
-      node.value = substituteFunctionsInValue(node.value, resolveThemeValue)
+      node.value = substituteFunctionsInValue(node.value, designSystem)
       return
     }
 
@@ -24,89 +49,27 @@ export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveTh
           node.name === '@custom-media' ||
           node.name === '@container' ||
           node.name === '@supports') &&
-        node.params.includes(THEME_FUNCTION_INVOCATION)
+        THEME_FUNCTION_INVOCATION.test(node.params)
       ) {
         features |= Features.ThemeFunction
-        node.params = substituteFunctionsInValue(node.params, resolveThemeValue)
+        node.params = substituteFunctionsInValue(node.params, designSystem)
       }
     }
   })
   return features
 }
 
-export function substituteFunctionsInValue(
-  value: string,
-  resolveThemeValue: ResolveThemeValue,
-): string {
+export function substituteFunctionsInValue(value: string, designSystem: DesignSystem): string {
   let ast = ValueParser.parse(value)
   ValueParser.walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'function' && node.value === 'theme') {
-      if (node.nodes.length < 1) {
-        throw new Error(
-          'Expected `theme()` function call to have a path. For example: `theme(--color-red-500)`.',
-        )
-      }
-
-      // Ignore whitespace before the first argument
-      if (node.nodes[0].kind === 'separator' && node.nodes[0].value.trim() === '') {
-        node.nodes.shift()
-      }
-
-      let pathNode = node.nodes[0]
-      if (pathNode.kind !== 'word') {
-        throw new Error(
-          `Expected \`theme()\` function to start with a path, but instead found ${pathNode.value}.`,
-        )
-      }
-      let path = pathNode.value
-
-      // For the theme function arguments, we require all separators to contain
-      // comma (`,`), spaces alone should be merged into the previous word to
-      // avoid splitting in this case:
-      //
-      // theme(--color-red-500 / 75%) theme(--color-red-500 / 75%, foo, bar)
-      //
-      // We only need to do this for the first node, as the fallback values are
-      // passed through as-is.
-      let skipUntilIndex = 1
-      for (let i = skipUntilIndex; i < node.nodes.length; i++) {
-        if (node.nodes[i].value.includes(',')) {
-          break
-        }
-        path += ValueParser.toCss([node.nodes[i]])
-        skipUntilIndex = i + 1
-      }
-
-      path = eventuallyUnquote(path)
-      let fallbackValues = node.nodes.slice(skipUntilIndex + 1)
-
-      replaceWith(cssThemeFn(resolveThemeValue, path, fallbackValues))
+    if (node.kind === 'function' && node.value in functions) {
+      let args = segment(ValueParser.toCss(node.nodes).trim(), ',').map((x) => x.trim())
+      let result = functions[node.value as keyof typeof functions](designSystem, ...args)
+      return replaceWith(ValueParser.parse(result))
     }
   })
 
   return ValueParser.toCss(ast)
-}
-
-function cssThemeFn(
-  resolveThemeValue: ResolveThemeValue,
-  path: string,
-  fallbackValues: ValueAstNode[],
-): ValueAstNode[] {
-  let resolvedValue = resolveThemeValue(path)
-
-  if (!resolvedValue && fallbackValues.length > 0) {
-    return fallbackValues
-  }
-
-  if (!resolvedValue) {
-    throw new Error(
-      `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
-    )
-  }
-
-  // We need to parse the values recursively since this can resolve with another
-  // `theme()` function definition.
-  return ValueParser.parse(resolvedValue)
 }
 
 function eventuallyUnquote(value: string) {

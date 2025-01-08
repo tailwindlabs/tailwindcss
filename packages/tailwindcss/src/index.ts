@@ -533,7 +533,7 @@ async function parseCss(
     node.context = {}
   }
 
-  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
+  features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
