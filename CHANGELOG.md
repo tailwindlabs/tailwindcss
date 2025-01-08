@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `@tailwindcss/browser` package to run Tailwind CSS in the browser ([#15558](https://github.com/tailwindlabs/tailwindcss/pull/15558))
 - Add `@reference "…"` API as a replacement for the previous `@import "…" reference` option ([#15565](https://github.com/tailwindlabs/tailwindcss/pull/15565))
 - Add functional utility syntax ([#15455](https://github.com/tailwindlabs/tailwindcss/pull/15455))
+- Add new `--spacing(…)`, `--alpha(…)` and `--theme(…)` CSS functions ([#15572](https://github.com/tailwindlabs/tailwindcss/pull/15572))
 
 ### Fixed
 
@@ -790,3 +791,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.0.0-alpha.1] - 2024-03-06
 
 - First 4.0.0-alpha.1 release
+
