@@ -4610,7 +4610,7 @@ export function createCssUtility(node: AtRule) {
     //   utility. E.g.:`
     //   ```
     //   @utility foo-* {
-    //     test: value(number)
+    //     test: --value(number)
     //   }
     //   ```
     //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
