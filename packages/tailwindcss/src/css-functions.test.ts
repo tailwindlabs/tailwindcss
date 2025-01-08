@@ -30,7 +30,7 @@ describe('--alpha(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --alpha(…) requires 2 arguments, e.g.: \`--alpha(var(--my-color), 50%)\`]`,
+      `[Error: The --alpha(…) function requires two arguments, e.g.: \`--alpha(var(--my-color), 50%)\`]`,
     )
   })
 
@@ -42,7 +42,7 @@ describe('--alpha(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --alpha(…) requires 2 arguments, e.g.: \`--alpha(red, 50%)\`]`,
+      `[Error: The --alpha(…) function requires two arguments, e.g.: \`--alpha(red, 50%)\`]`,
     )
   })
 
@@ -54,7 +54,7 @@ describe('--alpha(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --alpha(…) only aaccepts 2 arguments, e.g.: \`--alpha(red, 50%)\`]`,
+      `[Error: The --alpha(…) function only accepts two arguments, e.g.: \`--alpha(red, 50%)\`]`,
     )
   })
 })
@@ -112,7 +112,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --spacing(…) depends on the \`--spacing\` theme value, but it was not found.]`,
+      `[Error: The --spacing(…) function requires that the \`--spacing\` theme variable be set, but it was not found.]`,
     )
   })
 
@@ -128,7 +128,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --spacing(…) requires a single value, but received none.]`,
+      `[Error: The --spacing(…) function requires an argument, but received none.]`,
     )
   })
 
@@ -140,7 +140,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: --spacing(…) only accepts a single value, but received 3 values.]`,
+      `[Error: The --spacing(…) function only accepts a single argument, but received 3.]`,
     )
   })
 })

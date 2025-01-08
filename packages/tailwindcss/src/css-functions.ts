@@ -15,13 +15,13 @@ const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) 
 function alpha(_designSystem: DesignSystem, value: string, alpha: string, ...rest: string[]) {
   if (!value || !alpha) {
     throw new Error(
-      `--alpha(…) requires 2 arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+      `The --alpha(…) function requires two arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
     )
   }
 
   if (rest.length > 0) {
     throw new Error(
-      `--alpha(…) only aaccepts 2 arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+      `The --alpha(…) function only accepts two arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
     )
   }
 
@@ -30,18 +30,20 @@ function alpha(_designSystem: DesignSystem, value: string, alpha: string, ...res
 
 function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
   if (!value) {
-    throw new Error(`--spacing(…) requires a single value, but received none.`)
+    throw new Error(`The --spacing(…) function requires an argument, but received none.`)
   }
 
   if (rest.length > 0) {
     throw new Error(
-      `--spacing(…) only accepts a single value, but received ${rest.length + 1} values.`,
+      `The --spacing(…) function only accepts a single argument, but received ${rest.length + 1}.`,
     )
   }
 
   let multiplier = designSystem.theme.resolve(null, ['--spacing'])
   if (!multiplier) {
-    throw new Error('--spacing(…) depends on the `--spacing` theme value, but it was not found.')
+    throw new Error(
+      'The --spacing(…) function requires that the `--spacing` theme variable be set, but it was not found.',
+    )
   }
 
   return `calc(${multiplier} * ${value})`
