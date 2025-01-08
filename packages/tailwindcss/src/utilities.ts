@@ -4616,10 +4616,14 @@ export function createCssUtility(node: AtRule) {
     //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
 
     return (designSystem: DesignSystem) => {
+      let valueThemeKeys = new Set<`--${string}`>()
+      let modifierThemeKeys = new Set<`--${string}`>()
+
       // Pre-process the AST to make it easier to work with.
       //
       // - Normalize theme values used in `--value(…)` and `--modifier(…)`
       //   functions.
+      // - Track information for suggestions
       walk(node.nodes, (child) => {
         if (child.kind !== 'declaration') return
         if (!child.value) return
@@ -4664,6 +4668,19 @@ export function createCssUtility(node: AtRule) {
             args[idx] = arg
           }
           fn.nodes = ValueParser.parse(args.join(','))
+
+          // Track the theme keys for suggestions
+          for (let node of fn.nodes) {
+            if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
+              let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
+
+              if (fn.value === '--value') {
+                valueThemeKeys.add(value)
+              } else if (fn.value === '--modifier') {
+                modifierThemeKeys.add(value)
+              }
+            }
+          }
         })
 
         child.value = ValueParser.toCss(declarationValueAst)
@@ -4795,6 +4812,20 @@ export function createCssUtility(node: AtRule) {
         }
 
         return atRule.nodes
+      })
+
+      designSystem.utilities.suggest(name.slice(0, -2), () => {
+        return [
+          {
+            supportsNegative: name[0] === '-',
+            values: designSystem.theme
+              .keysInNamespaces(valueThemeKeys)
+              .map((x) => x.replaceAll('_', '.')),
+            modifiers: designSystem.theme
+              .keysInNamespaces(modifierThemeKeys)
+              .map((x) => x.replaceAll('_', '.')),
+          },
+        ] satisfies SuggestionGroup[]
       })
     }
   }
