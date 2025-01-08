@@ -4616,6 +4616,59 @@ export function createCssUtility(node: AtRule) {
     //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
 
     return (designSystem: DesignSystem) => {
+      // Pre-process the AST to make it easier to work with.
+      //
+      // - Normalize theme values used in `--value(…)` and `--modifier(…)`
+      //   functions.
+      walk(node.nodes, (child) => {
+        if (child.kind !== 'declaration') return
+        if (!child.value) return
+        if (!child.value.includes('--value(') && !child.value.includes('--modifier(')) return
+
+        let declarationValueAst = ValueParser.parse(child.value)
+
+        // Required manipulations:
+        //
+        // - `--value(--spacing)` -> `--value(--spacing-*)`
+        // - `--value(--spacing- *)` -> `--value(--spacing-*)`
+        // - `--value(--text- * --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value(--text --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value(--text-\\* --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value([ *])` -> `--value([*])`
+        //
+        // Once Prettier / Biome handle these better (e.g.: not crashing without
+        // `\\*` or not inserting whitespace) then most of these can go away.
+        ValueParser.walk(declarationValueAst, (fn) => {
+          if (fn.kind !== 'function') return
+          if (fn.value !== '--value' && fn.value !== '--modifier') return
+
+          let args = segment(ValueParser.toCss(fn.nodes), ',')
+          for (let [idx, arg] of args.entries()) {
+            // Transform escaped `\\*` -> `*`
+            arg = arg.replace(/\\\*/g, '*')
+
+            // Ensure `--value(--foo --bar)` becomes `--value(--foo-*--bar)`
+            arg = arg.replace(/--(.*?)\s--(.*?)/g, '--$1-*--$2')
+
+            // Remove whitespace, e.g.: `--value([ *])` -> `--value([*])`
+            arg = arg.replace(/\s+/g, '')
+
+            // Ensure multiple `-*` becomes a single `-*`
+            arg = arg.replace(/(-\*){2,}/g, '-*')
+
+            // Ensure trailing `-*` exists if `-*` isn't present yet
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+              arg += '-*'
+            }
+
+            args[idx] = arg
+          }
+          fn.nodes = ValueParser.parse(args.join(','))
+        })
+
+        child.value = ValueParser.toCss(declarationValueAst)
+      })
+
       designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
         let atRule = structuredClone(node)
 
@@ -4661,7 +4714,7 @@ export function createCssUtility(node: AtRule) {
           if (node.kind !== 'declaration') return
           if (!node.value) return
 
-          let valueAst = ValueParser.parse(node.value.replace(/(?:\s+|\\)\*/g, '*'))
+          let valueAst = ValueParser.parse(node.value)
           let result =
             ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
               if (valueNode.kind !== 'function') return
@@ -4763,37 +4816,6 @@ function resolveValueFunction(
   fn: ValueParser.ValueFunctionNode,
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
-  // Merge arguments separated by a space, e.g.: `--value(--text-*--line-height)`
-  //
-  // Results in:
-  // [
-  //   { kind: 'word', value: '--text-*' },
-  //   { kind: 'separator', value: ' ' },
-  //   { kind: 'word', value: '--line-height' },
-  // ]
-  //
-  // But should be:
-  // [
-  //   { kind: 'word', value: '--text-*--line-height' },
-  // ]
-  for (let i = fn.nodes.length - 1; i >= 2; --i) {
-    let lhs = fn.nodes[i - 2]
-    let sep = fn.nodes[i - 1]
-    let rhs = fn.nodes[i]
-    if (
-      rhs.kind === 'word' &&
-      sep.kind === 'separator' &&
-      sep.value === ' ' &&
-      lhs.kind === 'word'
-    ) {
-      // Ensure `--value(--foo --bar)` results in `--value(--foo-*--bar)`
-      if (lhs.value[lhs.value.length - 1] !== '*') lhs.value += '-*'
-
-      lhs.value = `${lhs.value}${rhs.value}`
-      fn.nodes.splice(i - 1, 2)
-    }
-  }
-
   for (let arg of fn.nodes) {
     // Resolving theme value, e.g.: `--value(--color)`
     if (
@@ -4802,8 +4824,6 @@ function resolveValueFunction(
       arg.value[0] === '-' &&
       arg.value[1] === '-'
     ) {
-      if (!arg.value.includes('*')) arg.value += '-*'
-
       let resolved = designSystem.resolveThemeValue(arg.value.replace('*', value.value))
       if (resolved) return { nodes: ValueParser.parse(resolved) }
     }
