@@ -7,6 +7,58 @@ import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
+describe('--alpha(…)', () => {
+  test('--alpha(…)', async () => {
+    expect(
+      await compileCss(css`
+        .foo {
+          margin: --alpha(red, 50%);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        margin: oklab(62.7955% .22486 .12584 / .5);
+      }"
+    `)
+  })
+
+  test('--alpha(…) errors when no arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --alpha(…) requires 2 arguments, e.g.: \`--alpha(var(--my-color), 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors when alpha value is missing', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --alpha(…) requires 2 arguments, e.g.: \`--alpha(red, 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors multiple arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red, 50%, blue);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --alpha(…) only aaccepts 2 arguments, e.g.: \`--alpha(red, 50%)\`]`,
+    )
+  })
+})
+
 describe('--spacing(…)', () => {
   test('--spacing(…)', async () => {
     expect(

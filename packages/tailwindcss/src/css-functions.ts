@@ -1,13 +1,31 @@
 import { Features } from '.'
 import { walk, type AstNode } from './ast'
 import type { DesignSystem } from './design-system'
+import { withAlpha } from './utilities'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
 const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => any> = {
+  '--alpha': alpha,
   '--spacing': spacing,
   '--theme': theme,
   theme,
+}
+
+function alpha(_designSystem: DesignSystem, value: string, alpha: string, ...rest: string[]) {
+  if (!value || !alpha) {
+    throw new Error(
+      `--alpha(…) requires 2 arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+    )
+  }
+
+  if (rest.length > 0) {
+    throw new Error(
+      `--alpha(…) only aaccepts 2 arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+    )
+  }
+
+  return withAlpha(value, alpha)
 }
 
 function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
