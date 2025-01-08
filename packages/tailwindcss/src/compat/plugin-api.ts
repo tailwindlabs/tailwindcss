@@ -95,7 +95,7 @@ export function buildPluginApi(
   let api: PluginAPI = {
     addBase(css) {
       let baseNodes = objectToAst(css)
-      featuresRef.current |= substituteFunctions(baseNodes, api.theme)
+      featuresRef.current |= substituteFunctions(baseNodes, designSystem)
       ast.push(atRule('@layer', 'base', baseNodes))
     },
 
