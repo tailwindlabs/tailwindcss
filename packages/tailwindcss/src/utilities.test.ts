@@ -17989,6 +17989,50 @@ describe('custom utilities', () => {
       `)
     })
 
+    test('using `--spacing(…)` shorthand', async () => {
+      let input = css`
+        @theme {
+          --spacing: 4px;
+        }
+
+        @utility example-* {
+          margin: --spacing(--value(number));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+        ":root {
+          --spacing: 4px;
+        }
+
+        .example-12 {
+          margin: calc(var(--spacing) * 12);
+        }"
+      `)
+    })
+
+    test('using `--spacing(…)` shorthand (inline theme)', async () => {
+      let input = css`
+        @theme inline reference {
+          --spacing: 4px;
+        }
+
+        @utility example-* {
+          margin: --spacing(--value(number));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+        ".example-12 {
+          margin: 48px;
+        }"
+      `)
+    })
+
     test('modifiers', async () => {
       let input = css`
         @theme reference {
