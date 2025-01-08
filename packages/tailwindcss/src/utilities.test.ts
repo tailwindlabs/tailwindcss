@@ -17718,6 +17718,86 @@ describe('custom utilities', () => {
       `)
     })
 
+    test('resolving any arbitrary values (without space)', async () => {
+      let input = `
+        @utility tab-* {
+          tab-size: --value([*]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+    })
+
+    test('resolving any arbitrary values (with escaped `*`)', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value([\*]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+    })
+
     test('resolving theme, bare and arbitrary values all at once', async () => {
       let input = css`
         @theme reference {
