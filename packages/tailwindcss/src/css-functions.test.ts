@@ -7,6 +7,92 @@ import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
+describe('--spacing(…)', () => {
+  test('--spacing(…)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: calc(var(--spacing) * 4);
+      }"
+    `)
+  })
+
+  test('--spacing(…) with inline `@theme` value', async () => {
+    expect(
+      await compileCss(css`
+        @theme inline {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: 1rem;
+      }"
+    `)
+  })
+
+  test('--spacing(…) relies on `--spacing` to be defined', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --spacing(…) depends on the \`--spacing\` theme value, but it was not found.]`,
+    )
+  })
+
+  test('--spacing(…) requires a single value', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --spacing(…) requires a single value, but received none.]`,
+    )
+  })
+
+  test('--spacing(…) does not have multiple arguments', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4, 5, 6);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: --spacing(…) only accepts a single value, but received 3 values.]`,
+    )
+  })
+})
+
 describe('--theme(…)', () => {
   test('theme(--color-red-500)', async () => {
     expect(

@@ -5,8 +5,28 @@ import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
 const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => any> = {
+  '--spacing': spacing,
   '--theme': theme,
   theme,
+}
+
+function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
+  if (!value) {
+    throw new Error(`--spacing(…) requires a single value, but received none.`)
+  }
+
+  if (rest.length > 0) {
+    throw new Error(
+      `--spacing(…) only accepts a single value, but received ${rest.length + 1} values.`,
+    )
+  }
+
+  let multiplier = designSystem.theme.resolve(null, ['--spacing'])
+  if (!multiplier) {
+    throw new Error('--spacing(…) depends on the `--spacing` theme value, but it was not found.')
+  }
+
+  return `calc(${multiplier} * ${value})`
 }
 
 function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
