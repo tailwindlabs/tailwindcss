@@ -26,12 +26,12 @@ import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
+import { createCssUtility } from './utilities'
 import { segment } from './utils/segment'
 import { compoundsForSelectors } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
-const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
   base?: string
@@ -174,25 +174,20 @@ async function parseCss(
         throw new Error('`@utility` cannot be nested.')
       }
 
-      let name = node.params
-
-      if (!IS_VALID_UTILITY_NAME.test(name)) {
-        throw new Error(
-          `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
-        )
-      }
-
       if (node.nodes.length === 0) {
         throw new Error(
-          `\`@utility ${name}\` is empty. Utilities should include at least one property.`,
+          `\`@utility ${node.params}\` is empty. Utilities should include at least one property.`,
         )
       }
 
-      customUtilities.push((designSystem) => {
-        designSystem.utilities.static(name, () => structuredClone(node.nodes))
-      })
+      let utility = createCssUtility(node)
+      if (utility === null) {
+        throw new Error(
+          `\`@utility ${node.params}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+        )
+      }
 
-      return
+      customUtilities.push(utility)
     }
 
     // Collect paths from `@source` at-rules

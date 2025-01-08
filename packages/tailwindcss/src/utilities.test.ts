@@ -17259,7 +17259,7 @@ describe('custom utilities', () => {
   test('custom utilities must use a valid name definitions', async () => {
     await expect(() =>
       compile(css`
-        @utility push-* {
+        @utility push-| {
           right: 100%;
         }
       `),
@@ -17437,5 +17437,755 @@ describe('custom utilities', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
     )
+  })
+
+  describe('functional utilities', () => {
+    test('resolving values from `@theme`', async () => {
+      let input = css`
+        @theme reference {
+          --tab-size-1: 1;
+          --tab-size-2: 2;
+          --tab-size-4: 4;
+          --tab-size-github: 8;
+        }
+
+        @utility tab-* {
+          tab-size: --value(--tab-size);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+        ".tab-1 {
+          tab-size: 1;
+        }
+
+        .tab-2 {
+          tab-size: 2;
+        }
+
+        .tab-4 {
+          tab-size: 4;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
+      let input =
+        // Explicitly not using the css tagged template literal so that
+        // Prettier doesn't format the `value(--tab-size-*)` as
+        // `value(--tab-size- *)`
+        `
+          @theme reference {
+            --tab-size-1: 1;
+            --tab-size-2: 2;
+            --tab-size-4: 4;
+            --tab-size-github: 8;
+          }
+
+          @utility tab-* {
+            tab-size: --value(--tab-size-*);
+          }
+
+          @tailwind utilities;
+        `
+
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+          ".tab-1 {
+            tab-size: 1;
+          }
+
+          .tab-2 {
+            tab-size: 2;
+          }
+
+          .tab-4 {
+            tab-size: 4;
+          }
+
+          .tab-github {
+            tab-size: 8;
+          }"
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)', async () => {
+      let input = css`
+        @theme reference {
+          --tab-size-1: 1;
+          --tab-size-2: 2;
+          --tab-size-4: 4;
+          --tab-size-github: 8;
+        }
+
+        @utility tab-* {
+          tab-size: --value(--tab-size-\*);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
+          ".tab-1 {
+            tab-size: 1;
+          }
+
+          .tab-2 {
+            tab-size: 2;
+          }
+
+          .tab-4 {
+            tab-size: 4;
+          }
+
+          .tab-github {
+            tab-size: 8;
+          }"
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('resolving bare values', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value(integer);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-1', 'tab-76', 'tab-971'])).toMatchInlineSnapshot(`
+        ".tab-1 {
+          tab-size: 1;
+        }
+
+        .tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-971 {
+          tab-size: 971;
+        }"
+      `)
+      expect(await compileCss(input, ['tab-foo'])).toEqual('')
+    })
+
+    test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
+      let input = css`
+        @utility example-* {
+          --value-as-number: --value(number);
+          --value-as-percentage: --value(percentage);
+          --value-as-ratio: --value(ratio);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
+        .toMatchInlineSnapshot(`
+        ".example-0\\.5 {
+          --value-as-number: .5;
+        }
+
+        .example-1 {
+          --value-as-number: 1;
+        }
+
+        .example-2\\/3 {
+          --value-as-ratio: 2 / 3;
+        }
+
+        .example-20\\% {
+          --value-as-percentage: 20%;
+        }"
+      `)
+      expect(
+        await compileCss(input, [
+          'example-1.23',
+          'example-12.34%',
+          'example-1.2/3',
+          'example-1/2.3',
+          'example-1.2/3.4',
+        ]),
+      ).toEqual('')
+    })
+
+    test('resolving unsupported bare values', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value(color);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-#0088cc', 'tab-foo'])).toEqual('')
+    })
+
+    test('resolving arbitrary values', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value([integer]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[integer:var(--my-value)]',
+          'tab-(integer:my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[integer\\:var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+      expect(
+        await compileCss(input, [
+          'tab-[#0088cc]',
+          'tab-[1px]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+          'tab-[color:var(--my-value)]',
+          'tab-(color:--my-value)',
+        ]),
+      ).toEqual('')
+    })
+
+    test('resolving any arbitrary values', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value([ *]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+    })
+
+    test('resolving any arbitrary values (without space)', async () => {
+      let input = `
+        @utility tab-* {
+          tab-size: --value([*]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+    })
+
+    test('resolving any arbitrary values (with escaped `*`)', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value([\*]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".tab-\\(--my-value\\) {
+          tab-size: var(--my-value);
+        }
+
+        .tab-\\[1\\] {
+          tab-size: 1;
+        }
+
+        .tab-\\[76\\] {
+          tab-size: 76;
+        }
+
+        .tab-\\[971\\] {
+          tab-size: 971;
+        }
+
+        .tab-\\[var\\(--my-value\\)\\] {
+          tab-size: var(--my-value);
+        }"
+      `)
+    })
+
+    test('resolving theme, bare and arbitrary values all at once', async () => {
+      let input = css`
+        @theme reference {
+          --tab-size-github: 8;
+        }
+
+        @utility tab-* {
+          tab-size: --value([integer]);
+          tab-size: --value(integer);
+          tab-size: --value(--tab-size);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-github', 'tab-76', 'tab-[123]'])).toMatchInlineSnapshot(`
+        ".tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-\\[123\\] {
+          tab-size: 123;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
+      expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
+    })
+
+    test('in combination with calc to produce different data types of values', async () => {
+      let input = css`
+        @theme reference {
+          --example-full: 100%;
+        }
+
+        @utility example-* {
+          --value: --value([percentage]);
+          --value: calc(--value(integer) * 1%);
+          --value: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-full', 'example-12', 'example-[20%]']))
+        .toMatchInlineSnapshot(`
+          ".example-12 {
+            --value: calc(12 * 1%);
+          }
+
+          .example-\\[20\\%\\] {
+            --value: 20%;
+          }
+
+          .example-full {
+            --value: 100%;
+          }"
+        `)
+      expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
+    })
+
+    test('shorthand if resulting values are of the same type', async () => {
+      let input = css`
+        @theme reference {
+          --tab-size-github: 8;
+          --example-full: 100%;
+        }
+
+        @utility tab-* {
+          tab-size: --value(--tab-size, integer, [integer]);
+        }
+
+        @utility example-* {
+          --value: calc(--value(integer) * 1%);
+          --value: --value(--example, [percentage]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'tab-github',
+          'tab-76',
+          'tab-[123]',
+          'example-37',
+          'example-[50%]',
+          'example-full',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".example-37 {
+          --value: calc(37 * 1%);
+        }
+
+        .example-\\[50\\%\\] {
+          --value: 50%;
+        }
+
+        .example-full {
+          --value: 100%;
+        }
+
+        .tab-76 {
+          tab-size: 76;
+        }
+
+        .tab-\\[123\\] {
+          tab-size: 123;
+        }
+
+        .tab-github {
+          tab-size: 8;
+        }"
+      `)
+      expect(
+        await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]', 'example-foo', 'example-[13px]']),
+      ).toEqual('')
+    })
+
+    test('negative values', async () => {
+      let input = css`
+        @theme reference {
+          --example-full: 100%;
+        }
+
+        @utility example-* {
+          --value: --value(--example, [percentage], [length]);
+        }
+
+        @utility -example-* {
+          --value: calc(--value(--example, [percentage], [length]) * -1);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'example-full',
+          '-example-full',
+          'example-[10px]',
+          '-example-[10px]',
+          'example-[20%]',
+          '-example-[20%]',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".-example-\\[10px\\] {
+          --value: calc(10px * -1);
+        }
+
+        .-example-\\[20\\%\\] {
+          --value: calc(20% * -1);
+        }
+
+        .-example-full {
+          --value: calc(100% * -1);
+        }
+
+        .example-\\[10px\\] {
+          --value: 10px;
+        }
+
+        .example-\\[20\\%\\] {
+          --value: 20%;
+        }
+
+        .example-full {
+          --value: 100%;
+        }"
+      `)
+      expect(await compileCss(input, ['example-10'])).toEqual('')
+    })
+
+    test('using the same value multiple times', async () => {
+      let input = css`
+        @utility example-* {
+          --value: calc(var(--spacing) * --value(number)) calc(var(--spacing) * --value(number));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+        ".example-12 {
+          --value: calc(var(--spacing) * 12) calc(var(--spacing) * 12);
+        }"
+      `)
+    })
+
+    test('modifiers', async () => {
+      let input = css`
+        @theme reference {
+          --value-sm: 14px;
+          --modifier-7: 28px;
+        }
+
+        @utility example-* {
+          --value: --value(--value, [length]);
+          --modifier: --modifier(--modifier, [length]);
+          --modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(
+        await compileCss(input, [
+          'example-sm',
+          'example-sm/7',
+          'example-[12px]',
+          'example-[12px]/[16px]',
+        ]),
+      ).toMatchInlineSnapshot(`
+        ".example-\\[12px\\] {
+          --value: 12px;
+        }
+
+        .example-\\[12px\\]\\/\\[16px\\] {
+          --value: 12px;
+          --modifier: 16px;
+          --modifier-with-calc: calc(16px * 2);
+        }
+
+        .example-sm {
+          --value: 14px;
+        }
+
+        .example-sm\\/7 {
+          --value: 14px;
+          --modifier: 28px;
+          --modifier-with-calc: calc(28px * 2);
+        }"
+      `)
+      expect(
+        await compileCss(input, ['example-foo', 'example-foo/[12px]', 'example-foo/12']),
+      ).toEqual('')
+    })
+
+    test('fractions', async () => {
+      let input = css`
+        @theme reference {
+          --example-video: 16 / 9;
+        }
+
+        @utility example-* {
+          --value: --value(--example, ratio, [ratio]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']))
+        .toMatchInlineSnapshot(`
+        ".example-1\\/1 {
+          --value: 1 / 1;
+        }
+
+        .example-\\[7\\/9\\] {
+          --value: 7 / 9;
+        }
+
+        .example-video {
+          --value: 16 / 9;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo'])).toEqual('')
+    })
+
+    test('resolve theme values with sub-namespace (--text- * --line-height)', async () => {
+      let input = css`
+        @theme reference {
+          --text-xs: 0.75rem;
+          --text-xs--line-height: calc(1 / 0.75);
+        }
+
+        @utility example-* {
+          font-size: --value(--text);
+          line-height: --value(--text- * --line-height);
+          line-height: --modifier(number);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+        ".example-xs {
+          font-size: .75rem;
+          line-height: 1.33333;
+        }
+
+        .example-xs\\/6 {
+          font-size: .75rem;
+          line-height: 6;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('resolve theme values with sub-namespace (--text-\\* --line-height)', async () => {
+      let input = css`
+        @theme reference {
+          --text-xs: 0.75rem;
+          --text-xs--line-height: calc(1 / 0.75);
+        }
+
+        @utility example-* {
+          font-size: --value(--text);
+          line-height: --value(--text-\* --line-height);
+          line-height: --modifier(number);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+        ".example-xs {
+          font-size: .75rem;
+          line-height: 1.33333;
+        }
+
+        .example-xs\\/6 {
+          font-size: .75rem;
+          line-height: 6;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('resolve theme values with sub-namespace (--value(--text --line-height))', async () => {
+      let input = css`
+        @theme reference {
+          --text-xs: 0.75rem;
+          --text-xs--line-height: calc(1 / 0.75);
+        }
+
+        @utility example-* {
+          font-size: --value(--text);
+          line-height: --value(--text --line-height);
+          line-height: --modifier(number);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+        ".example-xs {
+          font-size: .75rem;
+          line-height: 1.33333;
+        }
+
+        .example-xs\\/6 {
+          font-size: .75rem;
+          line-height: 6;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('resolve theme values with sub-namespace (--value(--text-*--line-height))', async () => {
+      let input = `
+        @theme reference {
+          --text-xs: 0.75rem;
+          --text-xs--line-height: calc(1 / 0.75);
+        }
+
+        @utility example-* {
+          font-size: --value(--text);
+          line-height: --value(--text-*--line-height);
+          line-height: --modifier(number);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+        ".example-xs {
+          font-size: .75rem;
+          line-height: 1.33333;
+        }
+
+        .example-xs\\/6 {
+          font-size: .75rem;
+          line-height: 6;
+        }"
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
   })
 })

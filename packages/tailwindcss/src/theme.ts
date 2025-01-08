@@ -68,7 +68,7 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
+  keysInNamespaces(themeKeys: Iterable<ThemeKey>): string[] {
     let keys: string[] = []
 
     for (let namespace of themeKeys) {
