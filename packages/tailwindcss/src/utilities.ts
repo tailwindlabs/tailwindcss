@@ -24,7 +24,7 @@ import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
-const IS_VALID_STATIC_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_STATIC_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*$/
 const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
 
 type CompileFn<T extends Candidate['kind']> = (
