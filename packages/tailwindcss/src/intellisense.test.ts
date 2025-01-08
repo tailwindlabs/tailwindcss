@@ -495,6 +495,11 @@ test('Custom functional @utility', async () => {
   expect(classNames).toContain('-negative-4')
   expect(classNames).toContain('-negative-github')
 
+  expect(classNames).not.toContain('--negative-1')
+  expect(classNames).not.toContain('--negative-2')
+  expect(classNames).not.toContain('--negative-4')
+  expect(classNames).not.toContain('--negative-github')
+
   expect(classNames).toContain('example-xs')
   expect(classMap.get('example-xs')?.modifiers).toEqual(['foo', 'bar'])
 })

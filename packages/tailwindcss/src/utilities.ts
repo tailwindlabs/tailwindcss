@@ -4817,7 +4817,6 @@ export function createCssUtility(node: AtRule) {
       designSystem.utilities.suggest(name.slice(0, -2), () => {
         return [
           {
-            supportsNegative: name[0] === '-',
             values: designSystem.theme
               .keysInNamespaces(valueThemeKeys)
               .map((x) => x.replaceAll('_', '.')),
