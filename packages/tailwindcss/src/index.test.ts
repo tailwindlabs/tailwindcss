@@ -3212,7 +3212,7 @@ describe('`@import "…" reference`', () => {
       { loadStylesheet },
     )
 
-    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
   })
 
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
@@ -3241,9 +3241,7 @@ describe('`@import "…" reference`', () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer theme;
-
-      @media (width >= 48rem) {
+      "@media (width >= 48rem) {
         .bar:hover, .bar:focus {
           color: red;
         }
@@ -3284,25 +3282,48 @@ describe('`@import "…" reference`', () => {
             @apply animate-spin;
           }
         `,
-        ['animate-spin'],
+        ['animate-spin', 'match-utility-initial', 'match-components-initial'],
         {
           loadModule: async () => ({
-            module: ({ addBase, addUtilities }: PluginAPI) => {
+            module: ({
+              addBase,
+              addUtilities,
+              addComponents,
+              matchUtilities,
+              matchComponents,
+            }: PluginAPI) => {
               addBase({
                 '@keyframes base': { '100%': { opacity: '0' } },
               })
               addUtilities({
                 '@keyframes utilities': { '100%': { opacity: '0' } },
               })
+              addComponents({
+                '@keyframes components ': { '100%': { opacity: '0' } },
+              })
+              matchUtilities(
+                {
+                  'match-utility': (value) => ({
+                    '@keyframes match-utilities': { '100%': { opacity: '0' } },
+                  }),
+                },
+                { values: { initial: 'initial' } },
+              )
+              matchComponents(
+                {
+                  'match-components': (value) => ({
+                    '@keyframes match-components': { '100%': { opacity: '0' } },
+                  }),
+                },
+                { values: { initial: 'initial' } },
+              )
             },
             base: '/root',
           }),
         },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer theme, base, components, utilities;
-
-      .bar {
+      ".bar {
         animation: var(--animate-spin);
       }"
     `)
