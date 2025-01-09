@@ -2,6 +2,7 @@ import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
 import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { printCandidate } from '../candidates'
 
 export function automaticVarInjection(
@@ -73,15 +74,32 @@ export function automaticVarInjection(
 }
 
 function injectVar(value: string): { value: string; didChange: boolean } {
+  let ast = ValueParser.parse(value)
+
   let didChange = false
-  if (value.startsWith('--')) {
-    value = `var(${value})`
-    didChange = true
-  } else if (value.startsWith(' --')) {
-    value = value.slice(1)
-    didChange = true
+  for (let [idx, node] of ast.entries()) {
+    // Convert `--my-color` to `var(--my-color)`
+    // Except if:
+    // - It's a function like `--spacing(…)`
+    // - It's preceeded by a space, e.g.: `bg-[_--my-color]` -> `bg-[--my-color]`
+    if (
+      node.kind === 'word' &&
+      node.value.startsWith('--') &&
+      !(ast[idx - 1]?.kind === 'separator' && ast[idx - 1]?.value === ' ')
+    ) {
+      node.value = `var(${node.value})`
+      didChange = true
+    }
+
+    // Remove the space "hack" before a variable. E.g.: `bg-[_--my-color]` ->
+    // `bg-[--my-color]`
+    else if (node.kind === 'separator' && node.value === ' ') {
+      ast.splice(idx, 1)
+      didChange = true
+    }
   }
-  return { value, didChange }
+
+  return { value: ValueParser.toCss(ast), didChange }
 }
 
 function injectVarIntoVariant(designSystem: DesignSystem, variant: Variant): boolean {
