@@ -9,9 +9,9 @@ test.each([
   ['[color:red]', '[color:red]'],
 
   // Handle special cases around `.1` in the `theme(…)`
-  ['[--value:theme(spacing.1)]', '[--value:calc(var(--spacing)*1)]'],
+  ['[--value:theme(spacing.1)]', '[--value:--spacing(1)]'],
   ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-xs--line-height)]'],
-  ['[--value:theme(spacing[1.25])]', '[--value:calc(var(--spacing)*1.25)]'],
+  ['[--value:theme(spacing[1.25])]', '[--value:--spacing(1.25)]'],
 
   // Should not convert invalid spacing values to calc
   ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
@@ -20,7 +20,7 @@ test.each([
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
   ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
   ['bg-[theme(colors.red.500)]', 'bg-(--color-red-500)'], // Arbitrary value
-  ['bg-[size:theme(spacing.4)]', 'bg-[size:calc(var(--spacing)*4)]'], // Arbitrary value + data type hint
+  ['bg-[size:theme(spacing.4)]', 'bg-[size:--spacing(4)]'], // Arbitrary value + data type hint
 
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
   ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
@@ -100,10 +100,7 @@ test.each([
 
   // `theme(…)` calls in another CSS function is replaced correctly.
   // Additionally we remove unnecessary whitespace.
-  [
-    'grid-cols-[min(50%_,_theme(spacing.80))_auto]',
-    'grid-cols-[min(50%,calc(var(--spacing)*80))_auto]',
-  ],
+  ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
@@ -152,7 +149,7 @@ test('extended space scale converts to var or calc', async () => {
     },
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
-    '[--value:calc(var(--spacing)*1)]',
+    '[--value:--spacing(1)]',
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
     '[--value:var(--spacing-2)]',

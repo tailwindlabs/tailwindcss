@@ -212,7 +212,7 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       let multiplier = keyPath[1]
       if (!isValidSpacingMultiplier(multiplier)) return null
 
-      return 'calc(var(--spacing) * ' + multiplier + ')'
+      return `--spacing(${multiplier})`
     }
 
     return null
