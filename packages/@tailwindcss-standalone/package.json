@@ -30,7 +30,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "detect-libc": "1.0.3",
-    "enhanced-resolve": "^5.17.1",
+    "enhanced-resolve": "^5.18.0",
     "tailwindcss": "workspace:^"
   },
   "__notes": "These binary packages must be included so Bun can build the CLI for all supported platforms. We also rely on Lightning CSS and Parcel being patched so Bun can statically analyze the executables.",

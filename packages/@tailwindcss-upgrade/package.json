@@ -31,7 +31,7 @@
     "@tailwindcss/oxide": "workspace:^",
     "braces": "^3.0.3",
     "dedent": "1.5.3",
-    "enhanced-resolve": "^5.17.1",
+    "enhanced-resolve": "^5.18.0",
     "globby": "^14.0.2",
     "jiti": "^2.0.0-beta.3",
     "mri": "^1.2.0",
