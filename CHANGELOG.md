@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Removed `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
+- Remove `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
 - Use Vite post-processor APIs for processing Svelte `<style>` blocks ([#15436](https://github.com/tailwindlabs/tailwindcss/pull/15436))
 
 ## [4.0.0-beta.8] - 2024-12-17
