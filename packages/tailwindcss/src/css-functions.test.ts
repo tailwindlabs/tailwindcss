@@ -146,7 +146,7 @@ describe('--spacing(…)', () => {
 })
 
 describe('--theme(…)', () => {
-  test('theme(--color-red-500)', async () => {
+  test('--theme(--color-red-500)', async () => {
     expect(
       await compileCss(css`
         @theme {
@@ -165,6 +165,19 @@ describe('--theme(…)', () => {
         color: red;
       }"
     `)
+  })
+
+  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(colors.red.500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: The --theme(…) function can only be used with CSS variables from your theme.]`)
   })
 })
 

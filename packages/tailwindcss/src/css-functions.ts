@@ -9,7 +9,7 @@ const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) 
   '--alpha': alpha,
   '--spacing': spacing,
   '--theme': theme,
-  theme,
+  theme: legacyTheme,
 }
 
 function alpha(_designSystem: DesignSystem, value: string, alpha: string, ...rest: string[]) {
@@ -50,6 +50,14 @@ function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
 }
 
 function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+  if (!path.startsWith('--')) {
+    throw new Error(`The --theme(…) function can only be used with CSS variables from your theme.`)
+  }
+
+  return legacyTheme(designSystem, path, ...fallback)
+}
+
+function legacyTheme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
   path = eventuallyUnquote(path)
 
   let resolvedValue = designSystem.resolveThemeValue(path)
