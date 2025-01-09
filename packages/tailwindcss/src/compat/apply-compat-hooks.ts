@@ -276,14 +276,27 @@ function upgradeToFullPluginSupport({
     }
   }
 
-  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig, {
-    set current(value: number) {
-      features |= value
+  let pluginApiConfig = {
+    designSystem,
+    ast,
+    resolvedConfig,
+    featuresRef: {
+      set current(value: number) {
+        features |= value
+      },
     },
-  })
+  }
+
+  let pluginApi = buildPluginApi({ ...pluginApiConfig, referenceMode: false })
+  let referenceModePluginApi = undefined
 
   for (let { handler, reference } of resolvedConfig.plugins) {
-    handler(reference ? { ...pluginApi, addBase: () => {} } : pluginApi)
+    if (reference) {
+      referenceModePluginApi ||= buildPluginApi({ ...pluginApiConfig, referenceMode: true })
+      handler(referenceModePluginApi)
+    } else {
+      handler(pluginApi)
+    }
   }
 
   // Merge the user-configured theme keys into the design system. The compat

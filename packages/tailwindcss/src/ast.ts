@@ -325,6 +325,11 @@ export function optimizeAst(ast: AstNode[]) {
 
     // Context
     else if (node.kind === 'context') {
+      // Remove reference imports from printing
+      if (node.context.reference) {
+        return
+      }
+
       for (let child of node.nodes) {
         transform(child, parent, depth)
       }

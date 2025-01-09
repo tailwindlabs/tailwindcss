@@ -362,42 +362,6 @@ async function parseCss(
 
         // Handle `@import "…" reference`
         else if (param === 'reference') {
-          walk(node.nodes, (child, { replaceWith }) => {
-            if (child.kind !== 'at-rule') {
-              replaceWith([])
-              return WalkAction.Skip
-            }
-            switch (child.name) {
-              case '@theme': {
-                let themeParams = segment(child.params, ' ')
-                if (!themeParams.includes('reference')) {
-                  child.params = (child.params === '' ? '' : ' ') + 'reference'
-                }
-                return WalkAction.Skip
-              }
-              case '@import':
-              case '@config':
-              case '@plugin':
-              case '@variant':
-              case '@utility': {
-                return WalkAction.Skip
-              }
-
-              case '@media':
-              case '@supports':
-              case '@layer': {
-                // These rules should be recursively traversed as these might be
-                // inserted by the `@import` resolution.
-                return
-              }
-
-              default: {
-                replaceWith([])
-                return WalkAction.Skip
-              }
-            }
-          })
-
           node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
@@ -419,6 +383,10 @@ async function parseCss(
     // Handle `@theme`
     if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
+
+      if (context.reference) {
+        themeOptions |= ThemeOptions.REFERENCE
+      }
 
       if (themePrefix) {
         if (!IS_VALID_PREFIX.test(themePrefix)) {

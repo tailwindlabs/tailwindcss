@@ -3212,7 +3212,7 @@ describe('`@import "…" reference`', () => {
       { loadStylesheet },
     )
 
-    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
   })
 
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
@@ -3241,12 +3241,90 @@ describe('`@import "…" reference`', () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer theme;
-
-      @media (width >= 48rem) {
+      "@media (width >= 48rem) {
         .bar:hover, .bar:focus {
           color: red;
         }
+      }"
+    `)
+  })
+
+  test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
+    await expect(
+      compileCss(
+        css`
+          @media reference {
+            @layer theme, base, components, utilities;
+            @layer theme {
+              @theme {
+                --animate-spin: spin 1s linear infinite;
+                --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+                @keyframes spin {
+                  to {
+                    transform: rotate(360deg);
+                  }
+                }
+              }
+            }
+            @layer base {
+              @keyframes ping {
+                75%,
+                100% {
+                  transform: scale(2);
+                  opacity: 0;
+                }
+              }
+            }
+            @plugin "my-plugin";
+          }
+
+          .bar {
+            @apply animate-spin;
+          }
+        `,
+        ['animate-spin', 'match-utility-initial', 'match-components-initial'],
+        {
+          loadModule: async () => ({
+            module: ({
+              addBase,
+              addUtilities,
+              addComponents,
+              matchUtilities,
+              matchComponents,
+            }: PluginAPI) => {
+              addBase({
+                '@keyframes base': { '100%': { opacity: '0' } },
+              })
+              addUtilities({
+                '@keyframes utilities': { '100%': { opacity: '0' } },
+              })
+              addComponents({
+                '@keyframes components ': { '100%': { opacity: '0' } },
+              })
+              matchUtilities(
+                {
+                  'match-utility': (value) => ({
+                    '@keyframes match-utilities': { '100%': { opacity: '0' } },
+                  }),
+                },
+                { values: { initial: 'initial' } },
+              )
+              matchComponents(
+                {
+                  'match-components': (value) => ({
+                    '@keyframes match-components': { '100%': { opacity: '0' } },
+                  }),
+                },
+                { values: { initial: 'initial' } },
+              )
+            },
+            base: '/root',
+          }),
+        },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".bar {
+        animation: var(--animate-spin);
       }"
     `)
   })

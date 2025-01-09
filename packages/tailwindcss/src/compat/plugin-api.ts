@@ -86,14 +86,22 @@ export type PluginAPI = {
 
 const IS_VALID_UTILITY_NAME = /^[a-z@][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(
-  designSystem: DesignSystem,
-  ast: AstNode[],
-  resolvedConfig: ResolvedConfig,
-  featuresRef: { current: Features },
-): PluginAPI {
+export function buildPluginApi({
+  designSystem,
+  ast,
+  resolvedConfig,
+  featuresRef,
+  referenceMode,
+}: {
+  designSystem: DesignSystem
+  ast: AstNode[]
+  resolvedConfig: ResolvedConfig
+  featuresRef: { current: Features }
+  referenceMode: boolean
+}): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
+      if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
       ast.push(atRule('@layer', 'base', baseNodes))
@@ -212,7 +220,9 @@ export function buildPluginApi(
 
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
-          ast.push(rule(name, objectToAst(css)))
+          if (!referenceMode) {
+            ast.push(rule(name, objectToAst(css)))
+          }
           continue
         }
 
