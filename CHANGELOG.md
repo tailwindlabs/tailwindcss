@@ -15,9 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `@tailwindcss/browser` package to run Tailwind CSS in the browser ([#15558](https://github.com/tailwindlabs/tailwindcss/pull/15558))
 - Add `@reference "…"` API as a replacement for the previous `@import "…" reference` option ([#15565](https://github.com/tailwindlabs/tailwindcss/pull/15565))
-- Add functional utility syntax ([#15455](https://github.com/tailwindlabs/tailwindcss/pull/15455))
+- Add support for defining functional utilities in CSS ([#15455](https://github.com/tailwindlabs/tailwindcss/pull/15455))
 - Add new `--spacing(…)`, `--alpha(…)`, and `--theme(…)` CSS functions ([#15572](https://github.com/tailwindlabs/tailwindcss/pull/15572))
 - Add Linux musl builds of the Standalone CLI ([#15567](https://github.com/tailwindlabs/tailwindcss/pull/15567))
+- Improve performance of internal AST manipulations ([#15529](https://github.com/tailwindlabs/tailwindcss/pull/15529))
 
 ### Fixed
 
@@ -26,9 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix incorrectly named `bg-round` and `bg-space` utilities to `bg-repeat-round` to `bg-repeat-space` ([#15462](https://github.com/tailwindlabs/tailwindcss/pull/15462))
 - Fix `inset-shadow-*` suggestions in IntelliSense ([#15471](https://github.com/tailwindlabs/tailwindcss/pull/15471))
 - Only compile arbitrary values ending in `]` ([#15503](https://github.com/tailwindlabs/tailwindcss/pull/15503))
-- Improve performance and memory usage ([#15529](https://github.com/tailwindlabs/tailwindcss/pull/15529))
 - Ensure `@apply` rules are processed in the correct order ([#15542](https://github.com/tailwindlabs/tailwindcss/pull/15542))
-- Allow negative utility names in `@utilty` ([#15573](https://github.com/tailwindlabs/tailwindcss/pull/15573))
+- Allow negative utility names in `@utility` ([#15573](https://github.com/tailwindlabs/tailwindcss/pull/15573))
 - Remove all `@keyframes` contributed by JavaScript plugins when using `@reference` imports ([#15581](https://github.com/tailwindlabs/tailwindcss/pull/15581))
 - _Upgrade (experimental)_: Do not extract class names from functions (e.g. `shadow` in `filter: 'drop-shadow(…)'`) ([#15566](https://github.com/tailwindlabs/tailwindcss/pull/15566))
 - _Upgrade (experimental)_: Migrate `theme(spacing.2)` to `--spacing(2)` ([#15579](https://github.com/tailwindlabs/tailwindcss/pull/15579))
