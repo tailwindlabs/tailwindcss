@@ -60,7 +60,7 @@ export function buildCustomContainerUtilityRules(
       let [key] = breakpoints[0]
       // Unset all default breakpoints
       rules.push(
-        atRule('@media', `(width >= theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
+        atRule('@media', `(width >= --theme(--breakpoint-${key}))`, [decl('max-width', 'none')]),
       )
     }
 

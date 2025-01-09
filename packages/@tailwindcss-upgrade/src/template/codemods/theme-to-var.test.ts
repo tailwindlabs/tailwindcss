@@ -14,7 +14,7 @@ test.each([
   ['[--value:theme(spacing[1.25])]', '[--value:--spacing(1.25)]'],
 
   // Should not convert invalid spacing values to calc
-  ['[--value:theme(spacing[1.1])]', '[--value:--theme(spacing[1.1])]'],
+  ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
 
   // Convert to `var(…)` if we can resolve the path
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
@@ -26,13 +26,13 @@ test.each([
   ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
 
   // Keep `theme(…)` if we can't resolve the path
-  ['bg-[theme(colors.foo.1000)]', 'bg-[--theme(colors.foo.1000)]'],
+  ['bg-[theme(colors.foo.1000)]', 'bg-[theme(colors.foo.1000)]'],
 
   // Keep `theme(…)` if we can't resolve the path, but still try to convert the
   // fallback value.
   [
     'bg-[theme(colors.foo.1000,theme(colors.red.500))]',
-    'bg-[--theme(colors.foo.1000,var(--color-red-500))]',
+    'bg-[theme(colors.foo.1000,var(--color-red-500))]',
   ],
 
   // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
@@ -92,35 +92,35 @@ test.each([
   // still upgrade the `theme(…)` to the modern syntax.
   ['max-[theme(screens.lg)]:flex', 'max-[--theme(--breakpoint-lg)]:flex'],
   // There are no variables for `--spacing` multiples, so we can't convert this
-  ['max-[theme(spacing.4)]:flex', 'max-[--theme(spacing.4)]:flex'],
+  ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
 
   // This test in itself doesn't make much sense. But we need to make sure
   // that this doesn't end up as the modifier in the candidate itself.
-  ['max-[theme(spacing.4/50)]:flex', 'max-[--theme(spacing.4/50)]:flex'],
+  ['max-[theme(spacing.4/50)]:flex', 'max-[theme(spacing.4/50)]:flex'],
 
   // `theme(…)` calls in another CSS function is replaced correctly.
   // Additionally we remove unnecessary whitespace.
   ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
-  ['[--foo:theme(transitionDuration.500)]', '[--foo:--theme(transitionDuration.500)]'],
+  ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
   // Renamed theme keys
   ['max-w-[theme(screens.md)]', 'max-w-(--breakpoint-md)'],
   ['w-[theme(maxWidth.md)]', 'w-(--container-md)'],
 
   // Invalid cases
-  ['[--foo:theme(colors.red.500/50/50)]', '[--foo:--theme(colors.red.500/50/50)]'],
-  ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:--theme(colors.red.500/50/50)]/50'],
+  ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
+  ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:theme(colors.red.500/50/50)]/50'],
 
   // Partially invalid cases
   [
     '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]',
-    '[--foo:--theme(colors.red.500/50/50)_var(--color-blue-200)]',
+    '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]',
   ],
   [
     '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
-    '[--foo:--theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
+    '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
   ],
 ])('%s => %s', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem(
@@ -158,7 +158,7 @@ test('extended space scale converts to var or calc', async () => {
     '[--value:var(--spacing-miami)]',
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.nyc)]')).toEqual(
-    '[--value:--theme(spacing.nyc)]',
+    '[--value:theme(spacing.nyc)]',
   )
 })
 
@@ -183,6 +183,6 @@ test('custom space scale converts to var', async () => {
     '[--value:var(--spacing-2)]',
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.3)]')).toEqual(
-    '[--value:--theme(spacing.3)]',
+    '[--value:theme(spacing.3)]',
   )
 })

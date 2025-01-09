@@ -239,8 +239,6 @@ function substituteFunctionsInValue(
 ) {
   ValueParser.walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
-      node.value = '--theme'
-
       if (node.nodes.length < 1) return
 
       // Ignore whitespace before the first argument
