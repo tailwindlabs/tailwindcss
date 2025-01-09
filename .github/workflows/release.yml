@@ -265,7 +265,9 @@ jobs:
           files: |
             packages/@tailwindcss-standalone/dist/sha256sums.txt
             packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
             packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
             packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
             packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
             packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
