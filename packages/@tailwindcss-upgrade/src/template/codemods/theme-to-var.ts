@@ -148,9 +148,7 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       let parts = segment(path, '/').map((part) => part.trim())
 
       // Multiple `/` separators, which makes this an invalid path
-      if (parts.length > 2) {
-        return null
-      }
+      if (parts.length > 2) return null
 
       // The path contains a `/`, which means that there is a modifier such as
       // `theme(colors.red.500/50%)`.
@@ -212,7 +210,7 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       let multiplier = keyPath[1]
       if (!isValidSpacingMultiplier(multiplier)) return null
 
-      return 'calc(var(--spacing) * ' + multiplier + ')'
+      return `--spacing(${multiplier})`
     }
 
     return null
@@ -227,7 +225,9 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
 
     let modifier =
       parts.length > 0 ? (prettyPrint ? ` / ${parts.join(' / ')}` : `/${parts.join('/')}`) : ''
-    return fallback ? `theme(${variable}${modifier}, ${fallback})` : `theme(${variable}${modifier})`
+    return fallback
+      ? `--theme(${variable}${modifier}, ${fallback})`
+      : `--theme(${variable}${modifier})`
   }
 
   return convert

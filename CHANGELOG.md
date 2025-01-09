@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow negative utility names in `@utilty` ([#15573](https://github.com/tailwindlabs/tailwindcss/pull/15573))
 - Remove all `@keyframes` contributed by JavaScript plugins when using `@reference` imports ([#15581](https://github.com/tailwindlabs/tailwindcss/pull/15581))
 - _Upgrade (experimental)_: Do not extract class names from functions (e.g. `shadow` in `filter: 'drop-shadow(…)'`) ([#15566](https://github.com/tailwindlabs/tailwindcss/pull/15566))
+- _Upgrade (experimental)_: Migrate `theme(spacing.2)` to `--spacing(2)` ([#15579](https://github.com/tailwindlabs/tailwindcss/pull/15579))
+- _Upgrade (experimental)_: Migrate `theme(…)` to `--theme(…)` ([#15579](https://github.com/tailwindlabs/tailwindcss/pull/15579))
 
 ### Changed
 

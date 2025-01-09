@@ -9,9 +9,9 @@ test.each([
   ['[color:red]', '[color:red]'],
 
   // Handle special cases around `.1` in the `theme(…)`
-  ['[--value:theme(spacing.1)]', '[--value:calc(var(--spacing)*1)]'],
+  ['[--value:theme(spacing.1)]', '[--value:--spacing(1)]'],
   ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-xs--line-height)]'],
-  ['[--value:theme(spacing[1.25])]', '[--value:calc(var(--spacing)*1.25)]'],
+  ['[--value:theme(spacing[1.25])]', '[--value:--spacing(1.25)]'],
 
   // Should not convert invalid spacing values to calc
   ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
@@ -20,7 +20,7 @@ test.each([
   ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
   ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
   ['bg-[theme(colors.red.500)]', 'bg-(--color-red-500)'], // Arbitrary value
-  ['bg-[size:theme(spacing.4)]', 'bg-[size:calc(var(--spacing)*4)]'], // Arbitrary value + data type hint
+  ['bg-[size:theme(spacing.4)]', 'bg-[size:--spacing(4)]'], // Arbitrary value + data type hint
 
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
   ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
@@ -47,11 +47,11 @@ test.each([
   //   to a candidate modifier _if_ all `theme(…)` calls use the same modifier.
   [
     '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]',
-    '[color:theme(--color-red-500/50,theme(--color-blue-500/50))]',
+    '[color:--theme(--color-red-500/50,--theme(--color-blue-500/50))]',
   ],
   [
     '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]/50',
-    '[color:theme(--color-red-500/50,theme(--color-blue-500/50))]/50',
+    '[color:--theme(--color-red-500/50,--theme(--color-blue-500/50))]/50',
   ],
 
   // Convert the `theme(…)`, but try to move the inline modifier (e.g. `50%`),
@@ -75,22 +75,22 @@ test.each([
   ['bg-[theme(colors.red.500/12.34%)]', 'bg-(--color-red-500)/[12.34%]'],
 
   // Arbitrary property that already contains a modifier
-  ['[color:theme(colors.red.500/50%)]/50', '[color:theme(--color-red-500/50%)]/50'],
+  ['[color:theme(colors.red.500/50%)]/50', '[color:--theme(--color-red-500/50%)]/50'],
 
   // Values that don't contain only `theme(…)` calls should not be converted to
   // use a modifier since the color is not the whole value.
   [
     'shadow-[shadow:inset_0px_1px_theme(colors.white/15%)]',
-    'shadow-[shadow:inset_0px_1px_theme(--color-white/15%)]',
+    'shadow-[shadow:inset_0px_1px_--theme(--color-white/15%)]',
   ],
 
   // Arbitrary value, where the candidate already contains a modifier
   // This should still migrate the `theme(…)` syntax to the modern syntax.
-  ['bg-[theme(colors.red.500/50%)]/50', 'bg-[theme(--color-red-500/50%)]/50'],
+  ['bg-[theme(colors.red.500/50%)]/50', 'bg-[--theme(--color-red-500/50%)]/50'],
 
   // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
   // still upgrade the `theme(…)` to the modern syntax.
-  ['max-[theme(screens.lg)]:flex', 'max-[theme(--breakpoint-lg)]:flex'],
+  ['max-[theme(screens.lg)]:flex', 'max-[--theme(--breakpoint-lg)]:flex'],
   // There are no variables for `--spacing` multiples, so we can't convert this
   ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
 
@@ -100,10 +100,7 @@ test.each([
 
   // `theme(…)` calls in another CSS function is replaced correctly.
   // Additionally we remove unnecessary whitespace.
-  [
-    'grid-cols-[min(50%_,_theme(spacing.80))_auto]',
-    'grid-cols-[min(50%,calc(var(--spacing)*80))_auto]',
-  ],
+  ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
 
   // `theme(…)` calls valid in v3, but not in v4 should still be converted.
   ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
@@ -152,7 +149,7 @@ test('extended space scale converts to var or calc', async () => {
     },
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
-    '[--value:calc(var(--spacing)*1)]',
+    '[--value:--spacing(1)]',
   )
   expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
     '[--value:var(--spacing-2)]',
