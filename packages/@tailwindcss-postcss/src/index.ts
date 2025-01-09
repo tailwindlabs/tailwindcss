@@ -317,7 +317,10 @@ function optimizeCss(
         deepSelectorCombinator: true,
       },
       include: LightningCssFeatures.Nesting,
-      exclude: LightningCssFeatures.LogicalProperties | LightningCssFeatures.DirSelector,
+      exclude:
+        LightningCssFeatures.LogicalProperties |
+        LightningCssFeatures.DirSelector |
+        LightningCssFeatures.LightDark,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),

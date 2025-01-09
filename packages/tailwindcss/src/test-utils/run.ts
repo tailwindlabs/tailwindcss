@@ -28,7 +28,7 @@ export function optimizeCss(
         deepSelectorCombinator: true,
       },
       include: Features.Nesting,
-      exclude: Features.LogicalProperties | Features.DirSelector,
+      exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),

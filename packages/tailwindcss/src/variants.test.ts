@@ -53,7 +53,11 @@ test('first-line', async () => {
 
 test('marker', async () => {
   expect(await run(['marker:flex'])).toMatchInlineSnapshot(`
-    ".marker\\:flex ::marker, .marker\\:flex::marker {
+    ".marker\\:flex ::marker {
+      display: flex;
+    }
+
+    .marker\\:flex::marker {
       display: flex;
     }"
   `)
@@ -1533,25 +1537,25 @@ test('not', async () => {
       }
     }
 
-    @media not (width < 640px) {
+    @media (width >= 640px) {
       .not-max-sm\\:flex {
         display: flex;
       }
     }
 
-    @media not (width < 130px) {
+    @media (width >= 130px) {
       .not-max-\\[130px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (width >= 130px) {
+    @media (width < 130px) {
       .not-min-\\[130px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (width >= 640px) {
+    @media (width < 640px) {
       .not-min-sm\\:flex, .not-sm\\:flex {
         display: flex;
       }
@@ -2165,7 +2169,15 @@ test('variant order', async () => {
       }
     }
 
-    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line, .marker\\:flex ::marker, .marker\\:flex::marker {
+    .first-letter\\:flex:first-letter, .first-line\\:flex:first-line {
+      display: flex;
+    }
+
+    .marker\\:flex ::marker {
+      display: flex;
+    }
+
+    .marker\\:flex::marker {
       display: flex;
     }
 

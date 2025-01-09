@@ -6839,34 +6839,15 @@ test('color-scheme', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".scheme-dark {
-      --lightningcss-light: ;
-      --lightningcss-dark: initial;
-      --lightningcss-light: ;
-      --lightningcss-dark: initial;
       color-scheme: dark;
     }
 
     .scheme-light {
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
       color-scheme: light;
     }
 
     .scheme-light-dark {
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
       color-scheme: light dark;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .scheme-light-dark {
-        --lightningcss-light: ;
-        --lightningcss-dark: initial;
-      }
     }
 
     .scheme-normal {
@@ -6874,18 +6855,10 @@ test('color-scheme', async () => {
     }
 
     .scheme-only-dark {
-      --lightningcss-light: ;
-      --lightningcss-dark: initial;
-      --lightningcss-light: ;
-      --lightningcss-dark: initial;
       color-scheme: dark only;
     }
 
     .scheme-only-light {
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
-      --lightningcss-light: initial;
-      --lightningcss-dark: ;
       color-scheme: light only;
     }"
   `)
@@ -14376,7 +14349,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
@@ -14443,7 +14416,7 @@ test('transition', async () => {
     }
 
     .transition {
-      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
     }
