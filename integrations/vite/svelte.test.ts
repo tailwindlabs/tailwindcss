@@ -57,19 +57,19 @@ test(
         <h1 class="global local underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss' reference;
           @import './other.css';
+          @reference 'tailwindcss';
         </style>
       `,
       'src/other.css': css`
         .local {
           @apply text-red-500;
-          animation: 2s ease-in-out 0s infinite localKeyframes;
+          animation: 2s ease-in-out infinite localKeyframes;
         }
 
         :global(.global) {
           @apply text-green-500;
-          animation: 2s ease-in-out 0s infinite globalKeyframes;
+          animation: 2s ease-in-out infinite globalKeyframes;
         }
 
         @keyframes -global-globalKeyframes {
@@ -93,18 +93,21 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('pnpm vite build')
+    let output = await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [
       candidate`underline`,
-      '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
-      /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+      '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
+      /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       /@keyframes globalKeyframes\{/,
       /@keyframes svelte-.*-localKeyframes\{/,
     ])
+
+    // Should not print any warnings
+    expect(output).not.toContain('vite-plugin-svelte')
   },
 )
 
@@ -164,20 +167,20 @@ test(
         <h1 class="local global underline">Hello {name}!</h1>
 
         <style>
-          @import 'tailwindcss' reference;
           @import './other.css';
+          @reference 'tailwindcss';
         </style>
       `,
       'src/index.css': css` @import 'tailwindcss'; `,
       'src/other.css': css`
         .local {
           @apply text-red-500;
-          animation: 2s ease-in-out 0s infinite localKeyframes;
+          animation: 2s ease-in-out infinite localKeyframes;
         }
 
         :global(.global) {
           @apply text-green-500;
-          animation: 2s ease-in-out 0s infinite globalKeyframes;
+          animation: 2s ease-in-out infinite globalKeyframes;
         }
 
         @keyframes -global-globalKeyframes {
@@ -210,10 +213,10 @@ test(
       let [, css] = files[0]
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(
-        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+        '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
       )
       expect(css).toMatch(
-        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       )
       expect(css).toMatch(/@keyframes globalKeyframes\{/)
       expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
@@ -235,10 +238,10 @@ test(
       let [, css] = files[0]
       expect(css).toContain(candidate`font-bold`)
       expect(css).toContain(
-        '.global{color:var(--color-green-500);animation:2s ease-in-out 0s infinite globalKeyframes}',
+        '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
       )
       expect(css).toMatch(
-        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out 0s infinite svelte-.*-localKeyframes\}/,
+        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       )
       expect(css).toMatch(/@keyframes globalKeyframes\{/)
       expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
