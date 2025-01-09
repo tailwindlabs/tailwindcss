@@ -306,10 +306,7 @@ function isPotentialCssRootFile(id: string) {
   if (id.includes('/.vite/')) return
   let extension = getExtension(id)
   let isCssFile =
-    (extension === 'css' ||
-      (extension === 'vue' && id.includes('&lang.css')) ||
-      (extension === 'astro' && id.includes('&lang.css')) ||
-      (extension === 'svelte' && id.includes('&lang.css')))
+    (extension === 'css' || id.includes('&lang.css')) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id)
 
