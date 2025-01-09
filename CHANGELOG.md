@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `@reference "…"` API as a replacement for the previous `@import "…" reference` option ([#15565](https://github.com/tailwindlabs/tailwindcss/pull/15565))
 - Add support for defining functional utilities in CSS ([#15455](https://github.com/tailwindlabs/tailwindcss/pull/15455))
 - Add new `--spacing(…)`, `--alpha(…)`, and `--theme(…)` CSS functions ([#15572](https://github.com/tailwindlabs/tailwindcss/pull/15572))
-- Add Linux musl builds of the Standalone CLI ([#15567](https://github.com/tailwindlabs/tailwindcss/pull/15567))
+- Add musl-based Linux builds of the standalone CLI ([#15567](https://github.com/tailwindlabs/tailwindcss/pull/15567))
 - Improve performance of internal AST manipulations ([#15529](https://github.com/tailwindlabs/tailwindcss/pull/15529))
 
 ### Fixed
