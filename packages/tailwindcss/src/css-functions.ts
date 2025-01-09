@@ -5,7 +5,7 @@ import { withAlpha } from './utilities'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
-const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => any> = {
+const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => string> = {
   '--alpha': alpha,
   '--spacing': spacing,
   '--theme': theme,
