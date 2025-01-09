@@ -3250,4 +3250,61 @@ describe('`@import "…" reference`', () => {
       }"
     `)
   })
+
+  test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
+    await expect(
+      compileCss(
+        css`
+          @media reference {
+            @layer theme, base, components, utilities;
+            @layer theme {
+              @theme {
+                --animate-spin: spin 1s linear infinite;
+                --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+                @keyframes spin {
+                  to {
+                    transform: rotate(360deg);
+                  }
+                }
+              }
+            }
+            @layer base {
+              @keyframes ping {
+                75%,
+                100% {
+                  transform: scale(2);
+                  opacity: 0;
+                }
+              }
+            }
+            @plugin "my-plugin";
+          }
+
+          .bar {
+            @apply animate-spin;
+          }
+        `,
+        ['animate-spin'],
+        {
+          loadModule: async () => ({
+            module: ({ addBase, addUtilities }: PluginAPI) => {
+              addBase({
+                '@keyframes base': { '100%': { opacity: '0' } },
+              })
+              addUtilities({
+                '@keyframes utilities': { '100%': { opacity: '0' } },
+              })
+            },
+            base: '/root',
+          }),
+        },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer theme, base, components, utilities;
+
+      .bar {
+        animation: var(--animate-spin);
+      }"
+    `)
+  })
 })
