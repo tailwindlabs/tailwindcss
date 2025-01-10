@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Include outline-color in default color properties to transition ([#15591](https://github.com/tailwindlabs/tailwindcss/pull/15591))
 
 ## [4.0.0-beta.9] - 2025-01-09
 
