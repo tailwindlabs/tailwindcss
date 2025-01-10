@@ -177,7 +177,9 @@ describe('--theme(…)', () => {
           color: --theme(colors.red.500);
         }
       `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: The --theme(…) function can only be used with CSS variables from your theme.]`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
   })
 })
 
