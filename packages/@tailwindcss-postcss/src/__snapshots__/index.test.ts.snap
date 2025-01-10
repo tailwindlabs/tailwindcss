@@ -472,7 +472,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   ol, ul, menu {
-    list-style-type: none;
+    list-style: none;
   }
 
   img, svg, video, canvas, audio, iframe, embed, object {

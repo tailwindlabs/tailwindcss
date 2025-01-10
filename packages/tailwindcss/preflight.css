@@ -205,7 +205,7 @@ summary {
 ol,
 ul,
 menu {
-  list-style-type: none;
+  list-style: none;
 }
 
 /*

@@ -10,8 +10,8 @@ catalogs:
       specifier: ^20.14.8
       version: 20.14.13
     lightningcss:
-      specifier: ^1.29.0
-      version: 1.29.0
+      specifier: ^1.29.1
+      version: 1.29.1
     vite:
       specifier: ^6.0.0
       version: 6.0.0
@@ -20,9 +20,9 @@ patchedDependencies:
   '@parcel/watcher@2.5.0':
     hash: zs2vvlrje3h42xp5ed2v44fep4
     path: patches/@parcel__watcher@2.5.0.patch
-  lightningcss@1.29.0:
+  lightningcss@1.29.1:
     hash: gkqcezdn4goium3e3s43dhy4by
-    path: patches/lightningcss@1.29.0.patch
+    path: patches/lightningcss@1.29.1.patch
 
 importers:
 
@@ -60,7 +60,7 @@ importers:
         version: 5.5.4
       vitest:
         specifier: ^2.0.5
-        version: 2.0.5(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
+        version: 2.0.5(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
 
   crates/node:
     optionalDependencies:
@@ -163,7 +163,7 @@ importers:
         version: 5.18.0
       lightningcss:
         specifier: 'catalog:'
-        version: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+        version: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -199,7 +199,7 @@ importers:
         version: link:../../crates/node
       lightningcss:
         specifier: 'catalog:'
-        version: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+        version: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
       postcss:
         specifier: ^8.4.41
         version: 8.4.41
@@ -367,7 +367,7 @@ importers:
         version: link:../../crates/node
       lightningcss:
         specifier: 'catalog:'
-        version: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+        version: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -377,7 +377,7 @@ importers:
         version: 20.14.13
       vite:
         specifier: 'catalog:'
-        version: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
+        version: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
 
   packages/internal-example-plugin: {}
 
@@ -394,7 +394,7 @@ importers:
         version: 1.5.3
       lightningcss:
         specifier: 'catalog:'
-        version: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+        version: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
 
   playgrounds/nextjs:
     dependencies:
@@ -480,7 +480,7 @@ importers:
         version: link:../../packages/@tailwindcss-vite
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.3.4(vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0))
+        version: 4.3.4(vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0))
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -502,7 +502,7 @@ importers:
         version: 1.1.29
       vite:
         specifier: 'catalog:'
-        version: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
+        version: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
 
 packages:
 
@@ -1529,13 +1529,11 @@ packages:
   '@parcel/watcher-darwin-arm64@2.5.0':
     resolution: {integrity: sha512-hyZ3TANnzGfLpRA2s/4U1kbw2ZI4qGxaRJbBH2DCSREFfubMswheh8TeiC1sGZ3z2jUf3s37P0BBlrD3sjVTUw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   '@parcel/watcher-darwin-x64@2.5.0':
     resolution: {integrity: sha512-9rhlwd78saKf18fT869/poydQK8YqlU26TMiNg7AIu7eBp9adqbJZqmdFOsbZ5cnLp5XvRo9wcFmNHgHdWaGYA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   '@parcel/watcher-freebsd-x64@2.5.0':
@@ -1559,25 +1557,21 @@ packages:
   '@parcel/watcher-linux-arm64-glibc@2.5.0':
     resolution: {integrity: sha512-BfNjXwZKxBy4WibDb/LDCriWSKLz+jJRL3cM/DllnHH5QUyoiUNEp3GmL80ZqxeumoADfCCP19+qiYiC8gUBjA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-arm64-musl@2.5.0':
     resolution: {integrity: sha512-S1qARKOphxfiBEkwLUbHjCY9BWPdWnW9j7f7Hb2jPplu8UZ3nes7zpPOW9bkLbHRvWM0WDTsjdOTUgW0xLBN1Q==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-glibc@2.5.0':
     resolution: {integrity: sha512-d9AOkusyXARkFD66S6zlGXyzx5RvY+chTP9Jp0ypSTC9d4lzyRs9ovGf/80VCxjKddcUvnsGwCHWuF2EoPgWjw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     resolution: {integrity: sha512-iqOC+GoTDoFyk/VYSFHwjHhYrk8bljW6zOhPuhi5t9ulqiYq1togGJB5e3PwYVFFfeVgc6pbz3JdQyDoBszVaA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-wasm@2.5.0':
@@ -1601,7 +1595,6 @@ packages:
   '@parcel/watcher-win32-x64@2.5.0':
     resolution: {integrity: sha512-lPrxve92zEHdgeff3aiu4gDOIt4u7sJYha6wbdEZDCDUhtjTsOMiaJzG5lMY4GkWH8p0fMmO2Ppq5G5XXG+DQw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [win32]
 
   '@parcel/watcher@2.5.0':
@@ -2088,13 +2081,11 @@ packages:
 
   bun@1.1.29:
     resolution: {integrity: sha512-SKhpyKNZtgxrVel9ec9xon3LDv8mgpiuFhARgcJo1YIbggY2PBrKHRNiwQ6Qlb+x3ivmRurfuwWgwGexjpgBRg==}
-    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
   bun@1.1.43:
     resolution: {integrity: sha512-8Acq5NuECRXx62jVera3rnLcsaHh4/k5Res3dOQFv783nyRKo39W3DHlenGlXB9bNWbtRybBEvkKaH+zdwzLHw==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -2924,11 +2915,10 @@ packages:
   lightningcss-darwin-arm64@1.26.0:
     resolution: {integrity: sha512-n4TIvHO1NY1ondKFYpL2ZX0bcC2y6yjXMD6JfyizgR8BCFNEeArINDzEaeqlfX9bXz73Bpz/Ow0nu+1qiDrBKg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
-  lightningcss-darwin-arm64@1.29.0:
-    resolution: {integrity: sha512-oxLEuI5qICT1FanwPm1U3CTKl4WljMOPuSJiibE6i4GYQgzH3BNFYF/xBhuLDvbJER+wwtuhWD2ir695HUssRg==}
+  lightningcss-darwin-arm64@1.29.1:
+    resolution: {integrity: sha512-HtR5XJ5A0lvCqYAoSv2QdZZyoHNttBpa5EP9aNuzBQeKGfbyH5+UipLWvVzpP4Uml5ej4BYs5I9Lco9u1fECqw==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [darwin]
@@ -2936,23 +2926,22 @@ packages:
   lightningcss-darwin-x64@1.26.0:
     resolution: {integrity: sha512-Rf9HuHIDi1R6/zgBkJh25SiJHF+dm9axUZW/0UoYCW1/8HV0gMI0blARhH4z+REmWiU1yYT/KyNF3h7tHyRXUg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [darwin]
 
-  lightningcss-darwin-x64@1.29.0:
-    resolution: {integrity: sha512-HrD1nEhQLE7GPzlw+DlbnLBGOae+42kct1kr7BRsWpFtVRMcgAMg316ruQvM6MEbZ22og01s2GJtp4uCBu7jrw==}
+  lightningcss-darwin-x64@1.29.1:
+    resolution: {integrity: sha512-k33G9IzKUpHy/J/3+9MCO4e+PzaFblsgBjSGlpAaFikeBFm8B/CkO3cKU9oI4g+fjS2KlkLM/Bza9K/aw8wsNA==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  lightningcss-freebsd-x64@1.29.0:
-    resolution: {integrity: sha512-6LSOV2BsWh9bug15Ttb40vs9QAxSM6kof10K61nRp29sGuJDDH74g9FN6UGwAKu3/9OHlARn7vTdxi6Wubrm+Q==}
+  lightningcss-freebsd-x64@1.29.1:
+    resolution: {integrity: sha512-0SUW22fv/8kln2LnIdOCmSuXnxgxVC276W5KLTwoehiO0hxkacBxjHOL5EtHD8BAXg2BvuhsJPmVMasvby3LiQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [freebsd]
 
-  lightningcss-linux-arm-gnueabihf@1.29.0:
-    resolution: {integrity: sha512-KvIyB4ucvLI4169RScKD/e50y6dQE2wxsaNZOW9ONHkaf1BxJ805cye/N5SBQmnKkQHNjAt2dkTvZzjWD6Xq+w==}
+  lightningcss-linux-arm-gnueabihf@1.29.1:
+    resolution: {integrity: sha512-sD32pFvlR0kDlqsOZmYqH/68SqUMPNj+0pucGxToXZi4XZgZmqeX/NkxNKCPsswAXU3UeYgDSpGhu05eAufjDg==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm]
     os: [linux]
@@ -2960,11 +2949,10 @@ packages:
   lightningcss-linux-arm64-gnu@1.26.0:
     resolution: {integrity: sha512-iJmZM7fUyVjH+POtdiCtExG+67TtPUTer7K/5A8DIfmPfrmeGvzfRyBltGhQz13Wi15K1lf2cPYoRaRh6vcwNA==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
-  lightningcss-linux-arm64-gnu@1.29.0:
-    resolution: {integrity: sha512-/Ca6ZeKybaQlhseizRXumJc6cufKoLllkaF5JJW0NS+VHfFB8AoTQlDSJNiVgqmpTxJ2Rlsgkcb+G0ovsN4tHQ==}
+  lightningcss-linux-arm64-gnu@1.29.1:
+    resolution: {integrity: sha512-0+vClRIZ6mmJl/dxGuRsE197o1HDEeeRk6nzycSy2GofC2JsY4ifCRnvUWf/CUBQmlrvMzt6SMQNMSEu22csWQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
@@ -2972,11 +2960,10 @@ packages:
   lightningcss-linux-arm64-musl@1.26.0:
     resolution: {integrity: sha512-XxoEL++tTkyuvu+wq/QS8bwyTXZv2y5XYCMcWL45b8XwkiS8eEEEej9BkMGSRwxa5J4K+LDeIhLrS23CpQyfig==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
-  lightningcss-linux-arm64-musl@1.29.0:
-    resolution: {integrity: sha512-87G89xyMaf+J2mKFjGvMcd8/pHXloN0bLIBcenPXyvFJWgZsDhNtn7eyCGZN9783DjUTdnNw5x7LE2JHIVEnrQ==}
+  lightningcss-linux-arm64-musl@1.29.1:
+    resolution: {integrity: sha512-UKMFrG4rL/uHNgelBsDwJcBqVpzNJbzsKkbI3Ja5fg00sgQnHw/VrzUTEc4jhZ+AN2BvQYz/tkHu4vt1kLuJyw==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
@@ -2984,11 +2971,10 @@ packages:
   lightningcss-linux-x64-gnu@1.26.0:
     resolution: {integrity: sha512-1dkTfZQAYLj8MUSkd6L/+TWTG8V6Kfrzfa0T1fSlXCXQHrt1HC1/UepXHtKHDt/9yFwyoeayivxXAsApVxn6zA==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
-  lightningcss-linux-x64-gnu@1.29.0:
-    resolution: {integrity: sha512-zy6c5unfJgBjhT7JFrY3zmtrSjKBNtKJYYfRZtgGVxZHmoWvVIkQi0Gy7AS46eURgM6cwjaSLuF5KqBGg+aV9g==}
+  lightningcss-linux-x64-gnu@1.29.1:
+    resolution: {integrity: sha512-u1S+xdODy/eEtjADqirA774y3jLcm8RPtYztwReEXoZKdzgsHYPl0s5V52Tst+GKzqjebkULT86XMSxejzfISw==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
@@ -2996,17 +2982,16 @@ packages:
   lightningcss-linux-x64-musl@1.26.0:
     resolution: {integrity: sha512-yX3Rk9m00JGCUzuUhFEojY+jf/6zHs3XU8S8Vk+FRbnr4St7cjyMXdNjuA2LjiT8e7j8xHRCH8hyZ4H/btRE4A==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
-  lightningcss-linux-x64-musl@1.29.0:
-    resolution: {integrity: sha512-1TLtr1/3Xqf/ZjWmYilSQSUOOO1gSOZmMTYHMalX0O6dLY5v0kO1muFWrueC1QEb46/7tiI2ko59a9m1S2pXqQ==}
+  lightningcss-linux-x64-musl@1.29.1:
+    resolution: {integrity: sha512-L0Tx0DtaNUTzXv0lbGCLB/c/qEADanHbu4QdcNOXLIe1i8i22rZRpbT3gpWYsCh9aSL9zFujY/WmEXIatWvXbw==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
 
-  lightningcss-win32-arm64-msvc@1.29.0:
-    resolution: {integrity: sha512-wgdBdIl+CN7xvHbmYT7FyBfzGPY5evtD0T1LMqfBs6Zp7AhD6vv/QC5Q72Mc/0kAk+Nvta88wMVLszN3CuJ/Dw==}
+  lightningcss-win32-arm64-msvc@1.29.1:
+    resolution: {integrity: sha512-QoOVnkIEFfbW4xPi+dpdft/zAKmgLgsRHfJalEPYuJDOWf7cLQzYg0DEh8/sn737FaeMJxHZRc1oBreiwZCjog==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [win32]
@@ -3014,17 +2999,16 @@ packages:
   lightningcss-win32-x64-msvc@1.26.0:
     resolution: {integrity: sha512-pYS3EyGP3JRhfqEFYmfFDiZ9/pVNfy8jVIYtrx9TVNusVyDK3gpW1w/rbvroQ4bDJi7grdUtyrYU6V2xkY/bBw==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [win32]
 
-  lightningcss-win32-x64-msvc@1.29.0:
-    resolution: {integrity: sha512-IOZBTx84bFf/V9QmHYIyUfnonmi1NxCbhUbgQW2U7cZYijwGVpDEaX8QRPmqUMt93a2yh4IQ5SMzbZ4/gPtqkA==}
+  lightningcss-win32-x64-msvc@1.29.1:
+    resolution: {integrity: sha512-NygcbThNBe4JElP+olyTI/doBNGJvLs3bFCRPdvuCcxZCcCZ71B858IHpdm7L1btZex0FvCmM17FK98Y9MRy1Q==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [win32]
 
-  lightningcss@1.29.0:
-    resolution: {integrity: sha512-4BkG0a3g6ZJ5F5iQ22lZsod0KJrIzYdbiBCMo9FgpDrxCx+uUapwkZmUVgisiZvHUj53BJGQiWWT+YXr1ZcZQQ==}
+  lightningcss@1.29.1:
+    resolution: {integrity: sha512-FmGoeD4S05ewj+AkhTY+D+myDvXI6eL27FjHIjoyUkO/uw7WZD1fBVs0QxeYWa7E17CUHJaYX/RUGISCtcrG4Q==}
     engines: {node: '>= 12.0.0'}
 
   lilconfig@2.1.0:
@@ -5166,14 +5150,14 @@ snapshots:
       '@typescript-eslint/types': 8.11.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-react@4.3.4(vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0))':
+  '@vitejs/plugin-react@4.3.4(vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
+      vite: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6506,62 +6490,62 @@ snapshots:
 
   lightningcss-darwin-arm64@1.26.0: {}
 
-  lightningcss-darwin-arm64@1.29.0:
+  lightningcss-darwin-arm64@1.29.1:
     optional: true
 
   lightningcss-darwin-x64@1.26.0: {}
 
-  lightningcss-darwin-x64@1.29.0:
+  lightningcss-darwin-x64@1.29.1:
     optional: true
 
-  lightningcss-freebsd-x64@1.29.0:
+  lightningcss-freebsd-x64@1.29.1:
     optional: true
 
-  lightningcss-linux-arm-gnueabihf@1.29.0:
+  lightningcss-linux-arm-gnueabihf@1.29.1:
     optional: true
 
   lightningcss-linux-arm64-gnu@1.26.0: {}
 
-  lightningcss-linux-arm64-gnu@1.29.0:
+  lightningcss-linux-arm64-gnu@1.29.1:
     optional: true
 
   lightningcss-linux-arm64-musl@1.26.0: {}
 
-  lightningcss-linux-arm64-musl@1.29.0:
+  lightningcss-linux-arm64-musl@1.29.1:
     optional: true
 
   lightningcss-linux-x64-gnu@1.26.0: {}
 
-  lightningcss-linux-x64-gnu@1.29.0:
+  lightningcss-linux-x64-gnu@1.29.1:
     optional: true
 
   lightningcss-linux-x64-musl@1.26.0: {}
 
-  lightningcss-linux-x64-musl@1.29.0:
+  lightningcss-linux-x64-musl@1.29.1:
     optional: true
 
-  lightningcss-win32-arm64-msvc@1.29.0:
+  lightningcss-win32-arm64-msvc@1.29.1:
     optional: true
 
   lightningcss-win32-x64-msvc@1.26.0: {}
 
-  lightningcss-win32-x64-msvc@1.29.0:
+  lightningcss-win32-x64-msvc@1.29.1:
     optional: true
 
-  lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by):
+  lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by):
     dependencies:
       detect-libc: 1.0.3
     optionalDependencies:
-      lightningcss-darwin-arm64: 1.29.0
-      lightningcss-darwin-x64: 1.29.0
-      lightningcss-freebsd-x64: 1.29.0
-      lightningcss-linux-arm-gnueabihf: 1.29.0
-      lightningcss-linux-arm64-gnu: 1.29.0
-      lightningcss-linux-arm64-musl: 1.29.0
-      lightningcss-linux-x64-gnu: 1.29.0
-      lightningcss-linux-x64-musl: 1.29.0
-      lightningcss-win32-arm64-msvc: 1.29.0
-      lightningcss-win32-x64-msvc: 1.29.0
+      lightningcss-darwin-arm64: 1.29.1
+      lightningcss-darwin-x64: 1.29.1
+      lightningcss-freebsd-x64: 1.29.1
+      lightningcss-linux-arm-gnueabihf: 1.29.1
+      lightningcss-linux-arm64-gnu: 1.29.1
+      lightningcss-linux-arm64-musl: 1.29.1
+      lightningcss-linux-x64-gnu: 1.29.1
+      lightningcss-linux-x64-musl: 1.29.1
+      lightningcss-win32-arm64-msvc: 1.29.1
+      lightningcss-win32-x64-msvc: 1.29.1
 
   lilconfig@2.1.0: {}
 
@@ -7543,13 +7527,13 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite-node@2.0.5(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
+  vite-node@2.0.5(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
     dependencies:
       cac: 6.7.14
       debug: 4.3.7
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7561,7 +7545,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.4.0(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
+  vite@5.4.0(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.49
@@ -7569,10 +7553,10 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.13
       fsevents: 2.3.3
-      lightningcss: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+      lightningcss: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
       terser: 5.31.6
 
-  vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0):
+  vite@6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
@@ -7581,12 +7565,12 @@ snapshots:
       '@types/node': 20.14.13
       fsevents: 2.3.3
       jiti: 2.4.2
-      lightningcss: 1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by)
+      lightningcss: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
       terser: 5.31.6
       tsx: 4.19.1
       yaml: 2.6.0
 
-  vitest@2.0.5(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
+  vitest@2.0.5(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -7604,8 +7588,8 @@ snapshots:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
-      vite-node: 2.0.5(@types/node@20.14.13)(lightningcss@1.29.0(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
+      vite: 5.4.0(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
+      vite-node: 2.0.5(@types/node@20.14.13)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.14.13
