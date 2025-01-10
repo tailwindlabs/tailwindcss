@@ -237,7 +237,7 @@ function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  ValueParser.walk(ast, (node, { replaceWith }) => {
+  ValueParser.walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
@@ -274,6 +274,37 @@ function substituteFunctionsInValue(
       let replacement =
         fallbackValues.length > 0 ? handle(path, ValueParser.toCss(fallbackValues)) : handle(path)
       if (replacement === null) return
+
+      if (parent) {
+        let idx = parent.nodes.indexOf(node) - 1
+        while (idx !== -1) {
+          let previous = parent.nodes[idx]
+          // Skip the space separator
+          if (previous.kind === 'separator' && previous.value.trim() === '') {
+            idx -= 1
+            continue
+          }
+
+          // If the previous node is a word and contains an operator, we need to
+          // wrap the replacement in parentheses to make the output less
+          // ambiguous.
+          //
+          // Input:
+          // - `calc(100dvh-theme(spacing.2))`
+          //
+          // Output:
+          // - `calc(100dvh-(--spacing(2)))`
+          //
+          // Not:
+          // -`calc(100dvh---spacing(2))`
+          //
+          if (/^[-+*/]$/.test(previous.value.trim())) {
+            replacement = `(${replacement})`
+          }
+
+          break
+        }
+      }
 
       replaceWith(ValueParser.parse(replacement))
     }

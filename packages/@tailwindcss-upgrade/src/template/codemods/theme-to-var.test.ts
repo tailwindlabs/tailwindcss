@@ -22,6 +22,13 @@ test.each([
   ['bg-[theme(colors.red.500)]', 'bg-(--color-red-500)'], // Arbitrary value
   ['bg-[size:theme(spacing.4)]', 'bg-[size:--spacing(4)]'], // Arbitrary value + data type hint
 
+  // Pretty print CSS functions preceded by an operator to prevent consecutive
+  // operator characters.
+  ['w-[calc(100dvh-theme(spacing.2))]', 'w-[calc(100dvh-(--spacing(2)))]'],
+  ['w-[calc(100dvh+theme(spacing.2))]', 'w-[calc(100dvh+(--spacing(2)))]'],
+  ['w-[calc(100dvh/theme(spacing.2))]', 'w-[calc(100dvh/(--spacing(2)))]'],
+  ['w-[calc(100dvh*theme(spacing.2))]', 'w-[calc(100dvh*(--spacing(2)))]'],
+
   // Convert to `var(…)` if we can resolve the path, but keep fallback values
   ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
 
