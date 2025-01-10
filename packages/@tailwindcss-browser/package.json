@@ -4,6 +4,7 @@
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "./dist/index.mjs",
+  "browser": "./dist/index.mjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/tailwindlabs/tailwindcss.git",
