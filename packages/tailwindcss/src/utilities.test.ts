@@ -14323,7 +14323,7 @@ test('transition', async () => {
         @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
-          --transition-property: color, background-color, outline-color, border-color,
+          --transition-property: color, background-color, border-color, outline-color,
             text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
             backdrop-filter;
           --transition-property-opacity: opacity;
