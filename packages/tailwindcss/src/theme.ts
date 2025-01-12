@@ -1,6 +1,8 @@
 import type { AtRule } from './ast'
 import { escape } from './utils/escape'
 
+const ESCAPED_STAR_REGEX = /-\\\*$/
+
 export const enum ThemeOptions {
   NONE = 0,
   INLINE = 1 << 0,
@@ -41,9 +43,7 @@ export class Theme {
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
-    if (key.endsWith('-\\*')) {
-      key = key.replace(/-\\\*$/, '-*')
-    }
+    key = key.replace(ESCAPED_STAR_REGEX, '-*')
 
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
