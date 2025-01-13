@@ -26,6 +26,7 @@ import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { createSourceMap, type DecodedSourceMap } from './source-maps/source-map'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
@@ -791,6 +792,8 @@ export async function compileAst(
   }
 }
 
+export type { DecodedSourceMap }
+
 export async function compile(
   css: string,
   opts: CompileOptions = {},
@@ -799,6 +802,7 @@ export async function compile(
   root: Root
   features: Features
   build(candidates: string[]): string
+  buildSourceMap(): DecodedSourceMap
 }> {
   let ast = CSS.parse(css, { from: opts.from })
   let api = await compileAst(ast, opts)
@@ -818,6 +822,12 @@ export async function compile(
       compiledAst = newAst
 
       return compiledCss
+    },
+
+    buildSourceMap() {
+      return createSourceMap({
+        ast: compiledAst,
+      })
     },
   }
 }
