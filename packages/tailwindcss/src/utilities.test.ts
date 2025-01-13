@@ -18226,4 +18226,144 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
     })
   })
+
+  test('resolve value based on `@theme`', async () => {
+    let input = css`
+      @theme {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ":root {
+        --tab-size-github: 8;
+      }
+
+      .tab-github {
+        tab-size: var(--tab-size-github);
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme reference`', async () => {
+    let input = css`
+      @theme reference {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ".tab-github {
+        tab-size: var(--tab-size-github);
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme inline`', async () => {
+    let input = css`
+      @theme inline {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ":root {
+        --tab-size-github: 8;
+      }
+
+      .tab-github {
+        tab-size: 8;
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme inline reference`', async () => {
+    let input = css`
+      @theme inline reference {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ".tab-github {
+        tab-size: 8;
+      }"
+    `)
+  })
+
+  test('sub namespaces can live in different @theme blocks (1)', async () => {
+    let input = `
+      @theme reference {
+        --text-xs: 0.75rem;
+      }
+
+      @theme inline reference {
+        --text-xs--line-height: calc(1 / 0.75);
+      }
+
+      @utility example-* {
+        font-size: --value(--text);
+        line-height: --value(--text-*--line-height);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+      ".example-xs {
+        font-size: var(--text-xs);
+        line-height: 1.33333;
+      }"
+    `)
+  })
+
+  test('sub namespaces can live in different @theme blocks (2)', async () => {
+    let input = `
+      @theme inline reference {
+        --text-xs: 0.75rem;
+      }
+
+      @theme reference {
+        --text-xs--line-height: calc(1 / 0.75);
+      }
+
+      @utility example-* {
+        font-size: --value(--text);
+        line-height: --value(--text-*--line-height);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+      ".example-xs {
+        font-size: .75rem;
+        line-height: var(--text-xs--line-height);
+      }"
+    `)
+  })
 })
