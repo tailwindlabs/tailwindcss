@@ -348,8 +348,8 @@ importers:
         version: 0.23.2(tree-sitter@0.22.4)
     devDependencies:
       '@types/braces':
-        specifier: ^3.0.4
-        version: 3.0.4
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
@@ -1830,8 +1830,8 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
-  '@types/braces@3.0.4':
-    resolution: {integrity: sha512-0WR3b8eaISjEW7RpZnclONaLFDf7buaowRHdqLp4vLj54AsSAYWfh3DRbfiYJY9XDxMgx1B4sE1Afw2PGpuHOA==}
+  '@types/braces@3.0.5':
+    resolution: {integrity: sha512-SQFof9H+LXeWNz8wDe7oN5zu7ket0qwMu5vZubW4GCJ8Kkeh6nBWUz87+KTz/G3Kqsrp0j/W253XJb3KMEeg3w==}
 
   '@types/bun@1.1.14':
     resolution: {integrity: sha512-opVYiFGtO2af0dnWBdZWlioLBoxSdDO5qokaazLhq8XQtGZbY4pY3/JxY8Zdf/hEwGubbp7ErZXoN1+h2yesxA==}
@@ -4974,7 +4974,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.26.3
 
-  '@types/braces@3.0.4': {}
+  '@types/braces@3.0.5': {}
 
   '@types/bun@1.1.14':
     dependencies:

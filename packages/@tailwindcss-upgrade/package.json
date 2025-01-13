@@ -45,7 +45,7 @@
     "tailwindcss": "workspace:*"
   },
   "devDependencies": {
-    "@types/braces": "^3.0.4",
+    "@types/braces": "^3.0.5",
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3"
   }
