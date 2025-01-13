@@ -1208,6 +1208,53 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('`@theme` values can be unset (using the escaped syntax)', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --color-red: #f00;
+            --color-blue: #00f;
+            --text-sm: 13px;
+            --text-md: 16px;
+
+            --animate-spin: spin 1s infinite linear;
+
+            @keyframes spin {
+              to {
+                transform: rotate(360deg);
+              }
+            }
+          }
+          @theme {
+            --color-\*: initial;
+            --text-md: initial;
+            --animate-\*: initial;
+            --keyframes-\*: initial;
+          }
+          @theme {
+            --color-green: #0f0;
+          }
+          @tailwind utilities;
+        `,
+        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --text-sm: 13px;
+        --color-green: #0f0;
+      }
+
+      .text-sm {
+        font-size: var(--text-sm);
+      }
+
+      .accent-green {
+        accent-color: var(--color-green);
+      }"
+    `)
+  })
+
   test('all `@theme` values can be unset at once', async () => {
     expect(
       await compileCss(
