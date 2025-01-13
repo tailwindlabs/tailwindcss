@@ -127,9 +127,12 @@
     "utilities.css"
   ],
   "devDependencies": {
+    "@ampproject/remapping": "^2.3.0",
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
+    "dedent": "1.5.3",
     "lightningcss": "catalog:",
-    "dedent": "1.5.3"
+    "magic-string": "^0.30.17",
+    "source-map-js": "^1.2.1"
   }
 }
