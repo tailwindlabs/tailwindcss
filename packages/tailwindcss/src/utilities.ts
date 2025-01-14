@@ -4854,8 +4854,35 @@ function resolveValueFunction(
       arg.value[0] === '-' &&
       arg.value[1] === '-'
     ) {
-      let resolved = designSystem.resolveThemeValue(arg.value.replace('*', value.value))
-      if (resolved) return { nodes: ValueParser.parse(resolved) }
+      let themeKey = arg.value as `--${string}`
+
+      // Resolve the theme value, e.g.: `--value(--color)`
+      if (themeKey.endsWith('-*')) {
+        // Without `-*` postfix
+        themeKey = themeKey.slice(0, -2) as `--${string}`
+
+        let resolved = designSystem.theme.resolve(value.value, [themeKey])
+        if (resolved) return { nodes: ValueParser.parse(resolved) }
+      }
+
+      // Split `--text-*--line-height` into `--text` and `--line-height`
+      else {
+        let nestedKeys = themeKey.split('-*') as `--${string}`[]
+        if (nestedKeys.length <= 1) continue
+
+        // Resolve theme values with nested keys, e.g.: `--value(--text-*--line-height)`
+        let themeKeys = [nestedKeys.shift()!]
+        let resolved = designSystem.theme.resolveWith(value.value, themeKeys, nestedKeys)
+        if (resolved) {
+          let [, options = {}] = resolved
+
+          // Resolve the value from the `options`
+          {
+            let resolved = options[nestedKeys.pop()!]
+            if (resolved) return { nodes: ValueParser.parse(resolved) }
+          }
+        }
+      }
     }
 
     // Bare value, e.g.: `--value(integer)`

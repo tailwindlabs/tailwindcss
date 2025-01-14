@@ -17452,22 +17452,22 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
-        ".tab-1 {
-          tab-size: 1;
-        }
+          ".tab-1 {
+            tab-size: var(--tab-size-1);
+          }
 
-        .tab-2 {
-          tab-size: 2;
-        }
+          .tab-2 {
+            tab-size: var(--tab-size-2);
+          }
 
-        .tab-4 {
-          tab-size: 4;
-        }
+          .tab-4 {
+            tab-size: var(--tab-size-4);
+          }
 
-        .tab-github {
-          tab-size: 8;
-        }"
-      `)
+          .tab-github {
+            tab-size: var(--tab-size-github);
+          }"
+        `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
     })
 
@@ -17494,19 +17494,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: 1;
+            tab-size: var(--tab-size-1);
           }
 
           .tab-2 {
-            tab-size: 2;
+            tab-size: var(--tab-size-2);
           }
 
           .tab-4 {
-            tab-size: 4;
+            tab-size: var(--tab-size-4);
           }
 
           .tab-github {
-            tab-size: 8;
+            tab-size: var(--tab-size-github);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17531,19 +17531,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: 1;
+            tab-size: var(--tab-size-1);
           }
 
           .tab-2 {
-            tab-size: 2;
+            tab-size: var(--tab-size-2);
           }
 
           .tab-4 {
-            tab-size: 4;
+            tab-size: var(--tab-size-4);
           }
 
           .tab-github {
-            tab-size: 8;
+            tab-size: var(--tab-size-github);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17817,7 +17817,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: 8;
+          tab-size: var(--tab-size-github);
         }"
       `)
       expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
@@ -17849,7 +17849,7 @@ describe('custom utilities', () => {
           }
 
           .example-full {
-            --value: 100%;
+            --value: var(--example-full);
           }"
         `)
       expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
@@ -17893,7 +17893,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: 100%;
+          --value: var(--example-full);
         }
 
         .tab-76 {
@@ -17905,7 +17905,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: 8;
+          tab-size: var(--tab-size-github);
         }"
       `)
       expect(
@@ -17949,7 +17949,7 @@ describe('custom utilities', () => {
         }
 
         .-example-full {
-          --value: calc(100% * -1);
+          --value: calc(var(--example-full) * -1);
         }
 
         .example-\\[10px\\] {
@@ -17961,7 +17961,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: 100%;
+          --value: var(--example-full);
         }"
       `)
       expect(await compileCss(input, ['example-10'])).toEqual('')
@@ -18062,13 +18062,13 @@ describe('custom utilities', () => {
         }
 
         .example-sm {
-          --value: 14px;
+          --value: var(--value-sm);
         }
 
         .example-sm\\/7 {
-          --value: 14px;
-          --modifier: 28px;
-          --modifier-with-calc: calc(28px * 2);
+          --value: var(--value-sm);
+          --modifier: var(--modifier-7);
+          --modifier-with-calc: calc(var(--modifier-7) * 2);
         }"
       `)
       expect(
@@ -18091,18 +18091,18 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']))
         .toMatchInlineSnapshot(`
-        ".example-1\\/1 {
-          --value: 1 / 1;
-        }
+          ".example-1\\/1 {
+            --value: 1 / 1;
+          }
 
-        .example-\\[7\\/9\\] {
-          --value: 7 / 9;
-        }
+          .example-\\[7\\/9\\] {
+            --value: 7 / 9;
+          }
 
-        .example-video {
-          --value: 16 / 9;
-        }"
-      `)
+          .example-video {
+            --value: var(--example-video);
+          }"
+        `)
       expect(await compileCss(input, ['example-foo'])).toEqual('')
     })
 
@@ -18124,12 +18124,13 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs {
-          font-size: .75rem;
-          line-height: 1.33333;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }
 
         .example-xs\\/6 {
-          font-size: .75rem;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
           line-height: 6;
         }"
       `)
@@ -18154,12 +18155,13 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs {
-          font-size: .75rem;
-          line-height: 1.33333;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }
 
         .example-xs\\/6 {
-          font-size: .75rem;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
           line-height: 6;
         }"
       `)
@@ -18184,12 +18186,13 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs {
-          font-size: .75rem;
-          line-height: 1.33333;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }
 
         .example-xs\\/6 {
-          font-size: .75rem;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
           line-height: 6;
         }"
       `)
@@ -18214,16 +18217,157 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs {
-          font-size: .75rem;
-          line-height: 1.33333;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }
 
         .example-xs\\/6 {
-          font-size: .75rem;
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
           line-height: 6;
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
     })
+  })
+
+  test('resolve value based on `@theme`', async () => {
+    let input = css`
+      @theme {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ":root {
+        --tab-size-github: 8;
+      }
+
+      .tab-github {
+        tab-size: var(--tab-size-github);
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme reference`', async () => {
+    let input = css`
+      @theme reference {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ".tab-github {
+        tab-size: var(--tab-size-github);
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme inline`', async () => {
+    let input = css`
+      @theme inline {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ":root {
+        --tab-size-github: 8;
+      }
+
+      .tab-github {
+        tab-size: 8;
+      }"
+    `)
+  })
+
+  test('resolve value based on `@theme inline reference`', async () => {
+    let input = css`
+      @theme inline reference {
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+      ".tab-github {
+        tab-size: 8;
+      }"
+    `)
+  })
+
+  test('sub namespaces can live in different @theme blocks (1)', async () => {
+    let input = `
+      @theme reference {
+        --text-xs: 0.75rem;
+      }
+
+      @theme inline reference {
+        --text-xs--line-height: calc(1 / 0.75);
+      }
+
+      @utility example-* {
+        font-size: --value(--text);
+        line-height: --value(--text-*--line-height);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+      ".example-xs {
+        font-size: var(--text-xs);
+        line-height: 1.33333;
+      }"
+    `)
+  })
+
+  test('sub namespaces can live in different @theme blocks (2)', async () => {
+    let input = `
+      @theme inline reference {
+        --text-xs: 0.75rem;
+      }
+
+      @theme reference {
+        --text-xs--line-height: calc(1 / 0.75);
+      }
+
+      @utility example-* {
+        font-size: --value(--text);
+        line-height: --value(--text-*--line-height);
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+      ".example-xs {
+        font-size: .75rem;
+        line-height: var(--text-xs--line-height);
+      }"
+    `)
   })
 })
