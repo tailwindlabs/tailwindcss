@@ -27,7 +27,7 @@
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/cli": "workspace:^",
-    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.15",
     "detect-libc": "1.0.3",
     "enhanced-resolve": "^5.18.0",
