@@ -240,8 +240,6 @@ export function walkDepth(
 export function optimizeAst(ast: AstNode[]) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
-  let propertyFallbacksRoot: Declaration[] = []
-  let propertyFallbacksUniversal: Declaration[] = []
 
   function transform(
     node: AstNode,
@@ -270,28 +268,6 @@ export function optimizeAst(ast: AstNode[]) {
       // Don't output duplicate `@property` rules
       if (seenAtProperties.has(node.params)) {
         return
-      }
-
-      // Collect fallbacks for `@property` rules for Firefox support
-      // We turn these into rules on `:root` or `*` and some pseudo-elements
-      // based on the value of `inherits``
-      let property = node.params
-      let initialValue = null
-      let inherits = false
-
-      for (let prop of node.nodes) {
-        if (prop.kind !== 'declaration') continue
-        if (prop.property === 'initial-value') {
-          initialValue = prop.value
-        } else if (prop.property === 'inherits') {
-          inherits = prop.value === 'true'
-        }
-      }
-
-      if (inherits) {
-        propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
-      } else {
-        propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
       }
 
       seenAtProperties.add(node.params)
@@ -349,25 +325,6 @@ export function optimizeAst(ast: AstNode[]) {
   let newAst: AstNode[] = []
   for (let node of ast) {
     transform(node, newAst, 0)
-  }
-
-  // Fallbacks
-  {
-    let fallbackAst = []
-
-    if (propertyFallbacksRoot.length > 0) {
-      fallbackAst.push(rule(':root', propertyFallbacksRoot))
-    }
-
-    if (propertyFallbacksUniversal.length > 0) {
-      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
-    }
-
-    if (fallbackAst.length > 0) {
-      newAst.push(
-        atRule('@supports', '(-moz-orient: inline)', [atRule('@layer', 'base', fallbackAst)]),
-      )
-    }
   }
 
   return newAst.concat(atRoots)

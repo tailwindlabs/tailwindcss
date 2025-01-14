@@ -630,14 +630,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-font-weight: initial;
-    }
-  }
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
