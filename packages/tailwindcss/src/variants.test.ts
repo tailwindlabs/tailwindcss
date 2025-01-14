@@ -111,14 +111,6 @@ test('before', async () => {
       display: flex;
     }
 
-    @supports (-moz-orient: inline) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
-    }
-
     @property --tw-content {
       syntax: "*";
       inherits: false;
@@ -133,14 +125,6 @@ test('after', async () => {
     ".after\\:flex:after {
       content: var(--tw-content);
       display: flex;
-    }
-
-    @supports (-moz-orient: inline) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
     }
 
     @property --tw-content {
@@ -2312,14 +2296,6 @@ test('variant order', async () => {
 
     .\\[\\&_p\\]\\:flex p {
       display: flex;
-    }
-
-    @supports (-moz-orient: inline) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
     }
 
     @property --tw-content {

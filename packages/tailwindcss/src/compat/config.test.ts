@@ -352,13 +352,6 @@ describe('theme callbacks', () => {
           --tw-leading: 201rem;
           line-height: 201rem;
         }
-        @supports (-moz-orient: inline) {
-          @layer base {
-            *, ::before, ::after, ::backdrop {
-              --tw-leading: initial;
-            }
-          }
-        }
         @property --tw-leading {
           syntax: "*";
           inherits: false;

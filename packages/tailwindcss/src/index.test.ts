@@ -285,16 +285,6 @@ describe('@apply', () => {
         }
       }
 
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-translate-x: 0;
-            --tw-translate-y: 0;
-            --tw-translate-z: 0;
-          }
-        }
-      }
-
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -367,14 +357,6 @@ describe('@apply', () => {
         --tw-content: "b";
         content: var(--tw-content);
         content: var(--tw-content);
-      }
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-content: "";
-          }
-        }
       }
 
       @property --tw-content {
@@ -582,14 +564,6 @@ describe('variant stacking', () => {
         }
       }
 
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -753,14 +727,6 @@ describe('sorting', () => {
         --tw-space-x-reverse: 0;
         margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
         margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
-      }
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-space-x-reverse: 0;
-          }
-        }
       }
 
       @property --tw-space-x-reverse {
@@ -1318,14 +1284,6 @@ describe('Parsing themes values from CSS', () => {
         font-weight: var(--font-weight-bold);
       }
 
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-font-weight: initial;
-          }
-        }
-      }
-
       @property --tw-font-weight {
         syntax: "*";
         inherits: false
@@ -1363,25 +1321,6 @@ describe('Parsing themes values from CSS', () => {
       .inset-shadow-sm {
         --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, #0000000d);
         box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      }
-
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, :before, :after, ::backdrop {
-            --tw-shadow: 0 0 #0000;
-            --tw-shadow-color: initial;
-            --tw-inset-shadow: 0 0 #0000;
-            --tw-inset-shadow-color: initial;
-            --tw-ring-color: initial;
-            --tw-ring-shadow: 0 0 #0000;
-            --tw-inset-ring-color: initial;
-            --tw-inset-ring-shadow: 0 0 #0000;
-            --tw-ring-inset: initial;
-            --tw-ring-offset-width: 0px;
-            --tw-ring-offset-color: #fff;
-            --tw-ring-offset-shadow: 0 0 #0000;
-          }
-        }
       }
 
       @property --tw-shadow {

@@ -118,14 +118,6 @@ exports[`border-* 1`] = `
   border-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -249,14 +241,6 @@ exports[`border-b-* 1`] = `
 
 .border-b-transparent {
   border-bottom-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 
 @property --tw-border-style {
@@ -384,14 +368,6 @@ exports[`border-e-* 1`] = `
   border-inline-end-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -515,14 +491,6 @@ exports[`border-l-* 1`] = `
 
 .border-l-transparent {
   border-left-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 
 @property --tw-border-style {
@@ -650,14 +618,6 @@ exports[`border-r-* 1`] = `
   border-right-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -781,14 +741,6 @@ exports[`border-s-* 1`] = `
 
 .border-s-transparent {
   border-inline-start-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 
 @property --tw-border-style {
@@ -916,14 +868,6 @@ exports[`border-t-* 1`] = `
   border-top-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -1049,14 +993,6 @@ exports[`border-x-* 1`] = `
   border-inline-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -1180,14 +1116,6 @@ exports[`border-y-* 1`] = `
 
 .border-y-transparent {
   border-block-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 
 @property --tw-border-style {
