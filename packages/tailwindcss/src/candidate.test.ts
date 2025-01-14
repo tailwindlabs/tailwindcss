@@ -836,6 +836,39 @@ it('should not parse invalid arbitrary values', () => {
   }
 })
 
+it('should not parse invalid arbitrary values in variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.functional('data', () => {})
+
+  for (let candidate of [
+    'data-foo-[#0088cc]:flex',
+    'data-foo[#0088cc]:flex',
+
+    'data-foo-[color:var(--value)]:flex',
+    'data-foo[color:var(--value)]:flex',
+
+    'data-foo-[#0088cc]/50:flex',
+    'data-foo[#0088cc]/50:flex',
+
+    'data-foo-[#0088cc]/[50%]:flex',
+    'data-foo[#0088cc]/[50%]:flex',
+
+    'data-foo-[#0088cc]:flex!',
+    'data-foo[#0088cc]:flex!',
+
+    'data-foo-[var(--value)]:flex',
+    'data-foo[var(--value)]:flex',
+
+    'data-foo-[var(--value)]:flex!',
+    'data-foo[var(--value)]:flex!',
+  ]) {
+    expect(run(candidate, { utilities, variants })).toEqual([])
+  }
+})
+
 it('should parse a utility with an implicit variable as the modifier', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -964,6 +997,18 @@ it('should parse a utility with an explicit variable as the modifier that is imp
       },
     ]
   `)
+})
+
+it('should not parse a partial variant', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('open', () => {})
+  variants.functional('data', () => {})
+
+  expect(run('open-:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
+  expect(run('data-:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a static variant starting with @', () => {
