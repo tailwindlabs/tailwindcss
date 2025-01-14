@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add missing `main` and `browser` fields for `@tailwindcss/browser` ([#15594](https://github.com/tailwindlabs/tailwindcss/pull/15594))
 - _Upgrade (experimental)_: Pretty print `--spacing(…)` to prevent ambiguity ([#15596](https://github.com/tailwindlabs/tailwindcss/pull/15596))
+- Discard invalid variants such as `data-checked-[selected=1]:*` ([#15629](https://github.com/tailwindlabs/tailwindcss/pull/15629))
 
 ## [4.0.0-beta.9] - 2025-01-09
 
