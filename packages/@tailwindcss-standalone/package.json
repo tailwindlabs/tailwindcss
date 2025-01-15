@@ -28,7 +28,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/cli": "workspace:^",
     "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.16",
     "detect-libc": "1.0.3",
     "enhanced-resolve": "^5.18.0",
     "tailwindcss": "workspace:^"
