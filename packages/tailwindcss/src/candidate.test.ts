@@ -864,6 +864,30 @@ it('should not parse invalid arbitrary values in variants', () => {
 
     'data-foo-[var(--value)]:flex!',
     'data-foo[var(--value)]:flex!',
+
+    'data-foo-(color:--value):flex',
+    'data-foo(color:--value):flex',
+
+    'data-foo-(color:--value)/50:flex',
+    'data-foo(color:--value)/50:flex',
+
+    'data-foo-(color:--value)/(--mod):flex',
+    'data-foo(color:--value)/(--mod):flex',
+
+    'data-foo-(color:--value)/(number:--mod):flex',
+    'data-foo(color:--value)/(number:--mod):flex',
+
+    'data-foo-(--value):flex',
+    'data-foo(--value):flex',
+
+    'data-foo-(--value)/50:flex',
+    'data-foo(--value)/50:flex',
+
+    'data-foo-(--value)/(--mod):flex',
+    'data-foo(--value)/(--mod):flex',
+
+    'data-foo-(--value)/(number:--mod):flex',
+    'data-foo(--value)/(number:--mod):flex',
   ]) {
     expect(run(candidate, { utilities, variants })).toEqual([])
   }

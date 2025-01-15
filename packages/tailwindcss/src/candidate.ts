@@ -591,24 +591,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     })
 
     for (let [root, value] of roots) {
-      let kind = designSystem.variants.kind(root)
-
-      // Compound variants e.g. not-in-[#foo] are ultimately split like so:
-      // - root: not
-      // - value: in-[#foo]
-      //  - root: in
-      //  - value: [#foo]
-      //
-      // However, other variants don't have this behavior, so we can skip
-      // over this possible variant if the root is not a compound variant
-      // and it contains an arbitrary value _after_ some other value
-      // e.g. `supports-display-[color:red]` is invalid
-      if (value && kind !== 'compound') {
-        if (value[value.length - 1] === ']' && value[0] !== '[') {
-          continue
-        }
-      }
-
       switch (designSystem.variants.kind(root)) {
         case 'static': {
           // Static variants do not have a value
@@ -656,6 +638,11 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             }
           }
 
+          // Discard values like `foo-[#bar]` or `foo-(#bar)`
+          if (value[0] !== '[' && value[value.length - 1] === ']') {
+            continue
+          }
+
           if (value[0] === '(' && value[value.length - 1] === ')') {
             let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
 
@@ -672,6 +659,11 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
                 value: `var(${arbitraryValue})`,
               },
             }
+          }
+
+          // Discard values like `foo-[#bar]` or `foo-(#bar)`
+          if (value[0] !== '(' && value[value.length - 1] === ')') {
+            continue
           }
 
           return {
