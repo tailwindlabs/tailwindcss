@@ -413,7 +413,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // Not an arbitrary value
   else {
     roots = findRoots(baseWithoutModifier, (root: string) => {
-      return designSystem.utilities.has(root, 'functional') ? 'functional' : null
+      return designSystem.utilities.has(root, 'functional')
     })
   }
 
@@ -587,10 +587,28 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     if (additionalModifier) return null
 
     let roots = findRoots(variantWithoutModifier, (root) => {
-      return designSystem.variants.has(root) ? designSystem.variants.kind(root) : null
+      return designSystem.variants.has(root)
     })
 
     for (let [root, value] of roots) {
+      let kind = designSystem.variants.kind(root)
+
+      // Compound variants e.g. not-in-[#foo] are ultimately split like so:
+      // - root: not
+      // - value: in-[#foo]
+      //  - root: in
+      //  - value: [#foo]
+      //
+      // However, other variants don't have this behavior, so we can skip
+      // over this possible variant if the root is not a compound variant
+      // and it contains an arbitrary value _after_ some other value
+      // e.g. `supports-display-[color:red]` is invalid
+      if (value && kind !== 'compound') {
+        if (value[value.length - 1] === ']' && value[0] !== '[') {
+          continue
+        }
+      }
+
       switch (designSystem.variants.kind(root)) {
         case 'static': {
           // Static variants do not have a value
@@ -702,12 +720,9 @@ type Root = [
   value: string | null,
 ]
 
-function* findRoots(
-  input: string,
-  kind: (input: string) => 'static' | 'functional' | 'compound' | 'arbitrary' | null,
-): Iterable<Root> {
+function* findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
   // If there is an exact match, then that's the root.
-  if (kind(input)) {
+  if (exists(input)) {
     yield [input, null]
   }
 
@@ -717,7 +732,7 @@ function* findRoots(
   if (idx === -1) {
     // Variants starting with `@` are special because they don't need a `-`
     // after the `@` (E.g.: `@-lg` should be written as `@lg`).
-    if (input[0] === '@' && kind('@')) {
+    if (input[0] === '@' && exists('@')) {
       yield ['@', input.slice(1)]
     }
     return
@@ -732,28 +747,9 @@ function* findRoots(
   // `bg`         -> Match
   do {
     let maybeRoot = input.slice(0, idx)
-    let rootKind = kind(maybeRoot)
 
-    if (rootKind) {
-      let value = input.slice(idx + 1)
-
-      // Compound variants e.g. not-in-[#foo] are ultimately split like so:
-      // - root: not
-      // - value: in-[#foo]
-      //  - root: in
-      //  - value: [#foo]
-      //
-      // However, other variants don't have this behavior, so we can skip
-      // over this possible variant if the root is not a compound variant
-      // and it contains an arbitrary value _after_ some other value
-      // e.g. `supports-display-[color:red]` is invalid
-      if (rootKind !== 'compound') {
-        if (value[value.length - 1] === ']' && value[0] !== '[') {
-          break
-        }
-      }
-
-      let root: Root = [maybeRoot, value]
+    if (exists(maybeRoot)) {
+      let root: Root = [maybeRoot, input.slice(idx + 1)]
 
       // If the leftover value is an empty string, it means that the value is an
       // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
