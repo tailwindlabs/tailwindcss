@@ -620,7 +620,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             }
           }
 
-          if (value[0] === '[' && value[value.length - 1] === ']') {
+          if (value[value.length - 1] === ']') {
+            // Discard values like `foo-[#bar]`
+            if (value[0] !== '[') continue
+
             let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
 
             // Empty arbitrary values are invalid. E.g.: `data-[]:`
@@ -638,7 +641,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             }
           }
 
-          if (value[0] === '(' && value[value.length - 1] === ')') {
+          if (value[value.length - 1] === ')') {
+            // Discard values like `foo-(--bar)`
+            if (value[0] !== '(') continue
+
             let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
 
             // Empty arbitrary values are invalid. E.g.: `data-():`
