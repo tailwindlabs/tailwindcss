@@ -3968,6 +3968,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('outline-offset', () => [
       {
+        supportsNegative: true,
         values: ['0', '1', '2', '4', '8'],
         valueThemeKeys: ['--outline-offset'],
       },
