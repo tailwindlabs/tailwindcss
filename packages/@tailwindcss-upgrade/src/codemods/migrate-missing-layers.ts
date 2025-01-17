@@ -16,6 +16,7 @@ export function migrateMissingLayers(): Plugin {
           node.name === 'source' ||
           node.name === 'theme' ||
           node.name === 'utility' ||
+          node.name === 'custom-variant' ||
           node.name === 'variant'
         ) {
           if (bucket.length > 0) {
