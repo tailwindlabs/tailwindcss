@@ -82,7 +82,7 @@ test('getVariants compound', () => {
 
 test('variant selectors are in the correct order', async () => {
   let input = css`
-    @variant overactive {
+    @custom-variant overactive {
       &:hover {
         @media (hover: hover) {
           &:focus {
@@ -386,8 +386,8 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 test('Custom at-rule variants do not show up as a value under `group`', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @variant variant-1 (@media foo);
-    @variant variant-2 {
+    @custom-variant variant-1 (@media foo);
+    @custom-variant variant-2 {
       @media bar {
         @slot;
       }

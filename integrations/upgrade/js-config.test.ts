@@ -167,7 +167,7 @@ test(
 
       @source '../node_modules/my-external-lib/**/*.{html}';
 
-      @variant dark (&:where(.dark, .dark *));
+      @custom-variant dark (&:where(.dark, .dark *));
 
       @theme {
         --shadow-*: initial;

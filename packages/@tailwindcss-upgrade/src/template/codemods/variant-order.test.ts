@@ -60,19 +60,19 @@ test('it works with custom variants', async () => {
   let designSystem = await __unstable__loadDesignSystem(
     css`
       @import 'tailwindcss';
-      @variant atrule {
+      @custom-variant atrule {
         @media (print) {
           @slot;
         }
       }
 
-      @variant combinator {
+      @custom-variant combinator {
         > * {
           @slot;
         }
       }
 
-      @variant pseudo {
+      @custom-variant pseudo {
         &::before {
           @slot;
         }

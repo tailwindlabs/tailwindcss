@@ -10,7 +10,7 @@ const BUCKET_ORDER = [
   'config', // @config
   'plugin', // @plugin
   'source', // @source
-  'variant', // @variant
+  'custom-variant', // @custom-variant
   'theme', // @theme
 
   // Styles
@@ -75,7 +75,7 @@ export function sortBuckets(): Plugin {
         // Known at-rules
         else if (
           node.type === 'atrule' &&
-          ['config', 'plugin', 'source', 'theme', 'utility', 'variant'].includes(node.name)
+          ['config', 'plugin', 'source', 'theme', 'utility', 'custom-variant'].includes(node.name)
         ) {
           injectInto(node.name, node)
         }

@@ -2493,56 +2493,56 @@ describe('@source', () => {
   })
 })
 
-describe('@variant', () => {
-  test('@variant must be top-level and cannot be nested', () => {
+describe('@custom-variant', () => {
+  test('@custom-variant must be top-level and cannot be nested', () => {
     return expect(
       compileCss(css`
         .foo {
-          @variant hocus (&:hover, &:focus);
+          @custom-variant hocus (&:hover, &:focus);
         }
       `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@custom-variant\` cannot be nested.]`)
   })
 
-  test('@variant with no body must include a selector', () => {
+  test('@custom-variant with no body must include a selector', () => {
     return expect(
       compileCss(css`
-        @variant hocus;
+        @custom-variant hocus;
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      '[Error: `@variant hocus` has no selector or body.]',
+      '[Error: `@custom-variant hocus` has no selector or body.]',
     )
   })
 
-  test('@variant with selector must include a body', () => {
+  test('@custom-variant with selector must include a body', () => {
     return expect(
       compileCss(css`
-        @variant hocus {
+        @custom-variant hocus {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      '[Error: `@variant hocus` has no selector or body.]',
+      '[Error: `@custom-variant hocus` has no selector or body.]',
     )
   })
 
-  test('@variant cannot have both a selector and a body', () => {
+  test('@custom-variant cannot have both a selector and a body', () => {
     return expect(
       compileCss(css`
-        @variant hocus (&:hover, &:focus) {
+        @custom-variant hocus (&:hover, &:focus) {
           &:is(.potato) {
             @slot;
           }
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@variant hocus\` cannot have both a selector and a body.]`,
+      `[Error: \`@custom-variant hocus\` cannot have both a selector and a body.]`,
     )
   })
 
   describe('body-less syntax', () => {
     test('selector variant', async () => {
       let { build } = await compile(css`
-        @variant hocus (&:hover, &:focus);
+        @custom-variant hocus (&:hover, &:focus);
 
         @layer utilities {
           @tailwind utilities;
@@ -2565,7 +2565,7 @@ describe('@variant', () => {
 
     test('at-rule variant', async () => {
       let { build } = await compile(css`
-        @variant any-hover (@media (any-hover: hover));
+        @custom-variant any-hover (@media (any-hover: hover));
 
         @layer utilities {
           @tailwind utilities;
@@ -2588,7 +2588,7 @@ describe('@variant', () => {
 
     test('style-rules and at-rules', async () => {
       let { build } = await compile(css`
-        @variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
+        @custom-variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
 
         @layer utilities {
           @tailwind utilities;
@@ -2621,7 +2621,7 @@ describe('@variant', () => {
   describe('body with @slot syntax', () => {
     test('selector with @slot', async () => {
       let { build } = await compile(css`
-        @variant selected {
+        @custom-variant selected {
           &[data-selected] {
             @slot;
           }
@@ -2644,7 +2644,7 @@ describe('@variant', () => {
 
     test('grouped selectors with @slot', async () => {
       let { build } = await compile(css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover,
           &:focus {
             @slot;
@@ -2668,7 +2668,7 @@ describe('@variant', () => {
 
     test('multiple selectors with @slot', async () => {
       let { build } = await compile(css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover {
             @slot;
           }
@@ -2695,7 +2695,7 @@ describe('@variant', () => {
 
     test('nested selector with @slot', async () => {
       let { build } = await compile(css`
-        @variant custom-before {
+        @custom-variant custom-before {
           & {
             --has-before: 1;
             &::before {
@@ -2725,7 +2725,7 @@ describe('@variant', () => {
 
     test('grouped nested selectors with @slot', async () => {
       let { build } = await compile(css`
-        @variant custom-before {
+        @custom-variant custom-before {
           & {
             --has-before: 1;
             &::before {
@@ -2758,7 +2758,7 @@ describe('@variant', () => {
 
     test('nested multiple selectors with @slot', async () => {
       let { build } = await compile(css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover {
             @media (hover: hover) {
               @slot;
@@ -2803,7 +2803,7 @@ describe('@variant', () => {
 
     test('selector nested under at-rule with @slot', async () => {
       let { build } = await compile(css`
-        @variant hocus {
+        @custom-variant hocus {
           @media (hover: hover) {
             &:hover {
               @slot;
@@ -2830,7 +2830,7 @@ describe('@variant', () => {
 
     test('at-rule with @slot', async () => {
       let { build } = await compile(css`
-        @variant any-hover {
+        @custom-variant any-hover {
           @media (any-hover: hover) {
             @slot;
           }
@@ -2855,7 +2855,7 @@ describe('@variant', () => {
 
     test('multiple at-rules with @slot', async () => {
       let { build } = await compile(css`
-        @variant desktop {
+        @custom-variant desktop {
           @media (any-hover: hover) {
             @slot;
           }
@@ -2890,7 +2890,7 @@ describe('@variant', () => {
 
     test('nested at-rules with @slot', async () => {
       let { build } = await compile(css`
-        @variant custom-variant {
+        @custom-variant custom-variant {
           @media (orientation: landscape) {
             @media screen {
               @slot;
@@ -2929,7 +2929,7 @@ describe('@variant', () => {
 
     test('at-rule and selector with @slot', async () => {
       let { build } = await compile(css`
-        @variant custom-dark {
+        @custom-variant custom-dark {
           @media (prefers-color-scheme: dark) {
             @slot;
           }
@@ -2964,7 +2964,7 @@ describe('@variant', () => {
     expect(
       await compileCss(
         css`
-          @variant dark (&:is([data-theme='dark'] *));
+          @custom-variant dark (&:is([data-theme='dark'] *));
           @layer utilities {
             @tailwind utilities;
           }
@@ -2993,7 +2993,7 @@ describe('@variant', () => {
     expect(
       await compileCss(
         css`
-          @variant foo (@media foo);
+          @custom-variant foo (@media foo);
 
           @layer utilities {
             @tailwind utilities;
@@ -3137,7 +3137,7 @@ describe('`@import "…" reference`', () => {
             @theme {
               --breakpoint-md: 768px;
             }
-            @variant hocus (&:hover, &:focus);
+            @custom-variant hocus (&:hover, &:focus);
           `,
           base: '/root/foo',
         }
@@ -3217,7 +3217,7 @@ describe('`@import "…" reference`', () => {
             @utility foo {
               color: red;
             }
-            @variant hocus (&:hover, &:focus);
+            @custom-variant hocus (&:hover, &:focus);
           }
 
           .bar {

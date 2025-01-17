@@ -216,8 +216,8 @@ test('Variants in CSS overwrite variants from plugins', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
-    @variant dark (&:is(.my-dark));
-    @variant light (&:is(.my-light));
+    @custom-variant dark (&:is(.my-dark));
+    @custom-variant light (&:is(.my-light));
   `
 
   let compiler = await compile(input, {

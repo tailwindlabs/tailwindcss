@@ -213,25 +213,25 @@ async function parseCss(
       return
     }
 
-    // Register custom variants from `@variant` at-rules
-    if (node.name === '@variant') {
+    // Register custom variants from `@custom-variant` at-rules
+    if (node.name === '@custom-variant') {
       if (parent !== null) {
-        throw new Error('`@variant` cannot be nested.')
+        throw new Error('`@custom-variant` cannot be nested.')
       }
 
-      // Remove `@variant` at-rule so it's not included in the compiled CSS
+      // Remove `@custom-variant` at-rule so it's not included in the compiled CSS
       replaceWith([])
 
       let [name, selector] = segment(node.params, ' ')
 
       if (node.nodes.length > 0 && selector) {
-        throw new Error(`\`@variant ${name}\` cannot have both a selector and a body.`)
+        throw new Error(`\`@custom-variant ${name}\` cannot have both a selector and a body.`)
       }
 
-      // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
+      // Variants with a selector, but without a body, e.g.: `@custom-variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
         if (!selector) {
-          throw new Error(`\`@variant ${name}\` has no selector or body.`)
+          throw new Error(`\`@custom-variant ${name}\` has no selector or body.`)
         }
 
         let selectors = segment(selector.slice(1, -1), ',')
@@ -279,7 +279,7 @@ async function parseCss(
       // E.g.:
       //
       // ```css
-      // @variant hocus {
+      // @custom-variant hocus {
       //   &:hover {
       //     @slot;
       //   }
