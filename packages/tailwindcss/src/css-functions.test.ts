@@ -12,7 +12,7 @@ describe('--alpha(…)', () => {
     expect(
       await compileCss(css`
         .foo {
-          margin: --alpha(red, 50%);
+          margin: --alpha(red / 50%);
         }
       `),
     ).toMatchInlineSnapshot(`
@@ -30,7 +30,7 @@ describe('--alpha(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The --alpha(…) function requires two arguments, e.g.: \`--alpha(var(--my-color), 50%)\`]`,
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(var(--my-color) / 50%)\`]`,
     )
   })
 
@@ -42,7 +42,7 @@ describe('--alpha(…)', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The --alpha(…) function requires two arguments, e.g.: \`--alpha(red, 50%)\`]`,
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(red / 50%)\`]`,
     )
   })
 
@@ -50,11 +50,11 @@ describe('--alpha(…)', () => {
     expect(() =>
       compileCss(css`
         .foo {
-          margin: --alpha(red, 50%, blue);
+          margin: --alpha(red / 50%, blue);
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The --alpha(…) function only accepts two arguments, e.g.: \`--alpha(red, 50%)\`]`,
+      `[Error: The --alpha(…) function only accepts one argument, e.g.: \`--alpha(red / 50%)\`]`,
     )
   })
 })

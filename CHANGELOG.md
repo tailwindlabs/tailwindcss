@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Write to `stdout` when `--output -` flag is used for `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
 - _Upgrade (experimental)_: Pretty print `--spacing(…)` to prevent ambiguity ([#15596](https://github.com/tailwindlabs/tailwindcss/pull/15596))
 
+### Changed
+
+- Use more modern `--alpha(color / 50%)` syntax instead of `--alpha(color, 50%)` ([#15665](https://github.com/tailwindlabs/tailwindcss/pull/15665))
+
 ## [4.0.0-beta.9] - 2025-01-09
 
 ### Added
