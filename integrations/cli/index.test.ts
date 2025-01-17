@@ -96,6 +96,149 @@ describe.each([
   )
 
   test(
+    'production build — read input from stdin',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'project-a/index.html': html`
+          <div
+            class="underline 2xl:font-bold hocus:underline inverted:flex *:flex **:flex"
+          ></div>
+        `,
+        'project-a/plugin.js': js`
+          module.exports = function ({ addVariant }) {
+            addVariant('inverted', '@media (inverted-colors: inverted)')
+            addVariant('hocus', ['&:focus', '&:hover'])
+          }
+        `,
+        'project-a/tailwind.config.js': js`
+          module.exports = {
+            content: ['../project-b/src/**/*.js'],
+          }
+        `,
+        'project-a/src/index.js': js`
+          const className = "content-['project-a/src/index.js']"
+          module.exports = { className }
+        `,
+        'project-b/src/index.html': html`
+          <div class="flex" />
+        `,
+        'project-b/src/index.js': js`
+          const className = "content-['project-b/src/index.js']"
+          module.exports = { className }
+        `,
+      },
+    },
+    async ({ root, fs, exec }) => {
+      await exec(
+        `${command} --input - --output dist/out.css`,
+        { cwd: path.join(root, 'project-a') },
+        {
+          stdin: css`
+            @import 'tailwindcss/utilities';
+            @config './tailwind.config.js';
+            @source '../project-b/src/**/*.html';
+            @plugin './plugin.js';
+          `,
+        },
+      )
+
+      await fs.expectFileToContain('project-a/dist/out.css', [
+        candidate`underline`,
+        candidate`flex`,
+        candidate`content-['project-a/src/index.js']`,
+        candidate`content-['project-b/src/index.js']`,
+        candidate`inverted:flex`,
+        candidate`hocus:underline`,
+        candidate`*:flex`,
+        candidate`**:flex`,
+      ])
+    },
+  )
+
+  test(
+    'production build — (write to stdout)',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'project-a/index.html': html`
+          <div
+            class="underline 2xl:font-bold hocus:underline inverted:flex *:flex **:flex"
+          ></div>
+        `,
+        'project-a/plugin.js': js`
+          module.exports = function ({ addVariant }) {
+            addVariant('inverted', '@media (inverted-colors: inverted)')
+            addVariant('hocus', ['&:focus', '&:hover'])
+          }
+        `,
+        'project-a/tailwind.config.js': js`
+          module.exports = {
+            content: ['../project-b/src/**/*.js'],
+          }
+        `,
+        'project-a/src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @config '../tailwind.config.js';
+          @source '../../project-b/src/**/*.html';
+          @plugin '../plugin.js';
+        `,
+        'project-a/src/index.js': js`
+          const className = "content-['project-a/src/index.js']"
+          module.exports = { className }
+        `,
+        'project-b/src/index.html': html`
+          <div class="flex" />
+        `,
+        'project-b/src/index.js': js`
+          const className = "content-['project-b/src/index.js']"
+          module.exports = { className }
+        `,
+      },
+    },
+    async ({ root, expect, exec }) => {
+      let stdout = await exec(`${command} --input src/index.css --output -`, {
+        cwd: path.join(root, 'project-a'),
+      })
+
+      expect(stdout).toContain(candidate`underline`)
+      expect(stdout).toContain(candidate`flex`)
+      expect(stdout).toContain(candidate`content-['project-a/src/index.js']`)
+      expect(stdout).toContain(candidate`content-['project-b/src/index.js']`)
+      expect(stdout).toContain(candidate`inverted:flex`)
+      expect(stdout).toContain(candidate`hocus:underline`)
+      expect(stdout).toContain(candidate`*:flex`)
+      expect(stdout).toContain(candidate`**:flex`)
+    },
+  )
+
+  test(
     'watch mode',
     {
       fs: {
