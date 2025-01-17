@@ -12,20 +12,22 @@ const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) 
   theme: legacyTheme,
 }
 
-function alpha(_designSystem: DesignSystem, value: string, alpha: string, ...rest: string[]) {
-  if (!value || !alpha) {
+function alpha(_designSystem: DesignSystem, value: string, ...rest: string[]) {
+  let [color, alpha] = segment(value, '/').map((v) => v.trim())
+
+  if (!color || !alpha) {
     throw new Error(
-      `The --alpha(…) function requires two arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+      `The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(${color || 'var(--my-color)'} / ${alpha || '50%'})\``,
     )
   }
 
   if (rest.length > 0) {
     throw new Error(
-      `The --alpha(…) function only accepts two arguments, e.g.: \`--alpha(${value || 'var(--my-color)'}, ${alpha || '50%'})\``,
+      `The --alpha(…) function only accepts one argument, e.g.: \`--alpha(${color || 'var(--my-color)'} / ${alpha || '50%'})\``,
     )
   }
 
-  return withAlpha(value, alpha)
+  return withAlpha(color, alpha)
 }
 
 function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
