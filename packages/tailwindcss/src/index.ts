@@ -21,7 +21,7 @@ import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
-import { compileCandidates } from './compile'
+import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
@@ -97,6 +97,9 @@ export const enum Features {
 
   // `@tailwind utilities` was used
   Utilities = 1 << 4,
+
+  // `@variant` was used
+  Variants = 1 << 5,
 }
 
 async function parseCss(
@@ -118,6 +121,7 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
+  let variantNodes: AtRule[] = []
   let globs: { base: string; pattern: string }[] = []
   let root = null as Root
 
@@ -211,6 +215,42 @@ async function parseCss(
       globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
       replaceWith([])
       return
+    }
+
+    // Apply `@variant` at-rules
+    if (node.name === '@variant') {
+      // Legacy `@variant` at-rules containing `@slot` or without a body should
+      // be considered a `@custom-variant` at-rule.
+      if (parent === null) {
+        // Body-less `@variant`, e.g.: `@variant foo (…);`
+        if (node.nodes.length === 0) {
+          node.name = '@custom-variant'
+        }
+
+        // Using `@slot`:
+        //
+        // ```css
+        // @variant foo {
+        //   &:hover {
+        //     @slot;
+        //   }
+        // }
+        // ```
+        else {
+          walk(node.nodes, (child) => {
+            if (child.kind === 'at-rule' && child.name === '@slot') {
+              node.name = '@custom-variant'
+              return WalkAction.Stop
+            }
+          })
+        }
+      }
+
+      // Collect all the `@variant` at-rules, we will replace them later once
+      // all variants are registered in the system.
+      else {
+        variantNodes.push(node)
+      }
     }
 
     // Register custom variants from `@custom-variant` at-rules
@@ -499,6 +539,30 @@ async function parseCss(
     let node = utilitiesNode as AstNode as Context
     node.kind = 'context'
     node.context = {}
+  }
+
+  // Replace the `@variant` at-rules with the actual variant rules.
+  if (variantNodes.length > 0) {
+    for (let variantNode of variantNodes) {
+      // Starting with the `&` rule node
+      let node = styleRule('&', variantNode.nodes)
+
+      for (let variant of segment(variantNode.params, ':').reverse()) {
+        let variantAst = designSystem.parseVariant(variant)
+        if (variantAst === null) {
+          throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+        }
+
+        let result = applyVariant(node, variantAst, designSystem.variants)
+        if (result === null) {
+          throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+        }
+      }
+
+      // Update the variant at-rule node, to be the `&` rule node
+      Object.assign(variantNode, node)
+    }
+    features |= Features.Variants
   }
 
   features |= substituteFunctions(ast, designSystem)

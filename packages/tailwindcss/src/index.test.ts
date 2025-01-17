@@ -3315,3 +3315,189 @@ describe('`@import "…" reference`', () => {
     `)
   })
 })
+
+describe('@variant', () => {
+  it('should convert legacy body-less `@variant` as a `@custom-variant`', async () => {
+    await expect(
+      compileCss(
+        css`
+          @variant hocus (&:hover, &:focus);
+          @tailwind utilities;
+        `,
+        ['hocus:underline'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".hocus\\:underline:hover, .hocus\\:underline:focus {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  it('should convert legacy `@variant` with `@slot` as a `@custom-variant`', async () => {
+    await expect(
+      compileCss(
+        css`
+          @variant hocus {
+            &:hover {
+              @slot;
+            }
+
+            &:focus {
+              @slot;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['hocus:underline'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".hocus\\:underline:hover, .hocus\\:underline:focus {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  it('should be possible to use `@variant` in your CSS', async () => {
+    await expect(
+      compileCss(
+        css`
+          .btn {
+            background: black;
+
+            @variant dark {
+              background: white;
+            }
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .btn {
+          background: #fff;
+        }
+      }"
+    `)
+  })
+
+  it('should be possible to use `@variant` in your CSS with a `@custom-variant` that is defined later', async () => {
+    await expect(
+      compileCss(
+        css`
+          .btn {
+            background: black;
+
+            @variant hocus {
+              background: white;
+            }
+          }
+
+          @custom-variant hocus (&:hover, &:focus);
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      .btn:hover, .btn:focus {
+        background: #fff;
+      }"
+    `)
+  })
+
+  it('should be possible to use nested `@variant` rules', async () => {
+    await expect(
+      compileCss(
+        css`
+          .btn {
+            background: black;
+
+            @variant disabled {
+              @variant focus {
+                background: white;
+              }
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['disabled:focus:underline'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      .btn:disabled:focus {
+        background: #fff;
+      }
+
+      .disabled\\:focus\\:underline:disabled:focus {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  it('should be possible to use multiple `@variant` params at once', async () => {
+    await expect(
+      compileCss(
+        css`
+          .btn {
+            background: black;
+
+            @variant hover:focus {
+              background: white;
+            }
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      @media (hover: hover) {
+        .btn:hover:focus {
+          background: #fff;
+        }
+      }"
+    `)
+  })
+
+  it('should be possible to use `@variant` with a funky looking variants', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme inline reference {
+            --container-md: 768px;
+          }
+
+          .btn {
+            background: black;
+
+            @variant @md:[&.foo] {
+              background: white;
+            }
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      @container (width >= 768px) {
+        .btn.foo {
+          background: #fff;
+        }
+      }"
+    `)
+  })
+})
