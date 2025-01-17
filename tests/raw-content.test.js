@@ -145,6 +145,9 @@ it('raw content', () => {
           <div class="w-12"></div>
           <div class="break-words"></div>
           <div class="z-30"></div>
+          <div class="content-visibility-visible"></div>
+          <div class="content-visibility-hidden"></div>
+          <div class="content-visibility-auto"></div>
         `,
       },
     ],
