@@ -547,16 +547,16 @@ async function parseCss(
       // Starting with the `&` rule node
       let node = styleRule('&', variantNode.nodes)
 
-      for (let variant of segment(variantNode.params, ':').reverse()) {
-        let variantAst = designSystem.parseVariant(variant)
-        if (variantAst === null) {
-          throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-        }
+      let variant = variantNode.params
 
-        let result = applyVariant(node, variantAst, designSystem.variants)
-        if (result === null) {
-          throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
-        }
+      let variantAst = designSystem.parseVariant(variant)
+      if (variantAst === null) {
+        throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+      }
+
+      let result = applyVariant(node, variantAst, designSystem.variants)
+      if (result === null) {
+        throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
       }
 
       // Update the variant at-rule node, to be the `&` rule node

@@ -3443,33 +3443,6 @@ describe('@variant', () => {
     `)
   })
 
-  it('should be possible to use multiple `@variant` params at once', async () => {
-    await expect(
-      compileCss(
-        css`
-          .btn {
-            background: black;
-
-            @variant hover:focus {
-              background: white;
-            }
-          }
-        `,
-        [],
-      ),
-    ).resolves.toMatchInlineSnapshot(`
-      ".btn {
-        background: #000;
-      }
-
-      @media (hover: hover) {
-        .btn:hover:focus {
-          background: #fff;
-        }
-      }"
-    `)
-  })
-
   it('should be possible to use `@variant` with a funky looking variants', async () => {
     await expect(
       compileCss(
@@ -3481,8 +3454,10 @@ describe('@variant', () => {
           .btn {
             background: black;
 
-            @variant @md:[&.foo] {
-              background: white;
+            @variant @md {
+              @variant [&.foo] {
+                background: white;
+              }
             }
           }
         `,
