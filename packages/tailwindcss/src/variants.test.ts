@@ -1644,6 +1644,30 @@ test('not', async () => {
             }
           }
         }
+        @custom-variant parallel-style-rules {
+          &:hover {
+            @slot;
+          }
+          &:focus {
+            @slot;
+          }
+        }
+        @custom-variant parallel-at-rules {
+          @media foo {
+            @slot;
+          }
+          @media bar {
+            @slot;
+          }
+        }
+        @custom-variant parallel-mixed-rules {
+          &:hover {
+            @slot;
+          }
+          @media bar {
+            @slot;
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -1659,6 +1683,10 @@ test('not', async () => {
         'not-nested-style-rules:flex',
         'not-multiple-media-conditions:flex',
         'not-starting:flex',
+
+        'not-parallel-style-rules:flex',
+        'not-parallel-at-rules:flex',
+        'not-parallel-mixed-rules:flex',
 
         // The following built-in variants don't have not-* versions because
         // there is no sensible negative version of them.

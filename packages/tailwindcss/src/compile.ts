@@ -219,6 +219,15 @@ export function applyVariant(
     let result = applyVariant(isolatedNode, variant.variant, variants, depth + 1)
     if (result === null) return null
 
+    if (variant.root === 'not' && isolatedNode.nodes.length > 1) {
+      // The `not` variant cannot negate sibling rules / at-rules because these
+      // are an OR relationship. Doing so would require transforming sibling
+      // nodes into nesting while negating them. This isn't possible with the
+      // current implementation of the `not` variant or with how variants are
+      // applied in general (on a per-node basis).
+      return null
+    }
+
     for (let child of isolatedNode.nodes) {
       // Only some variants wrap children in rules. For example, the `force`
       // variant is a noop on the AST. And the `has` variant modifies the
