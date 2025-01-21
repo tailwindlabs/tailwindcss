@@ -518,7 +518,7 @@ test('group-*', async () => {
   expect(
     await compileCss(
       css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover,
           &:focus {
             @slot;
@@ -560,8 +560,8 @@ test('group-*', async () => {
   expect(
     await compileCss(
       css`
-        @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
+        @custom-variant custom-at-rule (@media foo);
+        @custom-variant nested-selectors {
           &:hover {
             &:focus {
               @slot;
@@ -610,7 +610,7 @@ test('peer-*', async () => {
   expect(
     await compileCss(
       css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover,
           &:focus {
             @slot;
@@ -651,8 +651,8 @@ test('peer-*', async () => {
   expect(
     await compileCss(
       css`
-        @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
+        @custom-variant custom-at-rule (@media foo);
+        @custom-variant nested-selectors {
           &:hover {
             &:focus {
               @slot;
@@ -1361,14 +1361,14 @@ test('not', async () => {
   expect(
     await compileCss(
       css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover,
           &:focus {
             @slot;
           }
         }
 
-        @variant device-hocus {
+        @custom-variant device-hocus {
           @media (hover: hover) {
             &:hover,
             &:focus {
@@ -1625,19 +1625,19 @@ test('not', async () => {
   expect(
     await compileCss(
       css`
-        @variant nested-at-rules {
+        @custom-variant nested-at-rules {
           @media foo {
             @media bar {
               @slot;
             }
           }
         }
-        @variant multiple-media-conditions {
+        @custom-variant multiple-media-conditions {
           @media foo, bar {
             @slot;
           }
         }
-        @variant nested-style-rules {
+        @custom-variant nested-style-rules {
           &:hover {
             &:focus {
               @slot;
@@ -1706,7 +1706,7 @@ test('has', async () => {
   expect(
     await compileCss(
       css`
-        @variant hocus {
+        @custom-variant hocus {
           &:hover,
           &:focus {
             @slot;
@@ -1759,8 +1759,8 @@ test('has', async () => {
   expect(
     await compileCss(
       css`
-        @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
+        @custom-variant custom-at-rule (@media foo);
+        @custom-variant nested-selectors {
           &:hover {
             &:focus {
               @slot;

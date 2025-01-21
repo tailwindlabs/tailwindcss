@@ -256,11 +256,23 @@ export function optimizeAst(ast: AstNode[]) {
 
     // Rule
     else if (node.kind === 'rule') {
-      let copy = { ...node, nodes: [] }
-      for (let child of node.nodes) {
-        transform(child, copy.nodes, depth + 1)
+      // Rules with `&` as the selector should be flattened
+      if (node.selector === '&') {
+        for (let child of node.nodes) {
+          let nodes: AstNode[] = []
+          transform(child, nodes, depth + 1)
+          parent.push(...nodes)
+        }
       }
-      parent.push(copy)
+
+      //
+      else {
+        let copy = { ...node, nodes: [] }
+        for (let child of node.nodes) {
+          transform(child, copy.nodes, depth + 1)
+        }
+        parent.push(copy)
+      }
     }
 
     // AtRule `@property`

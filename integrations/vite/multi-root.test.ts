@@ -48,7 +48,7 @@ test(
       `,
       'src/root1.css': css`
         @import './shared.css';
-        @variant one (&:is([data-root='1']));
+        @custom-variant one (&:is([data-root='1']));
       `,
       'root2.html': html`
         <head>
@@ -60,7 +60,7 @@ test(
       `,
       'src/root2.css': css`
         @import './shared.css';
-        @variant two (&:is([data-root='2']));
+        @custom-variant two (&:is([data-root='2']));
       `,
     },
   },
@@ -124,7 +124,7 @@ test(
       `,
       'src/root1.css': css`
         @import './shared.css';
-        @variant one (&:is([data-root='1']));
+        @custom-variant one (&:is([data-root='1']));
       `,
       'root2.html': html`
         <head>
@@ -136,7 +136,7 @@ test(
       `,
       'src/root2.css': css`
         @import './shared.css';
-        @variant two (&:is([data-root='2']));
+        @custom-variant two (&:is([data-root='2']));
       `,
     },
   },

@@ -10,7 +10,7 @@ import { DefaultMap } from '../utils/default-map'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
-import { compoundsForSelectors, substituteAtSlot } from '../variants'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
 import * as SelectorParser from './selector-parser'
@@ -108,6 +108,12 @@ export function buildPluginApi({
     },
 
     addVariant(name, variant) {
+      if (!IS_VALID_VARIANT_NAME.test(name)) {
+        throw new Error(
+          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+        )
+      }
+
       // Single selector or multiple parallel selectors
       if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(

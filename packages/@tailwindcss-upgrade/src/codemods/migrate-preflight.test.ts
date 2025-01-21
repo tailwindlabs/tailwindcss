@@ -135,7 +135,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     await migrate(css`
       @import 'tailwindcss';
 
-      @variant foo {
+      @custom-variant foo {
       }
 
       @utility bar {
@@ -153,7 +153,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss';
 
-    @variant foo {
+    @custom-variant foo {
     }
 
     /*
@@ -193,7 +193,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     await migrate(css`
       @import 'tailwindcss/preflight';
 
-      @variant foo {
+      @custom-variant foo {
       }
 
       @utility bar {
@@ -211,7 +211,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss/preflight';
 
-    @variant foo {
+    @custom-variant foo {
     }
 
     /*
@@ -249,7 +249,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
 it('should not add the backwards compatibility CSS when no `@import "tailwindcss"` or `@import "tailwindcss/preflight"` exists', async () => {
   expect(
     await migrate(css`
-      @variant foo {
+      @custom-variant foo {
       }
 
       @utility bar {
@@ -265,7 +265,7 @@ it('should not add the backwards compatibility CSS when no `@import "tailwindcss
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@variant foo {
+    "@custom-variant foo {
     }
 
     @utility bar {
@@ -287,7 +287,7 @@ it('should not add the backwards compatibility CSS when another `@import "tailwi
     await migrate(css`
       @import 'tailwindcss/theme';
 
-      @variant foo {
+      @custom-variant foo {
       }
 
       @utility bar {
@@ -305,7 +305,7 @@ it('should not add the backwards compatibility CSS when another `@import "tailwi
   ).toMatchInlineSnapshot(`
     "@import 'tailwindcss/theme';
 
-    @variant foo {
+    @custom-variant foo {
     }
 
     @utility bar {
