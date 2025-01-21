@@ -2497,8 +2497,18 @@ describe('@custom-variant', () => {
   test('@custom-variant must be top-level and cannot be nested', () => {
     return expect(
       compileCss(css`
+        @custom-variant foo:bar (&:hover, &:focus);
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant foo:bar\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+    )
+  })
+
+  test('@custom-variant must not container special characters', () => {
+    return expect(
+      compileCss(css`
         .foo {
-          @custom-variant hocus (&:hover, &:focus);
+          @custom-variant foo:bar (&:hover, &:focus);
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@custom-variant\` cannot be nested.]`)

@@ -28,7 +28,7 @@ import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { segment } from './utils/segment'
-import { compoundsForSelectors } from './variants'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
@@ -263,6 +263,12 @@ async function parseCss(
       replaceWith([])
 
       let [name, selector] = segment(node.params, ' ')
+
+      if (!IS_VALID_VARIANT_NAME.test(name)) {
+        throw new Error(
+          `\`@custom-variant ${name}\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+        )
+      }
 
       if (node.nodes.length > 0 && selector) {
         throw new Error(`\`@custom-variant ${name}\` cannot have both a selector and a body.`)
