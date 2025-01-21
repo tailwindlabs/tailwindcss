@@ -1644,6 +1644,30 @@ test('not', async () => {
             }
           }
         }
+        @custom-variant parallel-style-rules {
+          &:hover {
+            @slot;
+          }
+          &:focus {
+            @slot;
+          }
+        }
+        @custom-variant parallel-at-rules {
+          @media foo {
+            @slot;
+          }
+          @media bar {
+            @slot;
+          }
+        }
+        @custom-variant parallel-mixed-rules {
+          &:hover {
+            @slot;
+          }
+          @media bar {
+            @slot;
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -1660,23 +1684,27 @@ test('not', async () => {
         'not-multiple-media-conditions:flex',
         'not-starting:flex',
 
+        'not-parallel-style-rules:flex',
+        'not-parallel-at-rules:flex',
+        'not-parallel-mixed-rules:flex',
+
         // The following built-in variants don't have not-* versions because
         // there is no sensible negative version of them.
 
         // These just don't make sense as not-*
-        'not-force',
-        'not-*',
+        'not-force:flex',
+        'not-*:flex',
 
         // These contain pseudo-elements
-        'not-first-letter',
-        'not-first-line',
-        'not-marker',
-        'not-selection',
-        'not-file',
-        'not-placeholder',
-        'not-backdrop',
-        'not-before',
-        'not-after',
+        'not-first-letter:flex',
+        'not-first-line:flex',
+        'not-marker:flex',
+        'not-selection:flex',
+        'not-file:flex',
+        'not-placeholder:flex',
+        'not-backdrop:flex',
+        'not-before:flex',
+        'not-after:flex',
 
         // This is not a conditional at rule
         'not-starting:flex',
