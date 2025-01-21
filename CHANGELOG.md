@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add new `@variant` directive for applying variants to your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+- Include `outline-color` when transitioning colors ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
 
 ### Fixed
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use more modern `--alpha(color / 50%)` syntax instead of `--alpha(color, 50%)` ([#15665](https://github.com/tailwindlabs/tailwindcss/pull/15665))
 - Rename `@variant` to `@custom-variant` ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+- `outline-hidden` and `outline-none` behave the same in non-forced colors mode ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
 
 ## [4.0.0-beta.9] - 2025-01-09
 
