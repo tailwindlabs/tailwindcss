@@ -3552,7 +3552,7 @@ export function createUtilities(theme: Theme) {
     staticUtility('transition-colors', [
       [
         'transition-property',
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
+        'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
       ],
       ['transition-timing-function', defaultTimingFunction],
       ['transition-duration', defaultDuration],
@@ -3575,7 +3575,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('transition', {
       defaultValue:
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
+        'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
       themeKeys: ['--transition-property'],
       handle: (value) => [
         decl('transition-property', value),
@@ -3850,10 +3850,15 @@ export function createUtilities(theme: Theme) {
       return atRoot([property('--tw-outline-style', 'solid')])
     }
 
-    staticUtility('outline-hidden', [
-      ['outline', '2px solid transparent'],
-      ['outline-offset', '2px'],
-    ])
+    utilities.static('outline-hidden', () => {
+      return [
+        decl('outline-style', 'none'),
+        atRule('@media', '(forced-colors: active)', [
+          decl('outline', '2px solid transparent'),
+          decl('outline-offset', '2px'),
+        ]),
+      ]
+    })
 
     /**
      * @css `outline-style`
