@@ -14599,7 +14599,7 @@ test('outline', async () => {
       outline-style: none;
     }
 
-    @media screen and (forced-colors: active) {
+    @media (forced-colors: active) {
       .outline-hidden {
         outline-offset: 2px;
         outline: 2px solid #0000;

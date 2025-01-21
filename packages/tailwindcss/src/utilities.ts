@@ -3853,7 +3853,7 @@ export function createUtilities(theme: Theme) {
     utilities.static('outline-hidden', () => {
       return [
         decl('outline-style', 'none'),
-        atRule('@media', 'screen and (forced-colors: active)', [
+        atRule('@media', '(forced-colors: active)', [
           decl('outline', '2px solid transparent'),
           decl('outline-offset', '2px'),
         ]),
