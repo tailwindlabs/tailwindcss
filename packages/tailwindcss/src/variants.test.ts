@@ -1664,19 +1664,19 @@ test('not', async () => {
         // there is no sensible negative version of them.
 
         // These just don't make sense as not-*
-        'not-force',
-        'not-*',
+        'not-force:flex',
+        'not-*:flex',
 
         // These contain pseudo-elements
-        'not-first-letter',
-        'not-first-line',
-        'not-marker',
-        'not-selection',
-        'not-file',
-        'not-placeholder',
-        'not-backdrop',
-        'not-before',
-        'not-after',
+        'not-first-letter:flex',
+        'not-first-line:flex',
+        'not-marker:flex',
+        'not-selection:flex',
+        'not-file:flex',
+        'not-placeholder:flex',
+        'not-backdrop:flex',
+        'not-before:flex',
+        'not-after:flex',
 
         // This is not a conditional at rule
         'not-starting:flex',
