@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-darwin-arm64",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.0-beta.10",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",

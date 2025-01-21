@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet
+
+## [4.0.0-beta.10] - 2025-01-21
+
 ### Added
 
 - Add new `@variant` directive for applying variants to your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
