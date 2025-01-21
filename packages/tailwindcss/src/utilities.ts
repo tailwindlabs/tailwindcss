@@ -3850,10 +3850,15 @@ export function createUtilities(theme: Theme) {
       return atRoot([property('--tw-outline-style', 'solid')])
     }
 
-    staticUtility('outline-hidden', [
-      ['outline', '2px solid transparent'],
-      ['outline-offset', '2px'],
-    ])
+    utilities.static('outline-hidden', () => {
+      return [
+        decl('outline-style', 'none'),
+        atRule('@media', 'screen and (forced-colors: active)', [
+          decl('outline', '2px solid transparent'),
+          decl('outline-offset', '2px'),
+        ]),
+      ]
+    })
 
     /**
      * @css `outline-style`

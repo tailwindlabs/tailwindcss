@@ -14543,6 +14543,7 @@ test('outline', async () => {
       `,
       [
         'outline',
+        'outline-hidden',
 
         // outline-style
         'outline-none',
@@ -14592,6 +14593,17 @@ test('outline', async () => {
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
+    }
+
+    .outline-hidden {
+      outline-style: none;
+    }
+
+    @media screen and (forced-colors: active) {
+      .outline-hidden {
+        outline-offset: 2px;
+        outline: 2px solid #0000;
+      }
     }
 
     .outline {
