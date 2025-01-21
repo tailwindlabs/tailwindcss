@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `-outline-offset-*` utilities are suggested in IntelliSense ([#15646](https://github.com/tailwindlabs/tailwindcss/pull/15646))
 - Write to `stdout` when `--output` is set to `-` or omitted for `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
 - Write to `stdout` when `--output -` flag is used for `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
-- Prevent `not-*` variant from working with variants with multiple sibling rules ([#15689](https://github.com/tailwindlabs/tailwindcss/pull/15689))
+- Prevent `not-*` variant from being used with variants with multiple sibling rules ([#15689](https://github.com/tailwindlabs/tailwindcss/pull/15689))
 - _Upgrade (experimental)_: Pretty print `--spacing(…)` to prevent ambiguity ([#15596](https://github.com/tailwindlabs/tailwindcss/pull/15596))
 
 ### Changed
