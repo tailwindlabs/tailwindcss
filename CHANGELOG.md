@@ -13,18 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add new `@variant` directive for applying variants to your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+- Add support for using `@variant` to use variants in your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
 - Include `outline-color` when transitioning colors ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
 
 ### Fixed
 
 - Add missing `main` and `browser` fields for `@tailwindcss/browser` ([#15594](https://github.com/tailwindlabs/tailwindcss/pull/15594))
-- Ensure namespace reset with escaped `*` (e.g.: `--color-\*: initial;`) ([#15603](https://github.com/tailwindlabs/tailwindcss/pull/15603))
-- Resolve values in functional utilities based on `@theme` options ([#15623](https://github.com/tailwindlabs/tailwindcss/pull/15623))
-- Discard invalid variants such as `data-checked-[selected=1]:*` ([#15629](https://github.com/tailwindlabs/tailwindcss/pull/15629))
+- Support escaping `*` in theme namespace syntax (e.g.: `--color-\*: initial;`) ([#15603](https://github.com/tailwindlabs/tailwindcss/pull/15603))
+- Respect `@theme` options when resolving values in custom functional utilities ([#15623](https://github.com/tailwindlabs/tailwindcss/pull/15623))
+- Discard invalid variants (e.g. `data-checked-[selected=1]:*`) ([#15629](https://github.com/tailwindlabs/tailwindcss/pull/15629))
 - Ensure `-outline-offset-*` utilities are suggested in IntelliSense ([#15646](https://github.com/tailwindlabs/tailwindcss/pull/15646))
-- Write to `stdout` when `--output` is set to `-` or omitted for `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
-- Write to `stdout` when `--output -` flag is used for `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
+- Write to `stdout` when `--output` is set to `-` or omitted with `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
 - Prevent `not-*` from being used with variants that have multiple sibling rules ([#15689](https://github.com/tailwindlabs/tailwindcss/pull/15689))
 - _Upgrade (experimental)_: Pretty print `--spacing(…)` to prevent ambiguity ([#15596](https://github.com/tailwindlabs/tailwindcss/pull/15596))
 
@@ -32,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use more modern `--alpha(color / 50%)` syntax instead of `--alpha(color, 50%)` ([#15665](https://github.com/tailwindlabs/tailwindcss/pull/15665))
 - Rename `@variant` to `@custom-variant` ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
-- `outline-hidden` and `outline-none` behave the same in non-forced colors mode ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
+- Change `outline-hidden` to set `outline-style: none` except in forced colors mode ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
 
 ## [4.0.0-beta.9] - 2025-01-09
 
