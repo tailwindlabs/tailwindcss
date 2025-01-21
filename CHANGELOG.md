@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add new `@variant` directive for applying variants to your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+
 ### Fixed
 
 - Add missing `main` and `browser` fields for `@tailwindcss/browser` ([#15594](https://github.com/tailwindlabs/tailwindcss/pull/15594))
@@ -22,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use more modern `--alpha(color / 50%)` syntax instead of `--alpha(color, 50%)` ([#15665](https://github.com/tailwindlabs/tailwindcss/pull/15665))
+- Rename `@variant` to `@custom-variant` ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
 
 ## [4.0.0-beta.9] - 2025-01-09
 
