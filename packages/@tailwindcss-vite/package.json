@@ -30,14 +30,15 @@
   "dependencies": {
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
-    "lightningcss": "catalog:",
-    "tailwindcss": "workspace:*"
+    "lightningcss": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "tailwindcss": "workspace:*"
   },
   "peerDependencies": {
+    "tailwindcss": "^4",
     "vite": "^5.2.0 || ^6"
   }
 }

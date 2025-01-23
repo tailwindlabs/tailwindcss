@@ -38,7 +38,12 @@
   },
   "dependencies": {
     "enhanced-resolve": "^5.18.0",
-    "jiti": "^2.4.2",
+    "jiti": "^2.4.2"
+  },
+  "devDependencies": {
     "tailwindcss": "workspace:*"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4"
   }
 }

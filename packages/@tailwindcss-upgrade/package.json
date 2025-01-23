@@ -41,12 +41,15 @@
     "postcss-selector-parser": "^7.0.0",
     "prettier": "^3.4.2",
     "tree-sitter": "^0.22.4",
-    "tree-sitter-typescript": "^0.23.2",
-    "tailwindcss": "workspace:*"
+    "tree-sitter-typescript": "^0.23.2"
   },
   "devDependencies": {
     "@types/braces": "^3.0.5",
     "@types/node": "catalog:",
-    "@types/postcss-import": "^14.0.3"
+    "@types/postcss-import": "^14.0.3",
+    "tailwindcss": "workspace:*"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4"
   }
 }
