@@ -961,6 +961,13 @@ it('should parse a utility with an implicit variable as the modifier using the s
   `)
 })
 
+it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-500/(value)', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
 it('should parse a utility with an implicit variable as the modifier that is important', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
