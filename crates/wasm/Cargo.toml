@@ -1,0 +1,15 @@
+[package]
+name = "tailwind-oxide-wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+tailwindcss-oxide = { path = "../oxide" }
+rayon = "1.5.3"
+wasm-bindgen = "0.2.73"
+console_log = "1.0.0"
+log="0.4.25"
+
