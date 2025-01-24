@@ -25,6 +25,7 @@ interface ChildProcessOptions {
 
 interface ExecOptions {
   ignoreStdErr?: boolean
+  stdin?: string
 }
 
 interface TestConfig {
@@ -112,7 +113,7 @@ export function test(
           }
           if (debug) console.log(`> ${command}`)
           return new Promise((resolve, reject) => {
-            exec(
+            let child = exec(
               command,
               {
                 cwd,
@@ -134,6 +135,10 @@ export function test(
                 }
               },
             )
+            if (execOptions.stdin) {
+              child.stdin?.write(execOptions.stdin)
+              child.stdin?.end()
+            }
           })
         },
         async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {

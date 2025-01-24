@@ -10,7 +10,7 @@ import { DefaultMap } from '../utils/default-map'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
-import { compoundsForSelectors, substituteAtSlot } from '../variants'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
 import * as SelectorParser from './selector-parser'
@@ -86,20 +86,34 @@ export type PluginAPI = {
 
 const IS_VALID_UTILITY_NAME = /^[a-z@][a-zA-Z0-9/%._-]*$/
 
-export function buildPluginApi(
-  designSystem: DesignSystem,
-  ast: AstNode[],
-  resolvedConfig: ResolvedConfig,
-  featuresRef: { current: Features },
-): PluginAPI {
+export function buildPluginApi({
+  designSystem,
+  ast,
+  resolvedConfig,
+  featuresRef,
+  referenceMode,
+}: {
+  designSystem: DesignSystem
+  ast: AstNode[]
+  resolvedConfig: ResolvedConfig
+  featuresRef: { current: Features }
+  referenceMode: boolean
+}): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
+      if (referenceMode) return
       let baseNodes = objectToAst(css)
-      featuresRef.current |= substituteFunctions(baseNodes, api.theme)
+      featuresRef.current |= substituteFunctions(baseNodes, designSystem)
       ast.push(atRule('@layer', 'base', baseNodes))
     },
 
     addVariant(name, variant) {
+      if (!IS_VALID_VARIANT_NAME.test(name)) {
+        throw new Error(
+          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+        )
+      }
+
       // Single selector or multiple parallel selectors
       if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(
@@ -212,7 +226,9 @@ export function buildPluginApi(
 
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
-          ast.push(rule(name, objectToAst(css)))
+          if (!referenceMode) {
+            ast.push(rule(name, objectToAst(css)))
+          }
           continue
         }
 

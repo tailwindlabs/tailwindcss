@@ -32,6 +32,7 @@ export function options() {
       type: 'string',
       description: 'Output file',
       alias: '-o',
+      default: '-',
     },
     '--watch': {
       type: 'boolean | string',
@@ -72,8 +73,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let base = path.resolve(args['--cwd'])
 
-  // Resolve the output as an absolute path.
-  if (args['--output']) {
+  // Resolve the output as an absolute path. If the output is a `-`, then we
+  // don't need to resolve it because this is a flag to indicate that we want to
+  // use `stdout` instead.
+  if (args['--output'] && args['--output'] !== '-') {
     args['--output'] = path.resolve(base, args['--output'])
   }
 
@@ -129,7 +132,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
     // Write the output
     DEBUG && I.start('Write output')
-    if (args['--output']) {
+    if (args['--output'] && args['--output'] !== '-') {
       await outputFile(args['--output'], output)
     } else {
       println(output)
@@ -445,7 +448,7 @@ function optimizeCss(
         deepSelectorCombinator: true,
       },
       include: Features.Nesting,
-      exclude: Features.LogicalProperties | Features.DirSelector,
+      exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
       targets: {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),

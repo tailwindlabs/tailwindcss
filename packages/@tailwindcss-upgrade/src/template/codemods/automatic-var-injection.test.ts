@@ -36,6 +36,10 @@ test.each([
   ['supports-[--test]:flex', 'supports-(--test):flex'],
   ['supports-[_--test]:flex', 'supports-[--test]:flex'],
 
+  // Custom CSS functions that look like variables should not be converted
+  ['w-[--spacing(5)]', 'w-[--spacing(5)]'],
+  ['bg-[--theme(--color-red-500)]', 'bg-[--theme(--color-red-500)]'],
+
   // Some properties never had var() injection in v3.
   ['[scroll-timeline-name:--myTimeline]', '[scroll-timeline-name:--myTimeline]'],
   ['[timeline-scope:--myScope]', '[timeline-scope:--myScope]'],

@@ -204,7 +204,7 @@ function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
   if (variant === '') {
     return ''
   }
-  return `\n@tw-bucket variant {\n@variant dark (${variant});\n}\n`
+  return `\n@tw-bucket custom-variant {\n@custom-variant dark (${variant});\n}\n`
 }
 
 // Returns a string identifier used to section theme declarations

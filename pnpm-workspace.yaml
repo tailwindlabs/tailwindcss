@@ -7,5 +7,5 @@ packages:
 
 catalog:
   '@types/node': ^20.14.8
-  lightningcss: ^1.26.0
+  lightningcss: ^1.29.1
   vite: ^6.0.0

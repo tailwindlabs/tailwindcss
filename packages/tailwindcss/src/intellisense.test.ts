@@ -82,7 +82,7 @@ test('getVariants compound', () => {
 
 test('variant selectors are in the correct order', async () => {
   let input = css`
-    @variant overactive {
+    @custom-variant overactive {
       &:hover {
         @media (hover: hover) {
           &:focus {
@@ -386,8 +386,8 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 test('Custom at-rule variants do not show up as a value under `group`', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @variant variant-1 (@media foo);
-    @variant variant-2 {
+    @custom-variant variant-1 (@media foo);
+    @custom-variant variant-2 {
       @media bar {
         @slot;
       }
@@ -436,4 +436,70 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
   expect(not.values).toContain('variant-2')
   expect(not.values).toContain('variant-3')
   expect(not.values).toContain('variant-4')
+})
+
+test('Custom functional @utility', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+
+    @theme reference {
+      --tab-size-1: 1;
+      --tab-size-2: 2;
+      --tab-size-4: 4;
+      --tab-size-github: 8;
+
+      --text-xs: 0.75rem;
+      --text-xs--line-height: calc(1 / 0.75);
+
+      --leading-foo: 1.5;
+      --leading-bar: 2;
+    }
+
+    @utility tab-* {
+      tab-size: --value(--tab-size);
+    }
+
+    @utility example-* {
+      font-size: --value(--text);
+      line-height: --value(--text- * --line-height);
+      line-height: --modifier(--leading);
+    }
+
+    @utility -negative-* {
+      margin: --value(--tab-size- *);
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  let classMap = new Map(design.getClassList())
+  let classNames = Array.from(classMap.keys())
+
+  expect(classNames).toContain('tab-1')
+  expect(classNames).toContain('tab-2')
+  expect(classNames).toContain('tab-4')
+  expect(classNames).toContain('tab-github')
+
+  expect(classNames).not.toContain('-tab-1')
+  expect(classNames).not.toContain('-tab-2')
+  expect(classNames).not.toContain('-tab-4')
+  expect(classNames).not.toContain('-tab-github')
+
+  expect(classNames).toContain('-negative-1')
+  expect(classNames).toContain('-negative-2')
+  expect(classNames).toContain('-negative-4')
+  expect(classNames).toContain('-negative-github')
+
+  expect(classNames).not.toContain('--negative-1')
+  expect(classNames).not.toContain('--negative-2')
+  expect(classNames).not.toContain('--negative-4')
+  expect(classNames).not.toContain('--negative-github')
+
+  expect(classNames).toContain('example-xs')
+  expect(classMap.get('example-xs')?.modifiers).toEqual(['foo', 'bar'])
 })

@@ -1,5 +1,16 @@
-import { atRoot, atRule, decl, styleRule, type AstNode } from './ast'
+import {
+  atRoot,
+  atRule,
+  decl,
+  styleRule,
+  walk,
+  type AstNode,
+  type AtRule,
+  type Declaration,
+  type Rule,
+} from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
+import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -11,6 +22,10 @@ import {
 } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
+import * as ValueParser from './value-parser'
+
+const IS_VALID_STATIC_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
 
 type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
@@ -3538,7 +3553,7 @@ export function createUtilities(theme: Theme) {
     staticUtility('transition-colors', [
       [
         'transition-property',
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
+        'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to',
       ],
       ['transition-timing-function', defaultTimingFunction],
       ['transition-duration', defaultDuration],
@@ -3561,7 +3576,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('transition', {
       defaultValue:
-        'color, background-color, border-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
+        'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter',
       themeKeys: ['--transition-property'],
       handle: (value) => [
         decl('transition-property', value),
@@ -3836,10 +3851,15 @@ export function createUtilities(theme: Theme) {
       return atRoot([property('--tw-outline-style', 'solid')])
     }
 
-    staticUtility('outline-hidden', [
-      ['outline', '2px solid transparent'],
-      ['outline-offset', '2px'],
-    ])
+    utilities.static('outline-hidden', () => {
+      return [
+        decl('outline-style', 'none'),
+        atRule('@media', '(forced-colors: active)', [
+          decl('outline', '2px solid transparent'),
+          decl('outline-offset', '2px'),
+        ]),
+      ]
+    })
 
     /**
      * @css `outline-style`
@@ -3954,6 +3974,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('outline-offset', () => [
       {
+        supportsNegative: true,
         values: ['0', '1', '2', '4', '8'],
         valueThemeKeys: ['--outline-offset'],
       },
@@ -4320,7 +4341,7 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: [],
-        valueThemeKeys: ['--shadow'],
+        valueThemeKeys: ['--inset-shadow'],
         hasDefaultValue: true,
       },
     ])
@@ -4569,4 +4590,388 @@ export function createUtilities(theme: Theme) {
   ])
 
   return utilities
+}
+
+export function createCssUtility(node: AtRule) {
+  let name = node.params
+
+  // Functional utilities. E.g.: `tab-size-*`
+  if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
+    // API:
+    //
+    // - `--value(number)`            resolves a bare value of type number
+    // - `--value([number])`          resolves an arbitrary value of type number
+    // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(number, [number])`  resolves a bare value of type number or an
+    //                                arbitrary value of type number in order.
+    //
+    // Rules:
+    //
+    // - If `--value(…)` does not resolve to a valid value, the declaration is
+    //   removed.
+    // - If a `--value(ratio)` resolves, the `--modifier(…)` cannot be used.
+    // - If a candidate looks like `foo-2/3`, then the `--value(ratio)` should
+    //   be used OR the `--value(…)` and `--modifier(…)` must be used. But not
+    //   both.
+    // - All parts of the candidate must resolve, otherwise it's not a valid
+    //   utility. E.g.:`
+    //   ```
+    //   @utility foo-* {
+    //     test: --value(number)
+    //   }
+    //   ```
+    //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
+
+    return (designSystem: DesignSystem) => {
+      let valueThemeKeys = new Set<`--${string}`>()
+      let modifierThemeKeys = new Set<`--${string}`>()
+
+      // Pre-process the AST to make it easier to work with.
+      //
+      // - Normalize theme values used in `--value(…)` and `--modifier(…)`
+      //   functions.
+      // - Track information for suggestions
+      walk(node.nodes, (child) => {
+        if (child.kind !== 'declaration') return
+        if (!child.value) return
+        if (!child.value.includes('--value(') && !child.value.includes('--modifier(')) return
+
+        let declarationValueAst = ValueParser.parse(child.value)
+
+        // Required manipulations:
+        //
+        // - `--value(--spacing)` -> `--value(--spacing-*)`
+        // - `--value(--spacing- *)` -> `--value(--spacing-*)`
+        // - `--value(--text- * --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value(--text --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value(--text-\\* --line-height)` -> `--value(--text-*--line-height)`
+        // - `--value([ *])` -> `--value([*])`
+        //
+        // Once Prettier / Biome handle these better (e.g.: not crashing without
+        // `\\*` or not inserting whitespace) then most of these can go away.
+        ValueParser.walk(declarationValueAst, (fn) => {
+          if (fn.kind !== 'function') return
+          if (fn.value !== '--value' && fn.value !== '--modifier') return
+
+          let args = segment(ValueParser.toCss(fn.nodes), ',')
+          for (let [idx, arg] of args.entries()) {
+            // Transform escaped `\\*` -> `*`
+            arg = arg.replace(/\\\*/g, '*')
+
+            // Ensure `--value(--foo --bar)` becomes `--value(--foo-*--bar)`
+            arg = arg.replace(/--(.*?)\s--(.*?)/g, '--$1-*--$2')
+
+            // Remove whitespace, e.g.: `--value([ *])` -> `--value([*])`
+            arg = arg.replace(/\s+/g, '')
+
+            // Ensure multiple `-*` becomes a single `-*`
+            arg = arg.replace(/(-\*){2,}/g, '-*')
+
+            // Ensure trailing `-*` exists if `-*` isn't present yet
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+              arg += '-*'
+            }
+
+            args[idx] = arg
+          }
+          fn.nodes = ValueParser.parse(args.join(','))
+
+          // Track the theme keys for suggestions
+          for (let node of fn.nodes) {
+            if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
+              let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
+
+              if (fn.value === '--value') {
+                valueThemeKeys.add(value)
+              } else if (fn.value === '--modifier') {
+                modifierThemeKeys.add(value)
+              }
+            }
+          }
+        })
+
+        child.value = ValueParser.toCss(declarationValueAst)
+      })
+
+      designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
+        let atRule = structuredClone(node)
+
+        let value = candidate.value
+        let modifier = candidate.modifier
+
+        // A value is required for functional utilities, if you want to accept
+        // just `tab-size`, you'd have to use a static utility.
+        if (value === null) return
+
+        // Whether `--value(…)` was used
+        let usedValueFn = false
+
+        // Whether any of the declarations successfully resolved a `--value(…)`.
+        // E.g:
+        // ```css
+        // @utility tab-size-* {
+        //   tab-size: --value(integer);
+        //   tab-size: --value(--tab-size);
+        //   tab-size: --value([integer]);
+        // }
+        // ```
+        // Any of these `tab-size` declarations have to resolve to a valid in
+        // order to make the utility valid.
+        let resolvedValueFn = false
+
+        // Whether `--modifier(…)` was used
+        let usedModifierFn = false
+
+        // Whether any of the declarations successfully resolved a `--modifier(…)`
+        let resolvedModifierFn = false
+
+        // A map of all declarations we replaced and their parent rules. We
+        // might need to remove some later on. E.g.: remove declarations that
+        // used `--value(number)` when `--value(ratio)` was resolved.
+        let resolvedDeclarations = new Map<Declaration, AtRule | Rule>()
+
+        // Whether `--value(ratio)` was resolved
+        let resolvedRatioValue = false
+
+        walk([atRule], (node, { parent, replaceWith: replaceDeclarationWith }) => {
+          if (parent?.kind !== 'rule' && parent?.kind !== 'at-rule') return
+          if (node.kind !== 'declaration') return
+          if (!node.value) return
+
+          let valueAst = ValueParser.parse(node.value)
+          let result =
+            ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
+              if (valueNode.kind !== 'function') return
+
+              // Value function, e.g.: `--value(integer)`
+              if (valueNode.value === '--value') {
+                usedValueFn = true
+
+                let resolved = resolveValueFunction(value, valueNode, designSystem)
+                if (resolved) {
+                  resolvedValueFn = true
+                  if (resolved.ratio) {
+                    resolvedRatioValue = true
+                  } else {
+                    resolvedDeclarations.set(node, parent)
+                  }
+                  replaceWith(resolved.nodes)
+                  return ValueParser.ValueWalkAction.Skip
+                }
+
+                // Drop the declaration in case we couldn't resolve the value
+                usedValueFn ||= false
+                replaceDeclarationWith([])
+                return ValueParser.ValueWalkAction.Stop
+              }
+
+              // Modifier function, e.g.: `--modifier(integer)`
+              else if (valueNode.value === '--modifier') {
+                // If there is no modifier present in the candidate, then the
+                // declaration can be removed.
+                if (modifier === null) {
+                  replaceDeclarationWith([])
+                  return ValueParser.ValueWalkAction.Skip
+                }
+
+                usedModifierFn = true
+
+                let replacement = resolveValueFunction(modifier, valueNode, designSystem)
+                if (replacement) {
+                  resolvedModifierFn = true
+                  replaceWith(replacement.nodes)
+                  return ValueParser.ValueWalkAction.Skip
+                }
+
+                // Drop the declaration in case we couldn't resolve the value
+                usedModifierFn ||= false
+                replaceDeclarationWith([])
+                return ValueParser.ValueWalkAction.Stop
+              }
+            }) ?? ValueParser.ValueWalkAction.Continue
+
+          if (result === ValueParser.ValueWalkAction.Continue) {
+            node.value = ValueParser.toCss(valueAst)
+          }
+        })
+
+        // Used `--value(…)` but nothing resolved
+        if (usedValueFn && !resolvedValueFn) return null
+
+        // Used `--modifier(…)` but nothing resolved
+        if (usedModifierFn && !resolvedModifierFn) return null
+
+        // Resolved `--value(ratio)` and `--modifier(…)`, which is invalid
+        if (resolvedRatioValue && resolvedModifierFn) return null
+
+        // When a candidate has a modifier, then the `--modifier(…)` must
+        // resolve correctly or the `--value(ratio)` must resolve correctly.
+        if (modifier && !resolvedRatioValue && !resolvedModifierFn) return null
+
+        // Resolved `--value(ratio)`, so all other declarations that didn't use
+        // `--value(ratio)` should be removed. E.g.: `--value(number)` would
+        // otherwise resolve for `foo-1/2`.
+        if (resolvedRatioValue) {
+          for (let [declaration, parent] of resolvedDeclarations) {
+            let idx = parent.nodes.indexOf(declaration)
+            if (idx !== -1) parent.nodes.splice(idx, 1)
+          }
+        }
+
+        return atRule.nodes
+      })
+
+      designSystem.utilities.suggest(name.slice(0, -2), () => {
+        return [
+          {
+            values: designSystem.theme
+              .keysInNamespaces(valueThemeKeys)
+              .map((x) => x.replaceAll('_', '.')),
+            modifiers: designSystem.theme
+              .keysInNamespaces(modifierThemeKeys)
+              .map((x) => x.replaceAll('_', '.')),
+          },
+        ] satisfies SuggestionGroup[]
+      })
+    }
+  }
+
+  if (IS_VALID_STATIC_UTILITY_NAME.test(name)) {
+    return (designSystem: DesignSystem) => {
+      designSystem.utilities.static(name, () => structuredClone(node.nodes))
+    }
+  }
+
+  return null
+}
+
+function resolveValueFunction(
+  value: NonNullable<
+    | Extract<Candidate, { kind: 'functional' }>['value']
+    | Extract<Candidate, { kind: 'functional' }>['modifier']
+  >,
+  fn: ValueParser.ValueFunctionNode,
+  designSystem: DesignSystem,
+): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  for (let arg of fn.nodes) {
+    // Resolving theme value, e.g.: `--value(--color)`
+    if (
+      value.kind === 'named' &&
+      arg.kind === 'word' &&
+      arg.value[0] === '-' &&
+      arg.value[1] === '-'
+    ) {
+      let themeKey = arg.value as `--${string}`
+
+      // Resolve the theme value, e.g.: `--value(--color)`
+      if (themeKey.endsWith('-*')) {
+        // Without `-*` postfix
+        themeKey = themeKey.slice(0, -2) as `--${string}`
+
+        let resolved = designSystem.theme.resolve(value.value, [themeKey])
+        if (resolved) return { nodes: ValueParser.parse(resolved) }
+      }
+
+      // Split `--text-*--line-height` into `--text` and `--line-height`
+      else {
+        let nestedKeys = themeKey.split('-*') as `--${string}`[]
+        if (nestedKeys.length <= 1) continue
+
+        // Resolve theme values with nested keys, e.g.: `--value(--text-*--line-height)`
+        let themeKeys = [nestedKeys.shift()!]
+        let resolved = designSystem.theme.resolveWith(value.value, themeKeys, nestedKeys)
+        if (resolved) {
+          let [, options = {}] = resolved
+
+          // Resolve the value from the `options`
+          {
+            let resolved = options[nestedKeys.pop()!]
+            if (resolved) return { nodes: ValueParser.parse(resolved) }
+          }
+        }
+      }
+    }
+
+    // Bare value, e.g.: `--value(integer)`
+    else if (value.kind === 'named' && arg.kind === 'word') {
+      // Limit the bare value types, to prevent new syntax that we
+      // don't want to support. E.g.: `text-#000` is something we
+      // don't want to support, but could be built this way.
+      if (
+        arg.value !== 'number' &&
+        arg.value !== 'integer' &&
+        arg.value !== 'ratio' &&
+        arg.value !== 'percentage'
+      ) {
+        continue
+      }
+
+      let resolved = arg.value === 'ratio' && 'fraction' in value ? value.fraction : value.value
+      if (!resolved) continue
+
+      let type = inferDataType(resolved, [arg.value as any])
+      if (type === null) continue
+
+      // Ratio must be a valid fraction, e.g.: <integer>/<integer>
+      if (type === 'ratio') {
+        let [lhs, rhs] = segment(resolved, '/')
+        if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
+      }
+
+      // Non-integer numbers should be a valid multiplier,
+      // e.g.: `1.5`
+      else if (type === 'number' && !isValidSpacingMultiplier(resolved)) {
+        continue
+      }
+
+      // Percentages must be an integer, e.g.: `50%`
+      else if (type === 'percentage' && !isPositiveInteger(resolved.slice(0, -1))) {
+        continue
+      }
+
+      return { nodes: ValueParser.parse(resolved), ratio: type === 'ratio' }
+    }
+
+    // Arbitrary value, e.g.: `--value([integer])`
+    else if (
+      value.kind === 'arbitrary' &&
+      arg.kind === 'word' &&
+      arg.value[0] === '[' &&
+      arg.value[arg.value.length - 1] === ']'
+    ) {
+      let dataType = arg.value.slice(1, -1)
+
+      // Allow any data type, e.g.: `--value([*])`
+      if (dataType === '*') {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+
+      // The forced arbitrary value hint must match the expected
+      // data type.
+      //
+      // ```css
+      // @utility tab-* {
+      //   tab-size: --value([integer]);
+      // }
+      // ```
+      //
+      // Given a candidate like `tab-(color:var(--my-value))`,
+      // should not match because `color` and `integer` don't
+      // match.
+      if ('dataType' in value && value.dataType && value.dataType !== dataType) {
+        continue
+      }
+
+      // Use the provided data type hint
+      if ('dataType' in value && value.dataType) {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+
+      // No data type hint provided, so we have to infer it
+      let type = inferDataType(value.value, [dataType as any])
+      if (type !== null) {
+        return { nodes: ValueParser.parse(value.value) }
+      }
+    }
+  }
 }

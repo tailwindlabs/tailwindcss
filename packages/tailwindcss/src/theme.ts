@@ -41,6 +41,10 @@ export class Theme {
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
+    if (key.endsWith('\\*')) {
+      key = key.slice(0, -2) + '*'
+    }
+
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -68,7 +72,7 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
+  keysInNamespaces(themeKeys: Iterable<ThemeKey>): string[] {
     let keys: string[] = []
 
     for (let namespace of themeKeys) {

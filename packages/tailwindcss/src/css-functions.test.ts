@@ -7,7 +7,183 @@ import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
-describe('theme function', () => {
+describe('--alpha(…)', () => {
+  test('--alpha(…)', async () => {
+    expect(
+      await compileCss(css`
+        .foo {
+          margin: --alpha(red / 50%);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        margin: oklab(62.7955% .22486 .12584 / .5);
+      }"
+    `)
+  })
+
+  test('--alpha(…) errors when no arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(var(--my-color) / 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors when alpha value is missing', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(red / 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors multiple arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red / 50%, blue);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function only accepts one argument, e.g.: \`--alpha(red / 50%)\`]`,
+    )
+  })
+})
+
+describe('--spacing(…)', () => {
+  test('--spacing(…)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: calc(var(--spacing) * 4);
+      }"
+    `)
+  })
+
+  test('--spacing(…) with inline `@theme` value', async () => {
+    expect(
+      await compileCss(css`
+        @theme inline {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: 1rem;
+      }"
+    `)
+  })
+
+  test('--spacing(…) relies on `--spacing` to be defined', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function requires that the \`--spacing\` theme variable exists, but it was not found.]`,
+    )
+  })
+
+  test('--spacing(…) requires a single value', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function requires an argument, but received none.]`,
+    )
+  })
+
+  test('--spacing(…) does not have multiple arguments', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4, 5, 6);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function only accepts a single argument, but received 3.]`,
+    )
+  })
+})
+
+describe('--theme(…)', () => {
+  test('--theme(--color-red-500)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: red;
+      }"
+    `)
+  })
+
+  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(colors.red.500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
+  })
+})
+
+describe('theme(…)', () => {
   describe('in declaration values', () => {
     describe('without fallback values', () => {
       test('theme(colors.red.500)', async () => {

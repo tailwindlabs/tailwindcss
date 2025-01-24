@@ -7,15 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet
+
+## [4.0.0] - 2025-01-21
+## [4.0.0-beta.10] - 2025-01-21
+
+### Added
+
+- Add support for using `@variant` to use variants in your CSS ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+- Include `outline-color` when transitioning colors ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
+
+### Fixed
+
+- Add missing `main` and `browser` fields for `@tailwindcss/browser` ([#15594](https://github.com/tailwindlabs/tailwindcss/pull/15594))
+- Support escaping `*` in theme namespace syntax (e.g.: `--color-\*: initial;`) ([#15603](https://github.com/tailwindlabs/tailwindcss/pull/15603))
+- Respect `@theme` options when resolving values in custom functional utilities ([#15623](https://github.com/tailwindlabs/tailwindcss/pull/15623))
+- Discard invalid variants (e.g. `data-checked-[selected=1]:*`) ([#15629](https://github.com/tailwindlabs/tailwindcss/pull/15629))
+- Ensure `-outline-offset-*` utilities are suggested in IntelliSense ([#15646](https://github.com/tailwindlabs/tailwindcss/pull/15646))
+- Write to `stdout` when `--output` is set to `-` or omitted with `@tailwindcss/cli` ([#15656](https://github.com/tailwindlabs/tailwindcss/pull/15656))
+- Prevent `not-*` from being used with variants that have multiple sibling rules ([#15689](https://github.com/tailwindlabs/tailwindcss/pull/15689))
+- _Upgrade (experimental)_: Pretty print `--spacing(…)` to prevent ambiguity ([#15596](https://github.com/tailwindlabs/tailwindcss/pull/15596))
+
+### Changed
+
+- Use more modern `--alpha(color / 50%)` syntax instead of `--alpha(color, 50%)` ([#15665](https://github.com/tailwindlabs/tailwindcss/pull/15665))
+- Rename `@variant` to `@custom-variant` ([#15663](https://github.com/tailwindlabs/tailwindcss/pull/15663))
+- Change `outline-hidden` to set `outline-style: none` except in forced colors mode ([#15690](https://github.com/tailwindlabs/tailwindcss/pull/15690))
+
+## [4.0.0-beta.9] - 2025-01-09
+
+### Added
+
+- Add `@tailwindcss/browser` package to run Tailwind CSS in the browser ([#15558](https://github.com/tailwindlabs/tailwindcss/pull/15558))
+- Add `@reference "…"` API as a replacement for the previous `@import "…" reference` option ([#15565](https://github.com/tailwindlabs/tailwindcss/pull/15565))
+- Add support for defining functional utilities in CSS ([#15455](https://github.com/tailwindlabs/tailwindcss/pull/15455))
+- Add new `--spacing(…)`, `--alpha(…)`, and `--theme(…)` CSS functions ([#15572](https://github.com/tailwindlabs/tailwindcss/pull/15572))
+- Add musl-based Linux builds of the standalone CLI ([#15567](https://github.com/tailwindlabs/tailwindcss/pull/15567))
+- Improve performance of internal AST manipulations ([#15529](https://github.com/tailwindlabs/tailwindcss/pull/15529))
+
 ### Fixed
 
 - Use the correct property value for `place-content-between`, `place-content-around`, and `place-content-evenly` utilities ([#15440](https://github.com/tailwindlabs/tailwindcss/pull/15440))
 - Don’t detect arbitrary properties when preceded by an escape ([#15456](https://github.com/tailwindlabs/tailwindcss/pull/15456))
 - Fix incorrectly named `bg-round` and `bg-space` utilities to `bg-repeat-round` to `bg-repeat-space` ([#15462](https://github.com/tailwindlabs/tailwindcss/pull/15462))
+- Fix `inset-shadow-*` suggestions in IntelliSense ([#15471](https://github.com/tailwindlabs/tailwindcss/pull/15471))
+- Only compile arbitrary values ending in `]` ([#15503](https://github.com/tailwindlabs/tailwindcss/pull/15503))
+- Ensure `@apply` rules are processed in the correct order ([#15542](https://github.com/tailwindlabs/tailwindcss/pull/15542))
+- Allow negative utility names in `@utility` ([#15573](https://github.com/tailwindlabs/tailwindcss/pull/15573))
+- Remove all `@keyframes` contributed by JavaScript plugins when using `@reference` imports ([#15581](https://github.com/tailwindlabs/tailwindcss/pull/15581))
+- _Upgrade (experimental)_: Do not extract class names from functions (e.g. `shadow` in `filter: 'drop-shadow(…)'`) ([#15566](https://github.com/tailwindlabs/tailwindcss/pull/15566))
+- _Upgrade (experimental)_: Migrate `theme(spacing.2)` to `--spacing(2)` ([#15579](https://github.com/tailwindlabs/tailwindcss/pull/15579))
+- _Upgrade (experimental)_: Migrate `theme(…)` to `--theme(…)` ([#15579](https://github.com/tailwindlabs/tailwindcss/pull/15579))
 
 ### Changed
 
-- Removed `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
+- Remove `--container-prose` in favor of a deprecated `--max-width-prose` theme variable so that `*-prose` is only available for max-width utilities and only for backward compatibility ([#15439](https://github.com/tailwindlabs/tailwindcss/pull/15439))
+- Use Vite post-processor APIs for processing Svelte `<style>` blocks ([#15436](https://github.com/tailwindlabs/tailwindcss/pull/15436))
+- Remove `@property` fallback rules for Firefox ([#15622](https://github.com/tailwindlabs/tailwindcss/pull/15622))
 
 ## [4.0.0-beta.8] - 2024-12-17
 

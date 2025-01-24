@@ -761,13 +761,6 @@ test(
         --tw-content: "src/nested/index.html";
         content: var(--tw-content);
       }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -997,13 +990,6 @@ test(
         --tw-content: 'project-d/src/index.html';
         content: var(--tw-content);
       }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -1226,13 +1212,6 @@ test(
       .content-\\[\\"pages\\/nested\\/foo\\.html\\"\\] {
         --tw-content: "pages/nested/foo.html";
         content: var(--tw-content);
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
       }
       @property --tw-content {
         syntax: "*";

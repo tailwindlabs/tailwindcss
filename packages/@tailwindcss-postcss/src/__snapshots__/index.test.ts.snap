@@ -400,9 +400,9 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   hr {
+    height: 0;
     color: inherit;
     border-top-width: 1px;
-    height: 0;
   }
 
   abbr:where([title]) {
@@ -533,8 +533,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   ::-webkit-date-and-time-value {
-    text-align: inherit;
     min-height: 1lh;
+    text-align: inherit;
   }
 
   ::-webkit-datetime-edit {
@@ -626,14 +626,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     .\\32 xl\\:font-bold {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
-    }
-  }
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-font-weight: initial;
     }
   }
 }

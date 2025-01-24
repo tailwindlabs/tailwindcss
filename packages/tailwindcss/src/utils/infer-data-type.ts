@@ -6,7 +6,9 @@ type DataType =
   | 'color'
   | 'length'
   | 'percentage'
+  | 'ratio'
   | 'number'
+  | 'integer'
   | 'url'
   | 'position'
   | 'bg-size'
@@ -23,7 +25,9 @@ const checks: Record<DataType, (value: string) => boolean> = {
   color: isColor,
   length: isLength,
   percentage: isPercentage,
+  ratio: isFraction,
   number: isNumber,
+  integer: isPositiveInteger,
   url: isUrl,
   position: isBackgroundPosition,
   'bg-size': isBackgroundSize,
@@ -169,6 +173,14 @@ const IS_PERCENTAGE = new RegExp(`^${HAS_NUMBER.source}%$`)
 
 function isPercentage(value: string): boolean {
   return IS_PERCENTAGE.test(value) || hasMathFn(value)
+}
+
+/* -------------------------------------------------------------------------- */
+
+const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\s*/\s*${HAS_NUMBER.source}$`)
+
+function isFraction(value: string): boolean {
+  return IS_FRACTION.test(value) || hasMathFn(value)
 }
 
 /* -------------------------------------------------------------------------- */

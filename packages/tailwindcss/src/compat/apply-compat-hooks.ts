@@ -253,14 +253,50 @@ function upgradeToFullPluginSupport({
     userConfig,
   )
 
-  let pluginApi = buildPluginApi(designSystem, ast, resolvedConfig, {
-    set current(value: number) {
-      features |= value
+  // Replace `resolveThemeValue` with a version that is backwards compatible
+  // with dot-notation but also aware of any JS theme configurations registered
+  // by plugins or JS config files. This is significantly slower than just
+  // upgrading dot-notation keys so we only use this version if plugins or
+  // config files are actually being used. In the future we may want to optimize
+  // this further by only doing this if plugins or config files _actually_
+  // registered JS config objects.
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
+    let resolvedValue = pluginApi.theme(path, defaultValue)
+
+    if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
+      // When a tuple is returned, return the first element
+      return resolvedValue[0]
+    } else if (Array.isArray(resolvedValue)) {
+      // Arrays get serialized into a comma-separated lists
+      return resolvedValue.join(', ')
+    } else if (typeof resolvedValue === 'string') {
+      // Otherwise only allow string values here, objects (and namespace maps)
+      // are treated as non-resolved values for the CSS `theme()` function.
+      return resolvedValue
+    }
+  }
+
+  let pluginApiConfig = {
+    designSystem,
+    ast,
+    resolvedConfig,
+    featuresRef: {
+      set current(value: number) {
+        features |= value
+      },
     },
-  })
+  }
+
+  let pluginApi = buildPluginApi({ ...pluginApiConfig, referenceMode: false })
+  let referenceModePluginApi = undefined
 
   for (let { handler, reference } of resolvedConfig.plugins) {
-    handler(reference ? { ...pluginApi, addBase: () => {} } : pluginApi)
+    if (reference) {
+      referenceModePluginApi ||= buildPluginApi({ ...pluginApiConfig, referenceMode: true })
+      handler(referenceModePluginApi)
+    } else {
+      handler(pluginApi)
+    }
   }
 
   // Merge the user-configured theme keys into the design system. The compat
@@ -317,29 +353,6 @@ function upgradeToFullPluginSupport({
 
   for (let candidate of resolvedConfig.blocklist) {
     designSystem.invalidCandidates.add(candidate)
-  }
-
-  // Replace `resolveThemeValue` with a version that is backwards compatible
-  // with dot-notation but also aware of any JS theme configurations registered
-  // by plugins or JS config files. This is significantly slower than just
-  // upgrading dot-notation keys so we only use this version if plugins or
-  // config files are actually being used. In the future we may want to optimize
-  // this further by only doing this if plugins or config files _actually_
-  // registered JS config objects.
-  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
-    let resolvedValue = pluginApi.theme(path, defaultValue)
-
-    if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
-      // When a tuple is returned, return the first element
-      return resolvedValue[0]
-    } else if (Array.isArray(resolvedValue)) {
-      // Arrays get serialized into a comma-separated lists
-      return resolvedValue.join(', ')
-    } else if (typeof resolvedValue === 'string') {
-      // Otherwise only allow string values here, objects (and namespace maps)
-      // are treated as non-resolved values for the CSS `theme()` function.
-      return resolvedValue
-    }
   }
 
   for (let file of resolvedConfig.content.files) {

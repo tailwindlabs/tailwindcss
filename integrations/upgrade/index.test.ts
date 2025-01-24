@@ -1433,7 +1433,7 @@ test(
         @tailwind components;
         @tailwind utilities;
 
-        @variant hocus (&:hover, &:focus);
+        @custom-variant hocus (&:hover, &:focus);
 
         @theme {
           --color-red-500: #f00;
@@ -1539,7 +1539,7 @@ test(
 
       @config './tailwind.config.ts';
 
-      @variant hocus (&:hover, &:focus);
+      @custom-variant hocus (&:hover, &:focus);
 
       @theme {
         --color-red-500: #f00;
@@ -1675,7 +1675,7 @@ test(
         @tailwind components;
         @tailwind utilities;
 
-        @variant hocus (&:hover, &:focus);
+        @custom-variant hocus (&:hover, &:focus);
 
         @theme {
           --color-red-500: #f00;

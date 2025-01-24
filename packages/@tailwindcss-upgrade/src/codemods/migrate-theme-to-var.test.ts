@@ -35,11 +35,11 @@ it('should migrate `theme(…)` to `var(…)`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@media theme(--breakpoint-sm) {
+    "@media --theme(--breakpoint-sm) {
       .foo {
         background-color: var(--color-red-900);
-        color: theme(--color-red-900 / 75%);
-        border-color: theme(--color-red-200 / 75%);
+        color: --theme(--color-red-900 / 75%);
+        border-color: --theme(--color-red-200 / 75%);
       }
     }"
   `)

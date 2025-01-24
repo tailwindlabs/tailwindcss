@@ -21,17 +21,17 @@ import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
-import { compileCandidates } from './compile'
+import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
+import { createCssUtility } from './utilities'
 import { segment } from './utils/segment'
-import { compoundsForSelectors } from './variants'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
-const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type CompileOptions = {
   base?: string
@@ -97,6 +97,9 @@ export const enum Features {
 
   // `@tailwind utilities` was used
   Utilities = 1 << 4,
+
+  // `@variant` was used
+  Variants = 1 << 5,
 }
 
 async function parseCss(
@@ -118,6 +121,7 @@ async function parseCss(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
+  let variantNodes: AtRule[] = []
   let globs: { base: string; pattern: string }[] = []
   let root = null as Root
 
@@ -174,25 +178,20 @@ async function parseCss(
         throw new Error('`@utility` cannot be nested.')
       }
 
-      let name = node.params
-
-      if (!IS_VALID_UTILITY_NAME.test(name)) {
-        throw new Error(
-          `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
-        )
-      }
-
       if (node.nodes.length === 0) {
         throw new Error(
-          `\`@utility ${name}\` is empty. Utilities should include at least one property.`,
+          `\`@utility ${node.params}\` is empty. Utilities should include at least one property.`,
         )
       }
 
-      customUtilities.push((designSystem) => {
-        designSystem.utilities.static(name, () => structuredClone(node.nodes))
-      })
+      let utility = createCssUtility(node)
+      if (utility === null) {
+        throw new Error(
+          `\`@utility ${node.params}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+        )
+      }
 
-      return
+      customUtilities.push(utility)
     }
 
     // Collect paths from `@source` at-rules
@@ -218,25 +217,67 @@ async function parseCss(
       return
     }
 
-    // Register custom variants from `@variant` at-rules
+    // Apply `@variant` at-rules
     if (node.name === '@variant') {
-      if (parent !== null) {
-        throw new Error('`@variant` cannot be nested.')
+      // Legacy `@variant` at-rules containing `@slot` or without a body should
+      // be considered a `@custom-variant` at-rule.
+      if (parent === null) {
+        // Body-less `@variant`, e.g.: `@variant foo (…);`
+        if (node.nodes.length === 0) {
+          node.name = '@custom-variant'
+        }
+
+        // Using `@slot`:
+        //
+        // ```css
+        // @variant foo {
+        //   &:hover {
+        //     @slot;
+        //   }
+        // }
+        // ```
+        else {
+          walk(node.nodes, (child) => {
+            if (child.kind === 'at-rule' && child.name === '@slot') {
+              node.name = '@custom-variant'
+              return WalkAction.Stop
+            }
+          })
+        }
       }
 
-      // Remove `@variant` at-rule so it's not included in the compiled CSS
+      // Collect all the `@variant` at-rules, we will replace them later once
+      // all variants are registered in the system.
+      else {
+        variantNodes.push(node)
+      }
+    }
+
+    // Register custom variants from `@custom-variant` at-rules
+    if (node.name === '@custom-variant') {
+      if (parent !== null) {
+        throw new Error('`@custom-variant` cannot be nested.')
+      }
+
+      // Remove `@custom-variant` at-rule so it's not included in the compiled CSS
       replaceWith([])
 
       let [name, selector] = segment(node.params, ' ')
 
-      if (node.nodes.length > 0 && selector) {
-        throw new Error(`\`@variant ${name}\` cannot have both a selector and a body.`)
+      if (!IS_VALID_VARIANT_NAME.test(name)) {
+        throw new Error(
+          `\`@custom-variant ${name}\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+        )
       }
 
-      // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
+      if (node.nodes.length > 0 && selector) {
+        throw new Error(`\`@custom-variant ${name}\` cannot have both a selector and a body.`)
+      }
+
+      // Variants with a selector, but without a body, e.g.: `@custom-variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
         if (!selector) {
-          throw new Error(`\`@variant ${name}\` has no selector or body.`)
+          throw new Error(`\`@custom-variant ${name}\` has no selector or body.`)
         }
 
         let selectors = segment(selector.slice(1, -1), ',')
@@ -284,7 +325,7 @@ async function parseCss(
       // E.g.:
       //
       // ```css
-      // @variant hocus {
+      // @custom-variant hocus {
       //   &:hover {
       //     @slot;
       //   }
@@ -367,42 +408,6 @@ async function parseCss(
 
         // Handle `@import "…" reference`
         else if (param === 'reference') {
-          walk(node.nodes, (child, { replaceWith }) => {
-            if (child.kind !== 'at-rule') {
-              replaceWith([])
-              return WalkAction.Skip
-            }
-            switch (child.name) {
-              case '@theme': {
-                let themeParams = segment(child.params, ' ')
-                if (!themeParams.includes('reference')) {
-                  child.params = (child.params === '' ? '' : ' ') + 'reference'
-                }
-                return WalkAction.Skip
-              }
-              case '@import':
-              case '@config':
-              case '@plugin':
-              case '@variant':
-              case '@utility': {
-                return WalkAction.Skip
-              }
-
-              case '@media':
-              case '@supports':
-              case '@layer': {
-                // These rules should be recursively traversed as these might be
-                // inserted by the `@import` resolution.
-                return
-              }
-
-              default: {
-                replaceWith([])
-                return WalkAction.Skip
-              }
-            }
-          })
-
           node.nodes = [contextNode({ reference: true }, node.nodes)]
         }
 
@@ -424,6 +429,10 @@ async function parseCss(
     // Handle `@theme`
     if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
+
+      if (context.reference) {
+        themeOptions |= ThemeOptions.REFERENCE
+      }
 
       if (themePrefix) {
         if (!IS_VALID_PREFIX.test(themePrefix)) {
@@ -538,10 +547,32 @@ async function parseCss(
     node.context = {}
   }
 
-  // Replace `@apply` rules with the actual utility classes.
-  features |= substituteAtApply(ast, designSystem)
+  // Replace the `@variant` at-rules with the actual variant rules.
+  if (variantNodes.length > 0) {
+    for (let variantNode of variantNodes) {
+      // Starting with the `&` rule node
+      let node = styleRule('&', variantNode.nodes)
 
-  features |= substituteFunctions(ast, designSystem.resolveThemeValue)
+      let variant = variantNode.params
+
+      let variantAst = designSystem.parseVariant(variant)
+      if (variantAst === null) {
+        throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+      }
+
+      let result = applyVariant(node, variantAst, designSystem.variants)
+      if (result === null) {
+        throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+      }
+
+      // Update the variant at-rule node, to be the `&` rule node
+      Object.assign(variantNode, node)
+    }
+    features |= Features.Variants
+  }
+
+  features |= substituteFunctions(ast, designSystem)
+  features |= substituteAtApply(ast, designSystem)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.

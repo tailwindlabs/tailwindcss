@@ -74,13 +74,14 @@ export function automaticVarInjection(
 
 function injectVar(value: string): { value: string; didChange: boolean } {
   let didChange = false
-  if (value.startsWith('--')) {
+  if (value.startsWith('--') && !value.includes('(')) {
     value = `var(${value})`
     didChange = true
   } else if (value.startsWith(' --')) {
     value = value.slice(1)
     didChange = true
   }
+
   return { value, didChange }
 }
 

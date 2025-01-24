@@ -216,8 +216,8 @@ test('Variants in CSS overwrite variants from plugins', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
-    @variant dark (&:is(.my-dark));
-    @variant light (&:is(.my-light));
+    @custom-variant dark (&:is(.my-dark));
+    @custom-variant light (&:is(.my-light));
   `
 
   let compiler = await compile(input, {
@@ -351,13 +351,6 @@ describe('theme callbacks', () => {
         .leading-xl {
           --tw-leading: 201rem;
           line-height: 201rem;
-        }
-        @supports (-moz-orient: inline) {
-          @layer base {
-            *, ::before, ::after, ::backdrop {
-              --tw-leading: initial;
-            }
-          }
         }
         @property --tw-leading {
           syntax: "*";

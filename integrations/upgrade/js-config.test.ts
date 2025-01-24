@@ -137,6 +137,7 @@ test(
       'src/test.js': ts`
         export default {
           'shouldNotMigrate': !border.test + '',
+          'filter': 'drop-shadow(0 0 0.5rem #000)',
         }
       `,
       'src/index.html': html`
@@ -166,7 +167,7 @@ test(
 
       @source '../node_modules/my-external-lib/**/*.{html}';
 
-      @variant dark (&:where(.dark, .dark *));
+      @custom-variant dark (&:where(.dark, .dark *));
 
       @theme {
         --shadow-*: initial;
@@ -288,6 +289,7 @@ test(
       --- src/test.js ---
       export default {
         'shouldNotMigrate': !border.test + '',
+        'filter': 'drop-shadow(0 0 0.5rem #000)',
       }
       "
     `)
@@ -1294,10 +1296,10 @@ describe('border compatibility', () => {
         "
         --- src/index.html ---
         <div
-          class="[width:calc(var(--spacing)*2)]
-            [width:calc(var(--spacing)*4.5)]
+          class="[width:--spacing(2)]
+            [width:--spacing(4.5)]
             [width:var(--spacing-5_5)]
-            [width:calc(var(--spacing)*13)]
+            [width:--spacing(13)]
             [width:var(--spacing-100)]
             [width:var(--spacing-miami)]"
         ></div>
@@ -1330,10 +1332,10 @@ describe('border compatibility', () => {
         }
 
         .container {
-          width: calc(var(--spacing) * 2);
-          width: calc(var(--spacing) * 4.5);
+          width: --spacing(2);
+          width: --spacing(4.5);
           width: var(--spacing-5_5);
-          width: calc(var(--spacing) * 13);
+          width: --spacing(13);
           width: var(--spacing-100);
           width: var(--spacing-miami);
         }
@@ -1513,7 +1515,7 @@ describe('border compatibility', () => {
         @utility container {
           margin-inline: auto;
           padding-inline: 2rem;
-          @media (width >= theme(--breakpoint-sm)) {
+          @media (width >= --theme(--breakpoint-sm)) {
             max-width: none;
           }
           @media (width >= 48rem) {
