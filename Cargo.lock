@@ -550,7 +550,7 @@ dependencies = [
 
 [[package]]
 name = "tailwind-oxide-wasm"
-version = "0.1.0"
+version = "4.0.0"
 dependencies = [
  "console_log",
  "log",

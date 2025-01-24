@@ -1,0 +1,23 @@
+{
+  "name": "@tailwindcss/oxide-wasm",
+  "version": "4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/wasm"
+  },
+  "main": "pkg/tailwindcss_oxide_wasm.js",
+  "files": [
+    "pkg/tailwind_oxide_wasm.js",
+    "pkg/tailwind_oxide_wasm_bg.wasm",
+    "pkg/tailwind_oxide_wasm.d.ts"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}
