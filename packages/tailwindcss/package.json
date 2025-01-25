@@ -12,7 +12,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node --env.NODE_ENV production",
+    "build": "tsup-node --env.NODE_ENV production && node fix-default-cjs-exports.mjs",
     "dev": "tsup-node --env.NODE_ENV development --watch",
     "test:ui": "playwright test"
   },
@@ -66,38 +66,85 @@
     "access": "public",
     "exports": {
       ".": {
-        "types": "./dist/lib.d.mts",
         "style": "./index.css",
-        "require": "./dist/lib.js",
-        "import": "./dist/lib.mjs"
+        "import": {
+          "types": "./dist/lib.d.mts",
+          "default": "./dist/lib.mjs"
+        },
+        "require": {
+          "types": "./dist/lib.d.ts",
+          "default": "./dist/lib.js"
+        }
       },
       "./plugin": {
-        "require": "./dist/plugin.js",
-        "import": "./dist/plugin.mjs"
+        "import": {
+          "types": "./dist/plugin.d.mts",
+          "default": "./dist/plugin.mjs"
+        },
+        "require": {
+          "types": "./dist/plugin.d.ts",
+          "default": "./dist/plugin.js"
+        }
       },
       "./plugin.js": {
-        "require": "./dist/plugin.js",
-        "import": "./dist/plugin.mjs"
+        "import": {
+          "types": "./dist/plugin.d.mts",
+          "default": "./dist/plugin.mjs"
+        },
+        "require": {
+          "types": "./dist/plugin.d.ts",
+          "default": "./dist/plugin.js"
+        }
       },
       "./defaultTheme": {
-        "require": "./dist/default-theme.js",
-        "import": "./dist/default-theme.mjs"
+        "import": {
+          "types": "./dist/default-theme.d.mts",
+          "default": "./dist/default-theme.mjs"
+        },
+        "require": {
+          "types": "./dist/default-theme.d.ts",
+          "default": "./dist/default-theme.js"
+        }
       },
       "./defaultTheme.js": {
-        "require": "./dist/default-theme.js",
-        "import": "./dist/default-theme.mjs"
+        "import": {
+          "types": "./dist/default-theme.d.mts",
+          "default": "./dist/default-theme.mjs"
+        },
+        "require": {
+          "types": "./dist/default-theme.d.ts",
+          "default": "./dist/default-theme.js"
+        }
       },
       "./colors": {
-        "require": "./dist/colors.js",
-        "import": "./dist/colors.mjs"
+        "import": {
+          "types": "./dist/colors.d.mts",
+          "default": "./dist/colors.mjs"
+        },
+        "require": {
+          "types": "./dist/colors.d.ts",
+          "default": "./dist/colors.js"
+        }
       },
       "./colors.js": {
-        "require": "./dist/colors.js",
-        "import": "./dist/colors.mjs"
+        "import": {
+          "types": "./dist/colors.d.mts",
+          "default": "./dist/colors.mjs"
+        },
+        "require": {
+          "types": "./dist/colors.d.ts",
+          "default": "./dist/colors.js"
+        }
       },
       "./lib/util/flattenColorPalette": {
-        "require": "./dist/flatten-color-palette.js",
-        "import": "./dist/flatten-color-palette.mjs"
+        "import": {
+          "types": "./dist/flatten-color-palette.d.mts",
+          "default": "./dist/flatten-color-palette.mjs"
+        },
+        "require": {
+          "types": "./dist/flatten-color-palette.d.ts",
+          "default": "./dist/flatten-color-palette.js"
+        }
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
@@ -111,6 +158,37 @@
     }
   },
   "style": "index.css",
+  "main": "dist/lib.js",
+  "module": "dist/lib.mjs",
+  "types": "dist/lib.d.ts",
+  "typesVersions": {
+    "*": {
+      "plugin": [
+        "./dist/plugin.d.ts"
+      ],
+      "plugin.js": [
+        "./dist/plugin.d.ts"
+      ],
+      "colors": [
+        "./dist/colors.d.ts"
+      ],
+      "colors.js": [
+        "./dist/colors.d.ts"
+      ],
+      "defaultTheme": [
+        "./dist/default-theme.d.ts"
+      ],
+      "defaultTheme.js": [
+        "./dist/default-theme.d.ts"
+      ],
+      "lib/util/flattenColorPalette": [
+        "./dist/flatten-color-palette.d.ts"
+      ],
+      "lib/util/flattenColorPalette.js": [
+        "./dist/flatten-color-palette.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist",
     "index.css",
