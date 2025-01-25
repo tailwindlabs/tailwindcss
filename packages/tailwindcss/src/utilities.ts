@@ -2936,17 +2936,7 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--font'],
     },
     {
-      values: [
-        'thin',
-        'extralight',
-        'light',
-        'normal',
-        'medium',
-        'semibold',
-        'bold',
-        'extrabold',
-        'black',
-      ],
+      values: [],
       valueThemeKeys: ['--font-weight'],
     },
   ])
