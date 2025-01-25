@@ -12,8 +12,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 /**
  * This function will replace `export { type X, Y, Z as default }` with:
  * ```js
- * export = X;
- * export { Y, Z }; // <== this line will be only added if there are additional named exports
+ * export = Z;
+ * export { type X, Y }; // <== this line will be only added if there are additional named exports
  * ```
  * @param dtsPath {string}
  */
