@@ -23,6 +23,8 @@ function loadDesignSystem() {
   theme.add('--drop-shadow-sm', '0 1px 1px rgb(0 0 0 / 0.05)')
   theme.add('--inset-shadow-sm', 'inset 0 1px 1px rgb(0 0 0 / 0.05)')
   theme.add('--font-weight-bold', '700')
+  theme.add('--container-md', '768px')
+  theme.add('--container-lg', '1024px')
   return buildDesignSystem(theme)
 }
 

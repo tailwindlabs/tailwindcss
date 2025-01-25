@@ -1117,6 +1117,11 @@ export function createVariants(theme: Theme): Variants {
         '@min',
         () => Array.from(widths.keys()).filter((key) => key !== null) as string[],
       )
+
+      variants.suggest(
+        '@',
+        () => Array.from(widths.keys()).filter((key) => key !== null) as string[],
+      )
     }
   }
 
