@@ -2,12 +2,13 @@ import { expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
 import plugin from './plugin'
-import { Theme } from './theme'
+import { Theme, ThemeOptions } from './theme'
 
 const css = String.raw
 
 function loadDesignSystem() {
   let theme = new Theme()
+  theme.add('--spacing', '0.25rem')
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
   theme.add('--breakpoint-sm', '640px')
@@ -34,6 +35,25 @@ test('getClassList', () => {
   ])
 
   expect(classNames).toMatchSnapshot()
+})
+
+test('Spacing utilities do not suggest bare values when not using the multiplier-based spacing scale', () => {
+  let design = loadDesignSystem()
+
+  // Remove spacing scale
+  design.theme.clearNamespace('--spacing', ThemeOptions.NONE)
+
+  let classList = design.getClassList()
+  let classNames = classList.flatMap(([name, meta]) => [
+    name,
+    ...meta.modifiers.map((m) => `${name}/${m}`),
+  ])
+
+  expect(classNames).not.toContain('p-0')
+  expect(classNames).not.toContain('p-1')
+  expect(classNames).not.toContain('p-2')
+  expect(classNames).not.toContain('p-3')
+  expect(classNames).not.toContain('p-4')
 })
 
 test('Theme values with underscores are converted back to decimal points', () => {
