@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet
+### Fixed
+
+- Remove invalid `min-w/h-none` utilities ([#15845](https://github.com/tailwindlabs/tailwindcss/pull/15845))
 
 ## [4.0.0] - 2025-01-21
+
 ## [4.0.0-beta.10] - 2025-01-21
 
 ### Added
