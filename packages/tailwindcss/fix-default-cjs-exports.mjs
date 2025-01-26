@@ -16,36 +16,34 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
  * export { type X, Y }; // <== this line will be only added if there are additional named exports
  * ```
  * @param dtsPath {string}
+ * @returns {Promise<void>}
  */
-function fixDefaultCjsExport(dtsPath) {
-  return readFile(dtsPath, { encoding: 'utf-8' })
-    .then((content) => {
-      let match = content.match(regexp)
-      if (!match) return undefined
-      const fullExport = match[0]
-      /**@type {string | undefined}*/
-      let defaultExport = undefined
-      /**@type {string[]} */
-      const namedExports = []
-      for (const exp of match[1].split(',').map((e) => e.trim())) {
-        match = exp.match(defaultExportRegexp)
-        if (match) {
-          defaultExport = exp.replace(match[0], '').trim()
-        } else {
-          namedExports.push(exp)
-        }
-      }
-      if (!defaultExport) return undefined
-      return namedExports.length === 0
-        ? content.replace(fullExport, `export = ${defaultExport}`)
-        : content.replace(
-            fullExport,
-            `export = ${defaultExport};\nexport { ${namedExports.join(', ')} }`,
-          )
-    })
-    .then((content) => {
-      return content ? writeFile(dtsPath, content, 'utf-8') : Promise.resolve()
-    })
+async function fixDefaultCjsExport(dtsPath) {
+  const content = await readFile(dtsPath, { encoding: 'utf-8' })
+  let match = content.match(regexp)
+  if (!match) return
+  const fullExport = match[0]
+  /**@type {string | undefined}*/
+  let defaultExport = undefined
+  /**@type {string[]} */
+  const namedExports = []
+  for (const exp of match[1].split(',').map((e) => e.trim())) {
+    match = exp.match(defaultExportRegexp)
+    if (match) {
+      defaultExport = exp.replace(match[0], '').trim()
+    } else {
+      namedExports.push(exp)
+    }
+  }
+  if (!defaultExport) return
+  const newContent =
+    namedExports.length === 0
+      ? content.replace(fullExport, `export = ${defaultExport}`)
+      : content.replace(
+          fullExport,
+          `export = ${defaultExport};\nexport { ${namedExports.join(', ')} }`,
+        )
+  await writeFile(dtsPath, newContent, 'utf-8')
 }
 
 /**
