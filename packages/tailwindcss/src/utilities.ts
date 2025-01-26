@@ -896,9 +896,7 @@ export function createUtilities(theme: Theme) {
   staticUtility(`min-h-screen`, [['min-height', '100vh']])
   staticUtility(`max-h-screen`, [['max-height', '100vh']])
 
-  staticUtility(`min-w-none`, [['min-width', 'none']])
   staticUtility(`max-w-none`, [['max-width', 'none']])
-  staticUtility(`min-h-none`, [['min-height', 'none']])
   staticUtility(`max-h-none`, [['max-height', 'none']])
 
   spacingUtility(
