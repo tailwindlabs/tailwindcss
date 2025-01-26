@@ -33,6 +33,7 @@ test(
         </div>
         <input type="text" class="form-input" />
         <div class="aspect-w-16"></div>
+        <div class="@container"></div>
       `,
       'src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
@@ -41,6 +42,7 @@ test(
         @plugin '@tailwindcss/forms';
         @plugin '@tailwindcss/typography';
         @plugin '@tailwindcss/aspect-ratio';
+        @plugin '@tailwindcss/container-queries';
       `,
     },
   },
@@ -53,6 +55,7 @@ test(
       candidate`form-input`,
       candidate`prose`,
       candidate`aspect-w-16`,
+      candidate`@container`,
     ])
   },
 )

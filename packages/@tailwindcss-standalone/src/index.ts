@@ -44,6 +44,7 @@ globalThis.__tw_resolve = (id, baseDir) => {
     case '@tailwindcss/forms':
     case '@tailwindcss/typography':
     case '@tailwindcss/aspect-ratio':
+    case '@tailwindcss/container-queries':
       return id
     default:
       return false
@@ -56,6 +57,8 @@ globalThis.__tw_load = async (id) => {
     return require('@tailwindcss/typography')
   } else if (id.endsWith('@tailwindcss/aspect-ratio')) {
     return require('@tailwindcss/aspect-ratio')
+  } else if (id.endsWith('@tailwindcss/container-queries')) {
+    return require('@tailwindcss/container-queries')
   } else {
     return undefined
   }
