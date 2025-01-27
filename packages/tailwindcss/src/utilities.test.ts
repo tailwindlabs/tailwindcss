@@ -14927,6 +14927,7 @@ test('text', async () => {
           --color-red-500: #ef4444;
           --text-sm: 0.875rem;
           --text-sm--line-height: 1.25rem;
+          --leading-snug: 1.375;
         }
         @tailwind utilities;
       `,
@@ -14962,6 +14963,9 @@ test('text', async () => {
         // font-size / line-height / letter-spacing / font-weight
         'text-sm',
         'text-sm/6',
+        'text-sm/none',
+        'text-[10px]/none',
+        'text-sm/snug',
         'text-sm/[4px]',
         'text-[12px]',
         'text-[12px]/6',
@@ -14986,11 +14990,17 @@ test('text', async () => {
       --color-red-500: #ef4444;
       --text-sm: .875rem;
       --text-sm--line-height: 1.25rem;
+      --leading-snug: 1.375;
     }
 
     .text-sm {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+
+    .text-\\[10px\\]\\/none {
+      font-size: 10px;
+      line-height: 1;
     }
 
     .text-\\[12px\\]\\/6 {
@@ -15026,6 +15036,16 @@ test('text', async () => {
     .text-sm\\/\\[4px\\] {
       font-size: var(--text-sm);
       line-height: 4px;
+    }
+
+    .text-sm\\/none {
+      font-size: var(--text-sm);
+      line-height: 1;
+    }
+
+    .text-sm\\/snug {
+      font-size: var(--text-sm);
+      line-height: var(--leading-snug);
     }
 
     .text-\\[12px\\] {
