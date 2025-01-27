@@ -12,6 +12,7 @@ env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 20
   OXIDE_LOCATION: ./crates/node
+  RELEASE_CHANNEL: insiders
 
 jobs:
   build:
