@@ -229,6 +229,6 @@ jobs:
         run: node ./scripts/lock-pre-release-versions.mjs
 
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
