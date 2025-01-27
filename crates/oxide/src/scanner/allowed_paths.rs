@@ -66,6 +66,47 @@ fn create_walk_builder(root: &Path) -> WalkBuilder {
   // are first created and may not be in a git repo yet.
   builder.require_git(false);
 
+  // Don't descend into .git directories inside the root folder
+  // This is necessary when `root` contains the `.git` dir
+  builder.filter_entry(|entry| entry.file_name() != ".git");
+
+  // If we are in a git repo then require it to ensure that only rules within
+  // the repo are used. For example, we don't want to consider a .gitnore file
+  // in the user's home folder if we're in a git repo.
+  //
+  // The alternative is using a call like `.parents(false)` but that will
+  // prevent looking at parent directories for .gitignore files from within
+  // the repo and that's not what we want.
+  //
+  // For example, in a project with this structure:
+  //
+  // home
+  // .gitignore
+  //  my-project
+  //   .gitignore
+  //   apps
+  //     .gitignore
+  //     web
+  //       {root}
+  //
+  // We do want to consider all .gitignore files listed:
+  // - home/.gitignore
+  // - my-project/.gitignore
+  // - my-project/apps/.gitignore
+  //
+  // However, if a repo is initalized inside my-project then only the following
+  // make sense for consideration:
+  // - my-project/.gitignore
+  // - my-project/apps/.gitignore
+  //
+  // Setting the require_git(true) flag conditionally allows us to do this.
+  for parent in root.ancestors() {
+    if parent.join(".git").exists() {
+      builder.require_git(true);
+      break;
+    }
+  }
+
   builder
 }
 
