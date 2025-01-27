@@ -570,6 +570,13 @@ it('should parse a utility with an arbitrary value with parens', () => {
   `)
 })
 
+it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
 it('should parse a utility with an arbitrary value including a typehint', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -614,6 +621,13 @@ it('should parse a utility with an arbitrary value with parens including a typeh
       },
     ]
   `)
+})
+
+it('should not parse a utility with an arbitrary value with parens including a typehint that does not start with --', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(color:my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value with parens and a fallback', () => {
@@ -888,6 +902,8 @@ it('should not parse invalid arbitrary values in variants', () => {
 
     'data-foo-(--value)/(number:--mod):flex',
     'data-foo(--value)/(number:--mod):flex',
+
+    'data-(value):flex',
   ]) {
     expect(run(candidate, { utilities, variants })).toEqual([])
   }
@@ -943,6 +959,13 @@ it('should parse a utility with an implicit variable as the modifier using the s
       },
     ]
   `)
+})
+
+it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-500/(value)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an implicit variable as the modifier that is important', () => {
