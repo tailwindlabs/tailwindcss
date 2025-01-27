@@ -1,13 +1,9 @@
 name: Release Insiders
 
 on:
-  workflow_dispatch:
-    inputs:
-      release_channel:
-        description: 'Release channel'
-        required: false
-        default: 'next'
-        type: string
+  push:
+    # TODO: Rename to `main`, once merged
+    branches: [next]
 
 permissions:
   contents: read
