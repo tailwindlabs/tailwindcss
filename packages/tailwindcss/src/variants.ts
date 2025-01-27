@@ -681,7 +681,7 @@ export function createVariants(theme: Theme): Variants {
   // State
   staticVariant('visited', ['&:visited'])
   staticVariant('target', ['&:target'])
-  staticVariant('open', ['&:is([open], :popover-open)'])
+  staticVariant('open', ['&:is([open], :popover-open, :open)'])
 
   // Forms
   staticVariant('default', ['&:default'])
