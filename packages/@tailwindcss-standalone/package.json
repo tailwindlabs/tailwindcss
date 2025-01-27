@@ -30,8 +30,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "detect-libc": "1.0.3",
-    "enhanced-resolve": "^5.18.0",
-    "tailwindcss": "workspace:^"
+    "enhanced-resolve": "^5.18.0"
   },
   "__notes": "These binary packages must be included so Bun can build the CLI for all supported platforms. We also rely on Lightning CSS and Parcel being patched so Bun can statically analyze the executables.",
   "devDependencies": {
@@ -50,6 +49,10 @@
     "lightningcss-linux-arm64-musl": "^1.29.1",
     "lightningcss-linux-x64-gnu": "^1.29.1",
     "lightningcss-linux-x64-musl": "^1.29.1",
-    "lightningcss-win32-x64-msvc": "^1.29.1"
+    "lightningcss-win32-x64-msvc": "^1.29.1",
+    "tailwindcss": "workspace:^"
+  },
+  "peerDependencies": {
+    "tailwindcss": "workspace:*"
   }
 }

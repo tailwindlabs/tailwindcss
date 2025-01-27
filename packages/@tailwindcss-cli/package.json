@@ -35,7 +35,12 @@
     "enhanced-resolve": "^5.18.0",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
-    "picocolors": "^1.1.1",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "workspace:*"
+  },
+  "peerDependencies": {
     "tailwindcss": "workspace:*"
   }
 }

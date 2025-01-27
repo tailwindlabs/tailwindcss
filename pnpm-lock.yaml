@@ -170,6 +170,7 @@ importers:
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
+    devDependencies:
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -182,6 +183,7 @@ importers:
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
+    devDependencies:
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -203,9 +205,6 @@ importers:
       postcss:
         specifier: ^8.4.41
         version: 8.4.41
-      tailwindcss:
-        specifier: workspace:*
-        version: link:../tailwindcss
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -222,6 +221,9 @@ importers:
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.41)
+      tailwindcss:
+        specifier: workspace:*
+        version: link:../tailwindcss
 
   packages/@tailwindcss-standalone:
     dependencies:
@@ -243,9 +245,6 @@ importers:
       enhanced-resolve:
         specifier: ^5.18.0
         version: 5.18.0
-      tailwindcss:
-        specifier: workspace:^
-        version: link:../tailwindcss
     devDependencies:
       '@parcel/watcher-darwin-arm64':
         specifier: ^2.5.0
@@ -295,6 +294,9 @@ importers:
       lightningcss-win32-x64-msvc:
         specifier: ^1.29.1
         version: 1.29.1
+      tailwindcss:
+        specifier: workspace:^
+        version: link:../tailwindcss
 
   packages/@tailwindcss-upgrade:
     dependencies:
@@ -337,9 +339,6 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
-      tailwindcss:
-        specifier: workspace:*
-        version: link:../tailwindcss
       tree-sitter:
         specifier: ^0.22.4
         version: 0.22.4
@@ -356,6 +355,9 @@ importers:
       '@types/postcss-import':
         specifier: ^14.0.3
         version: 14.0.3
+      tailwindcss:
+        specifier: workspace:*
+        version: link:../tailwindcss
 
   packages/@tailwindcss-vite:
     dependencies:
@@ -368,9 +370,6 @@ importers:
       lightningcss:
         specifier: 'catalog:'
         version: 1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by)
-      tailwindcss:
-        specifier: workspace:*
-        version: link:../tailwindcss
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -378,6 +377,9 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 6.0.0(@types/node@20.14.13)(jiti@2.4.2)(lightningcss@1.29.1(patch_hash=gkqcezdn4goium3e3s43dhy4by))(terser@5.31.6)(tsx@4.19.1)(yaml@2.6.0)
+      tailwindcss:
+        specifier: workspace:*
+        version: link:../tailwindcss
 
   packages/internal-example-plugin: {}
 
