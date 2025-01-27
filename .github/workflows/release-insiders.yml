@@ -1,4 +1,4 @@
-name: Release
+name: Release Insiders
 
 on:
   workflow_dispatch:
@@ -143,7 +143,7 @@ jobs:
   release:
     runs-on: macos-14
     timeout-minutes: 15
-    name: Build and release Tailwind CSS
+    name: Build and release Tailwind CSS insiders
 
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
