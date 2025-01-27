@@ -137,7 +137,7 @@ jobs:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
-  release:
+  prepare:
     runs-on: macos-14
     timeout-minutes: 15
     name: Build and release Tailwind CSS
@@ -240,7 +240,7 @@ jobs:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
 
-      - name: Release
+      - name: Prepare GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
