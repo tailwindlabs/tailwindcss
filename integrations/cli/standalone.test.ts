@@ -1,6 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
-import { candidate, css, html, json, test } from '../utils'
+import { candidate, css, html, js, json, test } from '../utils'
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -54,5 +54,60 @@ test(
       candidate`prose`,
       candidate`aspect-w-16`,
     ])
+  },
+)
+
+test(
+  'includes js APIs for plugins',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {}
+        }
+      `,
+      'index.html': html`
+        <div class="underline md:example"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
+        @import 'tailwindcss/utilities';
+        @plugin './plugin.js';
+      `,
+      'src/plugin.js': js`
+        import plugin from 'tailwindcss/plugin'
+
+        // Import all publicly avabile JS APIs to make sure they can be used
+        // by the standalone CLI
+        import * as tw from 'tailwindcss'
+        import colors from 'tailwindcss/colors'
+        import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
+        import defaultTheme from 'tailwindcss/defaultTheme'
+        import * as pkg from 'tailwindcss/package.json'
+
+        console.log({
+          tw,
+          colors,
+          flattenColorPalette,
+          defaultTheme,
+          pkg,
+        })
+
+        export default plugin(function ({ addUtilities }) {
+          addUtilities({
+            '.example': {
+              color: 'red',
+            },
+          })
+        })
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec(
+      `${path.resolve(__dirname, `../../packages/@tailwindcss-standalone/dist/${STANDALONE_BINARY}`)} --input src/index.css --output dist/out.css`,
+    )
+
+    await fs.expectFileToContain('dist/out.css', [candidate`underline`, candidate`md:example`])
   },
 )
