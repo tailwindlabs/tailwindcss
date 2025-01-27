@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Remove invalid `min-w/h-none` utilities ([#15845](https://github.com/tailwindlabs/tailwindcss/pull/15845))
+- Ensure CSS variable shorthand uses valid CSS variables ([#15738](https://github.com/tailwindlabs/tailwindcss/pull/15738))
 
 ## [4.0.0] - 2025-01-21
 
