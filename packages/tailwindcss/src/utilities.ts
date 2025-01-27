@@ -4043,6 +4043,8 @@ export function createUtilities(theme: Theme) {
             if (modifier) {
               return [decl('font-size', value), decl('line-height', modifier)]
             }
+
+            return null
           }
 
           return [decl('font-size', value)]
@@ -4084,6 +4086,10 @@ export function createUtilities(theme: Theme) {
             let multiplier = theme.resolve(null, ['--spacing'])
             if (!multiplier) return null
             modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+          }
+
+          if (!modifier) {
+            return null
           }
 
           let declarations = [decl('font-size', fontSize)]

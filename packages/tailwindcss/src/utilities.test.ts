@@ -15121,29 +15121,39 @@ test('text', async () => {
     }"
   `)
   expect(
-    await run([
-      'text',
-      // color
-      '-text-red-500',
-      '-text-red-500/50',
-      '-text-red-500/[0.5]',
-      '-text-red-500/[50%]',
-      '-text-current',
-      '-text-current/50',
-      '-text-current/[0.5]',
-      '-text-current/[50%]',
-      '-text-inherit',
-      '-text-transparent',
-      '-text-[#0088cc]',
-      '-text-[#0088cc]/50',
-      '-text-[#0088cc]/[0.5]',
-      '-text-[#0088cc]/[50%]',
+    await compileCss(
+      css`
+        @theme inline reference {
+          --text-sm: 0.875rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'text',
+        // color
+        '-text-red-500',
+        '-text-red-500/50',
+        '-text-red-500/[0.5]',
+        '-text-red-500/[50%]',
+        '-text-current',
+        '-text-current/50',
+        '-text-current/[0.5]',
+        '-text-current/[50%]',
+        '-text-inherit',
+        '-text-transparent',
+        '-text-[#0088cc]',
+        '-text-[#0088cc]/50',
+        '-text-[#0088cc]/[0.5]',
+        '-text-[#0088cc]/[50%]',
 
-      // font-size / line-height / letter-spacing / font-weight
-      '-text-sm',
-      '-text-sm/6',
-      '-text-sm/[4px]',
-    ]),
+        // font-size / line-height / letter-spacing / font-weight
+        '-text-sm',
+        '-text-sm/6',
+        'text-sm/foo',
+        '-text-sm/[4px]',
+        'text-[10px]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
