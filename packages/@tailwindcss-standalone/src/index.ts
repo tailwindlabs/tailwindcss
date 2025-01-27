@@ -71,9 +71,10 @@ globalThis.__tw_readFile = async (path, encoding) => {
   return fs.readFileSync(path, encoding)
 }
 
-// Import these to make sure they are bundled
+// We use a plugin to make sure that the JS APIs are bundled with the standalone
+// CLI and can be imported inside configs and plugins
 Bun.plugin({
-  name: 'tailwindcss',
+  name: 'bundle-tailwindcss-apis',
   target: 'bun',
   async setup(build) {
     // These imports must be static strings otherwise they won't be bundled
