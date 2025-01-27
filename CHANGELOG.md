@@ -332,7 +332,7 @@ For a deep-dive into everything that's new, [check out the announcement post](ht
 - Rename `drop-shadow` to `drop-shadow-sm` and `drop-shadow-sm` to `drop-shadow-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `rounded` to `rounded-sm` and `rounded-sm` to `rounded-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
 - Rename `blur` to `blur-sm` and `blur-sm` to `blur-xs` ([#14849](https://github.com/tailwindlabs/tailwindcss/pull/14849))
-- Remove fixed line-height theme values and derive `leading-*` utilites from `--spacing-*` scale ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
+- Remove fixed line-height theme values and derive `leading-*` utilities from `--spacing-*` scale ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Remove `--transition-timing-function-linear` from the default theme in favor of a static `ease-linear` utility ([#14880](https://github.com/tailwindlabs/tailwindcss/pull/14880))
 - Remove default `--spacing-*` scale in favor of `--spacing` multiplier ([#14857](https://github.com/tailwindlabs/tailwindcss/pull/14857))
 - Remove `var(…)` fallbacks from theme values in utilities ([#14881](https://github.com/tailwindlabs/tailwindcss/pull/14881))
