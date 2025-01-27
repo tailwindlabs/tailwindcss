@@ -33,17 +33,13 @@ pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
 
 #[tracing::instrument(skip_all)]
 pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
-    WalkBuilder::new(root)
-        .hidden(false)
-        .require_git(false)
+    create_walk_builder(root)
         .build()
         .filter_map(Result::ok)
 }
 
 pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEntry> {
-    WalkBuilder::new(root)
-        .hidden(false)
-        .require_git(false)
+    create_walk_builder(root)
         .max_depth(depth)
         .filter_entry(move |entry| match entry.file_type() {
             Some(file_type) if file_type.is_dir() => match entry.file_name().to_str() {
@@ -58,6 +54,21 @@ pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEn
         .build()
         .filter_map(Result::ok)
 }
+
+fn create_walk_builder(root: &Path) -> WalkBuilder {
+  let mut builder = WalkBuilder::new(root);
+
+  // Scan hidden files / directories
+  builder.hidden(false);
+
+  // By default, allow .gitignore files to be used regardless of whether or not
+  // a .git directory is present. This is an optimization for when projects
+  // are first created and may not be in a git repo yet.
+  builder.require_git(false);
+
+  builder
+}
+
 
 pub fn is_allowed_content_path(path: &Path) -> bool {
     // Skip known ignored files
