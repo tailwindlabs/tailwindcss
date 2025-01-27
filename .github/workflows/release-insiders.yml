@@ -218,6 +218,9 @@ jobs:
       - name: Build Tailwind CSS
         run: pnpm run build
 
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: pnpm run version-packages 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}
+
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
 
