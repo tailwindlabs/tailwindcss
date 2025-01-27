@@ -71,4 +71,40 @@ globalThis.__tw_readFile = async (path, encoding) => {
   return fs.readFileSync(path, encoding)
 }
 
+// We use a plugin to make sure that the JS APIs are bundled with the standalone
+// CLI and can be imported inside configs and plugins
+Bun.plugin({
+  name: 'bundle-tailwindcss-apis',
+  target: 'bun',
+  async setup(build) {
+    // These imports must be static strings otherwise they won't be bundled
+    let bundled = {
+      tailwindcss: await import('tailwindcss'),
+      'tailwindcss/colors': await import('tailwindcss/colors'),
+      'tailwindcss/colors.js': await import('tailwindcss/colors'),
+      'tailwindcss/plugin': await import('tailwindcss/plugin'),
+      'tailwindcss/plugin.js': await import('tailwindcss/plugin'),
+      'tailwindcss/package.json': await import('tailwindcss/package.json'),
+      'tailwindcss/lib/util/flattenColorPalette': await import(
+        'tailwindcss/lib/util/flattenColorPalette'
+      ),
+      'tailwindcss/lib/util/flattenColorPalette.js': await import(
+        'tailwindcss/lib/util/flattenColorPalette'
+      ),
+      'tailwindcss/defaultTheme': await import('tailwindcss/defaultTheme'),
+      'tailwindcss/defaultTheme.js': await import('tailwindcss/defaultTheme'),
+    }
+
+    for (let [id, exports] of Object.entries(bundled)) {
+      build.module(id, () => ({
+        loader: 'object',
+        exports: {
+          ...exports,
+          __esModule: true,
+        },
+      }))
+    }
+  },
+})
+
 await import('../../@tailwindcss-cli/src/index.ts')
