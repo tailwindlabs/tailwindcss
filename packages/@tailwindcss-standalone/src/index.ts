@@ -71,4 +71,33 @@ globalThis.__tw_readFile = async (path, encoding) => {
   return fs.readFileSync(path, encoding)
 }
 
+// Import these to make sure they are bundled
+Bun.plugin({
+  name: 'tailwindcss',
+  target: 'bun',
+  async setup(build) {
+    // These imports must be static strings otherwise they won't be bundled
+    let bundled = {
+      tailwindcss: await import('tailwindcss'),
+      'tailwindcss/colors': await import('tailwindcss/colors'),
+      'tailwindcss/colors.js': await import('tailwindcss/colors'),
+      'tailwindcss/plugin': await import('tailwindcss/plugin'),
+      'tailwindcss/plugin.js': await import('tailwindcss/plugin'),
+      'tailwindcss/package.json': await import('tailwindcss/package.json'),
+      'tailwindcss/lib/util/flattenColorPalette': await import(
+        'tailwindcss/lib/util/flattenColorPalette'
+      ),
+      'tailwindcss/lib/util/flattenColorPalette.js': await import(
+        'tailwindcss/lib/util/flattenColorPalette'
+      ),
+      'tailwindcss/defaultTheme': await import('tailwindcss/defaultTheme'),
+      'tailwindcss/defaultTheme.js': await import('tailwindcss/defaultTheme'),
+    }
+
+    for (let [id, exports] of Object.entries(bundled)) {
+      build.module(id, () => ({ loader: 'object', exports }))
+    }
+  },
+})
+
 await import('../../@tailwindcss-cli/src/index.ts')
