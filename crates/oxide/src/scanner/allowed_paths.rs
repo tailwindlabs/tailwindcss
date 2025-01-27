@@ -110,7 +110,6 @@ fn create_walk_builder(root: &Path) -> WalkBuilder {
   builder
 }
 
-
 pub fn is_allowed_content_path(path: &Path) -> bool {
     // Skip known ignored files
     if path
