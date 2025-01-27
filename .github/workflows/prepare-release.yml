@@ -2,6 +2,9 @@ name: Prepare Release
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
 
 env:
   CI: true
