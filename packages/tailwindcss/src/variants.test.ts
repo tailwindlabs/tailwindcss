@@ -756,7 +756,7 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-md: 768px;
       --breakpoint-lg: 1024px;
@@ -824,7 +824,7 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-10xl: 5000px;
     }
 
@@ -851,7 +851,7 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -906,7 +906,7 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -963,7 +963,7 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1018,7 +1018,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1080,7 +1080,7 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1465,7 +1465,7 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
     }
 
@@ -2011,7 +2011,7 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --container-lg: 1024px;
     }
 
@@ -2167,7 +2167,7 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":host {
       --breakpoint-sm: 640px;
       --breakpoint-md: 768px;
       --breakpoint-lg: 1024px;

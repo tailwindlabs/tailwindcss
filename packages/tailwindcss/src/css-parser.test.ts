@@ -254,10 +254,10 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       })
 
       it('should parse a minified custom property', () => {
-        expect(parse(':root{--foo:bar;}')).toEqual([
+        expect(parse(':host{--foo:bar;}')).toEqual([
           {
             kind: 'rule',
-            selector: ':root',
+            selector: ':host',
             nodes: [
               {
                 kind: 'declaration',
@@ -271,10 +271,10 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       })
 
       it('should parse a minified custom property with no semicolon ', () => {
-        expect(parse(':root{--foo:bar}')).toEqual([
+        expect(parse(':host{--foo:bar}')).toEqual([
           {
             kind: 'rule',
-            selector: ':root',
+            selector: ':host',
             nodes: [
               {
                 kind: 'declaration',
