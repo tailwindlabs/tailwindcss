@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Suggest container query variants ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Disable bare value suggestions when not using the `--spacing` variable ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Ensure suggested classes are properly sorted ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
+- Don’t look at ignore files outside initialized repos ([#15941](https://github.com/tailwindlabs/tailwindcss/pull/15941))
 - Find utilities when using the Svelte class shorthand syntax across multiple lines ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))
 - Find utilities when using the Angular class shorthand syntax ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))
 - Find utilities when using functions inside arrays ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))

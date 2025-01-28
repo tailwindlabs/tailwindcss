@@ -556,6 +556,83 @@ describe.each([
       ])
     },
   )
+
+  test(
+    'git ignore files outside of a repo are not considered',
+    {
+      fs: {
+        // Ignore everything in the "home" directory
+        'home/.gitignore': '*',
+
+        // Only ignore files called ignore-*.html in the actual git repo
+        'home/project/.gitignore': 'ignore-*.html',
+
+        'home/project/package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+
+        'home/project/src/index.css': css` @import 'tailwindcss'; `,
+        'home/project/src/index.html': html`
+          <div
+            class="content-['index.html']"
+          ></div>
+        `,
+        'home/project/src/ignore-1.html': html`
+          <div
+            class="content-['ignore-1.html']"
+          ></div>
+        `,
+        'home/project/src/ignore-2.html': html`
+          <div
+            class="content-['ignore-2.html']"
+          ></div>
+        `,
+      },
+
+      installDependencies: false,
+    },
+    async ({ fs, root, exec }) => {
+      await exec(`pnpm install --ignore-workspace`, {
+        cwd: path.join(root, 'home/project'),
+      })
+
+      // No git repo = all ignore files are considered
+      await exec(`${command} --input src/index.css --output dist/out.css`, {
+        cwd: path.join(root, 'home/project'),
+      })
+
+      await fs.expectFileNotToContain('./home/project/dist/out.css', [
+        candidate`content-['index.html']`,
+        candidate`content-['ignore-1.html']`,
+        candidate`content-['ignore-2.html']`,
+      ])
+
+      // Make home/project a git repo
+      // Only ignore files within the repo are considered
+      await exec(`git init`, {
+        cwd: path.join(root, 'home/project'),
+      })
+
+      await exec(`${command} --input src/index.css --output dist/out.css`, {
+        cwd: path.join(root, 'home/project'),
+      })
+
+      await fs.expectFileToContain('./home/project/dist/out.css', [
+        candidate`content-['index.html']`,
+      ])
+
+      await fs.expectFileNotToContain('./home/project/dist/out.css', [
+        candidate`content-['ignore-1.html']`,
+        candidate`content-['ignore-2.html']`,
+      ])
+    },
+  )
 })
 
 test(
