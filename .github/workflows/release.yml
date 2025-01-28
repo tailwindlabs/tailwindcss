@@ -219,8 +219,13 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
+      - name: Calculate environment variables
+        run: |
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
+          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./packages/tailwindcss/package.json`).version);')" >> $GITHUB_ENV
+
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
