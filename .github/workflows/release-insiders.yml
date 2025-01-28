@@ -3,7 +3,7 @@ name: Release Insiders
 on:
   push:
     # TODO: Rename to `main`, once merged
-    branches: [next]
+    branches: [feat/setup-v4-releases]
 
 permissions:
   contents: read
@@ -229,7 +229,7 @@ jobs:
         run: node ./scripts/lock-pre-release-versions.mjs
 
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
