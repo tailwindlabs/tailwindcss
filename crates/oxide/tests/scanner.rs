@@ -586,4 +586,121 @@ mod scanner {
             ]
         );
     }
+
+    #[test]
+    fn skips_ignore_files_outside_of_a_repo() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                // This file should always be picked up
+                ("home/project/apps/web/index.html", "content-['index.html']"),
+                // Set up various ignore rules
+                ("home/.gitignore", "ignore-home.html"),
+                ("home/project/.gitignore", "ignore-project.html"),
+                ("home/project/apps/.gitignore", "ignore-apps.html"),
+                ("home/project/apps/web/.gitignore", "ignore-web.html"),
+                // Some of these should be ignored depending on which dir is the repo root
+                (
+                    "home/project/apps/web/ignore-home.html",
+                    "content-['ignore-home.html']",
+                ),
+                (
+                    "home/project/apps/web/ignore-project.html",
+                    "content-['ignore-project.html']",
+                ),
+                (
+                    "home/project/apps/web/ignore-apps.html",
+                    "content-['ignore-apps.html']",
+                ),
+                (
+                    "home/project/apps/web/ignore-web.html",
+                    "content-['ignore-web.html']",
+                ),
+            ],
+        );
+
+        let sources = vec![GlobEntry {
+            base: dir
+                .join("home/project/apps/web")
+                .to_string_lossy()
+                .to_string(),
+            pattern: "**/*".to_owned(),
+        }];
+
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        // All ignore files are applied because there's no git repo
+        assert_eq!(candidates, vec!["content-['index.html']".to_owned(),]);
+
+        // Initialize `home` as a git repository and scan again
+        // The results should be the same as before
+        _ = Command::new("git")
+            .arg("init")
+            .current_dir(dir.join("home"))
+            .output();
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        assert_eq!(candidates, vec!["content-['index.html']".to_owned(),]);
+
+        // Drop the .git folder
+        fs::remove_dir_all(dir.join("home/.git")).unwrap();
+
+        // Initialize `home/project` as a git repository and scan again
+        _ = Command::new("git")
+            .arg("init")
+            .current_dir(dir.join("home/project"))
+            .output();
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['ignore-home.html']".to_owned(),
+                "content-['index.html']".to_owned(),
+            ]
+        );
+
+        // Drop the .git folder
+        fs::remove_dir_all(dir.join("home/project/.git")).unwrap();
+
+        // Initialize `home/project/apps` as a git repository and scan again
+        _ = Command::new("git")
+            .arg("init")
+            .current_dir(dir.join("home/project/apps"))
+            .output();
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['ignore-home.html']".to_owned(),
+                "content-['ignore-project.html']".to_owned(),
+                "content-['index.html']".to_owned(),
+            ]
+        );
+
+        // Drop the .git folder
+        fs::remove_dir_all(dir.join("home/project/apps/.git")).unwrap();
+
+        // Initialize `home/project/apps` as a git repository and scan again
+        _ = Command::new("git")
+            .arg("init")
+            .current_dir(dir.join("home/project/apps/web"))
+            .output();
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['ignore-apps.html']".to_owned(),
+                "content-['ignore-home.html']".to_owned(),
+                "content-['ignore-project.html']".to_owned(),
+                "content-['index.html']".to_owned(),
+            ]
+        );
+    }
 }
