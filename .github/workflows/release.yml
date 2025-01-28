@@ -230,12 +230,6 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Upload Standalone Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: tailwindcss-standalone
-          path: packages/@tailwindcss-standalone/dist/
-
       - name: Publish
         run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
         env:
