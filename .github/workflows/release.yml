@@ -231,7 +231,7 @@ jobs:
 
       - name: Trigger Tailwind Play update
         if: env.RELEASE_CHANNEL == 'latest'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
           script: |

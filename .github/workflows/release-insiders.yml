@@ -234,7 +234,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
           script: |
