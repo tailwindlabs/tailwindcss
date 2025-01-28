@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure CSS variable shorthand uses valid CSS variables ([#15738](https://github.com/tailwindlabs/tailwindcss/pull/15738))
 - Ensure font-size utilities with `none` modifier have a line-height set e.g.: `text-sm/none` ([#15921](https://github.com/tailwindlabs/tailwindcss/pull/15921))
 - Ensure font-size utilities with unknown modifier don't generate CSS ([#15921](https://github.com/tailwindlabs/tailwindcss/pull/15921))
+- _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 
 ## [4.0.0] - 2025-01-21
 
