@@ -447,6 +447,8 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
     };
 
     match extension {
+        // Angular class shorthand
+        Some("html") => Some(content.replace("[class.", "[")),
         Some("svelte") => Some(content.replace(" class:", " ").replace("\tclass:", " ")),
         _ => Some(content),
     }
