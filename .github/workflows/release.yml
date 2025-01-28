@@ -155,13 +155,6 @@ jobs:
           fetch-tags: true
           fetch-depth: 20
 
-      - run: git fetch --tags -f
-
-      - name: Resolve version
-        id: vars
-        run: |
-          echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
