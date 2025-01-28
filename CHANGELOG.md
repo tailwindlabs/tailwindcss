@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t suggest font weight utilities more than once ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Suggest container query variants ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Disable bare value suggestions when not using the `--spacing` variable ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
+- Ensure suggested classes are properly sorted ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 
 ## [4.0.0] - 2025-01-21
