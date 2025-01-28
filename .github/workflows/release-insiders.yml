@@ -121,9 +121,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
 
-      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
-        run: pnpm run version-packages 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}
-
       - name: Build release
         run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build
         env:
