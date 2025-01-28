@@ -2,8 +2,7 @@ name: Release Insiders
 
 on:
   push:
-    # TODO: Rename to `main`, once merged
-    branches: [next]
+    branches: [main]
 
 permissions:
   contents: read

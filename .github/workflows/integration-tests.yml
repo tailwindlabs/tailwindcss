@@ -2,7 +2,7 @@ name: Integration Tests
 
 on:
   push:
-    branches: [next]
+    branches: [main]
   pull_request:
 
 permissions:
@@ -32,13 +32,13 @@ jobs:
           - postcss
 
         # Exclude windows and macos from being built on feature branches
-        on-next-branch:
-          - ${{ github.ref == 'refs/heads/next' }}
+        on-main-branch:
+          - ${{ github.ref == 'refs/heads/main' }}
         exclude:
-          - on-next-branch: false
+          - on-main-branch: false
             runner:
               name: Windows
-          - on-next-branch: false
+          - on-main-branch: false
             runner:
               name: macOS
 
@@ -95,8 +95,8 @@ jobs:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Notify Discord
-        if: failure() && github.ref == 'refs/heads/next'
+        if: failure() && github.ref == 'refs/heads/main'
         uses: discord-actions/message@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `next` branch has failed.'
+          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
