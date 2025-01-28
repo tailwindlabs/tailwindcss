@@ -8,6 +8,7 @@ import prettier from 'prettier'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
+const version = process.argv[2] || null
 
 // The known workspace is: @tailwindcss/oxide
 // All the workspaces in `crates/node/npm/*` should always be in sync with
@@ -50,6 +51,34 @@ exec('pnpm --silent --filter=!./playgrounds/* -r exec pwd', async (err, stdout) 
   if (err) {
     console.error(err)
     process.exit(1)
+  }
+
+  if (version !== null) {
+    for (let pkgPath of stdout
+      .trim()
+      .split('\n')
+      .map((x) => path.resolve(x, 'package.json'))) {
+      let pkg = await fs.readFile(pkgPath, 'utf8').then(JSON.parse)
+      let name = pkg.name
+      if (version !== '') {
+        // Ensure the version is set after the name and before everything else
+        delete pkg.name
+        delete pkg.version
+
+        // This allows us to keep the order of the keys in the package.json
+        pkg = { name, version, ...pkg }
+      }
+
+      await fs.writeFile(
+        pkgPath,
+        await prettier
+          .format(JSON.stringify(pkg, null, 2), { filepath: pkgPath })
+          .then((x) => `${x.trim()}\n`),
+      )
+    }
+
+    console.log('Done.')
+    return
   }
 
   let paths = stdout

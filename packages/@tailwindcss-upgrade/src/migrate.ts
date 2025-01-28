@@ -435,7 +435,7 @@ export async function linkConfigs(
       // If the path points to a file in the same directory, `path.relative` will
       // remove the leading `./` and we need to add it back in order to still
       // consider the path relative
-      if (!relative.startsWith('.')) {
+      if (!relative.startsWith('.') && !path.isAbsolute(relative)) {
         relative = './' + relative
       }
 

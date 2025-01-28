@@ -40,7 +40,7 @@ export async function prepareConfig(
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
     // consider the path relative
-    if (!relative.startsWith('.')) {
+    if (!relative.startsWith('.') && !path.isAbsolute(relative)) {
       relative = './' + relative
     }
 
@@ -49,7 +49,7 @@ export async function prepareConfig(
     let newPrefix = userConfig.prefix ? migratePrefix(userConfig.prefix) : null
     let input = css`
       @import 'tailwindcss' ${newPrefix ? `prefix(${newPrefix})` : ''};
-      @config './${relative}';
+      @config '${relative}';
     `
 
     let [compiler, designSystem] = await Promise.all([

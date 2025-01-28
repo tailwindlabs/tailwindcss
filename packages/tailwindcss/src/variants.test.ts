@@ -233,7 +233,7 @@ test('target', async () => {
 
 test('open', async () => {
   expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
-    ".group-open\\:flex:is(:where(.group):is([open], :popover-open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open) ~ *), .open\\:flex:is([open], :popover-open) {
+    ".group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
       display: flex;
     }"
   `)
@@ -1473,7 +1473,7 @@ test('not', async () => {
       display: flex;
     }
 
-    .not-open\\:flex:not([open], :popover-open) {
+    .not-open\\:flex:not([open], :popover-open, :open) {
       display: flex;
     }
 
@@ -2214,7 +2214,7 @@ test('variant order', async () => {
       display: flex;
     }
 
-    .first\\:flex:first-child, .last\\:flex:last-child, .only\\:flex:only-child, .odd\\:flex:nth-child(odd), .even\\:flex:nth-child(2n), .first-of-type\\:flex:first-of-type, .last-of-type\\:flex:last-of-type, .only-of-type\\:flex:only-of-type, .visited\\:flex:visited, .target\\:flex:target, .open\\:flex:is([open], :popover-open), .default\\:flex:default, .checked\\:flex:checked, .indeterminate\\:flex:indeterminate, .placeholder-shown\\:flex:placeholder-shown, .autofill\\:flex:autofill, .optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid, .in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within {
+    .first\\:flex:first-child, .last\\:flex:last-child, .only\\:flex:only-child, .odd\\:flex:nth-child(odd), .even\\:flex:nth-child(2n), .first-of-type\\:flex:first-of-type, .last-of-type\\:flex:last-of-type, .only-of-type\\:flex:only-of-type, .visited\\:flex:visited, .target\\:flex:target, .open\\:flex:is([open], :popover-open, :open), .default\\:flex:default, .checked\\:flex:checked, .indeterminate\\:flex:indeterminate, .placeholder-shown\\:flex:placeholder-shown, .autofill\\:flex:autofill, .optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid, .in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within {
       display: flex;
     }
 
