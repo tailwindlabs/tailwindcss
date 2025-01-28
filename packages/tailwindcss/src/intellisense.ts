@@ -34,7 +34,7 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
     }
   }
 
-  list.sort(([a], [b]) => compare(a, b))
+  list.sort((a, b) => compare(a[0], b[0]))
 
   return list
 }
