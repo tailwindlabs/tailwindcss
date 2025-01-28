@@ -32,6 +32,8 @@ interface TestConfig {
   fs: {
     [filePath: string]: string | Uint8Array
   }
+
+  installDependencies?: boolean
 }
 interface TestContext {
   root: string
@@ -382,14 +384,18 @@ export function test(
         await context.fs.write(filename, content)
       }
 
+      let shouldInstallDependencies = config.installDependencies ?? true
+
       try {
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
         // pnpm install on the workspace instead (expect if the root dir defines
         // a separate workspace). We work around this by using the
         // `--ignore-workspace` flag.
-        let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-        await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        if (shouldInstallDependencies) {
+          let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
+          await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        }
       } catch (error: any) {
         console.error(error)
         console.error(error.stdout?.toString())
