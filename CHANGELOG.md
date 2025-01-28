@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Suggest container query variants ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Disable bare value suggestions when not using the `--spacing` variable ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Ensure suggested classes are properly sorted ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
+- Don’t look at ignore files outside initialized repos ([#15941](https://github.com/tailwindlabs/tailwindcss/pull/15941))
 - _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 
 ## [4.0.0] - 2025-01-21
