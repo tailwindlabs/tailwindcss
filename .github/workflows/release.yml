@@ -230,13 +230,6 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Get release notes
-        run: |
-          RELEASE_NOTES=$(node ./scripts/release-notes.mjs)
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$RELEASE_NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Upload Standalone Artifacts
         uses: actions/upload-artifact@v4
         with:
