@@ -121,6 +121,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
 
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: pnpm run version-packages 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}
+
       - name: Build release
         run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build
         env:
@@ -216,11 +219,11 @@ jobs:
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
 
-      - name: Build Tailwind CSS
-        run: pnpm run build
-
       - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
         run: pnpm run version-packages 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}
+
+      - name: Build Tailwind CSS
+        run: pnpm run build
 
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
