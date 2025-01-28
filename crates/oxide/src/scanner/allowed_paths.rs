@@ -67,11 +67,11 @@ fn create_walk_builder(root: &Path) -> WalkBuilder {
   builder.require_git(false);
 
   // Don't descend into .git directories inside the root folder
-  // This is necessary when `root` contains the `.git` dir
+  // This is necessary when `root` contains the `.git` dir.
   builder.filter_entry(|entry| entry.file_name() != ".git");
 
   // If we are in a git repo then require it to ensure that only rules within
-  // the repo are used. For example, we don't want to consider a .gitnore file
+  // the repo are used. For example, we don't want to consider a .gitignore file
   // in the user's home folder if we're in a git repo.
   //
   // The alternative is using a call like `.parents(false)` but that will
@@ -94,7 +94,7 @@ fn create_walk_builder(root: &Path) -> WalkBuilder {
   // - my-project/.gitignore
   // - my-project/apps/.gitignore
   //
-  // However, if a repo is initalized inside my-project then only the following
+  // However, if a repo is initialized inside my-project then only the following
   // make sense for consideration:
   // - my-project/.gitignore
   // - my-project/apps/.gitignore
