@@ -106,7 +106,7 @@ test('CSS variables output by the theme are prefixed', async () => {
 
   // Prefixed utilities are generated
   expect(compiler.build(['tw:text-red'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --tw-color-red: #f00;
       --tw-color-green: #0f0;
       --tw-breakpoint-sm: 640px;
@@ -131,19 +131,19 @@ test('CSS theme functions do not use the prefix', async () => {
 
   expect(compiler.build(['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]']))
     .toMatchInlineSnapshot(`
-    ":root {
-      --tw-color-red: #f00;
-      --tw-color-green: #0f0;
-      --tw-breakpoint-sm: 640px;
-    }
-    .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
-      color: #f00;
-    }
-    .tw\\:text-\\[theme\\(--color-red\\)\\] {
-      color: #f00;
-    }
-    "
-  `)
+      ":root, :host {
+        --tw-color-red: #f00;
+        --tw-color-green: #0f0;
+        --tw-breakpoint-sm: 640px;
+      }
+      .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
+        color: #f00;
+      }
+      .tw\\:text-\\[theme\\(--color-red\\)\\] {
+        color: #f00;
+      }
+      "
+    `)
 
   compiler = await compile(css`
     @theme reference prefix(tw) {
@@ -193,7 +193,7 @@ test('JS theme functions do not use the prefix', async () => {
   )
 
   expect(compiler.build(['tw:my-custom'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --tw-color-red: #f00;
       --tw-color-green: #0f0;
       --tw-breakpoint-sm: 640px;
@@ -300,7 +300,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
 
   expect(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom']))
     .toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --tw-color-potato: #7a4724;
       }
       .tw\\:bg-potato {
@@ -338,7 +338,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   })
 
   expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --tw-color-potato: #7a4724;
     }
     "

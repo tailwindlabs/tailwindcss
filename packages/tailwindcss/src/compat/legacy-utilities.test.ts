@@ -85,7 +85,7 @@ test('max-w-screen', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;

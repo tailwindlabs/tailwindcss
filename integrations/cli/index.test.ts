@@ -370,7 +370,7 @@ describe.each([
 
       await fs.expectFileToContain('project-a/dist/out.css', [
         css`
-          :root {
+          :root, :host {
           }
         `,
       ])

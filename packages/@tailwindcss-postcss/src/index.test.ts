@@ -280,7 +280,7 @@ test('runs `Once` plugins in the right order', async () => {
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --color-red-500: red;
     }
 
@@ -297,7 +297,7 @@ test('runs `Once` plugins in the right order', async () => {
     }"
   `)
   expect(after).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --color-red-500: red;
     }
 
