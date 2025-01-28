@@ -1,13 +1,9 @@
 name: Release
 
 on:
+  release:
+    types: [published]
   workflow_dispatch:
-    inputs:
-      release_channel:
-        description: 'Release channel'
-        required: false
-        default: 'next'
-        type: string
 
 permissions:
   contents: read
