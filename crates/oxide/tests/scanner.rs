@@ -325,12 +325,22 @@ mod scanner {
             ("foo.html", "lg:font-bold"),
             // A svelte file with `class:foo="bar"` syntax
             ("index.svelte", "<div class:px-4='condition'></div>"),
+            ("index2.svelte", "<div\n\tclass:px-5='condition'></div>"),
+            ("index3.svelte", "<div\n  class:px-6='condition'></div>"),
         ])
         .1;
 
         assert_eq!(
             candidates,
-            vec!["condition", "div", "font-bold", "md:flex", "px-4"]
+            vec![
+                "condition",
+                "div",
+                "font-bold",
+                "md:flex",
+                "px-4",
+                "px-5",
+                "px-6"
+            ]
         );
     }
 
