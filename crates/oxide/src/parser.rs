@@ -334,6 +334,26 @@ impl<'a> Extractor<'a> {
             return ValidationResult::Restart;
         }
 
+        // Only allow parentheses for the shorthand arbitrary custom properties syntax
+        if let Some(index) = utility.find(b"(") {
+            let mut skip_parens_check = false;
+            let start_brace_index = utility.find(b"[");
+            let end_brace_index = utility.find(b"]");
+
+            match (start_brace_index, end_brace_index) {
+                (Some(start_brace_index), Some(end_brace_index)) => {
+                    if start_brace_index < index && end_brace_index > index {
+                        skip_parens_check = true;
+                    }
+                }
+                _ => {}
+            }
+
+            if !skip_parens_check && !utility[index + 1..].starts_with(b"--") {
+                return ValidationResult::Restart;
+            }
+        }
+
         // Pluck out the part that we are interested in.
         let utility = &utility[offset..(utility.len() - offset_end)];
 
@@ -911,9 +931,6 @@ impl<'a> Extractor<'a> {
     fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
         match self.without_surrounding() {
             Bracketing::None => ParseAction::SingleCandidate(candidate),
-            Bracketing::Included(sliceable) if sliceable == candidate => {
-                ParseAction::SingleCandidate(candidate)
-            }
             Bracketing::Included(sliceable) | Bracketing::Wrapped(sliceable) => {
                 if candidate == sliceable {
                     ParseAction::SingleCandidate(candidate)
@@ -1117,7 +1134,7 @@ mod test {
         assert_eq!(candidates, vec!["something"]);
 
         let candidates = run(" [feature(slice_as_chunks)]", false);
-        assert_eq!(candidates, vec!["feature(slice_as_chunks)"]);
+        assert_eq!(candidates, vec!["feature", "slice_as_chunks"]);
 
         let candidates = run("![feature(slice_as_chunks)]", false);
         assert!(candidates.is_empty());
@@ -1213,9 +1230,8 @@ mod test {
 
     #[test]
     fn ignores_arbitrary_property_ish_things() {
-        // FIXME: () are only valid in an arbitrary
         let candidates = run(" [feature(slice_as_chunks)]", false);
-        assert_eq!(candidates, vec!["feature(slice_as_chunks)",]);
+        assert_eq!(candidates, vec!["feature", "slice_as_chunks",]);
     }
 
     #[test]
@@ -1637,7 +1653,6 @@ mod test {
 
     #[test]
     fn arbitrary_properties_are_not_picked_up_after_an_escape() {
-        _please_trace();
         let candidates = run(
             r#"
               <!-- [!code word:group-has-\\[a\\]\\:block] -->
@@ -1647,5 +1662,49 @@ mod test {
         );
 
         assert_eq!(candidates, vec!["!code", "a"]);
+    }
+
+    #[test]
+    fn test_find_candidates_in_braces_inside_brackets() {
+        let candidates = run(
+            r#"
+                const classes = [wrapper("bg-red-500")]
+            "#,
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["const", "classes", "wrapper", "bg-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_is_valid_candidate_string() {
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo-(--color-red-500)"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"bg-[url(foo)]"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"group-foo/(--bar)"),
+            ValidationResult::Valid
+        );
+
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo(\"bg-red-500\")"),
+            ValidationResult::Restart
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo-("),
+            ValidationResult::Restart
+        );
     }
 }
