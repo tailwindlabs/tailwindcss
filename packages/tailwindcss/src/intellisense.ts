@@ -1,6 +1,7 @@
 import { styleRule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
+import { compare } from './utils/compare'
 
 interface ClassMetadata {
   modifiers: string[]
@@ -33,7 +34,7 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
     }
   }
 
-  list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] < b[0] ? -1 : 1))
+  list.sort((a, b) => compare(a[0], b[0]))
 
   return list
 }
@@ -57,11 +58,12 @@ export function getVariants(design: DesignSystem) {
   for (let [root, variant] of design.variants.entries()) {
     if (variant.kind === 'arbitrary') continue
 
+    let hasDash = root !== '@'
     let values = design.variants.getCompletions(root)
 
     function selectors({ value, modifier }: SelectorOptions = {}) {
       let name = root
-      if (value) name += `-${value}`
+      if (value) name += hasDash ? `-${value}` : value
       if (modifier) name += `/${modifier}`
 
       let variant = design.parseVariant(name)
@@ -128,7 +130,7 @@ export function getVariants(design: DesignSystem) {
           name: root,
           values,
           isArbitrary: false,
-          hasDash: true,
+          hasDash,
           selectors,
         })
         break
@@ -138,7 +140,7 @@ export function getVariants(design: DesignSystem) {
           name: root,
           values,
           isArbitrary: true,
-          hasDash: true,
+          hasDash,
           selectors,
         })
         break
@@ -148,7 +150,7 @@ export function getVariants(design: DesignSystem) {
           name: root,
           values,
           isArbitrary: true,
-          hasDash: true,
+          hasDash,
           selectors,
         })
         break
