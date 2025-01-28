@@ -2,6 +2,9 @@ import { styleRule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 
+const ZERO = 48
+const NINE = 57
+
 interface ClassMetadata {
   modifiers: string[]
 }
@@ -33,7 +36,7 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
     }
   }
 
-  list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] < b[0] ? -1 : 1))
+  list.sort(([a], [b]) => compare(a, b))
 
   return list
 }
@@ -158,4 +161,43 @@ export function getVariants(design: DesignSystem) {
   }
 
   return list
+}
+
+function compare(a: string, z: string) {
+  let aLen = a.length
+  let zLen = z.length
+
+  let minLen = aLen < zLen ? aLen : zLen
+
+  for (let i = 0; i < minLen; i++) {
+    let aCode = a.charCodeAt(i)
+    let zCode = z.charCodeAt(i)
+
+    if (aCode === zCode) continue
+
+    if (aCode >= ZERO && aCode <= NINE && zCode >= ZERO && zCode <= NINE) {
+      // Start position of the number in the string.
+      let aStart = i
+      let zStart = i
+
+      // End position of the number in the string, starts at the next character.
+      let aEnd = i + 1
+      let zEnd = i + 1
+
+      aCode = a.charCodeAt(aEnd)
+      while (aCode >= ZERO && aCode <= NINE) aCode = a.charCodeAt(++aEnd)
+
+      zCode = z.charCodeAt(zEnd)
+      while (zCode >= ZERO && zCode <= NINE) zCode = z.charCodeAt(++zEnd)
+
+      let aNumber = a.slice(aStart, aEnd)
+      let zNumber = z.slice(zStart, zEnd)
+
+      return Number(aNumber) - Number(zNumber)
+    }
+
+    return aCode - zCode
+  }
+
+  return a.length - z.length
 }
