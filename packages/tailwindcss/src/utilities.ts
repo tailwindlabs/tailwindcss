@@ -1752,6 +1752,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
     handleBareValue: ({ value }) => {
+      if (value === '0') return null
       if (!isPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
@@ -1763,6 +1764,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-rows', {
     themeKeys: ['--grid-template-rows'],
     handleBareValue: ({ value }) => {
+      if (value === '0') return null
       if (!isPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
