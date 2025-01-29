@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
 
 ## [4.0.1] - 2025-01-29
 
