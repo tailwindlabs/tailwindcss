@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Target `:open` in existing `open` variant ([#15349](https://github.com/tailwindlabs/tailwindcss/pull/15349))
+- Target `::details-content` in new `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
 
 ### Fixed
 
