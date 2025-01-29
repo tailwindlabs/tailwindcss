@@ -281,6 +281,11 @@ async function parseCss(
         }
 
         let selectors = segment(selector.slice(1, -1), ',')
+        if (selectors.length === 0 || selectors.some((selector) => selector.trim() === '')) {
+          throw new Error(
+            `\`@custom-variant ${name} (${selectors.join(',')})\` selector is invalid.`,
+          )
+        }
 
         let atRuleParams: string[] = []
         let styleRuleSelectors: string[] = []

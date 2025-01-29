@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure that `@tailwindcss/browser` does not pollute the global namespace ([#15978](https://github.com/tailwindlabs/tailwindcss/pull/15978))
 - Ensure CSS variables are registered on `:host` to be available within shadow roots ([#15975](https://github.com/tailwindlabs/tailwindcss/pull/15975))
 - Fix crash when project lives in the `/` directory ([#15988](https://github.com/tailwindlabs/tailwindcss/pull/15988))
+- Ensure `@custom-variant` has a non-empty selector list  ([#16009](https://github.com/tailwindlabs/tailwindcss/pull/16009))
 - _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 - _Upgrade_: Migrate `leading-[1]` to `leading-none` ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
 - _Upgrade_: Do not migrate arbitrary leading utilities to bare utilities ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))

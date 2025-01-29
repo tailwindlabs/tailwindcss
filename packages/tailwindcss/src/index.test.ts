@@ -2514,6 +2514,26 @@ describe('@custom-variant', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@custom-variant\` cannot be nested.]`)
   })
 
+  test('@custom-variant must not have an empty selector', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant foo ();
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant foo ()\` selector is invalid.]`,
+    )
+  })
+
+  test('@custom-variant with multiple selectors, cannot be empty', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant foo (.foo, .bar, );
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant foo (.foo, .bar, )\` selector is invalid.]`,
+    )
+  })
+
   test('@custom-variant with no body must include a selector', () => {
     return expect(
       compileCss(css`
