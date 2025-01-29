@@ -9,6 +9,8 @@ import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
 
+const IGNORED_DEPENDENCIES = ['tailwind-merge']
+
 export default function tailwindcss(): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
@@ -62,6 +64,18 @@ export default function tailwindcss(): Plugin[] {
   })
 
   function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
+    for (let dependency of IGNORED_DEPENDENCIES) {
+      // We validated that Vite IDs always use posix style path separators, even on Windows.
+      // In dev build, Vite precompiles dependencies
+      if (id.includes(`.vite/deps/${dependency}.js`)) {
+        return
+      }
+      // In prod builds, use the node_modules path
+      if (id.includes(`/node_modules/${dependency}/`)) {
+        return
+      }
+    }
+
     let updated = false
     for (let candidate of moduleGraphScanner.scanFiles([{ content, extension }])) {
       updated = true
