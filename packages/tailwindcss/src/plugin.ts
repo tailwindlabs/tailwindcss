@@ -1,5 +1,7 @@
 import type { Config, PluginFn, PluginWithConfig, PluginWithOptions } from './compat/plugin-api'
 
+export type { Config, PluginFn, PluginWithConfig, PluginWithOptions }
+
 function createPlugin(handler: PluginFn, config?: Partial<Config>): PluginWithConfig {
   return {
     handler,
