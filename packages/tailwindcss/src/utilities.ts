@@ -17,6 +17,7 @@ import { DefaultMap } from './utils/default-map'
 import {
   inferDataType,
   isPositiveInteger,
+  isStrictPositiveInteger,
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
@@ -1752,7 +1753,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
     handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
+      if (!isStrictPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-columns', value)],
@@ -1763,7 +1764,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-rows', {
     themeKeys: ['--grid-template-rows'],
     handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
+      if (!isStrictPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-rows', value)],

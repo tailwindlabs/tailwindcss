@@ -6995,6 +6995,7 @@ test('grid-cols', async () => {
   expect(
     await run([
       'grid-cols',
+      'grid-cols-0',
       '-grid-cols-none',
       '-grid-cols-subgrid',
       'grid-cols--12',
@@ -7043,6 +7044,7 @@ test('grid-rows', async () => {
   expect(
     await run([
       'grid-rows',
+      'grid-rows-0',
       '-grid-rows-none',
       '-grid-rows-subgrid',
       'grid-rows--12',
