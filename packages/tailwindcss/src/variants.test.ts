@@ -6,15 +6,6 @@ import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
 
-test('force', async () => {
-  expect(await run(['force:flex'])).toMatchInlineSnapshot(`
-    ".force\\:flex {
-      display: flex;
-    }"
-  `)
-  expect(await run(['force/foo:flex'])).toEqual('')
-})
-
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
     ":is(.\\*\\:flex > *) {

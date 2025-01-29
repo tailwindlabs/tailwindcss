@@ -365,7 +365,6 @@ export function createVariants(theme: Theme): Variants {
     )
   }
 
-  variants.static('force', () => {}, { compounds: Compounds.Never })
   staticVariant('*', [':is(& > *)'], { compounds: Compounds.Never })
   staticVariant('**', [':is(& *)'], { compounds: Compounds.Never })
 

@@ -112,13 +112,16 @@ impl DetectSources {
                     continue;
                 }
 
-                // If we are in a directory where the parent is a forced static directory, then this
-                // will become a forced static directory as well.
-                if forced_static_directories.contains(&entry.path().parent().unwrap().to_path_buf())
-                {
-                    forced_static_directories.push(entry.path().to_path_buf());
-                    root_directories.insert(entry.path().to_path_buf());
-                    continue;
+                // Although normally very unlikely, if running inside a dockerfile
+                // the current directory might be "/" with no parent
+                if let Some(parent) = entry.path().parent() {
+                    // If we are in a directory where the parent is a forced static directory, then this
+                    // will become a forced static directory as well.
+                    if forced_static_directories.contains(&parent.to_path_buf()) {
+                        forced_static_directories.push(entry.path().to_path_buf());
+                        root_directories.insert(entry.path().to_path_buf());
+                        continue;
+                    }
                 }
 
                 // If we are in a directory, and the directory is git ignored, then we don't have to

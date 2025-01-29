@@ -64,6 +64,23 @@ export function arbitraryValueToBareValue(
       clone.value?.kind === 'arbitrary' &&
       clone.value.dataType === null
     ) {
+      if (clone.root === 'leading') {
+        // leading-[1] -> leading-none
+        if (clone.value.value === '1') {
+          changed = true
+          clone.value = {
+            kind: 'named',
+            value: 'none',
+            fraction: null,
+          }
+        }
+
+        // Keep leading-[<number>] as leading-[<number>]
+        else {
+          continue
+        }
+      }
+
       let parts = segment(clone.value.value, '/')
       if (parts.every((part) => isPositiveInteger(part))) {
         changed = true
