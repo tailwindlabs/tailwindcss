@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`border-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -126,7 +126,7 @@ exports[`border-* 1`] = `
 `;
 
 exports[`border-b-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -251,7 +251,7 @@ exports[`border-b-* 1`] = `
 `;
 
 exports[`border-e-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -376,7 +376,7 @@ exports[`border-e-* 1`] = `
 `;
 
 exports[`border-l-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -501,7 +501,7 @@ exports[`border-l-* 1`] = `
 `;
 
 exports[`border-r-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -626,7 +626,7 @@ exports[`border-r-* 1`] = `
 `;
 
 exports[`border-s-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -751,7 +751,7 @@ exports[`border-s-* 1`] = `
 `;
 
 exports[`border-t-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -876,7 +876,7 @@ exports[`border-t-* 1`] = `
 `;
 
 exports[`border-x-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -1001,7 +1001,7 @@ exports[`border-x-* 1`] = `
 `;
 
 exports[`border-y-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;

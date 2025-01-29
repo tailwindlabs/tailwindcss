@@ -322,7 +322,7 @@ describe('theme callbacks', () => {
 
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
-        ":root {
+        ":root, :host {
           --text-base: 100rem;
           --text-md--line-height: 101rem;
         }
@@ -391,7 +391,7 @@ describe('theme overrides order', () => {
     })
 
     expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-blue: blue;
       }
       .bg-blue {
@@ -477,7 +477,7 @@ describe('theme overrides order', () => {
         'hover-bg-slate-600',
       ]),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-slate-100: #000100;
         --color-slate-300: #000300;
         --color-slate-400: #100400;
@@ -562,7 +562,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: normal;
@@ -601,7 +601,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: "cv06";
         --default-font-variation-settings: normal;
@@ -641,7 +641,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: "XHGT" 0.7;
@@ -684,7 +684,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: "cv06";
         --default-font-variation-settings: "XHGT" 0.7;
@@ -728,7 +728,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
         --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
@@ -768,7 +768,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Inter, system-ui, sans-serif;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: normal;
@@ -807,7 +807,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
         --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
@@ -841,7 +841,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: normal;
         --default-mono-font-variation-settings: normal;
@@ -880,7 +880,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: "cv06";
         --default-mono-font-variation-settings: normal;
@@ -920,7 +920,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: normal;
         --default-mono-font-variation-settings: "XHGT" 0.7;
@@ -963,7 +963,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: "cv06";
         --default-mono-font-variation-settings: "XHGT" 0.7;
@@ -1007,7 +1007,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: var(--font-mono);
         --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
         --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
@@ -1047,7 +1047,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
         --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
@@ -1179,7 +1179,7 @@ test('merges css breakpoints with js config screens', async () => {
 
   expect(compiler.build(['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline']))
     .toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 50rem;
         --breakpoint-lg: 64rem;
         --breakpoint-xl: 80rem;
@@ -1333,7 +1333,7 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
   )
 
   expect(compiler.build(['wat:custom'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --wat-color-red: #f00;
       --wat-color-green: #0f0;
       --wat-breakpoint-sm: 640px;

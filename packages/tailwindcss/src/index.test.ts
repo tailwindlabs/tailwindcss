@@ -25,7 +25,7 @@ describe('compiling CSS', () => {
         ['flex', 'md:grid', 'hover:underline', 'dark:bg-black'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-black: #000;
         --breakpoint-md: 768px;
       }
@@ -133,7 +133,7 @@ describe('compiling CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1_5: 1.5rem;
         --spacing-2_5: 2.5rem;
       }
@@ -245,7 +245,7 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-200: #fecaca;
         --color-red-500: #ef4444;
         --color-blue-500: #3b82f6;
@@ -608,7 +608,7 @@ describe('important', () => {
         ['animate-spin!'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -646,7 +646,7 @@ describe('sorting', () => {
         ['pointer-events-none', 'flex', 'p-1', 'px-1', 'pl-1'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1: .25rem;
       }
 
@@ -709,7 +709,7 @@ describe('sorting', () => {
         ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-0: 0px;
         --spacing-2: .5rem;
         --spacing-4: 1rem;
@@ -771,7 +771,7 @@ describe('sorting', () => {
         ].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1: 1px;
         --spacing-2: 2px;
         --spacing-3: 3px;
@@ -992,7 +992,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: red;
       }
 
@@ -1015,7 +1015,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: #f10;
       }
 
@@ -1040,7 +1040,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500', 'accent-blue-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: red;
         --color-blue-500: #00f;
       }
@@ -1069,7 +1069,7 @@ describe('Parsing themes values from CSS', () => {
         ['w-1/2', 'w-75%'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --width-1\\/2: 75%;
         --width-75\\%: 50%;
       }
@@ -1105,7 +1105,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'text-lg'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red: red;
         --animate-foo: foo 1s infinite;
         --text-lg: 20px;
@@ -1159,7 +1159,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-sm: 13px;
         --color-green: #0f0;
       }
@@ -1206,7 +1206,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-sm: 13px;
         --color-green: #0f0;
       }
@@ -1242,7 +1242,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-green: #0f0;
       }
 
@@ -1270,7 +1270,7 @@ describe('Parsing themes values from CSS', () => {
         ['font-bold', 'font-sans', 'font-serif', 'font-body'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --font-weight-bold: bold;
         --font-body: Inter;
       }
@@ -1309,7 +1309,7 @@ describe('Parsing themes values from CSS', () => {
         ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
@@ -1420,7 +1420,7 @@ describe('Parsing themes values from CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-color-potato: brown;
         --text-underline-offset-potato: 4px;
         --text-indent-potato: 6px;
@@ -1485,7 +1485,7 @@ describe('Parsing themes values from CSS', () => {
         ['animate-foo', 'animate-foobar'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --animate-foobar: foobar 1s infinite;
       }
 
@@ -1516,7 +1516,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
       }
 
@@ -1566,7 +1566,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #c794aa;
       }
 
@@ -1596,7 +1596,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
       }
 
@@ -1647,7 +1647,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
         --color-potato: #ac855b;
         --color-primary: var(--primary);
@@ -1684,7 +1684,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
         --color-potato: #ac855b;
         --color-primary: var(--primary);
@@ -1780,7 +1780,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #ac855b;
       }
 
@@ -1803,7 +1803,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #efb46b;
       }
 
@@ -1872,7 +1872,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato', 'bg-tomato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #ac855b;
         --color-tomato: tomato;
       }
@@ -1919,7 +1919,7 @@ describe('Parsing themes values from CSS', () => {
     )
 
     expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-orange: orange;
       }
 
@@ -1965,7 +1965,7 @@ describe('Parsing themes values from CSS', () => {
     )
 
     expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-orange: orange;
       }
 

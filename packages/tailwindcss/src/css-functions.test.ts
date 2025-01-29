@@ -72,7 +72,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing: .25rem;
       }
 
@@ -94,7 +94,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing: .25rem;
       }
 
@@ -157,7 +157,7 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: red;
       }
 
@@ -197,7 +197,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -218,7 +218,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -239,7 +239,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -260,7 +260,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -281,7 +281,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -302,7 +302,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -323,7 +323,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -344,7 +344,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -365,7 +365,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -386,7 +386,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -408,7 +408,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -429,7 +429,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-12: 3rem;
           }
 
@@ -450,7 +450,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-2_5: .625rem;
           }
 
@@ -471,7 +471,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-2_5: .625rem;
           }
 
@@ -492,7 +492,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --radius-lg: .5rem;
           }
 
@@ -514,14 +514,14 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-          ":root {
-            --blur: 8px;
-          }
+            ":root, :host {
+              --blur: 8px;
+            }
 
-          .default-blur {
-            filter: blur(8px);
-          }"
-        `)
+            .default-blur {
+              filter: blur(8px);
+            }"
+          `)
         })
 
         test('theme(fontSize.xs[1].lineHeight)', async () => {
@@ -537,7 +537,7 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ":root {
+            ":root, :host {
               --text-xs: 1337.75rem;
               --text-xs--line-height: 1337rem;
             }
@@ -626,7 +626,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -684,7 +684,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
             --color-foo: red;
           }
@@ -707,7 +707,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
             --color-foo: oklab(62.7955% .22486 .12584 / .5);
           }
@@ -731,7 +731,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -752,7 +752,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -773,7 +773,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -796,7 +796,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --blur: 8px;
           }
 
@@ -861,7 +861,7 @@ describe('theme(…)', () => {
           }
         }
 
-        :root {
+        :root, :host {
           --breakpoint-sm: 40rem;
           --color-red-500: red;
         }"
@@ -921,7 +921,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root {
+        ":root, :host {
           --breakpoint-md: 48rem;
           --breakpoint-lg: 64rem;
         }
@@ -948,7 +948,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root {
+        ":root, :host {
           --breakpoint-md: 48rem;
           --breakpoint-lg: 64rem;
         }
@@ -976,7 +976,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 48rem;
       }
 
@@ -1001,7 +1001,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 48rem;
       }
 
@@ -1026,7 +1026,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --font-size-xs: .75rem;
       }
 
@@ -1187,7 +1187,7 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
       },
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --color-red-500: red;
     }
 
@@ -1212,7 +1212,7 @@ test('resolves paths ending with a 1', async () => {
       [],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --spacing-1: .25rem;
     }
 
