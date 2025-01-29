@@ -7,21 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.1] - 2025-01-29
+
 ### Added
 
-- Target `:open` in existing `open` variant ([#15349](https://github.com/tailwindlabs/tailwindcss/pull/15349))
+- Include `:open` pseudo-class in existing `open` variant ([#15349](https://github.com/tailwindlabs/tailwindcss/pull/15349))
 
 ### Fixed
 
 - Remove invalid `min-w/h-none` utilities ([#15845](https://github.com/tailwindlabs/tailwindcss/pull/15845))
-- Ensure CSS variable shorthand uses valid CSS variables ([#15738](https://github.com/tailwindlabs/tailwindcss/pull/15738))
-- Ensure font-size utilities with `none` modifier have a line-height set e.g.: `text-sm/none` ([#15921](https://github.com/tailwindlabs/tailwindcss/pull/15921))
+- Discard CSS variable shorthand utilities that don't use valid CSS variables ([#15738](https://github.com/tailwindlabs/tailwindcss/pull/15738))
+- Ensure font-size utilities with `none` modifier have a line-height set e.g. `text-sm/none` ([#15921](https://github.com/tailwindlabs/tailwindcss/pull/15921))
 - Ensure font-size utilities with unknown modifier don't generate CSS ([#15921](https://github.com/tailwindlabs/tailwindcss/pull/15921))
 - Don’t suggest font weight utilities more than once ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Suggest container query variants ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Disable bare value suggestions when not using the `--spacing` variable ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
 - Ensure suggested classes are properly sorted ([#15857](https://github.com/tailwindlabs/tailwindcss/pull/15857))
-- Don’t look at ignore files outside initialized repos ([#15941](https://github.com/tailwindlabs/tailwindcss/pull/15941))
+- Don’t look at .gitignore files outside initialized repos ([#15941](https://github.com/tailwindlabs/tailwindcss/pull/15941))
 - Find utilities when using the Svelte class shorthand syntax across multiple lines ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))
 - Find utilities when using the Angular class shorthand syntax ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))
 - Find utilities when using functions inside arrays ([#15974](https://github.com/tailwindlabs/tailwindcss/pull/15974))
@@ -29,10 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure that `tailwind-merge` is not scanned when using the Vite plugin ([#16005](https://github.com/tailwindlabs/tailwindcss/pull/16005))
 - Ensure CSS theme variables are available within shadow roots ([#15975](https://github.com/tailwindlabs/tailwindcss/pull/15975))
 - Fix crash when project lives in the `/` directory ([#15988](https://github.com/tailwindlabs/tailwindcss/pull/15988))
-- Ensure `@custom-variant` has a non-empty selector list  ([#16009](https://github.com/tailwindlabs/tailwindcss/pull/16009))
+- Ensure custom variants have a non-empty selector list ([#16009](https://github.com/tailwindlabs/tailwindcss/pull/16009))
 - _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 - _Upgrade_: Migrate `leading-[1]` to `leading-none` ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
-- _Upgrade_: Do not migrate arbitrary leading utilities to bare utilities ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
+- _Upgrade_: Do not migrate arbitrary leading utilities to bare values ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
 
 ## [4.0.0] - 2025-01-21
 
@@ -3347,7 +3351,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
 [4.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.9...v4.0.0-beta.10
 [4.0.0-beta.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.8...v4.0.0-beta.9
