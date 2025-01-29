@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.1] - 2025-01-29
+
 ### Added
 
 - Target `:open` in existing `open` variant ([#15349](https://github.com/tailwindlabs/tailwindcss/pull/15349))
@@ -29,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure that `tailwind-merge` is not scanned when using the Vite plugin ([#16005](https://github.com/tailwindlabs/tailwindcss/pull/16005))
 - Ensure CSS theme variables are available within shadow roots ([#15975](https://github.com/tailwindlabs/tailwindcss/pull/15975))
 - Fix crash when project lives in the `/` directory ([#15988](https://github.com/tailwindlabs/tailwindcss/pull/15988))
-- Ensure `@custom-variant` has a non-empty selector list  ([#16009](https://github.com/tailwindlabs/tailwindcss/pull/16009))
+- Ensure `@custom-variant` has a non-empty selector list ([#16009](https://github.com/tailwindlabs/tailwindcss/pull/16009))
 - _Upgrade_: Ensure JavaScript config files on different drives are correctly migrated ([#15927](https://github.com/tailwindlabs/tailwindcss/pull/15927))
 - _Upgrade_: Migrate `leading-[1]` to `leading-none` ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
 - _Upgrade_: Do not migrate arbitrary leading utilities to bare utilities ([#16004](https://github.com/tailwindlabs/tailwindcss/pull/16004))
@@ -3347,7 +3351,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
 [4.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.9...v4.0.0-beta.10
 [4.0.0-beta.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.8...v4.0.0-beta.9
