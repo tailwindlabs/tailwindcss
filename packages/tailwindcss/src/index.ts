@@ -478,7 +478,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = styleRule(':root', node.nodes)
+        firstThemeRule = styleRule(':root, :host', node.nodes)
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])

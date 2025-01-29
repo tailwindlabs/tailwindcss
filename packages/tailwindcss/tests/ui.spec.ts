@@ -639,6 +639,45 @@ test('explicit duration and ease utilities are respected when overriding transit
   expect(await getPropertyValue('#x', 'transition-duration')).toEqual('0.5s')
 })
 
+test('shadow DOM has access to variables', async ({ page }) => {
+  await render(
+    page,
+    html`
+      <script type="text/javascript">
+        class Component extends HTMLElement {
+          constructor() {
+            super()
+            this.attachShadow({ mode: 'open' })
+          }
+
+          connectedCallback() {
+            this.shadowRoot.innerHTML =
+              '<style>' +
+              document.querySelector('style').textContent +
+              '</style>' +
+              '<div class="flex gap-2" id="x">' +
+              '  <div>one</div>' +
+              '  <div>two</div>' +
+              '</div>'
+          }
+        }
+
+        customElements.define('my-component', Component)
+      </script>
+
+      <my-component id="shadow"></my-component>
+    `,
+  )
+
+  let gap = await page.evaluate(() => {
+    let shadowRoot = document.querySelector('#shadow')!.shadowRoot!
+    let x = shadowRoot.querySelector('#x')!
+    return window.getComputedStyle(x).getPropertyValue('gap')
+  })
+
+  expect(gap).toBe('8px')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
@@ -673,14 +712,13 @@ async function render(page: Page, content: string, extraCss: string = '') {
   // mouse to before running the tests.
   content = `<div id="mouse-park" class="size-12"></div>${content}`
 
-  await page.setContent(content)
-
   let scanner = new Scanner({})
   let candidates = scanner.scanFiles([{ content, extension: 'html' }])
 
-  await page.addStyleTag({
-    content: optimizeCss(build(candidates)),
-  })
+  let styles = optimizeCss(build(candidates))
+
+  content = `<style type="text/css">${styles}</style>${content}`
+  await page.setContent(content)
 
   await page.locator('#mouse-park').hover()
 
