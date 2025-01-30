@@ -690,6 +690,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('autofill', ['&:autofill'])
   staticVariant('optional', ['&:optional'])
   staticVariant('required', ['&:required'])
+  staticVariant('user-valid', ['&:user-valid'])
+  staticVariant('user-invalid', ['&:user-invalid'])
   staticVariant('valid', ['&:valid'])
   staticVariant('invalid', ['&:invalid'])
   staticVariant('in-range', ['&:in-range'])
