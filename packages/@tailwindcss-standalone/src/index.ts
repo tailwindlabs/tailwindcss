@@ -96,7 +96,13 @@ Bun.plugin({
     }
 
     for (let [id, exports] of Object.entries(bundled)) {
-      build.module(id, () => ({ loader: 'object', exports }))
+      build.module(id, () => ({
+        loader: 'object',
+        exports: {
+          ...exports,
+          __esModule: true,
+        },
+      }))
     }
   },
 })
