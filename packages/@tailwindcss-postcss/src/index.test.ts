@@ -248,6 +248,33 @@ test('bail early when Tailwind is not used', async () => {
   `)
 })
 
+test('handle CSS when only using a `@reference` (we should not bail early)', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    css`
+      @reference "tailwindcss/theme.css";
+
+      foo {
+        @variant md {
+          bar: baz;
+        }
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    "@media (width >= 48rem) {
+      foo {
+        bar: baz;
+      }
+    }"
+  `)
+})
+
 test('runs `Once` plugins in the right order', async () => {
   let before = ''
   let after = ''
