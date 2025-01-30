@@ -2370,7 +2370,7 @@ export function createUtilities(theme: Theme) {
               value = negative ? `calc(${value} * -1)` : `${value}`
 
               return [
-                decl('--tw-gradient-position', `${value}`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2378,7 +2378,7 @@ export function createUtilities(theme: Theme) {
               if (negative) return
 
               return [
-                decl('--tw-gradient-position', `${value}`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2425,7 +2425,7 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           let value = candidate.value.value
           return [
-            decl('--tw-gradient-position', `${value}`),
+            decl('--tw-gradient-position', value),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
           ]
         }
@@ -2434,7 +2434,7 @@ export function createUtilities(theme: Theme) {
 
         if (!candidate.value) {
           return [
-            decl('--tw-gradient-position', `${interpolationMethod}`),
+            decl('--tw-gradient-position', interpolationMethod),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
           ]
         }
@@ -2471,7 +2471,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
         return [
-          decl('--tw-gradient-position', `${interpolationMethod}`),
+          decl('--tw-gradient-position', interpolationMethod),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2480,7 +2480,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier) return
         let value = candidate.value.value
         return [
-          decl('--tw-gradient-position', `${value}`),
+          decl('--tw-gradient-position', value),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
         ]
       }
