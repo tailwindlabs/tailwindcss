@@ -41,9 +41,7 @@ export class Theme {
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
-    if (key.endsWith('\\*')) {
-      key = key.slice(0, -2) + '*'
-    }
+    key = key.replaceAll('.', '_')
 
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
@@ -150,7 +148,7 @@ export class Theme {
     for (let namespace of themeKeys) {
       let themeKey =
         candidateValue !== null
-          ? (escape(`${namespace}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
+          ? (`${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey)
           : namespace
 
       if (!this.values.has(themeKey)) continue
@@ -167,7 +165,7 @@ export class Theme {
       return null
     }
 
-    return `var(${this.#prefixKey(themeKey)})`
+    return `var(${escape(this.#prefixKey(themeKey))})`
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

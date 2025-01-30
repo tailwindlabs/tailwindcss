@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
+- Ensure escaped theme variables are handled correctly ([#16064](https://github.com/tailwindlabs/tailwindcss/pull/16064))
 
 ## [4.0.1] - 2025-01-29
 

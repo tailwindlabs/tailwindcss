@@ -1,6 +1,5 @@
 import type { DesignSystem } from '../design-system'
 import { ThemeOptions } from '../theme'
-import { escape } from '../utils/escape'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
@@ -55,7 +54,7 @@ export function applyConfigToTheme(
     if (!name) continue
 
     designSystem.theme.add(
-      `--${escape(name)}`,
+      `--${name}`,
       '' + value,
       ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
     )

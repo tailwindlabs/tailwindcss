@@ -152,6 +152,35 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('unescapes theme variables and handles dots as underscore', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-1\.5: 2.5rem;
+            --spacing-foo\/bar: 3rem;
+          }
+          @tailwind utilities;
+        `,
+        ['m-1.5', 'm-foo/bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing-1_5: 2.5rem;
+        --spacing-foo\\/bar: 3rem;
+      }
+
+      .m-1\\.5 {
+        margin: var(--spacing-1_5);
+      }
+
+      .m-foo\\/bar {
+        margin: var(--spacing-foo\\/bar);
+      }"
+    `)
+  })
+
   test('adds vendor prefixes', async () => {
     expect(
       await compileCss(
