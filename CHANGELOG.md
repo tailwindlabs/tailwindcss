@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
+- Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
+- Vite: Fix a crash happening in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 
 ## [4.0.1] - 2025-01-29
 
