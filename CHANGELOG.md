@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
+- Ensure we process Tailwind CSS features when only using `@reference` or `@variant` ([#16057](https://github.com/tailwindlabs/tailwindcss/pull/16057))
+- Refactor gradient implementation to work around [prettier/prettier#17058](https://github.com/prettier/prettier/issues/17058) ([#16072](https://github.com/tailwindlabs/tailwindcss/pull/16072))
 - Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 

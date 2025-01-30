@@ -10160,257 +10160,257 @@ test('bg', async () => {
     }
 
     .-bg-conic-45\\/oklab {
-      --tw-gradient-position: from calc(45 * -1) in oklab, ;
+      --tw-gradient-position: from calc(45 * -1) in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .-bg-linear-45, .-bg-linear-45\\/oklab {
-      --tw-gradient-position: calc(45deg * -1) in oklab, ;
+      --tw-gradient-position: calc(45deg * -1) in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .-bg-linear-\\[1\\.3rad\\] {
-      --tw-gradient-position: calc(74.4845deg * -1), ;
+      --tw-gradient-position: calc(74.4845deg * -1);
       background-image: linear-gradient(var(--tw-gradient-stops, calc(74.4845deg * -1)));
     }
 
     .-bg-linear-\\[125deg\\] {
-      --tw-gradient-position: calc(125deg * -1), ;
+      --tw-gradient-position: calc(125deg * -1);
       background-image: linear-gradient(var(--tw-gradient-stops, calc(125deg * -1)));
     }
 
     .bg-conic-45\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: from 45deg in hsl longer hue, ;
+      --tw-gradient-position: from 45deg in hsl longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic-45\\/oklab {
-      --tw-gradient-position: from 45deg in oklab, ;
+      --tw-gradient-position: from 45deg in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic-45\\/shorter {
-      --tw-gradient-position: from 45deg in oklch shorter hue, ;
+      --tw-gradient-position: from 45deg in oklch shorter hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: in hsl longer hue, ;
+      --tw-gradient-position: in hsl longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/decreasing {
-      --tw-gradient-position: in oklch decreasing hue, ;
+      --tw-gradient-position: in oklch decreasing hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/hsl {
-      --tw-gradient-position: in hsl, ;
+      --tw-gradient-position: in hsl;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/increasing {
-      --tw-gradient-position: in oklch increasing hue, ;
+      --tw-gradient-position: in oklch increasing hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/longer {
-      --tw-gradient-position: in oklch longer hue, ;
+      --tw-gradient-position: in oklch longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/oklab {
-      --tw-gradient-position: in oklab, ;
+      --tw-gradient-position: in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/oklch {
-      --tw-gradient-position: in oklch, ;
+      --tw-gradient-position: in oklch;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/shorter {
-      --tw-gradient-position: in oklch shorter hue, ;
+      --tw-gradient-position: in oklch shorter hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/srgb {
-      --tw-gradient-position: in srgb, ;
+      --tw-gradient-position: in srgb;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45 {
-      --tw-gradient-position: 45deg in oklab, ;
+      --tw-gradient-position: 45deg in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: 45deg in hsl longer hue, ;
+      --tw-gradient-position: 45deg in hsl longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/oklab {
-      --tw-gradient-position: 45deg in oklab, ;
+      --tw-gradient-position: 45deg in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/shorter {
-      --tw-gradient-position: 45deg in oklch shorter hue, ;
+      --tw-gradient-position: 45deg in oklch shorter hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-\\[1\\.3rad\\] {
-      --tw-gradient-position: 74.4845deg, ;
+      --tw-gradient-position: 74.4845deg;
       background-image: linear-gradient(var(--tw-gradient-stops, 74.4845deg));
     }
 
     .bg-linear-\\[125deg\\] {
-      --tw-gradient-position: 125deg, ;
+      --tw-gradient-position: 125deg;
       background-image: linear-gradient(var(--tw-gradient-stops, 125deg));
     }
 
     .bg-linear-\\[to_bottom\\] {
-      --tw-gradient-position: to bottom, ;
+      --tw-gradient-position: to bottom;
       background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
     }
 
     .bg-linear-to-b {
-      --tw-gradient-position: to bottom in oklab, ;
+      --tw-gradient-position: to bottom in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-bl {
-      --tw-gradient-position: to bottom left in oklab, ;
+      --tw-gradient-position: to bottom left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-br {
-      --tw-gradient-position: to bottom right in oklab, ;
+      --tw-gradient-position: to bottom right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-l {
-      --tw-gradient-position: to left in oklab, ;
+      --tw-gradient-position: to left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r {
-      --tw-gradient-position: to right in oklab, ;
+      --tw-gradient-position: to right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: to right in hsl longer hue, ;
+      --tw-gradient-position: to right in hsl longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/\\[longer\\] {
-      --tw-gradient-position: to right longer, ;
+      --tw-gradient-position: to right longer;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/decreasing {
-      --tw-gradient-position: to right in oklch decreasing hue, ;
+      --tw-gradient-position: to right in oklch decreasing hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/hsl {
-      --tw-gradient-position: to right in hsl, ;
+      --tw-gradient-position: to right in hsl;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/increasing {
-      --tw-gradient-position: to right in oklch increasing hue, ;
+      --tw-gradient-position: to right in oklch increasing hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/longer {
-      --tw-gradient-position: to right in oklch longer hue, ;
+      --tw-gradient-position: to right in oklch longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/oklab {
-      --tw-gradient-position: to right in oklab, ;
+      --tw-gradient-position: to right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/oklch {
-      --tw-gradient-position: to right in oklch, ;
+      --tw-gradient-position: to right in oklch;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/shorter {
-      --tw-gradient-position: to right in oklch shorter hue, ;
+      --tw-gradient-position: to right in oklch shorter hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/srgb {
-      --tw-gradient-position: to right in srgb, ;
+      --tw-gradient-position: to right in srgb;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-t {
-      --tw-gradient-position: to top in oklab, ;
+      --tw-gradient-position: to top in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tl {
-      --tw-gradient-position: to top left in oklab, ;
+      --tw-gradient-position: to top left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tr {
-      --tw-gradient-position: to top right in oklab, ;
+      --tw-gradient-position: to top right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial-\\[circle_at_center\\] {
-      --tw-gradient-position: circle at center, ;
+      --tw-gradient-position: circle at center;
       background-image: radial-gradient(var(--tw-gradient-stops, circle at center));
     }
 
     .bg-radial\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: in hsl longer hue, ;
+      --tw-gradient-position: in hsl longer hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/decreasing {
-      --tw-gradient-position: in oklch decreasing hue, ;
+      --tw-gradient-position: in oklch decreasing hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/hsl {
-      --tw-gradient-position: in hsl, ;
+      --tw-gradient-position: in hsl;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/increasing {
-      --tw-gradient-position: in oklch increasing hue, ;
+      --tw-gradient-position: in oklch increasing hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/longer {
-      --tw-gradient-position: in oklch longer hue, ;
+      --tw-gradient-position: in oklch longer hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/oklab {
-      --tw-gradient-position: in oklab, ;
+      --tw-gradient-position: in oklab;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/oklch {
-      --tw-gradient-position: in oklch, ;
+      --tw-gradient-position: in oklch;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/shorter {
-      --tw-gradient-position: in oklch shorter hue, ;
+      --tw-gradient-position: in oklch shorter hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/srgb {
-      --tw-gradient-position: in srgb, ;
+      --tw-gradient-position: in srgb;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
@@ -10710,62 +10710,62 @@ test('from', async () => {
 
     .from-\\[\\#0088cc\\] {
       --tw-gradient-from: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:var\\(--my-color\\)\\]\\/50, .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[var\\(--my-color\\)\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[var\\(--my-color\\)\\]\\/50, .from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current {
       --tw-gradient-from: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-inherit {
       --tw-gradient-from: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500 {
       --tw-gradient-from: var(--color-red-500);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-transparent {
       --tw-gradient-from: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-0\\% {
@@ -10929,73 +10929,73 @@ test('via', async () => {
 
     .via-\\[\\#0088cc\\] {
       --tw-gradient-via: #08c;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:var\\(--my-color\\)\\]\\/50, .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[var\\(--my-color\\)\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[var\\(--my-color\\)\\]\\/50, .via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current {
       --tw-gradient-via: currentColor;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-inherit {
       --tw-gradient-via: inherit;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500 {
       --tw-gradient-via: var(--color-red-500);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-transparent {
       --tw-gradient-via: transparent;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
@@ -11158,62 +11158,62 @@ test('to', async () => {
 
     .to-\\[\\#0088cc\\] {
       --tw-gradient-to: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:var\\(--my-color\\)\\]\\/50, .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[var\\(--my-color\\)\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[var\\(--my-color\\)\\]\\/50, .to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current {
       --tw-gradient-to: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-inherit {
       --tw-gradient-to: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500 {
       --tw-gradient-to: var(--color-red-500);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-transparent {
       --tw-gradient-to: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-0\\% {

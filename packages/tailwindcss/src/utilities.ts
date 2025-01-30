@@ -2370,7 +2370,7 @@ export function createUtilities(theme: Theme) {
               value = negative ? `calc(${value} * -1)` : `${value}`
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2378,7 +2378,7 @@ export function createUtilities(theme: Theme) {
               if (negative) return
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2398,7 +2398,7 @@ export function createUtilities(theme: Theme) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         return [
-          decl('--tw-gradient-position', `${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2425,7 +2425,7 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           let value = candidate.value.value
           return [
-            decl('--tw-gradient-position', `${value},`),
+            decl('--tw-gradient-position', value),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
           ]
         }
@@ -2434,7 +2434,7 @@ export function createUtilities(theme: Theme) {
 
         if (!candidate.value) {
           return [
-            decl('--tw-gradient-position', `${interpolationMethod},`),
+            decl('--tw-gradient-position', interpolationMethod),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
           ]
         }
@@ -2446,7 +2446,7 @@ export function createUtilities(theme: Theme) {
         value = negative ? `calc(${value} * -1)` : `${value}deg`
 
         return [
-          decl('--tw-gradient-position', `from ${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `from ${value} ${interpolationMethod}`),
           decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2471,7 +2471,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
         return [
-          decl('--tw-gradient-position', `${interpolationMethod},`),
+          decl('--tw-gradient-position', interpolationMethod),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2480,7 +2480,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier) return
         let value = candidate.value.value
         return [
-          decl('--tw-gradient-position', `${value},`),
+          decl('--tw-gradient-position', value),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
         ]
       }
@@ -2655,7 +2655,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-from', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-from-position', value)],
@@ -2668,7 +2668,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-via', value),
       decl(
         '--tw-gradient-via-stops',
-        'var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
+        'var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
       ),
       decl('--tw-gradient-stops', 'var(--tw-gradient-via-stops)'),
     ],
@@ -2681,7 +2681,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-to', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
