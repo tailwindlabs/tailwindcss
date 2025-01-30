@@ -157,6 +157,10 @@ for (let [classes, expected] of [
     'bg-radial-[at_0%_0%,var(--color-red),transparent]',
     'radial-gradient(at 0% 0%, rgb(255, 0, 0), rgba(0, 0, 0, 0))',
   ],
+  [
+    'bg-radial-[at_center] from-red to-green',
+    'radial-gradient(rgb(255, 0, 0) 0%, rgb(0, 255, 0) 100%)',
+  ],
 ]) {
   test(`radial gradient, "${classes}"`, async ({ page }) => {
     let { getPropertyValue } = await render(
