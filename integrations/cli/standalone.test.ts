@@ -74,7 +74,7 @@ test(
         @import 'tailwindcss/utilities';
         @plugin './plugin.js';
         /* Does not currently work */
-        /* @plugin './plugin.cjs'; */
+        @plugin './plugin.cjs';
         @plugin './plugin.ts';
       `,
       'src/plugin.js': js`
@@ -104,11 +104,11 @@ test(
         const plugin = require('tailwindcss/plugin')
 
         // Make sure all available JS APIs can be imported and used
-        const * as tw = require('tailwindcss')
+        const tw = require('tailwindcss')
         const colors = require('tailwindcss/colors')
         const flattenColorPalette = require('tailwindcss/lib/util/flattenColorPalette')
         const defaultTheme = require('tailwindcss/defaultTheme')
-        const * as pkg = require('tailwindcss/package.json')
+        const pkg = require('tailwindcss/package.json')
 
         module.exports = plugin(function ({ addUtilities }) {
           addUtilities({
@@ -159,8 +159,7 @@ test(
     await fs.expectFileToContain('dist/out.css', [
       candidate`underline`,
       candidate`example1`,
-      // Does not currently work
-      // candidate` example2`,
+      candidate` example2`,
       candidate`example3`,
     ])
   },
