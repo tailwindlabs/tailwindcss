@@ -1425,7 +1425,7 @@ describe('theme', async () => {
         :root, :host {
           --width-1: 0.25rem;
           --width-1\\/2: 60%;
-          --width-1_5: 0.375rem;
+          --width-1\\.5: 0.375rem;
           --width-2_5: 0.625rem;
         }
         "
@@ -1482,7 +1482,7 @@ describe('theme', async () => {
         :root, :host {
           --width-1: 0.25rem;
           --width-1\\/2: 60%;
-          --width-1_5: 0.375rem;
+          --width-1\\.5: 0.375rem;
           --width-2_5: 0.625rem;
         }
         "

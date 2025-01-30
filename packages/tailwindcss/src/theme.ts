@@ -41,8 +41,6 @@ export class Theme {
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
-    key = key.replaceAll('.', '_')
-
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -147,11 +145,20 @@ export class Theme {
   #resolveKey(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
     for (let namespace of themeKeys) {
       let themeKey =
-        candidateValue !== null
-          ? (`${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey)
-          : namespace
+        candidateValue !== null ? (`${namespace}-${candidateValue}` as ThemeKey) : namespace
 
-      if (!this.values.has(themeKey)) continue
+      if (!this.values.has(themeKey)) {
+        // If the exact theme key is not found, we might be trying to resolve a key containing a dot
+        // that was registered with an underscore instead:
+        if (candidateValue !== null && candidateValue.includes('.')) {
+          themeKey = `${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey
+
+          if (!this.values.has(themeKey)) continue
+        } else {
+          continue
+        }
+      }
+
       if (isIgnoredThemeKey(themeKey, namespace)) continue
 
       return themeKey
