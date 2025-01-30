@@ -88,15 +88,11 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function invalidateAllRoots() {
-    let rootsFound = new Set()
-
     for (let server of servers) {
       let updates: Update[] = []
       for (let [id] of roots.entries()) {
         let module = server.moduleGraph.getModuleById(id)
         if (!module) continue
-
-        rootsFound.add(id)
 
         roots.get(id).requiresRebuild = false
         server.moduleGraph.invalidateModule(module)
@@ -203,7 +199,9 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan all non-CSS files for candidates
       transformIndexHtml(html, { path }) {
+        // SolidStart emits HTML chunks with an undefined path and the html content of `\`.
         if (!path) return
+
         scanFile(path, html, 'html')
       },
       transform(src, id, options) {
