@@ -257,7 +257,7 @@ test('handle CSS when only using a `@reference` (we should not bail early)', asy
     css`
       @reference "tailwindcss/theme.css";
 
-      foo {
+      .foo {
         @variant md {
           bar: baz;
         }
@@ -268,9 +268,32 @@ test('handle CSS when only using a `@reference` (we should not bail early)', asy
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
     "@media (width >= 48rem) {
-      foo {
+      .foo {
         bar: baz;
       }
+    }"
+  `)
+})
+
+test('handle CSS when using a `@variant` using variants that do not rely on the `@theme`', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    css`
+      .foo {
+        @variant data-is-hoverable {
+          bar: baz;
+        }
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ".foo[data-is-hoverable] {
+      bar: baz;
     }"
   `)
 })
