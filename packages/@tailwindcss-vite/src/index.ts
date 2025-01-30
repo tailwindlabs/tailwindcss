@@ -203,6 +203,7 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan all non-CSS files for candidates
       transformIndexHtml(html, { path }) {
+        if (!path) return
         scanFile(path, html, 'html')
       },
       transform(src, id, options) {
