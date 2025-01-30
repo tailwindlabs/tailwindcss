@@ -63,7 +63,7 @@ export default function tailwindcss(): Plugin[] {
     )
   })
 
-  function scanFile(id: string, content: string, extension: string, isSSR: boolean) {
+  function scanFile(id: string, content: string, extension: string) {
     for (let dependency of IGNORED_DEPENDENCIES) {
       // We validated that Vite IDs always use posix style path separators, even on Windows.
       // In dev build, Vite precompiles dependencies
@@ -83,26 +83,20 @@ export default function tailwindcss(): Plugin[] {
     }
 
     if (updated) {
-      invalidateAllRoots(isSSR)
+      invalidateAllRoots()
     }
   }
 
-  function invalidateAllRoots(isSSR: boolean) {
+  function invalidateAllRoots() {
+    let rootsFound = new Set()
+
     for (let server of servers) {
       let updates: Update[] = []
-      for (let [id, root] of roots.entries()) {
+      for (let [id] of roots.entries()) {
         let module = server.moduleGraph.getModuleById(id)
-        if (!module) {
-          // Note: Removing this during SSR is not safe and will produce
-          // inconsistent results based on the timing of the removal and
-          // the order / timing of transforms.
-          if (!isSSR) {
-            // It is safe to remove the item here since we're iterating on a copy
-            // of the keys.
-            roots.delete(id)
-          }
-          continue
-        }
+        if (!module) continue
+
+        rootsFound.add(id)
 
         roots.get(id).requiresRebuild = false
         server.moduleGraph.invalidateModule(module)
@@ -113,7 +107,6 @@ export default function tailwindcss(): Plugin[] {
           timestamp: Date.now(),
         })
       }
-
       if (updates.length > 0) {
         server.hot.send({ type: 'update', updates })
       }
@@ -210,12 +203,12 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan all non-CSS files for candidates
       transformIndexHtml(html, { path }) {
-        scanFile(path, html, 'html', isSSR)
+        scanFile(path, html, 'html')
       },
       transform(src, id, options) {
         let extension = getExtension(id)
         if (isPotentialCssRootFile(id)) return
-        scanFile(id, src, extension, options?.ssr ?? false)
+        scanFile(id, src, extension)
       },
     },
 
