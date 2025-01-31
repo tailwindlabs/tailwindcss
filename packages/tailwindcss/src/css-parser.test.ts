@@ -1041,6 +1041,34 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    // TODO: These should probably be errors in some cases?
+    it('discards invalid declarations', () => {
+      // This shouldn't parse as a custom property declaration
+      expect(parse(`--foo`)).toEqual([])
+
+      // This shouldn't parse as a rule followed by a declaration
+      expect(parse(`@plugin "foo" {};`)).toEqual([
+        {
+          kind: 'at-rule',
+          name: '@plugin',
+          params: '"foo"',
+          nodes: [],
+        },
+      ])
+
+      // This shouldn't parse as consecutive declarations
+      expect(parse(`;;;`)).toEqual([])
+
+      // This shouldn't parse as a rule with a declaration inside of it
+      expect(parse(`.foo { bar }`)).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [],
+        },
+      ])
+    })
   })
 
   describe('errors', () => {
