@@ -298,8 +298,8 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   ]
 
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
-    let unresolvedConfigExtraKeys = Object.keys(unresolvedConfig).filter(key => !knownProperties.includes(key))
-    info(`We have detected that your configuration file contains non-migratable values : ${highlight(unresolvedConfigExtraKeys.join(', '))}`, { prefix: '↳ ' })
+    let extraKeys = Object.keys(unresolvedConfig).filter(key => !knownProperties.includes(key))
+    info(`We have detected that your configuration file contains non-migratable values : ${highlight(extraKeys.join(', '))}`, { prefix: '↳ ' })
     return false
   }
 
