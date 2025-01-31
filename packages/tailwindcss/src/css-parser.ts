@@ -286,14 +286,12 @@ export function parse(input: string) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
-      if (declaration) {
-        if (parent) {
-          parent.nodes.push(declaration)
-        } else {
-          ast.push(declaration)
-        }
+      if (!declaration) throw new Error(`Invalid custom property, expected a value`)
+
+      if (parent) {
+        parent.nodes.push(declaration)
       } else {
-        throw new Error(`Invalid custom property, expected a value`)
+        ast.push(declaration)
       }
 
       buffer = ''
@@ -341,26 +339,15 @@ export function parse(input: string) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       let declaration = parseDeclaration(buffer)
-      if (declaration) {
-        if (parent) {
-          parent.nodes.push(declaration)
-        } else {
-          ast.push(declaration)
-        }
-      } else if (input.charCodeAt(i - 1) === SEMICOLON || input.charCodeAt(i + 1) === SEMICOLON) {
-        let startSemiColonIdx = i
-        while (input.charCodeAt(startSemiColonIdx - 1) === SEMICOLON) {
-          startSemiColonIdx--
-        }
-        let endSemiColonIdx = i
-        while (input.charCodeAt(endSemiColonIdx) === SEMICOLON) {
-          endSemiColonIdx++
-        }
-        throw new Error(`Unexpected: \`${input.slice(startSemiColonIdx, endSemiColonIdx)}\``)
-      } else if (buffer.length == 0) {
-        throw new Error('Unexpected semicolon')
-      } else {
+      if (!declaration) {
+        if (buffer.length === 0) throw new Error('Unexpected semicolon')
         throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+      }
+
+      if (parent) {
+        parent.nodes.push(declaration)
+      } else {
+        ast.push(declaration)
       }
 
       buffer = ''
@@ -456,11 +443,9 @@ export function parse(input: string) {
           // Attach the declaration to the parent.
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
-            if (node) {
-              parent.nodes.push(node)
-            } else {
-              throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
-            }
+            if (!node) throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+
+            parent.nodes.push(node)
           }
         }
       }
