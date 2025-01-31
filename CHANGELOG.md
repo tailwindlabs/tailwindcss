@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Adding a warning in the upgrade CLI when a config file contains non-migratable values. ([#16113](https://github.com/tailwindlabs/tailwindcss/pull/16113))
+- Prevent camelCasing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
 
 ## [4.0.1] - 2025-01-29
 
