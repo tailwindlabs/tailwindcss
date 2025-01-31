@@ -655,9 +655,5 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
   // currently.
   expect(
     compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex']),
-  ).toMatchInlineSnapshot(`
-    ":root, :host {
-    }
-    "
-  `)
+  ).toMatchInlineSnapshot(`""`)
 })

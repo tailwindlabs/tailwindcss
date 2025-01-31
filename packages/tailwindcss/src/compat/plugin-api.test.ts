@@ -3167,8 +3167,6 @@ describe('addUtilities()', () => {
             color: red;
           }
         }
-      }
-      :root, :host {
       }"
     `,
     )
