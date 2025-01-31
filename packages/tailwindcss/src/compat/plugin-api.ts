@@ -499,15 +499,18 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
 
   for (let [name, value] of entries) {
     if (typeof value !== 'object') {
-      if (!name.startsWith('--') && value === '@slot') {
-        ast.push(rule(name, [atRule('@slot')]))
-      } else {
+      if (!name.startsWith('--')) {
+        if (value === '@slot') {
+          ast.push(rule(name, [atRule('@slot')]))
+          continue
+        }
+
         // Convert camelCase to kebab-case:
         // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
         name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
-
-        ast.push(decl(name, String(value)))
       }
+
+      ast.push(decl(name, String(value)))
     } else if (Array.isArray(value)) {
       for (let item of value) {
         if (typeof item === 'string') {

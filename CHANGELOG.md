@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor gradient implementation to work around [prettier/prettier#17058](https://github.com/prettier/prettier/issues/17058) ([#16072](https://github.com/tailwindlabs/tailwindcss/pull/16072))
 - Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
+- Prevent camelCasing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
 
 ## [4.0.1] - 2025-01-29
 
