@@ -152,6 +152,49 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('unescapes theme variables and handles dots as underscore', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-1\.5: 1.5px;
+            --spacing-2_5: 2.5px;
+            --spacing-3\.5: 3.5px;
+            --spacing-3_5: 3.5px;
+            --spacing-foo\/bar: 3rem;
+          }
+          @tailwind utilities;
+        `,
+        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing-1\\.5: 1.5px;
+        --spacing-2_5: 2.5px;
+        --spacing-3\\.5: 3.5px;
+        --spacing-3_5: 3.5px;
+        --spacing-foo\\/bar: 3rem;
+      }
+
+      .m-1\\.5 {
+        margin: var(--spacing-1\\.5);
+      }
+
+      .m-2\\.5, .m-2_5 {
+        margin: var(--spacing-2_5);
+      }
+
+      .m-3\\.5 {
+        margin: var(--spacing-3\\.5);
+      }
+
+      .m-foo\\/bar {
+        margin: var(--spacing-foo\\/bar);
+      }"
+    `)
+  })
+
   test('adds vendor prefixes', async () => {
     expect(
       await compileCss(

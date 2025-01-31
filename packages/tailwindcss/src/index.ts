@@ -27,6 +27,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
+import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
@@ -467,7 +468,7 @@ async function parseCss(
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(child.property, child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions)
           return
         }
 
@@ -526,7 +527,7 @@ async function parseCss(
 
     for (let [key, value] of theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-      nodes.push(decl(key, value.value))
+      nodes.push(decl(escape(key), value.value))
     }
 
     let keyframesRules = theme.getKeyframes()
