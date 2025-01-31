@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.2] - 2025-01-31
+
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
@@ -15,9 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor gradient implementation to work around [prettier/prettier#17058](https://github.com/prettier/prettier/issues/17058) ([#16072](https://github.com/tailwindlabs/tailwindcss/pull/16072))
 - Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
-- Vite: Don't rebase urls that appear to be aliases ([#16078](https://github.com/tailwindlabs/tailwindcss/pull/16078))
+- Vite: Don't rebase URLs that appear to be aliases ([#16078](https://github.com/tailwindlabs/tailwindcss/pull/16078))
 - Vite: Transform `<style>` blocks in HTML files ([#16069](https://github.com/tailwindlabs/tailwindcss/pull/16069))
-- Prevent camelCasing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
+- Prevent camel-casing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
 - Do not emit `@keyframes` in `@theme reference` ([#16120](https://github.com/tailwindlabs/tailwindcss/pull/16120))
 - Discard invalid declarations when parsing CSS ([#16093](https://github.com/tailwindlabs/tailwindcss/pull/16093))
 - Do not emit empty CSS rules and at-rules ([#16121](https://github.com/tailwindlabs/tailwindcss/pull/16121))
@@ -3365,7 +3369,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...HEAD
+[4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
 [4.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.9...v4.0.0-beta.10
