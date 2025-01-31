@@ -329,6 +329,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should parse a custom property with an empty value', () => {
+        expect(parse('--foo:;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
+      it('should parse a custom property with a space value', () => {
+        expect(parse('--foo: ;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
       it('should parse a custom property with a block including nested "css"', () => {
         expect(
           parse(css`
@@ -1041,34 +1063,6 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
-
-    // TODO: These should probably be errors in some cases?
-    it('discards invalid declarations', () => {
-      // This shouldn't parse as a custom property declaration
-      expect(parse(`--foo`)).toEqual([])
-
-      // This shouldn't parse as a rule followed by a declaration
-      expect(parse(`@plugin "foo" {};`)).toEqual([
-        {
-          kind: 'at-rule',
-          name: '@plugin',
-          params: '"foo"',
-          nodes: [],
-        },
-      ])
-
-      // This shouldn't parse as consecutive declarations
-      expect(parse(`;;;`)).toEqual([])
-
-      // This shouldn't parse as a rule with a declaration inside of it
-      expect(parse(`.foo { bar }`)).toEqual([
-        {
-          kind: 'rule',
-          selector: '.foo',
-          nodes: [],
-        },
-      ])
-    })
   })
 
   describe('errors', () => {
@@ -1124,6 +1118,40 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!;"]`)
+    })
+
+    it('should error when incomplete custom properties are used', () => {
+      expect(() => parse('--foo')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when incomplete custom properties are used inside rules', () => {
+      expect(() => parse('.foo { --bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when a declaration is incomplete', () => {
+      expect(() => parse('.foo { bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid declaration: \`bar\`]`,
+      )
+    })
+
+    it('should error when a semicolon exists after an at-rule with a body', () => {
+      expect(() => parse('@plugin "foo" {} ;')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected semicolon]`,
+      )
+    })
+
+    it('should error when consecutive semicolons exist', () => {
+      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected: \`;;;\`]`)
+    })
+
+    it('should error when consecutive semicolons exist after a declaration', () => {
+      expect(() => parse('.foo { color: red;;; }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected: \`;;;\`]`,
+      )
     })
   })
 })
