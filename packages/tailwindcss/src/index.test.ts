@@ -3510,6 +3510,38 @@ describe('@variant', () => {
               background: white;
             }
           }
+
+          @variant hover {
+            @variant landscape {
+              .btn2 {
+                color: red;
+              }
+            }
+          }
+
+          @variant hover {
+            .foo {
+              color: red;
+            }
+            @variant landscape {
+              .bar {
+                color: blue;
+              }
+            }
+            .baz {
+              @variant portrait {
+                color: green;
+              }
+            }
+          }
+
+          @media something {
+            @variant landscape {
+              @page {
+                color: red;
+              }
+            }
+          }
         `,
         [],
       ),
@@ -3521,6 +3553,38 @@ describe('@variant', () => {
       @media (prefers-color-scheme: dark) {
         .btn {
           background: #fff;
+        }
+      }
+
+      @media (hover: hover) {
+        @media (orientation: landscape) {
+          :scope:hover .btn2 {
+            color: red;
+          }
+        }
+
+        :scope:hover .foo {
+          color: red;
+        }
+
+        @media (orientation: landscape) {
+          :scope:hover .bar {
+            color: #00f;
+          }
+        }
+
+        @media (orientation: portrait) {
+          :scope:hover .baz {
+            color: green;
+          }
+        }
+      }
+
+      @media something {
+        @media (orientation: landscape) {
+          @page {
+            color: red;
+          }
         }
       }"
     `)
