@@ -1530,6 +1530,71 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('`@keyframes` added in `@theme reference` should not be emitted', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".flex {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+
+          @theme {
+            --color-pink: pink;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-pink'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-pink: pink;
+      }
+
+      .bg-pink {
+        background-color: var(--color-pink);
+      }"
+    `)
+  })
+
   test('theme values added as reference that override existing theme value suppress the output of the original theme value as a variable', async () => {
     expect(
       await compileCss(
