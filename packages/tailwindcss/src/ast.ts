@@ -305,7 +305,8 @@ export function optimizeAst(ast: AstNode[]) {
         copy.nodes.length > 0 ||
         copy.name === '@layer' ||
         copy.name === '@charset' ||
-        copy.name === '@custom-media'
+        copy.name === '@custom-media' ||
+        copy.name === '@namespace'
       ) {
         parent.push(copy)
       }
