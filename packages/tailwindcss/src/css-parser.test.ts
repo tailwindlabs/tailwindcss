@@ -1145,12 +1145,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should error when consecutive semicolons exist', () => {
-      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected: \`;;;\`]`)
+      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected semicolon]`)
     })
 
     it('should error when consecutive semicolons exist after a declaration', () => {
       expect(() => parse('.foo { color: red;;; }')).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Unexpected: \`;;;\`]`,
+        `[Error: Unexpected semicolon]`,
       )
     })
   })
