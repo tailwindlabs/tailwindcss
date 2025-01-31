@@ -244,6 +244,11 @@ async function parseCss(
               return WalkAction.Stop
             }
           })
+
+          // No `@slot` found, so this is still a regular `@variant` at-rule
+          if (node.name === '@variant') {
+            variantNodes.push(node)
+          }
         }
       }
 
@@ -428,6 +433,13 @@ async function parseCss(
       } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
+
+      walk(node.nodes, (node) => {
+        if (node.kind !== 'at-rule') return
+        if (node.name !== '@variant') return
+
+        variantNodes.push(node)
+      })
 
       return WalkAction.Skip
     }

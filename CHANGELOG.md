@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not emit `@keyframes` in `@theme reference` ([#16120](https://github.com/tailwindlabs/tailwindcss/pull/16120))
 - Discard invalid declarations when parsing CSS ([#16093](https://github.com/tailwindlabs/tailwindcss/pull/16093))
 - Do not emit empty CSS rules and at-rules ([#16121](https://github.com/tailwindlabs/tailwindcss/pull/16121))
+- Handle `@variant` when at the top-level of a stylesheet ([#16129](https://github.com/tailwindlabs/tailwindcss/pull/16129))
 
 ## [4.0.1] - 2025-01-29
 
