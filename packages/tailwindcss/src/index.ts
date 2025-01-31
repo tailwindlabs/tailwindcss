@@ -454,6 +454,12 @@ async function parseCss(
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
+          // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
+          if (themeOptions & ThemeOptions.REFERENCE) {
+            replaceWith([])
+            return WalkAction.Skip
+          }
+
           theme.addKeyframes(child)
           replaceWith([])
           return WalkAction.Skip
