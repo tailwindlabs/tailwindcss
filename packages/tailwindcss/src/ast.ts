@@ -301,7 +301,14 @@ export function optimizeAst(ast: AstNode[]) {
       for (let child of node.nodes) {
         transform(child, copy.nodes, depth + 1)
       }
-      parent.push(copy)
+      if (
+        copy.nodes.length > 0 ||
+        copy.name === '@layer' ||
+        copy.name === '@charset' ||
+        copy.name === '@custom-media'
+      ) {
+        parent.push(copy)
+      }
     }
 
     // AtRoot
