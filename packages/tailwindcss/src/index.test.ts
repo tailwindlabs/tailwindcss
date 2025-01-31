@@ -1549,11 +1549,11 @@ describe('Parsing themes values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['flex'],
+        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
-      ".flex {
-        display: flex;
+      ".animate-foo {
+        animation: var(--animate-foo);
       }"
     `)
   })
@@ -1582,11 +1582,15 @@ describe('Parsing themes values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-pink'],
+        ['bg-pink', 'animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-pink: pink;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
       }
 
       .bg-pink {
