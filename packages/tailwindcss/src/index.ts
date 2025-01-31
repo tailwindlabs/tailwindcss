@@ -27,6 +27,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
+import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
@@ -454,6 +455,12 @@ async function parseCss(
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
+          // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
+          if (themeOptions & ThemeOptions.REFERENCE) {
+            replaceWith([])
+            return WalkAction.Skip
+          }
+
           theme.addKeyframes(child)
           replaceWith([])
           return WalkAction.Skip
@@ -461,7 +468,7 @@ async function parseCss(
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(child.property, child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions)
           return
         }
 
@@ -520,7 +527,7 @@ async function parseCss(
 
     for (let [key, value] of theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-      nodes.push(decl(key, value.value))
+      nodes.push(decl(escape(key), value.value))
     }
 
     let keyframesRules = theme.getKeyframes()

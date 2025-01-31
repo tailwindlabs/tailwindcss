@@ -1534,6 +1534,38 @@ describe('addBase', () => {
       "
     `)
   })
+
+  test('does not modify CSS variables', async () => {
+    let input = css`
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: plugin(function ({ addBase }) {
+          addBase({
+            ':root': {
+              '--PascalCase': '1',
+              '--camelCase': '1',
+              '--UPPERCASE': '1',
+            },
+          })
+        }),
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@layer base {
+        :root {
+          --PascalCase: 1;
+          --camelCase: 1;
+          --UPPERCASE: 1;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('addVariant', () => {
