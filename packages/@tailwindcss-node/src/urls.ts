@@ -149,9 +149,12 @@ async function doUrlReplace(
   return `${funcName}(${wrap}${newUrl}${wrap})`
 }
 
-function skipUrlReplacer(rawUrl: string) {
+function skipUrlReplacer(rawUrl: string, aliases?: string[]) {
   return (
-    isExternalUrl(rawUrl) || isDataUrl(rawUrl) || rawUrl[0] === '#' || functionCallRE.test(rawUrl)
+    isExternalUrl(rawUrl) ||
+    isDataUrl(rawUrl) ||
+    !rawUrl[0].match(/[\.a-zA-Z0-9_]/) ||
+    functionCallRE.test(rawUrl)
   )
 }
 
