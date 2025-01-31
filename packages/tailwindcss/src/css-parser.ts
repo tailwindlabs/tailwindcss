@@ -286,6 +286,8 @@ export function parse(input: string) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
+      if (!declaration) throw new Error(`Invalid custom property, expected a value`)
+
       if (parent) {
         parent.nodes.push(declaration)
       } else {
@@ -337,6 +339,11 @@ export function parse(input: string) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       let declaration = parseDeclaration(buffer)
+      if (!declaration) {
+        if (buffer.length === 0) throw new Error('Unexpected semicolon')
+        throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+      }
+
       if (parent) {
         parent.nodes.push(declaration)
       } else {
@@ -435,7 +442,10 @@ export function parse(input: string) {
 
           // Attach the declaration to the parent.
           if (parent) {
-            parent.nodes.push(parseDeclaration(buffer, colonIdx))
+            let node = parseDeclaration(buffer, colonIdx)
+            if (!node) throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+
+            parent.nodes.push(node)
           }
         }
       }
@@ -543,7 +553,11 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
   return atRule(buffer.trim(), '', nodes)
 }
 
-function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {
+function parseDeclaration(
+  buffer: string,
+  colonIdx: number = buffer.indexOf(':'),
+): Declaration | null {
+  if (colonIdx === -1) return null
   let importantIdx = buffer.indexOf('!important', colonIdx + 1)
   return decl(
     buffer.slice(0, colonIdx).trim(),
