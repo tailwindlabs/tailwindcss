@@ -138,7 +138,7 @@ it('should not emit empty rules once optimized', () => {
     }
 
     /* Exceptions: */
-    @charset 'UTF-8';
+    @charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
@@ -170,7 +170,7 @@ it('should not emit empty rules once optimized', () => {
         }
       }
     }
-    @charset 'UTF-8';
+    @charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
@@ -178,7 +178,7 @@ it('should not emit empty rules once optimized', () => {
   `)
 
   expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
-    "@charset 'UTF-8';
+    "@charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
