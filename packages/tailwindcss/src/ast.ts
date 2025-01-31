@@ -261,7 +261,9 @@ export function optimizeAst(ast: AstNode[]) {
         for (let child of node.nodes) {
           let nodes: AstNode[] = []
           transform(child, nodes, depth + 1)
-          parent.push(...nodes)
+          if (nodes.length > 0) {
+            parent.push(...nodes)
+          }
         }
       }
 
@@ -271,7 +273,9 @@ export function optimizeAst(ast: AstNode[]) {
         for (let child of node.nodes) {
           transform(child, copy.nodes, depth + 1)
         }
-        parent.push(copy)
+        if (copy.nodes.length > 0) {
+          parent.push(copy)
+        }
       }
     }
 
