@@ -14,7 +14,7 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
     ['tl', 'top left'],
   ]) {
     designSystem.utilities.static(`bg-gradient-to-${value}`, () => [
-      decl('--tw-gradient-position', `to ${direction} in oklab,`),
+      decl('--tw-gradient-position', `to ${direction} in oklab`),
       decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
     ])
   }
