@@ -292,6 +292,8 @@ export function parse(input: string) {
         } else {
           ast.push(declaration)
         }
+      } else {
+        throw new Error(`Invalid custom property, expected a value`)
       }
 
       buffer = ''
@@ -345,6 +347,20 @@ export function parse(input: string) {
         } else {
           ast.push(declaration)
         }
+      } else if (input.charCodeAt(i - 1) === SEMICOLON || input.charCodeAt(i + 1) === SEMICOLON) {
+        let startSemiColonIdx = i
+        while (input.charCodeAt(startSemiColonIdx - 1) === SEMICOLON) {
+          startSemiColonIdx--
+        }
+        let endSemiColonIdx = i
+        while (input.charCodeAt(endSemiColonIdx) === SEMICOLON) {
+          endSemiColonIdx++
+        }
+        throw new Error(`Unexpected: \`${input.slice(startSemiColonIdx, endSemiColonIdx)}\``)
+      } else if (buffer.length == 0) {
+        throw new Error('Unexpected semicolon')
+      } else {
+        throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
       }
 
       buffer = ''
@@ -442,6 +458,8 @@ export function parse(input: string) {
             let node = parseDeclaration(buffer, colonIdx)
             if (node) {
               parent.nodes.push(node)
+            } else {
+              throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
             }
           }
         }
