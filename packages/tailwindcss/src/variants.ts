@@ -1138,6 +1138,9 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
 
+  staticVariant('noscript', ['@media (scripting: none)'])
+  staticVariant('scripting', ['@media (scripting: enabled)'])
+
   return variants
 }
 
