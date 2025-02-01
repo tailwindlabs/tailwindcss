@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix `@import url()` being stripped ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
+- Fix incorrect removal of `@import url();` ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
 
 ## [4.0.2] - 2025-01-31
 
