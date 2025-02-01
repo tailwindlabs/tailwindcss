@@ -1988,6 +1988,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-words', [['overflow-wrap', 'break-word']])
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'keep-all']])
+  staticUtility('break-anywhere', [['overflow-wrap', 'anywhere']])
 
   {
     // border-radius
