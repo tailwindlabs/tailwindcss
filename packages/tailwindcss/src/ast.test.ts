@@ -142,6 +142,7 @@ it('should not emit empty rules once optimized', () => {
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
   `)
 
   expect(toCss(ast)).toMatchInlineSnapshot(`
@@ -174,6 +175,7 @@ it('should not emit empty rules once optimized', () => {
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     "
   `)
 
@@ -182,6 +184,7 @@ it('should not emit empty rules once optimized', () => {
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     "
   `)
 })
