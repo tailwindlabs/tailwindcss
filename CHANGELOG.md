@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.3] - 2025-02-01
+
 ### Fixed
 
-- Fix `@import url()` being stripped ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
+- Fix incorrect removal of `@import url();` ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
 
 ## [4.0.2] - 2025-01-31
 
@@ -3371,7 +3375,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...HEAD
+[4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
