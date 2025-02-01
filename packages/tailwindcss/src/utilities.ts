@@ -602,6 +602,11 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-auto', [['grid-column', 'auto']])
   functionalUtility('col', {
+    supportsNegative: true,
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
     themeKeys: ['--grid-column'],
     handle: (value) => [decl('grid-column', value)],
   })
@@ -670,6 +675,11 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-auto', [['grid-row', 'auto']])
   functionalUtility('row', {
+    supportsNegative: true,
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
     themeKeys: ['--grid-row'],
     handle: (value) => [decl('grid-row', value)],
   })
