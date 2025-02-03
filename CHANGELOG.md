@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure `@import url(…)` is hoisted ([#16203](https://github.com/tailwindlabs/tailwindcss/pull/16203))
 
 ## [4.0.3] - 2025-02-01
 
