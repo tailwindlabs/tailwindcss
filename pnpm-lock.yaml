@@ -260,8 +260,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0
       '@parcel/watcher-linux-x64-glibc':
-        specifier: ^2.5.0
-        version: 2.5.0
+        specifier: ^2.5.1
+        version: 2.5.1
       '@parcel/watcher-linux-x64-musl':
         specifier: ^2.5.0
         version: 2.5.0
@@ -1570,6 +1570,12 @@ packages:
 
   '@parcel/watcher-linux-x64-glibc@2.5.0':
     resolution: {integrity: sha512-d9AOkusyXARkFD66S6zlGXyzx5RvY+chTP9Jp0ypSTC9d4lzyRs9ovGf/80VCxjKddcUvnsGwCHWuF2EoPgWjw==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  '@parcel/watcher-linux-x64-glibc@2.5.1':
+    resolution: {integrity: sha512-GcESn8NZySmfwlTsIur+49yDqSny2IhPeZfXunQi48DMugKeZ7uy1FX83pO0X22sHntJ4Ub+9k34XQCX+oHt2A==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
@@ -4747,7 +4753,10 @@ snapshots:
 
   '@parcel/watcher-linux-arm64-musl@2.5.0': {}
 
-  '@parcel/watcher-linux-x64-glibc@2.5.0': {}
+  '@parcel/watcher-linux-x64-glibc@2.5.0':
+    optional: true
+
+  '@parcel/watcher-linux-x64-glibc@2.5.1': {}
 
   '@parcel/watcher-linux-x64-musl@2.5.0': {}
 
