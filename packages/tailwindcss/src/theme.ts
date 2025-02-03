@@ -173,8 +173,16 @@ export class Theme {
       return null
     }
 
-    this.values.get(themeKey)!.options |= ThemeOptions.USED
+    this.use(themeKey)
+
     return `var(${escape(this.#prefixKey(themeKey))})`
+  }
+
+  use(themeKey: string) {
+    let value = this.values.get(themeKey)
+    if (!value) return
+
+    value.options |= ThemeOptions.USED
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

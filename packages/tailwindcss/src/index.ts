@@ -29,6 +29,7 @@ import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
+import * as ValueParser from './value-parser'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
 
@@ -557,6 +558,23 @@ async function parseCss(
 
   features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
+
+  // Mark CSS variables as used. Right now they can only be used in
+  // declarations, because `@media` and `@container` don't support them.
+  walk(ast, (node) => {
+    if (node.kind !== 'declaration') return
+    if (!node.value?.includes('var(')) return
+
+    ValueParser.walk(ValueParser.parse(node.value), (node) => {
+      if (node.kind !== 'function' || node.value !== 'var') return
+
+      ValueParser.walk(node.nodes, (child) => {
+        if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
+
+        designSystem.theme.use(child.value)
+      })
+    })
+  })
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
