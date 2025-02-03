@@ -151,6 +151,9 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       if (result === null) return []
     }
 
+    // Mark CSS variables as used
+    designSystem.theme.trackUsedVariables([node])
+
     rules.push({
       node,
       propertySort,

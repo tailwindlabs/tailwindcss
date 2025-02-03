@@ -29,7 +29,6 @@ import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
-import * as ValueParser from './value-parser'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
 
@@ -561,27 +560,7 @@ async function parseCss(
 
   // Mark CSS variables as used. Right now they can only be used in
   // declarations, because `@media` and `@container` don't support them.
-  walk(ast, (node) => {
-    // Variables used in `@utility` and `@custom-variant` at-rules will be
-    // handled separately, because we only want to mark them as used if the
-    // utility or variant is used.
-    if (node.kind === 'at-rule' && (node.name === '@utility' || node.name === '@custom-variant')) {
-      return WalkAction.Skip
-    }
-
-    if (node.kind !== 'declaration') return
-    if (!node.value?.includes('var(')) return
-
-    ValueParser.walk(ValueParser.parse(node.value), (node) => {
-      if (node.kind !== 'function' || node.value !== 'var') return
-
-      ValueParser.walk(node.nodes, (child) => {
-        if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
-
-        designSystem.theme.use(child.value)
-      })
-    })
-  })
+  designSystem.theme.trackUsedVariables(ast)
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.

@@ -1,5 +1,6 @@
-import type { AtRule } from './ast'
+import { walk, WalkAction, type AstNode, type AtRule } from './ast'
 import { escape } from './utils/escape'
+import * as ValueParser from './value-parser'
 
 export const enum ThemeOptions {
   NONE = 0,
@@ -176,6 +177,33 @@ export class Theme {
     this.use(themeKey)
 
     return `var(${escape(this.#prefixKey(themeKey))})`
+  }
+
+  trackUsedVariables(ast: AstNode[]) {
+    walk(ast, (node) => {
+      // Variables used in `@utility` and `@custom-variant` at-rules will be
+      // handled separately, because we only want to mark them as used if the
+      // utility or variant is used.
+      if (
+        node.kind === 'at-rule' &&
+        (node.name === '@utility' || node.name === '@custom-variant')
+      ) {
+        return WalkAction.Skip
+      }
+
+      if (node.kind !== 'declaration') return
+      if (!node.value?.includes('var(')) return
+
+      ValueParser.walk(ValueParser.parse(node.value), (node) => {
+        if (node.kind !== 'function' || node.value !== 'var') return
+
+        ValueParser.walk(node.nodes, (child) => {
+          if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
+
+          this.use(child.value)
+        })
+      })
+    })
   }
 
   use(themeKey: string) {
