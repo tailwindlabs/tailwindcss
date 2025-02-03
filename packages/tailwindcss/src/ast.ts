@@ -240,6 +240,9 @@ export function walkDepth(
 export function optimizeAst(ast: AstNode[]) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
+  let licenses: AstNode[] = []
+  let charsets: AstNode[] = []
+  let imports: AstNode[] = []
 
   function transform(
     node: AstNode,
@@ -301,13 +304,22 @@ export function optimizeAst(ast: AstNode[]) {
       for (let child of node.nodes) {
         transform(child, copy.nodes, depth + 1)
       }
+
+      if (copy.name === '@charset') {
+        charsets.push(copy)
+        return
+      }
+
+      if (copy.name === '@import') {
+        imports.push(copy)
+        return
+      }
+
       if (
         copy.nodes.length > 0 ||
         copy.name === '@layer' ||
-        copy.name === '@charset' ||
         copy.name === '@custom-media' ||
-        copy.name === '@namespace' ||
-        copy.name === '@import'
+        copy.name === '@namespace'
       ) {
         parent.push(copy)
       }
@@ -338,6 +350,10 @@ export function optimizeAst(ast: AstNode[]) {
 
     // Comment
     else if (node.kind === 'comment') {
+      if (node.value[0] === '!') {
+        licenses.push(node)
+        return
+      }
       parent.push(node)
     }
 
@@ -352,7 +368,7 @@ export function optimizeAst(ast: AstNode[]) {
     transform(node, newAst, 0)
   }
 
-  return newAst.concat(atRoots)
+  return licenses.concat(charsets, imports, newAst, atRoots)
 }
 
 export function toCss(ast: AstNode[]) {
