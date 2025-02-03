@@ -1253,3 +1253,44 @@ test(
     `)
   },
 )
+
+test(
+  'external imports are properly hoisted to the top',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+          <div class="underline flex"></div>
+        `,
+      'src/index.css': css`
+        @charset "UTF-8";
+        @import 'tailwindcss/utilities';
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      @charset "UTF-8";
+      @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+      .flex {
+        display: flex;
+      }
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
+  },
+)
