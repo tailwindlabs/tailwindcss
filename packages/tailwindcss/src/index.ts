@@ -562,6 +562,13 @@ async function parseCss(
   // Mark CSS variables as used. Right now they can only be used in
   // declarations, because `@media` and `@container` don't support them.
   walk(ast, (node) => {
+    // Variables used in `@utility` and `@custom-variant` at-rules will be
+    // handled separately, because we only want to mark them as used if the
+    // utility or variant is used.
+    if (node.kind === 'at-rule' && (node.name === '@utility' || node.name === '@custom-variant')) {
+      return WalkAction.Skip
+    }
+
     if (node.kind !== 'declaration') return
     if (!node.value?.includes('var(')) return
 

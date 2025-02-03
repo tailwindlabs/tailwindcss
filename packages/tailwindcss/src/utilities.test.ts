@@ -17610,6 +17610,55 @@ describe('custom utilities', () => {
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
     })
+
+    test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
+        ".flex {
+          display: flex;
+        }"
+      `)
+    })
+
+    test('variables used in `@utility` will be emitted if the utility is used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --example-foo: red;
+        }
+
+        .example-foo {
+          color: var(--color-red-500);
+          background-color: var(--example-foo);
+        }"
+      `)
+    })
   })
 
   test('resolve value based on `@theme`', async () => {
