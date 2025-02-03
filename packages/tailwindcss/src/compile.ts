@@ -151,8 +151,14 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
       if (result === null) return []
     }
 
-    // Mark CSS variables as used
-    designSystem.theme.trackUsedVariables([node])
+    // Mark CSS variables as used. Variables resolved internally will already be
+    // marked as used. This is purely for arbitrary values and properties that use
+    // variables. E.g.: `[--color:var(--color-red-500)]`
+    //
+    //
+    if (candidate.raw.includes('var(')) {
+      designSystem.theme.trackUsedVariables([node])
+    }
 
     rules.push({
       node,
