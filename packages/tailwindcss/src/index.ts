@@ -488,7 +488,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = styleRule(':root, :host', node.nodes)
+        firstThemeRule = styleRule(':root, :host', [])
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -521,37 +521,6 @@ async function parseCss(
 
   for (let customUtility of customUtilities) {
     customUtility(designSystem)
-  }
-
-  // Output final set of theme variables at the position of the first `@theme`
-  // rule.
-  if (firstThemeRule) {
-    let nodes = []
-
-    for (let [key, value] of theme.entries()) {
-      if (value.options & ThemeOptions.REFERENCE) continue
-      nodes.push(decl(escape(key), value.value))
-    }
-
-    let keyframesRules = theme.getKeyframes()
-    if (keyframesRules.length > 0) {
-      let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
-        animation.split(/\s+/),
-      )
-
-      for (let keyframesRule of keyframesRules) {
-        // Remove any keyframes that aren't used by an animation variable.
-        let keyframesName = keyframesRule.params
-        if (!animationParts.includes(keyframesName)) {
-          continue
-        }
-
-        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-        // printing.
-        nodes.push(atRoot([keyframesRule]))
-      }
-    }
-    firstThemeRule.nodes = nodes
   }
 
   // Replace the `@tailwind utilities` node with a context since it prints
@@ -610,6 +579,7 @@ async function parseCss(
     root,
     utilitiesNode,
     features,
+    firstThemeRule,
   }
 }
 
@@ -622,7 +592,10 @@ export async function compileAst(
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features, firstThemeRule } = await parseCss(
+    input,
+    opts,
+  )
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -675,6 +648,39 @@ export async function compileAst(
       let newNodes = compileCandidates(allValidCandidates, designSystem, {
         onInvalidCandidate,
       }).astNodes
+
+      // Output final set of theme variables at the position of the first
+      // `@theme` rule.
+      if (firstThemeRule) {
+        let nodes = []
+
+        for (let [key, value] of designSystem.theme.entries()) {
+          if (value.options & ThemeOptions.REFERENCE) continue
+
+          nodes.push(decl(escape(key), value.value))
+        }
+
+        let keyframesRules = designSystem.theme.getKeyframes()
+        if (keyframesRules.length > 0) {
+          let animationParts = [...designSystem.theme.namespace('--animate').values()].flatMap(
+            (animation) => animation.split(/\s+/),
+          )
+
+          for (let keyframesRule of keyframesRules) {
+            // Remove any keyframes that aren't used by an animation variable.
+            let keyframesName = keyframesRule.params
+            if (!animationParts.includes(keyframesName)) {
+              continue
+            }
+
+            // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+            // printing.
+            nodes.push(atRoot([keyframesRule]))
+          }
+        }
+
+        firstThemeRule.nodes = nodes
+      }
 
       // If no new ast nodes were generated, then we can return the original
       // CSS. This currently assumes that we only add new ast nodes and never
