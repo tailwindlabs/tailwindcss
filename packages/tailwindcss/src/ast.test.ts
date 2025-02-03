@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest'
 import { context, decl, optimizeAst, styleRule, toCss, walk, WalkAction } from './ast'
 import * as CSS from './css-parser'
+import { compileCss } from './test-utils/run'
 
 const css = String.raw
 
@@ -181,10 +182,47 @@ it('should not emit empty rules once optimized', () => {
 
   expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
     "@charset "UTF-8";
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
+    "
+  `)
+})
+
+it('should hoist external imports to the top', async () => {
+  let input = css`
+    @charset "UTF-8";
+    @import 'tailwindcss';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+  `
+  let ast = CSS.parse(input)
+
+  expect(toCss(ast)).toMatchInlineSnapshot(`
+    "@charset "UTF-8";
+    @import 'tailwindcss';
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     "
+  `)
+
+  expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
+    "@charset "UTF-8";
+    @import 'tailwindcss';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+    "
+  `)
+
+  expect(
+    await compileCss(input, ['flex'], {
+      async loadStylesheet(_id, base) {
+        return { content: '@tailwind utilities;', base }
+      },
+    }),
+  ).toMatchInlineSnapshot(`
+    "@import "https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap";
+
+    .flex {
+      display: flex;
+    }"
   `)
 })
