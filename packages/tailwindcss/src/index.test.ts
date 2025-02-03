@@ -132,7 +132,12 @@ describe('compiling CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ".ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
+      ":root, :host {
+        --spacing-1_5: 1.5rem;
+        --spacing-2_5: 2.5rem;
+      }
+
+      .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
         margin-left: 1.5rem;
       }
 

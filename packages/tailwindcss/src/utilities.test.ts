@@ -3159,7 +3159,11 @@ describe('container', () => {
         ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
-      ".container {
+      ":root, :host {
+        --breakpoint-sm: 40rem;
+      }
+
+      .container {
         width: 100%;
       }
 
@@ -3294,7 +3298,11 @@ describe('container', () => {
         ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
-      ".container {
+      ":root, :host {
+        --breakpoint-sm: 40rem;
+      }
+
+      .container {
         width: 100%;
       }
 
@@ -17651,6 +17659,7 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
         ":root, :host {
           --example-foo: red;
+          --color-red-500: red;
         }
 
         .example-foo {
