@@ -656,6 +656,7 @@ export async function compileAst(
 
         for (let [key, value] of designSystem.theme.entries()) {
           if (value.options & ThemeOptions.REFERENCE) continue
+          if (!(value.options & ThemeOptions.USED)) continue
 
           nodes.push(decl(escape(key), value.value))
         }
