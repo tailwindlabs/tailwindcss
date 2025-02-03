@@ -27,7 +27,6 @@ describe('compiling CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-black: #000;
-        --breakpoint-md: 768px;
       }
 
       @layer utilities {
@@ -133,12 +132,7 @@ describe('compiling CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --spacing-1_5: 1.5rem;
-        --spacing-2_5: 2.5rem;
-      }
-
-      .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
+      ".ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
         margin-left: 1.5rem;
       }
 
@@ -173,7 +167,6 @@ describe('compiling CSS', () => {
         --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
         --spacing-3\\.5: 3.5px;
-        --spacing-3_5: 3.5px;
         --spacing-foo\\/bar: 3rem;
       }
 
@@ -288,17 +281,7 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-red-200: #fecaca;
-        --color-red-500: #ef4444;
-        --color-blue-500: #3b82f6;
-        --color-green-200: #bbf7d0;
-        --color-green-500: #22c55e;
-        --breakpoint-md: 768px;
-        --animate-spin: spin 1s linear infinite;
-      }
-
-      .foo {
+      ".foo {
         --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
         animation: var(--animate-spin);
@@ -325,12 +308,6 @@ describe('@apply', () => {
       @media (width >= 768px) {
         .foo:hover:focus {
           background-color: var(--color-green-200);
-        }
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
         }
       }
 
@@ -1150,7 +1127,6 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-red: red;
-        --animate-foo: foo 1s infinite;
         --text-lg: 20px;
       }
 
@@ -1392,7 +1368,6 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
 
@@ -1798,13 +1773,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1835,13 +1804,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1954,11 +1917,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-potato: #efb46b;
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #efb46b;
       }"
     `)

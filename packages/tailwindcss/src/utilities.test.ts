@@ -147,7 +147,6 @@ test('inset', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
       --inset-shadowned: 1940px;
     }
 
@@ -3160,15 +3159,7 @@ describe('container', () => {
         ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
-      }
-
-      .container {
+      ".container {
         width: 100%;
       }
 
@@ -3303,15 +3294,7 @@ describe('container', () => {
         ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
-      }
-
-      .container {
+      ".container {
         width: 100%;
       }
 
@@ -7734,11 +7717,7 @@ test('divide-x with custom default border width', async () => {
       ['divide-x'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-x > :not(:last-child)) {
+    ":where(.divide-x > :not(:last-child)) {
       --tw-divide-x-reverse: 0;
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(2px * var(--tw-divide-x-reverse));
@@ -7840,11 +7819,7 @@ test('divide-y with custom default border width', async () => {
       ['divide-y'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-y > :not(:last-child)) {
+    ":where(.divide-y > :not(:last-child)) {
       --tw-divide-y-reverse: 0;
       border-bottom-style: var(--tw-border-style);
       border-top-style: var(--tw-border-style);
@@ -9930,11 +9905,7 @@ test('border with custom default border width', async () => {
       ['border'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    .border {
+    ".border {
       border-style: var(--tw-border-style);
       border-width: 2px;
     }
@@ -13870,7 +13841,6 @@ test('transition', async () => {
     ":root, :host {
       --default-transition-timing-function: ease;
       --default-transition-duration: .1s;
-      --transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
       --transition-property-opacity: opacity;
     }
 
@@ -13936,12 +13906,7 @@ test('transition', async () => {
       ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-transition-timing-function: ease;
-      --default-transition-duration: .1s;
-    }
-
-    .transition {
+    ".transition {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
@@ -15227,8 +15192,6 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-      --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
     }
 
     .shadow-\\[10px_10px\\] {
@@ -15451,8 +15414,6 @@ test('inset-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --inset-shadow: inset 0 2px 4px #0000000d;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
     }
 
     .inset-shadow {
@@ -16443,7 +16404,6 @@ describe('spacing utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-sm: 8px;
-        --container-sm: 256px;
       }
 
       .w-sm {
@@ -17710,11 +17670,7 @@ describe('custom utilities', () => {
     `
 
     expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --tab-size-github: 8;
-      }
-
-      .tab-github {
+      ".tab-github {
         tab-size: 8;
       }"
     `)
