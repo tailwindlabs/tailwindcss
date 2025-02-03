@@ -254,3 +254,48 @@ test('theme keys can read from the CSS theme', () => {
     new Set(['colors', 'accentColor', 'placeholderColor', 'caretColor', 'transitionColor']),
   )
 })
+
+test('handles null as theme values', () => {
+  let theme = new Theme()
+  theme.add('--color-red-50', 'red')
+  theme.add('--color-red-100', 'red')
+
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: ({ theme }) => ({
+            // Reads from the --color-* namespace
+            ...theme('color'),
+          }),
+        },
+      },
+      base: '/root',
+      reference: false,
+    },
+    {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              red: null,
+            },
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+    },
+  ])
+
+  expect(resolvedConfig).toMatchObject({
+    theme: {
+      colors: {
+        red: null,
+      },
+    },
+  })
+  expect(replacedThemeKeys).toEqual(new Set(['colors']))
+})
