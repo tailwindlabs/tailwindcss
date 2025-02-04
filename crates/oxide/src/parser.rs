@@ -159,7 +159,7 @@ impl<'a> Extractor<'a> {
         }
 
         while !candidate.is_empty() {
-            match Extractor::is_valid_candidate_string(candidate) {
+            match Extractor::is_valid_candidate_string(candidate, self.input, self.idx_start) {
                 ValidationResult::Valid => return ParseAction::SingleCandidate(candidate),
                 ValidationResult::Restart => return ParseAction::RestartAt(self.idx_start + 1),
                 _ => {}
@@ -240,7 +240,11 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn is_valid_candidate_string(candidate: &'a [u8]) -> ValidationResult {
+    fn is_valid_candidate_string(
+        candidate: &'a [u8],
+        input: &[u8],
+        start_idx: usize,
+    ) -> ValidationResult {
         // Reject candidates that start with a capital letter
         if candidate[0].is_ascii_uppercase() {
             return ValidationResult::Invalid;
@@ -300,6 +304,14 @@ impl<'a> Extractor<'a> {
                 if count > 1 {
                     return ValidationResult::Invalid;
                 }
+            }
+        }
+
+        // CSS variables must be preceded by `var(` to be considered a valid CSS variable candidate
+        if candidate.starts_with(b"--") {
+            match input.get(start_idx - 4..start_idx) {
+                Some(b"var(") => return ValidationResult::Valid,
+                _ => return ValidationResult::Invalid,
             }
         }
 
@@ -1728,30 +1740,43 @@ mod test {
     }
 
     #[test]
+    fn test_css_variables_must_be_preceded_by_var_open_paren() {
+        let candidates = run("[--do-not-emit:true]", false);
+        assert_eq!(
+            candidates,
+            // Looks little funky, but `--do-not-emit` on its own is not emitted
+            vec!["[--do-not-emit:true]", "--do-not-emit:true"]
+        );
+
+        let candidates = run("<div style={{ '--do-not-emit': true }}>", false);
+        assert_eq!(candidates, vec!["div", "style", "true"]);
+    }
+
+    #[test]
     fn test_is_valid_candidate_string() {
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"foo"),
+            Extractor::is_valid_candidate_string(b"foo", b"", 0),
             ValidationResult::Valid
         );
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"foo-(--color-red-500)"),
+            Extractor::is_valid_candidate_string(b"foo-(--color-red-500)", b"", 0),
             ValidationResult::Valid
         );
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"bg-[url(foo)]"),
+            Extractor::is_valid_candidate_string(b"bg-[url(foo)]", b"", 0),
             ValidationResult::Valid
         );
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"group-foo/(--bar)"),
+            Extractor::is_valid_candidate_string(b"group-foo/(--bar)", b"", 0),
             ValidationResult::Valid
         );
 
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"foo(\"bg-red-500\")"),
+            Extractor::is_valid_candidate_string(b"foo(\"bg-red-500\")", b"", 0),
             ValidationResult::Restart
         );
         assert_eq!(
-            Extractor::is_valid_candidate_string(b"foo-("),
+            Extractor::is_valid_candidate_string(b"foo-(", b"", 0),
             ValidationResult::Restart
         );
     }
