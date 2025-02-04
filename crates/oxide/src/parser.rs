@@ -1680,6 +1680,54 @@ mod test {
     }
 
     #[test]
+    fn test_find_css_variables() {
+        let candidates = run("var(--color-red-500)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500"]);
+
+        let candidates = run("<div style={{ 'color': 'var(--color-red-500)' }}/>", false);
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_values() {
+        let candidates = run("var(--color-red-500, red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run("var(--color-red-500,red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500, red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500,red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_css_variable_values() {
+        let candidates = run("var(--color-red-500, var(--color-blue-500))", false);
+        assert_eq!(
+            candidates,
+            vec!["var", "--color-red-500", "--color-blue-500"]
+        );
+    }
+
+    #[test]
     fn test_is_valid_candidate_string() {
         assert_eq!(
             Extractor::is_valid_candidate_string(b"foo"),
