@@ -7,7 +7,8 @@ import path from 'node:path'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 const DEBUG = env.DEBUG
-const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
+const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
+const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
 const IGNORED_DEPENDENCIES = ['tailwind-merge']
@@ -315,8 +316,9 @@ function isPotentialCssRootFile(id: string) {
   let isCssFile =
     (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
     // Don't intercept special static asset resources
-    !SPECIAL_QUERY_RE.test(id)
-
+    !SPECIAL_QUERY_RE.test(id) &&
+    !COMMON_JS_PROXY_RE.test(id)
+  if (isCssFile) console.log(id)
   return isCssFile
 }
 
