@@ -7,11 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
-
 ### Fixed
 
 - Ensure that the `containers` JS theme key is added to the `--container-*` namespace. ([#16169](https://github.com/tailwindlabs/tailwindcss/pull/16169))
+- Fix missing `@keyframes` definition ([#16237](https://github.com/tailwindlabs/tailwindcss/pull/16237))
 
 ## [4.0.3] - 2025-02-01
 
