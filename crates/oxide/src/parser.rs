@@ -352,13 +352,12 @@ impl<'a> Extractor<'a> {
             let start_brace_index = utility.find(b"[");
             let end_brace_index = utility.find(b"]");
 
-            match (start_brace_index, end_brace_index) {
-                (Some(start_brace_index), Some(end_brace_index)) => {
-                    if start_brace_index < index && end_brace_index > index {
-                        skip_parens_check = true;
-                    }
+            if let (Some(start_brace_index), Some(end_brace_index)) =
+                (start_brace_index, end_brace_index)
+            {
+                if start_brace_index < index && end_brace_index > index {
+                    skip_parens_check = true;
                 }
-                _ => {}
             }
 
             if !skip_parens_check && !utility[index + 1..].starts_with(b"--") {
