@@ -1,5 +1,5 @@
 import { type AtRule } from './ast'
-import { escape } from './utils/escape'
+import { escape, unescape } from './utils/escape'
 
 export const enum ThemeOptions {
   NONE = 0,
@@ -107,7 +107,8 @@ export class Theme {
   }
 
   getOptions(key: string) {
-    return this.values.get(this.#unprefixKey(key))?.options ?? ThemeOptions.NONE
+    key = unescape(this.#unprefixKey(key))
+    return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
   entries() {
@@ -182,7 +183,8 @@ export class Theme {
   }
 
   markUsedVariable(themeKey: string) {
-    let value = this.values.get(this.#unprefixKey(themeKey))
+    let key = unescape(this.#unprefixKey(themeKey))
+    let value = this.values.get(key)
     if (!value) return false // Unknown variable
     if (value.options & ThemeOptions.USED) return false // Variable already used
 
