@@ -1303,15 +1303,15 @@ test(
         }
       `,
     )
-    await process.onStderr((m) => m.includes('Done in'))
 
-    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
-      "
-      --- ./dist/out.css ---
-      :root, :host {
-        --color-blue-500: blue;
-      }
-      "
-    `)
+    fs.expectFileToContain(
+      './dist/out.css',
+      css`
+        :root,
+        :host {
+          --color-blue-500: blue;
+        }
+      `,
+    )
   },
 )
