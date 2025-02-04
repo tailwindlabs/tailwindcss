@@ -58,7 +58,7 @@
     "tsup": "^8.3.6",
     "turbo": "^2.3.4",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.9"
   },
   "packageManager": "pnpm@9.6.0",
   "pnpm": {
