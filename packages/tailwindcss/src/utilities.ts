@@ -815,7 +815,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('block', [['display', 'block']])
   staticUtility('inline-block', [['display', 'inline-block']])
   staticUtility('inline', [['display', 'inline']])
-  staticUtility('hidden', [['display', 'none']])
+  staticUtility('hidden', [
+    ['--tw-sort', '--tw-display-none'],
+    ['display', 'none'],
+  ])
   // flex is registered below
   staticUtility('inline-flex', [['display', 'inline-flex']])
   staticUtility('table', [['display', 'table']])

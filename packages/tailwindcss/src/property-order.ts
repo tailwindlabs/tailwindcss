@@ -46,6 +46,7 @@ export default [
 
   'box-sizing',
   'display',
+  '--tw-display-none',
 
   'field-sizing',
   'aspect-ratio',

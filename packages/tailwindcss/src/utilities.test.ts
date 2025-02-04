@@ -2338,10 +2338,6 @@ test('display', async () => {
       display: grid;
     }
 
-    .hidden {
-      display: none;
-    }
-
     .inline {
       display: inline;
     }
@@ -2400,6 +2396,10 @@ test('display', async () => {
 
     .table-row-group {
       display: table-row-group;
+    }
+
+    .hidden {
+      display: none;
     }"
   `)
   expect(
