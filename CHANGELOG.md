@@ -7,15 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+### Fixed
+
+- Ensure that the `containers` JS theme key is added to the `--container-*` namespace. ([#16169](https://github.com/tailwindlabs/tailwindcss/pull/16169))
+
+## [4.0.3] - 2025-02-01
+
+### Fixed
+
+- Fix incorrect removal of `@import url();` ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
+
+## [4.0.2] - 2025-01-31
+
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
+- Ensure escaped theme variables are handled correctly ([#16064](https://github.com/tailwindlabs/tailwindcss/pull/16064))
 - Ensure we process Tailwind CSS features when only using `@reference` or `@variant` ([#16057](https://github.com/tailwindlabs/tailwindcss/pull/16057))
 - Refactor gradient implementation to work around [prettier/prettier#17058](https://github.com/prettier/prettier/issues/17058) ([#16072](https://github.com/tailwindlabs/tailwindcss/pull/16072))
 - Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
 - Adding a warning in the upgrade CLI when a config file contains non-migratable values. ([#16113](https://github.com/tailwindlabs/tailwindcss/pull/16113))
 - Prevent camelCasing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
+- Vite: Don't rebase URLs that appear to be aliases ([#16078](https://github.com/tailwindlabs/tailwindcss/pull/16078))
+- Vite: Transform `<style>` blocks in HTML files ([#16069](https://github.com/tailwindlabs/tailwindcss/pull/16069))
+- Prevent camel-casing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
+- Do not emit `@keyframes` in `@theme reference` ([#16120](https://github.com/tailwindlabs/tailwindcss/pull/16120))
+- Discard invalid declarations when parsing CSS ([#16093](https://github.com/tailwindlabs/tailwindcss/pull/16093))
+- Do not emit empty CSS rules and at-rules ([#16121](https://github.com/tailwindlabs/tailwindcss/pull/16121))
+- Handle `@variant` when at the top-level of a stylesheet ([#16129](https://github.com/tailwindlabs/tailwindcss/pull/16129))
 
 ## [4.0.1] - 2025-01-29
 
@@ -3359,7 +3381,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...HEAD
+[4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
+[4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
 [4.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.9...v4.0.0-beta.10

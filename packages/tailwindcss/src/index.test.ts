@@ -152,6 +152,49 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('unescapes theme variables and handles dots as underscore', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-1\.5: 1.5px;
+            --spacing-2_5: 2.5px;
+            --spacing-3\.5: 3.5px;
+            --spacing-3_5: 3.5px;
+            --spacing-foo\/bar: 3rem;
+          }
+          @tailwind utilities;
+        `,
+        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing-1\\.5: 1.5px;
+        --spacing-2_5: 2.5px;
+        --spacing-3\\.5: 3.5px;
+        --spacing-3_5: 3.5px;
+        --spacing-foo\\/bar: 3rem;
+      }
+
+      .m-1\\.5 {
+        margin: var(--spacing-1\\.5);
+      }
+
+      .m-2\\.5, .m-2_5 {
+        margin: var(--spacing-2_5);
+      }
+
+      .m-3\\.5 {
+        margin: var(--spacing-3\\.5);
+      }
+
+      .m-foo\\/bar {
+        margin: var(--spacing-foo\\/bar);
+      }"
+    `)
+  })
+
   test('adds vendor prefixes', async () => {
     expect(
       await compileCss(
@@ -1526,6 +1569,75 @@ describe('Parsing themes values from CSS', () => {
 
       .bg-tomato {
         background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: var(--animate-foo);
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+
+          @theme {
+            --color-pink: pink;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-pink', 'animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-pink: pink;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      .bg-pink {
+        background-color: var(--color-pink);
       }"
     `)
   })
@@ -3398,6 +3510,38 @@ describe('@variant', () => {
               background: white;
             }
           }
+
+          @variant hover {
+            @variant landscape {
+              .btn2 {
+                color: red;
+              }
+            }
+          }
+
+          @variant hover {
+            .foo {
+              color: red;
+            }
+            @variant landscape {
+              .bar {
+                color: blue;
+              }
+            }
+            .baz {
+              @variant portrait {
+                color: green;
+              }
+            }
+          }
+
+          @media something {
+            @variant landscape {
+              @page {
+                color: red;
+              }
+            }
+          }
         `,
         [],
       ),
@@ -3409,6 +3553,38 @@ describe('@variant', () => {
       @media (prefers-color-scheme: dark) {
         .btn {
           background: #fff;
+        }
+      }
+
+      @media (hover: hover) {
+        @media (orientation: landscape) {
+          :scope:hover .btn2 {
+            color: red;
+          }
+        }
+
+        :scope:hover .foo {
+          color: red;
+        }
+
+        @media (orientation: landscape) {
+          :scope:hover .bar {
+            color: #00f;
+          }
+        }
+
+        @media (orientation: portrait) {
+          :scope:hover .baz {
+            color: green;
+          }
+        }
+      }
+
+      @media something {
+        @media (orientation: landscape) {
+          @page {
+            color: red;
+          }
         }
       }"
     `)

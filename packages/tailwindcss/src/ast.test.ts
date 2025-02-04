@@ -2,6 +2,8 @@ import { expect, it } from 'vitest'
 import { context, decl, optimizeAst, styleRule, toCss, walk, WalkAction } from './ast'
 import * as CSS from './css-parser'
 
+const css = String.raw
+
 it('should pretty print an AST', () => {
   expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'))))
     .toMatchInlineSnapshot(`
@@ -93,5 +95,96 @@ it('should stop walking when returning `WalkAction.Stop`', () => {
       ".nested",
       ".bail",
     }
+  `)
+})
+
+it('should not emit empty rules once optimized', () => {
+  let ast = CSS.parse(css`
+    /* Empty rule */
+    .foo {
+    }
+
+    /* Empty rule, with nesting */
+    .foo {
+      .bar {
+      }
+      .baz {
+      }
+    }
+
+    /* Empty rule, with special case '&' rules */
+    .foo {
+      & {
+        &:hover {
+        }
+        &:focus {
+        }
+      }
+    }
+
+    /* Empty at-rule */
+    @media (min-width: 768px) {
+    }
+
+    /* Empty at-rule with nesting*/
+    @media (min-width: 768px) {
+      .foo {
+      }
+
+      @media (min-width: 1024px) {
+        .bar {
+        }
+      }
+    }
+
+    /* Exceptions: */
+    @charset "UTF-8";
+    @layer foo, bar, baz;
+    @custom-media --modern (color), (hover);
+    @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+  `)
+
+  expect(toCss(ast)).toMatchInlineSnapshot(`
+    ".foo {
+    }
+    .foo {
+      .bar {
+      }
+      .baz {
+      }
+    }
+    .foo {
+      & {
+        &:hover {
+        }
+        &:focus {
+        }
+      }
+    }
+    @media (min-width: 768px);
+    @media (min-width: 768px) {
+      .foo {
+      }
+      @media (min-width: 1024px) {
+        .bar {
+        }
+      }
+    }
+    @charset "UTF-8";
+    @layer foo, bar, baz;
+    @custom-media --modern (color), (hover);
+    @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+    "
+  `)
+
+  expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
+    "@charset "UTF-8";
+    @layer foo, bar, baz;
+    @custom-media --modern (color), (hover);
+    @namespace 'http://www.w3.org/1999/xhtml';
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+    "
   `)
 })

@@ -8,6 +8,7 @@ import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite
 
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](raw|url)\b/
+const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
 const IGNORED_DEPENDENCIES = ['tailwind-merge']
 
@@ -312,7 +313,7 @@ function isPotentialCssRootFile(id: string) {
   if (id.includes('/.vite/')) return
   let extension = getExtension(id)
   let isCssFile =
-    (extension === 'css' || id.includes('&lang.css')) &&
+    (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id)
 

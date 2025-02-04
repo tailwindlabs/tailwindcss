@@ -368,12 +368,7 @@ describe.each([
         `,
       )
 
-      await fs.expectFileToContain('project-a/dist/out.css', [
-        css`
-          :root, :host {
-          }
-        `,
-      ])
+      await fs.expectFileToContain('project-a/dist/out.css', [css``])
     },
   )
 
@@ -1191,6 +1186,68 @@ test(
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      "
+    `)
+  },
+)
+
+test(
+  '@theme reference should never emit values',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @reference "tailwindcss";
+
+        .keep-me {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn(
+      `pnpm tailwindcss --input src/index.css --output dist/out.css --watch`,
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .keep-me {
+        color: red;
+      }
+      "
+    `)
+
+    await fs.write(
+      './src/index.css',
+      css`
+        @reference "tailwindcss";
+
+        /* Not a reference! */
+        @theme {
+          --color-pink: pink;
+        }
+
+        .keep-me {
+          color: red;
+        }
+      `,
+    )
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .keep-me {
+        color: red;
       }
       "
     `)
