@@ -16468,6 +16468,40 @@ describe('custom utilities', () => {
     `)
   })
 
+  test('custom static utility emit CSS variables if the utility is used', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme {
+        --example-foo: 123px;
+      }
+
+      @utility foo {
+        value: var(--example-foo);
+      }
+    `)
+    let compiled = build([])
+
+    // `foo` is not used yet:
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+
+    // `foo` is used, and the CSS variable is emitted:
+    compiled = build(['foo'])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo {
+          value: var(--example-foo);
+        }
+      }
+
+      :root, :host {
+        --example-foo: 123px;
+      }"
+    `)
+  })
+
   test('custom static utility (negative)', async () => {
     let { build } = await compile(css`
       @layer utilities {
