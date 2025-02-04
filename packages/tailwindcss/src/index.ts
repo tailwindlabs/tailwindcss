@@ -545,7 +545,7 @@ async function parseCss(
     let keyframesRules = theme.getKeyframes()
     if (keyframesRules.length > 0) {
       let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
-        animation.split(' '),
+        animation.split(/\s+/),
       )
 
       for (let keyframesRule of keyframesRules) {
