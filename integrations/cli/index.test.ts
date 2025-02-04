@@ -1253,3 +1253,65 @@ test(
     `)
   },
 )
+
+test(
+  'emit CSS variables if used outside of utilities',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @theme {
+          --*: initial;
+          --color-blue-500: blue;
+        }
+      `,
+      'src/index.ts': ts`
+        function MyComponent() {
+          return <motion.div />
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    // No CSS variables are used, so nothing should be generated yet.
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      <EMPTY>
+      "
+    `)
+
+    // Use a CSS variable in JS/TS land, now it should be generated.
+    await fs.write(
+      './src/index.ts',
+      ts`
+        function MyComponent() {
+          return <motion.div animate={{ backgroundColor: 'var(--color-blue-500)' }} />
+        }
+      `,
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      :root, :host {
+        --color-blue-500: blue;
+      }
+      "
+    `)
+  },
+)
