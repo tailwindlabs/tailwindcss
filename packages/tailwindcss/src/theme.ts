@@ -208,9 +208,11 @@ export class Theme {
 
   use(themeKey: string) {
     let value = this.values.get(themeKey)
-    if (!value) return
+    if (!value) return false // Unknown
+    if (value.options & ThemeOptions.USED) return false // Already used
 
     value.options |= ThemeOptions.USED
+    return true
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
