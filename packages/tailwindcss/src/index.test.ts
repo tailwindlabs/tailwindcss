@@ -169,7 +169,10 @@ describe('compiling CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
+        --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
+        --spacing-3\\.5: 3.5px;
+        --spacing-foo\\/bar: 3rem;
       }
 
       .m-1\\.5 {
@@ -1106,7 +1109,12 @@ describe('Parsing themes values from CSS', () => {
         ['w-1/2', 'w-75%'],
       ),
     ).toMatchInlineSnapshot(`
-      ".w-1\\/2 {
+      ":root, :host {
+        --width-1\\/2: 75%;
+        --width-75\\%: 50%;
+      }
+
+      .w-1\\/2 {
         width: var(--width-1\\/2);
       }
 
