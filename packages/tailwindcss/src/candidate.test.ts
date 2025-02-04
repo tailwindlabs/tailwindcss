@@ -935,7 +935,7 @@ it('should parse a utility with an implicit variable as the modifier', () => {
   `)
 })
 
-it('should properly decode escaped underlines but not underlines to spaces for CSS variables in arbitrary positions', () => {
+it('should properly decode escaped underscores but not convert underscores to spaces for CSS variables in arbitrary positions', () => {
   let utilities = new Utilities()
   utilities.functional('flex', () => [])
   let variants = new Variants()
