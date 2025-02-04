@@ -40,7 +40,7 @@
     "@parcel/watcher-linux-arm64-glibc": "^2.5.0",
     "@parcel/watcher-linux-arm64-musl": "^2.5.0",
     "@parcel/watcher-linux-x64-glibc": "^2.5.0",
-    "@parcel/watcher-linux-x64-musl": "^2.5.0",
+    "@parcel/watcher-linux-x64-musl": "^2.5.1",
     "@parcel/watcher-win32-x64": "^2.5.0",
     "@types/bun": "^1.1.16",
     "bun": "1.1.43",

@@ -263,8 +263,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0
       '@parcel/watcher-linux-x64-musl':
-        specifier: ^2.5.0
-        version: 2.5.0
+        specifier: ^2.5.1
+        version: 2.5.1
       '@parcel/watcher-win32-x64':
         specifier: ^2.5.0
         version: 2.5.0
@@ -1432,6 +1432,12 @@ packages:
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     resolution: {integrity: sha512-iqOC+GoTDoFyk/VYSFHwjHhYrk8bljW6zOhPuhi5t9ulqiYq1togGJB5e3PwYVFFfeVgc6pbz3JdQyDoBszVaA==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  '@parcel/watcher-linux-x64-musl@2.5.1':
+    resolution: {integrity: sha512-n0E2EQbatQ3bXhcH2D1XIAANAcTZkQICBPVaxMeaCVBtOpBZpWJuf7LwyWPSBDITb7In8mqQgJ7gH8CILCURXg==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
@@ -4415,7 +4421,10 @@ snapshots:
 
   '@parcel/watcher-linux-x64-glibc@2.5.0': {}
 
-  '@parcel/watcher-linux-x64-musl@2.5.0': {}
+  '@parcel/watcher-linux-x64-musl@2.5.0':
+    optional: true
+
+  '@parcel/watcher-linux-x64-musl@2.5.1': {}
 
   '@parcel/watcher-wasm@2.5.0':
     dependencies:
