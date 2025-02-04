@@ -841,6 +841,49 @@ test(
   },
 )
 
+test(
+  `does not interfere with ?commonjs-proxy modules`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^",
+            "plotly.js": "^3",
+            "vite": "^6"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <script type="module" src="./src/index.js"></script>
+        </head>
+      `,
+      'src/index.js': js`import Plotly from 'plotly.js/lib/core'`,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`maplibregl-map`])
+  },
+)
+
 function firstLine(str: string) {
   return str.split('\n')[0]
 }
