@@ -4824,8 +4824,6 @@ export function createCssUtility(node: AtRule) {
           }
         }
 
-        designSystem.theme.trackUsedVariables(atRule.nodes)
-
         return atRule.nodes
       })
 
@@ -4846,11 +4844,7 @@ export function createCssUtility(node: AtRule) {
 
   if (IS_VALID_STATIC_UTILITY_NAME.test(name)) {
     return (designSystem: DesignSystem) => {
-      designSystem.utilities.static(name, () => {
-        let ast = structuredClone(node.nodes)
-        designSystem.theme.trackUsedVariables(ast)
-        return ast
-      })
+      designSystem.utilities.static(name, () => structuredClone(node.nodes))
     }
   }
 

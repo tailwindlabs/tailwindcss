@@ -84,7 +84,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
           },
         })
 
-        astNodes = optimizeAst(astNodes)
+        astNodes = optimizeAst(astNodes, designSystem)
 
         if (astNodes.length === 0 || wasInvalid) {
           result.push(null)

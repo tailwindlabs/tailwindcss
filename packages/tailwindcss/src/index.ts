@@ -4,6 +4,7 @@ import {
   atRoot,
   atRule,
   comment,
+  context,
   context as contextNode,
   decl,
   optimizeAst,
@@ -523,6 +524,39 @@ async function parseCss(
     customUtility(designSystem)
   }
 
+  // Output final set of theme variables at the position of the first
+  // `@theme` rule.
+  if (firstThemeRule) {
+    let nodes = []
+
+    for (let [key, value] of designSystem.theme.entries()) {
+      if (value.options & ThemeOptions.REFERENCE) continue
+
+      nodes.push(decl(escape(key), value.value))
+    }
+
+    let keyframesRules = designSystem.theme.getKeyframes()
+    if (keyframesRules.length > 0) {
+      let animationParts = [...designSystem.theme.namespace('--animate').values()].flatMap(
+        (animation) => animation.split(/\s+/),
+      )
+
+      for (let keyframesRule of keyframesRules) {
+        // Remove any keyframes that aren't used by an animation variable.
+        let keyframesName = keyframesRule.params
+        if (!animationParts.includes(keyframesName)) {
+          continue
+        }
+
+        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+        // printing.
+        nodes.push(atRoot([keyframesRule]))
+      }
+    }
+
+    firstThemeRule.nodes = [context({ theme: true }, nodes)]
+  }
+
   // Replace the `@tailwind utilities` node with a context since it prints
   // children directly.
   if (utilitiesNode) {
@@ -558,10 +592,6 @@ async function parseCss(
   features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
 
-  // Mark CSS variables as used. Right now they can only be used in
-  // declarations, because `@media` and `@container` don't support them.
-  designSystem.theme.trackUsedVariables(ast)
-
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
   walk(ast, (node, { replaceWith }) => {
@@ -583,7 +613,6 @@ async function parseCss(
     root,
     utilitiesNode,
     features,
-    firstThemeRule,
   }
 }
 
@@ -596,10 +625,7 @@ export async function compileAst(
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features, firstThemeRule } = await parseCss(
-    input,
-    opts,
-  )
+  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -627,7 +653,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -639,7 +665,7 @@ export async function compileAst(
       for (let candidate of newRawCandidates) {
         if (!designSystem.invalidCandidates.has(candidate)) {
           if (candidate[0] === '-' && candidate[1] === '-') {
-            emitNewCssVariables = designSystem.theme.use(candidate)
+            emitNewCssVariables = designSystem.theme.markUsedVariable(candidate)
             didChange ||= emitNewCssVariables
           } else {
             allValidCandidates.add(candidate)
@@ -651,7 +677,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -659,45 +685,11 @@ export async function compileAst(
         onInvalidCandidate,
       }).astNodes
 
-      // Output final set of theme variables at the position of the first
-      // `@theme` rule.
-      if (firstThemeRule) {
-        let nodes = []
-
-        for (let [key, value] of designSystem.theme.entries()) {
-          if (value.options & ThemeOptions.REFERENCE) continue
-          if (!(value.options & ThemeOptions.USED)) continue
-
-          nodes.push(decl(escape(key), value.value))
-        }
-
-        let keyframesRules = designSystem.theme.getKeyframes()
-        if (keyframesRules.length > 0) {
-          let animationParts = [...designSystem.theme.namespace('--animate').values()].flatMap(
-            (animation) => animation.split(/\s+/),
-          )
-
-          for (let keyframesRule of keyframesRules) {
-            // Remove any keyframes that aren't used by an animation variable.
-            let keyframesName = keyframesRule.params
-            if (!animationParts.includes(keyframesName)) {
-              continue
-            }
-
-            // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-            // printing.
-            nodes.push(atRoot([keyframesRule]))
-          }
-        }
-
-        firstThemeRule.nodes = nodes
-      }
-
       // If no new ast nodes were generated, then we can return the original
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length && !emitNewCssVariables) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -705,7 +697,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast)
+      compiled = optimizeAst(ast, designSystem)
       return compiled
     },
   }

@@ -1,4 +1,8 @@
 import { parseAtRule } from './css-parser'
+import type { DesignSystem } from './design-system'
+import { ThemeOptions } from './theme'
+import { DefaultMap } from './utils/default-map'
+import * as ValueParser from './value-parser'
 
 const AT_SIGN = 0x40
 
@@ -252,9 +256,13 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[]) {
+export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
+  let cssThemeVariables = new DefaultMap<
+    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    Set<Declaration>
+  >(() => new Set())
 
   function transform(
     node: AstNode,
@@ -266,6 +274,22 @@ export function optimizeAst(ast: AstNode[]) {
       if (node.property === '--tw-sort' || node.value === undefined || node.value === null) {
         return
       }
+
+      // Track used CSS variables
+      if (node.value.includes('var(')) {
+        ValueParser.walk(ValueParser.parse(node.value), (node) => {
+          if (node.kind !== 'function' || node.value !== 'var') return
+
+          ValueParser.walk(node.nodes, (child) => {
+            if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
+
+            designSystem.theme.markUsedVariable(child.value)
+          })
+
+          return ValueParser.ValueWalkAction.Skip
+        })
+      }
+
       parent.push(node)
     }
 
@@ -346,6 +370,15 @@ export function optimizeAst(ast: AstNode[]) {
         return
       }
 
+      if (node.context.theme) {
+        let declarations = cssThemeVariables.get(parent)
+        for (let child of node.nodes) {
+          if (child.kind === 'declaration') {
+            declarations.add(child)
+          }
+        }
+      }
+
       for (let child of node.nodes) {
         transform(child, parent, depth)
       }
@@ -365,6 +398,35 @@ export function optimizeAst(ast: AstNode[]) {
   let newAst: AstNode[] = []
   for (let node of ast) {
     transform(node, newAst, 0)
+  }
+
+  // Remove unused theme variables
+  next: for (let [parent, declarations] of cssThemeVariables) {
+    for (let declaration of declarations) {
+      let options = designSystem.theme.getOptions(declaration.property)
+      if (options & ThemeOptions.USED) continue
+
+      // Remove the declaration (from its parent)
+      let idx = parent.indexOf(declaration)
+      parent.splice(idx, 1)
+
+      // If the parent is now empty, remove it from the AST
+      if (parent.length === 0) {
+        for (let [idx, node] of newAst.entries()) {
+          // Assumption, but right now the `@theme` must be top-level, so we
+          // don't need to traverse the entire AST to find the parent.
+          //
+          // Checking for `rule`, because at this stage the `@theme` is already
+          // converted to a normal style rule `:root, :host`
+          if (node.kind === 'rule' && node.nodes === parent) {
+            newAst.splice(idx, 1)
+            break
+          }
+        }
+
+        continue next
+      }
+    }
   }
 
   return newAst.concat(atRoots)

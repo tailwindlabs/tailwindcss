@@ -1,6 +1,5 @@
-import { walk, WalkAction, type AstNode, type AtRule } from './ast'
+import { type AtRule } from './ast'
 import { escape } from './utils/escape'
-import * as ValueParser from './value-parser'
 
 export const enum ThemeOptions {
   NONE = 0,
@@ -108,7 +107,7 @@ export class Theme {
   }
 
   getOptions(key: string) {
-    return this.values.get(key)?.options ?? ThemeOptions.NONE
+    return this.values.get(this.#unprefixKey(key))?.options ?? ThemeOptions.NONE
   }
 
   entries() {
@@ -123,6 +122,11 @@ export class Theme {
   #prefixKey(key: string) {
     if (!this.prefix) return key
     return `--${this.prefix}-${key.slice(2)}`
+  }
+
+  #unprefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${key.slice(3 + this.prefix.length)}`
   }
 
   clearNamespace(namespace: string, clearOptions: ThemeOptions) {
@@ -174,42 +178,13 @@ export class Theme {
       return null
     }
 
-    this.use(themeKey)
-
     return `var(${escape(this.#prefixKey(themeKey))})`
   }
 
-  trackUsedVariables(ast: AstNode[]) {
-    walk(ast, (node) => {
-      // Variables used in `@utility` and `@custom-variant` at-rules will be
-      // handled separately, because we only want to mark them as used if the
-      // utility or variant is used.
-      if (
-        node.kind === 'at-rule' &&
-        (node.name === '@utility' || node.name === '@custom-variant')
-      ) {
-        return WalkAction.Skip
-      }
-
-      if (node.kind !== 'declaration') return
-      if (!node.value?.includes('var(')) return
-
-      ValueParser.walk(ValueParser.parse(node.value), (node) => {
-        if (node.kind !== 'function' || node.value !== 'var') return
-
-        ValueParser.walk(node.nodes, (child) => {
-          if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
-
-          this.use(child.value)
-        })
-      })
-    })
-  }
-
-  use(themeKey: string) {
-    let value = this.values.get(themeKey)
-    if (!value) return false // Unknown
-    if (value.options & ThemeOptions.USED) return false // Already used
+  markUsedVariable(themeKey: string) {
+    let value = this.values.get(this.#unprefixKey(themeKey))
+    if (!value) return false // Unknown variable
+    if (value.options & ThemeOptions.USED) return false // Variable already used
 
     value.options |= ThemeOptions.USED
     return true
