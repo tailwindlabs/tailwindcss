@@ -241,13 +241,8 @@ function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
           node.value === 'theme' ||
           node.value.endsWith('_theme')
         ) {
-          // Don't decode underscores in the first argument of var() and theme()
-          // but do decode the function name
           node.value = escapeUnderscore(node.value)
           for (let i = 0; i < node.nodes.length; i++) {
-            if (i == 0 && node.nodes[i].kind === 'word') {
-              continue
-            }
             recursivelyEscapeUnderscores([node.nodes[i]])
           }
           break
