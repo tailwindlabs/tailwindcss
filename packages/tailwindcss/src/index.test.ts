@@ -169,10 +169,7 @@ describe('compiling CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
-        --spacing-3\\.5: 3.5px;
-        --spacing-foo\\/bar: 3rem;
       }
 
       .m-1\\.5 {
@@ -286,7 +283,16 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo {
+      ":root, :host {
+        --color-red-200: #fecaca;
+        --color-red-500: #ef4444;
+        --color-blue-500: #3b82f6;
+        --color-green-200: #bbf7d0;
+        --color-green-500: #22c55e;
+        --animate-spin: spin 1s linear infinite;
+      }
+
+      .foo {
         --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
         animation: var(--animate-spin);
@@ -313,6 +319,12 @@ describe('@apply', () => {
       @media (width >= 768px) {
         .foo:hover:focus {
           background-color: var(--color-green-200);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
       }
 
@@ -1094,12 +1106,7 @@ describe('Parsing themes values from CSS', () => {
         ['w-1/2', 'w-75%'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --width-1\\/2: 75%;
-        --width-75\\%: 50%;
-      }
-
-      .w-1\\/2 {
+      ".w-1\\/2 {
         width: var(--width-1\\/2);
       }
 

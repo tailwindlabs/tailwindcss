@@ -4036,11 +4036,7 @@ test('translate-x', async () => {
       ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-x-\\[var\\(--value\\)\\] {
+    ".-translate-x-\\[var\\(--value\\)\\] {
       --tw-translate-x: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
@@ -4164,11 +4160,7 @@ test('translate-y', async () => {
       ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-y-\\[var\\(--value\\)\\] {
+    ".-translate-y-\\[var\\(--value\\)\\] {
       --tw-translate-y: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }

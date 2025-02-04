@@ -72,7 +72,11 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo {
+      ":root, :host {
+        --spacing: .25rem;
+      }
+
+      .foo {
         margin: calc(var(--spacing) * 4);
       }"
     `)
