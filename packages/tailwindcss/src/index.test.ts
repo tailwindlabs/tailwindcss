@@ -1190,11 +1190,15 @@ describe('Parsing themes values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-very-long-animatino-name'],
+        ['animate-very-long-animation-name'],
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+      }
+
+      .animate-very-long-animation-name {
+        animation: var(--animate-very-long-animation-name);
       }
 
       @keyframes very-long-animation-name {
