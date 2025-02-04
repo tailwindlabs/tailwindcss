@@ -1170,6 +1170,41 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('`@keyframes` in `@theme` are generated when name contains a new line', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-very-long-animation-name: very-long-animation-name
+              var(
+                --very-long-animation-name-configuration,
+                2.5s ease-in-out 0s infinite normal none running
+              );
+
+            @keyframes very-long-animation-name {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-very-long-animatino-name'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+      }
+
+      @keyframes very-long-animation-name {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
   test('`@theme` values can be unset', async () => {
     expect(
       await compileCss(
