@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure CSS variables in arbitrary values are properly decoded ([#16206](https://github.com/tailwindlabs/tailwindcss/pull/16206))
+- Ensure that the `containers` JS theme key is added to the `--container-*` namespace ([#16169](https://github.com/tailwindlabs/tailwindcss/pull/16169))
+- Fix missing `@keyframes` definition ([#16237](https://github.com/tailwindlabs/tailwindcss/pull/16237))
+- Vite: Skip parsing stylesheets with the `?commonjs-proxy` flag ([#16238](https://github.com/tailwindlabs/tailwindcss/pull/16238))
 
 ## [4.0.3] - 2025-02-01
 
