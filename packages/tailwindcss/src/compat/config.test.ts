@@ -1628,3 +1628,54 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
   expect(didCallPluginFn).toHaveBeenCalled()
 })
+
+test('handles setting theme keys to null', async () => {
+  let compiler = await compile(
+    css`
+      @theme default {
+        --color-red-50: oklch(0.971 0.013 17.38);
+        --color-red-100: oklch(0.936 0.032 17.717);
+      }
+      @config "./my-config.js";
+      @tailwind utilities;
+      @theme {
+        --color-red-100: oklch(0.936 0.032 17.717);
+        --color-red-200: oklch(0.885 0.062 18.334);
+      }
+    `,
+    {
+      loadModule: async () => {
+        return {
+          module: {
+            theme: {
+              extend: {
+                colors: {
+                  red: null,
+                },
+              },
+            },
+          },
+          base: '/root',
+        }
+      },
+    },
+  )
+
+  expect(compiler.build(['bg-red-50', 'bg-red-100', 'bg-red-200'])).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-50: oklch(0.971 0.013 17.38);
+      --color-red-100: oklch(0.936 0.032 17.717);
+      --color-red-200: oklch(0.885 0.062 18.334);
+    }
+    .bg-red-50 {
+      background-color: var(--color-red-50);
+    }
+    .bg-red-100 {
+      background-color: var(--color-red-100);
+    }
+    .bg-red-200 {
+      background-color: var(--color-red-200);
+    }
+    "
+  `)
+})
