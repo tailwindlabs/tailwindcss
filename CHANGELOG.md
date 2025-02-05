@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vite: Skip parsing stylesheets with the `?commonjs-proxy` flag ([#16238](https://github.com/tailwindlabs/tailwindcss/pull/16238))
 - Fix `order-first` and `order-last` for Firefox ([#16266](https://github.com/tailwindlabs/tailwindcss/pull/16266))
 - Ensure `NODE_PATH` is respected when resolving JavaScript and CSS files ([#16274](https://github.com/tailwindlabs/tailwindcss/pull/16274))
+- Ensure Node addons are packaged correctly with FreeBSD builds ([#16277](https://github.com/tailwindlabs/tailwindcss/pull/16277))
 
 ## [4.0.3] - 2025-02-01
 
