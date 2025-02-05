@@ -78,16 +78,16 @@ async function run() {
 
     // Discover CSS files in case no files were provided
     if (files.length === 0) {
-      info('Searching for CSS files in the current directory and its subdirectories…')
+      info('Searching for CSS or SCSS files in the current directory and its subdirectories…')
 
-      files = await globby(['**/*.css', '**/*.scss'], {
+      files = await globby(['**/*.{css,scss}'], {
         absolute: true,
         gitignore: true,
       })
     }
 
-    // Ensure we are only dealing with CSS files
-    files = files.filter((file) => file.endsWith('.css'))
+    // Ensure we are only dealing with CSS and SCSS files
+    files = files.filter((file) => file.endsWith('.css' || '.scss'))
 
     // Analyze the stylesheets
     let loadResults = await Promise.allSettled(files.map((filepath) => Stylesheet.load(filepath)))
