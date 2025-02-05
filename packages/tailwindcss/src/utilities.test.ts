@@ -1053,11 +1053,11 @@ test('order', async () => {
     }
 
     .order-first {
-      order: calc(-infinity);
+      order: -9999;
     }
 
     .order-last {
-      order: calc(infinity);
+      order: 9999;
     }
 
     .order-none {
