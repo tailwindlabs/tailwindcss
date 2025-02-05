@@ -193,12 +193,15 @@ async function importModule(path: string): Promise<any> {
   }
 }
 
+const modules = ['node_modules', ...(process.env.NODE_PATH ? [process.env.NODE_PATH] : [])]
+
 const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
   extensions: ['.css'],
   mainFields: ['style'],
   conditionNames: ['style'],
+  modules,
 })
 async function resolveCssId(
   id: string,
@@ -227,6 +230,7 @@ const esmResolver = EnhancedResolve.ResolverFactory.createResolver({
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
   conditionNames: ['node', 'import'],
+  modules,
 })
 
 const cjsResolver = EnhancedResolve.ResolverFactory.createResolver({
@@ -234,6 +238,7 @@ const cjsResolver = EnhancedResolve.ResolverFactory.createResolver({
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
   conditionNames: ['node', 'require'],
+  modules,
 })
 
 async function resolveJsId(
