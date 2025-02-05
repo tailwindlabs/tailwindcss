@@ -185,11 +185,10 @@ export class Theme {
   markUsedVariable(themeKey: string) {
     let key = unescape(this.#unprefixKey(themeKey))
     let value = this.values.get(key)
-    if (!value) return false // Unknown variable
-    if (value.options & ThemeOptions.USED) return false // Variable already used
+    if (!value) return // Unknown variable
+    if (value.options & ThemeOptions.USED) return // Variable already used
 
     value.options |= ThemeOptions.USED
-    return true
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
