@@ -1,6 +1,7 @@
 import { optimizeAst, toCss } from './ast'
 import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
+import { substituteFunctions } from './css-functions'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme, ThemeKey } from './theme'
@@ -41,9 +42,27 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   let parsedCandidates = new DefaultMap((candidate) =>
     Array.from(parseCandidate(candidate, designSystem)),
   )
-  let compiledAstNodes = new DefaultMap<Candidate>((candidate) =>
-    compileAstNodes(candidate, designSystem),
-  )
+  let compiledAstNodes = new DefaultMap<Candidate>((candidate) => {
+    let ast = compileAstNodes(candidate, designSystem)
+
+    // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+    // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+    // calls so we need evaluate any functions we find there that weren't in
+    // the source CSS.
+    try {
+      substituteFunctions(
+        ast.map(({ node }) => node),
+        designSystem,
+      )
+    } catch (err) {
+      // If substitution fails then the candidate likely contains a call to
+      // `theme()` that is invalid which may be because of incorrect usage,
+      // invalid arguments, or a theme key that does not exist.
+      return []
+    }
+
+    return ast
+  })
 
   let designSystem: DesignSystem = {
     theme,
