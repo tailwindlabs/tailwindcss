@@ -53,10 +53,11 @@ await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
 // Build platform binaries and checksum them
 let results = await Promise.all([
-  // All Linux builds use `bun-baseline` due to various instruction-related
+  build('bun-linux-arm64', './tailwindcss-linux-arm64'),
+  build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
+
+  // All Linux x64 builds use `bun-baseline` due to various instruction-related
   // errors on some older Server hardware.
-  build('bun-linux-arm64-baseline', './tailwindcss-linux-arm64'),
-  build('bun-linux-arm64-musl-baseline', './tailwindcss-linux-arm64-musl'),
   build('bun-linux-x64-baseline', './tailwindcss-linux-x64'),
   build('bun-linux-x64-musl-baseline', './tailwindcss-linux-x64-musl'),
 
