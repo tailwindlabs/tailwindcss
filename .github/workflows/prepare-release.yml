@@ -162,7 +162,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            npm install -g pnpm --unsafe-perm=true
+            sudo npm install -g pnpm --unsafe-perm=true
             node --version
             pnpm --version
             curl https://sh.rustup.rs -sSf --output rustup.sh
