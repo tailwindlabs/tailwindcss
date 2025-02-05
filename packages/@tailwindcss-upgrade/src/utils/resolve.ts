@@ -38,7 +38,7 @@ export function resolveJsId(id: string, base: string) {
 const resolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
   useSyncFileSystemCalls: true,
-  extensions: ['.css'],
+  extensions: ['.css', '.scss'],
   mainFields: ['style'],
   conditionNames: ['style'],
 })
