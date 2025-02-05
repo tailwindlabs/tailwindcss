@@ -3,8 +3,6 @@ name: Prepare Release
 on:
   workflow_dispatch:
   push:
-    branches:
-      - fix/freebsd
     tags:
       - 'v*'
 
@@ -286,19 +284,19 @@ jobs:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
 
-      # - name: Prepare GitHub Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     draft: true
-      #     tag_name: ${{ env.TAG_NAME }}
-      #     body: |
-      #       ${{ env.RELEASE_NOTES }}
-      #     files: |
-      #       packages/@tailwindcss-standalone/dist/sha256sums.txt
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-      #       packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+      - name: Prepare GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ env.TAG_NAME }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
+          files: |
+            packages/@tailwindcss-standalone/dist/sha256sums.txt
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
+            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
+            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
