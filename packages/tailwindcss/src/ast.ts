@@ -2,7 +2,6 @@ import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
-import * as ValueParser from './value-parser'
 
 const AT_SIGN = 0x40
 
@@ -277,17 +276,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
       // Track used CSS variables
       if (node.value.includes('var(')) {
-        ValueParser.walk(ValueParser.parse(node.value), (node) => {
-          if (node.kind !== 'function' || node.value !== 'var') return
-
-          ValueParser.walk(node.nodes, (child) => {
-            if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
-
-            designSystem.theme.markUsedVariable(child.value)
-          })
-
-          return ValueParser.ValueWalkAction.Skip
-        })
+        designSystem.trackUsedVariables(node.value)
       }
 
       parent.push(node)
