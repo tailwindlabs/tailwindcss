@@ -80,7 +80,7 @@ async function run() {
     if (files.length === 0) {
       info('Searching for CSS files in the current directory and its subdirectories…')
 
-      files = await globby(['**/*.css'], {
+      files = await globby(['**/*.css', '**/*.scss'], {
         absolute: true,
         gitignore: true,
       })
