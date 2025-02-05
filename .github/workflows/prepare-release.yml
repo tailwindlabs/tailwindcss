@@ -3,6 +3,8 @@ name: Prepare Release
 on:
   workflow_dispatch:
   push:
+    branches:
+      - fix/freebsd
     tags:
       - 'v*'
 
@@ -137,6 +139,51 @@ jobs:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
+  build-freebsd:
+    name: Build x86_64-unknown-freebsd (OXIDE)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build FreeBSD
+        uses: cross-platform-actions/action@v0.25.0
+        env:
+          DEBUG: napi:*
+          RUSTUP_HOME: /usr/local/rustup
+          CARGO_HOME: /usr/local/cargo
+          RUSTUP_IO_THREADS: 1
+          RUST_TARGET: x86_64-unknown-freebsd
+        with:
+          operating_system: freebsd
+          version: '14.0'
+          memory: 13G
+          cpu_count: 3
+          environment_variables: 'DEBUG RUSTUP_IO_THREADS'
+          shell: bash
+          run: |
+            sudo pkg install -y -f curl node libnghttp2 npm
+            npm install -g pnpm
+            node --version
+            pnpm --version
+            curl https://sh.rustup.rs -sSf --output rustup.sh
+            sh rustup.sh -y --profile minimal --default-toolchain beta
+            source "$HOME/.cargo/env"
+            echo "~~~~ rustc --version ~~~~"
+            rustc --version
+            echo "~~~~ node -v ~~~~"
+            node -v
+            echo "~~~~ pnpm --version ~~~~"
+            pnpm --version
+            pnpm install || true
+            pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+            strip -x ${{ env.OXIDE_LOCATION }}/*.node
+            ls -la ${{ env.OXIDE_LOCATION }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-x86_64-unknown-freebsd
+          path: ${{ env.OXIDE_LOCATION }}/*.node
+
   prepare:
     runs-on: macos-14
     timeout-minutes: 15
@@ -217,6 +264,7 @@ jobs:
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
+          cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
 
       - name: Build Tailwind CSS
         run: pnpm run build
@@ -240,19 +288,19 @@ jobs:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
 
-      - name: Prepare GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ env.RELEASE_NOTES }}
-          files: |
-            packages/@tailwindcss-standalone/dist/sha256sums.txt
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+      # - name: Prepare GitHub Release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     draft: true
+      #     tag_name: ${{ env.TAG_NAME }}
+      #     body: |
+      #       ${{ env.RELEASE_NOTES }}
+      #     files: |
+      #       packages/@tailwindcss-standalone/dist/sha256sums.txt
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
+      #       packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
