@@ -163,8 +163,6 @@ jobs:
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g pnpm --unsafe-perm=true
-            node --version
-            pnpm --version
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain beta
             source "$HOME/.cargo/env"
@@ -174,7 +172,7 @@ jobs:
             node -v
             echo "~~~~ pnpm --version ~~~~"
             pnpm --version
-            pnpm install || true
+            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
             pnpm run --filter ${{ env.OXIDE_LOCATION }} build
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
