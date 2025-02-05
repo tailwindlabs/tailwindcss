@@ -42,9 +42,9 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release --no-const-enum",
+    "build": "napi build --platform --release --no-const-enum && node export_native_binding.js",
     "dev": "cargo watch --quiet --shell 'npm run build'",
-    "build:debug": "napi build --platform --no-const-enum",
+    "build:debug": "napi build --platform --no-const-enum && node export_native_binding.js",
     "version": "napi version"
   },
   "optionalDependencies": {
