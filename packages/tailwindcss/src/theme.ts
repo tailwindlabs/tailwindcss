@@ -6,7 +6,7 @@ export const enum ThemeOptions {
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
-  USED = 1 << 3,
+  STATIC = 1 << 3,
 }
 
 // In the future we may want to replace this with just a `Set` of known theme
@@ -186,7 +186,7 @@ export class Theme {
     let key = unescape(this.#unprefixKey(themeKey))
     let value = this.values.get(key)
     if (!value) return
-    value.options |= ThemeOptions.USED
+    value.options |= ThemeOptions.STATIC
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

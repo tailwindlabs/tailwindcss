@@ -393,7 +393,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   next: for (let [parent, declarations] of cssThemeVariables) {
     for (let declaration of declarations) {
       let options = designSystem.theme.getOptions(declaration.property)
-      if (options & ThemeOptions.USED) continue
+      if (options & ThemeOptions.STATIC) continue
 
       // Remove the declaration (from its parent)
       let idx = parent.indexOf(declaration)
