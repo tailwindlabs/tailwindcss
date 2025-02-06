@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix a crash when setting JS theme values to `null` ([#16210](https://github.com/tailwindlabs/tailwindcss/pull/16210))
-- Ensure CSS variables in arbitrary values are properly decoded ([#16206](https://github.com/tailwindlabs/tailwindcss/pull/16206))
+- Ensure escaped underscores in CSS variables in arbitrary values are properly unescaped ([#16206](https://github.com/tailwindlabs/tailwindcss/pull/16206))
 - Ensure that the `containers` JS theme key is added to the `--container-*` namespace ([#16169](https://github.com/tailwindlabs/tailwindcss/pull/16169))
-- Fix missing `@keyframes` definition ([#16237](https://github.com/tailwindlabs/tailwindcss/pull/16237))
+- Ensure theme `@keyframes` are generated even if an `--animation-*` variable spans multiple lines ([#16237](https://github.com/tailwindlabs/tailwindcss/pull/16237))
 - Vite: Skip parsing stylesheets with the `?commonjs-proxy` flag ([#16238](https://github.com/tailwindlabs/tailwindcss/pull/16238))
 - Fix `order-first` and `order-last` for Firefox ([#16266](https://github.com/tailwindlabs/tailwindcss/pull/16266))
 - Fix support for older instruction sets on Linux x64 builds of the standalone CLI ([#16244](https://github.com/tailwindlabs/tailwindcss/pull/16244))
