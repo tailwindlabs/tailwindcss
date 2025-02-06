@@ -283,8 +283,5 @@ jobs:
               owner: 'tailwindlabs',
               repo: 'play.tailwindcss.com',
               ref: 'master',
-              workflow_id: 'upgrade-tailwindcss.yml',
-              inputs: {
-                version: '${{ env.TAILWINDCSS_VERSION }}'
-              }
+              workflow_id: 'upgrade-tailwindcss.yml'
             })
