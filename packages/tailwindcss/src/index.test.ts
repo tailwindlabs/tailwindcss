@@ -1807,6 +1807,33 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('theme values added as `static` will always be generated, regardless of whether they were used or not', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --color-tomato: #e10c04;
+            --color-potato: #ac855b;
+            --color-primary: var(--primary);
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
   test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
     expect(
       await compileCss(
