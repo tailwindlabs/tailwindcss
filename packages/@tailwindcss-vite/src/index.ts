@@ -318,7 +318,6 @@ function isPotentialCssRootFile(id: string) {
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id) &&
     !COMMON_JS_PROXY_RE.test(id)
-  if (isCssFile) console.log(id)
   return isCssFile
 }
 
