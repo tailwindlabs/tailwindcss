@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.4] - 2025-02-06
+
 ### Fixed
 
 - Fix a crash when setting JS theme values to `null` ([#16210](https://github.com/tailwindlabs/tailwindcss/pull/16210))
@@ -3386,7 +3390,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...HEAD
+[4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
 [4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
