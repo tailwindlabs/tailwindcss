@@ -586,3 +586,35 @@ test('resolves @reference as `@import "…" reference`', async () => {
     "
   `)
 })
+
+test('resolves `@variant` used as `@custom-variant` inside `@reference`', async () => {
+  let loadStylesheet = async (id: string, base: string) => {
+    expect(base).toBe('/root')
+    expect(id).toBe('./foo/bar.css')
+    return {
+      content: css`
+        @variant dark {
+          &:where([data-theme='dark'] *) {
+            @slot;
+          }
+        }
+      `,
+      base: '/root/foo',
+    }
+  }
+
+  await expect(
+    run(
+      css`
+        @reference './foo/bar.css';
+        @tailwind utilities;
+      `,
+      { loadStylesheet, candidates: ['dark:flex'] },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ".dark\\:flex:where([data-theme="dark"] *) {
+      display: flex;
+    }
+    "
+  `)
+})

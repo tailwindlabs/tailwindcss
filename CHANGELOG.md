@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix support for older instruction sets on Linux x64 builds of the standalone CLI ([#16244](https://github.com/tailwindlabs/tailwindcss/pull/16244))
 - Ensure `NODE_PATH` is respected when resolving JavaScript and CSS files ([#16274](https://github.com/tailwindlabs/tailwindcss/pull/16274))
 - Ensure Node addons are packaged correctly with FreeBSD builds ([#16277](https://github.com/tailwindlabs/tailwindcss/pull/16277))
+- Fix an issue where `@variant` inside a referenced stylesheet could cause a stack overflow ([#16300](https://github.com/tailwindlabs/tailwindcss/pull/16300))
 
 ## [4.0.3] - 2025-02-01
 
