@@ -77,7 +77,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             root.walkAtRules((node) => {
               if (
                 node.name === 'import' ||
+                node.name === 'reference' ||
                 node.name === 'theme' ||
+                node.name === 'variant' ||
                 node.name === 'config' ||
                 node.name === 'plugin' ||
                 node.name === 'apply'

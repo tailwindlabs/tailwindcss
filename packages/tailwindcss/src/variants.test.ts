@@ -6,15 +6,6 @@ import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
 
-test('force', async () => {
-  expect(await run(['force:flex'])).toMatchInlineSnapshot(`
-    ".force\\:flex {
-      display: flex;
-    }"
-  `)
-  expect(await run(['force/foo:flex'])).toEqual('')
-})
-
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
     ":is(.\\*\\:flex > *) {
@@ -233,7 +224,7 @@ test('target', async () => {
 
 test('open', async () => {
   expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
-    ".group-open\\:flex:is(:where(.group):is([open], :popover-open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open) ~ *), .open\\:flex:is([open], :popover-open) {
+    ".group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
       display: flex;
     }"
   `)
@@ -756,7 +747,7 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-md: 768px;
       --breakpoint-lg: 1024px;
@@ -824,7 +815,7 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-10xl: 5000px;
     }
 
@@ -851,7 +842,7 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -906,7 +897,7 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -963,7 +954,7 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1018,7 +1009,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1080,7 +1071,7 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-lg: 1024px;
       --breakpoint-md: 768px;
@@ -1465,7 +1456,7 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
     }
 
@@ -1473,7 +1464,7 @@ test('not', async () => {
       display: flex;
     }
 
-    .not-open\\:flex:not([open], :popover-open) {
+    .not-open\\:flex:not([open], :popover-open, :open) {
       display: flex;
     }
 
@@ -2011,7 +2002,7 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --container-lg: 1024px;
     }
 
@@ -2167,7 +2158,7 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 640px;
       --breakpoint-md: 768px;
       --breakpoint-lg: 1024px;
@@ -2214,7 +2205,7 @@ test('variant order', async () => {
       display: flex;
     }
 
-    .first\\:flex:first-child, .last\\:flex:last-child, .only\\:flex:only-child, .odd\\:flex:nth-child(odd), .even\\:flex:nth-child(2n), .first-of-type\\:flex:first-of-type, .last-of-type\\:flex:last-of-type, .only-of-type\\:flex:only-of-type, .visited\\:flex:visited, .target\\:flex:target, .open\\:flex:is([open], :popover-open), .default\\:flex:default, .checked\\:flex:checked, .indeterminate\\:flex:indeterminate, .placeholder-shown\\:flex:placeholder-shown, .autofill\\:flex:autofill, .optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid, .in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within {
+    .first\\:flex:first-child, .last\\:flex:last-child, .only\\:flex:only-child, .odd\\:flex:nth-child(odd), .even\\:flex:nth-child(2n), .first-of-type\\:flex:first-of-type, .last-of-type\\:flex:last-of-type, .only-of-type\\:flex:only-of-type, .visited\\:flex:visited, .target\\:flex:target, .open\\:flex:is([open], :popover-open, :open), .default\\:flex:default, .checked\\:flex:checked, .indeterminate\\:flex:indeterminate, .placeholder-shown\\:flex:placeholder-shown, .autofill\\:flex:autofill, .optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid, .in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within {
       display: flex;
     }
 

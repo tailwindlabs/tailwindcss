@@ -31,7 +31,7 @@ test('creates a custom utility to extend the built-in container', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -96,7 +96,7 @@ test('allows padding to be defined at custom breakpoints', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -164,7 +164,7 @@ test('allows breakpoints to be overwritten', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -237,7 +237,7 @@ test('padding applies to custom `container` screens', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -307,7 +307,7 @@ test("an empty `screen` config will undo all custom media screens and won't appl
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -379,7 +379,7 @@ test('legacy container component does not interfere with new --container variabl
   })
 
   expect(compiler.build(['max-w-sm'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --container-3xs: 16rem;
       --container-2xs: 18rem;
       --container-xs: 20rem;
@@ -438,7 +438,7 @@ test('combines custom padding and screen overwrites', async () => {
   })
 
   expect(compiler.build(['container', '!container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -557,7 +557,7 @@ test('filters out complex breakpoints', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;

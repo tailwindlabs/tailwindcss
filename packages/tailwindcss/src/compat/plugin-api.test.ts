@@ -293,7 +293,7 @@ describe('theme', async () => {
       .variable {
         color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
       }
-      :root {
+      :root, :host {
         --color-red-500: #ef4444;
       }
       "
@@ -379,7 +379,7 @@ describe('theme', async () => {
       .js-variable {
         color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
       }
-      :root {
+      :root, :host {
         --color-custom-css: rgba(255 0 0 / <alpha-value>);
       }
       "
@@ -1422,7 +1422,7 @@ describe('theme', async () => {
         .my-width-2\\.5 {
           width: 0.625rem;
         }
-        :root {
+        :root, :host {
           --width-1: 0.25rem;
           --width-1\\/2: 60%;
           --width-1\\.5: 0.375rem;
@@ -1479,7 +1479,7 @@ describe('theme', async () => {
         .my-width-2\\.5 {
           width: 0.625rem;
         }
-        :root {
+        :root, :host {
           --width-1: 0.25rem;
           --width-1\\/2: 60%;
           --width-1\\.5: 0.375rem;
@@ -1529,6 +1529,38 @@ describe('addBase', () => {
       "@layer base {
         outside {
           color: red;
+        }
+      }
+      "
+    `)
+  })
+
+  test('does not modify CSS variables', async () => {
+    let input = css`
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: plugin(function ({ addBase }) {
+          addBase({
+            ':root': {
+              '--PascalCase': '1',
+              '--camelCase': '1',
+              '--UPPERCASE': '1',
+            },
+          })
+        }),
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@layer base {
+        :root {
+          --PascalCase: 1;
+          --camelCase: 1;
+          --UPPERCASE: 1;
         }
       }
       "
@@ -3135,8 +3167,6 @@ describe('addUtilities()', () => {
             color: red;
           }
         }
-      }
-      :root {
       }"
     `,
     )

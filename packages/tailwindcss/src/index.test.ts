@@ -25,7 +25,7 @@ describe('compiling CSS', () => {
         ['flex', 'md:grid', 'hover:underline', 'dark:bg-black'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-black: #000;
         --breakpoint-md: 768px;
       }
@@ -133,7 +133,7 @@ describe('compiling CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1_5: 1.5rem;
         --spacing-2_5: 2.5rem;
       }
@@ -148,6 +148,49 @@ describe('compiling CSS', () => {
 
       .bg-\\[no-repeat_url\\(\\.\\/my_file\\.jpg\\)\\] {
         background-color: no-repeat url("./my_file.jpg");
+      }"
+    `)
+  })
+
+  test('unescapes theme variables and handles dots as underscore', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-1\.5: 1.5px;
+            --spacing-2_5: 2.5px;
+            --spacing-3\.5: 3.5px;
+            --spacing-3_5: 3.5px;
+            --spacing-foo\/bar: 3rem;
+          }
+          @tailwind utilities;
+        `,
+        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing-1\\.5: 1.5px;
+        --spacing-2_5: 2.5px;
+        --spacing-3\\.5: 3.5px;
+        --spacing-3_5: 3.5px;
+        --spacing-foo\\/bar: 3rem;
+      }
+
+      .m-1\\.5 {
+        margin: var(--spacing-1\\.5);
+      }
+
+      .m-2\\.5, .m-2_5 {
+        margin: var(--spacing-2_5);
+      }
+
+      .m-3\\.5 {
+        margin: var(--spacing-3\\.5);
+      }
+
+      .m-foo\\/bar {
+        margin: var(--spacing-foo\\/bar);
       }"
     `)
   })
@@ -245,7 +288,7 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-200: #fecaca;
         --color-red-500: #ef4444;
         --color-blue-500: #3b82f6;
@@ -608,7 +651,7 @@ describe('important', () => {
         ['animate-spin!'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -646,7 +689,7 @@ describe('sorting', () => {
         ['pointer-events-none', 'flex', 'p-1', 'px-1', 'pl-1'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1: .25rem;
       }
 
@@ -709,7 +752,7 @@ describe('sorting', () => {
         ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-0: 0px;
         --spacing-2: .5rem;
         --spacing-4: 1rem;
@@ -771,7 +814,7 @@ describe('sorting', () => {
         ].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --spacing-1: 1px;
         --spacing-2: 2px;
         --spacing-3: 3px;
@@ -992,7 +1035,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: red;
       }
 
@@ -1015,7 +1058,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: #f10;
       }
 
@@ -1040,7 +1083,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red-500', 'accent-blue-500'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red-500: red;
         --color-blue-500: #00f;
       }
@@ -1069,7 +1112,7 @@ describe('Parsing themes values from CSS', () => {
         ['w-1/2', 'w-75%'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --width-1\\/2: 75%;
         --width-75\\%: 50%;
       }
@@ -1105,7 +1148,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'text-lg'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-red: red;
         --animate-foo: foo 1s infinite;
         --text-lg: 20px;
@@ -1120,6 +1163,45 @@ describe('Parsing themes values from CSS', () => {
       }
 
       @keyframes foo {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('`@keyframes` in `@theme` are generated when name contains a new line', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-very-long-animation-name: very-long-animation-name
+              var(
+                --very-long-animation-name-configuration,
+                2.5s ease-in-out 0s infinite normal none running
+              );
+
+            @keyframes very-long-animation-name {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-very-long-animation-name'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+      }
+
+      .animate-very-long-animation-name {
+        animation: var(--animate-very-long-animation-name);
+      }
+
+      @keyframes very-long-animation-name {
         to {
           opacity: 1;
         }
@@ -1159,7 +1241,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-sm: 13px;
         --color-green: #0f0;
       }
@@ -1206,7 +1288,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-sm: 13px;
         --color-green: #0f0;
       }
@@ -1242,7 +1324,7 @@ describe('Parsing themes values from CSS', () => {
         ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-green: #0f0;
       }
 
@@ -1270,7 +1352,7 @@ describe('Parsing themes values from CSS', () => {
         ['font-bold', 'font-sans', 'font-serif', 'font-body'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --font-weight-bold: bold;
         --font-body: Inter;
       }
@@ -1309,7 +1391,7 @@ describe('Parsing themes values from CSS', () => {
         ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
@@ -1420,7 +1502,7 @@ describe('Parsing themes values from CSS', () => {
         ],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --text-color-potato: brown;
         --text-underline-offset-potato: 4px;
         --text-indent-potato: 6px;
@@ -1485,7 +1567,7 @@ describe('Parsing themes values from CSS', () => {
         ['animate-foo', 'animate-foobar'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --animate-foobar: foobar 1s infinite;
       }
 
@@ -1516,7 +1598,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
       }
 
@@ -1526,6 +1608,75 @@ describe('Parsing themes values from CSS', () => {
 
       .bg-tomato {
         background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: var(--animate-foo);
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+
+          @theme {
+            --color-pink: pink;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-pink', 'animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-pink: pink;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      .bg-pink {
+        background-color: var(--color-pink);
       }"
     `)
   })
@@ -1566,7 +1717,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #c794aa;
       }
 
@@ -1596,7 +1747,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
       }
 
@@ -1647,7 +1798,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
         --color-potato: #ac855b;
         --color-primary: var(--primary);
@@ -1684,7 +1835,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-tomato: #e10c04;
         --color-potato: #ac855b;
         --color-primary: var(--primary);
@@ -1780,7 +1931,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #ac855b;
       }
 
@@ -1803,7 +1954,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #efb46b;
       }
 
@@ -1872,7 +2023,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato', 'bg-tomato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-potato: #ac855b;
         --color-tomato: tomato;
       }
@@ -1919,7 +2070,7 @@ describe('Parsing themes values from CSS', () => {
     )
 
     expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-orange: orange;
       }
 
@@ -1965,7 +2116,7 @@ describe('Parsing themes values from CSS', () => {
     )
 
     expect(optimizeCss(build(['text-red', 'text-orange'])).trim()).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-orange: orange;
       }
 
@@ -2512,6 +2663,26 @@ describe('@custom-variant', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@custom-variant\` cannot be nested.]`)
+  })
+
+  test('@custom-variant must not have an empty selector', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant foo ();
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant foo ()\` selector is invalid.]`,
+    )
+  })
+
+  test('@custom-variant with multiple selectors, cannot be empty', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant foo (.foo, .bar, );
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant foo (.foo, .bar, )\` selector is invalid.]`,
+    )
   })
 
   test('@custom-variant with no body must include a selector', () => {
@@ -3378,6 +3549,38 @@ describe('@variant', () => {
               background: white;
             }
           }
+
+          @variant hover {
+            @variant landscape {
+              .btn2 {
+                color: red;
+              }
+            }
+          }
+
+          @variant hover {
+            .foo {
+              color: red;
+            }
+            @variant landscape {
+              .bar {
+                color: blue;
+              }
+            }
+            .baz {
+              @variant portrait {
+                color: green;
+              }
+            }
+          }
+
+          @media something {
+            @variant landscape {
+              @page {
+                color: red;
+              }
+            }
+          }
         `,
         [],
       ),
@@ -3389,6 +3592,38 @@ describe('@variant', () => {
       @media (prefers-color-scheme: dark) {
         .btn {
           background: #fff;
+        }
+      }
+
+      @media (hover: hover) {
+        @media (orientation: landscape) {
+          :scope:hover .btn2 {
+            color: red;
+          }
+        }
+
+        :scope:hover .foo {
+          color: red;
+        }
+
+        @media (orientation: landscape) {
+          :scope:hover .bar {
+            color: #00f;
+          }
+        }
+
+        @media (orientation: portrait) {
+          :scope:hover .baz {
+            color: green;
+          }
+        }
+      }
+
+      @media something {
+        @media (orientation: landscape) {
+          @page {
+            color: red;
+          }
         }
       }"
     `)

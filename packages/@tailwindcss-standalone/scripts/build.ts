@@ -55,15 +55,18 @@ await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 let results = await Promise.all([
   build('bun-linux-arm64', './tailwindcss-linux-arm64'),
   build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
-  build('bun-linux-x64', './tailwindcss-linux-x64'),
-  build('bun-linux-x64-musl', './tailwindcss-linux-x64-musl'),
-  // build('linux-armv7', 'tailwindcss-linux-armv7'),
+
+  // All Linux x64 builds use `bun-baseline` due to various instruction-related
+  // errors on some older Server hardware.
+  build('bun-linux-x64-baseline', './tailwindcss-linux-x64'),
+  build('bun-linux-x64-musl-baseline', './tailwindcss-linux-x64-musl'),
+
   build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
   build('bun-darwin-x64', './tailwindcss-macos-x64'),
+
   // The Windows x64 build uses `bun-baseline` instead of the regular bun build.
   // This enables support for running inside the ARM emulation mode.
   build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
-  // buildForPlatform('win32-arm64', 'tailwindcss-windows-arm64'),
 ])
 
 // Write the checksums to a file

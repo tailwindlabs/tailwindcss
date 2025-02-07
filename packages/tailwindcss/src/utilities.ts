@@ -17,6 +17,7 @@ import { DefaultMap } from './utils/default-map'
 import {
   inferDataType,
   isPositiveInteger,
+  isStrictPositiveInteger,
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
@@ -427,42 +428,44 @@ export function createUtilities(theme: Theme) {
 
     suggest(name, () => [
       {
-        values: [
-          '0',
-          '0.5',
-          '1',
-          '1.5',
-          '2',
-          '2.5',
-          '3',
-          '3.5',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '14',
-          '16',
-          '20',
-          '24',
-          '28',
-          '32',
-          '36',
-          '40',
-          '44',
-          '48',
-          '52',
-          '56',
-          '60',
-          '64',
-          '72',
-          '80',
-          '96',
-        ],
+        values: theme.get(['--spacing'])
+          ? [
+              '0',
+              '0.5',
+              '1',
+              '1.5',
+              '2',
+              '2.5',
+              '3',
+              '3.5',
+              '4',
+              '5',
+              '6',
+              '7',
+              '8',
+              '9',
+              '10',
+              '11',
+              '12',
+              '14',
+              '16',
+              '20',
+              '24',
+              '28',
+              '32',
+              '36',
+              '40',
+              '44',
+              '48',
+              '52',
+              '56',
+              '60',
+              '64',
+              '72',
+              '80',
+              '96',
+            ]
+          : [],
         supportsNegative,
         valueThemeKeys: themeKeys,
       },
@@ -573,8 +576,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `order`
    */
-  staticUtility('order-first', [['order', 'calc(-infinity)']])
-  staticUtility('order-last', [['order', 'calc(infinity)']])
+  staticUtility('order-first', [['order', '-9999']])
+  staticUtility('order-last', [['order', '9999']])
   staticUtility('order-none', [['order', '0']])
   functionalUtility('order', {
     supportsNegative: true,
@@ -896,9 +899,7 @@ export function createUtilities(theme: Theme) {
   staticUtility(`min-h-screen`, [['min-height', '100vh']])
   staticUtility(`max-h-screen`, [['max-height', '100vh']])
 
-  staticUtility(`min-w-none`, [['min-width', 'none']])
   staticUtility(`max-w-none`, [['max-width', 'none']])
-  staticUtility(`min-h-none`, [['min-height', 'none']])
   staticUtility(`max-h-none`, [['max-height', 'none']])
 
   spacingUtility(
@@ -1752,7 +1753,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
     handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
+      if (!isStrictPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-columns', value)],
@@ -1763,7 +1764,7 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grid-rows', {
     themeKeys: ['--grid-template-rows'],
     handleBareValue: ({ value }) => {
-      if (!isPositiveInteger(value)) return null
+      if (!isStrictPositiveInteger(value)) return null
       return `repeat(${value}, minmax(0, 1fr))`
     },
     handle: (value) => [decl('grid-template-rows', value)],
@@ -2370,7 +2371,7 @@ export function createUtilities(theme: Theme) {
               value = negative ? `calc(${value} * -1)` : `${value}`
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2378,7 +2379,7 @@ export function createUtilities(theme: Theme) {
               if (negative) return
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2398,7 +2399,7 @@ export function createUtilities(theme: Theme) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         return [
-          decl('--tw-gradient-position', `${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2425,7 +2426,7 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           let value = candidate.value.value
           return [
-            decl('--tw-gradient-position', `${value},`),
+            decl('--tw-gradient-position', value),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
           ]
         }
@@ -2434,7 +2435,7 @@ export function createUtilities(theme: Theme) {
 
         if (!candidate.value) {
           return [
-            decl('--tw-gradient-position', `${interpolationMethod},`),
+            decl('--tw-gradient-position', interpolationMethod),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
           ]
         }
@@ -2446,7 +2447,7 @@ export function createUtilities(theme: Theme) {
         value = negative ? `calc(${value} * -1)` : `${value}deg`
 
         return [
-          decl('--tw-gradient-position', `from ${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `from ${value} ${interpolationMethod}`),
           decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2471,7 +2472,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
         return [
-          decl('--tw-gradient-position', `${interpolationMethod},`),
+          decl('--tw-gradient-position', interpolationMethod),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2480,7 +2481,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier) return
         let value = candidate.value.value
         return [
-          decl('--tw-gradient-position', `${value},`),
+          decl('--tw-gradient-position', value),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
         ]
       }
@@ -2655,7 +2656,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-from', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-from-position', value)],
@@ -2668,7 +2669,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-via', value),
       decl(
         '--tw-gradient-via-stops',
-        'var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
+        'var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
       ),
       decl('--tw-gradient-stops', 'var(--tw-gradient-via-stops)'),
     ],
@@ -2681,7 +2682,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-to', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
@@ -2937,17 +2938,7 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--font'],
     },
     {
-      values: [
-        'thin',
-        'extralight',
-        'light',
-        'normal',
-        'medium',
-        'semibold',
-        'bold',
-        'extrabold',
-        'black',
-      ],
+      values: [],
       valueThemeKeys: ['--font-weight'],
     },
   ])
@@ -4043,9 +4034,16 @@ export function createUtilities(theme: Theme) {
               modifier = `calc(${multiplier} * ${candidate.modifier.value})`
             }
 
+            // Shorthand for `leading-none`
+            if (!modifier && candidate.modifier.value === 'none') {
+              modifier = '1'
+            }
+
             if (modifier) {
               return [decl('font-size', value), decl('line-height', modifier)]
             }
+
+            return null
           }
 
           return [decl('font-size', value)]
@@ -4087,6 +4085,15 @@ export function createUtilities(theme: Theme) {
             let multiplier = theme.resolve(null, ['--spacing'])
             if (!multiplier) return null
             modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+          }
+
+          // Shorthand for `leading-none`
+          if (!modifier && candidate.modifier.value === 'none') {
+            modifier = '1'
+          }
+
+          if (!modifier) {
+            return null
           }
 
           let declarations = [decl('font-size', fontSize)]

@@ -20,7 +20,7 @@ export function decodeArbitraryValue(input: string): string {
  * Convert `_` to ` `, except for escaped underscores `\_` they should be
  * converted to `_` instead.
  */
-function convertUnderscoresToWhitespace(input: string) {
+function convertUnderscoresToWhitespace(input: string, skipUnderscoreToSpace = false) {
   let output = ''
   for (let i = 0; i < input.length; i++) {
     let char = input[i]
@@ -32,7 +32,7 @@ function convertUnderscoresToWhitespace(input: string) {
     }
 
     // Unescaped underscore
-    else if (char === '_') {
+    else if (char === '_' && !skipUnderscoreToSpace) {
       output += ' '
     }
 
@@ -61,11 +61,11 @@ function recursivelyDecodeArbitraryValues(ast: ValueParser.ValueAstNode[]) {
           node.value === 'theme' ||
           node.value.endsWith('_theme')
         ) {
-          // Don't decode underscores in the first argument of var() but do
-          // decode the function name
           node.value = convertUnderscoresToWhitespace(node.value)
           for (let i = 0; i < node.nodes.length; i++) {
+            // Don't decode underscores to spaces in the first argument of var()
             if (i == 0 && node.nodes[i].kind === 'word') {
+              node.nodes[i].value = convertUnderscoresToWhitespace(node.nodes[i].value, true)
               continue
             }
             recursivelyDecodeArbitraryValues([node.nodes[i]])

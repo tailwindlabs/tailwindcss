@@ -1,6 +1,5 @@
 import type { DesignSystem } from '../design-system'
 import { ThemeOptions } from '../theme'
-import { escape } from '../utils/escape'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
@@ -55,7 +54,7 @@ export function applyConfigToTheme(
     if (!name) continue
 
     designSystem.theme.add(
-      `--${escape(name)}`,
+      `--${name}`,
       '' + value,
       ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
     )
@@ -152,6 +151,7 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'borderRadius') path[0] = 'radius'
   if (path[0] === 'boxShadow') path[0] = 'shadow'
   if (path[0] === 'colors') path[0] = 'color'
+  if (path[0] === 'containers') path[0] = 'container'
   if (path[0] === 'fontFamily') path[0] = 'font'
   if (path[0] === 'fontSize') path[0] = 'text'
   if (path[0] === 'letterSpacing') path[0] = 'tracking'

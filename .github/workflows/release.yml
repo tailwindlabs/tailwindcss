@@ -1,13 +1,9 @@
 name: Release
 
 on:
+  release:
+    types: [published]
   workflow_dispatch:
-    inputs:
-      release_channel:
-        description: 'Release channel'
-        required: false
-        default: 'next'
-        type: string
 
 permissions:
   contents: read
@@ -140,6 +136,49 @@ jobs:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
+  build-freebsd:
+    name: Build x86_64-unknown-freebsd (OXIDE)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build FreeBSD
+        uses: cross-platform-actions/action@v0.25.0
+        env:
+          DEBUG: napi:*
+          RUSTUP_HOME: /usr/local/rustup
+          CARGO_HOME: /usr/local/cargo
+          RUSTUP_IO_THREADS: 1
+          RUST_TARGET: x86_64-unknown-freebsd
+        with:
+          operating_system: freebsd
+          version: '14.0'
+          memory: 13G
+          cpu_count: 3
+          environment_variables: 'DEBUG RUSTUP_IO_THREADS'
+          shell: bash
+          run: |
+            sudo pkg install -y -f curl node libnghttp2 npm
+            sudo npm install -g pnpm --unsafe-perm=true
+            curl https://sh.rustup.rs -sSf --output rustup.sh
+            sh rustup.sh -y --profile minimal --default-toolchain beta
+            source "$HOME/.cargo/env"
+            echo "~~~~ rustc --version ~~~~"
+            rustc --version
+            echo "~~~~ node -v ~~~~"
+            node -v
+            echo "~~~~ pnpm --version ~~~~"
+            pnpm --version
+            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
+            pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+            strip -x ${{ env.OXIDE_LOCATION }}/*.node
+            ls -la ${{ env.OXIDE_LOCATION }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-x86_64-unknown-freebsd
+          path: ${{ env.OXIDE_LOCATION }}/*.node
+
   release:
     runs-on: macos-14
     timeout-minutes: 15
@@ -158,13 +197,6 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 20
-
-      - run: git fetch --tags -f
-
-      - name: Resolve version
-        id: vars
-        run: |
-          echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       - uses: pnpm/action-setup@v4
 
@@ -220,6 +252,7 @@ jobs:
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
+          cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
 
       - name: Build Tailwind CSS
         run: pnpm run build
@@ -230,44 +263,25 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Get release notes
+      - name: Calculate environment variables
         run: |
-          RELEASE_NOTES=$(node ./scripts/release-notes.mjs)
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$RELEASE_NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Upload Standalone Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: tailwindcss-standalone
-          path: packages/@tailwindcss-standalone/dist/
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
+          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./packages/tailwindcss/package.json`).version);')" >> $GITHUB_ENV
 
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Alias packages to `latest`
-        if: ${{ inputs.release_channel == 'next' }}
-        run: |
-          npm dist-tag add @tailwindcss/upgrade@${{ env.TAG_NAME }} latest
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
+      - name: Trigger Tailwind Play update
+        if: env.RELEASE_CHANNEL == 'latest'
+        uses: actions/github-script@v7
         with:
-          draft: true
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ env.RELEASE_NOTES }}
-          files: |
-            packages/@tailwindcss-standalone/dist/sha256sums.txt
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml'
+            })

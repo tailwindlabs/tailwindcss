@@ -24,6 +24,20 @@ test('URLs can be rewritten', async () => {
         background: url('/image.jpg');
         background: url("/image.jpg");
 
+        /* Potentially Vite-aliased URLs: ignored */
+        background: url(~/image.jpg);
+        background: url(~/foo/image.jpg);
+        background: url('~/image.jpg');
+        background: url("~/image.jpg");
+        background: url(#/image.jpg);
+        background: url(#/foo/image.jpg);
+        background: url('#/image.jpg');
+        background: url("#/image.jpg");
+        background: url(@/image.jpg);
+        background: url(@/foo/image.jpg);
+        background: url('@/image.jpg');
+        background: url("@/image.jpg");
+
         /* External URL: ignored */
         background: url(http://example.com/image.jpg);
         background: url('http://example.com/image.jpg');
@@ -109,6 +123,18 @@ test('URLs can be rewritten', async () => {
       background: url(/foo/image.jpg);
       background: url('/image.jpg');
       background: url("/image.jpg");
+      background: url(~/image.jpg);
+      background: url(~/foo/image.jpg);
+      background: url('~/image.jpg');
+      background: url("~/image.jpg");
+      background: url(#/image.jpg);
+      background: url(#/foo/image.jpg);
+      background: url('#/image.jpg');
+      background: url("#/image.jpg");
+      background: url(@/image.jpg);
+      background: url(@/foo/image.jpg);
+      background: url('@/image.jpg');
+      background: url("@/image.jpg");
       background: url(http://example.com/image.jpg);
       background: url('http://example.com/image.jpg');
       background: url("http://example.com/image.jpg");

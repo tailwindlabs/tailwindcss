@@ -517,6 +517,9 @@ function parseModifier(modifier: string): CandidateModifier | null {
     //                                                 ^^
     if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
+    // Arbitrary values must start with `--` since it represents a CSS variable.
+    if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+
     return {
       kind: 'arbitrary',
       value: `var(${arbitraryValue})`,
@@ -650,6 +653,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             // Empty arbitrary values are invalid. E.g.: `data-():`
             //                                                 ^^
             if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
+            // Arbitrary values must start with `--` since it represents a CSS variable.
+            if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
 
             return {
               kind: 'functional',

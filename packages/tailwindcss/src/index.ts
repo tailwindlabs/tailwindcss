@@ -27,6 +27,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
+import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
@@ -243,6 +244,11 @@ async function parseCss(
               return WalkAction.Stop
             }
           })
+
+          // No `@slot` found, so this is still a regular `@variant` at-rule
+          if (node.name === '@variant') {
+            variantNodes.push(node)
+          }
         }
       }
 
@@ -281,6 +287,11 @@ async function parseCss(
         }
 
         let selectors = segment(selector.slice(1, -1), ',')
+        if (selectors.length === 0 || selectors.some((selector) => selector.trim() === '')) {
+          throw new Error(
+            `\`@custom-variant ${name} (${selectors.join(',')})\` selector is invalid.`,
+          )
+        }
 
         let atRuleParams: string[] = []
         let styleRuleSelectors: string[] = []
@@ -422,8 +433,6 @@ async function parseCss(
       } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
-
-      return WalkAction.Skip
     }
 
     // Handle `@theme`
@@ -449,6 +458,12 @@ async function parseCss(
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
+          // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
+          if (themeOptions & ThemeOptions.REFERENCE) {
+            replaceWith([])
+            return WalkAction.Skip
+          }
+
           theme.addKeyframes(child)
           replaceWith([])
           return WalkAction.Skip
@@ -456,7 +471,7 @@ async function parseCss(
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(child.property, child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions)
           return
         }
 
@@ -473,7 +488,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = styleRule(':root', node.nodes)
+        firstThemeRule = styleRule(':root, :host', node.nodes)
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -515,13 +530,13 @@ async function parseCss(
 
     for (let [key, value] of theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-      nodes.push(decl(key, value.value))
+      nodes.push(decl(escape(key), value.value))
     }
 
     let keyframesRules = theme.getKeyframes()
     if (keyframesRules.length > 0) {
       let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
-        animation.split(' '),
+        animation.split(/\s+/),
       )
 
       for (let keyframesRule of keyframesRules) {

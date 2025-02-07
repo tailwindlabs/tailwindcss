@@ -137,31 +137,46 @@ export function walk(
     }
 
     path.push(node)
+    let replacedNode = false
+    let replacedNodeOffset = 0
     let status =
       visit(node, {
         parent,
         context,
         path,
         replaceWith(newNode) {
+          replacedNode = true
+
           if (Array.isArray(newNode)) {
             if (newNode.length === 0) {
               ast.splice(i, 1)
+              replacedNodeOffset = 0
             } else if (newNode.length === 1) {
               ast[i] = newNode[0]
+              replacedNodeOffset = 1
             } else {
               ast.splice(i, 1, ...newNode)
+              replacedNodeOffset = newNode.length
             }
           } else {
             ast[i] = newNode
+            replacedNodeOffset = 1
           }
-
-          // We want to visit the newly replaced node(s), which start at the
-          // current index (i). By decrementing the index here, the next loop
-          // will process this position (containing the replaced node) again.
-          i--
         },
       }) ?? WalkAction.Continue
     path.pop()
+
+    // We want to visit or skip the newly replaced node(s), which start at the
+    // current index (i). By decrementing the index here, the next loop will
+    // process this position (containing the replaced node) again.
+    if (replacedNode) {
+      if (status === WalkAction.Continue) {
+        i--
+      } else {
+        i += replacedNodeOffset - 1
+      }
+      continue
+    }
 
     // Stop the walk entirely
     if (status === WalkAction.Stop) return WalkAction.Stop
@@ -169,7 +184,7 @@ export function walk(
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
-    if (node.kind === 'rule' || node.kind === 'at-rule') {
+    if ('nodes' in node) {
       path.push(node)
       let result = walk(node.nodes, visit, path, context)
       path.pop()
@@ -261,7 +276,9 @@ export function optimizeAst(ast: AstNode[]) {
         for (let child of node.nodes) {
           let nodes: AstNode[] = []
           transform(child, nodes, depth + 1)
-          parent.push(...nodes)
+          if (nodes.length > 0) {
+            parent.push(...nodes)
+          }
         }
       }
 
@@ -271,7 +288,9 @@ export function optimizeAst(ast: AstNode[]) {
         for (let child of node.nodes) {
           transform(child, copy.nodes, depth + 1)
         }
-        parent.push(copy)
+        if (copy.nodes.length > 0) {
+          parent.push(copy)
+        }
       }
     }
 
@@ -297,7 +316,16 @@ export function optimizeAst(ast: AstNode[]) {
       for (let child of node.nodes) {
         transform(child, copy.nodes, depth + 1)
       }
-      parent.push(copy)
+      if (
+        copy.nodes.length > 0 ||
+        copy.name === '@layer' ||
+        copy.name === '@charset' ||
+        copy.name === '@custom-media' ||
+        copy.name === '@namespace' ||
+        copy.name === '@import'
+      ) {
+        parent.push(copy)
+      }
     }
 
     // AtRoot

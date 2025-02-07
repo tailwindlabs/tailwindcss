@@ -1,18 +1,17 @@
-name: Prepare Release
+name: Release Insiders
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
+
+permissions:
+  contents: read
 
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 20
   OXIDE_LOCATION: ./crates/node
-
-permissions:
-  contents: read
+  RELEASE_CHANNEL: insiders
 
 jobs:
   build:
@@ -180,10 +179,10 @@ jobs:
           name: bindings-x86_64-unknown-freebsd
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
-  prepare:
+  release:
     runs-on: macos-14
     timeout-minutes: 15
-    name: Build and release Tailwind CSS
+    name: Build and release Tailwind CSS insiders
 
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
@@ -199,12 +198,10 @@ jobs:
           fetch-tags: true
           fetch-depth: 20
 
-      - run: git fetch --tags -f
-
       - name: Resolve version
         id: vars
         run: |
-          echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - uses: pnpm/action-setup@v4
 
@@ -262,6 +259,9 @@ jobs:
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
           cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
 
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: pnpm run version-packages 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}
+
       - name: Build Tailwind CSS
         run: pnpm run build
 
@@ -271,32 +271,19 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Get release notes
-        run: |
-          RELEASE_NOTES=$(node ./scripts/release-notes.mjs)
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$RELEASE_NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      - name: Publish
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Upload Standalone Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Trigger Tailwind Play update
+        uses: actions/github-script@v7
         with:
-          name: tailwindcss-standalone
-          path: packages/@tailwindcss-standalone/dist/
-
-      - name: Prepare GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ env.RELEASE_NOTES }}
-          files: |
-            packages/@tailwindcss-standalone/dist/sha256sums.txt
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml'
+            })

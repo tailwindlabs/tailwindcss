@@ -570,6 +570,13 @@ it('should parse a utility with an arbitrary value with parens', () => {
   `)
 })
 
+it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
 it('should parse a utility with an arbitrary value including a typehint', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -614,6 +621,13 @@ it('should parse a utility with an arbitrary value with parens including a typeh
       },
     ]
   `)
+})
+
+it('should not parse a utility with an arbitrary value with parens including a typehint that does not start with --', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-(color:my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value with parens and a fallback', () => {
@@ -888,6 +902,8 @@ it('should not parse invalid arbitrary values in variants', () => {
 
     'data-foo-(--value)/(number:--mod):flex',
     'data-foo(--value)/(number:--mod):flex',
+
+    'data-(value):flex',
   ]) {
     expect(run(candidate, { utilities, variants })).toEqual([])
   }
@@ -919,6 +935,154 @@ it('should parse a utility with an implicit variable as the modifier', () => {
   `)
 })
 
+it('should properly decode escaped underscores but not convert underscores to spaces for CSS variables in arbitrary positions', () => {
+  let utilities = new Utilities()
+  utilities.functional('flex', () => [])
+  let variants = new Variants()
+  variants.functional('supports', () => {})
+
+  expect(run('flex-(--\\_foo)', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-(--\\_foo)",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-(--_foo)', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-(--_foo)",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[var(--\\_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[var(--_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  expect(run('flex-[calc(var(--\\_foo)*0.2)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(var(--\\_foo)*0.2)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(var(--_foo) * 0.2)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[calc(var(--_foo)*0.2)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(var(--_foo)*0.2)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(var(--_foo) * 0.2)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  // Due to limitations in the CSS value parser, the `var(…)` inside the `calc(…)` is not correctly
+  // scanned here.
+  expect(run('flex-[calc(0.2*var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(0.2*var(--\\_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(0.2 * var(--_foo))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[calc(0.2*var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(0.2*var(--_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(0.2 * var(-- foo))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
 it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -943,6 +1107,13 @@ it('should parse a utility with an implicit variable as the modifier using the s
       },
     ]
   `)
+})
+
+it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-500/(value)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an implicit variable as the modifier that is important', () => {

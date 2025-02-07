@@ -365,7 +365,6 @@ export function createVariants(theme: Theme): Variants {
     )
   }
 
-  variants.static('force', () => {}, { compounds: Compounds.Never })
   staticVariant('*', [':is(& > *)'], { compounds: Compounds.Never })
   staticVariant('**', [':is(& *)'], { compounds: Compounds.Never })
 
@@ -681,7 +680,7 @@ export function createVariants(theme: Theme): Variants {
   // State
   staticVariant('visited', ['&:visited'])
   staticVariant('target', ['&:target'])
-  staticVariant('open', ['&:is([open], :popover-open)'])
+  staticVariant('open', ['&:is([open], :popover-open, :open)'])
 
   // Forms
   staticVariant('default', ['&:default'])
@@ -1115,6 +1114,11 @@ export function createVariants(theme: Theme): Variants {
 
       variants.suggest(
         '@min',
+        () => Array.from(widths.keys()).filter((key) => key !== null) as string[],
+      )
+
+      variants.suggest(
+        '@',
         () => Array.from(widths.keys()).filter((key) => key !== null) as string[],
       )
     }
