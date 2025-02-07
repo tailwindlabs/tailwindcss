@@ -263,7 +263,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     Set<Declaration>
   >(() => new Set())
   let keyframes = new Set<AtRule>()
-  let usedAnimationNames = new Set()
+  let usedKeyframeNames = new Set()
 
   function transform(
     node: AstNode,
@@ -285,7 +285,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       // Track used animation names
       if (node.property === 'animation') {
         let parts = node.value.split(/\s+/)
-        for (let part of parts) usedAnimationNames.add(part)
+        for (let part of parts) usedKeyframeNames.add(part)
       }
 
       parent.push(node)
@@ -339,6 +339,8 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         transform(child, copy.nodes, context, depth + 1)
       }
 
+      // Only track `@keyframes` that could be removed, when they were defined
+      // inside of a `@theme`.
       if (node.name === '@keyframes' && context.theme) {
         keyframes.add(copy)
       }
@@ -411,7 +413,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       if (options & ThemeOptions.STATIC) {
         if (declaration.property.startsWith('--animate-')) {
           let parts = declaration.value!.split(/\s+/)
-          for (let part of parts) usedAnimationNames.add(part)
+          for (let part of parts) usedKeyframeNames.add(part)
         }
 
         continue
@@ -442,7 +444,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
   // Remove unused keyframes
   for (let keyframe of keyframes) {
-    if (!usedAnimationNames.has(keyframe.params)) {
+    if (!usedKeyframeNames.has(keyframe.params)) {
       let idx = atRoots.indexOf(keyframe)
       atRoots.splice(idx, 1)
     }
