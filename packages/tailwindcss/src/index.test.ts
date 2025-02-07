@@ -1740,6 +1740,51 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('keyframes outside of `@theme are always preserved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @keyframes unused {
+            to {
+              opacity: 0;
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@keyframes unused {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
   test('theme values added as reference are not included in the output as variables', async () => {
     expect(
       await compileCss(
