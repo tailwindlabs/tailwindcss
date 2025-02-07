@@ -1652,6 +1652,55 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('keyframes are generated when used in an animation using `@theme static`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused-but-kept 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused-but-kept {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+        --animate-bar: unused-but-kept 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes unused-but-kept {
+        to {
+          opacity: 0;
+        }
+      }"
+    `)
+  })
+
   test('keyframes are generated when used in user CSS', async () => {
     expect(
       await compileCss(
