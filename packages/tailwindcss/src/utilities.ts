@@ -42,6 +42,7 @@ type SuggestionDefinition =
   | string
   | {
       supportsNegative?: boolean
+      supportsFractions?: boolean
       values?: string[]
       modifiers?: string[]
       valueThemeKeys?: ThemeKey[]
@@ -225,6 +226,35 @@ export function createUtilities(theme: Theme) {
       }
     }
 
+    let suggestedFractions = [
+      '1/2',
+      '1/3',
+      '2/3',
+      '1/4',
+      '2/4',
+      '3/4',
+      '1/5',
+      '2/5',
+      '3/5',
+      '4/5',
+      '1/6',
+      '2/6',
+      '3/6',
+      '4/6',
+      '5/6',
+      '1/12',
+      '2/12',
+      '3/12',
+      '4/12',
+      '5/12',
+      '6/12',
+      '7/12',
+      '8/12',
+      '9/12',
+      '10/12',
+      '11/12',
+    ]
+
     utilities.suggest(classRoot, () => {
       let groups: SuggestionGroup[] = []
 
@@ -238,7 +268,12 @@ export function createUtilities(theme: Theme) {
           ...(defn.values ?? []),
           ...resolve(defn.valueThemeKeys ?? []),
         ]
+
         let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
+
+        if (defn.supportsFractions) {
+          values.push(...suggestedFractions)
+        }
 
         if (defn.hasDefaultValue) {
           values.unshift(null)
@@ -341,6 +376,7 @@ export function createUtilities(theme: Theme) {
         supportsNegative: desc.supportsNegative,
         valueThemeKeys: desc.themeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
+        supportsFractions: desc.supportsFractions,
       },
     ])
   }
@@ -467,6 +503,7 @@ export function createUtilities(theme: Theme) {
             ]
           : [],
         supportsNegative,
+        supportsFractions,
         valueThemeKeys: themeKeys,
       },
     ])
@@ -965,6 +1002,8 @@ export function createUtilities(theme: Theme) {
       return [decl('flex', candidate.value.value)]
     }
   })
+
+  suggest('flex', () => [{ supportsFractions: true }])
 
   /**
    * @css `flex-shrink`
