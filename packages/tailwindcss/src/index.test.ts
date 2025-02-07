@@ -1156,12 +1156,6 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-red {
         accent-color: var(--color-red);
-      }
-
-      @keyframes foo {
-        to {
-          opacity: 1;
-        }
       }"
     `)
   })
@@ -1573,6 +1567,125 @@ describe('Parsing themes values from CSS', () => {
       @keyframes foobar {
         to {
           opacity: 0;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation using `@theme inline`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme inline {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in user CSS', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
         }
       }"
     `)
