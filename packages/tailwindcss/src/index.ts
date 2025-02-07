@@ -538,22 +538,10 @@ async function parseCss(
     }
 
     let keyframesRules = designSystem.theme.getKeyframes()
-    if (keyframesRules.length > 0) {
-      let animationParts = [...designSystem.theme.namespace('--animate').values()].flatMap(
-        (animation) => animation.split(/\s+/),
-      )
-
-      for (let keyframesRule of keyframesRules) {
-        // Remove any keyframes that aren't used by an animation variable.
-        let keyframesName = keyframesRule.params
-        if (!animationParts.includes(keyframesName)) {
-          continue
-        }
-
-        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-        // printing.
-        nodes.push(atRoot([keyframesRule]))
-      }
+    for (let keyframes of keyframesRules) {
+      // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+      // printing.
+      nodes.push(atRoot([keyframes]))
     }
 
     firstThemeRule.nodes = [context({ theme: true }, nodes)]
