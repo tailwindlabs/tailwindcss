@@ -406,7 +406,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     for (let declaration of declarations) {
       let options = designSystem.theme.getOptions(declaration.property)
 
-      if (options & ThemeOptions.STATIC) {
+      if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
         if (declaration.property.startsWith('--animate-')) {
           let parts = declaration.value!.split(/\s+/)
           for (let part of parts) usedKeyframeNames.add(part)
