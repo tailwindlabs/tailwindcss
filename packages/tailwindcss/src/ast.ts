@@ -277,6 +277,11 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         return
       }
 
+      // Track variables defined in `@theme`
+      if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+        cssThemeVariables.get(parent).add(node)
+      }
+
       // Track used CSS variables
       if (node.value.includes('var(')) {
         designSystem.trackUsedVariables(node.value)
@@ -373,15 +378,6 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       // Remove reference imports from printing
       if (node.context.reference) {
         return
-      }
-
-      if (node.context.theme) {
-        let declarations = cssThemeVariables.get(parent)
-        for (let child of node.nodes) {
-          if (child.kind === 'declaration') {
-            declarations.add(child)
-          }
-        }
       }
 
       for (let child of node.nodes) {
