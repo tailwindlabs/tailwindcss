@@ -11,6 +11,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
+import { enableTableFooterGroup } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -824,7 +825,9 @@ export function createUtilities(theme: Theme) {
   staticUtility('table-cell', [['display', 'table-cell']])
   staticUtility('table-column', [['display', 'table-column']])
   staticUtility('table-column-group', [['display', 'table-column-group']])
-  staticUtility('table-footer-group', [['display', 'table-footer-group']])
+  if (enableTableFooterGroup) {
+    staticUtility('table-footer-group', [['display', 'table-footer-group']])
+  }
   staticUtility('table-header-group', [['display', 'table-header-group']])
   staticUtility('table-row-group', [['display', 'table-row-group']])
   staticUtility('table-row', [['display', 'table-row']])
