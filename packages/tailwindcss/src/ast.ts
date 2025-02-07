@@ -1,4 +1,7 @@
 import { parseAtRule } from './css-parser'
+import type { DesignSystem } from './design-system'
+import { ThemeOptions } from './theme'
+import { DefaultMap } from './utils/default-map'
 
 const AT_SIGN = 0x40
 
@@ -252,13 +255,20 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[]) {
+export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
+  let cssThemeVariables = new DefaultMap<
+    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    Set<Declaration>
+  >(() => new Set())
+  let keyframes = new Set<AtRule>()
+  let usedKeyframeNames = new Set()
 
   function transform(
     node: AstNode,
     parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    context: Record<string, string | boolean> = {},
     depth = 0,
   ) {
     // Declaration
@@ -266,6 +276,23 @@ export function optimizeAst(ast: AstNode[]) {
       if (node.property === '--tw-sort' || node.value === undefined || node.value === null) {
         return
       }
+
+      // Track variables defined in `@theme`
+      if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+        cssThemeVariables.get(parent).add(node)
+      }
+
+      // Track used CSS variables
+      if (node.value.includes('var(')) {
+        designSystem.trackUsedVariables(node.value)
+      }
+
+      // Track used animation names
+      if (node.property === 'animation') {
+        let parts = node.value.split(/\s+/)
+        for (let part of parts) usedKeyframeNames.add(part)
+      }
+
       parent.push(node)
     }
 
@@ -275,7 +302,7 @@ export function optimizeAst(ast: AstNode[]) {
       if (node.selector === '&') {
         for (let child of node.nodes) {
           let nodes: AstNode[] = []
-          transform(child, nodes, depth + 1)
+          transform(child, nodes, context, depth + 1)
           if (nodes.length > 0) {
             parent.push(...nodes)
           }
@@ -286,7 +313,7 @@ export function optimizeAst(ast: AstNode[]) {
       else {
         let copy = { ...node, nodes: [] }
         for (let child of node.nodes) {
-          transform(child, copy.nodes, depth + 1)
+          transform(child, copy.nodes, context, depth + 1)
         }
         if (copy.nodes.length > 0) {
           parent.push(copy)
@@ -305,7 +332,7 @@ export function optimizeAst(ast: AstNode[]) {
 
       let copy = { ...node, nodes: [] }
       for (let child of node.nodes) {
-        transform(child, copy.nodes, depth + 1)
+        transform(child, copy.nodes, context, depth + 1)
       }
       parent.push(copy)
     }
@@ -314,8 +341,15 @@ export function optimizeAst(ast: AstNode[]) {
     else if (node.kind === 'at-rule') {
       let copy = { ...node, nodes: [] }
       for (let child of node.nodes) {
-        transform(child, copy.nodes, depth + 1)
+        transform(child, copy.nodes, context, depth + 1)
       }
+
+      // Only track `@keyframes` that could be removed, when they were defined
+      // inside of a `@theme`.
+      if (node.name === '@keyframes' && context.theme) {
+        keyframes.add(copy)
+      }
+
       if (
         copy.nodes.length > 0 ||
         copy.name === '@layer' ||
@@ -332,7 +366,7 @@ export function optimizeAst(ast: AstNode[]) {
     else if (node.kind === 'at-root') {
       for (let child of node.nodes) {
         let newParent: AstNode[] = []
-        transform(child, newParent, 0)
+        transform(child, newParent, context, 0)
         for (let child of newParent) {
           atRoots.push(child)
         }
@@ -347,7 +381,7 @@ export function optimizeAst(ast: AstNode[]) {
       }
 
       for (let child of node.nodes) {
-        transform(child, parent, depth)
+        transform(child, parent, { ...context, ...node.context }, depth)
       }
     }
 
@@ -364,7 +398,52 @@ export function optimizeAst(ast: AstNode[]) {
 
   let newAst: AstNode[] = []
   for (let node of ast) {
-    transform(node, newAst, 0)
+    transform(node, newAst, {}, 0)
+  }
+
+  // Remove unused theme variables
+  next: for (let [parent, declarations] of cssThemeVariables) {
+    for (let declaration of declarations) {
+      let options = designSystem.theme.getOptions(declaration.property)
+
+      if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+        if (declaration.property.startsWith('--animate-')) {
+          let parts = declaration.value!.split(/\s+/)
+          for (let part of parts) usedKeyframeNames.add(part)
+        }
+
+        continue
+      }
+
+      // Remove the declaration (from its parent)
+      let idx = parent.indexOf(declaration)
+      parent.splice(idx, 1)
+
+      // If the parent is now empty, remove it from the AST
+      if (parent.length === 0) {
+        for (let [idx, node] of newAst.entries()) {
+          // Assumption, but right now the `@theme` must be top-level, so we
+          // don't need to traverse the entire AST to find the parent.
+          //
+          // Checking for `rule`, because at this stage the `@theme` is already
+          // converted to a normal style rule `:root, :host`
+          if (node.kind === 'rule' && node.nodes === parent) {
+            newAst.splice(idx, 1)
+            break
+          }
+        }
+
+        continue next
+      }
+    }
+  }
+
+  // Remove unused keyframes
+  for (let keyframe of keyframes) {
+    if (!usedKeyframeNames.has(keyframe.params)) {
+      let idx = atRoots.indexOf(keyframe)
+      atRoots.splice(idx, 1)
+    }
   }
 
   return newAst.concat(atRoots)

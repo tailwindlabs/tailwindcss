@@ -4,6 +4,7 @@ import {
   atRoot,
   atRule,
   comment,
+  context,
   context as contextNode,
   decl,
   optimizeAst,
@@ -63,6 +64,8 @@ function parseThemeOptions(params: string) {
       options |= ThemeOptions.INLINE
     } else if (option === 'default') {
       options |= ThemeOptions.DEFAULT
+    } else if (option === 'static') {
+      options |= ThemeOptions.STATIC
     } else if (option.startsWith('prefix(') && option.endsWith(')')) {
       prefix = option.slice(7, -1)
     }
@@ -454,18 +457,16 @@ async function parseCss(
       }
 
       // Record all custom properties in the `@theme` declaration
-      walk(node.nodes, (child, { replaceWith }) => {
+      walk(node.nodes, (child) => {
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
           // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
           if (themeOptions & ThemeOptions.REFERENCE) {
-            replaceWith([])
             return WalkAction.Skip
           }
 
           theme.addKeyframes(child)
-          replaceWith([])
           return WalkAction.Skip
         }
 
@@ -488,7 +489,7 @@ async function parseCss(
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = styleRule(':root, :host', node.nodes)
+        firstThemeRule = styleRule(':root, :host', [])
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -523,35 +524,25 @@ async function parseCss(
     customUtility(designSystem)
   }
 
-  // Output final set of theme variables at the position of the first `@theme`
-  // rule.
+  // Output final set of theme variables at the position of the first
+  // `@theme` rule.
   if (firstThemeRule) {
     let nodes = []
 
-    for (let [key, value] of theme.entries()) {
+    for (let [key, value] of designSystem.theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
+
       nodes.push(decl(escape(key), value.value))
     }
 
-    let keyframesRules = theme.getKeyframes()
-    if (keyframesRules.length > 0) {
-      let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
-        animation.split(/\s+/),
-      )
-
-      for (let keyframesRule of keyframesRules) {
-        // Remove any keyframes that aren't used by an animation variable.
-        let keyframesName = keyframesRule.params
-        if (!animationParts.includes(keyframesName)) {
-          continue
-        }
-
-        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-        // printing.
-        nodes.push(atRoot([keyframesRule]))
-      }
+    let keyframesRules = designSystem.theme.getKeyframes()
+    for (let keyframes of keyframesRules) {
+      // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+      // printing.
+      nodes.push(atRoot([keyframes]))
     }
-    firstThemeRule.nodes = nodes
+
+    firstThemeRule.nodes = [context({ theme: true }, nodes)]
   }
 
   // Replace the `@tailwind utilities` node with a context since it prints
@@ -650,7 +641,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -660,7 +651,11 @@ export async function compileAst(
       let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
         if (!designSystem.invalidCandidates.has(candidate)) {
-          allValidCandidates.add(candidate)
+          if (candidate[0] === '-' && candidate[1] === '-') {
+            designSystem.theme.markUsedVariable(candidate)
+          } else {
+            allValidCandidates.add(candidate)
+          }
           didChange ||= allValidCandidates.size !== prevSize
         }
       }
@@ -668,7 +663,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -680,7 +675,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -688,7 +683,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast)
+      compiled = optimizeAst(ast, designSystem)
       return compiled
     },
   }

@@ -330,11 +330,7 @@ test('runs `Once` plugins in the right order', async () => {
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .custom-css {
+    ".custom-css {
       color: red;
     }"
   `)
@@ -347,11 +343,7 @@ test('runs `Once` plugins in the right order', async () => {
     }"
   `)
   expect(after).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .custom-css {
+    ".custom-css {
       color: red;
     }"
   `)

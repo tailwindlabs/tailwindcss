@@ -1,11 +1,14 @@
-import type { AtRule } from './ast'
-import { escape } from './utils/escape'
+import { type AtRule } from './ast'
+import { escape, unescape } from './utils/escape'
 
 export const enum ThemeOptions {
   NONE = 0,
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
+
+  STATIC = 1 << 3,
+  USED = 1 << 4,
 }
 
 // In the future we may want to replace this with just a `Set` of known theme
@@ -106,6 +109,7 @@ export class Theme {
   }
 
   getOptions(key: string) {
+    key = unescape(this.#unprefixKey(key))
     return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
@@ -121,6 +125,11 @@ export class Theme {
   #prefixKey(key: string) {
     if (!this.prefix) return key
     return `--${this.prefix}-${key.slice(2)}`
+  }
+
+  #unprefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${key.slice(3 + this.prefix.length)}`
   }
 
   clearNamespace(namespace: string, clearOptions: ThemeOptions) {
@@ -173,6 +182,13 @@ export class Theme {
     }
 
     return `var(${escape(this.#prefixKey(themeKey))})`
+  }
+
+  markUsedVariable(themeKey: string) {
+    let key = unescape(this.#unprefixKey(themeKey))
+    let value = this.values.get(key)
+    if (!value) return
+    value.options |= ThemeOptions.USED
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

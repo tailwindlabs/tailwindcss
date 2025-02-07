@@ -163,6 +163,14 @@ export function parse(input: string) {
     let currentChar = input.charCodeAt(i)
 
     switch (currentChar) {
+      // Current character is a `\` therefore the next character is escaped,
+      // consume it together with the next character and continue.
+      case BACKSLASH: {
+        buffer += input[i] + input[i + 1]
+        i++
+        break
+      }
+
       // Space and commas are bundled into separators
       //
       // E.g.:

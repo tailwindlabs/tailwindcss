@@ -27,7 +27,6 @@ describe('compiling CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-black: #000;
-        --breakpoint-md: 768px;
       }
 
       @layer utilities {
@@ -173,7 +172,6 @@ describe('compiling CSS', () => {
         --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
         --spacing-3\\.5: 3.5px;
-        --spacing-3_5: 3.5px;
         --spacing-foo\\/bar: 3rem;
       }
 
@@ -294,7 +292,6 @@ describe('@apply', () => {
         --color-blue-500: #3b82f6;
         --color-green-200: #bbf7d0;
         --color-green-500: #22c55e;
-        --breakpoint-md: 768px;
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -1150,7 +1147,6 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-red: red;
-        --animate-foo: foo 1s infinite;
         --text-lg: 20px;
       }
 
@@ -1160,12 +1156,6 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-red {
         accent-color: var(--color-red);
-      }
-
-      @keyframes foo {
-        to {
-          opacity: 1;
-        }
       }"
     `)
   })
@@ -1392,7 +1382,6 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
 
@@ -1578,6 +1567,219 @@ describe('Parsing themes values from CSS', () => {
       @keyframes foobar {
         to {
           opacity: 0;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation using `@theme inline`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme inline {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation using `@theme static`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused-but-kept 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused-but-kept {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+        --animate-bar: unused-but-kept 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes unused-but-kept {
+        to {
+          opacity: 0;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in user CSS', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes outside of `@theme are always preserved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @keyframes unused {
+            to {
+              opacity: 0;
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@keyframes unused {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
         }
       }"
     `)
@@ -1798,13 +2000,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1814,6 +2010,33 @@ describe('Parsing themes values from CSS', () => {
 
       .bg-tomato {
         background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('theme values added as `static` will always be generated, regardless of whether they were used or not', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --color-tomato: #e10c04;
+            --color-potato: #ac855b;
+            --color-primary: var(--primary);
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato);
       }"
     `)
   })
@@ -1835,13 +2058,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1954,11 +2171,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-potato: #efb46b;
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #efb46b;
       }"
     `)
