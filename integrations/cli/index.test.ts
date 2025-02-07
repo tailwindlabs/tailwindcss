@@ -1269,7 +1269,6 @@ test(
       'src/index.css': css`
         @import 'tailwindcss/utilities';
         @theme {
-          --*: initial;
           --color-blue-500: blue;
         }
       `,
