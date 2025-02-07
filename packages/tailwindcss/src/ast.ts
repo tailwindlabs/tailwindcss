@@ -339,7 +339,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         transform(child, copy.nodes, context, depth + 1)
       }
 
-      if (node.kind === 'at-rule' && node.name === '@keyframes' && context.theme) {
+      if (node.name === '@keyframes' && context.theme) {
         keyframes.add(copy)
       }
 
