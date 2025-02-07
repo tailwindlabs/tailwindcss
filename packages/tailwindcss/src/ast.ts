@@ -262,6 +262,8 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     Extract<AstNode, { nodes: AstNode[] }>['nodes'],
     Set<Declaration>
   >(() => new Set())
+  let keyframes = new Set<AtRule>()
+  let usedAnimationNames = new Set()
 
   function transform(
     node: AstNode,
@@ -278,6 +280,12 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       // Track used CSS variables
       if (node.value.includes('var(')) {
         designSystem.trackUsedVariables(node.value)
+      }
+
+      // Track used animation names
+      if (node.property === 'animation') {
+        let parts = node.value.split(/\s+/)
+        for (let part of parts) usedAnimationNames.add(part)
       }
 
       parent.push(node)
@@ -330,6 +338,11 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       for (let child of node.nodes) {
         transform(child, copy.nodes, context, depth + 1)
       }
+
+      if (node.kind === 'at-rule' && node.name === '@keyframes' && context.theme) {
+        keyframes.add(copy)
+      }
+
       if (
         copy.nodes.length > 0 ||
         copy.name === '@layer' ||
@@ -387,14 +400,22 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
   let newAst: AstNode[] = []
   for (let node of ast) {
-    transform(node, newAst, 0)
+    transform(node, newAst, {}, 0)
   }
 
   // Remove unused theme variables
   next: for (let [parent, declarations] of cssThemeVariables) {
     for (let declaration of declarations) {
       let options = designSystem.theme.getOptions(declaration.property)
-      if (options & ThemeOptions.STATIC) continue
+
+      if (options & ThemeOptions.STATIC) {
+        if (declaration.property.startsWith('--animate-')) {
+          let parts = declaration.value!.split(/\s+/)
+          for (let part of parts) usedAnimationNames.add(part)
+        }
+
+        continue
+      }
 
       // Remove the declaration (from its parent)
       let idx = parent.indexOf(declaration)
@@ -416,6 +437,14 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
         continue next
       }
+    }
+  }
+
+  // Remove unused keyframes
+  for (let keyframe of keyframes) {
+    if (!usedAnimationNames.has(keyframe.params)) {
+      let idx = atRoots.indexOf(keyframe)
+      atRoots.splice(idx, 1)
     }
   }
 
