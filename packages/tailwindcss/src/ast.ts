@@ -266,6 +266,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   function transform(
     node: AstNode,
     parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    context: Record<string, string | boolean> = {},
     depth = 0,
   ) {
     // Declaration
@@ -288,7 +289,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       if (node.selector === '&') {
         for (let child of node.nodes) {
           let nodes: AstNode[] = []
-          transform(child, nodes, depth + 1)
+          transform(child, nodes, context, depth + 1)
           if (nodes.length > 0) {
             parent.push(...nodes)
           }
@@ -299,7 +300,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       else {
         let copy = { ...node, nodes: [] }
         for (let child of node.nodes) {
-          transform(child, copy.nodes, depth + 1)
+          transform(child, copy.nodes, context, depth + 1)
         }
         if (copy.nodes.length > 0) {
           parent.push(copy)
@@ -318,7 +319,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
       let copy = { ...node, nodes: [] }
       for (let child of node.nodes) {
-        transform(child, copy.nodes, depth + 1)
+        transform(child, copy.nodes, context, depth + 1)
       }
       parent.push(copy)
     }
@@ -327,7 +328,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     else if (node.kind === 'at-rule') {
       let copy = { ...node, nodes: [] }
       for (let child of node.nodes) {
-        transform(child, copy.nodes, depth + 1)
+        transform(child, copy.nodes, context, depth + 1)
       }
       if (
         copy.nodes.length > 0 ||
@@ -345,7 +346,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     else if (node.kind === 'at-root') {
       for (let child of node.nodes) {
         let newParent: AstNode[] = []
-        transform(child, newParent, 0)
+        transform(child, newParent, context, 0)
         for (let child of newParent) {
           atRoots.push(child)
         }
@@ -369,7 +370,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       }
 
       for (let child of node.nodes) {
-        transform(child, parent, depth)
+        transform(child, parent, { ...context, ...node.context }, depth)
       }
     }
 
