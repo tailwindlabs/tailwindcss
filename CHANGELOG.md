@@ -3404,7 +3404,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...HEAD
+[4.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...v4.0.5
 [4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
 [4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
