@@ -7,10 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet!
+
+## [4.0.5] - 2025-02-08
+
+### Added
+
+- Add `@theme static` option for always including theme variables in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
+
 ### Fixed
 
-- Only expose used CSS variables ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
-- Only expose used `@keyframes` ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
+- Remove rogue `console.log` from `@tailwindcss/vite` ([#16307](https://github.com/tailwindlabs/tailwindcss/pull/16307))
+
+### Changed
+
+- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
 
 ## [4.0.4] - 2025-02-06
 
