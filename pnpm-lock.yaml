@@ -13,8 +13,8 @@ catalogs:
       specifier: ^1.29.1
       version: 1.29.1
     prettier:
-      specifier: 3.4.2
-      version: 3.4.2
+      specifier: 3.5.0
+      version: 3.5.0
     vite:
       specifier: ^6.0.0
       version: 6.0.0
@@ -45,13 +45,13 @@ importers:
         version: 16.1.0(postcss@8.5.1)
       prettier:
         specifier: 'catalog:'
-        version: 3.4.2
+        version: 3.5.0
       prettier-plugin-embed:
         specifier: ^0.4.15
         version: 0.4.15
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.0.0(prettier@3.4.2)(typescript@5.5.4)
+        version: 4.0.0(prettier@3.5.0)(typescript@5.5.4)
       tsup:
         specifier: ^8.3.6
         version: 8.3.6(jiti@2.4.2)(postcss@8.5.1)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
@@ -339,7 +339,7 @@ importers:
         version: 7.0.0
       prettier:
         specifier: 'catalog:'
-        version: 3.4.2
+        version: 3.5.0
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -3232,8 +3232,8 @@ packages:
       vue-tsc:
         optional: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  prettier@3.5.0:
+    resolution: {integrity: sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -6590,12 +6590,12 @@ snapshots:
     transitivePeerDependencies:
       - babel-plugin-macros
 
-  prettier-plugin-organize-imports@4.0.0(prettier@3.4.2)(typescript@5.5.4):
+  prettier-plugin-organize-imports@4.0.0(prettier@3.5.0)(typescript@5.5.4):
     dependencies:
-      prettier: 3.4.2
+      prettier: 3.5.0
       typescript: 5.5.4
 
-  prettier@3.4.2: {}
+  prettier@3.5.0: {}
 
   prop-types@15.8.1:
     dependencies:
