@@ -34,7 +34,8 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": ["FEATURES_ENV"]
     },
     "lint": {},
     "dev": {

@@ -31,7 +31,14 @@ test('creates a custom utility to extend the built-in container', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -89,7 +96,14 @@ test('allows padding to be defined at custom breakpoints', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -150,7 +164,14 @@ test('allows breakpoints to be overwritten', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -216,7 +237,14 @@ test('padding applies to custom `container` screens', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -279,7 +307,14 @@ test("an empty `screen` config will undo all custom media screens and won't appl
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -345,7 +380,20 @@ test('legacy container component does not interfere with new --container variabl
 
   expect(compiler.build(['max-w-sm'])).toMatchInlineSnapshot(`
     ":root, :host {
+      --container-3xs: 16rem;
+      --container-2xs: 18rem;
+      --container-xs: 20rem;
       --container-sm: 24rem;
+      --container-md: 28rem;
+      --container-lg: 32rem;
+      --container-xl: 36rem;
+      --container-2xl: 42rem;
+      --container-3xl: 48rem;
+      --container-4xl: 56rem;
+      --container-5xl: 64rem;
+      --container-6xl: 72rem;
+      --container-7xl: 80rem;
+      --container-prose: 65ch;
     }
     .max-w-sm {
       max-width: var(--container-sm);
@@ -390,7 +438,14 @@ test('combines custom padding and screen overwrites', async () => {
   })
 
   expect(compiler.build(['container', '!container'])).toMatchInlineSnapshot(`
-    ".\\!container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .\\!container {
       width: 100% !important;
       @media (width >= 40rem) {
         max-width: 40rem !important;
@@ -502,7 +557,14 @@ test('filters out complex breakpoints', async () => {
   })
 
   expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+    ":root, :host {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
