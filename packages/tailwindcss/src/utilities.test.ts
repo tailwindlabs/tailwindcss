@@ -12545,7 +12545,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -12617,7 +12618,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme reference {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -13820,8 +13822,9 @@ test('transition', async () => {
         @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
-          --transition-property: color, background-color, border-color, text-decoration-color, fill,
-            stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+          --transition-property:
+            color, background-color, border-color, text-decoration-color, fill, stroke, opacity,
+            box-shadow, transform, filter, backdrop-filter;
           --transition-property-opacity: opacity;
         }
         @tailwind utilities;
