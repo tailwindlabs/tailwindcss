@@ -63,5 +63,14 @@ export function isSafeMigration(location: { contents: string; start: number; end
     }
   }
 
+  // Heuristic: Disallow Next.js Image placeholder prop
+  if (
+    currentLineBeforeCandidate.includes('placeholder=') ||
+    currentLineBeforeCandidate.includes('placeholder={') ||
+    currentLineBeforeCandidate.includes('placeholder="')
+  ) {
+    return false
+  }
+
   return true
 }
