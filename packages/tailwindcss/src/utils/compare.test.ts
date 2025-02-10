@@ -21,6 +21,12 @@ it.each([
   ['2', '1', GREATER],
   ['1', '10', LESS],
   ['10', '1', GREATER],
+
+  // Numbers of different lengths
+  ['75', '700', LESS],
+  ['700', '75', GREATER],
+  ['75', '770', LESS],
+  ['770', '75', GREATER],
 ])('should compare "%s" with "%s" as "%d"', (a, b, expected) => {
   expect(Math.sign(compare(a, b))).toBe(expected)
 })
@@ -123,4 +129,40 @@ it('should sort strings with multiple numbers consistently using the `compare` f
       "foo-128-bar-457-baz-789",
     ]
   `)
+})
+
+it('sort is stable', () => {
+  // Heap's algorithm for permutations
+  function* permutations<T>(input: T[]) {
+    let pos = 1
+    let stack = input.map(() => 0)
+
+    yield input.slice()
+
+    while (pos < input.length) {
+      if (stack[pos] < pos) {
+        let k = pos % 2 == 0 ? 0 : stack[pos]
+        ;[input[k], input[pos]] = [input[pos], input[k]]
+        yield input.slice()
+        ++stack[pos]
+        pos = 1
+      } else {
+        stack[pos] = 0
+        ++pos
+      }
+    }
+  }
+
+  let classes = ['duration-initial', 'duration-75', 'duration-150', 'duration-700', 'duration-1000']
+
+  for (let permutation of permutations(classes)) {
+    let sorted = [...permutation].sort(compare)
+    expect(sorted).toEqual([
+      'duration-75',
+      'duration-150',
+      'duration-700',
+      'duration-1000',
+      'duration-initial',
+    ])
+  }
 })
