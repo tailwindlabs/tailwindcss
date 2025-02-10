@@ -103,6 +103,10 @@
         "require": "./dist/flatten-color-palette.js",
         "import": "./dist/flatten-color-palette.mjs"
       },
+      "./lib/util/flattenColorPalette.js": {
+        "require": "./dist/flatten-color-palette.js",
+        "import": "./dist/flatten-color-palette.mjs"
+      },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
       "./index": "./index.css",
