@@ -35,6 +35,10 @@
       "require": "./src/compat/flatten-color-palette.cts",
       "import": "./src/compat/flatten-color-palette.ts"
     },
+    "./lib/util/flattenColorPalette.js": {
+      "require": "./src/compat/flatten-color-palette.cts",
+      "import": "./src/compat/flatten-color-palette.ts"
+    },
     "./defaultTheme": {
       "require": "./src/compat/default-theme.cts",
       "import": "./src/compat/default-theme.ts"
