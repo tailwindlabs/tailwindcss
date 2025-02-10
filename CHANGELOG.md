@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Fixed
+
+- Revert change to no longer include theme variables that aren't used in compiled CSS
 
 ## [4.0.5] - 2025-02-08
 

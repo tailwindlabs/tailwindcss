@@ -1,5 +1,6 @@
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
+import { enableRemoveUnusedThemeVariables } from './feature-flags'
 import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 
@@ -406,13 +407,15 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     for (let declaration of declarations) {
       let options = designSystem.theme.getOptions(declaration.property)
 
-      if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
-        if (declaration.property.startsWith('--animate-')) {
-          let parts = declaration.value!.split(/\s+/)
-          for (let part of parts) usedKeyframeNames.add(part)
-        }
+      if (enableRemoveUnusedThemeVariables) {
+        if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+          if (declaration.property.startsWith('--animate-')) {
+            let parts = declaration.value!.split(/\s+/)
+            for (let part of parts) usedKeyframeNames.add(part)
+          }
 
-        continue
+          continue
+        }
       }
 
       // Remove the declaration (from its parent)
