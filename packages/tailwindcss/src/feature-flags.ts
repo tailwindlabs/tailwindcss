@@ -1,1 +1,1 @@
-export const enableRemoveUnusedThemeVariables = process.env.FEATURES_ENV !== 'stable'
+export const enableRemoveUnusedThemeVariables = false

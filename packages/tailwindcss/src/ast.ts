@@ -403,11 +403,11 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   }
 
   // Remove unused theme variables
-  next: for (let [parent, declarations] of cssThemeVariables) {
-    for (let declaration of declarations) {
-      let options = designSystem.theme.getOptions(declaration.property)
+  if (enableRemoveUnusedThemeVariables) {
+    next: for (let [parent, declarations] of cssThemeVariables) {
+      for (let declaration of declarations) {
+        let options = designSystem.theme.getOptions(declaration.property)
 
-      if (enableRemoveUnusedThemeVariables) {
         if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
           if (declaration.property.startsWith('--animate-')) {
             let parts = declaration.value!.split(/\s+/)
@@ -416,36 +416,36 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
           continue
         }
-      }
 
-      // Remove the declaration (from its parent)
-      let idx = parent.indexOf(declaration)
-      parent.splice(idx, 1)
+        // Remove the declaration (from its parent)
+        let idx = parent.indexOf(declaration)
+        parent.splice(idx, 1)
 
-      // If the parent is now empty, remove it from the AST
-      if (parent.length === 0) {
-        for (let [idx, node] of newAst.entries()) {
-          // Assumption, but right now the `@theme` must be top-level, so we
-          // don't need to traverse the entire AST to find the parent.
-          //
-          // Checking for `rule`, because at this stage the `@theme` is already
-          // converted to a normal style rule `:root, :host`
-          if (node.kind === 'rule' && node.nodes === parent) {
-            newAst.splice(idx, 1)
-            break
+        // If the parent is now empty, remove it from the AST
+        if (parent.length === 0) {
+          for (let [idx, node] of newAst.entries()) {
+            // Assumption, but right now the `@theme` must be top-level, so we
+            // don't need to traverse the entire AST to find the parent.
+            //
+            // Checking for `rule`, because at this stage the `@theme` is already
+            // converted to a normal style rule `:root, :host`
+            if (node.kind === 'rule' && node.nodes === parent) {
+              newAst.splice(idx, 1)
+              break
+            }
           }
-        }
 
-        continue next
+          continue next
+        }
       }
     }
-  }
 
-  // Remove unused keyframes
-  for (let keyframe of keyframes) {
-    if (!usedKeyframeNames.has(keyframe.params)) {
-      let idx = atRoots.indexOf(keyframe)
-      atRoots.splice(idx, 1)
+    // Remove unused keyframes
+    for (let keyframe of keyframes) {
+      if (!usedKeyframeNames.has(keyframe.params)) {
+        let idx = atRoots.indexOf(keyframe)
+        atRoots.splice(idx, 1)
+      }
     }
   }
 
