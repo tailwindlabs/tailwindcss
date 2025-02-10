@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Revert change to no longer include theme variables that aren't used in compiled CSS
+- Revert change to no longer include theme variables that aren't used in compiled CSS ([#16403](https://github.com/tailwindlabs/tailwindcss/pull/16403))
 
 ## [4.0.5] - 2025-02-08
 
