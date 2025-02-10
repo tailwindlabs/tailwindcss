@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Fixed
+
+- Preserve custom properties in keyframes ([#16376](https://github.com/tailwindlabs/tailwindcss/pull/16376))
 
 ## [4.0.5] - 2025-02-08
 
