@@ -27,6 +27,7 @@ describe('compiling CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-black: #000;
+        --breakpoint-md: 768px;
       }
 
       @layer utilities {
@@ -172,6 +173,7 @@ describe('compiling CSS', () => {
         --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
         --spacing-3\\.5: 3.5px;
+        --spacing-3_5: 3.5px;
         --spacing-foo\\/bar: 3rem;
       }
 
@@ -292,6 +294,7 @@ describe('@apply', () => {
         --color-blue-500: #3b82f6;
         --color-green-200: #bbf7d0;
         --color-green-500: #22c55e;
+        --breakpoint-md: 768px;
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -1147,6 +1150,7 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-red: red;
+        --animate-foo: foo 1s infinite;
         --text-lg: 20px;
       }
 
@@ -1156,6 +1160,12 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-red {
         accent-color: var(--color-red);
+      }
+
+      @keyframes foo {
+        to {
+          opacity: 1;
+        }
       }"
     `)
   })
@@ -1242,6 +1252,12 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-green {
         accent-color: var(--color-green);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }"
     `)
   })
@@ -1289,6 +1305,12 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-green {
         accent-color: var(--color-green);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }"
     `)
   })
@@ -1382,6 +1404,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
+        --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
 
@@ -1564,6 +1587,12 @@ describe('Parsing themes values from CSS', () => {
         animation: var(--animate-foobar);
       }
 
+      @keyframes foo {
+        to {
+          opacity: 1;
+        }
+      }
+
       @keyframes foobar {
         to {
           opacity: 0;
@@ -1600,6 +1629,7 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --animate-foo: used 1s infinite;
+        --animate-bar: unused 1s infinite;
       }
 
       .animate-foo {
@@ -1609,6 +1639,12 @@ describe('Parsing themes values from CSS', () => {
       @keyframes used {
         to {
           opacity: 1;
+        }
+      }
+
+      @keyframes unused {
+        to {
+          opacity: 0;
         }
       }"
     `)
@@ -1640,13 +1676,24 @@ describe('Parsing themes values from CSS', () => {
         ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
-      ".animate-foo {
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+        --animate-bar: unused 1s infinite;
+      }
+
+      .animate-foo {
         animation: 1s infinite used;
       }
 
       @keyframes used {
         to {
           opacity: 1;
+        }
+      }
+
+      @keyframes unused {
+        to {
+          opacity: 0;
         }
       }"
     `)
@@ -1735,6 +1782,12 @@ describe('Parsing themes values from CSS', () => {
       @keyframes used {
         to {
           opacity: 1;
+        }
+      }
+
+      @keyframes unused {
+        to {
+          opacity: 0;
         }
       }"
     `)
@@ -2000,7 +2053,13 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ".bg-potato {
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-potato {
         background-color: #ac855b;
       }
 
@@ -2058,7 +2117,13 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ".bg-potato {
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-potato {
         background-color: #ac855b;
       }
 
@@ -2171,7 +2236,11 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ".bg-potato {
+      ":root, :host {
+        --color-potato: #efb46b;
+      }
+
+      .bg-potato {
         background-color: #efb46b;
       }"
     `)

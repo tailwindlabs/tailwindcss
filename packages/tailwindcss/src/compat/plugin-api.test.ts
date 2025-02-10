@@ -293,6 +293,9 @@ describe('theme', async () => {
       .variable {
         color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
       }
+      :root, :host {
+        --color-red-500: #ef4444;
+      }
       "
     `)
   })
@@ -375,6 +378,9 @@ describe('theme', async () => {
       }
       .js-variable {
         color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+      }
+      :root, :host {
+        --color-custom-css: rgba(255 0 0 / <alpha-value>);
       }
       "
     `)
@@ -1416,6 +1422,12 @@ describe('theme', async () => {
         .my-width-2\\.5 {
           width: 0.625rem;
         }
+        :root, :host {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
+        }
         "
       `)
   })
@@ -1466,6 +1478,12 @@ describe('theme', async () => {
         }
         .my-width-2\\.5 {
           width: 0.625rem;
+        }
+        :root, :host {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
         }
         "
       `)

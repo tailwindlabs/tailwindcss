@@ -2,6 +2,9 @@
 
 exports[`border-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -124,6 +127,9 @@ exports[`border-* 1`] = `
 
 exports[`border-b-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -246,6 +252,9 @@ exports[`border-b-* 1`] = `
 
 exports[`border-e-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -368,6 +377,9 @@ exports[`border-e-* 1`] = `
 
 exports[`border-l-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -490,6 +502,9 @@ exports[`border-l-* 1`] = `
 
 exports[`border-r-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -612,6 +627,9 @@ exports[`border-r-* 1`] = `
 
 exports[`border-s-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -734,6 +752,9 @@ exports[`border-s-* 1`] = `
 
 exports[`border-t-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -856,6 +877,9 @@ exports[`border-t-* 1`] = `
 
 exports[`border-x-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
@@ -978,6 +1002,9 @@ exports[`border-x-* 1`] = `
 
 exports[`border-y-* 1`] = `
 ":root, :host {
+  --radius-none: 0px;
+  --radius-full: 9999px;
+  --radius-sm: .125rem;
   --color-red-500: #ef4444;
 }
 
