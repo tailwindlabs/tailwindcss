@@ -12,6 +12,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.95"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34ac096ce696dc2fcabef30516bb13c0a68a11d30131d3df6f04711467681b04"
+
+[[package]]
 name = "bexpand"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -36,6 +42,28 @@ dependencies = [
  "memchr",
  "regex-automata 0.4.8",
  "serde",
+]
+
+[[package]]
+name = "bun-macro"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9b9082118e799fe4ec203a283da1cd85eb0b0c8aa21a4c61ed96dd412c1862b"
+dependencies = [
+ "anyhow",
+ "napi",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "bun-native-plugin"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e433ce0299dab021217de9c52049b571208da6d879972e55765f901a62eec9e"
+dependencies = [
+ "anyhow",
+ "bun-macro",
 ]
 
 [[package]]
@@ -259,9 +287,9 @@ checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
 
 [[package]]
 name = "napi"
-version = "2.16.11"
+version = "2.16.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53575dfa17f208dd1ce3a2da2da4659aae393b256a472f2738a8586a6c4107fd"
+checksum = "d3437deb8b6ba2448b6a94260c5c6b9e5eeb5a5d6277e44b40b2532d457b0f0d"
 dependencies = [
  "bitflags",
  "ctor",
@@ -509,10 +537,12 @@ dependencies = [
 name = "tailwind-oxide"
 version = "0.0.0"
 dependencies = [
+ "bun-native-plugin",
  "napi",
  "napi-build",
  "napi-derive",
  "rayon",
+ "rustc-hash",
  "tailwindcss-oxide",
 ]
 

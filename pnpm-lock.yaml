@@ -150,6 +150,25 @@ importers:
         specifier: workspace:*
         version: link:../tailwindcss
 
+  packages/@tailwindcss-bun:
+    dependencies:
+      '@tailwindcss/node':
+        specifier: workspace:^
+        version: link:../@tailwindcss-node
+      '@tailwindcss/oxide':
+        specifier: workspace:^
+        version: link:../../crates/node
+      tailwindcss:
+        specifier: workspace:*
+        version: link:../tailwindcss
+    devDependencies:
+      '@types/bun':
+        specifier: 1.2.2
+        version: 1.2.2
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.14.13
+
   packages/@tailwindcss-cli:
     dependencies:
       '@parcel/watcher':
@@ -606,7 +625,6 @@ packages:
     os: [aix]
 
   '@esbuild/aix-ppc64@0.23.1':
-    resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [aix]
@@ -1690,6 +1708,9 @@ packages:
   '@types/bun@1.1.16':
     resolution: {integrity: sha512-E+ue6NMcn4FXC5bDRE1W/BXUVs01h5Mt02qH8/8HGCox9akuh8KNOFdwvaQS9TDgT2RmUyJYFRRqA60WtTnm2g==}
 
+  '@types/bun@1.2.2':
+    resolution: {integrity: sha512-tr74gdku+AEDN5ergNiBnplr7hpDp3V1h7fqI2GcR/rsUaM39jpSeKH0TFibRvU0KwniRx5POgaYnaXbk0hU+w==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -1934,6 +1955,9 @@ packages:
 
   bun-types@1.1.43:
     resolution: {integrity: sha512-W0wCtVH+bwFp7p3Zgs03CqxEDmXxEvmmUM/FBKgWIv9T8gyeotvIjIbHzuDScc2DphhRNtr7hJLCR5PspYL5qw==}
+
+  bun-types@1.2.2:
+    resolution: {integrity: sha512-RCbMH5elr9gjgDGDhkTTugA21XtJAy/9jkKe/G3WR2q17VPGhcquf9Sir6uay9iW+7P/BV0CAHA1XlHXMAVKHg==}
 
   bun@1.1.29:
     resolution: {integrity: sha512-SKhpyKNZtgxrVel9ec9xon3LDv8mgpiuFhARgcJo1YIbggY2PBrKHRNiwQ6Qlb+x3ivmRurfuwWgwGexjpgBRg==}
@@ -4697,6 +4721,10 @@ snapshots:
     dependencies:
       bun-types: 1.1.43
 
+  '@types/bun@1.2.2':
+    dependencies:
+      bun-types: 1.2.2
+
   '@types/estree@1.0.5': {}
 
   '@types/estree@1.0.6': {}
@@ -5076,6 +5104,11 @@ snapshots:
   bun-types@1.1.43:
     dependencies:
       '@types/node': 20.12.14
+      '@types/ws': 8.5.12
+
+  bun-types@1.2.2:
+    dependencies:
+      '@types/node': 20.14.13
       '@types/ws': 8.5.12
 
   bun@1.1.29:

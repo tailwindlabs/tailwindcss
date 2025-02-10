@@ -419,6 +419,9 @@ export function test(
       if (only || debug) {
         try {
           await context.exec('git init', { cwd: root })
+          // Add these lines to set git identity for CI
+          await context.exec('git config user.email "test@example.com"', { cwd: root })
+          await context.exec('git config user.name "Test User"', { cwd: root })
           await context.exec('git add --all', { cwd: root })
           await context.exec('git commit -m "before migration"', { cwd: root })
         } catch (error: any) {
@@ -544,7 +547,7 @@ export function escape(value: string) {
 
   while (++index < length) {
     codeUnit = string.charCodeAt(index)
-    // Note: there’s no need to special-case astral symbols, surrogate
+    // Note: there's no need to special-case astral symbols, surrogate
     // pairs, or lone surrogates.
 
     // If the character is NULL (U+0000), then the REPLACEMENT CHARACTER
@@ -612,7 +615,7 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(base: string, path = '/'): Promise<string> {
+export async function fetchStyles(base: string, path = '/', isBun = false): Promise<string> {
   while (base.endsWith('/')) {
     base = base.slice(0, -1)
   }
@@ -620,7 +623,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let linkRegex = /<link rel="stylesheet".* href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
   let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
   let stylesheets: string[] = []
