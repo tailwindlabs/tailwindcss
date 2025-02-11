@@ -7,14 +7,22 @@ interface ClassMetadata {
   modifiers: string[]
 }
 
+export type ClassItem = {
+  name: string
+  modifiers: string[]
+}
+
 export type ClassEntry = [string, ClassMetadata]
 
 export function getClassList(design: DesignSystem): ClassEntry[] {
-  let list: [string, ClassMetadata][] = []
+  let list: ClassItem[] = []
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
-    list.push([utility, { modifiers: [] }])
+    list.push({
+      name: utility,
+      modifiers: [],
+    })
   }
 
   // Functional utilities have their own list of completions
@@ -23,20 +31,31 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
 
     for (let group of completions) {
       for (let value of group.values) {
+        let fraction = value !== null && IS_FRACTION.test(value)
+
         let name = value === null ? utility : `${utility}-${value}`
 
-        list.push([name, { modifiers: group.modifiers }])
+        list.push({
+          name,
+          modifiers: group.modifiers,
+        })
 
         if (group.supportsNegative) {
-          list.push([`-${name}`, { modifiers: group.modifiers }])
+          list.push({
+            name: `-${name}`,
+            modifiers: group.modifiers,
+          })
         }
       }
     }
   }
 
-  list.sort((a, b) => compare(a[0], b[0]))
+  if (list.length === 0) return []
 
-  return list
+  // Sort utilities by their class name
+  list.sort((a, b) => compare(a.name, b.name))
+
+  return list.map((item) => [item.name, { modifiers: item.modifiers }])
 }
 
 interface SelectorOptions {
