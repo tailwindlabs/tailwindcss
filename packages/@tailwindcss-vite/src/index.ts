@@ -209,9 +209,13 @@ export default function tailwindcss(
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
-        if (shouldDisableModuleGraph(config) && scannerMode === 'automatic') {
-          console.warn('Detected an Astro.js build and opted-out of using the Vite module graph.')
-          scannerMode = 'file-system'
+        if (scannerMode === 'automatic') {
+          if (shouldDisableModuleGraph(config)) {
+            console.warn('Detected an Astro.js build and opted-out of using the Vite module graph.')
+            scannerMode = 'file-system'
+            return
+          }
+          scannerMode = 'module-graph'
         }
       },
 
