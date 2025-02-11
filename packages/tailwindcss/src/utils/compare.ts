@@ -14,9 +14,6 @@ export function compare(a: string, z: string) {
     let aCode = a.charCodeAt(i)
     let zCode = z.charCodeAt(i)
 
-    // Continue if the characters are the same
-    if (aCode === zCode) continue
-
     // If both are numbers, compare them as numbers instead of strings.
     if (aCode >= ZERO && aCode <= NINE && zCode >= ZERO && zCode <= NINE) {
       let aStart = i
@@ -35,13 +32,23 @@ export function compare(a: string, z: string) {
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
 
-      return (
-        Number(aNumber) - Number(zNumber) ||
-        // Fallback case if numbers are the same but the string representation
-        // is not. Fallback to string sorting. E.g.: `0123` vs `123`
-        (aNumber < zNumber ? -1 : 1)
-      )
+      let diff = Number(aNumber) - Number(zNumber)
+      if (diff) return diff
+
+      // Fallback case if numbers are the same but the string representation
+      // is not. Fallback to string sorting. E.g.: `0123` vs `123`
+      if (aNumber < zNumber) return -1
+      if (aNumber > zNumber) return 1
+
+      // Continue with the next character otherwise short strings will appear
+      // after long ones when containing numbers. E.g.:
+      // - bg-red-500/70
+      // - bg-red-500
+      continue
     }
+
+    // Continue if the characters are the same
+    if (aCode === zCode) continue
 
     // Otherwise, compare them as strings
     return aCode - zCode

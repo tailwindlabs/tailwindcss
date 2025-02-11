@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Fixed
+
+- Export `tailwindcss/lib/util/flattenColorPalette.js` for backward compatibility ([#16411](https://github.com/tailwindlabs/tailwindcss/pull/16411))
+- Fix sorting numeric utilities when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
+
+## [4.0.6] - 2025-02-10
+
+### Fixed
+
+- Revert change to no longer include theme variables that aren't used in compiled CSS ([#16403](https://github.com/tailwindlabs/tailwindcss/pull/16403))
 
 ### Fixed
 
@@ -3408,7 +3417,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...HEAD
+[4.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...v4.0.6
 [4.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...v4.0.5
 [4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
 [4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
