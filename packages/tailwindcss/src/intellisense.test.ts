@@ -538,6 +538,9 @@ test('Theme keys with underscores are suggested with underscores', async () => {
       /* This will get suggeted with a dot because its surrounded by numbers */
       --spacing-1_5: 1.5rem;
 
+      /* This will get suggeted with a dot  */
+      --spacing-2\.5: 1.5rem;
+
       /* This will get suggeted with an underscore */
       --spacing-logo_margin: 0.875rem;
     }
@@ -553,5 +556,10 @@ test('Theme keys with underscores are suggested with underscores', async () => {
   let entries = design.getClassList().filter(([name]) => name.startsWith('p-'))
 
   expect(entries).toContainEqual(['p-1.5', { modifiers: [] }])
+  expect(entries).toContainEqual(['p-2.5', { modifiers: [] }])
   expect(entries).toContainEqual(['p-logo_margin', { modifiers: [] }])
+
+  expect(entries).not.toContainEqual(['p-1_5', { modifiers: [] }])
+  expect(entries).not.toContainEqual(['p-2_5', { modifiers: [] }])
+  expect(entries).not.toContainEqual(['p-logo.margin', { modifiers: [] }])
 })
