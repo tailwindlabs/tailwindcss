@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet!
 
+### Fixed
+
+- Upgrade: Don't migrate `blur` to `blur-sm` when used with Next.js `<Image placeholder="blur" />` ([#16405](https://github.com/tailwindlabs/tailwindcss/pull/16405))
+
 ## [4.0.5] - 2025-02-08
 
 ### Added

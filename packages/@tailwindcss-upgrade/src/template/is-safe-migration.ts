@@ -10,6 +10,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /x-if=['"]$/,
   /x-show=['"]$/,
 ]
+const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"]$/
 
 export function isSafeMigration(location: { contents: string; start: number; end: number }) {
   let currentLineBeforeCandidate = ''
@@ -63,12 +64,8 @@ export function isSafeMigration(location: { contents: string; start: number; end
     }
   }
 
-  // Heuristic: Disallow Next.js Image placeholder prop
-  if (
-    currentLineBeforeCandidate.includes('placeholder=') ||
-    currentLineBeforeCandidate.includes('placeholder={') ||
-    currentLineBeforeCandidate.includes('placeholder="')
-  ) {
+  // Heuristic: Disallow Next.js Image `placeholder` prop
+  if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
     return false
   }
 
