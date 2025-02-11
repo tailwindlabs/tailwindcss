@@ -68,4 +68,9 @@ test('does not replace classes in invalid positions', async () => {
   await shouldNotReplace(`<div v-show="shadow"></div>\n`)
   await shouldNotReplace(`<div x-if="shadow"></div>\n`)
   await shouldNotReplace(`<div style={{filter: 'drop-shadow(30px 10px 4px #4444dd)'}}/>\n`)
+
+  // Next.js Image placeholder cases
+  await shouldNotReplace(`<Image placeholder="blur" src="/image.jpg" />`, 'blur')
+  await shouldNotReplace(`<Image placeholder={'blur'} src="/image.jpg" />`, 'blur')
+  await shouldNotReplace(`<Image placeholder={blur} src="/image.jpg" />`, 'blur')
 })
