@@ -13,7 +13,13 @@ const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
 const IGNORED_DEPENDENCIES = ['tailwind-merge']
 
-export default function tailwindcss(): Plugin[] {
+type ScannerMode = 'automatic' | 'module-graph' | 'file-system'
+
+export default function tailwindcss(
+  { scanner: scannerMode = 'automatic' }: { scanner: ScannerMode } = {
+    scanner: 'automatic',
+  },
+): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
 
@@ -59,13 +65,18 @@ export default function tailwindcss(): Plugin[] {
     return new Root(
       id,
       () => moduleGraphCandidates,
-      config!.base,
+      scannerMode,
+      config!.root,
       customCssResolver,
       customJsResolver,
     )
   })
 
   function scanFile(id: string, content: string, extension: string) {
+    if (scannerMode === 'file-system') {
+      return
+    }
+
     for (let dependency of IGNORED_DEPENDENCIES) {
       // We validated that Vite IDs always use posix style path separators, even on Windows.
       // In dev build, Vite precompiles dependencies
@@ -197,6 +208,11 @@ export default function tailwindcss(): Plugin[] {
         config = _config
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
+
+        if (shouldDisableModuleGraph(config) && scannerMode === 'automatic') {
+          console.warn('Detected an Astro.js build and opted-out of using the Vite module graph.')
+          scannerMode = 'file-system'
+        }
       },
 
       // Scan all non-CSS files for candidates
@@ -416,6 +432,7 @@ class Root {
   constructor(
     private id: string,
     private getSharedCandidates: () => Map<string, Set<string>>,
+    private scannerMode: ScannerMode,
     private base: string,
 
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -458,9 +475,13 @@ class Root {
           return []
         }
 
-        // No root specified, use the module graph
+        // No root specified, use the module graph unless we are in file-based scanner mode
         if (this.compiler.root === null) {
-          return []
+          if (this.scannerMode === 'file-system') {
+            return [{ base: this.base, pattern: '**/*' }]
+          } else {
+            return []
+          }
         }
 
         // Use the specified root
@@ -547,8 +568,9 @@ class Root {
   }
 
   private sharedCandidates(): Set<string> {
-    if (!this.compiler) return new Set()
-    if (this.compiler.root === 'none') return new Set()
+    if (!this.compiler || this.scannerMode === 'file-system' || this.compiler.root === 'none') {
+      return new Set()
+    }
 
     const HAS_DRIVE_LETTER = /^[A-Z]:/
 
@@ -580,4 +602,8 @@ class Root {
 
     return shared
   }
+}
+
+function shouldDisableModuleGraph(config: ResolvedConfig) {
+  return config.plugins.some((p) => p.name === 'astro:scripts:page-ssr')
 }
