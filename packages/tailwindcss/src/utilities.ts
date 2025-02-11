@@ -220,9 +220,20 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
+    /**
+     * The alpha and beta releases used `_` in theme keys to represent a `.`. This meant we used
+     * `--leading-1_5` instead of `--leading-1\.5` to add utilities like `leading-1.5`.
+     *
+     * We prefer the use of the escaped dot now but still want to make sure suggestions for the
+     * legacy key format still works as expected when surrounded by numbers.
+     */
+    const LEGACY_NUMERIC_KEY = /(\d+)_(\d+)/g
+
     function* resolve(themeKeys: ThemeKey[]) {
       for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield value.replaceAll('_', '.')
+        yield value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
+          return `${a}.${b}`
+        })
       }
     }
 

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export `tailwindcss/lib/util/flattenColorPalette.js` for backward compatibility ([#16411](https://github.com/tailwindlabs/tailwindcss/pull/16411))
 - Fix sorting numeric utilities when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
 - Show suggestions for fractions in IntelliSense ([#16353](https://github.com/tailwindlabs/tailwindcss/pull/16353))
+- Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
 
 ## [4.0.6] - 2025-02-10
 
