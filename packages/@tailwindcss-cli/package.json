@@ -32,7 +32,7 @@
     "@parcel/watcher": "^2.5.1",
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
-    "enhanced-resolve": "^5.18.0",
+    "enhanced-resolve": "^5.18.1",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
