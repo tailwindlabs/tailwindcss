@@ -410,6 +410,35 @@ test('inset shadow colors', async ({ page }) => {
   )
 })
 
+test('filter', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div
+        id="a"
+        class="blur-md brightness-50 contrast-50 drop-shadow-md grayscale hue-rotate-180 invert saturate-50 sepia"
+      >
+        <div id="b" class="contrast-100"></div>
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#a', 'filter')).toEqual(
+    [
+      'blur(12px)',
+      'brightness(0.5)',
+      'contrast(0.5)',
+      'grayscale(1)',
+      'hue-rotate(180deg)',
+      'invert(1)',
+      'saturate(0.5)',
+      'sepia(1)',
+      'drop-shadow(rgba(0, 0, 0, 0.12) 0px 3px 3px)',
+    ].join(' '),
+  )
+  expect(await getPropertyValue('#b', 'filter')).toEqual('contrast(1)')
+})
+
 test('outline style is optional', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,

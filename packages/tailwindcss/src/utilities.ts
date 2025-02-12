@@ -3152,6 +3152,7 @@ export function createUtilities(theme: Theme) {
         property('--tw-opacity'),
         property('--tw-saturate'),
         property('--tw-sepia'),
+        property('--tw-drop-shadow'),
       ])
     }
 
