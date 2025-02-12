@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix sorting numeric utilities when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
 - Show suggestions for fractions in IntelliSense ([#16353](https://github.com/tailwindlabs/tailwindcss/pull/16353))
 - Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
+- Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility
 
 ## [4.0.6] - 2025-02-10
 

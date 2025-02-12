@@ -3928,10 +3928,11 @@ export function createUtilities(theme: Theme) {
     utilities.functional('outline', (candidate) => {
       if (candidate.value === null) {
         if (candidate.modifier) return
+        let value = theme.get(['--default-outline-width']) ?? '1px'
         return [
           outlineProperties(),
           decl('outline-style', 'var(--tw-outline-style)'),
-          decl('outline-width', '1px'),
+          decl('outline-width', value),
         ]
       }
 

@@ -14737,6 +14737,32 @@ test('outline', async () => {
     }"
   `)
   expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-outline-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['outline'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --default-outline-width: 2px;
+    }
+
+    .outline {
+      outline-style: var(--tw-outline-style);
+      outline-width: 2px;
+    }
+
+    @property --tw-outline-style {
+      syntax: "*";
+      inherits: false;
+      initial-value: solid;
+    }"
+  `)
+  expect(
     await run([
       '-outline',
 
@@ -15780,6 +15806,93 @@ test('ring', async () => {
 
     .ring-inset {
       --tw-ring-inset: inset;
+    }
+
+    @property --tw-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-ring-inset {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-offset-width {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-ring-offset-color {
+      syntax: "*";
+      inherits: false;
+      initial-value: #fff;
+    }
+
+    @property --tw-ring-offset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-ring-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['ring'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --default-ring-width: 2px;
+    }
+
+    .ring {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     @property --tw-shadow {
