@@ -13407,6 +13407,11 @@ test('filter', async () => {
     @property --tw-sepia {
       syntax: "*";
       inherits: false
+    }
+
+    @property --tw-drop-shadow {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
