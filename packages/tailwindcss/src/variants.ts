@@ -12,6 +12,7 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
+import { enableUserValid } from './feature-flags'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -692,8 +693,10 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('required', ['&:required'])
   staticVariant('valid', ['&:valid'])
   staticVariant('invalid', ['&:invalid'])
-  staticVariant('user-valid', ['&:user-valid'])
-  staticVariant('user-invalid', ['&:user-invalid'])
+  if (enableUserValid) {
+    staticVariant('user-valid', ['&:user-valid'])
+    staticVariant('user-invalid', ['&:user-invalid'])
+  }
   staticVariant('in-range', ['&:in-range'])
   staticVariant('out-of-range', ['&:out-of-range'])
   staticVariant('read-only', ['&:read-only'])
