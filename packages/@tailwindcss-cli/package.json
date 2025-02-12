@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/cli",
-  "version": "4.0.0-alpha.25",
+  "version": "4.0.6",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -29,13 +29,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@parcel/watcher": "^2.4.1",
+    "@parcel/watcher": "^2.5.1",
     "@tailwindcss/node": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
-    "enhanced-resolve": "^5.17.1",
+    "enhanced-resolve": "^5.18.1",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
-    "picocolors": "^1.0.1",
-    "tailwindcss": "workspace:^"
+    "picocolors": "^1.1.1",
+    "tailwindcss": "workspace:*"
   }
 }

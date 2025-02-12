@@ -67,7 +67,19 @@ export type Result<T extends Arg> = {
 }
 
 export function args<const T extends Arg>(options: T, argv = process.argv.slice(2)): Result<T> {
+  for (let [idx, value] of argv.entries()) {
+    if (value === '-') {
+      argv[idx] = '__IO_DEFAULT_VALUE__'
+    }
+  }
+
   let parsed = parse(argv)
+
+  for (let key in parsed) {
+    if (parsed[key] === '__IO_DEFAULT_VALUE__') {
+      parsed[key] = '-'
+    }
+  }
 
   let result: { _: string[]; [key: string]: unknown } = {
     _: parsed._,

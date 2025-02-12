@@ -1,6 +1,21 @@
-export type Rule = {
+import { parseAtRule } from './css-parser'
+import type { DesignSystem } from './design-system'
+import { enableRemoveUnusedThemeVariables } from './feature-flags'
+import { ThemeOptions } from './theme'
+import { DefaultMap } from './utils/default-map'
+
+const AT_SIGN = 0x40
+
+export type StyleRule = {
   kind: 'rule'
   selector: string
+  nodes: AstNode[]
+}
+
+export type AtRule = {
+  kind: 'at-rule'
+  name: string
+  params: string
   nodes: AstNode[]
 }
 
@@ -18,13 +33,19 @@ export type Comment = {
 
 export type Context = {
   kind: 'context'
-  context: Record<string, string>
+  context: Record<string, string | boolean>
   nodes: AstNode[]
 }
 
-export type AstNode = Rule | Declaration | Comment | Context
+export type AtRoot = {
+  kind: 'at-root'
+  nodes: AstNode[]
+}
 
-export function rule(selector: string, nodes: AstNode[]): Rule {
+export type Rule = StyleRule | AtRule
+export type AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtRoot
+
+export function styleRule(selector: string, nodes: AstNode[] = []): StyleRule {
   return {
     kind: 'rule',
     selector,
@@ -32,12 +53,29 @@ export function rule(selector: string, nodes: AstNode[]): Rule {
   }
 }
 
-export function decl(property: string, value: string | undefined): Declaration {
+export function atRule(name: string, params: string = '', nodes: AstNode[] = []): AtRule {
+  return {
+    kind: 'at-rule',
+    name,
+    params,
+    nodes,
+  }
+}
+
+export function rule(selector: string, nodes: AstNode[] = []): StyleRule | AtRule {
+  if (selector.charCodeAt(0) === AT_SIGN) {
+    return parseAtRule(selector, nodes)
+  }
+
+  return styleRule(selector, nodes)
+}
+
+export function decl(property: string, value: string | undefined, important = false): Declaration {
   return {
     kind: 'declaration',
     property,
     value,
-    important: false,
+    important,
   }
 }
 
@@ -48,7 +86,7 @@ export function comment(value: string): Comment {
   }
 }
 
-export function context(context: Record<string, string>, nodes: AstNode[]): Context {
+export function context(context: Record<string, string | boolean>, nodes: AstNode[]): Context {
   return {
     kind: 'context',
     context,
@@ -56,7 +94,14 @@ export function context(context: Record<string, string>, nodes: AstNode[]): Cont
   }
 }
 
-export enum WalkAction {
+export function atRoot(nodes: AstNode[]): AtRoot {
+  return {
+    kind: 'at-root',
+    nodes,
+  }
+}
+
+export const enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
 
@@ -74,75 +119,360 @@ export function walk(
     utils: {
       parent: AstNode | null
       replaceWith(newNode: AstNode | AstNode[]): void
-      context: Record<string, string>
+      context: Record<string, string | boolean>
+      path: AstNode[]
     },
   ) => void | WalkAction,
-  parent: AstNode | null = null,
-  context: Record<string, string> = {},
+  path: AstNode[] = [],
+  context: Record<string, string | boolean> = {},
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+    let parent = path[path.length - 1] ?? null
 
     // We want context nodes to be transparent in walks. This means that
     // whenever we encounter one, we immediately walk through its children and
     // furthermore we also don't update the parent.
     if (node.kind === 'context') {
-      walk(node.nodes, visit, parent, { ...context, ...node.context })
+      if (walk(node.nodes, visit, path, { ...context, ...node.context }) === WalkAction.Stop) {
+        return WalkAction.Stop
+      }
       continue
     }
 
+    path.push(node)
+    let replacedNode = false
+    let replacedNodeOffset = 0
     let status =
       visit(node, {
         parent,
-        replaceWith(newNode) {
-          ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
-          // We want to visit the newly replaced node(s), which start at the
-          // current index (i). By decrementing the index here, the next loop
-          // will process this position (containing the replaced node) again.
-          i--
-        },
         context,
+        path,
+        replaceWith(newNode) {
+          replacedNode = true
+
+          if (Array.isArray(newNode)) {
+            if (newNode.length === 0) {
+              ast.splice(i, 1)
+              replacedNodeOffset = 0
+            } else if (newNode.length === 1) {
+              ast[i] = newNode[0]
+              replacedNodeOffset = 1
+            } else {
+              ast.splice(i, 1, ...newNode)
+              replacedNodeOffset = newNode.length
+            }
+          } else {
+            ast[i] = newNode
+            replacedNodeOffset = 1
+          }
+        },
       }) ?? WalkAction.Continue
+    path.pop()
+
+    // We want to visit or skip the newly replaced node(s), which start at the
+    // current index (i). By decrementing the index here, the next loop will
+    // process this position (containing the replaced node) again.
+    if (replacedNode) {
+      if (status === WalkAction.Continue) {
+        i--
+      } else {
+        i += replacedNodeOffset - 1
+      }
+      continue
+    }
 
     // Stop the walk entirely
-    if (status === WalkAction.Stop) return
+    if (status === WalkAction.Stop) return WalkAction.Stop
 
     // Skip visiting the children of this node
     if (status === WalkAction.Skip) continue
 
-    if (node.kind === 'rule') {
-      walk(node.nodes, visit, node, context)
+    if ('nodes' in node) {
+      path.push(node)
+      let result = walk(node.nodes, visit, path, context)
+      path.pop()
+
+      if (result === WalkAction.Stop) {
+        return WalkAction.Stop
+      }
     }
   }
 }
 
-export function toCss(ast: AstNode[]) {
-  let atRoots: string = ''
-  let seenAtProperties = new Set<string>()
-  let propertyFallbacksRoot: Declaration[] = []
-  let propertyFallbacksUniversal: Declaration[] = []
+// This is a depth-first traversal of the AST
+export function walkDepth(
+  ast: AstNode[],
+  visit: (
+    node: AstNode,
+    utils: {
+      parent: AstNode | null
+      path: AstNode[]
+      context: Record<string, string | boolean>
+      replaceWith(newNode: AstNode[]): void
+    },
+  ) => void,
+  path: AstNode[] = [],
+  context: Record<string, string | boolean> = {},
+) {
+  for (let i = 0; i < ast.length; i++) {
+    let node = ast[i]
+    let parent = path[path.length - 1] ?? null
 
+    if (node.kind === 'rule' || node.kind === 'at-rule') {
+      path.push(node)
+      walkDepth(node.nodes, visit, path, context)
+      path.pop()
+    } else if (node.kind === 'context') {
+      walkDepth(node.nodes, visit, path, { ...context, ...node.context })
+      continue
+    }
+
+    path.push(node)
+    visit(node, {
+      parent,
+      context,
+      path,
+      replaceWith(newNode) {
+        if (Array.isArray(newNode)) {
+          if (newNode.length === 0) {
+            ast.splice(i, 1)
+          } else if (newNode.length === 1) {
+            ast[i] = newNode[0]
+          } else {
+            ast.splice(i, 1, ...newNode)
+          }
+        } else {
+          ast[i] = newNode
+        }
+
+        // Skip over the newly inserted nodes (being depth-first it doesn't make sense to visit them)
+        i += newNode.length - 1
+      },
+    })
+    path.pop()
+  }
+}
+
+// Optimize the AST for printing where all the special nodes that require custom
+// handling are handled such that the printing is a 1-to-1 transformation.
+export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
+  let atRoots: AstNode[] = []
+  let seenAtProperties = new Set<string>()
+  let cssThemeVariables = new DefaultMap<
+    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    Set<Declaration>
+  >(() => new Set())
+  let keyframes = new Set<AtRule>()
+  let usedKeyframeNames = new Set()
+
+  function transform(
+    node: AstNode,
+    parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    context: Record<string, string | boolean> = {},
+    depth = 0,
+  ) {
+    // Declaration
+    if (node.kind === 'declaration') {
+      if (node.property === '--tw-sort' || node.value === undefined || node.value === null) {
+        return
+      }
+
+      // Track variables defined in `@theme`
+      if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+        cssThemeVariables.get(parent).add(node)
+      }
+
+      // Track used CSS variables
+      if (node.value.includes('var(')) {
+        designSystem.trackUsedVariables(node.value)
+      }
+
+      // Track used animation names
+      if (node.property === 'animation') {
+        let parts = node.value.split(/\s+/)
+        for (let part of parts) usedKeyframeNames.add(part)
+      }
+
+      parent.push(node)
+    }
+
+    // Rule
+    else if (node.kind === 'rule') {
+      // Rules with `&` as the selector should be flattened
+      if (node.selector === '&') {
+        for (let child of node.nodes) {
+          let nodes: AstNode[] = []
+          transform(child, nodes, context, depth + 1)
+          if (nodes.length > 0) {
+            parent.push(...nodes)
+          }
+        }
+      }
+
+      //
+      else {
+        let copy = { ...node, nodes: [] }
+        for (let child of node.nodes) {
+          transform(child, copy.nodes, context, depth + 1)
+        }
+        if (copy.nodes.length > 0) {
+          parent.push(copy)
+        }
+      }
+    }
+
+    // AtRule `@property`
+    else if (node.kind === 'at-rule' && node.name === '@property' && depth === 0) {
+      // Don't output duplicate `@property` rules
+      if (seenAtProperties.has(node.params)) {
+        return
+      }
+
+      seenAtProperties.add(node.params)
+
+      let copy = { ...node, nodes: [] }
+      for (let child of node.nodes) {
+        transform(child, copy.nodes, context, depth + 1)
+      }
+      parent.push(copy)
+    }
+
+    // AtRule
+    else if (node.kind === 'at-rule') {
+      let copy = { ...node, nodes: [] }
+      for (let child of node.nodes) {
+        transform(child, copy.nodes, context, depth + 1)
+      }
+
+      // Only track `@keyframes` that could be removed, when they were defined
+      // inside of a `@theme`.
+      if (node.name === '@keyframes' && context.theme) {
+        keyframes.add(copy)
+      }
+
+      if (
+        copy.nodes.length > 0 ||
+        copy.name === '@layer' ||
+        copy.name === '@charset' ||
+        copy.name === '@custom-media' ||
+        copy.name === '@namespace' ||
+        copy.name === '@import'
+      ) {
+        parent.push(copy)
+      }
+    }
+
+    // AtRoot
+    else if (node.kind === 'at-root') {
+      for (let child of node.nodes) {
+        let newParent: AstNode[] = []
+        transform(child, newParent, context, 0)
+        for (let child of newParent) {
+          atRoots.push(child)
+        }
+      }
+    }
+
+    // Context
+    else if (node.kind === 'context') {
+      // Remove reference imports from printing
+      if (node.context.reference) {
+        return
+      }
+
+      for (let child of node.nodes) {
+        transform(child, parent, { ...context, ...node.context }, depth)
+      }
+    }
+
+    // Comment
+    else if (node.kind === 'comment') {
+      parent.push(node)
+    }
+
+    // Unknown
+    else {
+      node satisfies never
+    }
+  }
+
+  let newAst: AstNode[] = []
+  for (let node of ast) {
+    transform(node, newAst, {}, 0)
+  }
+
+  // Remove unused theme variables
+  if (enableRemoveUnusedThemeVariables) {
+    next: for (let [parent, declarations] of cssThemeVariables) {
+      for (let declaration of declarations) {
+        let options = designSystem.theme.getOptions(declaration.property)
+
+        if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+          if (declaration.property.startsWith('--animate-')) {
+            let parts = declaration.value!.split(/\s+/)
+            for (let part of parts) usedKeyframeNames.add(part)
+          }
+
+          continue
+        }
+
+        // Remove the declaration (from its parent)
+        let idx = parent.indexOf(declaration)
+        parent.splice(idx, 1)
+
+        // If the parent is now empty, remove it from the AST
+        if (parent.length === 0) {
+          for (let [idx, node] of newAst.entries()) {
+            // Assumption, but right now the `@theme` must be top-level, so we
+            // don't need to traverse the entire AST to find the parent.
+            //
+            // Checking for `rule`, because at this stage the `@theme` is already
+            // converted to a normal style rule `:root, :host`
+            if (node.kind === 'rule' && node.nodes === parent) {
+              newAst.splice(idx, 1)
+              break
+            }
+          }
+
+          continue next
+        }
+      }
+    }
+
+    // Remove unused keyframes
+    for (let keyframe of keyframes) {
+      if (!usedKeyframeNames.has(keyframe.params)) {
+        let idx = atRoots.indexOf(keyframe)
+        atRoots.splice(idx, 1)
+      }
+    }
+  }
+
+  return newAst.concat(atRoots)
+}
+
+export function toCss(ast: AstNode[]) {
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
     let indent = '  '.repeat(depth)
 
+    // Declaration
+    if (node.kind === 'declaration') {
+      css += `${indent}${node.property}: ${node.value}${node.important ? ' !important' : ''};\n`
+    }
+
     // Rule
-    if (node.kind === 'rule') {
-      // Pull out `@at-root` rules to append later
-      if (node.selector === '@at-root') {
-        for (let child of node.nodes) {
-          atRoots += stringify(child, 0)
-        }
-        return css
+    else if (node.kind === 'rule') {
+      css += `${indent}${node.selector} {\n`
+      for (let child of node.nodes) {
+        css += stringify(child, depth + 1)
       }
+      css += `${indent}}\n`
+    }
 
-      if (node.selector === '@tailwind utilities') {
-        for (let child of node.nodes) {
-          css += stringify(child, depth)
-        }
-        return css
-      }
-
+    // AtRule
+    else if (node.kind === 'at-rule') {
       // Print at-rules without nodes with a `;` instead of an empty block.
       //
       // E.g.:
@@ -150,42 +480,11 @@ export function toCss(ast: AstNode[]) {
       // ```css
       // @layer base, components, utilities;
       // ```
-      if (node.selector[0] === '@' && node.nodes.length === 0) {
-        return `${indent}${node.selector};\n`
+      if (node.nodes.length === 0) {
+        return `${indent}${node.name} ${node.params};\n`
       }
 
-      if (node.selector[0] === '@' && node.selector.startsWith('@property ') && depth === 0) {
-        // Don't output duplicate `@property` rules
-        if (seenAtProperties.has(node.selector)) {
-          return ''
-        }
-
-        // Collect fallbacks for `@property` rules for Firefox support
-        // We turn these into rules on `:root` or `*` and some pseudo-elements
-        // based on the value of `inherits``
-        let property = node.selector.replace(/@property\s*/g, '')
-        let initialValue = null
-        let inherits = false
-
-        for (let prop of node.nodes) {
-          if (prop.kind !== 'declaration') continue
-          if (prop.property === 'initial-value') {
-            initialValue = prop.value
-          } else if (prop.property === 'inherits') {
-            inherits = prop.value === 'true'
-          }
-        }
-
-        if (inherits) {
-          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
-        } else {
-          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
-        }
-
-        seenAtProperties.add(node.selector)
-      }
-
-      css += `${indent}${node.selector} {\n`
+      css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
@@ -197,16 +496,16 @@ export function toCss(ast: AstNode[]) {
       css += `${indent}/*${node.value}*/\n`
     }
 
-    // Context Node
-    else if (node.kind === 'context') {
-      for (let child of node.nodes) {
-        css += stringify(child, depth)
-      }
+    // These should've been handled already by `prepareAstForPrinting` which
+    // means we can safely ignore them here. We return an empty string
+    // immediately to signal that something went wrong.
+    else if (node.kind === 'context' || node.kind === 'at-root') {
+      return ''
     }
 
-    // Declaration
-    else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      css += `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
+    // Unknown
+    else {
+      node satisfies never
     }
 
     return css
@@ -221,23 +520,5 @@ export function toCss(ast: AstNode[]) {
     }
   }
 
-  let fallbackAst = []
-
-  if (propertyFallbacksRoot.length) {
-    fallbackAst.push(rule(':root', propertyFallbacksRoot))
-  }
-
-  if (propertyFallbacksUniversal.length) {
-    fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
-  }
-
-  let fallback = ''
-
-  if (fallbackAst.length) {
-    fallback = stringify(
-      rule('@supports (-moz-orient: inline)', [rule('@layer base', fallbackAst)]),
-    )
-  }
-
-  return `${css}${fallback}${atRoots}`
+  return css
 }

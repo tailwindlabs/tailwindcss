@@ -4,19 +4,19 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bstr = "1.0.1"
-globwalk = "0.8.1"
-log = "0.4"
-rayon = "1.5.3"
-fxhash = "0.2.1"
-crossbeam = "0.8.2"
-tracing = { version = "0.1.37", features = [] }
-tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
-walkdir = "2.3.3"
-ignore = "0.4.20"
-glob-match = "0.2.1"
+bstr = "1.10.0"
+globwalk = "0.9.1"
+log = "0.4.22"
+rayon = "1.10.0"
+fxhash = { package = "rustc-hash", version = "2.0.0" }
+crossbeam = "0.8.4"
+tracing = { version = "0.1.40", features = [] }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+walkdir = "2.5.0"
+ignore = "0.4.23"
 dunce = "1.0.5"
+bexpand = "1.2.0"
+glob-match = "0.2.1"
 
 [dev-dependencies]
-tempfile = "3.5.0"
-
+tempfile = "3.13.0"

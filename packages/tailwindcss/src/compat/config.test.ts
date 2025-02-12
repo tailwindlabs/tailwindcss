@@ -1,7 +1,7 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { compile, type Config } from '..'
-import plugin from '../plugin'
-import { flattenColorPalette } from './flatten-color-palette'
+import { default as plugin } from '../plugin'
+import flattenColorPalette from './flatten-color-palette'
 
 const css = String.raw
 
@@ -216,8 +216,8 @@ test('Variants in CSS overwrite variants from plugins', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
-    @variant dark (&:is(.my-dark));
-    @variant light (&:is(.my-light));
+    @custom-variant dark (&:is(.my-dark));
+    @custom-variant light (&:is(.my-light));
   `
 
   let compiler = await compile(input, {
@@ -255,16 +255,16 @@ describe('theme callbacks', () => {
   }) => {
     let input = css`
       @theme default {
-        --font-size-base: 0rem;
-        --font-size-base--line-height: 1rem;
-        --font-size-md: 0rem;
-        --font-size-md--line-height: 1rem;
-        --font-size-xl: 0rem;
-        --font-size-xl--line-height: 1rem;
+        --text-base: 0rem;
+        --text-base--line-height: 1rem;
+        --text-md: 0rem;
+        --text-md--line-height: 1rem;
+        --text-xl: 0rem;
+        --text-xl--line-height: 1rem;
       }
       @theme {
-        --font-size-base: 100rem;
-        --font-size-md--line-height: 101rem;
+        --text-base: 100rem;
+        --text-md--line-height: 101rem;
       }
       @tailwind utilities;
       @config "./config.js";
@@ -322,9 +322,9 @@ describe('theme callbacks', () => {
 
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
-        ":root {
-          --font-size-base: 100rem;
-          --font-size-md--line-height: 101rem;
+        ":root, :host {
+          --text-base: 100rem;
+          --text-md--line-height: 101rem;
         }
         .prose {
           [class~=lead-base] {
@@ -351,13 +351,6 @@ describe('theme callbacks', () => {
         .leading-xl {
           --tw-leading: 201rem;
           line-height: 201rem;
-        }
-        @supports (-moz-orient: inline) {
-          @layer base {
-            *, ::before, ::after, ::backdrop {
-              --tw-leading: initial;
-            }
-          }
         }
         @property --tw-leading {
           syntax: "*";
@@ -398,11 +391,11 @@ describe('theme overrides order', () => {
     })
 
     expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-blue: blue;
       }
       .bg-blue {
-        background-color: var(--color-blue, blue);
+        background-color: var(--color-blue);
       }
       .bg-red {
         background-color: very-red;
@@ -484,26 +477,26 @@ describe('theme overrides order', () => {
         'hover-bg-slate-600',
       ]),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --color-slate-100: #000100;
         --color-slate-300: #000300;
         --color-slate-400: #100400;
         --color-slate-500: #100500;
       }
       .bg-slate-100 {
-        background-color: var(--color-slate-100, #000100);
+        background-color: var(--color-slate-100);
       }
       .bg-slate-200 {
         background-color: #200200;
       }
       .bg-slate-300 {
-        background-color: var(--color-slate-300, #000300);
+        background-color: var(--color-slate-300);
       }
       .bg-slate-400 {
-        background-color: var(--color-slate-400, #100400);
+        background-color: var(--color-slate-400);
       }
       .bg-slate-500 {
-        background-color: var(--color-slate-500, #100500);
+        background-color: var(--color-slate-500);
       }
       .bg-slate-600 {
         background-color: #200600;
@@ -569,7 +562,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: normal;
@@ -608,7 +601,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: "cv06";
         --default-font-variation-settings: normal;
@@ -648,7 +641,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: "XHGT" 0.7;
@@ -691,7 +684,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Potato Sans;
         --default-font-feature-settings: "cv06";
         --default-font-variation-settings: "XHGT" 0.7;
@@ -716,7 +709,7 @@ describe('default font family compatibility', () => {
       }
       @config "./config.js";
       @theme {
-        --font-family-sans: Sandwich Sans;
+        --font-sans: Sandwich Sans;
       }
       @tailwind utilities;
     `
@@ -735,14 +728,14 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
         --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
-        --font-family-sans: Sandwich Sans;
+        --font-sans: Sandwich Sans;
       }
       .font-sans {
-        font-family: var(--font-family-sans, Sandwich Sans);
+        font-family: var(--font-sans);
       }
       "
     `)
@@ -775,7 +768,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: Inter, system-ui, sans-serif;
         --default-font-feature-settings: normal;
         --default-font-variation-settings: normal;
@@ -814,7 +807,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
         --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
@@ -848,7 +841,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: normal;
         --default-mono-font-variation-settings: normal;
@@ -887,7 +880,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: "cv06";
         --default-mono-font-variation-settings: normal;
@@ -927,7 +920,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: normal;
         --default-mono-font-variation-settings: "XHGT" 0.7;
@@ -945,9 +938,9 @@ describe('default font family compatibility', () => {
   }) => {
     let input = css`
       @theme default {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
       }
       @config "./config.js";
       @tailwind utilities;
@@ -970,7 +963,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: Potato Mono;
         --default-mono-font-feature-settings: "cv06";
         --default-mono-font-variation-settings: "XHGT" 0.7;
@@ -989,13 +982,13 @@ describe('default font family compatibility', () => {
   }) => {
     let input = css`
       @theme default {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
       }
       @config "./config.js";
       @theme {
-        --font-family-mono: Sandwich Mono;
+        --font-mono: Sandwich Mono;
       }
       @tailwind utilities;
     `
@@ -1014,14 +1007,14 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
-        --font-family-mono: Sandwich Mono;
+      ":root, :host {
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
+        --font-mono: Sandwich Mono;
       }
       .font-mono {
-        font-family: var(--font-family-mono, Sandwich Mono);
+        font-family: var(--font-mono);
       }
       "
     `)
@@ -1054,7 +1047,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
         --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
@@ -1109,14 +1102,14 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
       'print:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".aria-polite\\:underline {
-      &[aria-live="polite"] {
-        text-decoration-line: underline;
-      }
-    }
-    .aria-hidden\\:flex {
+    ".aria-hidden\\:flex {
       &[aria-hidden="true"] {
         display: flex;
+      }
+    }
+    .aria-polite\\:underline {
+      &[aria-live="polite"] {
+        text-decoration-line: underline;
       }
     }
     .data-checked\\:underline {
@@ -1186,7 +1179,7 @@ test('merges css breakpoints with js config screens', async () => {
 
   expect(compiler.build(['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline']))
     .toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 50rem;
         --breakpoint-lg: 64rem;
         --breakpoint-xl: 80rem;
@@ -1216,4 +1209,473 @@ test('merges css breakpoints with js config screens', async () => {
       }
       "
     `)
+})
+
+test('utilities must be prefixed', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (id, base) => ({
+      base,
+      module: { prefix: 'tw' },
+    }),
+  })
+
+  // Prefixed utilities are generated
+  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
+    .toMatchInlineSnapshot(`
+    ".tw\\:custom {
+      color: red;
+    }
+    .tw\\:underline {
+      text-decoration-line: underline;
+    }
+    .tw\\:hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
+      }
+    }
+    "
+  `)
+
+  // Non-prefixed utilities are ignored
+  compiler = await compile(input, {
+    loadModule: async (id, base) => ({
+      base,
+      module: { prefix: 'tw' },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+})
+
+test('utilities used in @apply must be prefixed', async () => {
+  let compiler = await compile(
+    css`
+      @config "./config.js";
+
+      .my-underline {
+        @apply tw:underline;
+      }
+    `,
+    {
+      loadModule: async (id, base) => ({
+        base,
+        module: { prefix: 'tw' },
+      }),
+    },
+  )
+
+  // Prefixed utilities are generated
+  expect(compiler.build([])).toMatchInlineSnapshot(`
+    ".my-underline {
+      text-decoration-line: underline;
+    }
+    "
+  `)
+
+  // Non-prefixed utilities cause an error
+  expect(() =>
+    compile(
+      css`
+        @config "./config.js";
+
+        .my-underline {
+          @apply underline;
+        }
+      `,
+      {
+        loadModule: async (id, base) => ({
+          base,
+          module: { prefix: 'tw' },
+        }),
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: Cannot apply unknown utility class: underline]`,
+  )
+})
+
+test('Prefixes configured in CSS take precedence over those defined in JS configs', async () => {
+  let compiler = await compile(
+    css`
+      @theme prefix(wat) {
+        --color-red: #f00;
+        --color-green: #0f0;
+        --breakpoint-sm: 640px;
+      }
+
+      @config "./plugin.js";
+
+      @tailwind utilities;
+
+      @utility custom {
+        color: red;
+      }
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: { prefix: 'tw' },
+        }
+      },
+    },
+  )
+
+  expect(compiler.build(['wat:custom'])).toMatchInlineSnapshot(`
+    ":root, :host {
+      --wat-color-red: #f00;
+      --wat-color-green: #0f0;
+      --wat-breakpoint-sm: 640px;
+    }
+    .wat\\:custom {
+      color: red;
+    }
+    "
+  `)
+})
+
+test('a prefix must be letters only', async () => {
+  await expect(() =>
+    compile(
+      css`
+        @config "./plugin.js";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: { prefix: '__' },
+          }
+        },
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: The prefix "__" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.]`,
+  )
+})
+
+test('important: `#app`', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (_, base) => ({
+      base,
+      module: { important: '#app' },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
+    "#app {
+      .custom {
+        color: red;
+      }
+      .underline {
+        text-decoration-line: underline;
+      }
+      .hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
+        }
+      }
+    }
+    "
+  `)
+})
+
+test('important: true', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async (_, base) => ({
+      base,
+      module: { important: true },
+    }),
+  })
+
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
+    ".custom {
+      color: red !important;
+    }
+    .underline {
+      text-decoration-line: underline !important;
+    }
+    .hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through !important;
+        }
+      }
+    }
+    "
+  `)
+})
+
+test('blocklisted candidates are not generated', async () => {
+  let compiler = await compile(
+    css`
+      @theme reference {
+        --color-white: #fff;
+        --breakpoint-md: 48rem;
+      }
+      @tailwind utilities;
+      @config "./config.js";
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: {
+            blocklist: ['bg-white'],
+          },
+        }
+      },
+    },
+  )
+
+  // bg-white will not get generated
+  expect(compiler.build(['bg-white'])).toEqual('')
+
+  // underline will as will md:bg-white
+  expect(compiler.build(['underline', 'bg-white', 'md:bg-white'])).toMatchInlineSnapshot(`
+    ".underline {
+      text-decoration-line: underline;
+    }
+    .md\\:bg-white {
+      @media (width >= 48rem) {
+        background-color: var(--color-white);
+      }
+    }
+    "
+  `)
+})
+
+test('blocklisted candidates cannot be used with `@apply`', async () => {
+  await expect(() =>
+    compile(
+      css`
+        @theme reference {
+          --color-white: #fff;
+          --breakpoint-md: 48rem;
+        }
+        @tailwind utilities;
+        @config "./config.js";
+        .foo {
+          @apply bg-white;
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: {
+              blocklist: ['bg-white'],
+            },
+          }
+        },
+      },
+    ),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: Cannot apply unknown utility class: bg-white]`,
+  )
+})
+
+test('old theme values are merged with their renamed counterparts in the CSS theme', async () => {
+  let didCallPluginFn = vi.fn()
+
+  await compile(
+    css`
+      @theme reference {
+        --breakpoint-a: 1;
+        --breakpoint-b: 2;
+
+        --color-a: 1;
+        --color-b: 2;
+
+        --radius-a: 1;
+        --radius-b: 2;
+
+        --shadow-a: 1;
+        --shadow-b: 2;
+
+        --animate-a: 1;
+        --animate-b: 2;
+
+        --aspect-a: 1;
+        --aspect-b: 2;
+
+        --container-a: 1;
+        --container-b: 2;
+
+        --tracking-a: 1;
+        --tracking-b: 2;
+
+        --leading-a: 1;
+        --leading-b: 2;
+      }
+
+      @plugin "./plugin.js";
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: plugin(function ({ theme }) {
+            didCallPluginFn()
+
+            expect(theme('screens')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('screens.a')).toEqual('1')
+            expect(theme('screens.b')).toEqual('2')
+
+            expect(theme('colors')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('colors.a')).toEqual('1')
+            expect(theme('colors.b')).toEqual('2')
+
+            expect(theme('borderRadius')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('borderRadius.a')).toEqual('1')
+            expect(theme('borderRadius.b')).toEqual('2')
+
+            expect(theme('animation')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('animation.a')).toEqual('1')
+            expect(theme('animation.b')).toEqual('2')
+
+            expect(theme('aspectRatio')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('aspectRatio.a')).toEqual('1')
+            expect(theme('aspectRatio.b')).toEqual('2')
+
+            expect(theme('boxShadow')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('boxShadow.a')).toEqual('1')
+            expect(theme('boxShadow.b')).toEqual('2')
+
+            expect(theme('maxWidth')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('maxWidth.a')).toEqual('1')
+            expect(theme('maxWidth.b')).toEqual('2')
+
+            expect(theme('letterSpacing.a')).toEqual('1')
+            expect(theme('letterSpacing.b')).toEqual('2')
+
+            expect(theme('letterSpacing')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+
+            expect(theme('lineHeight.a')).toEqual('1')
+            expect(theme('lineHeight.b')).toEqual('2')
+
+            expect(theme('lineHeight')).toMatchObject({
+              a: '1',
+              b: '2',
+            })
+          }),
+        }
+      },
+    },
+  )
+
+  expect(didCallPluginFn).toHaveBeenCalled()
+})
+
+test('handles setting theme keys to null', async () => {
+  let compiler = await compile(
+    css`
+      @theme default {
+        --color-red-50: oklch(0.971 0.013 17.38);
+        --color-red-100: oklch(0.936 0.032 17.717);
+      }
+      @config "./my-config.js";
+      @tailwind utilities;
+      @theme {
+        --color-red-100: oklch(0.936 0.032 17.717);
+        --color-red-200: oklch(0.885 0.062 18.334);
+      }
+    `,
+    {
+      loadModule: async () => {
+        return {
+          module: {
+            theme: {
+              extend: {
+                colors: {
+                  red: null,
+                },
+              },
+            },
+          },
+          base: '/root',
+        }
+      },
+    },
+  )
+
+  expect(compiler.build(['bg-red-50', 'bg-red-100', 'bg-red-200'])).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-50: oklch(0.971 0.013 17.38);
+      --color-red-100: oklch(0.936 0.032 17.717);
+      --color-red-200: oklch(0.885 0.062 18.334);
+    }
+    .bg-red-50 {
+      background-color: var(--color-red-50);
+    }
+    .bg-red-100 {
+      background-color: var(--color-red-100);
+    }
+    .bg-red-200 {
+      background-color: var(--color-red-200);
+    }
+    "
+  `)
 })

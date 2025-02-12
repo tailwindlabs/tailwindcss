@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide",
-  "version": "4.0.0-alpha.25",
+  "version": "4.0.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
@@ -20,7 +20,8 @@
         "armv7-unknown-linux-gnueabihf",
         "x86_64-unknown-linux-musl",
         "x86_64-unknown-freebsd",
-        "i686-pc-windows-msvc"
+        "i686-pc-windows-msvc",
+        "aarch64-pc-windows-msvc"
       ]
     }
   },
@@ -56,6 +57,7 @@
     "@tailwindcss/oxide-linux-arm64-musl": "workspace:*",
     "@tailwindcss/oxide-linux-x64-gnu": "workspace:*",
     "@tailwindcss/oxide-linux-x64-musl": "workspace:*",
-    "@tailwindcss/oxide-win32-x64-msvc": "workspace:*"
+    "@tailwindcss/oxide-win32-x64-msvc": "workspace:*",
+    "@tailwindcss/oxide-win32-arm64-msvc": "workspace:*"
   }
 }

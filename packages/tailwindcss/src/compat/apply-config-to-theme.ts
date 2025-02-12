@@ -19,15 +19,43 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
   return null
 }
 
-export function applyConfigToTheme(designSystem: DesignSystem, { theme }: ResolvedConfig) {
+export function applyConfigToTheme(
+  designSystem: DesignSystem,
+  { theme }: ResolvedConfig,
+  replacedThemeKeys: Set<string>,
+) {
+  for (let replacedThemeKey of replacedThemeKeys) {
+    let name = keyPathToCssProperty([replacedThemeKey])
+    if (!name) continue
+
+    designSystem.theme.clearNamespace(`--${name}`, ThemeOptions.DEFAULT)
+  }
+
   for (let [path, value] of themeableValues(theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
     }
+
+    // Replace `<alpha-value>` with `1`
+    if (typeof value === 'string') {
+      value = value.replace(/<alpha-value>/g, '1')
+    }
+
+    // Convert `opacity` namespace from decimal to percentage values
+    if (path[0] === 'opacity' && (typeof value === 'number' || typeof value === 'string')) {
+      let numValue = typeof value === 'string' ? parseFloat(value) : value
+
+      if (numValue >= 0 && numValue <= 1) {
+        value = numValue * 100 + '%'
+      }
+    }
+
     let name = keyPathToCssProperty(path)
+    if (!name) continue
+
     designSystem.theme.add(
       `--${name}`,
-      value as any,
+      '' + value,
       ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
     )
   }
@@ -44,7 +72,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, { theme }: Resolv
     // Replace `--default-font-*` with `fontFamily.sans` values
     {
       let fontFamily = resolveThemeValue(theme.fontFamily.sans)
-      if (fontFamily && designSystem.theme.hasDefault('--font-family-sans')) {
+      if (fontFamily && designSystem.theme.hasDefault('--font-sans')) {
         designSystem.theme.add('--default-font-family', fontFamily, options)
         designSystem.theme.add(
           '--default-font-feature-settings',
@@ -62,7 +90,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, { theme }: Resolv
     // Replace `--default-mono-font-*` with `fontFamily.mono` values
     {
       let fontFamily = resolveThemeValue(theme.fontFamily.mono)
-      if (fontFamily && designSystem.theme.hasDefault('--font-family-mono')) {
+      if (fontFamily && designSystem.theme.hasDefault('--font-mono')) {
         designSystem.theme.add('--default-mono-font-family', fontFamily, options)
         designSystem.theme.add(
           '--default-mono-font-feature-settings',
@@ -81,7 +109,7 @@ export function applyConfigToTheme(designSystem: DesignSystem, { theme }: Resolv
   return theme
 }
 
-function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][] {
+export function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][] {
   let toAdd: [string[], unknown][] = []
 
   walk(config as any, [], (value, path) => {
@@ -110,16 +138,42 @@ function themeableValues(config: ResolvedConfig['theme']): [string[], unknown][]
   return toAdd
 }
 
-function keyPathToCssProperty(path: string[]) {
+const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
+
+export function keyPathToCssProperty(path: string[]) {
+  // The legacy container component config should not be included in the Theme
+  if (path[0] === 'container') return null
+
+  path = structuredClone(path)
+
+  if (path[0] === 'animation') path[0] = 'animate'
+  if (path[0] === 'aspectRatio') path[0] = 'aspect'
+  if (path[0] === 'borderRadius') path[0] = 'radius'
+  if (path[0] === 'boxShadow') path[0] = 'shadow'
   if (path[0] === 'colors') path[0] = 'color'
+  if (path[0] === 'containers') path[0] = 'container'
+  if (path[0] === 'fontFamily') path[0] = 'font'
+  if (path[0] === 'fontSize') path[0] = 'text'
+  if (path[0] === 'letterSpacing') path[0] = 'tracking'
+  if (path[0] === 'lineHeight') path[0] = 'leading'
+  if (path[0] === 'maxWidth') path[0] = 'container'
   if (path[0] === 'screens') path[0] = 'breakpoint'
+  if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
+
+  for (let part of path) {
+    if (!IS_VALID_KEY.test(part)) return null
+  }
 
   return (
     path
       // [1] should move into the nested object tuple. To create the CSS variable
       // name for this, we replace it with an empty string that will result in two
       // subsequent dashes when joined.
-      .map((path) => (path === '1' ? '' : path))
+      //
+      // E.g.:
+      // - `fontSize.xs.1.lineHeight` -> `font-size-xs--line-height`
+      // - `spacing.1` -> `--spacing-1`
+      .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
       .map((part) =>
@@ -160,7 +214,7 @@ function isValidThemeTuple(value: unknown): value is [string, Record<string, str
   return true
 }
 
-enum WalkAction {
+const enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
 
@@ -188,10 +242,12 @@ function walk(
     let result = callback(value, keyPath) ?? WalkAction.Continue
 
     if (result === WalkAction.Skip) continue
-    if (result === WalkAction.Stop) break
+    if (result === WalkAction.Stop) return WalkAction.Stop
 
     if (!Array.isArray(value) && typeof value !== 'object') continue
 
-    walk(value as any, keyPath, callback)
+    if (walk(value as any, keyPath, callback) === WalkAction.Stop) {
+      return WalkAction.Stop
+    }
   }
 }

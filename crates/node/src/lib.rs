@@ -1,5 +1,9 @@
+use utf16::IndexConverter;
+
 #[macro_use]
 extern crate napi_derive;
+
+mod utf16;
 
 #[derive(Debug, Clone)]
 #[napi(object)]
@@ -12,13 +16,6 @@ pub struct ChangedContent {
 
   /// File extension
   pub extension: String,
-}
-
-#[derive(Debug, Clone)]
-#[napi(object)]
-pub struct DetectSources {
-  /// Base path to start scanning from
-  pub base: String,
 }
 
 #[derive(Debug, Clone)]
@@ -58,20 +55,11 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   }
 }
 
-impl From<DetectSources> for tailwindcss_oxide::scanner::detect_sources::DetectSources {
-  fn from(detect_sources: DetectSources) -> Self {
-    Self::new(detect_sources.base.into())
-  }
-}
-
 // ---
 
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScannerOptions {
-  /// Automatically detect sources in the base path
-  pub detect_sources: Option<DetectSources>,
-
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
 }
@@ -82,13 +70,22 @@ pub struct Scanner {
   scanner: tailwindcss_oxide::Scanner,
 }
 
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct CandidateWithPosition {
+  /// The candidate string
+  pub candidate: String,
+
+  /// The position of the candidate inside the content file
+  pub position: i64,
+}
+
 #[napi]
 impl Scanner {
   #[napi(constructor)]
   pub fn new(opts: ScannerOptions) -> Self {
     Self {
       scanner: tailwindcss_oxide::Scanner::new(
-        opts.detect_sources.map(Into::into),
         opts
           .sources
           .map(|x| x.into_iter().map(Into::into).collect()),
@@ -106,6 +103,34 @@ impl Scanner {
     self
       .scanner
       .scan_content(input.into_iter().map(Into::into).collect())
+  }
+
+  #[napi]
+  pub fn get_candidates_with_positions(
+    &mut self,
+    input: ChangedContent,
+  ) -> Vec<CandidateWithPosition> {
+    let content = input.content.unwrap_or_else(|| {
+      std::fs::read_to_string(input.file.unwrap()).expect("Failed to read file")
+    });
+
+    let input = ChangedContent {
+      file: None,
+      content: Some(content.clone()),
+      extension: input.extension,
+    };
+
+    let mut utf16_idx = IndexConverter::new(&content[..]);
+
+    self
+      .scanner
+      .get_candidates_with_positions(input.into())
+      .into_iter()
+      .map(|(candidate, position)| CandidateWithPosition {
+        candidate,
+        position: utf16_idx.get(position),
+      })
+      .collect()
   }
 
   #[napi(getter)]

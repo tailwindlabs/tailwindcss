@@ -1,7 +1,16 @@
 import type { AtRule, Plugin } from 'postcss'
+import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../tailwindcss/src/design-system'
 import { segment } from '../../../tailwindcss/src/utils/segment'
+import { migrateCandidate } from '../template/migrate'
 
-export function migrateAtApply(): Plugin {
+export function migrateAtApply({
+  designSystem,
+  userConfig,
+}: {
+  designSystem: DesignSystem
+  userConfig: Config
+}): Plugin {
   function migrate(atRule: AtRule) {
     let utilities = atRule.params.split(/(\s+)/)
     let important =
@@ -21,22 +30,30 @@ export function migrateAtApply(): Plugin {
         utility += '!'
       }
 
-      // Migrate the important modifier to the end of the utility
-      if (utility[0] === '!') {
-        utility = `${utility.slice(1)}!`
-      }
-
       // Reconstruct the utility with the variants
       return [...variants, utility].join(':')
     })
 
-    atRule.params = params.join('').trim()
+    return async () => {
+      // If we have a valid designSystem and config setup, we can run all
+      // candidate migrations on each utility
+      params = await Promise.all(
+        params.map(async (param) => await migrateCandidate(designSystem, userConfig, param)),
+      )
+
+      atRule.params = params.join('').trim()
+    }
   }
 
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-at-apply',
-    OnceExit(root) {
-      root.walkAtRules('apply', migrate)
+    async OnceExit(root) {
+      let migrations: (() => void)[] = []
+      root.walkAtRules('apply', (atRule) => {
+        migrations.push(migrate(atRule))
+      })
+
+      await Promise.allSettled(migrations.map((m) => m()))
     },
   }
 }

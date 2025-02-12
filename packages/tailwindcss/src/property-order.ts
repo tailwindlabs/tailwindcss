@@ -28,6 +28,10 @@ export default [
   'float',
   'clear',
 
+  // Ensure that the included `container` class is always sorted before any
+  // custom container extensions
+  '--tw-container-component',
+
   // How do we make `mx-0` come before `mt-0`?
   // Idea: `margin-x` property that we compile away with a Visitor plugin?
   'margin',
@@ -99,6 +103,8 @@ export default [
   'scroll-snap-align',
   'scroll-snap-stop',
   'scroll-margin',
+  'scroll-margin-inline',
+  'scroll-margin-block',
   'scroll-margin-inline-start',
   'scroll-margin-inline-end',
   'scroll-margin-top',
@@ -107,6 +113,8 @@ export default [
   'scroll-margin-left',
 
   'scroll-padding',
+  'scroll-padding-inline',
+  'scroll-padding-block',
   'scroll-padding-inline-start',
   'scroll-padding-inline-end',
   'scroll-padding-top',
@@ -151,7 +159,6 @@ export default [
   '--tw-divide-y-reverse',
   'divide-style',
   'divide-color',
-  '--tw-divide-opacity',
 
   'place-self',
   'align-self',
@@ -166,14 +173,6 @@ export default [
   'overscroll-behavior-y',
 
   'scroll-behavior',
-
-  'text-overflow',
-  'hyphens',
-  'white-space',
-
-  'text-wrap',
-  'overflow-wrap',
-  'work-break',
 
   'border-radius',
   'border-start-radius', // Not real
@@ -192,7 +191,8 @@ export default [
   'border-bottom-left-radius',
 
   'border-width',
-  'border-inline-width', // Not real
+  'border-inline-width',
+  'border-block-width',
   'border-inline-start-width',
   'border-inline-end-width',
   'border-top-width',
@@ -201,9 +201,18 @@ export default [
   'border-left-width',
 
   'border-style',
+  'border-inline-style',
+  'border-block-style',
+  'border-inline-start-style',
+  'border-inline-end-style',
+  'border-top-style',
+  'border-right-style',
+  'border-bottom-style',
+  'border-left-style',
+
   'border-color',
-  'border-x-color', // Not real
-  'border-y-color', // Not real
+  'border-inline-color',
+  'border-block-color',
   'border-inline-start-color',
   'border-inline-end-color',
   'border-top-color',
@@ -211,10 +220,7 @@ export default [
   'border-bottom-color',
   'border-left-color',
 
-  '--tw-border-opacity',
-
   'background-color',
-  '--tw-bg-opacity',
 
   'background-image',
   '--tw-gradient-position',
@@ -259,15 +265,21 @@ export default [
 
   'font-family',
   'font-size',
+  'line-height',
   'font-weight',
+  'letter-spacing',
+  'text-wrap',
+  'overflow-wrap',
+  'word-break',
+  'text-overflow',
+  'hyphens',
+  'white-space',
+
+  'color',
   'text-transform',
   'font-style',
   'font-stretch',
   'font-variant-numeric',
-  'line-height',
-  'letter-spacing',
-  'color',
-  '--tw-text-opacity',
   'text-decoration-line',
   'text-decoration-color',
   'text-decoration-style',
@@ -275,11 +287,12 @@ export default [
   'text-underline-offset',
   '-webkit-font-smoothing',
 
-  'placeholder-color', // Not real
-  '--tw-placeholder-opacity',
+  'placeholder-color',
 
   'caret-color',
   'accent-color',
+
+  'color-scheme',
 
   'opacity',
 
@@ -295,7 +308,6 @@ export default [
   '--tw-inset-shadow-color',
   '--tw-inset-ring-shadow',
   '--tw-inset-ring-color',
-  '--tw-ring-opacity',
   '--tw-ring-offset-width',
   '--tw-ring-offset-color',
 
@@ -327,6 +339,7 @@ export default [
   'backdrop-filter',
 
   'transition-property',
+  'transition-behavior',
   'transition-delay',
   'transition-duration',
   'transition-timing-function',

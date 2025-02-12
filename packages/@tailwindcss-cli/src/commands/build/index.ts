@@ -1,9 +1,9 @@
 import watcher from '@parcel/watcher'
-import { compile } from '@tailwindcss/node'
+import { compile, env, Instrumentation } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
-import { existsSync } from 'node:fs'
+import { existsSync, type Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Arg, Result } from '../../utils/args'
@@ -19,6 +19,7 @@ import {
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
+const DEBUG = env.DEBUG
 
 export function options() {
   return {
@@ -31,6 +32,7 @@ export function options() {
       type: 'string',
       description: 'Output file',
       alias: '-o',
+      default: '-',
     },
     '--watch': {
       type: 'boolean | string',
@@ -54,11 +56,27 @@ export function options() {
   } satisfies Arg
 }
 
+async function handleError<T>(fn: () => T): Promise<T> {
+  try {
+    return await fn()
+  } catch (err) {
+    if (err instanceof Error) {
+      eprintln(err.toString())
+    }
+    process.exit(1)
+  }
+}
+
 export async function handle(args: Result<ReturnType<typeof options>>) {
+  using I = new Instrumentation()
+  DEBUG && I.start('[@tailwindcss/cli] (initial build)')
+
   let base = path.resolve(args['--cwd'])
 
-  // Resolve the output as an absolute path.
-  if (args['--output']) {
+  // Resolve the output as an absolute path. If the output is a `-`, then we
+  // don't need to resolve it because this is a flag to indicate that we want to
+  // use `stdout` instead.
+  if (args['--output'] && args['--output'] !== '-') {
     args['--output'] = path.resolve(base, args['--output'])
   }
 
@@ -92,16 +110,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     optimizedCss: '',
   }
 
-  async function write(css: string, args: Result<ReturnType<typeof options>>) {
+  async function write(css: string, args: Result<ReturnType<typeof options>>, I: Instrumentation) {
     let output = css
 
     // Optimize the output
     if (args['--minify'] || args['--optimize']) {
       if (css !== previous.css) {
+        DEBUG && I.start('Optimize CSS')
         let optimizedCss = optimizeCss(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
         })
+        DEBUG && I.end('Optimize CSS')
         previous.css = css
         previous.optimizedCss = optimizedCss
         output = optimizedCss
@@ -111,42 +131,69 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
 
     // Write the output
-    if (args['--output']) {
+    DEBUG && I.start('Write output')
+    if (args['--output'] && args['--output'] !== '-') {
       await outputFile(args['--output'], output)
     } else {
       println(output)
     }
+    DEBUG && I.end('Write output')
   }
 
-  let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
-  let inputBasePath = path.dirname(path.resolve(inputFile))
-  let fullRebuildPaths: string[] = []
+  let inputFilePath =
+    args['--input'] && args['--input'] !== '-' ? path.resolve(args['--input']) : null
 
-  function createCompiler(css: string) {
-    return compile(css, {
+  let inputBasePath = inputFilePath ? path.dirname(inputFilePath) : process.cwd()
+
+  let fullRebuildPaths: string[] = inputFilePath ? [inputFilePath] : []
+
+  async function createCompiler(css: string, I: Instrumentation) {
+    DEBUG && I.start('Setup compiler')
+    let compiler = await compile(css, {
       base: inputBasePath,
       onDependency(path) {
         fullRebuildPaths.push(path)
       },
     })
+
+    let sources = (() => {
+      // Disable auto source detection
+      if (compiler.root === 'none') {
+        return []
+      }
+
+      // No root specified, use the base directory
+      if (compiler.root === null) {
+        return [{ base, pattern: '**/*' }]
+      }
+
+      // Use the specified root
+      return [compiler.root]
+    })().concat(compiler.globs)
+
+    let scanner = new Scanner({ sources })
+    DEBUG && I.end('Setup compiler')
+
+    return [compiler, scanner] as const
   }
 
-  // Compile the input
-  let compiler = await createCompiler(input)
-  let scanner = new Scanner({
-    detectSources: { base },
-    sources: compiler.globs,
-  })
+  let [compiler, scanner] = await handleError(() => createCompiler(input, I))
 
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
-      watchDirectories(base, scanner),
+      watchDirectories(scanner),
       async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
           if (files.length === 1 && files[0] === args['--output']) return
+
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/cli] (watcher)')
+
+          // Re-compile the input
+          let start = process.hrtime.bigint()
 
           let changedFiles: ChangedContent[] = []
           let rebuildStrategy: 'incremental' | 'full' = 'incremental'
@@ -172,17 +219,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             } satisfies ChangedContent)
           }
 
-          // Re-compile the input
-          let start = process.hrtime.bigint()
-
           // Track the compiled CSS
           let compiledCss = ''
 
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
-            // Clear all watchers
-            cleanupWatchers()
-
             // Read the new `input`.
             let input = args['--input']
               ? args['--input'] === '-'
@@ -192,30 +233,39 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   @import 'tailwindcss';
                 `
             clearRequireCache(resolvedFullRebuildPaths)
-            fullRebuildPaths = []
+            fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
-            compiler = await createCompiler(input)
-
-            // Re-scan the directory to get the new `candidates`
-            scanner = new Scanner({
-              detectSources: { base },
-              sources: compiler.globs,
-            })
+            ;[compiler, scanner] = await createCompiler(input, I)
 
             // Scan the directory for candidates
+            DEBUG && I.start('Scan for candidates')
             let candidates = scanner.scan()
+            DEBUG && I.end('Scan for candidates')
 
             // Setup new watchers
-            cleanupWatchers = await createWatchers(watchDirectories(base, scanner), handle)
+            DEBUG && I.start('Setup new watchers')
+            let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+            DEBUG && I.end('Setup new watchers')
+
+            // Clear old watchers
+            DEBUG && I.start('Cleanup old watchers')
+            await cleanupWatchers()
+            DEBUG && I.end('Cleanup old watchers')
+
+            cleanupWatchers = newCleanupWatchers
 
             // Re-compile the CSS
+            DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(candidates)
+            DEBUG && I.end('Build CSS')
           }
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
+            DEBUG && I.start('Scan for candidates')
             let newCandidates = scanner.scanFiles(changedFiles)
+            DEBUG && I.end('Scan for candidates')
 
             // No new candidates found which means we don't need to write to
             // disk, and can return early.
@@ -225,10 +275,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               return
             }
 
+            DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(newCandidates)
+            DEBUG && I.end('Build CSS')
           }
 
-          await write(compiledCss, args)
+          await write(compiledCss, args, I)
 
           let end = process.hrtime.bigint()
           eprintln(`Done in ${formatDuration(end - start)}`)
@@ -246,8 +298,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        cleanupWatchers()
-        process.exit(0)
+        cleanupWatchers().then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
       })
     }
 
@@ -255,7 +309,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.stdin.resume()
   }
 
-  await write(compiler.build(scanner.scan()), args)
+  DEBUG && I.start('Scan for candidates')
+  let candidates = scanner.scan()
+  DEBUG && I.end('Scan for candidates')
+  DEBUG && I.start('Build CSS')
+  let output = await handleError(() => compiler.build(candidates))
+  DEBUG && I.end('Build CSS')
+  await write(output, args, I)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -263,22 +323,42 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-function watchDirectories(base: string, scanner: Scanner) {
-  return [base].concat(
-    scanner.globs.flatMap((globEntry) => {
-      // We don't want a watcher for negated globs.
-      if (globEntry.pattern[0] === '!') return []
+function watchDirectories(scanner: Scanner) {
+  return scanner.globs.flatMap((globEntry) => {
+    // We don't want a watcher for negated globs.
+    if (globEntry.pattern[0] === '!') return []
 
-      // We don't want a watcher for nested directories, these will be covered
-      // by the `base` directory already.
-      if (globEntry.base.startsWith(base)) return []
+    // We don't want a watcher for files, only directories.
+    if (globEntry.pattern === '') return []
 
-      return globEntry.base
-    }),
-  )
+    return globEntry.base
+  })
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  // Remove any directories that are children of an already watched directory.
+  // If we don't we may not get notified of certain filesystem events regardless
+  // of whether or not they are for the directory that is duplicated.
+
+  // 1. Sort in asc by length
+  dirs = dirs.sort((a, z) => a.length - z.length)
+
+  // 2. Remove any directories that are children of another directory
+  let toRemove = []
+
+  // /project-a 0
+  // /project-a/src 1
+
+  for (let i = 0; i < dirs.length; ++i) {
+    for (let j = 0; j < i; ++j) {
+      if (!dirs[i].startsWith(`${dirs[j]}/`)) continue
+
+      toRemove.push(dirs[i])
+    }
+  }
+
+  dirs = dirs.filter((dir) => !toRemove.includes(dir))
+
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
@@ -294,9 +374,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
   // files to handle them in a single batch and to avoid multiple rebuilds.
-  function enqueueCallback() {
-    // Dispose all existing macrotask.
-    debounceQueue.dispose()
+  async function enqueueCallback() {
+    // Dispose all existing macrotasks.
+    await debounceQueue.dispose()
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
@@ -323,8 +403,11 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
           if (event.type === 'delete') return
 
           // Ignore directory changes. We only care about file changes
-          let stats = await fs.lstat(event.path)
-          if (stats.isDirectory()) {
+          let stats: Stats | null = null
+          try {
+            stats = await fs.lstat(event.path)
+          } catch {}
+          if (!stats?.isFile() && !stats?.isSymbolicLink()) {
             return
           }
 
@@ -334,7 +417,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
       )
 
       // Handle the tracked files at some point in the future.
-      enqueueCallback()
+      await enqueueCallback()
     })
 
     // Ensure we cleanup the watcher when we're done.
@@ -342,9 +425,9 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 
   // Cleanup
-  return () => {
-    watchers.dispose()
-    debounceQueue.dispose()
+  return async () => {
+    await watchers.dispose()
+    await debounceQueue.dispose()
   }
 }
 
@@ -352,22 +435,31 @@ function optimizeCss(
   input: string,
   { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
 ) {
-  return transform({
-    filename: file,
-    code: Buffer.from(input),
-    minify,
-    sourceMap: false,
-    drafts: {
-      customMedia: true,
-    },
-    nonStandard: {
-      deepSelectorCombinator: true,
-    },
-    include: Features.Nesting,
-    exclude: Features.LogicalProperties,
-    targets: {
-      safari: (16 << 16) | (4 << 8),
-    },
-    errorRecovery: true,
-  }).code.toString()
+  function optimize(code: Buffer | Uint8Array) {
+    return transform({
+      filename: file,
+      code,
+      minify,
+      sourceMap: false,
+      drafts: {
+        customMedia: true,
+      },
+      nonStandard: {
+        deepSelectorCombinator: true,
+      },
+      include: Features.Nesting,
+      exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
+      targets: {
+        safari: (16 << 16) | (4 << 8),
+        ios_saf: (16 << 16) | (4 << 8),
+        firefox: 128 << 16,
+        chrome: 111 << 16,
+      },
+      errorRecovery: true,
+    }).code
+  }
+
+  // Running Lightning CSS twice to ensure that adjacent rules are merged after
+  // nesting is applied. This creates a more optimized output.
+  return optimize(optimize(Buffer.from(input))).toString()
 }

@@ -1,4 +1,5 @@
 import type { DesignSystem } from '../../design-system'
+import colors from '../colors'
 import type { PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
 import { deepMerge, isPlainObject } from './deep-merge'
@@ -14,6 +15,7 @@ export interface ConfigFile {
   path?: string
   base: string
   config: UserConfig
+  reference: boolean
 }
 
 interface ResolutionContext {
@@ -27,6 +29,10 @@ interface ResolutionContext {
 }
 
 let minimal: ResolvedConfig = {
+  blocklist: [],
+  future: {},
+  prefix: '',
+  important: false,
   darkMode: null,
   theme: {},
   plugins: [],
@@ -35,7 +41,10 @@ let minimal: ResolvedConfig = {
   },
 }
 
-export function resolveConfig(design: DesignSystem, files: ConfigFile[]): ResolvedConfig {
+export function resolveConfig(
+  design: DesignSystem,
+  files: ConfigFile[],
+): { resolvedConfig: ResolvedConfig; replacedThemeKeys: Set<string> } {
   let ctx: ResolutionContext = {
     design,
     configs: [],
@@ -54,25 +63,40 @@ export function resolveConfig(design: DesignSystem, files: ConfigFile[]): Resolv
     extractConfigs(ctx, file)
   }
 
-  // Merge dark mode
+  // Merge top level keys
   for (let config of ctx.configs) {
     if ('darkMode' in config && config.darkMode !== undefined) {
       ctx.result.darkMode = config.darkMode ?? null
     }
+
+    if ('prefix' in config && config.prefix !== undefined) {
+      ctx.result.prefix = config.prefix ?? ''
+    }
+
+    if ('blocklist' in config && config.blocklist !== undefined) {
+      ctx.result.blocklist = config.blocklist ?? []
+    }
+
+    if ('important' in config && config.important !== undefined) {
+      ctx.result.important = config.important ?? false
+    }
   }
 
   // Merge themes
-  mergeTheme(ctx)
+  let replacedThemeKeys = mergeTheme(ctx)
 
   return {
-    ...ctx.result,
-    content: ctx.content,
-    theme: ctx.theme as ResolvedConfig['theme'],
-    plugins: ctx.plugins,
+    resolvedConfig: {
+      ...ctx.result,
+      content: ctx.content,
+      theme: ctx.theme as ResolvedConfig['theme'],
+      plugins: ctx.plugins,
+    },
+    replacedThemeKeys,
   }
 }
 
-function mergeThemeExtension(
+export function mergeThemeExtension(
   themeValue: ThemeValue | ThemeValue[],
   extensionValue: ThemeValue | ThemeValue[],
 ) {
@@ -100,11 +124,15 @@ function mergeThemeExtension(
   return undefined
 }
 
-export interface PluginUtils {
-  theme(keypath: string, defaultValue?: any): any
+export type PluginUtils = {
+  theme: (keypath: string, defaultValue?: any) => any
+  colors: typeof colors
 }
 
-function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFile): void {
+function extractConfigs(
+  ctx: ResolutionContext,
+  { config, base, path, reference }: ConfigFile,
+): void {
   let plugins: PluginWithConfig[] = []
 
   // Normalize plugins so they share the same shape
@@ -112,17 +140,17 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugins.push(plugin())
+      plugins.push({ ...plugin(), reference })
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugins.push(plugin)
+      plugins.push({ ...plugin, reference })
     } else {
       // Just a plain function without using the plugin(…) API
-      plugins.push({ handler: plugin })
+      plugins.push({ handler: plugin, reference })
     }
   }
 
@@ -134,7 +162,7 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   }
 
   for (let preset of config.presets ?? []) {
-    extractConfigs(ctx, { path, base, config: preset })
+    extractConfigs(ctx, { path, base, config: preset, reference })
   }
 
   // Apply configs from plugins
@@ -142,7 +170,7 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      extractConfigs(ctx, { path, base, config: plugin.config })
+      extractConfigs(ctx, { path, base, config: plugin.config, reference: !!plugin.reference })
     }
   }
 
@@ -158,14 +186,18 @@ function extractConfigs(ctx: ResolutionContext, { config, base, path }: ConfigFi
   ctx.configs.push(config)
 }
 
-function mergeTheme(ctx: ResolutionContext) {
-  let api: PluginUtils = {
-    theme: createThemeFn(ctx.design, () => ctx.theme, resolveValue),
-  }
+function mergeTheme(ctx: ResolutionContext): Set<string> {
+  let replacedThemeKeys: Set<string> = new Set()
+
+  let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
+  let theme = Object.assign(themeFn, {
+    theme: themeFn,
+    colors,
+  })
 
   function resolveValue(value: ThemeValue | null | undefined): ResolvedThemeValue {
     if (typeof value === 'function') {
-      return value(api) ?? null
+      return value(theme) ?? null
     }
 
     return value ?? null
@@ -174,6 +206,14 @@ function mergeTheme(ctx: ResolutionContext) {
   for (let config of ctx.configs) {
     let theme = config.theme ?? {}
     let extend = theme.extend ?? {}
+
+    // Keep track of all theme keys that were reset
+    for (let key in theme) {
+      if (key === 'extend') {
+        continue
+      }
+      replacedThemeKeys.add(key)
+    }
 
     // Shallow merge themes so latest "group" wins
     Object.assign(ctx.theme, theme)
@@ -219,4 +259,6 @@ function mergeTheme(ctx: ResolutionContext) {
       ctx.theme.screens[key] = screen.min
     }
   }
+
+  return replacedThemeKeys
 }

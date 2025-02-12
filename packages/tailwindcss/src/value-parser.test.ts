@@ -52,6 +52,22 @@ describe('parse', () => {
     ])
   })
 
+  it('should parse a function with multiple arguments across lines', () => {
+    expect(parse('theme(\n\tfoo,\n\tbar\n)')).toEqual([
+      {
+        kind: 'function',
+        value: 'theme',
+        nodes: [
+          { kind: 'separator', value: '\n\t' },
+          { kind: 'word', value: 'foo' },
+          { kind: 'separator', value: ',\n\t' },
+          { kind: 'word', value: 'bar' },
+          { kind: 'separator', value: '\n' },
+        ],
+      },
+    ])
+  })
+
   it('should parse a function with nested arguments', () => {
     expect(parse('theme(foo, theme(bar))')).toEqual([
       {
@@ -61,6 +77,20 @@ describe('parse', () => {
           { kind: 'word', value: 'foo' },
           { kind: 'separator', value: ', ' },
           { kind: 'function', value: 'theme', nodes: [{ kind: 'word', value: 'bar' }] },
+        ],
+      },
+    ])
+  })
+
+  it('should parse a function with nested arguments separated by `/`', () => {
+    expect(parse('theme(colors.red.500/var(--opacity))')).toEqual([
+      {
+        kind: 'function',
+        value: 'theme',
+        nodes: [
+          { kind: 'word', value: 'colors.red.500' },
+          { kind: 'separator', value: '/' },
+          { kind: 'function', value: 'var', nodes: [{ kind: 'word', value: '--opacity' }] },
         ],
       },
     ])

@@ -6,7 +6,9 @@ type DataType =
   | 'color'
   | 'length'
   | 'percentage'
+  | 'ratio'
   | 'number'
+  | 'integer'
   | 'url'
   | 'position'
   | 'bg-size'
@@ -23,7 +25,9 @@ const checks: Record<DataType, (value: string) => boolean> = {
   color: isColor,
   length: isLength,
   percentage: isPercentage,
+  ratio: isFraction,
   number: isNumber,
+  integer: isPositiveInteger,
   url: isUrl,
   position: isBackgroundPosition,
   'bg-size': isBackgroundSize,
@@ -169,6 +173,14 @@ const IS_PERCENTAGE = new RegExp(`^${HAS_NUMBER.source}%$`)
 
 function isPercentage(value: string): boolean {
   return IS_PERCENTAGE.test(value) || hasMathFn(value)
+}
+
+/* -------------------------------------------------------------------------- */
+
+const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\s*/\s*${HAS_NUMBER.source}$`)
+
+function isFraction(value: string): boolean {
+  return IS_FRACTION.test(value) || hasMathFn(value)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -322,9 +334,31 @@ function isVector(value: string) {
 }
 
 /**
- * Returns true of the value can be parsed as a positive whole number.
+ * Returns true if the value can be parsed as a positive whole number.
  */
 export function isPositiveInteger(value: any) {
   let num = Number(value)
-  return Number.isInteger(num) && num >= 0
+  return Number.isInteger(num) && num >= 0 && String(num) === String(value)
+}
+
+export function isStrictPositiveInteger(value: any) {
+  let num = Number(value)
+  return Number.isInteger(num) && num > 0 && String(num) === String(value)
+}
+
+export function isValidSpacingMultiplier(value: any) {
+  return isMultipleOf(value, 0.25)
+}
+
+export function isValidOpacityValue(value: any) {
+  return isMultipleOf(value, 0.25)
+}
+
+/**
+ * Ensures a number (or numeric string) is a multiple of another number, and
+ * that it has no unnecessary leading or trailing zeros.
+ */
+function isMultipleOf(value: string | number, divisor: number) {
+  let num = Number(value)
+  return num >= 0 && num % divisor === 0 && String(num) === String(value)
 }

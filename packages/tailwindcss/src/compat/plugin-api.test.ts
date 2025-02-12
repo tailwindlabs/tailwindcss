@@ -71,6 +71,39 @@ describe('theme', async () => {
     `)
   })
 
+  test('keyframes added via addUtilities are appended to the AST', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ addUtilities, theme }) {
+            addUtilities({
+              '@keyframes enter': {
+                from: {
+                  opacity: 'var(--tw-enter-opacity, 1)',
+                },
+              },
+            })
+          }),
+        }
+      },
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@keyframes enter {
+        from {
+          opacity: var(--tw-enter-opacity, 1);
+        }
+      }
+      "
+    `)
+  })
+
   test('plugin theme can extend colors', async () => {
     let input = css`
       @theme reference {
@@ -252,20 +285,107 @@ describe('theme', async () => {
 
     expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
       ".fraction {
-        color: color-mix(in srgb, #ef4444 50%, transparent);
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .percentage {
-        color: color-mix(in srgb, #ef4444 50%, transparent);
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .variable {
-        color: color-mix(in srgb, #ef4444 calc(var(--opacity) * 100%), transparent);
+        color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
       }
-      :root {
+      :root, :host {
         --color-red-500: #ef4444;
       }
       "
     `)
   })
+
+  test('plugin theme colors can use <alpha-value>', async () => {
+    let input = css`
+      @tailwind utilities;
+      @theme {
+        /* This should not work */
+        --color-custom-css: rgba(255 0 0 / <alpha-value>);
+      }
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ addUtilities, theme }) {
+              addUtilities({
+                '.css-percentage': {
+                  color: theme('colors.custom-css / 50%'),
+                },
+                '.css-fraction': {
+                  color: theme('colors.custom-css / 0.5'),
+                },
+                '.css-variable': {
+                  color: theme('colors.custom-css / var(--opacity)'),
+                },
+                '.js-percentage': {
+                  color: theme('colors.custom-js / 50%'),
+                },
+                '.js-fraction': {
+                  color: theme('colors.custom-js / 0.5'),
+                },
+                '.js-variable': {
+                  color: theme('colors.custom-js / var(--opacity)'),
+                },
+              })
+            },
+            {
+              theme: {
+                colors: {
+                  /* This should work */
+                  'custom-js': 'rgb(255 0 0 / <alpha-value>)',
+                },
+              },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(
+      compiler.build([
+        'bg-custom',
+        'css-percentage',
+        'css-fraction',
+        'css-variable',
+        'js-percentage',
+        'js-fraction',
+        'js-variable',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ".css-fraction {
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+      }
+      .css-percentage {
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
+      }
+      .css-variable {
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+      }
+      .js-fraction {
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
+      }
+      .js-percentage {
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
+      }
+      .js-variable {
+        color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+      }
+      :root, :host {
+        --color-custom-css: rgba(255 0 0 / <alpha-value>);
+      }
+      "
+    `)
+  })
+
   test('theme value functions are resolved correctly regardless of order', async () => {
     let input = css`
       @tailwind utilities;
@@ -368,8 +488,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -426,8 +546,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -480,8 +600,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation: pulse 1s linear infinite;
-        --animation-spin: spin 1s linear infinite;
+        --animate: pulse 1s linear infinite;
+        --animate-spin: spin 1s linear infinite;
       }
     `
 
@@ -527,8 +647,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
-        --animation-simple-spin: spin 1s linear infinite;
-        --animation-simple-bounce: bounce 1s linear infinite;
+        --animate-simple-spin: spin 1s linear infinite;
+        --animate-simple-bounce: bounce 1s linear infinite;
       }
     `
 
@@ -851,8 +971,8 @@ describe('theme', async () => {
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
-        --transition-timing-function-in: ease-in;
-        --transition-timing-function-out: ease-out;
+        --ease-in: ease-in;
+        --ease-out: ease-out;
       }
     `
 
@@ -1209,6 +1329,243 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('can use escaped JS variables in theme values', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                { 'my-width': (value) => ({ width: value }) },
+                { values: theme('width') },
+              )
+            },
+            {
+              theme: {
+                extend: {
+                  width: {
+                    '1': '0.25rem',
+                    // Purposely setting to something different from the v3 default
+                    '1/2': '60%',
+                    '1.5': '0.375rem',
+                  },
+                },
+              },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1/2', 'my-width-1.5'])).toMatchInlineSnapshot(
+      `
+      ".my-width-1 {
+        width: 0.25rem;
+      }
+      .my-width-1\\.5 {
+        width: 0.375rem;
+      }
+      .my-width-1\\/2 {
+        width: 60%;
+      }
+      "
+    `,
+    )
+  })
+
+  test('can use escaped CSS variables in theme values', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+
+      @theme {
+        --width-1: 0.25rem;
+        /* Purposely setting to something different from the v3 default */
+        --width-1\/2: 60%;
+        --width-1\.5: 0.375rem;
+        --width-2_5: 0.625rem;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+              { 'my-width': (value) => ({ width: value }) },
+              { values: theme('width') },
+            )
+          }),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+      .toMatchInlineSnapshot(`
+        ".my-width-1 {
+          width: 0.25rem;
+        }
+        .my-width-1\\.5 {
+          width: 0.375rem;
+        }
+        .my-width-1\\/2 {
+          width: 60%;
+        }
+        .my-width-2\\.5 {
+          width: 0.625rem;
+        }
+        :root, :host {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
+        }
+        "
+      `)
+  })
+
+  test('can use escaped CSS variables in referenced theme namespace', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+
+      @theme {
+        --width-1: 0.25rem;
+        /* Purposely setting to something different from the v3 default */
+        --width-1\/2: 60%;
+        --width-1\.5: 0.375rem;
+        --width-2_5: 0.625rem;
+      }
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          base,
+          module: plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                { 'my-width': (value) => ({ width: value }) },
+                { values: theme('myWidth') },
+              )
+            },
+            {
+              theme: { myWidth: ({ theme }) => theme('width') },
+            },
+          ),
+        }
+      },
+    })
+
+    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+      .toMatchInlineSnapshot(`
+        ".my-width-1 {
+          width: 0.25rem;
+        }
+        .my-width-1\\.5 {
+          width: 0.375rem;
+        }
+        .my-width-1\\/2 {
+          width: 60%;
+        }
+        .my-width-2\\.5 {
+          width: 0.625rem;
+        }
+        :root, :host {
+          --width-1: 0.25rem;
+          --width-1\\/2: 60%;
+          --width-1\\.5: 0.375rem;
+          --width-2_5: 0.625rem;
+        }
+        "
+      `)
+  })
+})
+
+describe('addBase', () => {
+  test('does not create rules when imported via `@import "…" reference`', async () => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "outside";
+      @import './inside.css' reference;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        if (id === 'inside') {
+          return {
+            base,
+            module: plugin(function ({ addBase }) {
+              addBase({ inside: { color: 'red' } })
+            }),
+          }
+        }
+        return {
+          base,
+          module: plugin(function ({ addBase }) {
+            addBase({ outside: { color: 'red' } })
+          }),
+        }
+      },
+      async loadStylesheet() {
+        return {
+          content: css`
+            @plugin "inside";
+          `,
+          base: '',
+        }
+      },
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@layer base {
+        outside {
+          color: red;
+        }
+      }
+      "
+    `)
+  })
+
+  test('does not modify CSS variables', async () => {
+    let input = css`
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: plugin(function ({ addBase }) {
+          addBase({
+            ':root': {
+              '--PascalCase': '1',
+              '--camelCase': '1',
+              '--UPPERCASE': '1',
+            },
+          })
+        }),
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      "@layer base {
+        :root {
+          --PascalCase: 1;
+          --camelCase: 1;
+          --UPPERCASE: 1;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('addVariant', () => {
@@ -1400,11 +1757,7 @@ describe('addVariant', () => {
             .potato\\:flex:large-potato {
               display: flex;
             }
-          }
-        }
 
-        @media (width <= 400px) {
-          @supports (font: bold) {
             .potato\\:underline:large-potato {
               text-decoration-line: underline;
             }
@@ -1648,19 +2001,7 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .alphabet-d\\:underline[data-order="1"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-a\\:underline[data-order="2"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-c\\:underline[data-order="3"] {
-          text-decoration-line: underline;
-        }
-
-        .alphabet-b\\:underline[data-order="4"] {
+        .alphabet-d\\:underline[data-order="1"], .alphabet-a\\:underline[data-order="2"], .alphabet-c\\:underline[data-order="3"], .alphabet-b\\:underline[data-order="4"] {
           text-decoration-line: underline;
         }
       }"
@@ -1867,9 +2208,7 @@ describe('matchVariant', () => {
               order: 3;
             }
           }
-        }
 
-        @media (width >= 100px) {
           @media (width <= 300px) {
             .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-4 {
               order: 4;
@@ -1924,11 +2263,7 @@ describe('matchVariant', () => {
                 text-decoration-line: underline;
               }
             }
-          }
-        }
 
-        @media (width >= 100px) {
-          @media (width <= 200px) {
             .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:focus\\:underline:focus {
               text-decoration-line: underline;
             }
@@ -2053,9 +2388,7 @@ describe('matchVariant', () => {
               text-decoration-line: underline;
             }
           }
-        }
 
-        @media (width <= 400px) {
           @media (width >= 200px) {
             .testmax-\\[400px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
@@ -2069,9 +2402,7 @@ describe('matchVariant', () => {
               text-decoration-line: underline;
             }
           }
-        }
 
-        @media (width <= 300px) {
           @media (width >= 200px) {
             .testmax-\\[300px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
@@ -2278,6 +2609,52 @@ describe('matchVariant', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .foo-good .foo\\:underline {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('should be called with eventual modifiers', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('my-container', (value, { modifier }) => {
+                function parseValue(value: string) {
+                  const numericValue = value.match(/^(\d+\.\d+|\d+|\.\d+)\D+/)?.[1] ?? null
+                  if (numericValue === null) return null
+
+                  return parseFloat(value)
+                }
+
+                const parsed = parseValue(value)
+                return parsed !== null ? `@container ${modifier ?? ''} (min-width: ${value})` : []
+              })
+            },
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'my-container-[250px]:underline',
+      'my-container-[250px]/placement:underline',
+    ])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@container (width >= 250px) {
+        .my-container-\\[250px\\]\\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @container placement (width >= 250px) {
+        .my-container-\\[250px\\]\\/placement\\:underline {
           text-decoration-line: underline;
         }
       }"
@@ -2548,7 +2925,7 @@ describe('addUtilities()', () => {
               base,
               module: ({ addUtilities }: PluginAPI) => {
                 addUtilities({
-                  '.text-trim > *': {
+                  ':hover > *': {
                     'text-box-trim': 'both',
                     'text-box-edge': 'cap alphabetic',
                   },
@@ -2630,22 +3007,169 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
-      .toMatchInlineSnapshot(`
-        ".form-input {
+    expect(compiled.build(['form-input', 'lg:form-textarea']).trim()).toMatchInlineSnapshot(`
+      ".form-input {
+        background-color: red;
+        &::placeholder {
           background-color: red;
         }
-
-        .form-input::placeholder {
-          background-color: red;
-        }
-
+      }
+      .lg\\:form-textarea {
         @media (width >= 1024px) {
-          .lg\\:form-textarea:hover:focus {
+          &:hover:focus {
             background-color: red;
           }
-        }"
-      `)
+        }
+      }"
+    `)
+  })
+
+  test('nests complex utility names', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c': {
+                  color: 'red',
+                },
+                '.d > *': {
+                  color: 'red',
+                },
+                '.e .bar:not(.f):has(.g)': {
+                  color: 'red',
+                },
+                '.h~.i': {
+                  color: 'red',
+                },
+                '.j.j': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(
+      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']).trim(),
+    ).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .a {
+          & .b:hover .c {
+            color: red;
+          }
+        }
+        .b {
+          .a &:hover .c {
+            color: red;
+          }
+        }
+        .c {
+          .a .b:hover & {
+            color: red;
+          }
+        }
+        .d {
+          & > * {
+            color: red;
+          }
+        }
+        .e {
+          & .bar:not(.f):has(.g) {
+            color: red;
+          }
+        }
+        .g {
+          .e .bar:not(.f):has(&) {
+            color: red;
+          }
+        }
+        .h {
+          &~.i {
+            color: red;
+          }
+        }
+        .i {
+          .h~& {
+            color: red;
+          }
+        }
+        .j {
+          &.j {
+            color: red;
+          }
+          .j& {
+            color: red;
+          }
+        }
+      }"
+    `,
+    )
+  })
+
+  test('prefixes nested class names with the configured theme prefix', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+        @theme prefix(tw) {
+        }
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.a .b:hover .c.d': {
+                  color: 'red',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['tw:a', 'tw:b', 'tw:c', 'tw:d']).trim()).toMatchInlineSnapshot(
+      `
+      "@layer utilities {
+        .tw\\:a {
+          & .tw\\:b:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:b {
+          .tw\\:a &:hover .tw\\:c.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:c {
+          .tw\\:a .tw\\:b:hover &.tw\\:d {
+            color: red;
+          }
+        }
+        .tw\\:d {
+          .tw\\:a .tw\\:b:hover .tw\\:c& {
+            color: red;
+          }
+        }
+      }"
+    `,
+    )
   })
 })
 
@@ -2733,6 +3257,49 @@ describe('matchUtilities()', () => {
         ]),
       ).trim(),
     ).toEqual('')
+  })
+
+  test('custom functional utilities can start with @', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+
+        {
+          async loadModule(id, base) {
+            return {
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  { '@w': (value) => ({ width: value }) },
+                  {
+                    values: {
+                      1: '1px',
+                    },
+                  },
+                )
+              },
+            }
+          },
+        },
+      )
+
+      return compiled.build(candidates)
+    }
+
+    expect(optimizeCss(await run(['@w-1', 'hover:@w-1'])).trim()).toMatchInlineSnapshot(`
+        ".\\@w-1 {
+          width: 1px;
+        }
+
+        @media (hover: hover) {
+          .hover\\:\\@w-1:hover {
+            width: 1px;
+          }
+        }"
+      `)
   })
 
   test('custom functional utilities can return an array of rules', async () => {
@@ -2971,7 +3538,7 @@ describe('matchUtilities()', () => {
         }
 
         .scrollbar-\\[\\#08c\\]\\/50 {
-          scrollbar-color: #0088cc80;
+          scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
         }
 
         .scrollbar-\\[2px\\] {
@@ -3134,7 +3701,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[\\#fff\\]\\/50 {
-        scrollbar-color: #ffffff80;
+        scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
       }
 
       .scrollbar-\\[2px\\] {
@@ -3146,7 +3713,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
@@ -3158,7 +3725,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-black {
@@ -3166,7 +3733,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/50 {
-        scrollbar-color: #00000080;
+        scrollbar-color: oklab(0% none none / .5);
       }"
     `)
 
@@ -3232,7 +3799,7 @@ describe('matchUtilities()', () => {
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
-        scrollbar-color: color-mix(in srgb, var(--my-color) 25%, transparent);
+        scrollbar-color: color-mix(in oklab, var(--my-color) 25%, transparent);
       }
 
       .scrollbar-black {
@@ -3240,11 +3807,11 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-black\\/33 {
-        scrollbar-color: #00000054;
+        scrollbar-color: oklab(0% none none / .33);
       }
 
       .scrollbar-black\\/\\[50\\%\\] {
-        scrollbar-color: #00000080;
+        scrollbar-color: oklab(0% none none / .5);
       }
 
       .scrollbar-current {
@@ -3252,7 +3819,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-current\\/45 {
-        scrollbar-color: color-mix(in srgb, currentColor 45%, transparent);
+        scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
       }"
     `)
   })
@@ -3372,9 +3939,7 @@ describe('matchUtilities()', () => {
             --foo: 12px;
             display: flex;
           }
-        }
 
-        @media (width >= 1024px) {
           .lg\\:foo-bar {
             --foo: bar;
             display: flex;
@@ -3486,6 +4051,51 @@ describe('addComponents()', () => {
   })
 })
 
+describe('matchComponents()', () => {
+  test('is an alias for matchUtilities', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ matchComponents }: PluginAPI) => {
+              matchComponents(
+                {
+                  prose: (value) => ({ '--container-size': value }),
+                },
+                {
+                  values: {
+                    DEFAULT: 'normal',
+                    sm: 'sm',
+                    lg: 'lg',
+                  },
+                },
+              )
+            },
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
+      .toMatchInlineSnapshot(`
+      ".prose {
+        --container-size: normal;
+      }
+
+      @media (hover: hover) {
+        .hover\\:prose-lg:hover {
+          --container-size: lg;
+        }
+      }"
+    `)
+  })
+})
+
 describe('prefix()', () => {
   test('is an identity function', async () => {
     let fn = vi.fn()
@@ -3506,5 +4116,80 @@ describe('prefix()', () => {
     )
 
     expect(fn).toHaveBeenCalledWith('btn')
+  })
+})
+
+describe('config()', () => {
+  test('can return the resolved config when passed no arguments', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config())
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        theme: expect.objectContaining({
+          spacing: expect.any(Object),
+        }),
+      }),
+    )
+  })
+
+  test('can return part of the config', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config('theme'))
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        spacing: expect.any(Object),
+      }),
+    )
+  })
+
+  test('falls back to default value if requested path does not exist', async () => {
+    let fn = vi.fn()
+    await compile(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ config }: PluginAPI) => {
+              fn(config('somekey', 'defaultvalue'))
+            },
+          }
+        },
+      },
+    )
+
+    expect(fn).toHaveBeenCalledWith('defaultvalue')
   })
 })

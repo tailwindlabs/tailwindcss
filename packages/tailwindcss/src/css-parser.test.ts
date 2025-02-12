@@ -329,6 +329,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should parse a custom property with an empty value', () => {
+        expect(parse('--foo:;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
+      it('should parse a custom property with a space value', () => {
+        expect(parse('--foo: ;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
       it('should parse a custom property with a block including nested "css"', () => {
         expect(
           parse(css`
@@ -505,6 +527,59 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    it('should parse url(…) without quotes and special characters such as `;`, `{}`, and `[]`', () => {
+      expect(
+        parse(css`
+          .foo {
+            /* ';' should be valid inside the 'url(…)' function */
+            background: url(data:image/png;base64,abc==);
+
+            /* '{', '}', '[' and ']' should be valid inside the 'url(…)' function */
+            /* '{' and '}' should not start a new block (nesting) */
+            background: url(https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]);
+
+            /* '{' and '}' don't need to be balanced */
+            background: url(https://example-image-search.org?curlies=}});
+
+            /* '(' and ')' are not valid, unless we are in a string with quotes */
+            background: url('https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]&format=(png|jpg)');
+          }
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(data:image/png;base64,abc==)',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(https://example-image-search.org?q={query;limit=5}&ids=[1,2,3])',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value: 'url(https://example-image-search.org?curlies=}})',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              property: 'background',
+              value:
+                "url('https://example-image-search.org?q={query;limit=5}&ids=[1,2,3]&format=(png|jpg)')",
+              important: false,
+            },
+          ],
+        },
+      ])
+    })
   })
 
   describe('selectors', () => {
@@ -630,7 +705,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(css`
           @charset "UTF-8";
         `),
-      ).toEqual([{ kind: 'rule', selector: '@charset "UTF-8"', nodes: [] }])
+      ).toEqual([{ kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] }])
     })
 
     it('should parse an at-rule without a block or semicolon', () => {
@@ -638,7 +713,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(`
           @tailwind utilities
         `),
-      ).toEqual([{ kind: 'rule', selector: '@tailwind utilities', nodes: [] }])
+      ).toEqual([{ kind: 'at-rule', name: '@tailwind', params: 'utilities', nodes: [] }])
     })
 
     it("should parse an at-rule without a block or semicolon when it's the last rule in a block", () => {
@@ -650,9 +725,10 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'rule',
-          selector: '@layer utilities',
-          nodes: [{ kind: 'rule', selector: '@tailwind utilities', nodes: [] }],
+          kind: 'at-rule',
+          name: '@layer',
+          params: 'utilities',
+          nodes: [{ kind: 'at-rule', name: '@tailwind', params: 'utilities', nodes: [] }],
         },
       ])
     })
@@ -670,14 +746,17 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'rule',
-          selector: '@layer utilities',
-          nodes: [{ kind: 'rule', selector: '@charset "UTF-8"', nodes: [] }],
+          kind: 'at-rule',
+          name: '@layer',
+          params: 'utilities',
+          nodes: [{ kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] }],
         },
         {
           kind: 'rule',
           selector: '.foo',
-          nodes: [{ kind: 'rule', selector: '@apply font-bold hover:text-red-500', nodes: [] }],
+          nodes: [
+            { kind: 'at-rule', name: '@apply', params: 'font-bold hover:text-red-500', nodes: [] },
+          ],
         },
       ])
     })
@@ -689,8 +768,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           @tailwind base;
         `),
       ).toEqual([
-        { kind: 'rule', selector: '@tailwind', nodes: [] },
-        { kind: 'rule', selector: '@tailwind base', nodes: [] },
+        { kind: 'at-rule', name: '@tailwind', params: '', nodes: [] },
+        { kind: 'at-rule', name: '@tailwind', params: 'base', nodes: [] },
       ])
     })
 
@@ -711,8 +790,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'rule',
-          selector: '@media (width >= 600px)',
+          kind: 'at-rule',
+          name: '@media',
+          params: '(width >= 600px)',
           nodes: [
             {
               kind: 'rule',
@@ -720,15 +800,17 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               nodes: [
                 { kind: 'declaration', property: 'color', value: 'red', important: false },
                 {
-                  kind: 'rule',
-                  selector: '@media (width >= 800px)',
+                  kind: 'at-rule',
+                  name: '@media',
+                  params: '(width >= 800px)',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'blue', important: false },
                   ],
                 },
                 {
-                  kind: 'rule',
-                  selector: '@media (width >= 1000px)',
+                  kind: 'at-rule',
+                  name: '@media',
+                  params: '(width >= 1000px)',
                   nodes: [
                     { kind: 'declaration', property: 'color', value: 'green', important: false },
                   ],
@@ -756,10 +838,11 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           kind: 'rule',
           nodes: [
             {
-              kind: 'rule',
+              kind: 'at-rule',
+              name: '@apply',
+              params:
+                'hover:text-red-100 sm:hover:text-red-200 md:hover:text-red-300 lg:hover:text-red-400 xl:hover:text-red-500',
               nodes: [],
-              selector:
-                '@apply hover:text-red-100 sm:hover:text-red-200 md:hover:text-red-300 lg:hover:text-red-400 xl:hover:text-red-500',
             },
           ],
           selector: '.foo',
@@ -923,8 +1006,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toEqual([
         {
-          kind: 'rule',
-          selector: '@custom \\{',
+          kind: 'at-rule',
+          name: '@custom',
+          params: '\\{',
           nodes: [{ kind: 'declaration', property: 'foo', value: 'bar', important: false }],
         },
       ])
@@ -940,8 +1024,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           nodes: [
             { kind: 'declaration', property: 'color', value: 'red', important: false },
             {
-              kind: 'rule',
-              selector: '@media(width>=600px)',
+              kind: 'at-rule',
+              name: '@media',
+              params: '(width>=600px)',
               nodes: [
                 {
                   kind: 'rule',
@@ -1033,6 +1118,40 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!;"]`)
+    })
+
+    it('should error when incomplete custom properties are used', () => {
+      expect(() => parse('--foo')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when incomplete custom properties are used inside rules', () => {
+      expect(() => parse('.foo { --bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when a declaration is incomplete', () => {
+      expect(() => parse('.foo { bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid declaration: \`bar\`]`,
+      )
+    })
+
+    it('should error when a semicolon exists after an at-rule with a body', () => {
+      expect(() => parse('@plugin "foo" {} ;')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected semicolon]`,
+      )
+    })
+
+    it('should error when consecutive semicolons exist', () => {
+      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected semicolon]`)
+    })
+
+    it('should error when consecutive semicolons exist after a declaration', () => {
+      expect(() => parse('.foo { color: red;;; }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected semicolon]`,
+      )
     })
   })
 })

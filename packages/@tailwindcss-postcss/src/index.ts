@@ -1,31 +1,44 @@
-import { compile } from '@tailwindcss/node'
+import QuickLRU from '@alloc/quick-lru'
+import { compileAst, env, Features, Instrumentation } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import fs from 'fs'
-import { Features, transform } from 'lightningcss'
-import path from 'path'
+import { Features as LightningCssFeatures, transform } from 'lightningcss'
+import fs from 'node:fs'
+import path, { relative } from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import { toCss, type AstNode } from '../../tailwindcss/src/ast'
+import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
-/**
- * A Map that can generate default values for keys that don't exist.
- * Generated default values are added to the map to avoid recomputation.
- */
-class DefaultMap<T = string, V = any> extends Map<T, V> {
-  constructor(private factory: (key: T, self: DefaultMap<T, V>) => V) {
-    super()
+const DEBUG = env.DEBUG
+
+interface CacheEntry {
+  mtimes: Map<string, number>
+  compiler: null | Awaited<ReturnType<typeof compileAst>>
+  scanner: null | Scanner
+  tailwindCssAst: AstNode[]
+  cachedPostCssAst: postcss.Root
+  optimizedPostCssAst: postcss.Root
+  fullRebuildPaths: string[]
+}
+const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
+
+function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+  if (cache.has(key)) return cache.get(key)!
+  let entry = {
+    mtimes: new Map<string, number>(),
+    compiler: null,
+    scanner: null,
+
+    tailwindCssAst: [],
+    cachedPostCssAst: postcss.root(),
+    optimizedPostCssAst: postcss.root(),
+
+    fullRebuildPaths: [] as string[],
   }
-
-  get(key: T): V {
-    let value = super.get(key)
-
-    if (value === undefined) {
-      value = this.factory(key, this)
-      this.set(key, value)
-    }
-
-    return value
-  }
+  cache.set(key, entry)
+  return entry
 }
 
 export type PluginOptions = {
@@ -40,57 +53,95 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
-  let cache = new DefaultMap(() => {
-    return {
-      mtimes: new Map<string, number>(),
-      compiler: null as null | Awaited<ReturnType<typeof compile>>,
-      css: '',
-      optimizedCss: '',
-      fullRebuildPaths: [] as string[],
-    }
-  })
-
   return {
     postcssPlugin: '@tailwindcss/postcss',
     plugins: [
-      // We need to handle the case where `postcss-import` might have run before the Tailwind CSS
-      // plugin is run. In this case, we need to manually fix relative paths before processing it
-      // in core.
+      // We need to handle the case where `postcss-import` might have run before
+      // the Tailwind CSS plugin is run. In this case, we need to manually fix
+      // relative paths before processing it in core.
       fixRelativePathsPlugin(),
 
       {
         postcssPlugin: 'tailwindcss',
-        async OnceExit(root, { result }) {
+        async Once(root, { result }) {
+          using I = new Instrumentation()
+
           let inputFile = result.opts.from ?? ''
-          let context = cache.get(inputFile)
+
+          DEBUG && I.start(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
+
+          // Bail out early if this is guaranteed to be a non-Tailwind CSS file.
+          {
+            DEBUG && I.start('Quick bail check')
+            let canBail = true
+            root.walkAtRules((node) => {
+              if (
+                node.name === 'import' ||
+                node.name === 'reference' ||
+                node.name === 'theme' ||
+                node.name === 'variant' ||
+                node.name === 'config' ||
+                node.name === 'plugin' ||
+                node.name === 'apply'
+              ) {
+                canBail = false
+                return false
+              }
+            })
+            if (canBail) return
+            DEBUG && I.end('Quick bail check')
+          }
+
+          let context = getContextFromCache(inputFile, opts)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           async function createCompiler() {
-            clearRequireCache(context.fullRebuildPaths)
+            DEBUG && I.start('Setup compiler')
+            if (context.fullRebuildPaths.length > 0 && !isInitialBuild) {
+              clearRequireCache(context.fullRebuildPaths)
+            }
 
             context.fullRebuildPaths = []
 
-            return compile(root.toString(), {
+            DEBUG && I.start('PostCSS AST -> Tailwind CSS AST')
+            let ast = postCssAstToCssAst(root)
+            DEBUG && I.end('PostCSS AST -> Tailwind CSS AST')
+
+            DEBUG && I.start('Create compiler')
+            let compiler = await compileAst(ast, {
               base: inputBasePath,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
             })
+            DEBUG && I.end('Create compiler')
+
+            DEBUG && I.end('Setup compiler')
+            return compiler
           }
+
+          // Whether this is the first build or not, if it is, then we can
+          // optimize the build by not creating the compiler until we need it.
+          let isInitialBuild = context.compiler === null
 
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
           context.compiler ??= await createCompiler()
 
+          if (context.compiler.features === Features.None) {
+            return
+          }
+
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
           // Track file modification times to CSS files
+          DEBUG && I.start('Register full rebuild paths')
           {
             for (let file of context.fullRebuildPaths) {
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file,
+                file: path.resolve(file),
                 parent: result.opts.from,
               })
             }
@@ -117,54 +168,134 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               context.mtimes.set(file, changedTime)
             }
           }
+          DEBUG && I.end('Register full rebuild paths')
 
-          let css = ''
-
-          // Look for candidates used to generate the CSS
-          let scanner = new Scanner({
-            detectSources: { base },
-            sources: context.compiler.globs,
-          })
-
-          let candidates = scanner.scan()
-
-          // Add all found files as direct dependencies
-          for (let file of scanner.files) {
-            result.messages.push({
-              type: 'dependency',
-              plugin: '@tailwindcss/postcss',
-              file,
-              parent: result.opts.from,
-            })
-          }
-
-          // Register dependencies so changes in `base` cause a rebuild while
-          // giving tools like Vite or Parcel a glob that can be used to limit
-          // the files that cause a rebuild to only those that match it.
-          for (let { base, pattern } of scanner.globs) {
-            result.messages.push({
-              type: 'dir-dependency',
-              plugin: '@tailwindcss/postcss',
-              dir: base,
-              glob: pattern,
-              parent: result.opts.from,
-            })
-          }
-
-          if (rebuildStrategy === 'full') {
+          if (
+            rebuildStrategy === 'full' &&
+            // We can re-use the compiler if it was created during the
+            // initial build. If it wasn't, we need to create a new one.
+            !isInitialBuild
+          ) {
             context.compiler = await createCompiler()
           }
-          css = context.compiler.build(candidates)
 
-          // Replace CSS
-          if (css !== context.css && optimize) {
-            context.optimizedCss = optimizeCss(css, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
+          if (context.scanner === null || rebuildStrategy === 'full') {
+            DEBUG && I.start('Setup scanner')
+            let sources = (() => {
+              // Disable auto source detection
+              if (context.compiler.root === 'none') {
+                return []
+              }
+
+              // No root specified, use the base directory
+              if (context.compiler.root === null) {
+                return [{ base, pattern: '**/*' }]
+              }
+
+              // Use the specified root
+              return [context.compiler.root]
+            })().concat(context.compiler.globs)
+
+            // Look for candidates used to generate the CSS
+            context.scanner = new Scanner({ sources })
+            DEBUG && I.end('Setup scanner')
           }
-          context.css = css
+
+          DEBUG && I.start('Scan for candidates')
+          let candidates =
+            context.compiler.features & Features.Utilities ? context.scanner.scan() : []
+          DEBUG && I.end('Scan for candidates')
+
+          if (context.compiler.features & Features.Utilities) {
+            DEBUG && I.start('Register dependency messages')
+            // Add all found files as direct dependencies
+            for (let file of context.scanner.files) {
+              result.messages.push({
+                type: 'dependency',
+                plugin: '@tailwindcss/postcss',
+                file: path.resolve(file),
+                parent: result.opts.from,
+              })
+            }
+
+            // Register dependencies so changes in `base` cause a rebuild while
+            // giving tools like Vite or Parcel a glob that can be used to limit
+            // the files that cause a rebuild to only those that match it.
+            for (let { base: globBase, pattern } of context.scanner.globs) {
+              // Avoid adding a dependency on the base directory itself, since it
+              // causes Next.js to start an endless recursion if the `distDir` is
+              // configured to anything other than the default `.next` dir.
+              if (pattern === '*' && base === globBase) {
+                continue
+              }
+
+              if (pattern === '') {
+                result.messages.push({
+                  type: 'dependency',
+                  plugin: '@tailwindcss/postcss',
+                  file: path.resolve(globBase),
+                  parent: result.opts.from,
+                })
+              } else {
+                result.messages.push({
+                  type: 'dir-dependency',
+                  plugin: '@tailwindcss/postcss',
+                  dir: path.resolve(globBase),
+                  glob: pattern,
+                  parent: result.opts.from,
+                })
+              }
+            }
+            DEBUG && I.end('Register dependency messages')
+          }
+
+          DEBUG && I.start('Build utilities')
+          let tailwindCssAst = context.compiler.build(candidates)
+          DEBUG && I.end('Build utilities')
+
+          if (context.tailwindCssAst !== tailwindCssAst) {
+            if (optimize) {
+              DEBUG && I.start('Optimization')
+
+              DEBUG && I.start('AST -> CSS')
+              let css = toCss(tailwindCssAst)
+              DEBUG && I.end('AST -> CSS')
+
+              DEBUG && I.start('Lightning CSS')
+              let ast = optimizeCss(css, {
+                minify: typeof optimize === 'object' ? optimize.minify : true,
+              })
+              DEBUG && I.end('Lightning CSS')
+
+              DEBUG && I.start('CSS -> PostCSS AST')
+              context.optimizedPostCssAst = postcss.parse(ast, result.opts)
+              DEBUG && I.end('CSS -> PostCSS AST')
+
+              DEBUG && I.end('Optimization')
+            } else {
+              // Convert our AST to a PostCSS AST
+              DEBUG && I.start('Transform Tailwind CSS AST into PostCSS AST')
+              context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
+              DEBUG && I.end('Transform Tailwind CSS AST into PostCSS AST')
+            }
+          }
+
+          context.tailwindCssAst = tailwindCssAst
+
+          DEBUG && I.start('Update PostCSS AST')
           root.removeAll()
-          root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+          root.append(
+            optimize
+              ? context.optimizedPostCssAst.clone().nodes
+              : context.cachedPostCssAst.clone().nodes,
+          )
+
+          // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
+          // as the default instead of 4.
+          root.raws.indent = '  '
+          DEBUG && I.end('Update PostCSS AST')
+
+          DEBUG && I.end(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
         },
       },
     ],
@@ -175,24 +306,36 @@ function optimizeCss(
   input: string,
   { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
 ) {
-  return transform({
-    filename: file,
-    code: Buffer.from(input),
-    minify,
-    sourceMap: false,
-    drafts: {
-      customMedia: true,
-    },
-    nonStandard: {
-      deepSelectorCombinator: true,
-    },
-    include: Features.Nesting,
-    exclude: Features.LogicalProperties,
-    targets: {
-      safari: (16 << 16) | (4 << 8),
-    },
-    errorRecovery: true,
-  }).code.toString()
+  function optimize(code: Buffer | Uint8Array) {
+    return transform({
+      filename: file,
+      code,
+      minify,
+      sourceMap: false,
+      drafts: {
+        customMedia: true,
+      },
+      nonStandard: {
+        deepSelectorCombinator: true,
+      },
+      include: LightningCssFeatures.Nesting,
+      exclude:
+        LightningCssFeatures.LogicalProperties |
+        LightningCssFeatures.DirSelector |
+        LightningCssFeatures.LightDark,
+      targets: {
+        safari: (16 << 16) | (4 << 8),
+        ios_saf: (16 << 16) | (4 << 8),
+        firefox: 128 << 16,
+        chrome: 111 << 16,
+      },
+      errorRecovery: true,
+    }).code
+  }
+
+  // Running Lightning CSS twice to ensure that adjacent rules are merged after
+  // nesting is applied. This creates a more optimized output.
+  return optimize(optimize(Buffer.from(input))).toString()
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>

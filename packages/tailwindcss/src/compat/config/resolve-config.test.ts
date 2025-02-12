@@ -6,7 +6,7 @@ import { resolveConfig } from './resolve-config'
 test('top level theme keys are replaced', () => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -43,7 +43,7 @@ test('top level theme keys are replaced', () => {
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         blue: 'blue',
@@ -53,12 +53,13 @@ test('top level theme keys are replaced', () => {
       },
     },
   })
+  expect(replacedThemeKeys).toEqual(new Set(['colors', 'fontFamily']))
 })
 
 test('theme can be extended', () => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -87,7 +88,7 @@ test('theme can be extended', () => {
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -98,6 +99,7 @@ test('theme can be extended', () => {
       },
     },
   })
+  expect(replacedThemeKeys).toEqual(new Set(['colors', 'fontFamily']))
 })
 
 test('theme keys can reference other theme keys using the theme function regardless of order', ({
@@ -105,7 +107,7 @@ test('theme keys can reference other theme keys using the theme function regardl
 }) => {
   let design = buildDesignSystem(new Theme())
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -146,7 +148,7 @@ test('theme keys can reference other theme keys using the theme function regardl
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -170,6 +172,7 @@ test('theme keys can reference other theme keys using the theme function regardl
       },
     },
   })
+  expect(replacedThemeKeys).toEqual(new Set(['colors', 'placeholderColor']))
 })
 
 test('theme keys can read from the CSS theme', () => {
@@ -178,7 +181,7 @@ test('theme keys can read from the CSS theme', () => {
 
   let design = buildDesignSystem(theme)
 
-  let config = resolveConfig(design, [
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
     {
       config: {
         theme: {
@@ -198,13 +201,21 @@ test('theme keys can read from the CSS theme', () => {
             // Reads from the --color-* namespace directly
             secondary: theme('color.green'),
           }),
+          caretColor: ({ colors }) => ({
+            // Gives access to the colors object directly
+            primary: colors.green,
+          }),
+          transitionColor: (theme: any) => ({
+            // The parameter object is also the theme function
+            ...theme('colors'),
+          }),
         },
       },
       base: '/root',
     },
   ])
 
-  expect(config).toMatchObject({
+  expect(resolvedConfig).toMatchObject({
     theme: {
       colors: {
         red: 'red',
@@ -218,6 +229,73 @@ test('theme keys can read from the CSS theme', () => {
         primary: 'green',
         secondary: 'green',
       },
+      caretColor: {
+        primary: {
+          '50': 'oklch(0.982 0.018 155.826)',
+          '100': 'oklch(0.962 0.044 156.743)',
+          '200': 'oklch(0.925 0.084 155.995)',
+          '300': 'oklch(0.871 0.15 154.449)',
+          '400': 'oklch(0.792 0.209 151.711)',
+          '500': 'oklch(0.723 0.219 149.579)',
+          '600': 'oklch(0.627 0.194 149.214)',
+          '700': 'oklch(0.527 0.154 150.069)',
+          '800': 'oklch(0.448 0.119 151.328)',
+          '900': 'oklch(0.393 0.095 152.535)',
+          '950': 'oklch(0.266 0.065 152.934)',
+        },
+      },
+      transitionColor: {
+        red: 'red',
+        green: 'green',
+      },
     },
   })
+  expect(replacedThemeKeys).toEqual(
+    new Set(['colors', 'accentColor', 'placeholderColor', 'caretColor', 'transitionColor']),
+  )
+})
+
+test('handles null as theme values', () => {
+  let theme = new Theme()
+  theme.add('--color-red-50', 'red')
+  theme.add('--color-red-100', 'red')
+
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: ({ theme }) => ({
+            // Reads from the --color-* namespace
+            ...theme('color'),
+          }),
+        },
+      },
+      base: '/root',
+      reference: false,
+    },
+    {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              red: null,
+            },
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+    },
+  ])
+
+  expect(resolvedConfig).toMatchObject({
+    theme: {
+      colors: {
+        red: null,
+      },
+    },
+  })
+  expect(replacedThemeKeys).toEqual(new Set(['colors']))
 })

@@ -40,7 +40,13 @@ export function relative(
 /**
  * Wrap `text` into multiple lines based on the `width`.
  */
-export function wordWrap(text: string, width: number) {
+export function wordWrap(text: string, width: number): string[] {
+  // Handle text with newlines by maintaining the newlines, then splitting
+  // each line separately.
+  if (text.includes('\n')) {
+    return text.split('\n').flatMap((line) => wordWrap(line, width))
+  }
+
   let words = text.split(' ')
   let lines = []
 
@@ -83,32 +89,36 @@ export function indent(value: string, offset = 0) {
   return `${' '.repeat(offset + UI.indent)}${value}`
 }
 
-export function success(message: string, print = eprintln) {
-  wordWrap(message, process.stderr.columns - 3).map((line) => {
-    return print(`${pc.green('\u2502')} ${line}`)
+function log(message: string, { art = pc.gray('\u2502'), prefix = '', print = eprintln }) {
+  let prefixLength = prefix.length
+  let padding = ' '
+  let paddingLength = padding.length
+  let artLength = stripVTControlCharacters(art).length
+  let availableWidth = process.stderr.columns
+  let totalWidth = availableWidth - prefixLength - paddingLength * 2 - artLength
+
+  wordWrap(message, totalWidth).map((line, idx) => {
+    return print(
+      `${art}${padding}${idx === 0 ? prefix : ' '.repeat(prefixLength)}${line}${padding}`,
+    )
   })
   print()
 }
 
-export function info(message: string, print = eprintln) {
-  wordWrap(message, process.stderr.columns - 3).map((line) => {
-    return print(`${pc.blue('\u2502')} ${line}`)
-  })
-  print()
+export function success(message: string, { prefix = '', print = eprintln } = {}) {
+  log(message, { art: pc.green('\u2502'), prefix, print })
 }
 
-export function error(message: string, print = eprintln) {
-  wordWrap(message, process.stderr.columns - 3).map((line) => {
-    return print(`${pc.red('\u2502')} ${line}`)
-  })
-  print()
+export function info(message: string, { prefix = '', print = eprintln } = {}) {
+  log(message, { art: pc.blue('\u2502'), prefix, print })
 }
 
-export function warn(message: string, print = eprintln) {
-  wordWrap(message, process.stderr.columns - 3).map((line) => {
-    return print(`${pc.yellow('\u2502')} ${line}`)
-  })
-  print()
+export function error(message: string, { prefix = '', print = eprintln } = {}) {
+  log(message, { art: pc.red('\u2502'), prefix, print })
+}
+
+export function warn(message: string, { prefix = '', print = eprintln } = {}) {
+  log(message, { art: pc.yellow('\u2502'), prefix, print })
 }
 
 // Rust inspired functions to print to the console:

@@ -1,14 +1,47 @@
-import { escape } from './utils/escape'
+import { type AtRule } from './ast'
+import { escape, unescape } from './utils/escape'
 
 export const enum ThemeOptions {
   NONE = 0,
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
+
+  STATIC = 1 << 3,
+  USED = 1 << 4,
+}
+
+// In the future we may want to replace this with just a `Set` of known theme
+// keys and let the computer sort out which keys should ignored which other keys
+// based on overlapping prefixes.
+const ignoredThemeKeyMap = new Map([
+  ['--font', ['--font-weight', '--font-size']],
+  ['--inset', ['--inset-shadow', '--inset-ring']],
+  [
+    '--text',
+    [
+      '--text-color',
+      '--text-underline-offset',
+      '--text-indent',
+      '--text-decoration-thickness',
+      '--text-decoration-color',
+    ],
+  ],
+])
+
+function isIgnoredThemeKey(themeKey: ThemeKey, namespace: ThemeKey) {
+  return (ignoredThemeKeyMap.get(namespace) ?? []).some(
+    (ignoredThemeKey) => themeKey === ignoredThemeKey || themeKey.startsWith(`${ignoredThemeKey}-`),
+  )
 }
 
 export class Theme {
-  constructor(private values = new Map<string, { value: string; options: number }>()) {}
+  public prefix: string | null = null
+
+  constructor(
+    private values = new Map<string, { value: string; options: ThemeOptions }>(),
+    private keyframes = new Set<AtRule>([]),
+  ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
     if (key.endsWith('-*')) {
@@ -18,7 +51,11 @@ export class Theme {
       if (key === '--*') {
         this.values.clear()
       } else {
-        this.#clearNamespace(key.slice(0, -2))
+        this.clearNamespace(
+          key.slice(0, -2),
+          // `--${key}-*: initial;` should clear _all_ theme values
+          ThemeOptions.NONE,
+        )
       }
     }
 
@@ -34,20 +71,22 @@ export class Theme {
     }
   }
 
-  keysInNamespaces(themeKeys: ThemeKey[]): string[] {
+  keysInNamespaces(themeKeys: Iterable<ThemeKey>): string[] {
     let keys: string[] = []
 
-    for (let prefix of themeKeys) {
-      let namespace = `${prefix}-`
+    for (let namespace of themeKeys) {
+      let prefix = `${namespace}-`
 
       for (let key of this.values.keys()) {
-        if (key.startsWith(namespace)) {
-          if (key.indexOf('--', 2) !== -1) {
-            continue
-          }
+        if (!key.startsWith(prefix)) continue
 
-          keys.push(key.slice(namespace.length))
+        if (key.indexOf('--', 2) !== -1) continue
+
+        if (isIgnoredThemeKey(key as ThemeKey, namespace)) {
+          continue
         }
+
+        keys.push(key.slice(prefix.length))
       }
     }
 
@@ -70,29 +109,68 @@ export class Theme {
   }
 
   getOptions(key: string) {
+    key = unescape(this.#unprefixKey(key))
     return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
   entries() {
-    return this.values.entries()
+    if (!this.prefix) return this.values.entries()
+
+    return Array.from(this.values, (entry) => {
+      entry[0] = this.#prefixKey(entry[0])
+      return entry
+    })
   }
 
-  #clearNamespace(namespace: string) {
-    for (let key of this.values.keys()) {
+  #prefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${this.prefix}-${key.slice(2)}`
+  }
+
+  #unprefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${key.slice(3 + this.prefix.length)}`
+  }
+
+  clearNamespace(namespace: string, clearOptions: ThemeOptions) {
+    let ignored = ignoredThemeKeyMap.get(namespace) ?? []
+
+    outer: for (let key of this.values.keys()) {
       if (key.startsWith(namespace)) {
+        if (clearOptions !== ThemeOptions.NONE) {
+          let options = this.getOptions(key)
+          if ((options & clearOptions) !== clearOptions) {
+            continue
+          }
+        }
+        for (let ignoredNamespace of ignored) {
+          if (key.startsWith(ignoredNamespace)) continue outer
+        }
         this.values.delete(key)
       }
     }
   }
 
   #resolveKey(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
-    for (let key of themeKeys) {
+    for (let namespace of themeKeys) {
       let themeKey =
-        candidateValue !== null ? escape(`${key}-${candidateValue.replaceAll('.', '_')}`) : key
+        candidateValue !== null ? (`${namespace}-${candidateValue}` as ThemeKey) : namespace
 
-      if (this.values.has(themeKey)) {
-        return themeKey
+      if (!this.values.has(themeKey)) {
+        // If the exact theme key is not found, we might be trying to resolve a key containing a dot
+        // that was registered with an underscore instead:
+        if (candidateValue !== null && candidateValue.includes('.')) {
+          themeKey = `${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey
+
+          if (!this.values.has(themeKey)) continue
+        } else {
+          continue
+        }
       }
+
+      if (isIgnoredThemeKey(themeKey, namespace)) continue
+
+      return themeKey
     }
 
     return null
@@ -103,7 +181,14 @@ export class Theme {
       return null
     }
 
-    return `var(${themeKey}, ${this.values.get(themeKey)?.value})`
+    return `var(${escape(this.#prefixKey(themeKey))})`
+  }
+
+  markUsedVariable(themeKey: string) {
+    let key = unescape(this.#unprefixKey(themeKey))
+    let value = this.values.get(key)
+    if (!value) return
+    value.options |= ThemeOptions.USED
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
@@ -176,6 +261,14 @@ export class Theme {
     }
 
     return values
+  }
+
+  addKeyframes(value: AtRule): void {
+    this.keyframes.add(value)
+  }
+
+  getKeyframes() {
+    return Array.from(this.keyframes)
   }
 }
 

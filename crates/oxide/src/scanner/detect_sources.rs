@@ -27,11 +27,11 @@ impl DetectSources {
         Self { base }
     }
 
-    pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>) {
+    pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
         let (files, dirs) = self.resolve_files();
         let globs = self.resolve_globs(&dirs);
 
-        (files, globs)
+        (files, globs, dirs)
     }
 
     fn resolve_files(&self) -> (Vec<PathBuf>, Vec<PathBuf>) {
@@ -95,13 +95,8 @@ impl DetectSources {
             )
             .into_iter();
 
-        loop {
-            // We are only interested in valid entries
-            let entry = match it.next() {
-                Some(Ok(entry)) => entry,
-                _ => break,
-            };
-
+        // We are only interested in valid entries
+        while let Some(Ok(entry)) = it.next() {
             // Ignore known directories that we don't want to traverse into.
             if entry.file_type().is_dir() && entry.file_name() == ".git" {
                 it.skip_current_dir();
@@ -117,13 +112,16 @@ impl DetectSources {
                     continue;
                 }
 
-                // If we are in a directory where the parent is a forced static directory, then this
-                // will become a forced static directory as well.
-                if forced_static_directories.contains(&entry.path().parent().unwrap().to_path_buf())
-                {
-                    forced_static_directories.push(entry.path().to_path_buf());
-                    root_directories.insert(entry.path().to_path_buf());
-                    continue;
+                // Although normally very unlikely, if running inside a dockerfile
+                // the current directory might be "/" with no parent
+                if let Some(parent) = entry.path().parent() {
+                    // If we are in a directory where the parent is a forced static directory, then this
+                    // will become a forced static directory as well.
+                    if forced_static_directories.contains(&parent.to_path_buf()) {
+                        forced_static_directories.push(entry.path().to_path_buf());
+                        root_directories.insert(entry.path().to_path_buf());
+                        continue;
+                    }
                 }
 
                 // If we are in a directory, and the directory is git ignored, then we don't have to

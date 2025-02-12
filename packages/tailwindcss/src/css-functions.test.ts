@@ -7,7 +7,183 @@ import { compileCss, optimizeCss } from './test-utils/run'
 
 const css = String.raw
 
-describe('theme function', () => {
+describe('--alpha(…)', () => {
+  test('--alpha(…)', async () => {
+    expect(
+      await compileCss(css`
+        .foo {
+          margin: --alpha(red / 50%);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        margin: oklab(62.7955% .22486 .12584 / .5);
+      }"
+    `)
+  })
+
+  test('--alpha(…) errors when no arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(var(--my-color) / 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors when alpha value is missing', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(red / 50%)\`]`,
+    )
+  })
+
+  test('--alpha(…) errors multiple arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --alpha(red / 50%, blue);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --alpha(…) function only accepts one argument, e.g.: \`--alpha(red / 50%)\`]`,
+    )
+  })
+})
+
+describe('--spacing(…)', () => {
+  test('--spacing(…)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: calc(var(--spacing) * 4);
+      }"
+    `)
+  })
+
+  test('--spacing(…) with inline `@theme` value', async () => {
+    expect(
+      await compileCss(css`
+        @theme inline {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        margin: 1rem;
+      }"
+    `)
+  })
+
+  test('--spacing(…) relies on `--spacing` to be defined', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function requires that the \`--spacing\` theme variable exists, but it was not found.]`,
+    )
+  })
+
+  test('--spacing(…) requires a single value', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+
+        .foo {
+          margin: --spacing();
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function requires an argument, but received none.]`,
+    )
+  })
+
+  test('--spacing(…) does not have multiple arguments', async () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          margin: --spacing(4, 5, 6);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --spacing(…) function only accepts a single argument, but received 3.]`,
+    )
+  })
+})
+
+describe('--theme(…)', () => {
+  test('--theme(--color-red-500)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: red;
+      }"
+    `)
+  })
+
+  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(colors.red.500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
+  })
+})
+
+describe('theme(…)', () => {
   describe('in declaration values', () => {
     describe('without fallback values', () => {
       test('theme(colors.red.500)', async () => {
@@ -21,7 +197,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -42,7 +218,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -63,7 +239,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -84,7 +260,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -105,7 +281,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -126,12 +302,33 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
           .red {
             color: red;
+          }"
+        `)
+      })
+
+      test('theme(colors.red.500/75%)', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              color: theme(colors.red.500/75%);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root, :host {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -147,12 +344,12 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
           .red {
-            color: #ff0000bf;
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -168,12 +365,55 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
           .red {
-            color: #ff0000bf;
+            color: oklab(62.7955% .22486 .12584 / .75);
+          }"
+        `)
+      })
+
+      test('theme(colors.red.500/var(--opacity))', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              color: theme(colors.red.500/var(--opacity));
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root, :host {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: color-mix(in oklab, red var(--opacity), transparent);
+          }"
+        `)
+      })
+
+      test('theme(colors.red.500/var(--opacity,50%))', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --color-red-500: #f00;
+            }
+            .red {
+              /* prettier-ignore */
+              color: theme(colors.red.500/var(--opacity,50%));
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ":root, :host {
+            --color-red-500: red;
+          }
+
+          .red {
+            color: color-mix(in oklab, red var(--opacity, 50%), transparent);
           }"
         `)
       })
@@ -189,7 +429,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-12: 3rem;
           }
 
@@ -210,7 +450,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-2_5: .625rem;
           }
 
@@ -231,7 +471,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --spacing-2_5: .625rem;
           }
 
@@ -252,7 +492,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --radius-lg: .5rem;
           }
 
@@ -274,22 +514,22 @@ describe('theme function', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-          ":root {
-            --blur: 8px;
-          }
+            ":root, :host {
+              --blur: 8px;
+            }
 
-          .default-blur {
-            filter: blur(8px);
-          }"
-        `)
+            .default-blur {
+              filter: blur(8px);
+            }"
+          `)
         })
 
         test('theme(fontSize.xs[1].lineHeight)', async () => {
           expect(
             await compileCss(css`
               @theme {
-                --font-size-xs: 1337.75rem;
-                --font-size-xs--line-height: 1337rem;
+                --text-xs: 1337.75rem;
+                --text-xs--line-height: 1337rem;
               }
               .text {
                 font-size: theme(fontSize.xs);
@@ -297,9 +537,9 @@ describe('theme function', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ":root {
-              --font-size-xs: 1337.75rem;
-              --font-size-xs--line-height: 1337rem;
+            ":root, :host {
+              --text-xs: 1337.75rem;
+              --text-xs--line-height: 1337rem;
             }
 
             .text {
@@ -313,8 +553,9 @@ describe('theme function', () => {
           expect(
             await compileCss(css`
               @theme default reference {
-                --font-family-sans: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
-                  Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+                --font-family-sans:
+                  ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+                  Segoe UI Symbol, Noto Color Emoji;
               }
               .fam {
                 font-family: theme(fontFamily.sans);
@@ -386,12 +627,12 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
           .red {
-            color: #ff000040;
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -401,6 +642,26 @@ describe('theme function', () => {
           await compileCss(css`
             .fam {
               font-family: theme(fontFamily.unknown, Helvetica Neue, Helvetica, sans-serif);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          ".fam {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+          }"
+        `)
+      })
+
+      test('theme(\n\tfontFamily.unknown,\n\tHelvetica Neue,\n\tHelvetica,\n\tsans-serif\n)', async () => {
+        expect(
+          // prettier-ignore
+          await compileCss(css`
+            .fam {
+              font-family: theme(
+                fontFamily.unknown,
+                Helvetica Neue,
+                Helvetica,
+                sans-serif
+              );
             }
           `),
         ).toMatchInlineSnapshot(`
@@ -424,7 +685,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
             --color-foo: red;
           }
@@ -447,13 +708,13 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
-            --color-foo: #ff000080;
+            --color-foo: oklab(62.7955% .22486 .12584 / .5);
           }
 
           .red {
-            color: #ff000040;
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -471,7 +732,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -492,12 +753,12 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
           .red {
-            color: #ff000080;
+            color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
       })
@@ -513,7 +774,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --color-red-500: red;
           }
 
@@ -536,7 +797,7 @@ describe('theme function', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root {
+          ":root, :host {
             --blur: 8px;
           }
 
@@ -553,12 +814,13 @@ describe('theme function', () => {
           'fontFamily.sans',
           'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         ],
-        ['width.xs', '20rem'],
-        ['transition.timing.function.in.out', 'cubic-bezier(.4, 0, .2, 1)'],
-        ['backgroundColor.red.500', '#ef4444'],
+        ['maxWidth.xs', '20rem'],
+        ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
+        ['letterSpacing.wide', '.025em'],
+        ['lineHeight.tight', '1.25'],
+        ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
-
         let compiled = await compileCss(css`
           ${defaultTheme}
           .custom {
@@ -600,7 +862,7 @@ describe('theme function', () => {
           }
         }
 
-        :root {
+        :root, :host {
           --breakpoint-sm: 40rem;
           --color-red-500: red;
         }"
@@ -660,7 +922,7 @@ describe('theme function', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root {
+        ":root, :host {
           --breakpoint-md: 48rem;
           --breakpoint-lg: 64rem;
         }
@@ -687,7 +949,7 @@ describe('theme function', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root {
+        ":root, :host {
           --breakpoint-md: 48rem;
           --breakpoint-lg: 64rem;
         }
@@ -715,7 +977,7 @@ describe('theme function', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 48rem;
       }
 
@@ -740,7 +1002,7 @@ describe('theme function', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 48rem;
       }
 
@@ -765,7 +1027,7 @@ describe('theme function', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --font-size-xs: .75rem;
       }
 
@@ -785,10 +1047,10 @@ describe('in plugins', () => {
         @layer base, utilities;
         @plugin "my-plugin";
         @theme reference {
-          --color-red: red;
-          --color-orange: orange;
-          --color-blue: blue;
-          --color-pink: pink;
+          --color-red: oklch(62% 0.25 30);
+          --color-orange: oklch(79% 0.17 70);
+          --color-blue: oklch(45% 0.31 264);
+          --color-pink: oklch(87% 0.07 7);
         }
         @layer utilities {
           @tailwind utilities;
@@ -822,16 +1084,16 @@ describe('in plugins', () => {
     expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
       "@layer base {
         .my-base-rule {
-          color: red;
-          background-color: #00f;
-          border-color: #ffc0cb1a;
-          outline-color: #ffa50026;
+          color: oklch(62% .25 30);
+          background-color: oklch(45% .31 264);
+          border-color: oklab(87% .06947 .00853 / .1);
+          outline-color: oklab(79% .05814 .15974 / .15);
         }
       }
 
       @layer utilities {
         .my-utility {
-          color: red;
+          color: oklch(62% .25 30);
         }
       }"
     `)
@@ -900,4 +1162,80 @@ describe('in JS config files', () => {
       }"
     `)
   })
+})
+
+test('replaces CSS theme() function with values inside imported stylesheets', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        @import './bar.css';
+      `,
+      [],
+      {
+        async loadStylesheet() {
+          return {
+            base: '/bar.css',
+            content: css`
+              .red {
+                color: theme(colors.red.500);
+              }
+            `,
+          }
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: red;
+    }
+
+    .red {
+      color: red;
+    }"
+  `)
+})
+
+test('resolves paths ending with a 1', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-1: 0.25rem;
+        }
+
+        .foo {
+          margin: theme(spacing.1);
+        }
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-1: .25rem;
+    }
+
+    .foo {
+      margin: .25rem;
+    }"
+  `)
+})
+
+test('upgrades to a full JS compat theme lookup if a value can not be mapped to a CSS variable', async () => {
+  expect(
+    await compileCss(
+      css`
+        .semi {
+          font-weight: theme(fontWeight.semibold);
+        }
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".semi {
+      font-weight: 600;
+    }"
+  `)
 })

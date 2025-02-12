@@ -1,4 +1,4 @@
-import { expect } from 'vitest'
+import { describe } from 'vitest'
 import { candidate, css, fetchStyles, js, json, retryAssertion, test } from '../utils'
 
 test(
@@ -56,7 +56,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm next build')
 
     let files = await fs.glob('.next/static/css/**/*.css')
@@ -70,9 +70,10 @@ test(
     ])
   },
 )
-;['turbo', 'webpack'].forEach((bundler) => {
+
+describe.each(['turbo', 'webpack'])('%s', (bundler) => {
   test(
-    `dev mode (${bundler})`,
+    'dev mode',
     {
       fs: {
         'package.json': json`
@@ -126,26 +127,35 @@ test(
         `,
       },
     },
-    async ({ fs, spawn, getFreePort }) => {
-      let port = await getFreePort()
-      await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''} --port ${port}`)
+    async ({ fs, spawn, expect }) => {
+      let process = await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''}`)
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)/.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await process.onStdout((m) => m.includes('Ready in'))
 
       await retryAssertion(async () => {
-        let css = await fetchStyles(port)
+        let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
       })
 
-      await retryAssertion(async () => {
-        await fs.write(
-          'app/page.js',
-          js`
-            export default function Page() {
-              return <h1 className="underline text-red-500">Hello, Next.js!</h1>
-            }
-          `,
-        )
+      await fs.write(
+        'app/page.js',
+        js`
+          export default function Page() {
+            return <h1 className="underline text-red-500">Hello, Next.js!</h1>
+          }
+        `,
+      )
+      await process.onStdout((m) => m.includes('Compiled in'))
 
-        let css = await fetchStyles(port)
+      await retryAssertion(async () => {
+        let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`text-red-500`)
       })

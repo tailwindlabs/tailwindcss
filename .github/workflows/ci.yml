@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [next]
+    branches: [main]
   pull_request:
 
 permissions:
@@ -14,10 +14,31 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        runner: [ubuntu-latest, windows-latest, macos-14]
+        runner:
+          - name: Windows
+            os: windows-latest
 
-    runs-on: ${{ matrix.runner }}
+          - name: Linux
+            os: namespace-profile-default
+
+          - name: macOS
+            os: macos-14
+
+        # Exclude windows and macos from being built on feature branches
+        on-main-branch:
+          - ${{ github.ref == 'refs/heads/main' }}
+        exclude:
+          - on-main-branch: false
+            runner:
+              name: Windows
+          - on-main-branch: false
+            runner:
+              name: macOS
+
+    runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
+
+    name: ${{ matrix.runner.name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -64,18 +85,20 @@ jobs:
       - name: Lint
         run: pnpm run lint
         # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner == 'ubuntu-latest'
+        if: matrix.runner.os == 'ubuntu-latest'
 
       - name: Test
         run: pnpm run test
-
-      - name: Integration Tests
-        run: pnpm run test:integrations
-        env:
-          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
         run: npm run test:ui
+
+      - name: Notify Discord
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: discord-actions/message@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'

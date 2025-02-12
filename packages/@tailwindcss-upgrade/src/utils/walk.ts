@@ -1,4 +1,4 @@
-export enum WalkAction {
+export const enum WalkAction {
   // Continue walking the tree. Default behavior.
   Continue,
 
@@ -15,11 +15,14 @@ interface Walkable<T> {
 
 // Custom walk implementation where we can skip going into nodes when we don't
 // need to process them.
-export function walk<T>(rule: Walkable<T>, cb: (rule: T) => void | WalkAction): undefined | false {
+export function walk<T>(
+  rule: Walkable<T>,
+  cb: (rule: T, idx: number, parent: Walkable<T>) => void | WalkAction,
+): undefined | false {
   let result: undefined | false = undefined
 
-  rule.each?.((node) => {
-    let action = cb(node) ?? WalkAction.Continue
+  rule.each?.((node, idx) => {
+    let action = cb(node, idx, rule) ?? WalkAction.Continue
     if (action === WalkAction.Stop) {
       result = false
       return result

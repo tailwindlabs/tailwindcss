@@ -1,12 +1,11 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import killPort from 'kill-port'
 import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
-import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest, expect } from 'vitest'
+import { stripVTControlCharacters } from 'node:util'
+import { test as defaultTest, type ExpectStatic } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -21,29 +20,35 @@ interface SpawnedProcess {
 
 interface ChildProcessOptions {
   cwd?: string
+  env?: Record<string, string>
 }
 
 interface ExecOptions {
   ignoreStdErr?: boolean
+  stdin?: string
 }
 
 interface TestConfig {
   fs: {
-    [filePath: string]: string
+    [filePath: string]: string | Uint8Array
   }
+
+  installDependencies?: boolean
 }
 interface TestContext {
   root: string
+  expect: ExpectStatic
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
-  getFreePort(): Promise<number>
   fs: {
     write(filePath: string, content: string): Promise<void>
+    create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
+    dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
       filePath: string,
-      contents: string | string[] | RegExp | RegExp[],
+      contents: string | RegExp | (string | RegExp)[],
     ): Promise<void>
     expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
   }
@@ -51,6 +56,7 @@ interface TestContext {
 type TestCallback = (context: TestContext) => Promise<void> | void
 interface TestFlags {
   only?: boolean
+  skip?: boolean
   debug?: boolean
 }
 
@@ -70,11 +76,17 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, debug = false }: TestFlags = {},
 ) {
-  return (only || (!process.env.CI && debug) ? defaultTest.only : defaultTest)(
+  return defaultTest(
     name,
-    { timeout: TEST_TIMEOUT },
+    {
+      timeout: TEST_TIMEOUT,
+      retry: process.env.CI ? 2 : 0,
+      only: only || (!process.env.CI && debug),
+      skip,
+      concurrent: true,
+    },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
@@ -89,6 +101,7 @@ export function test(
 
       let context = {
         root,
+        expect: options.expect,
         async exec(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
@@ -102,21 +115,32 @@ export function test(
           }
           if (debug) console.log(`> ${command}`)
           return new Promise((resolve, reject) => {
-            exec(
+            let child = exec(
               command,
               {
                 cwd,
                 ...childProcessOptions,
+                env: childProcessOptions.env,
               },
               (error, stdout, stderr) => {
                 if (error) {
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
+                  if (only || debug) {
+                    console.error(stdout)
+                  }
                   reject(error)
                 } else {
-                  resolve(stdout.toString())
+                  if (only || debug) {
+                    console.log(stdout.toString() + '\n\n' + stderr.toString())
+                  }
+                  resolve(stdout.toString() + '\n\n' + stderr.toString())
                 }
               },
             )
+            if (execOptions.stdin) {
+              child.stdin?.write(execOptions.stdin)
+              child.stdin?.end()
+            }
           })
         },
         async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
@@ -137,14 +161,17 @@ export function test(
           let child = spawn(command, {
             cwd,
             shell: true,
+            ...childProcessOptions,
             env: {
               ...process.env,
+              ...childProcessOptions.env,
             },
-            ...childProcessOptions,
           })
 
           function dispose() {
-            child.kill()
+            if (!child.kill()) {
+              child.kill('SIGKILL')
+            }
 
             let timer = setTimeout(
               () =>
@@ -186,16 +213,20 @@ export function test(
 
           child.stdout.on('data', (result) => {
             let content = result.toString()
-            if (debug) console.log(content)
+            if (debug || only) console.log(content)
             combined.push(['stdout', content])
-            stdoutMessages.push(content)
+            for (let line of content.split('\n')) {
+              stdoutMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
-            if (debug) console.error(content)
+            if (debug || only) console.error(content)
             combined.push(['stderr', content])
-            stderrMessages.push(content)
+            for (let line of content.split('\n')) {
+              stderrMessages.push(stripVTControlCharacters(line))
+            }
             notifyNext(stderrActors, stderrMessages)
           })
           child.on('exit', onExit)
@@ -206,8 +237,9 @@ export function test(
           })
 
           options.onTestFailed(() => {
-            // In debug mode, messages are logged to the console immediately
-            if (debug) return
+            // In only or debug mode, messages are logged to the console
+            // immediately.
+            if (only || debug) return
 
             for (let [type, message] of combined) {
               if (type === 'stdout') {
@@ -234,45 +266,15 @@ export function test(
             },
           }
         },
-        async getFreePort(): Promise<number> {
-          return new Promise((resolve, reject) => {
-            let server = net.createServer()
-            server.listen(0, () => {
-              let address = server.address()
-              let port = address === null || typeof address === 'string' ? null : address.port
-
-              server.close(() => {
-                if (port === null) {
-                  reject(new Error(`Failed to get a free port: address is ${address}`))
-                } else {
-                  disposables.push(async () => {
-                    // Wait for 10ms in case the process was just killed
-                    await new Promise((resolve) => setTimeout(resolve, 10))
-
-                    // kill-port uses `lsof` on macOS which is expensive and can
-                    // block for multiple seconds. In order to avoid that for a
-                    // server that is no longer running, we check if the port is
-                    // still in use first.
-                    let isPortTaken = await testIfPortTaken(port)
-                    if (!isPortTaken) {
-                      return
-                    }
-
-                    try {
-                      await killPort(port)
-                    } catch {
-                      // If the process can not be killed, we can't do anything
-                    }
-                  })
-                  resolve(port)
-                }
-              })
-            })
-          })
-        },
         fs: {
-          async write(filename: string, content: string): Promise<void> {
+          async write(filename: string, content: string | Uint8Array): Promise<void> {
             let full = path.join(root, filename)
+            let dir = path.dirname(full)
+            await fs.mkdir(dir, { recursive: true })
+
+            if (typeof content !== 'string') {
+              return await fs.writeFile(full, content)
+            }
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
@@ -283,10 +285,19 @@ export function test(
               content = content.replace(/\n/g, '\r\n')
             }
 
-            let dir = path.dirname(full)
-            await fs.mkdir(dir, { recursive: true })
-            await fs.writeFile(full, content)
+            await fs.writeFile(full, content, 'utf-8')
           },
+
+          async create(filenames: string[]): Promise<void> {
+            for (let filename of filenames) {
+              let full = path.join(root, filename)
+
+              let dir = path.dirname(full)
+              await fs.mkdir(dir, { recursive: true })
+              await fs.writeFile(full, '')
+            }
+          },
+
           async read(filePath: string) {
             let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
 
@@ -302,18 +313,54 @@ export function test(
             return Promise.all(
               files.map(async (file) => {
                 let content = await fs.readFile(path.join(root, file), 'utf8')
-                return [file, content]
+                return [
+                  file,
+                  // Drop license comment
+                  content.replace(/[\s\n]*\/\*! tailwindcss .*? \*\/[\s\n]*/g, ''),
+                ]
               }),
             )
+          },
+          async dumpFiles(pattern: string) {
+            let files = await context.fs.glob(pattern)
+            return `\n${files
+              .slice()
+              .sort((a: [string], z: [string]) => {
+                let aParts = a[0].split('/')
+                let zParts = z[0].split('/')
+
+                let aFile = aParts.at(-1)
+                let zFile = zParts.at(-1)
+
+                // Sort by depth, shallow first
+                if (aParts.length < zParts.length) return -1
+                if (aParts.length > zParts.length) return 1
+
+                // Sort by folder names, alphabetically
+                for (let i = 0; i < aParts.length - 1; i++) {
+                  let diff = aParts[i].localeCompare(zParts[i])
+                  if (diff !== 0) return diff
+                }
+
+                // Sort by filename, sort files named `index` before others
+                if (aFile?.startsWith('index') && !zFile?.startsWith('index')) return -1
+                if (zFile?.startsWith('index') && !aFile?.startsWith('index')) return 1
+
+                // Sort by filename, alphabetically
+                return a[0].localeCompare(z[0])
+              })
+              .map(([file, content]) => `--- ${file} ---\n${content || '<EMPTY>'}`)
+              .join('\n\n')
+              .trim()}\n`
           },
           async expectFileToContain(filePath, contents) {
             return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of Array.isArray(contents) ? contents : [contents]) {
                 if (content instanceof RegExp) {
-                  expect(fileContent).toMatch(content)
+                  options.expect(fileContent).toMatch(content)
                 } else {
-                  expect(fileContent).toContain(content)
+                  options.expect(fileContent).toContain(content)
                 }
               }
             })
@@ -322,7 +369,7 @@ export function test(
             return retryAssertion(async () => {
               let fileContent = await this.read(filePath)
               for (let content of contents) {
-                expect(fileContent).not.toContain(content)
+                options.expect(fileContent).not.toContain(content)
               }
             })
           },
@@ -337,14 +384,18 @@ export function test(
         await context.fs.write(filename, content)
       }
 
+      let shouldInstallDependencies = config.installDependencies ?? true
+
       try {
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
         // pnpm install on the workspace instead (expect if the root dir defines
         // a separate workspace). We work around this by using the
         // `--ignore-workspace` flag.
-        let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-        await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        if (shouldInstallDependencies) {
+          let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
+          await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+        }
       } catch (error: any) {
         console.error(error)
         console.error(error.stdout?.toString())
@@ -364,12 +415,29 @@ export function test(
 
       options.onTestFinished(dispose)
 
+      // Make it a git repository, and commit all files
+      if (only || debug) {
+        try {
+          await context.exec('git init', { cwd: root })
+          await context.exec('git add --all', { cwd: root })
+          await context.exec('git commit -m "before migration"', { cwd: root })
+        } catch (error: any) {
+          console.error(error)
+          console.error(error.stdout?.toString())
+          console.error(error.stderr?.toString())
+          throw error
+        }
+      }
+
       return await testCallback(context)
     },
   )
 }
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
+}
+test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { skip: true })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
@@ -385,16 +453,14 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   let json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  ;['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'].forEach(
-    (key) => {
-      let dependencies = json[key] || {}
-      for (let dependency in dependencies) {
-        if (dependencies[dependency] === 'workspace:^') {
-          dependencies[dependency] = resolveVersion(dependency)
-        }
+  for (let key of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+    let dependencies = json[key] || {}
+    for (let dependency in dependencies) {
+      if (dependencies[dependency] === 'workspace:^') {
+        dependencies[dependency] = resolveVersion(dependency)
       }
-    },
-  )
+    }
+  }
 
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
@@ -403,7 +469,17 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   json.pnpm ||= {}
   json.pnpm.overrides ||= {}
   for (let pkg of PUBLIC_PACKAGES) {
-    json.pnpm.overrides[pkg] = resolveVersion(pkg)
+    if (pkg === 'tailwindcss') {
+      // We want to be explicit about the `tailwindcss` package so our tests can
+      // also import v3 without conflicting v4 tarballs.
+      json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+    } else {
+      json.pnpm.overrides[pkg] = resolveVersion(pkg)
+    }
   }
 
   return JSON.stringify(json, null, 2)
@@ -418,25 +494,7 @@ export function stripTailwindComment(content: string) {
   return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
 }
 
-function testIfPortTaken(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    let client = new net.Socket()
-    client.once('connect', () => {
-      resolve(true)
-      client.end()
-    })
-    client.once('error', (error: any) => {
-      if (error.code !== 'ECONNREFUSED') {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-      client.end()
-    })
-    client.connect({ port: port, host: 'localhost' })
-  })
-}
-
+export let svg = dedent
 export let css = dedent
 export let html = dedent
 export let ts = dedent
@@ -444,6 +502,12 @@ export let js = dedent
 export let json = dedent
 export let yaml = dedent
 export let txt = dedent
+
+export function binary(str: string | TemplateStringsArray, ...values: unknown[]): Uint8Array {
+  let base64 = typeof str === 'string' ? str : String.raw(str, ...values)
+
+  return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
+}
 
 export function candidate(strings: TemplateStringsArray, ...values: any[]) {
   let output: string[] = []
@@ -548,8 +612,12 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(port: number, path = '/'): Promise<string> {
-  let index = await fetch(`http://localhost:${port}${path}`)
+export async function fetchStyles(base: string, path = '/'): Promise<string> {
+  while (base.endsWith('/')) {
+    base = base.slice(0, -1)
+  }
+
+  let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
   let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
@@ -568,7 +636,7 @@ export async function fetchStyles(port: number, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`http://localhost:${port}${path}`, {
+        let css = await fetch(`${base}${path}`, {
           headers: {
             Accept: 'text/css',
           },
@@ -591,13 +659,5 @@ async function gracefullyRemove(dir: string) {
   // Skip removing the directory in CI because it can stall on Windows
   if (!process.env.CI) {
     await fs.rm(dir, { recursive: true, force: true })
-  }
-}
-
-async function dirExists(dir: string): Promise<boolean> {
-  try {
-    return await fs.stat(dir).then((stat) => stat.isDirectory())
-  } catch {
-    return false
   }
 }

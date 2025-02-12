@@ -41,15 +41,19 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
       'lg:flex',
       'min-sm:max-md:underline',
       'min-md:max-lg:underline',
+      'max-w-screen-sm',
       // Ensure other core variants appear at the end
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-md: 50rem;
       --breakpoint-lg: 64rem;
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
+    }
+    .max-w-screen-sm {
+      max-width: 44rem;
     }
     .sm\\:flex {
       @media (width >= 44rem) {
@@ -136,7 +140,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-md: 50rem;
     }
     .min-xs\\:flex {
@@ -283,10 +287,12 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
     loadModule: async () => ({
       module: {
         theme: {
-          screens: {
-            mini: '40rem',
-            midi: '48rem',
-            maxi: '64rem',
+          extend: {
+            screens: {
+              mini: '40rem',
+              midi: '48rem',
+              maxi: '64rem',
+            },
           },
         },
       },
@@ -310,7 +316,7 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root {
+    ":root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -578,7 +584,7 @@ describe('complex screen configs', () => {
         'print:items-end',
       ]),
     ).toMatchInlineSnapshot(`
-      ":root {
+      ":root, :host {
         --breakpoint-md: 48rem;
       }
       .min-sm\\:flex {
@@ -614,4 +620,40 @@ describe('complex screen configs', () => {
       "
     `)
   })
+})
+
+test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () => {
+  let input = css`
+    @theme default {
+      --breakpoint-sm: 40rem;
+      --breakpoint-md: 48rem;
+      --breakpoint-lg: 64rem;
+      --breakpoint-xl: 80rem;
+      --breakpoint-2xl: 96rem;
+    }
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          screens: {
+            mini: '40rem',
+            midi: '48rem',
+            maxi: '64rem',
+          },
+        },
+      },
+      base: '/root',
+    }),
+  })
+
+  // Note: The `sm`, `md`, and other variants are still there because they are
+  // created before the compat layer can intercept. We do not remove them
+  // currently.
+  expect(
+    compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex']),
+  ).toMatchInlineSnapshot(`""`)
 })

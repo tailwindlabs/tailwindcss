@@ -1,10 +1,11 @@
+import dedent from 'dedent'
 import { expect, test, vi } from 'vitest'
 import type { Plugin } from './compat/plugin-api'
 import { compile, type Config } from './index'
 import plugin from './plugin'
 import { optimizeCss } from './test-utils/run'
 
-let css = String.raw
+const css = dedent
 
 async function run(
   css: string,
@@ -161,10 +162,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('example.css');"`)
 
   await expect(
     run(
@@ -173,10 +171,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('./example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('./example.css');"`)
 
   await expect(
     run(
@@ -185,10 +180,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url('/example.css');
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url('/example.css');"`)
 
   await expect(
     run(
@@ -197,10 +189,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(example.css);"`)
 
   await expect(
     run(
@@ -209,10 +198,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(./example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(./example.css);"`)
 
   await expect(
     run(
@@ -221,10 +207,7 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`
-    "@import url(/example.css);
-    "
-  `)
+  ).resolves.toMatchInlineSnapshot(`"@import url(/example.css);"`)
 })
 
 test('handles case-insensitive @import directive', async () => {
@@ -438,7 +421,7 @@ test('supports theme(reference) imports', async () => {
     ),
   ).resolves.toMatchInlineSnapshot(`
     ".text-red-500 {
-      color: var(--color-red-500, red);
+      color: var(--color-red-500);
     }
     "
   `)
@@ -569,4 +552,69 @@ test('it crashes when inside a cycle', async () => {
   ).rejects.toMatchInlineSnapshot(
     `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
   )
+})
+
+test('resolves @reference as `@import "…" reference`', async () => {
+  let loadStylesheet = async (id: string, base: string) => {
+    expect(base).toBe('/root')
+    expect(id).toBe('./foo/bar.css')
+    return {
+      content: css`
+        @theme {
+          --color-red-500: red;
+        }
+        .foo {
+          color: red;
+        }
+      `,
+      base: '/root/foo',
+    }
+  }
+
+  await expect(
+    run(
+      css`
+        @reference './foo/bar.css';
+        @tailwind utilities;
+      `,
+      { loadStylesheet, candidates: ['text-red-500'] },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ".text-red-500 {
+      color: var(--color-red-500);
+    }
+    "
+  `)
+})
+
+test('resolves `@variant` used as `@custom-variant` inside `@reference`', async () => {
+  let loadStylesheet = async (id: string, base: string) => {
+    expect(base).toBe('/root')
+    expect(id).toBe('./foo/bar.css')
+    return {
+      content: css`
+        @variant dark {
+          &:where([data-theme='dark'] *) {
+            @slot;
+          }
+        }
+      `,
+      base: '/root/foo',
+    }
+  }
+
+  await expect(
+    run(
+      css`
+        @reference './foo/bar.css';
+        @tailwind utilities;
+      `,
+      { loadStylesheet, candidates: ['dark:flex'] },
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ".dark\\:flex:where([data-theme="dark"] *) {
+      display: flex;
+    }
+    "
+  `)
 })

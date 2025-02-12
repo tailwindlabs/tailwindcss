@@ -12,7 +12,10 @@ const localResolve = createRequire(import.meta.url).resolve
 globalThis.__tw_resolve = (id, baseDir) => {
   let isEmbeddedFileBase = baseDir === '/$bunfs/root' || baseDir?.includes(':/~BUN/root')
   const likelyEmbeddedFile =
-    id === 'tailwindcss' || id.startsWith('tailwindcss/') || isEmbeddedFileBase
+    id === 'tailwindcss' ||
+    id.startsWith('tailwindcss/') ||
+    id.startsWith('@tailwindcss/') ||
+    isEmbeddedFileBase
 
   if (!likelyEmbeddedFile) {
     return false
@@ -38,8 +41,23 @@ globalThis.__tw_resolve = (id, baseDir) => {
     case 'utilities':
     case 'utilities.css':
       return localResolve(utilitiesCss)
+    case '@tailwindcss/forms':
+    case '@tailwindcss/typography':
+    case '@tailwindcss/aspect-ratio':
+      return id
     default:
       return false
+  }
+}
+globalThis.__tw_load = async (id) => {
+  if (id.endsWith('@tailwindcss/forms')) {
+    return require('@tailwindcss/forms')
+  } else if (id.endsWith('@tailwindcss/typography')) {
+    return require('@tailwindcss/typography')
+  } else if (id.endsWith('@tailwindcss/aspect-ratio')) {
+    return require('@tailwindcss/aspect-ratio')
+  } else {
+    return undefined
   }
 }
 globalThis.__tw_version = packageJson.version

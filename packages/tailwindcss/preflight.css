@@ -128,9 +128,9 @@ pre {
     'Liberation Mono',
     'Courier New',
     monospace
-  ); /* 4 */
-  font-feature-settings: var(--default-mono-font-feature-settings, normal); /* 5 */
-  font-variation-settings: var(--default-mono-font-variation-settings, normal); /* 6 */
+  ); /* 1 */
+  font-feature-settings: var(--default-mono-font-feature-settings, normal); /* 2 */
+  font-variation-settings: var(--default-mono-font-variation-settings, normal); /* 3 */
   font-size: 1em; /* 4 */
 }
 
@@ -175,44 +175,6 @@ table {
 }
 
 /*
-  1. Inherit the font styles in all browsers.
-  2. Remove the default background color.
-*/
-
-button,
-input,
-optgroup,
-select,
-textarea,
-::file-selector-button {
-  font: inherit; /* 1 */
-  font-feature-settings: inherit; /* 1 */
-  font-variation-settings: inherit; /* 1 */
-  letter-spacing: inherit; /* 1 */
-  color: inherit; /* 1 */
-  background: transparent; /* 2 */
-}
-
-/*
-  Reset the default inset border style for form controls to solid.
-*/
-
-input:where(:not([type='button'], [type='reset'], [type='submit'])),
-select,
-textarea {
-  border: 1px solid;
-}
-
-/*
-  Correct the inability to style the border radius in iOS Safari.
-*/
-button,
-input:where([type='button'], [type='reset'], [type='submit']),
-::file-selector-button {
-  appearance: button;
-}
-
-/*
   Use the modern Firefox focus style for all focusable elements.
 */
 
@@ -221,36 +183,11 @@ input:where([type='button'], [type='reset'], [type='submit']),
 }
 
 /*
-  Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
-*/
-
-:-moz-ui-invalid {
-  box-shadow: none;
-}
-
-/*
   Add the correct vertical alignment in Chrome and Firefox.
 */
 
 progress {
   vertical-align: baseline;
-}
-
-/*
-  Correct the cursor style of increment and decrement buttons in Safari.
-*/
-
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-  height: auto;
-}
-
-/*
-  Remove the inner padding in Chrome and Safari on macOS.
-*/
-
-::-webkit-search-decoration {
-  -webkit-appearance: none;
 }
 
 /*
@@ -272,27 +209,9 @@ menu {
 }
 
 /*
-  Prevent resizing textareas horizontally by default.
-*/
-
-textarea {
-  resize: vertical;
-}
-
-/*
-  1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
-  2. Set the default placeholder color to a semi-transparent version of the current text color.
-*/
-
-::placeholder {
-  opacity: 1; /* 1 */
-  color: color-mix(in srgb, currentColor 50%, transparent); /* 2 */
-}
-
-/*
   1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
   2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
-     This can trigger a poorly considered lint error in some tools but is included by design.
+      This can trigger a poorly considered lint error in some tools but is included by design.
 */
 
 img,
@@ -318,9 +237,147 @@ video {
 }
 
 /*
+  1. Inherit font styles in all browsers.
+  2. Remove border radius in all browsers.
+  3. Remove background color in all browsers.
+  4. Ensure consistent opacity for disabled states in all browsers.
+*/
+
+button,
+input,
+select,
+optgroup,
+textarea,
+::file-selector-button {
+  font: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
+  color: inherit; /* 1 */
+  border-radius: 0; /* 2 */
+  background-color: transparent; /* 3 */
+  opacity: 1; /* 4 */
+}
+
+/*
+  Restore default font weight.
+*/
+
+:where(select:is([multiple], [size])) optgroup {
+  font-weight: bolder;
+}
+
+/*
+  Restore indentation.
+*/
+
+:where(select:is([multiple], [size])) optgroup option {
+  padding-inline-start: 20px;
+}
+
+/*
+  Restore space after button.
+*/
+
+::file-selector-button {
+  margin-inline-end: 4px;
+}
+
+/*
+  1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+  2. Set the default placeholder color to a semi-transparent version of the current text color.
+*/
+
+::placeholder {
+  opacity: 1; /* 1 */
+  color: color-mix(in oklab, currentColor 50%, transparent); /* 2 */
+}
+
+/*
+  Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+  Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+  1. Ensure date/time inputs have the same height when empty in iOS Safari.
+  2. Ensure text alignment can be changed on date/time inputs in iOS Safari.
+*/
+
+::-webkit-date-and-time-value {
+  min-height: 1lh; /* 1 */
+  text-align: inherit; /* 2 */
+}
+
+/*
+  Prevent height from changing on date/time inputs in macOS Safari when the input is set to `display: block`.
+*/
+
+::-webkit-datetime-edit {
+  display: inline-flex;
+}
+
+/*
+  Remove excess padding from pseudo-elements in date/time inputs to ensure consistent height across browsers.
+*/
+
+::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+::-webkit-datetime-edit,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-minute-field,
+::-webkit-datetime-edit-second-field,
+::-webkit-datetime-edit-millisecond-field,
+::-webkit-datetime-edit-meridiem-field {
+  padding-block: 0;
+}
+
+/*
+  Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+  Correct the inability to style the border radius in iOS Safari.
+*/
+
+button,
+input:where([type='button'], [type='reset'], [type='submit']),
+::file-selector-button {
+  appearance: button;
+}
+
+/*
+  Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
   Make elements with the HTML hidden attribute stay hidden by default.
 */
 
-[hidden] {
+[hidden]:where(:not([hidden='until-found'])) {
   display: none !important;
 }

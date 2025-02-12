@@ -1,11 +1,13 @@
-import { toCss } from './ast'
+import { optimizeAst, toCss } from './ast'
 import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
+import { substituteFunctions } from './css-functions'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme, ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
+import * as ValueParser from './value-parser'
 import { Variants, createVariants } from './variants'
 
 export type DesignSystem = {
@@ -13,16 +15,23 @@ export type DesignSystem = {
   utilities: Utilities
   variants: Variants
 
+  invalidCandidates: Set<string>
+
+  // Whether to mark utility declarations as !important
+  important: boolean
+
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
 
-  parseCandidate(candidate: string): Candidate[]
-  parseVariant(variant: string): Variant | null
+  parseCandidate(candidate: string): Readonly<Candidate>[]
+  parseVariant(variant: string): Readonly<Variant> | null
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getVariantOrder(): Map<Variant, number>
   resolveThemeValue(path: string): string | undefined
+
+  trackUsedVariables(raw: string): void
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
@@ -36,21 +45,68 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   let parsedCandidates = new DefaultMap((candidate) =>
     Array.from(parseCandidate(candidate, designSystem)),
   )
-  let compiledAstNodes = new DefaultMap<Candidate>((candidate) =>
-    compileAstNodes(candidate, designSystem),
-  )
+
+  let compiledAstNodes = new DefaultMap<Candidate>((candidate) => {
+    let ast = compileAstNodes(candidate, designSystem)
+
+    // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+    // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+    // calls so we need evaluate any functions we find there that weren't in
+    // the source CSS.
+    try {
+      substituteFunctions(
+        ast.map(({ node }) => node),
+        designSystem,
+      )
+    } catch (err) {
+      // If substitution fails then the candidate likely contains a call to
+      // `theme()` that is invalid which may be because of incorrect usage,
+      // invalid arguments, or a theme key that does not exist.
+      return []
+    }
+
+    return ast
+  })
+
+  let trackUsedVariables = new DefaultMap((raw) => {
+    ValueParser.walk(ValueParser.parse(raw), (node) => {
+      if (node.kind !== 'function' || node.value !== 'var') return
+
+      ValueParser.walk(node.nodes, (child) => {
+        if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
+
+        theme.markUsedVariable(child.value)
+      })
+
+      return ValueParser.ValueWalkAction.Skip
+    })
+
+    return true
+  })
 
   let designSystem: DesignSystem = {
     theme,
     utilities,
     variants,
 
+    invalidCandidates: new Set(),
+    important: false,
+
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
 
       for (let className of classes) {
-        let { astNodes } = compileCandidates([className], this)
-        if (astNodes.length === 0) {
+        let wasInvalid = false
+
+        let { astNodes } = compileCandidates([className], this, {
+          onInvalidCandidate() {
+            wasInvalid = true
+          },
+        })
+
+        astNodes = optimizeAst(astNodes, designSystem)
+
+        if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
         } else {
           result.push(toCss(astNodes))
@@ -122,6 +178,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       }
 
       return themeValue
+    },
+
+    trackUsedVariables(raw: string) {
+      trackUsedVariables.get(raw)
     },
   }
 

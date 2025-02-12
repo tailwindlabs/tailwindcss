@@ -14,6 +14,9 @@ type ArbitraryUtilityValue = {
    * ```
    * bg-[color:var(--my-color)]
    *     ^^^^^
+   *
+   * bg-(color:--my-color)
+   *     ^^^^^
    * ```
    */
   dataType: string | null
@@ -25,6 +28,9 @@ type ArbitraryUtilityValue = {
    *
    * bg-[var(--my_variable)]
    *     ^^^^^^^^^^^^^^^^^^
+   *
+   * bg-(--my_variable)
+   *     ^^^^^^^^^^^^^^
    * ```
    */
   value: string
@@ -100,9 +106,6 @@ export type Variant =
       kind: 'arbitrary'
       selector: string
 
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
-
       // Whether or not the selector is a relative selector
       // @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#relative_selector
       relative: boolean
@@ -116,9 +119,6 @@ export type Variant =
   | {
       kind: 'static'
       root: string
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
   /**
@@ -138,9 +138,6 @@ export type Variant =
       root: string
       value: ArbitraryVariantValue | NamedVariantValue | null
       modifier: ArbitraryModifier | NamedModifier | null
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
   /**
@@ -157,9 +154,6 @@ export type Variant =
       root: string
       modifier: ArbitraryModifier | NamedModifier | null
       variant: Variant
-
-      // If true, it can be applied as a child of a compound variant
-      compounds: boolean
     }
 
 export type Candidate =
@@ -189,13 +183,12 @@ export type Candidate =
    * E.g.:
    *
    * - `underline`
-   * - `flex`
+   * - `box-border`
    */
   | {
       kind: 'static'
       root: string
       variants: Variant[]
-      negative: boolean
       important: boolean
       raw: string
     }
@@ -215,7 +208,6 @@ export type Candidate =
       value: ArbitraryUtilityValue | NamedUtilityValue | null
       modifier: ArbitraryModifier | NamedModifier | null
       variants: Variant[]
-      negative: boolean
       important: boolean
       raw: string
     }
@@ -225,6 +217,16 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
   let rawVariants = segment(input, ':')
+
+  // A prefix is a special variant used to prefix all utilities. When present,
+  // all utilities must start with that variant which we will then remove from
+  // the variant list so no other part of the codebase has to know about it.
+  if (designSystem.theme.prefix) {
+    if (rawVariants.length === 1) return null
+    if (rawVariants[0] !== designSystem.theme.prefix) return null
+
+    rawVariants.shift()
+  }
 
   // Safety: At this point it is safe to use TypeScript's non-null assertion
   // operator because even if the `input` was an empty string, splitting an
@@ -242,7 +244,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   }
 
   let important = false
-  let negative = false
 
   // Candidates that end with an exclamation mark are the important version with
   // higher specificity of the non-important candidate, e.g. `mx-4!`.
@@ -257,13 +258,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     base = base.slice(1)
   }
 
-  // Candidates that start with a dash are the negative versions of another
-  // candidate, e.g. `-mx-4`.
-  if (base[0] === '-') {
-    negative = true
-    base = base.slice(1)
-  }
-
   // Check for an exact match of a static utility first as long as it does not
   // look like an arbitrary value.
   if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
@@ -271,7 +265,6 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       kind: 'static',
       root: base,
       variants: parsedCandidateVariants,
-      negative,
       important,
       raw: input,
     }
@@ -294,6 +287,14 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   //
   // - `bg-red-500/50/50`
   if (additionalModifier) return
+
+  let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
+
+  // Empty arbitrary values are invalid. E.g.: `[color:red]/[]` or `[color:red]/()`.
+  //                                                        ^^                  ^^
+  //                                           `bg-[#0088cc]/[]` or `bg-[#0088cc]/()`.
+  //                                                         ^^                   ^^
+  if (modifierSegment !== null && parsedModifier === null) return
 
   // Arbitrary properties
   if (baseWithoutModifier[0] === '[') {
@@ -329,7 +330,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       kind: 'arbitrary',
       property,
       value,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier: parsedModifier,
       variants: parsedCandidateVariants,
       important,
       raw: input,
@@ -353,9 +354,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^           -> Root
   //    ^^^^^^^^^ -> Arbitrary value
   //
-  // bg-red-[#0088cc]
-  // ^^^^^^           -> Root
-  //        ^^^^^^^^^ -> Arbitrary value
+  // border-l-[#0088cc]
+  // ^^^^^^^^           -> Root
+  //          ^^^^^^^^^ -> Arbitrary value
   // ```
   if (baseWithoutModifier[baseWithoutModifier.length - 1] === ']') {
     let idx = baseWithoutModifier.indexOf('-[')
@@ -372,6 +373,43 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     roots = [[root, value]]
   }
 
+  // If the base of the utility ends with a `)`, then we know it's an arbitrary
+  // value that encapsulates a CSS variable. This also means that everything
+  // before the `(…)` part should be the root of the utility.
+  //
+  // E.g.:
+  //
+  // bg-(--my-var)
+  // ^^            -> Root
+  //    ^^^^^^^^^^ -> Arbitrary value
+  // ```
+  else if (baseWithoutModifier[baseWithoutModifier.length - 1] === ')') {
+    let idx = baseWithoutModifier.indexOf('-(')
+    if (idx === -1) return
+
+    let root = baseWithoutModifier.slice(0, idx)
+
+    // The root of the utility should exist as-is in the utilities map. If not,
+    // it's an invalid utility and we can skip continue parsing.
+    if (!designSystem.utilities.has(root, 'functional')) return
+
+    let value = baseWithoutModifier.slice(idx + 2, -1)
+
+    let parts = segment(value, ':')
+
+    let dataType = null
+    if (parts.length === 2) {
+      dataType = parts[0]
+      value = parts[1]
+    }
+
+    // An arbitrary value with `(…)` should always start with `--` since it
+    // represents a CSS variable.
+    if (value[0] !== '-' && value[1] !== '-') return
+
+    roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
+  }
+
   // Not an arbitrary value
   else {
     roots = findRoots(baseWithoutModifier, (root: string) => {
@@ -383,10 +421,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     let candidate: Candidate = {
       kind: 'functional',
       root,
-      modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
+      modifier: parsedModifier,
       value: null,
       variants: parsedCandidateVariants,
-      negative,
       important,
       raw: input,
     }
@@ -401,7 +438,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
       let valueIsArbitrary = startArbitraryIdx !== -1
 
       if (valueIsArbitrary) {
-        let arbitraryValue = value.slice(startArbitraryIdx + 1, -1)
+        // Arbitrary values must end with a `]`.
+        if (value[value.length - 1] !== ']') return
+
+        let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
         let typehint = ''
@@ -424,10 +464,16 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           break
         }
 
+        // Empty arbitrary values are invalid. E.g.: `p-[]`
+        //                                              ^^
+        if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) {
+          continue
+        }
+
         candidate.value = {
           kind: 'arbitrary',
           dataType: typehint || null,
-          value: decodeArbitraryValue(arbitraryValue),
+          value: arbitraryValue,
         }
       } else {
         // Some utilities support fractions as values, e.g. `w-1/2`. Since it's
@@ -450,13 +496,33 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   }
 }
 
-function parseModifier(modifier: string): CandidateModifier {
+function parseModifier(modifier: string): CandidateModifier | null {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
-    let arbitraryValue = modifier.slice(1, -1)
+    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+
+    // Empty arbitrary values are invalid. E.g.: `data-[]:`
+    //                                                 ^^
+    if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
     return {
       kind: 'arbitrary',
-      value: decodeArbitraryValue(arbitraryValue),
+      value: arbitraryValue,
+    }
+  }
+
+  if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
+    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+
+    // Empty arbitrary values are invalid. E.g.: `data-():`
+    //                                                 ^^
+    if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
+    // Arbitrary values must start with `--` since it represents a CSS variable.
+    if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+
+    return {
+      kind: 'arbitrary',
+      value: `var(${arbitraryValue})`,
     }
   }
 
@@ -486,6 +552,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
     let selector = decodeArbitraryValue(variant.slice(1, -1))
 
+    // Empty arbitrary values are invalid. E.g.: `[]:`
+    //                                            ^^
+    if (selector.length === 0 || selector.trim().length === 0) return null
+
     let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
 
     // Ensure `&` is always present by wrapping the selector in `&:is(…)`,
@@ -501,7 +571,6 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     return {
       kind: 'arbitrary',
       selector,
-      compounds: true,
       relative,
     }
   }
@@ -536,40 +605,74 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           return {
             kind: 'static',
             root,
-            compounds: designSystem.variants.compounds(root),
           }
         }
 
         case 'functional': {
+          let parsedModifier = modifier === null ? null : parseModifier(modifier)
+          // Empty arbitrary values are invalid. E.g.: `@max-md/[]:` or `@max-md/():`
+          //                                                    ^^               ^^
+          if (modifier !== null && parsedModifier === null) return null
+
           if (value === null) {
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier: parsedModifier,
               value: null,
-              compounds: designSystem.variants.compounds(root),
             }
           }
 
-          if (value[0] === '[' && value[value.length - 1] === ']') {
+          if (value[value.length - 1] === ']') {
+            // Discard values like `foo-[#bar]`
+            if (value[0] !== '[') continue
+
+            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+
+            // Empty arbitrary values are invalid. E.g.: `data-[]:`
+            //                                                 ^^
+            if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
             return {
               kind: 'functional',
               root,
-              modifier: modifier === null ? null : parseModifier(modifier),
+              modifier: parsedModifier,
               value: {
                 kind: 'arbitrary',
-                value: decodeArbitraryValue(value.slice(1, -1)),
+                value: arbitraryValue,
               },
-              compounds: designSystem.variants.compounds(root),
+            }
+          }
+
+          if (value[value.length - 1] === ')') {
+            // Discard values like `foo-(--bar)`
+            if (value[0] !== '(') continue
+
+            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+
+            // Empty arbitrary values are invalid. E.g.: `data-():`
+            //                                                 ^^
+            if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+
+            // Arbitrary values must start with `--` since it represents a CSS variable.
+            if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+
+            return {
+              kind: 'functional',
+              root,
+              modifier: parsedModifier,
+              value: {
+                kind: 'arbitrary',
+                value: `var(${arbitraryValue})`,
+              },
             }
           }
 
           return {
             kind: 'functional',
             root,
-            modifier: modifier === null ? null : parseModifier(modifier),
+            modifier: parsedModifier,
             value: { kind: 'named', value },
-            compounds: designSystem.variants.compounds(root),
           }
         }
 
@@ -578,14 +681,20 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
           let subVariant = designSystem.parseVariant(value)
           if (subVariant === null) return null
-          if (subVariant.compounds === false) return null
+
+          // These two variants must be compatible when compounded
+          if (!designSystem.variants.compoundsWith(root, subVariant)) return null
+
+          let parsedModifier = modifier === null ? null : parseModifier(modifier)
+          // Empty arbitrary values are invalid. E.g.: `group-focus/[]:` or `group-focus/():`
+          //                                                        ^^                   ^^
+          if (modifier !== null && parsedModifier === null) return null
 
           return {
             kind: 'compound',
             root,
-            modifier: modifier === null ? null : { kind: 'named', value: modifier },
+            modifier: parsedModifier,
             variant: subVariant,
-            compounds: designSystem.variants.compounds(root),
           }
         }
       }

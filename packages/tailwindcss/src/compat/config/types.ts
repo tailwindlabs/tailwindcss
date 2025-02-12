@@ -25,7 +25,7 @@ export interface ResolvedConfig {
 type ContentFile = string | { raw: string; extension?: string }
 
 export interface UserConfig {
-  content?: ContentFile[] | { files: ContentFile[] }
+  content?: ContentFile[] | { relative?: boolean; files: ContentFile[] }
 }
 
 type ResolvedContent = { base: string; pattern: string } | { raw: string; extension?: string }
@@ -68,4 +68,40 @@ export interface UserConfig {
 
 export interface ResolvedConfig {
   darkMode: DarkModeStrategy | null
+}
+
+// `prefix` support
+export interface UserConfig {
+  prefix?: string
+}
+
+export interface ResolvedConfig {
+  prefix: string
+}
+
+// `blocklist` support
+export interface UserConfig {
+  blocklist?: string[]
+}
+
+export interface ResolvedConfig {
+  blocklist: string[]
+}
+
+// `important` support
+export interface UserConfig {
+  important?: boolean | string
+}
+
+export interface ResolvedConfig {
+  important: boolean | string
+}
+
+// `future` key support
+export interface UserConfig {
+  future?: 'all' | Record<string, boolean>
+}
+
+export interface ResolvedConfig {
+  future: Record<string, boolean>
 }

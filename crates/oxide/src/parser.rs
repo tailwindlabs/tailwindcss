@@ -39,6 +39,24 @@ pub struct ExtractorOptions {
     pub preserve_spaces_in_arbitrary: bool,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone)]
+enum Arbitrary {
+    /// Not inside any arbitrary value
+    None,
+
+    /// In arbitrary value mode with square brackets
+    ///
+    /// E.g.: `bg-[…]`
+    ///           ^
+    Brackets { start_idx: usize },
+
+    /// In arbitrary value mode with parens
+    ///
+    /// E.g.: `bg-(…)`
+    ///           ^
+    Parens { start_idx: usize },
+}
+
 pub struct Extractor<'a> {
     opts: ExtractorOptions,
 
@@ -48,9 +66,9 @@ pub struct Extractor<'a> {
     idx_start: usize,
     idx_end: usize,
     idx_last: usize,
-    idx_arbitrary_start: usize,
 
-    in_arbitrary: bool,
+    arbitrary: Arbitrary,
+
     in_candidate: bool,
     in_escape: bool,
 
@@ -82,6 +100,18 @@ impl<'a> Extractor<'a> {
 
         candidates
     }
+
+    pub fn with_positions(input: &'a [u8], opts: ExtractorOptions) -> Vec<(&'a [u8], usize)> {
+        let mut result = Vec::new();
+        let extractor = Self::new(input, opts).flatten();
+        for item in extractor {
+            // Since the items are slices of the input buffer, we can calculate the start index
+            // by doing some pointer arithmetics.
+            let start_index = item.as_ptr() as usize - input.as_ptr() as usize;
+            result.push((item, start_index));
+        }
+        result
+    }
 }
 
 impl<'a> Extractor<'a> {
@@ -93,9 +123,8 @@ impl<'a> Extractor<'a> {
 
             idx_start: 0,
             idx_end: 0,
-            idx_arbitrary_start: 0,
 
-            in_arbitrary: false,
+            arbitrary: Arbitrary::None,
             in_candidate: false,
             in_escape: false,
 
@@ -175,7 +204,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
+    fn split_candidate(candidate: &'a [u8]) -> SplitCandidate<'a> {
         let mut brackets = 0;
         let mut idx_end = 0;
 
@@ -224,9 +253,7 @@ impl<'a> Extractor<'a> {
 
         // Reject candidates that are single camelCase words, e.g.: `useEffect`
         if candidate.iter().all(|c| c.is_ascii_alphanumeric())
-            && candidate
-                .iter()
-                .any(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+            && candidate.iter().any(|c| c.is_ascii_uppercase())
         {
             return ValidationResult::Invalid;
         }
@@ -234,7 +261,7 @@ impl<'a> Extractor<'a> {
         // Reject candidates that look like SVG path data, e.g.: `m32.368 m7.5`
         if !candidate.contains(&b'-')
             && !candidate.contains(&b':')
-            && candidate.iter().any(|c| c == &b'.' || c.is_ascii_digit())
+            && candidate.iter().any(|c| c == &b'.')
         {
             return ValidationResult::Invalid;
         }
@@ -307,6 +334,25 @@ impl<'a> Extractor<'a> {
             return ValidationResult::Restart;
         }
 
+        // Only allow parentheses for the shorthand arbitrary custom properties syntax
+        if let Some(index) = utility.find(b"(") {
+            let mut skip_parens_check = false;
+            let start_brace_index = utility.find(b"[");
+            let end_brace_index = utility.find(b"]");
+
+            if let (Some(start_brace_index), Some(end_brace_index)) =
+                (start_brace_index, end_brace_index)
+            {
+                if start_brace_index < index && end_brace_index > index {
+                    skip_parens_check = true;
+                }
+            }
+
+            if !skip_parens_check && !utility[index + 1..].starts_with(b"--") {
+                return ValidationResult::Restart;
+            }
+        }
+
         // Pluck out the part that we are interested in.
         let utility = &utility[offset..(utility.len() - offset_end)];
 
@@ -350,6 +396,8 @@ impl<'a> Extractor<'a> {
             }
 
             // The ':` must be preceded by a-Z0-9 because it represents a property name.
+            // SAFETY: the Self::validate_arbitrary_property function from above validates that the
+            //         `:` exists.
             let colon = utility.find(":").unwrap();
 
             if !utility
@@ -447,7 +495,7 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_arbitrary(&mut self) -> ParseAction<'a> {
-        // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
+        // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary values
         if self.in_escape {
             return self.parse_escaped();
         }
@@ -465,9 +513,29 @@ impl<'a> Extractor<'a> {
                     self.bracket_stack.pop();
                 }
 
-                // Last bracket is different compared to what we expect, therefore we are not in a
-                // valid arbitrary value.
-                _ if !self.in_quotes() => return ParseAction::Skip,
+                // This is the last bracket meaning the end of arbitrary content
+                _ if !self.in_quotes() => {
+                    if matches!(self.cursor.next, b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9') {
+                        return ParseAction::Consume;
+                    }
+
+                    if let Arbitrary::Parens { start_idx } = self.arbitrary {
+                        trace!("Arbitrary::End\t");
+                        self.arbitrary = Arbitrary::None;
+
+                        if self.cursor.pos - start_idx == 1 {
+                            // We have an empty arbitrary value, which is not allowed
+                            return ParseAction::Skip;
+                        }
+
+                        // We have a valid arbitrary value
+                        return ParseAction::Consume;
+                    }
+
+                    // Last parenthesis is different compared to what we expect, therefore we are
+                    // not in a valid arbitrary value.
+                    return ParseAction::Skip;
+                }
 
                 // We're probably in quotes or nested brackets, so we keep going
                 _ => {}
@@ -487,12 +555,17 @@ impl<'a> Extractor<'a> {
                         return ParseAction::Consume;
                     }
 
-                    trace!("Arbitrary::End\t");
-                    self.in_arbitrary = false;
+                    if let Arbitrary::Brackets { start_idx: _ } = self.arbitrary {
+                        trace!("Arbitrary::End\t");
+                        self.arbitrary = Arbitrary::None;
 
-                    if self.cursor.pos - self.idx_arbitrary_start == 1 {
-                        // We have an empty arbitrary value, which is not allowed
-                        return ParseAction::Skip;
+                        // TODO: This is temporarily disabled such that the upgrade tool can work
+                        // with legacy arbitrary values. This will be re-enabled in the future (or
+                        // with a flag)
+                        // if self.cursor.pos - start_idx == 1 {
+                        //     // We have an empty arbitrary value, which is not allowed
+                        //     return ParseAction::Skip;
+                        // }
                     }
                 }
 
@@ -514,12 +587,16 @@ impl<'a> Extractor<'a> {
                 }
             },
 
-            b' ' if !self.opts.preserve_spaces_in_arbitrary => {
+            c if c.is_ascii_whitespace() && !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
 
-                // Restart the parser ahead of the arbitrary value
-                // It may pick up more candidates
-                return ParseAction::RestartAt(self.idx_arbitrary_start + 1);
+                if let Arbitrary::Brackets { start_idx } | Arbitrary::Parens { start_idx } =
+                    self.arbitrary
+                {
+                    // Restart the parser ahead of the arbitrary value It may pick up more
+                    // candidates
+                    return ParseAction::RestartAt(start_idx + 1);
+                }
             }
 
             // Arbitrary values allow any character inside them
@@ -536,11 +613,12 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_start(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
-            // Enter arbitrary value mode
-            b'[' => {
+            // Enter arbitrary property mode
+            b'[' if self.cursor.prev != b'\\' => {
                 trace!("Arbitrary::Start\t");
-                self.in_arbitrary = true;
-                self.idx_arbitrary_start = self.cursor.pos;
+                self.arbitrary = Arbitrary::Brackets {
+                    start_idx: self.cursor.pos,
+                };
 
                 ParseAction::Consume
             }
@@ -570,22 +648,29 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_continue(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
-            // Enter arbitrary value mode
-            b'[' if matches!(
-                self.cursor.prev,
-                b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0'
-            ) =>
+            // Enter arbitrary value mode. E.g.: `bg-[rgba(0, 0, 0)]`
+            //                                       ^
+            b'[' if matches!(self.cursor.prev, b'@' | b'-' | b':' | b'/' | b'!' | b'\0')
+                || self.cursor.prev.is_ascii_whitespace() =>
             {
                 trace!("Arbitrary::Start\t");
-                self.in_arbitrary = true;
-                self.idx_arbitrary_start = self.cursor.pos;
+                self.arbitrary = Arbitrary::Brackets {
+                    start_idx: self.cursor.pos,
+                };
             }
 
-            // Can't enter arbitrary value mode
-            // This can't be a candidate
-            b'[' => {
-                trace!("Arbitrary::Skip_Start\t");
+            // Enter arbitrary value mode. E.g.: `bg-(--my-color)`
+            //                                       ^
+            b'(' if matches!(self.cursor.prev, b'-' | b'/') => {
+                trace!("Arbitrary::Start\t");
+                self.arbitrary = Arbitrary::Parens {
+                    start_idx: self.cursor.pos,
+                };
+            }
 
+            // Can't enter arbitrary value mode. This can't be a candidate.
+            b'[' | b'(' => {
+                trace!("Arbitrary::Skip_Start\t");
                 return ParseAction::Skip;
             }
 
@@ -598,7 +683,8 @@ impl<'a> Extractor<'a> {
                     (true, _) => ParseAction::Consume,
 
                     // Looks like the end of a candidate == okay
-                    (_, b' ' | b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, b'\'' | b'"' | b'`') => ParseAction::Consume,
+                    (_, c) if c.is_ascii_whitespace() => ParseAction::Consume,
 
                     // Otherwise, not a valid character in a candidate
                     _ => ParseAction::Skip,
@@ -670,7 +756,7 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn can_be_candidate(&mut self) -> bool {
         self.in_candidate
-            && !self.in_arbitrary
+            && matches!(self.arbitrary, Arbitrary::None)
             && (0..=127).contains(&self.cursor.curr)
             && (self.idx_start == 0 || self.input[self.idx_start - 1] <= 127)
     }
@@ -682,13 +768,13 @@ impl<'a> Extractor<'a> {
         self.idx_start = self.cursor.pos;
         self.idx_end = self.cursor.pos;
         self.in_candidate = false;
-        self.in_arbitrary = false;
+        self.arbitrary = Arbitrary::None;
         self.in_escape = false;
     }
 
     #[inline(always)]
     fn parse_char(&mut self) -> ParseAction<'a> {
-        if self.in_arbitrary {
+        if !matches!(self.arbitrary, Arbitrary::None) {
             self.parse_arbitrary()
         } else if self.in_candidate {
             self.parse_continue()
@@ -718,9 +804,8 @@ impl<'a> Extractor<'a> {
 
         self.idx_start = pos;
         self.idx_end = pos;
-        self.idx_arbitrary_start = 0;
 
-        self.in_arbitrary = false;
+        self.arbitrary = Arbitrary::None;
         self.in_candidate = false;
         self.in_escape = false;
 
@@ -845,17 +930,18 @@ impl<'a> Extractor<'a> {
     fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
         match self.without_surrounding() {
             Bracketing::None => ParseAction::SingleCandidate(candidate),
-            Bracketing::Included(sliceable) if sliceable == candidate => {
-                ParseAction::SingleCandidate(candidate)
-            }
             Bracketing::Included(sliceable) | Bracketing::Wrapped(sliceable) => {
-                let parts = vec![candidate, sliceable];
-                let parts = parts
-                    .into_iter()
-                    .filter(|v| !v.is_empty())
-                    .collect::<Vec<_>>();
+                if candidate == sliceable {
+                    ParseAction::SingleCandidate(candidate)
+                } else {
+                    let parts = vec![candidate, sliceable];
+                    let parts = parts
+                        .into_iter()
+                        .filter(|v| !v.is_empty())
+                        .collect::<Vec<_>>();
 
-                ParseAction::MultipleCandidates(parts)
+                    ParseAction::MultipleCandidates(parts)
+                }
             }
         }
     }
@@ -960,6 +1046,18 @@ mod test {
     }
 
     #[test]
+    fn it_can_parse_utilities_with_arbitrary_var_shorthand() {
+        let candidates = run("m-(--my-var)", false);
+        assert_eq!(candidates, vec!["m-(--my-var)"]);
+    }
+
+    #[test]
+    fn it_can_parse_utilities_with_arbitrary_var_shorthand_as_modifier() {
+        let candidates = run("bg-(--my-color)/(--my-opacity)", false);
+        assert_eq!(candidates, vec!["bg-(--my-color)/(--my-opacity)"]);
+    }
+
+    #[test]
     fn it_throws_away_arbitrary_values_that_are_unbalanced() {
         let candidates = run("m-[calc(100px*2]", false);
         assert!(candidates.is_empty());
@@ -1035,7 +1133,7 @@ mod test {
         assert_eq!(candidates, vec!["something"]);
 
         let candidates = run(" [feature(slice_as_chunks)]", false);
-        assert_eq!(candidates, vec!["feature(slice_as_chunks)"]);
+        assert_eq!(candidates, vec!["feature", "slice_as_chunks"]);
 
         let candidates = run("![feature(slice_as_chunks)]", false);
         assert!(candidates.is_empty());
@@ -1131,9 +1229,8 @@ mod test {
 
     #[test]
     fn ignores_arbitrary_property_ish_things() {
-        // FIXME: () are only valid in an arbitrary
         let candidates = run(" [feature(slice_as_chunks)]", false);
-        assert_eq!(candidates, vec!["feature(slice_as_chunks)",]);
+        assert_eq!(candidates, vec!["feature", "slice_as_chunks",]);
     }
 
     #[test]
@@ -1173,7 +1270,7 @@ mod test {
     fn bad_003() {
         // TODO: This seems… wrong
         let candidates = run(r"[𕤵:]", false);
-        assert_eq!(candidates, vec!["𕤵", "𕤵:"]);
+        assert_eq!(candidates, vec!["𕤵", "𕤵:",]);
     }
 
     #[test]
@@ -1423,5 +1520,238 @@ mod test {
             .transpose()
             .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
+    }
+
+    #[test]
+    fn does_not_emit_the_same_slice_multiple_times() {
+        let candidates: Vec<_> =
+            Extractor::with_positions("<div class=\"flex\"></div>".as_bytes(), Default::default())
+                .into_iter()
+                .map(|(s, p)| unsafe { (std::str::from_utf8_unchecked(s), p) })
+                .collect();
+
+        assert_eq!(candidates, vec![("div", 1), ("class", 5), ("flex", 12),]);
+    }
+
+    #[test]
+    fn empty_arbitrary_values_are_allowed_for_codemods() {
+        let candidates = run(
+            r#"<div class="group-[]:flex group-[]/name:flex peer-[]:flex peer-[]/name:flex"></div>"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "div",
+                "class",
+                "group-[]:flex",
+                "group-[]/name:flex",
+                "peer-[]:flex",
+                "peer-[]/name:flex"
+            ]
+        );
+    }
+
+    #[test]
+    fn simple_utility_names_with_numbers_work() {
+        let candidates = run(r#"<div class="h2 hz"></div>"#, false);
+        assert_eq!(candidates, vec!["div", "class", "h2", "hz",]);
+    }
+
+    #[test]
+    fn classes_in_an_array_without_whitespace() {
+        let candidates = run(
+            "let classes = ['bg-black','hover:px-0.5','text-[13px]','[--my-var:1_/_2]','[.foo_&]:px-[0]','[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_spaces() {
+        let candidates = run(
+            "let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]', '[.foo_&]:px-[0]', '[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_tabs() {
+        let candidates = run(
+            "let classes = ['bg-black',\t'hover:px-0.5',\t'text-[13px]',\t'[--my-var:1_/_2]',\t'[.foo_&]:px-[0]',\t'[.foo_&]:[color:red]']",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_an_array_with_newlines() {
+        let candidates = run(
+            "let classes = [\n'bg-black',\n'hover:px-0.5',\n'text-[13px]',\n'[--my-var:1_/_2]',\n'[.foo_&]:px-[0]',\n'[.foo_&]:[color:red]'\n]",
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn arbitrary_properties_are_not_picked_up_after_an_escape() {
+        let candidates = run(
+            r#"
+              <!-- [!code word:group-has-\\[a\\]\\:block] -->
+              \\[a\\]\\:block]
+            "#,
+            false,
+        );
+
+        assert_eq!(candidates, vec!["!code", "a"]);
+    }
+
+    #[test]
+    fn test_find_candidates_in_braces_inside_brackets() {
+        let candidates = run(
+            r#"
+                const classes = [wrapper("bg-red-500")]
+            "#,
+            false,
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["const", "classes", "wrapper", "bg-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables() {
+        let candidates = run("var(--color-red-500)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500"]);
+
+        let candidates = run("<div style={{ 'color': 'var(--color-red-500)' }}/>", false);
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_values() {
+        let candidates = run("var(--color-red-500, red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run("var(--color-red-500,red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500, red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500,red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_css_variable_values() {
+        let candidates = run("var(--color-red-500, var(--color-blue-500))", false);
+        assert_eq!(
+            candidates,
+            vec!["var", "--color-red-500", "--color-blue-500"]
+        );
+    }
+
+    #[test]
+    fn test_is_valid_candidate_string() {
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo-(--color-red-500)"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"bg-[url(foo)]"),
+            ValidationResult::Valid
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"group-foo/(--bar)"),
+            ValidationResult::Valid
+        );
+
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo(\"bg-red-500\")"),
+            ValidationResult::Restart
+        );
+        assert_eq!(
+            Extractor::is_valid_candidate_string(b"foo-("),
+            ValidationResult::Restart
+        );
     }
 }

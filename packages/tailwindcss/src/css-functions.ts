@@ -1,96 +1,71 @@
+import { Features } from '.'
 import { walk, type AstNode } from './ast'
+import type { DesignSystem } from './design-system'
+import { withAlpha } from './utilities'
+import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
-import { type ValueAstNode } from './value-parser'
 
-export const THEME_FUNCTION_INVOCATION = 'theme('
-
-type ResolveThemeValue = (path: string) => string | undefined
-
-export function substituteFunctions(ast: AstNode[], resolveThemeValue: ResolveThemeValue) {
-  walk(ast, (node) => {
-    // Find all declaration values
-    if (node.kind === 'declaration' && node.value?.includes(THEME_FUNCTION_INVOCATION)) {
-      node.value = substituteFunctionsInValue(node.value, resolveThemeValue)
-      return
-    }
-
-    // Find at-rules rules
-    if (node.kind === 'rule') {
-      if (
-        node.selector[0] === '@' &&
-        (node.selector.startsWith('@media ') ||
-          node.selector.startsWith('@media(') ||
-          node.selector.startsWith('@custom-media ') ||
-          node.selector.startsWith('@custom-media(') ||
-          node.selector.startsWith('@container ') ||
-          node.selector.startsWith('@container(') ||
-          node.selector.startsWith('@supports ') ||
-          node.selector.startsWith('@supports(')) &&
-        node.selector.includes(THEME_FUNCTION_INVOCATION)
-      ) {
-        node.selector = substituteFunctionsInValue(node.selector, resolveThemeValue)
-      }
-    }
-  })
+const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => string> = {
+  '--alpha': alpha,
+  '--spacing': spacing,
+  '--theme': theme,
+  theme: legacyTheme,
 }
 
-export function substituteFunctionsInValue(
-  value: string,
-  resolveThemeValue: ResolveThemeValue,
-): string {
-  let ast = ValueParser.parse(value)
-  ValueParser.walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'function' && node.value === 'theme') {
-      if (node.nodes.length < 1) {
-        throw new Error(
-          'Expected `theme()` function call to have a path. For example: `theme(--color-red-500)`.',
-        )
-      }
+function alpha(_designSystem: DesignSystem, value: string, ...rest: string[]) {
+  let [color, alpha] = segment(value, '/').map((v) => v.trim())
 
-      let pathNode = node.nodes[0]
-      if (pathNode.kind !== 'word') {
-        throw new Error(
-          `Expected \`theme()\` function to start with a path, but instead found ${pathNode.value}.`,
-        )
-      }
-      let path = pathNode.value
+  if (!color || !alpha) {
+    throw new Error(
+      `The --alpha(…) function requires a color and an alpha value, e.g.: \`--alpha(${color || 'var(--my-color)'} / ${alpha || '50%'})\``,
+    )
+  }
 
-      // For the theme function arguments, we require all separators to contain
-      // comma (`,`), spaces alone should be merged into the previous word to
-      // avoid splitting in this case:
-      //
-      // theme(--color-red-500 / 75%) theme(--color-red-500 / 75%, foo, bar)
-      //
-      // We only need to do this for the first node, as the fallback values are
-      // passed through as-is.
-      let skipUntilIndex = 1
-      for (let i = skipUntilIndex; i < node.nodes.length; i++) {
-        if (node.nodes[i].value.includes(',')) {
-          break
-        }
-        path += node.nodes[i].value
-        skipUntilIndex = i + 1
-      }
+  if (rest.length > 0) {
+    throw new Error(
+      `The --alpha(…) function only accepts one argument, e.g.: \`--alpha(${color || 'var(--my-color)'} / ${alpha || '50%'})\``,
+    )
+  }
 
-      path = eventuallyUnquote(path)
-      let fallbackValues = node.nodes.slice(skipUntilIndex + 1)
-
-      replaceWith(cssThemeFn(resolveThemeValue, path, fallbackValues))
-    }
-  })
-
-  return ValueParser.toCss(ast)
+  return withAlpha(color, alpha)
 }
 
-function cssThemeFn(
-  resolveThemeValue: ResolveThemeValue,
-  path: string,
-  fallbackValues: ValueAstNode[],
-): ValueAstNode[] {
-  let resolvedValue = resolveThemeValue(path)
+function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
+  if (!value) {
+    throw new Error(`The --spacing(…) function requires an argument, but received none.`)
+  }
 
-  if (!resolvedValue && fallbackValues.length > 0) {
-    return fallbackValues
+  if (rest.length > 0) {
+    throw new Error(
+      `The --spacing(…) function only accepts a single argument, but received ${rest.length + 1}.`,
+    )
+  }
+
+  let multiplier = designSystem.theme.resolve(null, ['--spacing'])
+  if (!multiplier) {
+    throw new Error(
+      'The --spacing(…) function requires that the `--spacing` theme variable exists, but it was not found.',
+    )
+  }
+
+  return `calc(${multiplier} * ${value})`
+}
+
+function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+  if (!path.startsWith('--')) {
+    throw new Error(`The --theme(…) function can only be used with CSS variables from your theme.`)
+  }
+
+  return legacyTheme(designSystem, path, ...fallback)
+}
+
+function legacyTheme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+  path = eventuallyUnquote(path)
+
+  let resolvedValue = designSystem.resolveThemeValue(path)
+
+  if (!resolvedValue && fallback.length > 0) {
+    return fallback.join(', ')
   }
 
   if (!resolvedValue) {
@@ -99,9 +74,53 @@ function cssThemeFn(
     )
   }
 
-  // We need to parse the values recursively since this can resolve with another
-  // `theme()` function definition.
-  return ValueParser.parse(resolvedValue)
+  return resolvedValue
+}
+
+export const THEME_FUNCTION_INVOCATION = new RegExp(
+  Object.keys(functions)
+    .map((x) => `${x}\\(`)
+    .join('|'),
+)
+
+export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) {
+  let features = Features.None
+  walk(ast, (node) => {
+    // Find all declaration values
+    if (node.kind === 'declaration' && node.value && THEME_FUNCTION_INVOCATION.test(node.value)) {
+      features |= Features.ThemeFunction
+      node.value = substituteFunctionsInValue(node.value, designSystem)
+      return
+    }
+
+    // Find at-rules rules
+    if (node.kind === 'at-rule') {
+      if (
+        (node.name === '@media' ||
+          node.name === '@custom-media' ||
+          node.name === '@container' ||
+          node.name === '@supports') &&
+        THEME_FUNCTION_INVOCATION.test(node.params)
+      ) {
+        features |= Features.ThemeFunction
+        node.params = substituteFunctionsInValue(node.params, designSystem)
+      }
+    }
+  })
+  return features
+}
+
+export function substituteFunctionsInValue(value: string, designSystem: DesignSystem): string {
+  let ast = ValueParser.parse(value)
+  ValueParser.walk(ast, (node, { replaceWith }) => {
+    if (node.kind === 'function' && node.value in functions) {
+      let args = segment(ValueParser.toCss(node.nodes).trim(), ',').map((x) => x.trim())
+      let result = functions[node.value as keyof typeof functions](designSystem, ...args)
+      return replaceWith(ValueParser.parse(result))
+    }
+  })
+
+  return ValueParser.toCss(ast)
 }
 
 function eventuallyUnquote(value: string) {

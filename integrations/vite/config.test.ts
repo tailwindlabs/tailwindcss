@@ -1,4 +1,3 @@
-import { expect } from 'vitest'
 import { candidate, css, fetchStyles, html, js, json, retryAssertion, test, ts } from '../utils'
 
 test(
@@ -13,7 +12,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -51,7 +50,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -77,7 +76,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -115,7 +114,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
@@ -141,7 +140,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -181,12 +180,19 @@ test(
       `,
     },
   },
-  async ({ fs, getFreePort, spawn }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -194,7 +200,7 @@ test(
     await retryAssertion(async () => {
       await fs.write('my-color.cjs', js`module.exports = 'red'`)
 
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })
@@ -213,7 +219,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5.3.5"
+            "vite": "^6"
           }
         }
       `,
@@ -253,12 +259,19 @@ test(
       `,
     },
   },
-  async ({ fs, getFreePort, spawn }) => {
-    let port = await getFreePort()
-    await spawn(`pnpm vite dev --port ${port}`)
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -266,7 +279,7 @@ test(
     await retryAssertion(async () => {
       await fs.write('my-color.mjs', js`export default 'red'`)
 
-      let css = await fetchStyles(port, '/index.html')
+      let css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })

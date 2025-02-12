@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`border-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -63,7 +63,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[\\#0088cc\\]\\/50 {
-  border-color: #0088cc80;
+  border-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-\\[color\\:var\\(--my-color\\)\\] {
@@ -71,7 +71,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-\\[var\\(--my-color\\)\\] {
@@ -79,7 +79,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[var\\(--my-color\\)\\]\\/50 {
-  border-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-current {
@@ -87,7 +87,7 @@ exports[`border-* 1`] = `
 }
 
 .border-current\\/50 {
-  border-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-inherit {
@@ -95,34 +95,38 @@ exports[`border-* 1`] = `
 }
 
 .border-red-500 {
-  border-color: var(--color-red-500, #ef4444);
+  border-color: var(--color-red-500);
+}
+
+.border-red-500\\/2\\.5 {
+  border-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-red-500\\/2\\.25 {
+  border-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-red-500\\/2\\.75 {
+  border-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-red-500\\/50 {
-  border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-transparent {
   border-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-b-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -184,7 +188,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[\\#0088cc\\]\\/50 {
-  border-bottom-color: #0088cc80;
+  border-bottom-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-b-\\[color\\:var\\(--my-color\\)\\] {
@@ -192,7 +196,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-b-\\[var\\(--my-color\\)\\] {
@@ -200,7 +204,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-bottom-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-b-current {
@@ -208,7 +212,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-current\\/50 {
-  border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-bottom-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-b-inherit {
@@ -216,34 +220,38 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-red-500 {
-  border-bottom-color: var(--color-red-500, #ef4444);
+  border-bottom-color: var(--color-red-500);
+}
+
+.border-b-red-500\\/2\\.5 {
+  border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-b-red-500\\/2\\.25 {
+  border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-b-red-500\\/2\\.75 {
+  border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-b-red-500\\/50 {
-  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-bottom-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-b-transparent {
   border-bottom-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-e-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -305,7 +313,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[\\#0088cc\\]\\/50 {
-  border-inline-end-color: #0088cc80;
+  border-inline-end-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-e-\\[color\\:var\\(--my-color\\)\\] {
@@ -313,7 +321,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-e-\\[var\\(--my-color\\)\\] {
@@ -321,7 +329,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-e-current {
@@ -329,7 +337,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-current\\/50 {
-  border-inline-end-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-inline-end-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-e-inherit {
@@ -337,34 +345,38 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-red-500 {
-  border-inline-end-color: var(--color-red-500, #ef4444);
+  border-inline-end-color: var(--color-red-500);
+}
+
+.border-e-red-500\\/2\\.5 {
+  border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-e-red-500\\/2\\.25 {
+  border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-e-red-500\\/2\\.75 {
+  border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-e-red-500\\/50 {
-  border-inline-end-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-inline-end-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-e-transparent {
   border-inline-end-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-l-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -426,7 +438,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[\\#0088cc\\]\\/50 {
-  border-left-color: #0088cc80;
+  border-left-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-l-\\[color\\:var\\(--my-color\\)\\] {
@@ -434,7 +446,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-l-\\[var\\(--my-color\\)\\] {
@@ -442,7 +454,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-left-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-l-current {
@@ -450,7 +462,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-current\\/50 {
-  border-left-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-left-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-l-inherit {
@@ -458,34 +470,38 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-red-500 {
-  border-left-color: var(--color-red-500, #ef4444);
+  border-left-color: var(--color-red-500);
+}
+
+.border-l-red-500\\/2\\.5 {
+  border-left-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-l-red-500\\/2\\.25 {
+  border-left-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-l-red-500\\/2\\.75 {
+  border-left-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-l-red-500\\/50 {
-  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-left-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-l-transparent {
   border-left-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-r-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -547,7 +563,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[\\#0088cc\\]\\/50 {
-  border-right-color: #0088cc80;
+  border-right-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-r-\\[color\\:var\\(--my-color\\)\\] {
@@ -555,7 +571,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-r-\\[var\\(--my-color\\)\\] {
@@ -563,7 +579,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[var\\(--my-color\\)\\]\\/50 {
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-right-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-r-current {
@@ -571,7 +587,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-current\\/50 {
-  border-right-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-right-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-r-inherit {
@@ -579,34 +595,38 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-red-500 {
-  border-right-color: var(--color-red-500, #ef4444);
+  border-right-color: var(--color-red-500);
+}
+
+.border-r-red-500\\/2\\.5 {
+  border-right-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-r-red-500\\/2\\.25 {
+  border-right-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-r-red-500\\/2\\.75 {
+  border-right-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-r-red-500\\/50 {
-  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-right-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-r-transparent {
   border-right-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-s-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -668,7 +688,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[\\#0088cc\\]\\/50 {
-  border-inline-start-color: #0088cc80;
+  border-inline-start-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-s-\\[color\\:var\\(--my-color\\)\\] {
@@ -676,7 +696,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-s-\\[var\\(--my-color\\)\\] {
@@ -684,7 +704,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-s-current {
@@ -692,7 +712,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-current\\/50 {
-  border-inline-start-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-inline-start-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-s-inherit {
@@ -700,34 +720,38 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-red-500 {
-  border-inline-start-color: var(--color-red-500, #ef4444);
+  border-inline-start-color: var(--color-red-500);
+}
+
+.border-s-red-500\\/2\\.5 {
+  border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-s-red-500\\/2\\.25 {
+  border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-s-red-500\\/2\\.75 {
+  border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-s-red-500\\/50 {
-  border-inline-start-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-inline-start-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-s-transparent {
   border-inline-start-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-t-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -789,7 +813,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[\\#0088cc\\]\\/50 {
-  border-top-color: #0088cc80;
+  border-top-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-t-\\[color\\:var\\(--my-color\\)\\] {
@@ -797,7 +821,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-t-\\[var\\(--my-color\\)\\] {
@@ -805,7 +829,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-top-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-t-current {
@@ -813,7 +837,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-current\\/50 {
-  border-top-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-top-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-t-inherit {
@@ -821,34 +845,38 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-red-500 {
-  border-top-color: var(--color-red-500, #ef4444);
+  border-top-color: var(--color-red-500);
+}
+
+.border-t-red-500\\/2\\.5 {
+  border-top-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-t-red-500\\/2\\.25 {
+  border-top-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-t-red-500\\/2\\.75 {
+  border-top-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-t-red-500\\/50 {
-  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-top-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-t-transparent {
   border-top-color: #0000;
 }
 
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
-}
-
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-x-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -856,152 +884,124 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 1px;
-  border-right-width: 1px;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 1px;
 }
 
 .border-x-0 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 0;
-  border-right-width: 0;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 0;
 }
 
 .border-x-2 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 2px;
-  border-right-width: 2px;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 2px;
 }
 
 .border-x-4 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 4px;
-  border-right-width: 4px;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 4px;
 }
 
 .border-x-123 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 123px;
-  border-right-width: 123px;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 123px;
 }
 
 .border-x-\\[12px\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: 12px;
-  border-right-width: 12px;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: 12px;
 }
 
 .border-x-\\[length\\:var\\(--my-width\\)\\], .border-x-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: var(--my-width);
-  border-right-width: var(--my-width);
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: var(--my-width);
 }
 
 .border-x-\\[medium\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: medium;
-  border-right-width: medium;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: medium;
 }
 
 .border-x-\\[thick\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: thick;
-  border-right-width: thick;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: thick;
 }
 
 .border-x-\\[thin\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
-  border-left-width: thin;
-  border-right-width: thin;
+  border-inline-style: var(--tw-border-style);
+  border-inline-width: thin;
 }
 
 .border-x-\\[\\#0088cc\\] {
-  border-left-color: #08c;
-  border-right-color: #08c;
+  border-inline-color: #08c;
 }
 
 .border-x-\\[\\#0088cc\\]\\/50 {
-  border-left-color: #0088cc80;
-  border-right-color: #0088cc80;
+  border-inline-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-x-\\[color\\:var\\(--my-color\\)\\] {
-  border-left-color: var(--my-color);
-  border-right-color: var(--my-color);
+  border-inline-color: var(--my-color);
 }
 
 .border-x-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-x-\\[var\\(--my-color\\)\\] {
-  border-left-color: var(--my-color);
-  border-right-color: var(--my-color);
+  border-inline-color: var(--my-color);
 }
 
 .border-x-\\[var\\(--my-color\\)\\]\\/50 {
-  border-left-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-inline-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-x-current {
-  border-left-color: currentColor;
-  border-right-color: currentColor;
+  border-inline-color: currentColor;
 }
 
 .border-x-current\\/50 {
-  border-left-color: color-mix(in srgb, currentColor 50%, transparent);
-  border-right-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-inline-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-x-inherit {
-  border-left-color: inherit;
-  border-right-color: inherit;
+  border-inline-color: inherit;
 }
 
 .border-x-red-500 {
-  border-left-color: var(--color-red-500, #ef4444);
-  border-right-color: var(--color-red-500, #ef4444);
+  border-inline-color: var(--color-red-500);
+}
+
+.border-x-red-500\\/2\\.5 {
+  border-inline-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-x-red-500\\/2\\.25 {
+  border-inline-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-x-red-500\\/2\\.75 {
+  border-inline-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-x-red-500\\/50 {
-  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-inline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-x-transparent {
-  border-left-color: #0000;
-  border-right-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
+  border-inline-color: #0000;
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"
 `;
 
 exports[`border-y-* 1`] = `
-":root {
+":root, :host {
   --radius-none: 0px;
   --radius-full: 9999px;
   --radius-sm: .125rem;
@@ -1009,145 +1009,117 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 1px;
-  border-bottom-width: 1px;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 1px;
 }
 
 .border-y-0 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 0;
-  border-bottom-width: 0;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 0;
 }
 
 .border-y-2 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 2px;
-  border-bottom-width: 2px;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 2px;
 }
 
 .border-y-4 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 4px;
-  border-bottom-width: 4px;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 4px;
 }
 
 .border-y-123 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 123px;
-  border-bottom-width: 123px;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 123px;
 }
 
 .border-y-\\[12px\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: 12px;
-  border-bottom-width: 12px;
+  border-block-style: var(--tw-border-style);
+  border-block-width: 12px;
 }
 
 .border-y-\\[length\\:var\\(--my-width\\)\\], .border-y-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: var(--my-width);
-  border-bottom-width: var(--my-width);
+  border-block-style: var(--tw-border-style);
+  border-block-width: var(--my-width);
 }
 
 .border-y-\\[medium\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: medium;
-  border-bottom-width: medium;
+  border-block-style: var(--tw-border-style);
+  border-block-width: medium;
 }
 
 .border-y-\\[thick\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: thick;
-  border-bottom-width: thick;
+  border-block-style: var(--tw-border-style);
+  border-block-width: thick;
 }
 
 .border-y-\\[thin\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
-  border-top-width: thin;
-  border-bottom-width: thin;
+  border-block-style: var(--tw-border-style);
+  border-block-width: thin;
 }
 
 .border-y-\\[\\#0088cc\\] {
-  border-top-color: #08c;
-  border-bottom-color: #08c;
+  border-block-color: #08c;
 }
 
 .border-y-\\[\\#0088cc\\]\\/50 {
-  border-top-color: #0088cc80;
-  border-bottom-color: #0088cc80;
+  border-block-color: oklab(59.9824% -.06725 -.12414 / .5);
 }
 
 .border-y-\\[color\\:var\\(--my-color\\)\\] {
-  border-top-color: var(--my-color);
-  border-bottom-color: var(--my-color);
+  border-block-color: var(--my-color);
 }
 
 .border-y-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-block-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-y-\\[var\\(--my-color\\)\\] {
-  border-top-color: var(--my-color);
-  border-bottom-color: var(--my-color);
+  border-block-color: var(--my-color);
 }
 
 .border-y-\\[var\\(--my-color\\)\\]\\/50 {
-  border-top-color: color-mix(in srgb, var(--my-color) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+  border-block-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
 .border-y-current {
-  border-top-color: currentColor;
-  border-bottom-color: currentColor;
+  border-block-color: currentColor;
 }
 
 .border-y-current\\/50 {
-  border-top-color: color-mix(in srgb, currentColor 50%, transparent);
-  border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-block-color: color-mix(in oklab, currentColor 50%, transparent);
 }
 
 .border-y-inherit {
-  border-top-color: inherit;
-  border-bottom-color: inherit;
+  border-block-color: inherit;
 }
 
 .border-y-red-500 {
-  border-top-color: var(--color-red-500, #ef4444);
-  border-bottom-color: var(--color-red-500, #ef4444);
+  border-block-color: var(--color-red-500);
+}
+
+.border-y-red-500\\/2\\.5 {
+  border-block-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+}
+
+.border-y-red-500\\/2\\.25 {
+  border-block-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+}
+
+.border-y-red-500\\/2\\.75 {
+  border-block-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
 }
 
 .border-y-red-500\\/50 {
-  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-block-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
 }
 
 .border-y-transparent {
-  border-top-color: #0000;
-  border-bottom-color: #0000;
-}
-
-@supports (-moz-orient: inline) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
+  border-block-color: #0000;
 }
 
 @property --tw-border-style {
-  syntax: "<custom-ident>";
+  syntax: "*";
   inherits: false;
   initial-value: solid;
 }"

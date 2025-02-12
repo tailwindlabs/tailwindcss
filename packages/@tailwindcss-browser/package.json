@@ -1,0 +1,37 @@
+{
+  "name": "@tailwindcss/browser",
+  "version": "4.0.6",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "main": "./dist/index.global.js",
+  "browser": "./dist/index.global.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-browser"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node",
+    "dev": "pnpm run build -- --watch",
+    "test:ui": "playwright test"
+  },
+  "exports": {
+    ".": "./dist/index.global.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "devDependencies": {
+    "h3": "^1.13.1",
+    "listhen": "^1.9.0",
+    "tailwindcss": "workspace:*"
+  }
+}
