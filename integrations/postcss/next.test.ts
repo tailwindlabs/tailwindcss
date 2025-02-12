@@ -162,3 +162,89 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
     },
   )
 })
+
+test.only(
+  'should scan dynamic route segments',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "react": "^18",
+            "react-dom": "^18",
+            "next": "^14"
+          },
+          "devDependencies": {
+            "@tailwindcss/postcss": "workspace:^",
+            "tailwindcss": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.mjs': js`
+        /** @type {import('postcss-load-config').Config} */
+        const config = {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+
+        export default config
+      `,
+      'next.config.mjs': js`
+        /** @type {import('next').NextConfig} */
+        const nextConfig = {}
+
+        export default nextConfig
+      `,
+      'app/a/[slug]/page.js': js`
+        export default function Page() {
+          return <h1 className="content-['[slug]']">Hello, Next.js!</h1>
+        }
+      `,
+      'app/b/[...slug]/page.js': js`
+        export default function Page() {
+          return <h1 className="content-['[...slug]']">Hello, Next.js!</h1>
+        }
+      `,
+      'app/c/[[...slug]]/page.js': js`
+        export default function Page() {
+          return <h1 className="content-['[[...slug]]']">Hello, Next.js!</h1>
+        }
+      `,
+      'app/d/(theme)/page.js': js`
+        export default function Page() {
+          return <h1 className="content-['(theme)']">Hello, Next.js!</h1>
+        }
+      `,
+      'app/layout.js': js`
+        import './globals.css'
+
+        export default function RootLayout({ children }) {
+          return (
+            <html>
+              <body>{children}</body>
+            </html>
+          )
+        }
+      `,
+      'app/globals.css': css`
+        @import 'tailwindcss/utilities' source(none);
+        @source './**/*.{js,ts,jsx,tsx,mdx}';
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm next build')
+
+    let files = await fs.glob('.next/static/css/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [
+      candidate`content-['[slug]']`,
+      candidate`content-['[...slug]']`,
+      candidate`content-['[[...slug]]']`,
+      candidate`content-['(theme)']`,
+    ])
+  },
+)
