@@ -380,6 +380,14 @@ test(
         is-arr-mixed: null, true, false, 1234567, 1.35, 'foo', 'bar', 'true';
       }
 
+      @custom-variant dark {
+        @media not print {
+          .dark & {
+            @slot;
+          }
+        }
+      }
+
       /*
         The default border color has changed to \`currentColor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
