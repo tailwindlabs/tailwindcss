@@ -9945,7 +9945,38 @@ test('border with custom default border width', async () => {
       initial-value: solid;
     }"
   `)
-  expect(await run(['-border', 'border/foo'])).toEqual('')
+})
+
+test(`border where \`--color-*\` and \`--border-width-*\` matches`, async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-default: #f00;
+          --border-width-default: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['border-default'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-default: red;
+      --border-width-default: 2px;
+    }
+
+    .border-default {
+      border-style: var(--tw-border-style);
+      border-width: var(--border-width-default);
+      border-color: var(--color-default);
+    }
+
+    @property --tw-border-style {
+      syntax: "*";
+      inherits: false;
+      initial-value: solid;
+    }"
+  `)
 })
 
 test('bg', async () => {

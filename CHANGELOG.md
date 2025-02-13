@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
 - Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility
 - Ensure drop shadow utilities don't inherit unexpectedly ([#16471](https://github.com/tailwindlabs/tailwindcss/pull/16471))
+- Ensure `border` utility creates `border-width` and `border-color` declarations if both namespaces have a match ([#16513](https://github.com/tailwindlabs/tailwindcss/pull/16513))
 
 ## [4.0.6] - 2025-02-10
 
