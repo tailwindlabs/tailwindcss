@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
-import { warn } from './renderer'
+import { error, warn } from './renderer'
 
 const exec = promisify(execCb)
 
@@ -20,11 +20,28 @@ export function pkg(base: string) {
       if (location === 'devDependencies') {
         args.push(SAVE_DEV[packageManager] || SAVE_DEV.default)
       }
-      return exec(`${packageManager} add ${args.join(' ')}`, { cwd: base })
+
+      let command = `${packageManager} add ${args.join(' ')}`
+      try {
+        return await exec(command, { cwd: base })
+      } catch (e: any) {
+        error(`An error occurred while running \`${command}\`\n\n${e.stdout}\n${e.stderr}`, {
+          prefix: '↳ ',
+        })
+        throw e
+      }
     },
     async remove(packages: string[]) {
       let packageManager = await packageManagerForBase.get(base)
-      return exec(`${packageManager} remove ${packages.join(' ')}`, { cwd: base })
+      let command = `${packageManager} remove ${packages.join(' ')}`
+      try {
+        return await exec(command, { cwd: base })
+      } catch (e: any) {
+        error(`An error occurred while running \`${command}\`\n\n${e.stdout}\n${e.stderr}`, {
+          prefix: '↳ ',
+        })
+        throw e
+      }
     },
   }
 }
