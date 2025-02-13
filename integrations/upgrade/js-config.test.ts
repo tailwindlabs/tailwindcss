@@ -318,7 +318,14 @@ test(
         import customPlugin from './custom-plugin'
 
         export default {
-          darkMode: ['variant', '@media not print { .dark & }'],
+          darkMode: [
+            'variant',
+            [
+              '@media not print { .dark & }',
+              '@media not eink { .dark & }',
+              '&:where(.dark, .dark *)',
+            ],
+          ],
           plugins: [
             typography,
             customPlugin({
@@ -385,6 +392,14 @@ test(
           .dark & {
             @slot;
           }
+        }
+        @media not eink {
+          .dark & {
+            @slot;
+          }
+        }
+        &:where(.dark, .dark *) {
+          @slot;
         }
       }
 
