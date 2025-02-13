@@ -2141,30 +2141,34 @@ export function createUtilities(theme: Theme) {
           }
         }
 
+        let declarations = []
+
+        // `border-width` property
+        {
+          if (!candidate.modifier) {
+            let value = theme.resolve(candidate.value.value, ['--border-width'])
+            if (value) {
+              let decls = desc.width(value)
+              if (decls) declarations.push(borderProperties(), ...decls)
+            }
+
+            if (isPositiveInteger(candidate.value.value)) {
+              let decls = desc.width(`${candidate.value.value}px`)
+              if (decls) declarations.push(borderProperties(), ...decls)
+            }
+          }
+        }
+
         // `border-color` property
         {
           let value = resolveThemeColor(candidate, theme, ['--border-color', '--color'])
           if (value) {
-            return desc.color(value)
+            let decls = desc.color(value)
+            if (decls) declarations.push(...decls)
           }
         }
 
-        // `border-width` property
-        {
-          if (candidate.modifier) return
-          let value = theme.resolve(candidate.value.value, ['--border-width'])
-          if (value) {
-            let decls = desc.width(value)
-            if (!decls) return
-            return [borderProperties(), ...decls]
-          }
-
-          if (isPositiveInteger(candidate.value.value)) {
-            let decls = desc.width(`${candidate.value.value}px`)
-            if (!decls) return
-            return [borderProperties(), ...decls]
-          }
-        }
+        if (declarations.length > 0) return declarations
       })
 
       suggest(classRoot, () => [
