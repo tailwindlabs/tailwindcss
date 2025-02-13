@@ -318,6 +318,7 @@ test(
         import customPlugin from './custom-plugin'
 
         export default {
+          darkMode: ['variant', '@media not print { .dark & }'],
           plugins: [
             typography,
             customPlugin({
