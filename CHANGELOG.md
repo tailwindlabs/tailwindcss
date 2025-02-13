@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
 - Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility
 - Ensure drop shadow utilities don't inherit unexpectedly ([#16471](https://github.com/tailwindlabs/tailwindcss/pull/16471))
+- Export backwards compatible config and plugin types from `tailwindcss/plugin` ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
 - Upgrade: Report errors when updating dependencies ([#16504](https://github.com/tailwindlabs/tailwindcss/pull/16504))
 
 ## [4.0.6] - 2025-02-10
