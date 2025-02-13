@@ -1,4 +1,12 @@
-import type { Config, PluginFn, PluginWithConfig, PluginWithOptions } from './compat/plugin-api'
+import type { ThemeConfig } from './compat/config/types'
+import type {
+  Config,
+  Plugin,
+  PluginAPI,
+  PluginFn,
+  PluginWithConfig,
+  PluginWithOptions,
+} from './compat/plugin-api'
 
 function createPlugin(handler: PluginFn, config?: Partial<Config>): PluginWithConfig {
   return {
@@ -24,3 +32,6 @@ createPlugin.withOptions = function <T>(
 }
 
 export default createPlugin
+
+// v3 compatible types previously exported via `tailwindcss/types/config`
+export type { Config, PluginAPI, PluginFn as PluginCreator, Plugin as PluginsConfig, ThemeConfig }
