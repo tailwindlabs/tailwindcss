@@ -55,6 +55,14 @@
       "require": "./src/plugin.cts",
       "import": "./src/plugin.ts"
     },
+    "./ast": {
+      "require": "./src/ast.cts",
+      "import": "./src/ast.ts"
+    },
+    "./ast.js": {
+      "require": "./src/ast.cts",
+      "import": "./src/ast.ts"
+    },
     "./package.json": "./package.json",
     "./index.css": "./index.css",
     "./index": "./index.css",
@@ -82,6 +90,14 @@
       "./plugin.js": {
         "require": "./dist/plugin.js",
         "import": "./dist/plugin.mjs"
+      },
+      "./ast": {
+        "require": "./dist/ast.js",
+        "import": "./dist/ast.mjs"
+      },
+      "./ast.js": {
+        "require": "./dist/ast.js",
+        "import": "./dist/ast.mjs"
       },
       "./defaultTheme": {
         "require": "./dist/default-theme.js",

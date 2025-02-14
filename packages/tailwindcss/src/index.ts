@@ -33,9 +33,13 @@ import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
 
+export {
+  CSS
+}
+
 const IS_VALID_PREFIX = /^[a-z]+$/
 
-type CompileOptions = {
+export type CompileOptions = {
   base?: string
   loadModule?: (
     id: string,
@@ -106,7 +110,7 @@ export const enum Features {
   Variants = 1 << 5,
 }
 
-async function parseCss(
+export async function parseCss(
   ast: AstNode[],
   {
     base = '',

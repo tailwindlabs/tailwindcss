@@ -11,6 +11,7 @@ export default defineConfig([
       colors: 'src/compat/colors.ts',
       'default-theme': 'src/compat/default-theme.ts',
       'flatten-color-palette': 'src/compat/flatten-color-palette.ts',
+      'ast': 'src/ast.ts'
     },
     define: {
       'process.env.FEATURES_ENV': JSON.stringify(process.env.FEATURES_ENV ?? 'insiders'),
@@ -26,6 +27,7 @@ export default defineConfig([
       colors: 'src/compat/colors.cts',
       'default-theme': 'src/compat/default-theme.cts',
       'flatten-color-palette': 'src/compat/flatten-color-palette.cts',
+      'ast': 'src/ast.cts'
     },
     define: {
       'process.env.FEATURES_ENV': JSON.stringify(process.env.FEATURES_ENV ?? 'insiders'),
