@@ -4,6 +4,7 @@ use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
 use bstr::ByteSlice;
+use extractor::Extracted;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
 use glob_match::glob_match;
@@ -17,11 +18,13 @@ use std::time::SystemTime;
 use tracing::event;
 
 pub mod cursor;
+pub mod extractor;
 pub mod fast_skip;
 pub mod glob;
 pub mod parser;
 pub mod paths;
 pub mod scanner;
+pub mod throughput;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
     || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
@@ -451,9 +454,9 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
         Some("html") => Some(content.replace("[class.", "[")),
         Some("svelte") => Some(
             content
-                .replace(" class:", " ")
-                .replace("\tclass:", " ")
-                .replace("\nclass:", " "),
+                .replace(" class:", " class ")
+                .replace("\tclass:", " class ")
+                .replace("\nclass:", " class "),
         ),
         _ => Some(content),
     }
@@ -478,7 +481,24 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let mut result: Vec<_> = blobs
         .par_iter()
         .flat_map(|blob| blob.par_split(|x| matches!(x, b'\n')))
-        .map(|blob| Extractor::unique(blob, Default::default()))
+        .map(|blob| {
+            let mut candidates: FxHashSet<&[u8]> = Default::default();
+            candidates.reserve(100);
+
+            candidates.extend(
+                crate::extractor::Extractor::new(blob)
+                    .extract()
+                    .into_iter()
+                    .filter_map(|x| match x {
+                        Extracted::Candidate(bytes) => Some(bytes),
+                        // Extracted::CssVariable(bytes) => Some(bytes),
+                        _ => None,
+                    }),
+            );
+
+            candidates
+        })
+        // .map(|blob| Extractor::unique(blob, Default::default()))
         .reduce(Default::default, |mut a, b| {
             a.extend(b);
             a
