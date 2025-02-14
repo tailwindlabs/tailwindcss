@@ -1955,6 +1955,26 @@ test('forced-colors', async () => {
   expect(await run(['forced-colors/foo:flex'])).toEqual('')
 })
 
+test('noscript', async () => {
+    expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: none) {
+      .noscript\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting', async () => {
+  expect(await run(['scripting:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: enabled) {
+      .scripting\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('nth', async () => {
   expect(
     await run([
