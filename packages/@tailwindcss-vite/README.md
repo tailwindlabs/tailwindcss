@@ -35,9 +35,9 @@ For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
 The Vite plugin can be configured by passing an object to the `tailwindcss()`. Here is a full list of available options:
 
-| Property                                      | Values                                    |
-| --------------------------------------------- | ----------------------------------------- |
-| [`scanner`](#disabling-module-graph-scanning) | `module-graph` _(default)_, `file-system` |
+| Property                                      | Values                                                 |
+| --------------------------------------------- | ------------------------------------------------------ |
+| [`scanner`](#disabling-module-graph-scanning) | `automatic` _(default)_, `module-graph`, `file-system` |
 
 ### Disabling module-graph scanning
 
@@ -45,7 +45,9 @@ Our Vite plugin is designed to take the Vite module graph into account when scan
 
 However, sometimes your Vite setup is split across different build steps (e.g. when using SSR builds). If that is the case, you might find that the client build might contain more utilities since it traverses all components while the server build doesn't.
 
-To ensure that both builds read all components from your project, set the `scanner` option to `file-system`:
+When the `scanner` is set to `automatic`, we will automatically use the `file-system` scanner for Astro builds.
+
+To ensure that both builds read all components from your project in other cases, set the `scanner` option to `file-system`:
 
 ```js
 import { defineConfig } from 'vite'
