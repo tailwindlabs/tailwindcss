@@ -13,11 +13,11 @@ const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
 const IGNORED_DEPENDENCIES = ['tailwind-merge']
 
-type ScannerMode = 'module-graph' | 'file-system'
+type ScannerMode = 'automatic' | 'module-graph' | 'file-system'
 
 export default function tailwindcss(
-  { scanner: scannerMode = 'module-graph' }: { scanner: ScannerMode } = {
-    scanner: 'module-graph',
+  { scanner: scannerMode = 'automatic' }: { scanner: ScannerMode } = {
+    scanner: 'automatic',
   },
 ): Plugin[] {
   let servers: ViteDevServer[] = []
@@ -25,8 +25,6 @@ export default function tailwindcss(
 
   let isSSR = false
   let minify = false
-
-  let additionalFileSystemSources: string[] = []
 
   // The Vite extension has two types of sources for candidates:
   //
@@ -69,7 +67,6 @@ export default function tailwindcss(
       () => moduleGraphCandidates,
       scannerMode,
       config!.root,
-      additionalFileSystemSources,
       customCssResolver,
       customJsResolver,
     )
@@ -212,8 +209,13 @@ export default function tailwindcss(
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
-        if (isAstro(config)) {
-          additionalFileSystemSources.push(path.join(config.root, 'src', 'components'))
+        if (scannerMode === 'automatic') {
+          if (shouldDisableModuleGraph(config)) {
+            console.warn('Detected an Astro.js build and opted-out of using the Vite module graph.')
+            scannerMode = 'file-system'
+            return
+          }
+          scannerMode = 'module-graph'
         }
       },
 
@@ -436,7 +438,6 @@ class Root {
     private getSharedCandidates: () => Map<string, Set<string>>,
     private scannerMode: ScannerMode,
     private base: string,
-    private additionalFileSystemSources: string[],
 
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
     private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -490,15 +491,6 @@ class Root {
         // Use the specified root
         return [this.compiler.root]
       })().concat(this.compiler.globs)
-
-      if (this.additionalFileSystemSources) {
-        sources = sources.concat(
-          this.additionalFileSystemSources.map((source) => ({
-            base: source,
-            pattern: '**/*',
-          })),
-        )
-      }
 
       this.scanner = new Scanner({ sources })
     }
@@ -616,6 +608,6 @@ class Root {
   }
 }
 
-function isAstro(config: ResolvedConfig) {
+function shouldDisableModuleGraph(config: ResolvedConfig) {
   return config.plugins.some((p) => p.name === 'astro:scripts:page-ssr')
 }

@@ -92,10 +92,9 @@ test(
         // https://astro.build/config
         export default defineConfig({ vite: { plugins: [tailwindcss()] }, integrations: [react()] })
       `,
-      // prettier-ignore
       'src/pages/index.astro': html`
         ---
-        import ClientOnly from '../components/client-only';
+        import ClientOnly from './client-only';
         ---
 
         <div class="underline">Hello, world!</div>
@@ -106,7 +105,7 @@ test(
           @import 'tailwindcss';
         </style>
       `,
-      'src/components/client-only.jsx': js`
+      'src/pages/client-only.jsx': js`
         export default function ClientOnly() {
           return <div className="overline">Hello, world!</div>
         }
