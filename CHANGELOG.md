@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
+- Vite: Add a new `scanner` option to disable module-graph based scanning ([#16425](https://github.com/tailwindlabs/tailwindcss/pull/16425))
 
 ### Fixed
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export backwards compatible config and plugin types from `tailwindcss/plugin` ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
 - Upgrade: Report errors when updating dependencies ([#16504](https://github.com/tailwindlabs/tailwindcss/pull/16504))
 - Upgrade: Ensure a `darkMode` JS config setting with block syntax converts to use `@slot` ([#16507](https://github.com/tailwindlabs/tailwindcss/pull/16507))
+- Vite: Ensure that Astro builds with client-only components are always scanned ([#16425](https://github.com/tailwindlabs/tailwindcss/pull/16425))
 
 ## [4.0.6] - 2025-02-10
 
