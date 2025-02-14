@@ -7,6 +7,7 @@ import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
+import { escape } from '../utils/escape'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
@@ -282,8 +283,9 @@ export function buildPluginApi({
           })
         }
 
-        designSystem.utilities.static(className, () => {
+        designSystem.utilities.static(className, (candidate) => {
           let clonedAst = structuredClone(ast)
+          replaceNestedClassNameReferences(clonedAst, className, candidate.raw)
           featuresRef.current |= substituteAtApply(clonedAst, designSystem)
           return clonedAst
         })
@@ -406,6 +408,7 @@ export function buildPluginApi({
             }
 
             let ast = objectToAst(fn(value, { modifier }))
+            replaceNestedClassNameReferences(ast, name, candidate.raw)
             featuresRef.current |= substituteAtApply(ast, designSystem)
             return ast
           }
@@ -543,3 +546,22 @@ function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNo
 
 type Primitive = string | number | boolean | null
 export type CssPluginOptions = Record<string, Primitive | Primitive[]>
+
+function replaceNestedClassNameReferences(
+  ast: AstNode[],
+  utilityName: string,
+  rawCandidate: string,
+) {
+  // Replace nested rules using the utility name in the selector
+  walk(ast, (node) => {
+    if (node.kind === 'rule') {
+      let selectorAst = SelectorParser.parse(node.selector)
+      SelectorParser.walk(selectorAst, (node) => {
+        if (node.kind === 'selector' && node.value === `.${utilityName}`) {
+          node.value = `.${escape(rawCandidate)}`
+        }
+      })
+      node.selector = SelectorParser.toCss(selectorAst)
+    }
+  })
+}
