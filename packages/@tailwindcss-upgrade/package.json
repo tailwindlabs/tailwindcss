@@ -32,7 +32,7 @@
     "braces": "^3.0.3",
     "dedent": "1.5.3",
     "enhanced-resolve": "^5.18.1",
-    "globby": "^14.0.2",
+    "globby": "^14.1.0",
     "jiti": "^2.0.0-beta.3",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
