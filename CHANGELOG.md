@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure drop shadow utilities don't inherit unexpectedly ([#16471](https://github.com/tailwindlabs/tailwindcss/pull/16471))
 - Export backwards compatible config and plugin types from `tailwindcss/plugin` ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
 - Ensure JavaScript plugins that emit nested rules referencing to the utility name work as expected ([#16539](https://github.com/tailwindlabs/tailwindcss/pull/16539))
+- Ensure that Next.js splat routes are automatically scanned for classes ([#16457](https://github.com/tailwindlabs/tailwindcss/pull/16457))
 - Upgrade: Report errors when updating dependencies ([#16504](https://github.com/tailwindlabs/tailwindcss/pull/16504))
 - Upgrade: Ensure a `darkMode` JS config setting with block syntax converts to use `@slot` ([#16507](https://github.com/tailwindlabs/tailwindcss/pull/16507))
 

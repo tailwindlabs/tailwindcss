@@ -1,5 +1,5 @@
+use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
-use glob_match::glob_match;
 use std::path::{Path, PathBuf};
 use tracing::event;
 
@@ -173,7 +173,7 @@ pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
 
     globs
         .iter()
-        .any(|g| glob_match(&format!("{}/{}", g.base, g.pattern), &path))
+        .any(|g| glob_match(&format!("{}/{}", g.base, g.pattern), path.as_bytes()))
 }
 
 #[cfg(test)]

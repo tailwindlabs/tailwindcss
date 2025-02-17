@@ -16,7 +16,7 @@ walkdir = "2.5.0"
 ignore = "0.4.23"
 dunce = "1.0.5"
 bexpand = "1.2.0"
-glob-match = "0.2.1"
+fast-glob = "0.4.3"
 
 [dev-dependencies]
 tempfile = "3.13.0"

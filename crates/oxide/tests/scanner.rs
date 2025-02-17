@@ -434,9 +434,9 @@ mod scanner {
             candidates,
             vec![
                 "content-['(theme)']",
-                "content-['[slug]']",
                 "content-['[...slug]']",
                 "content-['[[...slug]]']",
+                "content-['[slug]']",
             ],
         );
     }
