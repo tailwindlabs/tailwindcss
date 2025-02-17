@@ -163,7 +163,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
   )
 })
 
-test.only(
+test(
   'should scan dynamic route segments',
   {
     fs: {
