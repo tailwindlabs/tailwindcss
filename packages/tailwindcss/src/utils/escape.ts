@@ -3,12 +3,12 @@ export function escape(value: string) {
   if (arguments.length === 0) {
     throw new TypeError('`CSS.escape` requires an argument.')
   }
-  const string = String(value)
-  const length = string.length
+  let string = String(value)
+  let length = string.length
   let index = -1
   let codeUnit: number
   let result = ''
-  const firstCodeUnit = string.charCodeAt(0)
+  let firstCodeUnit = string.charCodeAt(0)
 
   if (
     // If the character is the first character and is a `-` (U+002D), and
