@@ -1,10 +1,9 @@
 ---
 name: Bug report
-about: Report a Tailwind CSS issue.
+about: If you've already asked for help with a problem and confirmed something is broken with Tailwind CSS itself, create a bug report.
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 <!-- Please provide all of the information requested below. We're a small team and without all of this information it's not possible for us to help and your bug report will be closed. -->
