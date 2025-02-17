@@ -1680,6 +1680,13 @@ mod test {
 
     #[test]
     fn test_find_css_variables() {
+        let candidates = run(
+            "let foo = '--color-red-500'; x.getPropertyValue(foo)",
+            false,
+        );
+        assert_eq!(candidates, vec![""]);
+        assert_eq!(candidates, vec!["let", "foo", "--color-red-500"]);
+
         let candidates = run("var(--color-red-500)", false);
         assert_eq!(candidates, vec!["var", "--color-red-500"]);
 

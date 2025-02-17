@@ -1,13 +1,13 @@
 import watcher from '@parcel/watcher'
-import { compile, env, Instrumentation } from '@tailwindcss/node'
-import { clearRequireCache } from '@tailwindcss/node/require-cache'
-import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
-import { existsSync, type Stats } from 'node:fs'
+import {compile, env, Instrumentation} from '@tailwindcss/node'
+import {clearRequireCache} from '@tailwindcss/node/require-cache'
+import {Scanner, type ChangedContent} from '@tailwindcss/oxide'
+import {Features, transform} from 'lightningcss'
+import {existsSync, type Stats} from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Arg, Result } from '../../utils/args'
-import { Disposables } from '../../utils/disposables'
+import type {Arg, Result} from '../../utils/args'
+import {Disposables} from '../../utils/disposables'
 import {
   eprintln,
   formatDuration,
@@ -16,7 +16,7 @@ import {
   println,
   relative,
 } from '../../utils/renderer'
-import { drainStdin, outputFile } from './utils'
+import {drainStdin, outputFile} from './utils'
 
 const css = String.raw
 const DEBUG = env.DEBUG
@@ -164,14 +164,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
       // No root specified, use the base directory
       if (compiler.root === null) {
-        return [{ base, pattern: '**/*' }]
+        return [{base, pattern: '**/*'}]
       }
 
       // Use the specified root
       return [compiler.root]
     })().concat(compiler.globs)
 
-    let scanner = new Scanner({ sources })
+    let scanner = new Scanner({sources})
     DEBUG && I.end('Setup compiler')
 
     return [compiler, scanner] as const
@@ -235,8 +235,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             clearRequireCache(resolvedFullRebuildPaths)
             fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
-            // Create a new compiler, given the new `input`
-            ;[compiler, scanner] = await createCompiler(input, I)
+              // Create a new compiler, given the new `input`
+              ;[compiler, scanner] = await createCompiler(input, I)
 
             // Scan the directory for candidates
             DEBUG && I.start('Scan for candidates')
@@ -312,6 +312,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   DEBUG && I.start('Scan for candidates')
   let candidates = scanner.scan()
   DEBUG && I.end('Scan for candidates')
+  // require('fs').writeFileSync('candidates.json', JSON.stringify(candidates, null, 2))
+  // DEBUG && I.hit(`Candidates: ${candidates.length}`)
   DEBUG && I.start('Build CSS')
   let output = await handleError(() => compiler.build(candidates))
   DEBUG && I.end('Build CSS')
@@ -387,7 +389,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
   // Setup a watcher for every directory.
   for (let dir of dirs) {
-    let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
+    let {unsubscribe} = await watcher.subscribe(dir, async (err, events) => {
       // Whenever an error occurs we want to let the user know about it but we
       // want to keep watching for changes.
       if (err) {
@@ -433,7 +435,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
 function optimizeCss(
   input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
+  {file = 'input.css', minify = false}: {file?: string; minify?: boolean} = {},
 ) {
   function optimize(code: Buffer | Uint8Array) {
     return transform({
