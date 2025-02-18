@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "@parcel/watcher": "^2.5.1",
-    "@tailwindcss/node": "workspace:^",
-    "@tailwindcss/oxide": "workspace:^",
+    "@tailwindcss/node": "workspace:*",
+    "@tailwindcss/oxide": "workspace:*",
     "enhanced-resolve": "^5.18.1",
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
