@@ -174,19 +174,8 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         return Boolean(url)
       })
 
-      // Candidates are resolved lazily, so the first visit of index.html
-      // will only have candidates from this file.
       await retryAssertion(async () => {
         let styles = await fetchStyles(url, '/index.html')
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).not.toContain(candidate`font-bold`)
-      })
-
-      // Going to about.html will extend the candidate list to include
-      // candidates from about.html.
-      await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/about.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -696,7 +685,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
 })
 
 test(
-  `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
+  `demote Tailwind roots to regular CSS files and back to Tailwind roots`,
   {
     fs: {
       'package.json': json`
@@ -750,18 +739,8 @@ test(
       return Boolean(url)
     })
 
-    // Candidates are resolved lazily, so the first visit of index.html
-    // will only have candidates from this file.
     await retryAssertion(async () => {
       let styles = await fetchStyles(url, '/index.html')
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).not.toContain(candidate`font-bold`)
-    })
-
-    // Going to about.html will extend the candidate list to include
-    // candidates from about.html.
-    await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/about.html')
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
