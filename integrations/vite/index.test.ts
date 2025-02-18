@@ -92,7 +92,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  test.only(
+  test(
     'dev mode',
     {
       fs: {
