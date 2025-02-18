@@ -65,7 +65,7 @@ export default function tailwindcss(): Plugin[] {
         if (!isPotentialCssRootFile(id)) return
 
         using I = new Instrumentation()
-        I.start('[@tailwindcss/vite] Generate CSS (serve)')
+        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
 
         let root = roots.get(id)
 
@@ -75,7 +75,7 @@ export default function tailwindcss(): Plugin[] {
           return src
         }
 
-        I.end('[@tailwindcss/vite] Generate CSS (serve)')
+        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
         return { code: generated }
       },
     },
@@ -90,7 +90,7 @@ export default function tailwindcss(): Plugin[] {
         if (!isPotentialCssRootFile(id)) return
 
         using I = new Instrumentation()
-        I.start('[@tailwindcss/vite] Generate CSS (build)')
+        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
 
         let root = roots.get(id)
 
@@ -99,11 +99,11 @@ export default function tailwindcss(): Plugin[] {
           roots.delete(id)
           return src
         }
-        I.end('[@tailwindcss/vite] Generate CSS (build)')
+        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
-        I.start('[@tailwindcss/vite] Optimize CSS')
+        DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
         generated = optimizeCss(generated, { minify })
-        I.end('[@tailwindcss/vite] Optimize CSS')
+        DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 
         return { code: generated }
       },
