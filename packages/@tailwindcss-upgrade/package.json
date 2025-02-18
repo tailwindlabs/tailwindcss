@@ -27,8 +27,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@tailwindcss/node": "workspace:^",
-    "@tailwindcss/oxide": "workspace:^",
+    "@tailwindcss/node": "workspace:*",
+    "@tailwindcss/oxide": "workspace:*",
     "braces": "^3.0.3",
     "dedent": "1.5.3",
     "enhanced-resolve": "^5.18.1",
