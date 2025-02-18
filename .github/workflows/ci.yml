@@ -28,7 +28,7 @@ jobs:
         on-main-branch:
           - ${{ github.ref == 'refs/heads/main' }}
         exclude:
-          - on-main-branch: true
+          - on-main-branch: false
             runner:
               name: Windows
           - on-main-branch: false
