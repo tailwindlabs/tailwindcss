@@ -76,7 +76,6 @@ export default function tailwindcss(): Plugin[] {
         }
 
         I.end('[@tailwindcss/vite] Generate CSS (serve)')
-        I.report()
         return { code: generated }
       },
     },
@@ -105,8 +104,6 @@ export default function tailwindcss(): Plugin[] {
         I.start('[@tailwindcss/vite] Optimize CSS')
         generated = optimizeCss(generated, { minify })
         I.end('[@tailwindcss/vite] Optimize CSS')
-
-        I.report()
 
         return { code: generated }
       },
