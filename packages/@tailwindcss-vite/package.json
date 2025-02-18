@@ -28,8 +28,8 @@
     }
   },
   "dependencies": {
-    "@tailwindcss/node": "workspace:^",
-    "@tailwindcss/oxide": "workspace:^",
+    "@tailwindcss/node": "workspace:*",
+    "@tailwindcss/oxide": "workspace:*",
     "lightningcss": "catalog:",
     "tailwindcss": "workspace:*"
   },
