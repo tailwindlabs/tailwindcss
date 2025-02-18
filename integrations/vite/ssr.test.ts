@@ -51,7 +51,7 @@ test(
             cssMinify: false,
             ssrEmitAssets: true,
           },
-          plugins: [tailwindcss({ scanner: 'file-system' })],
+          plugins: [tailwindcss()],
         })
       `,
       ...WORKSPACE,
@@ -98,7 +98,7 @@ test(
             cssMinify: false,
             ssrEmitAssets: true,
           },
-          plugins: [tailwindcss({ scanner: 'file-system' })],
+          plugins: [tailwindcss()],
         })
       `,
       ...WORKSPACE,

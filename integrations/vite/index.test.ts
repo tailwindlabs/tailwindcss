@@ -14,12 +14,7 @@ import {
   yaml,
 } from '../utils'
 
-describe.each([
-  ['postcss', 'module-graph'],
-  ['postcss', 'file-system'],
-  ['lightningcss', 'module-graph'],
-  ['lightningcss', 'file-system'],
-])('using %s via %s', (transformer, scanner) => {
+describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     `production build`,
     {
@@ -50,7 +45,7 @@ describe.each([
           export default defineConfig({
             css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
             build: { cssMinify: false },
-            plugins: [tailwindcss({ scanner: '${scanner}' })],
+            plugins: [tailwindcss()],
           })
         `,
         'project-a/index.html': html`
@@ -62,7 +57,9 @@ describe.each([
           </body>
         `,
         'project-a/tailwind.config.js': js`
-          export default { content: ['../project-b/src/**/*.js'] }
+          export default {
+            content: ['../project-b/src/**/*.js'],
+          }
         `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/theme' theme(reference);
@@ -125,7 +122,7 @@ describe.each([
           export default defineConfig({
             css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
             build: { cssMinify: false },
-            plugins: [tailwindcss({ scanner: '${scanner}' })],
+            plugins: [tailwindcss()],
           })
         `,
         'project-a/index.html': html`
@@ -145,7 +142,9 @@ describe.each([
           </body>
         `,
         'project-a/tailwind.config.js': js`
-          export default { content: ['../project-b/src/**/*.js'] }
+          export default {
+            content: ['../project-b/src/**/*.js'],
+          }
         `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/theme' theme(reference);
@@ -163,7 +162,9 @@ describe.each([
       },
     },
     async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite dev', { cwd: path.join(root, 'project-a') })
+      let process = await spawn('pnpm vite dev', {
+        cwd: path.join(root, 'project-a'),
+      })
       await process.onStdout((m) => m.includes('ready in'))
 
       let url = ''
@@ -173,19 +174,17 @@ describe.each([
         return Boolean(url)
       })
 
-      // Candidates are resolved lazily in module-graph mode, so the first visit of index.html will
-      // only have candidates from this file.
+      // Candidates are resolved lazily, so the first visit of index.html
+      // will only have candidates from this file.
       await retryAssertion(async () => {
         let styles = await fetchStyles(url, '/index.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
-
-        if (scanner === 'module-graph') {
-          expect(styles).not.toContain(candidate`font-bold`)
-        }
+        expect(styles).not.toContain(candidate`font-bold`)
       })
 
-      // Going to about.html will extend the candidate list to include candidates from about.html.
+      // Going to about.html will extend the candidate list to include
+      // candidates from about.html.
       await retryAssertion(async () => {
         let styles = await fetchStyles(url, '/about.html')
         expect(styles).toContain(candidate`underline`)
@@ -233,8 +232,8 @@ describe.each([
       })
 
       await retryAssertion(async () => {
-        // After updates to the CSS file, all previous candidates should still be in the generated
-        // stylesheet.
+        // After updates to the CSS file, all previous candidates should still be in
+        // the generated CSS
         await fs.write(
           'project-a/src/index.css',
           css`
@@ -284,7 +283,10 @@ describe.each([
           import tailwindcss from '@tailwindcss/vite'
           import { defineConfig } from 'vite'
 
-          export default defineConfig({ build: { cssMinify: false }, plugins: [tailwindcss()] })
+          export default defineConfig({
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+          })
         `,
         'project-a/index.html': html`
           <head>
@@ -295,7 +297,9 @@ describe.each([
           </body>
         `,
         'project-a/tailwind.config.js': js`
-          export default { content: ['../project-b/src/**/*.js'] }
+          export default {
+            content: ['../project-b/src/**/*.js'],
+          }
         `,
         'project-a/src/index.css': css`
           @import 'tailwindcss/theme' theme(reference);
@@ -320,7 +324,9 @@ describe.each([
       },
     },
     async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite build --watch', { cwd: path.join(root, 'project-a') })
+      let process = await spawn('pnpm vite build --watch', {
+        cwd: path.join(root, 'project-a'),
+      })
       await process.onStdout((m) => m.includes('built in'))
 
       let filename = ''
@@ -459,7 +465,7 @@ describe.each([
           export default defineConfig({
             css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
             build: { cssMinify: false },
-            plugins: [tailwindcss({ scanner: '${scanner}' })],
+            plugins: [tailwindcss()],
           })
         `,
         'project-a/index.html': html`
@@ -545,7 +551,7 @@ describe.each([
           export default defineConfig({
             css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
             build: { cssMinify: false },
-            plugins: [tailwindcss({ scanner: '${scanner}' })],
+            plugins: [tailwindcss()],
           })
         `,
         'project-a/index.html': html`
@@ -647,7 +653,7 @@ describe.each([
           export default defineConfig({
             css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
             build: { cssMinify: false },
-            plugins: [tailwindcss({ scanner: '${scanner}' })],
+            plugins: [tailwindcss()],
           })
         `,
         'project-a/index.html': html`
@@ -696,15 +702,23 @@ test(
       'package.json': json`
         {
           "type": "module",
-          "dependencies": { "@tailwindcss/vite": "workspace:^", "tailwindcss": "workspace:^" },
-          "devDependencies": { "vite": "^6" }
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^6"
+          }
         }
       `,
       'vite.config.ts': ts`
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
-        export default defineConfig({ build: { cssMinify: false }, plugins: [tailwindcss()] })
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
       `,
       'index.html': html`
         <head>
@@ -770,15 +784,23 @@ test(
       'package.json': json`
         {
           "type": "module",
-          "dependencies": { "@tailwindcss/vite": "workspace:^", "tailwindcss": "workspace:^" },
-          "devDependencies": { "vite": "^6" }
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^6"
+          }
         }
       `,
       'vite.config.ts': ts`
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
-        export default defineConfig({ build: { cssMinify: false }, plugins: [tailwindcss()] })
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
       `,
       'index.html': html`
         <head>
@@ -838,7 +860,10 @@ test(
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
-        export default defineConfig({ build: { cssMinify: false }, plugins: [tailwindcss()] })
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
       `,
       'index.html': html`
         <head>

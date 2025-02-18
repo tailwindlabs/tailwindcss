@@ -156,7 +156,7 @@ test(
         import tailwindcss from '@tailwindcss/vite'
 
         export default defineConfig({
-          plugins: [tailwindcss({ scanner: 'file-system' }), reactRouter()],
+          plugins: [tailwindcss(), reactRouter()],
         })
       `,
       '.gitignore': txt`
