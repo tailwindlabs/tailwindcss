@@ -5,3 +5,8 @@ linker = "aarch64-linux-musl-gcc"
 rustflags = ["-C", "target-feature=-crt-static"]
 [target.armv7-unknown-linux-gnueabihf]
 linker = "arm-linux-gnueabihf-gcc"
+# Statically link Visual Studio redistributables on Windows builds
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
+[target.aarch64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
