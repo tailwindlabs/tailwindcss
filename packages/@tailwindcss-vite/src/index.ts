@@ -227,8 +227,6 @@ class Root {
     let inputPath = idToPath(this.id)
     let inputBase = path.dirname(path.resolve(inputPath))
 
-    console.log({ requiresRebuild: await requiresBuildPromise })
-
     if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
@@ -237,10 +235,6 @@ class Root {
       this.addBuildDependency(idToPath(inputPath))
 
       DEBUG && I.start('Setup compiler')
-      console.log({
-        notCompiler: !this.compiler,
-        notScanner: !this.scanner,
-      })
       let addBuildDependenciesPromises: Promise<void>[] = []
       this.compiler = await compile(content, {
         base: inputBase,
@@ -264,7 +258,7 @@ class Root {
           return []
         }
 
-        // No root specified, use the module graph unless we are in file-based scanner mode
+        // No root specified, auto-detect based on the `**/*` pattern
         if (this.compiler.root === null) {
           return [{ base: this.base, pattern: '**/*' }]
         }
