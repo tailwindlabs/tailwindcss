@@ -146,7 +146,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
 
     // Ensure the v4 project compiles correctly
@@ -657,12 +657,12 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -709,7 +709,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -756,7 +756,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.devDependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -824,12 +824,12 @@ test(
     `)
 
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -901,12 +901,12 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
