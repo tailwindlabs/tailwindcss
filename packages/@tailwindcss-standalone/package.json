@@ -26,12 +26,12 @@
   ],
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/cli": "workspace:^",
+    "@tailwindcss/cli": "workspace:*",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "detect-libc": "1.0.3",
     "enhanced-resolve": "^5.18.1",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:*"
   },
   "__notes": "These binary packages must be included so Bun can build the CLI for all supported platforms. We also rely on Lightning CSS and Parcel being patched so Bun can statically analyze the executables.",
   "devDependencies": {
