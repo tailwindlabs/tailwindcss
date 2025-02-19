@@ -11,22 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 
+## [4.0.7] - 2025-02-18
+
 ### Fixed
 
 - Export `tailwindcss/lib/util/flattenColorPalette.js` for backward compatibility ([#16411](https://github.com/tailwindlabs/tailwindcss/pull/16411))
-- Fix sorting numeric utilities when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
+- Fix sorting of numeric utility suggestions when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
 - Show suggestions for fractions in IntelliSense ([#16353](https://github.com/tailwindlabs/tailwindcss/pull/16353))
 - Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
-- Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility
+- Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility ([#16469](https://github.com/tailwindlabs/tailwindcss/pull/16469))
 - Ensure drop shadow utilities don't inherit unexpectedly ([#16471](https://github.com/tailwindlabs/tailwindcss/pull/16471))
-- Export backwards compatible config and plugin types from `tailwindcss/plugin` ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
-- Ensure JavaScript plugins that emit nested rules referencing to the utility name work as expected ([#16539](https://github.com/tailwindlabs/tailwindcss/pull/16539))
-- Statically link Visual Studio redistributables on Windows builds ([#16602](https://github.com/tailwindlabs/tailwindcss/pull/16602))
-- Ensure that Next.js splat routes are automatically scanned for classes ([#16457](https://github.com/tailwindlabs/tailwindcss/pull/16457))
-- Pin exact versions of `tailwindcss` and `@tailwindcss/*` ([#16623](https://github.com/tailwindlabs/tailwindcss/pull/16623))
+- Export config and plugin types from `tailwindcss/plugin` for backward compatibility ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
+- Ensure JavaScript plugins that emit nested rules referencing the utility name work as expected ([#16539](https://github.com/tailwindlabs/tailwindcss/pull/16539))
+- Statically link Visual Studio redistributables in `@tailwindcss/oxide` Windows builds ([#16602](https://github.com/tailwindlabs/tailwindcss/pull/16602))
+- Ensure that Next.js splat routes are scanned for classes ([#16457](https://github.com/tailwindlabs/tailwindcss/pull/16457))
+- Pin exact version of `tailwindcss` in `@tailwindcss/*` packages ([#16623](https://github.com/tailwindlabs/tailwindcss/pull/16623))
 - Upgrade: Report errors when updating dependencies ([#16504](https://github.com/tailwindlabs/tailwindcss/pull/16504))
 - Upgrade: Ensure a `darkMode` JS config setting with block syntax converts to use `@slot` ([#16507](https://github.com/tailwindlabs/tailwindcss/pull/16507))
-- Upgrade: Ensure to upgrade to the latest version of `tailwindcss` and `@tailwindcss/postcss` ([#16620](https://github.com/tailwindlabs/tailwindcss/pull/16620))
+- Upgrade: Ensure the latest version of `tailwindcss` and `@tailwindcss/postcss` are installed when upgrading ([#16620](https://github.com/tailwindlabs/tailwindcss/pull/16620))
 
 ## [4.0.6] - 2025-02-10
 
