@@ -1,6 +1,5 @@
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
-import { enableRemoveUnusedThemeVariables } from './feature-flags'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
@@ -435,62 +434,60 @@ export function optimizeAst(
   for (let node of ast) {
     transform(node, newAst, {}, 0)
   }
+
   // Remove unused theme variables
-  if (enableRemoveUnusedThemeVariables) {
-    // Remove unused theme variables
-    next: for (let [parent, declarations] of cssThemeVariables) {
-      for (let declaration of declarations) {
-        // Find out if a variable is either used directly or if any of the
-        // variables referencing it is used.
-        let variableUsed = isVariableUsed(
-          declaration.property,
-          designSystem.theme,
-          variableDependencies,
-        )
-        if (variableUsed) {
-          if (declaration.property.startsWith('--animate-')) {
-            let parts = declaration.value!.split(/\s+/)
-            for (let part of parts) usedKeyframeNames.add(part)
-          }
-
-          continue
+  next: for (let [parent, declarations] of cssThemeVariables) {
+    for (let declaration of declarations) {
+      // Find out if a variable is either used directly or if any of the
+      // variables referencing it is used.
+      let variableUsed = isVariableUsed(
+        declaration.property,
+        designSystem.theme,
+        variableDependencies,
+      )
+      if (variableUsed) {
+        if (declaration.property.startsWith('--animate-')) {
+          let parts = declaration.value!.split(/\s+/)
+          for (let part of parts) usedKeyframeNames.add(part)
         }
 
-        // Remove the declaration (from its parent)
-        let idx = parent.indexOf(declaration)
-        parent.splice(idx, 1)
+        continue
+      }
 
-        // If the parent is now empty, remove it and any `@layer` rules above it
-        // from the AST
-        if (parent.length === 0) {
-          let path = findNode(newAst, (node) => node.kind === 'rule' && node.nodes === parent)
+      // Remove the declaration (from its parent)
+      let idx = parent.indexOf(declaration)
+      parent.splice(idx, 1)
 
-          if (!path || path.length === 0) continue next
+      // If the parent is now empty, remove it and any `@layer` rules above it
+      // from the AST
+      if (parent.length === 0) {
+        let path = findNode(newAst, (node) => node.kind === 'rule' && node.nodes === parent)
 
-          // Add the root of the AST so we can delete from the top-level
-          path.unshift({
-            kind: 'at-root',
-            nodes: newAst,
-          })
+        if (!path || path.length === 0) continue next
 
-          // Remove nodes from the parent as long as the parent is empty
-          // otherwise and consist of only @layer rules
-          do {
-            let nodeToRemove = path.pop()
-            if (!nodeToRemove) break
+        // Add the root of the AST so we can delete from the top-level
+        path.unshift({
+          kind: 'at-root',
+          nodes: newAst,
+        })
 
-            let removeFrom = path[path.length - 1]
-            if (!removeFrom) break
-            if (removeFrom.kind !== 'at-root' && removeFrom.kind !== 'at-rule') break
+        // Remove nodes from the parent as long as the parent is empty
+        // otherwise and consist of only @layer rules
+        do {
+          let nodeToRemove = path.pop()
+          if (!nodeToRemove) break
 
-            let idx = removeFrom.nodes.indexOf(nodeToRemove)
-            if (idx === -1) break
+          let removeFrom = path[path.length - 1]
+          if (!removeFrom) break
+          if (removeFrom.kind !== 'at-root' && removeFrom.kind !== 'at-rule') break
 
-            removeFrom.nodes.splice(idx, 1)
-          } while (true)
+          let idx = removeFrom.nodes.indexOf(nodeToRemove)
+          if (idx === -1) break
 
-          continue next
-        }
+          removeFrom.nodes.splice(idx, 1)
+        } while (true)
+
+        continue next
       }
     }
 
