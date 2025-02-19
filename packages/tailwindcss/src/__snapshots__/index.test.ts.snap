@@ -2,8 +2,6 @@
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
 ":root, :host {
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --color-red-500: oklch(.637 .237 25.331);
   --spacing: .25rem;
 }

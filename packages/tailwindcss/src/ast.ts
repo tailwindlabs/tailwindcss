@@ -1,8 +1,9 @@
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { enableRemoveUnusedThemeVariables } from './feature-flags'
-import { ThemeOptions } from './theme'
+import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { extractUsedVariables } from './utils/variables'
 
 const AT_SIGN = 0x40
 
@@ -270,6 +271,8 @@ export function optimizeAst(
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
 
+  let variableDependencies = new DefaultMap<string, Set<string>>(() => new Set())
+
   function transform(
     node: AstNode,
     parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
@@ -289,7 +292,15 @@ export function optimizeAst(
 
       // Track used CSS variables
       if (node.value.includes('var(')) {
-        designSystem.trackUsedVariables(node.value)
+        // Declaring another variable does not count as usage. Instead, we mark
+        // the relationship
+        if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+          for (let variable of extractUsedVariables(node.value)) {
+            variableDependencies.get(variable).add(node.property)
+          }
+        } else {
+          designSystem.trackUsedVariables(node.value)
+        }
       }
 
       // Track used animation names
@@ -426,11 +437,17 @@ export function optimizeAst(
   }
   // Remove unused theme variables
   if (enableRemoveUnusedThemeVariables) {
+    // Remove unused theme variables
     next: for (let [parent, declarations] of cssThemeVariables) {
       for (let declaration of declarations) {
-        let options = designSystem.theme.getOptions(declaration.property)
-
-        if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+        // Find out if a variable is either used directly or if any of the
+        // variables referencing it is used.
+        let variableUsed = isVariableUsed(
+          declaration.property,
+          designSystem.theme,
+          variableDependencies,
+        )
+        if (variableUsed) {
           if (declaration.property.startsWith('--animate-')) {
             let parts = declaration.value!.split(/\s+/)
             for (let part of parts) usedKeyframeNames.add(part)
@@ -569,4 +586,34 @@ function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | n
     }
   })
   return foundPath
+}
+
+// Find out if a variable is either used directly or if any of the variables that depend on it are
+// used
+function isVariableUsed(
+  variable: string,
+  theme: Theme,
+  variableDependencies: Map<string, Set<string>>,
+  alreadySeenVariables: Set<string> = new Set(),
+): boolean {
+  // Break recursions when visiting a variable twice
+  if (alreadySeenVariables.has(variable)) {
+    return true
+  } else {
+    alreadySeenVariables.add(variable)
+  }
+
+  let options = theme.getOptions(variable)
+  if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+    return true
+  } else {
+    let dependencies = variableDependencies.get(variable) ?? []
+    for (let dependency of dependencies) {
+      if (isVariableUsed(dependency, theme, variableDependencies, alreadySeenVariables)) {
+        return true
+      }
+    }
+  }
+
+  return false
 }

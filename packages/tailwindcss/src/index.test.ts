@@ -2366,6 +2366,54 @@ describe('Parsing themes values from CSS', () => {
       }"
     `)
   })
+
+  test('only emits theme variables that are used outside of being defined by another variable', async () => {
+    let { build } = await compile(
+      css`
+        @theme {
+          --var-a: var(--var-b);
+          --var-b: var(--var-c);
+          --var-c: var(--var-d);
+          --var-d: red;
+
+          --var-four: green;
+          --var-three: var(--var-four);
+          --var-two: var(--var-three);
+          --var-one: var(--var-two);
+
+          --var-eins: var(--var-zwei);
+          --var-zwei: var(--var-drei);
+          --var-drei: var(--var-vier);
+          --var-vier: blue;
+        }
+
+        @utility get-var-* {
+          color: --value(--var-\*);
+        }
+        @tailwind utilities;
+      `,
+      {},
+    )
+
+    expect(optimizeCss(build(['get-var-b', 'get-var-two'])).trim()).toMatchInlineSnapshot(`
+      ":root, :host {
+        --var-b: var(--var-c);
+        --var-c: var(--var-d);
+        --var-d: red;
+        --var-four: green;
+        --var-three: var(--var-four);
+        --var-two: var(--var-three);
+      }
+
+      .get-var-b {
+        color: var(--var-b);
+      }
+
+      .get-var-two {
+        color: var(--var-two);
+      }"
+    `)
+  })
 })
 
 describe('plugins', () => {

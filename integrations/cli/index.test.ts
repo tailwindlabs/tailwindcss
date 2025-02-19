@@ -1289,9 +1289,7 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      :root, :host {
-        --color-blue-500: blue;
-      }
+      <EMPTY>
       "
     `)
 
