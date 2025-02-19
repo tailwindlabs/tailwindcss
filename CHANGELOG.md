@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 
+### Fixed
+
+- Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+
 ## [4.0.7] - 2025-02-18
 
 ### Fixed
