@@ -775,15 +775,7 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-md: 768px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-2xl: 1536px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -843,11 +835,7 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-10xl: 5000px;
-    }
-
-    @media (width >= 5000px) {
+    "@media (width >= 5000px) {
       .\\31 0xl\\:flex {
         display: flex;
       }
@@ -870,13 +858,7 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width < 1024px) {
+    "@media (width < 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -925,13 +907,7 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .min-sm\\:flex {
         display: flex;
       }
@@ -982,15 +958,7 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-xs: 280px;
-    }
-
-    @media (width >= 280px) {
+    "@media (width >= 280px) {
       @media (width < 640px) {
         .min-xs\\:max-sm\\:flex {
           display: flex;
@@ -1037,13 +1005,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -1099,13 +1061,7 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width < 1024px) {
+    "@media (width < 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -1484,11 +1440,7 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-    }
-
-    .not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target) {
+    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target) {
       display: flex;
     }
 
@@ -2030,11 +1982,7 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --container-lg: 1024px;
-    }
-
-    @container name (width < 1024px) {
+    "@container name (width < 1024px) {
       .\\@max-lg\\/name\\:flex {
         display: flex;
       }
@@ -2186,15 +2134,7 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-md: 768px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-2xl: 1536px;
-    }
-
-    @media (hover: hover) {
+    "@media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }

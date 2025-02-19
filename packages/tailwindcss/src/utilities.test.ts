@@ -147,7 +147,6 @@ test('inset', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
       --inset-shadowned: 1940px;
     }
 
@@ -3162,10 +3161,6 @@ describe('container', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
       }
 
       .container {
@@ -3305,10 +3300,6 @@ describe('container', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
       }
 
       .container {
@@ -4045,11 +4036,7 @@ test('translate-x', async () => {
       ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-x-\\[var\\(--value\\)\\] {
+    ".-translate-x-\\[var\\(--value\\)\\] {
       --tw-translate-x: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
@@ -4173,11 +4160,7 @@ test('translate-y', async () => {
       ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-y-\\[var\\(--value\\)\\] {
+    ".-translate-y-\\[var\\(--value\\)\\] {
       --tw-translate-y: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
@@ -7734,11 +7717,7 @@ test('divide-x with custom default border width', async () => {
       ['divide-x'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-x > :not(:last-child)) {
+    ":where(.divide-x > :not(:last-child)) {
       --tw-divide-x-reverse: 0;
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(2px * var(--tw-divide-x-reverse));
@@ -7840,11 +7819,7 @@ test('divide-y with custom default border width', async () => {
       ['divide-y'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-y > :not(:last-child)) {
+    ":where(.divide-y > :not(:last-child)) {
       --tw-divide-y-reverse: 0;
       border-bottom-style: var(--tw-border-style);
       border-top-style: var(--tw-border-style);
@@ -9930,11 +9905,7 @@ test('border with custom default border width', async () => {
       ['border'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    .border {
+    ".border {
       border-style: var(--tw-border-style);
       border-width: 2px;
     }
@@ -13878,7 +13849,6 @@ test('transition', async () => {
     ":root, :host {
       --default-transition-timing-function: ease;
       --default-transition-duration: .1s;
-      --transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
       --transition-property-opacity: opacity;
     }
 
@@ -13944,12 +13914,7 @@ test('transition', async () => {
       ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-transition-timing-function: ease;
-      --default-transition-duration: .1s;
-    }
-
-    .transition {
+    ".transition {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
@@ -14752,11 +14717,7 @@ test('outline', async () => {
       ['outline'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-outline-width: 2px;
-    }
-
-    .outline {
+    ".outline {
       outline-style: var(--tw-outline-style);
       outline-width: 2px;
     }
@@ -15261,8 +15222,6 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-      --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
     }
 
     .shadow-\\[10px_10px\\] {
@@ -15485,8 +15444,6 @@ test('inset-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --inset-shadow: inset 0 2px 4px #0000000d;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
     }
 
     .inset-shadow {
@@ -15891,11 +15848,7 @@ test('ring', async () => {
       ['ring'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-ring-width: 2px;
-    }
-
-    .ring {
+    ".ring {
       --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
@@ -16564,7 +16517,6 @@ describe('spacing utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-sm: 8px;
-        --container-sm: 256px;
       }
 
       .w-sm {
@@ -16638,13 +16590,7 @@ describe('custom utilities', () => {
     let compiled = build([])
 
     // `foo` is not used yet:
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities;
-
-      :root, :host {
-        --example-foo: 123px;
-      }"
-    `)
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
 
     // `foo` is used, and the CSS variable is emitted:
     compiled = build(['foo'])
@@ -17828,12 +17774,7 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
-        ":root, :host {
-          --example-foo: red;
-          --color-red-500: red;
-        }
-
-        .flex {
+        ".flex {
           display: flex;
         }"
       `)
@@ -17926,11 +17867,7 @@ describe('custom utilities', () => {
     `
 
     expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --tab-size-github: 8;
-      }
-
-      .tab-github {
+      ".tab-github {
         tab-size: 8;
       }"
     `)
