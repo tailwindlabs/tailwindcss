@@ -256,6 +256,8 @@ jobs:
 
       - name: Build Tailwind CSS
         run: pnpm run build
+        env:
+          FEATURES_ENV: stable
 
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs

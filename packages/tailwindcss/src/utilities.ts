@@ -42,6 +42,7 @@ type SuggestionDefinition =
   | string
   | {
       supportsNegative?: boolean
+      supportsFractions?: boolean
       values?: string[]
       modifiers?: string[]
       valueThemeKeys?: ThemeKey[]
@@ -219,11 +220,51 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
+    /**
+     * The alpha and beta releases used `_` in theme keys to represent a `.`. This meant we used
+     * `--leading-1_5` instead of `--leading-1\.5` to add utilities like `leading-1.5`.
+     *
+     * We prefer the use of the escaped dot now but still want to make sure suggestions for the
+     * legacy key format still works as expected when surrounded by numbers.
+     */
+    const LEGACY_NUMERIC_KEY = /(\d+)_(\d+)/g
+
     function* resolve(themeKeys: ThemeKey[]) {
       for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield value.replaceAll('_', '.')
+        yield value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
+          return `${a}.${b}`
+        })
       }
     }
+
+    let suggestedFractions = [
+      '1/2',
+      '1/3',
+      '2/3',
+      '1/4',
+      '2/4',
+      '3/4',
+      '1/5',
+      '2/5',
+      '3/5',
+      '4/5',
+      '1/6',
+      '2/6',
+      '3/6',
+      '4/6',
+      '5/6',
+      '1/12',
+      '2/12',
+      '3/12',
+      '4/12',
+      '5/12',
+      '6/12',
+      '7/12',
+      '8/12',
+      '9/12',
+      '10/12',
+      '11/12',
+    ]
 
     utilities.suggest(classRoot, () => {
       let groups: SuggestionGroup[] = []
@@ -238,7 +279,12 @@ export function createUtilities(theme: Theme) {
           ...(defn.values ?? []),
           ...resolve(defn.valueThemeKeys ?? []),
         ]
+
         let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
+
+        if (defn.supportsFractions) {
+          values.push(...suggestedFractions)
+        }
 
         if (defn.hasDefaultValue) {
           values.unshift(null)
@@ -341,6 +387,7 @@ export function createUtilities(theme: Theme) {
         supportsNegative: desc.supportsNegative,
         valueThemeKeys: desc.themeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
+        supportsFractions: desc.supportsFractions,
       },
     ])
   }
@@ -467,6 +514,7 @@ export function createUtilities(theme: Theme) {
             ]
           : [],
         supportsNegative,
+        supportsFractions,
         valueThemeKeys: themeKeys,
       },
     ])
@@ -965,6 +1013,8 @@ export function createUtilities(theme: Theme) {
       return [decl('flex', candidate.value.value)]
     }
   })
+
+  suggest('flex', () => [{ supportsFractions: true }])
 
   /**
    * @css `flex-shrink`
@@ -3103,6 +3153,7 @@ export function createUtilities(theme: Theme) {
         property('--tw-opacity'),
         property('--tw-saturate'),
         property('--tw-sepia'),
+        property('--tw-drop-shadow'),
       ])
     }
 
@@ -3879,10 +3930,11 @@ export function createUtilities(theme: Theme) {
     utilities.functional('outline', (candidate) => {
       if (candidate.value === null) {
         if (candidate.modifier) return
+        let value = theme.get(['--default-outline-width']) ?? '1px'
         return [
           outlineProperties(),
           decl('outline-style', 'var(--tw-outline-style)'),
-          decl('outline-width', '1px'),
+          decl('outline-width', value),
         ]
       }
 

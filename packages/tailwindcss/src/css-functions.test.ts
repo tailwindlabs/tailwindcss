@@ -553,8 +553,9 @@ describe('theme(…)', () => {
           expect(
             await compileCss(css`
               @theme default reference {
-                --font-family-sans: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
-                  Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+                --font-family-sans:
+                  ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+                  Segoe UI Symbol, Noto Color Emoji;
               }
               .fam {
                 font-family: theme(fontFamily.sans);

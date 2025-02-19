@@ -12580,7 +12580,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -12652,7 +12653,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme reference {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -13411,6 +13413,11 @@ test('filter', async () => {
     @property --tw-sepia {
       syntax: "*";
       inherits: false
+    }
+
+    @property --tw-drop-shadow {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13855,8 +13862,9 @@ test('transition', async () => {
         @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
-          --transition-property: color, background-color, border-color, text-decoration-color, fill,
-            stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+          --transition-property:
+            color, background-color, border-color, text-decoration-color, fill, stroke, opacity,
+            box-shadow, transform, filter, backdrop-filter;
           --transition-property-opacity: opacity;
         }
         @tailwind utilities;
@@ -14731,6 +14739,32 @@ test('outline', async () => {
     .outline-solid {
       --tw-outline-style: solid;
       outline-style: solid;
+    }
+
+    @property --tw-outline-style {
+      syntax: "*";
+      inherits: false;
+      initial-value: solid;
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-outline-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['outline'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --default-outline-width: 2px;
+    }
+
+    .outline {
+      outline-style: var(--tw-outline-style);
+      outline-width: 2px;
     }
 
     @property --tw-outline-style {
@@ -15853,6 +15887,93 @@ test('ring', async () => {
     }"
   `)
   expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-ring-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['ring'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --default-ring-width: 2px;
+    }
+
+    .ring {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    @property --tw-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-ring-inset {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-offset-width {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-ring-offset-color {
+      syntax: "*";
+      inherits: false;
+      initial-value: #fff;
+    }
+
+    @property --tw-ring-offset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }"
+  `)
+  expect(
     await run([
       // ring color
       '-ring-inset',
@@ -16502,6 +16623,46 @@ describe('custom utilities', () => {
             text-box-edge: cap alphabetic;
           }
         }
+      }"
+    `)
+  })
+
+  test('custom static utility emit CSS variables if the utility is used', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme {
+        --example-foo: 123px;
+      }
+
+      @utility foo {
+        value: var(--example-foo);
+      }
+    `)
+    let compiled = build([])
+
+    // `foo` is not used yet:
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities;
+
+      :root, :host {
+        --example-foo: 123px;
+      }"
+    `)
+
+    // `foo` is used, and the CSS variable is emitted:
+    compiled = build(['foo'])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo {
+          value: var(--example-foo);
+        }
+      }
+
+      :root, :host {
+        --example-foo: 123px;
       }"
     `)
   })
@@ -17655,6 +17816,61 @@ describe('custom utilities', () => {
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --example-foo: red;
+          --color-red-500: red;
+        }
+
+        .flex {
+          display: flex;
+        }"
+      `)
+    })
+
+    test('variables used in `@utility` will be emitted if the utility is used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --example-foo: red;
+          --color-red-500: red;
+        }
+
+        .example-foo {
+          color: var(--color-red-500);
+          background-color: var(--example-foo);
+        }"
+      `)
     })
   })
 

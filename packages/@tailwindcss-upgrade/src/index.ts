@@ -276,7 +276,7 @@ async function run() {
 
   try {
     // Upgrade Tailwind CSS
-    await pkg(base).add(['tailwindcss@next'])
+    await pkg(base).add(['tailwindcss@latest'])
     success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
   } catch {}
 

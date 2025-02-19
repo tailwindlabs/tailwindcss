@@ -196,7 +196,7 @@ async function migrateTheme(
 }
 
 function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
-  let variant: string = ''
+  let variant: string | string[] = ''
   let addVariant = (_name: string, _variant: string) => (variant = _variant)
   let config = () => unresolvedConfig.darkMode
   darkModePlugin({ config, addVariant })
@@ -204,7 +204,30 @@ function migrateDarkMode(unresolvedConfig: Config & { darkMode: any }): string {
   if (variant === '') {
     return ''
   }
-  return `\n@tw-bucket custom-variant {\n@custom-variant dark (${variant});\n}\n`
+
+  if (!Array.isArray(variant)) {
+    variant = [variant]
+  }
+
+  if (variant.length === 1 && !variant[0].includes('{')) {
+    return `\n@tw-bucket custom-variant {\n@custom-variant dark (${variant[0]});\n}\n`
+  }
+
+  let customVariant = ''
+  for (let variantName of variant) {
+    // Convert to the block syntax if a block is used
+    if (variantName.includes('{')) {
+      customVariant += variantName.replace('}', '{ @slot }}') + '\n'
+    } else {
+      customVariant += variantName + '{ @slot }\n'
+    }
+  }
+
+  if (customVariant !== '') {
+    return `\n@tw-bucket custom-variant {\n@custom-variant dark {${customVariant}};\n}\n`
+  }
+
+  return ''
 }
 
 // Returns a string identifier used to section theme declarations

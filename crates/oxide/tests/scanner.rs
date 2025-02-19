@@ -416,6 +416,32 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_scan_next_dynamic_folders() {
+        let candidates = scan_with_globs(
+            &[
+                // We know that `.styl` extensions are ignored, so they are not covered by auto content
+                // detection.
+                ("app/[slug]/page.styl", "content-['[slug]']"),
+                ("app/[...slug]/page.styl", "content-['[...slug]']"),
+                ("app/[[...slug]]/page.styl", "content-['[[...slug]]']"),
+                ("app/(theme)/page.styl", "content-['(theme)']"),
+            ],
+            vec!["./**/*.{styl}"],
+        )
+        .1;
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['(theme)']",
+                "content-['[...slug]']",
+                "content-['[[...slug]]']",
+                "content-['[slug]']",
+            ],
+        );
+    }
+
+    #[test]
     fn it_should_scan_absolute_paths() {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();

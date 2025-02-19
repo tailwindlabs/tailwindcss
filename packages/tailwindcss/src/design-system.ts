@@ -7,6 +7,7 @@ import { getClassOrder } from './sort'
 import type { Theme, ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
+import * as ValueParser from './value-parser'
 import { Variants, createVariants } from './variants'
 
 export type DesignSystem = {
@@ -30,6 +31,8 @@ export type DesignSystem = {
   getVariantOrder(): Map<Variant, number>
   resolveThemeValue(path: string): string | undefined
 
+  trackUsedVariables(raw: string): void
+
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
 }
@@ -42,6 +45,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   let parsedCandidates = new DefaultMap((candidate) =>
     Array.from(parseCandidate(candidate, designSystem)),
   )
+
   let compiledAstNodes = new DefaultMap<Candidate>((candidate) => {
     let ast = compileAstNodes(candidate, designSystem)
 
@@ -64,6 +68,22 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     return ast
   })
 
+  let trackUsedVariables = new DefaultMap((raw) => {
+    ValueParser.walk(ValueParser.parse(raw), (node) => {
+      if (node.kind !== 'function' || node.value !== 'var') return
+
+      ValueParser.walk(node.nodes, (child) => {
+        if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
+
+        theme.markUsedVariable(child.value)
+      })
+
+      return ValueParser.ValueWalkAction.Skip
+    })
+
+    return true
+  })
+
   let designSystem: DesignSystem = {
     theme,
     utilities,
@@ -84,7 +104,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
           },
         })
 
-        astNodes = optimizeAst(astNodes)
+        astNodes = optimizeAst(astNodes, designSystem)
 
         if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
@@ -158,6 +178,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       }
 
       return themeValue
+    },
+
+    trackUsedVariables(raw: string) {
+      trackUsedVariables.get(raw)
     },
   }
 

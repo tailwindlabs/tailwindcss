@@ -3171,6 +3171,68 @@ describe('addUtilities()', () => {
     `,
     )
   })
+
+  test('replaces the class name with variants in nested selectors', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @theme {
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.foo': {
+                  ':where(.foo > :first-child)': {
+                    color: 'red',
+                  },
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['foo', 'md:foo', 'not-hover:md:foo']).trim()).toMatchInlineSnapshot(`
+      ":root, :host {
+        --breakpoint-md: 768px;
+      }
+      .foo {
+        :where(.foo > :first-child) {
+          color: red;
+        }
+      }
+      .md\\:foo {
+        @media (width >= 768px) {
+          :where(.md\\:foo > :first-child) {
+            color: red;
+          }
+        }
+      }
+      .not-hover\\:md\\:foo {
+        &:not(*:hover) {
+          @media (width >= 768px) {
+            :where(.not-hover\\:md\\:foo > :first-child) {
+              color: red;
+            }
+          }
+        }
+        @media not (hover: hover) {
+          @media (width >= 768px) {
+            :where(.not-hover\\:md\\:foo > :first-child) {
+              color: red;
+            }
+          }
+        }
+      }"
+    `)
+  })
 })
 
 describe('matchUtilities()', () => {
@@ -3980,6 +4042,76 @@ describe('matchUtilities()', () => {
         },
       )
     }).rejects.toThrowError(/invalid utility name/)
+  })
+
+  test('replaces the class name with variants in nested selectors', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @theme {
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(base) {
+          return {
+            base,
+            module: ({ matchUtilities }: PluginAPI) => {
+              matchUtilities(
+                {
+                  foo: (value) => ({
+                    ':where(.foo > :first-child)': {
+                      color: value,
+                    },
+                  }),
+                },
+                {
+                  values: {
+                    red: 'red',
+                  },
+                },
+              )
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['foo-red', 'md:foo-red', 'not-hover:md:foo-red']).trim())
+      .toMatchInlineSnapshot(`
+        ":root, :host {
+          --breakpoint-md: 768px;
+        }
+        .foo-red {
+          :where(.foo-red > :first-child) {
+            color: red;
+          }
+        }
+        .md\\:foo-red {
+          @media (width >= 768px) {
+            :where(.md\\:foo-red > :first-child) {
+              color: red;
+            }
+          }
+        }
+        .not-hover\\:md\\:foo-red {
+          &:not(*:hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo-red > :first-child) {
+                color: red;
+              }
+            }
+          }
+          @media not (hover: hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo-red > :first-child) {
+                color: red;
+              }
+            }
+          }
+        }"
+      `)
   })
 })
 

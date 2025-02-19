@@ -340,13 +340,12 @@ impl<'a> Extractor<'a> {
             let start_brace_index = utility.find(b"[");
             let end_brace_index = utility.find(b"]");
 
-            match (start_brace_index, end_brace_index) {
-                (Some(start_brace_index), Some(end_brace_index)) => {
-                    if start_brace_index < index && end_brace_index > index {
-                        skip_parens_check = true;
-                    }
+            if let (Some(start_brace_index), Some(end_brace_index)) =
+                (start_brace_index, end_brace_index)
+            {
+                if start_brace_index < index && end_brace_index > index {
+                    skip_parens_check = true;
                 }
-                _ => {}
             }
 
             if !skip_parens_check && !utility[index + 1..].starts_with(b"--") {
@@ -1676,6 +1675,54 @@ mod test {
         assert_eq!(
             candidates,
             vec!["const", "classes", "wrapper", "bg-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables() {
+        let candidates = run("var(--color-red-500)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500"]);
+
+        let candidates = run("<div style={{ 'color': 'var(--color-red-500)' }}/>", false);
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_values() {
+        let candidates = run("var(--color-red-500, red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run("var(--color-red-500,red)", false);
+        assert_eq!(candidates, vec!["var", "--color-red-500", "red"]);
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500, red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+
+        let candidates = run(
+            "<div style={{ 'color': 'var(--color-red-500,red)' }}/>",
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["div", "style", "color", "var", "--color-red-500", "red"]
+        );
+    }
+
+    #[test]
+    fn test_find_css_variables_with_fallback_css_variable_values() {
+        let candidates = run("var(--color-red-500, var(--color-blue-500))", false);
+        assert_eq!(
+            candidates,
+            vec!["var", "--color-red-500", "--color-blue-500"]
         );
     }
 
