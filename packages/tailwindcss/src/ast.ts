@@ -490,13 +490,13 @@ export function optimizeAst(
         continue next
       }
     }
+  }
 
-    // Remove unused keyframes
-    for (let keyframe of keyframes) {
-      if (!usedKeyframeNames.has(keyframe.params)) {
-        let idx = atRoots.indexOf(keyframe)
-        atRoots.splice(idx, 1)
-      }
+  // Remove unused keyframes
+  for (let keyframe of keyframes) {
+    if (!usedKeyframeNames.has(keyframe.params)) {
+      let idx = atRoots.indexOf(keyframe)
+      atRoots.splice(idx, 1)
     }
   }
 
