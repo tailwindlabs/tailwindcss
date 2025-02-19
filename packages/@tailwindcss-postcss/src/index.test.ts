@@ -267,7 +267,12 @@ test('handle CSS when only using a `@reference` (we should not bail early)', asy
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    "@media (width >= 48rem) {
+    ":root, :host {
+      --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    @media (width >= 48rem) {
       .foo {
         bar: baz;
       }

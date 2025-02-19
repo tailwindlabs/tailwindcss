@@ -256,7 +256,11 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
+export function optimizeAst(
+  ast: AstNode[],
+  designSystem: DesignSystem,
+  firstThemeRule: StyleRule | null,
+) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let cssThemeVariables = new DefaultMap<
@@ -376,13 +380,32 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
     // Context
     else if (node.kind === 'context') {
-      // Remove reference imports from printing
       if (node.context.reference) {
-        return
-      }
+        if (firstThemeRule) {
+          let path = findNode(node.nodes, (node) => node === firstThemeRule)
+          if (path) {
+            let newPathToFirstThemeRule = path
+              .filter((node) => node.kind === 'at-rule')
+              .map((node) => ({ ...node, nodes: [] }))
+              .reverse() as AtRule[]
 
-      for (let child of node.nodes) {
-        transform(child, parent, { ...context, ...node.context }, depth)
+            let child = firstThemeRule as AstNode
+            for (let node of newPathToFirstThemeRule) {
+              node.nodes = [child]
+              child = node
+            }
+
+            let newParent: AstNode[] = []
+            transform(child, newParent, { ...context, ...node.context, reference: false }, depth)
+            parent.push(...newParent)
+          }
+        }
+
+        return
+      } else {
+        for (let child of node.nodes) {
+          transform(child, parent, { ...context, ...node.context }, depth)
+        }
       }
     }
 
@@ -401,7 +424,6 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   for (let node of ast) {
     transform(node, newAst, {}, 0)
   }
-
   // Remove unused theme variables
   if (enableRemoveUnusedThemeVariables) {
     next: for (let [parent, declarations] of cssThemeVariables) {
@@ -521,4 +543,15 @@ export function toCss(ast: AstNode[]) {
   }
 
   return css
+}
+
+function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | null {
+  let foundPath: AstNode[] = []
+  walk(ast, (node, { path }) => {
+    if (fn(node)) {
+      foundPath = [...path]
+      return WalkAction.Stop
+    }
+  })
+  return foundPath
 }

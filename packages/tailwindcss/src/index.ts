@@ -442,10 +442,6 @@ async function parseCss(
     if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
 
-      if (context.reference) {
-        themeOptions |= ThemeOptions.REFERENCE
-      }
-
       if (themePrefix) {
         if (!IS_VALID_PREFIX.test(themePrefix)) {
           throw new Error(
@@ -488,7 +484,7 @@ async function parseCss(
 
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
-      if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
+      if (!firstThemeRule) {
         firstThemeRule = styleRule(':root, :host', [])
         replaceWith([firstThemeRule])
       } else {
@@ -601,6 +597,7 @@ async function parseCss(
     root,
     utilitiesNode,
     features,
+    firstThemeRule,
   }
 }
 
@@ -613,7 +610,10 @@ export async function compileAst(
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features, firstThemeRule } = await parseCss(
+    input,
+    opts,
+  )
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -641,7 +641,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
         return compiled
       }
 
@@ -663,7 +663,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
         return compiled
       }
 
@@ -675,7 +675,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
         return compiled
       }
 
@@ -683,7 +683,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast, designSystem)
+      compiled = optimizeAst(ast, designSystem, firstThemeRule)
       return compiled
     },
   }

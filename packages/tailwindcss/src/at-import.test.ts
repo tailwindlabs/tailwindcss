@@ -580,7 +580,11 @@ test('resolves @reference as `@import "…" reference`', async () => {
       { loadStylesheet, candidates: ['text-red-500'] },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".text-red-500 {
+    ":root, :host {
+      --color-red-500: red;
+    }
+
+    .text-red-500 {
       color: var(--color-red-500);
     }
     "

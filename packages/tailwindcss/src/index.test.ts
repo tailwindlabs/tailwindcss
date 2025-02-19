@@ -3516,7 +3516,7 @@ it("should error when `layer(…)` is used, but it's not the first param", async
   )
 })
 
-describe('`@import "…" reference`', () => {
+describe('`@reference "…" reference`', () => {
   test('recursively removes styles', async () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
@@ -3547,7 +3547,7 @@ describe('`@import "…" reference`', () => {
     await expect(
       compileCss(
         `
-          @import './foo/bar.css' reference;
+          @reference './foo/bar.css';
 
           .bar {
             @apply md:hocus:foo;
@@ -3587,46 +3587,12 @@ describe('`@import "…" reference`', () => {
 
     let { build } = await compile(
       css`
-        @import './foo/bar.css' reference;
+        @reference './foo/bar.css';
       `,
       { loadStylesheet },
     )
 
     expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
-  })
-
-  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
-    await expect(
-      compileCss(
-        `
-          @media reference {
-            @layer theme {
-              @theme {
-                --breakpoint-md: 48rem;
-              }
-              .foo {
-                color: red;
-              }
-            }
-            @utility foo {
-              color: red;
-            }
-            @custom-variant hocus (&:hover, &:focus);
-          }
-
-          .bar {
-            @apply md:hocus:foo;
-          }
-        `,
-        [],
-      ),
-    ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
-        .bar:hover, .bar:focus {
-          color: red;
-        }
-      }"
-    `)
   })
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
@@ -3703,8 +3669,179 @@ describe('`@import "…" reference`', () => {
         },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      ".bar {
+      "@layer theme {
+        :root, :host {
+          --animate-spin: spin 1s linear infinite;
+        }
+      }
+
+      .bar {
         animation: var(--animate-spin);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }"
+    `)
+  })
+
+  test('emits theme variables and keyframes defined inside @reference-ed files', async () => {
+    let loadStylesheet = async (id: string, base: string) => {
+      switch (id) {
+        case './one.css': {
+          return {
+            content: css`
+              @import './two.css' layer(two);
+            `,
+            base: '/root',
+          }
+        }
+        case './two.css': {
+          return {
+            content: css`
+              @import './three.css' layer(three);
+            `,
+            base: '/root',
+          }
+        }
+        case './three.css': {
+          return {
+            content: css`
+              .foo {
+                color: red;
+              }
+              @theme {
+                --color-red: red;
+                --animate-wiggle: wiggle 1s ease-in-out infinite;
+                @keyframes wiggle {
+                  0%,
+                  100% {
+                    transform: rotate(-3deg);
+                  }
+                  50% {
+                    transform: rotate(3deg);
+                  }
+                }
+              }
+            `,
+            base: '/root',
+          }
+        }
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+          @reference './one.css';
+          .bar {
+            @apply text-red animate-wiggle;
+          }
+        `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer two {
+        @layer three {
+          :root, :host {
+            --color-red: red;
+            --animate-wiggle: wiggle 1s ease-in-out infinite;
+          }
+        }
+      }
+
+      .bar {
+        animation: var(--animate-wiggle);
+        color: var(--color-red);
+      }
+
+      @keyframes wiggle {
+        0%, 100% {
+          transform: rotate(-3deg);
+        }
+
+        50% {
+          transform: rotate(3deg);
+        }
+      }"
+    `)
+  })
+
+  test('supports `@import "…" reference` syntax', async () => {
+    let loadStylesheet = async () => {
+      return {
+        content: css`
+          .foo {
+            color: red;
+          }
+          @utility foo {
+            color: red;
+          }
+          @theme {
+            --breakpoint-md: 768px;
+          }
+          @custom-variant hocus (&:hover, &:focus);
+        `,
+        base: '/root/foo',
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+            @import './foo/bar.css' reference;
+
+            .bar {
+              @apply md:hocus:foo;
+            }
+          `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+        "@media (width >= 768px) {
+          .bar:hover, .bar:focus {
+            color: red;
+          }
+        }"
+      `)
+  })
+
+  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
+    await expect(
+      compileCss(
+        `
+          @media reference {
+            @layer theme {
+              @theme {
+                --breakpoint-md: 48rem;
+              }
+              .foo {
+                color: red;
+              }
+            }
+            @utility foo {
+              color: red;
+            }
+            @custom-variant hocus (&:hover, &:focus);
+          }
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer theme;
+
+      @media (width >= 48rem) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
       }"
     `)
   })
