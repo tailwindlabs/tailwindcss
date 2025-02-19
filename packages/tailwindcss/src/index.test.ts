@@ -2041,6 +2041,30 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
+  test('when no theme values are emitted, empty layers can be removed', async () => {
+    expect(
+      await compileCss(
+        css`
+          @layer theme1 {
+            @layer theme2 {
+              @theme {
+                --color-tomato: #e10c04;
+                --color-potato: #ac855b;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['underline'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
   test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
     expect(
       await compileCss(
@@ -3836,9 +3860,7 @@ describe('`@reference "…" reference`', () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer theme;
-
-      @media (width >= 48rem) {
+      "@media (width >= 48rem) {
         .bar:hover, .bar:focus {
           color: red;
         }

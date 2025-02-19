@@ -443,19 +443,34 @@ export function optimizeAst(
         let idx = parent.indexOf(declaration)
         parent.splice(idx, 1)
 
-        // If the parent is now empty, remove it from the AST
+        // If the parent is now empty, remove it and any `@layer` rules above it
+        // from the AST
         if (parent.length === 0) {
-          for (let [idx, node] of newAst.entries()) {
-            // Assumption, but right now the `@theme` must be top-level, so we
-            // don't need to traverse the entire AST to find the parent.
-            //
-            // Checking for `rule`, because at this stage the `@theme` is already
-            // converted to a normal style rule `:root, :host`
-            if (node.kind === 'rule' && node.nodes === parent) {
-              newAst.splice(idx, 1)
-              break
-            }
-          }
+          let path = findNode(newAst, (node) => node.kind === 'rule' && node.nodes === parent)
+
+          if (!path || path.length === 0) continue next
+
+          // Add the root of the AST so we can delete from the top-level
+          path.unshift({
+            kind: 'at-root',
+            nodes: newAst,
+          })
+
+          // Remove nodes from the parent as long as the parent is empty
+          // otherwise and consist of only @layer rules
+          do {
+            let nodeToRemove = path.pop()
+            if (!nodeToRemove) break
+
+            let removeFrom = path[path.length - 1]
+            if (!removeFrom) break
+            if (removeFrom.kind !== 'at-root' && removeFrom.kind !== 'at-rule') break
+
+            let idx = removeFrom.nodes.indexOf(nodeToRemove)
+            if (idx === -1) break
+
+            removeFrom.nodes.splice(idx, 1)
+          } while (true)
 
           continue next
         }
