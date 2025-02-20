@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+- Vite: Automatic source detection now ignores files and directories specified in your `.gitignore` file ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure Astro production builds contain classes for client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure utility classes are read without escaping special characters ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
 
 ## [4.0.7] - 2025-02-18
 
