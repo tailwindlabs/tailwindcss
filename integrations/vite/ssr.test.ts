@@ -1,5 +1,30 @@
 import { candidate, css, html, json, test, ts } from '../utils'
 
+const WORKSPACE = {
+  'index.html': html`
+    <body>
+      <div id="app"></div>
+      <script type="module" src="./src/index.ts"></script>
+    </body>
+  `,
+  'src/index.css': css`@import 'tailwindcss';`,
+  'src/index.ts': ts`
+    import './index.css'
+
+    document.querySelector('#app').innerHTML = \`
+      <div class="underline m-2">Hello, world!</div>
+    \`
+  `,
+  'server.ts': ts`
+    import css from './src/index.css?url'
+
+    document.querySelector('#app').innerHTML = \`
+      <link rel="stylesheet" href="\${css}">
+      <div class="overline m-3">Hello, world!</div>
+    \`
+  `,
+}
+
 test(
   'Vite 5',
   {
@@ -27,31 +52,9 @@ test(
             ssrEmitAssets: true,
           },
           plugins: [tailwindcss()],
-          ssr: { resolve: { conditions: [] } },
         })
       `,
-      'index.html': html`
-        <body>
-          <div id="app"></div>
-          <script type="module" src="./src/index.ts"></script>
-        </body>
-      `,
-      'src/index.css': css`@import 'tailwindcss';`,
-      'src/index.ts': ts`
-        import './index.css'
-
-        document.querySelector('#app').innerHTML = \`
-          <div class="underline m-2">Hello, world!</div>
-        \`
-      `,
-      'server.ts': ts`
-        import css from './src/index.css?url'
-
-        document.querySelector('#app').innerHTML = \`
-          <link rel="stylesheet" href="\${css}">
-          <div class="underline m-2">Hello, world!</div>
-        \`
-      `,
+      ...WORKSPACE,
     },
   },
   async ({ fs, exec, expect }) => {
@@ -62,9 +65,10 @@ test(
     let [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
-      //
       candidate`underline`,
       candidate`m-2`,
+      candidate`overline`,
+      candidate`m-3`,
     ])
   },
 )
@@ -95,31 +99,9 @@ test(
             ssrEmitAssets: true,
           },
           plugins: [tailwindcss()],
-          ssr: { resolve: { conditions: [] } },
         })
       `,
-      'index.html': html`
-        <body>
-          <div id="app"></div>
-          <script type="module" src="./src/index.ts"></script>
-        </body>
-      `,
-      'src/index.css': css`@import 'tailwindcss';`,
-      'src/index.ts': ts`
-        import './index.css'
-
-        document.querySelector('#app').innerHTML = \`
-          <div class="underline m-2">Hello, world!</div>
-        \`
-      `,
-      'server.ts': ts`
-        import css from './src/index.css?url'
-
-        document.querySelector('#app').innerHTML = \`
-          <link rel="stylesheet" href="\${css}">
-          <div class="underline m-2">Hello, world!</div>
-        \`
-      `,
+      ...WORKSPACE,
     },
   },
   async ({ fs, exec, expect }) => {
@@ -130,9 +112,10 @@ test(
     let [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
-      //
       candidate`underline`,
       candidate`m-2`,
+      candidate`overline`,
+      candidate`m-3`,
     ])
   },
 )
