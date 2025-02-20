@@ -2,6 +2,7 @@ import dedent from 'dedent'
 import fastGlob from 'fast-glob'
 import { exec, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
+import net from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { stripVTControlCharacters } from 'node:util'
@@ -587,4 +588,12 @@ async function gracefullyRemove(dir: string) {
   if (!process.env.CI) {
     await fs.rm(dir, { recursive: true, force: true })
   }
+}
+
+export function getFreePort(): number {
+  let server = net.createServer()
+  server.listen(0)
+  let address = server.address() as net.AddressInfo
+  server.close()
+  return address.port
 }
