@@ -1,7 +1,11 @@
 import { Features, transform } from 'lightningcss'
 import { compile } from '..'
 
-export async function compileCss(css: string, candidates: string[] = [], options = {}) {
+export async function compileCss(
+  css: string,
+  candidates: string[] = [],
+  options: Parameters<typeof compile>[1] = {},
+) {
   let { build } = await compile(css, options)
   return optimizeCss(build(candidates)).trim()
 }

@@ -380,18 +380,24 @@ async function parseCss(
 
         // Handle `@media theme(…)`
         //
-        // We support `@import "tailwindcss/theme" theme(reference)` as a way to
+        // We support `@import "tailwindcss" theme(reference)` as a way to
         // import an external theme file as a reference, which becomes `@media
         // theme(reference) { … }` when the `@import` is processed.
         else if (param.startsWith('theme(')) {
           let themeParams = param.slice(6, -1)
+          let hasReference = themeParams.includes('reference')
 
           walk(node.nodes, (child) => {
             if (child.kind !== 'at-rule') {
-              throw new Error(
-                'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
-              )
+              if (hasReference) {
+                throw new Error(
+                  `Files imported with \`@import "…" theme(reference)\` must only contain \`@theme\` blocks.\nUse \`@reference "…";\` instead.`,
+                )
+              }
+
+              return WalkAction.Continue
             }
+
             if (child.name === '@theme') {
               child.params += ' ' + themeParams
               return WalkAction.Skip
