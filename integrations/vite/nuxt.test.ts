@@ -1,14 +1,4 @@
-import {
-  candidate,
-  css,
-  fetchStyles,
-  getFreePort,
-  html,
-  json,
-  retryAssertion,
-  test,
-  ts,
-} from '../utils'
+import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 const SETUP = {
   fs: {
@@ -88,7 +78,7 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
   await exec('pnpm nuxt build')
   // The Nuxt preview server does not automatically assign a free port if 3000
   // is taken, so we use a random port instead.
-  let process = await spawn(`pnpm nuxt preview --port ${getFreePort()}`, {
+  let process = await spawn(`pnpm nuxt preview --port 8724`, {
     env: {
       TEST: 'false',
       NODE_ENV: 'development',
