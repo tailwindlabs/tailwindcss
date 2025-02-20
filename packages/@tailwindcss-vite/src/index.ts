@@ -227,7 +227,6 @@ class Root {
     if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
-      this.buildDependencies = new Map()
 
       this.addBuildDependency(idToPath(inputPath))
 
