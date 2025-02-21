@@ -22,10 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
 - Vite: Automatic source detection now ignores files and directories specified in your `.gitignore` file ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
 - Vite: Ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure Astro production builds contain classes for client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure utility classes are read without escaping special characters ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Allow `theme(…)` options when using `@import` ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
-- Use amount of properties when sorting ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Vite: Ensure Astro production builds always contain classes used in client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure utility classes are scanned without added escaping ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Allow `@import` with `theme(…)` options for all stylesheets ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
+- Use amount of all used properties when sorting utilities ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
 - Remove double generated `translate-z-px` utilities ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
 
 ## [4.0.7] - 2025-02-18
