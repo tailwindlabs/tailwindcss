@@ -4213,9 +4213,8 @@ test('translate-y', async () => {
 })
 
 test('translate-z', async () => {
-  expect(
-    await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
+    .toMatchInlineSnapshot(`
     ".-translate-z-\\[var\\(--value\\)\\] {
       --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
@@ -8800,16 +8799,12 @@ test('text-wrap', async () => {
   ).toEqual('')
 })
 
-test('overflow-wrap', async () => {
-  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep', 'break-anywhere']))
+test('word-break', async () => {
+  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
     .toMatchInlineSnapshot(`
       ".break-normal {
         overflow-wrap: normal;
         word-break: normal;
-      }
-
-      .break-anywhere {
-        overflow-wrap: anywhere;
       }
 
       .break-words {
@@ -8830,12 +8825,36 @@ test('overflow-wrap', async () => {
       '-break-words',
       '-break-all',
       '-break-keep',
-      '-break-anywhere',
       'break-normal/foo',
       'break-words/foo',
       'break-all/foo',
       'break-keep/foo',
-      'break-anywhere/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('overflow-wrap', async () => {
+  expect(await run(['wrap-anywhere', 'wrap-break-word', 'wrap-normal'])).toMatchInlineSnapshot(`
+    ".wrap-anywhere {
+      overflow-wrap: anywhere;
+    }
+
+    .wrap-break-word {
+      overflow-wrap: break-word;
+    }
+
+    .wrap-normal {
+      overflow-wrap: normal;
+    }"
+  `)
+  expect(
+    await run([
+      '-wrap-anywhere',
+      '-wrap-break-word',
+      '-wrap-normal',
+      'wrap-anywhere/foo',
+      'wrap-break-word/foo',
+      'wrap-normal/foo',
     ]),
   ).toEqual('')
 })
