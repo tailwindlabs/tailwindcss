@@ -4214,14 +4214,14 @@ test('translate-y', async () => {
 
 test('translate-z', async () => {
   expect(await run(['translate-y-px', '-translate-z-[var(--value)]'])).toMatchInlineSnapshot(`
-    ".-translate-z-\\[var\\(--value\\)\\] {
-      --tw-translate-z: calc(var(--value) * -1);
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
-
-    .translate-y-px {
+    ".translate-y-px {
       --tw-translate-y: 1px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .-translate-z-\\[var\\(--value\\)\\] {
+      --tw-translate-z: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
     @property --tw-translate-x {
@@ -5458,12 +5458,7 @@ test('touch-pan', async () => {
       'touch-pan-down',
     ]),
   ).toMatchInlineSnapshot(`
-    ".touch-pan-down {
-      --tw-pan-y: pan-down;
-      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
-    }
-
-    .touch-pan-left {
+    ".touch-pan-left {
       --tw-pan-x: pan-left;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
@@ -5473,13 +5468,18 @@ test('touch-pan', async () => {
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
-    .touch-pan-up {
-      --tw-pan-y: pan-up;
+    .touch-pan-x {
+      --tw-pan-x: pan-x;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
-    .touch-pan-x {
-      --tw-pan-x: pan-x;
+    .touch-pan-down {
+      --tw-pan-y: pan-down;
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
+    }
+
+    .touch-pan-up {
+      --tw-pan-y: pan-up;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
