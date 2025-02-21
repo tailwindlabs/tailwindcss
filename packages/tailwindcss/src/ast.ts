@@ -1,8 +1,8 @@
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
-import { enableRemoveUnusedThemeVariables } from './feature-flags'
-import { ThemeOptions } from './theme'
+import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { extractUsedVariables } from './utils/variables'
 
 const AT_SIGN = 0x40
 
@@ -256,7 +256,11 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
+export function optimizeAst(
+  ast: AstNode[],
+  designSystem: DesignSystem,
+  firstThemeRule: StyleRule | null,
+) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let cssThemeVariables = new DefaultMap<
@@ -265,6 +269,8 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   >(() => new Set())
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
+
+  let variableDependencies = new DefaultMap<string, Set<string>>(() => new Set())
 
   function transform(
     node: AstNode,
@@ -285,7 +291,15 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
       // Track used CSS variables
       if (node.value.includes('var(')) {
-        designSystem.trackUsedVariables(node.value)
+        // Declaring another variable does not count as usage. Instead, we mark
+        // the relationship
+        if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+          for (let variable of extractUsedVariables(node.value)) {
+            variableDependencies.get(variable).add(node.property)
+          }
+        } else {
+          designSystem.trackUsedVariables(node.value)
+        }
       }
 
       // Track used animation names
@@ -376,13 +390,32 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
     // Context
     else if (node.kind === 'context') {
-      // Remove reference imports from printing
       if (node.context.reference) {
-        return
-      }
+        if (firstThemeRule) {
+          let path = findNode(node.nodes, (node) => node === firstThemeRule)
+          if (path) {
+            let newPathToFirstThemeRule = path
+              .filter((node) => node.kind === 'at-rule')
+              .map((node) => ({ ...node, nodes: [] }))
+              .reverse() as AtRule[]
 
-      for (let child of node.nodes) {
-        transform(child, parent, { ...context, ...node.context }, depth)
+            let child = firstThemeRule as AstNode
+            for (let node of newPathToFirstThemeRule) {
+              node.nodes = [child]
+              child = node
+            }
+
+            let newParent: AstNode[] = []
+            transform(child, newParent, { ...context, ...node.context, reference: false }, depth)
+            parent.push(...newParent)
+          }
+        }
+
+        return
+      } else {
+        for (let child of node.nodes) {
+          transform(child, parent, { ...context, ...node.context }, depth)
+        }
       }
     }
 
@@ -403,49 +436,67 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   }
 
   // Remove unused theme variables
-  if (enableRemoveUnusedThemeVariables) {
-    next: for (let [parent, declarations] of cssThemeVariables) {
-      for (let declaration of declarations) {
-        let options = designSystem.theme.getOptions(declaration.property)
-
-        if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
-          if (declaration.property.startsWith('--animate-')) {
-            let parts = declaration.value!.split(/\s+/)
-            for (let part of parts) usedKeyframeNames.add(part)
-          }
-
-          continue
+  next: for (let [parent, declarations] of cssThemeVariables) {
+    for (let declaration of declarations) {
+      // Find out if a variable is either used directly or if any of the
+      // variables referencing it is used.
+      let variableUsed = isVariableUsed(
+        declaration.property,
+        designSystem.theme,
+        variableDependencies,
+      )
+      if (variableUsed) {
+        if (declaration.property.startsWith('--animate-')) {
+          let parts = declaration.value!.split(/\s+/)
+          for (let part of parts) usedKeyframeNames.add(part)
         }
 
-        // Remove the declaration (from its parent)
-        let idx = parent.indexOf(declaration)
-        parent.splice(idx, 1)
+        continue
+      }
 
-        // If the parent is now empty, remove it from the AST
-        if (parent.length === 0) {
-          for (let [idx, node] of newAst.entries()) {
-            // Assumption, but right now the `@theme` must be top-level, so we
-            // don't need to traverse the entire AST to find the parent.
-            //
-            // Checking for `rule`, because at this stage the `@theme` is already
-            // converted to a normal style rule `:root, :host`
-            if (node.kind === 'rule' && node.nodes === parent) {
-              newAst.splice(idx, 1)
-              break
-            }
-          }
+      // Remove the declaration (from its parent)
+      let idx = parent.indexOf(declaration)
+      parent.splice(idx, 1)
 
-          continue next
-        }
+      // If the parent is now empty, remove it and any `@layer` rules above it
+      // from the AST
+      if (parent.length === 0) {
+        let path = findNode(newAst, (node) => node.kind === 'rule' && node.nodes === parent)
+
+        if (!path || path.length === 0) continue next
+
+        // Add the root of the AST so we can delete from the top-level
+        path.unshift({
+          kind: 'at-root',
+          nodes: newAst,
+        })
+
+        // Remove nodes from the parent as long as the parent is empty
+        // otherwise and consist of only @layer rules
+        do {
+          let nodeToRemove = path.pop()
+          if (!nodeToRemove) break
+
+          let removeFrom = path[path.length - 1]
+          if (!removeFrom) break
+          if (removeFrom.kind !== 'at-root' && removeFrom.kind !== 'at-rule') break
+
+          let idx = removeFrom.nodes.indexOf(nodeToRemove)
+          if (idx === -1) break
+
+          removeFrom.nodes.splice(idx, 1)
+        } while (true)
+
+        continue next
       }
     }
+  }
 
-    // Remove unused keyframes
-    for (let keyframe of keyframes) {
-      if (!usedKeyframeNames.has(keyframe.params)) {
-        let idx = atRoots.indexOf(keyframe)
-        atRoots.splice(idx, 1)
-      }
+  // Remove unused keyframes
+  for (let keyframe of keyframes) {
+    if (!usedKeyframeNames.has(keyframe.params)) {
+      let idx = atRoots.indexOf(keyframe)
+      atRoots.splice(idx, 1)
     }
   }
 
@@ -521,4 +572,45 @@ export function toCss(ast: AstNode[]) {
   }
 
   return css
+}
+
+function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | null {
+  let foundPath: AstNode[] = []
+  walk(ast, (node, { path }) => {
+    if (fn(node)) {
+      foundPath = [...path]
+      return WalkAction.Stop
+    }
+  })
+  return foundPath
+}
+
+// Find out if a variable is either used directly or if any of the variables that depend on it are
+// used
+function isVariableUsed(
+  variable: string,
+  theme: Theme,
+  variableDependencies: Map<string, Set<string>>,
+  alreadySeenVariables: Set<string> = new Set(),
+): boolean {
+  // Break recursions when visiting a variable twice
+  if (alreadySeenVariables.has(variable)) {
+    return true
+  } else {
+    alreadySeenVariables.add(variable)
+  }
+
+  let options = theme.getOptions(variable)
+  if (options & (ThemeOptions.STATIC | ThemeOptions.USED)) {
+    return true
+  } else {
+    let dependencies = variableDependencies.get(variable) ?? []
+    for (let dependency of dependencies) {
+      if (isVariableUsed(dependency, theme, variableDependencies, alreadySeenVariables)) {
+        return true
+      }
+    }
+  }
+
+  return false
 }

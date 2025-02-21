@@ -27,7 +27,6 @@ describe('compiling CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-black: #000;
-        --breakpoint-md: 768px;
       }
 
       @layer utilities {
@@ -173,7 +172,6 @@ describe('compiling CSS', () => {
         --spacing-1\\.5: 1.5px;
         --spacing-2_5: 2.5px;
         --spacing-3\\.5: 3.5px;
-        --spacing-3_5: 3.5px;
         --spacing-foo\\/bar: 3rem;
       }
 
@@ -294,7 +292,6 @@ describe('@apply', () => {
         --color-blue-500: #3b82f6;
         --color-green-200: #bbf7d0;
         --color-green-500: #22c55e;
-        --breakpoint-md: 768px;
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -1149,7 +1146,6 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-red: red;
-        --animate-foo: foo 1s infinite;
         --text-lg: 20px;
       }
 
@@ -1159,12 +1155,6 @@ describe('Parsing theme values from CSS', () => {
 
       .accent-red {
         accent-color: var(--color-red);
-      }
-
-      @keyframes foo {
-        to {
-          opacity: 1;
-        }
       }"
     `)
   })
@@ -1251,12 +1241,6 @@ describe('Parsing theme values from CSS', () => {
 
       .accent-green {
         accent-color: var(--color-green);
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
       }"
     `)
   })
@@ -1304,12 +1288,6 @@ describe('Parsing theme values from CSS', () => {
 
       .accent-green {
         accent-color: var(--color-green);
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
       }"
     `)
   })
@@ -1403,7 +1381,6 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
 
@@ -1586,12 +1563,6 @@ describe('Parsing theme values from CSS', () => {
         animation: var(--animate-foobar);
       }
 
-      @keyframes foo {
-        to {
-          opacity: 1;
-        }
-      }
-
       @keyframes foobar {
         to {
           opacity: 0;
@@ -1628,7 +1599,6 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --animate-foo: used 1s infinite;
-        --animate-bar: unused 1s infinite;
       }
 
       .animate-foo {
@@ -1638,12 +1608,6 @@ describe('Parsing theme values from CSS', () => {
       @keyframes used {
         to {
           opacity: 1;
-        }
-      }
-
-      @keyframes unused {
-        to {
-          opacity: 0;
         }
       }"
     `)
@@ -1675,24 +1639,13 @@ describe('Parsing theme values from CSS', () => {
         ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --animate-foo: used 1s infinite;
-        --animate-bar: unused 1s infinite;
-      }
-
-      .animate-foo {
+      ".animate-foo {
         animation: 1s infinite used;
       }
 
       @keyframes used {
         to {
           opacity: 1;
-        }
-      }
-
-      @keyframes unused {
-        to {
-          opacity: 0;
         }
       }"
     `)
@@ -1781,12 +1734,6 @@ describe('Parsing theme values from CSS', () => {
       @keyframes used {
         to {
           opacity: 1;
-        }
-      }
-
-      @keyframes unused {
-        to {
-          opacity: 0;
         }
       }"
     `)
@@ -2092,13 +2039,7 @@ describe('Parsing theme values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -2137,13 +2078,7 @@ describe('Parsing theme values from CSS', () => {
         },
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-tomato {
+      ".bg-tomato {
         background-color: #e10c04;
       }"
     `)
@@ -2176,6 +2111,30 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  test('when no theme values are emitted, empty layers can be removed', async () => {
+    expect(
+      await compileCss(
+        css`
+          @layer theme1 {
+            @layer theme2 {
+              @theme {
+                --color-tomato: #e10c04;
+                --color-potato: #ac855b;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['underline'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
   test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
     expect(
       await compileCss(
@@ -2193,13 +2152,7 @@ describe('Parsing theme values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -2312,11 +2265,7 @@ describe('Parsing theme values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-potato: #efb46b;
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #efb46b;
       }"
     `)
@@ -2484,6 +2433,54 @@ describe('Parsing theme values from CSS', () => {
 
       .text-red {
         color: tomato;
+      }"
+    `)
+  })
+
+  test('only emits theme variables that are used outside of being defined by another variable', async () => {
+    let { build } = await compile(
+      css`
+        @theme {
+          --var-a: var(--var-b);
+          --var-b: var(--var-c);
+          --var-c: var(--var-d);
+          --var-d: red;
+
+          --var-four: green;
+          --var-three: var(--var-four);
+          --var-two: var(--var-three);
+          --var-one: var(--var-two);
+
+          --var-eins: var(--var-zwei);
+          --var-zwei: var(--var-drei);
+          --var-drei: var(--var-vier);
+          --var-vier: blue;
+        }
+
+        @utility get-var-* {
+          color: --value(--var-\*);
+        }
+        @tailwind utilities;
+      `,
+      {},
+    )
+
+    expect(optimizeCss(build(['get-var-b', 'get-var-two'])).trim()).toMatchInlineSnapshot(`
+      ":root, :host {
+        --var-b: var(--var-c);
+        --var-c: var(--var-d);
+        --var-d: red;
+        --var-four: green;
+        --var-three: var(--var-four);
+        --var-two: var(--var-three);
+      }
+
+      .get-var-b {
+        color: var(--var-b);
+      }
+
+      .get-var-two {
+        color: var(--var-two);
       }"
     `)
   })
@@ -3661,7 +3658,7 @@ it("should error when `layer(…)` is used, but it's not the first param", async
   )
 })
 
-describe('`@import "…" reference`', () => {
+describe('`@reference "…" reference`', () => {
   test('recursively removes styles', async () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
@@ -3692,7 +3689,7 @@ describe('`@import "…" reference`', () => {
     await expect(
       compileCss(
         `
-          @import './foo/bar.css' reference;
+          @reference './foo/bar.css';
 
           .bar {
             @apply md:hocus:foo;
@@ -3732,46 +3729,12 @@ describe('`@import "…" reference`', () => {
 
     let { build } = await compile(
       css`
-        @import './foo/bar.css' reference;
+        @reference './foo/bar.css';
       `,
       { loadStylesheet },
     )
 
     expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
-  })
-
-  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
-    await expect(
-      compileCss(
-        `
-          @media reference {
-            @layer theme {
-              @theme {
-                --breakpoint-md: 48rem;
-              }
-              .foo {
-                color: red;
-              }
-            }
-            @utility foo {
-              color: red;
-            }
-            @custom-variant hocus (&:hover, &:focus);
-          }
-
-          .bar {
-            @apply md:hocus:foo;
-          }
-        `,
-        [],
-      ),
-    ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
-        .bar:hover, .bar:focus {
-          color: red;
-        }
-      }"
-    `)
   })
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
@@ -3848,8 +3811,177 @@ describe('`@import "…" reference`', () => {
         },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      ".bar {
+      "@layer theme {
+        :root, :host {
+          --animate-spin: spin 1s linear infinite;
+        }
+      }
+
+      .bar {
         animation: var(--animate-spin);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }"
+    `)
+  })
+
+  test('emits theme variables and keyframes defined inside @reference-ed files', async () => {
+    let loadStylesheet = async (id: string, base: string) => {
+      switch (id) {
+        case './one.css': {
+          return {
+            content: css`
+              @import './two.css' layer(two);
+            `,
+            base: '/root',
+          }
+        }
+        case './two.css': {
+          return {
+            content: css`
+              @import './three.css' layer(three);
+            `,
+            base: '/root',
+          }
+        }
+        case './three.css': {
+          return {
+            content: css`
+              .foo {
+                color: red;
+              }
+              @theme {
+                --color-red: red;
+                --animate-wiggle: wiggle 1s ease-in-out infinite;
+                @keyframes wiggle {
+                  0%,
+                  100% {
+                    transform: rotate(-3deg);
+                  }
+                  50% {
+                    transform: rotate(3deg);
+                  }
+                }
+              }
+            `,
+            base: '/root',
+          }
+        }
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+          @reference './one.css';
+          .bar {
+            @apply text-red animate-wiggle;
+          }
+        `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer two {
+        @layer three {
+          :root, :host {
+            --color-red: red;
+            --animate-wiggle: wiggle 1s ease-in-out infinite;
+          }
+        }
+      }
+
+      .bar {
+        animation: var(--animate-wiggle);
+        color: var(--color-red);
+      }
+
+      @keyframes wiggle {
+        0%, 100% {
+          transform: rotate(-3deg);
+        }
+
+        50% {
+          transform: rotate(3deg);
+        }
+      }"
+    `)
+  })
+
+  test('supports `@import "…" reference` syntax', async () => {
+    let loadStylesheet = async () => {
+      return {
+        content: css`
+          .foo {
+            color: red;
+          }
+          @utility foo {
+            color: red;
+          }
+          @theme {
+            --breakpoint-md: 768px;
+          }
+          @custom-variant hocus (&:hover, &:focus);
+        `,
+        base: '/root/foo',
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+            @import './foo/bar.css' reference;
+
+            .bar {
+              @apply md:hocus:foo;
+            }
+          `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+        "@media (width >= 768px) {
+          .bar:hover, .bar:focus {
+            color: red;
+          }
+        }"
+      `)
+  })
+
+  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
+    await expect(
+      compileCss(
+        `
+          @media reference {
+            @layer theme {
+              @theme {
+                --breakpoint-md: 48rem;
+              }
+              .foo {
+                color: red;
+              }
+            }
+            @utility foo {
+              color: red;
+            }
+            @custom-variant hocus (&:hover, &:focus);
+          }
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@media (width >= 48rem) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
       }"
     `)
   })
