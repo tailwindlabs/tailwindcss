@@ -75,6 +75,7 @@ export default [
   'translate',
   '--tw-translate-x',
   '--tw-translate-y',
+  '--tw-translate-z',
   'scale',
   '--tw-scale-x',
   '--tw-scale-y',
