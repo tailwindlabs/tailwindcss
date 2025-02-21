@@ -4213,15 +4213,21 @@ test('translate-y', async () => {
 })
 
 test('translate-z', async () => {
-  expect(await run(['translate-z-px', '-translate-z-[var(--value)]'])).toMatchInlineSnapshot(`
+  expect(
+    await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']),
+  ).toMatchInlineSnapshot(`
     ".-translate-z-\\[var\\(--value\\)\\] {
       --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
+    .-translate-z-px {
+      --tw-translate-z: -1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
     .translate-z-px {
       --tw-translate-z: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
