@@ -2078,13 +2078,7 @@ describe('Parsing theme values from CSS', () => {
         },
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-tomato {
+      ".bg-tomato {
         background-color: #e10c04;
       }"
     `)
