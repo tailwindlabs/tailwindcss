@@ -4214,14 +4214,14 @@ test('translate-y', async () => {
 
 test('translate-z', async () => {
   expect(await run(['translate-y-px', '-translate-z-[var(--value)]'])).toMatchInlineSnapshot(`
-    ".translate-y-px {
-      --tw-translate-y: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y);
-    }
-
-    .-translate-z-\\[var\\(--value\\)\\] {
+    ".-translate-z-\\[var\\(--value\\)\\] {
       --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    .translate-y-px {
+      --tw-translate-y: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     @property --tw-translate-x {
@@ -12573,6 +12573,10 @@ test('font', async () => {
       --font-weight-bold: 650;
     }
 
+    .font-sans {
+      font-family: var(--font-sans);
+    }
+
     .font-\\[\\"arial_rounded\\"\\] {
       font-family: arial rounded;
     }
@@ -12583,10 +12587,6 @@ test('font', async () => {
 
     .font-\\[ui-sans-serif\\] {
       font-family: ui-sans-serif;
-    }
-
-    .font-sans {
-      font-family: var(--font-sans);
     }
 
     .font-\\[100\\] {
@@ -14155,15 +14155,7 @@ test('contain', async () => {
       'contain-[unset]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".contain-\\[unset\\] {
-      contain: unset;
-    }
-
-    .contain-content {
-      contain: content;
-    }
-
-    .contain-inline-size {
+    ".contain-inline-size {
       --tw-contain-size: inline-size;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
@@ -14171,10 +14163,6 @@ test('contain', async () => {
     .contain-layout {
       --tw-contain-layout: layout;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
-    }
-
-    .contain-none {
-      contain: none;
     }
 
     .contain-paint {
@@ -14187,13 +14175,25 @@ test('contain', async () => {
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
-    .contain-strict {
-      contain: strict;
-    }
-
     .contain-style {
       --tw-contain-style: style;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
+    }
+
+    .contain-\\[unset\\] {
+      contain: unset;
+    }
+
+    .contain-content {
+      contain: content;
+    }
+
+    .contain-none {
+      contain: none;
+    }
+
+    .contain-strict {
+      contain: strict;
     }
 
     @property --tw-contain-size {
@@ -14424,10 +14424,6 @@ test('font-variant-numeric', async () => {
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
     }
 
-    .normal-nums {
-      font-variant-numeric: normal;
-    }
-
     .oldstyle-nums {
       --tw-numeric-figure: oldstyle-nums;
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
@@ -14456,6 +14452,10 @@ test('font-variant-numeric', async () => {
     .tabular-nums {
       --tw-numeric-spacing: tabular-nums;
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
+    }
+
+    .normal-nums {
+      font-variant-numeric: normal;
     }
 
     @property --tw-ordinal {
@@ -16385,20 +16385,8 @@ test('@container', async () => {
       '@container-[size]/sidebar',
     ]),
   ).toMatchInlineSnapshot(`
-    ".\\@container {
-      container-type: inline-size;
-    }
-
-    .\\@container-\\[size\\] {
-      container-type: size;
-    }
-
-    .\\@container-\\[size\\]\\/sidebar {
+    ".\\@container-\\[size\\]\\/sidebar {
       container: sidebar / size;
-    }
-
-    .\\@container-normal {
-      container-type: normal;
     }
 
     .\\@container-normal\\/sidebar {
@@ -16407,6 +16395,18 @@ test('@container', async () => {
 
     .\\@container\\/sidebar {
       container: sidebar / inline-size;
+    }
+
+    .\\@container {
+      container-type: inline-size;
+    }
+
+    .\\@container-\\[size\\] {
+      container-type: size;
+    }
+
+    .\\@container-normal {
+      container-type: normal;
     }"
   `)
   expect(
@@ -17579,24 +17579,24 @@ describe('custom utilities', () => {
           'example-[12px]/[16px]',
         ]),
       ).toMatchInlineSnapshot(`
-        ".example-\\[12px\\] {
-          --value: 12px;
-        }
-
-        .example-\\[12px\\]\\/\\[16px\\] {
+        ".example-\\[12px\\]\\/\\[16px\\] {
           --value: 12px;
           --modifier: 16px;
           --modifier-with-calc: calc(16px * 2);
-        }
-
-        .example-sm {
-          --value: var(--value-sm);
         }
 
         .example-sm\\/7 {
           --value: var(--value-sm);
           --modifier: var(--modifier-7);
           --modifier-with-calc: calc(var(--modifier-7) * 2);
+        }
+
+        .example-\\[12px\\] {
+          --value: 12px;
+        }
+
+        .example-sm {
+          --value: var(--value-sm);
         }"
       `)
       expect(
@@ -17651,15 +17651,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-        }
-
-        .example-xs\\/6 {
+        ".example-xs\\/6 {
           font-size: var(--text-xs);
           line-height: var(--text-xs--line-height);
           line-height: 6;
+        }
+
+        .example-xs {
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17682,15 +17682,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-        }
-
-        .example-xs\\/6 {
+        ".example-xs\\/6 {
           font-size: var(--text-xs);
           line-height: var(--text-xs--line-height);
           line-height: 6;
+        }
+
+        .example-xs {
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17713,15 +17713,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-        }
-
-        .example-xs\\/6 {
+        ".example-xs\\/6 {
           font-size: var(--text-xs);
           line-height: var(--text-xs--line-height);
           line-height: 6;
+        }
+
+        .example-xs {
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17744,15 +17744,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-        }
-
-        .example-xs\\/6 {
+        ".example-xs\\/6 {
           font-size: var(--text-xs);
           line-height: var(--text-xs--line-height);
           line-height: 6;
+        }
+
+        .example-xs {
+          font-size: var(--text-xs);
+          line-height: var(--text-xs--line-height);
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
