@@ -95,8 +95,8 @@ export function compileCandidates(
     // Find the first property that is different between the two rules
     let offset = 0
     while (
-      aSorting.properties.order.length < offset &&
-      zSorting.properties.order.length < offset &&
+      offset < aSorting.properties.order.length &&
+      offset < zSorting.properties.order.length &&
       aSorting.properties.order[offset] === zSorting.properties.order[offset]
     ) {
       offset += 1
