@@ -12574,10 +12574,6 @@ test('font', async () => {
       --font-weight-bold: 650;
     }
 
-    .font-sans {
-      font-family: var(--font-sans);
-    }
-
     .font-\\[\\"arial_rounded\\"\\] {
       font-family: arial rounded;
     }
@@ -12588,6 +12584,10 @@ test('font', async () => {
 
     .font-\\[ui-sans-serif\\] {
       font-family: ui-sans-serif;
+    }
+
+    .font-sans {
+      font-family: var(--font-sans);
     }
 
     .font-\\[100\\] {
