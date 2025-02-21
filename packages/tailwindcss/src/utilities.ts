@@ -11,6 +11,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
+import { enableWrapAnywhere } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -2028,6 +2029,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-words', [['overflow-wrap', 'break-word']])
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'keep-all']])
+
+  if (enableWrapAnywhere) {
+    staticUtility('wrap-anywhere', [['overflow-wrap', 'anywhere']])
+    staticUtility('wrap-break-word', [['overflow-wrap', 'break-word']])
+    staticUtility('wrap-normal', [['overflow-wrap', 'normal']])
+  }
 
   {
     // border-radius
