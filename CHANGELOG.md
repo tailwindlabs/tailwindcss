@@ -12,20 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
-### Changed
+## [4.0.8] - 2025-02-21
 
-- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
+### Added
+
+- Allow `@import` with `theme(…)` options for stylesheets that contain more than just `@theme` rules ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
 
 ### Fixed
 
-- Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
-- Vite: Automatic source detection now ignores files and directories specified in your `.gitignore` file ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure Astro production builds contain classes for client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure utility classes are read without escaping special characters ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Allow `theme(…)` options when using `@import` ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
-- Use amount of properties when sorting ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
-- Remove double generated `translate-z-px` utilities ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
+- Don't add `!important` to CSS variable declarations when using the important modifier ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+- Vite: Ignore files and directories specified in your `.gitignore` file when using automatic source detection([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Don't rely on the module graph for detecting candidates to ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure Astro production builds always contain classes used in client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Always scan raw file contents for utility classes before any other transforms have been applied to ensure utility classes are scanned without any additional escaping ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Ensure utilities with more declarations are always sorted before utilities with fewer declarations when utilities only define CSS variables ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Only include `translate-z-px` utilities once in compiled CSS ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
+
+### Changed
+
+- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
 
 ## [4.0.7] - 2025-02-18
 
@@ -3448,7 +3453,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...HEAD
+[4.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.7...v4.0.8
+[4.0.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...v4.0.7
 [4.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...v4.0.6
 [4.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...v4.0.5
 [4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
