@@ -1874,6 +1874,26 @@ test('landscape', async () => {
   expect(await run(['landscape/foo:flex'])).toEqual('')
 })
 
+test('transparency-safe', async () => {
+  expect(await run(['transparency-safe:flex'])).toMatchInlineSnapshot(`
+    "@media (prefers-reduced-transparency: no-preference) {
+      .transparency-safe\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('transparency-reduce', async () => {
+  expect(await run(['transparency-reduce:flex'])).toMatchInlineSnapshot(`
+    "@media (prefers-reduced-transparency: reduce) {
+      .transparency-reduce\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('contrast-more', async () => {
   expect(await run(['contrast-more:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-contrast: more) {

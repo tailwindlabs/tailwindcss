@@ -1143,6 +1143,9 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
 
+  staticVariant('transparency-safe', ['@media (prefers-reduced-transparency: no-preference)'])
+  staticVariant('transparency-reduce', ['@media (prefers-reduced-transparency: reduce)'])
+
   return variants
 }
 
