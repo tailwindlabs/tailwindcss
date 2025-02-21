@@ -19,7 +19,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.1",
     "eslint-config-next": "^15.1.7",
     "typescript": "^5.5.4"
   }
