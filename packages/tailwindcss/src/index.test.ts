@@ -1613,6 +1613,44 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/16374
+  test('custom properties in keyframes preserved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-foo: used 1s infinite;
+
+            @keyframes used {
+              to {
+                --other: var(--angle);
+                --angle: 360deg;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          --other: var(--angle);
+          --angle: 360deg;
+        }
+      }"
+    `)
+  })
+
   test('keyframes are generated when used in an animation using `@theme inline`', async () => {
     expect(
       await compileCss(

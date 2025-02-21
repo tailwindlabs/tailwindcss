@@ -286,7 +286,9 @@ export function optimizeAst(
 
       // Track variables defined in `@theme`
       if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
-        cssThemeVariables.get(parent).add(node)
+        if (!context.keyframes) {
+          cssThemeVariables.get(parent).add(node)
+        }
       }
 
       // Track used CSS variables
@@ -354,6 +356,10 @@ export function optimizeAst(
 
     // AtRule
     else if (node.kind === 'at-rule') {
+      if (node.name === '@keyframes') {
+        context = { ...context, keyframes: true }
+      }
+
       let copy = { ...node, nodes: [] }
       for (let child of node.nodes) {
         transform(child, copy.nodes, context, depth + 1)
