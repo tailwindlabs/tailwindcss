@@ -3047,6 +3047,14 @@ describe('addUtilities()', () => {
     ).toMatchInlineSnapshot(
       `
       "@layer utilities {
+        .j {
+          &.j {
+            color: red;
+          }
+          .j& {
+            color: red;
+          }
+        }
         .a {
           & .b:hover .c {
             color: red;
@@ -3084,14 +3092,6 @@ describe('addUtilities()', () => {
         }
         .i {
           .h~& {
-            color: red;
-          }
-        }
-        .j {
-          &.j {
-            color: red;
-          }
-          .j& {
             color: red;
           }
         }
