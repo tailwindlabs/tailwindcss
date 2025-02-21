@@ -327,18 +327,19 @@ function getPropertySort(nodes: AstNode[]) {
     if (node.kind === 'declaration') {
       count++
 
-      if (!seenTwSort) {
-        if (node.property === '--tw-sort') {
-          let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value ?? '')
-          if (idx !== -1) {
-            order.add(idx)
-            seenTwSort = true
-          }
-        }
+      if (seenTwSort) continue
 
-        let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
-        if (idx !== -1) order.add(idx)
+      if (node.property === '--tw-sort') {
+        let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value ?? '')
+        if (idx !== -1) {
+          order.add(idx)
+          seenTwSort = true
+          continue
+        }
       }
+
+      let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
+      if (idx !== -1) order.add(idx)
     } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       for (let child of node.nodes) {
         q.push(child)
