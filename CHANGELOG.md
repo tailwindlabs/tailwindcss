@@ -13,20 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - 2025-02-21
 
+### Added
+
+- Allow `@import` with `theme(…)` options for stylesheets that contain more than just `@theme` rules ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
+
 ### Changed
 
 - Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
 
+  
 ### Fixed
 
-- Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
-- Vite: Automatic source detection now ignores files and directories specified in your `.gitignore` file ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Don't add `!important` to CSS variable declarations when using the important modifier ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+- Vite: Ignore files and directories specified in your `.gitignore` file when using automatic source detection  ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Don't rely on the module graph for detecting candidates to ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
 - Vite: Ensure Astro production builds always contain classes used in client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Vite: Ensure utility classes are scanned without added escaping ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
-- Allow `@import` with `theme(…)` options for all stylesheets ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
-- Use amount of all used properties when sorting utilities ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
-- Remove double generated `translate-z-px` utilities ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
+- Vite: Always scan raw file contents for utility classes before any other transforms have been applied to ensure utility classes are scanned without any additional escaping ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Ensure utilities with more declarations are always sorted before utilities with fewer declarations when utilities only define CSS variables ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Only include `translate-z-px` utilities once in compiled CSS ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
 
 ## [4.0.7] - 2025-02-18
 
