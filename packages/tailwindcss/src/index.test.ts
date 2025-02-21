@@ -1623,6 +1623,7 @@ describe('Parsing theme values from CSS', () => {
 
             @keyframes used {
               to {
+                --other: var(--angle);
                 --angle: 360deg;
               }
             }
@@ -1643,6 +1644,7 @@ describe('Parsing theme values from CSS', () => {
 
       @keyframes used {
         to {
+          --other: var(--angle);
           --angle: 360deg;
         }
       }"
