@@ -1018,8 +1018,7 @@ describe('sorting', () => {
   })
 })
 
-// Parsing theme values from CSS
-describe('Parsing themes values from CSS', () => {
+describe('Parsing theme values from CSS', () => {
   test('Can read values from `@theme`', async () => {
     expect(
       await compileCss(
@@ -1967,7 +1966,44 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@media theme(…)` can only contain `@theme` rules', () => {
+  test('`@import "tailwindcss" theme(static)` will always generate theme values, regardless of whether they were used or not', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss' theme(static);
+        `,
+        ['bg-tomato'],
+        {
+          async loadStylesheet() {
+            return {
+              content: css`
+                @theme {
+                  --color-tomato: #e10c04;
+                  --color-potato: #ac855b;
+                  --color-primary: var(--primary);
+                }
+
+                @tailwind utilities;
+              `,
+              base: '',
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('`@media theme(reference)` can only contain `@theme` rules', () => {
     return expect(
       compileCss(
         css`
@@ -1981,7 +2017,10 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Files imported with \`@import "…" theme(…)\` must only contain \`@theme\` blocks.]`,
+      `
+      [Error: Files imported with \`@import "…" theme(reference)\` must only contain \`@theme\` blocks.
+      Use \`@reference "…";\` instead.]
+    `,
     )
   })
 
@@ -2006,6 +2045,43 @@ describe('Parsing themes values from CSS', () => {
 
       .bg-primary {
         background-color: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('`@import "tailwindcss" theme(inline)` theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss' theme(inline);
+        `,
+        ['bg-tomato'],
+        {
+          async loadStylesheet() {
+            return {
+              content: css`
+                @theme {
+                  --color-tomato: #e10c04;
+                  --color-potato: #ac855b;
+                  --color-primary: var(--primary);
+                }
+
+                @tailwind utilities;
+              `,
+              base: '',
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
       }
 
       .bg-tomato {
