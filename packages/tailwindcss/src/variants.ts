@@ -12,7 +12,7 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
-import { enableUserValid } from './feature-flags'
+import { enableInvertedColors, enableUserValid } from './feature-flags'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -1142,6 +1142,10 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('print', ['@media print'])
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
+
+  if (enableInvertedColors) {
+    staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
+  }
 
   return variants
 }

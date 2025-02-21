@@ -1907,6 +1907,16 @@ test('forced-colors', async () => {
   expect(await run(['forced-colors/foo:flex'])).toEqual('')
 })
 
+test('inverted-colors', async () => {
+  expect(await run(['inverted-colors:flex'])).toMatchInlineSnapshot(`
+    "@media (inverted-colors: inverted) {
+      .inverted-colors\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('nth', async () => {
   expect(
     await run([
