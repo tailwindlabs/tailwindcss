@@ -10,6 +10,11 @@ const SETUP = {
           "nuxt": "^3.13.1",
           "tailwindcss": "workspace:^",
           "vue": "latest"
+        },
+        "pnpm": {
+          "overrides": {
+            "c12": "2.0.2"
+          }
         }
       }
     `,
