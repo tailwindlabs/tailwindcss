@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 
+## [4.0.8] - 2025-02-21
+
 ### Changed
 
 - Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
@@ -3447,7 +3449,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...HEAD
+[4.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.7...v4.0.8
+[4.0.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...v4.0.7
 [4.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...v4.0.6
 [4.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...v4.0.5
 [4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
