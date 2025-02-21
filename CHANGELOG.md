@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vite: Ensure utility classes are read without escaping special characters ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
 - Allow `theme(…)` options when using `@import` ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
 - Use amount of properties when sorting ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Remove double generated `translate-z-px` utilities ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
 
 ## [4.0.7] - 2025-02-18
 
