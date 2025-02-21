@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 
+### Changed
+
+- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
+
+### Fixed
+
+- Remove invalid `!important` on CSS variable declarations ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+- Vite: Automatic source detection now ignores files and directories specified in your `.gitignore` file ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure Astro production builds contain classes for client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure utility classes are read without escaping special characters ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Allow `theme(…)` options when using `@import` ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
+- Use amount of properties when sorting ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Remove double generated `translate-z-px` utilities ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
+
 ## [4.0.7] - 2025-02-18
 
 ### Fixed
@@ -35,9 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Revert change to no longer include theme variables that aren't used in compiled CSS ([#16403](https://github.com/tailwindlabs/tailwindcss/pull/16403))
-
-### Fixed
-
 - Upgrade: Don't migrate `blur` to `blur-sm` when used with Next.js `<Image placeholder="blur" />` ([#16405](https://github.com/tailwindlabs/tailwindcss/pull/16405))
 
 ## [4.0.5] - 2025-02-08

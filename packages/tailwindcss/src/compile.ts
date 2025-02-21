@@ -23,7 +23,7 @@ export function compileCandidates(
 ) {
   let nodeSorting = new Map<
     AstNode,
-    { properties: number[]; variants: bigint; candidate: string }
+    { properties: { order: number[]; count: number }; variants: bigint; candidate: string }
   >()
   let astNodes: AstNode[] = []
   let matches = new Map<string, Candidate[]>()
@@ -95,18 +95,19 @@ export function compileCandidates(
     // Find the first property that is different between the two rules
     let offset = 0
     while (
-      aSorting.properties.length < offset &&
-      zSorting.properties.length < offset &&
-      aSorting.properties[offset] === zSorting.properties[offset]
+      offset < aSorting.properties.order.length &&
+      offset < zSorting.properties.order.length &&
+      aSorting.properties.order[offset] === zSorting.properties.order[offset]
     ) {
       offset += 1
     }
 
     return (
       // Sort by lowest property index first
-      (aSorting.properties[offset] ?? Infinity) - (zSorting.properties[offset] ?? Infinity) ||
+      (aSorting.properties.order[offset] ?? Infinity) -
+        (zSorting.properties.order[offset] ?? Infinity) ||
       // Sort by most properties first, then by least properties
-      zSorting.properties.length - aSorting.properties.length ||
+      zSorting.properties.count - aSorting.properties.count ||
       // Sort alphabetically
       compare(aSorting.candidate, zSorting.candidate)
     )
@@ -124,7 +125,10 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
 
   let rules: {
     node: AstNode
-    propertySort: number[]
+    propertySort: {
+      order: number[]
+      count: number
+    }
   }[] = []
 
   let selector = `.${escape(candidate.raw)}`
@@ -300,7 +304,7 @@ function applyImportant(ast: AstNode[]): void {
       continue
     }
 
-    if (node.kind === 'declaration') {
+    if (node.kind === 'declaration' && node.property[0] !== '-' && node.property[1] !== '-') {
       node.important = true
     } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       applyImportant(node.nodes)
@@ -310,24 +314,33 @@ function applyImportant(ast: AstNode[]): void {
 
 function getPropertySort(nodes: AstNode[]) {
   // Determine sort order based on properties used
-  let propertySort = new Set<number>()
+  let order = new Set<number>()
+  let count = 0
   let q: AstNode[] = nodes.slice()
+
+  let seenTwSort = false
 
   while (q.length > 0) {
     // SAFETY: At this point it is safe to use TypeScript's non-null assertion
     // operator because we guarded against `q.length > 0` above.
     let node = q.shift()!
     if (node.kind === 'declaration') {
+      // Empty strings should still be counted, e.g.: `--tw-foo:;` is valid
+      if (node.value !== undefined) count++
+
+      if (seenTwSort) continue
+
       if (node.property === '--tw-sort') {
         let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.value ?? '')
         if (idx !== -1) {
-          propertySort.add(idx)
-          break
+          order.add(idx)
+          seenTwSort = true
+          continue
         }
       }
 
       let idx = GLOBAL_PROPERTY_ORDER.indexOf(node.property)
-      if (idx !== -1) propertySort.add(idx)
+      if (idx !== -1) order.add(idx)
     } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       for (let child of node.nodes) {
         q.push(child)
@@ -335,5 +348,8 @@ function getPropertySort(nodes: AstNode[]) {
     }
   }
 
-  return Array.from(propertySort).sort((a, z) => a - z)
+  return {
+    order: Array.from(order).sort((a, z) => a - z),
+    count,
+  }
 }

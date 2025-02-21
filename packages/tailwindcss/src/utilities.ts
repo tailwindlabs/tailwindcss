@@ -1230,16 +1230,6 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
     },
   )
-  staticUtility(`-translate-z-px`, [
-    translateProperties,
-    [`--tw-translate-z`, '-1px'],
-    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
-  ])
-  staticUtility(`translate-z-px`, [
-    translateProperties,
-    [`--tw-translate-z`, '1px'],
-    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
-  ])
 
   staticUtility('translate-3d', [
     translateProperties,

@@ -7,7 +7,7 @@ import { getClassOrder } from './sort'
 import type { Theme, ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
-import * as ValueParser from './value-parser'
+import { extractUsedVariables } from './utils/variables'
 import { Variants, createVariants } from './variants'
 
 export type DesignSystem = {
@@ -69,19 +69,9 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
   })
 
   let trackUsedVariables = new DefaultMap((raw) => {
-    ValueParser.walk(ValueParser.parse(raw), (node) => {
-      if (node.kind !== 'function' || node.value !== 'var') return
-
-      ValueParser.walk(node.nodes, (child) => {
-        if (child.kind !== 'word' || child.value[0] !== '-' || child.value[1] !== '-') return
-
-        theme.markUsedVariable(child.value)
-      })
-
-      return ValueParser.ValueWalkAction.Skip
-    })
-
-    return true
+    for (let variable of extractUsedVariables(raw)) {
+      theme.markUsedVariable(variable)
+    }
   })
 
   let designSystem: DesignSystem = {
@@ -104,7 +94,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
           },
         })
 
-        astNodes = optimizeAst(astNodes, designSystem)
+        astNodes = optimizeAst(astNodes, designSystem, null)
 
         if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
