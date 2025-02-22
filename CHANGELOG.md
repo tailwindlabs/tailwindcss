@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
+### Fixed
+
+- Make JS APIs available to plugins and configs in the Standalone CLI ([#15934](https://github.com/tailwindlabs/tailwindcss/pull/15934))
+
 ## [4.0.8] - 2025-02-21
 
 ### Added
