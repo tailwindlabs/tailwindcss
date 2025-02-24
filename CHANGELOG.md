@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Vite: Don't crash when importing virtual modules
+- Vite: Don't crash when importing a virtual module in JavaScript that ends in `.css` ([#16780](https://github.com/tailwindlabs/tailwindcss/pull/16780))
 
 ## [4.0.8] - 2025-02-21
 
