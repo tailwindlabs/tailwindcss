@@ -49,6 +49,18 @@ impl<'a> Cursor<'a> {
         self.move_to(self.pos.saturating_add(amount));
     }
 
+    #[inline(always)]
+    pub fn advance(&mut self) {
+        self.pos += 1;
+
+        self.prev = self.curr;
+        self.curr = self.next;
+        self.next = *self
+            .input
+            .get(self.pos.saturating_add(1))
+            .unwrap_or(&0x00u8);
+    }
+
     pub fn move_to(&mut self, pos: usize) {
         let len = self.input.len();
         let pos = pos.clamp(0, len);
