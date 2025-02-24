@@ -90,7 +90,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
 
   let result = await processor.process(
     css`
-      @import 'tailwindcss/theme.css' theme(reference);
+      @reference 'tailwindcss/theme.css';
       .foo {
         @apply text-red-500;
       }
@@ -99,7 +99,11 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    ".foo {
+    ":root, :host {
+      --color-red-500: oklch(.637 .237 25.331);
+    }
+
+    .foo {
       color: var(--color-red-500);
     }"
   `)

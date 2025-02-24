@@ -62,7 +62,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
@@ -147,7 +147,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
@@ -291,7 +291,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @import './custom-theme.css';
           @config '../tailwind.config.js';

@@ -25,7 +25,7 @@ test(
         <div class="one:underline two:underline"></div>
       `,
       'src/shared.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
       `,
       'src/root1.css': css`

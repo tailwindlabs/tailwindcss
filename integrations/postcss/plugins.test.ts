@@ -26,7 +26,7 @@ test(
         <div className="ui-open:flex"></div>
       `,
       'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
         @plugin '@headlessui/tailwindcss';
       `,
@@ -65,7 +65,7 @@ test(
         <div className="ui-open:flex"></div>
       `,
       'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
         @plugin '@headlessui/tailwindcss';
       `,

@@ -51,7 +51,7 @@ test(
         }
       `,
       'app/globals.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
       `,
     },
@@ -122,7 +122,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
           }
         `,
         'app/globals.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
         `,
       },
