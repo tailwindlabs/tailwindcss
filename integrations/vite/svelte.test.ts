@@ -100,8 +100,8 @@ test(
 
     await fs.expectFileToContain(files[0][0], [
       candidate`underline`,
-      '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
-      /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
+      '.global{color:var(--color-green-500,oklch(.723 .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',
+      /\.local.svelte-.*\{color:var\(--color-red-500\,oklch\(\.637 \.237 25\.331\)\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       /@keyframes globalKeyframes\{/,
       /@keyframes svelte-.*-localKeyframes\{/,
     ])
@@ -213,10 +213,10 @@ test(
       let [, css] = files[0]
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(
-        '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
+        '.global{color:var(--color-green-500,oklch(.723 .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',
       )
       expect(css).toMatch(
-        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
+        /\.local.svelte-.*\{color:var\(--color-red-500,oklch\(\.637 \.237 25\.331\)\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       )
       expect(css).toMatch(/@keyframes globalKeyframes\{/)
       expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
@@ -238,14 +238,16 @@ test(
       let [, css] = files[0]
       expect(css).toContain(candidate`font-bold`)
       expect(css).toContain(
-        '.global{color:var(--color-green-500);animation:2s ease-in-out infinite globalKeyframes}',
+        '.global{color:var(--color-green-500,oklch(.723 .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',
       )
       expect(css).toMatch(
-        /\.local.svelte-.*\{color:var\(--color-red-500\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
+        /\.local.svelte-.*\{color:var\(--color-red-500,oklch\(\.637 \.237 25\.331\)\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       )
       expect(css).toMatch(/@keyframes globalKeyframes\{/)
       expect(css).toMatch(/@keyframes svelte-.*-localKeyframes\{/)
-      expect(css).toMatch(/\.bar.svelte-.*\{color:var\(--color-pink-500\)\}/)
+      expect(css).toMatch(
+        /\.bar.svelte-.*\{color:var\(--color-pink-500,oklch\(\.656 \.241 354\.308\)\)\}/,
+      )
     })
   },
 )
