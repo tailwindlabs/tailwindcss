@@ -19,21 +19,13 @@ test(
         }
       `,
       'postcss.config.mjs': js`
-        /** @type {import('postcss-load-config').Config} */
-        const config = {
+        export default {
           plugins: {
             '@tailwindcss/postcss': {},
           },
         }
-
-        export default config
       `,
-      'next.config.mjs': js`
-        /** @type {import('next').NextConfig} */
-        const nextConfig = {}
-
-        export default nextConfig
-      `,
+      'next.config.mjs': js`export default {}`,
       'app/layout.js': js`
         import './globals.css'
 
@@ -46,8 +38,17 @@ test(
         }
       `,
       'app/page.js': js`
+        import styles from './page.module.css'
         export default function Page() {
-          return <h1 className="text-3xl font-bold underline">Hello, Next.js!</h1>
+          return (
+            <h1 className={styles.heading + ' text-3xl font-bold underline'}>Hello, Next.js!</h1>
+          )
+        }
+      `,
+      'app/page.module.css': css`
+        @reference './globals.css';
+        .heading {
+          @apply text-red-500 animate-ping;
         }
       `,
       'app/globals.css': css`
@@ -60,13 +61,25 @@ test(
     await exec('pnpm next build')
 
     let files = await fs.glob('.next/static/css/**/*.css')
-    expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    expect(files).toHaveLength(2)
 
-    await fs.expectFileToContain(filename, [
+    let globalCss: string | null = null
+    let moduleCss: string | null = null
+    for (let [filename, content] of files) {
+      if (content.includes('@keyframes page_ping')) moduleCss = filename
+      else globalCss = filename
+    }
+
+    await fs.expectFileToContain(globalCss!, [
       candidate`underline`,
       candidate`font-bold`,
       candidate`text-3xl`,
+    ])
+
+    await fs.expectFileToContain(moduleCss!, [
+      'color:var(--color-red-500,oklch(.637 .237 25.331)',
+      'animation:var(--animate-ping,ping 1s cubic-bezier(0,0,.2,1) infinite)',
+      /@keyframes page_ping.*{75%,to{transform:scale\(2\);opacity:0}/,
     ])
   },
 )
@@ -90,21 +103,13 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
           }
         `,
         'postcss.config.mjs': js`
-          /** @type {import('postcss-load-config').Config} */
-          const config = {
+          export default {
             plugins: {
               '@tailwindcss/postcss': {},
             },
           }
-
-          export default config
         `,
-        'next.config.mjs': js`
-          /** @type {import('next').NextConfig} */
-          const nextConfig = {}
-
-          export default nextConfig
-        `,
+        'next.config.mjs': js`export default {}`,
         'app/layout.js': js`
           import './globals.css'
 
@@ -117,8 +122,15 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
           }
         `,
         'app/page.js': js`
+          import styles from './page.module.css'
           export default function Page() {
-            return <h1 className="underline">Hello, Next.js!</h1>
+            return <h1 className={styles.heading + ' underline'}>Hello, Next.js!</h1>
+          }
+        `,
+        'app/page.module.css': css`
+          @reference './globals.css';
+          .heading {
+            @apply text-red-500 animate-ping content-['module'];
           }
         `,
         'app/globals.css': css`
@@ -142,13 +154,16 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       await retryAssertion(async () => {
         let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
+        expect(css).toContain('content: var(--tw-content)')
+        expect(css).toContain('@keyframes')
       })
 
       await fs.write(
         'app/page.js',
         js`
+          import styles from './page.module.css'
           export default function Page() {
-            return <h1 className="underline text-red-500">Hello, Next.js!</h1>
+            return <h1 className={styles.heading + ' underline bg-red-500'}>Hello, Next.js!</h1>
           }
         `,
       )
@@ -157,7 +172,9 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       await retryAssertion(async () => {
         let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
-        expect(css).toContain(candidate`text-red-500`)
+        expect(css).toContain(candidate`bg-red-500`)
+        expect(css).toContain('content: var(--tw-content)')
+        expect(css).toContain('@keyframes')
       })
     },
   )
@@ -181,21 +198,13 @@ test(
         }
       `,
       'postcss.config.mjs': js`
-        /** @type {import('postcss-load-config').Config} */
-        const config = {
+        export default {
           plugins: {
             '@tailwindcss/postcss': {},
           },
         }
-
-        export default config
       `,
-      'next.config.mjs': js`
-        /** @type {import('next').NextConfig} */
-        const nextConfig = {}
-
-        export default nextConfig
-      `,
+      'next.config.mjs': js`export default {}`,
       'app/a/[slug]/page.js': js`
         export default function Page() {
           return <h1 className="content-['[slug]']">Hello, Next.js!</h1>
