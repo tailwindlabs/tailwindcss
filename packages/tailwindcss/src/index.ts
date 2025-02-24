@@ -468,10 +468,6 @@ async function parseCss(
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
           // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
-          if (themeOptions & ThemeOptions.REFERENCE) {
-            return WalkAction.Skip
-          }
-
           theme.addKeyframes(child)
           return WalkAction.Skip
         }
@@ -544,8 +540,9 @@ async function parseCss(
     let keyframesRules = designSystem.theme.getKeyframes()
     for (let keyframes of keyframesRules) {
       // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-      // printing.
-      nodes.push(atRoot([keyframes]))
+      // printing. We push it to the top-level of the AST so that an eventual
+      // `@reference` does not cut it out when printing the document.
+      ast.push(context({ theme: true }, [atRoot([keyframes])]))
     }
 
     firstThemeRule.nodes = [context({ theme: true }, nodes)]

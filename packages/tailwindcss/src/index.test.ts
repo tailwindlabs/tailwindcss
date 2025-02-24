@@ -325,12 +325,6 @@ describe('@apply', () => {
         }
       }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
       @property --tw-translate-x {
         syntax: "*";
         inherits: false;
@@ -347,6 +341,12 @@ describe('@apply', () => {
         syntax: "*";
         inherits: false;
         initial-value: 0;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }"
     `)
   })
@@ -1822,7 +1822,7 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
-  test('theme values added as reference are not included in the output as variables', async () => {
+  test('theme values added as reference are not included in the output as variables but emit fallback values', async () => {
     expect(
       await compileCss(
         css`
@@ -1875,6 +1875,16 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ".animate-foo {
         animation: var(--animate-foo, foo 1s infinite);
+      }
+
+      @keyframes foo {
+        0%, 100% {
+          color: red;
+        }
+
+        50% {
+          color: #00f;
+        }
       }"
     `)
   })
@@ -1916,6 +1926,16 @@ describe('Parsing theme values from CSS', () => {
 
       .bg-pink {
         background-color: var(--color-pink);
+      }
+
+      @keyframes foo {
+        0%, 100% {
+          color: red;
+        }
+
+        50% {
+          color: #00f;
+        }
       }"
     `)
   })
@@ -3696,7 +3716,7 @@ it("should error when `layer(…)` is used, but it's not the first param", async
   )
 })
 
-describe('`@reference "…" reference`', () => {
+describe('`@reference "…" imports`', () => {
   test('recursively removes styles', async () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
@@ -3851,11 +3871,17 @@ describe('`@reference "…" reference`', () => {
     ).resolves.toMatchInlineSnapshot(`
       ".bar {
         animation: var(--animate-spin, spin 1s linear infinite);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }"
     `)
   })
 
-  test('emits theme variables and keyframes defined inside @reference-ed files', async () => {
+  test('emits CSS variable fallback and keyframes defined inside @reference-ed files', async () => {
     let loadStylesheet = async (id: string, base: string) => {
       switch (id) {
         case './one.css': {
@@ -3915,6 +3941,16 @@ describe('`@reference "…" reference`', () => {
       ".bar {
         animation: var(--animate-wiggle, wiggle 1s ease-in-out infinite);
         color: var(--color-red, red);
+      }
+
+      @keyframes wiggle {
+        0%, 100% {
+          transform: rotate(-3deg);
+        }
+
+        50% {
+          transform: rotate(3deg);
+        }
       }"
     `)
   })
