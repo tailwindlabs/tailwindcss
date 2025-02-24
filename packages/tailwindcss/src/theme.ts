@@ -177,11 +177,20 @@ export class Theme {
   }
 
   #var(themeKey: string) {
-    if (!this.values.has(themeKey)) {
+    let value = this.values.get(themeKey)
+    if (!value) {
       return null
     }
 
-    return `var(${escape(this.#prefixKey(themeKey))})`
+    // Since @theme blocks in reference mode do not emit the CSS variables, we can not assume that
+    // the values will eventually be set up in the browser (e.g. when using `@apply` inside roots
+    // that use `@reference`). Ensure we set up a fallback in these cases.
+    let fallback = null
+    if (value.options & ThemeOptions.REFERENCE) {
+      fallback = value.value
+    }
+
+    return `var(${escape(this.#prefixKey(themeKey))}${fallback ? `, ${fallback}` : ''})`
   }
 
   markUsedVariable(themeKey: string) {

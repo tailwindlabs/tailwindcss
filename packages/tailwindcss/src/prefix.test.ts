@@ -228,7 +228,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".tw\\:bg-potato {
-      background-color: var(--tw-color-potato);
+      background-color: var(--tw-color-potato, #7a4724);
     }
     .tw\\:custom {
       color: red;

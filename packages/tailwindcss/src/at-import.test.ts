@@ -421,7 +421,7 @@ test('supports theme(reference) imports', async () => {
     ),
   ).resolves.toMatchInlineSnapshot(`
     ".text-red-500 {
-      color: var(--color-red-500);
+      color: var(--color-red-500, red);
     }
     "
   `)
@@ -580,12 +580,8 @@ test('resolves @reference as `@import "…" reference`', async () => {
       { loadStylesheet, candidates: ['text-red-500'] },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .text-red-500 {
-      color: var(--color-red-500);
+    ".text-red-500 {
+      color: var(--color-red-500, red);
     }
     "
   `)

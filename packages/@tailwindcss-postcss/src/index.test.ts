@@ -99,12 +99,8 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: oklch(.637 .237 25.331);
-    }
-
-    .foo {
-      color: var(--color-red-500);
+    ".foo {
+      color: var(--color-red-500, oklch(.637 .237 25.331));
     }"
   `)
 })

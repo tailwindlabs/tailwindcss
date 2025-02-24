@@ -1842,7 +1842,7 @@ describe('Parsing theme values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
@@ -1874,7 +1874,7 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".animate-foo {
-        animation: var(--animate-foo);
+        animation: var(--animate-foo, foo 1s infinite);
       }"
     `)
   })
@@ -1911,7 +1911,7 @@ describe('Parsing theme values from CSS', () => {
       }
 
       .animate-foo {
-        animation: var(--animate-foo);
+        animation: var(--animate-foo, foo 1s infinite);
       }
 
       .bg-pink {
@@ -1936,7 +1936,7 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #c794aa);
       }"
     `)
   })
@@ -1991,11 +1991,11 @@ describe('Parsing theme values from CSS', () => {
       }
 
       .bg-avocado {
-        background-color: var(--color-avocado);
+        background-color: var(--color-avocado, #c0cc6d);
       }
 
       .bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
@@ -2323,7 +2323,7 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #efb46b);
       }"
     `)
   })
@@ -3849,20 +3849,8 @@ describe('`@reference "…" reference`', () => {
         },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer theme {
-        :root, :host {
-          --animate-spin: spin 1s linear infinite;
-        }
-      }
-
-      .bar {
-        animation: var(--animate-spin);
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+      ".bar {
+        animation: var(--animate-spin, spin 1s linear infinite);
       }"
     `)
   })
@@ -3924,28 +3912,9 @@ describe('`@reference "…" reference`', () => {
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@layer two {
-        @layer three {
-          :root, :host {
-            --color-red: red;
-            --animate-wiggle: wiggle 1s ease-in-out infinite;
-          }
-        }
-      }
-
-      .bar {
-        animation: var(--animate-wiggle);
-        color: var(--color-red);
-      }
-
-      @keyframes wiggle {
-        0%, 100% {
-          transform: rotate(-3deg);
-        }
-
-        50% {
-          transform: rotate(3deg);
-        }
+      ".bar {
+        animation: var(--animate-wiggle, wiggle 1s ease-in-out infinite);
+        color: var(--color-red, red);
       }"
     `)
   })

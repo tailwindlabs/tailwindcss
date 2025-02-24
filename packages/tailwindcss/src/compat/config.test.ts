@@ -1389,7 +1389,7 @@ test('blocklisted candidates are not generated', async () => {
     }
     .md\\:bg-white {
       @media (width >= 48rem) {
-        background-color: var(--color-white);
+        background-color: var(--color-white, #fff);
       }
     }
     "
