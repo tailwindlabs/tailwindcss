@@ -1154,4 +1154,15 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       )
     })
   })
+
+  it('ignores BOM at the beginning of a file', () => {
+    expect(parse("\uFEFF@reference 'tailwindcss';")).toEqual([
+      {
+        kind: 'at-rule',
+        name: '@reference',
+        nodes: [],
+        params: "'tailwindcss'",
+      },
+    ])
+  })
 })
