@@ -202,8 +202,9 @@ class Root {
   private candidates: Set<string> = new Set<string>()
 
   // List of all build dependencies (e.g. imported  stylesheets or plugins) and
-  // their last modification timestamp
-  private buildDependencies = new Map<string, number>()
+  // their last modification timestamp. If no mtime can be found, we need to
+  // assume the file has always changed.
+  private buildDependencies = new Map<string, number | null>()
 
   constructor(
     private id: string,
@@ -334,14 +335,22 @@ class Root {
   }
 
   private async addBuildDependency(path: string) {
-    let stat = await fs.stat(path)
-    this.buildDependencies.set(path, stat.mtimeMs)
+    let mtime: number | null = null
+    try {
+      mtime = (await fs.stat(path)).mtimeMs
+    } catch {}
+    this.buildDependencies.set(path, mtime)
   }
 
   private async requiresBuild(): Promise<boolean> {
     for (let [path, mtime] of this.buildDependencies) {
-      let stat = await fs.stat(path)
-      if (stat.mtimeMs > mtime) {
+      if (mtime === null) return true
+      try {
+        let stat = await fs.stat(path)
+        if (stat.mtimeMs > mtime) {
+          return true
+        }
+      } catch {
         return true
       }
     }
