@@ -448,6 +448,10 @@ async function parseCss(
     if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
 
+      if (context.reference) {
+        themeOptions |= ThemeOptions.REFERENCE
+      }
+
       if (themePrefix) {
         if (!IS_VALID_PREFIX.test(themePrefix)) {
           throw new Error(
@@ -463,11 +467,6 @@ async function parseCss(
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
-          // Do not track/emit `@keyframes`, if they are part of a `@theme reference`.
-          if (themeOptions & ThemeOptions.REFERENCE) {
-            return WalkAction.Skip
-          }
-
           theme.addKeyframes(child)
           return WalkAction.Skip
         }
@@ -540,8 +539,9 @@ async function parseCss(
     let keyframesRules = designSystem.theme.getKeyframes()
     for (let keyframes of keyframesRules) {
       // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-      // printing.
-      nodes.push(atRoot([keyframes]))
+      // printing. We push it to the top-level of the AST so that an eventual
+      // `@reference` does not cut it out when printing the document.
+      ast.push(context({ theme: true }, [atRoot([keyframes])]))
     }
 
     firstThemeRule.nodes = [context({ theme: true }, nodes)]
@@ -603,7 +603,6 @@ async function parseCss(
     root,
     utilitiesNode,
     features,
-    firstThemeRule,
   }
 }
 
@@ -616,10 +615,7 @@ export async function compileAst(
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features, firstThemeRule } = await parseCss(
-    input,
-    opts,
-  )
+  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -647,7 +643,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -669,7 +665,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -681,7 +677,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast, designSystem, firstThemeRule)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -689,7 +685,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast, designSystem, firstThemeRule)
+      compiled = optimizeAst(ast, designSystem)
       return compiled
     },
   }

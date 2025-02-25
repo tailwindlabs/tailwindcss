@@ -49,7 +49,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           @plugin '#js-alias';
         `,
         'src/alias.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
         `,
         'src/plugin.js': js`
@@ -117,7 +117,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           @plugin '#js-alias';
         `,
         'src/alias.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
         `,
         'src/plugin.js': js`

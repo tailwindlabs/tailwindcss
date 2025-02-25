@@ -47,7 +47,7 @@ function createSetup(transformer: 'postcss' | 'lightningcss') {
         </body>
       `,
       'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
 
         .foo {
@@ -111,7 +111,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
       await fs.write(
         'src/index.css',
         css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
 
           .foo {
@@ -155,7 +155,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
       await fs.write(
         'src/index.css',
         css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
 
           .foo {

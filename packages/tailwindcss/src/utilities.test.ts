@@ -10649,15 +10649,15 @@ test('bg', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".bg-current\\/custom {
-      background-color: color-mix(in oklab, currentColor var(--opacity-custom), transparent);
+      background-color: color-mix(in oklab, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in oklab, currentColor var(--opacity-half), transparent);
+      background-color: color-mix(in oklab, currentColor var(--opacity-half, .5), transparent);
     }
 
     .\\[color\\:red\\]\\/half {
-      color: color-mix(in oklab, red var(--opacity-half), transparent);
+      color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
     }"
   `)
 })
@@ -16734,8 +16734,8 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--text-sm);
-          line-height: var(--tw-leading, var(--text-sm--line-height));
+          font-size: var(--text-sm, .875rem);
+          line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
           font-size: var(--text-sm, .8755rem);
           line-height: var(--text-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
@@ -16771,7 +16771,7 @@ describe('custom utilities', () => {
         }
 
         .rounded-xl {
-          border-radius: var(--radius-xl);
+          border-radius: var(--radius-xl, 16px);
         }
       }"
     `)
@@ -17013,19 +17013,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17054,19 +17054,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17091,19 +17091,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17377,7 +17377,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: var(--tab-size-github);
+          tab-size: var(--tab-size-github, 8);
         }"
       `)
       expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
@@ -17409,7 +17409,7 @@ describe('custom utilities', () => {
           }
 
           .example-full {
-            --value: var(--example-full);
+            --value: var(--example-full, 100%);
           }"
         `)
       expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
@@ -17453,7 +17453,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: var(--example-full);
+          --value: var(--example-full, 100%);
         }
 
         .tab-76 {
@@ -17465,7 +17465,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: var(--tab-size-github);
+          tab-size: var(--tab-size-github, 8);
         }"
       `)
       expect(
@@ -17509,7 +17509,7 @@ describe('custom utilities', () => {
         }
 
         .-example-full {
-          --value: calc(var(--example-full) * -1);
+          --value: calc(var(--example-full, 100%) * -1);
         }
 
         .example-\\[10px\\] {
@@ -17521,7 +17521,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: var(--example-full);
+          --value: var(--example-full, 100%);
         }"
       `)
       expect(await compileCss(input, ['example-10'])).toEqual('')
@@ -17618,9 +17618,9 @@ describe('custom utilities', () => {
         }
 
         .example-sm\\/7 {
-          --value: var(--value-sm);
-          --modifier: var(--modifier-7);
-          --modifier-with-calc: calc(var(--modifier-7) * 2);
+          --value: var(--value-sm, 14px);
+          --modifier: var(--modifier-7, 28px);
+          --modifier-with-calc: calc(var(--modifier-7, 28px) * 2);
         }
 
         .example-\\[12px\\] {
@@ -17628,7 +17628,7 @@ describe('custom utilities', () => {
         }
 
         .example-sm {
-          --value: var(--value-sm);
+          --value: var(--value-sm, 14px);
         }"
       `)
       expect(
@@ -17660,7 +17660,7 @@ describe('custom utilities', () => {
           }
 
           .example-video {
-            --value: var(--example-video);
+            --value: var(--example-video, 16 / 9);
           }"
         `)
       expect(await compileCss(input, ['example-foo'])).toEqual('')
@@ -17684,14 +17684,14 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
           line-height: 6;
         }
 
         .example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17715,14 +17715,14 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
           line-height: 6;
         }
 
         .example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17746,14 +17746,14 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
           line-height: 6;
         }
 
         .example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17777,14 +17777,14 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
           line-height: 6;
         }
 
         .example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17880,7 +17880,7 @@ describe('custom utilities', () => {
 
     expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ".tab-github {
-        tab-size: var(--tab-size-github);
+        tab-size: var(--tab-size-github, 8);
       }"
     `)
   })
@@ -17945,7 +17945,7 @@ describe('custom utilities', () => {
 
     expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
-        font-size: var(--text-xs);
+        font-size: var(--text-xs, .75rem);
         line-height: 1.33333;
       }"
     `)
@@ -17972,7 +17972,7 @@ describe('custom utilities', () => {
     expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
         font-size: .75rem;
-        line-height: var(--text-xs--line-height);
+        line-height: var(--text-xs--line-height, calc(1 / .75));
       }"
     `)
   })

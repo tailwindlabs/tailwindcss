@@ -643,7 +643,7 @@ test(
         }
       `,
       'index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* (1) */
         /* - Only './src' should be auto-scanned, not the current working directory */
@@ -774,7 +774,7 @@ test(
         }
       `,
       'project-a/src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* Run auto-content detection in ../../project-b */
         @import 'tailwindcss/utilities' source('../../project-b');
@@ -1132,7 +1132,7 @@ test(
         }
       `,
       'index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* (1) */
         /* - Only './src' should be auto-scanned, not the current working directory */

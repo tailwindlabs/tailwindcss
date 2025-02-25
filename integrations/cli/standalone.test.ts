@@ -35,7 +35,7 @@ test(
         <div class="aspect-w-16"></div>
       `,
       'src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
 
         @plugin '@tailwindcss/forms';
