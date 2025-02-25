@@ -42,7 +42,7 @@ interface TestContext {
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   fs: {
-    write(filePath: string, content: string): Promise<void>
+    write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
@@ -268,7 +268,11 @@ export function test(
           }
         },
         fs: {
-          async write(filename: string, content: string | Uint8Array): Promise<void> {
+          async write(
+            filename: string,
+            content: string | Uint8Array,
+            encoding: BufferEncoding = 'utf8',
+          ): Promise<void> {
             let full = path.join(root, filename)
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
@@ -286,7 +290,7 @@ export function test(
               content = content.replace(/\n/g, '\r\n')
             }
 
-            await fs.writeFile(full, content, 'utf-8')
+            await fs.writeFile(full, content, encoding)
           },
 
           async create(filenames: string[]): Promise<void> {

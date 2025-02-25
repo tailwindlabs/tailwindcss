@@ -2747,7 +2747,7 @@ test(
 )
 
 test(
-  `handles UTF-8 files with BOM`,
+  `can read files with BOM`,
   {
     fs: {
       'package.json': json`

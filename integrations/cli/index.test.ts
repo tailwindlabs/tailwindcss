@@ -1316,7 +1316,7 @@ test(
 )
 
 test(
-  'auto source detection disabled',
+  'can read files with UTF-8 files with BOM',
   {
     fs: {
       'package.json': json`
@@ -1347,6 +1347,43 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'fails when reading files with UTF-16 files with BOM',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await fs.write(
+      'index.css',
+      withBOM(css`
+        @reference 'tailwindcss/theme.css';
+        @import 'tailwindcss/utilities';
+      `),
+      'utf16le',
+    )
+    await fs.write(
+      'index.html',
+      withBOM(html`
+        <div class="underline"></div>
+      `),
+      'utf16le',
+    )
+
+    await expect(exec('pnpm tailwindcss --input index.css --output dist/out.css')).rejects.toThrow(
+      /Invalid declaration:/,
+    )
   },
 )
 
