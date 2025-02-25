@@ -158,7 +158,7 @@ test(
     await fs.expectFileToContain('dist/out.css', [
       candidate`underline`,
       candidate`example1`,
-      candidate` example2`,
+      candidate`example2`,
       candidate`example3`,
     ])
   },
