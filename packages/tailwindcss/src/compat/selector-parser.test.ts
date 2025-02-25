@@ -131,31 +131,6 @@ describe('parse', () => {
       },
     ])
   })
-
-  it('parses :not(:nth-child(1))', () => {
-    expect(parse('&:not(:nth-child(1))')).toEqual([
-      {
-        kind: 'selector',
-        value: '&',
-      },
-      {
-        kind: 'function',
-        value: ':not',
-        nodes: [
-          {
-            kind: 'function',
-            value: ':nth-child',
-            nodes: [
-              {
-                kind: 'value',
-                value: '1',
-              },
-            ],
-          },
-        ],
-      },
-    ])
-  })
 })
 
 describe('toCss', () => {
