@@ -191,6 +191,7 @@ jobs:
 
     needs:
       - build
+      - build-freebsd
 
     steps:
       - uses: actions/checkout@v4
