@@ -304,7 +304,7 @@ function applyImportant(ast: AstNode[]): void {
       continue
     }
 
-    if (node.kind === 'declaration' && node.property[0] !== '-' && node.property[1] !== '-') {
+    if (node.kind === 'declaration' && !(node.property[0] === '-' && node.property[1] === '-')) {
       node.important = true
     } else if (node.kind === 'rule' || node.kind === 'at-rule') {
       applyImportant(node.nodes)
