@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vite: Don't crash when importing a virtual module in JavaScript that ends in `.css` ([#16780](https://github.com/tailwindlabs/tailwindcss/pull/16780))
 - Ensure `@reference "…"` does not emit CSS variables ([#16774](https://github.com/tailwindlabs/tailwindcss/pull/16774))
 - Fix an issue where `@reference "…"` would sometimes omit keyframe animations ([#16774](https://github.com/tailwindlabs/tailwindcss/pull/16774))
+- Ensure `z-*!` utilities are property marked as `!important` ([#16795](https://github.com/tailwindlabs/tailwindcss/pull/16795))
 
 ## [4.0.8] - 2025-02-21
 
