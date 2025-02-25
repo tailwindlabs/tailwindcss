@@ -300,7 +300,11 @@ export function parse(input: string) {
           buffer = ''
           i = end
 
-          ast.push(node)
+          if (parent) {
+            parent.nodes.push(node)
+          } else {
+            ast.push(node)
+          }
 
           break
         }

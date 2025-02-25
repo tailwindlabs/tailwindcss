@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix an issue where `@reference "…"` would sometimes omit keyframe animations ([#16774](https://github.com/tailwindlabs/tailwindcss/pull/16774))
 - Ensure `z-*!` utilities are property marked as `!important` ([#16795](https://github.com/tailwindlabs/tailwindcss/pull/16795))
 - Read UTF-8 CSS files that start with a byte-order mark (BOM) ([#16796](https://github.com/tailwindlabs/tailwindcss/pull/16796))
+- Ensure nested functions in selectors used with JavaScript plugins are not truncated ([#16802](https://github.com/tailwindlabs/tailwindcss/pull/16802))
 
 ## [4.0.8] - 2025-02-21
 

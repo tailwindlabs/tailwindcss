@@ -77,6 +77,85 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('parses &:has(.child:nth-child(2))', () => {
+    expect(parse('&:has(.child:nth-child(2))')).toEqual([
+      {
+        kind: 'selector',
+        value: '&',
+      },
+      {
+        kind: 'function',
+        value: ':has',
+        nodes: [
+          {
+            kind: 'selector',
+            value: '.child',
+          },
+          {
+            kind: 'function',
+            value: ':nth-child',
+            nodes: [
+              {
+                kind: 'value',
+                value: '2',
+              },
+            ],
+          },
+        ],
+      },
+    ])
+  })
+
+  it('parses &:has(:nth-child(2))', () => {
+    expect(parse('&:has(:nth-child(2))')).toEqual([
+      {
+        kind: 'selector',
+        value: '&',
+      },
+      {
+        kind: 'function',
+        value: ':has',
+        nodes: [
+          {
+            kind: 'function',
+            value: ':nth-child',
+            nodes: [
+              {
+                kind: 'value',
+                value: '2',
+              },
+            ],
+          },
+        ],
+      },
+    ])
+  })
+
+  it('parses :not(:nth-child(1))', () => {
+    expect(parse('&:not(:nth-child(1))')).toEqual([
+      {
+        kind: 'selector',
+        value: '&',
+      },
+      {
+        kind: 'function',
+        value: ':not',
+        nodes: [
+          {
+            kind: 'function',
+            value: ':nth-child',
+            nodes: [
+              {
+                kind: 'value',
+                value: '1',
+              },
+            ],
+          },
+        ],
+      },
+    ])
+  })
 })
 
 describe('toCss', () => {
