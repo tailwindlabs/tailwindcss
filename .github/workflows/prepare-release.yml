@@ -164,13 +164,13 @@ jobs:
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain beta
             source "$HOME/.cargo/env"
+            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
             echo "~~~~ rustc --version ~~~~"
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
             echo "~~~~ pnpm --version ~~~~"
             pnpm --version
-            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
             pnpm run --filter ${{ env.OXIDE_LOCATION }} build
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
