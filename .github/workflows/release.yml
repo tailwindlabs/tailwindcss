@@ -159,7 +159,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm --unsafe-perm=true
+            sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain beta
             source "$HOME/.cargo/env"
