@@ -31,6 +31,7 @@ const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 
 export function parse(input: string) {
+  if (input[0] === '\uFEFF') input = input.slice(1)
   input = input.replaceAll('\r\n', '\n')
 
   let ast: AstNode[] = []

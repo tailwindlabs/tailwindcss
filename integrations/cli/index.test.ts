@@ -1314,3 +1314,42 @@ test(
     )
   },
 )
+
+test(
+  'auto source detection disabled',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': withBOM(css`
+        @reference 'tailwindcss/theme.css';
+        @import 'tailwindcss/utilities';
+      `),
+      'index.html': withBOM(html`
+        <div class="underline"></div>
+      `),
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input index.css --output dist/out.css')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
+  },
+)
+
+function withBOM(text: string): string {
+  return '\uFEFF' + text
+}
