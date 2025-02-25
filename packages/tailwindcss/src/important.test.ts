@@ -98,11 +98,15 @@ test('variables in utilities should not be marked as important', async () => {
         }
         @tailwind utilities;
       `,
-      ['ease-out!'],
+      ['ease-out!', 'z-10!'],
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --ease-out: cubic-bezier(0, 0, .2, 1);
+    }
+
+    .z-10\\! {
+      z-index: 10 !important;
     }
 
     .ease-out\\! {
