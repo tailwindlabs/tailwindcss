@@ -28,7 +28,7 @@ impl Machine for CssVariableMachine {
         let start_pos = cursor.pos;
         let len = cursor.input.len();
 
-        cursor.advance();
+        cursor.advance_twice();
 
         while cursor.pos < len {
             match CLASS_TABLE[cursor.curr as usize] {
@@ -75,7 +75,7 @@ impl Machine for CssVariableMachine {
                     // E.g.: `--my-\#variable`
                     //             ^           We are here
                     //               ^         Resume here
-                    _ => cursor.advance_by(2),
+                    _ => cursor.advance_twice(),
                 },
 
                 // Character is not valid anymore

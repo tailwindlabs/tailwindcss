@@ -72,7 +72,7 @@ impl Machine for ArbitraryValueMachine {
                             // E.g.: `[color:var(--my-\ color)]`
                             //                         ^
                             Class::Whitespace => {
-                                cursor.advance_by(2);
+                                cursor.advance_twice();
                                 return self.restart();
                             }
 
@@ -80,7 +80,7 @@ impl Machine for ArbitraryValueMachine {
                             //
                             // E.g.: `[color:var(--my-\#color)]`
                             //                        ^
-                            _ => cursor.advance_by(2),
+                            _ => cursor.advance_twice(),
                         },
 
                         Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {

@@ -133,7 +133,7 @@ impl Machine for ArbitraryPropertyMachine {
                             //
                             // E.g.: `[color:var(--my-\#color)]`
                             //                        ^
-                            _ => cursor.advance_by(2),
+                            _ => cursor.advance_twice(),
                         },
 
                         Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
@@ -202,7 +202,7 @@ impl ArbitraryPropertyMachine {
                 //                   ^
                 Class::Colon => {
                     self.state = State::ParsingValue;
-                    cursor.advance_by(2);
+                    cursor.advance_twice();
                     self.next(cursor)
                 }
 

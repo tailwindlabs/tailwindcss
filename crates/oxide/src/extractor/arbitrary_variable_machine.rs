@@ -97,7 +97,7 @@ impl Machine for ArbitraryVariableMachine {
                     //                   ^
                     Class::Comma => {
                         self.state = State::ParsingFallback;
-                        cursor.advance_by(2); // Skip the `,`
+                        cursor.advance_twice(); // Skip the `,`
                         self.next(cursor)
                     }
 
@@ -133,7 +133,7 @@ impl Machine for ArbitraryVariableMachine {
                             //
                             // E.g.: `(--my-\#color)`
                             //              ^^
-                            _ => cursor.advance_by(2),
+                            _ => cursor.advance_twice(),
                         },
 
                         Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
