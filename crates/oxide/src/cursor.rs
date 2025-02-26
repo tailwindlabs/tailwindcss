@@ -41,10 +41,6 @@ impl<'a> Cursor<'a> {
         cursor
     }
 
-    pub fn rewind_by(&mut self, amount: usize) {
-        self.move_to(self.pos.saturating_sub(amount));
-    }
-
     pub fn advance_by(&mut self, amount: usize) {
         self.move_to(self.pos.saturating_add(amount));
     }
@@ -159,21 +155,5 @@ mod test {
         assert_eq!(cursor.prev, b'd');
         assert_eq!(cursor.curr, 0x00);
         assert_eq!(cursor.next, 0x00);
-
-        cursor.rewind_by(1);
-        assert_eq!(cursor.pos, 10);
-        assert!(!cursor.at_start);
-        assert!(cursor.at_end);
-        assert_eq!(cursor.prev, b'l');
-        assert_eq!(cursor.curr, b'd');
-        assert_eq!(cursor.next, 0x00);
-
-        cursor.rewind_by(10);
-        assert_eq!(cursor.pos, 0);
-        assert!(cursor.at_start);
-        assert!(!cursor.at_end);
-        assert_eq!(cursor.prev, 0x00);
-        assert_eq!(cursor.curr, b'h');
-        assert_eq!(cursor.next, b'e');
     }
 }
