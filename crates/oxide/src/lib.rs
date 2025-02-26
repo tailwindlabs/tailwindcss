@@ -40,9 +40,9 @@ fn init_tracing() {
 }
 
 #[derive(Debug, Clone)]
-pub struct ChangedContent {
-    pub file: Option<PathBuf>,
-    pub content: Option<String>,
+pub enum ChangedContent<'a> {
+    File(PathBuf, Cow<'a, str>),
+    Content(String, Cow<'a, str>),
 }
 
 #[derive(Debug, Clone)]
@@ -197,10 +197,8 @@ impl Scanner {
             };
 
             if should_scan_file {
-                changed_content.push(ChangedContent {
-                    file: Some(path.clone()),
-                    content: None,
-                });
+                let extension = path.extension().unwrap_or_default().to_string_lossy();
+                changed_content.push(ChangedContent::File(path.to_path_buf(), extension))
             }
         }
 
@@ -427,24 +425,18 @@ impl Scanner {
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
-    if let Some(content) = c.content {
-        return Some(content.into_bytes());
-    }
+    let (content, extension) = match c {
+        ChangedContent::File(file, extension) => match std::fs::read(&file) {
+            Ok(content) => (content, extension),
+            Err(e) => {
+                event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
+                return None;
+            }
+        },
 
-    let Some(file) = c.file else {
-        return Default::default();
+        ChangedContent::Content(contents, extension) => (contents.into_bytes(), extension),
     };
 
-    let Ok(content) = std::fs::read(&file).map_err(|e| {
-        event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
-        e
-    }) else {
-        return Default::default();
-    };
-
-    let Some(extension) = file.extension().map(|x| x.to_str()) else {
-        return Some(content);
-    };
 
     match extension {
         // Angular class shorthand
