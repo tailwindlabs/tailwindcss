@@ -427,11 +427,6 @@ export function createVariants(theme: Theme): Variants {
     if (selector.includes('::')) return null
 
     let selectors = segment(selector, ',').map((sel) => {
-      // Remove unnecessary wrapping &:is(…) to reduce the selector size
-      if (sel.startsWith('&:is(') && sel.endsWith(')')) {
-        sel = sel.slice(5, -1)
-      }
-
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:not(*:hover)`. The `*` will often be optimized away.
       sel = sel.replaceAll('&', '*')
