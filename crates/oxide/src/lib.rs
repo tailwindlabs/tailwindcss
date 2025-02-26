@@ -1,15 +1,18 @@
+use crate::extractor::machine::Machine;
 use crate::glob::hoist_static_glob_parts;
-use crate::parser::Extractor;
 use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
 use bstr::ByteSlice;
+use extractor::string_machine::StringMachine;
+use extractor::{Extracted, Extractor};
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
 use paths::Path;
 use rayon::prelude::*;
 use scanner::allowed_paths::read_dir;
+use std::borrow::Cow;
 use std::fs;
 use std::path::PathBuf;
 use std::sync;
@@ -17,11 +20,12 @@ use std::time::SystemTime;
 use tracing::event;
 
 pub mod cursor;
+pub mod extractor;
 pub mod fast_skip;
 pub mod glob;
-pub mod parser;
 pub mod paths;
 pub mod scanner;
+pub mod throughput;
 
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
     || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
@@ -101,12 +105,13 @@ impl Scanner {
 
     pub fn scan(&mut self) -> Vec<String> {
         init_tracing();
+
         self.prepare();
         self.compute_candidates();
 
         let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
+        candidates.par_sort_unstable();
 
-        candidates.par_sort();
         candidates
     }
 
@@ -135,18 +140,39 @@ impl Scanner {
         self.prepare();
 
         let content = read_changed_content(changed_content).unwrap_or_default();
-        let extractor = Extractor::with_positions(&content[..], Default::default());
+        let original_content = &content;
 
-        let candidates: Vec<(String, usize)> = extractor
+        // Workaround for legacy upgrades:
+        //
+        // `-[]` won't parse in the new parser (`[…]` must contain _something_), but we do need it
+        // for people using `group-[]` (which we will later replace with `in-[.group]` instead).
+        let content = content.replace("-[]", "XYZ");
+        let offset = content.as_ptr() as usize;
+
+        let mut extractor = Extractor::new(&content[..]);
+
+        extractor
+            .extract()
             .into_par_iter()
-            .map(|(s, i)| {
-                // SAFETY: When we parsed the candidates, we already guaranteed that the byte slices
-                // are valid, therefore we don't have to re-check here when we want to convert it back
-                // to a string.
-                unsafe { (String::from_utf8_unchecked(s.to_vec()), i) }
+            .flat_map(|extracted| match extracted {
+                Extracted::Candidate(s) => {
+                    let i = s.as_ptr() as usize - offset;
+                    let original = &original_content[i..i + s.len()];
+                    if original.contains_str("-[]") {
+                        return Some(unsafe {
+                            (String::from_utf8_unchecked(original.to_vec()), i)
+                        });
+                    }
+
+                    // SAFETY: When we parsed the candidates, we already guaranteed that the byte
+                    // slices are valid, therefore we don't have to re-check here when we want to
+                    // convert it back to a string.
+                    Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
+                }
+
+                _ => None,
             })
-            .collect();
-        candidates
+            .collect()
     }
 
     #[tracing::instrument(skip_all)]
@@ -437,17 +463,47 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
         ChangedContent::Content(contents, extension) => (contents.into_bytes(), extension),
     };
 
+    Some(pre_process_input(&content, &extension))
+}
 
+pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
+    // NOTE: Replace strings with same-length replacements to avoid reallocations
     match extension {
-        // Angular class shorthand
-        Some("html") => Some(content.replace("[class.", "[")),
-        Some("svelte") => Some(
-            content
-                .replace(" class:", " ")
-                .replace("\tclass:", " ")
-                .replace("\nclass:", " "),
-        ),
-        _ => Some(content),
+        // Handle dot notation, e.g.: `div.flex.bg-red-500` -> `div flex bg-red-500`
+        "slim" | "pug" => {
+            let len = content.len();
+            let mut cursor = cursor::Cursor::new(content);
+            let mut new_content = String::from_utf8(content.to_vec()).unwrap();
+            let mut string_machine = StringMachine;
+
+            while cursor.pos < len {
+                match cursor.curr {
+                    // Consume strings as-is
+                    b'\'' | b'"' => {
+                        string_machine.next(&mut cursor);
+                    }
+
+                    // Replace dots with spaces
+                    b'.' => {
+                        new_content.replace_range(cursor.pos..cursor.pos + 1, " ");
+                    }
+
+                    // Consume everything else
+                    _ => {}
+                };
+
+                cursor.advance();
+            }
+
+            new_content.into()
+        }
+
+        // Svelte class shorthand
+        "svelte" => content
+            .replace(" class:", " class ")
+            .replace("\tclass:", " class ")
+            .replace("\nclass:", " class "),
+        _ => content.to_vec(),
     }
 }
 
@@ -469,21 +525,78 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let mut result: Vec<_> = blobs
         .par_iter()
-        .flat_map(|blob| blob.par_split(|x| matches!(x, b'\n')))
-        .map(|blob| Extractor::unique(blob, Default::default()))
+        .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
+        .filter_map(|blob| {
+            if blob.is_empty() {
+                return None;
+            }
+
+            let extracted = crate::extractor::Extractor::new(blob).extract();
+            if extracted.is_empty() {
+                return None;
+            }
+
+            Some(FxHashSet::from_iter(extracted.into_iter().map(
+                |x| match x {
+                    Extracted::Candidate(bytes) => bytes,
+                    Extracted::CssVariable(bytes) => bytes,
+                },
+            )))
+        })
         .reduce(Default::default, |mut a, b| {
             a.extend(b);
             a
         })
         .into_iter()
-        .map(|s| {
-            // SAFETY: When we parsed the candidates, we already guaranteed that the byte slices
-            // are valid, therefore we don't have to re-check here when we want to convert it back
-            // to a string.
-            unsafe { String::from_utf8_unchecked(s.to_vec()) }
-        })
+        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
         .collect();
 
-    result.par_sort();
+    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
+    //         guaranteed to have unique candidates.
+    result.par_sort_unstable();
+
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::Scanner;
+
+    #[test]
+    fn test_positions() {
+        let mut scanner = Scanner::new(None);
+
+        for (input, expected) in [
+            // Before migrations
+            (
+                r#"<div class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex tw:[color:red] group-[]:tw__flex"#,
+                vec![
+                    ("!tw__flex".to_string(), 12),
+                    ("sm:!tw__block".to_string(), 22),
+                    ("tw__bg-gradient-to-t".to_string(), 36),
+                    ("flex".to_string(), 57),
+                    ("tw:[color:red]".to_string(), 62),
+                    ("group-[]:tw__flex".to_string(), 77),
+                ],
+            ),
+            // After migrations
+            (
+                r#"<div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red] tw:in-[.tw\:group]:flex"></div>"#,
+                vec![
+                    ("tw:flex!".to_string(), 12),
+                    ("tw:sm:block!".to_string(), 21),
+                    ("tw:bg-linear-to-t".to_string(), 34),
+                    ("flex".to_string(), 52),
+                    ("tw:[color:red]".to_string(), 57),
+                    ("tw:in-[.tw\\:group]:flex".to_string(), 72),
+                ],
+            ),
+        ] {
+            let candidates = scanner.get_candidates_with_positions(crate::ChangedContent::Content(
+                input.to_string(),
+                "html".into(),
+            ));
+            assert_eq!(candidates, expected);
+        }
+    }
 }
