@@ -1926,10 +1926,20 @@ test('inverted-colors', async () => {
   `)
 })
 
-test('noscript', async () => {
-  expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
+test('scripting-initial', async () => {
+  expect(await run(['scripting-initial:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: initial-only) {
+      .scripting-initial\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting-none', async () => {
+  expect(await run(['scripting-none:flex'])).toMatchInlineSnapshot(`
     "@media (scripting: none) {
-      .noscript\\:flex {
+      .scripting-none\\:flex {
         display: flex;
       }
     }"
