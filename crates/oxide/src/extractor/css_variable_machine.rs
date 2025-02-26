@@ -135,6 +135,13 @@ const CLASS_TABLE: [Class; 256] = {
     set_range!(Class::AllowedCharacter, b'A'..=b'Z');
     set_range!(Class::AllowedCharacter, b'0'..=b'9');
 
+    // non-ASCII (such as Emoji): https://drafts.csswg.org/css-syntax-3/#non-ascii-ident-code-point
+    let mut i = 0x80;
+    while i <= 0xff {
+        table[i as usize] = Class::AllowedCharacter;
+        i += 1;
+    }
+
     set!(Class::End, b'\0');
 
     table
@@ -167,6 +174,9 @@ mod tests {
                 "calc(var(--first) + var(--second))",
                 vec!["--first", "--second"],
             ),
+            // Variables with... emojis
+            ("--😀", vec!["--😀"]),
+            ("--😀-😁", vec!["--😀-😁"]),
             // Escaped character in the middle, skips the next character
             (r#"--spacing-1\/2"#, vec![r#"--spacing-1\/2"#]),
             // Escaped whitespace is not allowed
@@ -223,7 +233,13 @@ mod tests {
             ] {
                 let input = wrapper.replace("{}", input);
 
-                assert_eq!(CssVariableMachine::test_extract_all(&input), expected);
+                let actual = CssVariableMachine::test_extract_all(&input);
+
+                if actual != expected {
+                    dbg!(&input, &actual, &expected);
+                }
+
+                assert_eq!(actual, expected);
             }
         }
     }
