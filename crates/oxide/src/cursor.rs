@@ -61,6 +61,18 @@ impl<'a> Cursor<'a> {
             .unwrap_or(&0x00u8);
     }
 
+    #[inline(always)]
+    pub fn advance_twice(&mut self) {
+        self.pos += 2;
+
+        self.prev = self.next;
+        self.curr = *self.input.get(self.pos).unwrap_or(&0x00u8);
+        self.next = *self
+            .input
+            .get(self.pos.saturating_add(1))
+            .unwrap_or(&0x00u8);
+    }
+
     pub fn move_to(&mut self, pos: usize) {
         let len = self.input.len();
         let pos = pos.clamp(0, len);
