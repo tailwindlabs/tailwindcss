@@ -16,121 +16,94 @@ use crate::extractor::string_machine::StringMachine;
 /// ```
 #[derive(Debug, Default)]
 pub struct ArbitraryValueMachine {
-    /// Start position of the arbitrary value
-    start_pos: usize,
-
     /// Track brackets to ensure they are balanced
     bracket_stack: BracketStack,
 
-    /// Current state of the machine
-    state: State,
-
     string_machine: StringMachine,
-}
-
-#[derive(Debug, Default)]
-enum State {
-    #[default]
-    Idle,
-
-    /// Parsing an arbitrary value
-    Parsing,
 }
 
 impl Machine for ArbitraryValueMachine {
     #[inline(always)]
     fn reset(&mut self) {
-        self.start_pos = 0;
-        self.state = State::Idle;
         self.bracket_stack.reset();
     }
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        // An arbitrary value must start with an open bracket
+        if CLASS_TABLE[cursor.curr as usize] != Class::OpenBracket {
+            return MachineState::Idle;
+        }
+
+        let start_pos = cursor.pos;
+        cursor.advance();
+
         let len = cursor.input.len();
 
-        match self.state {
-            State::Idle => match CLASS_TABLE[cursor.curr as usize] {
-                // Start of an arbitrary value
-                Class::OpenBracket => {
-                    self.start_pos = cursor.pos;
-                    self.state = State::Parsing;
+        while cursor.pos < len {
+            match CLASS_TABLE[cursor.curr as usize] {
+                Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+                    // An escaped whitespace character is not allowed
+                    //
+                    // E.g.: `[color:var(--my-\ color)]`
+                    //                         ^
+                    Class::Whitespace => {
+                        cursor.advance_twice();
+                        return self.restart();
+                    }
+
+                    // An escaped character, skip the next character, resume after
+                    //
+                    // E.g.: `[color:var(--my-\#color)]`
+                    //                        ^
+                    _ => cursor.advance_twice(),
+                },
+
+                Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
+                    if !self.bracket_stack.push(cursor.curr) {
+                        return self.restart();
+                    }
                     cursor.advance();
-                    self.next(cursor)
                 }
 
-                // Anything else is not a valid start of an arbitrary value
-                _ => MachineState::Idle,
-            },
-
-            State::Parsing => {
-                while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
-                        Class::Escape => match CLASS_TABLE[cursor.next as usize] {
-                            // An escaped whitespace character is not allowed
-                            //
-                            // E.g.: `[color:var(--my-\ color)]`
-                            //                         ^
-                            Class::Whitespace => {
-                                cursor.advance_twice();
-                                return self.restart();
-                            }
-
-                            // An escaped character, skip the next character, resume after
-                            //
-                            // E.g.: `[color:var(--my-\#color)]`
-                            //                        ^
-                            _ => cursor.advance_twice(),
-                        },
-
-                        Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
-                            if !self.bracket_stack.push(cursor.curr) {
-                                return self.restart();
-                            }
-                            cursor.advance();
-                        }
-
-                        Class::CloseParen | Class::CloseBracket | Class::CloseCurly
-                            if !self.bracket_stack.is_empty() =>
-                        {
-                            if !self.bracket_stack.pop(cursor.curr) {
-                                return self.restart();
-                            }
-                            cursor.advance();
-                        }
-
-                        // End of an arbitrary value
-                        //
-                        // 1. All brackets must be balanced
-                        // 2. There must be at least a single character inside the brackets
-                        Class::CloseBracket
-                            if self.start_pos + 1 != cursor.pos
-                                && self.bracket_stack.is_empty() =>
-                        {
-                            return self.done(self.start_pos, cursor);
-                        }
-
-                        // Start of a string
-                        Class::Quote => match self.string_machine.next(cursor) {
-                            MachineState::Idle => return self.restart(),
-                            MachineState::Done(_) => cursor.advance(),
-                        },
-
-                        // Any kind of whitespace is not allowed
-                        Class::Whitespace => return self.restart(),
-
-                        // Everything else is valid
-                        _ => cursor.advance(),
-                    };
+                Class::CloseParen | Class::CloseBracket | Class::CloseCurly
+                    if !self.bracket_stack.is_empty() =>
+                {
+                    if !self.bracket_stack.pop(cursor.curr) {
+                        return self.restart();
+                    }
+                    cursor.advance();
                 }
 
-                MachineState::Idle
-            }
+                // End of an arbitrary value
+                //
+                // 1. All brackets must be balanced
+                // 2. There must be at least a single character inside the brackets
+                Class::CloseBracket
+                    if start_pos + 1 != cursor.pos && self.bracket_stack.is_empty() =>
+                {
+                    return self.done(start_pos, cursor);
+                }
+
+                // Start of a string
+                Class::Quote => match self.string_machine.next(cursor) {
+                    MachineState::Idle => return self.restart(),
+                    MachineState::Done(_) => cursor.advance(),
+                },
+
+                // Any kind of whitespace is not allowed
+                Class::Whitespace => return self.restart(),
+
+                // Everything else is valid
+                _ => cursor.advance(),
+            };
         }
+
+        self.restart()
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 enum Class {
     /// `\`
     Escape,
