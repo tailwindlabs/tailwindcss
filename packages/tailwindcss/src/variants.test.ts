@@ -1919,6 +1919,36 @@ test('inverted-colors', async () => {
   `)
 })
 
+test('scripting-initial', async () => {
+  expect(await run(['scripting-initial:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: initial-only) {
+      .scripting-initial\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting-none', async () => {
+  expect(await run(['scripting-none:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: none) {
+      .scripting-none\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting', async () => {
+  expect(await run(['scripting:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: enabled) {
+      .scripting\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('nth', async () => {
   expect(
     await run([
