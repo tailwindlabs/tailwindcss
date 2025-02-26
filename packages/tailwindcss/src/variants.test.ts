@@ -232,11 +232,12 @@ test('target', async () => {
 })
 
 test('open', async () => {
-  expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
-    ".group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
-      display: flex;
-    }"
-  `)
+  expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex', 'not-open:flex']))
+    .toMatchInlineSnapshot(`
+      ".not-open\\:flex:not(:is([open], :popover-open, :open)), .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
+        display: flex;
+      }"
+    `)
   expect(await run(['open/foo:flex'])).toEqual('')
 })
 
@@ -1449,15 +1450,7 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target) {
-      display: flex;
-    }
-
-    .not-open\\:flex:not([open], :popover-open, :open) {
-      display: flex;
-    }
-
-    .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown), .not-autofill\\:flex:not(:autofill), .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
+    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown), .not-autofill\\:flex:not(:autofill), .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
       display: flex;
     }
 
@@ -1467,7 +1460,7 @@ test('not', async () => {
       }
     }
 
-    .not-focus\\:flex:not(:focus), .not-focus-visible\\:flex:not(:focus-visible), .not-active\\:flex:not(:active), .not-enabled\\:flex:not(:enabled), .not-disabled\\:flex:not(:disabled), .not-inert\\:flex:not([inert], [inert] *), .not-has-checked\\:flex:not(:has(:checked)), .not-aria-selected\\:flex:not([aria-selected="true"]), .not-data-foo\\:flex:not([data-foo]), .not-nth-2\\:flex:not(:nth-child(2)) {
+    .not-focus\\:flex:not(:focus), .not-focus-visible\\:flex:not(:focus-visible), .not-active\\:flex:not(:active), .not-enabled\\:flex:not(:enabled), .not-disabled\\:flex:not(:disabled), .not-inert\\:flex:not(:is([inert], [inert] *)), .not-has-checked\\:flex:not(:has(:checked)), .not-aria-selected\\:flex:not([aria-selected="true"]), .not-data-foo\\:flex:not([data-foo]), .not-nth-2\\:flex:not(:nth-child(2)) {
       display: flex;
     }
 
