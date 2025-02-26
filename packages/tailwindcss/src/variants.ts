@@ -12,7 +12,7 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
-import { enableInvertedColors, enableUserValid } from './feature-flags'
+import { enableDetailsContent, enableInvertedColors, enableUserValid } from './feature-flags'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -628,6 +628,9 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('file', ['&::file-selector-button'])
   staticVariant('placeholder', ['&::placeholder'])
   staticVariant('backdrop', ['&::backdrop'])
+  if (enableDetailsContent) {
+    staticVariant('details-content', ['&::details-content'])
+  }
 
   {
     function contentProperties() {
