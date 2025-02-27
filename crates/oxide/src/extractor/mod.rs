@@ -324,17 +324,6 @@ mod tests {
             (r#"["p-2.5"]"#, vec!["p-2.5"]),
             (r#"["flex","p-2.5"]"#, vec!["flex", "p-2.5"]),
             (r#"["flex", "p-2.5"]"#, vec!["flex", "p-2.5"]),
-            // Ruby syntax
-            (r#"%w[flex]"#, vec!["flex"]),
-            (r#"%w[flex items-center]"#, vec!["flex", "items-center"]),
-            (r#"%w[[color:red]]"#, vec!["[color:red]"]),
-            // C# syntax. See: https://github.com/tailwindlabs/tailwindcss/issues/16189#issue-2826350984
-            (r#"[CssClass("gap-y-4")]"#, vec!["gap-y-4"]),
-            (r#"[CssClass("hover:gap-y-4")]"#, vec!["hover:gap-y-4"]),
-            (
-                r#"[CssClass("gap-y-4")]:flex"#,
-                vec![r#"[CssClass("gap-y-4")]:flex"#],
-            ),
             // Overlapping candidates, outer candidate should win
             (
                 r#"[CssClass("[&:hover]:flex",'italic')]"#,
@@ -537,7 +526,6 @@ mod tests {
             (r#"%w[flex items-center]"#, vec!["flex", "items-center"]),
             (r#"%w[[color:red]]"#, vec!["[color:red]"]),
             // See: https://github.com/tailwindlabs/tailwindcss/issues/13778
-            // TODO: `span` is extracted because it looks like Clojure/Pug syntax.
             (
                 r#"def call = tag.span "Foo", class: %w[rounded-full h-0.75 w-0.75]"#,
                 vec![
