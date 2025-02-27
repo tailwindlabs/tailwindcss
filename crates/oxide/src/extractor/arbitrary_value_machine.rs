@@ -1,3 +1,5 @@
+use classification_macros::ClassifyBytes;
+
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::machine::{Machine, MachineState};
@@ -31,7 +33,7 @@ impl Machine for ArbitraryValueMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // An arbitrary value must start with an open bracket
-        if CLASS_TABLE[cursor.curr as usize] != Class::OpenBracket {
+        if Class::CLASS_TABLE[cursor.curr as usize] != Class::OpenBracket {
             return MachineState::Idle;
         }
 
@@ -41,8 +43,8 @@ impl Machine for ArbitraryValueMachine {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match CLASS_TABLE[cursor.curr as usize] {
-                Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+            match Class::CLASS_TABLE[cursor.curr as usize] {
+                Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
                     // An escaped whitespace character is not allowed
                     //
                     // E.g.: `[color:var(--my-\ color)]`
@@ -103,64 +105,38 @@ impl Machine for ArbitraryValueMachine {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, ClassifyBytes)]
 enum Class {
-    /// `\`
+    #[bytes(b'\\')]
     Escape,
 
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// `)`
+    #[bytes(b')')]
     CloseParen,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `]`
+    #[bytes(b']')]
     CloseBracket,
 
-    /// `{`
+    #[bytes(b'{')]
     OpenCurly,
 
-    /// `}`
+    #[bytes(b'}')]
     CloseCurly,
 
-    /// ', ", or `
+    #[bytes(b'"', b'\'', b'`')]
     Quote,
 
-    /// Whitespace
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    set!(Class::Escape, b'\\');
-
-    set!(Class::OpenParen, b'(');
-    set!(Class::CloseParen, b')');
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::CloseBracket, b']');
-
-    set!(Class::OpenCurly, b'{');
-    set!(Class::CloseCurly, b'}');
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

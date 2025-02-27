@@ -1,3 +1,5 @@
+use classification_macros::ClassifyBytes;
+
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::machine::{Machine, MachineState};
@@ -15,7 +17,7 @@ impl Machine for VariantMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match CLASS_TABLE[cursor.curr as usize] {
+        match Class::CLASS_TABLE[cursor.curr as usize] {
             // Start of an arbitrary variant
             //
             // E.g.: `[&:hover]:`
@@ -47,7 +49,7 @@ impl VariantMachine {
         start_pos: usize,
         cursor: &mut cursor::Cursor<'_>,
     ) -> MachineState {
-        match CLASS_TABLE[cursor.next as usize] {
+        match Class::CLASS_TABLE[cursor.next as usize] {
             // End of an arbitrary value, must be followed by a `:`
             //
             // E.g.: `[&:hover]:`
@@ -63,31 +65,17 @@ impl VariantMachine {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, ClassifyBytes)]
 enum Class {
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `:`
+    #[bytes(b':')]
     Colon,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::Colon, b':');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

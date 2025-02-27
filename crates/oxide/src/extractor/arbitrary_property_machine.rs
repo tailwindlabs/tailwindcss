@@ -3,6 +3,7 @@ use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::string_machine::StringMachine;
 use crate::extractor::CssVariableMachine;
+use classification_macros::ClassifyBytes;
 
 /// Extracts arbitrary properties from the input, including the brackets.
 ///
@@ -68,7 +69,7 @@ impl Machine for ArbitraryPropertyMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match CLASS_TABLE[cursor.curr as usize] {
+            State::Idle => match Class::CLASS_TABLE[cursor.curr as usize] {
                 // Start of an arbitrary property
                 Class::OpenBracket => {
                     self.start_pos = cursor.pos;
@@ -83,8 +84,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingProperty => {
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
-                        Class::Dash => match CLASS_TABLE[cursor.next as usize] {
+                    match Class::CLASS_TABLE[cursor.curr as usize] {
+                        Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
                             // Start of a CSS variable
                             //
                             // E.g.: `[--my-color:red]`
@@ -121,8 +122,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingValue => {
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
-                        Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+                    match Class::CLASS_TABLE[cursor.curr as usize] {
+                        Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `[color:var(--my-\ color)]`
@@ -195,7 +196,7 @@ impl ArbitraryPropertyMachine {
     fn parse_property_variable(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.css_variable_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match Class::CLASS_TABLE[cursor.next as usize] {
                 // End of the CSS variable, must be followed by a `:`
                 //
                 // E.g.: `[--my-color:red]`
@@ -223,93 +224,50 @@ impl ArbitraryPropertyMachine {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, ClassifyBytes)]
 enum Class {
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `{`
+    #[bytes(b'{')]
     OpenCurly,
 
-    /// `)`
+    #[bytes(b')')]
     CloseParen,
 
-    /// `]`
+    #[bytes(b']')]
     CloseBracket,
 
-    /// `}`
+    #[bytes(b'}')]
     CloseCurly,
 
-    /// `\`
+    #[bytes(b'\\')]
     Escape,
 
-    /// ', ", or `
+    #[bytes(b'"', b'\'', b'`')]
     Quote,
 
-    /// `-`
+    #[bytes(b'-')]
     Dash,
 
-    /// `a`..`z` or `A`..`Z`
+    #[bytes_range(b'a'..=b'z', b'A'..=b'Z')]
     Alpha,
 
-    /// `:`
+    #[bytes(b':')]
     Colon,
 
-    /// Whitespace characters
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
-    /// End of the input
+    #[bytes(b'\0')]
     End,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set!(Class::OpenParen, b'(');
-    set!(Class::OpenBracket, b'[');
-    set!(Class::OpenCurly, b'{');
-
-    set!(Class::CloseParen, b')');
-    set!(Class::CloseBracket, b']');
-    set!(Class::CloseCurly, b'}');
-
-    set!(Class::Escape, b'\\');
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-
-    set!(Class::Dash, b'-');
-
-    set_range!(Class::Alpha, b'a'..=b'z');
-    set_range!(Class::Alpha, b'A'..=b'Z');
-
-    set!(Class::Colon, b':');
-    set!(Class::End, b'\0');
-
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

@@ -1,3 +1,5 @@
+use classification_macros::ClassifyBytes;
+
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
@@ -47,8 +49,8 @@ impl Machine for NamedUtilityMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match CLASS_TABLE[cursor.curr as usize] {
-                Class::AlphaLower => match CLASS_TABLE[cursor.next as usize] {
+            State::Idle => match Class::CLASS_TABLE[cursor.curr as usize] {
+                Class::AlphaLower => match Class::CLASS_TABLE[cursor.next as usize] {
                     // Valid single character utility in between quotes
                     //
                     // E.g.: `<div class="a"></div>`
@@ -87,7 +89,7 @@ impl Machine for NamedUtilityMachine {
                 //
                 // E.g.: `-mx-2.5`
                 //        ^^
-                Class::Dash => match CLASS_TABLE[cursor.next as usize] {
+                Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
                     Class::AlphaLower => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
@@ -105,7 +107,7 @@ impl Machine for NamedUtilityMachine {
 
             State::Parsing => {
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
+                    match Class::CLASS_TABLE[cursor.curr as usize] {
                         // Followed by a boundary character, we are at the end of the utility.
                         //
                         // E.g.: `'flex'`
@@ -119,7 +121,7 @@ impl Machine for NamedUtilityMachine {
                         // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                         //                    ^
                         Class::AlphaLower | Class::AlphaUpper => {
-                            match CLASS_TABLE[cursor.next as usize] {
+                            match Class::CLASS_TABLE[cursor.next as usize] {
                                 Class::Quote
                                 | Class::Whitespace
                                 | Class::CloseBracket
@@ -134,7 +136,7 @@ impl Machine for NamedUtilityMachine {
                             }
                         }
 
-                        Class::Dash => match CLASS_TABLE[cursor.next as usize] {
+                        Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
                             // Start of an arbitrary value
                             //
                             // E.g.: `bg-[#0088cc]`
@@ -178,7 +180,7 @@ impl Machine for NamedUtilityMachine {
                             _ => return self.restart(),
                         },
 
-                        Class::Underscore => match CLASS_TABLE[cursor.next as usize] {
+                        Class::Underscore => match Class::CLASS_TABLE[cursor.next as usize] {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the utility but not at the end of the utility.
                             //
@@ -228,11 +230,11 @@ impl Machine for NamedUtilityMachine {
                         // E.g.: `px-2.5`
                         //           ^^^
                         Class::Dot => {
-                            if !matches!(CLASS_TABLE[cursor.prev as usize], Class::Number) {
+                            if !matches!(Class::CLASS_TABLE[cursor.prev as usize], Class::Number) {
                                 return self.restart();
                             }
 
-                            if !matches!(CLASS_TABLE[cursor.next as usize], Class::Number) {
+                            if !matches!(Class::CLASS_TABLE[cursor.next as usize], Class::Number) {
                                 return self.restart();
                             }
 
@@ -256,14 +258,14 @@ impl Machine for NamedUtilityMachine {
                         //
                         Class::Number => {
                             if !matches!(
-                                CLASS_TABLE[cursor.prev as usize],
+                                Class::CLASS_TABLE[cursor.prev as usize],
                                 Class::Dash | Class::Dot | Class::Number | Class::AlphaLower
                             ) {
                                 return self.restart();
                             }
 
                             if !matches!(
-                                CLASS_TABLE[cursor.next as usize],
+                                Class::CLASS_TABLE[cursor.next as usize],
                                 Class::Dot
                                     | Class::Number
                                     | Class::AlphaLower
@@ -285,7 +287,7 @@ impl Machine for NamedUtilityMachine {
                         //       ^^
                         // ```
                         Class::Percent => {
-                            if !matches!(CLASS_TABLE[cursor.prev as usize], Class::Number) {
+                            if !matches!(Class::CLASS_TABLE[cursor.prev as usize], Class::Number) {
                                 return self.restart();
                             }
 
@@ -303,110 +305,62 @@ impl Machine for NamedUtilityMachine {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, ClassifyBytes)]
 enum Class {
-    /// `'a'..='z'`
+    #[bytes_range(b'a'..=b'z')]
     AlphaLower,
 
-    /// `'A'..='Z'`
+    #[bytes_range(b'A'..=b'Z')]
     AlphaUpper,
 
-    /// `@`
+    #[bytes(b'@')]
     At,
 
-    // `:`
+    #[bytes(b':')]
     Colon,
 
-    /// `-`
+    #[bytes(b'-')]
     Dash,
 
-    /// `:`
+    #[bytes(b'.')]
     Dot,
 
-    /// `0x00`
+    #[bytes(b'\0')]
     End,
 
-    /// `!`
+    #[bytes(b'!')]
     Exclamation,
 
-    /// `'0'..='9'`
+    #[bytes_range(b'0'..=b'9')]
     Number,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `]`
+    #[bytes(b']')]
     CloseBracket,
 
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// `%`
+    #[bytes(b'%')]
     Percent,
 
-    /// ', ", or `
+    #[bytes(b'"', b'\'', b'`')]
     Quote,
 
-    /// `/`
+    #[bytes(b'/')]
     Slash,
 
-    /// _
+    #[bytes(b'_')]
     Underscore,
 
-    /// Whitespace characters: ' ', '\t', '\n', '\r', '\x0C'
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
-    /// Anything else
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set!(Class::At, b'@');
-    set!(Class::Underscore, b'_');
-    set!(Class::Dash, b'-');
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::CloseBracket, b']');
-
-    set!(Class::OpenParen, b'(');
-
-    set!(Class::Dot, b'.');
-    set!(Class::Colon, b':');
-
-    set!(Class::Percent, b'%');
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-
-    set!(Class::Exclamation, b'!');
-    set!(Class::Slash, b'/');
-
-    set_range!(Class::AlphaLower, b'a'..=b'z');
-    set_range!(Class::AlphaUpper, b'A'..=b'Z');
-    set_range!(Class::Number, b'0'..=b'9');
-
-    set!(Class::End, 0x00);
-
-    table
-};
 
 #[cfg(test)]
 mod tests {
