@@ -117,12 +117,12 @@ export class Theme {
     if (!this.prefix) return this.values.entries()
 
     return Array.from(this.values, (entry) => {
-      entry[0] = this.#prefixKey(entry[0])
+      entry[0] = this.prefixKey(entry[0])
       return entry
     })
   }
 
-  #prefixKey(key: string) {
+  prefixKey(key: string) {
     if (!this.prefix) return key
     return `--${this.prefix}-${key.slice(2)}`
   }
@@ -190,7 +190,7 @@ export class Theme {
       fallback = value.value
     }
 
-    return `var(${escape(this.#prefixKey(themeKey))}${fallback ? `, ${fallback}` : ''})`
+    return `var(${escape(this.prefixKey(themeKey))}${fallback ? `, ${fallback}` : ''})`
   }
 
   markUsedVariable(themeKey: string) {

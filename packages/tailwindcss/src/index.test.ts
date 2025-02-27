@@ -1613,6 +1613,73 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  test('keyframes are generated when used in an animation within a prefixed setup', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['tw:animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-animate-foo: used 1s infinite;
+      }
+
+      .tw\\:animate-foo {
+        animation: var(--tw-animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('custom properties are generated when used from a CSS var with a prefixed setup', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --color-tomato: #e10c04;
+          }
+          @tailwind utilities;
+          .red {
+            color: var(--tw-color-tomato);
+          }
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-color-tomato: #e10c04;
+      }
+
+      .red {
+        color: var(--tw-color-tomato);
+      }"
+    `)
+  })
+
   // https://github.com/tailwindlabs/tailwindcss/issues/16374
   test('custom properties in keyframes preserved', async () => {
     expect(
