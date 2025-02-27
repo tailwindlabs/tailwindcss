@@ -136,11 +136,7 @@ const CLASS_TABLE: [Class; 256] = {
     set_range!(Class::AllowedCharacter, b'0'..=b'9');
 
     // non-ASCII (such as Emoji): https://drafts.csswg.org/css-syntax-3/#non-ascii-ident-code-point
-    let mut i = 0x80;
-    while i <= 0xff {
-        table[i as usize] = Class::AllowedCharacter;
-        i += 1;
-    }
+    set_range!(Class::AllowedCharacter, 0x80..=0xff);
 
     set!(Class::End, b'\0');
 
