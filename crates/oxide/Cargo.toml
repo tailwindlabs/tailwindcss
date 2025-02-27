@@ -17,6 +17,7 @@ ignore = "0.4.23"
 dunce = "1.0.5"
 bexpand = "1.2.0"
 fast-glob = "0.4.3"
+classification-macros = { path = "../classification-macros" }
 
 [dev-dependencies]
 tempfile = "3.13.0"
