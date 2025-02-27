@@ -102,6 +102,18 @@ pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
                 #(#fill),*
             ];
         }
+
+        // Extend u8 with a `classify` method
+        trait U8Ext {
+            fn classify(&self) -> #enum_name;
+        }
+
+        impl U8Ext for u8 {
+            #[inline(always)]
+            fn classify(&self) -> #enum_name {
+                #enum_name::TABLE[*self as usize]
+            }
+        }
     };
 
     TokenStream::from(expanded)
