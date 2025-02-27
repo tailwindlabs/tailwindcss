@@ -1,5 +1,6 @@
 use crate::cursor;
 use crate::extractor::machine::{Machine, MachineState};
+use classification_macros::ClassifyBytes;
 
 /// Extract CSS variables from an input.
 ///
@@ -19,8 +20,8 @@ impl Machine for CssVariableMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // CSS Variables must start with `--`
-        if CLASS_TABLE[cursor.curr as usize] != Class::Dash
-            || CLASS_TABLE[cursor.next as usize] != Class::Dash
+        if Class::CLASS_TABLE[cursor.curr as usize] != Class::Dash
+            || Class::CLASS_TABLE[cursor.next as usize] != Class::Dash
         {
             return MachineState::Idle;
         }
@@ -31,33 +32,35 @@ impl Machine for CssVariableMachine {
         cursor.advance_twice();
 
         while cursor.pos < len {
-            match CLASS_TABLE[cursor.curr as usize] {
+            match Class::CLASS_TABLE[cursor.curr as usize] {
                 // https://drafts.csswg.org/css-syntax-3/#ident-token-diagram
                 //
-                Class::AllowedCharacter | Class::Dash => match CLASS_TABLE[cursor.next as usize] {
-                    // Valid character followed by a valid character or an escape character
-                    //
-                    // E.g.: `--my-variable`
-                    //                ^^
-                    // E.g.: `--my-\#variable`
-                    //            ^^
-                    Class::AllowedCharacter | Class::Dash | Class::Escape => cursor.advance(),
+                Class::AllowedCharacter | Class::Dash => {
+                    match Class::CLASS_TABLE[cursor.next as usize] {
+                        // Valid character followed by a valid character or an escape character
+                        //
+                        // E.g.: `--my-variable`
+                        //                ^^
+                        // E.g.: `--my-\#variable`
+                        //            ^^
+                        Class::AllowedCharacter | Class::Dash | Class::Escape => cursor.advance(),
 
-                    // Valid character followed by anything else means the variable is done
-                    //
-                    // E.g.: `'--my-variable'`
-                    //                      ^
-                    _ => {
-                        // There must be at least 1 character after the `--`
-                        if cursor.pos - start_pos < 2 {
-                            return self.restart();
-                        } else {
-                            return self.done(start_pos, cursor);
+                        // Valid character followed by anything else means the variable is done
+                        //
+                        // E.g.: `'--my-variable'`
+                        //                      ^
+                        _ => {
+                            // There must be at least 1 character after the `--`
+                            if cursor.pos - start_pos < 2 {
+                                return self.restart();
+                            } else {
+                                return self.done(start_pos, cursor);
+                            }
                         }
                     }
-                },
+                }
 
-                Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+                Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
                     // An escaped whitespace character is not allowed
                     //
                     // In CSS it is allowed, but in the context of a class it's not because then we
@@ -87,61 +90,29 @@ impl Machine for CssVariableMachine {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, ClassifyBytes)]
 enum Class {
-    /// -
+    #[bytes(b'-')]
     Dash,
 
-    /// _, a-z, A-Z, 0-9
+    #[bytes(b'_')]
+    #[bytes_range(b'a'..=b'z', b'A'..=b'Z', b'0'..=b'9')]
+    // non-ASCII (such as Emoji): https://drafts.csswg.org/css-syntax-3/#non-ascii-ident-code-point
+    #[bytes_range(0x80..=0xff)]
     AllowedCharacter,
 
-    /// \
+    #[bytes(b'\\')]
     Escape,
 
-    /// Whitespace
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
-    /// End of the input
+    #[bytes(b'\0')]
     End,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set!(Class::Dash, b'-');
-    set!(Class::Escape, b'\\');
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    set!(Class::AllowedCharacter, b'_');
-    set_range!(Class::AllowedCharacter, b'a'..=b'z');
-    set_range!(Class::AllowedCharacter, b'A'..=b'Z');
-    set_range!(Class::AllowedCharacter, b'0'..=b'9');
-
-    // non-ASCII (such as Emoji): https://drafts.csswg.org/css-syntax-3/#non-ascii-ident-code-point
-    set_range!(Class::AllowedCharacter, 0x80..=0xff);
-
-    set!(Class::End, b'\0');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

@@ -1,3 +1,5 @@
+use classification_macros::ClassifyBytes;
+
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
@@ -73,8 +75,8 @@ impl Machine for NamedVariantMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match CLASS_TABLE[cursor.curr as usize] {
-                Class::AlphaLower | Class::Star => match CLASS_TABLE[cursor.next as usize] {
+            State::Idle => match Class::CLASS_TABLE[cursor.curr as usize] {
+                Class::AlphaLower | Class::Star => match Class::CLASS_TABLE[cursor.next as usize] {
                     // Valid single character variant, must be followed by a `:`
                     //
                     // E.g.: `<div class="x:flex"></div>`
@@ -120,8 +122,8 @@ impl Machine for NamedVariantMachine {
 
             State::Parsing => {
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
-                        Class::Dash => match CLASS_TABLE[cursor.next as usize] {
+                    match Class::CLASS_TABLE[cursor.curr as usize] {
+                        Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
                             // Start of an arbitrary value
                             //
                             // E.g.: `data-[state=pending]:`.
@@ -168,7 +170,7 @@ impl Machine for NamedVariantMachine {
                             _ => return self.restart(),
                         },
 
-                        Class::Underscore => match CLASS_TABLE[cursor.next as usize] {
+                        Class::Underscore => match Class::CLASS_TABLE[cursor.next as usize] {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the variant but not at the end of the variant.
                             //
@@ -224,7 +226,7 @@ impl Machine for NamedVariantMachine {
 
             State::ParsingModifier => match self.modifier_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+                MachineState::Done(_) => match Class::CLASS_TABLE[cursor.next as usize] {
                     // Modifier must be followed by a `:`
                     //
                     // E.g.: `group-hover/name:`
@@ -240,7 +242,7 @@ impl Machine for NamedVariantMachine {
                 },
             },
 
-            State::ParseEnd => match CLASS_TABLE[cursor.curr as usize] {
+            State::ParseEnd => match Class::CLASS_TABLE[cursor.curr as usize] {
                 // The end of a variant must be the `:`
                 //
                 // E.g.: `hover:`
@@ -257,7 +259,7 @@ impl Machine for NamedVariantMachine {
 impl NamedVariantMachine {
     #[inline(always)]
     fn parse_arbitrary_end(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match CLASS_TABLE[cursor.next as usize] {
+        match Class::CLASS_TABLE[cursor.next as usize] {
             Class::Slash => {
                 self.state = State::ParsingModifier;
                 cursor.advance();
@@ -273,105 +275,59 @@ impl NamedVariantMachine {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, ClassifyBytes)]
 enum Class {
-    /// `'a'..='z'`
+    #[bytes_range(b'a'..=b'z')]
     AlphaLower,
 
-    /// `'A'..='Z'`
+    #[bytes_range(b'A'..=b'Z')]
     AlphaUpper,
 
-    /// `@`
+    #[bytes(b'@')]
     At,
 
-    // `:`
+    #[bytes(b':')]
     Colon,
 
-    /// `-`
+    #[bytes(b'-')]
     Dash,
 
-    /// `:`
+    #[bytes(b'.')]
     Dot,
 
-    /// `0x00`
+    #[bytes(b'\0')]
     End,
 
-    /// `'0'..='9'`
+    #[bytes_range(b'0'..=b'9')]
     Number,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `]`
+    #[bytes(b']')]
     CloseBracket,
 
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// ', ", or `
+    #[bytes(b'\'', b'"', b'`')]
     Quote,
 
-    /// `*`
+    #[bytes(b'*')]
     Star,
 
-    /// `/`
+    #[bytes(b'/')]
     Slash,
 
-    /// _
+    #[bytes(b'_')]
     Underscore,
 
-    /// Whitespace characters: ' ', '\t', '\n', '\r', '\x0C'
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
-    /// Anything else
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set!(Class::At, b'@');
-    set!(Class::Underscore, b'_');
-    set!(Class::Dash, b'-');
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::CloseBracket, b']');
-
-    set!(Class::OpenParen, b'(');
-
-    set!(Class::Dot, b'.');
-    set!(Class::Colon, b':');
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-
-    set!(Class::Star, b'*');
-    set!(Class::Slash, b'/');
-
-    set_range!(Class::AlphaLower, b'a'..=b'z');
-    set_range!(Class::AlphaUpper, b'A'..=b'Z');
-    set_range!(Class::Number, b'0'..=b'9');
-
-    set!(Class::End, 0x00);
-
-    table
-};
 
 #[cfg(test)]
 mod tests {
