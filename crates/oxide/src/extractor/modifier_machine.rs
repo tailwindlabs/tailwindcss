@@ -52,8 +52,8 @@ impl Machine for ModifierMachine {
             // Start of an arbitrary variable:
             //
             // ```
-            // bg-red-500/[20%]
-            //            ^^^^^
+            // bg-red-500/(--my-opacity)
+            //            ^^^^^^^^^^^^^^
             // ```
             Class::OpenParen => match self.arbitrary_variable_machine.next(cursor) {
                 MachineState::Idle => self.restart(),

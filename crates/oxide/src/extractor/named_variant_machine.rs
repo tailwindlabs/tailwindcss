@@ -91,7 +91,7 @@ impl Machine for NamedVariantMachine {
                     //
                     // E.g.: `hover:`
                     //        ^
-                    // E.g.: `*:`
+                    // E.g.: `**:`
                     //        ^
                     _ => {
                         self.start_pos = cursor.pos;
@@ -151,11 +151,13 @@ impl Machine for NamedVariantMachine {
                             // only valid inside of the variant but not at the end of the variant.
                             //
                             // E.g.: `hover-`
-                            //            ^
+                            //             ^   Invalid
                             // E.g.: `hover-!`
-                            //            ^
+                            //             ^   Invalid
                             // E.g.: `hover-/`
-                            //            ^
+                            //             ^   Invalid
+                            // E.g.: `flex-1`
+                            //            ^    Valid
                             Class::Dash
                             | Class::Underscore
                             | Class::AlphaLower
@@ -170,12 +172,14 @@ impl Machine for NamedVariantMachine {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the variant but not at the end of the variant.
                             //
-                            // E.g.: `hover-`
-                            //            ^
-                            // E.g.: `hover-!`
-                            //            ^
-                            // E.g.: `hover-/`
-                            //            ^
+                            // E.g.: `hover_`
+                            //             ^     Invalid
+                            // E.g.: `hover_!`
+                            //             ^     Invalid
+                            // E.g.: `hover_/`
+                            //             ^     Invalid
+                            // E.g.: `custom_1`
+                            //              ^    Valid
                             Class::Dash
                             | Class::Underscore
                             | Class::AlphaLower

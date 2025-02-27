@@ -132,7 +132,6 @@ impl Machine for CandidateMachine {
                         self.start_pos = variant_span.start;
                     }
 
-                    //
                     self.last_variant_end_pos = Some(variant_cursor.pos);
                 }
 
