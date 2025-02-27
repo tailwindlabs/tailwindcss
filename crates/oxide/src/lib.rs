@@ -1,4 +1,3 @@
-use crate::extractor::machine::Machine;
 use crate::glob::hoist_static_glob_parts;
 use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
@@ -467,42 +466,12 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
 }
 
 pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
-    // NOTE: Replace strings with same-length replacements to avoid reallocations
+    use crate::extractor::pre_processors::*;
+
     match extension {
-        // Handle dot notation, e.g.: `div.flex.bg-red-500` -> `div flex bg-red-500`
-        "slim" | "pug" => {
-            let len = content.len();
-            let mut cursor = cursor::Cursor::new(content);
-            let mut new_content = String::from_utf8(content.to_vec()).unwrap();
-            let mut string_machine = StringMachine;
-
-            while cursor.pos < len {
-                match cursor.curr {
-                    // Consume strings as-is
-                    b'\'' | b'"' => {
-                        string_machine.next(&mut cursor);
-                    }
-
-                    // Replace dots with spaces
-                    b'.' => {
-                        new_content.replace_range(cursor.pos..cursor.pos + 1, " ");
-                    }
-
-                    // Consume everything else
-                    _ => {}
-                };
-
-                cursor.advance();
-            }
-
-            new_content.into()
-        }
-
-        // Svelte class shorthand
-        "svelte" => content
-            .replace(" class:", " class ")
-            .replace("\tclass:", " class ")
-            .replace("\nclass:", " class "),
+        "rb" | "erb" => Ruby.process(content),
+        "slim" | "pug" => Pug.process(content),
+        "svelte" => Svelte.process(content),
         _ => content.to_vec(),
     }
 }

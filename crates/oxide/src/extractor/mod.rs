@@ -15,6 +15,7 @@ pub mod machine;
 pub mod modifier_machine;
 pub mod named_utility_machine;
 pub mod named_variant_machine;
+pub mod pre_processors;
 pub mod string_machine;
 pub mod utility_machine;
 pub mod variant_machine;
@@ -573,8 +574,11 @@ mod tests {
                     "w-0.75",
                 ],
             ),
+            // Other similar syntaxes
+            (r#"%w[flex]"#, vec!["flex"]),
+            (r#"%w(flex)"#, vec!["flex"]),
         ] {
-            assert_extract_sorted_candidates(input, expected);
+            assert_extract_sorted_candidates(&pre_process_input(input, "rb"), expected);
         }
     }
 
