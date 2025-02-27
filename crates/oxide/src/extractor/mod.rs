@@ -812,9 +812,25 @@ mod tests {
 
     #[test]
     fn test_angular_binding_attribute_syntax() {
-        let input = r#"<div [class.underline]="bool"></div>"#;
-        let expected = vec!["underline", "bool"];
-        assert_extract_sorted_candidates(input, expected);
+        for (input, expected) in [
+            // Simple class
+            (
+                r#"<div [class.underline]="bool"></div>"#,
+                vec!["underline", "bool"],
+            ),
+            // With additional dots
+            (
+                r#"<div [class.px-2.5]="bool"></div>"#,
+                vec!["px-2.5", "bool"],
+            ),
+            // With additional square brackets
+            (
+                r#"<div [class.bg-[#0088cc]]="bool"></div>"#,
+                vec!["bg-[#0088cc]", "bool"],
+            ),
+        ] {
+            assert_extract_sorted_candidates(input, expected);
+        }
     }
 
     #[test]
