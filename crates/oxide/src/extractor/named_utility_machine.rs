@@ -88,7 +88,7 @@ impl Machine for NamedUtilityMachine {
                 // E.g.: `-mx-2.5`
                 //        ^^
                 Class::Dash => match CLASS_TABLE[cursor.next as usize] {
-                    Class::AlphaLower | Class::AlphaUpper => {
+                    Class::AlphaLower => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
                         cursor.advance();
