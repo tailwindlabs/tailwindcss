@@ -429,7 +429,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         variableDependencies,
       )
       if (variableUsed) {
-        if (declaration.property.startsWith('--animate-')) {
+        if (declaration.property.startsWith(designSystem.theme.prefixKey('--animate-'))) {
           let parts = declaration.value!.split(/\s+/)
           for (let part of parts) usedKeyframeNames.add(part)
         }
