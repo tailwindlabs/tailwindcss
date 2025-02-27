@@ -190,15 +190,14 @@ fn is_valid_common_boundary(c: &u8) -> bool {
 }
 
 /// A candidate must be preceded by any of these characters.
-/// E.g.: `%w[flex]`
-///          ^
 #[inline(always)]
 fn is_valid_before_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'{' | b'[' | b'.')
+    is_valid_common_boundary(c) || matches!(c, b'.')
 }
 
 /// A candidate must be followed by any of these characters.
-/// E.g.: `%w[flex]`                Ruby
+///
+/// E.g.: `[class.foo]`             Angular
 /// E.g.: `<div class:flex="bool">` Svelte
 ///                       ^
 #[inline(always)]

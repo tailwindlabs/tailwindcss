@@ -112,10 +112,10 @@ impl Machine for NamedUtilityMachine {
                         //             ^
                         // E.g.: `<div class="flex items-center">`
                         //                        ^
-                        // E.g.: `%w[flex]` (Ruby syntax)
-                        //               ^
-                        // E.g.: `flex.items-center` (Pug syntax)
-                        //            ^
+                        // E.g.: `[flex]` (Angular syntax)
+                        //             ^
+                        // E.g.: `[class.flex.items-center]` (Angular syntax)
+                        //                   ^
                         // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                         //                    ^
                         Class::AlphaLower | Class::AlphaUpper => {
@@ -204,10 +204,10 @@ impl Machine for NamedUtilityMachine {
                             //             ^
                             // E.g.: `<div class="flex items-center">`
                             //                        ^
-                            // E.g.: `%w[flex]` (Ruby syntax)
-                            //               ^
-                            // E.g.: `flex.items-center` (Pug syntax)
-                            //            ^
+                            // E.g.: `[flex]` (Angular syntax)
+                            //             ^
+                            // E.g.: `[class.flex.items-center]` (Angular syntax)
+                            //                   ^
                             // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                             //                    ^
                             Class::Quote

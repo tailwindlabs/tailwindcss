@@ -318,9 +318,7 @@ mod tests {
                 ],
             ),
             // In an array, looks like an arbitrary property (because it starts with `[`).
-            (r#"[flex]"#, vec!["flex"]),
             (r#"["flex"]"#, vec!["flex"]),
-            (r#"[p-2.5]"#, vec!["p-2.5"]),
             (r#"["p-2.5"]"#, vec!["p-2.5"]),
             (r#"["flex","p-2.5"]"#, vec!["flex", "p-2.5"]),
             (r#"["flex", "p-2.5"]"#, vec!["flex", "p-2.5"]),
@@ -392,15 +390,15 @@ mod tests {
             ("bg-red-500/(--my-opacity)/[20%]", vec![]),
             ("bg-red-500/(--my-opacity)/(--my-opacity)", vec![]),
             // Arbitrary value followed by an arbitrary value is invalid
-            ("bg-[red]-[blue]", vec!["red", "blue"]),
-            ("bg-[red][blue]", vec!["red", "blue"]),
+            ("bg-[red]-[blue]", vec![]),
+            ("bg-[red][blue]", vec![]),
             // Arbitrary value followed by an arbitrary variable is invalid
-            ("bg-[red]-(--my-color)", vec!["red"]),
-            ("bg-[red](--my-color)", vec!["red"]),
+            ("bg-[red]-(--my-color)", vec![]),
+            ("bg-[red](--my-color)", vec![]),
             // Important looking utility cannot be followed by another utility
             ("flex!block", vec![]),
             // Invalid variants make the whole candidate invalid
-            ("[foo]/bar:flex", vec!["foo"]),
+            ("[foo]/bar:flex", vec![]),
             // Utilities cannot start with `_`
             ("_blank", vec![]),
             ("hover:_blank", vec![]),
@@ -768,18 +766,11 @@ mod tests {
         for (input, expected) in [
             (
                 r#"'[ngClass]': `{"variant": variant(), "no-variant": !variant() }`"#,
-                vec!["ngClass", "variant", "no-variant"],
+                vec!["variant", "no-variant"],
             ),
             (
                 r#"'[class]': '"bg-gradient-to-b px-6 py-3 rounded-3xl from-5%"',"#,
-                vec![
-                    "class",
-                    "bg-gradient-to-b",
-                    "px-6",
-                    "py-3",
-                    "rounded-3xl",
-                    "from-5%",
-                ],
+                vec!["bg-gradient-to-b", "px-6", "py-3", "rounded-3xl", "from-5%"],
             ),
             (
                 r#"'[class.from-secondary-light]': `variant() === 'secondary'`,"#,
