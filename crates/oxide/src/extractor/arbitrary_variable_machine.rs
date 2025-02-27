@@ -349,6 +349,8 @@ mod tests {
             // Variables must have at least one character after the `--`
             (r"(--)", vec![]),
             (r"(--,red)", vec![]),
+            (r"(-)", vec![]),
+            (r"(-my-color)", vec![]),
         ] {
             assert_eq!(ArbitraryVariableMachine::test_extract_all(input), expected);
         }

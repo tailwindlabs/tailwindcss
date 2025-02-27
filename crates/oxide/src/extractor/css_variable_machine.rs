@@ -185,6 +185,8 @@ mod tests {
             //
             // Exceptions
             // Not a valid variable
+            ("", vec![]),
+            ("-", vec![]),
             ("--", vec![]),
         ] {
             for wrapper in [
