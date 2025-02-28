@@ -49,8 +49,8 @@ impl Machine for NamedUtilityMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match Class::TABLE[cursor.curr as usize] {
-                Class::AlphaLower => match Class::TABLE[cursor.next as usize] {
+            State::Idle => match cursor.curr.classify() {
+                Class::AlphaLower => match cursor.next.classify() {
                     // Valid single character utility in between quotes
                     //
                     // E.g.: `<div class="a"></div>`
@@ -89,7 +89,7 @@ impl Machine for NamedUtilityMachine {
                 //
                 // E.g.: `-mx-2.5`
                 //        ^^
-                Class::Dash => match Class::TABLE[cursor.next as usize] {
+                Class::Dash => match cursor.next.classify() {
                     Class::AlphaLower => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
@@ -107,7 +107,7 @@ impl Machine for NamedUtilityMachine {
 
             State::Parsing => {
                 while cursor.pos < len {
-                    match Class::TABLE[cursor.curr as usize] {
+                    match cursor.curr.classify() {
                         // Followed by a boundary character, we are at the end of the utility.
                         //
                         // E.g.: `'flex'`
@@ -121,7 +121,7 @@ impl Machine for NamedUtilityMachine {
                         // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                         //                    ^
                         Class::AlphaLower | Class::AlphaUpper => {
-                            match Class::TABLE[cursor.next as usize] {
+                            match cursor.next.classify() {
                                 Class::Quote
                                 | Class::Whitespace
                                 | Class::CloseBracket
@@ -136,7 +136,7 @@ impl Machine for NamedUtilityMachine {
                             }
                         }
 
-                        Class::Dash => match Class::TABLE[cursor.next as usize] {
+                        Class::Dash => match cursor.next.classify() {
                             // Start of an arbitrary value
                             //
                             // E.g.: `bg-[#0088cc]`
@@ -180,7 +180,7 @@ impl Machine for NamedUtilityMachine {
                             _ => return self.restart(),
                         },
 
-                        Class::Underscore => match Class::TABLE[cursor.next as usize] {
+                        Class::Underscore => match cursor.next.classify() {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the utility but not at the end of the utility.
                             //
@@ -230,11 +230,11 @@ impl Machine for NamedUtilityMachine {
                         // E.g.: `px-2.5`
                         //           ^^^
                         Class::Dot => {
-                            if !matches!(Class::TABLE[cursor.prev as usize], Class::Number) {
+                            if !matches!(cursor.prev.classify(), Class::Number) {
                                 return self.restart();
                             }
 
-                            if !matches!(Class::TABLE[cursor.next as usize], Class::Number) {
+                            if !matches!(cursor.next.classify(), Class::Number) {
                                 return self.restart();
                             }
 
@@ -258,14 +258,14 @@ impl Machine for NamedUtilityMachine {
                         //
                         Class::Number => {
                             if !matches!(
-                                Class::TABLE[cursor.prev as usize],
+                                cursor.prev.classify(),
                                 Class::Dash | Class::Dot | Class::Number | Class::AlphaLower
                             ) {
                                 return self.restart();
                             }
 
                             if !matches!(
-                                Class::TABLE[cursor.next as usize],
+                                cursor.next.classify(),
                                 Class::Dot
                                     | Class::Number
                                     | Class::AlphaLower
@@ -287,7 +287,7 @@ impl Machine for NamedUtilityMachine {
                         //       ^^
                         // ```
                         Class::Percent => {
-                            if !matches!(Class::TABLE[cursor.prev as usize], Class::Number) {
+                            if !matches!(cursor.prev.classify(), Class::Number) {
                                 return self.restart();
                             }
 
