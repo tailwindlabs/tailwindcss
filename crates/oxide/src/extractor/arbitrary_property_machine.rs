@@ -69,7 +69,7 @@ impl Machine for ArbitraryPropertyMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match Class::CLASS_TABLE[cursor.curr as usize] {
+            State::Idle => match Class::TABLE[cursor.curr as usize] {
                 // Start of an arbitrary property
                 Class::OpenBracket => {
                     self.start_pos = cursor.pos;
@@ -84,8 +84,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingProperty => {
                 while cursor.pos < len {
-                    match Class::CLASS_TABLE[cursor.curr as usize] {
-                        Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
+                    match Class::TABLE[cursor.curr as usize] {
+                        Class::Dash => match Class::TABLE[cursor.next as usize] {
                             // Start of a CSS variable
                             //
                             // E.g.: `[--my-color:red]`
@@ -122,8 +122,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingValue => {
                 while cursor.pos < len {
-                    match Class::CLASS_TABLE[cursor.curr as usize] {
-                        Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
+                    match Class::TABLE[cursor.curr as usize] {
+                        Class::Escape => match Class::TABLE[cursor.next as usize] {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `[color:var(--my-\ color)]`
@@ -196,7 +196,7 @@ impl ArbitraryPropertyMachine {
     fn parse_property_variable(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.css_variable_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match Class::CLASS_TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match Class::TABLE[cursor.next as usize] {
                 // End of the CSS variable, must be followed by a `:`
                 //
                 // E.g.: `[--my-color:red]`

@@ -30,7 +30,7 @@ impl Machine for StringMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        if Class::CLASS_TABLE[cursor.curr as usize] != Class::Quote {
+        if Class::TABLE[cursor.curr as usize] != Class::Quote {
             return MachineState::Idle;
         }
 
@@ -42,8 +42,8 @@ impl Machine for StringMachine {
         cursor.advance();
 
         while cursor.pos < len {
-            match Class::CLASS_TABLE[cursor.curr as usize] {
-                Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
+            match Class::TABLE[cursor.curr as usize] {
+                Class::Escape => match Class::TABLE[cursor.next as usize] {
                     // An escaped whitespace character is not allowed
                     Class::Whitespace => return MachineState::Idle,
 
