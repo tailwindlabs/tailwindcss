@@ -1,9 +1,8 @@
-use classification_macros::ClassifyBytes;
-
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::named_variant_machine::NamedVariantMachine;
+use classification_macros::ClassifyBytes;
 
 #[derive(Debug, Default)]
 pub struct VariantMachine {

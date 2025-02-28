@@ -1,10 +1,9 @@
-use classification_macros::ClassifyBytes;
-
 use crate::cursor;
 use crate::extractor::arbitrary_property_machine::ArbitraryPropertyMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::modifier_machine::ModifierMachine;
 use crate::extractor::named_utility_machine::NamedUtilityMachine;
+use classification_macros::ClassifyBytes;
 
 #[derive(Debug, Default)]
 pub struct UtilityMachine {

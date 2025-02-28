@@ -1,9 +1,8 @@
-use classification_macros::ClassifyBytes;
-
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::string_machine::StringMachine;
+use classification_macros::ClassifyBytes;
 
 /// Extracts arbitrary values including the brackets.
 ///

@@ -1,9 +1,8 @@
-use classification_macros::ClassifyBytes;
-
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
 use crate::extractor::machine::{Machine, MachineState};
+use classification_macros::ClassifyBytes;
 
 /// Extracts named utilities from an input.
 ///
