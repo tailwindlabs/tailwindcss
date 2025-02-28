@@ -75,8 +75,8 @@ impl Machine for NamedVariantMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match Class::CLASS_TABLE[cursor.curr as usize] {
-                Class::AlphaLower | Class::Star => match Class::CLASS_TABLE[cursor.next as usize] {
+            State::Idle => match Class::TABLE[cursor.curr as usize] {
+                Class::AlphaLower | Class::Star => match Class::TABLE[cursor.next as usize] {
                     // Valid single character variant, must be followed by a `:`
                     //
                     // E.g.: `<div class="x:flex"></div>`
@@ -122,8 +122,8 @@ impl Machine for NamedVariantMachine {
 
             State::Parsing => {
                 while cursor.pos < len {
-                    match Class::CLASS_TABLE[cursor.curr as usize] {
-                        Class::Dash => match Class::CLASS_TABLE[cursor.next as usize] {
+                    match Class::TABLE[cursor.curr as usize] {
+                        Class::Dash => match Class::TABLE[cursor.next as usize] {
                             // Start of an arbitrary value
                             //
                             // E.g.: `data-[state=pending]:`.
@@ -170,7 +170,7 @@ impl Machine for NamedVariantMachine {
                             _ => return self.restart(),
                         },
 
-                        Class::Underscore => match Class::CLASS_TABLE[cursor.next as usize] {
+                        Class::Underscore => match Class::TABLE[cursor.next as usize] {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the variant but not at the end of the variant.
                             //
@@ -226,7 +226,7 @@ impl Machine for NamedVariantMachine {
 
             State::ParsingModifier => match self.modifier_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match Class::CLASS_TABLE[cursor.next as usize] {
+                MachineState::Done(_) => match Class::TABLE[cursor.next as usize] {
                     // Modifier must be followed by a `:`
                     //
                     // E.g.: `group-hover/name:`
@@ -242,7 +242,7 @@ impl Machine for NamedVariantMachine {
                 },
             },
 
-            State::ParseEnd => match Class::CLASS_TABLE[cursor.curr as usize] {
+            State::ParseEnd => match Class::TABLE[cursor.curr as usize] {
                 // The end of a variant must be the `:`
                 //
                 // E.g.: `hover:`
@@ -259,7 +259,7 @@ impl Machine for NamedVariantMachine {
 impl NamedVariantMachine {
     #[inline(always)]
     fn parse_arbitrary_end(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match Class::CLASS_TABLE[cursor.next as usize] {
+        match Class::TABLE[cursor.next as usize] {
             Class::Slash => {
                 self.state = State::ParsingModifier;
                 cursor.advance();

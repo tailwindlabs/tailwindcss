@@ -64,7 +64,7 @@ impl Machine for ArbitraryVariableMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        let class_curr = Class::CLASS_TABLE[cursor.curr as usize];
+        let class_curr = Class::TABLE[cursor.curr as usize];
         let len = cursor.input.len();
 
         match self.state {
@@ -74,7 +74,7 @@ impl Machine for ArbitraryVariableMachine {
                 // E.g.: `(--my-variable)`
                 //        ^^
                 //
-                Class::OpenParen => match Class::CLASS_TABLE[cursor.next as usize] {
+                Class::OpenParen => match Class::TABLE[cursor.next as usize] {
                     Class::Dash => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
@@ -92,7 +92,7 @@ impl Machine for ArbitraryVariableMachine {
 
             State::Parsing => match self.css_variable_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match Class::CLASS_TABLE[cursor.next as usize] {
+                MachineState::Done(_) => match Class::TABLE[cursor.next as usize] {
                     // A CSS variable followed by a `,` means that there is a fallback
                     //
                     // E.g.: `(--my-color,red)`
@@ -110,7 +110,7 @@ impl Machine for ArbitraryVariableMachine {
                     _ => {
                         cursor.advance();
 
-                        match Class::CLASS_TABLE[cursor.curr as usize] {
+                        match Class::TABLE[cursor.curr as usize] {
                             // End of an arbitrary variable, must be followed by `)`
                             Class::CloseParen => self.done(self.start_pos, cursor),
 
@@ -123,8 +123,8 @@ impl Machine for ArbitraryVariableMachine {
 
             State::ParsingFallback => {
                 while cursor.pos < len {
-                    match Class::CLASS_TABLE[cursor.curr as usize] {
-                        Class::Escape => match Class::CLASS_TABLE[cursor.next as usize] {
+                    match Class::TABLE[cursor.curr as usize] {
+                        Class::Escape => match Class::TABLE[cursor.next as usize] {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `(--my-\ color)`

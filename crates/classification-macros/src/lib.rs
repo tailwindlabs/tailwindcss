@@ -98,7 +98,7 @@ pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
     // Generate the final expanded code
     let expanded = quote! {
         impl #enum_name {
-            pub const CLASS_TABLE: [#enum_name; 256] = [
+            pub const TABLE: [#enum_name; 256] = [
                 #(#fill),*
             ];
         }
