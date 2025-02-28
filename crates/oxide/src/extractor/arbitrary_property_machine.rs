@@ -69,7 +69,7 @@ impl Machine for ArbitraryPropertyMachine {
         let len = cursor.input.len();
 
         match self.state {
-            State::Idle => match Class::TABLE[cursor.curr as usize] {
+            State::Idle => match cursor.curr.classify() {
                 // Start of an arbitrary property
                 Class::OpenBracket => {
                     self.start_pos = cursor.pos;
@@ -84,8 +84,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingProperty => {
                 while cursor.pos < len {
-                    match Class::TABLE[cursor.curr as usize] {
-                        Class::Dash => match Class::TABLE[cursor.next as usize] {
+                    match cursor.curr.classify() {
+                        Class::Dash => match cursor.next.classify() {
                             // Start of a CSS variable
                             //
                             // E.g.: `[--my-color:red]`
@@ -122,8 +122,8 @@ impl Machine for ArbitraryPropertyMachine {
 
             State::ParsingValue => {
                 while cursor.pos < len {
-                    match Class::TABLE[cursor.curr as usize] {
-                        Class::Escape => match Class::TABLE[cursor.next as usize] {
+                    match cursor.curr.classify() {
+                        Class::Escape => match cursor.next.classify() {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `[color:var(--my-\ color)]`
@@ -196,7 +196,7 @@ impl ArbitraryPropertyMachine {
     fn parse_property_variable(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.css_variable_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match Class::TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match cursor.next.classify() {
                 // End of the CSS variable, must be followed by a `:`
                 //
                 // E.g.: `[--my-color:red]`

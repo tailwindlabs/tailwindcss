@@ -17,7 +17,7 @@ impl Machine for VariantMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match Class::TABLE[cursor.curr as usize] {
+        match cursor.curr.classify() {
             // Start of an arbitrary variant
             //
             // E.g.: `[&:hover]:`
@@ -49,7 +49,7 @@ impl VariantMachine {
         start_pos: usize,
         cursor: &mut cursor::Cursor<'_>,
     ) -> MachineState {
-        match Class::TABLE[cursor.next as usize] {
+        match cursor.next.classify() {
             // End of an arbitrary value, must be followed by a `:`
             //
             // E.g.: `[&:hover]:`

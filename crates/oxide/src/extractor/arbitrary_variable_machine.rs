@@ -64,7 +64,7 @@ impl Machine for ArbitraryVariableMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        let class_curr = Class::TABLE[cursor.curr as usize];
+        let class_curr = cursor.curr.classify();
         let len = cursor.input.len();
 
         match self.state {
@@ -74,7 +74,7 @@ impl Machine for ArbitraryVariableMachine {
                 // E.g.: `(--my-variable)`
                 //        ^^
                 //
-                Class::OpenParen => match Class::TABLE[cursor.next as usize] {
+                Class::OpenParen => match cursor.next.classify() {
                     Class::Dash => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
@@ -92,7 +92,7 @@ impl Machine for ArbitraryVariableMachine {
 
             State::Parsing => match self.css_variable_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match Class::TABLE[cursor.next as usize] {
+                MachineState::Done(_) => match cursor.next.classify() {
                     // A CSS variable followed by a `,` means that there is a fallback
                     //
                     // E.g.: `(--my-color,red)`
@@ -110,7 +110,7 @@ impl Machine for ArbitraryVariableMachine {
                     _ => {
                         cursor.advance();
 
-                        match Class::TABLE[cursor.curr as usize] {
+                        match cursor.curr.classify() {
                             // End of an arbitrary variable, must be followed by `)`
                             Class::CloseParen => self.done(self.start_pos, cursor),
 
@@ -123,8 +123,8 @@ impl Machine for ArbitraryVariableMachine {
 
             State::ParsingFallback => {
                 while cursor.pos < len {
-                    match Class::TABLE[cursor.curr as usize] {
-                        Class::Escape => match Class::TABLE[cursor.next as usize] {
+                    match cursor.curr.classify() {
+                        Class::Escape => match cursor.next.classify() {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `(--my-\ color)`

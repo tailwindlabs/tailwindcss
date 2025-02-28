@@ -32,14 +32,14 @@ impl Machine for ModifierMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // A modifier must start with a `/`, everything else is not a valid start of a modifier
-        if Class::TABLE[cursor.curr as usize] != Class::Slash {
+        if cursor.curr.classify() != Class::Slash {
             return MachineState::Idle;
         }
 
         let start_pos = cursor.pos;
         cursor.advance();
 
-        match Class::TABLE[cursor.curr as usize] {
+        match cursor.curr.classify() {
             // Start of an arbitrary value:
             //
             // ```
@@ -71,9 +71,9 @@ impl Machine for ModifierMachine {
             Class::ValidStart => {
                 let len = cursor.input.len();
                 while cursor.pos < len {
-                    match Class::TABLE[cursor.curr as usize] {
+                    match cursor.curr.classify() {
                         Class::ValidStart | Class::ValidInside => {
-                            match Class::TABLE[cursor.next as usize] {
+                            match cursor.next.classify() {
                                 // Only valid characters are allowed, if followed by another valid character
                                 Class::ValidStart | Class::ValidInside => cursor.advance(),
 
