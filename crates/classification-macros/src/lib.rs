@@ -29,7 +29,7 @@ use syn::{
 ///     Other,
 /// }
 /// ```
-/// Then call `b'a'.classify()` to get `Example::SomeLetters`.
+/// Then call `b'a'.into()` to get `Example::SomeLetters`.
 #[proc_macro_derive(ClassifyBytes, attributes(bytes, bytes_range, fallback))]
 pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
@@ -103,15 +103,9 @@ pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
             ];
         }
 
-        // Extend u8 with a `classify` method
-        trait U8Ext {
-            fn classify(&self) -> #enum_name;
-        }
-
-        impl U8Ext for u8 {
-            #[inline(always)]
-            fn classify(&self) -> #enum_name {
-                #enum_name::TABLE[*self as usize]
+        impl From<u8> for #enum_name {
+            fn from(byte: u8) -> Self {
+                #enum_name::TABLE[byte as usize]
             }
         }
     };

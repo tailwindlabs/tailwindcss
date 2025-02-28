@@ -28,12 +28,12 @@ impl Machine for UtilityMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.classify() {
+        match cursor.curr.into() {
             // LEGACY: Important marker
             Class::Exclamation => {
                 self.legacy_important = true;
 
-                match cursor.next.classify() {
+                match cursor.next.into() {
                     // Start of an arbitrary property
                     //
                     // E.g.: `![color:red]`
@@ -79,7 +79,7 @@ impl UtilityMachine {
     fn parse_arbitrary_property(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.arbitrary_property_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.classify() {
+            MachineState::Done(_) => match cursor.next.into() {
                 // End of arbitrary property, but there is a potential modifier.
                 //
                 // E.g.: `[color:#0088cc]/`
@@ -110,7 +110,7 @@ impl UtilityMachine {
     fn parse_named_utility(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.named_utility_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.classify() {
+            MachineState::Done(_) => match cursor.next.into() {
                 // End of a named utility, but there is a potential modifier.
                 //
                 // E.g.: `bg-red-500/`
@@ -141,7 +141,7 @@ impl UtilityMachine {
     fn parse_modifier(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.modifier_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.classify() {
+            MachineState::Done(_) => match cursor.next.into() {
                 // A modifier followed by a modifier is invalid
                 Class::Slash => self.restart(),
 

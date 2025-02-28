@@ -33,7 +33,7 @@ impl Machine for ArbitraryValueMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // An arbitrary value must start with an open bracket
-        if cursor.curr.classify() != Class::OpenBracket {
+        if Class::OpenBracket != cursor.curr.into() {
             return MachineState::Idle;
         }
 
@@ -43,8 +43,8 @@ impl Machine for ArbitraryValueMachine {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.classify() {
-                Class::Escape => match cursor.next.classify() {
+            match cursor.curr.into() {
+                Class::Escape => match cursor.next.into() {
                     // An escaped whitespace character is not allowed
                     //
                     // E.g.: `[color:var(--my-\ color)]`
