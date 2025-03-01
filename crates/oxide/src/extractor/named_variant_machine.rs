@@ -331,15 +331,15 @@ enum Class {
 #[cfg(test)]
 mod tests {
     use super::NamedVariantMachine;
-    use crate::extractor::{machine::Machine, variant_machine::VariantMachine};
+    use crate::extractor::machine::Machine;
 
     #[test]
     #[ignore]
     fn test_named_variant_machine_performance() {
         let input = r#"<button class="hover:focus:flex data-[state=pending]:flex supports-(--my-variable):flex group-hover/named:not-has-peer-data-disabled:flex">"#;
 
-        VariantMachine::test_throughput(1_000_000, input);
-        VariantMachine::test_duration_once(input);
+        NamedVariantMachine::test_throughput(1_000_000, input);
+        NamedVariantMachine::test_duration_once(input);
 
         todo!()
     }
