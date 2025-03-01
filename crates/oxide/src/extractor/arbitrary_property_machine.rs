@@ -103,7 +103,7 @@ impl Machine for ArbitraryPropertyMachine {
                         //
                         // E.g.: `[color:red]`
                         //         ^^^^^
-                        Class::Alpha => cursor.advance(),
+                        Class::AlphaLower => cursor.advance(),
 
                         // End of the property name, but there must be at least a single character
                         Class::Colon if cursor.pos > self.start_pos + 1 => {
@@ -253,8 +253,8 @@ enum Class {
     #[bytes(b'-')]
     Dash,
 
-    #[bytes_range(b'a'..=b'z', b'A'..=b'Z')]
-    Alpha,
+    #[bytes_range(b'a'..=b'z')]
+    AlphaLower,
 
     #[bytes(b':')]
     Colon,
