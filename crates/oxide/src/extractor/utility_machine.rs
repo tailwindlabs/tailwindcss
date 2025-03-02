@@ -3,6 +3,7 @@ use crate::extractor::arbitrary_property_machine::ArbitraryPropertyMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::modifier_machine::ModifierMachine;
 use crate::extractor::named_utility_machine::NamedUtilityMachine;
+use classification_macros::ClassifyBytes;
 
 #[derive(Debug, Default)]
 pub struct UtilityMachine {
@@ -26,12 +27,12 @@ impl Machine for UtilityMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match CLASS_TABLE[cursor.curr as usize] {
+        match cursor.curr.into() {
             // LEGACY: Important marker
             Class::Exclamation => {
                 self.legacy_important = true;
 
-                match CLASS_TABLE[cursor.next as usize] {
+                match cursor.next.into() {
                     // Start of an arbitrary property
                     //
                     // E.g.: `![color:red]`
@@ -77,7 +78,7 @@ impl UtilityMachine {
     fn parse_arbitrary_property(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.arbitrary_property_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match cursor.next.into() {
                 // End of arbitrary property, but there is a potential modifier.
                 //
                 // E.g.: `[color:#0088cc]/`
@@ -108,7 +109,7 @@ impl UtilityMachine {
     fn parse_named_utility(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.named_utility_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match cursor.next.into() {
                 // End of a named utility, but there is a potential modifier.
                 //
                 // E.g.: `bg-red-500/`
@@ -139,7 +140,7 @@ impl UtilityMachine {
     fn parse_modifier(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.modifier_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+            MachineState::Done(_) => match cursor.next.into() {
                 // A modifier followed by a modifier is invalid
                 Class::Slash => self.restart(),
 
@@ -172,35 +173,20 @@ impl UtilityMachine {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, ClassifyBytes)]
 enum Class {
-    /// `!`
+    #[bytes(b'!')]
     Exclamation,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `/`
+    #[bytes(b'/')]
     Slash,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    set!(Class::Exclamation, b'!');
-    set!(Class::OpenBracket, b'[');
-    set!(Class::Slash, b'/');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {
