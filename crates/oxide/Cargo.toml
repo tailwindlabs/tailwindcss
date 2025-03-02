@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bstr = "1.10.0"
+bstr = "1.11.3"
 globwalk = "0.9.1"
 log = "0.4.22"
 rayon = "1.10.0"
-fxhash = { package = "rustc-hash", version = "2.0.0" }
+fxhash = { package = "rustc-hash", version = "2.1.1" }
 crossbeam = "0.8.4"
 tracing = { version = "0.1.40", features = [] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
@@ -20,3 +20,4 @@ fast-glob = "0.4.3"
 
 [dev-dependencies]
 tempfile = "3.13.0"
+

@@ -41,12 +41,32 @@ impl<'a> Cursor<'a> {
         cursor
     }
 
-    pub fn rewind_by(&mut self, amount: usize) {
-        self.move_to(self.pos.saturating_sub(amount));
-    }
-
     pub fn advance_by(&mut self, amount: usize) {
         self.move_to(self.pos.saturating_add(amount));
+    }
+
+    #[inline(always)]
+    pub fn advance(&mut self) {
+        self.pos += 1;
+
+        self.prev = self.curr;
+        self.curr = self.next;
+        self.next = *self
+            .input
+            .get(self.pos.saturating_add(1))
+            .unwrap_or(&0x00u8);
+    }
+
+    #[inline(always)]
+    pub fn advance_twice(&mut self) {
+        self.pos += 2;
+
+        self.prev = self.next;
+        self.curr = *self.input.get(self.pos).unwrap_or(&0x00u8);
+        self.next = *self
+            .input
+            .get(self.pos.saturating_add(1))
+            .unwrap_or(&0x00u8);
     }
 
     pub fn move_to(&mut self, pos: usize) {
@@ -57,13 +77,9 @@ impl<'a> Cursor<'a> {
         self.at_start = pos == 0;
         self.at_end = pos + 1 >= len;
 
-        self.prev = if pos > 0 { self.input[pos - 1] } else { 0x00 };
-        self.curr = if pos < len { self.input[pos] } else { 0x00 };
-        self.next = if pos + 1 < len {
-            self.input[pos + 1]
-        } else {
-            0x00
-        };
+        self.prev = *self.input.get(pos.wrapping_sub(1)).unwrap_or(&0x00u8);
+        self.curr = *self.input.get(pos).unwrap_or(&0x00u8);
+        self.next = *self.input.get(pos.saturating_add(1)).unwrap_or(&0x00u8);
     }
 }
 
@@ -139,21 +155,5 @@ mod test {
         assert_eq!(cursor.prev, b'd');
         assert_eq!(cursor.curr, 0x00);
         assert_eq!(cursor.next, 0x00);
-
-        cursor.rewind_by(1);
-        assert_eq!(cursor.pos, 10);
-        assert!(!cursor.at_start);
-        assert!(cursor.at_end);
-        assert_eq!(cursor.prev, b'l');
-        assert_eq!(cursor.curr, b'd');
-        assert_eq!(cursor.next, 0x00);
-
-        cursor.rewind_by(10);
-        assert_eq!(cursor.pos, 0);
-        assert!(cursor.at_start);
-        assert!(!cursor.at_end);
-        assert_eq!(cursor.prev, 0x00);
-        assert_eq!(cursor.curr, b'h');
-        assert_eq!(cursor.next, b'e');
     }
 }

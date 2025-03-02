@@ -28,12 +28,23 @@ pub struct GlobEntry {
   pub pattern: String,
 }
 
-impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
+impl From<ChangedContent> for tailwindcss_oxide::ChangedContent<'_> {
   fn from(changed_content: ChangedContent) -> Self {
-    Self {
-      file: changed_content.file.map(Into::into),
-      content: changed_content.content,
+    if let Some(file) = changed_content.file {
+      return tailwindcss_oxide::ChangedContent::File(
+        file.into(),
+        changed_content.extension.into(),
+      );
     }
+
+    if let Some(contents) = changed_content.content {
+      return tailwindcss_oxide::ChangedContent::Content(
+        contents,
+        changed_content.extension.into(),
+      );
+    }
+
+    unreachable!()
   }
 }
 
