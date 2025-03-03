@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `not-*` does not remove `:is(…)` from variants ([#16825](https://github.com/tailwindlabs/tailwindcss/pull/16825))
 - Ensure `@keyframes` are correctly emitted when using a prefixed setup ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
 
+### Changed
+
+- Removed `max-w-auto` and `max-h-auto` utilities as they generate invalid CSS ([#16917](https://github.com/tailwindlabs/tailwindcss/pull/16917))
+
 ## [4.0.9] - 2025-02-25
 
 ### Fixed
