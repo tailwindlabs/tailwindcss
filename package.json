@@ -53,7 +53,7 @@
     "postcss": "8.5.2",
     "postcss-import": "^16.1.0",
     "prettier": "catalog:",
-    "prettier-plugin-embed": "^0.4.15",
+    "prettier-plugin-embed": "^0.5.0",
     "prettier-plugin-organize-imports": "^4.0.0",
     "tsup": "^8.3.6",
     "turbo": "^2.4.2",
