@@ -14623,6 +14623,7 @@ test('outline', async () => {
     }
 
     .outline-hidden {
+      --tw-outline-style: none;
       outline-style: none;
     }
 
