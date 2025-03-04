@@ -1919,6 +1919,66 @@ test('inverted-colors', async () => {
   `)
 })
 
+test('pointer-none', async () => {
+  expect(await run(['pointer-none:flex'])).toMatchInlineSnapshot(`
+    "@media (pointer: none) {
+      .pointer-none\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('pointer-coarse', async () => {
+  expect(await run(['pointer-coarse:flex'])).toMatchInlineSnapshot(`
+    "@media (pointer: coarse) {
+      .pointer-coarse\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('pointer-fine', async () => {
+  expect(await run(['pointer-fine:flex'])).toMatchInlineSnapshot(`
+    "@media (pointer: fine) {
+      .pointer-fine\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('any-pointer-none', async () => {
+  expect(await run(['any-pointer-none:flex'])).toMatchInlineSnapshot(`
+    "@media (any-pointer: none) {
+      .any-pointer-none\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('any-pointer-coarse', async () => {
+  expect(await run(['any-pointer-coarse:flex'])).toMatchInlineSnapshot(`
+    "@media (any-pointer: coarse) {
+      .any-pointer-coarse\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('any-pointer-fine', async () => {
+  expect(await run(['any-pointer-fine:flex'])).toMatchInlineSnapshot(`
+    "@media (any-pointer: fine) {
+      .any-pointer-fine\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('scripting-initial', async () => {
   expect(await run(['scripting-initial:flex'])).toMatchInlineSnapshot(`
     "@media (scripting: initial-only) {
