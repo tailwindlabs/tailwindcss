@@ -48,15 +48,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
+    "@playwright/test": "^1.50.1",
     "@types/node": "catalog:",
-    "postcss": "8.5.1",
+    "postcss": "8.5.2",
     "postcss-import": "^16.1.0",
-    "prettier": "^3.4.2",
-    "prettier-plugin-embed": "^0.4.15",
+    "prettier": "catalog:",
+    "prettier-plugin-embed": "^0.5.0",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "tsup": "^8.2.4",
-    "turbo": "^2.3.3",
+    "tsup": "^8.3.6",
+    "turbo": "^2.4.2",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },
@@ -64,7 +64,7 @@
   "pnpm": {
     "patchedDependencies": {
       "lightningcss@1.29.1": "patches/lightningcss@1.29.1.patch",
-      "@parcel/watcher@2.5.0": "patches/@parcel__watcher@2.5.0.patch"
+      "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch"
     }
   }
 }

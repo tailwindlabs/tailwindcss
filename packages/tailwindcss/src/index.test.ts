@@ -27,7 +27,6 @@ describe('compiling CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-black: #000;
-        --breakpoint-md: 768px;
       }
 
       @layer utilities {
@@ -152,6 +151,48 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('unescapes theme variables and handles dots as underscore', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-1\.5: 1.5px;
+            --spacing-2_5: 2.5px;
+            --spacing-3\.5: 3.5px;
+            --spacing-3_5: 3.5px;
+            --spacing-foo\/bar: 3rem;
+          }
+          @tailwind utilities;
+        `,
+        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing-1\\.5: 1.5px;
+        --spacing-2_5: 2.5px;
+        --spacing-3\\.5: 3.5px;
+        --spacing-foo\\/bar: 3rem;
+      }
+
+      .m-1\\.5 {
+        margin: var(--spacing-1\\.5);
+      }
+
+      .m-2\\.5, .m-2_5 {
+        margin: var(--spacing-2_5);
+      }
+
+      .m-3\\.5 {
+        margin: var(--spacing-3\\.5);
+      }
+
+      .m-foo\\/bar {
+        margin: var(--spacing-foo\\/bar);
+      }"
+    `)
+  })
+
   test('adds vendor prefixes', async () => {
     expect(
       await compileCss(
@@ -251,7 +292,6 @@ describe('@apply', () => {
         --color-blue-500: #3b82f6;
         --color-green-200: #bbf7d0;
         --color-green-500: #22c55e;
-        --breakpoint-md: 768px;
         --animate-spin: spin 1s linear infinite;
       }
 
@@ -285,12 +325,6 @@ describe('@apply', () => {
         }
       }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
       @property --tw-translate-x {
         syntax: "*";
         inherits: false;
@@ -307,6 +341,12 @@ describe('@apply', () => {
         syntax: "*";
         inherits: false;
         initial-value: 0;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }"
     `)
   })
@@ -487,6 +527,41 @@ describe('@apply', () => {
         body:focus {
           display: flex !important;
         }
+      }"
+    `)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/16935
+  it('should now swallow @utility declarations when @apply is used in nested rules', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+
+          .ignore-me {
+            @apply underline;
+            div {
+              @apply custom-utility;
+            }
+          }
+
+          @utility custom-utility {
+            @apply flex;
+          }
+        `,
+        ['custom-utility'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".custom-utility {
+        display: flex;
+      }
+
+      .ignore-me {
+        text-decoration-line: underline;
+      }
+
+      .ignore-me div {
+        display: flex;
       }"
     `)
   })
@@ -978,8 +1053,7 @@ describe('sorting', () => {
   })
 })
 
-// Parsing theme values from CSS
-describe('Parsing themes values from CSS', () => {
+describe('Parsing theme values from CSS', () => {
   test('Can read values from `@theme`', async () => {
     expect(
       await compileCss(
@@ -1107,7 +1181,6 @@ describe('Parsing themes values from CSS', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --color-red: red;
-        --animate-foo: foo 1s infinite;
         --text-lg: 20px;
       }
 
@@ -1117,9 +1190,42 @@ describe('Parsing themes values from CSS', () => {
 
       .accent-red {
         accent-color: var(--color-red);
+      }"
+    `)
+  })
+
+  test('`@keyframes` in `@theme` are generated when name contains a new line', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-very-long-animation-name: very-long-animation-name
+              var(
+                --very-long-animation-name-configuration,
+                2.5s ease-in-out 0s infinite normal none running
+              );
+
+            @keyframes very-long-animation-name {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-very-long-animation-name'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
       }
 
-      @keyframes foo {
+      .animate-very-long-animation-name {
+        animation: var(--animate-very-long-animation-name);
+      }
+
+      @keyframes very-long-animation-name {
         to {
           opacity: 1;
         }
@@ -1310,7 +1416,6 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --inset-shadow-sm: inset 0 2px 4px #0000000d;
         --inset-md: 50px;
       }
 
@@ -1501,7 +1606,325 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('theme values added as reference are not included in the output as variables', async () => {
+  test('keyframes are generated when used in an animation', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation within a prefixed setup', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['tw:animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-animate-foo: used 1s infinite;
+      }
+
+      .tw\\:animate-foo {
+        animation: var(--tw-animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('custom properties are generated when used from a CSS var with a prefixed setup', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --color-tomato: #e10c04;
+          }
+          @tailwind utilities;
+          .red {
+            color: var(--tw-color-tomato);
+          }
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-color-tomato: #e10c04;
+      }
+
+      .red {
+        color: var(--tw-color-tomato);
+      }"
+    `)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/16374
+  test('custom properties in keyframes preserved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-foo: used 1s infinite;
+
+            @keyframes used {
+              to {
+                --other: var(--angle);
+                --angle: 360deg;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          --other: var(--angle);
+          --angle: 360deg;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation using `@theme inline`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme inline {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in an animation using `@theme static`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --animate-foo: used 1s infinite;
+            --animate-bar: unused-but-kept 1s infinite;
+
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused-but-kept {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-foo: used 1s infinite;
+        --animate-bar: unused-but-kept 1s infinite;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo);
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes unused-but-kept {
+        to {
+          opacity: 0;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes are generated when used in user CSS', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('keyframes outside of `@theme are always preserved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+          }
+
+          @keyframes unused {
+            to {
+              opacity: 0;
+            }
+          }
+
+          .foo {
+            animation: used 1s infinite;
+          }
+
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@keyframes unused {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .foo {
+        animation: 1s infinite used;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
+  test('theme values added as reference are not included in the output as variables but emit fallback values', async () => {
     expect(
       await compileCss(
         css`
@@ -1521,11 +1944,100 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
         background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".animate-foo {
+        animation: var(--animate-foo, foo 1s infinite);
+      }
+
+      @keyframes foo {
+        0%, 100% {
+          color: red;
+        }
+
+        50% {
+          color: #00f;
+        }
+      }"
+    `)
+  })
+
+  test('`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --animate-foo: foo 1s infinite;
+
+            @keyframes foo {
+              0%,
+              100% {
+                color: red;
+              }
+              50% {
+                color: blue;
+              }
+            }
+          }
+
+          @theme {
+            --color-pink: pink;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-pink', 'animate-foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-pink: pink;
+      }
+
+      .animate-foo {
+        animation: var(--animate-foo, foo 1s infinite);
+      }
+
+      .bg-pink {
+        background-color: var(--color-pink);
+      }
+
+      @keyframes foo {
+        0%, 100% {
+          color: red;
+        }
+
+        50% {
+          color: #00f;
+        }
       }"
     `)
   })
@@ -1546,7 +2058,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #c794aa);
       }"
     `)
   })
@@ -1601,11 +2113,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-avocado {
-        background-color: var(--color-avocado);
+        background-color: var(--color-avocado, #c0cc6d);
       }
 
       .bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
@@ -1614,7 +2126,44 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@media theme(…)` can only contain `@theme` rules', () => {
+  test('`@import "tailwindcss" theme(static)` will always generate theme values, regardless of whether they were used or not', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss' theme(static);
+        `,
+        ['bg-tomato'],
+        {
+          async loadStylesheet() {
+            return {
+              content: css`
+                @theme {
+                  --color-tomato: #e10c04;
+                  --color-potato: #ac855b;
+                  --color-primary: var(--primary);
+                }
+
+                @tailwind utilities;
+              `,
+              base: '',
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('`@media theme(reference)` can only contain `@theme` rules', () => {
     return expect(
       compileCss(
         css`
@@ -1628,7 +2177,10 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Files imported with \`@import "…" theme(…)\` must only contain \`@theme\` blocks.]`,
+      `
+      [Error: Files imported with \`@import "…" theme(reference)\` must only contain \`@theme\` blocks.
+      Use \`@reference "…";\` instead.]
+    `,
     )
   })
 
@@ -1647,13 +2199,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1663,6 +2209,88 @@ describe('Parsing themes values from CSS', () => {
 
       .bg-tomato {
         background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('`@import "tailwindcss" theme(inline)` theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss' theme(inline);
+        `,
+        ['bg-tomato'],
+        {
+          async loadStylesheet() {
+            return {
+              content: css`
+                @theme {
+                  --color-tomato: #e10c04;
+                  --color-potato: #ac855b;
+                  --color-primary: var(--primary);
+                }
+
+                @tailwind utilities;
+              `,
+              base: '',
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('theme values added as `static` will always be generated, regardless of whether they were used or not', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme static {
+            --color-tomato: #e10c04;
+            --color-potato: #ac855b;
+            --color-primary: var(--primary);
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: var(--color-tomato);
+      }"
+    `)
+  })
+
+  test('when no theme values are emitted, empty layers can be removed', async () => {
+    expect(
+      await compileCss(
+        css`
+          @layer theme1 {
+            @layer theme2 {
+              @theme {
+                --color-tomato: #e10c04;
+                --color-potato: #ac855b;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['underline'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
       }"
     `)
   })
@@ -1684,13 +2312,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-tomato: #e10c04;
-        --color-potato: #ac855b;
-        --color-primary: var(--primary);
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #ac855b;
       }
 
@@ -1803,11 +2425,7 @@ describe('Parsing themes values from CSS', () => {
         ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-potato: #efb46b;
-      }
-
-      .bg-potato {
+      ".bg-potato {
         background-color: #efb46b;
       }"
     `)
@@ -1827,7 +2445,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: var(--color-potato);
+        background-color: var(--color-potato, #efb46b);
       }"
     `)
   })
@@ -1975,6 +2593,54 @@ describe('Parsing themes values from CSS', () => {
 
       .text-red {
         color: tomato;
+      }"
+    `)
+  })
+
+  test('only emits theme variables that are used outside of being defined by another variable', async () => {
+    let { build } = await compile(
+      css`
+        @theme {
+          --var-a: var(--var-b);
+          --var-b: var(--var-c);
+          --var-c: var(--var-d);
+          --var-d: red;
+
+          --var-four: green;
+          --var-three: var(--var-four);
+          --var-two: var(--var-three);
+          --var-one: var(--var-two);
+
+          --var-eins: var(--var-zwei);
+          --var-zwei: var(--var-drei);
+          --var-drei: var(--var-vier);
+          --var-vier: blue;
+        }
+
+        @utility get-var-* {
+          color: --value(--var-\*);
+        }
+        @tailwind utilities;
+      `,
+      {},
+    )
+
+    expect(optimizeCss(build(['get-var-b', 'get-var-two'])).trim()).toMatchInlineSnapshot(`
+      ":root, :host {
+        --var-b: var(--var-c);
+        --var-c: var(--var-d);
+        --var-d: red;
+        --var-four: green;
+        --var-three: var(--var-four);
+        --var-two: var(--var-three);
+      }
+
+      .get-var-b {
+        color: var(--var-b);
+      }
+
+      .get-var-two {
+        color: var(--var-two);
       }"
     `)
   })
@@ -3152,7 +3818,7 @@ it("should error when `layer(…)` is used, but it's not the first param", async
   )
 })
 
-describe('`@import "…" reference`', () => {
+describe('`@reference "…" imports`', () => {
   test('recursively removes styles', async () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
@@ -3183,7 +3849,7 @@ describe('`@import "…" reference`', () => {
     await expect(
       compileCss(
         `
-          @import './foo/bar.css' reference;
+          @reference './foo/bar.css';
 
           .bar {
             @apply md:hocus:foo;
@@ -3223,46 +3889,12 @@ describe('`@import "…" reference`', () => {
 
     let { build } = await compile(
       css`
-        @import './foo/bar.css' reference;
+        @reference './foo/bar.css';
       `,
       { loadStylesheet },
     )
 
     expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
-  })
-
-  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
-    await expect(
-      compileCss(
-        `
-          @media reference {
-            @layer theme {
-              @theme {
-                --breakpoint-md: 48rem;
-              }
-              .foo {
-                color: red;
-              }
-            }
-            @utility foo {
-              color: red;
-            }
-            @custom-variant hocus (&:hover, &:focus);
-          }
-
-          .bar {
-            @apply md:hocus:foo;
-          }
-        `,
-        [],
-      ),
-    ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
-        .bar:hover, .bar:focus {
-          color: red;
-        }
-      }"
-    `)
   })
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
@@ -3340,7 +3972,161 @@ describe('`@import "…" reference`', () => {
       ),
     ).resolves.toMatchInlineSnapshot(`
       ".bar {
-        animation: var(--animate-spin);
+        animation: var(--animate-spin, spin 1s linear infinite);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }"
+    `)
+  })
+
+  test('emits CSS variable fallback and keyframes defined inside @reference-ed files', async () => {
+    let loadStylesheet = async (id: string, base: string) => {
+      switch (id) {
+        case './one.css': {
+          return {
+            content: css`
+              @import './two.css' layer(two);
+            `,
+            base: '/root',
+          }
+        }
+        case './two.css': {
+          return {
+            content: css`
+              @import './three.css' layer(three);
+            `,
+            base: '/root',
+          }
+        }
+        case './three.css': {
+          return {
+            content: css`
+              .foo {
+                color: red;
+              }
+              @theme {
+                --color-red: red;
+                --animate-wiggle: wiggle 1s ease-in-out infinite;
+                @keyframes wiggle {
+                  0%,
+                  100% {
+                    transform: rotate(-3deg);
+                  }
+                  50% {
+                    transform: rotate(3deg);
+                  }
+                }
+              }
+            `,
+            base: '/root',
+          }
+        }
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+          @reference './one.css';
+          .bar {
+            @apply text-red animate-wiggle;
+          }
+        `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".bar {
+        animation: var(--animate-wiggle, wiggle 1s ease-in-out infinite);
+        color: var(--color-red, red);
+      }
+
+      @keyframes wiggle {
+        0%, 100% {
+          transform: rotate(-3deg);
+        }
+
+        50% {
+          transform: rotate(3deg);
+        }
+      }"
+    `)
+  })
+
+  test('supports `@import "…" reference` syntax', async () => {
+    let loadStylesheet = async () => {
+      return {
+        content: css`
+          .foo {
+            color: red;
+          }
+          @utility foo {
+            color: red;
+          }
+          @theme {
+            --breakpoint-md: 768px;
+          }
+          @custom-variant hocus (&:hover, &:focus);
+        `,
+        base: '/root/foo',
+      }
+    }
+
+    await expect(
+      compileCss(
+        `
+            @import './foo/bar.css' reference;
+
+            .bar {
+              @apply md:hocus:foo;
+            }
+          `,
+        [],
+        { loadStylesheet },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+        "@media (width >= 768px) {
+          .bar:hover, .bar:focus {
+            color: red;
+          }
+        }"
+      `)
+  })
+
+  test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
+    await expect(
+      compileCss(
+        `
+          @media reference {
+            @layer theme {
+              @theme {
+                --breakpoint-md: 48rem;
+              }
+              .foo {
+                color: red;
+              }
+            }
+            @utility foo {
+              color: red;
+            }
+            @custom-variant hocus (&:hover, &:focus);
+          }
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@media (width >= 48rem) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
       }"
     `)
   })
@@ -3398,6 +4184,38 @@ describe('@variant', () => {
               background: white;
             }
           }
+
+          @variant hover {
+            @variant landscape {
+              .btn2 {
+                color: red;
+              }
+            }
+          }
+
+          @variant hover {
+            .foo {
+              color: red;
+            }
+            @variant landscape {
+              .bar {
+                color: blue;
+              }
+            }
+            .baz {
+              @variant portrait {
+                color: green;
+              }
+            }
+          }
+
+          @media something {
+            @variant landscape {
+              @page {
+                color: red;
+              }
+            }
+          }
         `,
         [],
       ),
@@ -3409,6 +4227,38 @@ describe('@variant', () => {
       @media (prefers-color-scheme: dark) {
         .btn {
           background: #fff;
+        }
+      }
+
+      @media (hover: hover) {
+        @media (orientation: landscape) {
+          :scope:hover .btn2 {
+            color: red;
+          }
+        }
+
+        :scope:hover .foo {
+          color: red;
+        }
+
+        @media (orientation: landscape) {
+          :scope:hover .bar {
+            color: #00f;
+          }
+        }
+
+        @media (orientation: portrait) {
+          :scope:hover .baz {
+            color: green;
+          }
+        }
+      }
+
+      @media something {
+        @media (orientation: landscape) {
+          @page {
+            color: red;
+          }
         }
       }"
     `)

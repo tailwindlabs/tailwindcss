@@ -224,7 +224,7 @@ function get(obj: any, path: string[]) {
     let key = path[i]
 
     // The key does not exist so concatenate it with the next key
-    if (obj[key] === undefined) {
+    if (obj?.[key] === undefined) {
       if (path[i + 1] === undefined) {
         return undefined
       }

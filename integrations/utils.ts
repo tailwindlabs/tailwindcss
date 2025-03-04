@@ -6,6 +6,7 @@ import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { stripVTControlCharacters } from 'node:util'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
+import { escape } from '../packages/tailwindcss/src/utils/escape'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -29,9 +30,7 @@ interface ExecOptions {
 }
 
 interface TestConfig {
-  fs: {
-    [filePath: string]: string | Uint8Array
-  }
+  fs: { [filePath: string]: string | Uint8Array }
 
   installDependencies?: boolean
 }
@@ -41,7 +40,7 @@ interface TestContext {
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   fs: {
-    write(filePath: string, content: string): Promise<void>
+    write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
@@ -117,11 +116,7 @@ export function test(
           return new Promise((resolve, reject) => {
             let child = exec(
               command,
-              {
-                cwd,
-                ...childProcessOptions,
-                env: childProcessOptions.env,
-              },
+              { cwd, ...childProcessOptions, env: childProcessOptions.env },
               (error, stdout, stderr) => {
                 if (error) {
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
@@ -162,10 +157,7 @@ export function test(
             cwd,
             shell: true,
             ...childProcessOptions,
-            env: {
-              ...process.env,
-              ...childProcessOptions.env,
-            },
+            env: { ...process.env, ...childProcessOptions.env },
           })
 
           function dispose() {
@@ -267,7 +259,11 @@ export function test(
           }
         },
         fs: {
-          async write(filename: string, content: string | Uint8Array): Promise<void> {
+          async write(
+            filename: string,
+            content: string | Uint8Array,
+            encoding: BufferEncoding = 'utf8',
+          ): Promise<void> {
             let full = path.join(root, filename)
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
@@ -285,7 +281,7 @@ export function test(
               content = content.replace(/\n/g, '\r\n')
             }
 
-            await fs.writeFile(full, content, 'utf-8')
+            await fs.writeFile(full, content, encoding)
           },
 
           async create(filenames: string[]): Promise<void> {
@@ -639,11 +635,7 @@ export async function fetchStyles(base: string, path = '/', isBun = false): Prom
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`${base}${path}`, {
-          headers: {
-            Accept: 'text/css',
-          },
-        })
+        let css = await fetch(`${base}${path}`, { headers: { Accept: 'text/css' } })
         return await css.text()
       }),
     )),

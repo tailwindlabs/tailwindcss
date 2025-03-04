@@ -95,6 +95,15 @@ test('backdrop', async () => {
   expect(await run(['backdrop/foo:flex'])).toEqual('')
 })
 
+test('details-content', async () => {
+  expect(await run(['details-content:flex'])).toMatchInlineSnapshot(`
+    ".details-content\\:flex::details-content {
+      display: flex;
+    }"
+  `)
+  expect(await run(['details-content/foo:flex'])).toEqual('')
+})
+
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
     ".before\\:flex:before {
@@ -223,11 +232,12 @@ test('target', async () => {
 })
 
 test('open', async () => {
-  expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
-    ".group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
-      display: flex;
-    }"
-  `)
+  expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex', 'not-open:flex']))
+    .toMatchInlineSnapshot(`
+      ".not-open\\:flex:not(:is([open], :popover-open, :open)), .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
+        display: flex;
+      }"
+    `)
   expect(await run(['open/foo:flex'])).toEqual('')
 })
 
@@ -319,6 +329,34 @@ test('invalid', async () => {
   expect(await run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex']))
     .toMatchInlineSnapshot(`
       ".group-invalid\\:flex:is(:where(.group):invalid *), .peer-invalid\\:flex:is(:where(.peer):invalid ~ *), .invalid\\:flex:invalid {
+        display: flex;
+      }"
+    `)
+  expect(await run(['invalid/foo:flex'])).toEqual('')
+})
+
+test('user-valid', async () => {
+  expect(await run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']))
+    .toMatchInlineSnapshot(`
+      ".group-user-valid\\:flex:is(:where(.group):user-valid *), .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+        display: flex;
+      }
+
+      .user-valid\\:flex:user-valid {
+        display: flex;
+      }"
+    `)
+  expect(await run(['user-valid/foo:flex'])).toEqual('')
+})
+
+test('user-invalid', async () => {
+  expect(await run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']))
+    .toMatchInlineSnapshot(`
+      ".group-user-invalid\\:flex:is(:where(.group):user-invalid *), .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+        display: flex;
+      }
+
+      .user-invalid\\:flex:user-invalid {
         display: flex;
       }"
     `)
@@ -747,15 +785,7 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-md: 768px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-2xl: 1536px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -815,11 +845,7 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-10xl: 5000px;
-    }
-
-    @media (width >= 5000px) {
+    "@media (width >= 5000px) {
       .\\31 0xl\\:flex {
         display: flex;
       }
@@ -842,13 +868,7 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width < 1024px) {
+    "@media (width < 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -897,13 +917,7 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .min-sm\\:flex {
         display: flex;
       }
@@ -954,15 +968,7 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-xs: 280px;
-    }
-
-    @media (width >= 280px) {
+    "@media (width >= 280px) {
       @media (width < 640px) {
         .min-xs\\:max-sm\\:flex {
           display: flex;
@@ -1009,13 +1015,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width >= 640px) {
+    "@media (width >= 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -1071,13 +1071,7 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-md: 768px;
-    }
-
-    @media (width < 1024px) {
+    "@media (width < 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -1456,19 +1450,7 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-    }
-
-    .not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target) {
-      display: flex;
-    }
-
-    .not-open\\:flex:not([open], :popover-open, :open) {
-      display: flex;
-    }
-
-    .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown), .not-autofill\\:flex:not(:autofill), .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
+    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown), .not-autofill\\:flex:not(:autofill), .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
       display: flex;
     }
 
@@ -1478,7 +1460,7 @@ test('not', async () => {
       }
     }
 
-    .not-focus\\:flex:not(:focus), .not-focus-visible\\:flex:not(:focus-visible), .not-active\\:flex:not(:active), .not-enabled\\:flex:not(:enabled), .not-disabled\\:flex:not(:disabled), .not-inert\\:flex:not([inert], [inert] *), .not-has-checked\\:flex:not(:has(:checked)), .not-aria-selected\\:flex:not([aria-selected="true"]), .not-data-foo\\:flex:not([data-foo]), .not-nth-2\\:flex:not(:nth-child(2)) {
+    .not-focus\\:flex:not(:focus), .not-focus-visible\\:flex:not(:focus-visible), .not-active\\:flex:not(:active), .not-enabled\\:flex:not(:enabled), .not-disabled\\:flex:not(:disabled), .not-inert\\:flex:not(:is([inert], [inert] *)), .not-has-checked\\:flex:not(:has(:checked)), .not-aria-selected\\:flex:not([aria-selected="true"]), .not-data-foo\\:flex:not([data-foo]), .not-nth-2\\:flex:not(:nth-child(2)) {
       display: flex;
     }
 
@@ -1927,6 +1909,46 @@ test('forced-colors', async () => {
   expect(await run(['forced-colors/foo:flex'])).toEqual('')
 })
 
+test('inverted-colors', async () => {
+  expect(await run(['inverted-colors:flex'])).toMatchInlineSnapshot(`
+    "@media (inverted-colors: inverted) {
+      .inverted-colors\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting-initial', async () => {
+  expect(await run(['scripting-initial:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: initial-only) {
+      .scripting-initial\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting-none', async () => {
+  expect(await run(['scripting-none:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: none) {
+      .scripting-none\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting', async () => {
+  expect(await run(['scripting:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: enabled) {
+      .scripting\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('nth', async () => {
   expect(
     await run([
@@ -2002,11 +2024,7 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --container-lg: 1024px;
-    }
-
-    @container name (width < 1024px) {
+    "@container name (width < 1024px) {
       .\\@max-lg\\/name\\:flex {
         display: flex;
       }
@@ -2106,6 +2124,7 @@ test('variant order', async () => {
         'data-custom:flex',
         'data-[custom=true]:flex',
         'default:flex',
+        'details-content:flex',
         'disabled:flex',
         'empty:flex',
         'enabled:flex',
@@ -2158,15 +2177,7 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 640px;
-      --breakpoint-md: 768px;
-      --breakpoint-lg: 1024px;
-      --breakpoint-xl: 1280px;
-      --breakpoint-2xl: 1536px;
-    }
-
-    @media (hover: hover) {
+    "@media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }
@@ -2197,6 +2208,10 @@ test('variant order', async () => {
     }
 
     .placeholder\\:flex::placeholder, .backdrop\\:flex::backdrop {
+      display: flex;
+    }
+
+    .details-content\\:flex::details-content {
       display: flex;
     }
 

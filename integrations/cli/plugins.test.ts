@@ -14,7 +14,7 @@ test(
         }
       `,
       'index.html': html`
-        <div className="prose">
+        <div className="prose prose-stone prose-invert">
           <h1>Headline</h1>
           <p>
             Until now, trying to style an article, document, or blog post with Tailwind has been a
@@ -28,8 +28,17 @@ test(
       `,
     },
   },
-  async ({ fs, exec }) => {
+  async ({ fs, exec, expect }) => {
     await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    // Verify that `prose-stone` is defined before `prose-invert`
+    {
+      let contents = await fs.read('dist/out.css')
+      let proseInvertIdx = contents.indexOf('.prose-invert')
+      let proseStoneIdx = contents.indexOf('.prose-stone')
+
+      expect(proseStoneIdx).toBeLessThan(proseInvertIdx)
+    }
 
     await fs.expectFileToContain('dist/out.css', [
       candidate`prose`,

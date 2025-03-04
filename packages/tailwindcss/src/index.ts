@@ -4,6 +4,7 @@ import {
   atRoot,
   atRule,
   comment,
+  context,
   context as contextNode,
   decl,
   optimizeAst,
@@ -27,6 +28,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
+import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
 export type Config = UserConfig
@@ -62,6 +64,8 @@ function parseThemeOptions(params: string) {
       options |= ThemeOptions.INLINE
     } else if (option === 'default') {
       options |= ThemeOptions.DEFAULT
+    } else if (option === 'static') {
+      options |= ThemeOptions.STATIC
     } else if (option.startsWith('prefix(') && option.endsWith(')')) {
       prefix = option.slice(7, -1)
     }
@@ -243,6 +247,11 @@ async function parseCss(
               return WalkAction.Stop
             }
           })
+
+          // No `@slot` found, so this is still a regular `@variant` at-rule
+          if (node.name === '@variant') {
+            variantNodes.push(node)
+          }
         }
       }
 
@@ -371,18 +380,24 @@ async function parseCss(
 
         // Handle `@media theme(…)`
         //
-        // We support `@import "tailwindcss/theme" theme(reference)` as a way to
+        // We support `@import "tailwindcss" theme(reference)` as a way to
         // import an external theme file as a reference, which becomes `@media
         // theme(reference) { … }` when the `@import` is processed.
         else if (param.startsWith('theme(')) {
           let themeParams = param.slice(6, -1)
+          let hasReference = themeParams.includes('reference')
 
           walk(node.nodes, (child) => {
             if (child.kind !== 'at-rule') {
-              throw new Error(
-                'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
-              )
+              if (hasReference) {
+                throw new Error(
+                  `Files imported with \`@import "…" theme(reference)\` must only contain \`@theme\` blocks.\nUse \`@reference "…";\` instead.`,
+                )
+              }
+
+              return WalkAction.Continue
             }
+
             if (child.name === '@theme') {
               child.params += ' ' + themeParams
               return WalkAction.Skip
@@ -427,8 +442,6 @@ async function parseCss(
       } else if (params.length > 0) {
         replaceWith(node.nodes)
       }
-
-      return WalkAction.Skip
     }
 
     // Handle `@theme`
@@ -450,18 +463,17 @@ async function parseCss(
       }
 
       // Record all custom properties in the `@theme` declaration
-      walk(node.nodes, (child, { replaceWith }) => {
+      walk(node.nodes, (child) => {
         // Collect `@keyframes` rules to re-insert with theme variables later,
         // since the `@theme` rule itself will be removed.
         if (child.kind === 'at-rule' && child.name === '@keyframes') {
           theme.addKeyframes(child)
-          replaceWith([])
           return WalkAction.Skip
         }
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(child.property, child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions)
           return
         }
 
@@ -477,8 +489,8 @@ async function parseCss(
 
       // Keep a reference to the first `@theme` rule to update with the full
       // theme later, and delete any other `@theme` rules.
-      if (!firstThemeRule && !(themeOptions & ThemeOptions.REFERENCE)) {
-        firstThemeRule = styleRule(':root, :host', node.nodes)
+      if (!firstThemeRule) {
+        firstThemeRule = styleRule(':root, :host', [])
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -513,35 +525,26 @@ async function parseCss(
     customUtility(designSystem)
   }
 
-  // Output final set of theme variables at the position of the first `@theme`
-  // rule.
+  // Output final set of theme variables at the position of the first
+  // `@theme` rule.
   if (firstThemeRule) {
     let nodes = []
 
-    for (let [key, value] of theme.entries()) {
+    for (let [key, value] of designSystem.theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-      nodes.push(decl(key, value.value))
+
+      nodes.push(decl(escape(key), value.value))
     }
 
-    let keyframesRules = theme.getKeyframes()
-    if (keyframesRules.length > 0) {
-      let animationParts = [...theme.namespace('--animate').values()].flatMap((animation) =>
-        animation.split(' '),
-      )
-
-      for (let keyframesRule of keyframesRules) {
-        // Remove any keyframes that aren't used by an animation variable.
-        let keyframesName = keyframesRule.params
-        if (!animationParts.includes(keyframesName)) {
-          continue
-        }
-
-        // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
-        // printing.
-        nodes.push(atRoot([keyframesRule]))
-      }
+    let keyframesRules = designSystem.theme.getKeyframes()
+    for (let keyframes of keyframesRules) {
+      // Wrap `@keyframes` in `AtRoot` so they are hoisted out of `:root` when
+      // printing. We push it to the top-level of the AST so that an eventual
+      // `@reference` does not cut it out when printing the document.
+      ast.push(context({ theme: true }, [atRoot([keyframes])]))
     }
-    firstThemeRule.nodes = nodes
+
+    firstThemeRule.nodes = [context({ theme: true }, nodes)]
   }
 
   // Replace the `@tailwind utilities` node with a context since it prints
@@ -640,7 +643,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -650,7 +653,11 @@ export async function compileAst(
       let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
         if (!designSystem.invalidCandidates.has(candidate)) {
-          allValidCandidates.add(candidate)
+          if (candidate[0] === '-' && candidate[1] === '-') {
+            designSystem.theme.markUsedVariable(candidate)
+          } else {
+            allValidCandidates.add(candidate)
+          }
           didChange ||= allValidCandidates.size !== prevSize
         }
       }
@@ -658,7 +665,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -670,7 +677,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast)
+        compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
 
@@ -678,7 +685,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast)
+      compiled = optimizeAst(ast, designSystem)
       return compiled
     },
   }

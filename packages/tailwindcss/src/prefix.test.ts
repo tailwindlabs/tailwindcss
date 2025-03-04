@@ -108,8 +108,6 @@ test('CSS variables output by the theme are prefixed', async () => {
   expect(compiler.build(['tw:text-red'])).toMatchInlineSnapshot(`
     ":root, :host {
       --tw-color-red: #f00;
-      --tw-color-green: #0f0;
-      --tw-breakpoint-sm: 640px;
     }
     .tw\\:text-red {
       color: var(--tw-color-red);
@@ -131,12 +129,7 @@ test('CSS theme functions do not use the prefix', async () => {
 
   expect(compiler.build(['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]']))
     .toMatchInlineSnapshot(`
-      ":root, :host {
-        --tw-color-red: #f00;
-        --tw-color-green: #0f0;
-        --tw-breakpoint-sm: 640px;
-      }
-      .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
+      ".tw\\:\\[color\\:theme\\(--color-red\\)\\] {
         color: #f00;
       }
       .tw\\:text-\\[theme\\(--color-red\\)\\] {
@@ -193,12 +186,7 @@ test('JS theme functions do not use the prefix', async () => {
   )
 
   expect(compiler.build(['tw:my-custom'])).toMatchInlineSnapshot(`
-    ":root, :host {
-      --tw-color-red: #f00;
-      --tw-color-green: #0f0;
-      --tw-breakpoint-sm: 640px;
-    }
-    .tw\\:my-custom {
+    ".tw\\:my-custom {
       color: #f00;
     }
     "
@@ -240,7 +228,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".tw\\:bg-potato {
-      background-color: var(--tw-color-potato);
+      background-color: var(--tw-color-potato, #7a4724);
     }
     .tw\\:custom {
       color: red;
@@ -337,12 +325,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
-    ":root, :host {
-      --tw-color-potato: #7a4724;
-    }
-    "
-  `)
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
 })
 
 test('a prefix must be letters only', async () => {

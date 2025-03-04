@@ -2,19 +2,34 @@ import { styleRule, walkDepth } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 import { compare } from './utils/compare'
+import { DefaultMap } from './utils/default-map'
 
 interface ClassMetadata {
   modifiers: string[]
 }
 
+export type ClassItem = {
+  name: string
+  utility: string
+  fraction: boolean
+  modifiers: string[]
+}
+
 export type ClassEntry = [string, ClassMetadata]
 
+const IS_FRACTION = /^\d+\/\d+$/
+
 export function getClassList(design: DesignSystem): ClassEntry[] {
-  let list: [string, ClassMetadata][] = []
+  let list: ClassItem[] = []
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
-    list.push([utility, { modifiers: [] }])
+    list.push({
+      name: utility,
+      utility,
+      fraction: false,
+      modifiers: [],
+    })
   }
 
   // Functional utilities have their own list of completions
@@ -23,20 +38,99 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
 
     for (let group of completions) {
       for (let value of group.values) {
+        let fraction = value !== null && IS_FRACTION.test(value)
+
         let name = value === null ? utility : `${utility}-${value}`
 
-        list.push([name, { modifiers: group.modifiers }])
+        list.push({
+          name,
+          utility,
+          fraction,
+          modifiers: group.modifiers,
+        })
 
         if (group.supportsNegative) {
-          list.push([`-${name}`, { modifiers: group.modifiers }])
+          list.push({
+            name: `-${name}`,
+            utility: `-${utility}`,
+            fraction,
+            modifiers: group.modifiers,
+          })
         }
       }
     }
   }
 
-  list.sort((a, b) => compare(a[0], b[0]))
+  if (list.length === 0) return []
 
-  return list
+  // Sort utilities by their class name
+  list.sort((a, b) => compare(a.name, b.name))
+
+  let entries = sortFractionsLast(list)
+
+  return entries
+}
+
+function sortFractionsLast(list: ClassItem[]) {
+  type Bucket = {
+    utility: string
+    items: ClassItem[]
+  }
+
+  // 1. Create "buckets" for each utility group
+  let buckets: Bucket[] = []
+  let current: Bucket | null = null
+
+  // 2. Determine the last bucket for each utility group
+  let lastUtilityBucket = new Map<string, Bucket>()
+
+  // 3. Collect all fractions in a given utility group
+  let fractions = new DefaultMap<string, ClassItem[]>(() => [])
+
+  for (let item of list) {
+    let { utility, fraction } = item
+
+    if (!current) {
+      current = { utility, items: [] }
+      lastUtilityBucket.set(utility, current)
+    }
+
+    if (utility !== current.utility) {
+      buckets.push(current)
+
+      current = { utility, items: [] }
+      lastUtilityBucket.set(utility, current)
+    }
+
+    if (fraction) {
+      fractions.get(utility).push(item)
+    } else {
+      current.items.push(item)
+    }
+  }
+
+  if (current && buckets[buckets.length - 1] !== current) {
+    buckets.push(current)
+  }
+
+  // 4. Add fractions to their respective last utility buckets
+  for (let [utility, items] of fractions) {
+    let bucket = lastUtilityBucket.get(utility)
+    if (!bucket) continue
+
+    bucket.items.push(...items)
+  }
+
+  // 5. Flatten the buckets into a single list
+  let entries: ClassEntry[] = []
+
+  for (let bucket of buckets) {
+    for (let entry of bucket.items) {
+      entries.push([entry.name, { modifiers: entry.modifiers }])
+    }
+  }
+
+  return entries
 }
 
 interface SelectorOptions {

@@ -7,6 +7,7 @@ import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
+import { escape } from '../utils/escape'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
@@ -282,8 +283,9 @@ export function buildPluginApi({
           })
         }
 
-        designSystem.utilities.static(className, () => {
+        designSystem.utilities.static(className, (candidate) => {
           let clonedAst = structuredClone(ast)
+          replaceNestedClassNameReferences(clonedAst, className, candidate.raw)
           featuresRef.current |= substituteAtApply(clonedAst, designSystem)
           return clonedAst
         })
@@ -406,6 +408,7 @@ export function buildPluginApi({
             }
 
             let ast = objectToAst(fn(value, { modifier }))
+            replaceNestedClassNameReferences(ast, name, candidate.raw)
             featuresRef.current |= substituteAtApply(ast, designSystem)
             return ast
           }
@@ -499,15 +502,18 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
 
   for (let [name, value] of entries) {
     if (typeof value !== 'object') {
-      if (!name.startsWith('--') && value === '@slot') {
-        ast.push(rule(name, [atRule('@slot')]))
-      } else {
+      if (!name.startsWith('--')) {
+        if (value === '@slot') {
+          ast.push(rule(name, [atRule('@slot')]))
+          continue
+        }
+
         // Convert camelCase to kebab-case:
         // https://github.com/postcss/postcss-js/blob/b3db658b932b42f6ac14ca0b1d50f50c4569805b/parser.js#L30-L35
         name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
-
-        ast.push(decl(name, String(value)))
       }
+
+      ast.push(decl(name, String(value)))
     } else if (Array.isArray(value)) {
       for (let item of value) {
         if (typeof item === 'string') {
@@ -540,3 +546,22 @@ function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNo
 
 type Primitive = string | number | boolean | null
 export type CssPluginOptions = Record<string, Primitive | Primitive[]>
+
+function replaceNestedClassNameReferences(
+  ast: AstNode[],
+  utilityName: string,
+  rawCandidate: string,
+) {
+  // Replace nested rules using the utility name in the selector
+  walk(ast, (node) => {
+    if (node.kind === 'rule') {
+      let selectorAst = SelectorParser.parse(node.selector)
+      SelectorParser.walk(selectorAst, (node) => {
+        if (node.kind === 'selector' && node.value === `.${utilityName}`) {
+          node.value = `.${escape(rawCandidate)}`
+        }
+      })
+      node.selector = SelectorParser.toCss(selectorAst)
+    }
+  })
+}

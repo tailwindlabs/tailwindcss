@@ -62,7 +62,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
@@ -147,7 +147,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
@@ -174,19 +174,8 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         return Boolean(url)
       })
 
-      // Candidates are resolved lazily, so the first visit of index.html
-      // will only have candidates from this file.
       await retryAssertion(async () => {
         let styles = await fetchStyles(url, '/index.html')
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).not.toContain(candidate`font-bold`)
-      })
-
-      // Going to about.html will extend the candidate list to include
-      // candidates from about.html.
-      await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/about.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -302,7 +291,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         `,
         'project-a/src/index.css': css`
-          @import 'tailwindcss/theme' theme(reference);
+          @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
           @import './custom-theme.css';
           @config '../tailwind.config.js';
@@ -696,7 +685,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
 })
 
 test(
-  `demote Tailwind roots to regular CSS files and back to Tailwind roots while restoring all candidates`,
+  `demote Tailwind roots to regular CSS files and back to Tailwind roots`,
   {
     fs: {
       'package.json': json`
@@ -750,18 +739,8 @@ test(
       return Boolean(url)
     })
 
-    // Candidates are resolved lazily, so the first visit of index.html
-    // will only have candidates from this file.
     await retryAssertion(async () => {
       let styles = await fetchStyles(url, '/index.html')
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).not.toContain(candidate`font-bold`)
-    })
-
-    // Going to about.html will extend the candidate list to include
-    // candidates from about.html.
-    await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/about.html')
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
@@ -838,6 +817,49 @@ test(
       expect(firstLine(raw)).toBe(`export default "@import 'tailwindcss';"`)
       expect(firstLine(url)).toBe(`export default "/src/index.css"`)
     })
+  },
+)
+
+test(
+  `does not interfere with ?commonjs-proxy modules`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^",
+            "plotly.js": "^3",
+            "vite": "^6"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <script type="module" src="./src/index.js"></script>
+        </head>
+      `,
+      'src/index.js': js`import Plotly from 'plotly.js/lib/core'`,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`maplibregl-map`])
   },
 )
 

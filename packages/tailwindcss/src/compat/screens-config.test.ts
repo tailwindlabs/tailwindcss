@@ -46,13 +46,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-md: 50rem;
-      --breakpoint-lg: 64rem;
-      --breakpoint-xl: 80rem;
-      --breakpoint-2xl: 96rem;
-    }
-    .max-w-screen-sm {
+    ".max-w-screen-sm {
       max-width: 44rem;
     }
     .sm\\:flex {
@@ -140,10 +134,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-md: 50rem;
-    }
-    .min-xs\\:flex {
+    ".min-xs\\:flex {
       @media (width >= 30rem) {
         display: flex;
       }
@@ -316,14 +307,7 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
       'print:items-end',
     ]),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --breakpoint-sm: 40rem;
-      --breakpoint-md: 48rem;
-      --breakpoint-lg: 64rem;
-      --breakpoint-xl: 80rem;
-      --breakpoint-2xl: 96rem;
-    }
-    .mini\\:flex {
+    ".mini\\:flex {
       @media (width >= 40rem) {
         display: flex;
       }
@@ -584,10 +568,7 @@ describe('complex screen configs', () => {
         'print:items-end',
       ]),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-md: 48rem;
-      }
-      .min-sm\\:flex {
+      ".min-sm\\:flex {
         @media (width >= 40rem) {
           display: flex;
         }
@@ -655,9 +636,5 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
   // currently.
   expect(
     compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex']),
-  ).toMatchInlineSnapshot(`
-    ":root, :host {
-    }
-    "
-  `)
+  ).toMatchInlineSnapshot(`""`)
 })

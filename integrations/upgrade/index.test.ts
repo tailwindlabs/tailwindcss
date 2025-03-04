@@ -146,7 +146,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
 
     // Ensure the v4 project compiles correctly
@@ -657,12 +657,12 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -709,7 +709,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -756,7 +756,7 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.devDependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -824,12 +824,12 @@ test(
     `)
 
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -901,12 +901,12 @@ test(
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
-      tailwindcss: expect.stringContaining('4.0.0'),
+      tailwindcss: expect.stringMatching(/^\^4/),
     })
     expect(packageJson.dependencies).not.toHaveProperty('autoprefixer')
     expect(packageJson.dependencies).not.toHaveProperty('postcss-import')
     expect(packageJson.dependencies).toMatchObject({
-      '@tailwindcss/postcss': expect.stringContaining('4.0.0'),
+      '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
   },
 )
@@ -2745,3 +2745,71 @@ test(
     `)
   },
 )
+
+test(
+  `can read files with BOM`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': withBOM(html`
+        <div class="ring"></div>
+      `),
+      'src/input.css': withBOM(css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `),
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      ﻿<div class="ring-3"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentColor);
+        }
+      }
+      "
+    `)
+  },
+)
+
+function withBOM(text: string): string {
+  return '\uFEFF' + text
+}

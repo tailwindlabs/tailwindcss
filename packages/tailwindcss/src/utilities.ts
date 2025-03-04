@@ -11,6 +11,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
+import { enableWrapAnywhere } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -42,6 +43,7 @@ type SuggestionDefinition =
   | string
   | {
       supportsNegative?: boolean
+      supportsFractions?: boolean
       values?: string[]
       modifiers?: string[]
       valueThemeKeys?: ThemeKey[]
@@ -219,11 +221,51 @@ export function createUtilities(theme: Theme) {
    * Register list of suggestions for a class
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
+    /**
+     * The alpha and beta releases used `_` in theme keys to represent a `.`. This meant we used
+     * `--leading-1_5` instead of `--leading-1\.5` to add utilities like `leading-1.5`.
+     *
+     * We prefer the use of the escaped dot now but still want to make sure suggestions for the
+     * legacy key format still works as expected when surrounded by numbers.
+     */
+    const LEGACY_NUMERIC_KEY = /(\d+)_(\d+)/g
+
     function* resolve(themeKeys: ThemeKey[]) {
       for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield value.replaceAll('_', '.')
+        yield value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
+          return `${a}.${b}`
+        })
       }
     }
+
+    let suggestedFractions = [
+      '1/2',
+      '1/3',
+      '2/3',
+      '1/4',
+      '2/4',
+      '3/4',
+      '1/5',
+      '2/5',
+      '3/5',
+      '4/5',
+      '1/6',
+      '2/6',
+      '3/6',
+      '4/6',
+      '5/6',
+      '1/12',
+      '2/12',
+      '3/12',
+      '4/12',
+      '5/12',
+      '6/12',
+      '7/12',
+      '8/12',
+      '9/12',
+      '10/12',
+      '11/12',
+    ]
 
     utilities.suggest(classRoot, () => {
       let groups: SuggestionGroup[] = []
@@ -238,7 +280,12 @@ export function createUtilities(theme: Theme) {
           ...(defn.values ?? []),
           ...resolve(defn.valueThemeKeys ?? []),
         ]
+
         let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
+
+        if (defn.supportsFractions) {
+          values.push(...suggestedFractions)
+        }
 
         if (defn.hasDefaultValue) {
           values.unshift(null)
@@ -341,6 +388,7 @@ export function createUtilities(theme: Theme) {
         supportsNegative: desc.supportsNegative,
         valueThemeKeys: desc.themeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
+        supportsFractions: desc.supportsFractions,
       },
     ])
   }
@@ -467,6 +515,7 @@ export function createUtilities(theme: Theme) {
             ]
           : [],
         supportsNegative,
+        supportsFractions,
         valueThemeKeys: themeKeys,
       },
     ])
@@ -576,8 +625,8 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `order`
    */
-  staticUtility('order-first', [['order', 'calc(-infinity)']])
-  staticUtility('order-last', [['order', 'calc(infinity)']])
+  staticUtility('order-first', [['order', '-9999']])
+  staticUtility('order-last', [['order', '9999']])
   staticUtility('order-none', [['order', '0']])
   functionalUtility('order', {
     supportsNegative: true,
@@ -602,6 +651,11 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-auto', [['grid-column', 'auto']])
   functionalUtility('col', {
+    supportsNegative: true,
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
     themeKeys: ['--grid-column'],
     handle: (value) => [decl('grid-column', value)],
   })
@@ -670,6 +724,11 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-auto', [['grid-row', 'auto']])
   functionalUtility('row', {
+    supportsNegative: true,
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
     themeKeys: ['--grid-row'],
     handle: (value) => [decl('grid-row', value)],
   })
@@ -966,6 +1025,8 @@ export function createUtilities(theme: Theme) {
     }
   })
 
+  suggest('flex', () => [{ supportsFractions: true }])
+
   /**
    * @css `flex-shrink`
    */
@@ -1180,16 +1241,6 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
     },
   )
-  staticUtility(`-translate-z-px`, [
-    translateProperties,
-    [`--tw-translate-z`, '-1px'],
-    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
-  ])
-  staticUtility(`translate-z-px`, [
-    translateProperties,
-    [`--tw-translate-z`, '1px'],
-    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
-  ])
 
   staticUtility('translate-3d', [
     translateProperties,
@@ -1989,6 +2040,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'keep-all']])
 
+  if (enableWrapAnywhere) {
+    staticUtility('wrap-anywhere', [['overflow-wrap', 'anywhere']])
+    staticUtility('wrap-break-word', [['overflow-wrap', 'break-word']])
+    staticUtility('wrap-normal', [['overflow-wrap', 'normal']])
+  }
+
   {
     // border-radius
     for (let [root, properties] of [
@@ -2370,7 +2427,7 @@ export function createUtilities(theme: Theme) {
               value = negative ? `calc(${value} * -1)` : `${value}`
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2378,7 +2435,7 @@ export function createUtilities(theme: Theme) {
               if (negative) return
 
               return [
-                decl('--tw-gradient-position', `${value},`),
+                decl('--tw-gradient-position', value),
                 decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
               ]
             }
@@ -2398,7 +2455,7 @@ export function createUtilities(theme: Theme) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         return [
-          decl('--tw-gradient-position', `${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2425,7 +2482,7 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           let value = candidate.value.value
           return [
-            decl('--tw-gradient-position', `${value},`),
+            decl('--tw-gradient-position', value),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
           ]
         }
@@ -2434,7 +2491,7 @@ export function createUtilities(theme: Theme) {
 
         if (!candidate.value) {
           return [
-            decl('--tw-gradient-position', `${interpolationMethod},`),
+            decl('--tw-gradient-position', interpolationMethod),
             decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
           ]
         }
@@ -2446,7 +2503,7 @@ export function createUtilities(theme: Theme) {
         value = negative ? `calc(${value} * -1)` : `${value}deg`
 
         return [
-          decl('--tw-gradient-position', `from ${value} ${interpolationMethod},`),
+          decl('--tw-gradient-position', `from ${value} ${interpolationMethod}`),
           decl('background-image', `conic-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2471,7 +2528,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
         return [
-          decl('--tw-gradient-position', `${interpolationMethod},`),
+          decl('--tw-gradient-position', interpolationMethod),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops))`),
         ]
       }
@@ -2480,7 +2537,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier) return
         let value = candidate.value.value
         return [
-          decl('--tw-gradient-position', `${value},`),
+          decl('--tw-gradient-position', value),
           decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
         ]
       }
@@ -2655,7 +2712,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-from', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-from-position', value)],
@@ -2668,7 +2725,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-via', value),
       decl(
         '--tw-gradient-via-stops',
-        'var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
+        'var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)',
       ),
       decl('--tw-gradient-stops', 'var(--tw-gradient-via-stops)'),
     ],
@@ -2681,7 +2738,7 @@ export function createUtilities(theme: Theme) {
       decl('--tw-gradient-to', value),
       decl(
         '--tw-gradient-stops',
-        'var(--tw-gradient-via-stops, var(--tw-gradient-position,) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
+        'var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))',
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
@@ -3102,6 +3159,7 @@ export function createUtilities(theme: Theme) {
         property('--tw-opacity'),
         property('--tw-saturate'),
         property('--tw-sepia'),
+        property('--tw-drop-shadow'),
       ])
     }
 
@@ -3843,6 +3901,7 @@ export function createUtilities(theme: Theme) {
 
     utilities.static('outline-hidden', () => {
       return [
+        decl('--tw-outline-style', 'none'),
         decl('outline-style', 'none'),
         atRule('@media', '(forced-colors: active)', [
           decl('outline', '2px solid transparent'),
@@ -3878,10 +3937,11 @@ export function createUtilities(theme: Theme) {
     utilities.functional('outline', (candidate) => {
       if (candidate.value === null) {
         if (candidate.modifier) return
+        let value = theme.get(['--default-outline-width']) ?? '1px'
         return [
           outlineProperties(),
           decl('outline-style', 'var(--tw-outline-style)'),
-          decl('outline-width', '1px'),
+          decl('outline-width', value),
         ]
       }
 

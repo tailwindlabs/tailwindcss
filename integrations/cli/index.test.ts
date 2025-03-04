@@ -368,12 +368,7 @@ describe.each([
         `,
       )
 
-      await fs.expectFileToContain('project-a/dist/out.css', [
-        css`
-          :root, :host {
-          }
-        `,
-      ])
+      await fs.expectFileToContain('project-a/dist/out.css', [css``])
     },
   )
 
@@ -648,7 +643,7 @@ test(
         }
       `,
       'index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* (1) */
         /* - Only './src' should be auto-scanned, not the current working directory */
@@ -779,7 +774,7 @@ test(
         }
       `,
       'project-a/src/index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* Run auto-content detection in ../../project-b */
         @import 'tailwindcss/utilities' source('../../project-b');
@@ -1137,7 +1132,7 @@ test(
         }
       `,
       'index.css': css`
-        @import 'tailwindcss/theme' theme(reference);
+        @reference 'tailwindcss/theme';
 
         /* (1) */
         /* - Only './src' should be auto-scanned, not the current working directory */
@@ -1196,3 +1191,202 @@ test(
     `)
   },
 )
+
+test(
+  '@theme reference should never emit values',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @reference "tailwindcss";
+
+        .keep-me {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn(
+      `pnpm tailwindcss --input src/index.css --output dist/out.css --watch`,
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .keep-me {
+        color: red;
+      }
+      "
+    `)
+
+    await fs.write(
+      './src/index.css',
+      css`
+        @reference "tailwindcss";
+
+        /* Not a reference! */
+        @theme {
+          --color-pink: pink;
+        }
+
+        .keep-me {
+          color: red;
+        }
+      `,
+    )
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .keep-me {
+        color: red;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'emit CSS variables if used outside of utilities',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @theme {
+          --color-blue-500: blue;
+        }
+      `,
+      'src/index.ts': ts`
+        function MyComponent() {
+          return <motion.div />
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    // No CSS variables are used, so nothing should be generated yet.
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      <EMPTY>
+      "
+    `)
+
+    // Use a CSS variable in JS/TS land, now it should be generated.
+    await fs.write(
+      './src/index.ts',
+      ts`
+        function MyComponent() {
+          return <motion.div animate={{ backgroundColor: 'var(--color-blue-500)' }} />
+        }
+      `,
+    )
+
+    fs.expectFileToContain(
+      './dist/out.css',
+      css`
+        :root,
+        :host {
+          --color-blue-500: blue;
+        }
+      `,
+    )
+  },
+)
+
+test(
+  'can read files with UTF-8 files with BOM',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': withBOM(css`
+        @reference 'tailwindcss/theme.css';
+        @import 'tailwindcss/utilities';
+      `),
+      'index.html': withBOM(html`
+        <div class="underline"></div>
+      `),
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input index.css --output dist/out.css')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'fails when reading files with UTF-16 files with BOM',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await fs.write(
+      'index.css',
+      withBOM(css`
+        @reference 'tailwindcss/theme.css';
+        @import 'tailwindcss/utilities';
+      `),
+      'utf16le',
+    )
+    await fs.write(
+      'index.html',
+      withBOM(html`
+        <div class="underline"></div>
+      `),
+      'utf16le',
+    )
+
+    await expect(exec('pnpm tailwindcss --input index.css --output dist/out.css')).rejects.toThrow(
+      /Invalid declaration:/,
+    )
+  },
+)
+
+function withBOM(text: string): string {
+  return '\uFEFF' + text
+}

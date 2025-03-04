@@ -329,6 +329,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should parse a custom property with an empty value', () => {
+        expect(parse('--foo:;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
+      it('should parse a custom property with a space value', () => {
+        expect(parse('--foo: ;')).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
+      })
+
       it('should parse a custom property with a block including nested "css"', () => {
         expect(
           parse(css`
@@ -1097,5 +1119,50 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         `),
       ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!;"]`)
     })
+
+    it('should error when incomplete custom properties are used', () => {
+      expect(() => parse('--foo')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when incomplete custom properties are used inside rules', () => {
+      expect(() => parse('.foo { --bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid custom property, expected a value]`,
+      )
+    })
+
+    it('should error when a declaration is incomplete', () => {
+      expect(() => parse('.foo { bar }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Invalid declaration: \`bar\`]`,
+      )
+    })
+
+    it('should error when a semicolon exists after an at-rule with a body', () => {
+      expect(() => parse('@plugin "foo" {} ;')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected semicolon]`,
+      )
+    })
+
+    it('should error when consecutive semicolons exist', () => {
+      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected semicolon]`)
+    })
+
+    it('should error when consecutive semicolons exist after a declaration', () => {
+      expect(() => parse('.foo { color: red;;; }')).toThrowErrorMatchingInlineSnapshot(
+        `[Error: Unexpected semicolon]`,
+      )
+    })
+  })
+
+  it('ignores BOM at the beginning of a file', () => {
+    expect(parse("\uFEFF@reference 'tailwindcss';")).toEqual([
+      {
+        kind: 'at-rule',
+        name: '@reference',
+        nodes: [],
+        params: "'tailwindcss'",
+      },
+    ])
   })
 })

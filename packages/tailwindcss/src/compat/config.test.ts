@@ -322,11 +322,7 @@ describe('theme callbacks', () => {
 
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
-        ":root, :host {
-          --text-base: 100rem;
-          --text-md--line-height: 101rem;
-        }
-        .prose {
+        ".prose {
           [class~=lead-base] {
             font-size: 100rem;
             line-height: 201rem;
@@ -562,12 +558,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: Potato Sans;
-        --default-font-feature-settings: normal;
-        --default-font-variation-settings: normal;
-      }
-      .font-sans {
+      ".font-sans {
         font-family: Potato Sans;
       }
       "
@@ -601,12 +592,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: Potato Sans;
-        --default-font-feature-settings: "cv06";
-        --default-font-variation-settings: normal;
-      }
-      .font-sans {
+      ".font-sans {
         font-family: Potato Sans;
         font-feature-settings: "cv06";
       }
@@ -641,12 +627,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: Potato Sans;
-        --default-font-feature-settings: normal;
-        --default-font-variation-settings: "XHGT" 0.7;
-      }
-      .font-sans {
+      ".font-sans {
         font-family: Potato Sans;
         font-variation-settings: "XHGT" 0.7;
       }
@@ -684,12 +665,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: Potato Sans;
-        --default-font-feature-settings: "cv06";
-        --default-font-variation-settings: "XHGT" 0.7;
-      }
-      .font-sans {
+      ".font-sans {
         font-family: Potato Sans;
         font-feature-settings: "cv06";
         font-variation-settings: "XHGT" 0.7;
@@ -729,9 +705,6 @@ describe('default font family compatibility', () => {
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
       ":root, :host {
-        --default-font-family: var(--font-family-sans);
-        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
-        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
         --font-sans: Sandwich Sans;
       }
       .font-sans {
@@ -768,12 +741,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: Inter, system-ui, sans-serif;
-        --default-font-feature-settings: normal;
-        --default-font-variation-settings: normal;
-      }
-      .font-sans {
+      ".font-sans {
         font-family: Inter, system-ui, sans-serif;
       }
       "
@@ -806,14 +774,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-font-family: var(--font-family-sans);
-        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
-        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
-      }
-      "
-    `)
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`""`)
   })
 
   test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
@@ -841,12 +802,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-mono-font-family: Potato Mono;
-        --default-mono-font-feature-settings: normal;
-        --default-mono-font-variation-settings: normal;
-      }
-      .font-mono {
+      ".font-mono {
         font-family: Potato Mono;
       }
       "
@@ -880,12 +836,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-mono-font-family: Potato Mono;
-        --default-mono-font-feature-settings: "cv06";
-        --default-mono-font-variation-settings: normal;
-      }
-      .font-mono {
+      ".font-mono {
         font-family: Potato Mono;
         font-feature-settings: "cv06";
       }
@@ -920,12 +871,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-mono-font-family: Potato Mono;
-        --default-mono-font-feature-settings: normal;
-        --default-mono-font-variation-settings: "XHGT" 0.7;
-      }
-      .font-mono {
+      ".font-mono {
         font-family: Potato Mono;
         font-variation-settings: "XHGT" 0.7;
       }
@@ -963,12 +909,7 @@ describe('default font family compatibility', () => {
     })
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-mono-font-family: Potato Mono;
-        --default-mono-font-feature-settings: "cv06";
-        --default-mono-font-variation-settings: "XHGT" 0.7;
-      }
-      .font-mono {
+      ".font-mono {
         font-family: Potato Mono;
         font-feature-settings: "cv06";
         font-variation-settings: "XHGT" 0.7;
@@ -1008,9 +949,6 @@ describe('default font family compatibility', () => {
 
     expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
       ":root, :host {
-        --default-mono-font-family: var(--font-mono);
-        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
         --font-mono: Sandwich Mono;
       }
       .font-mono {
@@ -1046,14 +984,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --default-mono-font-family: var(--font-family-mono);
-        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
-        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
-      }
-      "
-    `)
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`""`)
   })
 })
 
@@ -1179,13 +1110,7 @@ test('merges css breakpoints with js config screens', async () => {
 
   expect(compiler.build(['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline']))
     .toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-md: 50rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
-      }
-      .sm\\:flex {
+      ".sm\\:flex {
         @media (width >= 44rem) {
           display: flex;
         }
@@ -1333,12 +1258,7 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
   )
 
   expect(compiler.build(['wat:custom'])).toMatchInlineSnapshot(`
-    ":root, :host {
-      --wat-color-red: #f00;
-      --wat-color-green: #0f0;
-      --wat-breakpoint-sm: 640px;
-    }
-    .wat\\:custom {
+    ".wat\\:custom {
       color: red;
     }
     "
@@ -1469,7 +1389,7 @@ test('blocklisted candidates are not generated', async () => {
     }
     .md\\:bg-white {
       @media (width >= 48rem) {
-        background-color: var(--color-white);
+        background-color: var(--color-white, #fff);
       }
     }
     "
@@ -1627,4 +1547,55 @@ test('old theme values are merged with their renamed counterparts in the CSS the
   )
 
   expect(didCallPluginFn).toHaveBeenCalled()
+})
+
+test('handles setting theme keys to null', async () => {
+  let compiler = await compile(
+    css`
+      @theme default {
+        --color-red-50: oklch(0.971 0.013 17.38);
+        --color-red-100: oklch(0.936 0.032 17.717);
+      }
+      @config "./my-config.js";
+      @tailwind utilities;
+      @theme {
+        --color-red-100: oklch(0.936 0.032 17.717);
+        --color-red-200: oklch(0.885 0.062 18.334);
+      }
+    `,
+    {
+      loadModule: async () => {
+        return {
+          module: {
+            theme: {
+              extend: {
+                colors: {
+                  red: null,
+                },
+              },
+            },
+          },
+          base: '/root',
+        }
+      },
+    },
+  )
+
+  expect(compiler.build(['bg-red-50', 'bg-red-100', 'bg-red-200'])).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-50: oklch(0.971 0.013 17.38);
+      --color-red-100: oklch(0.936 0.032 17.717);
+      --color-red-200: oklch(0.885 0.062 18.334);
+    }
+    .bg-red-50 {
+      background-color: var(--color-red-50);
+    }
+    .bg-red-100 {
+      background-color: var(--color-red-100);
+    }
+    .bg-red-200 {
+      background-color: var(--color-red-200);
+    }
+    "
+  `)
 })

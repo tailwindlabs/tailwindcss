@@ -935,6 +935,154 @@ it('should parse a utility with an implicit variable as the modifier', () => {
   `)
 })
 
+it('should properly decode escaped underscores but not convert underscores to spaces for CSS variables in arbitrary positions', () => {
+  let utilities = new Utilities()
+  utilities.functional('flex', () => [])
+  let variants = new Variants()
+  variants.functional('supports', () => {})
+
+  expect(run('flex-(--\\_foo)', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-(--\\_foo)",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-(--_foo)', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-(--_foo)",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[var(--\\_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[var(--_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--_foo)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  expect(run('flex-[calc(var(--\\_foo)*0.2)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(var(--\\_foo)*0.2)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(var(--_foo) * 0.2)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[calc(var(--_foo)*0.2)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(var(--_foo)*0.2)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(var(--_foo) * 0.2)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  // Due to limitations in the CSS value parser, the `var(…)` inside the `calc(…)` is not correctly
+  // scanned here.
+  expect(run('flex-[calc(0.2*var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(0.2*var(--\\_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(0.2 * var(--_foo))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+  expect(run('flex-[calc(0.2*var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "flex-[calc(0.2*var(--_foo)]",
+        "root": "flex",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "calc(0.2 * var(-- foo))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
 it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])

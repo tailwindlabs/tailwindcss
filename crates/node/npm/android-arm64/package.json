@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-android-arm64",
-  "version": "4.0.1",
+  "version": "4.0.9",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",

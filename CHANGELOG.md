@@ -7,9 +7,136 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
+- _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
+- _Experimental_: Add `scripting`, `scripting-none`, and `scripting-initial` variants ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929))
+- _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
+- _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+- Add `col-<number>` and `row-<number>` utilities for `grid-column` and `grid-row` ([#15183](https://github.com/tailwindlabs/tailwindcss/pull/15183))
+
+### Fixed
+
+- Ensure `not-*` does not remove `:is(…)` from variants ([#16825](https://github.com/tailwindlabs/tailwindcss/pull/16825))
+- Ensure `@keyframes` are correctly emitted when using a prefixed setup ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
+- Don't swallow `@utility` declarations when `@apply` is used in nested rules ([#16940](https://github.com/tailwindlabs/tailwindcss/pull/16940))
+- Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
+- Allow `!important` on CSS variables again ([#16873](https://github.com/tailwindlabs/tailwindcss/pull/16873))
+
+## [4.0.9] - 2025-02-25
+
+### Fixed
+
+- Make JS APIs available to plugins and configs in the Standalone CLI ([#15934](https://github.com/tailwindlabs/tailwindcss/pull/15934))
+- Vite: Don't crash when importing a virtual module from JavaScript that ends in `.css` ([#16780](https://github.com/tailwindlabs/tailwindcss/pull/16780))
+- Fix an issue where `@reference "…"` would sometimes omit keyframe animations ([#16774](https://github.com/tailwindlabs/tailwindcss/pull/16774))
+- Ensure `z-*!` utilities are properly marked as `!important` ([#16795](https://github.com/tailwindlabs/tailwindcss/pull/16795))
+- Read UTF-8 CSS files that start with a byte-order mark (BOM) ([#16800](https://github.com/tailwindlabs/tailwindcss/pull/16800))
+- Ensure nested functions in selectors used with JavaScript plugins are not truncated ([#16802](https://github.com/tailwindlabs/tailwindcss/pull/16802))
+
+### Changed
+
+- Emit variable fallbacks when using `@reference "…"` instead of duplicate CSS variable declarations ([#16774](https://github.com/tailwindlabs/tailwindcss/pull/16774))
+
+## [4.0.8] - 2025-02-21
+
+### Added
+
+- Allow `@import` with `theme(…)` options for stylesheets that contain more than just `@theme` rules ([#16514](https://github.com/tailwindlabs/tailwindcss/pull/16514))
+
+### Fixed
+
+- Don't add `!important` to CSS variable declarations when using the important modifier ([#16668](https://github.com/tailwindlabs/tailwindcss/pull/16668))
+- Vite: Ignore files and directories specified in your `.gitignore` file when using automatic source detection([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Don't rely on the module graph for detecting candidates to ensure setups with multiple Vite builds work as expected ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Ensure Astro production builds always contain classes used in client-only components ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Vite: Always scan raw file contents for utility classes before any other transforms have been applied to ensure utility classes are scanned without any additional escaping ([#16631](https://github.com/tailwindlabs/tailwindcss/pull/16631))
+- Ensure utilities with more declarations are always sorted before utilities with fewer declarations when utilities only define CSS variables ([#16715](https://github.com/tailwindlabs/tailwindcss/pull/16715))
+- Only include `translate-z-px` utilities once in compiled CSS ([#16718](https://github.com/tailwindlabs/tailwindcss/pull/16718))
+
+### Changed
+
+- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211), [#16676](https://github.com/tailwindlabs/tailwindcss/pull/16676))
+
+## [4.0.7] - 2025-02-18
+
+### Fixed
+
+- Export `tailwindcss/lib/util/flattenColorPalette.js` for backward compatibility ([#16411](https://github.com/tailwindlabs/tailwindcss/pull/16411))
+- Fix sorting of numeric utility suggestions when they have different magnitudes ([#16414](https://github.com/tailwindlabs/tailwindcss/pull/16414))
+- Show suggestions for fractions in IntelliSense ([#16353](https://github.com/tailwindlabs/tailwindcss/pull/16353))
+- Don’t replace `_` in suggested theme keys ([#16433](https://github.com/tailwindlabs/tailwindcss/pull/16433))
+- Ensure `--default-outline-width` can be used to change the `outline-width` value of the `outline` utility ([#16469](https://github.com/tailwindlabs/tailwindcss/pull/16469))
+- Ensure drop shadow utilities don't inherit unexpectedly ([#16471](https://github.com/tailwindlabs/tailwindcss/pull/16471))
+- Export config and plugin types from `tailwindcss/plugin` for backward compatibility ([#16505](https://github.com/tailwindlabs/tailwindcss/pull/16505))
+- Ensure JavaScript plugins that emit nested rules referencing the utility name work as expected ([#16539](https://github.com/tailwindlabs/tailwindcss/pull/16539))
+- Statically link Visual Studio redistributables in `@tailwindcss/oxide` Windows builds ([#16602](https://github.com/tailwindlabs/tailwindcss/pull/16602))
+- Ensure that Next.js splat routes are scanned for classes ([#16457](https://github.com/tailwindlabs/tailwindcss/pull/16457))
+- Pin exact version of `tailwindcss` in `@tailwindcss/*` packages ([#16623](https://github.com/tailwindlabs/tailwindcss/pull/16623))
+- Upgrade: Report errors when updating dependencies ([#16504](https://github.com/tailwindlabs/tailwindcss/pull/16504))
+- Upgrade: Ensure a `darkMode` JS config setting with block syntax converts to use `@slot` ([#16507](https://github.com/tailwindlabs/tailwindcss/pull/16507))
+- Upgrade: Ensure the latest version of `tailwindcss` and `@tailwindcss/postcss` are installed when upgrading ([#16620](https://github.com/tailwindlabs/tailwindcss/pull/16620))
+
+## [4.0.6] - 2025-02-10
+
+### Fixed
+
+- Revert change to no longer include theme variables that aren't used in compiled CSS ([#16403](https://github.com/tailwindlabs/tailwindcss/pull/16403))
+- Upgrade: Don't migrate `blur` to `blur-sm` when used with Next.js `<Image placeholder="blur" />` ([#16405](https://github.com/tailwindlabs/tailwindcss/pull/16405))
+
+## [4.0.5] - 2025-02-08
+
+### Added
+
+- Add `@theme static` option for always including theme variables in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
+
+### Fixed
+
+- Remove rogue `console.log` from `@tailwindcss/vite` ([#16307](https://github.com/tailwindlabs/tailwindcss/pull/16307))
+
+### Changed
+
+- Don't include theme variables that aren't used in compiled CSS ([#16211](https://github.com/tailwindlabs/tailwindcss/pull/16211))
+
+## [4.0.4] - 2025-02-06
+
+### Fixed
+
+- Fix a crash when setting JS theme values to `null` ([#16210](https://github.com/tailwindlabs/tailwindcss/pull/16210))
+- Ensure escaped underscores in CSS variables in arbitrary values are properly unescaped ([#16206](https://github.com/tailwindlabs/tailwindcss/pull/16206))
+- Ensure that the `containers` JS theme key is added to the `--container-*` namespace ([#16169](https://github.com/tailwindlabs/tailwindcss/pull/16169))
+- Ensure theme `@keyframes` are generated even if an `--animation-*` variable spans multiple lines ([#16237](https://github.com/tailwindlabs/tailwindcss/pull/16237))
+- Vite: Skip parsing stylesheets with the `?commonjs-proxy` flag ([#16238](https://github.com/tailwindlabs/tailwindcss/pull/16238))
+- Fix `order-first` and `order-last` for Firefox ([#16266](https://github.com/tailwindlabs/tailwindcss/pull/16266))
+- Fix support for older instruction sets on Linux x64 builds of the standalone CLI ([#16244](https://github.com/tailwindlabs/tailwindcss/pull/16244))
+- Ensure `NODE_PATH` is respected when resolving JavaScript and CSS files ([#16274](https://github.com/tailwindlabs/tailwindcss/pull/16274))
+- Ensure Node addons are packaged correctly with FreeBSD builds ([#16277](https://github.com/tailwindlabs/tailwindcss/pull/16277))
+- Fix an issue where `@variant` inside a referenced stylesheet could cause a stack overflow ([#16300](https://github.com/tailwindlabs/tailwindcss/pull/16300))
+
+## [4.0.3] - 2025-02-01
+
+### Fixed
+
+- Fix incorrect removal of `@import url();` ([#16144](https://github.com/tailwindlabs/tailwindcss/pull/16144))
+
+## [4.0.2] - 2025-01-31
+
 ### Fixed
 
 - Only generate positive `grid-cols-*` and `grid-rows-*` utilities ([#16020](https://github.com/tailwindlabs/tailwindcss/pull/16020))
+- Ensure escaped theme variables are handled correctly ([#16064](https://github.com/tailwindlabs/tailwindcss/pull/16064))
+- Ensure we process Tailwind CSS features when only using `@reference` or `@variant` ([#16057](https://github.com/tailwindlabs/tailwindcss/pull/16057))
+- Refactor gradient implementation to work around [prettier/prettier#17058](https://github.com/prettier/prettier/issues/17058) ([#16072](https://github.com/tailwindlabs/tailwindcss/pull/16072))
+- Vite: Ensure hot-reloading works with SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
+- Vite: Fix a crash when starting the development server in SolidStart setups ([#16052](https://github.com/tailwindlabs/tailwindcss/pull/16052))
+- Vite: Don't rebase URLs that appear to be aliases ([#16078](https://github.com/tailwindlabs/tailwindcss/pull/16078))
+- Vite: Transform `<style>` blocks in HTML files ([#16069](https://github.com/tailwindlabs/tailwindcss/pull/16069))
+- Prevent camel-casing CSS custom properties added by JavaScript plugins ([#16103](https://github.com/tailwindlabs/tailwindcss/pull/16103))
+- Do not emit `@keyframes` in `@theme reference` ([#16120](https://github.com/tailwindlabs/tailwindcss/pull/16120))
+- Discard invalid declarations when parsing CSS ([#16093](https://github.com/tailwindlabs/tailwindcss/pull/16093))
+- Do not emit empty CSS rules and at-rules ([#16121](https://github.com/tailwindlabs/tailwindcss/pull/16121))
+- Handle `@variant` when at the top-level of a stylesheet ([#16129](https://github.com/tailwindlabs/tailwindcss/pull/16129))
 
 ## [4.0.1] - 2025-01-29
 
@@ -3353,7 +3480,15 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.9...HEAD
+[4.0.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...v4.0.9
+[4.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.7...v4.0.8
+[4.0.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...v4.0.7
+[4.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.5...v4.0.6
+[4.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.4...v4.0.5
+[4.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.3...v4.0.4
+[4.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.2...v4.0.3
+[4.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.10...v4.0.0
 [4.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-beta.9...v4.0.0-beta.10

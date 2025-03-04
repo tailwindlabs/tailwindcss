@@ -157,6 +157,10 @@ for (let [classes, expected] of [
     'bg-radial-[at_0%_0%,var(--color-red),transparent]',
     'radial-gradient(at 0% 0%, rgb(255, 0, 0), rgba(0, 0, 0, 0))',
   ],
+  [
+    'bg-radial-[at_center] from-red to-green',
+    'radial-gradient(rgb(255, 0, 0) 0%, rgb(0, 255, 0) 100%)',
+  ],
 ]) {
   test(`radial gradient, "${classes}"`, async ({ page }) => {
     let { getPropertyValue } = await render(
@@ -404,6 +408,35 @@ test('inset shadow colors', async ({ page }) => {
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
     ].join(', '),
   )
+})
+
+test('filter', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div
+        id="a"
+        class="blur-md brightness-50 contrast-50 drop-shadow-md grayscale hue-rotate-180 invert saturate-50 sepia"
+      >
+        <div id="b" class="contrast-100"></div>
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#a', 'filter')).toEqual(
+    [
+      'blur(12px)',
+      'brightness(0.5)',
+      'contrast(0.5)',
+      'grayscale(1)',
+      'hue-rotate(180deg)',
+      'invert(1)',
+      'saturate(0.5)',
+      'sepia(1)',
+      'drop-shadow(rgba(0, 0, 0, 0.12) 0px 3px 3px)',
+    ].join(' '),
+  )
+  expect(await getPropertyValue('#b', 'filter')).toEqual('contrast(1)')
 })
 
 test('outline style is optional', async ({ page }) => {

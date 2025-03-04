@@ -94,11 +94,7 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --spacing: .25rem;
-      }
-
-      .foo {
+      ".foo {
         margin: 1rem;
       }"
     `)
@@ -157,11 +153,7 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --color-red-500: red;
-      }
-
-      .red {
+      ".red {
         color: red;
       }"
     `)
@@ -197,11 +189,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -218,11 +206,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -239,11 +223,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -260,11 +240,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -281,11 +257,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -302,11 +274,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -323,11 +291,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
@@ -344,11 +308,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
@@ -365,11 +325,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
@@ -386,11 +342,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: color-mix(in oklab, red var(--opacity), transparent);
           }"
         `)
@@ -408,11 +360,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: color-mix(in oklab, red var(--opacity, 50%), transparent);
           }"
         `)
@@ -429,11 +377,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --spacing-12: 3rem;
-          }
-
-          .space-on-the-left {
+          ".space-on-the-left {
             margin-left: 3rem;
           }"
         `)
@@ -450,11 +394,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --spacing-2_5: .625rem;
-          }
-
-          .space-on-the-left {
+          ".space-on-the-left {
             margin-left: .625rem;
           }"
         `)
@@ -471,11 +411,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --spacing-2_5: .625rem;
-          }
-
-          .space-on-the-left {
+          ".space-on-the-left {
             margin-left: calc(100vh - .625rem);
           }"
         `)
@@ -492,11 +428,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --radius-lg: .5rem;
-          }
-
-          .radius {
+          ".radius {
             border-radius: .5rem;
           }"
         `)
@@ -514,11 +446,7 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ":root, :host {
-              --blur: 8px;
-            }
-
-            .default-blur {
+            ".default-blur {
               filter: blur(8px);
             }"
           `)
@@ -537,12 +465,7 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ":root, :host {
-              --text-xs: 1337.75rem;
-              --text-xs--line-height: 1337rem;
-            }
-
-            .text {
+            ".text {
               font-size: 1337.75rem;
               line-height: 1337rem;
             }"
@@ -553,8 +476,9 @@ describe('theme(…)', () => {
           expect(
             await compileCss(css`
               @theme default reference {
-                --font-family-sans: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
-                  Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+                --font-family-sans:
+                  ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+                  Segoe UI Symbol, Noto Color Emoji;
               }
               .fam {
                 font-family: theme(fontFamily.sans);
@@ -626,11 +550,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
@@ -684,12 +604,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-            --color-foo: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -707,12 +622,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-            --color-foo: oklab(62.7955% .22486 .12584 / .5);
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
@@ -731,11 +641,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -752,11 +658,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
@@ -773,11 +675,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-red-500: red;
-          }
-
-          .red {
+          ".red {
             color: red;
           }"
         `)
@@ -796,11 +694,7 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --blur: 8px;
-          }
-
-          .blur {
+          ".blur {
             filter: blur(8px);
           }"
         `)
@@ -859,11 +753,6 @@ describe('theme(…)', () => {
           .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
             --color: red;
           }
-        }
-
-        :root, :host {
-          --breakpoint-sm: 40rem;
-          --color-red-500: red;
         }"
       `)
     })
@@ -921,12 +810,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root, :host {
-          --breakpoint-md: 48rem;
-          --breakpoint-lg: 64rem;
-        }
-
-        @media (width >= 48rem) and (width <= 64rem) {
+        "@media (width >= 48rem) and (width <= 64rem) {
           .red {
             color: red;
           }
@@ -948,12 +832,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        ":root, :host {
-          --breakpoint-md: 48rem;
-          --breakpoint-lg: 64rem;
-        }
-
-        @media (width >= 48rem) and (width < 64rem) {
+        "@media (width >= 48rem) and (width < 64rem) {
           .red {
             color: red;
           }
@@ -976,11 +855,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-md: 48rem;
-      }
-
-      @media (width >= 48rem) {
+      "@media (width >= 48rem) {
         .red {
           color: red;
         }
@@ -1001,11 +876,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --breakpoint-md: 48rem;
-      }
-
-      @container (width > 48rem) {
+      "@container (width > 48rem) {
         .red {
           color: red;
         }
@@ -1026,11 +897,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
-        --font-size-xs: .75rem;
-      }
-
-      @supports (text-stroke: 0.75rem) {
+      "@supports (text-stroke: 0.75rem) {
         .red {
           color: red;
         }
@@ -1187,11 +1054,7 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
       },
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .red {
+    ".red {
       color: red;
     }"
   `)
@@ -1212,11 +1075,7 @@ test('resolves paths ending with a 1', async () => {
       [],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-1: .25rem;
-    }
-
-    .foo {
+    ".foo {
       margin: .25rem;
     }"
   `)

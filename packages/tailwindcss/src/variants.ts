@@ -12,6 +12,12 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
+import {
+  enableDetailsContent,
+  enableInvertedColors,
+  enableScripting,
+  enableUserValid,
+} from './feature-flags'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -426,11 +432,6 @@ export function createVariants(theme: Theme): Variants {
     if (selector.includes('::')) return null
 
     let selectors = segment(selector, ',').map((sel) => {
-      // Remove unnecessary wrapping &:is(…) to reduce the selector size
-      if (sel.startsWith('&:is(') && sel.endsWith(')')) {
-        sel = sel.slice(5, -1)
-      }
-
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:not(*:hover)`. The `*` will often be optimized away.
       sel = sel.replaceAll('&', '*')
@@ -627,6 +628,9 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('file', ['&::file-selector-button'])
   staticVariant('placeholder', ['&::placeholder'])
   staticVariant('backdrop', ['&::backdrop'])
+  if (enableDetailsContent) {
+    staticVariant('details-content', ['&::details-content'])
+  }
 
   {
     function contentProperties() {
@@ -692,6 +696,10 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('required', ['&:required'])
   staticVariant('valid', ['&:valid'])
   staticVariant('invalid', ['&:invalid'])
+  if (enableUserValid) {
+    staticVariant('user-valid', ['&:user-valid'])
+    staticVariant('user-invalid', ['&:user-invalid'])
+  }
   staticVariant('in-range', ['&:in-range'])
   staticVariant('out-of-range', ['&:out-of-range'])
   staticVariant('read-only', ['&:read-only'])
@@ -1137,6 +1145,16 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('print', ['@media print'])
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
+
+  if (enableInvertedColors) {
+    staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
+  }
+
+  if (enableScripting) {
+    staticVariant('scripting-initial', ['@media (scripting: initial-only)'])
+    staticVariant('scripting-none', ['@media (scripting: none)'])
+    staticVariant('scripting', ['@media (scripting: enabled)'])
+  }
 
   return variants
 }

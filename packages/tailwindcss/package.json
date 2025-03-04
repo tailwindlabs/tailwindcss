@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "4.0.1",
+  "version": "4.0.9",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -32,6 +32,10 @@
       "import": "./src/compat/colors.ts"
     },
     "./lib/util/flattenColorPalette": {
+      "require": "./src/compat/flatten-color-palette.cts",
+      "import": "./src/compat/flatten-color-palette.ts"
+    },
+    "./lib/util/flattenColorPalette.js": {
       "require": "./src/compat/flatten-color-palette.cts",
       "import": "./src/compat/flatten-color-palette.ts"
     },
@@ -96,6 +100,10 @@
         "import": "./dist/colors.mjs"
       },
       "./lib/util/flattenColorPalette": {
+        "require": "./dist/flatten-color-palette.js",
+        "import": "./dist/flatten-color-palette.mjs"
+      },
+      "./lib/util/flattenColorPalette.js": {
         "require": "./dist/flatten-color-palette.js",
         "import": "./dist/flatten-color-palette.mjs"
       },

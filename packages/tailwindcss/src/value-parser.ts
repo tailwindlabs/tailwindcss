@@ -63,28 +63,42 @@ export function walk(
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+    let replacedNode = false
+    let replacedNodeOffset = 0
     let status =
       visit(node, {
         parent,
         replaceWith(newNode) {
+          replacedNode = true
+
           if (Array.isArray(newNode)) {
             if (newNode.length === 0) {
               ast.splice(i, 1)
+              replacedNodeOffset = 0
             } else if (newNode.length === 1) {
               ast[i] = newNode[0]
+              replacedNodeOffset = 1
             } else {
               ast.splice(i, 1, ...newNode)
+              replacedNodeOffset = newNode.length
             }
           } else {
             ast[i] = newNode
           }
-
-          // We want to visit the newly replaced node(s), which start at the
-          // current index (i). By decrementing the index here, the next loop
-          // will process this position (containing the replaced node) again.
-          i--
         },
       }) ?? ValueWalkAction.Continue
+
+    // We want to visit or skip the newly replaced node(s), which start at the
+    // current index (i). By decrementing the index here, the next loop will
+    // process this position (containing the replaced node) again.
+    if (replacedNode) {
+      if (status === ValueWalkAction.Continue) {
+        i--
+      } else {
+        i += replacedNodeOffset - 1
+      }
+      continue
+    }
 
     // Stop the walk entirely
     if (status === ValueWalkAction.Stop) return ValueWalkAction.Stop
@@ -149,6 +163,14 @@ export function parse(input: string) {
     let currentChar = input.charCodeAt(i)
 
     switch (currentChar) {
+      // Current character is a `\` therefore the next character is escaped,
+      // consume it together with the next character and continue.
+      case BACKSLASH: {
+        buffer += input[i] + input[i + 1]
+        i++
+        break
+      }
+
       // Space and commas are bundled into separators
       //
       // E.g.:

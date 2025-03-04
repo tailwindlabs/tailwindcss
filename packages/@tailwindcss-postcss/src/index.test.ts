@@ -90,7 +90,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
 
   let result = await processor.process(
     css`
-      @import 'tailwindcss/theme.css' theme(reference);
+      @reference 'tailwindcss/theme.css';
       .foo {
         @apply text-red-500;
       }
@@ -100,7 +100,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
     ".foo {
-      color: var(--color-red-500);
+      color: var(--color-red-500, oklch(.637 .237 25.331));
     }"
   `)
 })
@@ -248,6 +248,56 @@ test('bail early when Tailwind is not used', async () => {
   `)
 })
 
+test('handle CSS when only using a `@reference` (we should not bail early)', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    css`
+      @reference "tailwindcss/theme.css";
+
+      .foo {
+        @variant md {
+          bar: baz;
+        }
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    "@media (width >= 48rem) {
+      .foo {
+        bar: baz;
+      }
+    }"
+  `)
+})
+
+test('handle CSS when using a `@variant` using variants that do not rely on the `@theme`', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    css`
+      .foo {
+        @variant data-is-hoverable {
+          bar: baz;
+        }
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ".foo[data-is-hoverable] {
+      bar: baz;
+    }"
+  `)
+})
+
 test('runs `Once` plugins in the right order', async () => {
   let before = ''
   let after = ''
@@ -280,11 +330,7 @@ test('runs `Once` plugins in the right order', async () => {
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .custom-css {
+    ".custom-css {
       color: red;
     }"
   `)
@@ -297,11 +343,7 @@ test('runs `Once` plugins in the right order', async () => {
     }"
   `)
   expect(after).toMatchInlineSnapshot(`
-    ":root, :host {
-      --color-red-500: red;
-    }
-
-    .custom-css {
+    ".custom-css {
       color: red;
     }"
   `)

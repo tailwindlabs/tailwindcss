@@ -102,7 +102,7 @@ export async function migratePostCSSConfig(base: string) {
 
     if (location !== null) {
       try {
-        await pkg(base).add(['@tailwindcss/postcss@next'], location)
+        await pkg(base).add(['@tailwindcss/postcss@latest'], location)
         success(`Installed package: ${highlight('@tailwindcss/postcss')}`, { prefix: '↳ ' })
       } catch {}
     }

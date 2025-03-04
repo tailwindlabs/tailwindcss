@@ -1,11 +1,14 @@
-import type { AtRule } from './ast'
-import { escape } from './utils/escape'
+import { type AtRule } from './ast'
+import { escape, unescape } from './utils/escape'
 
 export const enum ThemeOptions {
   NONE = 0,
   INLINE = 1 << 0,
   REFERENCE = 1 << 1,
   DEFAULT = 1 << 2,
+
+  STATIC = 1 << 3,
+  USED = 1 << 4,
 }
 
 // In the future we may want to replace this with just a `Set` of known theme
@@ -41,10 +44,6 @@ export class Theme {
   ) {}
 
   add(key: string, value: string, options = ThemeOptions.NONE): void {
-    if (key.endsWith('\\*')) {
-      key = key.slice(0, -2) + '*'
-    }
-
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -110,6 +109,7 @@ export class Theme {
   }
 
   getOptions(key: string) {
+    key = unescape(this.#unprefixKey(key))
     return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
@@ -117,14 +117,19 @@ export class Theme {
     if (!this.prefix) return this.values.entries()
 
     return Array.from(this.values, (entry) => {
-      entry[0] = this.#prefixKey(entry[0])
+      entry[0] = this.prefixKey(entry[0])
       return entry
     })
   }
 
-  #prefixKey(key: string) {
+  prefixKey(key: string) {
     if (!this.prefix) return key
     return `--${this.prefix}-${key.slice(2)}`
+  }
+
+  #unprefixKey(key: string) {
+    if (!this.prefix) return key
+    return `--${key.slice(3 + this.prefix.length)}`
   }
 
   clearNamespace(namespace: string, clearOptions: ThemeOptions) {
@@ -149,11 +154,20 @@ export class Theme {
   #resolveKey(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
     for (let namespace of themeKeys) {
       let themeKey =
-        candidateValue !== null
-          ? (escape(`${namespace}-${candidateValue.replaceAll('.', '_')}`) as ThemeKey)
-          : namespace
+        candidateValue !== null ? (`${namespace}-${candidateValue}` as ThemeKey) : namespace
 
-      if (!this.values.has(themeKey)) continue
+      if (!this.values.has(themeKey)) {
+        // If the exact theme key is not found, we might be trying to resolve a key containing a dot
+        // that was registered with an underscore instead:
+        if (candidateValue !== null && candidateValue.includes('.')) {
+          themeKey = `${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey
+
+          if (!this.values.has(themeKey)) continue
+        } else {
+          continue
+        }
+      }
+
       if (isIgnoredThemeKey(themeKey, namespace)) continue
 
       return themeKey
@@ -163,11 +177,27 @@ export class Theme {
   }
 
   #var(themeKey: string) {
-    if (!this.values.has(themeKey)) {
+    let value = this.values.get(themeKey)
+    if (!value) {
       return null
     }
 
-    return `var(${this.#prefixKey(themeKey)})`
+    // Since @theme blocks in reference mode do not emit the CSS variables, we can not assume that
+    // the values will eventually be set up in the browser (e.g. when using `@apply` inside roots
+    // that use `@reference`). Ensure we set up a fallback in these cases.
+    let fallback = null
+    if (value.options & ThemeOptions.REFERENCE) {
+      fallback = value.value
+    }
+
+    return `var(${escape(this.prefixKey(themeKey))}${fallback ? `, ${fallback}` : ''})`
+  }
+
+  markUsedVariable(themeKey: string) {
+    let key = unescape(this.#unprefixKey(themeKey))
+    let value = this.values.get(key)
+    if (!value) return
+    value.options |= ThemeOptions.USED
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

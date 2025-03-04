@@ -223,3 +223,39 @@ test('converts opacity modifiers from decimal to percentage values', () => {
   expect(theme.resolve('20', ['--opacity'])).toEqual('20%')
   expect(theme.resolve('25', ['--opacity'])).toEqual('25%')
 })
+
+test('handles setting theme keys to null', async () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  theme.add('--color-blue-400', 'blue', ThemeOptions.DEFAULT)
+  theme.add('--color-blue-500', '#3b82f6')
+  theme.add('--color-red-400', 'red', ThemeOptions.DEFAULT)
+  theme.add('--color-red-500', '#ef4444')
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              blue: null,
+            },
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+    },
+  ])
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.namespace('--color')).toMatchInlineSnapshot(`
+    Map {
+      "blue-400" => "blue",
+      "blue-500" => "#3b82f6",
+      "red-400" => "red",
+      "red-500" => "#ef4444",
+    }
+  `)
+})

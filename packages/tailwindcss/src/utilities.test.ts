@@ -147,7 +147,6 @@ test('inset', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
       --inset-shadowned: 1940px;
     }
 
@@ -1053,11 +1052,11 @@ test('order', async () => {
     }
 
     .order-first {
-      order: calc(-infinity);
+      order: -9999;
     }
 
     .order-last {
-      order: calc(infinity);
+      order: 9999;
     }
 
     .order-none {
@@ -1087,6 +1086,8 @@ test('order', async () => {
 test('col', async () => {
   expect(
     await run([
+      'col-11',
+      '-col-12',
       'col-auto',
       'col-span-4',
       'col-span-17',
@@ -1095,7 +1096,15 @@ test('col', async () => {
       'col-span-[var(--my-variable)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".col-\\[span_123\\/span_123\\] {
+    ".-col-12 {
+      grid-column: calc(12 * -1);
+    }
+
+    .col-11 {
+      grid-column: 11;
+    }
+
+    .col-\\[span_123\\/span_123\\] {
       grid-column: span 123 / span 123;
     }
 
@@ -1214,6 +1223,8 @@ test('col-end', async () => {
 test('row', async () => {
   expect(
     await run([
+      'row-11',
+      '-row-12',
       'row-auto',
       'row-span-4',
       'row-span-17',
@@ -1222,7 +1233,15 @@ test('row', async () => {
       'row-span-[var(--my-variable)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".row-\\[span_123\\/span_123\\] {
+    ".-row-12 {
+      grid-row: calc(12 * -1);
+    }
+
+    .row-11 {
+      grid-row: 11;
+    }
+
+    .row-\\[span_123\\/span_123\\] {
       grid-row: span 123 / span 123;
     }
 
@@ -3162,10 +3181,6 @@ describe('container', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
       }
 
       .container {
@@ -3305,10 +3320,6 @@ describe('container', () => {
     ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
-        --breakpoint-md: 48rem;
-        --breakpoint-lg: 64rem;
-        --breakpoint-xl: 80rem;
-        --breakpoint-2xl: 96rem;
       }
 
       .container {
@@ -4045,11 +4056,7 @@ test('translate-x', async () => {
       ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-x-\\[var\\(--value\\)\\] {
+    ".-translate-x-\\[var\\(--value\\)\\] {
       --tw-translate-x: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
@@ -4173,11 +4180,7 @@ test('translate-y', async () => {
       ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing: .25rem;
-    }
-
-    .-translate-y-\\[var\\(--value\\)\\] {
+    ".-translate-y-\\[var\\(--value\\)\\] {
       --tw-translate-y: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
@@ -4230,14 +4233,20 @@ test('translate-y', async () => {
 })
 
 test('translate-z', async () => {
-  expect(await run(['translate-y-px', '-translate-z-[var(--value)]'])).toMatchInlineSnapshot(`
-    ".translate-y-px {
-      --tw-translate-y: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y);
+  expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
+    .toMatchInlineSnapshot(`
+    ".-translate-z-\\[var\\(--value\\)\\] {
+      --tw-translate-z: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
-    .-translate-z-\\[var\\(--value\\)\\] {
-      --tw-translate-z: calc(var(--value) * -1);
+    .-translate-z-px {
+      --tw-translate-z: -1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    .translate-z-px {
+      --tw-translate-z: 1px;
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
@@ -5475,12 +5484,7 @@ test('touch-pan', async () => {
       'touch-pan-down',
     ]),
   ).toMatchInlineSnapshot(`
-    ".touch-pan-down {
-      --tw-pan-y: pan-down;
-      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
-    }
-
-    .touch-pan-left {
+    ".touch-pan-left {
       --tw-pan-x: pan-left;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
@@ -5490,13 +5494,18 @@ test('touch-pan', async () => {
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
-    .touch-pan-up {
-      --tw-pan-y: pan-up;
+    .touch-pan-x {
+      --tw-pan-x: pan-x;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
-    .touch-pan-x {
-      --tw-pan-x: pan-x;
+    .touch-pan-down {
+      --tw-pan-y: pan-down;
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
+    }
+
+    .touch-pan-up {
+      --tw-pan-y: pan-up;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
@@ -7734,11 +7743,7 @@ test('divide-x with custom default border width', async () => {
       ['divide-x'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-x > :not(:last-child)) {
+    ":where(.divide-x > :not(:last-child)) {
       --tw-divide-x-reverse: 0;
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(2px * var(--tw-divide-x-reverse));
@@ -7840,11 +7845,7 @@ test('divide-y with custom default border width', async () => {
       ['divide-y'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    :where(.divide-y > :not(:last-child)) {
+    ":where(.divide-y > :not(:last-child)) {
       --tw-divide-y-reverse: 0;
       border-bottom-style: var(--tw-border-style);
       border-top-style: var(--tw-border-style);
@@ -8818,7 +8819,7 @@ test('text-wrap', async () => {
   ).toEqual('')
 })
 
-test('overflow-wrap', async () => {
+test('word-break', async () => {
   expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
     .toMatchInlineSnapshot(`
       ".break-normal {
@@ -8848,6 +8849,32 @@ test('overflow-wrap', async () => {
       'break-words/foo',
       'break-all/foo',
       'break-keep/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('overflow-wrap', async () => {
+  expect(await run(['wrap-anywhere', 'wrap-break-word', 'wrap-normal'])).toMatchInlineSnapshot(`
+    ".wrap-anywhere {
+      overflow-wrap: anywhere;
+    }
+
+    .wrap-break-word {
+      overflow-wrap: break-word;
+    }
+
+    .wrap-normal {
+      overflow-wrap: normal;
+    }"
+  `)
+  expect(
+    await run([
+      '-wrap-anywhere',
+      '-wrap-break-word',
+      '-wrap-normal',
+      'wrap-anywhere/foo',
+      'wrap-break-word/foo',
+      'wrap-normal/foo',
     ]),
   ).toEqual('')
 })
@@ -9930,11 +9957,7 @@ test('border with custom default border width', async () => {
       ['border'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-border-width: 2px;
-    }
-
-    .border {
+    ".border {
       border-style: var(--tw-border-style);
       border-width: 2px;
     }
@@ -10160,257 +10183,257 @@ test('bg', async () => {
     }
 
     .-bg-conic-45\\/oklab {
-      --tw-gradient-position: from calc(45 * -1) in oklab, ;
+      --tw-gradient-position: from calc(45 * -1) in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .-bg-linear-45, .-bg-linear-45\\/oklab {
-      --tw-gradient-position: calc(45deg * -1) in oklab, ;
+      --tw-gradient-position: calc(45deg * -1) in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .-bg-linear-\\[1\\.3rad\\] {
-      --tw-gradient-position: calc(74.4845deg * -1), ;
+      --tw-gradient-position: calc(74.4845deg * -1);
       background-image: linear-gradient(var(--tw-gradient-stops, calc(74.4845deg * -1)));
     }
 
     .-bg-linear-\\[125deg\\] {
-      --tw-gradient-position: calc(125deg * -1), ;
+      --tw-gradient-position: calc(125deg * -1);
       background-image: linear-gradient(var(--tw-gradient-stops, calc(125deg * -1)));
     }
 
     .bg-conic-45\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: from 45deg in hsl longer hue, ;
+      --tw-gradient-position: from 45deg in hsl longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic-45\\/oklab {
-      --tw-gradient-position: from 45deg in oklab, ;
+      --tw-gradient-position: from 45deg in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic-45\\/shorter {
-      --tw-gradient-position: from 45deg in oklch shorter hue, ;
+      --tw-gradient-position: from 45deg in oklch shorter hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: in hsl longer hue, ;
+      --tw-gradient-position: in hsl longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/decreasing {
-      --tw-gradient-position: in oklch decreasing hue, ;
+      --tw-gradient-position: in oklch decreasing hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/hsl {
-      --tw-gradient-position: in hsl, ;
+      --tw-gradient-position: in hsl;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/increasing {
-      --tw-gradient-position: in oklch increasing hue, ;
+      --tw-gradient-position: in oklch increasing hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/longer {
-      --tw-gradient-position: in oklch longer hue, ;
+      --tw-gradient-position: in oklch longer hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/oklab {
-      --tw-gradient-position: in oklab, ;
+      --tw-gradient-position: in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/oklch {
-      --tw-gradient-position: in oklch, ;
+      --tw-gradient-position: in oklch;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/shorter {
-      --tw-gradient-position: in oklch shorter hue, ;
+      --tw-gradient-position: in oklch shorter hue;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-conic\\/srgb {
-      --tw-gradient-position: in srgb, ;
+      --tw-gradient-position: in srgb;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45 {
-      --tw-gradient-position: 45deg in oklab, ;
+      --tw-gradient-position: 45deg in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: 45deg in hsl longer hue, ;
+      --tw-gradient-position: 45deg in hsl longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/oklab {
-      --tw-gradient-position: 45deg in oklab, ;
+      --tw-gradient-position: 45deg in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-45\\/shorter {
-      --tw-gradient-position: 45deg in oklch shorter hue, ;
+      --tw-gradient-position: 45deg in oklch shorter hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-\\[1\\.3rad\\] {
-      --tw-gradient-position: 74.4845deg, ;
+      --tw-gradient-position: 74.4845deg;
       background-image: linear-gradient(var(--tw-gradient-stops, 74.4845deg));
     }
 
     .bg-linear-\\[125deg\\] {
-      --tw-gradient-position: 125deg, ;
+      --tw-gradient-position: 125deg;
       background-image: linear-gradient(var(--tw-gradient-stops, 125deg));
     }
 
     .bg-linear-\\[to_bottom\\] {
-      --tw-gradient-position: to bottom, ;
+      --tw-gradient-position: to bottom;
       background-image: linear-gradient(var(--tw-gradient-stops, to bottom));
     }
 
     .bg-linear-to-b {
-      --tw-gradient-position: to bottom in oklab, ;
+      --tw-gradient-position: to bottom in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-bl {
-      --tw-gradient-position: to bottom left in oklab, ;
+      --tw-gradient-position: to bottom left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-br {
-      --tw-gradient-position: to bottom right in oklab, ;
+      --tw-gradient-position: to bottom right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-l {
-      --tw-gradient-position: to left in oklab, ;
+      --tw-gradient-position: to left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r {
-      --tw-gradient-position: to right in oklab, ;
+      --tw-gradient-position: to right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: to right in hsl longer hue, ;
+      --tw-gradient-position: to right in hsl longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/\\[longer\\] {
-      --tw-gradient-position: to right longer, ;
+      --tw-gradient-position: to right longer;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/decreasing {
-      --tw-gradient-position: to right in oklch decreasing hue, ;
+      --tw-gradient-position: to right in oklch decreasing hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/hsl {
-      --tw-gradient-position: to right in hsl, ;
+      --tw-gradient-position: to right in hsl;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/increasing {
-      --tw-gradient-position: to right in oklch increasing hue, ;
+      --tw-gradient-position: to right in oklch increasing hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/longer {
-      --tw-gradient-position: to right in oklch longer hue, ;
+      --tw-gradient-position: to right in oklch longer hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/oklab {
-      --tw-gradient-position: to right in oklab, ;
+      --tw-gradient-position: to right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/oklch {
-      --tw-gradient-position: to right in oklch, ;
+      --tw-gradient-position: to right in oklch;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/shorter {
-      --tw-gradient-position: to right in oklch shorter hue, ;
+      --tw-gradient-position: to right in oklch shorter hue;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-r\\/srgb {
-      --tw-gradient-position: to right in srgb, ;
+      --tw-gradient-position: to right in srgb;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-t {
-      --tw-gradient-position: to top in oklab, ;
+      --tw-gradient-position: to top in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tl {
-      --tw-gradient-position: to top left in oklab, ;
+      --tw-gradient-position: to top left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-linear-to-tr {
-      --tw-gradient-position: to top right in oklab, ;
+      --tw-gradient-position: to top right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial-\\[circle_at_center\\] {
-      --tw-gradient-position: circle at center, ;
+      --tw-gradient-position: circle at center;
       background-image: radial-gradient(var(--tw-gradient-stops, circle at center));
     }
 
     .bg-radial\\/\\[in_hsl_longer_hue\\] {
-      --tw-gradient-position: in hsl longer hue, ;
+      --tw-gradient-position: in hsl longer hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/decreasing {
-      --tw-gradient-position: in oklch decreasing hue, ;
+      --tw-gradient-position: in oklch decreasing hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/hsl {
-      --tw-gradient-position: in hsl, ;
+      --tw-gradient-position: in hsl;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/increasing {
-      --tw-gradient-position: in oklch increasing hue, ;
+      --tw-gradient-position: in oklch increasing hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/longer {
-      --tw-gradient-position: in oklch longer hue, ;
+      --tw-gradient-position: in oklch longer hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/oklab {
-      --tw-gradient-position: in oklab, ;
+      --tw-gradient-position: in oklab;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/oklch {
-      --tw-gradient-position: in oklch, ;
+      --tw-gradient-position: in oklch;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/shorter {
-      --tw-gradient-position: in oklch shorter hue, ;
+      --tw-gradient-position: in oklch shorter hue;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
     .bg-radial\\/srgb {
-      --tw-gradient-position: in srgb, ;
+      --tw-gradient-position: in srgb;
       background-image: radial-gradient(var(--tw-gradient-stops));
     }
 
@@ -10646,15 +10669,15 @@ test('bg', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".bg-current\\/custom {
-      background-color: color-mix(in oklab, currentColor var(--opacity-custom), transparent);
+      background-color: color-mix(in oklab, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in oklab, currentColor var(--opacity-half), transparent);
+      background-color: color-mix(in oklab, currentColor var(--opacity-half, .5), transparent);
     }
 
     .\\[color\\:red\\]\\/half {
-      color: color-mix(in oklab, red var(--opacity-half), transparent);
+      color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
     }"
   `)
 })
@@ -10710,62 +10733,62 @@ test('from', async () => {
 
     .from-\\[\\#0088cc\\] {
       --tw-gradient-from: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[color\\:var\\(--my-color\\)\\]\\/50, .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[var\\(--my-color\\)\\] {
       --tw-gradient-from: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-\\[var\\(--my-color\\)\\]\\/50, .from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current {
       --tw-gradient-from: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-inherit {
       --tw-gradient-from: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500 {
       --tw-gradient-from: var(--color-red-500);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-transparent {
       --tw-gradient-from: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-0\\% {
@@ -10929,73 +10952,73 @@ test('via', async () => {
 
     .via-\\[\\#0088cc\\] {
       --tw-gradient-via: #08c;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[color\\:var\\(--my-color\\)\\]\\/50, .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[var\\(--my-color\\)\\] {
       --tw-gradient-via: var(--my-color);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-\\[var\\(--my-color\\)\\]\\/50, .via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current {
       --tw-gradient-via: currentColor;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-inherit {
       --tw-gradient-via: inherit;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500 {
       --tw-gradient-via: var(--color-red-500);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-transparent {
       --tw-gradient-via: transparent;
-      --tw-gradient-via-stops: var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
@@ -11158,62 +11181,62 @@ test('to', async () => {
 
     .to-\\[\\#0088cc\\] {
       --tw-gradient-to: #08c;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:var\\(--my-color\\)\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[color\\:var\\(--my-color\\)\\]\\/50, .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[var\\(--my-color\\)\\] {
       --tw-gradient-to: var(--my-color);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-\\[var\\(--my-color\\)\\]\\/50, .to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current {
       --tw-gradient-to: currentColor;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-inherit {
       --tw-gradient-to: inherit;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500 {
       --tw-gradient-to: var(--color-red-500);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-transparent {
       --tw-gradient-to: transparent;
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position, ) var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-0\\% {
@@ -12574,7 +12597,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -12646,7 +12670,8 @@ test('font', async () => {
     await compileCss(
       css`
         @theme reference {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol', 'Noto Color Emoji';
           --font-weight-bold: 650;
         }
@@ -13405,6 +13430,11 @@ test('filter', async () => {
     @property --tw-sepia {
       syntax: "*";
       inherits: false
+    }
+
+    @property --tw-drop-shadow {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -13849,8 +13879,9 @@ test('transition', async () => {
         @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
-          --transition-property: color, background-color, border-color, text-decoration-color, fill,
-            stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+          --transition-property:
+            color, background-color, border-color, text-decoration-color, fill, stroke, opacity,
+            box-shadow, transform, filter, backdrop-filter;
           --transition-property-opacity: opacity;
         }
         @tailwind utilities;
@@ -13870,7 +13901,6 @@ test('transition', async () => {
     ":root, :host {
       --default-transition-timing-function: ease;
       --default-transition-duration: .1s;
-      --transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
       --transition-property-opacity: opacity;
     }
 
@@ -13936,12 +13966,7 @@ test('transition', async () => {
       ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --default-transition-timing-function: ease;
-      --default-transition-duration: .1s;
-    }
-
-    .transition {
+    ".transition {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
@@ -14182,15 +14207,7 @@ test('contain', async () => {
       'contain-[unset]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".contain-\\[unset\\] {
-      contain: unset;
-    }
-
-    .contain-content {
-      contain: content;
-    }
-
-    .contain-inline-size {
+    ".contain-inline-size {
       --tw-contain-size: inline-size;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
@@ -14198,10 +14215,6 @@ test('contain', async () => {
     .contain-layout {
       --tw-contain-layout: layout;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
-    }
-
-    .contain-none {
-      contain: none;
     }
 
     .contain-paint {
@@ -14214,13 +14227,25 @@ test('contain', async () => {
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
-    .contain-strict {
-      contain: strict;
-    }
-
     .contain-style {
       --tw-contain-style: style;
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
+    }
+
+    .contain-\\[unset\\] {
+      contain: unset;
+    }
+
+    .contain-content {
+      contain: content;
+    }
+
+    .contain-none {
+      contain: none;
+    }
+
+    .contain-strict {
+      contain: strict;
     }
 
     @property --tw-contain-size {
@@ -14451,10 +14476,6 @@ test('font-variant-numeric', async () => {
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
     }
 
-    .normal-nums {
-      font-variant-numeric: normal;
-    }
-
     .oldstyle-nums {
       --tw-numeric-figure: oldstyle-nums;
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
@@ -14483,6 +14504,10 @@ test('font-variant-numeric', async () => {
     .tabular-nums {
       --tw-numeric-spacing: tabular-nums;
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
+    }
+
+    .normal-nums {
+      font-variant-numeric: normal;
     }
 
     @property --tw-ordinal {
@@ -14598,6 +14623,7 @@ test('outline', async () => {
     }
 
     .outline-hidden {
+      --tw-outline-style: none;
       outline-style: none;
     }
 
@@ -14725,6 +14751,28 @@ test('outline', async () => {
     .outline-solid {
       --tw-outline-style: solid;
       outline-style: solid;
+    }
+
+    @property --tw-outline-style {
+      syntax: "*";
+      inherits: false;
+      initial-value: solid;
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-outline-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['outline'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".outline {
+      outline-style: var(--tw-outline-style);
+      outline-width: 2px;
     }
 
     @property --tw-outline-style {
@@ -15227,8 +15275,6 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-      --shadow-xl: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
     }
 
     .shadow-\\[10px_10px\\] {
@@ -15451,8 +15497,6 @@ test('inset-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
-      --inset-shadow: inset 0 2px 4px #0000000d;
-      --inset-shadow-sm: inset 0 1px 1px #0000000d;
     }
 
     .inset-shadow {
@@ -15777,6 +15821,89 @@ test('ring', async () => {
 
     .ring-inset {
       --tw-ring-inset: inset;
+    }
+
+    @property --tw-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-inset-ring-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-inset-ring-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }
+
+    @property --tw-ring-inset {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-ring-offset-width {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-ring-offset-color {
+      syntax: "*";
+      inherits: false;
+      initial-value: #fff;
+    }
+
+    @property --tw-ring-offset-shadow {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0 0 #0000;
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --default-ring-width: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['ring'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".ring {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     @property --tw-shadow {
@@ -16311,20 +16438,8 @@ test('@container', async () => {
       '@container-[size]/sidebar',
     ]),
   ).toMatchInlineSnapshot(`
-    ".\\@container {
-      container-type: inline-size;
-    }
-
-    .\\@container-\\[size\\] {
-      container-type: size;
-    }
-
-    .\\@container-\\[size\\]\\/sidebar {
+    ".\\@container-\\[size\\]\\/sidebar {
       container: sidebar / size;
-    }
-
-    .\\@container-normal {
-      container-type: normal;
     }
 
     .\\@container-normal\\/sidebar {
@@ -16333,6 +16448,18 @@ test('@container', async () => {
 
     .\\@container\\/sidebar {
       container: sidebar / inline-size;
+    }
+
+    .\\@container {
+      container-type: inline-size;
+    }
+
+    .\\@container-\\[size\\] {
+      container-type: size;
+    }
+
+    .\\@container-normal {
+      container-type: normal;
     }"
   `)
   expect(
@@ -16443,7 +16570,6 @@ describe('spacing utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-sm: 8px;
-        --container-sm: 256px;
       }
 
       .w-sm {
@@ -16496,6 +16622,40 @@ describe('custom utilities', () => {
             text-box-edge: cap alphabetic;
           }
         }
+      }"
+    `)
+  })
+
+  test('custom static utility emit CSS variables if the utility is used', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme {
+        --example-foo: 123px;
+      }
+
+      @utility foo {
+        value: var(--example-foo);
+      }
+    `)
+    let compiled = build([])
+
+    // `foo` is not used yet:
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+
+    // `foo` is used, and the CSS variable is emitted:
+    compiled = build(['foo'])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo {
+          value: var(--example-foo);
+        }
+      }
+
+      :root, :host {
+        --example-foo: 123px;
       }"
     `)
   })
@@ -16595,8 +16755,8 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--text-sm);
-          line-height: var(--tw-leading, var(--text-sm--line-height));
+          font-size: var(--text-sm, .875rem);
+          line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
           font-size: var(--text-sm, .8755rem);
           line-height: var(--text-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
@@ -16632,7 +16792,7 @@ describe('custom utilities', () => {
         }
 
         .rounded-xl {
-          border-radius: var(--radius-xl);
+          border-radius: var(--radius-xl, 16px);
         }
       }"
     `)
@@ -16874,19 +17034,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -16915,19 +17075,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -16952,19 +17112,19 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
         .toMatchInlineSnapshot(`
           ".tab-1 {
-            tab-size: var(--tab-size-1);
+            tab-size: var(--tab-size-1, 1);
           }
 
           .tab-2 {
-            tab-size: var(--tab-size-2);
+            tab-size: var(--tab-size-2, 2);
           }
 
           .tab-4 {
-            tab-size: var(--tab-size-4);
+            tab-size: var(--tab-size-4, 4);
           }
 
           .tab-github {
-            tab-size: var(--tab-size-github);
+            tab-size: var(--tab-size-github, 8);
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
@@ -17238,7 +17398,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: var(--tab-size-github);
+          tab-size: var(--tab-size-github, 8);
         }"
       `)
       expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
@@ -17270,7 +17430,7 @@ describe('custom utilities', () => {
           }
 
           .example-full {
-            --value: var(--example-full);
+            --value: var(--example-full, 100%);
           }"
         `)
       expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
@@ -17314,7 +17474,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: var(--example-full);
+          --value: var(--example-full, 100%);
         }
 
         .tab-76 {
@@ -17326,7 +17486,7 @@ describe('custom utilities', () => {
         }
 
         .tab-github {
-          tab-size: var(--tab-size-github);
+          tab-size: var(--tab-size-github, 8);
         }"
       `)
       expect(
@@ -17370,7 +17530,7 @@ describe('custom utilities', () => {
         }
 
         .-example-full {
-          --value: calc(var(--example-full) * -1);
+          --value: calc(var(--example-full, 100%) * -1);
         }
 
         .example-\\[10px\\] {
@@ -17382,7 +17542,7 @@ describe('custom utilities', () => {
         }
 
         .example-full {
-          --value: var(--example-full);
+          --value: var(--example-full, 100%);
         }"
       `)
       expect(await compileCss(input, ['example-10'])).toEqual('')
@@ -17472,24 +17632,24 @@ describe('custom utilities', () => {
           'example-[12px]/[16px]',
         ]),
       ).toMatchInlineSnapshot(`
-        ".example-\\[12px\\] {
-          --value: 12px;
-        }
-
-        .example-\\[12px\\]\\/\\[16px\\] {
+        ".example-\\[12px\\]\\/\\[16px\\] {
           --value: 12px;
           --modifier: 16px;
           --modifier-with-calc: calc(16px * 2);
         }
 
-        .example-sm {
-          --value: var(--value-sm);
+        .example-sm\\/7 {
+          --value: var(--value-sm, 14px);
+          --modifier: var(--modifier-7, 28px);
+          --modifier-with-calc: calc(var(--modifier-7, 28px) * 2);
         }
 
-        .example-sm\\/7 {
-          --value: var(--value-sm);
-          --modifier: var(--modifier-7);
-          --modifier-with-calc: calc(var(--modifier-7) * 2);
+        .example-\\[12px\\] {
+          --value: 12px;
+        }
+
+        .example-sm {
+          --value: var(--value-sm, 14px);
         }"
       `)
       expect(
@@ -17521,7 +17681,7 @@ describe('custom utilities', () => {
           }
 
           .example-video {
-            --value: var(--example-video);
+            --value: var(--example-video, 16 / 9);
           }"
         `)
       expect(await compileCss(input, ['example-foo'])).toEqual('')
@@ -17544,15 +17704,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+        ".example-xs\\/6 {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
+          line-height: 6;
         }
 
-        .example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-          line-height: 6;
+        .example-xs {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17575,15 +17735,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+        ".example-xs\\/6 {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
+          line-height: 6;
         }
 
-        .example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-          line-height: 6;
+        .example-xs {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17606,15 +17766,15 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+        ".example-xs\\/6 {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
+          line-height: 6;
         }
 
-        .example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-          line-height: 6;
+        .example-xs {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
@@ -17637,18 +17797,68 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
-        ".example-xs {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
+        ".example-xs\\/6 {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
+          line-height: 6;
         }
 
-        .example-xs\\/6 {
-          font-size: var(--text-xs);
-          line-height: var(--text-xs--line-height);
-          line-height: 6;
+        .example-xs {
+          font-size: var(--text-xs, .75rem);
+          line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
       `)
       expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
+
+    test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
+        ".flex {
+          display: flex;
+        }"
+      `)
+    })
+
+    test('variables used in `@utility` will be emitted if the utility is used', async () => {
+      let input = css`
+        @theme {
+          --example-foo: red;
+          --color-red-500: #f00;
+        }
+
+        @utility example-* {
+          color: var(--color-red-500);
+          background-color: --value(--example);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --example-foo: red;
+          --color-red-500: red;
+        }
+
+        .example-foo {
+          color: var(--color-red-500);
+          background-color: var(--example-foo);
+        }"
+      `)
     })
   })
 
@@ -17691,7 +17901,7 @@ describe('custom utilities', () => {
 
     expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ".tab-github {
-        tab-size: var(--tab-size-github);
+        tab-size: var(--tab-size-github, 8);
       }"
     `)
   })
@@ -17710,11 +17920,7 @@ describe('custom utilities', () => {
     `
 
     expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
-      ":root, :host {
-        --tab-size-github: 8;
-      }
-
-      .tab-github {
+      ".tab-github {
         tab-size: 8;
       }"
     `)
@@ -17760,7 +17966,7 @@ describe('custom utilities', () => {
 
     expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
-        font-size: var(--text-xs);
+        font-size: var(--text-xs, .75rem);
         line-height: 1.33333;
       }"
     `)
@@ -17787,7 +17993,7 @@ describe('custom utilities', () => {
     expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
         font-size: .75rem;
-        line-height: var(--text-xs--line-height);
+        line-height: var(--text-xs--line-height, calc(1 / .75));
       }"
     `)
   })

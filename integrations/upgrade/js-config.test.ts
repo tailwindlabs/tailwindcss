@@ -238,8 +238,9 @@ test(
         --width-225px: 225px;
 
         --font-sans: Inter, system-ui, sans-serif;
-        --font-display: Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif,
-          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --font-display:
+          Cabinet Grotesk, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+          'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
         --radius-4xl: 2rem;
 
@@ -317,6 +318,14 @@ test(
         import customPlugin from './custom-plugin'
 
         export default {
+          darkMode: [
+            'variant',
+            [
+              '@media not print { .dark & }',
+              '@media not eink { .dark & }',
+              '&:where(.dark, .dark *)',
+            ],
+          ],
           plugins: [
             typography,
             customPlugin({
@@ -376,6 +385,22 @@ test(
         is-str-sci: '1.35e-5';
         is-arr: 'foo', 'bar';
         is-arr-mixed: null, true, false, 1234567, 1.35, 'foo', 'bar', 'true';
+      }
+
+      @custom-variant dark {
+        @media not print {
+          .dark & {
+            @slot;
+          }
+        }
+        @media not eink {
+          .dark & {
+            @slot;
+          }
+        }
+        &:where(.dark, .dark *) {
+          @slot;
+        }
       }
 
       /*
