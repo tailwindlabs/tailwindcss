@@ -530,6 +530,41 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/16935
+  it('should now swallow @utility declarations when @apply is used in nested rules', async () => {
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+
+          .ignore-me {
+            @apply underline;
+            div {
+              @apply custom-utility;
+            }
+          }
+
+          @utility custom-utility {
+            @apply flex;
+          }
+        `,
+        ['custom-utility'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".custom-utility {
+        display: flex;
+      }
+
+      .ignore-me {
+        text-decoration-line: underline;
+      }
+
+      .ignore-me div {
+        display: flex;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {
