@@ -100,3 +100,86 @@ jobs:
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
+
+  bun-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        bun-version: [1.2.2]
+        runner:
+          - name: Windows
+            os: windows-latest
+
+          - name: Linux
+            os: ubuntu-latest
+
+          - name: macOS
+            os: macos-14
+
+        # Exclude windows and macos from being built on feature branches
+        on-main-branch:
+          - ${{ github.ref == 'refs/heads/main' }}
+        exclude:
+          - on-main-branch: false
+            runner:
+              name: Windows
+          - on-main-branch: false
+            runner:
+              name: macOS
+
+    runs-on: ${{ matrix.runner.os }}
+    timeout-minutes: 30
+
+    name: Bun / ${{ matrix.runner.name }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ matrix.bun-version }}
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `oxide` Rust build
+      - name: Cache oxide build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./target/
+            ./crates/node/*.node
+            ./crates/node/index.js
+            ./crates/node/index.d.ts
+          key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+        env:
+          CARGO_PROFILE_RELEASE_LTO: 'off'
+          CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
+
+      - name: Test
+        run: pnpm vitest --root=./integrations bun

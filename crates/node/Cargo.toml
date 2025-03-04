@@ -8,10 +8,12 @@ crate-type = ["cdylib"]
 
 [dependencies]
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
-napi = { version = "2.16.11", default-features = false, features = ["napi4"] }
+napi = { version = "2.16.15", default-features = false, features = ["napi4"] }
 napi-derive = "2.16.12"
 tailwindcss-oxide = { path = "../oxide" }
 rayon = "1.5.3"
+bun-native-plugin = { version = "0.2.0" }
+fxhash = { package = "rustc-hash", version = "2.0.0" }
 
 [build-dependencies]
 napi-build = "2.0.1"

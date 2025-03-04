@@ -30,9 +30,7 @@ interface ExecOptions {
 }
 
 interface TestConfig {
-  fs: {
-    [filePath: string]: string | Uint8Array
-  }
+  fs: { [filePath: string]: string | Uint8Array }
 
   installDependencies?: boolean
 }
@@ -118,11 +116,7 @@ export function test(
           return new Promise((resolve, reject) => {
             let child = exec(
               command,
-              {
-                cwd,
-                ...childProcessOptions,
-                env: childProcessOptions.env,
-              },
+              { cwd, ...childProcessOptions, env: childProcessOptions.env },
               (error, stdout, stderr) => {
                 if (error) {
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
@@ -163,10 +157,7 @@ export function test(
             cwd,
             shell: true,
             ...childProcessOptions,
-            env: {
-              ...process.env,
-              ...childProcessOptions.env,
-            },
+            env: { ...process.env, ...childProcessOptions.env },
           })
 
           function dispose() {
@@ -424,6 +415,9 @@ export function test(
       if (only || debug) {
         try {
           await context.exec('git init', { cwd: root })
+          // Add these lines to set git identity for CI
+          await context.exec('git config user.email "test@example.com"', { cwd: root })
+          await context.exec('git config user.name "Test User"', { cwd: root })
           await context.exec('git add --all', { cwd: root })
           await context.exec('git commit -m "before migration"', { cwd: root })
         } catch (error: any) {
@@ -526,6 +520,80 @@ export function candidate(strings: TemplateStringsArray, ...values: any[]) {
   return `.${escape(output.join('').trim())}`
 }
 
+// https://drafts.csswg.org/cssom/#serialize-an-identifier
+export function escape(value: string) {
+  if (arguments.length == 0) {
+    throw new TypeError('`CSS.escape` requires an argument.')
+  }
+  var string = String(value)
+  var length = string.length
+  var index = -1
+  var codeUnit
+  var result = ''
+  var firstCodeUnit = string.charCodeAt(0)
+
+  if (
+    // If the character is the first character and is a `-` (U+002D), and
+    // there is no second character, […]
+    length == 1 &&
+    firstCodeUnit == 0x002d
+  ) {
+    return '\\' + string
+  }
+
+  while (++index < length) {
+    codeUnit = string.charCodeAt(index)
+    // Note: there's no need to special-case astral symbols, surrogate
+    // pairs, or lone surrogates.
+
+    // If the character is NULL (U+0000), then the REPLACEMENT CHARACTER
+    // (U+FFFD).
+    if (codeUnit == 0x0000) {
+      result += '\uFFFD'
+      continue
+    }
+
+    if (
+      // If the character is in the range [\1-\1F] (U+0001 to U+001F) or is
+      // U+007F, […]
+      (codeUnit >= 0x0001 && codeUnit <= 0x001f) ||
+      codeUnit == 0x007f ||
+      // If the character is the first character and is in the range [0-9]
+      // (U+0030 to U+0039), […]
+      (index == 0 && codeUnit >= 0x0030 && codeUnit <= 0x0039) ||
+      // If the character is the second character and is in the range [0-9]
+      // (U+0030 to U+0039) and the first character is a `-` (U+002D), […]
+      (index == 1 && codeUnit >= 0x0030 && codeUnit <= 0x0039 && firstCodeUnit == 0x002d)
+    ) {
+      // https://drafts.csswg.org/cssom/#escape-a-character-as-code-point
+      result += '\\' + codeUnit.toString(16) + ' '
+      continue
+    }
+
+    // If the character is not handled by one of the above rules and is
+    // greater than or equal to U+0080, is `-` (U+002D) or `_` (U+005F), or
+    // is in one of the ranges [0-9] (U+0030 to U+0039), [A-Z] (U+0041 to
+    // U+005A), or [a-z] (U+0061 to U+007A), […]
+    if (
+      codeUnit >= 0x0080 ||
+      codeUnit == 0x002d ||
+      codeUnit == 0x005f ||
+      (codeUnit >= 0x0030 && codeUnit <= 0x0039) ||
+      (codeUnit >= 0x0041 && codeUnit <= 0x005a) ||
+      (codeUnit >= 0x0061 && codeUnit <= 0x007a)
+    ) {
+      // the character itself
+      result += string.charAt(index)
+      continue
+    }
+
+    // Otherwise, the escaped character.
+    // https://drafts.csswg.org/cssom/#escape-a-character
+    result += '\\' + string.charAt(index)
+  }
+  return result
+}
+
 export async function retryAssertion<T>(
   fn: () => Promise<T>,
   { timeout = ASSERTION_TIMEOUT, delay = 5 }: { timeout?: number; delay?: number } = {},
@@ -543,7 +611,7 @@ export async function retryAssertion<T>(
   throw error
 }
 
-export async function fetchStyles(base: string, path = '/'): Promise<string> {
+export async function fetchStyles(base: string, path = '/', isBun = false): Promise<string> {
   while (base.endsWith('/')) {
     base = base.slice(0, -1)
   }
@@ -551,7 +619,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let linkRegex = /<link rel="stylesheet".* href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
   let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
   let stylesheets: string[] = []
@@ -567,11 +635,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`${base}${path}`, {
-          headers: {
-            Accept: 'text/css',
-          },
-        })
+        let css = await fetch(`${base}${path}`, { headers: { Accept: 'text/css' } })
         return await css.text()
       }),
     )),

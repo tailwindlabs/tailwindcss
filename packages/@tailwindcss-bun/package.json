@@ -1,0 +1,39 @@
+{
+  "name": "@tailwindcss/bun",
+  "version": "4.0.1",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-bun"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "dependencies": {
+    "@tailwindcss/node": "workspace:^",
+    "@tailwindcss/oxide": "workspace:^",
+    "tailwindcss": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "1.2.2",
+    "@types/node": "catalog:"
+  }
+}
