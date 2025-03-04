@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `not-*` does not remove `:is(…)` from variants ([#16825](https://github.com/tailwindlabs/tailwindcss/pull/16825))
 - Ensure `@keyframes` are correctly emitted when using a prefixed setup ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
 - Don't swallow `@utility` declarations when `@apply` is used in nested rules ([#16940](https://github.com/tailwindlabs/tailwindcss/pull/16940))
+- Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
 
 ## [4.0.9] - 2025-02-25
 
