@@ -3901,6 +3901,7 @@ export function createUtilities(theme: Theme) {
 
     utilities.static('outline-hidden', () => {
       return [
+        decl('--tw-outline-style', 'none'),
         decl('outline-style', 'none'),
         atRule('@media', '(forced-colors: active)', [
           decl('outline', '2px solid transparent'),
