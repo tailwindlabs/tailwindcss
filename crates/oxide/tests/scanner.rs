@@ -340,8 +340,8 @@ mod scanner {
             candidates,
             vec![
                 "bool",
+                "class",
                 "condition",
-                "div",
                 "font-bold",
                 "md:flex",
                 "px-4",
