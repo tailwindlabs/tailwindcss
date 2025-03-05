@@ -171,7 +171,9 @@ impl Machine for NamedUtilityMachine {
                             //            ^    Invalid
                             // E.g.: `flex-2`
                             //            ^    Valid
-                            Class::AlphaLower | Class::AlphaUpper | Class::Number => {
+                            // E.g.: `foo--bar`
+                            //            ^    Valid
+                            Class::AlphaLower | Class::AlphaUpper | Class::Number | Class::Dash => {
                                 cursor.advance();
                             }
 
