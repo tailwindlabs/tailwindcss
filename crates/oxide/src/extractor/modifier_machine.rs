@@ -2,6 +2,7 @@ use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
 use crate::extractor::machine::{Machine, MachineState};
+use classification_macros::ClassifyBytes;
 
 /// Extract modifiers from an input including the `/`.
 ///
@@ -30,14 +31,14 @@ impl Machine for ModifierMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // A modifier must start with a `/`, everything else is not a valid start of a modifier
-        if CLASS_TABLE[cursor.curr as usize] != Class::Slash {
+        if Class::Slash != cursor.curr.into() {
             return MachineState::Idle;
         }
 
         let start_pos = cursor.pos;
         cursor.advance();
 
-        match CLASS_TABLE[cursor.curr as usize] {
+        match cursor.curr.into() {
             // Start of an arbitrary value:
             //
             // ```
@@ -69,9 +70,9 @@ impl Machine for ModifierMachine {
             Class::ValidStart => {
                 let len = cursor.input.len();
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
+                    match cursor.curr.into() {
                         Class::ValidStart | Class::ValidInside => {
-                            match CLASS_TABLE[cursor.next as usize] {
+                            match cursor.next.into() {
                                 // Only valid characters are allowed, if followed by another valid character
                                 Class::ValidStart | Class::ValidInside => cursor.advance(),
 
@@ -95,58 +96,26 @@ impl Machine for ModifierMachine {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, ClassifyBytes)]
 enum Class {
-    /// `'a'..='z' | 'A'..='Z' | '0'..='9'`
+    #[bytes_range(b'a'..=b'z', b'A'..=b'Z', b'0'..=b'9')]
     ValidStart,
 
-    /// `-`, `_`, `.`
+    #[bytes(b'-', b'_', b'.')]
     ValidInside,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// `/`
+    #[bytes(b'/')]
     Slash,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set_range!(Class::ValidStart, b'a'..=b'z');
-    set_range!(Class::ValidStart, b'A'..=b'Z');
-    set_range!(Class::ValidStart, b'0'..=b'9');
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::OpenParen, b'(');
-
-    set!(Class::Slash, b'/');
-
-    set!(Class::ValidInside, b'-', b'_', b'.');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

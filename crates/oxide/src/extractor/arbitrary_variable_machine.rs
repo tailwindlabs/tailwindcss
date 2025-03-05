@@ -3,6 +3,7 @@ use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::css_variable_machine::CssVariableMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::string_machine::StringMachine;
+use classification_macros::ClassifyBytes;
 
 /// Extracts arbitrary variables including the parens.
 ///
@@ -62,7 +63,7 @@ impl Machine for ArbitraryVariableMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        let class_curr = CLASS_TABLE[cursor.curr as usize];
+        let class_curr = cursor.curr.into();
         let len = cursor.input.len();
 
         match self.state {
@@ -72,7 +73,7 @@ impl Machine for ArbitraryVariableMachine {
                 // E.g.: `(--my-variable)`
                 //        ^^
                 //
-                Class::OpenParen => match CLASS_TABLE[cursor.next as usize] {
+                Class::OpenParen => match cursor.next.into() {
                     Class::Dash => {
                         self.start_pos = cursor.pos;
                         self.state = State::Parsing;
@@ -90,7 +91,7 @@ impl Machine for ArbitraryVariableMachine {
 
             State::Parsing => match self.css_variable_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match CLASS_TABLE[cursor.next as usize] {
+                MachineState::Done(_) => match cursor.next.into() {
                     // A CSS variable followed by a `,` means that there is a fallback
                     //
                     // E.g.: `(--my-color,red)`
@@ -108,7 +109,7 @@ impl Machine for ArbitraryVariableMachine {
                     _ => {
                         cursor.advance();
 
-                        match CLASS_TABLE[cursor.curr as usize] {
+                        match cursor.curr.into() {
                             // End of an arbitrary variable, must be followed by `)`
                             Class::CloseParen => self.done(self.start_pos, cursor),
 
@@ -121,8 +122,8 @@ impl Machine for ArbitraryVariableMachine {
 
             State::ParsingFallback => {
                 while cursor.pos < len {
-                    match CLASS_TABLE[cursor.curr as usize] {
-                        Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+                    match cursor.curr.into() {
+                        Class::Escape => match cursor.next.into() {
                             // An escaped whitespace character is not allowed
                             //
                             // E.g.: `(--my-\ color)`
@@ -192,117 +193,68 @@ impl Machine for ArbitraryVariableMachine {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, ClassifyBytes)]
 enum Class {
-    /// `'a'..='z'`
+    #[bytes_range(b'a'..=b'z')]
     AlphaLower,
 
-    /// `'A'..='Z'`
+    #[bytes_range(b'A'..=b'Z')]
     AlphaUpper,
 
-    /// `@`
+    #[bytes(b'@')]
     At,
 
-    // `:`
+    #[bytes(b':')]
     Colon,
 
-    /// `,`
+    #[bytes(b',')]
     Comma,
 
-    /// `-`
+    #[bytes(b'-')]
     Dash,
 
-    /// `:`
+    #[bytes(b'.')]
     Dot,
 
-    /// `\\`
+    #[bytes(b'\\')]
     Escape,
 
-    /// `0x00`
+    #[bytes(b'\0')]
     End,
 
-    /// `'0'..='9'`
+    #[bytes_range(b'0'..=b'9')]
     Number,
 
-    /// `[`
+    #[bytes(b'[')]
     OpenBracket,
 
-    /// `]`
+    #[bytes(b']')]
     CloseBracket,
 
-    /// `(`
+    #[bytes(b'(')]
     OpenParen,
 
-    /// `)`
+    #[bytes(b')')]
     CloseParen,
 
-    /// `{`
+    #[bytes(b'{')]
     OpenCurly,
 
-    /// `}`
+    #[bytes(b'}')]
     CloseCurly,
 
-    /// ', ", or `
+    #[bytes(b'"', b'\'', b'`')]
     Quote,
 
-    /// _
+    #[bytes(b'_')]
     Underscore,
 
-    /// Whitespace characters: ' ', '\t', '\n', '\r', '\x0C'
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
-    /// Anything else
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    macro_rules! set_range {
-        ($class:expr, $start:literal ..= $end:literal) => {
-            let mut i = $start;
-            while i <= $end {
-                table[i as usize] = $class;
-                i += 1;
-            }
-        };
-    }
-
-    set!(Class::At, b'@');
-    set!(Class::Underscore, b'_');
-    set!(Class::Dash, b'-');
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-    set!(Class::Comma, b',');
-    set!(Class::Escape, b'\\');
-
-    set!(Class::OpenBracket, b'[');
-    set!(Class::CloseBracket, b']');
-
-    set!(Class::OpenParen, b'(');
-    set!(Class::CloseParen, b')');
-
-    set!(Class::OpenCurly, b'{');
-    set!(Class::CloseCurly, b'}');
-
-    set!(Class::Dot, b'.');
-    set!(Class::Colon, b':');
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-
-    set_range!(Class::AlphaLower, b'a'..=b'z');
-    set_range!(Class::AlphaUpper, b'A'..=b'Z');
-    set_range!(Class::Number, b'0'..=b'9');
-
-    set!(Class::End, 0x00);
-
-    table
-};
 
 #[cfg(test)]
 mod tests {

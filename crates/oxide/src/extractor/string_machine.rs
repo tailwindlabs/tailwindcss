@@ -1,5 +1,6 @@
 use crate::cursor;
 use crate::extractor::machine::{Machine, MachineState};
+use classification_macros::ClassifyBytes;
 
 /// Extracts a string (including the quotes) from the input.
 ///
@@ -29,7 +30,7 @@ impl Machine for StringMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        if CLASS_TABLE[cursor.curr as usize] != Class::Quote {
+        if Class::Quote != cursor.curr.into() {
             return MachineState::Idle;
         }
 
@@ -41,8 +42,8 @@ impl Machine for StringMachine {
         cursor.advance();
 
         while cursor.pos < len {
-            match CLASS_TABLE[cursor.curr as usize] {
-                Class::Escape => match CLASS_TABLE[cursor.next as usize] {
+            match cursor.curr.into() {
+                Class::Escape => match cursor.next.into() {
                     // An escaped whitespace character is not allowed
                     Class::Whitespace => return MachineState::Idle,
 
@@ -67,35 +68,20 @@ impl Machine for StringMachine {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ClassifyBytes)]
 enum Class {
-    /// ', ", or `
+    #[bytes(b'"', b'\'', b'`')]
     Quote,
 
-    /// \
+    #[bytes(b'\\')]
     Escape,
 
-    /// Whitespace characters
+    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
 
+    #[fallback]
     Other,
 }
-
-const CLASS_TABLE: [Class; 256] = {
-    let mut table = [Class::Other; 256];
-
-    macro_rules! set {
-        ($class:expr, $($byte:expr),+ $(,)?) => {
-            $(table[$byte as usize] = $class;)+
-        };
-    }
-
-    set!(Class::Quote, b'"', b'\'', b'`');
-    set!(Class::Escape, b'\\');
-    set!(Class::Whitespace, b' ', b'\t', b'\n', b'\r', b'\x0C');
-
-    table
-};
 
 #[cfg(test)]
 mod tests {
