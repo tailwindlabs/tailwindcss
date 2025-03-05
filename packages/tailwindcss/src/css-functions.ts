@@ -7,6 +7,7 @@ import * as ValueParser from './value-parser'
 
 const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => string> = {
   '--alpha': alpha,
+  '--prefix': prefix,
   '--spacing': spacing,
   '--theme': theme,
   theme: legacyTheme,
@@ -28,6 +29,20 @@ function alpha(_designSystem: DesignSystem, value: string, ...rest: string[]) {
   }
 
   return withAlpha(color, alpha)
+}
+
+function prefix(designSystem: DesignSystem, value: string, ...rest: string[]) {
+  if (!value || value[0] !== '-' || value[1] !== '-') {
+    throw new Error(`The --prefix(…) function requires CSS variable name as the input`)
+  }
+
+  if (rest.length > 0) {
+    throw new Error(
+      `The --prefix(…) function only accepts one argument, e.g.: \`--prefix(--color-red-500)\``,
+    )
+  }
+
+  return designSystem.theme.prefixKey(value)
 }
 
 function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {

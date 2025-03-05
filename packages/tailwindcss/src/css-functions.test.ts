@@ -59,6 +59,61 @@ describe('--alpha(…)', () => {
   })
 })
 
+describe('--prefix(…)', () => {
+  test('--prefix(…)', async () => {
+    expect(
+      await compileCss(css`
+        @theme prefix(tw) {
+          --color-red: red;
+          --color-red-proxy: var(--prefix(--color-red));
+        }
+        .foo {
+          color: var(--prefix(--color-red-proxy));
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-color-red: red;
+        --tw-color-red-proxy: var(--tw-color-red);
+      }
+
+      .foo {
+        color: var(--tw-color-red-proxy);
+      }"
+    `)
+  })
+
+  test('--prefix(…) errors when variable is missing', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme prefix(tw) {
+          --color-red: red;
+        }
+        .foo {
+          color: var(--prefix(color-red));
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --prefix(…) function requires CSS variable name as the input]`,
+    )
+  })
+
+  test('--prefix(…) errors when multiple arguments are used', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme prefix(tw) {
+          --color-red: red;
+        }
+        .foo {
+          color: var(--prefix(--color-red, bar));
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --prefix(…) function only accepts one argument, e.g.: \`--prefix(--color-red-500)\`]`,
+    )
+  })
+})
+
 describe('--spacing(…)', () => {
   test('--spacing(…)', async () => {
     expect(
