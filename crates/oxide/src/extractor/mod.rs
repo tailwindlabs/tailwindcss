@@ -297,6 +297,7 @@ mod tests {
             ("flex block", vec!["flex", "block"]),
             // Simple utility with dashes
             ("items-center", vec!["items-center"]),
+            ("items--center", vec!["items--center"]),
             // Simple utility with numbers
             ("px-2.5", vec!["px-2.5"]),
             // Arbitrary properties

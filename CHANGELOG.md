@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
+### Fixed
+
+- Ensure classes containing `--` are extracted correctly ([#16972](https://github.com/tailwindlabs/tailwindcss/pull/16972))
+
 ## [4.0.10] - 2025-03-05
 
 ### Added
@@ -40,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `max-w-auto` and `max-h-auto` utilities as they generate invalid CSS ([#16917](https://github.com/tailwindlabs/tailwindcss/pull/16917))
 - Replaced the existing candidate extractor with a brand new extractor to improve maintainability, correctness, and performance ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
-
 
 ## [4.0.9] - 2025-02-25
 

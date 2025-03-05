@@ -219,6 +219,7 @@ mod tests {
             ("flex! block", vec!["flex!", "block"]),
             // With dashes
             ("items-center", vec!["items-center"]),
+            ("items--center", vec!["items--center"]),
             // Inside a string
             ("'flex'", vec!["flex"]),
             // Multiple utilities
