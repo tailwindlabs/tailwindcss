@@ -173,7 +173,7 @@ pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
 
     globs
         .iter()
-        .any(|g| glob_match(&format!("{}/{}", g.base, g.pattern), path.as_bytes()))
+        .any(|g| glob_match(format!("{}/{}", g.base, g.pattern), path.as_bytes()))
 }
 
 #[cfg(test)]
