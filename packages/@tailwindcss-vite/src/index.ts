@@ -97,6 +97,7 @@ export default function tailwindcss(): Plugin[] {
         let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
         if (!generated) {
           roots.delete(id)
+          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
           return src
         }
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
@@ -104,6 +105,8 @@ export default function tailwindcss(): Plugin[] {
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
         generated = optimizeCss(generated, { minify })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+
+        console.log('yield', generated)
 
         return { code: generated }
       },

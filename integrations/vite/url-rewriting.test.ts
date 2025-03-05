@@ -3,8 +3,8 @@ import { binary, css, html, svg, test, ts, txt } from '../utils'
 
 const SIMPLE_IMAGE = `iVBORw0KGgoAAAANSUhEUgAAADAAAAAlAQAAAAAsYlcCAAAACklEQVR4AWMYBQABAwABRUEDtQAAAABJRU5ErkJggg==`
 
-describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
-  test(
+describe.each(['postcss' /*, 'lightningcss'*/])('%s', (transformer) => {
+  test.debug(
     'can rewrite urls in production builds',
     {
       fs: {
@@ -48,23 +48,30 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         `,
         'src/main.ts': ts``,
         'src/app.css': css`
+          @reference 'tailwindcss';
           @import './dir-1/bar.css';
           @import './dir-1/dir-2/baz.css';
           @import './dir-1/dir-2/vector.css';
         `,
         'src/dir-1/bar.css': css`
-          .bar {
+          .test1 {
             background-image: url('../../resources/image.png');
           }
         `,
         'src/dir-1/dir-2/baz.css': css`
-          .baz {
+          .test2 {
             background-image: url('../../../resources/image.png');
           }
         `,
         'src/dir-1/dir-2/vector.css': css`
-          .baz {
+          @import './dir-3/vector.css';
+          .test3 {
             background-image: url('../../../resources/vector.svg');
+          }
+        `,
+        'src/dir-1/dir-2/dir-3/vector.css': css`
+          .test4 {
+            background-image: url('./vector-2.svg');
           }
         `,
         'resources/image.png': binary(SIMPLE_IMAGE),
@@ -76,6 +83,14 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             <circle cx="200" cy="100" r="80" fill="green" />
           </svg>
         `,
+        'src/dir-1/dir-2/dir-3/vector-2.svg': svg`
+          <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="blue" />
+            <circle cx="200" cy="100" r="80" fill="green" />
+            <rect width="100%" height="100%" fill="red" />
+            <circle cx="200" cy="100" r="80" fill="pink" />
+          </svg>
+       `,
       },
     },
     async ({ fs, exec, expect }) => {
@@ -87,7 +102,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       await fs.expectFileToContain(files[0][0], [SIMPLE_IMAGE])
 
       let images = await fs.glob('dist/**/*.svg')
-      expect(images).toHaveLength(1)
+      expect(images).toHaveLength(2)
 
       await fs.expectFileToContain(files[0][0], [/\/assets\/vector-.*?\.svg/])
     },

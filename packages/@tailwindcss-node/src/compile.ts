@@ -40,10 +40,11 @@ function createCompileOptions({
     async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },
-    async loadStylesheet(id: string, base: string) {
-      let sheet = await loadStylesheet(id, base, onDependency, customCssResolver)
+    async loadStylesheet(id: string, sheetBase: string) {
+      let sheet = await loadStylesheet(id, sheetBase, onDependency, customCssResolver)
 
       if (shouldRewriteUrls) {
+        console.log('rewriteUrls', { root: sheetBase, base: sheet.base, basebase: base })
         sheet.content = await rewriteUrls({
           css: sheet.content,
           root: base,

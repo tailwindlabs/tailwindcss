@@ -63,6 +63,8 @@ export async function rewriteUrls({
       relativeUrl = './' + relativeUrl
     }
 
+    console.log({ url, relativeUrl })
+
     return relativeUrl
   }
 
