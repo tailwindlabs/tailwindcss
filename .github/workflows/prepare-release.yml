@@ -161,8 +161,9 @@ jobs:
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
-            curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal
+            curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
+            chmod +x rustup-init
+            ./rustup-init -y --profile minimal
             source "$HOME/.cargo/env"
             pnpm install --ignore-scripts --filter=!./playgrounds/* || true
             echo "~~~~ rustc --version ~~~~"
