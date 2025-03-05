@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - Add `col-<number>` and `row-<number>` utilities for `grid-column` and `grid-row` ([#15183](https://github.com/tailwindlabs/tailwindcss/pull/15183))
 - Add new candidate extractor ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
+- Add new `--prefix(…)` CSS function ([#16960])(https://github.com/tailwindlabs/tailwindcss/pull/16960)
 
 ### Fixed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't swallow `@utility` declarations when `@apply` is used in nested rules ([#16940](https://github.com/tailwindlabs/tailwindcss/pull/16940))
 - Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
 - Allow `!important` on CSS variables again ([#16873](https://github.com/tailwindlabs/tailwindcss/pull/16873))
+- Ensure that all CSS variables used by preflight are prefixed inside a prefixed setup ([#16960])(https://github.com/tailwindlabs/tailwindcss/pull/16960)
 
 ### Changed
 
