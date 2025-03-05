@@ -218,9 +218,20 @@ class Root {
   // not considered a Tailwind root. When this happened, the root can be GCed.
   public async generate(
     content: string,
-    addWatchFile: (file: string) => void,
+    _addWatchFile: (file: string) => void,
     I: Instrumentation,
   ): Promise<string | false> {
+    function addWatchFile(file: string) {
+      // Scanning `.svg` file containing a `#` or `?` in the path will
+      // crash Vite. We work around this for now by ignoring updates to them.
+      //
+      // https://github.com/tailwindlabs/tailwindcss/issues/16877
+      if (/[\#\?].*\.svg$/.test(file)) {
+        return
+      }
+      _addWatchFile(file)
+    }
+
     let requiresBuildPromise = this.requiresBuild()
     let inputPath = idToPath(this.id)
     let inputBase = path.dirname(path.resolve(inputPath))
