@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
 - _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
-- _Experimental_: Add `scripting`, `scripting-none`, and `scripting-initial` variants ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+- _Experimental_: Add `scripting`, `scripting-none`, and `scripting-initial` variants ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929))
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - Add `col-<number>` and `row-<number>` utilities for `grid-column` and `grid-row` ([#15183](https://github.com/tailwindlabs/tailwindcss/pull/15183))
@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure `not-*` does not remove `:is(…)` from variants ([#16825](https://github.com/tailwindlabs/tailwindcss/pull/16825))
 - Ensure `@keyframes` are correctly emitted when using a prefixed setup ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
+- Don't swallow `@utility` declarations when `@apply` is used in nested rules ([#16940](https://github.com/tailwindlabs/tailwindcss/pull/16940))
+- Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
+- Allow `!important` on CSS variables again ([#16873](https://github.com/tailwindlabs/tailwindcss/pull/16873))
 
 ## [4.0.9] - 2025-02-25
 

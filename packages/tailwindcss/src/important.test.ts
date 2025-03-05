@@ -110,7 +110,7 @@ test('variables in utilities should not be marked as important', async () => {
     }
 
     .ease-out\\! {
-      --tw-ease: var(--ease-out);
+      --tw-ease: var(--ease-out) !important;
       transition-timing-function: var(--ease-out) !important;
     }
 
