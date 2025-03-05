@@ -1,5 +1,4 @@
 use proc_macro::TokenStream;
-use proc_macro2::Span;
 use quote::quote;
 use syn::{
     parse_macro_input, punctuated::Punctuated, token::Comma, Attribute, Data, DataEnum,
@@ -84,7 +83,7 @@ pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
     }
 
     // If no fallback variant is found, default to "Other"
-    let fallback_ident = fallback_variant.unwrap_or_else(|| Ident::new("Other", Span::call_site()));
+    let fallback_ident = fallback_variant.expect("A variant marked with #[fallback] is missing");
 
     // For each of the 256 byte values, fill the table
     let fill = byte_map
