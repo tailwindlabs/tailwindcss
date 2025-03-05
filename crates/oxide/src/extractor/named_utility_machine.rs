@@ -388,6 +388,8 @@ mod tests {
             ("a", vec!["a"]),
             // With dashes
             ("items-center", vec!["items-center"]),
+            // With double dashes
+            ("items--center", vec!["items--center"]),
             // With numbers
             ("px-5", vec!["px-5"]),
             ("px-2.5", vec!["px-2.5"]),
