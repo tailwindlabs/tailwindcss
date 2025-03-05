@@ -16,21 +16,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+
+## [4.0.10] - 2025-03-05
+
+### Added
+
 - Add `col-<number>` and `row-<number>` utilities for `grid-column` and `grid-row` ([#15183](https://github.com/tailwindlabs/tailwindcss/pull/15183))
-- Add new candidate extractor ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
 
 ### Fixed
 
 - Ensure `not-*` does not remove `:is(…)` from variants ([#16825](https://github.com/tailwindlabs/tailwindcss/pull/16825))
-- Ensure `@keyframes` are correctly emitted when using a prefixed setup ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
+- Ensure `@keyframes` are correctly emitted when using a prefix ([#16850](https://github.com/tailwindlabs/tailwindcss/pull/16850))
 - Don't swallow `@utility` declarations when `@apply` is used in nested rules ([#16940](https://github.com/tailwindlabs/tailwindcss/pull/16940))
-- Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#16943](https://github.com/tailwindlabs/tailwindcss/pull/16943))
+- Ensure `outline-hidden` behaves like `outline-none` outside of forced colors mode ([#16943](https://github.com/tailwindlabs/tailwindcss/pull/16943))
 - Allow `!important` on CSS variables again ([#16873](https://github.com/tailwindlabs/tailwindcss/pull/16873))
 - Vite: Do not crash when encountering an `.svg` file with `#` or `?` in the filename ([#16957](https://github.com/tailwindlabs/tailwindcss/pull/16957))
+- Ensure utilities are properly detected within square brackets ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
+- Ensure utilities are properly detected using Angular's conditional class binding syntax ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
+- Ensure utilities starting with numbers are properly extracted from Slim templates ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
+- Discard arbitrary property candidates that have guaranteed-invalid property names ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
 
 ### Changed
 
 - Removed `max-w-auto` and `max-h-auto` utilities as they generate invalid CSS ([#16917](https://github.com/tailwindlabs/tailwindcss/pull/16917))
+- Replaced the existing candidate extractor with a brand new extractor to improve maintainability, correctness, and performance ([#16306](https://github.com/tailwindlabs/tailwindcss/pull/16306))
+
 
 ## [4.0.9] - 2025-02-25
 
@@ -3488,7 +3498,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.9...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.10...HEAD
+[4.0.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.9...v4.0.10
 [4.0.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...v4.0.9
 [4.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.7...v4.0.8
 [4.0.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.6...v4.0.7
