@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `outline-hidden` behaves like `outline-none` in non-`forced-colors` mode ([#](https://github.com/tailwindlabs/tailwindcss/pull/))
 - Allow `!important` on CSS variables again ([#16873](https://github.com/tailwindlabs/tailwindcss/pull/16873))
 
+### Changed
+
+- Removed `max-w-auto` and `max-h-auto` utilities as they generate invalid CSS ([#16917](https://github.com/tailwindlabs/tailwindcss/pull/16917))
+
 ## [4.0.9] - 2025-02-25
 
 ### Fixed

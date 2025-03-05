@@ -2738,8 +2738,8 @@ test('min-width', async () => {
         @tailwind utilities;
       `,
       [
-        'min-w-auto',
         'min-w-full',
+        'min-w-auto',
         'min-w-min',
         'min-w-max',
         'min-w-fit',
@@ -2813,16 +2813,7 @@ test('max-width', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'max-w-none',
-        'max-w-full',
-        'max-w-max',
-        'max-w-max',
-        'max-w-fit',
-        'max-w-4',
-        'max-w-xl',
-        'max-w-[4px]',
-      ],
+      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
@@ -2861,6 +2852,7 @@ test('max-width', async () => {
   expect(
     await run([
       'max-w',
+      'max-w-auto',
       '-max-w-4',
       '-max-w-[4px]',
       'max-w-none/foo',
@@ -2988,8 +2980,8 @@ test('min-height', async () => {
         @tailwind utilities;
       `,
       [
-        'min-h-auto',
         'min-h-full',
+        'min-h-auto',
         'min-h-screen',
         'min-h-svh',
         'min-h-lvh',
@@ -3145,6 +3137,7 @@ test('max-height', async () => {
   expect(
     await run([
       'max-h',
+      'max-h-auto',
       '-max-h-4',
       '-max-h-[4px]',
       'max-h-none/foo',
