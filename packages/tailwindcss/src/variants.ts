@@ -15,6 +15,7 @@ import { type Variant } from './candidate'
 import {
   enableDetailsContent,
   enableInvertedColors,
+  enablePointerVariants,
   enableScripting,
   enableUserValid,
 } from './feature-flags'
@@ -1148,6 +1149,15 @@ export function createVariants(theme: Theme): Variants {
 
   if (enableInvertedColors) {
     staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
+  }
+
+  if (enablePointerVariants) {
+    staticVariant('pointer-none', ['@media (pointer: none)'])
+    staticVariant('pointer-coarse', ['@media (pointer: coarse)'])
+    staticVariant('pointer-fine', ['@media (pointer: fine)'])
+    staticVariant('any-pointer-none', ['@media (any-pointer: none)'])
+    staticVariant('any-pointer-coarse', ['@media (any-pointer: coarse)'])
+    staticVariant('any-pointer-fine', ['@media (any-pointer: fine)'])
   }
 
   if (enableScripting) {
