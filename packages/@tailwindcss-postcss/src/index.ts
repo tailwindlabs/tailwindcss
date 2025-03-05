@@ -110,6 +110,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('Create compiler')
             let compiler = await compileAst(ast, {
               base: inputBasePath,
+              shouldRewriteUrls: true,
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
