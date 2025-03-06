@@ -327,6 +327,7 @@ mod tests {
             (
                 r#"<div class="flex items-center px-2.5 bg-[#0088cc] text-(--my-color)"></div>"#,
                 vec![
+                    "class",
                     "flex",
                     "items-center",
                     "px-2.5",
@@ -379,7 +380,7 @@ mod tests {
             ("{ underline: true }", vec!["underline", "true"]),
             (
                 r#"            <CheckIcon className={clsx('h-4 w-4', { invisible: index !== 0 })} />"#,
-                vec!["h-4", "w-4", "invisible", "index"],
+                vec!["className", "h-4", "w-4", "invisible", "index"],
             ),
             // You can have variants but in a string. Vue example.
             (
@@ -496,13 +497,16 @@ mod tests {
                 //
                 // HTML
                 // Inside a class (on its own)
-                (r#"<div class="{}"></div>"#, vec![]),
+                (r#"<div class="{}"></div>"#, vec!["class"]),
                 // Inside a class (first)
-                (r#"<div class="{} foo"></div>"#, vec!["foo"]),
+                (r#"<div class="{} foo"></div>"#, vec!["class", "foo"]),
                 // Inside a class (second)
-                (r#"<div class="foo {}"></div>"#, vec!["foo"]),
+                (r#"<div class="foo {}"></div>"#, vec!["class", "foo"]),
                 // Inside a class (surrounded)
-                (r#"<div class="foo {} bar"></div>"#, vec!["foo", "bar"]),
+                (
+                    r#"<div class="foo {} bar"></div>"#,
+                    vec!["class", "foo", "bar"],
+                ),
                 // --------------------------
                 //
                 // JavaScript
@@ -606,7 +610,7 @@ mod tests {
             // Quoted attribute
             (
                 r#"input(type="checkbox" class="px-2.5")"#,
-                vec!["checkbox", "px-2.5"],
+                vec!["checkbox", "class", "px-2.5"],
             ),
         ] {
             assert_extract_sorted_candidates(&pre_process_input(input, "pug"), expected);
@@ -627,7 +631,7 @@ mod tests {
                 vec!["bg-blue-100", "2xl:bg-red-100"],
             ),
             // Quoted attribute
-            (r#"div class="px-2.5""#, vec!["div", "px-2.5"]),
+            (r#"div class="px-2.5""#, vec!["div", "class", "px-2.5"]),
         ] {
             assert_extract_sorted_candidates(&pre_process_input(input, "slim"), expected);
         }
@@ -847,6 +851,10 @@ mod tests {
             &pre_process_input(r#"<div class:px-4='condition'></div>"#, "svelte"),
             vec!["class", "px-4", "condition"],
         );
+        assert_extract_sorted_candidates(
+            &pre_process_input(r#"<div class:flex='condition'></div>"#, "svelte"),
+            vec!["class", "flex", "condition"],
+        );
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/16999
@@ -870,6 +878,7 @@ mod tests {
         assert_extract_sorted_candidates(
             r#"<div class="@md:flex @max-md:flex @-[36rem]:flex @[36rem]:flex"></div>"#,
             vec![
+                "class",
                 "@md:flex",
                 "@max-md:flex",
                 "@-[36rem]:flex",
@@ -883,7 +892,7 @@ mod tests {
     fn test_classes_containing_number_followed_by_dash_or_underscore() {
         assert_extract_sorted_candidates(
             r#"<div class="text-Title1_Strong"></div>"#,
-            vec!["text-Title1_Strong"],
+            vec!["class", "text-Title1_Strong"],
         );
     }
 
@@ -892,7 +901,11 @@ mod tests {
     fn test_arbitrary_variable_with_data_type() {
         assert_extract_sorted_candidates(
             r#"<div class="bg-(length:--my-length) bg-[color:var(--my-color)]"></div>"#,
-            vec!["bg-(length:--my-length)", "bg-[color:var(--my-color)]"],
+            vec![
+                "class",
+                "bg-(length:--my-length)",
+                "bg-[color:var(--my-color)]",
+            ],
         );
     }
 

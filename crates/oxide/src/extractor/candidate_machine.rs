@@ -316,13 +316,16 @@ mod tests {
                 //
                 // HTML
                 // Inside a class (on its own)
-                (r#"<div class="{}"></div>"#, vec![]),
+                (r#"<div class="{}"></div>"#, vec!["class"]),
                 // Inside a class (first)
-                (r#"<div class="{} foo"></div>"#, vec!["foo"]),
+                (r#"<div class="{} foo"></div>"#, vec!["class", "foo"]),
                 // Inside a class (second)
-                (r#"<div class="foo {}"></div>"#, vec!["foo"]),
+                (r#"<div class="foo {}"></div>"#, vec!["class", "foo"]),
                 // Inside a class (surrounded)
-                (r#"<div class="foo {} bar"></div>"#, vec!["foo", "bar"]),
+                (
+                    r#"<div class="foo {} bar"></div>"#,
+                    vec!["class", "foo", "bar"],
+                ),
                 // --------------------------
                 //
                 // JavaScript
