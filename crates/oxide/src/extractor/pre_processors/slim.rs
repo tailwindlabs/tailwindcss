@@ -94,6 +94,8 @@ mod tests {
             ),
             // Start of arbitrary property
             ("[color:red]", "[color:red]"),
+            // Arbitrary container query
+            ("@[320px]:flex", "@[320px]:flex"),
             // Nested brackets
             (
                 "bg-[url(https://example.com/?q=[1,2])]",
