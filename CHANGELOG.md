@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure classes containing `--` are extracted correctly ([#16972](https://github.com/tailwindlabs/tailwindcss/pull/16972))
 - Ensure classes containing numbers followed by dash or underscore are extracted correctly ([#16980](https://github.com/tailwindlabs/tailwindcss/pull/16980))
 - Ensure arbitrary container queries are extracted correctly ([#16984](https://github.com/tailwindlabs/tailwindcss/pull/16984))
+- Ensure classes ending in `[` are extracted in Slim templating language ([#16985](https://github.com/tailwindlabs/tailwindcss/pull/16985))
 
 ## [4.0.10] - 2025-03-05
 
