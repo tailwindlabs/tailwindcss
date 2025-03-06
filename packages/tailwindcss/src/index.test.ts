@@ -1051,6 +1051,43 @@ describe('sorting', () => {
       }"
     `)
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/16973
+  it('should not take undefined values into account when sorting', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --text-sm: 0.875rem;
+            --text-sm--line-height: calc(1.25 / 0.875);
+          }
+          @tailwind utilities;
+          @utility fancy-text {
+            font-size: var(--text-4xl);
+            line-height: var(--text-4xl--line-height);
+            font-weight: var(--font-weight-bold);
+          }
+        `,
+        ['fancy-text', 'text-sm'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --text-sm: .875rem;
+        --text-sm--line-height: calc(1.25 / .875);
+      }
+
+      .fancy-text {
+        font-size: var(--text-4xl);
+        line-height: var(--text-4xl--line-height);
+        font-weight: var(--font-weight-bold);
+      }
+
+      .text-sm {
+        font-size: var(--text-sm);
+        line-height: var(--tw-leading, var(--text-sm--line-height));
+      }"
+    `)
+  })
 })
 
 describe('Parsing theme values from CSS', () => {

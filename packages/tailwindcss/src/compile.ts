@@ -326,7 +326,9 @@ function getPropertySort(nodes: AstNode[]) {
     let node = q.shift()!
     if (node.kind === 'declaration') {
       // Empty strings should still be counted, e.g.: `--tw-foo:;` is valid
-      if (node.value !== undefined) count++
+      if (node.value === undefined) continue
+
+      count++
 
       if (seenTwSort) continue
 
