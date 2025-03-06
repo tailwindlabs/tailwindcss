@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Vite: Fix an issue where `url(…)` rebasing in transitively imported CSS files is not resolved correctly
+- Vite: Fix `url(…)` rebasing in transitively imported CSS files
 - PostCSS: Rebase `url(…)`s in imported CSS files
 - Ensure utilities are sorted based on their actual property order ([#16995](https://github.com/tailwindlabs/tailwindcss/pull/16995))
 
