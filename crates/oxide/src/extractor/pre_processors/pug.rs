@@ -1,8 +1,6 @@
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
-use crate::extractor::machine::Machine;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
-use crate::StringMachine;
 
 #[derive(Debug, Default)]
 pub struct Pug;
@@ -12,14 +10,29 @@ impl PreProcessor for Pug {
         let len = content.len();
         let mut result = content.to_vec();
         let mut cursor = cursor::Cursor::new(content);
-        let mut string_machine = StringMachine;
         let mut bracket_stack = BracketStack::default();
 
         while cursor.pos < len {
             match cursor.curr {
                 // Consume strings as-is
                 b'\'' | b'"' => {
-                    string_machine.next(&mut cursor);
+                    let len = cursor.input.len();
+                    let end_char = cursor.curr;
+
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'\'' | b'"' if cursor.curr == end_char => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
                 }
 
                 // Replace dots with spaces

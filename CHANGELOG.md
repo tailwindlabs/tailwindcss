@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure utilities are sorted based on their actual property order ([#16995](https://github.com/tailwindlabs/tailwindcss/pull/16995))
+- Ensure strings in Pug and Slim templates are handled correctly ([#17000](https://github.com/tailwindlabs/tailwindcss/pull/17000))
 
 ## [4.0.11] - 2025-03-06
 
