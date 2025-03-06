@@ -152,5 +152,6 @@ mod tests {
         "#;
 
         Slim::test(input, expected);
+        Slim::test_extract_contains(input, vec!["text-black", "bg-green-300", "bg-red-300"]);
     }
 }
