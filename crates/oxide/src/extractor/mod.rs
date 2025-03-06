@@ -833,6 +833,29 @@ mod tests {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/16982
+    #[test]
+    fn test_arbitrary_container_queries_syntax() {
+        assert_extract_sorted_candidates(
+            r#"<div class="@md:flex @max-md:flex @-[36rem]:flex @[36rem]:flex"></div>"#,
+            vec![
+                "@md:flex",
+                "@max-md:flex",
+                "@-[36rem]:flex",
+                "@[36rem]:flex",
+            ],
+        );
+    }
+  
+    // https://github.com/tailwindlabs/tailwindcss/issues/16978
+    #[test]
+    fn test_classes_containing_number_followed_by_dash_or_underscore() {
+        assert_extract_sorted_candidates(
+            r#"<div class="text-Title1_Strong"></div>"#,
+            vec!["text-Title1_Strong"],
+        );
+    }
+
     #[test]
     fn test_extract_css_variables() {
         for (input, expected) in [
