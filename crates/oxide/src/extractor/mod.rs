@@ -849,6 +849,14 @@ mod tests {
         );
     }
 
+    #[test]
+    fn test_twig_syntax() {
+        assert_extract_candidates_contains(
+            r#"<div class="flex items-center mx-4{% if session.isValid %}{% else %} h-4{% endif %}"></div>"#,
+            vec!["flex", "items-center", "mx-4", "h-4"],
+        );
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/16982
     #[test]
     fn test_arbitrary_container_queries_syntax() {
