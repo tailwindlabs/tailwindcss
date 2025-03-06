@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
+## [4.0.11] - 2025-03-06
+
 ### Fixed
 
 - Ensure classes containing `--` are extracted correctly ([#16972](https://github.com/tailwindlabs/tailwindcss/pull/16972))
@@ -3505,7 +3507,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.10...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.11...HEAD
+[4.0.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.10...v4.0.11
 [4.0.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.9...v4.0.10
 [4.0.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...v4.0.9
 [4.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.7...v4.0.8
