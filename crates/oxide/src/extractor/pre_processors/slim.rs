@@ -1,8 +1,6 @@
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
-use crate::extractor::machine::Machine;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
-use crate::StringMachine;
 
 #[derive(Debug, Default)]
 pub struct Slim;
@@ -12,14 +10,29 @@ impl PreProcessor for Slim {
         let len = content.len();
         let mut result = content.to_vec();
         let mut cursor = cursor::Cursor::new(content);
-        let mut string_machine = StringMachine;
         let mut bracket_stack = BracketStack::default();
 
         while cursor.pos < len {
             match cursor.curr {
                 // Consume strings as-is
                 b'\'' | b'"' => {
-                    string_machine.next(&mut cursor);
+                    let len = cursor.input.len();
+                    let end_char = cursor.curr;
+
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'\'' | b'"' if cursor.curr == end_char => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
                 }
 
                 // Replace dots with spaces
@@ -103,8 +116,41 @@ mod tests {
             ),
             // Nested brackets, with "invalid" syntax but valid due to nesting
             ("content-['50[]']", "content-['50[]']"),
+            // Escaped string
+            ("content-['a\'b\'c\'']", "content-['a\'b\'c\'']"),
         ] {
             Slim::test(input, expected);
         }
+    }
+
+    #[test]
+    fn test_nested_slim_syntax() {
+        let input = r#"
+            .text-black[
+              data-controller= ['foo', ('bar' if rand.positive?)].join(' ')
+            ]
+              .bg-green-300
+                | BLACK on GREEN - OK
+
+              .bg-red-300[
+                data-foo= 42
+              ]
+                | Should be BLACK on RED - FAIL
+        "#;
+
+        let expected = r#"
+             text-black 
+              data-controller= ['foo', ('bar' if rand.positive?)].join(' ')
+            ]
+               bg-green-300
+                | BLACK on GREEN - OK
+
+               bg-red-300 
+                data-foo= 42
+              ]
+                | Should be BLACK on RED - FAIL
+        "#;
+
+        Slim::test(input, expected);
     }
 }
