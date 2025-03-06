@@ -833,6 +833,20 @@ mod tests {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/16982
+    #[test]
+    fn test_arbitrary_container_queries_syntax() {
+        assert_extract_sorted_candidates(
+            r#"<div class="@md:flex @max-md:flex @-[36rem]:flex @[36rem]:flex"></div>"#,
+            vec![
+                "@md:flex",
+                "@max-md:flex",
+                "@-[36rem]:flex",
+                "@[36rem]:flex",
+            ],
+        );
+    }
+
     #[test]
     fn test_extract_css_variables() {
         for (input, expected) in [

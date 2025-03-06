@@ -169,6 +169,17 @@ impl Machine for NamedVariantMachine {
                             _ => return self.restart(),
                         },
 
+                        // Start of an arbitrary value
+                        //
+                        // E.g.: `@[state=pending]:`.
+                        //         ^
+                        Class::OpenBracket => {
+                            return match self.arbitrary_value_machine.next(cursor) {
+                                MachineState::Idle => self.restart(),
+                                MachineState::Done(_) => self.parse_arbitrary_end(cursor),
+                            };
+                        }
+
                         Class::Underscore => match cursor.next.into() {
                             // Valid characters _if_ followed by another valid character. These characters are
                             // only valid inside of the variant but not at the end of the variant.
@@ -360,6 +371,11 @@ mod tests {
                 vec!["group-[data-state=pending]/name:"],
             ),
             ("supports-(--foo)/name:flex", vec!["supports-(--foo)/name:"]),
+            // Container queries
+            ("@md:flex", vec!["@md:"]),
+            ("@max-md:flex", vec!["@max-md:"]),
+            ("@-[36rem]:flex", vec!["@-[36rem]:"]),
+            ("@[36rem]:flex", vec!["@[36rem]:"]),
             // --------------------------------------------------------
 
             // Exceptions:
