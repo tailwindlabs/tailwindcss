@@ -248,6 +248,22 @@ mod tests {
         assert_eq!(actual, expected);
     }
 
+    fn assert_extract_candidates_contains(input: &str, expected: Vec<&str>) {
+        let actual = extract_sorted_candidates(input);
+
+        let mut missing = vec![];
+        for item in &expected {
+            if !actual.contains(item) {
+                missing.push(item);
+            }
+        }
+
+        if !missing.is_empty() {
+            dbg!(&actual, &missing);
+            panic!("Missing some items");
+        }
+    }
+
     fn assert_extract_sorted_css_variables(input: &str, expected: Vec<&str>) {
         let actual = extract_sorted_css_variables(input);
 
