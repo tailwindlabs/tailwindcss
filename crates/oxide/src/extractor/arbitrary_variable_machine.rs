@@ -36,6 +36,14 @@ enum State {
     #[default]
     Idle,
 
+    /// Currently parsing the data type of the arbitrary variable
+    ///
+    /// ```text
+    /// (length:--my-opacity)
+    ///  ^^^^^^^
+    /// ```
+    ParsingDataType,
+
     /// Currently parsing the inside of the arbitrary variable
     ///
     /// ```text
@@ -81,6 +89,13 @@ impl Machine for ArbitraryVariableMachine {
                         self.next(cursor)
                     }
 
+                    Class::AlphaLower => {
+                        self.start_pos = cursor.pos;
+                        self.state = State::ParsingDataType;
+                        cursor.advance();
+                        self.next(cursor)
+                    }
+
                     _ => MachineState::Idle,
                 },
 
@@ -88,6 +103,38 @@ impl Machine for ArbitraryVariableMachine {
                 // character might be a valid start for a new utility.
                 _ => MachineState::Idle,
             },
+
+            State::ParsingDataType => {
+                while cursor.pos < len {
+                    match cursor.curr.into() {
+                        // Valid data type characters
+                        //
+                        // E.g.: `(length:--my-length)`
+                        //         ^
+                        Class::AlphaLower | Class::Dash => {
+                            cursor.advance();
+                        }
+
+                        // End of the data type
+                        //
+                        // E.g.: `(length:--my-length)`
+                        //               ^
+                        Class::Colon => match cursor.next.into() {
+                            Class::Dash => {
+                                self.state = State::Parsing;
+                                cursor.advance();
+                                return self.next(cursor);
+                            }
+
+                            _ => return self.restart(),
+                        },
+
+                        // Anything else is not a valid character
+                        _ => return self.restart(),
+                    };
+                }
+                self.restart()
+            }
 
             State::Parsing => match self.css_variable_machine.next(cursor) {
                 MachineState::Idle => self.restart(),
@@ -286,6 +333,8 @@ mod tests {
                 "(--my-img,url('https://example.com?q=(][)'))",
                 vec!["(--my-img,url('https://example.com?q=(][)'))"],
             ),
+            // With a type hint
+            ("(length:--my-length)", vec!["(length:--my-length)"]),
             // --------------------------------------------------------
 
             // Exceptions:

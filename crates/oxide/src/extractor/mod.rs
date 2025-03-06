@@ -846,13 +846,22 @@ mod tests {
             ],
         );
     }
-  
+
     // https://github.com/tailwindlabs/tailwindcss/issues/16978
     #[test]
     fn test_classes_containing_number_followed_by_dash_or_underscore() {
         assert_extract_sorted_candidates(
             r#"<div class="text-Title1_Strong"></div>"#,
             vec!["text-Title1_Strong"],
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/16983
+    #[test]
+    fn test_arbitrary_variable_with_data_type() {
+        assert_extract_sorted_candidates(
+            r#"<div class="bg-(length:--my-length) bg-[color:var(--my-color)]"></div>"#,
+            vec!["bg-(length:--my-length)", "bg-[color:var(--my-color)]"],
         );
     }
 
