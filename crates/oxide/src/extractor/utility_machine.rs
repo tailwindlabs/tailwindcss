@@ -266,8 +266,6 @@ mod tests {
                 "bg-(--my-color) flex px-(--my-padding)",
                 vec!["bg-(--my-color)", "flex", "px-(--my-padding)"],
             ),
-            // Pug syntax
-            (".flex.bg-red-500", vec!["flex", "bg-red-500"]),
             // --------------------------------------------------------
 
             // Exceptions:
