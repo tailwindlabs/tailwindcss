@@ -1,7 +1,7 @@
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
-use crate::extractor::candidate_machine::is_valid_after_boundary;
+use crate::extractor::boundary::is_valid_after_boundary;
 use crate::extractor::machine::{Machine, MachineState};
 use classification_macros::ClassifyBytes;
 
