@@ -1,8 +1,6 @@
-import { binary, css, js, json, svg, test } from '../utils'
+import { css, js, json, test } from '../utils'
 
-const SIMPLE_IMAGE = `iVBORw0KGgoAAAANSUhEUgAAADAAAAAlAQAAAAAsYlcCAAAACklEQVR4AWMYBQABAwABRUEDtQAAAABJRU5ErkJggg==`
-
-test.debug(
+test(
   'can rewrite urls in production builds',
   {
     fs: {
@@ -49,23 +47,6 @@ test.debug(
         .test4 {
           background-image: url('./vector-2.svg');
         }
-      `,
-      'resources/image.png': binary(SIMPLE_IMAGE),
-      'resources/vector.svg': svg`
-        <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100%" height="100%" fill="red" />
-          <circle cx="200" cy="100" r="80" fill="green" />
-          <rect width="100%" height="100%" fill="red" />
-          <circle cx="200" cy="100" r="80" fill="green" />
-        </svg>
-      `,
-      'src/dir-1/dir-2/dir-3/vector-2.svg': svg`
-        <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100%" height="100%" fill="blue" />
-          <circle cx="200" cy="100" r="80" fill="green" />
-          <rect width="100%" height="100%" fill="red" />
-          <circle cx="200" cy="100" r="80" fill="pink" />
-        </svg>
       `,
     },
   },
