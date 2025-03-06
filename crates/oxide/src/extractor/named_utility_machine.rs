@@ -243,7 +243,8 @@ impl Machine for NamedUtilityMachine {
                         }
 
                         // A number must be preceded by a `-`, `.` or another alphanumeric
-                        // character, and can be followed by a `.` or an alphanumeric character.
+                        // character, and can be followed by a `.` or an alphanumeric character or
+                        // dash or underscore.
                         //
                         // E.g.: `text-2xs`
                         //            ^^
@@ -272,6 +273,8 @@ impl Machine for NamedUtilityMachine {
                                     | Class::AlphaLower
                                     | Class::AlphaUpper
                                     | Class::Percent
+                                    | Class::Underscore
+                                    | Class::Dash
                             ) {
                                 return self.done(self.start_pos, cursor);
                             }
@@ -395,6 +398,9 @@ mod tests {
             // With numbers
             ("px-5", vec!["px-5"]),
             ("px-2.5", vec!["px-2.5"]),
+            // With number followed by dash or underscore
+            ("text-title1-strong", vec!["text-title1-strong"]),
+            ("text-title1_strong", vec!["text-title1_strong"]),
             // With trailing % sign
             ("from-15%", vec!["from-15%"]),
             // Arbitrary value with bracket notation
