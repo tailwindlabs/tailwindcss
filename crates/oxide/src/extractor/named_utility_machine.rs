@@ -1,6 +1,7 @@
 use crate::cursor;
 use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
+use crate::extractor::candidate_machine::is_valid_after_boundary;
 use crate::extractor::machine::{Machine, MachineState};
 use classification_macros::ClassifyBytes;
 
@@ -120,19 +121,22 @@ impl Machine for NamedUtilityMachine {
                         // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                         //                    ^
                         Class::AlphaLower | Class::AlphaUpper => {
-                            match cursor.next.into() {
-                                Class::Quote
-                                | Class::Whitespace
-                                | Class::CloseBracket
-                                | Class::Dot
-                                | Class::Colon
-                                | Class::End
-                                | Class::Slash
-                                | Class::Exclamation => return self.done(self.start_pos, cursor),
-
-                                // Still valid characters
-                                _ => cursor.advance(),
+                            if is_valid_after_boundary(&cursor.next) || {
+                                // Or any of these characters
+                                //
+                                // - `:`, because of JS object keys
+                                // - `/`, because of modifiers
+                                // - `!`, because of important
+                                matches!(
+                                    cursor.next.into(),
+                                    Class::Colon | Class::Slash | Class::Exclamation
+                                )
+                            } {
+                                return self.done(self.start_pos, cursor);
                             }
+
+                            // Still valid characters
+                            cursor.advance()
                         }
 
                         Class::Dash => match cursor.next.into() {
@@ -213,14 +217,20 @@ impl Machine for NamedUtilityMachine {
                             //                   ^
                             // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                             //                    ^
-                            Class::Quote
-                            | Class::Whitespace
-                            | Class::CloseBracket
-                            | Class::Dot
-                            | Class::Colon
-                            | Class::End
-                            | Class::Slash
-                            | Class::Exclamation => return self.done(self.start_pos, cursor),
+                            _ if is_valid_after_boundary(&cursor.next) || {
+                                // Or any of these characters
+                                //
+                                // - `:`, because of JS object keys
+                                // - `/`, because of modifiers
+                                // - `!`, because of important
+                                matches!(
+                                    cursor.next.into(),
+                                    Class::Colon | Class::Slash | Class::Exclamation
+                                )
+                            } =>
+                            {
+                                return self.done(self.start_pos, cursor)
+                            }
 
                             // Everything else is invalid
                             _ => return self.restart(),

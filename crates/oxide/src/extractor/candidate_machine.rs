@@ -200,7 +200,7 @@ fn is_valid_before_boundary(c: &u8) -> bool {
 /// E.g.: `<div class:flex="bool">` Svelte
 ///                       ^
 #[inline(always)]
-fn is_valid_after_boundary(c: &u8) -> bool {
+pub fn is_valid_after_boundary(c: &u8) -> bool {
     is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=' | b'{')
 }
 
