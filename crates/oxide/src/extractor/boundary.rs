@@ -1,31 +1,15 @@
+use classification_macros::ClassifyBytes;
+
 use crate::extractor::Span;
 
-/// A candidate must be preceded or followed by any of these characters
-/// E.g.: `<div class="flex">`
-///                   ^ Valid for `flex`
-///        ^ Invalid for `div`
-#[inline(always)]
-fn is_valid_common_boundary(c: &u8) -> bool {
-    matches!(
-        c,
-        b'\t' | b'\n' | b'\x0C' | b'\r' | b' ' | b'"' | b'\'' | b'`' | b'\0'
-    )
-}
-
-/// A candidate must be preceded by any of these characters.
 #[inline(always)]
 pub fn is_valid_before_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'.' | b'}')
+    matches!(c.into(), Class::Common | Class::Before)
 }
 
-/// A candidate must be followed by any of these characters.
-///
-/// E.g.: `[class.foo]`             Angular
-/// E.g.: `<div class:flex="bool">` Svelte
-///                       ^
 #[inline(always)]
 pub fn is_valid_after_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=' | b'{')
+    matches!(c.into(), Class::Common | Class::After)
 }
 
 #[inline(always)]
@@ -48,4 +32,73 @@ pub fn has_valid_boundaries(span: &Span, input: &[u8]) -> bool {
 
     // Ensure the span has valid boundary characters before and after
     is_valid_before_boundary(&before) && is_valid_after_boundary(&after)
+}
+
+#[derive(Debug, Clone, Copy, ClassifyBytes)]
+enum Class {
+    // Whitespace, e.g.:
+    //
+    // ```
+    // <div class="flex flex-col items-center"></div>
+    //                 ^        ^
+    // ```
+    #[bytes(b'\t', b'\n', b'\x0C', b'\r', b' ')]
+    // Quotes, e.g.:
+    //
+    // ```
+    // <div class="flex">
+    //            ^    ^
+    // ```
+    #[bytes(b'"', b'\'', b'`')]
+    // Twig like templating languages, e.g.:
+    //
+    // ```
+    // <div class="{% if true %}flex{% else %}block{% endif %}">
+    //                         ^
+    // ```
+    #[bytes(b'}')]
+    // End of the input, e.g.:
+    //
+    // ```
+    // flex
+    //     ^
+    // ```
+    #[bytes(b'\0')]
+    Common,
+
+    // Angular like attributes, e.g.:
+    //
+    // ````
+    // [class.foo]
+    //       ^
+    // ```
+    #[bytes(b'.')]
+    Before,
+
+    // Clojure and Angular like languages, e.g.:
+    // ```
+    // [:div.p-2]
+    //          ^
+    // [class.foo]
+    //           ^
+    // ```
+    #[bytes(b']')]
+    // Twig like templating languages, e.g.:
+    //
+    // ```
+    // <div class="{% if true %}flex{% else %}block{% endif %}">
+    //                              ^
+    // ```
+    #[bytes(b'{')]
+    // Svelte like attributes, e.g.:
+    //
+    // ```
+    // <div class:flex="bool"></div>
+    //                ^
+    // ```
+    #[bytes(b'=')]
+    After,
+
+    #[fallback]
+    Other,
 }
