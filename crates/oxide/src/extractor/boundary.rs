@@ -66,7 +66,7 @@ enum Class {
     //       ^
     // ```
     #[bytes(b'.')]
-    // Twig like templating languages, e.g.:
+    // Twig-like templating languages, e.g.:
     //
     // ```
     // <div class="{% if true %}flex{% else %}block{% endif %}">
