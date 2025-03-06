@@ -469,8 +469,9 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
     use crate::extractor::pre_processors::*;
 
     match extension {
+        "pug" => Pug.process(content),
         "rb" | "erb" => Ruby.process(content),
-        "slim" | "pug" => Pug.process(content),
+        "slim" => Slim.process(content),
         "svelte" => Svelte.process(content),
         _ => content.to_vec(),
     }
