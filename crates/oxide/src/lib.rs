@@ -3,7 +3,6 @@ use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
 use bstr::ByteSlice;
-use extractor::string_machine::StringMachine;
 use extractor::{Extracted, Extractor};
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
