@@ -191,7 +191,7 @@ fn is_valid_common_boundary(c: &u8) -> bool {
 /// A candidate must be preceded by any of these characters.
 #[inline(always)]
 fn is_valid_before_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'.')
+    is_valid_common_boundary(c) || matches!(c, b'.' | b'}')
 }
 
 /// A candidate must be followed by any of these characters.
@@ -201,7 +201,7 @@ fn is_valid_before_boundary(c: &u8) -> bool {
 ///                       ^
 #[inline(always)]
 fn is_valid_after_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=')
+    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=' | b'{')
 }
 
 #[inline(always)]
