@@ -25,4 +25,38 @@ pub trait PreProcessor: Sized + Default {
 
         assert_eq!(actual, expected);
     }
+
+    #[cfg(test)]
+    fn test_extract_contains(input: &str, items: Vec<&str>) {
+        use crate::extractor::{Extracted, Extractor};
+
+        let input = input.as_bytes();
+
+        let processor = Self::default();
+        let transformed = processor.process(input);
+
+        let extracted = Extractor::new(&transformed).extract();
+
+        // Extract all candidates and css variables.
+        let candidates = extracted
+            .iter()
+            .filter_map(|x| match x {
+                Extracted::Candidate(bytes) => std::str::from_utf8(bytes).ok(),
+                Extracted::CssVariable(bytes) => std::str::from_utf8(bytes).ok(),
+            })
+            .collect::<Vec<_>>();
+
+        // Ensure all items are present in the candidates.
+        let mut missing = vec![];
+        for item in &items {
+            if !candidates.contains(item) {
+                missing.push(item);
+            }
+        }
+
+        if !missing.is_empty() {
+            dbg!(&candidates, &missing);
+            panic!("Missing some items");
+        }
+    }
 }
