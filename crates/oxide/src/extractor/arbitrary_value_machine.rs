@@ -176,6 +176,8 @@ mod tests {
                 "[&>[data-slot=icon]:last-child]",
                 vec!["[&>[data-slot=icon]:last-child]"],
             ),
+            // With data types
+            ("[length:32rem]", vec!["[length:32rem]"]),
             // Spaces are not allowed
             ("[ #0088cc ]", vec![]),
             // Unbalanced brackets are not allowed
