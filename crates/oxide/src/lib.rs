@@ -3,7 +3,6 @@ use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
 use bstr::ByteSlice;
-use extractor::string_machine::StringMachine;
 use extractor::{Extracted, Extractor};
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
@@ -541,6 +540,7 @@ mod tests {
             (
                 r#"<div class="!tw__flex sm:!tw__block tw__bg-gradient-to-t flex tw:[color:red] group-[]:tw__flex"#,
                 vec![
+                    ("class".to_string(), 5),
                     ("!tw__flex".to_string(), 12),
                     ("sm:!tw__block".to_string(), 22),
                     ("tw__bg-gradient-to-t".to_string(), 36),
@@ -553,6 +553,7 @@ mod tests {
             (
                 r#"<div class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red] tw:in-[.tw\:group]:flex"></div>"#,
                 vec![
+                    ("class".to_string(), 5),
                     ("tw:flex!".to_string(), 12),
                     ("tw:sm:block!".to_string(), 21),
                     ("tw:bg-linear-to-t".to_string(), 34),

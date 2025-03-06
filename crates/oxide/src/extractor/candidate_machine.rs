@@ -191,7 +191,7 @@ fn is_valid_common_boundary(c: &u8) -> bool {
 /// A candidate must be preceded by any of these characters.
 #[inline(always)]
 fn is_valid_before_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'.')
+    is_valid_common_boundary(c) || matches!(c, b'.' | b'}')
 }
 
 /// A candidate must be followed by any of these characters.
@@ -200,8 +200,8 @@ fn is_valid_before_boundary(c: &u8) -> bool {
 /// E.g.: `<div class:flex="bool">` Svelte
 ///                       ^
 #[inline(always)]
-fn is_valid_after_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=')
+pub fn is_valid_after_boundary(c: &u8) -> bool {
+    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=' | b'{')
 }
 
 #[inline(always)]
@@ -316,13 +316,16 @@ mod tests {
                 //
                 // HTML
                 // Inside a class (on its own)
-                (r#"<div class="{}"></div>"#, vec![]),
+                (r#"<div class="{}"></div>"#, vec!["class"]),
                 // Inside a class (first)
-                (r#"<div class="{} foo"></div>"#, vec!["foo"]),
+                (r#"<div class="{} foo"></div>"#, vec!["class", "foo"]),
                 // Inside a class (second)
-                (r#"<div class="foo {}"></div>"#, vec!["foo"]),
+                (r#"<div class="foo {}"></div>"#, vec!["class", "foo"]),
                 // Inside a class (surrounded)
-                (r#"<div class="foo {} bar"></div>"#, vec!["foo", "bar"]),
+                (
+                    r#"<div class="foo {} bar"></div>"#,
+                    vec!["class", "foo", "bar"],
+                ),
                 // --------------------------
                 //
                 // JavaScript
