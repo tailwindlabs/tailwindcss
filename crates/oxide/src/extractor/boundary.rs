@@ -50,13 +50,6 @@ enum Class {
     //            ^    ^
     // ```
     #[bytes(b'"', b'\'', b'`')]
-    // Twig like templating languages, e.g.:
-    //
-    // ```
-    // <div class="{% if true %}flex{% else %}block{% endif %}">
-    //                         ^
-    // ```
-    #[bytes(b'}')]
     // End of the input, e.g.:
     //
     // ```
@@ -73,6 +66,13 @@ enum Class {
     //       ^
     // ```
     #[bytes(b'.')]
+    // Twig like templating languages, e.g.:
+    //
+    // ```
+    // <div class="{% if true %}flex{% else %}block{% endif %}">
+    //                         ^
+    // ```
+    #[bytes(b'}')]
     Before,
 
     // Clojure and Angular like languages, e.g.:
