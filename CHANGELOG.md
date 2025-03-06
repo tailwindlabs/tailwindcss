@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure classes containing `--` are extracted correctly ([#16972](https://github.com/tailwindlabs/tailwindcss/pull/16972))
+- Ensure classes containing number followed by dash or underscore are extracted correctly ([#16980](https://github.com/tailwindlabs/tailwindcss/pull/16980))
 
 ## [4.0.10] - 2025-03-05
 
