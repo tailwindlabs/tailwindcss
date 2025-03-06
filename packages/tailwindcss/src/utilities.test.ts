@@ -15036,11 +15036,6 @@ test('text', async () => {
       --leading-snug: 1.375;
     }
 
-    .text-sm {
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-    }
-
     .text-\\[10px\\]\\/none {
       font-size: 10px;
       line-height: 1;
@@ -15069,6 +15064,11 @@ test('text', async () => {
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
       line-height: calc(var(--spacing) * 6);
+    }
+
+    .text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
 
     .text-sm\\/6 {
@@ -16748,11 +16748,11 @@ describe('custom utilities', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
-          font-size: var(--text-sm, .875rem);
-          line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
           font-size: var(--text-sm, .8755rem);
           line-height: var(--text-sm--line-height, 1.255rem);
           text-rendering: optimizeLegibility;
+          font-size: var(--text-sm, .875rem);
+          line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
         }
       }"
     `)
