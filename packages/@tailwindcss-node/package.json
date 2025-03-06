@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/node",
-  "version": "4.0.10",
+  "version": "4.0.11",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
