@@ -220,9 +220,6 @@ mod tests {
             // With dashes
             ("items-center", vec!["items-center"]),
             ("items--center", vec!["items--center"]),
-            // With number followed by dash or underscore
-            ("text-title1-strong", vec!["text-title1-strong"]),
-            ("text-title1_strong", vec!["text-title1_strong"]),
             // Inside a string
             ("'flex'", vec!["flex"]),
             // Multiple utilities

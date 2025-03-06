@@ -300,9 +300,6 @@ mod tests {
             ("items--center", vec!["items--center"]),
             // Simple utility with numbers
             ("px-2.5", vec!["px-2.5"]),
-            // Simple utility with number followed by dash or underscore
-            ("text-title1-strong", vec!["text-title1-strong"]),
-            ("text-title1_strong", vec!["text-title1_strong"]),
             // Arbitrary properties
             ("[color:red]", vec!["[color:red]"]),
             ("![color:red]", vec!["![color:red]"]),
@@ -833,6 +830,15 @@ mod tests {
         assert_extract_sorted_candidates(
             &pre_process_input(r#"<div class:px-4='condition'></div>"#, "svelte"),
             vec!["class", "px-4", "condition"],
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/16978
+    #[test]
+    fn test_classes_containing_number_followed_by_dash_or_underscore() {
+        assert_extract_sorted_candidates(
+            r#"<div class="text-Title1_Strong"></div>"#,
+            vec!["text-Title1_Strong"],
         );
     }
 

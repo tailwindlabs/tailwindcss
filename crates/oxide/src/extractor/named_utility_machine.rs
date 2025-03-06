@@ -243,7 +243,8 @@ impl Machine for NamedUtilityMachine {
                         }
 
                         // A number must be preceded by a `-`, `.` or another alphanumeric
-                        // character, and can be followed by a `.` or an alphanumeric character or dash or underscore.
+                        // character, and can be followed by a `.` or an alphanumeric character or
+                        // dash or underscore.
                         //
                         // E.g.: `text-2xs`
                         //            ^^
