@@ -300,6 +300,9 @@ mod tests {
             ("items--center", vec!["items--center"]),
             // Simple utility with numbers
             ("px-2.5", vec!["px-2.5"]),
+            // Simple utility with number followed by dash or underscore
+            ("text-title1-strong", vec!["text-title1-strong"]),
+            ("text-title1_strong", vec!["text-title1_strong"]),
             // Arbitrary properties
             ("[color:red]", vec!["[color:red]"]),
             ("![color:red]", vec!["![color:red]"]),
