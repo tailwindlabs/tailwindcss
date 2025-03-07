@@ -22,11 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix `haml` pre-processing ([#17051](https://github.com/tailwindlabs/tailwindcss/pull/17051))
 - Ensure classes between `>` and `<` are properly extracted ([#17094](https://github.com/tailwindlabs/tailwindcss/pull/17094))
 - Treat starting single quote as verbatim text in Slim ([#17085](https://github.com/tailwindlabs/tailwindcss/pull/17085))
-- Ensure that all CSS variables used by preflight are prefixed
+- Ensure that all CSS variables used by preflight are prefixed ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 
 ### Changed
 
-- The `--theme(…)` function now returns CSS variables unless used inside positions where CSS variables are invalid (e.g. `@media` queries)
+- The `--theme(…)` function now returns CSS variables unless used inside positions where CSS variables are invalid (e.g. `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 
 ## [4.0.12] - 2025-03-07
 
