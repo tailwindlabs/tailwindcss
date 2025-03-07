@@ -873,6 +873,55 @@ mod tests {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/17050
+    #[test]
+    fn test_haml_syntax() {
+        for (input, expected) in [
+            // Element with classes
+            (
+                "%body.flex.flex-col.items-center.justify-center",
+                vec!["flex", "flex-col", "items-center", "justify-center"],
+            ),
+            // Plain element
+            (
+                ".text-slate-500.xl:text-gray-500",
+                vec!["text-slate-500", "xl:text-gray-500"],
+            ),
+            // Element with hash attributes
+            (
+                ".text-black.xl:text-red-500{ data: { tailwind: 'css' } }",
+                vec!["text-black", "xl:text-red-500"],
+            ),
+            // Element with a boolean attribute
+            (
+                ".text-green-500.xl:text-blue-500(data-sidebar)",
+                vec!["text-green-500", "xl:text-blue-500"],
+            ),
+            // Element with interpreted content
+            (
+                ".text-yellow-500.xl:text-purple-500= 'Element with interpreted content'",
+                vec!["text-yellow-500", "xl:text-purple-500"],
+            ),
+            // Element with a hash at the end and an extra class.
+            (
+                ".text-orange-500.xl:text-pink-500{ class: 'bg-slate-100' }",
+                vec!["text-orange-500", "xl:text-pink-500", "bg-slate-100"],
+            ),
+            // Object reference
+            (
+                ".text-teal-500.xl:text-indigo-500[@user, :greeting]",
+                vec!["text-teal-500", "xl:text-indigo-500"],
+            ),
+            // Element with an ID
+            (
+                ".text-lime-500.xl:text-emerald-500#root",
+                vec!["text-lime-500", "xl:text-emerald-500"],
+            ),
+        ] {
+            assert_extract_candidates_contains(&pre_process_input(input, "haml"), expected);
+        }
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/16982
     #[test]
     fn test_arbitrary_container_queries_syntax() {
@@ -888,6 +937,7 @@ mod tests {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/17023
     #[test]
     fn test_js_embedded_in_php_syntax() {
         // Escaped single quotes
