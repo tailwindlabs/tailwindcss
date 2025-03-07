@@ -266,8 +266,6 @@ mod tests {
                 "bg-(--my-color) flex px-(--my-padding)",
                 vec!["bg-(--my-color)", "flex", "px-(--my-padding)"],
             ),
-            // Pug syntax
-            (".flex.bg-red-500", vec!["flex", "bg-red-500"]),
             // --------------------------------------------------------
 
             // Exceptions:
@@ -293,15 +291,15 @@ mod tests {
                 //
                 // HTML
                 // Inside a class (on its own)
-                (r#"<div class="{}"></div>"#, vec!["div"]),
+                (r#"<div class="{}"></div>"#, vec!["div", "class"]),
                 // Inside a class (first)
-                (r#"<div class="{} foo"></div>"#, vec!["div", "foo"]),
+                (r#"<div class="{} foo"></div>"#, vec!["div", "class", "foo"]),
                 // Inside a class (second)
-                (r#"<div class="foo {}"></div>"#, vec!["div", "foo"]),
+                (r#"<div class="foo {}"></div>"#, vec!["div", "class", "foo"]),
                 // Inside a class (surrounded)
                 (
                     r#"<div class="foo {} bar"></div>"#,
-                    vec!["div", "foo", "bar"],
+                    vec!["div", "class", "foo", "bar"],
                 ),
                 // --------------------------
                 //

@@ -1,4 +1,5 @@
 use crate::cursor;
+use crate::extractor::boundary::{has_valid_boundaries, is_valid_before_boundary};
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::utility_machine::UtilityMachine;
 use crate::extractor::variant_machine::VariantMachine;
@@ -176,56 +177,6 @@ impl CandidateMachine {
     }
 }
 
-/// A candidate must be preceded or followed by any of these characters
-/// E.g.: `<div class="flex">`
-///                   ^ Valid for `flex`
-///        ^ Invalid for `div`
-#[inline(always)]
-fn is_valid_common_boundary(c: &u8) -> bool {
-    matches!(
-        c,
-        b'\t' | b'\n' | b'\x0C' | b'\r' | b' ' | b'"' | b'\'' | b'`' | b'\0'
-    )
-}
-
-/// A candidate must be preceded by any of these characters.
-#[inline(always)]
-fn is_valid_before_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'.')
-}
-
-/// A candidate must be followed by any of these characters.
-///
-/// E.g.: `[class.foo]`             Angular
-/// E.g.: `<div class:flex="bool">` Svelte
-///                       ^
-#[inline(always)]
-fn is_valid_after_boundary(c: &u8) -> bool {
-    is_valid_common_boundary(c) || matches!(c, b'}' | b']' | b'=')
-}
-
-#[inline(always)]
-fn has_valid_boundaries(span: &Span, input: &[u8]) -> bool {
-    let before = {
-        if span.start == 0 {
-            b'\0'
-        } else {
-            input[span.start - 1]
-        }
-    };
-
-    let after = {
-        if span.end >= input.len() - 1 {
-            b'\0'
-        } else {
-            input[span.end + 1]
-        }
-    };
-
-    // Ensure the span has valid boundary characters before and after
-    is_valid_before_boundary(&before) && is_valid_after_boundary(&after)
-}
-
 #[cfg(test)]
 mod tests {
     use super::CandidateMachine;
@@ -316,13 +267,16 @@ mod tests {
                 //
                 // HTML
                 // Inside a class (on its own)
-                (r#"<div class="{}"></div>"#, vec![]),
+                (r#"<div class="{}"></div>"#, vec!["class"]),
                 // Inside a class (first)
-                (r#"<div class="{} foo"></div>"#, vec!["foo"]),
+                (r#"<div class="{} foo"></div>"#, vec!["class", "foo"]),
                 // Inside a class (second)
-                (r#"<div class="foo {}"></div>"#, vec!["foo"]),
+                (r#"<div class="foo {}"></div>"#, vec!["class", "foo"]),
                 // Inside a class (surrounded)
-                (r#"<div class="foo {} bar"></div>"#, vec!["foo", "bar"]),
+                (
+                    r#"<div class="foo {} bar"></div>"#,
+                    vec!["class", "foo", "bar"],
+                ),
                 // --------------------------
                 //
                 // JavaScript
