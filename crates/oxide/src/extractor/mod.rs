@@ -8,6 +8,7 @@ use std::fmt;
 pub mod arbitrary_property_machine;
 pub mod arbitrary_value_machine;
 pub mod arbitrary_variable_machine;
+mod boundary;
 pub mod bracket_stack;
 pub mod candidate_machine;
 pub mod css_variable_machine;

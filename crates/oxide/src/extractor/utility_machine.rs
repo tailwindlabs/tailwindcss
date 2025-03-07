@@ -312,10 +312,7 @@ mod tests {
                     vec!["let", "classes", "true"],
                 ),
                 // Inside an object (no spaces, key)
-                (
-                    r#"let classes = {'{}':true};"#,
-                    vec!["let", "classes", "true"],
-                ),
+                (r#"let classes = {'{}':true};"#, vec!["let", "classes"]),
                 // Inside an object (value)
                 (
                     r#"let classes = { primary: '{}' };"#,

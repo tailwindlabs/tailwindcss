@@ -27,6 +27,7 @@ impl PreProcessor for Ruby {
             let boundary = match cursor.curr {
                 b'[' => b']',
                 b'(' => b')',
+                b'{' => b'}',
                 _ => {
                     cursor.advance();
                     continue;
@@ -54,12 +55,12 @@ impl PreProcessor for Ruby {
                     }
 
                     // Start of a nested bracket
-                    b'[' | b'(' => {
+                    b'[' | b'(' | b'{' => {
                         bracket_stack.push(cursor.curr);
                     }
 
                     // End of a nested bracket
-                    b']' | b')' if !bracket_stack.is_empty() => {
+                    b']' | b')' | b'}' if !bracket_stack.is_empty() => {
                         if !bracket_stack.pop(cursor.curr) {
                             // Unbalanced
                             cursor.advance();
@@ -98,6 +99,12 @@ mod tests {
                 "%w[flex data-[state=pending]:bg-[#0088cc] flex-col]",
                 "%w flex data-[state=pending]:bg-[#0088cc] flex-col ",
             ),
+            // %w{…}
+            ("%w{flex px-2.5}", "%w flex px-2.5 "),
+            (
+                "%w{flex data-[state=pending]:bg-(--my-color) flex-col}",
+                "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
+            ),
             // %w(…)
             ("%w(flex px-2.5)", "%w flex px-2.5 "),
             (
@@ -112,6 +119,38 @@ mod tests {
             (r#"%w[foo[bar baz]qux]"#, r#"%w foo[bar baz]qux "#),
         ] {
             Ruby::test(input, expected);
+        }
+    }
+
+    #[test]
+    fn test_ruby_extraction() {
+        for (input, expected) in [
+            // %w[…]
+            ("%w[flex px-2.5]", vec!["flex", "px-2.5"]),
+            ("%w[px-2.5 flex]", vec!["flex", "px-2.5"]),
+            ("%w[2xl:flex]", vec!["2xl:flex"]),
+            (
+                "%w[flex data-[state=pending]:bg-[#0088cc] flex-col]",
+                vec!["flex", "data-[state=pending]:bg-[#0088cc]", "flex-col"],
+            ),
+            // %w{…}
+            ("%w{flex px-2.5}", vec!["flex", "px-2.5"]),
+            ("%w{px-2.5 flex}", vec!["flex", "px-2.5"]),
+            ("%w{2xl:flex}", vec!["2xl:flex"]),
+            (
+                "%w{flex data-[state=pending]:bg-(--my-color) flex-col}",
+                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
+            ),
+            // %w(…)
+            ("%w(flex px-2.5)", vec!["flex", "px-2.5"]),
+            ("%w(px-2.5 flex)", vec!["flex", "px-2.5"]),
+            ("%w(2xl:flex)", vec!["2xl:flex"]),
+            (
+                "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
+                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
+            ),
+        ] {
+            Ruby::test_extract_contains(input, expected);
         }
     }
 }

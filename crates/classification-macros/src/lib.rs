@@ -107,6 +107,12 @@ pub fn classify_bytes_derive(input: TokenStream) -> TokenStream {
                 #enum_name::TABLE[byte as usize]
             }
         }
+
+        impl From<&u8> for #enum_name {
+            fn from(byte: &u8) -> Self {
+                #enum_name::TABLE[*byte as usize]
+            }
+        }
     };
 
     TokenStream::from(expanded)
