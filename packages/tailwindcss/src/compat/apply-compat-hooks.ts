@@ -134,9 +134,9 @@ export async function applyCompatibilityHooks({
   // compatibility concerns localized to our compatibility layer.
   let resolveThemeVariableValue = designSystem.resolveThemeValue
 
-  designSystem.resolveThemeValue = function resolveThemeValue(path: string) {
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, forceInline?: boolean) {
     if (path.startsWith('--')) {
-      return resolveThemeVariableValue(path)
+      return resolveThemeVariableValue(path, forceInline)
     }
 
     // If the theme value is not found in the simple resolver, we upgrade to the full backward
@@ -149,7 +149,7 @@ export async function applyCompatibilityHooks({
       configs: [],
       pluginDetails: [],
     })
-    return designSystem.resolveThemeValue(path)
+    return designSystem.resolveThemeValue(path, forceInline)
   }
 
   // If there are no plugins or configs registered, we don't need to register
@@ -260,8 +260,8 @@ function upgradeToFullPluginSupport({
   // config files are actually being used. In the future we may want to optimize
   // this further by only doing this if plugins or config files _actually_
   // registered JS config objects.
-  designSystem.resolveThemeValue = function resolveThemeValue(path: string, defaultValue?: string) {
-    let resolvedValue = pluginApi.theme(path, defaultValue)
+  designSystem.resolveThemeValue = function resolveThemeValue(path: string, forceInline?: boolean) {
+    let resolvedValue = pluginApi.theme(path, forceInline)
 
     if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
       // When a tuple is returned, return the first element

@@ -173,6 +173,40 @@ describe('--theme(…)', () => {
       `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
     )
   })
+
+  test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+        }
+        @custom-media --md (width >= --theme(--breakpoint-md));
+        @media (--md) {
+          .blue {
+            color: blue;
+          }
+        }
+        @media (width >= --theme(--breakpoint-lg)) {
+          .red {
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "@media (width >= 48rem) {
+        .blue {
+          color: #00f;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .red {
+          color: red;
+        }
+      }"
+    `)
+  })
 })
 
 describe('theme(…)', () => {
