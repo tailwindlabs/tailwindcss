@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The `--theme(…)` function now returns CSS variables for your theme values unless used inside positions where CSS variables are invalid (e.g. `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
+- The `--theme(…)` function now returns CSS variables from your theme variables unless used inside positions where CSS variables are invalid (e.g. inside `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 
 ## [4.0.14] - 2025-03-13
 
