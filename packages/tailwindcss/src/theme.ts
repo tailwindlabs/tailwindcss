@@ -200,14 +200,18 @@ export class Theme {
     value.options |= ThemeOptions.USED
   }
 
-  resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
+  resolve(
+    candidateValue: string | null,
+    themeKeys: ThemeKey[],
+    options: ThemeOptions = ThemeOptions.NONE,
+  ): string | null {
     let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 
     let value = this.values.get(themeKey)!
 
-    if (value.options & ThemeOptions.INLINE) {
+    if ((options | value.options) & ThemeOptions.INLINE) {
       return value.value
     }
 

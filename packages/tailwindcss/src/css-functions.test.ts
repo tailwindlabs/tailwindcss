@@ -153,8 +153,115 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: var(--color-red-500);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
       ".red {
         color: red;
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500/50)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500/0.5);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500/50 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500/50 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        color: oklab(62.7955% .224863 .125846);
+      }"
+    `)
+  })
+
+  test('--theme(--unknown, fallback)', async () => {
+    expect(
+      await compileCss(css`
+        .red {
+          color: --theme(--unknown, red);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        color: var(--unknown, red);
+      }"
+    `)
+  })
+
+  test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+        }
+        @custom-media --md (width >= --theme(--breakpoint-md));
+        @media (--md) {
+          .blue {
+            color: blue;
+          }
+        }
+        @media (width >= --theme(--breakpoint-lg)) {
+          .red {
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "@media (width >= 48rem) {
+        .blue {
+          color: #00f;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .red {
+          color: red;
+        }
       }"
     `)
   })
