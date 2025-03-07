@@ -4,7 +4,7 @@ import { compileAstNodes, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
-import type { Theme, ThemeKey } from './theme'
+import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
@@ -29,7 +29,7 @@ export type DesignSystem = {
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
 
   getVariantOrder(): Map<Variant, number>
-  resolveThemeValue(path: string): string | undefined
+  resolveThemeValue(path: string, forceInline?: boolean): string | undefined
 
   trackUsedVariables(raw: string): void
 
@@ -150,7 +150,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       return order
     },
 
-    resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`) {
+    resolveThemeValue(path: `${ThemeKey}` | `${ThemeKey}${string}`, forceInline: boolean = true) {
       // Extract an eventual modifier from the path. e.g.:
       // - "--color-red-500 / 50%" -> "50%"
       let lastSlash = path.lastIndexOf('/')
@@ -160,7 +160,9 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
         path = path.slice(0, lastSlash).trim() as ThemeKey
       }
 
-      let themeValue = theme.get([path]) ?? undefined
+      let themeValue =
+        theme.resolve(null, [path], forceInline ? ThemeOptions.INLINE : ThemeOptions.NONE) ??
+        undefined
 
       // Apply the opacity modifier if present
       if (modifier && themeValue) {

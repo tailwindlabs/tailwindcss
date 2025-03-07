@@ -56,7 +56,19 @@ function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) 
     throw new Error(`The --theme(…) function can only be used with CSS variables from your theme.`)
   }
 
-  return legacyTheme(designSystem, path, ...fallback)
+  let resolvedValue = designSystem.resolveThemeValue(path)
+
+  if (!resolvedValue && fallback.length > 0) {
+    return fallback.join(', ')
+  }
+
+  if (!resolvedValue) {
+    throw new Error(
+      `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the path is correct or provide a fallback value to silence this error.`,
+    )
+  }
+
+  return resolvedValue
 }
 
 function legacyTheme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
