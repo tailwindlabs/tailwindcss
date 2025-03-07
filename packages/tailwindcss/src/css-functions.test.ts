@@ -218,6 +218,20 @@ describe('--theme(…)', () => {
     `)
   })
 
+  test('--theme(--unknown, fallback)', async () => {
+    expect(
+      await compileCss(css`
+        .red {
+          color: --theme(--unknown, red);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        color: var(--unknown, red);
+      }"
+    `)
+  })
+
   test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
     expect(
       await compileCss(css`
