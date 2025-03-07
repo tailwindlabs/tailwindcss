@@ -153,25 +153,69 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: var(--color-red-500);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
       ".red {
         color: red;
       }"
     `)
   })
 
-  test('--theme(…) can only be used with CSS variables from your theme', async () => {
-    expect(() =>
-      compileCss(css`
+  test('--theme(--color-red-500/50)', async () => {
+    expect(
+      await compileCss(css`
         @theme {
           --color-red-500: #f00;
         }
         .red {
-          color: --theme(colors.red.500);
+          color: --theme(--color-red-500/0.5);
         }
       `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
-    )
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500/50 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500/50 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        color: oklab(62.7955% .224863 .125846);
+      }"
+    `)
   })
 
   test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
@@ -206,6 +250,21 @@ describe('--theme(…)', () => {
         }
       }"
     `)
+  })
+
+  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(colors.red.500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
   })
 })
 
