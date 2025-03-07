@@ -468,6 +468,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
     use crate::extractor::pre_processors::*;
 
     match extension {
+        "cshtml" | "razor" => Razor.process(content),
         "pug" => Pug.process(content),
         "rb" | "erb" => Ruby.process(content),
         "slim" => Slim.process(content),
