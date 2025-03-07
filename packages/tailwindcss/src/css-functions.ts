@@ -60,13 +60,15 @@ function theme(designSystem: DesignSystem, source: AstNode, path: string, ...fal
   }
 
   let inline = false
+
+  // Handle `--theme(… inline)` to force inline resolution
   if (path.endsWith(' inline')) {
     inline = true
     path = path.slice(0, -7)
   }
 
-  // If the `--theme(…)` function is used within an at-rule (e.g. `@media (width >= theme(…)))`, we
-  // have to always inline the result since CSS does not support CSS variables in these positions.
+  // If the `--theme(…)` function is used within an at-rule (e.g. `@media (width >= --theme(…)))`,
+  // we have to always inline the result since CSS does not support CSS variables in these positions
   if (source.kind === 'at-rule') {
     inline = true
   }
@@ -74,7 +76,11 @@ function theme(designSystem: DesignSystem, source: AstNode, path: string, ...fal
   let resolvedValue = designSystem.resolveThemeValue(path, inline)
 
   if (!resolvedValue && fallback.length > 0) {
-    return fallback.join(', ')
+    if (inline) {
+      return fallback.join(', ')
+    } else {
+      return `var(${path}, ${fallback.join(', ')})`
+    }
   }
 
   if (!resolvedValue) {
