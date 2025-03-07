@@ -888,6 +888,39 @@ mod tests {
         );
     }
 
+    #[test]
+    fn test_js_embedded_in_php_syntax() {
+        // Escaped single quotes
+        let input = r#"
+            @php
+            if ($sidebarIsStashable) {
+                $attributes = $attributes->merge([
+                    'x-init' => '$el.classList.add(\'-translate-x-full\'); $el.classList.add(\'transition-transform\')',
+                ]);
+            }
+            @endphp
+        "#;
+        assert_extract_candidates_contains(
+            input,
+            vec!["-translate-x-full", "transition-transform"],
+        );
+
+        // Double quotes
+        let input = r#"
+            @php
+            if ($sidebarIsStashable) {
+                $attributes = $attributes->merge([
+                    'x-init' => "\$el.classList.add('-translate-x-full'); \$el.classList.add('transition-transform')",
+                ]);
+            }
+            @endphp
+        "#;
+        assert_extract_candidates_contains(
+            input,
+            vec!["-translate-x-full", "transition-transform"],
+        );
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/16978
     #[test]
     fn test_classes_containing_number_followed_by_dash_or_underscore() {
