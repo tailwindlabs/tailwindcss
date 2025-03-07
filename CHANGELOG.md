@@ -17,13 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
+## [4.0.12] - 2025-03-07
+
 ### Fixed
 
 - Vite: Fix `url(…)` rebasing in transitively imported CSS files ([#16965](https://github.com/tailwindlabs/tailwindcss/pull/16965))
 - PostCSS: Rebase `url(…)`s in imported CSS files ([#16965](https://github.com/tailwindlabs/tailwindcss/pull/16965))
 - Ensure utilities are sorted based on their actual property order ([#16995](https://github.com/tailwindlabs/tailwindcss/pull/16995))
 - Ensure strings in Pug and Slim templates are handled correctly ([#17000](https://github.com/tailwindlabs/tailwindcss/pull/17000))
-- Ensure `}` and `{` are valid boundary characters when extracting candidates ([#17001](https://github.com/tailwindlabs/tailwindcss/pull/17001))
+- Ensure classes between `}` and `{` are properly extracted ([#17001](https://github.com/tailwindlabs/tailwindcss/pull/17001))
 - Add `razor`/`cshtml` pre processing ([#17027](https://github.com/tailwindlabs/tailwindcss/pull/17027))
 - Ensure extracting candidates from JS embedded in a PHP string works as expected ([#17031](https://github.com/tailwindlabs/tailwindcss/pull/17031))
 
@@ -3517,7 +3519,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.11...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.12...HEAD
+[4.0.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.11...v4.0.12
 [4.0.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.10...v4.0.11
 [4.0.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.9...v4.0.10
 [4.0.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.8...v4.0.9
