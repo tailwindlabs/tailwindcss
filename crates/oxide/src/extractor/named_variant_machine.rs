@@ -4,6 +4,37 @@ use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::modifier_machine::ModifierMachine;
 use classification_macros::ClassifyBytes;
+use std::marker::PhantomData;
+
+#[derive(Debug, Default)]
+pub struct IdleState;
+
+/// Parsing a variant
+#[derive(Debug, Default)]
+pub struct ParsingState;
+
+/// Parsing a modifier
+///
+/// E.g.:
+///
+/// ```text
+/// group-hover/name:
+///            ^^^^^
+/// ```
+///
+#[derive(Debug, Default)]
+pub struct ParsingModifierState;
+
+/// Parsing the end of a variant
+///
+/// E.g.:
+///
+/// ```text
+/// hover:
+///      ^
+/// ```
+#[derive(Debug, Default)]
+pub struct ParsingEndState;
 
 /// Extract named variants from an input including the `:`.
 ///
@@ -20,244 +51,233 @@ use classification_macros::ClassifyBytes;
 /// ^^^^^^^^^^^^^^^^^^^^^^^^^
 /// ```
 #[derive(Debug, Default)]
-pub struct NamedVariantMachine {
+pub struct NamedVariantMachine<State = IdleState> {
     /// Start position of the variant
     start_pos: usize,
-
-    /// Current state of the machine
-    state: State,
 
     arbitrary_variable_machine: ArbitraryVariableMachine,
     arbitrary_value_machine: ArbitraryValueMachine,
     modifier_machine: ModifierMachine,
+
+    _state: PhantomData<State>,
 }
 
-#[derive(Debug, Default)]
-enum State {
-    #[default]
-    Idle,
-
-    /// Parsing a variant
-    Parsing,
-
-    /// Parsing a modifier
-    ///
-    /// E.g.:
-    ///
-    /// ```text
-    /// group-hover/name:
-    ///            ^^^^^
-    /// ```
-    ///
-    ParsingModifier,
-
-    /// Parsing the end of a variant
-    ///
-    /// E.g.:
-    ///
-    /// ```text
-    /// hover:
-    ///      ^
-    /// ```
-    ParseEnd,
-}
-
-impl Machine for NamedVariantMachine {
+impl<State> NamedVariantMachine<State> {
     #[inline(always)]
-    fn reset(&mut self) {
-        self.start_pos = 0;
-        self.state = State::Idle;
+    fn transition<NextState>(&self) -> NamedVariantMachine<NextState> {
+        NamedVariantMachine {
+            start_pos: self.start_pos,
+            arbitrary_variable_machine: Default::default(),
+            arbitrary_value_machine: Default::default(),
+            modifier_machine: Default::default(),
+            _state: PhantomData,
+        }
     }
+}
 
-    #[inline]
+impl Machine for NamedVariantMachine<IdleState> {
+    #[inline(always)]
+    fn reset(&mut self) {}
+
+    #[inline(always)]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        let len = cursor.input.len();
-
-        match self.state {
-            State::Idle => match cursor.curr.into() {
-                Class::AlphaLower | Class::Star => match cursor.next.into() {
-                    // Valid single character variant, must be followed by a `:`
-                    //
-                    // E.g.: `<div class="x:flex"></div>`
-                    //                    ^^
-                    // E.g.: `*:`
-                    //        ^^
-                    Class::Colon => {
-                        self.state = State::ParseEnd;
-                        cursor.advance();
-                        self.next(cursor)
-                    }
-
-                    // Valid start characters
-                    //
-                    // E.g.: `hover:`
-                    //        ^
-                    // E.g.: `**:`
-                    //        ^
-                    _ => {
-                        self.start_pos = cursor.pos;
-                        self.state = State::Parsing;
-                        cursor.advance();
-                        self.next(cursor)
-                    }
-                },
+        match cursor.curr.into() {
+            Class::AlphaLower | Class::Star => match cursor.next.into() {
+                // Valid single character variant, must be followed by a `:`
+                //
+                // E.g.: `<div class="x:flex"></div>`
+                //                    ^^
+                // E.g.: `*:`
+                //        ^^
+                Class::Colon => {
+                    cursor.advance();
+                    self.transition::<ParsingEndState>().next(cursor)
+                }
 
                 // Valid start characters
                 //
-                // E.g.: `2xl:`
+                // E.g.: `hover:`
                 //        ^
-                // E.g.: `@md:`
+                // E.g.: `**:`
                 //        ^
-                Class::Number | Class::At => {
+                _ => {
                     self.start_pos = cursor.pos;
-                    self.state = State::Parsing;
                     cursor.advance();
-                    self.next(cursor)
+                    self.transition::<ParsingState>().next(cursor)
                 }
-
-                // Everything else, is not a valid start of the variant.
-                _ => MachineState::Idle,
             },
 
-            State::Parsing => {
-                while cursor.pos < len {
-                    match cursor.curr.into() {
-                        Class::Dash => match cursor.next.into() {
-                            // Start of an arbitrary value
-                            //
-                            // E.g.: `data-[state=pending]:`.
-                            //            ^^
-                            Class::OpenBracket => {
-                                cursor.advance();
+            // Valid start characters
+            //
+            // E.g.: `2xl:`
+            //        ^
+            // E.g.: `@md:`
+            //        ^
+            Class::Number | Class::At => {
+                self.start_pos = cursor.pos;
+                cursor.advance();
+                self.transition::<ParsingState>().next(cursor)
+            }
 
-                                return match self.arbitrary_value_machine.next(cursor) {
-                                    MachineState::Idle => self.restart(),
-                                    MachineState::Done(_) => self.parse_arbitrary_end(cursor),
-                                };
-                            }
+            // Everything else, is not a valid start of the variant.
+            _ => MachineState::Idle,
+        }
+    }
+}
 
-                            // Start of an arbitrary variable
-                            //
-                            // E.g.: `supports-(--my-color):`.
-                            //                ^^
-                            Class::OpenParen => {
-                                cursor.advance();
-                                return match self.arbitrary_variable_machine.next(cursor) {
-                                    MachineState::Idle => self.restart(),
-                                    MachineState::Done(_) => self.parse_arbitrary_end(cursor),
-                                };
-                            }
+impl Machine for NamedVariantMachine<ParsingState> {
+    #[inline(always)]
+    fn reset(&mut self) {}
 
-                            // Valid characters _if_ followed by another valid character. These characters are
-                            // only valid inside of the variant but not at the end of the variant.
-                            //
-                            // E.g.: `hover-`
-                            //             ^   Invalid
-                            // E.g.: `hover-!`
-                            //             ^   Invalid
-                            // E.g.: `hover-/`
-                            //             ^   Invalid
-                            // E.g.: `flex-1`
-                            //            ^    Valid
-                            Class::Dash
-                            | Class::Underscore
-                            | Class::AlphaLower
-                            | Class::AlphaUpper
-                            | Class::Number => cursor.advance(),
+    #[inline(always)]
+    fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        let len = cursor.input.len();
 
-                            // Everything else is invalid
-                            _ => return self.restart(),
-                        },
+        while cursor.pos < len {
+            match cursor.curr.into() {
+                Class::Dash => match cursor.next.into() {
+                    // Start of an arbitrary value
+                    //
+                    // E.g.: `data-[state=pending]:`.
+                    //            ^^
+                    Class::OpenBracket => {
+                        cursor.advance();
+                        return match self.arbitrary_value_machine.next(cursor) {
+                            MachineState::Idle => self.restart(),
+                            MachineState::Done(_) => self.parse_arbitrary_end(cursor),
+                        };
+                    }
 
-                        // Start of an arbitrary value
-                        //
-                        // E.g.: `@[state=pending]:`.
-                        //         ^
-                        Class::OpenBracket => {
-                            return match self.arbitrary_value_machine.next(cursor) {
-                                MachineState::Idle => self.restart(),
-                                MachineState::Done(_) => self.parse_arbitrary_end(cursor),
-                            };
-                        }
+                    // Start of an arbitrary variable
+                    //
+                    // E.g.: `supports-(--my-color):`.
+                    //                ^^
+                    Class::OpenParen => {
+                        cursor.advance();
+                        return match self.arbitrary_variable_machine.next(cursor) {
+                            MachineState::Idle => self.restart(),
+                            MachineState::Done(_) => self.parse_arbitrary_end(cursor),
+                        };
+                    }
 
-                        Class::Underscore => match cursor.next.into() {
-                            // Valid characters _if_ followed by another valid character. These characters are
-                            // only valid inside of the variant but not at the end of the variant.
-                            //
-                            // E.g.: `hover_`
-                            //             ^     Invalid
-                            // E.g.: `hover_!`
-                            //             ^     Invalid
-                            // E.g.: `hover_/`
-                            //             ^     Invalid
-                            // E.g.: `custom_1`
-                            //              ^    Valid
-                            Class::Dash
-                            | Class::Underscore
-                            | Class::AlphaLower
-                            | Class::AlphaUpper
-                            | Class::Number => cursor.advance(),
+                    // Valid characters _if_ followed by another valid character. These characters are
+                    // only valid inside of the variant but not at the end of the variant.
+                    //
+                    // E.g.: `hover-`
+                    //             ^   Invalid
+                    // E.g.: `hover-!`
+                    //             ^   Invalid
+                    // E.g.: `hover-/`
+                    //             ^   Invalid
+                    // E.g.: `flex-1`
+                    //            ^    Valid
+                    Class::Dash
+                    | Class::Underscore
+                    | Class::AlphaLower
+                    | Class::AlphaUpper
+                    | Class::Number => cursor.advance(),
 
-                            // Everything else is invalid
-                            _ => return self.restart(),
-                        },
+                    // Everything else is invalid
+                    _ => return self.restart(),
+                },
 
-                        // Still valid characters
-                        Class::AlphaLower | Class::AlphaUpper | Class::Number | Class::Star => {
-                            cursor.advance();
-                        }
-
-                        // A `/` means we are at the end of the variant, but there might be a modifier
-                        //
-                        // E.g.:
-                        //
-                        // ```
-                        // group-hover/name:
-                        //            ^
-                        // ```
-                        Class::Slash => {
-                            self.state = State::ParsingModifier;
-                            return self.next(cursor);
-                        }
-
-                        // A `:` means we are at the end of the variant
-                        //
-                        // E.g.: `hover:`
-                        //             ^
-                        Class::Colon => return self.done(self.start_pos, cursor),
-
-                        // Everything else is invalid
-                        _ => return self.restart(),
+                // Start of an arbitrary value
+                //
+                // E.g.: `@[state=pending]:`.
+                //         ^
+                Class::OpenBracket => {
+                    return match self.arbitrary_value_machine.next(cursor) {
+                        MachineState::Idle => self.restart(),
+                        MachineState::Done(_) => self.parse_arbitrary_end(cursor),
                     };
                 }
 
-                self.restart()
-            }
-
-            State::ParsingModifier => match self.modifier_machine.next(cursor) {
-                MachineState::Idle => self.restart(),
-                MachineState::Done(_) => match cursor.next.into() {
-                    // Modifier must be followed by a `:`
+                Class::Underscore => match cursor.next.into() {
+                    // Valid characters _if_ followed by another valid character. These characters are
+                    // only valid inside of the variant but not at the end of the variant.
                     //
-                    // E.g.: `group-hover/name:`
-                    //                        ^
-                    Class::Colon => {
-                        self.state = State::ParseEnd;
-                        cursor.advance();
-                        self.next(cursor)
-                    }
+                    // E.g.: `hover_`
+                    //             ^     Invalid
+                    // E.g.: `hover_!`
+                    //             ^     Invalid
+                    // E.g.: `hover_/`
+                    //             ^     Invalid
+                    // E.g.: `custom_1`
+                    //              ^    Valid
+                    Class::Dash
+                    | Class::Underscore
+                    | Class::AlphaLower
+                    | Class::AlphaUpper
+                    | Class::Number => cursor.advance(),
 
                     // Everything else is invalid
-                    _ => self.restart(),
+                    _ => return self.restart(),
                 },
-            },
 
-            State::ParseEnd => match cursor.curr.into() {
-                // The end of a variant must be the `:`
+                // Still valid characters
+                Class::AlphaLower | Class::AlphaUpper | Class::Number | Class::Star => {
+                    cursor.advance()
+                }
+
+                // A `/` means we are at the end of the variant, but there might be a modifier
+                //
+                // E.g.:
+                //
+                // ```
+                // group-hover/name:
+                //            ^
+                // ```
+                Class::Slash => return self.transition::<ParsingModifierState>().next(cursor),
+
+                // A `:` means we are at the end of the variant
                 //
                 // E.g.: `hover:`
                 //             ^
-                Class::Colon => self.done(self.start_pos, cursor),
+                Class::Colon => return self.done(self.start_pos, cursor),
+
+                // Everything else is invalid
+                _ => return self.restart(),
+            };
+        }
+
+        self.restart()
+    }
+}
+
+impl NamedVariantMachine<ParsingState> {
+    #[inline(always)]
+    fn parse_arbitrary_end(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        match cursor.next.into() {
+            Class::Slash => {
+                cursor.advance();
+                self.transition::<ParsingModifierState>().next(cursor)
+            }
+            Class::Colon => {
+                cursor.advance();
+                self.transition::<ParsingEndState>().next(cursor)
+            }
+            _ => self.restart(),
+        }
+    }
+}
+
+impl Machine for NamedVariantMachine<ParsingModifierState> {
+    #[inline(always)]
+    fn reset(&mut self) {}
+
+    #[inline(always)]
+    fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        match self.modifier_machine.next(cursor) {
+            MachineState::Idle => self.restart(),
+            MachineState::Done(_) => match cursor.next.into() {
+                // Modifier must be followed by a `:`
+                //
+                // E.g.: `group-hover/name:`
+                //                        ^
+                Class::Colon => {
+                    cursor.advance();
+                    self.transition::<ParsingEndState>().next(cursor)
+                }
 
                 // Everything else is invalid
                 _ => self.restart(),
@@ -266,20 +286,20 @@ impl Machine for NamedVariantMachine {
     }
 }
 
-impl NamedVariantMachine {
+impl Machine for NamedVariantMachine<ParsingEndState> {
     #[inline(always)]
-    fn parse_arbitrary_end(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.next.into() {
-            Class::Slash => {
-                self.state = State::ParsingModifier;
-                cursor.advance();
-                self.next(cursor)
-            }
-            Class::Colon => {
-                self.state = State::ParseEnd;
-                cursor.advance();
-                self.next(cursor)
-            }
+    fn reset(&mut self) {}
+
+    #[inline(always)]
+    fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        match cursor.curr.into() {
+            // The end of a variant must be the `:`
+            //
+            // E.g.: `hover:`
+            //             ^
+            Class::Colon => self.done(self.start_pos, cursor),
+
+            // Everything else is invalid
             _ => self.restart(),
         }
     }
@@ -341,7 +361,7 @@ enum Class {
 
 #[cfg(test)]
 mod tests {
-    use super::NamedVariantMachine;
+    use super::{IdleState, NamedVariantMachine};
     use crate::extractor::machine::Machine;
 
     #[test]
@@ -349,8 +369,8 @@ mod tests {
     fn test_named_variant_machine_performance() {
         let input = r#"<button class="hover:focus:flex data-[state=pending]:flex supports-(--my-variable):flex group-hover/named:not-has-peer-data-disabled:flex">"#;
 
-        NamedVariantMachine::test_throughput(1_000_000, input);
-        NamedVariantMachine::test_duration_once(input);
+        NamedVariantMachine::<IdleState>::test_throughput(1_000_000, input);
+        NamedVariantMachine::<IdleState>::test_duration_once(input);
 
         todo!()
     }
@@ -385,7 +405,7 @@ mod tests {
             // Single letter variant with uppercase letter is invalid
             ("A:", vec![]),
         ] {
-            let actual = NamedVariantMachine::test_extract_all(input);
+            let actual = NamedVariantMachine::<IdleState>::test_extract_all(input);
             if actual != expected {
                 dbg!(&input, &actual, &expected);
             }
