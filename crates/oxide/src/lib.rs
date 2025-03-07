@@ -469,6 +469,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
 
     match extension {
         "cshtml" | "razor" => Razor.process(content),
+        "haml" => Haml.process(content),
         "pug" => Pug.process(content),
         "rb" | "erb" => Ruby.process(content),
         "slim" => Slim.process(content),
