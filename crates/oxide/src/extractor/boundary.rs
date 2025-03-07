@@ -97,6 +97,18 @@ enum Class {
     //                ^
     // ```
     #[bytes(b'=')]
+    // Escaped character when embedding one language in another via strings, e.g.:
+    //
+    // ```
+    // $attributes->merge([
+    //   'x-init' => '$el.classList.add(\'-translate-x-full\'); $el.classList.add(\'transition-transform\')',
+    //                                                     ^                                            ^
+    // ]);
+    // ```
+    //
+    // In this case there is some JavaScript embedded in an string in PHP and some of the quotes
+    // need to be escaped.
+    #[bytes(b'\\')]
     After,
 
     #[fallback]

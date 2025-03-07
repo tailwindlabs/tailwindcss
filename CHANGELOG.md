@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure strings in Pug and Slim templates are handled correctly ([#17000](https://github.com/tailwindlabs/tailwindcss/pull/17000))
 - Ensure `}` and `{` are valid boundary characters when extracting candidates ([#17001](https://github.com/tailwindlabs/tailwindcss/pull/17001))
 - Add `razor`/`cshtml` pre processing ([#17027](https://github.com/tailwindlabs/tailwindcss/pull/17027))
+- Ensure extracting candidates from JS embedded in a PHP string works as expected ([#17031](https://github.com/tailwindlabs/tailwindcss/pull/17031))
 
 ## [4.0.11] - 2025-03-06
 
