@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-linux-x64-gnu",
-  "version": "4.0.11",
+  "version": "4.0.12",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
