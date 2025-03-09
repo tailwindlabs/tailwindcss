@@ -468,6 +468,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
     use crate::extractor::pre_processors::*;
 
     match extension {
+        "clj" | "cljs" | "cljc" => Clojure.process(content),
         "cshtml" | "razor" => Razor.process(content),
         "haml" => Haml.process(content),
         "json" => Json.process(content),
