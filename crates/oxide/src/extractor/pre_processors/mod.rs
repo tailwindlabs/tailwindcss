@@ -1,3 +1,4 @@
+pub mod clojure;
 pub mod haml;
 pub mod pre_processor;
 pub mod pug;
@@ -6,6 +7,7 @@ pub mod ruby;
 pub mod slim;
 pub mod svelte;
 
+pub use clojure::*;
 pub use haml::*;
 pub use pre_processor::*;
 pub use pug::*;
