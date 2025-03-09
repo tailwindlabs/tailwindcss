@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix `haml` pre-processing ([#17051](https://github.com/tailwindlabs/tailwindcss/pull/17051))
+- Ensure classes between `>` and `<` are properly extracted ([#17094](https://github.com/tailwindlabs/tailwindcss/pull/17094))
 
 ## [4.0.12] - 2025-03-07
 
