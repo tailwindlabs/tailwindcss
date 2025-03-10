@@ -11,9 +11,26 @@ impl PreProcessor for Slim {
         let mut result = content.to_vec();
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = BracketStack::default();
+        let mut line_start_pos = 0x00;
 
         while cursor.pos < len {
             match cursor.curr {
+                b'\n' => {
+                    line_start_pos = cursor.pos + 1;
+                }
+
+                // Line indicators:
+                //
+                // > Verbatim text with trailing white space '
+                // > See: https://github.com/slim-template/slim?tab=readme-ov-file#verbatim-text-with-trailing-white-space-
+                b'\''
+                    if cursor.input[line_start_pos..cursor.pos]
+                        .iter()
+                        .all(|x| x.is_ascii_whitespace()) =>
+                {
+                    // Do not treat the `'` as a string
+                }
+
                 // Consume strings as-is
                 b'\'' | b'"' => {
                     let len = cursor.input.len();
@@ -153,5 +170,31 @@ mod tests {
 
         Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["text-black", "bg-green-300", "bg-red-300"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17081
+    // https://github.com/slim-template/slim?tab=readme-ov-file#verbatim-text-with-trailing-white-space-
+    #[test]
+    fn test_single_quotes_to_enforce_trailing_whitespace() {
+        let input = r#"
+            div
+              'A single quote enforces trailing white space
+              = 1234
+
+            .text-red-500.text-3xl
+              | This text should be red
+        "#;
+
+        let expected = r#"
+            div
+              'A single quote enforces trailing white space
+              = 1234
+
+             text-red-500 text-3xl
+              | This text should be red
+        "#;
+
+        Slim::test(input, expected);
+        Slim::test_extract_contains(input, vec!["text-red-500", "text-3xl"]);
     }
 }
