@@ -922,6 +922,32 @@ mod tests {
         }
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/17088
+    #[test]
+    fn test_fluid_template_syntax() {
+        let input = r#"
+            <f:variable name="bgStyle">
+              <f:switch expression="{data.layout}">
+                <f:case value="0">from-blue-900 to-cyan-200</f:case>
+                <f:case value="1">from-cyan-600 to-teal-200</f:case>
+                <f:defaultCase>from-blue-300 to-cyan-100</f:defaultCase>
+              </f:switch>
+            </f:variable>
+        "#;
+
+        assert_extract_candidates_contains(
+            input,
+            vec![
+                "from-blue-900",
+                "to-cyan-200",
+                "from-cyan-600",
+                "to-teal-200",
+                "from-blue-300",
+                "to-cyan-100",
+            ],
+        );
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/16982
     #[test]
     fn test_arbitrary_container_queries_syntax() {
