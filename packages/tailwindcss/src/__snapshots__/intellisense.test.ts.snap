@@ -5057,6 +5057,8 @@ exports[`getClassList 1`] = `
   "mask-luminance",
   "mask-match",
   "mask-subtract",
+  "mask-type-alpha",
+  "mask-type-luminance",
   "max-h-0",
   "max-h-0.5",
   "max-h-1",
