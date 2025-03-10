@@ -355,12 +355,6 @@ mod tests {
                 r#"[:is(italic):is(underline)]:flex"#,
                 vec!["[:is(italic):is(underline)]:flex"],
             ),
-            // Clojure syntax. See: https://github.com/tailwindlabs/tailwindcss/issues/16189#issuecomment-2642438176
-            (r#"[:div {:class ["p-2"]}"#, vec!["p-2"]),
-            (
-                r#"[:div {:class ["p-2" "text-green"]}"#,
-                vec!["p-2", "text-green"],
-            ),
             (r#"[:div {:class ["p-2""#, vec!["p-2"]),
             (r#"               "text-green"]}"#, vec!["text-green"]),
             (r#"[:div.p-2]"#, vec!["p-2"]),
@@ -668,8 +662,13 @@ mod tests {
             (r#"[:div {:class ["p-2""#, vec!["p-2"]),
             (r#"               "text-green"]}"#, vec!["text-green"]),
             (r#"[:div.p-2]"#, vec!["p-2"]),
+            (r#"[:div {:class ["p-2"]}"#, vec!["p-2"]),
+            (
+                r#"[:div {:class ["p-2" "text-green"]}"#,
+                vec!["p-2", "text-green"],
+            ),
         ] {
-            assert_extract_sorted_candidates(input, expected);
+            assert_extract_candidates_contains(&pre_process_input(input, "cljs"), expected);
         }
     }
 
