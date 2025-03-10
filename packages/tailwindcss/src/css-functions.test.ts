@@ -218,7 +218,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) contains the fallback when the default namespace is unset and a prior `--theme(…)` function contains `initial`', async () => {
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function containing `initial`', async () => {
     expect(
       await compileCss(css`
         @theme prefix(tw) {
@@ -235,7 +235,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) contains the fallback when the default namespace is unset and a prior `--theme(…)` function contains `initial` in @reference', async () => {
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function containing `initial` in @reference mode', async () => {
     expect(
       await compileCss(css`
         @theme reference prefix(tw) {
@@ -252,7 +252,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) returns the fallback when the default namespace is unset and a prior `--theme(…)` function returns `initial` as inline value', async () => {
+  test('--theme(…) returns the fallback when the value it refers is set to a `--theme(…)` function that returns `initial` as inline value', async () => {
     expect(
       await compileCss(css`
         @theme prefix(tw) {
@@ -269,7 +269,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) returns the fallback when the default namespace is unset in @reference mode', async () => {
+  test('--theme(…) returns the fallback when the value it refers is set to a `--theme(…)` function that returns `initial` as inline value in @reference mode', async () => {
     expect(
       await compileCss(css`
         @theme reference prefix(tw) {
@@ -286,7 +286,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test.only('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
+  test('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
     expect(
       await compileCss(
         css`
@@ -323,7 +323,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
+  test('--theme(…) forces the value to be retrieved as inline when used inside an at-rule', async () => {
     expect(
       await compileCss(css`
         @theme {
@@ -357,7 +357,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+  test('--theme(…) can only be used with CSS variables from your @theme', async () => {
     expect(() =>
       compileCss(css`
         @theme {
@@ -369,6 +369,19 @@ describe('--theme(…)', () => {
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
+
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-green-500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Could not resolve value for theme function: \`theme(--color-green-500)\`. Consider checking if the variable name is correct or provide a fallback value to silence this error.]`,
     )
   })
 })
