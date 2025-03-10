@@ -32,7 +32,7 @@ impl PreProcessor for Slim {
                 }
 
                 // Consume strings as-is
-                b'\'' | b'"' => {
+                b'\'' | b'"' if !bracket_stack.is_empty() => {
                     let len = cursor.input.len();
                     let end_char = cursor.curr;
 
