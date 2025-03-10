@@ -98,12 +98,8 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   :root, :host {
     --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --tw-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --tw-default-font-family: var(--tw-font-sans);
-    --tw-default-font-feature-settings: var(--font-sans--font-feature-settings, normal);
-    --tw-default-font-variation-settings: var(--font-sans--font-variation-settings, normal);
-    --tw-default-mono-font-family: var(--tw-font-mono);
-    --tw-default-mono-font-feature-settings: var(--font-mono--font-feature-settings, normal);
-    --tw-default-mono-font-variation-settings: var(--font-mono--font-variation-settings, normal);
+    --tw-default-font-family: var(--tw-font-sans, initial);
+    --tw-default-mono-font-family: var(--tw-font-mono, initial);
   }
 }
 
@@ -126,9 +122,9 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
     line-height: 1.5;
-    font-family: var(--tw-default-font-family);
-    font-feature-settings: var(--tw-default-font-feature-settings);
-    font-variation-settings: var(--tw-default-font-variation-settings);
+    font-family: var(--tw-default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--tw-default-font-feature-settings, normal);
+    font-variation-settings: var(--tw-default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -165,9 +161,9 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   }
 
   code, kbd, samp, pre {
-    font-family: var(--tw-default-mono-font-family);
-    font-feature-settings: var(--tw-default-mono-font-feature-settings);
-    font-variation-settings: var(--tw-default-mono-font-variation-settings);
+    font-family: var(--tw-default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--tw-default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--tw-default-mono-font-variation-settings, normal);
     font-size: 1em;
   }
 

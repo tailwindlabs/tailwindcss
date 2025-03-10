@@ -282,6 +282,13 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
       // Track variables defined in `@theme`
       if (context.theme && node.property[0] === '-' && node.property[1] === '-') {
+        // Variables that resolve to `initial` should never be emitted. This can happen because of
+        // the `--theme(…)` being used and evaluated lazily
+        if (node.value === 'initial') {
+          node.value = undefined
+          return
+        }
+
         if (!context.keyframes) {
           cssThemeVariables.get(parent).add(node)
         }

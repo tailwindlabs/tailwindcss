@@ -15,7 +15,12 @@ const CSS_FUNCTIONS: Record<
   theme: legacyTheme,
 }
 
-function alpha(_designSystem: DesignSystem, _source: AstNode, value: string, ...rest: string[]) {
+function alpha(
+  _designSystem: DesignSystem,
+  _source: AstNode,
+  value: string,
+  ...rest: string[]
+): string {
   let [color, alpha] = segment(value, '/').map((v) => v.trim())
 
   if (!color || !alpha) {
@@ -33,7 +38,12 @@ function alpha(_designSystem: DesignSystem, _source: AstNode, value: string, ...
   return withAlpha(color, alpha)
 }
 
-function spacing(designSystem: DesignSystem, _source: AstNode, value: string, ...rest: string[]) {
+function spacing(
+  designSystem: DesignSystem,
+  _source: AstNode,
+  value: string,
+  ...rest: string[]
+): string {
   if (!value) {
     throw new Error(`The --spacing(…) function requires an argument, but received none.`)
   }
@@ -54,7 +64,12 @@ function spacing(designSystem: DesignSystem, _source: AstNode, value: string, ..
   return `calc(${multiplier} * ${value})`
 }
 
-function theme(designSystem: DesignSystem, source: AstNode, path: string, ...fallback: string[]) {
+function theme(
+  designSystem: DesignSystem,
+  source: AstNode,
+  path: string,
+  ...fallback: string[]
+): string {
   if (!path.startsWith('--')) {
     throw new Error(`The --theme(…) function can only be used with CSS variables from your theme.`)
   }
@@ -75,18 +90,31 @@ function theme(designSystem: DesignSystem, source: AstNode, path: string, ...fal
 
   let resolvedValue = designSystem.resolveThemeValue(path, inline)
 
-  if (!resolvedValue && fallback.length > 0) {
-    if (inline) {
-      return fallback.join(', ')
-    } else {
-      return `var(${path}, ${fallback.join(', ')})`
-    }
-  }
-
   if (!resolvedValue) {
+    if (fallback.length > 0) return fallback.join(', ')
     throw new Error(
       `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the variable name is correct or provide a fallback value to silence this error.`,
     )
+  }
+
+  if (fallback.length === 0) {
+    return resolvedValue
+  }
+
+  // Inject the fallback…
+  //
+  // - …as the value if the value returned is `initial`
+  // - …expect any `initial` fallbacks on `var(…)`, `theme(…)`, or `--theme(…)`
+  // - …as the fallback if a `var(…)` with no fallback is returned
+  if (resolvedValue === 'initial') return fallback.join(', ')
+  if (
+    resolvedValue.startsWith('var(') ||
+    resolvedValue.startsWith('theme(') ||
+    resolvedValue.startsWith('--theme(')
+  ) {
+    let valueAst = ValueParser.parse(resolvedValue)
+    injectFallbackForInitialFallback(valueAst, fallback.join(', '))
+    return ValueParser.toCss(valueAst)
   }
 
   return resolvedValue
@@ -97,7 +125,7 @@ function legacyTheme(
   _source: AstNode,
   path: string,
   ...fallback: string[]
-) {
+): string {
   path = eventuallyUnquote(path)
 
   let resolvedValue = designSystem.resolveThemeValue(path)
@@ -187,4 +215,23 @@ function eventuallyUnquote(value: string) {
   }
 
   return unquoted
+}
+
+function injectFallbackForInitialFallback(ast: ValueParser.ValueAstNode[], fallback: string): void {
+  ValueParser.walk(ast, (node) => {
+    if (node.kind !== 'function') return
+    if (node.value !== 'var' && node.value !== 'theme' && node.value !== '--theme') return
+
+    if (node.nodes.length === 1) {
+      node.nodes.push({
+        kind: 'word',
+        value: `, ${fallback}`,
+      })
+    } else {
+      let lastNode = node.nodes[node.nodes.length - 1]
+      if (lastNode.kind === 'word' && lastNode.value === 'initial') {
+        lastNode.value = fallback
+      }
+    }
+  })
 }

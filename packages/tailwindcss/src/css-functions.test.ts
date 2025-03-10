@@ -218,16 +218,70 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(--unknown, fallback)', async () => {
+  test('--theme(…) contains the fallback when the default namespace is unset and a prior `--theme(…)` function contains `initial`', async () => {
     expect(
       await compileCss(css`
+        @theme prefix(tw) {
+          --default-font-family: --theme(--font-family, initial);
+        }
         .red {
-          color: --theme(--unknown, red);
+          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
         }
       `),
     ).toMatchInlineSnapshot(`
       ".red {
-        color: var(--unknown, red);
+        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
+      }"
+    `)
+  })
+
+  test('--theme(…) contains the fallback when the default namespace is unset and a prior `--theme(…)` function contains `initial` in @reference', async () => {
+    expect(
+      await compileCss(css`
+        @theme reference prefix(tw) {
+          --default-font-family: --theme(--font-family, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
+      }"
+    `)
+  })
+
+  test('--theme(…) returns the fallback when the default namespace is unset and a prior `--theme(…)` function returns `initial` as inline value', async () => {
+    expect(
+      await compileCss(css`
+        @theme prefix(tw) {
+          --default-font-family: --theme(--font-family inline, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family inline, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: Potato Sans, sans-serif;
+      }"
+    `)
+  })
+
+  test('--theme(…) returns the fallback when the default namespace is unset in @reference mode', async () => {
+    expect(
+      await compileCss(css`
+        @theme reference prefix(tw) {
+          --default-font-family: --theme(--font-family, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
       }"
     `)
   })
