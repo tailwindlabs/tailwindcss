@@ -81,11 +81,11 @@ impl PreProcessor for Slim {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b'(' | b'[' | b'{' => {
+                b'(' | b'[' | b'{' | b'<' => {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b')' | b']' | b'}' if !bracket_stack.is_empty() => {
+                b')' | b']' | b'}' | b'>' if !bracket_stack.is_empty() => {
                     bracket_stack.pop(cursor.curr);
                 }
 

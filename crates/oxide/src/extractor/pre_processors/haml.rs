@@ -40,7 +40,7 @@ impl PreProcessor for Haml {
                     result[cursor.pos] = b' ';
                 }
 
-                b'(' | b'[' | b'{' => {
+                b'(' | b'[' | b'{' | b'<' => {
                     // Replace first bracket with a space
                     if bracket_stack.is_empty() {
                         result[cursor.pos] = b' ';
@@ -48,7 +48,7 @@ impl PreProcessor for Haml {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b')' | b']' | b'}' => {
+                b')' | b']' | b'}' | b'>' => {
                     bracket_stack.pop(cursor.curr);
 
                     // Replace closing bracket with a space
