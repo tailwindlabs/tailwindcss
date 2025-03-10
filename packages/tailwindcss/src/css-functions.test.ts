@@ -286,6 +286,43 @@ describe('--theme(…)', () => {
     `)
   })
 
+  test.only('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --font-sans:
+              ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+              'Segoe UI Symbol', 'Noto Color Emoji';
+            --default-font-family: --theme(--font-sans, initial);
+          }
+          @layer base {
+            html {
+              font-family: --theme(--default-font-family, sans-serif);
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['tw:font-sans'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --tw-default-font-family: var(--tw-font-sans);
+      }
+
+      @layer base {
+        html {
+          font-family: var(--tw-default-font-family, sans-serif);
+        }
+      }
+
+      .tw\\:font-sans {
+        font-family: var(--tw-font-sans);
+      }"
+    `)
+  })
+
   test('--theme(…) forces the value to be retrieved as inline when used inside an at rule', async () => {
     expect(
       await compileCss(css`

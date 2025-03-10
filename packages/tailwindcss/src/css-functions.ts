@@ -106,14 +106,16 @@ function theme(
   // - …as the value if the value returned is `initial`
   // - …expect any `initial` fallbacks on `var(…)`, `theme(…)`, or `--theme(…)`
   // - …as the fallback if a `var(…)` with no fallback is returned
-  if (resolvedValue === 'initial') return fallback.join(', ')
+  let joinedFallback = fallback.join(', ')
+  if (joinedFallback === 'initial') return resolvedValue
+  if (resolvedValue === 'initial') return joinedFallback
   if (
     resolvedValue.startsWith('var(') ||
     resolvedValue.startsWith('theme(') ||
     resolvedValue.startsWith('--theme(')
   ) {
     let valueAst = ValueParser.parse(resolvedValue)
-    injectFallbackForInitialFallback(valueAst, fallback.join(', '))
+    injectFallbackForInitialFallback(valueAst, joinedFallback)
     return ValueParser.toCss(valueAst)
   }
 

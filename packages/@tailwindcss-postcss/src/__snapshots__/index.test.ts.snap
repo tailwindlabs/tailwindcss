@@ -9,8 +9,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
     --font-weight-bold: 700;
-    --default-font-family: var(--font-sans, initial);
-    --default-mono-font-family: var(--font-mono, initial);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
   }
 }
 
