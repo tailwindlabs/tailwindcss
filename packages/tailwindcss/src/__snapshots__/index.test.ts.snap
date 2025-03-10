@@ -98,8 +98,8 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   :root, :host {
     --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --tw-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --tw-default-font-family: var(--tw-font-sans, initial);
-    --tw-default-mono-font-family: var(--tw-font-mono, initial);
+    --tw-default-font-family: var(--tw-font-sans);
+    --tw-default-mono-font-family: var(--tw-font-mono);
   }
 }
 
