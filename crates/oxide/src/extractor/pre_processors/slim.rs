@@ -135,6 +135,8 @@ mod tests {
             ("content-['50[]']", "content-['50[]']"),
             // Escaped string
             ("content-['a\'b\'c\'']", "content-['a\'b\'c\'']"),
+            // Classes in HTML attributes
+            (r#"<div id="px-2.5"></div>"#, r#"<div id="px-2.5"></div>"#),
         ] {
             Slim::test(input, expected);
         }
@@ -196,5 +198,31 @@ mod tests {
 
         Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["text-red-500", "text-3xl"]);
+    }
+
+    #[test]
+    fn test_strings_only_occur_when_nested() {
+        let input = r#"
+            p.mt-2.text-xl
+              | The quote in the next word, can't be the start of a string
+
+            h3.mt-24.text-center.text-4xl.font-bold.italic
+              | The classes above should be extracted
+        "#;
+
+        Slim::test_extract_contains(
+            input,
+            vec![
+                // First paragraph
+                "mt-2",
+                "text-xl",
+                // second paragraph
+                "mt-24",
+                "text-center",
+                "text-4xl",
+                "font-bold",
+                "italic",
+            ],
+        );
     }
 }

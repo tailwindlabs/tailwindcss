@@ -77,8 +77,36 @@ mod tests {
                 "bg-[url(https://example.com/?q=[1,2])]",
                 "bg-[url(https://example.com/?q=[1,2])]",
             ),
+            // Classes in HTML attributes
+            (r#"<div id="px-2.5"></div>"#, r#"<div id="px-2.5"></div>"#),
         ] {
             Pug::test(input, expected);
         }
+    }
+
+    #[test]
+    fn test_strings_only_occur_when_nested() {
+        let input = r#"
+            p.mt-2.text-xl
+              div The quote in the next word, can't be the start of a string
+
+            h3.mt-24.text-center.text-4xl.font-bold.italic
+              div The classes above should be extracted
+        "#;
+
+        Pug::test_extract_contains(
+            input,
+            vec![
+                // First paragraph
+                "mt-2",
+                "text-xl",
+                // second paragraph
+                "mt-24",
+                "text-center",
+                "text-4xl",
+                "font-bold",
+                "italic",
+            ],
+        );
     }
 }
