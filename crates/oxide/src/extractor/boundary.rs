@@ -73,6 +73,12 @@ enum Class {
     //                         ^
     // ```
     #[bytes(b'}')]
+    // XML-like languages where classes are inside the tag, e.g.:
+    // ```
+    // <f:case value="0">from-blue-900 to-cyan-200</f:case>
+    //                  ^
+    // ```
+    #[bytes(b'>')]
     Before,
 
     // Clojure and Angular like languages, e.g.:
@@ -109,6 +115,12 @@ enum Class {
     // In this case there is some JavaScript embedded in an string in PHP and some of the quotes
     // need to be escaped.
     #[bytes(b'\\')]
+    // XML-like languages where classes are inside the tag, e.g.:
+    // ```
+    // <f:case value="0">from-blue-900 to-cyan-200</f:case>
+    //                                            ^
+    // ```
+    #[bytes(b'<')]
     After,
 
     #[fallback]
