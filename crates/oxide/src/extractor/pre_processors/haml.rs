@@ -148,4 +148,14 @@ mod tests {
             ],
         );
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/pull/17051#issuecomment-2711181352
+    #[test]
+    fn test_haml_full_file() {
+        let processed = Haml.process(include_bytes!("./test-fixtures/haml/src-1.haml"));
+        let actual = std::str::from_utf8(&processed).unwrap();
+        let expected = include_str!("./test-fixtures/haml/dst-1.haml");
+
+        assert_eq!(actual, expected);
+    }
 }
