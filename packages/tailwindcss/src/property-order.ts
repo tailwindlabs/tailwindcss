@@ -234,6 +234,17 @@ export default [
   '--tw-gradient-to',
   '--tw-gradient-to-position',
 
+  'mask-image',
+  '--tw-mask-gradient-position',
+  '--tw-mask-gradient-stops',
+  '--tw-mask-gradient-via-stops',
+  '--tw-mask-gradient-from',
+  '--tw-mask-gradient-from-position',
+  '--tw-mask-gradient-via',
+  '--tw-mask-gradient-via-position',
+  '--tw-mask-gradient-to',
+  '--tw-mask-gradient-to-position',
+
   'box-decoration-break',
 
   'background-size',
@@ -242,6 +253,15 @@ export default [
   'background-position',
   'background-repeat',
   'background-origin',
+
+  'mask-composite',
+  'mask-mode',
+  'mask-type',
+  'mask-size',
+  'mask-clip',
+  'mask-position',
+  'mask-repeat',
+  'mask-origin',
 
   'fill',
   'stroke',
