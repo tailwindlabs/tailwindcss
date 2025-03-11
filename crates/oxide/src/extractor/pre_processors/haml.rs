@@ -15,9 +15,7 @@ impl PreProcessor for Haml {
         while cursor.pos < len {
             match cursor.curr {
                 // Consume strings as-is
-                b'\'' | b'"' if !bracket_stack.is_empty() => {
-                    let end_char = cursor.curr;
-
+                b'"' => {
                     cursor.advance();
 
                     while cursor.pos < len {
@@ -26,7 +24,25 @@ impl PreProcessor for Haml {
                             b'\\' => cursor.advance_twice(),
 
                             // End of the string
-                            b'\'' | b'"' if cursor.curr == end_char => break,
+                            b'"' => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+                }
+
+                // Consume strings in single quotes as-is _if_ we are inside of a bracket stack.
+                b'\'' if !bracket_stack.is_empty() => {
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'\'' => break,
 
                             // Everything else is valid
                             _ => cursor.advance(),
