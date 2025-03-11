@@ -31,7 +31,9 @@ impl PreProcessor for Slim {
                     // Do not treat the `'` as a string
                 }
 
-                // Consume strings as-is
+                // Consume strings as-is when inside of a bracket stack. In Slim you can have
+                // attributes without being in a bracket stack, e.g.: `div class="px-2.5"` so we
+                // check for the presence of `=` before consuming the string.
                 b'\'' | b'"' if !bracket_stack.is_empty() || matches!(cursor.prev, b'=') => {
                     let end_char = cursor.curr;
 
