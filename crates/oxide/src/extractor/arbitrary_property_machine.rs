@@ -163,7 +163,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         let len = cursor.input.len();
-        let start_of_value = cursor.pos;
+        let start_of_value_pos = cursor.pos;
         while cursor.pos < len {
             match cursor.curr.into() {
                 Class::Escape => match cursor.next.into() {
@@ -224,7 +224,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 Class::Whitespace => return self.restart(),
 
                 // URLs are not allowed
-                Class::Slash if start_of_value == cursor.pos => return self.restart(),
+                Class::Slash if start_of_value_pos == cursor.pos => return self.restart(),
 
                 // Everything else is valid
                 _ => cursor.advance(),
