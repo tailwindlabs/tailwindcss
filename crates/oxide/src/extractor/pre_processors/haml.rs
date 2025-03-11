@@ -47,7 +47,7 @@ impl PreProcessor for Haml {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b'>' if cursor.prev.is_ascii_alphabetic() => {
+                b'>' if cursor.prev.is_ascii_alphabetic() && !bracket_stack.is_empty() => {
                     bracket_stack.pop(cursor.curr);
 
                     // Replace closing bracket with a space
@@ -64,7 +64,7 @@ impl PreProcessor for Haml {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b')' | b']' | b'}' => {
+                b')' | b']' | b'}' if !bracket_stack.is_empty() => {
                     bracket_stack.pop(cursor.curr);
 
                     // Replace closing bracket with a space
@@ -133,7 +133,7 @@ mod tests {
                 " text-lime-500 xl:text-emerald-500 root",
             ),
             // HTML stays as-is
-            (r#"<div id="px-2.5"></div>"#, r#" div id="px-2.5"  /div "#),
+            (r#"<div id="px-2.5"></div>"#, r#" div id="px-2.5"></div "#),
         ] {
             Haml::test(input, expected);
         }
@@ -173,5 +173,15 @@ mod tests {
         let expected = include_str!("./test-fixtures/haml/dst-1.haml");
 
         assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_arbitrary_code_followed_by_classes() {
+        let input = r#"
+            %p
+              = i < 3
+              .flex.items-center
+        "#;
+        Haml::test_extract_contains(input, vec!["flex", "items-center"]);
     }
 }

@@ -40,11 +40,19 @@ impl PreProcessor for Pug {
                     result[cursor.pos] = b' ';
                 }
 
-                b'(' | b'[' | b'{' | b'<' => {
+                b'<' if cursor.next.is_ascii_alphabetic() => {
                     bracket_stack.push(cursor.curr);
                 }
 
-                b')' | b']' | b'}' | b'>' if !bracket_stack.is_empty() => {
+                b'>' if cursor.prev.is_ascii_alphabetic() && !bracket_stack.is_empty() => {
+                    bracket_stack.pop(cursor.curr);
+                }
+
+                b'(' | b'[' | b'{' => {
+                    bracket_stack.push(cursor.curr);
+                }
+
+                b')' | b']' | b'}' if !bracket_stack.is_empty() => {
                     bracket_stack.pop(cursor.curr);
                 }
 
@@ -108,5 +116,14 @@ mod tests {
                 "italic",
             ],
         );
+    }
+
+    #[test]
+    fn test_arbitrary_code_followed_by_classes() {
+        let input = r#"
+            - i < 3
+              .flex.items-center
+        "#;
+        Pug::test_extract_contains(input, vec!["flex", "items-center"]);
     }
 }
