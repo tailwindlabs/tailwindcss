@@ -3,7 +3,6 @@
 3g2
 3gp
 7z
-DS_Store
 a
 aac
 adp
@@ -51,6 +50,7 @@ docx
 dot
 dotm
 dra
+DS_Store
 dsk
 dts
 dtshd
@@ -131,6 +131,7 @@ mpg
 mpga
 mxu
 nef
+node
 npx
 numbers
 nupkg
@@ -229,6 +230,7 @@ uvu
 viv
 vob
 war
+wasm
 wav
 wax
 wbmp
