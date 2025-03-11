@@ -16,7 +16,6 @@ impl PreProcessor for Pug {
             match cursor.curr {
                 // Consume strings as-is
                 b'\'' | b'"' if !bracket_stack.is_empty() => {
-                    let len = cursor.input.len();
                     let end_char = cursor.curr;
 
                     cursor.advance();
