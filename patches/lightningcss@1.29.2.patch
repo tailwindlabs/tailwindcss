@@ -1,11 +1,12 @@
 diff --git a/node/index.js b/node/index.js
-index a9f2f6d5f3394329fcf8bc06af549030c01167a5..db3b1c6cab5e4bac140d2f7a2b2e041d9a0a8a36 100644
+index 011d04b450687083e7a0ec9023c41ee79104831c..ef26db49d98c60b5b31f3601f6ad045f0b0e8f4f 100644
 --- a/node/index.js
 +++ b/node/index.js
-@@ -1,27 +1,43 @@
+@@ -1,28 +1,41 @@
 -let parts = [process.platform, process.arch];
 -if (process.platform === 'linux') {
--  const { MUSL, family } = require('detect-libc');
+-  const { MUSL, familySync } = require('detect-libc');
+-  const family = familySync();
 -  if (family === MUSL) {
 -    parts.push('musl');
 -  } else if (process.arch === 'arm') {
@@ -17,18 +18,18 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..db3b1c6cab5e4bac140d2f7a2b2e041d
 -  parts.push('msvc');
 -}
 +function loadPackage() {
-+  if (process.platform === "linux") {
++  if (process.platform === 'linux') {
 +    if (process.env.PLATFORM_LIBC === 'musl') {
-+      return require(`lightningcss-${process.platform}-${process.arch}-musl`);
++      return require(`lightningcss-${process.platform}-${process.arch}-musl`)
 +    } else if (process.env.PLATFORM_LIBC === 'glibc') {
-+      if (process.arch === "arm") {
-+        return require(`lightningcss-${process.platform}-${process.arch}-gnueabihf`);
++      if (process.arch === 'arm') {
++        return require(`lightningcss-${process.platform}-${process.arch}-gnueabihf`)
 +      } else {
-+        return require(`lightningcss-${process.platform}-${process.arch}-gnu`);
++        return require(`lightningcss-${process.platform}-${process.arch}-gnu`)
 +      }
 +    } else {
 +      let { MUSL, GLIBC, family, familySync } = require('detect-libc')
- 
+
 -if (process.env.CSS_TRANSFORMER_WASM) {
 -  module.exports = require(`../pkg`);
 -} else {
@@ -42,30 +43,28 @@ index a9f2f6d5f3394329fcf8bc06af549030c01167a5..db3b1c6cab5e4bac140d2f7a2b2e041d
 +      if (typeof familySync === 'function') family = familySync()
 +
 +      if (family === MUSL) {
-+        return require(`lightningcss-${process.platform}-${process.arch}-musl`);
++        return require(`lightningcss-${process.platform}-${process.arch}-musl`)
 +      } else if (family === GLIBC) {
-+        if (process.arch === "arm") {
-+          return require(`lightningcss-${process.platform}-${process.arch}-gnueabihf`);
++        if (process.arch === 'arm') {
++          return require(`lightningcss-${process.platform}-${process.arch}-gnueabihf`)
 +        } else {
-+          return require(`lightningcss-${process.platform}-${process.arch}-gnu`);
++          return require(`lightningcss-${process.platform}-${process.arch}-gnu`)
 +        }
 +      } else {
-+        throw new Error(
-+          `Unsupported libc on: ${process.platform}-${process.arch}`
-+        );
++        throw new Error(`Unsupported libc on: ${process.platform}-${process.arch}`)
 +      }
 +    }
-+  } else if (process.platform === "win32") {
-+    return require(`lightningcss-${process.platform}-${process.arch}-msvc`);
++  } else if (process.platform === 'win32') {
++    return require(`lightningcss-${process.platform}-${process.arch}-msvc`)
 +  } else {
-+    return require(`lightningcss-${process.platform}-${process.arch}`);
++    return require(`lightningcss-${process.platform}-${process.arch}`)
    }
  }
- 
+
 -module.exports.browserslistToTargets = require('./browserslistToTargets');
 -module.exports.composeVisitors = require('./composeVisitors');
 -module.exports.Features = require('./flags').Features;
-+module.exports = loadPackage();
-+module.exports.browserslistToTargets = require("./browserslistToTargets");
-+module.exports.composeVisitors = require("./composeVisitors");
-+module.exports.Features = require("./flags").Features;
++module.exports = loadPackage()
++module.exports.browserslistToTargets = require('./browserslistToTargets')
++module.exports.composeVisitors = require('./composeVisitors')
++module.exports.Features = require('./flags').Features
