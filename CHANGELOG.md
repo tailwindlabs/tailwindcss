@@ -23,7 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure classes between `>` and `<` are properly extracted ([#17094](https://github.com/tailwindlabs/tailwindcss/pull/17094))
 - Treat starting single quote as verbatim text in Slim ([#17085](https://github.com/tailwindlabs/tailwindcss/pull/17085))
 - Ensure `.node` and `.wasm` files are not scanned for utilities ([#17123](https://github.com/tailwindlabs/tailwindcss/pull/17123))
-- Improve performance when scanning `JSON` files ([#17125](https://github.com/tailwindlabs/tailwindcss/pull/17125))
+- Improve performance when scanning JSON files ([#17125](https://github.com/tailwindlabs/tailwindcss/pull/17125))
+- Fix extracting candidates containing dots in Haml, Pug, and Slim pre processors ([#17113](https://github.com/tailwindlabs/tailwindcss/pull/17113))
 - Don't create invalid CSS when encountering a link wrapped in square brackets ([#17129](https://github.com/tailwindlabs/tailwindcss/pull/17129))
 
 ## [4.0.12] - 2025-03-07

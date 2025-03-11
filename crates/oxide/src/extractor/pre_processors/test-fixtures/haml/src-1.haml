@@ -1,0 +1,155 @@
+/ https://github.com/tailwindlabs/tailwindcss/pull/17051#issuecomment-2711181352
+- star_styles = "size-[800px] mask mask-star bg-gradient-to-r from-secondary via-cyan-400 to-lime-400"
+- crazy_text_styles = "italic font-black bg-gradient-to-r via-60% to-90% from-orange-500 via-secondary to-primary text-transparent bg-clip-text inline-block py-2"
+
+.relative
+  - # Blurred background star
+  .absolute.left-0.z-0{ class: "-top-[400px] -right-[400px]" }
+    .flex.justify-end.blur-3xl
+      %div{ class: star_styles }
+
+  .relative.z-10
+    %h1.mt-8.text-center.text-5xl.font-black.tracking-wide.drop-shadow-lg
+      %div
+        Components, Guides, and Paradigms
+      .md:inline-flex.md:items-center.justify-center
+        %span.-mr-2
+          for
+        %span.relative.-rotate-3.hover:-rotate-6.hover:scale-125.transition-transform
+          %span{ class: crazy_text_styles + " absolute blur-xl" }
+            &nbsp;CRAZY&nbsp;
+          %span{ class: crazy_text_styles + " drop-shadow-[0_0_1px_#fff]" }
+            &nbsp;CRAZY&nbsp;
+        %span.-ml-3.md:-ml-1
+          \-fast Development
+      %div
+        in Ruby on Rails!
+
+    .mt-16.text-center
+      = daisy_button "😃 Get Started", css: "btn-primary text-xl",
+        right_icon: "arrow-right", target: "_blank",
+        href: "https://github.com/profoundry-us/loco_motion#locomotion-components"
+
+    .mt-32.lg:flex.lg:space-x-8
+      %div{ class: "md:basis-2/5" }
+        %h3.text-4xl.font-bold
+          Easy, Flexible Components
+        %p.mt-2.text-xl
+          Powered by the fabulous
+          = succeed ',' do
+            = daisy_link("ViewComponent", "https://viewcomponent.org", target: "_blank")
+          = succeed ', and' do
+            = daisy_link "DaisyUI", "https://daisyui.com/", target: "_blank"
+          = daisy_link "TailwindCSS", "https://tailwindcss.com/", target: "_blank"
+          libraries, our components are designed to be fast, flexible, and easy to
+          use <i>directy</i> in Ruby on Rails!
+
+      = doc_example(css: "mt-8 lg:mt-0 lg:basis-3/5 h-44") do
+        .flex.flex-col.sm:flex-row.items-center.gap-4
+          = daisy_button "Accent Button", css: "btn-accent"
+          = daisy_tip("Click to Swap") do
+            = daisy_swap off: "🌚", on: "🌞", css: "swap-rotate text-4xl"
+          = daisy_badge "Large Badge", css: "badge-secondary badge-lg"
+
+
+    .mt-32.xl:flex.xl:flex-row-reverse.xl:items-center
+      .text-xl.xl:ml-8
+        %h3.text-4xl.font-bold
+          Simple, Concise Views
+
+        %p.mt-2
+          Utlize
+          = daisy_link("HAML", "https://haml.info/", target: "_blank")
+          so your views are simple, concise, and easy to understand.
+
+        %p.mt-2
+          No more messy ERB files with all of their closing tags and Ruby wrappers.
+          HAML feels more natural to write and reduces file sizes, making your
+          views easier to read and maintain.
+
+        %p.mt-2
+          :markdown
+            **PLUS!** You can utlize filters like _Markdown_, CoffeeScript,
+            Textile, and many more!
+
+      .mt-8.xl:mt-0
+        .flex.flex-col.xl:flex.xl:flex-row.w-full
+          = doc_code(css: "grow", code_css: "xl:pl-2 xl:pr-0 xl:rounded-r-none", language: "erb") do
+            :escaped
+              <% # Ruby %>
+
+              <% 5.times do |i| %>
+                <% if i.even? %>
+                  <p class="odd">Number <%= i %></p>
+                <% else %>
+                  <p class="even">Numero <%= i %></p>
+                <% end %>
+              <% end %>
+
+          = doc_code(css: "grow mt-8 xl:mt-0", pre_css: "xl:h-full", code_css: "xl:pl-0 xl:pr-2 xl:h-full xl:rounded-l-none") do
+            :escaped
+              - # HAML
+
+              - 5.times do |i|
+                - if i.even?
+                  %p.odd Number \#{i}
+                - else
+                  %p.even Numero \#{i}
+
+
+    %h3.mt-32.text-4xl.font-bold
+      Build Your <i>OWN</i> Components
+
+    %p.mt-2.text-xl
+      Can't find exactly what you need? No problem! Build your own components
+      with ease using our simple, flexible, and powerful DSL.
+
+    .mt-8.xl:flex.xl:space-x-8
+      %div
+        = doc_code(language: "ruby") do
+          :escaped
+            # app/components/application_component.rb
+            class ApplicationComponent < LocoMotion::BaseComponent
+              # Add your custom / shared component logic here!
+            end
+
+        = doc_code(language: "haml", css: "mt-8") do
+          :escaped
+            - # app/components/character_component.html.haml
+            = part(:component) do
+              = part(:head)
+              = part(:body) do
+                = content
+              = part(:legs)
+
+      %div.mt-8.xl:mt-0
+        = doc_code(language: "ruby") do
+          :escaped
+            # app/components/character_component.rb
+            class CharacterComponent < ApplicationComponent
+              define_parts :head, :body, :legs
+
+              def before_render
+                set_tag_name(:head, :h1)
+                add_css(:head, "text-3xl font-bold")
+
+                set_tag_name(:body, :p)
+                add_stimulus_controller(:body, "character-body")
+                add_css(:body, "text-lg")
+
+                set_tag_name(:legs, :footer)
+                add_css(:legs, "text-sm")
+              end
+            end
+
+    %h3.mt-24.text-center.text-4xl.font-bold.italic
+      More Coming Soon!
+    %p.mt-2.text-xl.text-center
+      Keen an eye out as we'll be adding more components, guides, and
+      %br.max-sm:hidden
+      suggested gems for you to build amazing Rails apps!
+    .mt-4.text-center
+      = daisy_button "😉 Get Started", css: "btn-primary text-xl",
+        right_icon: "arrow-right", target: "_blank",
+        class: "px-2.5"
+        href: "https://github.com/profoundry-us/loco_motion#locomotion-components"
