@@ -80,6 +80,9 @@ impl PreProcessor for Slim {
                     bracket_stack.push(cursor.curr);
                 }
 
+                // HTML: `<div class="…">` strings should be considered as-is inside of the `<…>`
+                // brackets. Requires a ascii alphabetic to prevent raw code from being considered
+                // as a bracket. E.g.: `i < 3` should not be considered as a bracket.
                 b'<' if cursor.next.is_ascii_alphabetic() => {
                     bracket_stack.push(cursor.curr);
                 }

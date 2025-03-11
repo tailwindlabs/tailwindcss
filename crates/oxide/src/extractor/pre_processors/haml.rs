@@ -39,6 +39,9 @@ impl PreProcessor for Haml {
                     result[cursor.pos] = b' ';
                 }
 
+                // HTML: `<div class="…">` strings should be considered as-is inside of the `<…>`
+                // brackets. Requires a ascii alphabetic to prevent raw code from being considered
+                // as a bracket. E.g.: `i < 3` should not be considered as a bracket.
                 b'<' if cursor.next.is_ascii_alphabetic() => {
                     // Replace first bracket with a space
                     if bracket_stack.is_empty() {
@@ -132,7 +135,7 @@ mod tests {
                 ".text-lime-500.xl:text-emerald-500#root",
                 " text-lime-500 xl:text-emerald-500 root",
             ),
-            // HTML stays as-is
+            // Dots in strings in HTML attributes stay as-is
             (r#"<div id="px-2.5"></div>"#, r#" div id="px-2.5"></div "#),
         ] {
             Haml::test(input, expected);
