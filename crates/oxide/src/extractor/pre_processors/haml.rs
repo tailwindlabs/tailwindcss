@@ -1,6 +1,8 @@
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
+use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use crate::extractor::variant_machine::VariantMachine;
 
 #[derive(Debug, Default)]
 pub struct Haml;
@@ -14,65 +16,49 @@ impl PreProcessor for Haml {
 
         while cursor.pos < len {
             match cursor.curr {
-                // Consume strings as-is
-                b'"' => {
-                    cursor.advance();
-
-                    while cursor.pos < len {
-                        match cursor.curr {
-                            // Escaped character, skip ahead to the next character
-                            b'\\' => cursor.advance_twice(),
-
-                            // End of the string
-                            b'"' => break,
-
-                            // Everything else is valid
-                            _ => cursor.advance(),
-                        };
+                // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
+                //
+                // ```diff
+                // - .flex.items-center
+                // +  flex items-center
+                // ```
+                //
+                // But with numbers, it's allowed:
+                //
+                // ```diff
+                // - px-2.5
+                // + px-2.5
+                // ```
+                b'.' => {
+                    // Don't replace dots with spaces when inside of any type of brackets, because
+                    // this could be part of arbitrary values. E.g.: `bg-[url(https://example.com)]`
+                    //                                                                       ^
+                    if !bracket_stack.is_empty() {
+                        cursor.advance();
+                        continue;
                     }
-                }
 
-                // Consume strings in single quotes as-is _if_ we are inside of a bracket stack.
-                b'\'' if !bracket_stack.is_empty() => {
-                    cursor.advance();
+                    // If the dot is surrounded by digits, we want to keep it. E.g.: `px-2.5`
+                    // EXCEPT if it's followed by a valid variant that happens to start with a
+                    // digit.
+                    // E.g.: `bg-red-500.2xl:flex`
+                    //                 ^^^
+                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                        let mut next_cursor = cursor.clone();
+                        next_cursor.advance();
 
-                    while cursor.pos < len {
-                        match cursor.curr {
-                            // Escaped character, skip ahead to the next character
-                            b'\\' => cursor.advance_twice(),
-
-                            // End of the string
-                            b'\'' => break,
-
-                            // Everything else is valid
-                            _ => cursor.advance(),
-                        };
+                        let mut variant_machine = VariantMachine::default();
+                        if let MachineState::Done(_) = variant_machine.next(&mut next_cursor) {
+                            result[cursor.pos] = b' ';
+                        }
+                    } else {
+                        result[cursor.pos] = b' ';
                     }
                 }
 
                 // Replace following characters with spaces if they are not inside of brackets
-                b'.' | b'#' | b'=' if bracket_stack.is_empty() => {
+                b'#' | b'=' if bracket_stack.is_empty() => {
                     result[cursor.pos] = b' ';
-                }
-
-                // HTML: `<div class="…">` strings should be considered as-is inside of the `<…>`
-                // brackets. Requires a ascii alphabetic to prevent raw code from being considered
-                // as a bracket. E.g.: `i < 3` should not be considered as a bracket.
-                b'<' if cursor.next.is_ascii_alphabetic() => {
-                    // Replace first bracket with a space
-                    if bracket_stack.is_empty() {
-                        result[cursor.pos] = b' ';
-                    }
-                    bracket_stack.push(cursor.curr);
-                }
-
-                b'>' if cursor.prev.is_ascii_alphabetic() && !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
-
-                    // Replace closing bracket with a space
-                    if bracket_stack.is_empty() {
-                        result[cursor.pos] = b' ';
-                    }
                 }
 
                 b'(' | b'[' | b'{' => {
@@ -152,7 +138,7 @@ mod tests {
                 " text-lime-500 xl:text-emerald-500 root",
             ),
             // Dots in strings in HTML attributes stay as-is
-            (r#"<div id="px-2.5"></div>"#, r#" div id="px-2.5"></div "#),
+            (r#"<div id="px-2.5"></div>"#, r#"<div id "px-2.5"></div>"#),
         ] {
             Haml::test(input, expected);
         }

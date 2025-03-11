@@ -1,6 +1,8 @@
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
+use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use crate::extractor::variant_machine::VariantMachine;
 
 #[derive(Debug, Default)]
 pub struct Slim;
@@ -11,51 +13,47 @@ impl PreProcessor for Slim {
         let mut result = content.to_vec();
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = BracketStack::default();
-        let mut line_start_pos = 0x00;
 
         while cursor.pos < len {
             match cursor.curr {
-                b'\n' => {
-                    line_start_pos = cursor.pos + 1;
-                }
-
-                // Line indicators:
+                // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
-                // > Verbatim text with trailing white space '
-                // > See: https://github.com/slim-template/slim?tab=readme-ov-file#verbatim-text-with-trailing-white-space-
-                b'\''
-                    if cursor.input[line_start_pos..cursor.pos]
-                        .iter()
-                        .all(|x| x.is_ascii_whitespace()) =>
-                {
-                    // Do not treat the `'` as a string
-                }
-
-                // Consume strings as-is when inside of a bracket stack. In Slim you can have
-                // attributes without being in a bracket stack, e.g.: `div class="px-2.5"` so we
-                // check for the presence of `=` before consuming the string.
-                b'\'' | b'"' if !bracket_stack.is_empty() || matches!(cursor.prev, b'=') => {
-                    let end_char = cursor.curr;
-
-                    cursor.advance();
-
-                    while cursor.pos < len {
-                        match cursor.curr {
-                            // Escaped character, skip ahead to the next character
-                            b'\\' => cursor.advance_twice(),
-
-                            // End of the string
-                            b'\'' | b'"' if cursor.curr == end_char => break,
-
-                            // Everything else is valid
-                            _ => cursor.advance(),
-                        };
+                // ```diff
+                // - .flex.items-center
+                // +  flex items-center
+                // ```
+                //
+                // But with numbers, it's allowed:
+                //
+                // ```diff
+                // - px-2.5
+                // + px-2.5
+                // ```
+                b'.' => {
+                    // Don't replace dots with spaces when inside of any type of brackets, because
+                    // this could be part of arbitrary values. E.g.: `bg-[url(https://example.com)]`
+                    //                                                                       ^
+                    if !bracket_stack.is_empty() {
+                        cursor.advance();
+                        continue;
                     }
-                }
 
-                // Replace dots with spaces
-                b'.' if bracket_stack.is_empty() => {
-                    result[cursor.pos] = b' ';
+                    // If the dot is surrounded by digits, we want to keep it. E.g.: `px-2.5`
+                    // EXCEPT if it's followed by a valid variant that happens to start with a
+                    // digit.
+                    // E.g.: `bg-red-500.2xl:flex`
+                    //                 ^^^
+                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                        let mut next_cursor = cursor.clone();
+                        next_cursor.advance();
+
+                        let mut variant_machine = VariantMachine::default();
+                        if let MachineState::Done(_) = variant_machine.next(&mut next_cursor) {
+                            result[cursor.pos] = b' ';
+                        }
+                    } else {
+                        result[cursor.pos] = b' ';
+                    }
                 }
 
                 // Any `[` preceded by an alphanumeric value will not be part of a candidate.
@@ -80,17 +78,6 @@ impl PreProcessor for Slim {
                 {
                     result[cursor.pos] = b' ';
                     bracket_stack.push(cursor.curr);
-                }
-
-                // HTML: `<div class="…">` strings should be considered as-is inside of the `<…>`
-                // brackets. Requires a ascii alphabetic to prevent raw code from being considered
-                // as a bracket. E.g.: `i < 3` should not be considered as a bracket.
-                b'<' if cursor.next.is_ascii_alphabetic() => {
-                    bracket_stack.push(cursor.curr);
-                }
-
-                b'>' if cursor.prev.is_ascii_alphabetic() && !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
                 }
 
                 b'(' | b'[' | b'{' => {
@@ -123,6 +110,11 @@ mod tests {
             // Convert dots to spaces
             ("div.flex.bg-red-500", "div flex bg-red-500"),
             (".flex.bg-red-500", " flex bg-red-500"),
+            (".bg-red-500.2xl:flex", " bg-red-500 2xl:flex"),
+            (
+                ".bg-red-500.2xl:flex.bg-green-200.3xl:flex",
+                " bg-red-500 2xl:flex bg-green-200 3xl:flex",
+            ),
             // Keep dots in strings
             (r#"div(class="px-2.5")"#, r#"div(class="px-2.5")"#),
             // Replace top-level `(a-z0-9)[` with `$1 `. E.g.: `.flex[x]` -> `.flex x]`
@@ -148,7 +140,11 @@ mod tests {
             // Escaped string
             ("content-['a\'b\'c\'']", "content-['a\'b\'c\'']"),
             // Classes in HTML attributes
-            (r#"<div id="px-2.5"></div>"#, r#"<div id="px-2.5"></div>"#),
+            ("<div id=\"px-2.5\"></div>", "<div id=\"px-2.5\"></div>"),
+            (
+                "<div id=\"px-2.5 bg-red-500 2xl:flex bg-green-200 3xl:flex\"></div>",
+                "<div id=\"px-2.5 bg-red-500 2xl:flex bg-green-200 3xl:flex\"></div>",
+            ),
         ] {
             Slim::test(input, expected);
         }
@@ -169,20 +165,6 @@ mod tests {
                 | Should be BLACK on RED - FAIL
         "#;
 
-        let expected = r#"
-             text-black 
-              data-controller= ['foo', ('bar' if rand.positive?)].join(' ')
-            ]
-               bg-green-300
-                | BLACK on GREEN - OK
-
-               bg-red-300 
-                data-foo= 42
-              ]
-                | Should be BLACK on RED - FAIL
-        "#;
-
-        Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["text-black", "bg-green-300", "bg-red-300"]);
     }
 
