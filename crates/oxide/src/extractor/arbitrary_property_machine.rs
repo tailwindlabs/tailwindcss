@@ -163,6 +163,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         let len = cursor.input.len();
+        let start_of_value = cursor.pos;
         while cursor.pos < len {
             match cursor.curr.into() {
                 Class::Escape => match cursor.next.into() {
@@ -222,6 +223,9 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return self.restart(),
 
+                // URLs are not allowed
+                Class::Slash if start_of_value == cursor.pos => return self.restart(),
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -277,6 +281,9 @@ enum Class {
 
     #[bytes(b':')]
     Colon,
+
+    #[bytes(b'/')]
+    Slash,
 
     #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
@@ -341,6 +348,9 @@ mod tests {
             ("[:red]", vec![]),
             // Empty brackets are not allowed
             ("[]", vec![]),
+            // URLs
+            ("[http://example.com]", vec![]),
+            ("[https://example.com]", vec![]),
             // Missing colon in more complex example
             (r#"[CssClass("gap-y-4")]"#, vec![]),
             // Brackets must be balanced
