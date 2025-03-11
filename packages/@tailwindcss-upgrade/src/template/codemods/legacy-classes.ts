@@ -139,9 +139,9 @@ export async function legacyClasses(
 
     if (fromThemeKey && toThemeKey) {
       // Migrating something that resolves to a value in the theme.
-      let customFrom = designSystem.resolveThemeValue(fromThemeKey)
-      let defaultFrom = defaultDesignSystem.resolveThemeValue(fromThemeKey)
-      let customTo = designSystem.resolveThemeValue(toThemeKey)
+      let customFrom = designSystem.resolveThemeValue(fromThemeKey, true)
+      let defaultFrom = defaultDesignSystem.resolveThemeValue(fromThemeKey, true)
+      let customTo = designSystem.resolveThemeValue(toThemeKey, true)
       let defaultTo = defaultDesignSystem.resolveThemeValue(toThemeKey)
 
       // The new theme value is not defined, which means we can't safely
