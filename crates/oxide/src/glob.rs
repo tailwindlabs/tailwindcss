@@ -1,11 +1,10 @@
-use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tracing::event;
 
 use crate::GlobEntry;
 
-pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
+pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>, emit_parent_glob: bool) -> Vec<GlobEntry> {
     let mut result = vec![];
 
     for entry in entries {
@@ -40,7 +39,7 @@ pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
         // If the base path is a file, then we want to move the file to the pattern, and point the
         // directory to the base. This is necessary for file watchers that can only listen to
         // folders.
-        if pattern.is_empty() && base.is_file() {
+        if emit_parent_glob && pattern.is_empty() && base.is_file() {
             result.push(GlobEntry {
                 // SAFETY: `parent()` will be available because we verify `base` is a file, thus a
                 // parent folder exists.
@@ -83,7 +82,7 @@ pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 /// tailwind --pwd ./project/components --content "**/*.js"
 /// ```
 pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
-    let entries = hoist_static_glob_parts(entries);
+    let entries = hoist_static_glob_parts(entries, true);
 
     // Track all base paths and their patterns. Later we will turn them back into `GlobalEntry`s.
     let mut pattern_map: FxHashMap<String, FxHashSet<String>> = FxHashMap::default();
@@ -166,14 +165,6 @@ fn split_pattern(pattern: &str) -> (Option<String>, Option<String>) {
     let dynamic_part = (!dynamic_part.is_empty()).then_some(dynamic_part);
 
     (static_part, dynamic_part)
-}
-
-pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
-    let path = path.to_string_lossy();
-
-    globs
-        .iter()
-        .any(|g| glob_match(format!("{}/{}", g.base, g.pattern), path.as_bytes()))
 }
 
 #[cfg(test)]

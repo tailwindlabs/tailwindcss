@@ -105,7 +105,7 @@ impl From<tailwindcss_oxide::SourceEntry> for SourceEntry {
 #[napi(object)]
 pub struct ScannerOptions {
   /// Glob sources
-  pub sources: Option<Vec<GlobEntry>>,
+  pub sources: Option<Vec<SourceEntry>>,
 }
 
 #[derive(Debug, Clone)]

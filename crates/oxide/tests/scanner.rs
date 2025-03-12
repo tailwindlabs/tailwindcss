@@ -62,7 +62,12 @@ mod scanner {
 
         let candidates = scanner.scan();
 
+        dbg!(&scanner);
+
         let mut paths: Vec<_> = scanner.get_files();
+
+        dbg!(&scanner);
+        dbg!(&paths);
 
         for glob in scanner.get_globs() {
             paths.push(format!("{}{}{}", glob.base, "/", glob.pattern));
@@ -83,6 +88,7 @@ mod scanner {
         // _could_ be random)
         paths.sort();
 
+        // TODO: Split this up in paths and globs
         (paths, candidates)
     }
 
@@ -644,24 +650,55 @@ mod scanner {
 
     #[test]
     fn it_should_ignore_negated_custom_sources() {
-        let candidates = scan_with_globs(
+        let (paths, candidates) = scan_with_globs(
             &[
                 ("src/index.ts", "content-['src/index.ts']"),
-                ("src/colors/red.tsx", "content-['src/colors/red.ts']"),
-                ("src/colors/blue.tsx", "content-['src/colors/blue.ts']"),
-                ("src/colors/green.tsx", "content-['src/colors/green.ts']"),
+                ("src/colors/red.jsx", "content-['src/colors/red.jsx']"),
+                ("src/colors/blue.tsx", "content-['src/colors/blue.tsx']"),
+                ("src/colors/green.tsx", "content-['src/colors/green.tsx']"),
+                ("src/utils/string.ts", "content-['src/utils/string.ts']"),
+                ("src/utils/date.ts", "content-['src/utils/date.ts']"),
+                ("src/utils/file.ts", "content-['src/utils/file.ts']"),
+                (
+                    "src/admin/foo/template.html",
+                    "content-['src/admin/template.html']",
+                ),
+                (
+                    "src/templates/index.html",
+                    "content-['src/templates/index.html']",
+                ),
+                ("dist/out.html", "content-['dist/out.html']"),
             ],
-            vec!["!src/index.ts", "!**/*.tsx"],
-        )
-        .1;
+            vec!["!src/index.ts", "!**/*.{jsx,tsx}", "!src/utils", "!dist"],
+        );
 
         assert_eq!(
             candidates,
             vec![
-                "content-['src/colors/blue.ts']",
-                "content-['src/colors/green.ts']",
-                "content-['src/colors/red.ts']",
-                "content-['src/index.ts']"
+                "content-['src/admin/template.html']",
+                "content-['src/templates/index.html']",
+            ]
+        );
+
+        assert_eq!(
+            paths,
+            vec![
+                "*",
+                // TODO: We have ignored all files inside `./dist` so this glob does not need to be created
+                // "dist/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "dist/out.html",
+
+                // TODO: This is now missing `src/colors/**/*`` and `src/admin/**/*`
+                "src/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "src/admin/foo/template.html",
+                "src/colors/blue.tsx",
+                "src/colors/green.tsx",
+                "src/colors/red.jsx",
+                "src/index.ts",
+                "src/templates/index.html",
+                "src/utils/date.ts",
+                "src/utils/file.ts",
+                "src/utils/string.ts"
             ]
         );
     }

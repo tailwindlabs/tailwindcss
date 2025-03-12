@@ -1,5 +1,7 @@
+use crate::glob::hoist_static_glob_parts;
 use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_paths};
-use crate::GlobEntry;
+use crate::{GlobEntry, SourceEntry};
+use fast_glob::glob_match;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
 use std::path::PathBuf;
@@ -9,6 +11,7 @@ use walkdir::WalkDir;
 #[derive(Debug, Clone)]
 pub struct DetectSources {
     base: PathBuf,
+    ignored_patterns: Vec<String>,
 }
 
 static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
@@ -23,13 +26,38 @@ static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new
 });
 
 impl DetectSources {
-    pub fn new(base: PathBuf) -> Self {
-        Self { base }
+    pub fn new(base: PathBuf, ignored_sources: &Vec<&SourceEntry>) -> Self {
+        let ignored_pattern = hoist_static_glob_parts(
+            &ignored_sources
+                .into_iter()
+                .map(|source| GlobEntry {
+                    base: source.base.clone(),
+                    pattern: source.pattern.clone(),
+                })
+                .collect::<Vec<_>>(),
+            false,
+        )
+        .into_iter()
+        .map(|source| {
+            if source.pattern.is_empty() {
+                source.base
+            } else {
+                source.base + "/" + &source.pattern
+            }
+        })
+        .collect::<Vec<String>>();
+
+        Self {
+            base,
+            ignored_patterns: ignored_pattern,
+        }
     }
 
     pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
         let (files, dirs) = self.resolve_files();
+        dbg!(&dirs);
         let globs = self.resolve_globs(&dirs);
+        dbg!(&globs);
 
         (files, globs, dirs)
     }
@@ -38,10 +66,28 @@ impl DetectSources {
         let mut files: Vec<PathBuf> = vec![];
         let mut dirs: Vec<PathBuf> = vec![];
 
-        for entry in resolve_allowed_paths(&self.base) {
+        'outer: for entry in resolve_allowed_paths(&self.base) {
             let Some(file_type) = entry.file_type() else {
                 continue;
             };
+
+            let file_path = entry.clone().into_path();
+            let Some(file_path_str) = file_path.to_str() else {
+                continue;
+            };
+            let file_path_str = file_path_str.replace('\\', "/");
+
+            for ignored_pattern in &self.ignored_patterns {
+                if glob_match(&ignored_pattern, &file_path_str) {
+                    continue 'outer;
+                }
+                if ignored_pattern.ends_with("/**/*") {
+                    let folder_path = ignored_pattern.trim_end_matches("/**/*");
+                    if folder_path == file_path_str {
+                        continue 'outer;
+                    }
+                }
+            }
 
             if file_type.is_file() {
                 files.push(entry.into_path());
@@ -138,6 +184,8 @@ impl DetectSources {
                         // If the parent is already marked as a valid deep glob directory, then we have
                         // to mark it as a shallow glob directory instead, because we won't be able to
                         // use deep globs for this directory anymore.
+                        //
+                        // TODO: All existing children should become deep globable.
                         if deep_globable_directories.contains(parent_path) {
                             deep_globable_directories.remove(parent_path);
                             shallow_globable_directories.insert(parent_path.to_path_buf());

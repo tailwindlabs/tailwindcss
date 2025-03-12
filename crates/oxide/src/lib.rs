@@ -300,6 +300,8 @@ impl Scanner {
 
             modified_dirs.clear();
 
+            dbg!(&new_entries);
+
             for path in new_entries {
                 if path.is_file() {
                     known.insert(path.clone());
@@ -324,6 +326,10 @@ impl Scanner {
         if sources.is_empty() {
             return;
         }
+
+        // Partition sources into kept and ignored
+        let (sources, ignored_sources): (Vec<_>, Vec<_>) =
+            sources.iter().partition(|source| !source.negated);
 
         // Expand glob patterns and create new `GlobEntry` instances for each expanded pattern.
         let sources = sources
@@ -395,7 +401,7 @@ impl Scanner {
             });
 
             // Detect all files/folders in the directory
-            let detect_sources = DetectSources::new(path);
+            let detect_sources = DetectSources::new(path, &ignored_sources);
 
             let (files, globs, dirs) = detect_sources.detect();
             self.files.extend(files);
@@ -405,7 +411,7 @@ impl Scanner {
 
         // Turn `Vec<&GlobEntry>` in `Vec<GlobEntry>`
         let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
-        let hoisted = hoist_static_glob_parts(&glob_sources);
+        let hoisted = hoist_static_glob_parts(&glob_sources, true);
 
         for source in &hoisted {
             // If the pattern is empty, then the base points to a specific file or folder already
