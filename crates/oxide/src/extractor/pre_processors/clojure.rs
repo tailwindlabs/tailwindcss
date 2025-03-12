@@ -138,4 +138,14 @@ mod tests {
 
         Clojure::test_extract_contains(input, vec!["hover:flex", "px-1.5"]);
     }
+
+    #[test]
+    fn test_ignore_comments_with_invalid_strings() {
+        let input = r#"
+            ;; This is an unclosed string: "
+            (dom/div {:class "hover:flex px-1.5"})
+        "#;
+
+        Clojure::test_extract_contains(input, vec!["hover:flex", "px-1.5"]);
+    }
 }
