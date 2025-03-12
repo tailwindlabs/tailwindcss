@@ -380,4 +380,25 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            // As part of the variable
+            ("(--my-${var})", vec![]),
+            // As the fallback
+            ("(--my-variable,${var})", vec![]),
+            // As the fallback in strings
+            (
+                "(--my-variable,url('${var}'))",
+                vec!["(--my-variable,url('${var}'))"],
+            ),
+        ] {
+            assert_eq!(
+                ArbitraryVariableMachine::<IdleState>::test_extract_all(input),
+                expected
+            );
+        }
+    }
 }

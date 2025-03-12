@@ -411,4 +411,26 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            // In key
+            ("[${x}:value]", vec![]),
+            // As part of the key
+            ("[background-${property}:value]", vec![]),
+            // In value
+            ("[key:${x}]", vec![]),
+            // As part of the value
+            ("[key:value-${x}]", vec![]),
+            // Allowed in strings
+            ("[--img:url('${x}')]", vec!["[--img:url('${x}')]"]),
+        ] {
+            assert_eq!(
+                ArbitraryPropertyMachine::<IdleState>::test_extract_all(input),
+                expected
+            );
+        }
+    }
 }

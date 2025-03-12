@@ -188,4 +188,17 @@ mod tests {
             assert_eq!(ArbitraryValueMachine::test_extract_all(input), expected);
         }
     }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            ("[${x}]", vec![]),
+            ("[url(${x})]", vec![]),
+            // Allowed in strings
+            ("[url('${x}')]", vec!["[url('${x}')]"]),
+        ] {
+            assert_eq!(ArbitraryValueMachine::test_extract_all(input), expected);
+        }
+    }
 }
