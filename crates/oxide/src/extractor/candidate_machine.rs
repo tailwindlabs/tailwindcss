@@ -327,4 +327,34 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn test_js_interpolation() {
+        for (input, expected) in [
+            // Utilities
+            // Arbitrary value
+            ("bg-[${color}]", vec![]),
+            // Arbitrary property
+            ("[color:${value}]", vec![]),
+            ("[${key}:value]", vec![]),
+            ("[${key}:${value}]", vec![]),
+            // Arbitrary property for CSS variables
+            ("[--color:${value}]", vec![]),
+            ("[--color-${name}:value]", vec![]),
+            // Arbitrary variable
+            ("bg-(--my-${name})", vec![]),
+            ("bg-(--my-variable,${fallback})", vec![]),
+            (
+                "bg-(--my-image,url('https://example.com?q=${value}'))",
+                vec!["bg-(--my-image,url('https://example.com?q=${value}'))"],
+            ),
+            // Variants
+            ("data-[state=${state}]:flex", vec![]),
+            ("support-(--my-${value}):flex", vec![]),
+            ("support-(--my-variable,${fallback}):flex", vec![]),
+            ("[@media(width>=${value})]:flex", vec![]),
+        ] {
+            assert_eq!(CandidateMachine::test_extract_all(input), expected);
+        }
+    }
 }

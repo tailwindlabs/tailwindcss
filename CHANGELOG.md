@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 
+### Fixed
+
+- Do not extract candidates with JS string interpolation `${` ([#17142](https://github.com/tailwindlabs/tailwindcss/pull/17142))
+
 ## [4.0.13] - 2025-03-11
 
 ### Fixed

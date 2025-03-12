@@ -95,6 +95,11 @@ impl Machine for ArbitraryValueMachine {
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -132,6 +137,9 @@ enum Class {
 
     #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[fallback]
     Other,
@@ -184,6 +192,19 @@ mod tests {
             ("[foo[bar]", vec![]),
             // Empty brackets are not allowed
             ("[]", vec![]),
+        ] {
+            assert_eq!(ArbitraryValueMachine::test_extract_all(input), expected);
+        }
+    }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            ("[${x}]", vec![]),
+            ("[url(${x})]", vec![]),
+            // Allowed in strings
+            ("[url('${x}')]", vec!["[url('${x}')]"]),
         ] {
             assert_eq!(ArbitraryValueMachine::test_extract_all(input), expected);
         }

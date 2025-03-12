@@ -226,6 +226,11 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 // URLs are not allowed
                 Class::Slash if start_of_value_pos == cursor.pos => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -275,6 +280,9 @@ enum Class {
 
     #[bytes(b'-')]
     Dash,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[bytes_range(b'a'..=b'z')]
     AlphaLower,
@@ -409,6 +417,28 @@ mod tests {
                 }
                 assert_eq!(actual, expected);
             }
+        }
+    }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            // In key
+            ("[${x}:value]", vec![]),
+            // As part of the key
+            ("[background-${property}:value]", vec![]),
+            // In value
+            ("[key:${x}]", vec![]),
+            // As part of the value
+            ("[key:value-${x}]", vec![]),
+            // Allowed in strings
+            ("[--img:url('${x}')]", vec!["[--img:url('${x}')]"]),
+        ] {
+            assert_eq!(
+                ArbitraryPropertyMachine::<IdleState>::test_extract_all(input),
+                expected
+            );
         }
     }
 }
