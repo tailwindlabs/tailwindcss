@@ -212,8 +212,8 @@ async function parseCss(
         throw new Error('`@source` cannot be nested.')
       }
 
-      let inline = false
       let not = false
+      let inline = false
       let path = node.params
 
       if (enableSourceInline) {
