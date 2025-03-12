@@ -235,6 +235,22 @@ impl Machine for NamedVariantMachine<ParsingState> {
                 //             ^
                 Class::Colon => return self.done(self.start_pos, cursor),
 
+                // A dot must be surrounded by numbers
+                //
+                // E.g.: `px-2.5`
+                //           ^^^
+                Class::Dot => {
+                    if !matches!(cursor.prev.into(), Class::Number) {
+                        return self.restart();
+                    }
+
+                    if !matches!(cursor.next.into(), Class::Number) {
+                        return self.restart();
+                    }
+
+                    cursor.advance();
+                }
+
                 // Everything else is invalid
                 _ => return self.restart(),
             };
