@@ -1,14 +1,18 @@
 use crate::cursor;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use bstr::ByteSlice;
 
 #[derive(Debug, Default)]
 pub struct Clojure;
 
 impl PreProcessor for Clojure {
     fn process(&self, content: &[u8]) -> Vec<u8> {
+        let content = content
+            .replace(":class", "      ")
+            .replace(":className", "          ");
         let len = content.len();
         let mut result = content.to_vec();
-        let mut cursor = cursor::Cursor::new(content);
+        let mut cursor = cursor::Cursor::new(&content);
 
         while cursor.pos < len {
             match cursor.curr {
@@ -59,15 +63,15 @@ mod tests {
                 ":.flex-3.flex-4 ;defaults to div",
                 "  flex-3 flex-4 ;defaults to div",
             ),
-            ("{:class :flex-5.flex-6", "{ class  flex-5 flex-6"),
-            (r#"{:class "flex-7 flex-8"}"#, r#"{ class "flex-7 flex-8"}"#),
+            ("{:class :flex-5.flex-6", "{        flex-5 flex-6"),
+            (r#"{:class "flex-7 flex-8"}"#, r#"{       "flex-7 flex-8"}"#),
             (
                 r#"{:class  ["flex-9" :flex-10]}"#,
-                r#"{ class  ["flex-9"  flex-10]}"#,
+                r#"{        ["flex-9"  flex-10]}"#,
             ),
             (
                 r#"(dom/div {:class "flex-11 flex-12"})"#,
-                r#"(dom/div { class "flex-11 flex-12"})"#,
+                r#"(dom/div {       "flex-11 flex-12"})"#,
             ),
             ("(dom/div :.flex-13.flex-14", "(dom/div   flex-13 flex-14"),
         ] {
