@@ -235,6 +235,22 @@ impl Machine for NamedVariantMachine<ParsingState> {
                 //             ^
                 Class::Colon => return self.done(self.start_pos, cursor),
 
+                // A dot must be surrounded by numbers
+                //
+                // E.g.: `2.5xl:flex`
+                //        ^^^
+                Class::Dot => {
+                    if !matches!(cursor.prev.into(), Class::Number) {
+                        return self.restart();
+                    }
+
+                    if !matches!(cursor.next.into(), Class::Number) {
+                        return self.restart();
+                    }
+
+                    cursor.advance();
+                }
+
                 // Everything else is invalid
                 _ => return self.restart(),
             };
@@ -325,23 +341,14 @@ enum Class {
     #[bytes(b'.')]
     Dot,
 
-    #[bytes(b'\0')]
-    End,
-
     #[bytes_range(b'0'..=b'9')]
     Number,
 
     #[bytes(b'[')]
     OpenBracket,
 
-    #[bytes(b']')]
-    CloseBracket,
-
     #[bytes(b'(')]
     OpenParen,
-
-    #[bytes(b'\'', b'"', b'`')]
-    Quote,
 
     #[bytes(b'*')]
     Star,
@@ -351,9 +358,6 @@ enum Class {
 
     #[bytes(b'_')]
     Underscore,
-
-    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
-    Whitespace,
 
     #[fallback]
     Other,
@@ -391,6 +395,8 @@ mod tests {
                 vec!["group-[data-state=pending]/name:"],
             ),
             ("supports-(--foo)/name:flex", vec!["supports-(--foo)/name:"]),
+            // Odd media queries
+            ("1.5xl:flex", vec!["1.5xl:"]),
             // Container queries
             ("@md:flex", vec!["@md:"]),
             ("@max-md:flex", vec!["@max-md:"]),
