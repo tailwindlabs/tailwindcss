@@ -86,17 +86,21 @@ mod tests {
             {:class  ["c9" :c10]}
             (dom/div {:class "c11 c12"})
             (dom/div :.c13.c14
+            {:className :c15.c16
+            {:className "c17 c18"}
+            {:className  ["c19" :c20]}
+            (dom/div {:className "c21 c22"})
         "#;
 
         Clojure::test_extract_contains(
             input,
             vec![
                 "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13",
-                "c14",
+                "c14", "c15", "c16", "c17", "c18", "c19", "c20", "c21", "c22",
             ],
         );
 
-        // Similar structure but using a real classes
+        // Similar structure but using real classes
         let input = r#"
             :div.flex-1.flex-2
             :.flex-3.flex-4 ;defaults to div
@@ -105,13 +109,18 @@ mod tests {
             {:class  ["flex-9" :flex-10]}
             (dom/div {:class "flex-11 flex-12"})
             (dom/div :.flex-13.flex-14
+            {:className :flex-15.flex-16
+            {:className "flex-17 flex-18"}
+            {:className  ["flex-19" :flex-20]}
+            (dom/div {:className "flex-21 flex-22"})
         "#;
 
         Clojure::test_extract_contains(
             input,
             vec![
                 "flex-1", "flex-2", "flex-3", "flex-4", "flex-5", "flex-6", "flex-7", "flex-8",
-                "flex-9", "flex-10", "flex-11", "flex-12", "flex-13", "flex-14",
+                "flex-9", "flex-10", "flex-11", "flex-12", "flex-13", "flex-14", "flex-15",
+                "flex-16", "flex-17", "flex-18", "flex-19", "flex-20", "flex-21", "flex-22",
             ],
         );
     }
