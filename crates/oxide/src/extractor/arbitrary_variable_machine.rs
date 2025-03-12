@@ -252,6 +252,11 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -283,6 +288,9 @@ enum Class {
 
     #[bytes(b'.')]
     Dot,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[bytes(b'\\')]
     Escape,
@@ -373,6 +381,27 @@ mod tests {
             (r"(--,red)", vec![]),
             (r"(-)", vec![]),
             (r"(-my-color)", vec![]),
+        ] {
+            assert_eq!(
+                ArbitraryVariableMachine::<IdleState>::test_extract_all(input),
+                expected
+            );
+        }
+    }
+
+    #[test]
+    fn test_exceptions() {
+        for (input, expected) in [
+            // JS string interpolation
+            // As part of the variable
+            ("(--my-${var})", vec![]),
+            // As the fallback
+            ("(--my-variable,${var})", vec![]),
+            // As the fallback in strings
+            (
+                "(--my-variable,url('${var}'))",
+                vec!["(--my-variable,url('${var}'))"],
+            ),
         ] {
             assert_eq!(
                 ArbitraryVariableMachine::<IdleState>::test_extract_all(input),
