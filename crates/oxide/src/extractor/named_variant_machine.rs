@@ -391,6 +391,8 @@ mod tests {
                 vec!["group-[data-state=pending]/name:"],
             ),
             ("supports-(--foo)/name:flex", vec!["supports-(--foo)/name:"]),
+            // Odd media queries
+            ("1.5xl:flex", vec!["1.5xl:"]),
             // Container queries
             ("@md:flex", vec!["@md:"]),
             ("@max-md:flex", vec!["@max-md:"]),
