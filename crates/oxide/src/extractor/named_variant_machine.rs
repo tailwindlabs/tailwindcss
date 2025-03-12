@@ -341,23 +341,14 @@ enum Class {
     #[bytes(b'.')]
     Dot,
 
-    #[bytes(b'\0')]
-    End,
-
     #[bytes_range(b'0'..=b'9')]
     Number,
 
     #[bytes(b'[')]
     OpenBracket,
 
-    #[bytes(b']')]
-    CloseBracket,
-
     #[bytes(b'(')]
     OpenParen,
-
-    #[bytes(b'\'', b'"', b'`')]
-    Quote,
 
     #[bytes(b'*')]
     Star,
@@ -367,9 +358,6 @@ enum Class {
 
     #[bytes(b'_')]
     Underscore,
-
-    #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
-    Whitespace,
 
     #[fallback]
     Other,
