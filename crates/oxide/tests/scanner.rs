@@ -38,17 +38,24 @@ mod scanner {
         let base = format!("{}", dir.display()).replace('\\', "/");
 
         // Resolve all content paths for the (temporary) current working directory
-        let mut sources: Vec<GlobEntry> = globs
+        let mut sources: Vec<SourceEntry> = globs
             .iter()
-            .map(|x| GlobEntry {
+            .map(|x| SourceEntry {
                 base: base.clone(),
-                pattern: x.to_string(),
+                pattern: if x.starts_with("!") {
+                    x[1..].to_string()
+                } else {
+                    x.to_string()
+                },
+                negated: x.starts_with("!"),
             })
             .collect();
 
-        sources.push(GlobEntry {
+        // Base source for auto-content detection
+        sources.push(SourceEntry {
             base: base.clone(),
             pattern: "**/*".to_string(),
+            negated: false,
         });
 
         let mut scanner = Scanner::new(Some(sources));
@@ -461,9 +468,10 @@ mod scanner {
         // Get POSIX-style absolute path
         let full_path = format!("{}", dir.display()).replace('\\', "/");
 
-        let sources = vec![GlobEntry {
+        let sources = vec![SourceEntry {
             base: full_path.clone(),
             pattern: full_path.clone(),
+            negated: false,
         }];
 
         let mut scanner = Scanner::new(Some(sources));
@@ -513,13 +521,15 @@ mod scanner {
         );
 
         let sources = vec![
-            GlobEntry {
+            SourceEntry {
                 base: dir.join("project-a").to_string_lossy().to_string(),
                 pattern: "**/*".to_owned(),
+                negated: false,
             },
-            GlobEntry {
+            SourceEntry {
                 base: dir.join("project-b").to_string_lossy().to_string(),
                 pattern: "**/*".to_owned(),
+                negated: false,
             },
         ];
 
@@ -633,6 +643,30 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_ignore_negated_custom_sources() {
+        let candidates = scan_with_globs(
+            &[
+                ("src/index.ts", "content-['src/index.ts']"),
+                ("src/colors/red.tsx", "content-['src/colors/red.ts']"),
+                ("src/colors/blue.tsx", "content-['src/colors/blue.ts']"),
+                ("src/colors/green.tsx", "content-['src/colors/green.ts']"),
+            ],
+            vec!["!src/index.ts", "!**/*.tsx"],
+        )
+        .1;
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['src/colors/blue.ts']",
+                "content-['src/colors/green.ts']",
+                "content-['src/colors/red.ts']",
+                "content-['src/index.ts']"
+            ]
+        );
+    }
+
+    #[test]
     fn skips_ignore_files_outside_of_a_repo() {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
@@ -668,12 +702,13 @@ mod scanner {
             ],
         );
 
-        let sources = vec![GlobEntry {
+        let sources = vec![SourceEntry {
             base: dir
                 .join("home/project/apps/web")
                 .to_string_lossy()
                 .to_string(),
             pattern: "**/*".to_owned(),
+            negated: false,
         }];
 
         let candidates = Scanner::new(Some(sources.clone())).scan();

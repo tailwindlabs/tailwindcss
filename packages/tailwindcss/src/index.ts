@@ -126,7 +126,7 @@ async function parseCss(
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
-  let globs: { base: string; pattern: string }[] = []
+  let sources: { base: string; pattern: string; negated: boolean }[] = []
   let root = null as Root
 
   // Handle at-rules
@@ -208,7 +208,14 @@ async function parseCss(
         throw new Error('`@source` cannot be nested.')
       }
 
+      let negated = false
       let path = node.params
+
+      if (path[0] === 'n' && path.startsWith('not ')) {
+        negated = true
+        path = path.slice(4)
+      }
+
       if (
         (path[0] === '"' && path[path.length - 1] !== '"') ||
         (path[0] === "'" && path[path.length - 1] !== "'") ||
@@ -216,7 +223,7 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
+      sources.push({ base: context.base as string, pattern: path.slice(1, -1), negated })
       replaceWith([])
       return
     }
@@ -514,7 +521,7 @@ async function parseCss(
     base,
     ast,
     loadModule,
-    globs,
+    sources,
   })
 
   for (let customVariant of customVariants) {
@@ -599,7 +606,7 @@ async function parseCss(
   return {
     designSystem,
     ast,
-    globs,
+    sources,
     root,
     utilitiesNode,
     features,
@@ -610,12 +617,12 @@ export async function compileAst(
   input: AstNode[],
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
+  let { designSystem, ast, sources, root, utilitiesNode, features } = await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -634,7 +641,7 @@ export async function compileAst(
   let previousAstNodeCount = 0
 
   return {
-    globs,
+    sources,
     root,
     features,
     build(newRawCandidates: string[]) {
@@ -695,7 +702,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): string

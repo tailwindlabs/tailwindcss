@@ -28,6 +28,19 @@ pub struct GlobEntry {
   pub pattern: String,
 }
 
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct SourceEntry {
+  /// Base path of the glob
+  pub base: String,
+
+  /// Glob pattern
+  pub pattern: String,
+
+  /// Negated flag
+  pub negated: bool,
+}
+
 impl From<ChangedContent> for tailwindcss_oxide::ChangedContent<'_> {
   fn from(changed_content: ChangedContent) -> Self {
     if let Some(file) = changed_content.file {
@@ -62,6 +75,26 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
     Self {
       base: glob.base,
       pattern: glob.pattern,
+    }
+  }
+}
+
+impl From<SourceEntry> for tailwindcss_oxide::SourceEntry {
+  fn from(source: SourceEntry) -> Self {
+    Self {
+      base: source.base,
+      pattern: source.pattern,
+      negated: source.negated,
+    }
+  }
+}
+
+impl From<tailwindcss_oxide::SourceEntry> for SourceEntry {
+  fn from(source: tailwindcss_oxide::SourceEntry) -> Self {
+    Self {
+      base: source.base,
+      pattern: source.pattern,
+      negated: source.negated,
     }
   }
 }

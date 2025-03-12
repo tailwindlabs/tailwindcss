@@ -68,10 +68,17 @@ pub struct GlobEntry {
     pub pattern: String,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct SourceEntry {
+    pub base: String,
+    pub pattern: String,
+    pub negated: bool,
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
-    /// Glob sources
-    sources: Option<Vec<GlobEntry>>,
+    /// Content sources
+    sources: Option<Vec<SourceEntry>>,
 
     /// Scanner is ready to scan. We delay the file system traversal for detecting all files until
     /// we actually need them.
@@ -83,7 +90,7 @@ pub struct Scanner {
     /// All directories, sub-directories, etc… we saw during source detection
     dirs: Vec<PathBuf>,
 
-    /// All generated globs
+    /// All generated globs, used for setting up watchers
     globs: Vec<GlobEntry>,
 
     /// Track file modification times
@@ -94,7 +101,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(sources: Option<Vec<GlobEntry>>) -> Self {
+    pub fn new(sources: Option<Vec<SourceEntry>>) -> Self {
         Self {
             sources,
             ..Default::default()
@@ -324,7 +331,10 @@ impl Scanner {
             .flat_map(|source| {
                 let expression: Result<Expression, _> = source.pattern[..].try_into();
                 let Ok(expression) = expression else {
-                    return vec![source.clone()];
+                    return vec![GlobEntry {
+                        base: source.base.clone(),
+                        pattern: source.pattern.clone(),
+                    }];
                 };
 
                 expression
