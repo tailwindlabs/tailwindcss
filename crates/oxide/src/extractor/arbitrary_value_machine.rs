@@ -95,6 +95,11 @@ impl Machine for ArbitraryValueMachine {
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -132,6 +137,9 @@ enum Class {
 
     #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[fallback]
     Other,

@@ -252,6 +252,11 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -283,6 +288,9 @@ enum Class {
 
     #[bytes(b'.')]
     Dot,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[bytes(b'\\')]
     Escape,

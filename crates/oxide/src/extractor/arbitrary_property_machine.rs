@@ -226,6 +226,11 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 // URLs are not allowed
                 Class::Slash if start_of_value_pos == cursor.pos => return self.restart(),
 
+                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -275,6 +280,9 @@ enum Class {
 
     #[bytes(b'-')]
     Dash,
+
+    #[bytes(b'$')]
+    Dollar,
 
     #[bytes_range(b'a'..=b'z')]
     AlphaLower,
