@@ -240,8 +240,11 @@ async function parseCss(
 
       if (enableSourceInline && inline) {
         let destination = not ? ignoredCandidates : inlineCandidates
-        for (let candidate of expand(source)) {
-          destination.push(candidate)
+        let sources = segment(source, ' ')
+        for (let source of sources) {
+          for (let candidate of expand(source)) {
+            destination.push(candidate)
+          }
         }
       } else {
         globs.push({ base: context.base as string, pattern: source })

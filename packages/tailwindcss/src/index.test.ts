@@ -3286,6 +3286,37 @@ describe('@source', () => {
       `)
     })
 
+    test('adds multiple inline sources separated by spaces', async () => {
+      let { build } = await compile(
+        css`
+          @theme {
+            --color-red-100: oklch(0.936 0.032 17.717);
+            --color-red-200: oklch(0.885 0.062 18.334);
+          }
+          @source inline("block bg-red-{100..200..100}");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --color-red-100: oklch(0.936 0.032 17.717);
+          --color-red-200: oklch(0.885 0.062 18.334);
+        }
+        .block {
+          display: block;
+        }
+        .bg-red-100 {
+          background-color: var(--color-red-100);
+        }
+        .bg-red-200 {
+          background-color: var(--color-red-200);
+        }
+        "
+      `)
+    })
+
     test('ignores invalid inline candidates', async () => {
       let { build } = await compile(
         css`
