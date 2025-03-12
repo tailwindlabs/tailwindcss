@@ -34,6 +34,14 @@ impl PreProcessor for Clojure {
                     }
                 }
 
+                // Consume comments as-is until the end of the line.
+                // Comments start with `;;`
+                b';' if matches!(cursor.next, b';') => {
+                    while cursor.pos < len && cursor.curr != b'\n' {
+                        cursor.advance();
+                    }
+                }
+
                 b':' | b'.' => {
                     result[cursor.pos] = b' ';
                 }
