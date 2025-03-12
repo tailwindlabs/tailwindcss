@@ -18,7 +18,6 @@ impl PreProcessor for Clojure {
             match cursor.curr {
                 // Consume strings as-is
                 b'"' => {
-                    let len = cursor.input.len();
                     cursor.advance();
 
                     while cursor.pos < len {
