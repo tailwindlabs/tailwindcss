@@ -237,8 +237,8 @@ impl Machine for NamedVariantMachine<ParsingState> {
 
                 // A dot must be surrounded by numbers
                 //
-                // E.g.: `px-2.5`
-                //           ^^^
+                // E.g.: `2.5xl:flex`
+                //        ^^^
                 Class::Dot => {
                     if !matches!(cursor.prev.into(), Class::Number) {
                         return self.restart();
