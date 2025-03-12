@@ -3194,6 +3194,154 @@ describe('@source', () => {
       { pattern: './php/secr3t/smarty.php', base: '/root' },
     ])
   })
+
+  describe('@source inline(…)', () => {
+    test('always includes the candidate', async () => {
+      let { build } = await compile(
+        css`
+          @source inline("underline");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`
+        ".underline {
+          text-decoration-line: underline;
+        }
+        "
+      `)
+    })
+
+    test('applies brace expansion', async () => {
+      let { build } = await compile(
+        css`
+          @theme {
+            --color-red-50: oklch(0.971 0.013 17.38);
+            --color-red-100: oklch(0.936 0.032 17.717);
+            --color-red-200: oklch(0.885 0.062 18.334);
+            --color-red-300: oklch(0.808 0.114 19.571);
+            --color-red-400: oklch(0.704 0.191 22.216);
+            --color-red-500: oklch(0.637 0.237 25.331);
+            --color-red-600: oklch(0.577 0.245 27.325);
+            --color-red-700: oklch(0.505 0.213 27.518);
+            --color-red-800: oklch(0.444 0.177 26.899);
+            --color-red-900: oklch(0.396 0.141 25.723);
+            --color-red-950: oklch(0.258 0.092 26.042);
+          }
+          @source inline("bg-red-{50,{100..900..100},950}");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`
+        ":root, :host {
+          --color-red-50: oklch(0.971 0.013 17.38);
+          --color-red-100: oklch(0.936 0.032 17.717);
+          --color-red-200: oklch(0.885 0.062 18.334);
+          --color-red-300: oklch(0.808 0.114 19.571);
+          --color-red-400: oklch(0.704 0.191 22.216);
+          --color-red-500: oklch(0.637 0.237 25.331);
+          --color-red-600: oklch(0.577 0.245 27.325);
+          --color-red-700: oklch(0.505 0.213 27.518);
+          --color-red-800: oklch(0.444 0.177 26.899);
+          --color-red-900: oklch(0.396 0.141 25.723);
+          --color-red-950: oklch(0.258 0.092 26.042);
+        }
+        .bg-red-50 {
+          background-color: var(--color-red-50);
+        }
+        .bg-red-100 {
+          background-color: var(--color-red-100);
+        }
+        .bg-red-200 {
+          background-color: var(--color-red-200);
+        }
+        .bg-red-300 {
+          background-color: var(--color-red-300);
+        }
+        .bg-red-400 {
+          background-color: var(--color-red-400);
+        }
+        .bg-red-500 {
+          background-color: var(--color-red-500);
+        }
+        .bg-red-600 {
+          background-color: var(--color-red-600);
+        }
+        .bg-red-700 {
+          background-color: var(--color-red-700);
+        }
+        .bg-red-800 {
+          background-color: var(--color-red-800);
+        }
+        .bg-red-900 {
+          background-color: var(--color-red-900);
+        }
+        .bg-red-950 {
+          background-color: var(--color-red-950);
+        }
+        "
+      `)
+    })
+
+    test('ignores invalid inline candidates', async () => {
+      let { build } = await compile(
+        css`
+          @source inline("my-cucumber");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`""`)
+    })
+
+    test('can be negated', async () => {
+      let { build } = await compile(
+        css`
+          @theme {
+            --breakpoint-sm: 40rem;
+            --breakpoint-md: 48rem;
+            --breakpoint-lg: 64rem;
+            --breakpoint-xl: 80rem;
+            --breakpoint-2xl: 96rem;
+          }
+          @source not inline("container");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build(['container'])).toMatchInlineSnapshot(`""`)
+    })
+
+    test('applies brace expansion to negated sources', async () => {
+      let { build } = await compile(
+        css`
+          @theme {
+            --color-red-50: oklch(0.971 0.013 17.38);
+            --color-red-100: oklch(0.936 0.032 17.717);
+            --color-red-200: oklch(0.885 0.062 18.334);
+            --color-red-300: oklch(0.808 0.114 19.571);
+            --color-red-400: oklch(0.704 0.191 22.216);
+            --color-red-500: oklch(0.637 0.237 25.331);
+            --color-red-600: oklch(0.577 0.245 27.325);
+            --color-red-700: oklch(0.505 0.213 27.518);
+            --color-red-800: oklch(0.444 0.177 26.899);
+            --color-red-900: oklch(0.396 0.141 25.723);
+            --color-red-950: oklch(0.258 0.092 26.042);
+          }
+          @source not inline("bg-red-{50,{100..900..100},950}");
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build(['bg-red-500', 'bg-red-700'])).toMatchInlineSnapshot(`""`)
+    })
+  })
 })
 
 describe('@custom-variant', () => {

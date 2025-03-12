@@ -26,8 +26,10 @@ import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { enableSourceInline } from './feature-flags'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
+import { expand } from './utils/brace-expansion'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
@@ -127,6 +129,8 @@ async function parseCss(
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
   let globs: { base: string; pattern: string }[] = []
+  let inlineCandidates: string[] = []
+  let ignoredCandidates: string[] = []
   let root = null as Root
 
   // Handle at-rules
@@ -208,7 +212,22 @@ async function parseCss(
         throw new Error('`@source` cannot be nested.')
       }
 
+      let inline = false
+      let not = false
       let path = node.params
+
+      if (enableSourceInline) {
+        if (path[0] === 'n' && path.startsWith('not ')) {
+          not = true
+          path = path.slice(4)
+        }
+
+        if (path[0] === 'i' && path.startsWith('inline(')) {
+          inline = true
+          path = path.slice(7, -1)
+        }
+      }
+
       if (
         (path[0] === '"' && path[path.length - 1] !== '"') ||
         (path[0] === "'" && path[path.length - 1] !== "'") ||
@@ -216,7 +235,17 @@ async function parseCss(
       ) {
         throw new Error('`@source` paths must be quoted.')
       }
-      globs.push({ base: context.base as string, pattern: path.slice(1, -1) })
+
+      let source = path.slice(1, -1)
+
+      if (enableSourceInline && inline) {
+        let destination = not ? ignoredCandidates : inlineCandidates
+        for (let candidate of expand(source)) {
+          destination.push(candidate)
+        }
+      } else {
+        globs.push({ base: context.base as string, pattern: source })
+      }
       replaceWith([])
       return
     }
@@ -505,6 +534,12 @@ async function parseCss(
     designSystem.important = important
   }
 
+  if (ignoredCandidates.length > 0) {
+    for (let candidate of ignoredCandidates) {
+      designSystem.invalidCandidates.add(candidate)
+    }
+  }
+
   // Apply hooks from backwards compatibility layer. This function takes a lot
   // of random arguments because it really just needs access to "the world" to
   // do whatever ungodly things it needs to do to make things backwards
@@ -603,6 +638,7 @@ async function parseCss(
     root,
     utilitiesNode,
     features,
+    inlineCandidates,
   }
 }
 
@@ -615,7 +651,8 @@ export async function compileAst(
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features } = await parseCss(input, opts)
+  let { designSystem, ast, globs, root, utilitiesNode, features, inlineCandidates } =
+    await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -632,6 +669,14 @@ export async function compileAst(
   let allValidCandidates = new Set<string>()
   let compiled = null as AstNode[] | null
   let previousAstNodeCount = 0
+  let defaultDidChange = false
+
+  for (let candidate of inlineCandidates) {
+    if (!designSystem.invalidCandidates.has(candidate)) {
+      allValidCandidates.add(candidate)
+      defaultDidChange = true
+    }
+  }
 
   return {
     globs,
@@ -647,7 +692,8 @@ export async function compileAst(
         return compiled
       }
 
-      let didChange = false
+      let didChange = defaultDidChange
+      defaultDidChange = false
 
       // Add all new candidates unless we know that they are invalid.
       let prevSize = allValidCandidates.size
