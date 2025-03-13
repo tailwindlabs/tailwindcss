@@ -847,4 +847,41 @@ mod scanner {
 
         assert_eq!(candidates, vec!["content-['keep-me.html']"]);
     }
+
+    #[test]
+    fn test_foo_bar() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(&dir, &[("src/keep-me.html", "content-['keep-me.html']")]);
+
+        let sources = vec![SourceEntry {
+            base: dir.to_string_lossy().to_string(),
+            pattern: "**/*.html".to_owned(),
+            negated: false,
+        }];
+
+        let mut scanner = Scanner::new(Some(sources.clone()));
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['keep-me.html']"]);
+
+        // Create new files that should definitely be ignored
+        create_files_in(
+            &dir,
+            &[
+                // This is valid because we want html
+                ("src/new-file.html", "content-['new-file.html']"),
+                // This is a bin file, so it should be ignored
+                ("src/oh-no.bin", "content-['oh-no.bin']"),
+            ],
+        );
+
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec!["content-['keep-me.html']", "content-['new-file.html']"]
+        );
+    }
 }
