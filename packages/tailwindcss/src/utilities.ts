@@ -2831,6 +2831,17 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-origin-padding', [['background-origin', 'padding-box']])
   staticUtility('bg-origin-content', [['background-origin', 'content-box']])
 
+  /**
+   * @css `mask-clip`
+   */
+  staticUtility('mask-clip-border', [['mask-clip', 'border-box']])
+  staticUtility('mask-clip-padding', [['mask-clip', 'padding-box']])
+  staticUtility('mask-clip-content', [['mask-clip', 'content-box']])
+  staticUtility('mask-clip-fill', [['mask-clip', 'fill-box']])
+  staticUtility('mask-clip-stroke', [['mask-clip', 'stroke-box']])
+  staticUtility('mask-clip-view', [['mask-clip', 'view-box']])
+  staticUtility('mask-clip-no-clip', [['mask-clip', 'no-clip']])
+
   for (let value of [
     'normal',
     'multiply',
