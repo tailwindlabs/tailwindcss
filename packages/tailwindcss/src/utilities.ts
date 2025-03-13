@@ -2775,6 +2775,14 @@ export function createUtilities(theme: Theme) {
   staticUtility('mask-type-luminance', [['mask-type', 'luminance']])
 
   /**
+   * @css `mask-size`
+   */
+
+  staticUtility('mask-auto', [['mask-size', 'auto']])
+  staticUtility('mask-cover', [['mask-size', 'cover']])
+  staticUtility('mask-contain', [['mask-size', 'contain']])
+
+  /**
    * @css `box-decoration-break`
    */
   staticUtility('box-decoration-slice', [
