@@ -82,9 +82,19 @@ pub struct GlobEntry {
 #[derive(Debug, Clone, PartialEq)]
 pub struct SourceEntry {
     pub base: String,
-    pub pattern: String,
-    pub negated: bool,
+    pub pattern: String, // **/* -> AutoSource
+    pub negated: bool,   // -> Ignore
 }
+
+// enum SourceEntryX {
+//     AutoSource { base: String },
+//     IgnoreAutoSource { base: String },
+//     // @source './src/foo'; should be added as an ignore(`!./src/foo`) when creating the walker. This
+//     // is because if `./src/foo` exists in your .gitignore then we explicitly don't want to ignore it
+//     // and include it.
+//     ExplicitPattern { base: String, pattern: String },
+//     IgnoredPattern { base: String, pattern: String },
+// }
 
 #[derive(Debug, Clone, Default)]
 pub struct Scanner {
@@ -301,6 +311,32 @@ impl Scanner {
         // Scan all modified directories for their immediate files
         let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
 
+        // Partition sources into kept and ignored
+        let ignored_sources = match &self.sources {
+            Some(sources) => sources.iter().filter(|source| source.negated).collect(),
+            None => vec![],
+        };
+
+        let ignored_patterns = hoist_static_glob_parts(
+            &ignored_sources
+                .iter()
+                .map(|source| GlobEntry {
+                    base: source.base.clone(),
+                    pattern: source.pattern.clone(),
+                })
+                .collect::<Vec<_>>(),
+            false,
+        )
+        .into_iter()
+        .map(|source| {
+            if source.pattern.is_empty() {
+                source.base
+            } else {
+                source.base + "/" + &source.pattern
+            }
+        })
+        .collect::<Vec<String>>();
+
         while !modified_dirs.is_empty() {
             let new_entries = modified_dirs
                 .iter()
@@ -311,7 +347,20 @@ impl Scanner {
 
             modified_dirs.clear();
 
-            for path in new_entries {
+            'outer: for path in new_entries {
+                let file_path_str = path.to_string_lossy().to_string();
+                for ignored_pattern in &ignored_patterns {
+                    if glob_match(ignored_pattern, &file_path_str) {
+                        continue 'outer;
+                    }
+                    if ignored_pattern.ends_with("/**/*") {
+                        let folder_path = ignored_pattern.trim_end_matches("/**/*");
+                        if folder_path == file_path_str {
+                            continue 'outer;
+                        }
+                    }
+                }
+
                 if path.is_file() {
                     known.insert(path.clone());
                     self.files.push(path);
@@ -468,34 +517,35 @@ impl Scanner {
                     continue;
                 };
 
-                if !file_type.is_file() {
-                    continue;
-                }
-
-                let file_path = entry.into_path();
-
+                let file_path = entry.clone().into_path();
                 let Some(file_path_str) = file_path.to_str() else {
                     continue;
                 };
 
                 let file_path_str = file_path_str.replace('\\', "/");
 
-                if glob_match(&full_pattern, &file_path_str) {
-                    for ignored_pattern in &ignored_patterns {
-                        if glob_match(ignored_pattern, &file_path_str) {
+                for ignored_pattern in &ignored_patterns {
+                    if glob_match(ignored_pattern, &file_path_str) {
+                        continue 'outer;
+                    }
+                    if ignored_pattern.ends_with("/**/*") {
+                        let folder_path = ignored_pattern.trim_end_matches("/**/*");
+                        if folder_path == file_path_str {
                             continue 'outer;
                         }
-
-                        if ignored_pattern.ends_with("/**/*") {
-                            let folder_path = ignored_pattern.trim_end_matches("/**/*");
-                            if folder_path == file_path_str {
-                                continue 'outer;
-                            }
-                        }
                     }
+                }
 
-                    // We can add it
-                    self.files.push(file_path);
+                if file_type.is_dir() {
+                    self.dirs.push(entry.clone().into_path());
+                }
+
+                if !glob_match(&full_pattern, &file_path_str) {
+                    continue;
+                }
+
+                if file_type.is_file() {
+                    self.files.push(entry.into_path());
                 }
             }
         }

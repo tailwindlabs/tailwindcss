@@ -854,36 +854,61 @@ mod scanner {
         let dir = tempdir().unwrap().into_path();
 
         // Create files
-        create_files_in(&dir, &[("src/keep-me.html", "content-['keep-me.html']")]);
+        create_files_in(
+            &dir,
+            &[("src/keep-me.html", "content-['src/keep-me.html']")],
+        );
 
-        let sources = vec![SourceEntry {
-            base: dir.to_string_lossy().to_string(),
-            // TODO: Works with just `**/*` because we hit the auto source detection route. These
-            // should behave the same thought.
-            pattern: "**/*.html".to_owned(),
-            negated: false,
-        }];
+        let sources = vec![
+            SourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*.html".to_owned(),
+                negated: false,
+            },
+            SourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "src/ignored-by-source-not.html".to_owned(),
+                negated: true,
+            },
+        ];
 
         let mut scanner = Scanner::new(Some(sources.clone()));
 
         let candidates = scanner.scan();
-        assert_eq!(candidates, vec!["content-['keep-me.html']"]);
+        assert_eq!(candidates, vec!["content-['src/keep-me.html']"]);
 
         // Create new files that should definitely be ignored
         create_files_in(
             &dir,
             &[
-                // This is valid because we want html
-                ("src/new-file.html", "content-['new-file.html']"),
-                // This is a bin file, so it should be ignored
-                ("src/oh-no.bin", "content-['oh-no.bin']"),
+                // Create new file that matches the `@source '…'` glob
+                ("src/new-file.html", "content-['src/new-file.html']"),
+                // Create new file that is ignored based on file extension
+                (
+                    "src/ignore-by-extension.bin",
+                    "content-['src/ignore-by-extension.bin']",
+                ),
+                // Create a file that is ignored based on the `.gitignore` file
+                (".gitignore", "src/ignored-by-gitignore.html"),
+                (
+                    "src/ignored-by-gitignore.html",
+                    "content-['src/ignored-by-gitignore.html']",
+                ),
+                // Create a file that is ignored by the `@source not '…'`
+                (
+                    "src/ignored-by-source-not.html",
+                    "content-['src/ignored-by-source-not.html']",
+                ),
             ],
         );
 
         let candidates = scanner.scan();
         assert_eq!(
             candidates,
-            vec!["content-['keep-me.html']", "content-['new-file.html']"]
+            vec![
+                "content-['src/keep-me.html']",
+                "content-['src/new-file.html']"
+            ]
         );
     }
 }
