@@ -2502,7 +2502,7 @@ export function createUtilities(theme: Theme) {
 
         if (!isPositiveInteger(value)) return
 
-        value = negative ? `calc(${value} * -1)` : `${value}deg`
+        value = negative ? `calc(${value}deg * -1)` : `${value}deg`
 
         return [
           decl('--tw-gradient-position', `from ${value} ${interpolationMethod}`),
