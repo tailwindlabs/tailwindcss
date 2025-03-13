@@ -12070,6 +12070,66 @@ test('mask-clip', async () => {
   ).toEqual('')
 })
 
+test('mask-origin', async () => {
+  expect(
+    await run([
+      'mask-origin-border',
+      'mask-origin-padding',
+      'mask-origin-content',
+      'mask-origin-fill',
+      'mask-origin-stroke',
+      'mask-origin-view',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".mask-origin-border {
+      -webkit-mask-origin: border-box;
+      mask-origin: border-box;
+    }
+
+    .mask-origin-content {
+      -webkit-mask-origin: content-box;
+      mask-origin: content-box;
+    }
+
+    .mask-origin-fill {
+      -webkit-mask-origin: fill-box;
+      mask-origin: fill-box;
+    }
+
+    .mask-origin-padding {
+      -webkit-mask-origin: padding-box;
+      mask-origin: padding-box;
+    }
+
+    .mask-origin-stroke {
+      -webkit-mask-origin: stroke-box;
+      mask-origin: stroke-box;
+    }
+
+    .mask-origin-view {
+      -webkit-mask-origin: view-box;
+      mask-origin: view-box;
+    }"
+  `)
+  expect(
+    await run([
+      'mask-origin',
+      '-mask-origin-border',
+      '-mask-origin-padding',
+      '-mask-origin-content',
+      '-mask-origin-fill',
+      '-mask-origin-stroke',
+      '-mask-origin-view',
+      'mask-origin-border/foo',
+      'mask-origin-padding/foo',
+      'mask-origin-content/foo',
+      'mask-origin-fill/foo',
+      'mask-origin-stroke/foo',
+      'mask-origin-view/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('bg-blend', async () => {
   expect(
     await run([
