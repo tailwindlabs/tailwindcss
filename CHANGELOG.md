@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 - _Experimental_: Add `@source not` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - _Experimental_: Add `text-shadow-*` utilities ([#17389](https://github.com/tailwindlabs/tailwindcss/pull/17389))
+- _Experimental_: Add `mask-*` utilities ([#17134](https://github.com/tailwindlabs/tailwindcss/pull/17134))
 - Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 - Added new `bg-{position,size}-*` utilities for arbitrary values ([#17432](https://github.com/tailwindlabs/tailwindcss/pull/17432))
 - Added new `shadow-*/{alpha}`, `inset-shadow-*/{alpha}`, and `text-shadow-*/{alpha}` utilities to control shadow opacity ([#17398](https://github.com/tailwindlabs/tailwindcss/pull/17398))
