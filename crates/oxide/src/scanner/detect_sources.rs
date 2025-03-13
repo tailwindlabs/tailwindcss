@@ -29,7 +29,7 @@ impl DetectSources {
     pub fn new(base: PathBuf, ignored_sources: &Vec<&SourceEntry>) -> Self {
         let ignored_pattern = hoist_static_glob_parts(
             &ignored_sources
-                .into_iter()
+                .iter()
                 .map(|source| GlobEntry {
                     base: source.base.clone(),
                     pattern: source.pattern.clone(),
@@ -76,7 +76,7 @@ impl DetectSources {
             let file_path_str = file_path_str.replace('\\', "/");
 
             for ignored_pattern in &self.ignored_patterns {
-                if glob_match(&ignored_pattern, &file_path_str) {
+                if glob_match(ignored_pattern, &file_path_str) {
                     continue 'outer;
                 }
                 if ignored_pattern.ends_with("/**/*") {
