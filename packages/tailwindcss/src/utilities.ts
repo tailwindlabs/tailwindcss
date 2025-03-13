@@ -2747,6 +2747,15 @@ export function createUtilities(theme: Theme) {
   })
 
   /**
+   * @css `mask-composite`
+   */
+
+  staticUtility('mask-add', [['mask-composite', 'add']])
+  staticUtility('mask-subtract', [['mask-composite', 'subtract']])
+  staticUtility('mask-intersect', [['mask-composite', 'intersect']])
+  staticUtility('mask-exclude', [['mask-composite', 'exclude']])
+
+  /**
    * @css `box-decoration-break`
    */
   staticUtility('box-decoration-slice', [
