@@ -11388,6 +11388,14 @@ test('mask', async () => {
         'mask-[length:120px_120px]',
         'mask-[position:120px_120px]',
         'mask-[size:120px_120px]',
+
+        // mask-repeat
+        'mask-repeat',
+        'mask-no-repeat',
+        'mask-repeat-x',
+        'mask-repeat-y',
+        'mask-repeat-round',
+        'mask-repeat-space',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -11494,6 +11502,36 @@ test('mask', async () => {
     .mask-top {
       -webkit-mask-position: top;
       mask-position: top;
+    }
+
+    .mask-no-repeat {
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .mask-repeat {
+      -webkit-mask-repeat: repeat;
+      mask-repeat: repeat;
+    }
+
+    .mask-repeat-round {
+      -webkit-mask-repeat: round;
+      mask-repeat: round;
+    }
+
+    .mask-repeat-space {
+      -webkit-mask-repeat: space;
+      mask-repeat: space;
+    }
+
+    .mask-repeat-x {
+      -webkit-mask-repeat: repeat-x;
+      mask-repeat: repeat-x;
+    }
+
+    .mask-repeat-y {
+      -webkit-mask-repeat: repeat-y;
+      mask-repeat: repeat-y;
     }"
   `)
   expect(
@@ -11536,6 +11574,14 @@ test('mask', async () => {
       '-mask-left-bottom',
       '-mask-left',
       '-mask-left-top',
+
+      // mask-repeat
+      '-mask-repeat',
+      '-mask-no-repeat',
+      '-mask-repeat-x',
+      '-mask-repeat-y',
+      '-mask-round',
+      '-mask-space',
     ]),
   ).toEqual('')
 
