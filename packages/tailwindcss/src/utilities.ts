@@ -2783,6 +2783,20 @@ export function createUtilities(theme: Theme) {
   staticUtility('mask-contain', [['mask-size', 'contain']])
 
   /**
+   * @css `mask-position`
+   */
+
+  staticUtility('mask-center', [['mask-position', 'center']])
+  staticUtility('mask-top', [['mask-position', 'top']])
+  staticUtility('mask-right-top', [['mask-position', 'right top']])
+  staticUtility('mask-right', [['mask-position', 'right']])
+  staticUtility('mask-right-bottom', [['mask-position', 'right bottom']])
+  staticUtility('mask-bottom', [['mask-position', 'bottom']])
+  staticUtility('mask-left-bottom', [['mask-position', 'left bottom']])
+  staticUtility('mask-left', [['mask-position', 'left']])
+  staticUtility('mask-left-top', [['mask-position', 'left top']])
+
+  /**
    * @css `box-decoration-break`
    */
   staticUtility('box-decoration-slice', [
