@@ -11486,6 +11486,21 @@ test('mask', async () => {
         'mask-[cover]',
         'mask-[contain]',
         'mask-[size:120px_120px]',
+
+        // mask-position
+        'mask-center',
+        'mask-top',
+        'mask-right-top',
+        'mask-right-bottom',
+        'mask-bottom',
+        'mask-left-bottom',
+        'mask-left',
+        'mask-left-top',
+        'mask-[50%]',
+        'mask-[120px]',
+        'mask-[120px_120px]',
+        'mask-[length:120px_120px]',
+        'mask-[position:120px_120px]',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -11560,7 +11575,7 @@ test('mask', async () => {
       mask-size: cover;
     }
 
-    .mask-\\[size\\:120px_120px\\] {
+    .mask-\\[length\\:120px_120px\\], .mask-\\[size\\:120px_120px\\] {
       -webkit-mask-size: 120px 120px;
       mask-size: 120px 120px;
     }
@@ -11578,6 +11593,61 @@ test('mask', async () => {
     .mask-cover {
       -webkit-mask-size: cover;
       mask-size: cover;
+    }
+
+    .mask-\\[50\\%\\] {
+      -webkit-mask-position: 50%;
+      mask-position: 50%;
+    }
+
+    .mask-\\[120px\\] {
+      -webkit-mask-position: 120px;
+      mask-position: 120px;
+    }
+
+    .mask-\\[120px_120px\\], .mask-\\[position\\:120px_120px\\] {
+      -webkit-mask-position: 120px 120px;
+      mask-position: 120px 120px;
+    }
+
+    .mask-bottom {
+      -webkit-mask-position: bottom;
+      mask-position: bottom;
+    }
+
+    .mask-center {
+      -webkit-mask-position: center;
+      mask-position: center;
+    }
+
+    .mask-left {
+      -webkit-mask-position: 0;
+      mask-position: 0;
+    }
+
+    .mask-left-bottom {
+      -webkit-mask-position: 0 100%;
+      mask-position: 0 100%;
+    }
+
+    .mask-left-top {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+
+    .mask-right-bottom {
+      -webkit-mask-position: 100% 100%;
+      mask-position: 100% 100%;
+    }
+
+    .mask-right-top {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+
+    .mask-top {
+      -webkit-mask-position: top;
+      mask-position: top;
     }"
   `)
   expect(
@@ -11623,6 +11693,16 @@ test('mask', async () => {
       '-mask-auto',
       '-mask-cover',
       '-mask-contain',
+
+      // mask-position
+      '-mask-center',
+      '-mask-top',
+      '-mask-right-top',
+      '-mask-right-bottom',
+      '-mask-bottom',
+      '-mask-left-bottom',
+      '-mask-left',
+      '-mask-left-top',
     ]),
   ).toEqual('')
 

@@ -2810,12 +2810,19 @@ export function createUtilities(theme: Theme) {
         candidate.value.dataType ??
         inferDataType(value, [
           'image',
+          'percentage',
+          'position',
           'bg-size',
           'length',
           'url',
         ])
 
       switch (type) {
+        case 'percentage':
+        case 'position': {
+          if (candidate.modifier) return
+          return [decl('mask-position', value)]
+        }
         case 'bg-size':
         case 'length':
         case 'size': {
@@ -2864,6 +2871,20 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-auto', [['mask-size', 'auto']])
     staticUtility('mask-cover', [['mask-size', 'cover']])
     staticUtility('mask-contain', [['mask-size', 'contain']])
+
+    /**
+     * @css `mask-position`
+     */
+
+    staticUtility('mask-center', [['mask-position', 'center']])
+    staticUtility('mask-top', [['mask-position', 'top']])
+    staticUtility('mask-right-top', [['mask-position', 'right top']])
+    staticUtility('mask-right', [['mask-position', 'right']])
+    staticUtility('mask-right-bottom', [['mask-position', 'right bottom']])
+    staticUtility('mask-bottom', [['mask-position', 'bottom']])
+    staticUtility('mask-left-bottom', [['mask-position', 'left bottom']])
+    staticUtility('mask-left', [['mask-position', 'left']])
+    staticUtility('mask-left-top', [['mask-position', 'left top']])
   }
 
   /**
