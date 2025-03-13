@@ -55,9 +55,7 @@ impl DetectSources {
 
     pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
         let (files, dirs) = self.resolve_files();
-        dbg!(&dirs);
         let globs = self.resolve_globs(&dirs);
-        dbg!(&globs);
 
         (files, globs, dirs)
     }

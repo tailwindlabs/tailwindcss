@@ -300,8 +300,6 @@ impl Scanner {
 
             modified_dirs.clear();
 
-            dbg!(&new_entries);
-
             for path in new_entries {
                 if path.is_file() {
                     known.insert(path.clone());

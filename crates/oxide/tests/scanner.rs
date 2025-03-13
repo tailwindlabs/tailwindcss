@@ -62,12 +62,7 @@ mod scanner {
 
         let candidates = scanner.scan();
 
-        dbg!(&scanner);
-
         let mut paths: Vec<_> = scanner.get_files();
-
-        dbg!(&scanner);
-        dbg!(&paths);
 
         for glob in scanner.get_globs() {
             paths.push(format!("{}{}{}", glob.base, "/", glob.pattern));
