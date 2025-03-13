@@ -4,6 +4,41 @@ use tracing::event;
 
 use crate::GlobEntry;
 
+pub fn hoist_static_glob_parts_single(glob: GlobEntry) -> GlobEntry {
+    let (static_part, dynamic_part) = split_pattern(&glob.pattern);
+
+    let base: PathBuf = glob.base.clone().into();
+    let base = match static_part {
+        Some(static_part) => base.join(static_part),
+        None => base,
+    };
+
+    let base = match dunce::canonicalize(&base) {
+        Ok(base) => base,
+        Err(err) => {
+            event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+            // If we can't resolve the new base on disk, let's keep the incoming glob as-is.
+            return glob;
+        }
+    };
+
+    let pattern = match dynamic_part {
+        Some(dynamic_part) => dynamic_part,
+        None => {
+            if base.is_dir() {
+                "**/*".to_owned()
+            } else {
+                "".to_owned()
+            }
+        }
+    };
+
+    GlobEntry {
+        base: base.to_string_lossy().to_string(),
+        pattern,
+    }
+}
+
 pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>, emit_parent_glob: bool) -> Vec<GlobEntry> {
     let mut result = vec![];
 

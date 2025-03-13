@@ -38,27 +38,26 @@ mod scanner {
         let base = format!("{}", dir.display()).replace('\\', "/");
 
         // Resolve all content paths for the (temporary) current working directory
-        let mut sources: Vec<SourceEntry> = globs
+        let mut sources: Vec<PublicSourceEntry> = globs
             .iter()
-            .map(|x| SourceEntry {
+            .map(|str| PublicSourceEntry {
                 base: base.clone(),
-                pattern: if x.starts_with("!") {
-                    x[1..].to_string()
-                } else {
-                    x.to_string()
+                pattern: match str.strip_prefix("!") {
+                    Some(x) => x.to_string(),
+                    None => str.to_string(),
                 },
-                negated: x.starts_with("!"),
+                negated: str.starts_with("!"),
             })
             .collect();
 
         // Base source for auto-content detection
-        sources.push(SourceEntry {
+        sources.push(PublicSourceEntry {
             base: base.clone(),
             pattern: "**/*".to_string(),
             negated: false,
         });
 
-        let mut scanner = Scanner::new(Some(sources));
+        let mut scanner = Scanner::new(sources);
 
         let candidates = scanner.scan();
 
@@ -469,13 +468,13 @@ mod scanner {
         // Get POSIX-style absolute path
         let full_path = format!("{}", dir.display()).replace('\\', "/");
 
-        let sources = vec![SourceEntry {
+        let sources = vec![PublicSourceEntry {
             base: full_path.clone(),
             pattern: full_path.clone(),
             negated: false,
         }];
 
-        let mut scanner = Scanner::new(Some(sources));
+        let mut scanner = Scanner::new(sources);
         let candidates = scanner.scan();
 
         // We've done the initial scan and found the files
@@ -522,19 +521,19 @@ mod scanner {
         );
 
         let sources = vec![
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.join("project-a").to_string_lossy().to_string(),
                 pattern: "**/*".to_owned(),
                 negated: false,
             },
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.join("project-b").to_string_lossy().to_string(),
                 pattern: "**/*".to_owned(),
                 negated: false,
             },
         ];
 
-        let mut scanner = Scanner::new(Some(sources));
+        let mut scanner = Scanner::new(sources);
         let candidates = scanner.scan();
 
         // We've done the initial scan and found the files
@@ -734,7 +733,7 @@ mod scanner {
             ],
         );
 
-        let sources = vec![SourceEntry {
+        let sources = vec![PublicSourceEntry {
             base: dir
                 .join("home/project/apps/web")
                 .to_string_lossy()
@@ -743,7 +742,7 @@ mod scanner {
             negated: false,
         }];
 
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         // All ignore files are applied because there's no git repo
         assert_eq!(candidates, vec!["content-['index.html']".to_owned(),]);
@@ -754,7 +753,7 @@ mod scanner {
             .arg("init")
             .current_dir(dir.join("home"))
             .output();
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         assert_eq!(candidates, vec!["content-['index.html']".to_owned(),]);
 
@@ -766,7 +765,7 @@ mod scanner {
             .arg("init")
             .current_dir(dir.join("home/project"))
             .output();
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         assert_eq!(
             candidates,
@@ -784,7 +783,7 @@ mod scanner {
             .arg("init")
             .current_dir(dir.join("home/project/apps"))
             .output();
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         assert_eq!(
             candidates,
@@ -803,7 +802,7 @@ mod scanner {
             .arg("init")
             .current_dir(dir.join("home/project/apps/web"))
             .output();
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         assert_eq!(
             candidates,
@@ -831,19 +830,19 @@ mod scanner {
         );
 
         let sources = vec![
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "**/*.html".to_owned(),
                 negated: false,
             },
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "src/ignore-me.html".to_owned(),
                 negated: true,
             },
         ];
 
-        let candidates = Scanner::new(Some(sources.clone())).scan();
+        let candidates = Scanner::new(sources.clone()).scan();
 
         assert_eq!(candidates, vec!["content-['keep-me.html']"]);
     }
@@ -860,19 +859,19 @@ mod scanner {
         );
 
         let sources = vec![
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "**/*.html".to_owned(),
                 negated: false,
             },
-            SourceEntry {
+            PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "src/ignored-by-source-not.html".to_owned(),
                 negated: true,
             },
         ];
 
-        let mut scanner = Scanner::new(Some(sources.clone()));
+        let mut scanner = Scanner::new(sources.clone());
 
         let candidates = scanner.scan();
         assert_eq!(candidates, vec!["content-['src/keep-me.html']"]);

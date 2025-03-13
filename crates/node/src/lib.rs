@@ -79,18 +79,8 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
   }
 }
 
-impl From<SourceEntry> for tailwindcss_oxide::SourceEntry {
+impl From<SourceEntry> for tailwindcss_oxide::PublicSourceEntry {
   fn from(source: SourceEntry) -> Self {
-    Self {
-      base: source.base,
-      pattern: source.pattern,
-      negated: source.negated,
-    }
-  }
-}
-
-impl From<tailwindcss_oxide::SourceEntry> for SourceEntry {
-  fn from(source: tailwindcss_oxide::SourceEntry) -> Self {
     Self {
       base: source.base,
       pattern: source.pattern,
@@ -129,11 +119,10 @@ impl Scanner {
   #[napi(constructor)]
   pub fn new(opts: ScannerOptions) -> Self {
     Self {
-      scanner: tailwindcss_oxide::Scanner::new(
-        opts
-          .sources
-          .map(|x| x.into_iter().map(Into::into).collect()),
-      ),
+      scanner: tailwindcss_oxide::Scanner::new(match opts.sources {
+        Some(sources) => sources.into_iter().map(Into::into).collect(),
+        None => vec![],
+      }),
     }
   }
 

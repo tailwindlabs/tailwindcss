@@ -1,16 +1,15 @@
 use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_paths};
-use crate::GlobEntry;
-use fast_glob::glob_match;
+use crate::{GlobEntry, Sources};
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
 use std::path::PathBuf;
 use std::sync;
 use walkdir::WalkDir;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct DetectSources<'a> {
     base: PathBuf,
-    ignored_patterns: &'a Vec<String>,
+    sources: &'a Sources,
 }
 
 static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
@@ -25,11 +24,8 @@ static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new
 });
 
 impl<'a> DetectSources<'a> {
-    pub fn new(base: PathBuf, ignored_patterns: &'a Vec<String>) -> Self {
-        Self {
-            base,
-            ignored_patterns,
-        }
+    pub fn new(base: PathBuf, sources: &'a Sources) -> Self {
+        Self { base, sources }
     }
 
     pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
@@ -43,27 +39,14 @@ impl<'a> DetectSources<'a> {
         let mut files: Vec<PathBuf> = vec![];
         let mut dirs: Vec<PathBuf> = vec![];
 
-        'outer: for entry in resolve_allowed_paths(&self.base) {
+        for entry in resolve_allowed_paths(&self.base) {
             let Some(file_type) = entry.file_type() else {
                 continue;
             };
 
             let file_path = entry.clone().into_path();
-            let Some(file_path_str) = file_path.to_str() else {
+            if self.sources.is_ignored(file_path) {
                 continue;
-            };
-            let file_path_str = file_path_str.replace('\\', "/");
-
-            for ignored_pattern in self.ignored_patterns {
-                if glob_match(ignored_pattern, &file_path_str) {
-                    continue 'outer;
-                }
-                if ignored_pattern.ends_with("/**/*") {
-                    let folder_path = ignored_pattern.trim_end_matches("/**/*");
-                    if folder_path == file_path_str {
-                        continue 'outer;
-                    }
-                }
             }
 
             if file_type.is_file() {
