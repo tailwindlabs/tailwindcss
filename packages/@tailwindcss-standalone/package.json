@@ -44,7 +44,7 @@
     "@parcel/watcher-win32-x64": "^2.5.1",
     "@types/bun": "^1.2.4",
     "bun": "^1.2.4",
-    "lightningcss-darwin-arm64": "^1.29.1",
+    "lightningcss-darwin-arm64": "^1.29.2",
     "lightningcss-darwin-x64": "^1.29.1",
     "lightningcss-linux-arm64-gnu": "^1.29.1",
     "lightningcss-linux-arm64-musl": "^1.29.1",
