@@ -2908,6 +2908,17 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-clip-stroke', [['mask-clip', 'stroke-box']])
     staticUtility('mask-clip-view', [['mask-clip', 'view-box']])
     staticUtility('mask-no-clip', [['mask-clip', 'no-clip']])
+
+    /**
+     * @css `mask-origin`
+     */
+
+    staticUtility('mask-origin-border', [['mask-origin', 'border-box']])
+    staticUtility('mask-origin-padding', [['mask-origin', 'padding-box']])
+    staticUtility('mask-origin-content', [['mask-origin', 'content-box']])
+    staticUtility('mask-origin-fill', [['mask-origin', 'fill-box']])
+    staticUtility('mask-origin-stroke', [['mask-origin', 'stroke-box']])
+    staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
   }
 
   /**
