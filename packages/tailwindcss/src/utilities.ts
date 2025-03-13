@@ -2885,6 +2885,17 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-left-bottom', [['mask-position', 'left bottom']])
     staticUtility('mask-left', [['mask-position', 'left']])
     staticUtility('mask-left-top', [['mask-position', 'left top']])
+
+    /**
+     * @css `mask-repeat`
+     */
+
+    staticUtility('mask-repeat', [['mask-repeat', 'repeat']])
+    staticUtility('mask-no-repeat', [['mask-repeat', 'no-repeat']])
+    staticUtility('mask-repeat-x', [['mask-repeat', 'repeat-x']])
+    staticUtility('mask-repeat-y', [['mask-repeat', 'repeat-y']])
+    staticUtility('mask-repeat-round', [['mask-repeat', 'round']])
+    staticUtility('mask-repeat-space', [['mask-repeat', 'space']])
   }
 
   /**
