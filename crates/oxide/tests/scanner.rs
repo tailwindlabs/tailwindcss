@@ -815,4 +815,36 @@ mod scanner {
             ]
         );
     }
+
+    #[test]
+    fn test_explicitly_ignore_explicitly_allowed_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/keep-me.html", "content-['keep-me.html']"),
+                ("src/ignore-me.html", "content-['ignore-me.html']"),
+            ],
+        );
+
+        let sources = vec![
+            SourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*.html".to_owned(),
+                negated: false,
+            },
+            SourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "src/ignore-me.html".to_owned(),
+                negated: true,
+            },
+        ];
+
+        let candidates = Scanner::new(Some(sources.clone())).scan();
+
+        assert_eq!(candidates, vec!["content-['keep-me.html']"]);
+    }
 }

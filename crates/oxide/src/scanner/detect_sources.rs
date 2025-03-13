@@ -1,6 +1,5 @@
-use crate::glob::hoist_static_glob_parts;
 use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_paths};
-use crate::{GlobEntry, SourceEntry};
+use crate::GlobEntry;
 use fast_glob::glob_match;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
@@ -9,9 +8,9 @@ use std::sync;
 use walkdir::WalkDir;
 
 #[derive(Debug, Clone)]
-pub struct DetectSources {
+pub struct DetectSources<'a> {
     base: PathBuf,
-    ignored_patterns: Vec<String>,
+    ignored_patterns: &'a Vec<String>,
 }
 
 static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
@@ -25,31 +24,11 @@ static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new
         .collect()
 });
 
-impl DetectSources {
-    pub fn new(base: PathBuf, ignored_sources: &Vec<&SourceEntry>) -> Self {
-        let ignored_pattern = hoist_static_glob_parts(
-            &ignored_sources
-                .iter()
-                .map(|source| GlobEntry {
-                    base: source.base.clone(),
-                    pattern: source.pattern.clone(),
-                })
-                .collect::<Vec<_>>(),
-            false,
-        )
-        .into_iter()
-        .map(|source| {
-            if source.pattern.is_empty() {
-                source.base
-            } else {
-                source.base + "/" + &source.pattern
-            }
-        })
-        .collect::<Vec<String>>();
-
+impl<'a> DetectSources<'a> {
+    pub fn new(base: PathBuf, ignored_patterns: &'a Vec<String>) -> Self {
         Self {
             base,
-            ignored_patterns: ignored_pattern,
+            ignored_patterns,
         }
     }
 
@@ -75,7 +54,7 @@ impl DetectSources {
             };
             let file_path_str = file_path_str.replace('\\', "/");
 
-            for ignored_pattern in &self.ignored_patterns {
+            for ignored_pattern in self.ignored_patterns {
                 if glob_match(ignored_pattern, &file_path_str) {
                     continue 'outer;
                 }

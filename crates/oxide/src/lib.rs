@@ -389,6 +389,26 @@ impl Scanner {
             PathBuf::from(&tmp)
         }
 
+        let ignored_patterns = hoist_static_glob_parts(
+            &ignored_sources
+                .iter()
+                .map(|source| GlobEntry {
+                    base: source.base.clone(),
+                    pattern: source.pattern.clone(),
+                })
+                .collect::<Vec<_>>(),
+            false,
+        )
+        .into_iter()
+        .map(|source| {
+            if source.pattern.is_empty() {
+                source.base
+            } else {
+                source.base + "/" + &source.pattern
+            }
+        })
+        .collect::<Vec<String>>();
+
         for path in auto_sources.iter().filter_map(|source| {
             dunce::canonicalize(join_paths(&source.base, &source.pattern)).ok()
         }) {
@@ -399,7 +419,7 @@ impl Scanner {
             });
 
             // Detect all files/folders in the directory
-            let detect_sources = DetectSources::new(path, &ignored_sources);
+            let detect_sources = DetectSources::new(path, &ignored_patterns);
 
             let (files, globs, dirs) = detect_sources.detect();
             self.files.extend(files);
@@ -432,7 +452,7 @@ impl Scanner {
             }
 
             let base = PathBuf::from(&source.base);
-            for entry in resolve_paths(&base) {
+            'outer: for entry in resolve_paths(&base) {
                 let Some(file_type) = entry.file_type() else {
                     continue;
                 };
@@ -450,6 +470,20 @@ impl Scanner {
                 let file_path_str = file_path_str.replace('\\', "/");
 
                 if glob_match(&full_pattern, &file_path_str) {
+                    for ignored_pattern in &ignored_patterns {
+                        if glob_match(ignored_pattern, &file_path_str) {
+                            continue 'outer;
+                        }
+
+                        if ignored_pattern.ends_with("/**/*") {
+                            let folder_path = ignored_pattern.trim_end_matches("/**/*");
+                            if folder_path == file_path_str {
+                                continue 'outer;
+                            }
+                        }
+                    }
+
+                    // We can add it
                     self.files.push(file_path);
                 }
             }
