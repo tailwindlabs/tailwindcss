@@ -10176,7 +10176,7 @@ test('bg', async () => {
     }
 
     .-bg-conic-45\\/oklab {
-      --tw-gradient-position: from calc(45 * -1) in oklab;
+      --tw-gradient-position: from calc(45deg * -1) in oklab;
       background-image: conic-gradient(var(--tw-gradient-stops));
     }
 
