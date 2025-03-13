@@ -1,4 +1,4 @@
-use crate::glob::hoist_static_glob_parts_single;
+use crate::glob::optimize_public_source_entry;
 use crate::scanner::allowed_paths::resolve_paths;
 use crate::scanner::detect_sources::DetectSources;
 use bexpand::Expression;
@@ -113,10 +113,6 @@ pub enum SourceEntry {
     /// ```
     IgnoredAuto { base: PathBuf },
 
-    // TODO: @source './src/foo'; should be added as an ignore(`!./src/foo`) when creating the
-    //       walker. This is because if `./src/foo` exists in your .gitignore then we explicitly don't
-    //       want to ignore it and include it.
-    //
     /// Explicit source pattern regardless of any auto source detection rules
     ///
     /// Represented by:
@@ -137,6 +133,7 @@ pub enum SourceEntry {
 }
 
 impl SourceEntry {
+    /// Check if the given path matches against the source entry
     fn matches(&self, path: PathBuf) -> bool {
         let Some(path) = path.to_str() else {
             return false;
@@ -145,14 +142,15 @@ impl SourceEntry {
         glob_match(self.pattern(), path.replace('\\', "/"))
     }
 
+    // TODO: Figure out if we can only compute this once and cache it
+    //
+    /// Compute the full glob pattern for the source entry
     fn pattern(&self) -> String {
+        use SourceEntry::*;
         match self {
-            SourceEntry::Auto { base } | SourceEntry::IgnoredAuto { base } => {
-                format!("{}/**/*", base.to_string_lossy())
-            }
-            SourceEntry::Pattern { base, pattern }
-            | SourceEntry::IgnoredPattern { base, pattern } => {
-                format!("{}/{}", base.to_string_lossy(), pattern)
+            Auto { base } | IgnoredAuto { base } => format!("{}/**/*", base.to_string_lossy()),
+            Pattern { base, pattern } | IgnoredPattern { base, pattern } => {
+                format!("{}/{}", base.to_string_lossy().replace("\\", "/"), pattern)
             }
         }
     }
@@ -205,45 +203,64 @@ impl From<&SourceEntry> for GlobEntry {
 }
 
 #[derive(Debug, Clone, Default)]
-struct Sources {
+pub struct Sources {
     sources: Vec<SourceEntry>,
+
+    // A collection of pre-computed ignore patterns
+    pre_computed_ignore_patterns: Vec<String>,
 }
 
 impl Sources {
+    fn new(sources: Vec<SourceEntry>) -> Self {
+        let mut pre_computed_ignore_patterns = vec![];
+        for source in &sources {
+            match source {
+                SourceEntry::IgnoredAuto { base } => {
+                    // // Is the folder directly
+                    // if *base == path {
+                    //     return true;
+                    // }
+
+                    pre_computed_ignore_patterns.push(format!("{}/**/*", base.to_string_lossy()));
+                }
+                SourceEntry::IgnoredPattern { base, pattern } => {
+                    pre_computed_ignore_patterns.push(format!(
+                        "{}/{}",
+                        base.to_string_lossy(),
+                        pattern
+                    ));
+                }
+                _ => {}
+            }
+        }
+
+        Self {
+            sources,
+            pre_computed_ignore_patterns,
+        }
+    }
+
+    fn iter(&self) -> impl Iterator<Item = &SourceEntry> {
+        self.sources.iter()
+    }
+
     fn is_ignored(&self, path: PathBuf) -> bool {
         let Some(file_path_str) = path.to_str() else {
             return false;
         };
 
         let file_path_str = file_path_str.replace('\\', "/");
-        for source in &self.sources {
-            match source {
-                SourceEntry::IgnoredAuto { base } => {
-                    // Is the folder directly
-                    if *base == path {
-                        return true;
-                    }
-
-                    if glob_match(
-                        format!("{}/**/*", base.to_string_lossy()),
-                        file_path_str.clone(),
-                    ) {
-                        return true;
-                    }
-                }
-                SourceEntry::IgnoredPattern { base, pattern } => {
-                    if glob_match(
-                        format!("{}/{}", base.to_string_lossy(), pattern),
-                        file_path_str.clone(),
-                    ) {
-                        return true;
-                    }
-                }
-                _ => continue,
+        for pattern in &self.pre_computed_ignore_patterns {
+            if glob_match(pattern, file_path_str.clone()) {
+                return true;
             }
         }
 
         false
+    }
+
+    fn is_empty(&self) -> bool {
+        self.sources.is_empty()
     }
 }
 
@@ -306,17 +323,16 @@ pub fn public_source_entries_to_private_source_entries(
             expression
                 .into_iter()
                 .filter_map(Result::ok)
-                .map(move |pattern| GlobEntry {
+                .map(move |pattern| PublicSourceEntry {
                     base: source.base.clone(),
                     pattern: pattern.into(),
-                })
-                .map(hoist_static_glob_parts_single)
-                .map(|x| PublicSourceEntry {
-                    base: x.base,
-                    pattern: x.pattern,
                     negated: source.negated,
                 })
                 .collect::<Vec<_>>()
+        })
+        .map(|mut public_source| {
+            optimize_public_source_entry(&mut public_source);
+            public_source
         })
         .collect::<Vec<_>>();
 
@@ -363,9 +379,10 @@ impl From<GlobEntry> for SourceEntry {
 impl Scanner {
     pub fn new(sources: Vec<PublicSourceEntry>) -> Self {
         let sources = public_source_entries_to_private_source_entries(sources);
+        let sources = Sources::new(sources);
 
         Self {
-            sources: Sources { sources },
+            sources,
             ..Default::default()
         }
     }
@@ -554,7 +571,7 @@ impl Scanner {
         while !modified_dirs.is_empty() {
             let new_entries = modified_dirs
                 .iter()
-                .flat_map(|dir| read_dir(dir, Some(1)))
+                .flat_map(|dir| read_dir(dir, Some(1), vec![]))
                 .map(|entry| entry.path().to_owned())
                 .filter(|path| !known.contains(path))
                 .collect::<Vec<_>>();
@@ -582,50 +599,12 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
-        if self.sources.sources.is_empty() {
+        if self.sources.is_empty() {
             return;
         }
 
-        // Partition sources into kept and ignored
-        let (sources, _ignored_sources): (Vec<_>, Vec<_>) =
-            self.sources.sources.iter().partition(|source| {
-                matches!(
-                    source,
-                    SourceEntry::Auto { .. } | SourceEntry::Pattern { .. }
-                )
-            });
-
-        // Partition sources into sources that should be promoted to auto source detection and
-        // sources that should be resolved as globs.
-        let (auto_sources, glob_sources): (Vec<_>, Vec<_>) =
-            sources.into_iter().partition(|source| {
-                matches!(
-                    source,
-                    SourceEntry::Auto { .. } | SourceEntry::IgnoredAuto { .. }
-                )
-            });
-
-        // fn join_paths(a: &str, b: &str) -> PathBuf {
-        //     let mut tmp = a.to_owned();
-        //     let b = b.trim_end_matches("**/*").trim_end_matches('/');
-        //
-        //     if b.starts_with('/') {
-        //         return PathBuf::from(b);
-        //     }
-        //
-        //     // On Windows a path like C:/foo.txt is absolute but C:foo.txt is not
-        //     // (the 2nd is relative to the CWD)
-        //     if b.chars().nth(1) == Some(':') && b.chars().nth(2) == Some('/') {
-        //         return PathBuf::from(b);
-        //     }
-        //
-        //     tmp += "/";
-        //     tmp += b;
-        //
-        //     PathBuf::from(&tmp)
-        // }
-
-        for source in auto_sources {
+        // Auto source detection
+        for source in self.sources.iter() {
             let SourceEntry::Auto { base } = source else {
                 continue;
             };
@@ -645,41 +624,16 @@ impl Scanner {
             self.dirs.extend(dirs);
         }
 
-        // Turn `Vec<&SourceEntry>` in `Vec<SourceEntry>`
-        let glob_sources: Vec<_> = glob_sources.into_iter().cloned().collect();
-
         // TODO: figure out how to do the `emit_parent_glob` part:
-        // let hoisted = hoist_static_glob_parts(&glob_sources, true);
-        let hoisted = glob_sources; // SourceEntry of type Pattern or IgnoredPattern
-
-        for source in &hoisted {
-            let SourceEntry::Pattern { base, .. } = source else {
+        // Explicit patterns
+        for source in self.sources.iter() {
+            let SourceEntry::Pattern { base, pattern } = source else {
                 continue;
             };
 
             self.globs.push(source.into());
 
-            // If the pattern is empty, then the base points to a specific file or folder already
-            // if it doesn't contain any dynamic parts. In that case we can use the base as the
-            // pattern.
-            //
-            // Otherwise we need to combine the base and the pattern, otherwise a pattern that
-            // looks like `*.html`, will never match a path that looks like
-            // `/my-project/project-a/index.html`, because it contains `/`.
-            //
-            // We can't prepend `**/`, because then `/my-project/project-a/nested/index.html` would
-            // match as well.
-            //
-            // Instead we combine the base and the pattern as a single glob pattern.
-            // let mut full_pattern = source.base.clone().replace('\\', "/");
-            //
-            // if !source.pattern.is_empty() {
-            //     full_pattern.push('/');
-            //     full_pattern.push_str(&source.pattern);
-            // }
-
-            // let base = PathBuf::from(&source.base);
-            for entry in resolve_paths(base) {
+            for entry in resolve_paths(base, vec![pattern]) {
                 let Some(file_type) = entry.file_type() else {
                     continue;
                 };
@@ -694,11 +648,6 @@ impl Scanner {
                     self.dirs.push(entry.clone().into_path());
                 }
 
-                // let Some(file_path_str) = file_path.to_str() else {
-                //     continue;
-                // };
-                // let file_path_str = file_path_str.replace('\\', "/");
-
                 if !source.matches(file_path) {
                     continue;
                 }
@@ -708,8 +657,6 @@ impl Scanner {
                 }
             }
         }
-
-        // self.globs.extend(hoisted);
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = optimize_patterns(&self.globs);

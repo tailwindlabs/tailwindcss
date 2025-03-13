@@ -1,5 +1,6 @@
 use crate::scanner::allowed_paths::{is_allowed_content_path, resolve_allowed_paths};
-use crate::{GlobEntry, Sources};
+use crate::GlobEntry;
+use crate::Sources;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
 use std::path::PathBuf;

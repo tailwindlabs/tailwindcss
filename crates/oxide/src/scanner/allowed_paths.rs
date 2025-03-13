@@ -1,4 +1,4 @@
-use ignore::{DirEntry, WalkBuilder};
+use ignore::{overrides::OverrideBuilder, DirEntry, WalkBuilder};
 use std::{path::Path, sync};
 
 static BINARY_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
@@ -28,16 +28,22 @@ static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
 #[tracing::instrument(skip_all)]
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
     // Read the directory recursively with no depth limit
-    read_dir(root, None)
+    read_dir(root, None, vec![])
 }
 
 #[tracing::instrument(skip_all)]
-pub fn resolve_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
-    create_walk_builder(root).build().filter_map(Result::ok)
+pub fn resolve_paths(root: &Path, additional_globs: Vec<&str>) -> impl Iterator<Item = DirEntry> {
+    create_walk_builder(root, additional_globs)
+        .build()
+        .filter_map(Result::ok)
 }
 
-pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEntry> {
-    create_walk_builder(root)
+pub fn read_dir(
+    root: &Path,
+    depth: Option<usize>,
+    additional_globs: Vec<&str>,
+) -> impl Iterator<Item = DirEntry> {
+    create_walk_builder(root, additional_globs)
         .max_depth(depth)
         .filter_entry(move |entry| match entry.file_type() {
             Some(file_type) if file_type.is_dir() => match entry.file_name().to_str() {
@@ -53,7 +59,7 @@ pub fn read_dir(root: &Path, depth: Option<usize>) -> impl Iterator<Item = DirEn
         .filter_map(Result::ok)
 }
 
-fn create_walk_builder(root: &Path) -> WalkBuilder {
+fn create_walk_builder(root: &Path, additional_globs: Vec<&str>) -> WalkBuilder {
     let mut builder = WalkBuilder::new(root);
 
     // Scan hidden files / directories
@@ -67,6 +73,17 @@ fn create_walk_builder(root: &Path) -> WalkBuilder {
     // Don't descend into .git directories inside the root folder
     // This is necessary when `root` contains the `.git` dir.
     builder.filter_entry(|entry| entry.file_name() != ".git");
+
+    // Add additional manual globs to the builder if needed
+    if !additional_globs.is_empty() {
+        let mut ov = OverrideBuilder::new(root);
+        for glob in additional_globs {
+            ov.add(glob).unwrap();
+        }
+        if let Ok(ignore) = ov.build() {
+            builder.overrides(ignore);
+        }
+    }
 
     // If we are in a git repo then require it to ensure that only rules within
     // the repo are used. For example, we don't want to consider a .gitignore file

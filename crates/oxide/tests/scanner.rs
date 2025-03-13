@@ -496,6 +496,7 @@ mod scanner {
                 // detection.
                 ("foo.styl", "content-['foo.styl']"),
             ],
+            // But explicitly including them should still work
             vec!["foo.styl"],
         )
         .1;
