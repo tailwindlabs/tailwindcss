@@ -25,6 +25,17 @@ pub mod paths;
 pub mod scanner;
 pub mod throughput;
 
+// @source "some/folder";               // This is auto source detection
+// @source "some/folder/**/*";          // This is auto source detection
+// @source "some/folder/*.html";        // This is just a glob, but new files matching this should be included
+// @source "node_modules/my-ui-lib";    // Auto source detection but since node_modules is explicit we allow it
+//                                      // Maybe could be considered `external(…)` automatically if:
+//                                      // 1. It's git ignored but listed explicitly
+//                                      // 2. It exists outside of the current working directory (do we know that?)
+//
+// @source "do-include-me.bin";         // `.bin` is typically ignored, but now it's explicit so should be included
+// @source "git-ignored.html";          // A git ignored file that is listed explicitly, should be scanned
+
 static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
     || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
 );

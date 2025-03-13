@@ -858,6 +858,8 @@ mod scanner {
 
         let sources = vec![SourceEntry {
             base: dir.to_string_lossy().to_string(),
+            // TODO: Works with just `**/*` because we hit the auto source detection route. These
+            // should behave the same thought.
             pattern: "**/*.html".to_owned(),
             negated: false,
         }];
