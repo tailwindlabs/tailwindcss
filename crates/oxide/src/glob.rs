@@ -1,13 +1,78 @@
 use fxhash::{FxHashMap, FxHashSet};
 use std::path::PathBuf;
-use tracing::event;
+use tracing::{event, Level};
 
-use crate::GlobEntry;
+use crate::{GlobEntry, PublicSourceEntry};
 
-pub fn hoist_static_glob_parts_single(glob: GlobEntry) -> GlobEntry {
-    let (static_part, dynamic_part) = split_pattern(&glob.pattern);
+/// Optimize the PublicSourceEntry by trying to move all the static parts of the pattern to the
+/// base of the PublicSourceEntry.
+///
+/// ```diff
+/// - { base: '/', pattern: 'src/**/*.html'}
+/// + { base: '/src', pattern: '**/*.html'}
+/// ```
+///
+/// A file stays in the `pattern` part, because the `base` should only be a directory.
+///
+/// ```diff
+/// - { base: '/', pattern: 'src/examples/index.html'}
+/// + { base: '/src/examples', pattern: 'index.html'}
+/// ```
+///
+/// A folder will be moved to the `base` part, and the `pattern` will be set to `**/*`.
+///
+/// ```diff
+/// - { base: '/', pattern: 'src/examples'}
+/// + { base: '/src/examples', pattern: '**/*'}
+/// ```
+///
+/// In addition, we will canonicalize the base path so we always work with the correctly resolved
+/// path.
+pub fn optimize_public_source_entry(source: &mut PublicSourceEntry) {
+    // Resolve base path immediately
+    let Ok(base) = dunce::canonicalize(&source.base) else {
+        event!(Level::ERROR, "Failed to resolve base: {:?}", source.base);
+        return;
+    };
+    source.base = base.to_string_lossy().to_string();
 
-    let base: PathBuf = glob.base.clone().into();
+    // No dynamic part, figure out if we are dealing with a file or a directory.
+    if !source.pattern.contains('*') {
+        let combined_path = if source.pattern.starts_with("/") {
+            PathBuf::from(&source.pattern)
+        } else {
+            PathBuf::from(&source.base).join(&source.pattern)
+        };
+
+        // TODO: What to do if the file/folder doesn't exist on disk? Just canonicalize the base
+        // and keep the path as-is?
+        if let Ok(resolved_path) = dunce::canonicalize(combined_path) {
+            if resolved_path.is_dir() {
+                source.base = resolved_path.to_string_lossy().to_string();
+                source.pattern = "**/*".to_owned();
+                return;
+            }
+
+            if resolved_path.is_file() {
+                source.base = resolved_path
+                    .parent()
+                    .unwrap()
+                    .to_string_lossy()
+                    .to_string();
+                source.pattern = resolved_path
+                    .file_name()
+                    .unwrap()
+                    .to_string_lossy()
+                    .to_string();
+                return;
+            }
+        }
+    }
+
+    // Contains dynamic part
+    let (static_part, dynamic_part) = split_pattern(&source.pattern);
+
+    let base: PathBuf = source.base.clone().into();
     let base = match static_part {
         Some(static_part) => base.join(static_part),
         None => base,
@@ -17,8 +82,7 @@ pub fn hoist_static_glob_parts_single(glob: GlobEntry) -> GlobEntry {
         Ok(base) => base,
         Err(err) => {
             event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-            // If we can't resolve the new base on disk, let's keep the incoming glob as-is.
-            return glob;
+            return;
         }
     };
 
@@ -33,10 +97,8 @@ pub fn hoist_static_glob_parts_single(glob: GlobEntry) -> GlobEntry {
         }
     };
 
-    GlobEntry {
-        base: base.to_string_lossy().to_string(),
-        pattern,
-    }
+    source.base = base.to_string_lossy().to_string();
+    source.pattern = pattern;
 }
 
 pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>, emit_parent_glob: bool) -> Vec<GlobEntry> {
@@ -166,10 +228,25 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 // using `*`.
 //
 // E.g.:
-//  Original input: `../project-b/**/*.{html,js}`
-//  Expanded input: `../project-b/**/*.html` & `../project-b/**/*.js`
-//  Split on first input: ("../project-b", "**/*.html")
-//  Split on second input: ("../project-b", "**/*.js")
+//
+//  Original input:
+//  - `../project-b/**/*.{html,js}`
+//
+//  Expanded input:
+//  - `../project-b/**/*.html`
+//  - `../project-b/**/*.js`
+//
+//  Split results in:
+//  - `("../project-b", "**/*.html")`
+//  - `("../project-b", "**/*.js")`
+//
+// A static file glob should also be considered as a dynamic part.
+//
+// E.g.:
+//
+// Input: `../project-b/foo/bar.html`
+// Split results in: `("../project-b/foo", "bar.html")`
+//
 fn split_pattern(pattern: &str) -> (Option<String>, Option<String>) {
     // No dynamic parts, so we can just return the input as-is.
     if !pattern.contains('*') {
