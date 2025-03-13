@@ -636,12 +636,12 @@ test.only(
       `,
       'project-a/src/ignore-me-file.html': html`
         <div>
-          <div class="content-['ignore-me-file.html']"></div>
+          <div class="content-['project-a/src/ignore-me-file.html']"></div>
         </div>
       `,
       'project-a/src/ignore-me-folder/index.html': html`
         <div>
-          <div class="content-['ignore-me-folder/index.html']"></div>
+          <div class="content-['project-a/src/ignore-me-folder/index.html']"></div>
         </div>
       `,
       'project-a/src/keep-me.html': html`<div class="content-['keep-me.html']"></div>`,
@@ -685,146 +685,102 @@ test.only(
       }
       "
     `)
-    //
-    // // Watch mode tests
-    // let process = await spawn(
-    //   'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
-    //   {
-    //     cwd: path.join(root, 'project-a'),
-    //   },
-    // )
-    // await process.onStderr((message) => message.includes('Waiting for file changes...'))
-    //
-    // // Changes to project-a should not be included in the output, we changed the
-    // // base folder to project-b.
-    // await fs.write(
-    //   'project-a/src/index.html',
-    //   html`<div class="[.changed_&]:content-['project-a/src/index.html']"></div>`,
-    // )
-    // await fs.expectFileNotToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-a/src/index.html']`,
-    // ])
-    //
-    // // Changes to this file should be included, because we explicitly listed
-    // // them using `@source`.
-    // await fs.write(
-    //   'project-a/src/logo.jpg',
-    //   html`<div class="[.changed_&]:content-['project-a/src/logo.jpg']"></div>`,
-    // )
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-a/src/logo.jpg']`,
-    // ])
-    //
-    // // Changes to these files should be included, because we explicitly listed
-    // // them using `@source`.
-    // await fs.write(
-    //   'project-a/node_modules/my-lib-1/src/index.html',
-    //   html`<div
-    //       class="[.changed_&]:content-['project-a/node_modules/my-lib-1/src/index.html']"
-    //     ></div>`,
-    // )
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-a/node_modules/my-lib-1/src/index.html']`,
-    // ])
-    //
-    // await fs.write(
-    //   'project-a/node_modules/my-lib-2/src/index.html',
-    //   html`<div
-    //       class="[.changed_&]:content-['project-a/node_modules/my-lib-2/src/index.html']"
-    //     ></div>`,
-    // )
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-a/node_modules/my-lib-2/src/index.html']`,
-    // ])
-    //
-    // // Changes to this file should be included, because we changed the base to
-    // // `project-b`.
-    // await fs.write(
-    //   'project-b/src/index.html',
-    //   html`<div class="[.changed_&]:content-['project-b/src/index.html']"></div>`,
-    // )
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-b/src/index.html']`,
-    // ])
-    //
-    // // Changes to this file should not be included. We did change the base to
-    // // `project-b`, but we still apply the auto source detection rules which
-    // // ignore `node_modules`.
-    // await fs.write(
-    //   'project-b/node_modules/my-lib-3/src/index.html',
-    //   html`<div
-    //       class="[.changed_&]:content-['project-b/node_modules/my-lib-3/src/index.html']"
-    //     ></div>`,
-    // )
-    // await fs.expectFileNotToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-b/node_modules/my-lib-3/src/index.html']`,
-    // ])
-    //
-    // // Project C was added explicitly via `@source`, therefore changes to these
-    // // files should be included.
-    // await fs.write(
-    //   'project-c/src/index.html',
-    //   html`<div class="[.changed_&]:content-['project-c/src/index.html']"></div>`,
-    // )
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-c/src/index.html']`,
-    // ])
-    //
-    // // Except for these files, since they are ignored by the default auto source
-    // // detection rules.
-    // await fs.write(
-    //   'project-c/src/logo.jpg',
-    //   html`<div class="[.changed_&]:content-['project-c/src/logo.jpg']"></div>`,
-    // )
-    // await fs.expectFileNotToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-c/src/logo.jpg']`,
-    // ])
-    // await fs.write(
-    //   'project-c/node_modules/my-lib-1/src/index.html',
-    //   html`<div
-    //       class="[.changed_&]:content-['project-c/node_modules/my-lib-1/src/index.html']"
-    //     ></div>`,
-    // )
-    // await fs.expectFileNotToContain('./project-a/dist/out.css', [
-    //   candidate`[.changed_&]:content-['project-c/node_modules/my-lib-1/src/index.html']`,
-    // ])
-    //
-    // // Creating new files in the "root" of auto source detected folders
-    // // We need to create the files and *then* update them because postcss-cli
-    // // does not pick up new files — only changes to existing files.
-    // await fs.create([
-    //   'project-b/new-file.html',
-    //   'project-b/new-folder/new-file.html',
-    //   'project-c/new-file.html',
-    //   'project-c/new-folder/new-file.html',
-    // ])
-    //
-    // // If we don't wait writes will be coalesced into a "add" event which
-    // // isn't picked up by postcss-cli.
-    // await new Promise((resolve) => setTimeout(resolve, 100))
-    //
-    // await fs.write(
-    //   'project-b/new-file.html',
-    //   html`<div class="[.created_&]:content-['project-b/new-file.html']"></div>`,
-    // )
-    // await fs.write(
-    //   'project-b/new-folder/new-file.html',
-    //   html`<div class="[.created_&]:content-['project-b/new-folder/new-file.html']"></div>`,
-    // )
-    // await fs.write(
-    //   'project-c/new-file.html',
-    //   html`<div class="[.created_&]:content-['project-c/new-file.html']"></div>`,
-    // )
-    // await fs.write(
-    //   'project-c/new-folder/new-file.html',
-    //   html`<div class="[.created_&]:content-['project-c/new-folder/new-file.html']"></div>`,
-    // )
-    //
-    // await fs.expectFileToContain('./project-a/dist/out.css', [
-    //   candidate`[.created_&]:content-['project-b/new-file.html']`,
-    //   candidate`[.created_&]:content-['project-b/new-folder/new-file.html']`,
-    //   candidate`[.created_&]:content-['project-c/new-file.html']`,
-    //   candidate`[.created_&]:content-['project-c/new-folder/new-file.html']`,
-    // ])
+
+    // Watch mode tests
+    let process = await spawn(
+      'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
+      {
+        cwd: path.join(root, 'project-a'),
+      },
+    )
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+
+    fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`content-['project-a/src/ignore-me-file.html']`,
+      candidate`content-['project-a/src/ignore-me-folder/index.html']`,
+      candidate`content-['project-b/src/ignore-me.html']`,
+    ])
+
+    // Changes to the keep-me files should be included
+    await fs.write(
+      'project-a/src/keep-me.html',
+      html`<div class="[.changed_&]:content-['project-a/src/keep-me.html']"></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/src/keep-me.html']`,
+    ])
+
+    await fs.write(
+      'project-b/src/keep-me.html',
+      html`<div class="[.changed_&]:content-['project-b/src/keep-me.html']"></div>`,
+    )
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-b/src/keep-me.html']`,
+    ])
+
+    // Changes to the ignored files should not be included
+    await fs.write(
+      'project-a/src/ignore-me.html',
+      html`<div class="[.changed_&]:content-['project-a/src/ignore-me.html']"></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/src/ignore-me.html']`,
+    ])
+
+    await fs.write(
+      'project-b/src/ignore-me.html',
+      html`<div class="[.changed_&]:content-['project-b/src/ignore-me.html']"></div>`,
+    )
+    await fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-b/src/ignore-me.html']`,
+    ])
+
+    fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`content-['project-a/src/ignore-me-file.html']`,
+      candidate`content-['project-a/src/ignore-me-folder/index.html']`,
+      candidate`content-['project-b/src/ignore-me.html']`,
+    ])
+
+    // Creating new files that match the source patterns should be included.
+    await fs.create([
+      'project-a/src/new-file.html',
+      'project-a/src/new-folder/new-file.html',
+      'project-b/src/new-file.html',
+      'project-b/src/new-folder/new-file.html',
+    ])
+
+    await fs.write(
+      'project-a/src/new-file.html',
+      html`<div class="[.created_&]:content-['project-a/src/new-file.html']"></div>`,
+    )
+    await fs.write(
+      'project-a/src/new-folder/new-file.html',
+      html`<div class="[.created_&]:content-['project-a/src/new-folder/new-file.html']"></div>`,
+    )
+    await fs.write(
+      'project-b/src/new-file.html',
+      html`<div class="[.created_&]:content-['project-b/src/new-file.html']"></div>`,
+    )
+    await fs.write(
+      'project-b/src/new-folder/new-file.html',
+      html`<div class="[.created_&]:content-['project-b/src/new-folder/new-file.html']"></div>`,
+    )
+
+    // If we don't wait writes will be coalesced into a "add" event which
+    // isn't picked up by postcss-cli.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+
+    await fs.expectFileToContain('./project-a/dist/out.css', [
+      candidate`[.created_&]:content-['project-a/src/new-file.html']`,
+      candidate`[.created_&]:content-['project-a/src/new-folder/new-file.html']`,
+      candidate`[.created_&]:content-['project-b/src/new-file.html']`,
+      candidate`[.created_&]:content-['project-b/src/new-folder/new-file.html']`,
+    ])
+
+    fs.expectFileNotToContain('./project-a/dist/out.css', [
+      candidate`content-['project-a/src/ignore-me-file.html']`,
+      candidate`content-['project-a/src/ignore-me-folder/index.html']`,
+      candidate`content-['project-b/src/ignore-me.html']`,
+    ])
   },
 )
