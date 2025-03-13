@@ -11365,6 +11365,75 @@ test('mask', async () => {
         'mask-type-alpha',
         'mask-type-luminance',
 
+        // mask-image
+        'mask-none',
+        'mask-[var(--some-var)]',
+        'mask-[image:var(--some-var)]',
+        'mask-[url:var(--some-var)]',
+
+        // Modern linear-gradient API
+        'mask-linear-to-t',
+        'mask-linear-to-tr',
+        'mask-linear-to-r',
+        'mask-linear-to-br',
+        'mask-linear-to-b',
+        'mask-linear-to-bl',
+        'mask-linear-to-l',
+        'mask-linear-to-tl',
+        'mask-linear-45',
+        '-mask-linear-45',
+
+        // With interpolation mode modifier
+        'mask-linear-to-r/oklch',
+        'mask-linear-to-r/oklab',
+        'mask-linear-to-r/hsl',
+        'mask-linear-to-r/srgb',
+        'mask-linear-to-r/longer',
+        'mask-linear-to-r/shorter',
+        'mask-linear-to-r/increasing',
+        'mask-linear-to-r/decreasing',
+        'mask-linear-to-r/[in_hsl_longer_hue]',
+        'mask-linear-45/oklab',
+        '-mask-linear-45/oklab',
+        'mask-linear-45/shorter',
+        'mask-linear-45/[in_hsl_longer_hue]',
+        'mask-conic/oklch',
+        'mask-conic/oklab',
+        'mask-conic/hsl',
+        'mask-conic/srgb',
+        'mask-conic/longer',
+        'mask-conic/shorter',
+        'mask-conic/increasing',
+        'mask-conic/decreasing',
+        'mask-conic/[in_hsl_longer_hue]',
+        'mask-conic-45/oklab',
+        '-mask-conic-45/oklab',
+        'mask-conic-45/shorter',
+        'mask-conic-45/[in_hsl_longer_hue]',
+        'mask-radial/oklch',
+        'mask-radial/oklab',
+        'mask-radial/hsl',
+        'mask-radial/srgb',
+        'mask-radial/longer',
+        'mask-radial/shorter',
+        'mask-radial/increasing',
+        'mask-radial/decreasing',
+        'mask-radial/[in_hsl_longer_hue]',
+        'mask-radial-[circle_at_center]',
+        // Invalid but proves not converted to `in oklch longer hue` when used
+        // as an arbitrary value
+        'mask-linear-to-r/[longer]',
+
+        'mask-[url(/image.png)]',
+        'mask-[url:var(--my-url)]',
+        'mask-[linear-gradient(to_bottom,red,blue)]',
+        'mask-[image:var(--my-gradient)]',
+        'mask-linear-[125deg]',
+        'mask-linear-[1.3rad]',
+        'mask-linear-[to_bottom]',
+        '-mask-linear-[125deg]',
+        '-mask-linear-[1.3rad]',
+
         // mask-size
         'mask-auto',
         'mask-cover',
@@ -11399,7 +11468,403 @@ test('mask', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-add {
+    ".-mask-conic-45\\/oklab {
+      --tw-mask-gradient-position: from calc(45deg * -1) in oklab;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .-mask-linear-45, .-mask-linear-45\\/oklab {
+      --tw-mask-gradient-position: calc(45deg * -1) in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .-mask-linear-\\[1\\.3rad\\] {
+      --tw-mask-gradient-position: calc(74.4845deg * -1);
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(74.4845deg * -1)));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(74.4845deg * -1)));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(74.4845deg * -1)));
+    }
+
+    .-mask-linear-\\[125deg\\] {
+      --tw-mask-gradient-position: calc(125deg * -1);
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(125deg * -1)));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(125deg * -1)));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops, calc(125deg * -1)));
+    }
+
+    .mask-conic-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-mask-gradient-position: from 45deg in hsl longer hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic-45\\/oklab {
+      --tw-mask-gradient-position: from 45deg in oklab;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic-45\\/shorter {
+      --tw-mask-gradient-position: from 45deg in oklch shorter hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/\\[in_hsl_longer_hue\\] {
+      --tw-mask-gradient-position: in hsl longer hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/decreasing {
+      --tw-mask-gradient-position: in oklch decreasing hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/hsl {
+      --tw-mask-gradient-position: in hsl;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/increasing {
+      --tw-mask-gradient-position: in oklch increasing hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/longer {
+      --tw-mask-gradient-position: in oklch longer hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/oklab {
+      --tw-mask-gradient-position: in oklab;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/oklch {
+      --tw-mask-gradient-position: in oklch;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/shorter {
+      --tw-mask-gradient-position: in oklch shorter hue;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-conic\\/srgb {
+      --tw-mask-gradient-position: in srgb;
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+      mask-image: conic-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-45 {
+      --tw-mask-gradient-position: 45deg in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-45\\/\\[in_hsl_longer_hue\\] {
+      --tw-mask-gradient-position: 45deg in hsl longer hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-45\\/oklab {
+      --tw-mask-gradient-position: 45deg in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-45\\/shorter {
+      --tw-mask-gradient-position: 45deg in oklch shorter hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-\\[1\\.3rad\\] {
+      --tw-mask-gradient-position: 74.4845deg;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, 74.4845deg));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, 74.4845deg));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops, 74.4845deg));
+    }
+
+    .mask-linear-\\[125deg\\] {
+      --tw-mask-gradient-position: 125deg;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, 125deg));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, 125deg));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops, 125deg));
+    }
+
+    .mask-linear-\\[to_bottom\\] {
+      --tw-mask-gradient-position: to bottom;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, to bottom));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops, to bottom));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops, to bottom));
+    }
+
+    .mask-linear-to-b {
+      --tw-mask-gradient-position: to bottom in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-bl {
+      --tw-mask-gradient-position: to bottom left in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-br {
+      --tw-mask-gradient-position: to bottom right in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-l {
+      --tw-mask-gradient-position: to left in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r {
+      --tw-mask-gradient-position: to right in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/\\[in_hsl_longer_hue\\] {
+      --tw-mask-gradient-position: to right in hsl longer hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/\\[longer\\] {
+      --tw-mask-gradient-position: to right longer;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/decreasing {
+      --tw-mask-gradient-position: to right in oklch decreasing hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/hsl {
+      --tw-mask-gradient-position: to right in hsl;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/increasing {
+      --tw-mask-gradient-position: to right in oklch increasing hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/longer {
+      --tw-mask-gradient-position: to right in oklch longer hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/oklab {
+      --tw-mask-gradient-position: to right in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/oklch {
+      --tw-mask-gradient-position: to right in oklch;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/shorter {
+      --tw-mask-gradient-position: to right in oklch shorter hue;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-r\\/srgb {
+      --tw-mask-gradient-position: to right in srgb;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-t {
+      --tw-mask-gradient-position: to top in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-tl {
+      --tw-mask-gradient-position: to top left in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-linear-to-tr {
+      --tw-mask-gradient-position: to top right in oklab;
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+      mask-image: linear-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial-\\[circle_at_center\\] {
+      --tw-mask-gradient-position: circle at center;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops, circle at center));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops, circle at center));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops, circle at center));
+    }
+
+    .mask-radial\\/\\[in_hsl_longer_hue\\] {
+      --tw-mask-gradient-position: in hsl longer hue;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/decreasing {
+      --tw-mask-gradient-position: in oklch decreasing hue;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/hsl {
+      --tw-mask-gradient-position: in hsl;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/increasing {
+      --tw-mask-gradient-position: in oklch increasing hue;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/longer {
+      --tw-mask-gradient-position: in oklch longer hue;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/oklab {
+      --tw-mask-gradient-position: in oklab;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/oklch {
+      --tw-mask-gradient-position: in oklch;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/shorter {
+      --tw-mask-gradient-position: in oklch shorter hue;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-radial\\/srgb {
+      --tw-mask-gradient-position: in srgb;
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      -webkit-mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+      mask-image: radial-gradient(var(--tw-mask-gradient-stops));
+    }
+
+    .mask-\\[image\\:var\\(--my-gradient\\)\\] {
+      -webkit-mask-image: var(--my-gradient);
+      -webkit-mask-image: var(--my-gradient);
+      mask-image: var(--my-gradient);
+    }
+
+    .mask-\\[image\\:var\\(--some-var\\)\\] {
+      -webkit-mask-image: var(--some-var);
+      -webkit-mask-image: var(--some-var);
+      mask-image: var(--some-var);
+    }
+
+    .mask-\\[linear-gradient\\(to_bottom\\,red\\,blue\\)\\] {
+      -webkit-mask-image: linear-gradient(red, #00f);
+      mask-image: linear-gradient(red, #00f);
+    }
+
+    .mask-\\[url\\(\\/image\\.png\\)\\] {
+      -webkit-mask-image: url("/image.png");
+      mask-image: url("/image.png");
+    }
+
+    .mask-\\[url\\:var\\(--my-url\\)\\] {
+      -webkit-mask-image: var(--my-url);
+      -webkit-mask-image: var(--my-url);
+      mask-image: var(--my-url);
+    }
+
+    .mask-\\[url\\:var\\(--some-var\\)\\], .mask-\\[var\\(--some-var\\)\\] {
+      -webkit-mask-image: var(--some-var);
+      -webkit-mask-image: var(--some-var);
+      mask-image: var(--some-var);
+    }
+
+    .mask-none {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .mask-add {
       -webkit-mask-composite: source-over;
       -webkit-mask-composite: source-over;
       mask-composite: add;
@@ -11449,6 +11914,21 @@ test('mask', async () => {
       mask-type: luminance;
     }
 
+    .mask-\\[contain\\] {
+      -webkit-mask-size: contain;
+      mask-size: contain;
+    }
+
+    .mask-\\[cover\\] {
+      -webkit-mask-size: cover;
+      mask-size: cover;
+    }
+
+    .mask-\\[length\\:120px_120px\\], .mask-\\[size\\:120px_120px\\] {
+      -webkit-mask-size: 120px 120px;
+      mask-size: 120px 120px;
+    }
+
     .mask-auto {
       -webkit-mask-size: auto;
       mask-size: auto;
@@ -11462,6 +11942,21 @@ test('mask', async () => {
     .mask-cover {
       -webkit-mask-size: cover;
       mask-size: cover;
+    }
+
+    .mask-\\[50\\%\\] {
+      -webkit-mask-position: 50%;
+      mask-position: 50%;
+    }
+
+    .mask-\\[120px\\] {
+      -webkit-mask-position: 120px;
+      mask-position: 120px;
+    }
+
+    .mask-\\[120px_120px\\], .mask-\\[position\\:120px_120px\\] {
+      -webkit-mask-position: 120px 120px;
+      mask-position: 120px 120px;
     }
 
     .mask-bottom {
@@ -11536,6 +12031,9 @@ test('mask', async () => {
   `)
   expect(
     await run([
+      'mask',
+      'mask-unknown',
+
       // mask-composite
       '-mask-add',
       '-mask-subtract',
@@ -11560,6 +12058,53 @@ test('mask', async () => {
       'mask-type-alpha/foo',
       'mask-type-luminance/foo',
 
+      // mask-color (not a thing so these shouldn't work)
+      'mask-red-500',
+      'mask-red-500/50',
+      'mask-red-500/2.25',
+      'mask-red-500/2.5',
+      'mask-red-500/2.75',
+      'mask-red-500/[0.5]',
+      'mask-red-500/[50%]',
+      'mask-current',
+      'mask-current/50',
+      'mask-current/[0.5]',
+      'mask-current/[50%]',
+      'mask-current/[var(--mask-opacity)]',
+      'mask-inherit',
+      'mask-transparent',
+      // 'mask-[#0088cc]',
+      'mask-[#0088cc]/50',
+      'mask-[#0088cc]/[0.5]',
+      'mask-[#0088cc]/[50%]',
+      'mask-[var(--some-var)]/50',
+      'mask-[var(--some-var)]/[0.5]',
+      'mask-[var(--some-var)]/[50%]',
+      // 'mask-[color:var(--some-var)]',
+      'mask-[color:var(--some-var)]/50',
+      'mask-[color:var(--some-var)]/[0.5]',
+      'mask-[color:var(--some-var)]/[50%]',
+      '-mask-red-500',
+      '-mask-red-500/50',
+      '-mask-red-500/[0.5]',
+      '-mask-red-500/[50%]',
+      '-mask-current',
+      '-mask-current/50',
+      '-mask-current/[0.5]',
+      '-mask-current/[50%]',
+      '-mask-inherit',
+      '-mask-transparent',
+      '-mask-[#0088cc]',
+      '-mask-[#0088cc]/50',
+      '-mask-[#0088cc]/[0.5]',
+      '-mask-[#0088cc]/[50%]',
+
+      // mask-image
+      '-mask-none',
+      '-mask-gradient-to-br',
+      '-mask-linear-to-br',
+      '-mask-linear-[to_bottom]',
+
       // mask-size
       '-mask-auto',
       '-mask-cover',
@@ -11582,6 +12127,44 @@ test('mask', async () => {
       '-mask-repeat-y',
       '-mask-round',
       '-mask-space',
+
+      'mask-none/foo',
+      'mask-[url(/image.png)]/foo',
+      'mask-[url:var(--my-url)]/foo',
+      'mask-[linear-gradient(to_bottom,red,blue)]/foo',
+      'mask-[image:var(--my-gradient)]/foo',
+      'mask-linear-[to_bottom]/hsl',
+      'mask-conic-[45deg]/hsl',
+      'mask-conic-[circle_at_center]/hsl',
+      'mask-auto/foo',
+      'mask-cover/foo',
+      'mask-contain/foo',
+      'mask-[cover]/foo',
+      'mask-[contain]/foo',
+      'mask-[size:120px_120px]/foo',
+      'mask-fixed/foo',
+      'mask-local/foo',
+      'mask-scroll/foo',
+      'mask-center/foo',
+      'mask-top/foo',
+      'mask-right-top/foo',
+      'mask-right-bottom/foo',
+      'mask-bottom/foo',
+      'mask-left-bottom/foo',
+      'mask-left/foo',
+      'mask-left-top/foo',
+      'mask-[50%]/foo',
+      'mask-[120px]/foo',
+      'mask-[120px_120px]/foo',
+      'mask-[length:120px_120px]/foo',
+      'mask-[position:120px_120px]/foo',
+      'mask-[size:120px_120px]/foo',
+      'mask-repeat/foo',
+      'mask-no-repeat/foo',
+      'mask-repeat-x/foo',
+      'mask-repeat-y/foo',
+      'mask-round/foo',
+      'mask-space/foo',
     ]),
   ).toEqual('')
 
@@ -11612,10 +12195,214 @@ test('mask-from', async () => {
         }
         @tailwind utilities;
       `,
-      [],
+      [
+        // --tw-mask-gradient-from
+        'mask-from-red-500',
+        'mask-from-red-500/50',
+        'mask-from-red-500/[0.5]',
+        'mask-from-red-500/[50%]',
+        'mask-from-current',
+        'mask-from-current/50',
+        'mask-from-current/[0.5]',
+        'mask-from-current/[50%]',
+        'mask-from-inherit',
+        'mask-from-transparent',
+        'mask-from-[#0088cc]',
+        'mask-from-[#0088cc]/50',
+        'mask-from-[#0088cc]/[0.5]',
+        'mask-from-[#0088cc]/[50%]',
+        'mask-from-[var(--my-color)]',
+        'mask-from-[var(--my-color)]/50',
+        'mask-from-[var(--my-color)]/[0.5]',
+        'mask-from-[var(--my-color)]/[50%]',
+        'mask-from-[color:var(--my-color)]',
+        'mask-from-[color:var(--my-color)]/50',
+        'mask-from-[color:var(--my-color)]/[0.5]',
+        'mask-from-[color:var(--my-color)]/[50%]',
+
+        // --tw-mask-gradient-from-position
+        'mask-from-0%',
+        'mask-from-5%',
+        'mask-from-100%',
+        'mask-from-[50%]',
+        'mask-from-[50px]',
+        'mask-from-[length:var(--my-position)]',
+        'mask-from-[percentage:var(--my-position)]',
+      ],
     ),
-  ).toMatchInlineSnapshot(`""`)
-  expect(await run([])).toEqual('')
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: #ef4444;
+    }
+
+    .mask-from-\\[\\#0088cc\\] {
+      --tw-mask-gradient-from: #08c;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-\\[\\#0088cc\\]\\/50, .mask-from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .mask-from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-\\[color\\:var\\(--my-color\\)\\] {
+      --tw-mask-gradient-from: var(--my-color);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-\\[color\\:var\\(--my-color\\)\\]\\/50, .mask-from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-\\[var\\(--my-color\\)\\] {
+      --tw-mask-gradient-from: var(--my-color);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-\\[var\\(--my-color\\)\\]\\/50, .mask-from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-current {
+      --tw-mask-gradient-from: currentColor;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-current\\/50, .mask-from-current\\/\\[0\\.5\\], .mask-from-current\\/\\[50\\%\\] {
+      --tw-mask-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-inherit {
+      --tw-mask-gradient-from: inherit;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-red-500 {
+      --tw-mask-gradient-from: var(--color-red-500);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-red-500\\/50, .mask-from-red-500\\/\\[0\\.5\\], .mask-from-red-500\\/\\[50\\%\\] {
+      --tw-mask-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-transparent {
+      --tw-mask-gradient-from: transparent;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-from-0\\% {
+      --tw-mask-gradient-from-position: 0%;
+    }
+
+    .mask-from-5\\% {
+      --tw-mask-gradient-from-position: 5%;
+    }
+
+    .mask-from-100\\% {
+      --tw-mask-gradient-from-position: 100%;
+    }
+
+    .mask-from-\\[50\\%\\] {
+      --tw-mask-gradient-from-position: 50%;
+    }
+
+    .mask-from-\\[50px\\] {
+      --tw-mask-gradient-from-position: 50px;
+    }
+
+    .mask-from-\\[length\\:var\\(--my-position\\)\\], .mask-from-\\[percentage\\:var\\(--my-position\\)\\] {
+      --tw-mask-gradient-from-position: var(--my-position);
+    }
+
+    @property --tw-mask-gradient-position {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-via {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-to {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-via-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    @property --tw-mask-gradient-via-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 50%;
+    }
+
+    @property --tw-mask-gradient-to-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 100%;
+    }"
+  `)
+  expect(
+    await run([
+      'mask-from',
+      'mask-from-25.%',
+      'mask-from-25.0%',
+      'mask-from-123',
+      'mask-from--123',
+      'mask-from--5%',
+      'mask-from-unknown',
+      'mask-from-unknown%',
+
+      // --tw-mask-gradient-from
+      '-mask-from-red-500',
+      '-mask-from-red-500/50',
+      '-mask-from-red-500/[0.5]',
+      '-mask-from-red-500/[50%]',
+      '-mask-from-current',
+      '-mask-from-current/50',
+      '-mask-from-current/[0.5]',
+      '-mask-from-current/[50%]',
+      '-mask-from-inherit',
+      '-mask-from-transparent',
+      '-mask-from-[#0088cc]',
+      '-mask-from-[#0088cc]/50',
+      '-mask-from-[#0088cc]/[0.5]',
+      '-mask-from-[#0088cc]/[50%]',
+
+      // --tw-mask-gradient-from-position
+      '-mask-from-0%',
+      '-mask-from-5%',
+      '-mask-from-100%',
+    ]),
+  ).toEqual('')
 })
 
 test('mask-via', async () => {
@@ -11627,10 +12414,224 @@ test('mask-via', async () => {
         }
         @tailwind utilities;
       `,
-      [],
+      [
+        // --tw-mask-gradient-stops
+        'mask-via-red-500',
+        'mask-via-red-500/50',
+        'mask-via-red-500/[0.5]',
+        'mask-via-red-500/[50%]',
+        'mask-via-current',
+        'mask-via-current/50',
+        'mask-via-current/[0.5]',
+        'mask-via-current/[50%]',
+        'mask-via-inherit',
+        'mask-via-transparent',
+        'mask-via-[#0088cc]',
+        'mask-via-[#0088cc]/50',
+        'mask-via-[#0088cc]/[0.5]',
+        'mask-via-[#0088cc]/[50%]',
+        'mask-via-[var(--my-color)]',
+        'mask-via-[var(--my-color)]/50',
+        'mask-via-[var(--my-color)]/[0.5]',
+        'mask-via-[var(--my-color)]/[50%]',
+        'mask-via-[color:var(--my-color)]',
+        'mask-via-[color:var(--my-color)]/50',
+        'mask-via-[color:var(--my-color)]/[0.5]',
+        'mask-via-[color:var(--my-color)]/[50%]',
+
+        // --tw-mask-gradient-via-position
+        'mask-via-0%',
+        'mask-via-5%',
+        'mask-via-100%',
+        'mask-via-[50%]',
+        'mask-via-[50px]',
+        'mask-via-[length:var(--my-position)]',
+        'mask-via-[percentage:var(--my-position)]',
+      ],
     ),
-  ).toMatchInlineSnapshot(`""`)
-  expect(await run([])).toEqual('')
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: #ef4444;
+    }
+
+    .mask-via-\\[\\#0088cc\\] {
+      --tw-mask-gradient-via: #08c;
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-\\[\\#0088cc\\]\\/50, .mask-via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .mask-via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-\\[color\\:var\\(--my-color\\)\\] {
+      --tw-mask-gradient-via: var(--my-color);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-\\[color\\:var\\(--my-color\\)\\]\\/50, .mask-via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-\\[var\\(--my-color\\)\\] {
+      --tw-mask-gradient-via: var(--my-color);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-\\[var\\(--my-color\\)\\]\\/50, .mask-via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-current {
+      --tw-mask-gradient-via: currentColor;
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-current\\/50, .mask-via-current\\/\\[0\\.5\\], .mask-via-current\\/\\[50\\%\\] {
+      --tw-mask-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-inherit {
+      --tw-mask-gradient-via: inherit;
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-red-500 {
+      --tw-mask-gradient-via: var(--color-red-500);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-red-500\\/50, .mask-via-red-500\\/\\[0\\.5\\], .mask-via-red-500\\/\\[50\\%\\] {
+      --tw-mask-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-transparent {
+      --tw-mask-gradient-via: transparent;
+      --tw-mask-gradient-via-stops: var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-via) var(--tw-mask-gradient-via-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops);
+    }
+
+    .mask-via-0\\% {
+      --tw-mask-gradient-via-position: 0%;
+    }
+
+    .mask-via-5\\% {
+      --tw-mask-gradient-via-position: 5%;
+    }
+
+    .mask-via-100\\% {
+      --tw-mask-gradient-via-position: 100%;
+    }
+
+    .mask-via-\\[50\\%\\] {
+      --tw-mask-gradient-via-position: 50%;
+    }
+
+    .mask-via-\\[50px\\] {
+      --tw-mask-gradient-via-position: 50px;
+    }
+
+    .mask-via-\\[length\\:var\\(--my-position\\)\\], .mask-via-\\[percentage\\:var\\(--my-position\\)\\] {
+      --tw-mask-gradient-via-position: var(--my-position);
+    }
+
+    @property --tw-mask-gradient-position {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-via {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-to {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-via-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    @property --tw-mask-gradient-via-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 50%;
+    }
+
+    @property --tw-mask-gradient-to-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 100%;
+    }"
+  `)
+  expect(
+    await run([
+      'mask-via',
+      'mask-via-123',
+      'mask-via--123',
+      'mask-via--5%',
+      'mask-via-unknown',
+      'mask-via-unknown%',
+
+      // --tw-mask-gradient-stops
+      '-mask-via-red-500',
+      '-mask-via-red-500/50',
+      '-mask-via-red-500/[0.5]',
+      '-mask-via-red-500/[50%]',
+      '-mask-via-current',
+      '-mask-via-current/50',
+      '-mask-via-current/[0.5]',
+      '-mask-via-current/[50%]',
+      '-mask-via-inherit',
+      '-mask-via-transparent',
+      '-mask-via-[#0088cc]',
+      '-mask-via-[#0088cc]/50',
+      '-mask-via-[#0088cc]/[0.5]',
+      '-mask-via-[#0088cc]/[50%]',
+
+      // --tw-mask-gradient-via-position
+      '-mask-via-0%',
+      '-mask-via-5%',
+      '-mask-via-100%',
+    ]),
+  ).toEqual('')
 })
 
 test('mask-to', async () => {
@@ -11642,10 +12643,212 @@ test('mask-to', async () => {
         }
         @tailwind utilities;
       `,
-      [],
+      [
+        // --tw-mask-gradient-to
+        'mask-to-red-500',
+        'mask-to-red-500/50',
+        'mask-to-red-500/[0.5]',
+        'mask-to-red-500/[50%]',
+        'mask-to-current',
+        'mask-to-current/50',
+        'mask-to-current/[0.5]',
+        'mask-to-current/[50%]',
+        'mask-to-inherit',
+        'mask-to-transparent',
+        'mask-to-[#0088cc]',
+        'mask-to-[#0088cc]/50',
+        'mask-to-[#0088cc]/[0.5]',
+        'mask-to-[#0088cc]/[50%]',
+        'mask-to-[var(--my-color)]',
+        'mask-to-[var(--my-color)]/50',
+        'mask-to-[var(--my-color)]/[0.5]',
+        'mask-to-[var(--my-color)]/[50%]',
+        'mask-to-[color:var(--my-color)]',
+        'mask-to-[color:var(--my-color)]/50',
+        'mask-to-[color:var(--my-color)]/[0.5]',
+        'mask-to-[color:var(--my-color)]/[50%]',
+
+        // --tw-mask-gradient-to-position
+        'mask-to-0%',
+        'mask-to-5%',
+        'mask-to-100%',
+        'mask-to-[50%]',
+        'mask-to-[50px]',
+        'mask-to-[length:var(--my-position)]',
+        'mask-to-[percentage:var(--my-position)]',
+      ],
     ),
-  ).toMatchInlineSnapshot(`""`)
-  expect(await run([])).toEqual('')
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: #ef4444;
+    }
+
+    .mask-to-\\[\\#0088cc\\] {
+      --tw-mask-gradient-to: #08c;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-\\[\\#0088cc\\]\\/50, .mask-to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .mask-to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-\\[color\\:var\\(--my-color\\)\\] {
+      --tw-mask-gradient-to: var(--my-color);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-\\[color\\:var\\(--my-color\\)\\]\\/50, .mask-to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-\\[var\\(--my-color\\)\\] {
+      --tw-mask-gradient-to: var(--my-color);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-\\[var\\(--my-color\\)\\]\\/50, .mask-to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\], .mask-to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      --tw-mask-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-current {
+      --tw-mask-gradient-to: currentColor;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-current\\/50, .mask-to-current\\/\\[0\\.5\\], .mask-to-current\\/\\[50\\%\\] {
+      --tw-mask-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-inherit {
+      --tw-mask-gradient-to: inherit;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-red-500 {
+      --tw-mask-gradient-to: var(--color-red-500);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-red-500\\/50, .mask-to-red-500\\/\\[0\\.5\\], .mask-to-red-500\\/\\[50\\%\\] {
+      --tw-mask-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-transparent {
+      --tw-mask-gradient-to: transparent;
+      --tw-mask-gradient-stops: var(--tw-mask-gradient-via-stops, var(--tw-mask-gradient-position), var(--tw-mask-gradient-from) var(--tw-mask-gradient-from-position), var(--tw-mask-gradient-to) var(--tw-mask-gradient-to-position));
+    }
+
+    .mask-to-0\\% {
+      --tw-mask-gradient-to-position: 0%;
+    }
+
+    .mask-to-5\\% {
+      --tw-mask-gradient-to-position: 5%;
+    }
+
+    .mask-to-100\\% {
+      --tw-mask-gradient-to-position: 100%;
+    }
+
+    .mask-to-\\[50\\%\\] {
+      --tw-mask-gradient-to-position: 50%;
+    }
+
+    .mask-to-\\[50px\\] {
+      --tw-mask-gradient-to-position: 50px;
+    }
+
+    .mask-to-\\[length\\:var\\(--my-position\\)\\], .mask-to-\\[percentage\\:var\\(--my-position\\)\\] {
+      --tw-mask-gradient-to-position: var(--my-position);
+    }
+
+    @property --tw-mask-gradient-position {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-via {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-to {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: #0000;
+    }
+
+    @property --tw-mask-gradient-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-via-stops {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-mask-gradient-from-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    @property --tw-mask-gradient-via-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 50%;
+    }
+
+    @property --tw-mask-gradient-to-position {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 100%;
+    }"
+  `)
+  expect(
+    await run([
+      'mask-to',
+      'mask-to-123',
+      'mask-to--123',
+      'mask-to--5%',
+      'mask-to-unknown',
+      'mask-to-unknown%',
+
+      // --tw-mask-gradient-to
+      '-mask-to-red-500',
+      '-mask-to-red-500/50',
+      '-mask-to-red-500/[0.5]',
+      '-mask-to-red-500/[50%]',
+      '-mask-to-current',
+      '-mask-to-current/50',
+      '-mask-to-current/[0.5]',
+      '-mask-to-current/[50%]',
+      '-mask-to-inherit',
+      '-mask-to-transparent',
+      '-mask-to-[#0088cc]',
+      '-mask-to-[#0088cc]/50',
+      '-mask-to-[#0088cc]/[0.5]',
+      '-mask-to-[#0088cc]/[50%]',
+
+      // --tw-mask-gradient-to-position
+      '-mask-to-0%',
+      '-mask-to-5%',
+      '-mask-to-100%',
+    ]),
+  ).toEqual('')
 })
 
 test('box-decoration', async () => {
