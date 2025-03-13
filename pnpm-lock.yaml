@@ -296,8 +296,8 @@ importers:
         specifier: ^1.29.1
         version: 1.29.1
       lightningcss-win32-x64-msvc:
-        specifier: ^1.29.1
-        version: 1.29.1
+        specifier: ^1.29.2
+        version: 1.29.2
 
   packages/@tailwindcss-upgrade:
     dependencies:
@@ -2976,12 +2976,6 @@ packages:
     resolution: {integrity: sha512-nL7zRW6evGQqYVu/bKGK+zShyz8OVzsCotFgc7judbt6wnB2KbiKKJwBE4SGoDBQ1O94RjW4asrCjQL4i8Fhbw==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
-    os: [win32]
-
-  lightningcss-win32-x64-msvc@1.29.1:
-    resolution: {integrity: sha512-NygcbThNBe4JElP+olyTI/doBNGJvLs3bFCRPdvuCcxZCcCZ71B858IHpdm7L1btZex0FvCmM17FK98Y9MRy1Q==}
-    engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [win32]
 
   lightningcss-win32-x64-msvc@1.29.2:
@@ -6456,10 +6450,7 @@ snapshots:
   lightningcss-win32-arm64-msvc@1.29.2:
     optional: true
 
-  lightningcss-win32-x64-msvc@1.29.1: {}
-
-  lightningcss-win32-x64-msvc@1.29.2:
-    optional: true
+  lightningcss-win32-x64-msvc@1.29.2: {}
 
   lightningcss@1.29.2(patch_hash=tzyxy3asfxcqc7ihrooumyi5fm):
     dependencies:
