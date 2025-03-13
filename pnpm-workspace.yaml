@@ -7,6 +7,13 @@ packages:
 
 catalog:
   '@types/node': ^20.14.8
-  lightningcss: 1.29.2
   prettier: 3.5.0
   vite: ^6.0.0
+  lightningcss: 1.29.2
+  lightningcss-darwin-arm64: 1.29.2
+  lightningcss-darwin-x64: 1.29.2
+  lightningcss-linux-arm64-gnu: 1.29.2
+  lightningcss-linux-arm64-musl: 1.29.2
+  lightningcss-linux-x64-gnu: 1.29.2
+  lightningcss-linux-x64-musl: 1.29.2
+  lightningcss-win32-x64-msvc: 1.29.2
