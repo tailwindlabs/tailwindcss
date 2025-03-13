@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Do not extract candidates with JS string interpolation `${` ([#17142](https://github.com/tailwindlabs/tailwindcss/pull/17142))
 - Fix extraction of variants containing `.` character ([#17153](https://github.com/tailwindlabs/tailwindcss/pull/17153))
+- Fix extracting candidates in Clojure/ClojureScript ([#17087](https://github.com/tailwindlabs/tailwindcss/pull/17087))
 
 ## [4.0.13] - 2025-03-11
 
