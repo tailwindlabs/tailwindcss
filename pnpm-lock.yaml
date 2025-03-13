@@ -281,8 +281,8 @@ importers:
         specifier: ^1.29.1
         version: 1.29.1
       lightningcss-darwin-x64:
-        specifier: ^1.29.1
-        version: 1.29.1
+        specifier: ^1.29.2
+        version: 1.29.2
       lightningcss-linux-arm64-gnu:
         specifier: ^1.29.1
         version: 1.29.1
@@ -2898,12 +2898,6 @@ packages:
     resolution: {integrity: sha512-cK/eMabSViKn/PG8U/a7aCorpeKLMlK0bQeNHmdb7qUnBkNPnL+oV5DjJUo0kqWsJUapZsM4jCfYItbqBDvlcA==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
-    os: [darwin]
-
-  lightningcss-darwin-x64@1.29.1:
-    resolution: {integrity: sha512-k33G9IzKUpHy/J/3+9MCO4e+PzaFblsgBjSGlpAaFikeBFm8B/CkO3cKU9oI4g+fjS2KlkLM/Bza9K/aw8wsNA==}
-    engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   lightningcss-darwin-x64@1.29.2:
@@ -6422,10 +6416,7 @@ snapshots:
   lightningcss-darwin-arm64@1.29.2:
     optional: true
 
-  lightningcss-darwin-x64@1.29.1: {}
-
-  lightningcss-darwin-x64@1.29.2:
-    optional: true
+  lightningcss-darwin-x64@1.29.2: {}
 
   lightningcss-freebsd-x64@1.29.2:
     optional: true
