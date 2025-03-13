@@ -11340,6 +11340,87 @@ test('to', async () => {
   ).toEqual('')
 })
 
+test('mask', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      [
+      ],
+    ),
+  ).toMatchInlineSnapshot(`""`)
+  expect(
+    await run([
+    ]),
+  ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --opacity-half: 0.5;
+          --opacity-custom: var(--custom-opacity);
+        }
+        @tailwind utilities;
+      `,
+      ['mask-current/half', 'mask-current/custom', '[color:red]/half'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".\\[color\\:red\\]\\/half {
+      color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
+    }"
+  `)
+})
+
+test('mask-from', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`""`)
+  expect(await run([])).toEqual('')
+})
+
+test('mask-via', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`""`)
+  expect(await run([])).toEqual('')
+})
+
+test('mask-to', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      [],
+    ),
+  ).toMatchInlineSnapshot(`""`)
+  expect(await run([])).toEqual('')
+})
+
 test('box-decoration', async () => {
   expect(await run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
     ".box-decoration-clone {
