@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 
+## [4.0.14] - 2025-03-13
+
 ### Fixed
 
 - Do not extract candidates with JS string interpolation `${` ([#17142](https://github.com/tailwindlabs/tailwindcss/pull/17142))
@@ -3536,7 +3538,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.13...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...HEAD
+[4.0.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.13...v4.0.14
 [4.0.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.12...v4.0.13
 [4.0.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.11...v4.0.12
 [4.0.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.10...v4.0.11
