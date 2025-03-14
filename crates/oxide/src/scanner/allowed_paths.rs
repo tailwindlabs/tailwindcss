@@ -1,3 +1,4 @@
+use ignore::gitignore::{Gitignore, GitignoreBuilder};
 use ignore::{overrides::OverrideBuilder, DirEntry, WalkBuilder};
 use std::{path::Path, sync};
 
@@ -24,6 +25,26 @@ static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(||
 
 static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
     sync::LazyLock::new(|| vec![".git"]);
+
+pub static AUTO_SOURCE_DETECTION_RULES: sync::LazyLock<Gitignore> = sync::LazyLock::new(|| {
+    let mut builder = GitignoreBuilder::new("");
+
+    for line in IGNORED_CONTENT_DIRS.iter() {
+        builder.add_line(None, line).unwrap();
+    }
+
+    builder
+        .add_line(None, &format!("*.{{{}}}", IGNORED_EXTENSIONS.join(",")))
+        .unwrap();
+    builder
+        .add_line(None, &format!("*.{{{}}}", BINARY_EXTENSIONS.join(",")))
+        .unwrap();
+    builder
+        .add_line(None, &format!("{{{}}}", IGNORED_FILES.join(",")))
+        .unwrap();
+
+    builder.build().unwrap()
+});
 
 #[tracing::instrument(skip_all)]
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
@@ -64,6 +85,9 @@ pub fn create_walk_builder(root: &Path, additional_globs: Vec<&str>) -> WalkBuil
 
     // Scan hidden files / directories
     builder.hidden(false);
+
+    // Don't respect global gitignore files
+    builder.git_global(false);
 
     // By default, allow .gitignore files to be used regardless of whether or not
     // a .git directory is present. This is an optimization for when projects

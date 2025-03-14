@@ -1,12 +1,76 @@
+diff --git a/src/dir.rs b/src/dir.rs
+index b302943..6b33791 100644
+--- a/src/dir.rs
++++ b/src/dir.rs
+@@ -523,12 +523,40 @@ impl Ignore {
+             Match::None
+         };
+ 
+-        m_custom_ignore
+-            .or(m_ignore)
+-            .or(m_gi)
+-            .or(m_gi_exclude)
+-            .or(m_global)
+-            .or(m_explicit)
++
++        let order = [
++            // Global gitignores
++            &m_global,
++            // .git/info/exclude
++            &m_gi_exclude,
++            // .gitignore
++            &m_gi,
++            // .ignore
++            &m_ignore,
++            // .customignore
++            &m_custom_ignore,
++            // Manually added ignores
++            &m_explicit,
++        ];
++
++        for (idx, check) in order.into_iter().enumerate() {
++            if check.is_none() {
++                continue;
++            }
++
++            let remaining = &order[idx + 1..];
++            if check.is_ignore() {
++                if remaining.iter().any(|other| other.is_whitelist()) {
++                    continue;
++                }
++            } else if remaining.iter().any(|other| other.is_ignore()) {
++                continue;
++            }
++
++            return check.clone();
++        }
++
++        m_explicit
+     }
+ 
+     /// Returns an iterator over parent ignore matchers, including this one.
 diff --git a/src/walk.rs b/src/walk.rs
-index d6ea9c2..00b6826 100644
-@@ -670,6 +666,10 @@ impl WalkBuilder {
+index d6ea9c2..48c54f7 100644
+--- a/src/walk.rs
++++ b/src/walk.rs
+@@ -16,7 +16,7 @@ use {
+ 
+ use crate::{
+     dir::{Ignore, IgnoreBuilder},
+-    gitignore::GitignoreBuilder,
++    gitignore::{Gitignore, GitignoreBuilder},
+     overrides::Override,
+     types::Types,
+     Error, PartialErrorBuilder,
+@@ -670,6 +670,12 @@ impl WalkBuilder {
          errs.into_error_option()
      }
  
++    /// Add a Gitignore to the builder.
 +    pub fn add_gitignore(&mut self, gi: Gitignore) {
 +        self.ig_builder.add_ignore(gi);
 +    }
++
 +
      /// Add a custom ignore file name
      ///

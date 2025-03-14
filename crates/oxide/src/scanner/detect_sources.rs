@@ -46,7 +46,7 @@ impl<'a> DetectSources<'a> {
             };
 
             let file_path = entry.clone().into_path();
-            if self.sources.is_ignored(file_path) {
+            if !self.sources.is_allowed(file_path) {
                 continue;
             }
 

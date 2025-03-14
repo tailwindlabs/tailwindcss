@@ -22,3 +22,5 @@ classification-macros = { path = "../classification-macros" }
 [dev-dependencies]
 tempfile = "3.13.0"
 
+[package.metadata.patch]
+crates = ["ignore"]

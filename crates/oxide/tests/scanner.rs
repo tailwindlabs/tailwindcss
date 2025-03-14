@@ -860,11 +860,13 @@ mod scanner {
         );
 
         let sources = vec![
+            // @source "**/*.html"
             PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "**/*.html".to_owned(),
                 negated: false,
             },
+            // @source not "src/ignored-by-source-not.html"
             PublicSourceEntry {
                 base: dir.to_string_lossy().to_string(),
                 pattern: "src/ignored-by-source-not.html".to_owned(),
@@ -902,14 +904,235 @@ mod scanner {
             ],
         );
 
+        // TODO: Drop this again
+        let mut scanner = Scanner::new(sources.clone());
         let candidates = scanner.scan();
+
         assert_eq!(
             candidates,
             vec![
+                // Ignored by git ignore BUT included by `@source "**/*.html"`
+                "content-['src/ignored-by-gitignore.html']",
                 "content-['src/keep-me.html']",
                 "content-['src/new-file.html']"
             ]
         );
-        todo!();
+    }
+
+    #[test]
+    fn test_allow_default_ignored_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(&dir, &[("foo.styl", "content-['foo.styl']")]);
+
+        let sources = vec![
+            // @source "**/*"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert!(candidates.is_empty());
+
+        // Explicitly allow `.styl` files
+        let sources = vec![
+            // @source "**/*"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+                negated: false,
+            },
+            // @source "./*.styl"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "./*.styl".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    fn test_allow_default_ignored_files_via_gitignore() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("index.html", "content-['index.html']"),
+                (".gitignore", "index.html"),
+            ],
+        );
+
+        let sources = vec![
+            // @source "**/*"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert!(candidates.is_empty());
+
+        let sources = vec![
+            // @source "**/*"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*".to_owned(),
+                negated: false,
+            },
+            // @source "./*.html"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "*.html".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['index.html']"]);
+    }
+
+    #[test]
+    fn test_allow_explicit_node_modules_paths() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                // Current project
+                ("src/index.html", "content-['src/index.html']"),
+                // Ignore file
+                (".gitignore", "node_modules"),
+                // Library ignored by default
+                (
+                    "node_modules/my-ui-lib/index.html",
+                    "content-['node_modules/my-ui-lib/index.html']",
+                ),
+            ],
+        );
+
+        // Default auto source detection
+        let sources = vec![
+            // @source "./"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "./".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+
+        // Explicitly listing all `*.html` files, should not include `node_modules` because it's
+        // ignored
+        let sources = vec![
+            // @source "**/*.html"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*.html".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+
+        // Explicitly listing all `*.html` files
+        // Explicitly list the `node_modules/my-ui-lib`
+        //
+        let sources = vec![
+            // @source "**/*.html"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "**/*.html".to_owned(),
+                negated: false,
+            },
+            // @source "node_modules/my-ui-lib"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "node_modules/my-ui-lib".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['node_modules/my-ui-lib/index.html']",
+                "content-['src/index.html']"
+            ]
+        );
+    }
+
+    // TODO: external(…) so that `.gitignore` from main project doesn't apply to external projects
+    #[test]
+    #[ignore]
+    fn test_ignore_files_in_node_modules() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                (".gitignore", "node_modules\ndist"),
+                (
+                    "node_modules/my-ui-lib/dist/index.html",
+                    "content-['node_modules/my-ui-lib/dist/index.html']",
+                ),
+            ],
+        );
+
+        // Explicitly listing all `*.html` files, should not include `node_modules` because it's
+        // ignored
+        let sources = vec![
+            // @source "./"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "./".to_owned(),
+                negated: false,
+            },
+            // @source "./node_modules/my-ui-lib"
+            PublicSourceEntry {
+                base: dir.to_string_lossy().to_string(),
+                pattern: "./node_modules/my-ui-lib".to_owned(),
+                negated: false,
+            },
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/my-ui-lib/dist/index.html']"]
+        );
     }
 }

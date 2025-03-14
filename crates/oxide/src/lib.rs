@@ -1,17 +1,18 @@
 use crate::glob::optimize_public_source_entry;
-use crate::scanner::allowed_paths::resolve_paths;
-use crate::scanner::detect_sources::DetectSources;
+use crate::scanner::allowed_paths::AUTO_SOURCE_DETECTION_RULES;
 use bexpand::Expression;
 use bstr::ByteSlice;
 use extractor::{Extracted, Extractor};
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
-use ignore::overrides::OverrideBuilder;
+use ignore::gitignore::GitignoreBuilder;
 use paths::Path;
 use rayon::prelude::*;
 use scanner::allowed_paths::{create_walk_builder, read_dir};
 use std::borrow::Cow;
+use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::PathBuf;
 use std::sync;
@@ -134,17 +135,6 @@ pub enum SourceEntry {
 }
 
 impl SourceEntry {
-    /// Check if the given path matches against the source entry
-    fn matches(&self, path: PathBuf) -> bool {
-        let Some(path) = path.to_str() else {
-            return false;
-        };
-
-        glob_match(self.pattern(), path.replace('\\', "/"))
-    }
-
-    // TODO: Figure out if we can only compute this once and cache it
-    //
     /// Compute the full glob pattern for the source entry
     fn pattern(&self) -> String {
         use SourceEntry::*;
@@ -209,35 +199,39 @@ pub struct Sources {
 
     // A collection of pre-computed ignore patterns
     pre_computed_ignore_patterns: Vec<String>,
+
+    // A collection of pre-computed patterns
+    pre_computed_patterns: Vec<String>,
 }
 
 impl Sources {
     fn new(sources: Vec<SourceEntry>) -> Self {
         let mut pre_computed_ignore_patterns = vec![];
+        let mut pre_computed_patterns = vec![];
         for source in &sources {
             match source {
-                SourceEntry::IgnoredAuto { base } => {
+                SourceEntry::IgnoredAuto { .. } => {
                     // // Is the folder directly
                     // if *base == path {
                     //     return true;
                     // }
 
-                    pre_computed_ignore_patterns.push(format!("{}/**/*", base.to_string_lossy()));
+                    pre_computed_ignore_patterns.push(source.pattern());
                 }
-                SourceEntry::IgnoredPattern { base, pattern } => {
-                    pre_computed_ignore_patterns.push(format!(
-                        "{}/{}",
-                        base.to_string_lossy(),
-                        pattern
-                    ));
+                SourceEntry::IgnoredPattern { .. } => {
+                    pre_computed_ignore_patterns.push(source.pattern());
                 }
-                _ => {}
+
+                SourceEntry::Auto { .. } | SourceEntry::Pattern { .. } => {
+                    pre_computed_patterns.push(source.pattern())
+                }
             }
         }
 
         Self {
             sources,
             pre_computed_ignore_patterns,
+            pre_computed_patterns,
         }
     }
 
@@ -245,20 +239,36 @@ impl Sources {
         self.sources.iter()
     }
 
-    fn is_ignored(&self, path: PathBuf) -> bool {
+    fn is_allowed(&self, path: PathBuf) -> bool {
         let Some(file_path_str) = path.to_str() else {
             return false;
         };
 
         let file_path_str = file_path_str.replace('\\', "/");
-        for pattern in &self.pre_computed_ignore_patterns {
-            if glob_match(pattern, file_path_str.clone()) {
-                return true;
-            }
-        }
 
-        false
+        self.pre_computed_patterns
+            .iter()
+            .any(|pattern| glob_match(pattern, file_path_str.clone()))
+            && !self
+                .pre_computed_ignore_patterns
+                .iter()
+                .any(|pattern| glob_match(pattern, file_path_str.clone()))
     }
+
+    // fn is_ignored(&self, path: PathBuf) -> bool {
+    //     let Some(file_path_str) = path.to_str() else {
+    //         return false;
+    //     };
+    //
+    //     let file_path_str = file_path_str.replace('\\', "/");
+    //     for pattern in &self.pre_computed_ignore_patterns {
+    //         if glob_match(pattern, file_path_str.clone()) {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     false
+    // }
 
     fn is_empty(&self) -> bool {
         self.sources.is_empty()
@@ -582,7 +592,7 @@ impl Scanner {
             modified_dirs.clear();
 
             for path in new_entries {
-                if self.sources.is_ignored(path.clone()) {
+                if !self.sources.is_allowed(path.clone()) {
                     continue;
                 }
 
@@ -606,149 +616,137 @@ impl Scanner {
             return;
         }
 
-        // TODO: Playground, can we setup the walker in such a way that we only scan everything
-        // once and add additional paths to scan (based on sources) and add additional ignore
-        // rules (by explicitly ignoring sources and explicitly including sources).
-        {
-            dbg!(self.sources.iter().collect::<Vec<_>>());
-            let start = std::time::Instant::now();
-            let mut roots: FxHashSet<&PathBuf> = FxHashSet::default();
-            let mut ignores: FxHashMap<&PathBuf, FxHashSet<String>> = FxHashMap::default();
-            for source in self.sources.iter() {
-                match source {
-                    SourceEntry::Auto { base } => {
-                        roots.insert(base);
-                        ignores.entry(base).or_default().insert("!**/*".to_string());
-                    }
-                    SourceEntry::IgnoredAuto { base } => {
-                        ignores.entry(base).or_default().insert("**/*".to_string());
-                    }
-                    SourceEntry::Pattern { base, pattern } => {
-                        roots.insert(base);
-                        ignores
-                            .entry(base)
-                            .or_default()
-                            .insert(format!("!{}", pattern));
-                    }
-                    SourceEntry::IgnoredPattern { base, pattern } => {
-                        ignores.entry(base).or_default().insert(pattern.to_string());
-                    }
-                }
-            }
-
-            // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
-            // parent is already in the list of roots.
-            let mut roots: Vec<&PathBuf> = roots.into_iter().collect();
-            let parents = roots.clone();
-            roots.retain(|root| {
-                let mut parent = root.parent();
-                while let Some(p) = parent {
-                    let path_buf = p.to_path_buf();
-                    if parents.contains(&&path_buf) {
-                        return false;
-                    }
-                    parent = p.parent();
-                }
-                true
-            });
-
-            // Leftover roots
-            let roots = roots.iter().collect::<Vec<_>>();
-            dbg!(&roots, &ignores);
-
-            let mut roots = roots.into_iter();
-            let Some(first_root) = roots.next() else {
-                return;
-            };
-
-            let mut builder = create_walk_builder(first_root, vec![]);
-
-            // Add other roots
-            for root in roots {
-                builder.add(root);
-            }
-
-            // Add all additional gitignore rules
-            for (base, patterns) in ignores {
-                let mut ov = OverrideBuilder::new(base);
-
-                for pattern in patterns {
-                    ov.add(&pattern).unwrap();
-                    if let Ok(ignore) = ov.build() {
-                        // TODO: I think this overrides(…) literally overrides the previous rules.
-                        // So I wonder if we can add these lines to the default ignore builder
-                        // instead somehow.
-                        //
-                        // CHEAT CODE IDEA: could we generate some files instead and list them via
-                        // `builder.add_ignore(file_path)`?
-                        builder.overrides(ignore);
-                    }
-                }
-            }
-            eprintln!("Prepared walker in {:?}", start.elapsed());
-
-            let start = std::time::Instant::now();
-            for entry in builder.build().filter_map(Result::ok) {
-                dbg!(entry.into_path());
-            }
-            eprintln!("Scanning sources efficiently in {:?}", start.elapsed());
-        }
-
-        // Auto source detection
+        let mut roots: FxHashSet<&PathBuf> = FxHashSet::default();
+        let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
         for source in self.sources.iter() {
-            let SourceEntry::Auto { base } = source else {
-                continue;
-            };
-
-            // Insert a glob for the base path, so we can see new files/folders in the directory itself.
-            self.globs.push(GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: "*".into(),
-            });
-
-            // Detect all files/folders in the directory
-            let detect_sources = DetectSources::new(base.to_path_buf(), &self.sources);
-
-            let (files, globs, dirs) = detect_sources.detect();
-            self.files.extend(files);
-            self.globs.extend(globs);
-            self.dirs.extend(dirs);
-        }
-
-        // TODO: figure out how to do the `emit_parent_glob` part:
-        // Explicit patterns
-        for source in self.sources.iter() {
-            let SourceEntry::Pattern { base, pattern } = source else {
-                continue;
-            };
-
-            self.globs.push(source.into());
-
-            for entry in resolve_paths(base, vec![pattern]) {
-                let Some(file_type) = entry.file_type() else {
-                    continue;
-                };
-
-                let file_path = entry.clone().into_path();
-
-                if self.sources.is_ignored(file_path.clone()) {
-                    continue;
+            match source {
+                SourceEntry::Auto { base } => {
+                    roots.insert(base);
                 }
-
-                if file_type.is_dir() {
-                    self.dirs.push(entry.clone().into_path());
+                SourceEntry::IgnoredAuto { base } => {
+                    ignores.entry(base).or_default().insert("**/*".to_string());
                 }
-
-                if !source.matches(file_path) {
-                    continue;
+                SourceEntry::Pattern { base, pattern } => {
+                    roots.insert(base);
+                    ignores
+                        .entry(base)
+                        .or_default()
+                        .insert(format!("!{}", pattern));
                 }
-
-                if file_type.is_file() {
-                    self.files.push(entry.into_path());
+                SourceEntry::IgnoredPattern { base, pattern } => {
+                    ignores.entry(base).or_default().insert(pattern.to_string());
                 }
             }
         }
 
+        // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
+        // parent is already in the list of roots.
+        let mut roots: Vec<&PathBuf> = roots.into_iter().collect();
+        let parents = roots.clone();
+        roots.retain(|root| {
+            let mut parent = root.parent();
+            while let Some(p) = parent {
+                let path_buf = p.to_path_buf();
+                if parents.contains(&&path_buf) {
+                    return false;
+                }
+                parent = p.parent();
+            }
+            true
+        });
+
+        // Leftover roots
+        let roots = roots.iter().collect::<Vec<_>>();
+        dbg!(&roots);
+
+        let mut roots = roots.into_iter();
+        let Some(first_root) = roots.next() else {
+            return;
+        };
+
+        let mut builder = create_walk_builder(first_root, vec![]);
+
+        // Add other roots
+        for root in roots {
+            builder.add(root);
+        }
+
+        // 1. Create auto source detection rules
+        builder.add_gitignore(AUTO_SOURCE_DETECTION_RULES.clone());
+
+        // 2. Apply default `.gitignore` rules
+        // 3. Apply overrides from `@source`
+
+        // Add all additional gitignore rules
+        for (base, patterns) in ignores {
+            let mut ignore_builder = GitignoreBuilder::new("");
+            for pattern in patterns {
+                ignore_builder
+                    .add_line(Some(base.clone()), &pattern)
+                    .unwrap();
+            }
+            let ignore = ignore_builder.build().unwrap();
+            builder.add_gitignore(ignore);
+        }
+
+        for entry in builder.build().filter_map(Result::ok) {
+            let path = entry.path();
+            if path.is_file() {
+                self.files.push(path.to_owned());
+            }
+        }
+
+        //
+        // // Auto source detection
+        // for source in self.sources.iter() {
+        //     let SourceEntry::Auto { base } = source else {
+        //         continue;
+        //     };
+        //
+        //     // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+        //     self.globs.push(GlobEntry {
+        //         base: base.to_string_lossy().into(),
+        //         pattern: "*".into(),
+        //     });
+        //
+        //     // Detect all files/folders in the directory
+        //     let detect_sources = DetectSources::new(base.to_path_buf(), &self.sources);
+        //
+        //     let (files, globs, dirs) = detect_sources.detect();
+        //     self.files.extend(files);
+        //     self.globs.extend(globs);
+        //     self.dirs.extend(dirs);
+        // }
+        //
+        // // TODO: figure out how to do the `emit_parent_glob` part:
+        // // Explicit patterns
+        // for source in self.sources.iter() {
+        //     let SourceEntry::Pattern { base, pattern } = source else {
+        //         continue;
+        //     };
+        //
+        //     self.globs.push(source.into());
+        //
+        //     for entry in resolve_paths(base, vec![pattern]) {
+        //         let Some(file_type) = entry.file_type() else {
+        //             continue;
+        //         };
+        //
+        //         let file_path = entry.clone().into_path();
+        //         if file_type.is_dir() {
+        //             self.dirs.push(file_path.clone());
+        //         }
+        //
+        //         if !self.sources.is_allowed(file_path.clone()) {
+        //             continue;
+        //         }
+        //
+        //         if file_type.is_file() {
+        //             self.files.push(entry.into_path());
+        //         }
+        //     }
+        // }
+        //
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = optimize_patterns(&self.globs);
     }
