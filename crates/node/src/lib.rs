@@ -41,20 +41,14 @@ pub struct SourceEntry {
   pub negated: bool,
 }
 
-impl From<ChangedContent> for tailwindcss_oxide::ChangedContent<'_> {
+impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
   fn from(changed_content: ChangedContent) -> Self {
     if let Some(file) = changed_content.file {
-      return tailwindcss_oxide::ChangedContent::File(
-        file.into(),
-        changed_content.extension.into(),
-      );
+      return tailwindcss_oxide::ChangedContent::File(file.into(), changed_content.extension);
     }
 
     if let Some(contents) = changed_content.content {
-      return tailwindcss_oxide::ChangedContent::Content(
-        contents,
-        changed_content.extension.into(),
-      );
+      return tailwindcss_oxide::ChangedContent::Content(contents, changed_content.extension);
     }
 
     unreachable!()

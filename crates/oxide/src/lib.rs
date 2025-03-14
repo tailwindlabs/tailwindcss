@@ -1,3 +1,4 @@
+use crate::glob::optimize_patterns;
 use crate::glob::optimize_public_source_entry;
 use crate::scanner::allowed_paths::AUTO_SOURCE_DETECTION_RULES;
 use bexpand::Expression;
@@ -8,11 +9,8 @@ use ignore::gitignore::GitignoreBuilder;
 use ignore::WalkBuilder;
 use paths::Path;
 use rayon::prelude::*;
-use scanner::allowed_paths::create_walk_builder;
-use std::borrow::Cow;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
-use std::fs;
 use std::path::PathBuf;
 use std::sync;
 use std::sync::Arc;
@@ -56,9 +54,9 @@ fn init_tracing() {
 }
 
 #[derive(Debug, Clone)]
-pub enum ChangedContent<'a> {
-    File(PathBuf, Cow<'a, str>),
-    Content(String, Cow<'a, str>),
+pub enum ChangedContent {
+    File(PathBuf, String),
+    Content(String, String),
 }
 
 #[derive(Debug, Clone)]
@@ -232,9 +230,6 @@ pub struct Scanner {
     /// All generated globs, used for setting up watchers
     globs: Vec<GlobEntry>,
 
-    /// Track file modification times
-    mtimes: Arc<Mutex<FxHashMap<PathBuf, SystemTime>>>,
-
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
 }
@@ -332,7 +327,7 @@ impl Scanner {
         let sources = Sources::new(sources);
 
         Self {
-            walker: setup_the_world(sources),
+            walker: create_walker(sources, Default::default()),
             ..Default::default()
         }
     }
@@ -343,8 +338,6 @@ impl Scanner {
         let start = std::time::Instant::now();
         self.scan_sources();
         eprintln!("Scanned sources in {:?}", start.elapsed());
-
-        self.compute_candidates();
 
         let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
         candidates.par_sort_unstable();
@@ -432,146 +425,12 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    fn compute_candidates(&mut self) {
-        let mut changed_content = vec![];
-
-        let current_mtimes = self
-            .files
-            .par_iter()
-            .map(|path| {
-                fs::metadata(path)
-                    .and_then(|m| m.modified())
-                    .unwrap_or(SystemTime::now())
-            })
-            .collect::<Vec<_>>();
-
-        for (idx, path) in self.files.iter().enumerate() {
-            let current_time = current_mtimes[idx];
-            let previous_time = self
-                .mtimes
-                .lock()
-                .unwrap()
-                .insert(path.clone(), current_time);
-
-            let should_scan_file = match previous_time {
-                // Time has changed, so we need to re-scan the file
-                Some(prev) if prev != current_time => true,
-
-                // File was in the cache, no need to re-scan
-                Some(_) => false,
-
-                // File didn't exist before, so we need to scan it
-                None => true,
-            };
-
-            if should_scan_file {
-                let extension = path.extension().unwrap_or_default().to_string_lossy();
-                changed_content.push(ChangedContent::File(path.to_path_buf(), extension))
-            }
-        }
-
-        if !changed_content.is_empty() {
-            let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.par_extend(candidates);
-        }
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn check_for_new_files(&mut self) {
-        // let current_mtimes = self
-        //     .dirs
-        //     .par_iter()
-        //     .map(|path| {
-        //         fs::metadata(path)
-        //             .and_then(|m| m.modified())
-        //             .unwrap_or(SystemTime::now())
-        //     })
-        //     .collect::<Vec<_>>();
-        //
-        // let mut modified_dirs: Vec<PathBuf> = vec![];
-        //
-        // // Check all directories to see if they were modified
-        // for (idx, path) in self.dirs.iter().enumerate() {
-        //     let current_time = current_mtimes[idx];
-        //     let previous_time = self.mtimes.insert(path.clone(), current_time);
-        //
-        //     let should_scan = match previous_time {
-        //         // Time has changed, so we need to re-scan the file
-        //         Some(prev) if prev != current_time => true,
-        //
-        //         // File was in the cache, no need to re-scan
-        //         Some(_) => false,
-        //
-        //         // File didn't exist before, so we need to scan it
-        //         None => true,
-        //     };
-        //
-        //     if should_scan {
-        //         modified_dirs.push(path.clone());
-        //     }
-        // }
-        //
-        // // Scan all modified directories for their immediate files
-        // let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
-        // while !modified_dirs.is_empty() {
-        //     let new_entries = modified_dirs
-        //         .iter()
-        //         .flat_map(|dir| read_dir(dir, Some(1)))
-        //         .map(|entry| entry.path().to_owned())
-        //         .filter(|path| !known.contains(path))
-        //         .collect::<Vec<_>>();
-        //
-        //     modified_dirs.clear();
-        //
-        //     for path in new_entries {
-        //         if !self.sources.is_allowed(path.clone()) {
-        //             continue;
-        //         }
-        //
-        //         if path.is_file() {
-        //             known.insert(path.clone());
-        //             self.files.push(path);
-        //         } else if path.is_dir() {
-        //             known.insert(path.clone());
-        //             self.dirs.push(path.clone());
-        //
-        //             // Recursively scan the new directory for files
-        //             modified_dirs.push(path);
-        //         }
-        //     }
-        // }
-    }
-
-    #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
         let Some(walker) = &mut self.walker else {
             return;
         };
 
-        // Setup filter based on changed files
-        let mtimes = Arc::clone(&self.mtimes);
-        walker.filter_entry({
-            move |entry| {
-                let current_time = match entry.metadata() {
-                    Ok(metadata) => metadata.modified().unwrap_or(SystemTime::now()),
-                    Err(_) => SystemTime::now(),
-                };
-
-                let mut mtimes = mtimes.lock().unwrap();
-                let previous_time = mtimes.insert(entry.path().to_owned(), current_time);
-
-                match previous_time {
-                    // Time has changed, so we need to re-scan the entry
-                    Some(prev) if prev != current_time => true,
-
-                    // Entry was in the cache, no need to re-scan
-                    Some(_) => false,
-
-                    // Entry didn't exist before, so we need to scan it
-                    None => true,
-                }
-            }
-        });
+        let mut changed_content = vec![];
 
         for entry in walker.build().filter_map(Result::ok) {
             let path = entry.path();
@@ -580,7 +439,20 @@ impl Scanner {
             }
             if path.is_file() {
                 self.files.push(path.to_owned());
+
+                let Some(extension) = path.extension().and_then(|x| x.to_str()) else {
+                    continue;
+                };
+                changed_content.push(ChangedContent::File(
+                    path.to_path_buf(),
+                    extension.to_owned(),
+                ))
             }
+        }
+
+        if !changed_content.is_empty() {
+            let candidates = parse_all_blobs(read_all_files(changed_content));
+            self.candidates.par_extend(candidates);
         }
 
         // TODO: BEWARE OF THE DRAGONS
@@ -590,7 +462,7 @@ impl Scanner {
         // }
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
-        // self.globs = optimize_patterns(&self.globs);
+        self.globs = optimize_patterns(&self.globs);
     }
 }
 
@@ -676,7 +548,10 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     result
 }
 
-fn setup_the_world(sources: Sources) -> Option<WalkBuilder> {
+fn create_walker(
+    sources: Sources,
+    mtimes: Arc<Mutex<FxHashMap<PathBuf, SystemTime>>>,
+) -> Option<WalkBuilder> {
     let mut roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
 
@@ -734,7 +609,59 @@ fn setup_the_world(sources: Sources) -> Option<WalkBuilder> {
     let mut roots = roots.into_iter();
     let first_root = roots.next()?;
 
-    let mut builder = create_walk_builder(first_root);
+    let mut builder = WalkBuilder::new(first_root);
+
+    // Scan hidden files / directories
+    builder.hidden(false);
+
+    // Don't respect global gitignore files
+    builder.git_global(false);
+
+    // By default, allow .gitignore files to be used regardless of whether or not
+    // a .git directory is present. This is an optimization for when projects
+    // are first created and may not be in a git repo yet.
+    builder.require_git(false);
+
+    // Don't descend into .git directories inside the root folder
+    // This is necessary when `root` contains the `.git` dir.
+    builder.filter_entry(|entry| entry.file_name() != ".git");
+
+    // If we are in a git repo then require it to ensure that only rules within
+    // the repo are used. For example, we don't want to consider a .gitignore file
+    // in the user's home folder if we're in a git repo.
+    //
+    // The alternative is using a call like `.parents(false)` but that will
+    // prevent looking at parent directories for .gitignore files from within
+    // the repo and that's not what we want.
+    //
+    // For example, in a project with this structure:
+    //
+    // home
+    // .gitignore
+    //  my-project
+    //   .gitignore
+    //   apps
+    //     .gitignore
+    //     web
+    //       {root}
+    //
+    // We do want to consider all .gitignore files listed:
+    // - home/.gitignore
+    // - my-project/.gitignore
+    // - my-project/apps/.gitignore
+    //
+    // However, if a repo is initialized inside my-project then only the following
+    // make sense for consideration:
+    // - my-project/.gitignore
+    // - my-project/apps/.gitignore
+    //
+    // Setting the require_git(true) flag conditionally allows us to do this.
+    for parent in first_root.ancestors() {
+        if parent.join(".git").exists() {
+            builder.require_git(true);
+            break;
+        }
+    }
 
     // Add other roots
     for root in roots {
@@ -760,6 +687,31 @@ fn setup_the_world(sources: Sources) -> Option<WalkBuilder> {
         let ignore = ignore_builder.build().unwrap();
         builder.add_gitignore(ignore);
     }
+
+    // Setup filter based on changed files
+    let mtimes = Arc::clone(&mtimes);
+    builder.filter_entry({
+        move |entry| {
+            let current_time = match entry.metadata() {
+                Ok(metadata) => metadata.modified().unwrap_or(SystemTime::now()),
+                Err(_) => SystemTime::now(),
+            };
+
+            let mut mtimes = mtimes.lock().unwrap();
+            let previous_time = mtimes.insert(entry.clone().into_path(), current_time);
+
+            match previous_time {
+                // Time has changed, so we need to re-scan the entry
+                Some(prev) if prev != current_time => true,
+
+                // Entry was in the cache, no need to re-scan
+                Some(_) => false,
+
+                // Entry didn't exist before, so we need to scan it
+                None => true,
+            }
+        }
+    });
 
     Some(builder)
 }
