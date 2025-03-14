@@ -44,11 +44,10 @@ mod scanner {
             .collect();
 
         // Base source for auto-content detection
-        let mut all_sources = vec![PublicSourceEntry {
-            base: base.clone(),
-            pattern: "**/*".to_string(),
-            negated: false,
-        }];
+        let mut all_sources = vec![PublicSourceEntry::from_pattern(
+            base.clone().into(),
+            "@source '**/*'",
+        )];
         all_sources.extend(sources);
 
         let mut scanner = Scanner::new(all_sources);
@@ -522,16 +521,8 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry {
-                base: dir.join("project-a").to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
-            PublicSourceEntry {
-                base: dir.join("project-b").to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
+            PublicSourceEntry::from_pattern(dir.join("project-a"), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(dir.join("project-b"), "@source '**/*'"),
         ];
 
         let mut scanner = Scanner::new(sources);
@@ -740,14 +731,13 @@ mod scanner {
             ],
         );
 
-        let sources = vec![PublicSourceEntry {
-            base: dir
-                .join("home/project/apps/web")
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.join("home/project/apps/web")
                 .to_string_lossy()
-                .to_string(),
-            pattern: "**/*".to_owned(),
-            negated: false,
-        }];
+                .to_string()
+                .into(),
+            "@source '**/*'",
+        )];
 
         let candidates = Scanner::new(sources.clone()).scan();
 
@@ -837,16 +827,8 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*.html".to_owned(),
-                negated: false,
-            },
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "src/ignore-me.html".to_owned(),
-                negated: true,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source not 'src/ignore-me.html'"),
         ];
 
         let candidates = Scanner::new(sources.clone()).scan();
@@ -866,18 +848,11 @@ mod scanner {
         );
 
         let sources = vec![
-            // @source "**/*.html"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*.html".to_owned(),
-                negated: false,
-            },
-            // @source not "src/ignored-by-source-not.html"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "src/ignored-by-source-not.html".to_owned(),
-                negated: true,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(
+                dir.clone(),
+                "@source not 'src/ignored-by-source-not.html'",
+            ),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
@@ -933,14 +908,10 @@ mod scanner {
         // Create files
         create_files_in(&dir, &[("foo.styl", "content-['foo.styl']")]);
 
-        let sources = vec![
-            // @source "**/*"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
-        ];
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )];
 
         let mut scanner = Scanner::new(sources.clone());
 
@@ -949,18 +920,8 @@ mod scanner {
 
         // Explicitly allow `.styl` files
         let sources = vec![
-            // @source "**/*"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
-            // @source "./*.styl"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "./*.styl".to_owned(),
-                negated: false,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '*.styl'"),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
@@ -983,14 +944,10 @@ mod scanner {
             ],
         );
 
-        let sources = vec![
-            // @source "**/*"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
-        ];
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )];
 
         let mut scanner = Scanner::new(sources.clone());
 
@@ -998,18 +955,8 @@ mod scanner {
         assert!(candidates.is_empty());
 
         let sources = vec![
-            // @source "**/*"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*".to_owned(),
-                negated: false,
-            },
-            // @source "./*.html"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "*.html".to_owned(),
-                negated: false,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './*.html'"),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
@@ -1040,14 +987,7 @@ mod scanner {
         );
 
         // Default auto source detection
-        let sources = vec![
-            // @source "./"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "./".to_owned(),
-                negated: false,
-            },
-        ];
+        let sources = vec![PublicSourceEntry::from_pattern(dir.clone(), "@source './'")];
 
         let mut scanner = Scanner::new(sources.clone());
 
@@ -1056,14 +996,10 @@ mod scanner {
 
         // Explicitly listing all `*.html` files, should not include `node_modules` because it's
         // ignored
-        let sources = vec![
-            // @source "**/*.html"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*.html".to_owned(),
-                negated: false,
-            },
-        ];
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*.html'",
+        )];
 
         let mut scanner = Scanner::new(sources.clone());
         let candidates = scanner.scan();
@@ -1110,18 +1046,8 @@ mod scanner {
         // Explicitly listing all `*.html` files, should not include `node_modules` because it's
         // ignored
         let sources = vec![
-            // @source "./"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "./".to_owned(),
-                negated: false,
-            },
-            // @source "./node_modules/my-ui-lib"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "./node_modules/my-ui-lib".to_owned(),
-                negated: false,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './node_modules/my-ui-lib'"),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
