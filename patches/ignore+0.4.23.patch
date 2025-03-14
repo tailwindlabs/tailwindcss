@@ -1,0 +1,13 @@
+diff --git a/src/walk.rs b/src/walk.rs
+index d6ea9c2..00b6826 100644
+@@ -670,6 +666,10 @@ impl WalkBuilder {
+         errs.into_error_option()
+     }
+ 
++    pub fn add_gitignore(&mut self, gi: Gitignore) {
++        self.ig_builder.add_ignore(gi);
++    }
++
+     /// Add a custom ignore file name
+     ///
+     /// These ignore files have higher precedence than all other ignore files.
