@@ -599,6 +599,7 @@ impl Scanner {
         // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
         // parent is already in the list of roots.
         let roots: Vec<&PathBuf> = roots.into_iter().collect();
+        dbg!(&roots);
         // let parents = roots.clone();
         // roots.retain(|root| {
         //     let mut parent = root.parent();
