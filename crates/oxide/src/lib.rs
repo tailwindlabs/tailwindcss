@@ -95,6 +95,28 @@ pub struct PublicSourceEntry {
     pub negated: bool,
 }
 
+impl PublicSourceEntry {
+    pub fn from_pattern(dir: PathBuf, pattern: &str) -> Self {
+        let mut parts = pattern.split_whitespace();
+        let _ = parts.next().unwrap_or_default();
+        let not_or_pattern = parts.next().unwrap_or_default();
+        if not_or_pattern == "not" {
+            let pattern = parts.next().unwrap_or_default();
+            return Self {
+                base: dir.to_string_lossy().into(),
+                pattern: pattern[1..pattern.len() - 1].to_string(),
+                negated: true,
+            };
+        }
+
+        Self {
+            base: dir.to_string_lossy().into(),
+            pattern: not_or_pattern[1..not_or_pattern.len() - 1].to_string(),
+            negated: false,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum SourceEntry {
     /// Auto source detection
@@ -548,68 +570,68 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     fn check_for_new_files(&mut self) {
-        let current_mtimes = self
-            .dirs
-            .par_iter()
-            .map(|path| {
-                fs::metadata(path)
-                    .and_then(|m| m.modified())
-                    .unwrap_or(SystemTime::now())
-            })
-            .collect::<Vec<_>>();
-
-        let mut modified_dirs: Vec<PathBuf> = vec![];
-
-        // Check all directories to see if they were modified
-        for (idx, path) in self.dirs.iter().enumerate() {
-            let current_time = current_mtimes[idx];
-            let previous_time = self.mtimes.insert(path.clone(), current_time);
-
-            let should_scan = match previous_time {
-                // Time has changed, so we need to re-scan the file
-                Some(prev) if prev != current_time => true,
-
-                // File was in the cache, no need to re-scan
-                Some(_) => false,
-
-                // File didn't exist before, so we need to scan it
-                None => true,
-            };
-
-            if should_scan {
-                modified_dirs.push(path.clone());
-            }
-        }
-
-        // Scan all modified directories for their immediate files
-        let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
-        while !modified_dirs.is_empty() {
-            let new_entries = modified_dirs
-                .iter()
-                .flat_map(|dir| read_dir(dir, Some(1), vec![]))
-                .map(|entry| entry.path().to_owned())
-                .filter(|path| !known.contains(path))
-                .collect::<Vec<_>>();
-
-            modified_dirs.clear();
-
-            for path in new_entries {
-                if !self.sources.is_allowed(path.clone()) {
-                    continue;
-                }
-
-                if path.is_file() {
-                    known.insert(path.clone());
-                    self.files.push(path);
-                } else if path.is_dir() {
-                    known.insert(path.clone());
-                    self.dirs.push(path.clone());
-
-                    // Recursively scan the new directory for files
-                    modified_dirs.push(path);
-                }
-            }
-        }
+        // let current_mtimes = self
+        //     .dirs
+        //     .par_iter()
+        //     .map(|path| {
+        //         fs::metadata(path)
+        //             .and_then(|m| m.modified())
+        //             .unwrap_or(SystemTime::now())
+        //     })
+        //     .collect::<Vec<_>>();
+        //
+        // let mut modified_dirs: Vec<PathBuf> = vec![];
+        //
+        // // Check all directories to see if they were modified
+        // for (idx, path) in self.dirs.iter().enumerate() {
+        //     let current_time = current_mtimes[idx];
+        //     let previous_time = self.mtimes.insert(path.clone(), current_time);
+        //
+        //     let should_scan = match previous_time {
+        //         // Time has changed, so we need to re-scan the file
+        //         Some(prev) if prev != current_time => true,
+        //
+        //         // File was in the cache, no need to re-scan
+        //         Some(_) => false,
+        //
+        //         // File didn't exist before, so we need to scan it
+        //         None => true,
+        //     };
+        //
+        //     if should_scan {
+        //         modified_dirs.push(path.clone());
+        //     }
+        // }
+        //
+        // // Scan all modified directories for their immediate files
+        // let mut known = FxHashSet::from_iter(self.files.iter().chain(self.dirs.iter()).cloned());
+        // while !modified_dirs.is_empty() {
+        //     let new_entries = modified_dirs
+        //         .iter()
+        //         .flat_map(|dir| read_dir(dir, Some(1)))
+        //         .map(|entry| entry.path().to_owned())
+        //         .filter(|path| !known.contains(path))
+        //         .collect::<Vec<_>>();
+        //
+        //     modified_dirs.clear();
+        //
+        //     for path in new_entries {
+        //         if !self.sources.is_allowed(path.clone()) {
+        //             continue;
+        //         }
+        //
+        //         if path.is_file() {
+        //             known.insert(path.clone());
+        //             self.files.push(path);
+        //         } else if path.is_dir() {
+        //             known.insert(path.clone());
+        //             self.dirs.push(path.clone());
+        //
+        //             // Recursively scan the new directory for files
+        //             modified_dirs.push(path);
+        //         }
+        //     }
+        // }
     }
 
     #[tracing::instrument(skip_all)]
@@ -620,9 +642,13 @@ impl Scanner {
 
         let mut roots: FxHashSet<&PathBuf> = FxHashSet::default();
         let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
+
+        let mut auto_content_roots = FxHashSet::default();
+
         for source in self.sources.iter() {
             match source {
                 SourceEntry::Auto { base } => {
+                    auto_content_roots.insert(base);
                     roots.insert(base);
                 }
                 SourceEntry::IgnoredAuto { base } => {
@@ -640,52 +666,60 @@ impl Scanner {
                 }
             }
         }
+        for root in &roots {
+            // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+            self.globs.push(GlobEntry {
+                base: root.to_string_lossy().into(),
+                pattern: "*".into(),
+            });
+        }
 
         // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
         // parent is already in the list of roots.
-        let mut roots: Vec<&PathBuf> = roots.into_iter().collect();
-        let parents = roots.clone();
-        roots.retain(|root| {
-            let mut parent = root.parent();
-            while let Some(p) = parent {
-                let path_buf = p.to_path_buf();
-                if parents.contains(&&path_buf) {
-                    return false;
-                }
-                parent = p.parent();
-            }
-            true
-        });
+        let roots: Vec<&PathBuf> = roots.into_iter().collect();
+        dbg!(&roots);
+        // let parents = roots.clone();
+        // roots.retain(|root| {
+        //     let mut parent = root.parent();
+        //     while let Some(p) = parent {
+        //         let path_buf = p.to_path_buf();
+        //         if parents.contains(&&path_buf) {
+        //             return false;
+        //         }
+        //         parent = p.parent();
+        //     }
+        //     true
+        // });
 
         // Leftover roots
         let roots = roots.iter().collect::<Vec<_>>();
-        dbg!(&roots);
 
         let mut roots = roots.into_iter();
         let Some(first_root) = roots.next() else {
             return;
         };
 
-        let mut builder = create_walk_builder(first_root, vec![]);
+        let mut builder = create_walk_builder(first_root);
 
         // Add other roots
         for root in roots {
             builder.add(root);
         }
 
-        // 1. Create auto source detection rules
         builder.add_gitignore(AUTO_SOURCE_DETECTION_RULES.clone());
-
-        // 2. Apply default `.gitignore` rules
-        // 3. Apply overrides from `@source`
 
         // Add all additional gitignore rules
         for (base, patterns) in ignores {
             let mut ignore_builder = GitignoreBuilder::new("");
             for pattern in patterns {
-                ignore_builder
-                    .add_line(Some(base.clone()), &pattern)
-                    .unwrap();
+                // So... we have to combine patterns with the base path and make them absolute. For
+                // some reason this is not handled by the `ignore` crate. (I'm pretty sure we might
+                // be doing something wrong as well. But this solves it, for now.)
+                let absolute_pattern = match pattern.strip_prefix("!") {
+                    Some(pattern) => format!("!{}/{}", base.to_string_lossy(), pattern),
+                    None => format!("{}/{}", base.to_string_lossy(), pattern),
+                };
+                ignore_builder.add_line(None, &absolute_pattern).unwrap();
             }
             let ignore = ignore_builder.build().unwrap();
             builder.add_gitignore(ignore);
@@ -693,62 +727,20 @@ impl Scanner {
 
         for entry in builder.build().filter_map(Result::ok) {
             let path = entry.path();
+            if path.is_dir() {
+                self.dirs.push(path.to_owned());
+            }
             if path.is_file() {
                 self.files.push(path.to_owned());
             }
         }
 
-        //
-        // // Auto source detection
-        // for source in self.sources.iter() {
-        //     let SourceEntry::Auto { base } = source else {
-        //         continue;
-        //     };
-        //
-        //     // Insert a glob for the base path, so we can see new files/folders in the directory itself.
-        //     self.globs.push(GlobEntry {
-        //         base: base.to_string_lossy().into(),
-        //         pattern: "*".into(),
-        //     });
-        //
-        //     // Detect all files/folders in the directory
-        //     let detect_sources = DetectSources::new(base.to_path_buf(), &self.sources);
-        //
-        //     let (files, globs, dirs) = detect_sources.detect();
-        //     self.files.extend(files);
-        //     self.globs.extend(globs);
-        //     self.dirs.extend(dirs);
-        // }
-        //
-        // // TODO: figure out how to do the `emit_parent_glob` part:
-        // // Explicit patterns
-        // for source in self.sources.iter() {
-        //     let SourceEntry::Pattern { base, pattern } = source else {
-        //         continue;
-        //     };
-        //
-        //     self.globs.push(source.into());
-        //
-        //     for entry in resolve_paths(base, vec![pattern]) {
-        //         let Some(file_type) = entry.file_type() else {
-        //             continue;
-        //         };
-        //
-        //         let file_path = entry.clone().into_path();
-        //         if file_type.is_dir() {
-        //             self.dirs.push(file_path.clone());
-        //         }
-        //
-        //         if !self.sources.is_allowed(file_path.clone()) {
-        //             continue;
-        //         }
-        //
-        //         if file_type.is_file() {
-        //             self.files.push(entry.into_path());
-        //         }
-        //     }
-        // }
-        //
+        // TODO: BEWARE OF THE DRAGONS
+        for root in auto_content_roots {
+            let globs = resolve_globs(root.to_path_buf(), &self.dirs);
+            self.globs.extend(globs);
+        }
+
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         self.globs = optimize_patterns(&self.globs);
     }

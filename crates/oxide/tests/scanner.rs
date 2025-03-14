@@ -24,7 +24,7 @@ mod scanner {
 
     fn scan_with_globs(
         paths_with_content: &[(&str, &str)],
-        globs: Vec<&str>,
+        source_directives: Vec<&str>,
     ) -> (Vec<String>, Vec<String>) {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
@@ -38,16 +38,9 @@ mod scanner {
         let base = format!("{}", dir.display()).replace('\\', "/");
 
         // Resolve all content paths for the (temporary) current working directory
-        let sources: Vec<PublicSourceEntry> = globs
+        let sources: Vec<PublicSourceEntry> = source_directives
             .iter()
-            .map(|str| PublicSourceEntry {
-                base: base.clone(),
-                pattern: match str.strip_prefix("!") {
-                    Some(x) => x.to_string(),
-                    None => str.to_string(),
-                },
-                negated: str.starts_with("!"),
-            })
+            .map(|str| PublicSourceEntry::from_pattern(base.clone().into(), str))
             .collect();
 
         // Base source for auto-content detection
@@ -365,7 +358,7 @@ mod scanner {
     fn it_should_be_possible_to_scan_in_the_parent_directory() {
         let candidates = scan_with_globs(
             &[("foo/bar/baz/foo.html", "content-['foo.html']")],
-            vec!["./foo/bar/baz/.."],
+            vec!["@source './foo/bar/baz/..'"],
         )
         .1;
 
@@ -375,8 +368,11 @@ mod scanner {
     #[test]
     fn it_should_scan_files_without_extensions() {
         // These look like folders, but they are files
-        let candidates =
-            scan_with_globs(&[("my-file", "content-['my-file']")], vec!["./my-file"]).1;
+        let candidates = scan_with_globs(
+            &[("my-file", "content-['my-file']")],
+            vec!["@source './my-file'"],
+        )
+        .1;
 
         assert_eq!(candidates, vec!["content-['my-file']"]);
     }
@@ -395,7 +391,10 @@ mod scanner {
                     "content-['my-folder.bin/foo.html']",
                 ),
             ],
-            vec!["./my-folder.templates", "./my-folder.bin"],
+            vec![
+                "@source './my-folder.templates'",
+                "@source './my-folder.bin'",
+            ],
         )
         .1;
 
@@ -416,7 +415,7 @@ mod scanner {
                 // detection.
                 ("foo.styl", "content-['foo.styl']"),
             ],
-            vec!["*.styl"],
+            vec!["@source '*.styl'"],
         )
         .1;
 
@@ -434,7 +433,7 @@ mod scanner {
                 ("app/[[...slug]]/page.styl", "content-['[[...slug]]']"),
                 ("app/(theme)/page.styl", "content-['(theme)']"),
             ],
-            vec!["./**/*.{styl}"],
+            vec!["@source './**/*.{styl}'"],
         )
         .1;
 
@@ -498,7 +497,7 @@ mod scanner {
                 ("foo.styl", "content-['foo.styl']"),
             ],
             // But explicitly including them should still work
-            vec!["foo.styl"],
+            vec!["@source 'foo.styl'"],
         )
         .1;
 
@@ -666,7 +665,12 @@ mod scanner {
                 ),
                 ("dist/out.html", "content-['dist/out.html']"),
             ],
-            vec!["!src/index.ts", "!**/*.{jsx,tsx}", "!src/utils", "!dist"],
+            vec![
+                "@source not 'src/index.ts'",
+                "@source not '**/*.{jsx,tsx}'",
+                "@source not 'src/utils'",
+                "@source not 'dist'",
+            ],
         );
 
         assert_eq!(
@@ -1069,18 +1073,8 @@ mod scanner {
         // Explicitly list the `node_modules/my-ui-lib`
         //
         let sources = vec![
-            // @source "**/*.html"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "**/*.html".to_owned(),
-                negated: false,
-            },
-            // @source "node_modules/my-ui-lib"
-            PublicSourceEntry {
-                base: dir.to_string_lossy().to_string(),
-                pattern: "node_modules/my-ui-lib".to_owned(),
-                negated: false,
-            },
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source 'node_modules/my-ui-lib'"),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
