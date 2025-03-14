@@ -3,7 +3,6 @@ use crate::scanner::allowed_paths::AUTO_SOURCE_DETECTION_RULES;
 use bexpand::Expression;
 use bstr::ByteSlice;
 use extractor::{Extracted, Extractor};
-use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
 use ignore::gitignore::GitignoreBuilder;
@@ -16,7 +15,6 @@ use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::fs;
 use std::path::PathBuf;
-use std::str::FromStr;
 use std::sync;
 use std::time::SystemTime;
 use tracing::event;
@@ -158,19 +156,6 @@ pub enum SourceEntry {
     IgnoredPattern { base: PathBuf, pattern: String },
 }
 
-impl SourceEntry {
-    /// Compute the full glob pattern for the source entry
-    fn pattern(&self) -> String {
-        use SourceEntry::*;
-        match self {
-            Auto { base } | IgnoredAuto { base } => format!("{}/**/*", base.to_string_lossy()),
-            Pattern { base, pattern } | IgnoredPattern { base, pattern } => {
-                format!("{}/{}", base.to_string_lossy().replace("\\", "/"), pattern)
-            }
-        }
-    }
-}
-
 impl From<SourceEntry> for GlobEntry {
     fn from(value: SourceEntry) -> Self {
         match value {
@@ -220,79 +205,16 @@ impl From<&SourceEntry> for GlobEntry {
 #[derive(Debug, Clone, Default)]
 pub struct Sources {
     sources: Vec<SourceEntry>,
-
-    // A collection of pre-computed ignore patterns
-    pre_computed_ignore_patterns: Vec<String>,
-
-    // A collection of pre-computed patterns
-    pre_computed_patterns: Vec<String>,
 }
 
 impl Sources {
     fn new(sources: Vec<SourceEntry>) -> Self {
-        let mut pre_computed_ignore_patterns = vec![];
-        let mut pre_computed_patterns = vec![];
-        for source in &sources {
-            match source {
-                SourceEntry::IgnoredAuto { .. } => {
-                    // // Is the folder directly
-                    // if *base == path {
-                    //     return true;
-                    // }
-
-                    pre_computed_ignore_patterns.push(source.pattern());
-                }
-                SourceEntry::IgnoredPattern { .. } => {
-                    pre_computed_ignore_patterns.push(source.pattern());
-                }
-
-                SourceEntry::Auto { .. } | SourceEntry::Pattern { .. } => {
-                    pre_computed_patterns.push(source.pattern())
-                }
-            }
-        }
-
-        Self {
-            sources,
-            pre_computed_ignore_patterns,
-            pre_computed_patterns,
-        }
+        Self { sources }
     }
 
     fn iter(&self) -> impl Iterator<Item = &SourceEntry> {
         self.sources.iter()
     }
-
-    fn is_allowed(&self, path: PathBuf) -> bool {
-        let Some(file_path_str) = path.to_str() else {
-            return false;
-        };
-
-        let file_path_str = file_path_str.replace('\\', "/");
-
-        self.pre_computed_patterns
-            .iter()
-            .any(|pattern| glob_match(pattern, file_path_str.clone()))
-            && !self
-                .pre_computed_ignore_patterns
-                .iter()
-                .any(|pattern| glob_match(pattern, file_path_str.clone()))
-    }
-
-    // fn is_ignored(&self, path: PathBuf) -> bool {
-    //     let Some(file_path_str) = path.to_str() else {
-    //         return false;
-    //     };
-    //
-    //     let file_path_str = file_path_str.replace('\\', "/");
-    //     for pattern in &self.pre_computed_ignore_patterns {
-    //         if glob_match(pattern, file_path_str.clone()) {
-    //             return true;
-    //         }
-    //     }
-    //
-    //     false
-    // }
 
     fn is_empty(&self) -> bool {
         self.sources.is_empty()
@@ -677,7 +599,6 @@ impl Scanner {
         // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
         // parent is already in the list of roots.
         let roots: Vec<&PathBuf> = roots.into_iter().collect();
-        dbg!(&roots);
         // let parents = roots.clone();
         // roots.retain(|root| {
         //     let mut parent = root.parent();
