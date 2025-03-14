@@ -1,17 +1,10 @@
 use crate::scanner::allowed_paths::is_allowed_content_path;
 use crate::GlobEntry;
-use crate::Sources;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
 use std::path::PathBuf;
 use std::sync;
 use walkdir::WalkDir;
-
-#[derive(Debug)]
-pub struct DetectSources<'a> {
-    base: PathBuf,
-    sources: &'a Sources,
-}
 
 static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
     include_str!("fixtures/template-extensions.txt")
@@ -23,48 +16,6 @@ static KNOWN_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new
         .filter(|x| !x.is_empty())
         .collect()
 });
-
-impl<'a> DetectSources<'a> {
-    pub fn new(base: PathBuf, sources: &'a Sources) -> Self {
-        Self { base, sources }
-    }
-
-    pub fn detect(&self) -> (Vec<PathBuf>, Vec<GlobEntry>, Vec<PathBuf>) {
-        let (files, dirs) = self.resolve_files();
-        let globs = self.resolve_globs(&dirs);
-
-        (files, globs, dirs)
-    }
-
-    fn resolve_files(&self) -> (Vec<PathBuf>, Vec<PathBuf>) {
-        // let mut files: Vec<PathBuf> = vec![];
-        // let mut dirs: Vec<PathBuf> = vec![];
-        //
-        // for entry in resolve_allowed_paths(&self.base) {
-        //     let Some(file_type) = entry.file_type() else {
-        //         continue;
-        //     };
-        //
-        //     let file_path = entry.clone().into_path();
-        //     if !self.sources.is_allowed(file_path) {
-        //         continue;
-        //     }
-        //
-        //     if file_type.is_file() {
-        //         files.push(entry.into_path());
-        //     } else if file_type.is_dir() {
-        //         dirs.push(entry.into_path());
-        //     }
-        // }
-        //
-        // (files, dirs)
-        (vec![], vec![])
-    }
-
-    fn resolve_globs(&self, dirs: &Vec<PathBuf>) -> Vec<GlobEntry> {
-        resolve_globs(self.base.clone(), dirs)
-    }
-}
 
 pub fn resolve_globs(base: PathBuf, dirs: &Vec<PathBuf>) -> Vec<GlobEntry> {
     let allowed_paths = FxHashSet::from_iter(dirs);
