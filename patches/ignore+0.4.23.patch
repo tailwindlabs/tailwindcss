@@ -14,7 +14,7 @@ index b302943..6b33791 100644
 -            .or(m_explicit)
 +
 +        let order = [
-+            // Global gitignores
++            // Global gitignore
 +            &m_global,
 +            // .git/info/exclude
 +            &m_gi_exclude,
