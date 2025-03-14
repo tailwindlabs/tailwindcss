@@ -24,15 +24,14 @@ static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(||
 });
 
 static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
-    sync::LazyLock::new(|| vec![".git"]);
+    sync::LazyLock::new(|| vec![".git", "node_modules"]);
 
 pub static AUTO_SOURCE_DETECTION_RULES: sync::LazyLock<Gitignore> = sync::LazyLock::new(|| {
     let mut builder = GitignoreBuilder::new("");
 
-    for line in IGNORED_CONTENT_DIRS.iter() {
-        builder.add_line(None, line).unwrap();
-    }
-
+    builder
+        .add_line(None, &format!("{{{}}}", IGNORED_CONTENT_DIRS.join(",")))
+        .unwrap();
     builder
         .add_line(None, &format!("*.{{{}}}", IGNORED_EXTENSIONS.join(",")))
         .unwrap();
