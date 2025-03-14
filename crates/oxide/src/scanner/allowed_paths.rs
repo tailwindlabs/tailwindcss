@@ -59,7 +59,7 @@ pub fn read_dir(
         .filter_map(Result::ok)
 }
 
-fn create_walk_builder(root: &Path, additional_globs: Vec<&str>) -> WalkBuilder {
+pub fn create_walk_builder(root: &Path, additional_globs: Vec<&str>) -> WalkBuilder {
     let mut builder = WalkBuilder::new(root);
 
     // Scan hidden files / directories

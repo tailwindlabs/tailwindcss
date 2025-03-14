@@ -7,9 +7,10 @@ use extractor::{Extracted, Extractor};
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use glob::optimize_patterns;
+use ignore::overrides::OverrideBuilder;
 use paths::Path;
 use rayon::prelude::*;
-use scanner::allowed_paths::read_dir;
+use scanner::allowed_paths::{create_walk_builder, read_dir};
 use std::borrow::Cow;
 use std::fs;
 use std::path::PathBuf;
@@ -526,7 +527,9 @@ impl Scanner {
             return;
         }
 
+        let start = std::time::Instant::now();
         self.scan_sources();
+        eprintln!("Scanned sources in {:?}", start.elapsed());
 
         self.ready = true;
     }
@@ -601,6 +604,94 @@ impl Scanner {
     fn scan_sources(&mut self) {
         if self.sources.is_empty() {
             return;
+        }
+
+        // TODO: Playground, can we setup the walker in such a way that we only scan everything
+        // once and add additional paths to scan (based on sources) and add additional ignore
+        // rules (by explicitly ignoring sources and explicitly including sources).
+        {
+            dbg!(self.sources.iter().collect::<Vec<_>>());
+            let start = std::time::Instant::now();
+            let mut roots: FxHashSet<&PathBuf> = FxHashSet::default();
+            let mut ignores: FxHashMap<&PathBuf, FxHashSet<String>> = FxHashMap::default();
+            for source in self.sources.iter() {
+                match source {
+                    SourceEntry::Auto { base } => {
+                        roots.insert(base);
+                        ignores.entry(base).or_default().insert("!**/*".to_string());
+                    }
+                    SourceEntry::IgnoredAuto { base } => {
+                        ignores.entry(base).or_default().insert("**/*".to_string());
+                    }
+                    SourceEntry::Pattern { base, pattern } => {
+                        roots.insert(base);
+                        ignores
+                            .entry(base)
+                            .or_default()
+                            .insert(format!("!{}", pattern));
+                    }
+                    SourceEntry::IgnoredPattern { base, pattern } => {
+                        ignores.entry(base).or_default().insert(pattern.to_string());
+                    }
+                }
+            }
+
+            // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
+            // parent is already in the list of roots.
+            let mut roots: Vec<&PathBuf> = roots.into_iter().collect();
+            let parents = roots.clone();
+            roots.retain(|root| {
+                let mut parent = root.parent();
+                while let Some(p) = parent {
+                    let path_buf = p.to_path_buf();
+                    if parents.contains(&&path_buf) {
+                        return false;
+                    }
+                    parent = p.parent();
+                }
+                true
+            });
+
+            // Leftover roots
+            let roots = roots.iter().collect::<Vec<_>>();
+            dbg!(&roots, &ignores);
+
+            let mut roots = roots.into_iter();
+            let Some(first_root) = roots.next() else {
+                return;
+            };
+
+            let mut builder = create_walk_builder(first_root, vec![]);
+
+            // Add other roots
+            for root in roots {
+                builder.add(root);
+            }
+
+            // Add all additional gitignore rules
+            for (base, patterns) in ignores {
+                let mut ov = OverrideBuilder::new(base);
+
+                for pattern in patterns {
+                    ov.add(&pattern).unwrap();
+                    if let Ok(ignore) = ov.build() {
+                        // TODO: I think this overrides(…) literally overrides the previous rules.
+                        // So I wonder if we can add these lines to the default ignore builder
+                        // instead somehow.
+                        //
+                        // CHEAT CODE IDEA: could we generate some files instead and list them via
+                        // `builder.add_ignore(file_path)`?
+                        builder.overrides(ignore);
+                    }
+                }
+            }
+            eprintln!("Prepared walker in {:?}", start.elapsed());
+
+            let start = std::time::Instant::now();
+            for entry in builder.build().filter_map(Result::ok) {
+                dbg!(entry.into_path());
+            }
+            eprintln!("Scanning sources efficiently in {:?}", start.elapsed());
         }
 
         // Auto source detection
