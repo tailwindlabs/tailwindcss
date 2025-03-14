@@ -1,20 +1,15 @@
-use crate::glob::optimize_patterns;
 use crate::glob::optimize_public_source_entry;
 use crate::scanner::allowed_paths::AUTO_SOURCE_DETECTION_RULES;
 use bexpand::Expression;
 use bstr::ByteSlice;
 use extractor::{Extracted, Extractor};
 use fxhash::{FxHashMap, FxHashSet};
-use ignore::gitignore::GitignoreBuilder;
-use ignore::WalkBuilder;
+use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use paths::Path;
 use rayon::prelude::*;
-use std::collections::BTreeMap;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
-use std::sync;
-use std::sync::Arc;
-use std::sync::Mutex;
+use std::sync::{self, Arc, Mutex};
 use std::time::SystemTime;
 use tracing::event;
 
@@ -221,6 +216,9 @@ pub struct Scanner {
     /// Content sources
     walker: Option<WalkBuilder>,
 
+    /// All changed content that we have to parse
+    changed_content: Vec<ChangedContent>,
+
     /// All files that we have to scan
     files: Vec<PathBuf>,
 
@@ -339,6 +337,8 @@ impl Scanner {
         self.scan_sources();
         eprintln!("Scanned sources in {:?}", start.elapsed());
 
+        self.compute_candidates();
+
         let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
         candidates.par_sort_unstable();
 
@@ -425,12 +425,23 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
+    fn compute_candidates(&mut self) {
+        if self.changed_content.is_empty() {
+            return;
+        }
+
+        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
+        let blobs = read_all_files(changed_content);
+        let candidates = parse_all_blobs(blobs);
+
+        self.candidates.par_extend(candidates);
+    }
+
+    #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
         let Some(walker) = &mut self.walker else {
             return;
         };
-
-        let mut changed_content = vec![];
 
         for entry in walker.build().filter_map(Result::ok) {
             let path = entry.path();
@@ -440,19 +451,13 @@ impl Scanner {
             if path.is_file() {
                 self.files.push(path.to_owned());
 
-                let Some(extension) = path.extension().and_then(|x| x.to_str()) else {
-                    continue;
-                };
-                changed_content.push(ChangedContent::File(
-                    path.to_path_buf(),
-                    extension.to_owned(),
-                ))
+                if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
+                    self.changed_content.push(ChangedContent::File(
+                        path.to_path_buf(),
+                        extension.to_owned(),
+                    ))
+                }
             }
-        }
-
-        if !changed_content.is_empty() {
-            let candidates = parse_all_blobs(read_all_files(changed_content));
-            self.candidates.par_extend(candidates);
         }
 
         // TODO: BEWARE OF THE DRAGONS
@@ -462,7 +467,7 @@ impl Scanner {
         // }
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
-        self.globs = optimize_patterns(&self.globs);
+        // self.globs = optimize_patterns(&self.globs);
     }
 }
 
