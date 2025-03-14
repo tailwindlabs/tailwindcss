@@ -592,8 +592,6 @@ impl Scanner {
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         // self.globs = optimize_patterns(&self.globs);
     }
-
-    fn setup_the_world(&self) {}
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
@@ -705,8 +703,8 @@ fn setup_the_world(sources: Sources) -> Option<WalkBuilder> {
             }
         }
     }
-    for _root in &roots {
 
+    for _root in &roots {
         // Insert a glob for the base path, so we can see new files/folders in the directory itself.
         // self.globs.push(GlobEntry {
         //     base: root.to_string_lossy().into(),
