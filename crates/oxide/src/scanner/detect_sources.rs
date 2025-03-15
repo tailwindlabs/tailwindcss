@@ -1,4 +1,3 @@
-use crate::scanner::allowed_paths::is_allowed_content_path;
 use crate::GlobEntry;
 use fxhash::FxHashSet;
 use std::cmp::Ordering;
@@ -152,16 +151,16 @@ pub fn resolve_globs(base: PathBuf, dirs: &Vec<PathBuf>) -> Vec<GlobEntry> {
         }
 
         // Handle allowed content paths
-        if is_allowed_content_path(entry.path())
-            && allowed_paths.contains(&entry.path().to_path_buf())
-        {
-            let path = entry.path();
-
-            // Collect the extension for future use when building globs.
-            if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
-                found_extensions.insert(extension.to_string());
-            }
-        }
+        // if is_allowed_content_path(entry.path())
+        //     && allowed_paths.contains(&entry.path().to_path_buf())
+        // {
+        //     let path = entry.path();
+        //
+        //     // Collect the extension for future use when building globs.
+        //     if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
+        //         found_extensions.insert(extension.to_string());
+        //     }
+        // }
     }
 
     let mut extension_list = found_extensions.into_iter().collect::<Vec<_>>();

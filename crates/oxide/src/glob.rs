@@ -1,8 +1,16 @@
+use crate::PublicSourceEntry;
 use fxhash::{FxHashMap, FxHashSet};
 use std::path::PathBuf;
 use tracing::{event, Level};
 
-use crate::{GlobEntry, PublicSourceEntry};
+#[derive(Debug, Clone, PartialEq)]
+pub struct GlobEntry {
+    /// Base path of the glob
+    pub base: String,
+
+    /// Glob pattern
+    pub pattern: String,
+}
 
 /// Optimize the PublicSourceEntry by trying to move all the static parts of the pattern to the
 /// base of the PublicSourceEntry.
