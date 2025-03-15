@@ -103,13 +103,14 @@ impl Scanner {
         self.scan_sources();
         eprintln!("Scanned sources in {:?}", start.elapsed());
 
-        match self.compute_candidates() {
-            Some(mut candidates) => {
-                candidates.par_sort_unstable();
-                candidates
-            }
-            None => vec![],
+        if self.changed_content.is_empty() {
+            return vec![];
         }
+
+        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
+        let mut candidates = self.scan_content(changed_content);
+        candidates.par_sort_unstable();
+        candidates
     }
 
     #[tracing::instrument(skip_all)]
@@ -161,17 +162,6 @@ impl Scanner {
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
         // self.globs = optimize_patterns(&self.globs);
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn compute_candidates(&mut self) -> Option<Vec<String>> {
-        if self.changed_content.is_empty() {
-            return None;
-        }
-
-        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-
-        Some(self.scan_content(changed_content))
     }
 
     #[tracing::instrument(skip_all)]
