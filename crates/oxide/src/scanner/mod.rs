@@ -3,7 +3,6 @@ pub mod detect_sources;
 pub mod sources;
 
 use crate::extractor::{Extracted, Extractor};
-use crate::paths::Path;
 use crate::scanner::sources::{
     public_source_entries_to_private_source_entries, PublicSourceEntry, SourceEntry, Sources,
 };
@@ -104,26 +103,28 @@ impl Scanner {
         self.scan_sources();
         eprintln!("Scanned sources in {:?}", start.elapsed());
 
-        self.compute_candidates();
-
-        let mut candidates: Vec<String> = self.candidates.clone().into_par_iter().collect();
-        candidates.par_sort_unstable();
-
-        candidates
+        match self.compute_candidates() {
+            Some(mut candidates) => {
+                candidates.par_sort_unstable();
+                candidates
+            }
+            None => vec![],
+        }
     }
 
     #[tracing::instrument(skip_all)]
     pub fn scan_content(&mut self, changed_content: Vec<ChangedContent>) -> Vec<String> {
         let candidates = parse_all_blobs(read_all_files(changed_content));
 
-        let mut new_candidates = vec![];
-        for candidate in candidates {
-            if self.candidates.contains(&candidate) {
-                continue;
-            }
-            self.candidates.insert(candidate.clone());
-            new_candidates.push(candidate);
-        }
+        // Only compute the new candidates and ignore the ones we already have. This is for
+        // subsequent calls to prevent serializing the entire set of candidates every time.
+        let new_candidates = candidates
+            .into_par_iter()
+            .filter(|candidate| !self.candidates.contains(candidate))
+            .collect::<Vec<_>>();
+
+        // Track new candidates for subsequent calls
+        self.candidates.par_extend(new_candidates.clone());
 
         new_candidates
     }
@@ -171,37 +172,38 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     pub fn get_files(&mut self) -> Vec<String> {
-        let start = std::time::Instant::now();
         self.scan_sources();
-        eprintln!("Scanned sources in {:?}", start.elapsed());
 
         self.files
             .par_iter()
-            .filter_map(|x| Path::from(x.clone()).canonicalize().ok())
-            .map(|x| x.to_string())
+            .filter_map(|x| x.clone().into_os_string().into_string().ok())
             .collect()
     }
 
     #[tracing::instrument(skip_all)]
     pub fn get_globs(&mut self) -> Vec<GlobEntry> {
-        let start = std::time::Instant::now();
         self.scan_sources();
-        eprintln!("Scanned sources in {:?}", start.elapsed());
+
+        // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+        // self.globs.push(GlobEntry {
+        //     base: root.to_string_lossy().into(),
+        //     pattern: "*".into(),
+        // });
+
+        // TODO: Compute globs
 
         self.globs.clone()
     }
 
     #[tracing::instrument(skip_all)]
-    fn compute_candidates(&mut self) {
+    fn compute_candidates(&mut self) -> Option<Vec<String>> {
         if self.changed_content.is_empty() {
-            return;
+            return None;
         }
 
         let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-        let blobs = read_all_files(changed_content);
-        let candidates = parse_all_blobs(blobs);
 
-        self.candidates.par_extend(candidates);
+        Some(self.scan_content(changed_content))
     }
 
     #[tracing::instrument(skip_all)]
@@ -211,19 +213,20 @@ impl Scanner {
         };
 
         for entry in walker.build().filter_map(Result::ok) {
-            let path = entry.path();
-            if path.is_dir() {
-                self.dirs.push(path.to_owned());
-            }
-            if path.is_file() {
-                self.files.push(path.to_owned());
-
+            let path = entry.into_path();
+            let Ok(metadata) = path.metadata() else {
+                continue;
+            };
+            if metadata.is_dir() {
+                self.dirs.push(path);
+            } else if metadata.is_file() {
                 if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
                     self.changed_content.push(ChangedContent::File(
                         path.to_path_buf(),
                         extension.to_owned(),
                     ))
                 }
+                self.files.push(path);
             }
         }
 
@@ -320,6 +323,11 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     result
 }
 
+/// Create a walker for the given sources to detect all the files that we have to scan.
+///
+/// The `mtimes` map is used to keep track of the last modified time of each file. This is used to
+/// determine if a file or folder has changed since the last scan and we can skip folders that
+/// haven't changed.
 fn create_walker(
     sources: Sources,
     mtimes: Arc<Mutex<FxHashMap<PathBuf, SystemTime>>>,
@@ -349,14 +357,6 @@ fn create_walker(
                 ignores.entry(base).or_default().insert(pattern.to_string());
             }
         }
-    }
-
-    for _root in &roots {
-        // Insert a glob for the base path, so we can see new files/folders in the directory itself.
-        // self.globs.push(GlobEntry {
-        //     base: root.to_string_lossy().into(),
-        //     pattern: "*".into(),
-        // });
     }
 
     // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
