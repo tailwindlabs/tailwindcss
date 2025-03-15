@@ -359,25 +359,6 @@ fn create_walker(
         }
     }
 
-    // PERF: Prevent scanning the same directory multiple times. Get rid of roots which
-    // parent is already in the list of roots.
-    let roots: Vec<&PathBuf> = roots.into_iter().collect();
-    // let parents = roots.clone();
-    // roots.retain(|root| {
-    //     let mut parent = root.parent();
-    //     while let Some(p) = parent {
-    //         let path_buf = p.to_path_buf();
-    //         if parents.contains(&&path_buf) {
-    //             return false;
-    //         }
-    //         parent = p.parent();
-    //     }
-    //     true
-    // });
-
-    // Leftover roots
-    let roots = roots.iter().collect::<Vec<_>>();
-
     let mut roots = roots.into_iter();
     let first_root = roots.next()?;
 
@@ -393,10 +374,6 @@ fn create_walker(
     // a .git directory is present. This is an optimization for when projects
     // are first created and may not be in a git repo yet.
     builder.require_git(false);
-
-    // Don't descend into .git directories inside the root folder
-    // This is necessary when `root` contains the `.git` dir.
-    builder.filter_entry(|entry| entry.file_name() != ".git");
 
     // If we are in a git repo then require it to ensure that only rules within
     // the repo are used. For example, we don't want to consider a .gitignore file
