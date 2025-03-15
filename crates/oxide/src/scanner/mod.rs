@@ -130,6 +130,76 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
+    fn scan_sources(&mut self) {
+        let Some(walker) = &mut self.walker else {
+            return;
+        };
+
+        for entry in walker.build().filter_map(Result::ok) {
+            let path = entry.into_path();
+            let Ok(metadata) = path.metadata() else {
+                continue;
+            };
+            if metadata.is_dir() {
+                self.dirs.push(path);
+            } else if metadata.is_file() {
+                if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
+                    self.changed_content.push(ChangedContent::File(
+                        path.to_path_buf(),
+                        extension.to_owned(),
+                    ))
+                }
+                self.files.push(path);
+            }
+        }
+
+        // TODO: BEWARE OF THE DRAGONS
+        // for root in auto_content_roots {
+        //     let globs = resolve_globs(root.to_path_buf(), &self.dirs);
+        //     self.globs.extend(globs);
+        // }
+
+        // Re-optimize the globs to reduce the number of patterns we have to scan.
+        // self.globs = optimize_patterns(&self.globs);
+    }
+
+    #[tracing::instrument(skip_all)]
+    fn compute_candidates(&mut self) -> Option<Vec<String>> {
+        if self.changed_content.is_empty() {
+            return None;
+        }
+
+        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
+
+        Some(self.scan_content(changed_content))
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub fn get_files(&mut self) -> Vec<String> {
+        self.scan_sources();
+
+        self.files
+            .par_iter()
+            .filter_map(|x| x.clone().into_os_string().into_string().ok())
+            .collect()
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub fn get_globs(&mut self) -> Vec<GlobEntry> {
+        self.scan_sources();
+
+        // Insert a glob for the base path, so we can see new files/folders in the directory itself.
+        // self.globs.push(GlobEntry {
+        //     base: root.to_string_lossy().into(),
+        //     pattern: "*".into(),
+        // });
+
+        // TODO: Compute globs
+
+        self.globs.clone()
+    }
+
+    #[tracing::instrument(skip_all)]
     pub fn get_candidates_with_positions(
         &mut self,
         changed_content: ChangedContent,
@@ -168,76 +238,6 @@ impl Scanner {
                 _ => None,
             })
             .collect()
-    }
-
-    #[tracing::instrument(skip_all)]
-    pub fn get_files(&mut self) -> Vec<String> {
-        self.scan_sources();
-
-        self.files
-            .par_iter()
-            .filter_map(|x| x.clone().into_os_string().into_string().ok())
-            .collect()
-    }
-
-    #[tracing::instrument(skip_all)]
-    pub fn get_globs(&mut self) -> Vec<GlobEntry> {
-        self.scan_sources();
-
-        // Insert a glob for the base path, so we can see new files/folders in the directory itself.
-        // self.globs.push(GlobEntry {
-        //     base: root.to_string_lossy().into(),
-        //     pattern: "*".into(),
-        // });
-
-        // TODO: Compute globs
-
-        self.globs.clone()
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn compute_candidates(&mut self) -> Option<Vec<String>> {
-        if self.changed_content.is_empty() {
-            return None;
-        }
-
-        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-
-        Some(self.scan_content(changed_content))
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn scan_sources(&mut self) {
-        let Some(walker) = &mut self.walker else {
-            return;
-        };
-
-        for entry in walker.build().filter_map(Result::ok) {
-            let path = entry.into_path();
-            let Ok(metadata) = path.metadata() else {
-                continue;
-            };
-            if metadata.is_dir() {
-                self.dirs.push(path);
-            } else if metadata.is_file() {
-                if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
-                    self.changed_content.push(ChangedContent::File(
-                        path.to_path_buf(),
-                        extension.to_owned(),
-                    ))
-                }
-                self.files.push(path);
-            }
-        }
-
-        // TODO: BEWARE OF THE DRAGONS
-        // for root in auto_content_roots {
-        //     let globs = resolve_globs(root.to_path_buf(), &self.dirs);
-        //     self.globs.extend(globs);
-        // }
-
-        // Re-optimize the globs to reduce the number of patterns we have to scan.
-        // self.globs = optimize_patterns(&self.globs);
     }
 }
 
