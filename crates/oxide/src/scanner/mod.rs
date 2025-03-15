@@ -108,9 +108,7 @@ impl Scanner {
         }
 
         let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-        let mut candidates = self.scan_content(changed_content);
-        candidates.par_sort_unstable();
-        candidates
+        self.scan_content(changed_content)
     }
 
     #[tracing::instrument(skip_all)]
@@ -119,10 +117,12 @@ impl Scanner {
 
         // Only compute the new candidates and ignore the ones we already have. This is for
         // subsequent calls to prevent serializing the entire set of candidates every time.
-        let new_candidates = candidates
+        let mut new_candidates = candidates
             .into_par_iter()
             .filter(|candidate| !self.candidates.contains(candidate))
             .collect::<Vec<_>>();
+
+        new_candidates.par_sort_unstable();
 
         // Track new candidates for subsequent calls
         self.candidates.par_extend(new_candidates.clone());
