@@ -9881,6 +9881,10 @@ for (let prefix of prefixes) {
     classes.push(`${prefix}-[medium]`)
     classes.push(`${prefix}-[thick]`)
     classes.push(`${prefix}-[12px]`)
+    classes.push(`${prefix}-[12px_8px]`)
+    classes.push(`${prefix}-[0_2px_0_2px]`)
+    classes.push(`${prefix}-[0_1]`)
+    classes.push(`${prefix}-[thin_2px]`)
     classes.push(`${prefix}-[length:var(--my-width)]`)
     classes.push(`${prefix}-[line-width:var(--my-width)]`)
 
