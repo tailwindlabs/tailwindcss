@@ -217,8 +217,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0bf760ebf69878d9fd8f110c89703d90ce35095324d1f1edcb595c63945ee757"
 dependencies = [
  "bitflags",
- "ignore",
+ "ignore 0.4.23 (registry+https://github.com/rust-lang/crates.io-index)",
  "walkdir",
+]
+
+[[package]]
+name = "ignore"
+version = "0.4.23"
+dependencies = [
+ "bstr",
+ "crossbeam-channel",
+ "crossbeam-deque",
+ "globset",
+ "log",
+ "memchr",
+ "regex-automata 0.4.8",
+ "same-file",
+ "walkdir",
+ "winapi-util",
 ]
 
 [[package]]
@@ -567,7 +583,7 @@ dependencies = [
  "fancy-regex",
  "fast-glob",
  "globwalk",
- "ignore",
+ "ignore 0.4.23",
  "log",
  "rayon",
  "regex",
