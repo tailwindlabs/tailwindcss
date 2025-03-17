@@ -4875,6 +4875,7 @@ exports[`getClassList 1`] = `
   "isolation-auto",
   "italic",
   "items-baseline",
+  "items-baseline-last",
   "items-center",
   "items-end",
   "items-start",

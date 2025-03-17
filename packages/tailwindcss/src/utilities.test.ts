@@ -7312,10 +7312,22 @@ test('align-content', async () => {
 })
 
 test('items', async () => {
-  expect(await run(['items-start', 'items-end', 'items-center', 'items-baseline', 'items-stretch']))
-    .toMatchInlineSnapshot(`
+  expect(
+    await run([
+      'items-start',
+      'items-end',
+      'items-center',
+      'items-baseline',
+      'items-baseline-last',
+      'items-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".items-baseline {
       align-items: baseline;
+    }
+
+    .items-baseline-last {
+      align-items: last baseline;
     }
 
     .items-center {
@@ -7341,6 +7353,8 @@ test('items', async () => {
       '-items-end',
       '-items-center',
       '-items-baseline',
+      '-items-first-baseline',
+      '-items-last-baseline',
       '-items-stretch',
       'items-start/foo',
       'items-end/foo',

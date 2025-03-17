@@ -1,3 +1,4 @@
+export const enableBaselineLast = process.env.FEATURES_ENV !== 'stable'
 export const enableDetailsContent = process.env.FEATURES_ENV !== 'stable'
 export const enableInvertedColors = process.env.FEATURES_ENV !== 'stable'
 export const enablePointerVariants = process.env.FEATURES_ENV !== 'stable'
