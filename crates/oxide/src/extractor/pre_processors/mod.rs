@@ -7,6 +7,7 @@ pub mod razor;
 pub mod ruby;
 pub mod slim;
 pub mod svelte;
+pub mod vue;
 
 pub use clojure::*;
 pub use haml::*;
@@ -17,3 +18,4 @@ pub use razor::*;
 pub use ruby::*;
 pub use slim::*;
 pub use svelte::*;
+pub use vue::*;
