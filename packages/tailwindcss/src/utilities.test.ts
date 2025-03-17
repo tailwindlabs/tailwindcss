@@ -7984,7 +7984,7 @@ test('accent', async () => {
     }
 
     .accent-current\\/50, .accent-current\\/\\[0\\.5\\], .accent-current\\/\\[50\\%\\] {
-      accent-color: color-mix(in oklab, currentColor 50%, transparent);
+      accent-color: oklab(from currentColor l a b / 50%);
     }
 
     .accent-inherit {
@@ -8099,7 +8099,7 @@ test('caret', async () => {
     }
 
     .caret-current\\/50, .caret-current\\/\\[0\\.5\\], .caret-current\\/\\[50\\%\\] {
-      caret-color: color-mix(in oklab, currentColor 50%, transparent);
+      caret-color: oklab(from currentColor l a b / 50%);
     }
 
     .caret-inherit {
@@ -8212,7 +8212,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: color-mix(in oklab, currentColor 50%, transparent);
+      border-color: oklab(from currentColor l a b / 50%);
     }
 
     :where(.divide-inherit > :not(:last-child)) {
@@ -10144,11 +10144,11 @@ test('bg', async () => {
     }
 
     .bg-current\\/50, .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
-      background-color: color-mix(in oklab, currentColor 50%, transparent);
+      background-color: oklab(from currentColor l a b / 50%);
     }
 
     .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
-      background-color: color-mix(in oklab, currentColor var(--bg-opacity), transparent);
+      background-color: oklab(from currentColor l a b / var(--bg-opacity));
     }
 
     .bg-inherit {
@@ -10666,11 +10666,11 @@ test('bg', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".bg-current\\/custom {
-      background-color: color-mix(in oklab, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
+      background-color: oklab(from currentColor l a b / var(--opacity-custom, var(--custom-opacity)));
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in oklab, currentColor var(--opacity-half, .5), transparent);
+      background-color: oklab(from currentColor l a b / var(--opacity-half, .5));
     }
 
     .\\[color\\:red\\]\\/half {
@@ -10764,7 +10764,7 @@ test('from', async () => {
     }
 
     .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
-      --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-gradient-from: oklab(from currentColor l a b / 50%);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -10990,7 +10990,7 @@ test('via', async () => {
     }
 
     .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
-      --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-gradient-via: oklab(from currentColor l a b / 50%);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11212,7 +11212,7 @@ test('to', async () => {
     }
 
     .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
-      --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-gradient-to: oklab(from currentColor l a b / 50%);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11739,7 +11739,7 @@ test('fill', async () => {
     }
 
     .fill-current\\/50, .fill-current\\/\\[0\\.5\\], .fill-current\\/\\[50\\%\\] {
-      fill: color-mix(in oklab, currentColor 50%, transparent);
+      fill: oklab(from currentColor l a b / 50%);
     }
 
     .fill-inherit {
@@ -11876,7 +11876,7 @@ test('stroke', async () => {
     }
 
     .stroke-current\\/50, .stroke-current\\/\\[0\\.5\\], .stroke-current\\/\\[50\\%\\] {
-      stroke: color-mix(in oklab, currentColor 50%, transparent);
+      stroke: oklab(from currentColor l a b / 50%);
     }
 
     .stroke-inherit {
@@ -12852,7 +12852,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
-      color: color-mix(in oklab, currentColor 50%, transparent);
+      color: oklab(from currentColor l a b / 50%);
     }
 
     .placeholder-inherit::placeholder {
@@ -13001,9 +13001,9 @@ test('decoration', async () => {
     }
 
     .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
-      -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
-      -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
-      text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
+      -webkit-text-decoration-color: oklab(from currentColor l a b / 50%);
+      -webkit-text-decoration-color: oklab(from currentColor l a b / 50%);
+      text-decoration-color: oklab(from currentColor l a b / 50%);
     }
 
     .decoration-inherit {
@@ -14706,7 +14706,7 @@ test('outline', async () => {
     }
 
     .outline-current\\/50, .outline-current\\/\\[0\\.5\\], .outline-current\\/\\[50\\%\\] {
-      outline-color: color-mix(in oklab, currentColor 50%, transparent);
+      outline-color: oklab(from currentColor l a b / 50%);
     }
 
     .outline-inherit {
@@ -15156,7 +15156,7 @@ test('text', async () => {
     }
 
     .text-current\\/50, .text-current\\/\\[0\\.5\\], .text-current\\/\\[50\\%\\] {
-      color: color-mix(in oklab, currentColor 50%, transparent);
+      color: oklab(from currentColor l a b / 50%);
     }
 
     .text-inherit {
@@ -15325,7 +15325,7 @@ test('shadow', async () => {
     }
 
     .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-shadow-color: oklab(from currentColor l a b / 50%);
     }
 
     .shadow-inherit {
@@ -15547,7 +15547,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-inset-shadow-color: oklab(from currentColor l a b / 50%);
     }
 
     .inset-shadow-inherit {
@@ -15785,7 +15785,7 @@ test('ring', async () => {
     }
 
     .ring-current\\/50, .ring-current\\/\\[0\\.5\\], .ring-current\\/\\[50\\%\\] {
-      --tw-ring-color: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-ring-color: oklab(from currentColor l a b / 50%);
     }
 
     .ring-inherit {
@@ -16124,7 +16124,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-current\\/50, .inset-ring-current\\/\\[0\\.5\\], .inset-ring-current\\/\\[50\\%\\] {
-      --tw-inset-ring-color: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-inset-ring-color: oklab(from currentColor l a b / 50%);
     }
 
     .inset-ring-inherit {
@@ -16368,7 +16368,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-current\\/50, .ring-offset-current\\/\\[0\\.5\\], .ring-offset-current\\/\\[50\\%\\] {
-      --tw-ring-offset-color: color-mix(in oklab, currentColor 50%, transparent);
+      --tw-ring-offset-color: oklab(from currentColor l a b / 50%);
     }
 
     .ring-offset-inherit {

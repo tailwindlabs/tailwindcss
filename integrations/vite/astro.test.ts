@@ -19,7 +19,10 @@ test(
         import { defineConfig } from 'astro/config'
 
         // https://astro.build/config
-        export default defineConfig({ vite: { plugins: [tailwindcss()] } })
+        export default defineConfig({
+          vite: { plugins: [tailwindcss()] },
+          build: { inlineStylesheets: 'never' },
+        })
       `,
       'src/pages/index.astro': html`
        <div class="underline">Hello, world!</div>
@@ -90,8 +93,13 @@ test(
         import { defineConfig } from 'astro/config'
 
         // https://astro.build/config
-        export default defineConfig({ vite: { plugins: [tailwindcss()] }, integrations: [react()] })
+        export default defineConfig({
+          vite: { plugins: [tailwindcss()] },
+          integrations: [react()],
+          build: { inlineStylesheets: 'never' },
+        })
       `,
+      // prettier-ignore
       'src/pages/index.astro': html`
         ---
         import ClientOnly from './client-only';

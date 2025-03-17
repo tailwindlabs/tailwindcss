@@ -169,7 +169,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::placeholder {
     opacity: 1;
-    color: color-mix(in oklab, currentColor 50%, transparent);
+    color: oklab(from currentColor l a b / 50%);
   }
 
   textarea {
