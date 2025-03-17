@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix incorrect angle in `-bg-conic-*` utilities ([#17174](https://github.com/tailwindlabs/tailwindcss/pull/17174))
+- Fix `border-[12px_4px]` being interpreted as a `border-color` instead of a `border-width` ([#17248](https://github.com/tailwindlabs/tailwindcss/pull/17248))
 
 ## [4.0.14] - 2025-03-13
 
