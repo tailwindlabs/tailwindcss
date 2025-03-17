@@ -7318,13 +7318,16 @@ test('items', async () => {
       'items-end',
       'items-center',
       'items-baseline',
-      'items-first-baseline',
-      'items-last-baseline',
+      'items-baseline-last',
       'items-stretch',
     ]),
   ).toMatchInlineSnapshot(`
     ".items-baseline {
       align-items: baseline;
+    }
+
+    .items-baseline-last {
+      align-items: last baseline;
     }
 
     .items-center {
@@ -7333,14 +7336,6 @@ test('items', async () => {
 
     .items-end {
       align-items: flex-end;
-    }
-
-    .items-first-baseline {
-      align-items: baseline;
-    }
-
-    .items-last-baseline {
-      align-items: last baseline;
     }
 
     .items-start {

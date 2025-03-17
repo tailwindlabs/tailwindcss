@@ -11,7 +11,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableWrapAnywhere } from './feature-flags'
+import { enableBaselineLast, enableWrapAnywhere } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -1875,8 +1875,9 @@ export function createUtilities(theme: Theme) {
   staticUtility('items-start', [['align-items', 'flex-start']])
   staticUtility('items-end', [['align-items', 'flex-end']])
   staticUtility('items-baseline', [['align-items', 'baseline']])
-  staticUtility('items-first-baseline', [['align-items', 'first baseline']])
-  staticUtility('items-last-baseline', [['align-items', 'last baseline']])
+  if (enableBaselineLast) {
+    staticUtility('items-baseline-last', [['align-items', 'last baseline']])
+  }
   staticUtility('items-stretch', [['align-items', 'stretch']])
 
   staticUtility('justify-normal', [['justify-content', 'normal']])
