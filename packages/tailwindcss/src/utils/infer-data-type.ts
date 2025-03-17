@@ -67,7 +67,14 @@ function isUrl(value: string): boolean {
 /* -------------------------------------------------------------------------- */
 
 function isLineWidth(value: string): boolean {
-  return value === 'thin' || value === 'medium' || value === 'thick'
+  return segment(value, ' ').every(
+    (value) =>
+      isLength(value) ||
+      isNumber(value) ||
+      value === 'thin' ||
+      value === 'medium' ||
+      value === 'thick',
+  )
 }
 
 /* -------------------------------------------------------------------------- */
