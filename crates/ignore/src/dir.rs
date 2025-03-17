@@ -176,7 +176,8 @@ impl Ignore {
         if !self.is_root() {
             panic!("Ignore::add_parents called on non-root matcher");
         }
-        let absolute_base = match path.as_ref().canonicalize() {
+        // CHANGED: Use `dunce::canonicalize` as we use it everywhere else.
+        let absolute_base = match dunce::canonicalize(path.as_ref()) {
             Ok(path) => Arc::new(path),
             Err(_) => {
                 // There's not much we can do here, so just return our
@@ -428,60 +429,51 @@ impl Ignore {
             saw_git = saw_git || ig.0.has_git;
         }
         if self.0.opts.parents {
-            if let Some(abs_parent_path) = self.absolute_base() {
-                // What we want to do here is take the absolute base path of
-                // this directory and join it with the path we're searching.
-                // The main issue we want to avoid is accidentally duplicating
-                // directory components, so we try to strip any common prefix
-                // off of `path`. Overall, this seems a little ham-fisted, but
-                // it does fix a nasty bug. It should do fine until we overhaul
-                // this crate.
-                let dirpath = self.0.dir.as_path();
-                let path_prefix = match strip_prefix("./", dirpath) {
-                    None => dirpath,
-                    Some(stripped_dot_slash) => stripped_dot_slash,
-                };
-                let path = match strip_prefix(path_prefix, path) {
-                    None => abs_parent_path.join(path),
-                    Some(p) => {
-                        let p = match strip_prefix("/", p) {
-                            None => p,
-                            Some(p) => p,
-                        };
-                        abs_parent_path.join(p)
-                    }
-                };
-
-                for ig in self.parents().skip_while(|ig| !ig.0.is_absolute_parent) {
-                    if m_custom_ignore.is_none() {
-                        m_custom_ignore =
-                            ig.0.custom_ignore_matcher
-                                .matched(&path, is_dir)
-                                .map(IgnoreMatch::gitignore);
-                    }
-                    if m_ignore.is_none() {
-                        m_ignore =
-                            ig.0.ignore_matcher
-                                .matched(&path, is_dir)
-                                .map(IgnoreMatch::gitignore);
-                    }
-                    if any_git && !saw_git && m_gi.is_none() {
-                        m_gi =
-                            ig.0.git_ignore_matcher
-                                .matched(&path, is_dir)
-                                .map(IgnoreMatch::gitignore);
-                    }
-                    if any_git && !saw_git && m_gi_exclude.is_none() {
-                        m_gi_exclude =
-                            ig.0.git_exclude_matcher
-                                .matched(&path, is_dir)
-                                .map(IgnoreMatch::gitignore);
-                    }
-                    saw_git = saw_git || ig.0.has_git;
+            // CHANGED: We removed a code path that rewrote the `path` to be relative to
+            // `self.absolute_base()` because it assumed that the every path is inside the base
+            // which is not the case for us as we use `WalkBuilder#add` to add roots outside of the
+            // base.
+            for ig in self.parents().skip_while(|ig| !ig.0.is_absolute_parent) {
+                if m_custom_ignore.is_none() {
+                    m_custom_ignore =
+                        ig.0.custom_ignore_matcher
+                            .matched(&path, is_dir)
+                            .map(IgnoreMatch::gitignore);
                 }
+                if m_ignore.is_none() {
+                    m_ignore =
+                        ig.0.ignore_matcher
+                            .matched(&path, is_dir)
+                            .map(IgnoreMatch::gitignore);
+                }
+                if any_git && !saw_git && m_gi.is_none() {
+                    m_gi =
+                        ig.0.git_ignore_matcher
+                            .matched(&path, is_dir)
+                            .map(IgnoreMatch::gitignore);
+                }
+                if any_git && !saw_git && m_gi_exclude.is_none() {
+                    m_gi_exclude =
+                        ig.0.git_exclude_matcher
+                            .matched(&path, is_dir)
+                            .map(IgnoreMatch::gitignore);
+                }
+                saw_git = saw_git || ig.0.has_git;
             }
         }
         for gi in self.0.explicit_ignores.iter().rev() {
+            // CHANGED: We need to make sure that the explicit gitignore rules apply to the path
+            //
+            //          path      = Is the current file/folder we are traversing
+            //          gi.path() = Is the path of the custom gitignore file
+            //
+            //  E.g.: If we have a custom rule for `/src/utils` with `**/*`, and we are looking at
+            //        just `/src`, then the `**/*` rules do not apply to this folder, so we can
+            //        ignore the current custom gitignore file.
+            //
+            if !path.starts_with(gi.path()) {
+                continue;
+            }
             if !m_explicit.is_none() {
                 break;
             }
@@ -496,23 +488,46 @@ impl Ignore {
             Match::None
         };
 
-        m_custom_ignore
-            .or(m_ignore)
-            .or(m_gi)
-            .or(m_gi_exclude)
-            .or(m_global)
-            .or(m_explicit)
+        // CHANGED: We added logic to configure an order in which the ignore files are respected and
+        // allowed a whitelist in a later file to overrule a block on an earlier file.
+        let order = [
+            // Global gitignore
+            &m_global,
+            // .git/info/exclude
+            &m_gi_exclude,
+            // .gitignore
+            &m_gi,
+            // .ignore
+            &m_ignore,
+            // .custom-ignore
+            &m_custom_ignore,
+            // Manually added ignores
+            &m_explicit,
+        ];
+
+        for (idx, check) in order.into_iter().enumerate() {
+            if check.is_none() {
+                continue;
+            }
+
+            let remaining = &order[idx + 1..];
+            if check.is_ignore() {
+                if remaining.iter().any(|other| other.is_whitelist()) {
+                    continue;
+                }
+            } else if remaining.iter().any(|other| other.is_ignore()) {
+                continue;
+            }
+
+            return check.clone();
+        }
+
+        m_explicit
     }
 
     /// Returns an iterator over parent ignore matchers, including this one.
     pub(crate) fn parents(&self) -> Parents<'_> {
         Parents(Some(self))
-    }
-
-    /// Returns the first absolute path of the first absolute parent, if
-    /// one exists.
-    fn absolute_base(&self) -> Option<&Path> {
-        self.0.absolute_base.as_ref().map(|p| &***p)
     }
 }
 
@@ -875,9 +890,10 @@ mod tests {
             .build()
             .add_child(td.path());
         assert!(err.is_none());
-        assert!(ig.matched("foo", false).is_ignore());
-        assert!(ig.matched("bar", false).is_whitelist());
-        assert!(ig.matched("baz", false).is_none());
+        assert!(ig.matched(td.path().join("foo"), false).is_ignore());
+        assert!(ig.matched(td.path().join("bar"), false).is_whitelist());
+        assert!(ig.matched(td.path().join("baz"), false).is_none());
+        assert!(ig.matched("/foo", false).is_none());
     }
 
     #[test]
@@ -1131,8 +1147,10 @@ mod tests {
         let (ig2, err) = ig1.add_child("src");
         assert!(err.is_none());
 
-        assert!(ig1.matched("llvm", true).is_none());
-        assert!(ig2.matched("llvm", true).is_none());
+        // CHANGED: These test cases do not make sense for us as we never call the Ignore with
+        // relative paths.
+        assert!(ig1.matched("llvm", true).is_ignore());
+        assert!(ig2.matched("llvm", true).is_ignore());
         assert!(ig2.matched("src/llvm", true).is_none());
         assert!(ig2.matched("foo", false).is_ignore());
         assert!(ig2.matched("src/foo", false).is_ignore());

@@ -16,7 +16,7 @@ use {
 
 use crate::{
     dir::{Ignore, IgnoreBuilder},
-    gitignore::GitignoreBuilder,
+    gitignore::{Gitignore, GitignoreBuilder},
     overrides::Override,
     types::Types,
     Error, PartialErrorBuilder,
@@ -664,6 +664,11 @@ impl WalkBuilder {
             }
         }
         errs.into_error_option()
+    }
+
+    /// CHANGED: Add a Gitignore to the builder.
+    pub fn add_gitignore(&mut self, gi: Gitignore) {
+        self.ig_builder.add_ignore(gi);
     }
 
     /// Add a custom ignore file name
