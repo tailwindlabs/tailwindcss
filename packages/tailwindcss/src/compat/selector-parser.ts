@@ -98,6 +98,9 @@ export function walk(
       visit(node, {
         parent,
         replaceWith(newNode) {
+          if (replacedNode) {
+            throw new Error('Cannot replace a node more than once')
+          }
           replacedNode = true
 
           if (Array.isArray(newNode)) {
