@@ -1,2 +1,0 @@
-[target.'cfg(target_env = "gnu")']
-rustflags = ["-C", "link-args=-Wl,-z,nodelete"]
