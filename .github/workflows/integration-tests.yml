@@ -30,6 +30,7 @@ jobs:
           - vite
           - cli
           - postcss
+          - workers
 
         # Exclude windows and macos from being built on feature branches
         on-main-branch:
