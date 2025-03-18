@@ -17961,6 +17961,38 @@ describe('custom utilities', () => {
         }"
       `)
     })
+
+    // This originated from a bug. Essentially in the second `--mask-right` we
+    // call both `--modifier(…)` and `--value(…)`. The moment we processed
+    // `--modifier(…)` it deleted the `--mask-right` declaration (expected
+    // behavior). But we didn't properly stop so the `--value(…)` was still
+    // processed and also tried to remove the `--mask-right` declaration.
+    //
+    // This test now ensures that we only remove/replace a declaration once.
+    test('declaration nodes are only replaced/removed once', async () => {
+      let input = css`
+        @utility mask-r-* {
+          --mask-right: linear-gradient(to left, transparent, black --value(percentage));
+          --mask-right: linear-gradient(
+            to left,
+            transparent calc(var(--spacing) * --modifier(integer)),
+            black calc(var(--spacing) * --value(integer))
+          );
+          mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['mask-r-20%'])).toMatchInlineSnapshot(`
+        ".mask-r-20\\% {
+          --mask-right: linear-gradient(to left, transparent, black 20%);
+          -webkit-mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
+          -webkit-mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
+          mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
+        }"
+      `)
+    })
   })
 
   test('resolve value based on `@theme`', async () => {
