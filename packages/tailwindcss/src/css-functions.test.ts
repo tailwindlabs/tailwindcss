@@ -218,7 +218,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function containing `initial`', async () => {
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function with the fallback `initial`', async () => {
     expect(
       await compileCss(css`
         @theme prefix(tw) {
@@ -235,7 +235,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function containing `initial` in @reference mode', async () => {
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function with the fallback `initial` in @reference mode', async () => {
     expect(
       await compileCss(css`
         @theme reference prefix(tw) {
@@ -252,7 +252,7 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) returns the fallback when the value it refers is set to a `--theme(…)` function that returns `initial` as inline value', async () => {
+  test('--theme(…) resolves with the fallback when the value it refers is set to a `--theme(… inline)` function with the fallback `initial`', async () => {
     expect(
       await compileCss(css`
         @theme prefix(tw) {
@@ -269,19 +269,19 @@ describe('--theme(…)', () => {
     `)
   })
 
-  test('--theme(…) returns the fallback when the value it refers is set to a `--theme(…)` function that returns `initial` as inline value in @reference mode', async () => {
+  test('--theme(…) resolves with the fallback when the value it refers is set to a `--theme(… inline)` function with the fallback `initial` in @reference mode', async () => {
     expect(
       await compileCss(css`
         @theme reference prefix(tw) {
-          --default-font-family: --theme(--font-family, initial);
+          --default-font-family: --theme(--font-family inline, initial);
         }
         .red {
-          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
+          font-family: --theme(--default-font-family inline, Potato Sans, sans-serif);
         }
       `),
     ).toMatchInlineSnapshot(`
       ".red {
-        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
+        font-family: Potato Sans, sans-serif;
       }"
     `)
   })

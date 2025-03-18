@@ -101,14 +101,17 @@ function theme(
     return resolvedValue
   }
 
-  // Inject the fallback…
-  //
-  // - …as the value if the value returned is `initial`
-  // - …expect any `initial` fallbacks on `var(…)`, `theme(…)`, or `--theme(…)`
-  // - …as the fallback if a `var(…)` with no fallback is returned
   let joinedFallback = fallback.join(', ')
   if (joinedFallback === 'initial') return resolvedValue
+
+  // When the resolved value returns `initial`, resolve with the the fallback value
   if (resolvedValue === 'initial') return joinedFallback
+
+  // Inject the fallback of a `--theme(…)` function into the fallback of a referenced `--theme(…)`
+  // function or `var(…)` declaration. If the referenced function already defines a fallback, we use
+  // a potential fallback value of `initial` in the referenced function to determine if we should
+  // inject the fallback value of the caller. If that's not the case, we keep the fallback as-is
+  // (this is needed for theme variables in reference-mode).
   if (
     resolvedValue.startsWith('var(') ||
     resolvedValue.startsWith('theme(') ||
