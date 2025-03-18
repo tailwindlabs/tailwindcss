@@ -116,7 +116,7 @@ mod tests {
                 " bg-red-500 2xl:flex bg-green-200 3xl:flex",
             ),
             // Keep dots in strings
-            (r#"div(class="px-2.5")"#, r#"div(class="px-2.5")"#),
+            (r#"div(class="px-2.5")"#, r#"div class="px-2.5")"#),
             // Replace top-level `(a-z0-9)[` with `$1 `. E.g.: `.flex[x]` -> `.flex x]`
             (".text-xl.text-red-600[", " text-xl text-red-600 "),
             // But keep important brackets:
@@ -192,6 +192,28 @@ mod tests {
 
         Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["text-red-500", "text-3xl"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17277
+    #[test]
+    fn test_class_shorthand_followed_by_parens() {
+        let input = r#"
+              body.border-t-4.p-8(class="\#{body_classes}" data-hotwire-native="\#{hotwire_native_app?}" data-controller="update-time-zone")
+        "#;
+        Slim::test_extract_contains(input, vec!["border-t-4", "p-8"]);
+
+        // Additional test with CSS Variable shorthand syntax in the attribute itself because `(`
+        // and `)` are not valid in the class shorthand version.
+        //
+        // Also included an arbitrary value including `(` and `)` to make sure that we don't
+        // accidentally remove those either.
+        let input = r#"
+              body.p-8(class="bg-(--my-color) bg-[url(https://example.com)]")
+        "#;
+        Slim::test_extract_contains(
+            input,
+            vec!["p-8", "bg-(--my-color)", "bg-[url(https://example.com)]"],
+        );
     }
 
     #[test]
