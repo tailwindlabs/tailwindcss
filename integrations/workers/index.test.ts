@@ -11,19 +11,22 @@ test(
           }
         }
       `,
-      'start-worker.js': js`
-        const { Worker } = require('worker_threads')
+      'start.js': js`
+        let { Worker } = require('worker_threads')
         new Worker('./worker.js')
       `,
       'worker.js': js`
         require('@tailwindcss/oxide')
-        console.log('Spawned worker')
+        process.on('exit', () => console.log('worker thread exited'))
       `,
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('node ./start-worker.js')
+    let output = await exec('node ./start.js').then(
+      (out) => out.trim(),
+      (err) => `${err}`,
+    )
 
-    expect(output).toContain('Spawned worker')
+    expect(output).toEqual('worker thread exited')
   },
 )
