@@ -80,6 +80,23 @@ impl PreProcessor for Slim {
                     bracket_stack.push(cursor.curr);
                 }
 
+                // In slim the class name shorthand can be followed by a parenthesis. E.g.:
+                //
+                // ```slim
+                // body.border-t-4.p-8(attr=value)
+                //                    ^ Not part of the p-8 class
+                // ```
+                //
+                // This means that we need to replace all these `(` and `)` with spaces to make
+                // sure that we can extract the `p-8`.
+                //
+                // However, we also need to make sure that we keep the parens that are part of the
+                // utility class. E.g.: `bg-(--my-color)`.
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-') => {
+                    result[cursor.pos] = b' ';
+                    bracket_stack.push(cursor.curr);
+                }
+
                 b'(' | b'[' | b'{' => {
                     bracket_stack.push(cursor.curr);
                 }
