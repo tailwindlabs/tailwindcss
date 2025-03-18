@@ -10,3 +10,5 @@ linker = "arm-linux-gnueabihf-gcc"
 rustflags = ["-C", "target-feature=+crt-static"]
 [target.aarch64-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
+[target.'cfg(target_env = "gnu")']
+rustflags = ["-C", "link-args=-Wl,-z,nodelete"]
