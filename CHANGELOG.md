@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use the `oklab(…)` function when applying opacity to `currentColor` to work around a crash in Safari 16.4 and 16.5 ([#17247](https://github.com/tailwindlabs/tailwindcss/pull/17247))
 - Pre-process `<template lang="…">` in Vue files ([#17252](https://github.com/tailwindlabs/tailwindcss/pull/17252))
 - Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
+- Prevent segfault when loaded in a worker thread on Linux ([#17276](https://github.com/tailwindlabs/tailwindcss/pull/17276))
 
 ## [4.0.14] - 2025-03-13
 
