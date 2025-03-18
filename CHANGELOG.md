@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-process `<template lang="…">` in Vue files ([#17252](https://github.com/tailwindlabs/tailwindcss/pull/17252))
 - Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
 - Prevent segfault when loaded in a worker thread on Linux ([#17276](https://github.com/tailwindlabs/tailwindcss/pull/17276))
+- Fix class extraction followed by `(` in Slim ([#17278](https://github.com/tailwindlabs/tailwindcss/pull/17278))
 
 ## [4.0.14] - 2025-03-13
 
