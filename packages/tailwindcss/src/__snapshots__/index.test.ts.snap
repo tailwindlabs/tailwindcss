@@ -128,10 +128,6 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     -webkit-tap-highlight-color: transparent;
   }
 
-  body {
-    line-height: inherit;
-  }
-
   hr {
     height: 0;
     color: inherit;
