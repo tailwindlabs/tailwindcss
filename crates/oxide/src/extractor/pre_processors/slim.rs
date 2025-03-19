@@ -225,11 +225,16 @@ mod tests {
         // Also included an arbitrary value including `(` and `)` to make sure that we don't
         // accidentally remove those either.
         let input = r#"
-              body.p-8(class="bg-(--my-color) bg-[url(https://example.com)]")
+              body.p-8(class="bg-(--my-color) bg-(--my-color)/(--my-opacity) bg-[url(https://example.com)]")
         "#;
         Slim::test_extract_contains(
             input,
-            vec!["p-8", "bg-(--my-color)", "bg-[url(https://example.com)]"],
+            vec![
+                "p-8",
+                "bg-(--my-color)",
+                "bg-(--my-color)/(--my-opacity)",
+                "bg-[url(https://example.com)]",
+            ],
         );
     }
 
