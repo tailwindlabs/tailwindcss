@@ -92,7 +92,7 @@ impl PreProcessor for Slim {
                 //
                 // However, we also need to make sure that we keep the parens that are part of the
                 // utility class. E.g.: `bg-(--my-color)`.
-                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-') => {
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-' | b'/') => {
                     result[cursor.pos] = b' ';
                     bracket_stack.push(cursor.curr);
                 }
@@ -235,6 +235,15 @@ mod tests {
                 "bg-(--my-color)/(--my-opacity)",
                 "bg-[url(https://example.com)]",
             ],
+        );
+
+        // Top-level class shorthand with parens
+        let input = r#"
+            div class="bg-(--my-color) bg-(--my-color)/(--my-opacity)"
+        "#;
+        Slim::test_extract_contains(
+            input,
+            vec!["bg-(--my-color)", "bg-(--my-color)/(--my-opacity)"],
         );
     }
 
