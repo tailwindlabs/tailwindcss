@@ -149,6 +149,7 @@ export function walk(
         context,
         path,
         replaceWith(newNode) {
+          if (replacedNode) return
           replacedNode = true
 
           if (Array.isArray(newNode)) {
