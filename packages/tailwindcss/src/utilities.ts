@@ -4885,7 +4885,7 @@ export function createCssUtility(node: AtRule) {
                 // declaration can be removed.
                 if (modifier === null) {
                   replaceDeclarationWith([])
-                  return ValueParser.ValueWalkAction.Skip
+                  return ValueParser.ValueWalkAction.Stop
                 }
 
                 usedModifierFn = true
