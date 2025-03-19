@@ -80,6 +80,23 @@ impl PreProcessor for Slim {
                     bracket_stack.push(cursor.curr);
                 }
 
+                // In slim the class name shorthand can be followed by a parenthesis. E.g.:
+                //
+                // ```slim
+                // body.border-t-4.p-8(attr=value)
+                //                    ^ Not part of the p-8 class
+                // ```
+                //
+                // This means that we need to replace all these `(` and `)` with spaces to make
+                // sure that we can extract the `p-8`.
+                //
+                // However, we also need to make sure that we keep the parens that are part of the
+                // utility class. E.g.: `bg-(--my-color)`.
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-' | b'/') => {
+                    result[cursor.pos] = b' ';
+                    bracket_stack.push(cursor.curr);
+                }
+
                 b'(' | b'[' | b'{' => {
                     bracket_stack.push(cursor.curr);
                 }
@@ -116,7 +133,7 @@ mod tests {
                 " bg-red-500 2xl:flex bg-green-200 3xl:flex",
             ),
             // Keep dots in strings
-            (r#"div(class="px-2.5")"#, r#"div(class="px-2.5")"#),
+            (r#"div(class="px-2.5")"#, r#"div class="px-2.5")"#),
             // Replace top-level `(a-z0-9)[` with `$1 `. E.g.: `.flex[x]` -> `.flex x]`
             (".text-xl.text-red-600[", " text-xl text-red-600 "),
             // But keep important brackets:
@@ -192,6 +209,42 @@ mod tests {
 
         Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["text-red-500", "text-3xl"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17277
+    #[test]
+    fn test_class_shorthand_followed_by_parens() {
+        let input = r#"
+              body.border-t-4.p-8(class="\#{body_classes}" data-hotwire-native="\#{hotwire_native_app?}" data-controller="update-time-zone")
+        "#;
+        Slim::test_extract_contains(input, vec!["border-t-4", "p-8"]);
+
+        // Additional test with CSS Variable shorthand syntax in the attribute itself because `(`
+        // and `)` are not valid in the class shorthand version.
+        //
+        // Also included an arbitrary value including `(` and `)` to make sure that we don't
+        // accidentally remove those either.
+        let input = r#"
+              body.p-8(class="bg-(--my-color) bg-(--my-color)/(--my-opacity) bg-[url(https://example.com)]")
+        "#;
+        Slim::test_extract_contains(
+            input,
+            vec![
+                "p-8",
+                "bg-(--my-color)",
+                "bg-(--my-color)/(--my-opacity)",
+                "bg-[url(https://example.com)]",
+            ],
+        );
+
+        // Top-level class shorthand with parens
+        let input = r#"
+            div class="bg-(--my-color) bg-(--my-color)/(--my-opacity)"
+        "#;
+        Slim::test_extract_contains(
+            input,
+            vec!["bg-(--my-color)", "bg-(--my-color)/(--my-opacity)"],
+        );
     }
 
     #[test]
