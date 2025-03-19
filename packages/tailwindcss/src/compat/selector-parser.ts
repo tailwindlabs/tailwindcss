@@ -98,6 +98,7 @@ export function walk(
       visit(node, {
         parent,
         replaceWith(newNode) {
+          if (replacedNode) return
           replacedNode = true
 
           if (Array.isArray(newNode)) {
