@@ -696,6 +696,7 @@ export async function compileAst(
       }
 
       let didChange = defaultDidChange
+      let didAddExternalVariable = false
       defaultDidChange = false
 
       // Add all new candidates unless we know that they are invalid.
@@ -703,11 +704,13 @@ export async function compileAst(
       for (let candidate of newRawCandidates) {
         if (!designSystem.invalidCandidates.has(candidate)) {
           if (candidate[0] === '-' && candidate[1] === '-') {
-            designSystem.theme.markUsedVariable(candidate)
+            let didMarkVariableAsUsed = designSystem.theme.markUsedVariable(candidate)
+            didChange ||= didMarkVariableAsUsed
+            didAddExternalVariable ||= didMarkVariableAsUsed
           } else {
             allValidCandidates.add(candidate)
+            didChange ||= allValidCandidates.size !== prevSize
           }
-          didChange ||= allValidCandidates.size !== prevSize
         }
       }
 
@@ -725,7 +728,7 @@ export async function compileAst(
       // If no new ast nodes were generated, then we can return the original
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
-      if (previousAstNodeCount === newNodes.length) {
+      if (!didAddExternalVariable && previousAstNodeCount === newNodes.length) {
         compiled ??= optimizeAst(ast, designSystem)
         return compiled
       }
