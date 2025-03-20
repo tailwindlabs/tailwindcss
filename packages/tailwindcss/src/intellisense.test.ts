@@ -476,6 +476,9 @@ test('Custom functional @utility', async () => {
 
       --leading-foo: 1.5;
       --leading-bar: 2;
+
+      --spacing: 0.25rem;
+      --spacing-custom: 123px;
     }
 
     @utility tab-* {
@@ -486,6 +489,18 @@ test('Custom functional @utility', async () => {
       font-size: --value(--text);
       line-height: --value(--text- * --line-height);
       line-height: --modifier(--leading, 'normal');
+    }
+
+    @utility with-custom-spacing-* {
+      size: --value(--spacing);
+    }
+
+    @utility with-integer-spacing-* {
+      size: --spacing(--value(integer));
+    }
+
+    @utility with-number-spacing-* {
+      size: --spacing(--value(number));
     }
 
     @utility -negative-* {
@@ -514,6 +529,24 @@ test('Custom functional @utility', async () => {
   expect(classNames).not.toContain('-tab-2')
   expect(classNames).not.toContain('-tab-4')
   expect(classNames).not.toContain('-tab-github')
+
+  expect(classNames).toContain('with-custom-spacing-custom')
+  expect(classNames).not.toContain('with-custom-spacing-0')
+  expect(classNames).not.toContain('with-custom-spacing-0.5')
+  expect(classNames).not.toContain('with-custom-spacing-1')
+  expect(classNames).not.toContain('with-custom-spacing-1.5')
+
+  expect(classNames).not.toContain('with-integer-spacing-custom')
+  expect(classNames).toContain('with-integer-spacing-0')
+  expect(classNames).not.toContain('with-integer-spacing-0.5')
+  expect(classNames).toContain('with-integer-spacing-1')
+  expect(classNames).not.toContain('with-integer-spacing-1.5')
+
+  expect(classNames).not.toContain('with-number-spacing-custom')
+  expect(classNames).toContain('with-number-spacing-0')
+  expect(classNames).toContain('with-number-spacing-0.5')
+  expect(classNames).toContain('with-number-spacing-1')
+  expect(classNames).toContain('with-number-spacing-1.5')
 
   expect(classNames).toContain('-negative-1')
   expect(classNames).toContain('-negative-2')
