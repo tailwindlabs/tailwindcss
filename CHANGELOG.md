@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure multiple `--value(…)` or `--modifier(…)` calls don't delete subsequent declarations ([#17273](https://github.com/tailwindlabs/tailwindcss/pull/17273))
 - Fix class extraction followed by `(` in Slim ([#17278](https://github.com/tailwindlabs/tailwindcss/pull/17278))
 - Export `PluginUtils` from `tailwindcss/plugin` for compatibility with v3 ([#17299](https://github.com/tailwindlabs/tailwindcss/pull/17299))
+- Increase Standalone hardware compatibility on macOS x64 builds ([#17267](https://github.com/tailwindlabs/tailwindcss/pull/17267))
 
 ## [4.0.14] - 2025-03-13
 
