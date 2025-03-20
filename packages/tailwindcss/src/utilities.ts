@@ -4706,6 +4706,7 @@ export function createCssUtility(node: AtRule) {
   if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
     // API:
     //
+    // - `--value('literal')`         resolves a literal named value
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
@@ -4731,7 +4732,10 @@ export function createCssUtility(node: AtRule) {
 
     return (designSystem: DesignSystem) => {
       let valueThemeKeys = new Set<`--${string}`>()
+      let valueLiterals = new Set<string>()
+
       let modifierThemeKeys = new Set<`--${string}`>()
+      let modifierLiterals = new Set<string>()
 
       // Pre-process the AST to make it easier to work with.
       //
@@ -4747,12 +4751,12 @@ export function createCssUtility(node: AtRule) {
 
         // Required manipulations:
         //
-        // - `--value(--spacing)` -> `--value(--spacing-*)`
-        // - `--value(--spacing- *)` -> `--value(--spacing-*)`
-        // - `--value(--text- * --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value(--text --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value(--text-\\* --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value([ *])` -> `--value([*])`
+        // - `--value(--spacing)`                 -> `--value(--spacing-*)`
+        // - `--value(--spacing- *)`              -> `--value(--spacing-*)`
+        // - `--value(--text- * --line-height)`   -> `--value(--text-*--line-height)`
+        // - `--value(--text --line-height)`      -> `--value(--text-*--line-height)`
+        // - `--value(--text-\\* --line-height)`  -> `--value(--text-*--line-height)`
+        // - `--value([ *])`                      -> `--value([*])`
         //
         // Once Prettier / Biome handle these better (e.g.: not crashing without
         // `\\*` or not inserting whitespace) then most of these can go away.
@@ -4783,9 +4787,25 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          // Track the theme keys for suggestions
+          // Track information for suggestions
           for (let node of fn.nodes) {
-            if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
+            // Track literal values
+            if (
+              node.kind === 'word' &&
+              (node.value[0] === '"' || node.value[0] === "'") &&
+              node.value[0] === node.value[node.value.length - 1]
+            ) {
+              let value = node.value.slice(1, -1)
+
+              if (fn.value === '--value') {
+                valueLiterals.add(value)
+              } else if (fn.value === '--modifier') {
+                modifierLiterals.add(value)
+              }
+            }
+
+            // Track theme keys
+            else if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
               let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
 
               if (fn.value === '--value') {
@@ -4929,16 +4949,23 @@ export function createCssUtility(node: AtRule) {
       })
 
       designSystem.utilities.suggest(name.slice(0, -2), () => {
-        return [
-          {
-            values: designSystem.theme
-              .keysInNamespaces(valueThemeKeys)
-              .map((x) => x.replaceAll('_', '.')),
-            modifiers: designSystem.theme
-              .keysInNamespaces(modifierThemeKeys)
-              .map((x) => x.replaceAll('_', '.')),
-          },
-        ] satisfies SuggestionGroup[]
+        let values = []
+        for (let value of valueLiterals) {
+          values.push(value)
+        }
+        for (let value of designSystem.theme.keysInNamespaces(valueThemeKeys)) {
+          values.push(value)
+        }
+
+        let modifiers = []
+        for (let modifier of modifierLiterals) {
+          modifiers.push(modifier)
+        }
+        for (let value of designSystem.theme.keysInNamespaces(modifierThemeKeys)) {
+          modifiers.push(value)
+        }
+
+        return [{ values, modifiers }] satisfies SuggestionGroup[]
       })
     }
   }
@@ -4961,8 +4988,21 @@ function resolveValueFunction(
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
   for (let arg of fn.nodes) {
-    // Resolving theme value, e.g.: `--value(--color)`
+    // Resolve literal value, e.g.: `--modifier('closest-side')`
     if (
+      value.kind === 'named' &&
+      arg.kind === 'word' &&
+      // Should be wreapped in quotes
+      (arg.value[0] === "'" || arg.value[0] === '"') &&
+      arg.value[arg.value.length - 1] === arg.value[0] &&
+      // Values should match
+      arg.value.slice(1, -1) === value.value
+    ) {
+      return { nodes: ValueParser.parse(value.value) }
+    }
+
+    // Resolving theme value, e.g.: `--value(--color)`
+    else if (
       value.kind === 'named' &&
       arg.kind === 'word' &&
       arg.value[0] === '-' &&
