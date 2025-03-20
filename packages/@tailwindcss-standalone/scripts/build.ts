@@ -12,8 +12,8 @@ async function buildForPlatform(triple: string, outfile: string) {
     try {
       let cmd = $`bun build --compile --target=${triple} ./src/index.ts --outfile=${outfile} --env inline`
 
-      // This env var is used by our patched versions of Lightning CSS and Parcel Watcher
-      // to statically bundle the proper binaries for musl vs glibc
+      // This env var is used by our patched versions of Lightning CSS and Parcel Watcher to
+      // statically bundle the proper binaries for musl vs glibc
       cmd = cmd.env({
         PLATFORM_LIBC: triple.includes('-musl') ? 'musl' : 'glibc',
       })
@@ -51,21 +51,18 @@ async function build(triple: string, file: string) {
 
 await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
-// Build platform binaries and checksum them
+// Build platform binaries and checksum them. We use baseline builds for all x64 platforms to ensure
+// compatibility with older hardware.
 let results = await Promise.all([
   build('bun-linux-arm64', './tailwindcss-linux-arm64'),
   build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
 
-  // All Linux x64 builds use `bun-baseline` due to various instruction-related
-  // errors on some older Server hardware.
   build('bun-linux-x64-baseline', './tailwindcss-linux-x64'),
   build('bun-linux-x64-musl-baseline', './tailwindcss-linux-x64-musl'),
 
   build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
-  build('bun-darwin-x64', './tailwindcss-macos-x64'),
+  build('bun-darwin-x64-baseline', './tailwindcss-macos-x64'),
 
-  // The Windows x64 build uses `bun-baseline` instead of the regular bun build.
-  // This enables support for running inside the ARM emulation mode.
   build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
 ])
 
