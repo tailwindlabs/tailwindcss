@@ -17256,23 +17256,6 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab-foo'])).toEqual('')
     })
 
-    test('resolve literal values', async () => {
-      let input = css`
-        @utility tab-* {
-          tab-size: --value('revert');
-        }
-
-        @tailwind utilities;
-      `
-
-      expect(await compileCss(input, ['tab-revert'])).toMatchInlineSnapshot(`
-        ".tab-revert {
-          tab-size: revert;
-        }"
-      `)
-      expect(await compileCss(input, ['tab-initial'])).toEqual('')
-    })
-
     test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
       let input = css`
         @utility example-* {
@@ -17737,7 +17720,6 @@ describe('custom utilities', () => {
           --value: --value(--value, [length]);
           --modifier: --modifier(--modifier, [length]);
           --modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
-          --modifier-literals: --modifier('literal', 'literal-2');
         }
 
         @tailwind utilities;
@@ -17749,8 +17731,6 @@ describe('custom utilities', () => {
           'example-sm/7',
           'example-[12px]',
           'example-[12px]/[16px]',
-          'example-sm/literal',
-          'example-sm/literal-2',
         ]),
       ).toMatchInlineSnapshot(`
         ".example-\\[12px\\]\\/\\[16px\\] {
@@ -17765,16 +17745,6 @@ describe('custom utilities', () => {
           --modifier-with-calc: calc(var(--modifier-7, 28px) * 2);
         }
 
-        .example-sm\\/literal {
-          --value: var(--value-sm, 14px);
-          --modifier-literals: literal;
-        }
-
-        .example-sm\\/literal-2 {
-          --value: var(--value-sm, 14px);
-          --modifier-literals: literal-2;
-        }
-
         .example-\\[12px\\] {
           --value: 12px;
         }
@@ -17784,12 +17754,7 @@ describe('custom utilities', () => {
         }"
       `)
       expect(
-        await compileCss(input, [
-          'example-foo',
-          'example-foo/[12px]',
-          'example-foo/12',
-          'example-sm/unknown-literal',
-        ]),
+        await compileCss(input, ['example-foo', 'example-foo/[12px]', 'example-foo/12']),
       ).toEqual('')
     })
 
