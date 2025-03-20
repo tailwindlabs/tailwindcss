@@ -479,13 +479,13 @@ test('Custom functional @utility', async () => {
     }
 
     @utility tab-* {
-      tab-size: --value(--tab-size);
+      tab-size: --value(--tab-size, 'revert', 'initial');
     }
 
     @utility example-* {
       font-size: --value(--text);
       line-height: --value(--text- * --line-height);
-      line-height: --modifier(--leading);
+      line-height: --modifier(--leading, 'normal');
     }
 
     @utility -negative-* {
@@ -507,6 +507,8 @@ test('Custom functional @utility', async () => {
   expect(classNames).toContain('tab-2')
   expect(classNames).toContain('tab-4')
   expect(classNames).toContain('tab-github')
+  expect(classNames).toContain('tab-revert')
+  expect(classNames).toContain('tab-initial')
 
   expect(classNames).not.toContain('-tab-1')
   expect(classNames).not.toContain('-tab-2')
@@ -524,7 +526,7 @@ test('Custom functional @utility', async () => {
   expect(classNames).not.toContain('--negative-github')
 
   expect(classNames).toContain('example-xs')
-  expect(classMap.get('example-xs')?.modifiers).toEqual(['foo', 'bar'])
+  expect(classMap.get('example-xs')?.modifiers).toEqual(['normal', 'foo', 'bar'])
 })
 
 test('Theme keys with underscores are suggested with underscores', async () => {
