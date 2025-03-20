@@ -4961,8 +4961,21 @@ function resolveValueFunction(
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
   for (let arg of fn.nodes) {
-    // Resolving theme value, e.g.: `--value(--color)`
+    // Resolve literal value, e.g.: `--modifier('closest-side')`
     if (
+      value.kind === 'named' &&
+      arg.kind === 'word' &&
+      // Should be wreapped in quotes
+      (arg.value[0] === "'" || arg.value[0] === '"') &&
+      arg.value[arg.value.length - 1] === arg.value[0] &&
+      // Values should match
+      arg.value.slice(1, -1) === value.value
+    ) {
+      return { nodes: ValueParser.parse(value.value) }
+    }
+
+    // Resolving theme value, e.g.: `--value(--color)`
+    else if (
       value.kind === 'named' &&
       arg.kind === 'word' &&
       arg.value[0] === '-' &&
