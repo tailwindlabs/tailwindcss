@@ -193,11 +193,13 @@ export class Theme {
     return `var(${escape(this.prefixKey(themeKey))}${fallback ? `, ${fallback}` : ''})`
   }
 
-  markUsedVariable(themeKey: string) {
+  markUsedVariable(themeKey: string): boolean {
     let key = unescape(this.#unprefixKey(themeKey))
     let value = this.values.get(key)
-    if (!value) return
+    if (!value) return false
+    let isUsed = value.options & ThemeOptions.USED
     value.options |= ThemeOptions.USED
+    return !isUsed
   }
 
   resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {

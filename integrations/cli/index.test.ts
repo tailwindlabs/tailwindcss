@@ -1303,11 +1303,11 @@ test(
       `,
     )
 
-    fs.expectFileToContain(
+    // prettier-ignore
+    await fs.expectFileToContain(
       './dist/out.css',
       css`
-        :root,
-        :host {
+        :root, :host {
           --color-blue-500: blue;
         }
       `,
