@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 
+### [4.0.15] - 2025-03-20
+
 ### Fixed
 
 - Fix incorrect angle in `-bg-conic-*` utilities ([#17174](https://github.com/tailwindlabs/tailwindcss/pull/17174))
@@ -27,17 +29,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Work around a crash in Safari 16.4 and 16.5 when using the default Preflight styles ([#17306](https://github.com/tailwindlabs/tailwindcss/pull/17306))
 - Pre-process `<template lang="…">` in Vue files ([#17252](https://github.com/tailwindlabs/tailwindcss/pull/17252))
 - Ensure that all CSS variables used by Preflight are prefixed ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
-
-### Changed
-
-- The `--theme(…)` function now returns CSS variables from your theme variables unless used inside positions where CSS variables are invalid (e.g. inside `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
-- Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
 - Prevent segfault when loaded in a worker thread on Linux ([#17276](https://github.com/tailwindlabs/tailwindcss/pull/17276))
 - Ensure multiple `--value(…)` or `--modifier(…)` calls don't delete subsequent declarations ([#17273](https://github.com/tailwindlabs/tailwindcss/pull/17273))
 - Fix class extraction followed by `(` in Slim ([#17278](https://github.com/tailwindlabs/tailwindcss/pull/17278))
 - Export `PluginUtils` from `tailwindcss/plugin` for compatibility with v3 ([#17299](https://github.com/tailwindlabs/tailwindcss/pull/17299))
+- Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
 - Increase Standalone hardware compatibility on macOS x64 builds ([#17267](https://github.com/tailwindlabs/tailwindcss/pull/17267))
 - Ensure that the CSS file rebuilds if a new CSS variable is used from templates ([#17301](https://github.com/tailwindlabs/tailwindcss/pull/17301))
+
+### Changed
+
+- The `--theme(…)` function now returns CSS variables from your theme variables unless used inside positions where CSS variables are invalid (e.g. inside `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 
 ## [4.0.14] - 2025-03-13
 
@@ -3559,7 +3561,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.15...HEAD
+[4.0.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...v4.0.15
 [4.0.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.13...v4.0.14
 [4.0.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.12...v4.0.13
 [4.0.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.11...v4.0.12
