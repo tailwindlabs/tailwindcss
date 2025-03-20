@@ -136,13 +136,6 @@ export function withAlpha(value: string, alpha: string): string {
     alpha = `${alphaAsNumber * 100}%`
   }
 
-  // Use the `oklab(…)` function when applying alpha to `currentColor` to work
-  // around a crash with Safari 16.4 and 16.5
-  // https://github.com/tailwindlabs/tailwindcss/issues/17194
-  if (value === 'currentColor') {
-    return `oklab(from currentColor l a b / ${alpha})`
-  }
-
   return `color-mix(in oklab, ${value} ${alpha}, transparent)`
 }
 

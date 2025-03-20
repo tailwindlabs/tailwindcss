@@ -24,9 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix incorrect angle in `-bg-conic-*` utilities ([#17174](https://github.com/tailwindlabs/tailwindcss/pull/17174))
 - Fix `border-[12px_4px]` being interpreted as a `border-color` instead of a `border-width` ([#17248](https://github.com/tailwindlabs/tailwindcss/pull/17248))
-- Use the `oklab(…)` function when applying opacity to `currentColor` to work around a crash in Safari 16.4 and 16.5 ([#17247](https://github.com/tailwindlabs/tailwindcss/pull/17247))
+- Work around a crash in Safari 16.4 and 16.5 when using the default Preflight styles ([#17306](https://github.com/tailwindlabs/tailwindcss/pull/17306))
 - Pre-process `<template lang="…">` in Vue files ([#17252](https://github.com/tailwindlabs/tailwindcss/pull/17252))
-- Ensure that all CSS variables used by preflight are prefixed ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
+- Ensure that all CSS variables used by Preflight are prefixed ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 
 ### Changed
 

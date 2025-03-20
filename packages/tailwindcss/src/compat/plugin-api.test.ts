@@ -3860,7 +3860,7 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-current\\/45 {
-        scrollbar-color: oklab(from currentColor l a b / 45%);
+        scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
       }"
     `)
   })
