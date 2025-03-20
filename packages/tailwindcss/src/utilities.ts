@@ -4732,7 +4732,10 @@ export function createCssUtility(node: AtRule) {
 
     return (designSystem: DesignSystem) => {
       let valueThemeKeys = new Set<`--${string}`>()
+      let valueLiterals = new Set<string>()
+
       let modifierThemeKeys = new Set<`--${string}`>()
+      let modifierLiterals = new Set<string>()
 
       // Pre-process the AST to make it easier to work with.
       //
@@ -4784,9 +4787,25 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          // Track the theme keys for suggestions
+          // Track information for suggestions
           for (let node of fn.nodes) {
-            if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
+            // Track literal values
+            if (
+              node.kind === 'word' &&
+              (node.value[0] === '"' || node.value[0] === "'") &&
+              node.value[0] === node.value[node.value.length - 1]
+            ) {
+              let value = node.value.slice(1, -1)
+
+              if (fn.value === '--value') {
+                valueLiterals.add(value)
+              } else if (fn.value === '--modifier') {
+                modifierLiterals.add(value)
+              }
+            }
+
+            // Track theme keys
+            else if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
               let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
 
               if (fn.value === '--value') {
@@ -4930,16 +4949,23 @@ export function createCssUtility(node: AtRule) {
       })
 
       designSystem.utilities.suggest(name.slice(0, -2), () => {
-        return [
-          {
-            values: designSystem.theme
-              .keysInNamespaces(valueThemeKeys)
-              .map((x) => x.replaceAll('_', '.')),
-            modifiers: designSystem.theme
-              .keysInNamespaces(modifierThemeKeys)
-              .map((x) => x.replaceAll('_', '.')),
-          },
-        ] satisfies SuggestionGroup[]
+        let values = []
+        for (let value of valueLiterals) {
+          values.push(value)
+        }
+        for (let value of designSystem.theme.keysInNamespaces(valueThemeKeys)) {
+          values.push(value.replaceAll('_', '.'))
+        }
+
+        let modifiers = []
+        for (let modifier of modifierLiterals) {
+          modifiers.push(modifier)
+        }
+        for (let value of designSystem.theme.keysInNamespaces(modifierThemeKeys)) {
+          modifiers.push(value.replaceAll('_', '.'))
+        }
+
+        return [{ values, modifiers }] satisfies SuggestionGroup[]
       })
     }
   }
