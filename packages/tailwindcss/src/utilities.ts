@@ -4706,6 +4706,7 @@ export function createCssUtility(node: AtRule) {
   if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
     // API:
     //
+    // - `--value('literal')`         resolves a literal named value
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
@@ -4747,12 +4748,12 @@ export function createCssUtility(node: AtRule) {
 
         // Required manipulations:
         //
-        // - `--value(--spacing)` -> `--value(--spacing-*)`
-        // - `--value(--spacing- *)` -> `--value(--spacing-*)`
-        // - `--value(--text- * --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value(--text --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value(--text-\\* --line-height)` -> `--value(--text-*--line-height)`
-        // - `--value([ *])` -> `--value([*])`
+        // - `--value(--spacing)`                 -> `--value(--spacing-*)`
+        // - `--value(--spacing- *)`              -> `--value(--spacing-*)`
+        // - `--value(--text- * --line-height)`   -> `--value(--text-*--line-height)`
+        // - `--value(--text --line-height)`      -> `--value(--text-*--line-height)`
+        // - `--value(--text-\\* --line-height)`  -> `--value(--text-*--line-height)`
+        // - `--value([ *])`                      -> `--value([*])`
         //
         // Once Prettier / Biome handle these better (e.g.: not crashing without
         // `\\*` or not inserting whitespace) then most of these can go away.
