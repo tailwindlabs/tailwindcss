@@ -4954,7 +4954,7 @@ export function createCssUtility(node: AtRule) {
           values.push(value)
         }
         for (let value of designSystem.theme.keysInNamespaces(valueThemeKeys)) {
-          values.push(value.replaceAll('_', '.'))
+          values.push(value)
         }
 
         let modifiers = []
@@ -4962,7 +4962,7 @@ export function createCssUtility(node: AtRule) {
           modifiers.push(modifier)
         }
         for (let value of designSystem.theme.keysInNamespaces(modifierThemeKeys)) {
-          modifiers.push(value.replaceAll('_', '.'))
+          modifiers.push(value)
         }
 
         return [{ values, modifiers }] satisfies SuggestionGroup[]
