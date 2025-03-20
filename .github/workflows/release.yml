@@ -197,7 +197,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-tags: true
           fetch-depth: 20
 
       - uses: pnpm/action-setup@v4
