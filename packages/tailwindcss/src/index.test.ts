@@ -115,6 +115,29 @@ describe('compiling CSS', () => {
     ).toMatchSnapshot()
   })
 
+  test('prefix all CSS variables inside preflight', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss' prefix(tw);
+          @tailwind utilities;
+        `,
+        ['font-mono'],
+        {
+          async loadStylesheet(id) {
+            return {
+              content: fs.readFileSync(
+                path.resolve(__dirname, '..', id === 'tailwindcss' ? 'index.css' : id),
+                'utf-8',
+              ),
+              base: '',
+            }
+          },
+        },
+      ),
+    ).toMatchSnapshot()
+  })
+
   test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()` and `theme()`', async () => {
     expect(
       await compileCss(

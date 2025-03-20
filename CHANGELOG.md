@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix `border-[12px_4px]` being interpreted as a `border-color` instead of a `border-width` ([#17248](https://github.com/tailwindlabs/tailwindcss/pull/17248))
 - Use the `oklab(…)` function when applying opacity to `currentColor` to work around a crash in Safari 16.4 and 16.5 ([#17247](https://github.com/tailwindlabs/tailwindcss/pull/17247))
 - Pre-process `<template lang="…">` in Vue files ([#17252](https://github.com/tailwindlabs/tailwindcss/pull/17252))
+- Ensure that all CSS variables used by preflight are prefixed ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
+
+### Changed
+
+- The `--theme(…)` function now returns CSS variables from your theme variables unless used inside positions where CSS variables are invalid (e.g. inside `@media` queries) ([#17036](https://github.com/tailwindlabs/tailwindcss/pull/17036))
 - Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
 - Prevent segfault when loaded in a worker thread on Linux ([#17276](https://github.com/tailwindlabs/tailwindcss/pull/17276))
 - Ensure multiple `--value(…)` or `--modifier(…)` calls don't delete subsequent declarations ([#17273](https://github.com/tailwindlabs/tailwindcss/pull/17273))

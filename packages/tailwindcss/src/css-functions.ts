@@ -5,14 +5,22 @@ import { withAlpha } from './utilities'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 
-const functions: Record<string, (designSystem: DesignSystem, ...args: string[]) => string> = {
+const CSS_FUNCTIONS: Record<
+  string,
+  (designSystem: DesignSystem, source: AstNode, ...args: string[]) => string
+> = {
   '--alpha': alpha,
   '--spacing': spacing,
   '--theme': theme,
   theme: legacyTheme,
 }
 
-function alpha(_designSystem: DesignSystem, value: string, ...rest: string[]) {
+function alpha(
+  _designSystem: DesignSystem,
+  _source: AstNode,
+  value: string,
+  ...rest: string[]
+): string {
   let [color, alpha] = segment(value, '/').map((v) => v.trim())
 
   if (!color || !alpha) {
@@ -30,7 +38,12 @@ function alpha(_designSystem: DesignSystem, value: string, ...rest: string[]) {
   return withAlpha(color, alpha)
 }
 
-function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
+function spacing(
+  designSystem: DesignSystem,
+  _source: AstNode,
+  value: string,
+  ...rest: string[]
+): string {
   if (!value) {
     throw new Error(`The --spacing(…) function requires an argument, but received none.`)
   }
@@ -51,15 +64,73 @@ function spacing(designSystem: DesignSystem, value: string, ...rest: string[]) {
   return `calc(${multiplier} * ${value})`
 }
 
-function theme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+function theme(
+  designSystem: DesignSystem,
+  source: AstNode,
+  path: string,
+  ...fallback: string[]
+): string {
   if (!path.startsWith('--')) {
     throw new Error(`The --theme(…) function can only be used with CSS variables from your theme.`)
   }
 
-  return legacyTheme(designSystem, path, ...fallback)
+  let inline = false
+
+  // Handle `--theme(… inline)` to force inline resolution
+  if (path.endsWith(' inline')) {
+    inline = true
+    path = path.slice(0, -7)
+  }
+
+  // If the `--theme(…)` function is used within an at-rule (e.g. `@media (width >= --theme(…)))`,
+  // we have to always inline the result since CSS does not support CSS variables in these positions
+  if (source.kind === 'at-rule') {
+    inline = true
+  }
+
+  let resolvedValue = designSystem.resolveThemeValue(path, inline)
+
+  if (!resolvedValue) {
+    if (fallback.length > 0) return fallback.join(', ')
+    throw new Error(
+      `Could not resolve value for theme function: \`theme(${path})\`. Consider checking if the variable name is correct or provide a fallback value to silence this error.`,
+    )
+  }
+
+  if (fallback.length === 0) {
+    return resolvedValue
+  }
+
+  let joinedFallback = fallback.join(', ')
+  if (joinedFallback === 'initial') return resolvedValue
+
+  // When the resolved value returns `initial`, resolve with the the fallback value
+  if (resolvedValue === 'initial') return joinedFallback
+
+  // Inject the fallback of a `--theme(…)` function into the fallback of a referenced `--theme(…)`
+  // function or `var(…)` declaration. If the referenced function already defines a fallback, we use
+  // a potential fallback value of `initial` in the referenced function to determine if we should
+  // inject the fallback value of the caller. If that's not the case, we keep the fallback as-is
+  // (this is needed for theme variables in reference-mode).
+  if (
+    resolvedValue.startsWith('var(') ||
+    resolvedValue.startsWith('theme(') ||
+    resolvedValue.startsWith('--theme(')
+  ) {
+    let valueAst = ValueParser.parse(resolvedValue)
+    injectFallbackForInitialFallback(valueAst, joinedFallback)
+    return ValueParser.toCss(valueAst)
+  }
+
+  return resolvedValue
 }
 
-function legacyTheme(designSystem: DesignSystem, path: string, ...fallback: string[]) {
+function legacyTheme(
+  designSystem: DesignSystem,
+  _source: AstNode,
+  path: string,
+  ...fallback: string[]
+): string {
   path = eventuallyUnquote(path)
 
   let resolvedValue = designSystem.resolveThemeValue(path)
@@ -78,7 +149,7 @@ function legacyTheme(designSystem: DesignSystem, path: string, ...fallback: stri
 }
 
 export const THEME_FUNCTION_INVOCATION = new RegExp(
-  Object.keys(functions)
+  Object.keys(CSS_FUNCTIONS)
     .map((x) => `${x}\\(`)
     .join('|'),
 )
@@ -89,7 +160,7 @@ export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) 
     // Find all declaration values
     if (node.kind === 'declaration' && node.value && THEME_FUNCTION_INVOCATION.test(node.value)) {
       features |= Features.ThemeFunction
-      node.value = substituteFunctionsInValue(node.value, designSystem)
+      node.value = substituteFunctionsInValue(node.value, node, designSystem)
       return
     }
 
@@ -103,19 +174,27 @@ export function substituteFunctions(ast: AstNode[], designSystem: DesignSystem) 
         THEME_FUNCTION_INVOCATION.test(node.params)
       ) {
         features |= Features.ThemeFunction
-        node.params = substituteFunctionsInValue(node.params, designSystem)
+        node.params = substituteFunctionsInValue(node.params, node, designSystem)
       }
     }
   })
   return features
 }
 
-export function substituteFunctionsInValue(value: string, designSystem: DesignSystem): string {
+export function substituteFunctionsInValue(
+  value: string,
+  source: AstNode,
+  designSystem: DesignSystem,
+): string {
   let ast = ValueParser.parse(value)
   ValueParser.walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'function' && node.value in functions) {
+    if (node.kind === 'function' && node.value in CSS_FUNCTIONS) {
       let args = segment(ValueParser.toCss(node.nodes).trim(), ',').map((x) => x.trim())
-      let result = functions[node.value as keyof typeof functions](designSystem, ...args)
+      let result = CSS_FUNCTIONS[node.value as keyof typeof CSS_FUNCTIONS](
+        designSystem,
+        source,
+        ...args,
+      )
       return replaceWith(ValueParser.parse(result))
     }
   })
@@ -141,4 +220,23 @@ function eventuallyUnquote(value: string) {
   }
 
   return unquoted
+}
+
+function injectFallbackForInitialFallback(ast: ValueParser.ValueAstNode[], fallback: string): void {
+  ValueParser.walk(ast, (node) => {
+    if (node.kind !== 'function') return
+    if (node.value !== 'var' && node.value !== 'theme' && node.value !== '--theme') return
+
+    if (node.nodes.length === 1) {
+      node.nodes.push({
+        kind: 'word',
+        value: `, ${fallback}`,
+      })
+    } else {
+      let lastNode = node.nodes[node.nodes.length - 1]
+      if (lastNode.kind === 'word' && lastNode.value === 'initial') {
+        lastNode.value = fallback
+      }
+    }
+  })
 }

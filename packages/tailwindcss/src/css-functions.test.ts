@@ -153,13 +153,211 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: var(--color-red-500);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
       ".red {
         color: red;
       }"
     `)
   })
 
-  test('--theme(…) can only be used with CSS variables from your theme', async () => {
+  test('--theme(--color-red-500/50)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500/0.5);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: red;
+      }
+
+      .red {
+        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      }"
+    `)
+  })
+
+  test('--theme(--color-red-500/50 inline)', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-red-500/50 inline);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        color: oklab(62.7955% .224863 .125846);
+      }"
+    `)
+  })
+
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function with the fallback `initial`', async () => {
+    expect(
+      await compileCss(css`
+        @theme prefix(tw) {
+          --default-font-family: --theme(--font-family, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
+      }"
+    `)
+  })
+
+  test('--theme(…) injects the fallback when the value it refers is set to a `--theme(…)` function with the fallback `initial` in @reference mode', async () => {
+    expect(
+      await compileCss(css`
+        @theme reference prefix(tw) {
+          --default-font-family: --theme(--font-family, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
+      }"
+    `)
+  })
+
+  test('--theme(…) resolves with the fallback when the value it refers is set to a `--theme(… inline)` function with the fallback `initial`', async () => {
+    expect(
+      await compileCss(css`
+        @theme prefix(tw) {
+          --default-font-family: --theme(--font-family inline, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family inline, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: Potato Sans, sans-serif;
+      }"
+    `)
+  })
+
+  test('--theme(…) resolves with the fallback when the value it refers is set to a `--theme(… inline)` function with the fallback `initial` in @reference mode', async () => {
+    expect(
+      await compileCss(css`
+        @theme reference prefix(tw) {
+          --default-font-family: --theme(--font-family inline, initial);
+        }
+        .red {
+          font-family: --theme(--default-font-family inline, Potato Sans, sans-serif);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".red {
+        font-family: Potato Sans, sans-serif;
+      }"
+    `)
+  })
+
+  test('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme prefix(tw) {
+            --font-sans:
+              ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+              'Segoe UI Symbol', 'Noto Color Emoji';
+            --default-font-family: --theme(--font-sans, initial);
+          }
+          @layer base {
+            html {
+              font-family: --theme(--default-font-family, sans-serif);
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['tw:font-sans'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --tw-default-font-family: var(--tw-font-sans);
+      }
+
+      @layer base {
+        html {
+          font-family: var(--tw-default-font-family, sans-serif);
+        }
+      }
+
+      .tw\\:font-sans {
+        font-family: var(--tw-font-sans);
+      }"
+    `)
+  })
+
+  test('--theme(…) forces the value to be retrieved as inline when used inside an at-rule', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+        }
+        @custom-media --md (width >= --theme(--breakpoint-md));
+        @media (--md) {
+          .blue {
+            color: blue;
+          }
+        }
+        @media (width >= --theme(--breakpoint-lg)) {
+          .red {
+            color: red;
+          }
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "@media (width >= 48rem) {
+        .blue {
+          color: #00f;
+        }
+      }
+
+      @media (width >= 64rem) {
+        .red {
+          color: red;
+        }
+      }"
+    `)
+  })
+
+  test('--theme(…) can only be used with CSS variables from your @theme', async () => {
     expect(() =>
       compileCss(css`
         @theme {
@@ -171,6 +369,19 @@ describe('--theme(…)', () => {
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
+    )
+
+    expect(() =>
+      compileCss(css`
+        @theme {
+          --color-red-500: #f00;
+        }
+        .red {
+          color: --theme(--color-green-500);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Could not resolve value for theme function: \`theme(--color-green-500)\`. Consider checking if the variable name is correct or provide a fallback value to silence this error.]`,
     )
   })
 })

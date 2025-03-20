@@ -30,7 +30,7 @@ html,
   line-height: 1.5; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
   tab-size: 4; /* 3 */
-  font-family: var(
+  font-family: --theme(
     --default-font-family,
     ui-sans-serif,
     system-ui,
@@ -40,8 +40,8 @@ html,
     'Segoe UI Symbol',
     'Noto Color Emoji'
   ); /* 4 */
-  font-feature-settings: var(--default-font-feature-settings, normal); /* 5 */
-  font-variation-settings: var(--default-font-variation-settings, normal); /* 6 */
+  font-feature-settings: --theme(--default-font-feature-settings, normal); /* 5 */
+  font-variation-settings: --theme(--default-font-variation-settings, normal); /* 6 */
   -webkit-tap-highlight-color: transparent; /* 7 */
 }
 
@@ -110,7 +110,7 @@ code,
 kbd,
 samp,
 pre {
-  font-family: var(
+  font-family: --theme(
     --default-mono-font-family,
     ui-monospace,
     SFMono-Regular,
@@ -121,8 +121,8 @@ pre {
     'Courier New',
     monospace
   ); /* 1 */
-  font-feature-settings: var(--default-mono-font-feature-settings, normal); /* 2 */
-  font-variation-settings: var(--default-mono-font-variation-settings, normal); /* 3 */
+  font-feature-settings: --theme(--default-mono-font-feature-settings, normal); /* 2 */
+  font-variation-settings: --theme(--default-mono-font-variation-settings, normal); /* 3 */
   font-size: 1em; /* 4 */
 }
 
