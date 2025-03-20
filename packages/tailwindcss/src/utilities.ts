@@ -4731,11 +4731,20 @@ export function createCssUtility(node: AtRule) {
     //   If you then use `foo-1/2`, this is invalid, because the modifier is not used.
 
     return (designSystem: DesignSystem) => {
-      let valueThemeKeys = new Set<`--${string}`>()
-      let valueLiterals = new Set<string>()
-
-      let modifierThemeKeys = new Set<`--${string}`>()
-      let modifierLiterals = new Set<string>()
+      let storage = {
+        '--value': {
+          usedSpacingInteger: false,
+          usedSpacingNumber: false,
+          themeKeys: new Set<`--${string}`>(),
+          literals: new Set<string>(),
+        },
+        '--modifier': {
+          usedSpacingInteger: false,
+          usedSpacingNumber: false,
+          themeKeys: new Set<`--${string}`>(),
+          literals: new Set<string>(),
+        },
+      }
 
       // Pre-process the AST to make it easier to work with.
       //
@@ -4762,6 +4771,41 @@ export function createCssUtility(node: AtRule) {
         // `\\*` or not inserting whitespace) then most of these can go away.
         ValueParser.walk(declarationValueAst, (fn) => {
           if (fn.kind !== 'function') return
+
+          // Track usage of `--spacing(…)`
+          if (
+            fn.value === '--spacing' &&
+            // Quick bail check if we already know that `--value` and `--modifier` are
+            // using the full `--spacing` theme scale.
+            !(storage['--modifier'].usedSpacingNumber && storage['--value'].usedSpacingNumber)
+          ) {
+            ValueParser.walk(fn.nodes, (node) => {
+              if (node.kind !== 'function') return
+              if (node.value !== '--value' && node.value !== '--modifier') return
+              const key = node.value
+
+              for (let arg of node.nodes) {
+                if (arg.kind !== 'word') continue
+
+                if (arg.value === 'integer') {
+                  storage[key].usedSpacingInteger ||= true
+                } else if (arg.value === 'number') {
+                  storage[key].usedSpacingNumber ||= true
+
+                  // Once both `--value` and `--modifier` are using the full
+                  // `number` spacing scale, then there's no need to continue
+                  if (
+                    storage['--modifier'].usedSpacingNumber &&
+                    storage['--value'].usedSpacingNumber
+                  ) {
+                    return ValueParser.ValueWalkAction.Stop
+                  }
+                }
+              }
+            })
+            return ValueParser.ValueWalkAction.Continue
+          }
+
           if (fn.value !== '--value' && fn.value !== '--modifier') return
 
           let args = segment(ValueParser.toCss(fn.nodes), ',')
@@ -4796,23 +4840,13 @@ export function createCssUtility(node: AtRule) {
               node.value[0] === node.value[node.value.length - 1]
             ) {
               let value = node.value.slice(1, -1)
-
-              if (fn.value === '--value') {
-                valueLiterals.add(value)
-              } else if (fn.value === '--modifier') {
-                modifierLiterals.add(value)
-              }
+              storage[fn.value].literals.add(value)
             }
 
             // Track theme keys
             else if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
               let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
-
-              if (fn.value === '--value') {
-                valueThemeKeys.add(value)
-              } else if (fn.value === '--modifier') {
-                modifierThemeKeys.add(value)
-              }
+              storage[fn.value].themeKeys.add(value)
             }
           }
         })
@@ -4949,20 +4983,33 @@ export function createCssUtility(node: AtRule) {
       })
 
       designSystem.utilities.suggest(name.slice(0, -2), () => {
-        let values = []
-        for (let value of valueLiterals) {
-          values.push(value)
-        }
-        for (let value of designSystem.theme.keysInNamespaces(valueThemeKeys)) {
-          values.push(value)
-        }
+        let values: string[] = []
+        let modifiers: string[] = []
 
-        let modifiers = []
-        for (let modifier of modifierLiterals) {
-          modifiers.push(modifier)
-        }
-        for (let value of designSystem.theme.keysInNamespaces(modifierThemeKeys)) {
-          modifiers.push(value)
+        for (let [target, { literals, usedSpacingNumber, usedSpacingInteger, themeKeys }] of [
+          [values, storage['--value']],
+          [modifiers, storage['--modifier']],
+        ] as const) {
+          // Suggest literal values. E.g.: `--value('literal')`
+          for (let value of literals) {
+            target.push(value)
+          }
+
+          // Suggest `--spacing(…)` values. E.g.: `--spacing(--value(integer))`
+          if (usedSpacingNumber) {
+            target.push(...DEFAULT_SPACING_SUGGESTIONS)
+          } else if (usedSpacingInteger) {
+            for (let value of DEFAULT_SPACING_SUGGESTIONS) {
+              if (isPositiveInteger(value)) {
+                target.push(value)
+              }
+            }
+          }
+
+          // Suggest theme values. E.g.: `--value(--color-*)`
+          for (let value of designSystem.theme.keysInNamespaces(themeKeys)) {
+            target.push(value)
+          }
         }
 
         return [{ values, modifiers }] satisfies SuggestionGroup[]
