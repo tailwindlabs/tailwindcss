@@ -161,7 +161,12 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   ::placeholder {
     opacity: 1;
-    color: oklab(from currentColor l a b / 50%);
+  }
+
+  @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: color-mix(in oklab, currentColor 50%, transparent);
+    }
   }
 
   textarea {
