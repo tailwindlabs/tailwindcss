@@ -12002,6 +12002,74 @@ test('bg-origin', async () => {
   ).toEqual('')
 })
 
+test('mask-clip', async () => {
+  expect(
+    await run([
+      'mask-clip-border',
+      'mask-clip-padding',
+      'mask-clip-content',
+      'mask-clip-fill',
+      'mask-clip-stroke',
+      'mask-clip-view',
+      'mask-no-clip',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".mask-clip-border {
+      -webkit-mask-clip: border-box;
+      mask-clip: border-box;
+    }
+
+    .mask-clip-content {
+      -webkit-mask-clip: content-box;
+      mask-clip: content-box;
+    }
+
+    .mask-clip-fill {
+      -webkit-mask-clip: fill-box;
+      mask-clip: fill-box;
+    }
+
+    .mask-clip-padding {
+      -webkit-mask-clip: padding-box;
+      mask-clip: padding-box;
+    }
+
+    .mask-clip-stroke {
+      -webkit-mask-clip: stroke-box;
+      mask-clip: stroke-box;
+    }
+
+    .mask-clip-view {
+      -webkit-mask-clip: view-box;
+      mask-clip: view-box;
+    }
+
+    .mask-no-clip {
+      -webkit-mask-clip: no-clip;
+      mask-clip: no-clip;
+    }"
+  `)
+  expect(
+    await run([
+      'mask-clip',
+      '-mask-clip-border',
+      '-mask-clip-padding',
+      '-mask-clip-content',
+      '-mask-clip-fill',
+      '-mask-clip-stroke',
+      '-mask-clip-view',
+      '-mask-no-clip',
+      'mask-clip-border/foo',
+      'mask-clip-padding/foo',
+      'mask-clip-content/foo',
+      'mask-clip-fill/foo',
+      'mask-clip-stroke/foo',
+      'mask-clip-view/foo',
+      'mask-no-clip/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('bg-blend', async () => {
   expect(
     await run([
