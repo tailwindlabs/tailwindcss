@@ -2810,10 +2810,17 @@ export function createUtilities(theme: Theme) {
         candidate.value.dataType ??
         inferDataType(value, [
           'image',
+          'bg-size',
+          'length',
           'url',
         ])
 
       switch (type) {
+        case 'bg-size':
+        case 'length':
+        case 'size': {
+          return [decl('mask-size', value)]
+        }
         case 'image':
         case 'url':
         default: {
@@ -2849,6 +2856,14 @@ export function createUtilities(theme: Theme) {
      */
     staticUtility('mask-type-alpha', [['mask-type', 'alpha']])
     staticUtility('mask-type-luminance', [['mask-type', 'luminance']])
+
+    /**
+     * @css `mask-size`
+     */
+
+    staticUtility('mask-auto', [['mask-size', 'auto']])
+    staticUtility('mask-cover', [['mask-size', 'cover']])
+    staticUtility('mask-contain', [['mask-size', 'contain']])
   }
 
   /**
