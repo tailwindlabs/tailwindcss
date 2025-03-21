@@ -21,7 +21,7 @@ export async function applyCompatibilityHooks({
   base,
   ast,
   loadModule,
-  globs,
+  sources,
 }: {
   designSystem: DesignSystem
   base: string
@@ -31,7 +31,7 @@ export async function applyCompatibilityHooks({
     base: string,
     resourceHint: 'plugin' | 'config',
   ) => Promise<{ module: any; base: string }>
-  globs: { origin?: string; pattern: string }[]
+  sources: { base: string; pattern: string }[]
 }) {
   let features = Features.None
   let pluginPaths: [{ id: string; base: string; reference: boolean }, CssPluginOptions | null][] =
@@ -145,7 +145,7 @@ export async function applyCompatibilityHooks({
       designSystem,
       base,
       ast,
-      globs,
+      sources,
       configs: [],
       pluginDetails: [],
     })
@@ -186,7 +186,7 @@ export async function applyCompatibilityHooks({
     designSystem,
     base,
     ast,
-    globs,
+    sources,
     configs,
     pluginDetails,
   })
@@ -198,14 +198,14 @@ function upgradeToFullPluginSupport({
   designSystem,
   base,
   ast,
-  globs,
+  sources,
   configs,
   pluginDetails,
 }: {
   designSystem: DesignSystem
   base: string
   ast: AstNode[]
-  globs: { origin?: string; pattern: string }[]
+  sources: { base: string; pattern: string }[]
   configs: {
     path: string
     base: string
@@ -362,7 +362,7 @@ function upgradeToFullPluginSupport({
       )
     }
 
-    globs.push(file)
+    sources.push(file)
   }
   return features
 }

@@ -19,7 +19,7 @@ export async function prepareConfig(
   options: { base: string },
 ): Promise<{
   designSystem: DesignSystem
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string }[]
   userConfig: Config
   configFilePath: string
 
@@ -59,7 +59,7 @@ export async function prepareConfig(
 
     return {
       designSystem,
-      globs: compiler.globs,
+      sources: compiler.sources,
       userConfig,
       newPrefix,
       configFilePath,

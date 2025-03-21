@@ -180,7 +180,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
       // Use the specified root
       return [compiler.root]
-    })().concat(compiler.globs)
+    })().concat(compiler.sources)
 
     let scanner = new Scanner({ sources })
     DEBUG && I.end('Setup compiler')

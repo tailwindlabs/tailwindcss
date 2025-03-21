@@ -128,7 +128,7 @@ async function parseCss(
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
-  let globs: { base: string; pattern: string }[] = []
+  let sources: { base: string; pattern: string }[] = []
   let inlineCandidates: string[] = []
   let ignoredCandidates: string[] = []
   let root = null as Root
@@ -247,7 +247,7 @@ async function parseCss(
           }
         }
       } else {
-        globs.push({ base: context.base as string, pattern: source })
+        sources.push({ base: context.base as string, pattern: source })
       }
       replaceWith([])
       return
@@ -552,7 +552,7 @@ async function parseCss(
     base,
     ast,
     loadModule,
-    globs,
+    sources,
   })
 
   for (let customVariant of customVariants) {
@@ -637,7 +637,7 @@ async function parseCss(
   return {
     designSystem,
     ast,
-    globs,
+    sources,
     root,
     utilitiesNode,
     features,
@@ -649,12 +649,12 @@ export async function compileAst(
   input: AstNode[],
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string }[]
   root: Root
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features, inlineCandidates } =
+  let { designSystem, ast, sources, root, utilitiesNode, features, inlineCandidates } =
     await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -682,7 +682,7 @@ export async function compileAst(
   }
 
   return {
-    globs,
+    sources,
     root,
     features,
     build(newRawCandidates: string[]) {
@@ -747,7 +747,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string }[]
   root: Root
   features: Features
   build(candidates: string[]): string

@@ -195,7 +195,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
               // Use the specified root
               return [context.compiler.root]
-            })().concat(context.compiler.globs)
+            })().concat(context.compiler.sources)
 
             // Look for candidates used to generate the CSS
             context.scanner = new Scanner({ sources })

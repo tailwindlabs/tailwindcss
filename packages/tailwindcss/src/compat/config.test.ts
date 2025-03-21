@@ -15,7 +15,7 @@ test('Config files can add content', async () => {
     loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root' }),
   })
 
-  expect(compiler.globs).toEqual([{ base: '/root', pattern: './file.txt' }])
+  expect(compiler.sources).toEqual([{ base: '/root', pattern: './file.txt' }])
 })
 
 test('Config files can change dark mode (media)', async () => {

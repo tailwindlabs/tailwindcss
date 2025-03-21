@@ -474,7 +474,7 @@ test('emits the right base for @source directives inside nested files', async ()
     { base: '/root', loadStylesheet },
   )
 
-  expect(compiler.globs).toEqual([
+  expect(compiler.sources).toEqual([
     { pattern: './nested/**/*.css', base: '/root/foo' },
     { pattern: './root/**/*.css', base: '/root' },
   ])
@@ -521,7 +521,7 @@ test('emits the right base for @source found inside JS configs and plugins from 
     { base: '/root', loadStylesheet, loadModule },
   )
 
-  expect(compiler.globs).toEqual([
+  expect(compiler.sources).toEqual([
     { pattern: './nested-plugin/*.html', base: '/root/foo-plugin' },
     { pattern: './root-plugin/*.html', base: '/root-plugin' },
 

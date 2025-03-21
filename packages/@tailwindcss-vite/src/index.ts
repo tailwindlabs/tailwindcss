@@ -273,7 +273,7 @@ class Root {
 
         // Use the specified root
         return [this.compiler.root]
-      })().concat(this.compiler.globs)
+      })().concat(this.compiler.sources)
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
