@@ -172,6 +172,164 @@ for (let [classes, expected] of [
   })
 }
 
+for (let [classes, expected] of [
+  [
+    'mask-linear-to-r mask-from-red',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-linear-to-r mask-via-red',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-linear-to-r mask-to-red',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 100%)',
+  ],
+  [
+    'mask-linear-to-r mask-from-red mask-to-blue',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+  ],
+  [
+    'mask-linear-45 mask-from-red mask-to-blue',
+    'linear-gradient(45deg in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+  ],
+  [
+    '-mask-linear-45 mask-from-red mask-to-blue',
+    // Chrome reports a different (but also correct) computed value than Firefox/WebKit so we check
+    // for both options.
+    [
+      'linear-gradient(-45deg in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+      'linear-gradient(calc(-45deg) in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+    ],
+  ],
+  [
+    'mask-linear-to-r mask-via-red mask-to-blue',
+    'linear-gradient(to right in oklab, rgba(0, 0, 0, 0) 0%, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)',
+  ],
+  [
+    'mask-linear-to-r mask-from-red mask-via-green mask-to-blue',
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+  ],
+  [
+    'mask-linear-[to_right,var(--color-red),var(--color-green),var(--color-blue)]',
+    'linear-gradient(to right, rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 255))',
+  ],
+]) {
+  test(`mask gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    if (Array.isArray(expected)) {
+      expect(expected).toContain(await getPropertyValue('#x', 'mask-image'))
+    } else {
+      expect(await getPropertyValue('#x', 'mask-image')).toEqual(expected)
+    }
+  })
+}
+
+test('mask gradient, going from 2 to 3', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="x" class="mask-linear-to-r mask-from-red hover:mask-via-green mask-to-blue">
+        Hello world
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'mask-image')).toEqual(
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+  )
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue('#x', 'mask-image')).toEqual(
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+  )
+})
+
+test('mask gradient, going from 3 to 2', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div
+        id="x"
+        class="mask-linear-to-r mask-from-red mask-via-green hover:mask-via-none mask-to-blue"
+      >
+        Hello world
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#x', 'mask-image')).toEqual(
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 255, 0) 50%, rgb(0, 0, 255) 100%)',
+  )
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue('#x', 'mask-image')).toEqual(
+    'linear-gradient(to right in oklab, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)',
+  )
+})
+
+for (let [classes, expected] of [
+  [
+    'mask-conic mask-from-red',
+    'conic-gradient(in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-conic-45 mask-from-red',
+    'conic-gradient(from 45deg in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-conic-[from_45deg] mask-from-red',
+    'conic-gradient(from 45deg, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-conic-[from_45deg,var(--color-red),transparent]',
+    'conic-gradient(from 45deg, rgb(255, 0, 0), rgba(0, 0, 0, 0))',
+  ],
+]) {
+  test(`mask conic gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'mask-image')).toEqual(expected)
+  })
+}
+
+for (let [classes, expected] of [
+  [
+    'mask-radial mask-from-red',
+    'radial-gradient(in oklab, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-radial-[at_0%_0%] mask-from-red',
+    'radial-gradient(at 0% 0%, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 100%)',
+  ],
+  [
+    'mask-radial-[at_0%_0%,var(--color-red),transparent]',
+    'radial-gradient(at 0% 0%, rgb(255, 0, 0), rgba(0, 0, 0, 0))',
+  ],
+  [
+    'mask-radial-[at_center] mask-from-red mask-to-green',
+    'radial-gradient(rgb(255, 0, 0) 0%, rgb(0, 255, 0) 100%)',
+  ],
+]) {
+  test(`mask radial gradient, "${classes}"`, async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`<div id="x" class="${classes}">Hello world</div>`,
+    )
+
+    expect(await getPropertyValue('#x', 'mask-image')).toEqual(expected)
+  })
+}
+
 test("::backdrop can receive a border with just the 'border' utility", async ({ page }) => {
   let { getPropertyValue } = await render(
     page,

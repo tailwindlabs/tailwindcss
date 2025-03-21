@@ -234,6 +234,45 @@ export default [
   '--tw-gradient-to',
   '--tw-gradient-to-position',
 
+  'mask-image',
+
+  // Edge masks
+  '--tw-mask-top',
+  '--tw-mask-top-from',
+  '--tw-mask-top-to',
+
+  '--tw-mask-right',
+  '--tw-mask-right-from',
+  '--tw-mask-right-to',
+
+  '--tw-mask-bottom',
+  '--tw-mask-bottom-from',
+  '--tw-mask-bottom-to',
+
+  '--tw-mask-left',
+  '--tw-mask-left-from',
+  '--tw-mask-left-to',
+
+  // Linear masks
+  '--tw-mask-linear',
+  '--tw-mask-linear-position',
+  '--tw-mask-linear-from',
+  '--tw-mask-linear-to',
+
+  // Radial masks
+  '--tw-mask-radial',
+  '--tw-mask-radial-shape',
+  '--tw-mask-radial-size',
+  '--tw-mask-radial-position',
+  '--tw-mask-radial-from',
+  '--tw-mask-radial-to',
+
+  // Conic masks
+  '--tw-mask-conic',
+  '--tw-mask-conic-position',
+  '--tw-mask-conic-from',
+  '--tw-mask-conic-to',
+
   'box-decoration-break',
 
   'background-size',
@@ -242,6 +281,15 @@ export default [
   'background-position',
   'background-repeat',
   'background-origin',
+
+  'mask-composite',
+  'mask-mode',
+  'mask-type',
+  'mask-size',
+  'mask-clip',
+  'mask-position',
+  'mask-repeat',
+  'mask-origin',
 
   'fill',
   'stroke',
