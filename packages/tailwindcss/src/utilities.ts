@@ -353,7 +353,7 @@ export function createUtilities(theme: Theme) {
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
-    handle: (value: string) => AstNode[] | undefined
+    handle: (value: string, dataType: string | null) => AstNode[] | undefined
   }
 
   /**
@@ -364,6 +364,7 @@ export function createUtilities(theme: Theme) {
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
+        let dataType: string | null = null
 
         if (!candidate.value) {
           if (candidate.modifier) return
@@ -379,6 +380,7 @@ export function createUtilities(theme: Theme) {
         } else if (candidate.value.kind === 'arbitrary') {
           if (candidate.modifier) return
           value = candidate.value.value
+          dataType = candidate.value.dataType
         } else {
           value = theme.resolve(
             candidate.value.fraction ?? candidate.value.value,
@@ -398,7 +400,7 @@ export function createUtilities(theme: Theme) {
           if (value === null && negative && desc.handleNegativeBareValue) {
             value = desc.handleNegativeBareValue(candidate.value)
             if (!value?.includes('/') && candidate.modifier) return
-            if (value !== null) return desc.handle(value)
+            if (value !== null) return desc.handle(value, null)
           }
 
           if (value === null && desc.handleBareValue) {
@@ -411,7 +413,7 @@ export function createUtilities(theme: Theme) {
         if (value === null) return
 
         // Negate the value if the candidate has a negative prefix.
-        return desc.handle(negative ? `calc(${value} * -1)` : value)
+        return desc.handle(negative ? `calc(${value} * -1)` : value, dataType)
       }
     }
 
