@@ -11463,6 +11463,12 @@ test('mask', async () => {
         'mask-[var(--some-var)]',
         'mask-[image:var(--some-var)]',
         'mask-[url:var(--some-var)]',
+
+        // mask-composite
+        'mask-add',
+        'mask-subtract',
+        'mask-intersect',
+        'mask-exclude',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -11475,6 +11481,30 @@ test('mask', async () => {
     .mask-none {
       -webkit-mask-image: none;
       mask-image: none;
+    }
+
+    .mask-add {
+      -webkit-mask-composite: source-over;
+      -webkit-mask-composite: source-over;
+      mask-composite: add;
+    }
+
+    .mask-exclude {
+      -webkit-mask-composite: xor;
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    .mask-intersect {
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-subtract {
+      -webkit-mask-composite: source-out;
+      -webkit-mask-composite: source-out;
+      mask-composite: subtract;
     }"
   `)
   expect(
@@ -11491,6 +11521,16 @@ test('mask', async () => {
       'mask-[image:var(--some-var)]/foo',
       '-mask-[url:var(--some-var)]',
       'mask-[url:var(--some-var)]/foo',
+
+      // mask-composite
+      '-mask-add',
+      '-mask-subtract',
+      '-mask-intersect',
+      '-mask-exclude',
+      'mask-add/foo',
+      'mask-subtract/foo',
+      'mask-intersect/foo',
+      'mask-exclude/foo',
     ]),
   ).toEqual('')
 
