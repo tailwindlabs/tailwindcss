@@ -605,7 +605,7 @@ mod tests {
             // Quoted attribute
             (
                 r#"input(type="checkbox" class="px-2.5")"#,
-                vec!["checkbox", "class", "px-2.5"],
+                vec!["input", "type", "checkbox", "class", "px-2.5"],
             ),
         ] {
             assert_extract_sorted_candidates(&pre_process_input(input, "pug"), expected);

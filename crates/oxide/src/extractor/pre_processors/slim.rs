@@ -80,7 +80,7 @@ impl PreProcessor for Slim {
                     bracket_stack.push(cursor.curr);
                 }
 
-                // In slim the class name shorthand can be followed by a parenthesis. E.g.:
+                // In Slim the class name shorthand can be followed by a parenthesis. E.g.:
                 //
                 // ```slim
                 // body.border-t-4.p-8(attr=value)
