@@ -3269,6 +3269,112 @@ export function createUtilities(theme: Theme) {
         values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
       },
     ])
+
+    /**
+     * Conic masks
+     */
+
+    let maskPropertiesConic = () =>
+      atRoot([
+        property('--tw-mask-conic-position', '0deg'),
+        property('--tw-mask-conic-from', '0%'),
+        property('--tw-mask-conic-to', '100%'),
+      ])
+
+    functionalUtility('mask-conic', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * ${value.value})`
+      },
+      handleNegativeBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * -${value.value})`
+      },
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl('--tw-mask-conic-position', ' '),
+        decl('--tw-mask-conic-position', ' '),
+        decl('--tw-mask-conic-position', value),
+        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-position))'),
+      ],
+    })
+
+    suggest('mask-conic', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+      },
+    ])
+
+    functionalUtility('mask-conic-from', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic',
+          'conic-gradient(from var(--tw-mask-conic-position), black var(--tw-mask-conic-from), transparent var(--tw-mask-conic-to))',
+        ),
+        decl('--tw-mask-conic-from', value),
+      ],
+    })
+
+    functionalUtility('mask-conic-to', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic',
+          'conic-gradient(from var(--tw-mask-conic-position), black var(--tw-mask-conic-from), transparent var(--tw-mask-conic-to))',
+        ),
+        decl('--tw-mask-conic-to', value),
+      ],
+    })
+
+    suggest('mask-conic-from', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
+
+    suggest('mask-conic-to', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
   }
 
   /**
