@@ -11469,6 +11469,11 @@ test('mask', async () => {
         'mask-subtract',
         'mask-intersect',
         'mask-exclude',
+
+        // mask-mode
+        'mask-alpha',
+        'mask-luminance',
+        'mask-match',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -11505,6 +11510,24 @@ test('mask', async () => {
       -webkit-mask-composite: source-out;
       -webkit-mask-composite: source-out;
       mask-composite: subtract;
+    }
+
+    .mask-alpha {
+      -webkit-mask-source-type: alpha;
+      -webkit-mask-source-type: alpha;
+      mask-mode: alpha;
+    }
+
+    .mask-luminance {
+      -webkit-mask-source-type: luminance;
+      -webkit-mask-source-type: luminance;
+      mask-mode: luminance;
+    }
+
+    .mask-match {
+      -webkit-mask-source-type: auto;
+      -webkit-mask-source-type: auto;
+      mask-mode: match-source;
     }"
   `)
   expect(
@@ -11531,6 +11554,14 @@ test('mask', async () => {
       'mask-subtract/foo',
       'mask-intersect/foo',
       'mask-exclude/foo',
+
+      // mask-mode
+      '-mask-alpha',
+      '-mask-luminance',
+      '-mask-match',
+      'mask-alpha/foo',
+      'mask-luminance/foo',
+      'mask-match/foo',
     ]),
   ).toEqual('')
 

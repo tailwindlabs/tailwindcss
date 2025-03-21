@@ -2830,6 +2830,16 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-subtract', [['mask-composite', 'subtract']])
     staticUtility('mask-intersect', [['mask-composite', 'intersect']])
     staticUtility('mask-exclude', [['mask-composite', 'exclude']])
+
+    /**
+     * @css `mask-mode`
+     *
+     * Sets the "mode" of the mask given by mask-image
+     */
+
+    staticUtility('mask-alpha', [['mask-mode', 'alpha']])
+    staticUtility('mask-luminance', [['mask-mode', 'luminance']])
+    staticUtility('mask-match', [['mask-mode', 'match-source']])
   }
 
   /**
