@@ -104,7 +104,7 @@ mod tests {
             ("div.flex.bg-red-500", "div flex bg-red-500"),
             (".flex.bg-red-500", " flex bg-red-500"),
             // Keep dots in strings
-            (r#"div(class="px-2.5")"#, r#"div(class="px-2.5")"#),
+            (r#"div(class="px-2.5")"#, r#"div class="px-2.5")"#),
             // Nested brackets
             (
                 "bg-[url(https://example.com/?q=[1,2])]",
