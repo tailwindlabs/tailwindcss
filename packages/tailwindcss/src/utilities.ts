@@ -2896,6 +2896,18 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-repeat-y', [['mask-repeat', 'repeat-y']])
     staticUtility('mask-repeat-round', [['mask-repeat', 'round']])
     staticUtility('mask-repeat-space', [['mask-repeat', 'space']])
+
+    /**
+     * @css `mask-clip`
+     */
+
+    staticUtility('mask-clip-border', [['mask-clip', 'border-box']])
+    staticUtility('mask-clip-padding', [['mask-clip', 'padding-box']])
+    staticUtility('mask-clip-content', [['mask-clip', 'content-box']])
+    staticUtility('mask-clip-fill', [['mask-clip', 'fill-box']])
+    staticUtility('mask-clip-stroke', [['mask-clip', 'stroke-box']])
+    staticUtility('mask-clip-view', [['mask-clip', 'view-box']])
+    staticUtility('mask-no-clip', [['mask-clip', 'no-clip']])
   }
 
   /**
