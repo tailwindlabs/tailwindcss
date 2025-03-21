@@ -95,6 +95,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
   }
 
+  // Check if the input and output file paths are identical, otherwise return an
+  // error to the user.
+  if (args['--input'] === args['--output']) {
+    eprintln(header())
+    eprintln()
+    eprintln(`Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`)
+    process.exit(1)
+  }
+
   let start = process.hrtime.bigint()
 
   let input = args['--input']
