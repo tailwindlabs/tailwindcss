@@ -3048,6 +3048,112 @@ export function createUtilities(theme: Theme) {
     maskEdgeUtility('mask-b-to', 'to', { top: false, right: false, bottom: true, left: false })
     maskEdgeUtility('mask-l-from', 'from', { top: false, right: false, bottom: false, left: true })
     maskEdgeUtility('mask-l-to', 'to', { top: false, right: false, bottom: false, left: true })
+
+    /**
+     *  Linear Masks
+     */
+
+    let maskPropertiesLinear = () =>
+      atRoot([
+        property('--tw-mask-linear-position', '0deg'),
+        property('--tw-mask-linear-from', '0%'),
+        property('--tw-mask-linear-to', '100%'),
+      ])
+
+    functionalUtility('mask-linear', {
+      defaultValue: null,
+      supportsNegative: true,
+      supportsFractions: false,
+      handleBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * ${value.value})`
+      },
+      handleNegativeBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * -${value.value})`
+      },
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesLinear(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl('--tw-mask-linear-position', ` `),
+        decl('--tw-mask-linear-position', ` `),
+        decl('--tw-mask-linear-position', value),
+        decl('--tw-mask-linear', `linear-gradient(var(--tw-mask-linear-position))`),
+      ],
+    })
+
+    suggest('mask-linear', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+      },
+    ])
+
+    functionalUtility('mask-linear-from', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesLinear(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-linear',
+          'linear-gradient(var(--tw-mask-linear-position), black var(--tw-mask-linear-from), transparent var(--tw-mask-linear-to))',
+        ),
+        decl('--tw-mask-linear-from', value),
+      ],
+    })
+
+    functionalUtility('mask-linear-to', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesLinear(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-linear',
+          'linear-gradient(var(--tw-mask-linear-position), black var(--tw-mask-linear-from), transparent var(--tw-mask-linear-to))',
+        ),
+        decl('--tw-mask-linear-to', value),
+      ],
+    })
+
+    suggest('mask-linear-from', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
+
+    suggest('mask-linear-to', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
   }
 
   /**
