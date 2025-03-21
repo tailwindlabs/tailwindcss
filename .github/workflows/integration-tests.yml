@@ -34,7 +34,7 @@ jobs:
 
         # Exclude windows and macos from being built on feature branches
         on-main-branch:
-          - ${{ github.ref == 'refs/heads/main' }}
+          - ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.body, '[ci-all]') }}
         exclude:
           - on-main-branch: false
             runner:

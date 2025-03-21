@@ -163,7 +163,7 @@ async function run() {
       // Template migrations
       for (let config of configBySheet.values()) {
         let set = new Set<string>()
-        for (let globEntry of config.globs.flatMap((entry) => hoistStaticGlobParts(entry))) {
+        for (let globEntry of config.sources.flatMap((entry) => hoistStaticGlobParts(entry))) {
           let files = await globby([globEntry.pattern], {
             absolute: true,
             gitignore: true,

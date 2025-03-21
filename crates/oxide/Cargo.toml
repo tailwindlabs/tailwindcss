@@ -13,11 +13,11 @@ crossbeam = "0.8.4"
 tracing = { version = "0.1.40", features = [] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 walkdir = "2.5.0"
-ignore = "0.4.23"
 dunce = "1.0.5"
 bexpand = "1.2.0"
 fast-glob = "0.4.3"
 classification-macros = { path = "../classification-macros" }
+ignore = { path = "../ignore" }
 regex = "1.11.1"
 
 [dev-dependencies]

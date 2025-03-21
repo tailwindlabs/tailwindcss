@@ -3193,18 +3193,18 @@ describe('plugins', () => {
 
 describe('@source', () => {
   test('emits @source files', async () => {
-    let { globs } = await compile(
+    let { sources } = await compile(
       css`
         @source "./foo/bar/*.ts";
       `,
       { base: '/root' },
     )
 
-    expect(globs).toEqual([{ pattern: './foo/bar/*.ts', base: '/root' }])
+    expect(sources).toEqual([{ pattern: './foo/bar/*.ts', base: '/root', negated: false }])
   })
 
   test('emits multiple @source files', async () => {
-    let { globs } = await compile(
+    let { sources } = await compile(
       css`
         @source "./foo/**/*.ts";
         @source "./php/secr3t/smarty.php";
@@ -3212,9 +3212,24 @@ describe('@source', () => {
       { base: '/root' },
     )
 
-    expect(globs).toEqual([
-      { pattern: './foo/**/*.ts', base: '/root' },
-      { pattern: './php/secr3t/smarty.php', base: '/root' },
+    expect(sources).toEqual([
+      { pattern: './foo/**/*.ts', base: '/root', negated: false },
+      { pattern: './php/secr3t/smarty.php', base: '/root', negated: false },
+    ])
+  })
+
+  test('emits negated @source files', async () => {
+    let { sources } = await compile(
+      css`
+        @source not "./foo/**/*.ts";
+        @source not "./php/secr3t/smarty.php";
+      `,
+      { base: '/root' },
+    )
+
+    expect(sources).toEqual([
+      { pattern: './foo/**/*.ts', base: '/root', negated: true },
+      { pattern: './php/secr3t/smarty.php', base: '/root', negated: true },
     ])
   })
 
