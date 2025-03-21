@@ -5061,6 +5061,7 @@ exports[`getClassList 1`] = `
   "m-96",
   "m-auto",
   "m-px",
+  "mask-none",
   "max-h-0",
   "max-h-0.5",
   "max-h-1",
