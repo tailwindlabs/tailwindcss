@@ -51,4 +51,4 @@ static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(||
 });
 
 static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
-    sync::LazyLock::new(|| vec![".git"]);
+    sync::LazyLock::new(|| vec![".git", "node_modules"]);
