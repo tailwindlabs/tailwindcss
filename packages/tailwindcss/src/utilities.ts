@@ -3154,6 +3154,121 @@ export function createUtilities(theme: Theme) {
         values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
       },
     ])
+
+    /**
+     * Radial masks
+     */
+
+    let maskPropertiesRadial = () =>
+      atRoot([
+        property('--tw-mask-radial-from', '0%'),
+        property('--tw-mask-radial-to', '100%'),
+        property('--tw-mask-radial-shape', 'ellipse'),
+        property('--tw-mask-radial-size', 'farthest-corner'),
+        property('--tw-mask-radial-position', 'center'),
+      ])
+
+    staticUtility('mask-circle', [['--tw-mask-radial-shape', 'circle']])
+    staticUtility('mask-ellipse', [['--tw-mask-radial-shape', 'ellipse']])
+    staticUtility('mask-radial-closest-side', [['--tw-mask-radial-size', 'closest-side']])
+    staticUtility('mask-radial-farthest-side', [['--tw-mask-radial-size', 'farthest-side']])
+    staticUtility('mask-radial-closest-corner', [['--tw-mask-radial-size', 'closest-corner']])
+    staticUtility('mask-radial-farthest-corner', [['--tw-mask-radial-size', 'farthest-corner']])
+    staticUtility('mask-radial-at-top', [['--tw-mask-radial-position', 'top']])
+    staticUtility('mask-radial-at-top-left', [['--tw-mask-radial-position', 'top left']])
+    staticUtility('mask-radial-at-top-right', [['--tw-mask-radial-position', 'top right']])
+    staticUtility('mask-radial-at-bottom', [['--tw-mask-radial-position', 'bottom']])
+    staticUtility('mask-radial-at-bottom-left', [['--tw-mask-radial-position', 'bottom left']])
+    staticUtility('mask-radial-at-bottom-right', [['--tw-mask-radial-position', 'bottom right']])
+    staticUtility('mask-radial-at-left', [['--tw-mask-radial-position', 'left']])
+    staticUtility('mask-radial-at-right', [['--tw-mask-radial-position', 'right']])
+    functionalUtility('mask-radial-at', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handle: (value) => [decl('--tw-mask-radial-position', value)],
+    })
+
+    /*
+      This can be used to set just the size in conjunction with `mask-radial-from-*` et al,
+      or can set the whole gradient if it's the only utility you use.
+
+      For example:
+      `mask-radial-[40px_80px] mask-radial-from-50%`
+      `mask-radial-[96px_at_top,black_40%,transparent_80%,black_90%]`
+
+      This will produce nonsense though and break, which is fine:
+      `mask-radial-[96px_at_top,black_40%,transparent_80%,black_90%]  mask-radial-from-50%`
+    */
+    functionalUtility('mask-radial', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesRadial(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl('--tw-mask-radial-size', ' '),
+        decl('--tw-mask-radial-size', ' '),
+        decl('--tw-mask-radial-size', value),
+        decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-size))'),
+      ],
+    })
+
+    functionalUtility('mask-radial-from', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesRadial(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-radial',
+          'radial-gradient(var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), black var(--tw-mask-radial-from), transparent var(--tw-mask-radial-to))',
+        ),
+        decl('--tw-mask-radial-from', value),
+      ],
+    })
+
+    functionalUtility('mask-radial-to', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue: handleMaskStopBareValue,
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesRadial(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-radial',
+          'radial-gradient(var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), black var(--tw-mask-radial-from), transparent var(--tw-mask-radial-to))',
+        ),
+        decl('--tw-mask-radial-to', value),
+      ],
+    })
+
+    suggest('mask-radial-from', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
+
+    suggest('mask-radial-to', () => [
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+    ])
   }
 
   /**
