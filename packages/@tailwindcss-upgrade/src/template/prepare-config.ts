@@ -82,7 +82,7 @@ async function createResolvedUserConfig(fullConfigPath: string): Promise<Config>
   ])
 
   return resolveConfig(noopDesignSystem, [
-    { base: dirname(fullConfigPath), config: unresolvedUserConfig },
+    { base: dirname(fullConfigPath), config: unresolvedUserConfig, reference: false },
   ]).resolvedConfig as any
 }
 

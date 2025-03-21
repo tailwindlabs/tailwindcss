@@ -100,6 +100,7 @@ async function migrateTheme(
   let configToResolve: ConfigFile = {
     base,
     config: { ...unresolvedConfig, plugins: [], presets: undefined },
+    reference: false,
   }
   let { resolvedConfig, replacedThemeKeys } = resolveConfig(designSystem, [configToResolve])
 
