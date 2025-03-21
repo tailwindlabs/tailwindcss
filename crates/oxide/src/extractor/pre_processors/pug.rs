@@ -56,6 +56,23 @@ impl PreProcessor for Pug {
                     }
                 }
 
+                // In Pug the class name shorthand can be followed by a parenthesis. E.g.:
+                //
+                // ```pug
+                // body.border-t-4.p-8(attr=value)
+                //                    ^ Not part of the p-8 class
+                // ```
+                //
+                // This means that we need to replace all these `(` and `)` with spaces to make
+                // sure that we can extract the `p-8`.
+                //
+                // However, we also need to make sure that we keep the parens that are part of the
+                // utility class. E.g.: `bg-(--my-color)`.
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-' | b'/') => {
+                    result[cursor.pos] = b' ';
+                    bracket_stack.push(cursor.curr);
+                }
+
                 b'(' | b'[' | b'{' => {
                     bracket_stack.push(cursor.curr);
                 }
@@ -133,5 +150,32 @@ mod tests {
               .flex.items-center
         "#;
         Pug::test_extract_contains(input, vec!["flex", "items-center"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17313
+    #[test]
+    fn test_class_shorthand_followed_by_parens() {
+        let input = r#"
+            .text-sky-600.bg-neutral-900(title="A tooltip") This div has an HTML attribute.
+        "#;
+        Pug::test_extract_contains(input, vec!["text-sky-600", "bg-neutral-900"]);
+
+        // Additional test with CSS Variable shorthand syntax in the attribute itself because `(`
+        // and `)` are not valid in the class shorthand version.
+        //
+        // Also included an arbitrary value including `(` and `)` to make sure that we don't
+        // accidentally remove those either.
+        let input = r#"
+            .p-8(class="bg-(--my-color) bg-(--my-color)/(--my-opacity) bg-[url(https://example.com)]")
+        "#;
+        Pug::test_extract_contains(
+            input,
+            vec![
+                "p-8",
+                "bg-(--my-color)",
+                "bg-(--my-color)/(--my-opacity)",
+                "bg-[url(https://example.com)]",
+            ],
+        );
     }
 }
