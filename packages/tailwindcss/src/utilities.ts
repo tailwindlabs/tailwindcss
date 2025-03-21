@@ -2919,6 +2919,135 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-origin-fill', [['mask-origin', 'fill-box']])
     staticUtility('mask-origin-stroke', [['mask-origin', 'stroke-box']])
     staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
+
+    /**
+     * @css `mask-image`
+     */
+
+    staticUtility('mask-none', [['mask-image', 'none']])
+
+    let maskPropertiesGradient = () =>
+      atRoot([
+        property('--tw-mask-linear', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-radial', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-conic', 'linear-gradient(#000, #000)'),
+      ])
+
+    /**
+     * All mask-*-*-{from,to} utilities handle bare values in the same way:
+     * - Fractions are not supported
+     * - Numbers are used as spacing multipliers
+     * - Percentages are used as is
+     */
+    function handleMaskStopBareValue(value: NamedUtilityValue) {
+      if (value.fraction) return null
+
+      let type = inferDataType(value.value, ['number', 'percentage'])
+      if (!type) return null
+
+      if (type === 'number') {
+        let multiplier = theme.resolve(null, ['--spacing'])
+        if (!multiplier) return null
+        if (!isValidSpacingMultiplier(value.value)) return null
+
+        return `--spacing(${value.value})`
+      }
+
+      //
+      else if (type === 'percentage') {
+        if (!isPositiveInteger(value.value.slice(0, -1))) return null
+
+        return value.value
+      }
+
+      return null
+    }
+
+    /**
+     * Edge masks
+     */
+
+    let maskPropertiesEdge = () =>
+      atRoot([
+        property('--tw-mask-left', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-right', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-bottom', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-top', 'linear-gradient(#000, #000)'),
+      ])
+
+    type MaskEdge = 'top' | 'right' | 'bottom' | 'left'
+    type MaskStop = 'from' | 'to'
+
+    function maskEdgeUtility(name: string, stop: MaskStop, edges: Record<MaskEdge, boolean>) {
+      functionalUtility(name, {
+        defaultValue: null,
+        supportsNegative: false,
+        supportsFractions: false,
+        handleBareValue: handleMaskStopBareValue,
+        handle(value) {
+          let nodes: AstNode[] = [
+            // Common @property declarations
+            maskPropertiesGradient(),
+            maskPropertiesEdge(),
+
+            // Common properties to all edge utilities
+            decl(
+              'mask-image',
+              'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)',
+            ),
+            decl('mask-composite', 'intersect'),
+            decl(
+              '--tw-mask-linear',
+              'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
+            ),
+          ]
+
+          for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
+            if (!edges[edge]) continue
+
+            nodes.push(
+              decl(
+                `--tw-mask-${edge}`,
+                `linear-gradient(to ${edge}, black var(--tw-mask-${edge}-from), transparent var(--tw-mask-${edge}-to))`,
+              ),
+            )
+
+            nodes.push(
+              atRoot([
+                property(`--tw-mask-${edge}-from`, '0%'),
+                property(`--tw-mask-${edge}-to`, '100%'),
+              ]),
+            )
+
+            nodes.push(decl(`--tw-mask-${edge}-${stop}`, value))
+          }
+
+          return nodes
+        },
+      })
+
+      suggest(name, () => [
+        {
+          values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+        },
+        {
+          values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+        },
+      ])
+    }
+
+    maskEdgeUtility('mask-x-from', 'from', { top: false, right: true, bottom: false, left: true })
+    maskEdgeUtility('mask-x-to', 'to', { top: false, right: true, bottom: false, left: true })
+    maskEdgeUtility('mask-y-from', 'from', { top: true, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-y-to', 'to', { top: true, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-t-from', 'from', { top: true, right: false, bottom: false, left: false })
+    maskEdgeUtility('mask-t-to', 'to', { top: true, right: false, bottom: false, left: false })
+    maskEdgeUtility('mask-r-from', 'from', { top: false, right: true, bottom: false, left: false })
+    maskEdgeUtility('mask-r-to', 'to', { top: false, right: true, bottom: false, left: false })
+    maskEdgeUtility('mask-b-from', 'from', { top: false, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-b-to', 'to', { top: false, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-l-from', 'from', { top: false, right: false, bottom: false, left: true })
+    maskEdgeUtility('mask-l-to', 'to', { top: false, right: false, bottom: false, left: true })
   }
 
   /**
