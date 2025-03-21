@@ -334,18 +334,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-function watchDirectories(scanner: Scanner) {
-  return scanner.globs.flatMap((globEntry) => {
-    // We don't want a watcher for negated globs.
-    if (globEntry.pattern[0] === '!') return []
-
-    // We don't want a watcher for files, only directories.
-    if (globEntry.pattern === '') return []
-
-    return globEntry.base
-  })
-}
-
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
@@ -473,4 +461,8 @@ function optimizeCss(
   // Running Lightning CSS twice to ensure that adjacent rules are merged after
   // nesting is applied. This creates a more optimized output.
   return optimize(optimize(Buffer.from(input))).toString()
+}
+
+function watchDirectories(scanner: Scanner) {
+  return [...new Set(scanner.normalizedSources.flatMap((globEntry) => globEntry.base))]
 }
