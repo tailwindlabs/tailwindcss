@@ -128,7 +128,7 @@ async function parseCss(
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
-  let sources: { base: string; pattern: string }[] = []
+  let sources: { base: string; pattern: string; negated: boolean }[] = []
   let inlineCandidates: string[] = []
   let ignoredCandidates: string[] = []
   let root = null as Root
@@ -247,7 +247,7 @@ async function parseCss(
           }
         }
       } else {
-        sources.push({ base: context.base as string, pattern: source })
+        sources.push({ base: context.base as string, pattern: source, negated: not })
       }
       replaceWith([])
       return
@@ -649,7 +649,7 @@ export async function compileAst(
   input: AstNode[],
   opts: CompileOptions = {},
 ): Promise<{
-  sources: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): AstNode[]
@@ -747,7 +747,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  sources: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): string

@@ -3243,7 +3243,7 @@ describe('@source', () => {
       { base: '/root' },
     )
 
-    expect(sources).toEqual([{ pattern: './foo/bar/*.ts', base: '/root' }])
+    expect(sources).toEqual([{ pattern: './foo/bar/*.ts', base: '/root', negated: false }])
   })
 
   test('emits multiple @source files', async () => {
@@ -3256,8 +3256,8 @@ describe('@source', () => {
     )
 
     expect(sources).toEqual([
-      { pattern: './foo/**/*.ts', base: '/root' },
-      { pattern: './php/secr3t/smarty.php', base: '/root' },
+      { pattern: './foo/**/*.ts', base: '/root', negated: false },
+      { pattern: './php/secr3t/smarty.php', base: '/root', negated: false },
     ])
   })
 

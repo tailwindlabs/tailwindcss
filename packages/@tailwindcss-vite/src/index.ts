@@ -268,11 +268,11 @@ class Root {
 
         // No root specified, auto-detect based on the `**/*` pattern
         if (this.compiler.root === null) {
-          return [{ base: this.base, pattern: '**/*' }]
+          return [{ base: this.base, pattern: '**/*', negated: false }]
         }
 
         // Use the specified root
-        return [this.compiler.root]
+        return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
 
       this.scanner = new Scanner({ sources })

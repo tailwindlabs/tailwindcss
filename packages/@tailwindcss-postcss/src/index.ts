@@ -190,11 +190,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
               // No root specified, use the base directory
               if (context.compiler.root === null) {
-                return [{ base, pattern: '**/*' }]
+                return [{ base, pattern: '**/*', negated: false }]
               }
 
               // Use the specified root
-              return [context.compiler.root]
+              return [{ ...context.compiler.root, negated: false }]
             })().concat(context.compiler.sources)
 
             // Look for candidates used to generate the CSS

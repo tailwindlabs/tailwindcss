@@ -175,11 +175,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
       // No root specified, use the base directory
       if (compiler.root === null) {
-        return [{ base, pattern: '**/*' }]
+        return [{ base, pattern: '**/*', negated: false }]
       }
 
       // Use the specified root
-      return [compiler.root]
+      return [{ ...compiler.root, negated: false }]
     })().concat(compiler.sources)
 
     let scanner = new Scanner({ sources })

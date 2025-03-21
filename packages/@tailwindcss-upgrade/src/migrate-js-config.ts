@@ -274,7 +274,11 @@ async function migrateContent(
       throw new Error('Unsupported content value: ' + pattern)
     }
 
-    let sourceFiles = patternSourceFiles({ base, pattern })
+    let sourceFiles = patternSourceFiles({
+      base,
+      pattern: pattern[0] === '!' ? pattern.slice(1) : pattern,
+      negated: pattern[0] === '!',
+    })
 
     let autoContentContainsAllSourceFiles = true
     for (let sourceFile of sourceFiles) {
@@ -375,12 +379,20 @@ function keyframesToCss(keyframes: Record<string, unknown>): string {
 }
 
 function autodetectedSourceFiles(base: string) {
-  let scanner = new Scanner({ sources: [{ base, pattern: '**/*' }] })
+  let scanner = new Scanner({
+    sources: [
+      {
+        base,
+        pattern: '**/*',
+        negated: false,
+      },
+    ],
+  })
   scanner.scan()
   return scanner.files
 }
 
-function patternSourceFiles(source: { base: string; pattern: string }): string[] {
+function patternSourceFiles(source: { base: string; pattern: string; negated: boolean }): string[] {
   let scanner = new Scanner({ sources: [source] })
   scanner.scan()
   return scanner.files
