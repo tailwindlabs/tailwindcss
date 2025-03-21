@@ -61,7 +61,7 @@ mod scanner {
         let mut files = scanner
             .get_files()
             .iter()
-                // Normalize paths to use unix style separators
+            // Normalize paths to use unix style separators
             .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
             .collect::<Vec<_>>();
         files.sort();
@@ -91,7 +91,7 @@ mod scanner {
                     format!("{}{}", glob.base, glob.pattern)
                 } else {
                     format!("{}/{}", glob.base, glob.pattern)
-    }
+                }
             })
             // Normalize paths to use unix style separators
             .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
@@ -295,6 +295,20 @@ mod scanner {
 
         assert_eq!(files, vec!["index.html"]);
         assert_eq!(globs, vec!["*"]);
+        assert_eq!(normalized_sources, vec!["**/*"]);
+    }
+
+    #[test]
+    fn it_should_find_new_extensions() {
+        let ScanResult {
+            files,
+            globs,
+            normalized_sources,
+            ..
+        } = scan(&[("src/index.my-extension", "")]);
+
+        assert_eq!(files, vec!["src/index.my-extension"]);
+        assert_eq!(globs, vec!["*", "src/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,my-extension,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
         assert_eq!(normalized_sources, vec!["**/*"]);
     }
 
@@ -770,6 +784,244 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_ignore_negated_custom_sources() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                ("src/index.ts", "content-['src/index.ts']"),
+                ("src/colors/red.jsx", "content-['src/colors/red.jsx']"),
+                ("src/colors/blue.tsx", "content-['src/colors/blue.tsx']"),
+                ("src/colors/green.tsx", "content-['src/colors/green.tsx']"),
+                ("src/utils/string.ts", "content-['src/utils/string.ts']"),
+                ("src/utils/date.ts", "content-['src/utils/date.ts']"),
+                ("src/utils/file.ts", "content-['src/utils/file.ts']"),
+                (
+                    "src/admin/foo/template.html",
+                    "content-['src/admin/template.html']",
+                ),
+                (
+                    "src/templates/index.html",
+                    "content-['src/templates/index.html']",
+                ),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source not 'src/index.ts'",
+                "@source not '**/*.{jsx,tsx}'",
+                "@source not 'src/utils'",
+                "@source not 'dist'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['src/admin/template.html']",
+                "content-['src/templates/index.html']",
+            ]
+        );
+
+        assert_eq!(
+            files,
+            vec![
+                "src/admin/foo/template.html",
+                "src/templates/index.html",
+                // These files are ignored and thus do not need to be watched:
+
+                // "src/colors/blue.tsx",
+                // "src/colors/green.tsx",
+                // "src/colors/red.jsx",
+                // "src/index.ts",
+                // "src/utils/date.ts",
+                // "src/utils/file.ts",
+                // "src/utils/string.ts"
+            ]
+        );
+        assert_eq!(
+            globs,
+            vec![
+                "*",
+                "src/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "src/admin/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "src/colors/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "src/templates/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+            ]
+        );
+
+        assert_eq!(normalized_sources, vec!["**/*",]);
+    }
+
+    #[test]
+    fn it_should_include_defined_extensions_that_are_ignored_by_default() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            // Typically skipped
+            &[
+                ("src/index.exe", "content-['src/index.exe']"),
+                ("src/index.bin", "content-['src/index.bin']"),
+                ("out/out.exe", "content-['out/out.exe']"),
+            ],
+            // But explicitly included
+            vec!["@source '**/*'", "@source 'src/**/*.{exe,bin}'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['src/index.bin']", "content-['src/index.exe']",]
+        );
+        assert_eq!(files, vec!["src/index.bin", "src/index.exe",]);
+        assert_eq!(
+            globs,
+            vec![
+                "*",
+                // Contains `.exe` and `.bin` in the list
+                "out/**/*.{aspx,astro,bin,cjs,cts,eex,erb,exe,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+                "src/{**/*.bin,**/*.exe,**/*.{aspx,astro,bin,cjs,cts,eex,erb,exe,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}}",
+            ]
+        );
+        assert_eq!(
+            normalized_sources,
+            vec!["**/*", "src/**/*.bin", "src/**/*.exe"]
+        );
+    }
+
+    #[test]
+    fn it_should_work_with_manual_glob_only() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                ("index.html", "content-['index.html']"),
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/ignore.html", "content-['src/ignore.html']"),
+                ("src/admin/index.html", "content-['src/admin/index.html']"),
+                ("src/admin/ignore.html", "content-['src/admin/ignore.html']"),
+                (
+                    "src/dashboard/index.html",
+                    "content-['src/dashboard/index.html']",
+                ),
+                (
+                    "src/dashboard/ignore.html",
+                    "content-['src/dashboard/ignore.html']",
+                ),
+                ("src/lib.ts", "content-['src/lib.ts']"),
+            ],
+            vec![
+                "@source './src/**/*.html'",
+                "@source not './src/index.html'",
+                "@source not './src/**/ignore.html'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['src/admin/index.html']",
+                "content-['src/dashboard/index.html']",
+            ]
+        );
+
+        assert_eq!(
+            files,
+            vec!["src/admin/index.html", "src/dashboard/index.html",]
+        );
+        assert_eq!(globs, vec!["src/**/*.html"]);
+        assert_eq!(normalized_sources, vec!["src/**/*.html"]);
+    }
+
+    #[test]
+    fn it_respects_gitignore_in_workspace_root2() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                (".gitignore", "ignore-1.html\nweb/ignore-2.html"),
+                ("src/index.html", "content-['src/index.html']"),
+                ("web/index.html", "content-['web/index.html']"),
+                ("web/ignore-1.html", "content-['web/ignore-1.html']"),
+                ("web/ignore-2.html", "content-['web/ignore-2.html']"),
+            ],
+            vec!["@source './src'", "@source './web'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['src/index.html']", "content-['web/index.html']",]
+        );
+
+        assert_eq!(files, vec!["src/index.html", "web/index.html",]);
+        assert_eq!(globs, vec!["src/*", "web/*",]);
+        assert_eq!(normalized_sources, vec!["src/**/*", "web/**/*",]);
+    }
+
+    #[test]
+    fn it_includes_skipped_by_default_extensions_with_a_specific_source() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                ("src/logo.jpg", "content-['/src/logo.jpg']"),
+                ("src/logo.png", "content-['/src/logo.png']"),
+            ],
+            vec!["@source './src/logo.{jpg,png}'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['/src/logo.jpg']", "content-['/src/logo.png']"]
+        );
+        assert_eq!(files, vec!["src/logo.jpg", "src/logo.png"]);
+        assert!(globs.is_empty());
+        assert_eq!(normalized_sources, vec!["src/logo.jpg", "src/logo.png"]);
+    }
+
+    #[test]
+    fn it_respects_gitignore_in_workspace_root_for_manual_globs() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                (".gitignore", "ignore-1.html\n/web/ignore-2.html"),
+                ("web/index.html", "content-['web/index.html']"),
+                ("web/ignore-1.html", "content-['web/ignore-1.html']"),
+                ("web/ignore-2.html", "content-['web/ignore-2.html']"),
+            ],
+            vec!["@source './web'", "@source './web/ignore-1.html'"],
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['web/ignore-1.html']",
+                "content-['web/index.html']",
+            ]
+        );
+
+        assert_eq!(files, vec!["web/ignore-1.html", "web/index.html",]);
+        assert_eq!(globs, vec!["web/*"]);
+        assert_eq!(normalized_sources, vec!["web/**/*", "web/ignore-1.html"]);
+    }
+
+    #[test]
     fn skips_ignore_files_outside_of_a_repo() {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
@@ -802,13 +1054,23 @@ mod scanner {
                     "home/project/apps/web/ignore-web.html",
                     "content-['ignore-web.html']",
                 ),
+                // Auto content detection outside of `web/`
+                (
+                    "home/project/apps/admin/index.html",
+                    "content-['home/project/apps/admin/index.html']",
+                ),
+                // Manual sources outside of `web/`
+                (
+                    "home/project/apps/dashboard/index.html",
+                    "content-['home/project/apps/dashboard/index.html']",
+                ),
             ],
         );
 
         let sources = vec![
             PublicSourceEntry::from_pattern(
                 dir.join("home/project/apps/web")
-                .to_string_lossy()
+                    .to_string_lossy()
                     .to_string()
                     .into(),
                 "@source '**/*'",
@@ -923,14 +1185,351 @@ mod scanner {
         );
     }
 
+    #[test]
+    fn test_explicitly_ignore_explicitly_allowed_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/keep-me.html", "content-['keep-me.html']"),
+                ("src/ignore-me.html", "content-['ignore-me.html']"),
+            ],
+        );
+
+        let sources = vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source not 'src/ignore-me.html'"),
+        ];
+
+        let candidates = Scanner::new(sources.clone()).scan();
+
+        assert_eq!(candidates, vec!["content-['keep-me.html']"]);
+    }
+
+    #[test]
+    fn test_works_with_filenames_containing_glob_characters() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/app/[foo]/ignore-me.html", "content-['ignore-me.html']"),
+                ("src/app/[foo]/keep-me.html", "content-['keep-me.html']"),
+            ],
+        );
+
+        let sources = vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(
+                dir.clone(),
+                "@source not 'src/app/[foo]/ignore*.html'",
+            ),
+        ];
+
+        let candidates = Scanner::new(sources.clone()).scan();
+
+        assert_eq!(candidates, vec!["content-['keep-me.html']"]);
+    }
+
+    #[test]
+    fn test_ignore_files_can_be_included_with_custom_source_rule() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[("src/keep-me.html", "content-['src/keep-me.html']")],
+        );
+
+        let mut scanner = Scanner::new(vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(
+                dir.clone(),
+                "@source not 'src/ignored-by-source-not.html'",
+            ),
+        ]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/keep-me.html']"]);
+
+        // Create new files that should definitely be ignored
+        create_files_in(
+            &dir,
+            &[
+                // Create new file that matches the `@source '…'` glob
+                ("src/new-file.html", "content-['src/new-file.html']"),
+                // Create new file that is ignored based on file extension
+                (
+                    "src/ignore-by-extension.bin",
+                    "content-['src/ignore-by-extension.bin']",
+                ),
+                // Create a file that is ignored based on the `.gitignore` file
+                (".gitignore", "src/ignored-by-gitignore.html"),
+                (
+                    "src/ignored-by-gitignore.html",
+                    "content-['src/ignored-by-gitignore.html']",
+                ),
+                // Create a file that is ignored by the `@source not '…'`
+                (
+                    "src/ignored-by-source-not.html",
+                    "content-['src/ignored-by-source-not.html']",
+                ),
+            ],
+        );
+
+        let candidates = scanner.scan();
+
         assert_eq!(
             candidates,
             vec![
-                "content-['ignore-apps.html']".to_owned(),
-                "content-['ignore-home.html']".to_owned(),
-                "content-['ignore-project.html']".to_owned(),
-                "content-['index.html']".to_owned(),
+                // Ignored by git ignore BUT included by `@source "**/*.html"`
+                "content-['src/ignored-by-gitignore.html']",
+                "content-['src/keep-me.html']",
+                "content-['src/new-file.html']"
             ]
         );
+    }
+
+    #[test]
+    fn test_allow_default_ignored_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(&dir, &[("foo.styl", "content-['foo.styl']")]);
+
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert!(candidates.is_empty());
+
+        // Explicitly allow `.styl` files
+        let mut scanner = Scanner::new(vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '*.styl'"),
+        ]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    fn test_allow_default_ignored_files_via_gitignore() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("index.html", "content-['index.html']"),
+                (".gitignore", "index.html"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        let candidates = scanner.scan();
+        assert!(candidates.is_empty());
+
+        let mut scanner = Scanner::new(vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './*.html'"),
+        ]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['index.html']"]);
+    }
+
+    #[test]
+    fn test_allow_explicit_node_modules_paths() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                // Current project
+                ("src/index.html", "content-['src/index.html']"),
+                // Ignore file
+                (".gitignore", "node_modules"),
+                // Library ignored by default
+                (
+                    "node_modules/my-ui-lib/index.html",
+                    "content-['node_modules/my-ui-lib/index.html']",
+                ),
+            ],
+        );
+
+        // Default auto source detection
+        let sources = vec![PublicSourceEntry::from_pattern(dir.clone(), "@source './'")];
+
+        let mut scanner = Scanner::new(sources.clone());
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+
+        // Explicitly listing all `*.html` files, should not include `node_modules` because it's
+        // ignored
+        let sources = vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*.html'",
+        )];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+
+        // Explicitly listing all `*.html` files
+        // Explicitly list the `node_modules/my-ui-lib`
+        //
+        let sources = vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source 'node_modules/my-ui-lib'"),
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['node_modules/my-ui-lib/index.html']",
+                "content-['src/index.html']"
+            ]
+        );
+    }
+
+    // TODO: external(…) so that `.gitignore` from main project doesn't apply to external projects
+    #[test]
+    #[ignore]
+    fn test_ignore_files_in_node_modules() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                (".gitignore", "node_modules\ndist"),
+                (
+                    "node_modules/my-ui-lib/dist/index.html",
+                    "content-['node_modules/my-ui-lib/dist/index.html']",
+                ),
+            ],
+        );
+
+        // Explicitly listing all `*.html` files, should not include `node_modules` because it's
+        // ignored
+        let sources = vec![
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './'"),
+            PublicSourceEntry::from_pattern(dir.clone(), "@source './node_modules/my-ui-lib'"),
+        ];
+
+        let mut scanner = Scanner::new(sources.clone());
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/my-ui-lib/dist/index.html']"]
+        );
+    }
+
+    #[test]
+    fn test_manually_scanning_files_should_follow_all_rules() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                // Ignore all `.jsx` files, and all `generated` folders
+                (".gitignore", "*.jsx\ngenerated/"),
+                // .tsx files are allowed
+                (
+                    "src/components/button.tsx",
+                    "content-['src/components/button.tsx']",
+                ),
+                // .jsx files are not allowed
+                (
+                    "src/components/button.jsx",
+                    "content-['src/components/button.jsx']",
+                ),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![PublicSourceEntry::from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['src/components/button.tsx']"]);
+
+        // Create 2 new files, one "good" and one "bad" file, and manually scan them. This should
+        // only return the "good" file because the "bad" one is ignored by a `.gitignore` file.
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "src/components/good.tsx",
+                    "content-['src/components/good.tsx']",
+                ),
+                (
+                    "src/components/bad.jsx",
+                    "content-['src/components/bad.jsx']",
+                ),
+            ],
+        );
+
+        let candidates = scanner.scan_content(vec![
+            ChangedContent::File(dir.join("src/components/good.tsx"), "tsx".to_owned()),
+            ChangedContent::File(dir.join("src/components/bad.jsx"), "jsx".to_owned()),
+        ]);
+
+        assert_eq!(candidates, vec!["content-['src/components/good.tsx']"]);
+
+        // Create a generated file in a nested folder that is ignored by a `.gitignore` file higher
+        // up the tree.
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "src/components/generated/bad.tsx",
+                    "content-['src/components/generated/bad.tsx']",
+                ),
+                (
+                    "src/components/generated/bad.jsx",
+                    "content-['src/components/generated/bad.jsx']",
+                ),
+            ],
+        );
+
+        let candidates = scanner.scan_content(vec![
+            ChangedContent::File(
+                dir.join("src/components/generated/bad.tsx"),
+                "tsx".to_owned(),
+            ),
+            ChangedContent::File(
+                dir.join("src/components/generated/bad.jsx"),
+                "jsx".to_owned(),
+            ),
+        ]);
+
+        assert!(candidates.is_empty());
     }
 }
