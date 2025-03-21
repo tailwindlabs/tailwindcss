@@ -26,7 +26,7 @@ import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { enableSourceInline } from './feature-flags'
+import { enableSourceInline, enableSourceNot } from './feature-flags'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
@@ -216,12 +216,14 @@ async function parseCss(
       let inline = false
       let path = node.params
 
-      if (enableSourceInline) {
+      if (enableSourceNot) {
         if (path[0] === 'n' && path.startsWith('not ')) {
           not = true
           path = path.slice(4)
         }
+      }
 
+      if (enableSourceInline) {
         if (path[0] === 'i' && path.startsWith('inline(')) {
           inline = true
           path = path.slice(7, -1)
@@ -247,7 +249,11 @@ async function parseCss(
           }
         }
       } else {
-        sources.push({ base: context.base as string, pattern: source, negated: not })
+        sources.push({
+          base: context.base as string,
+          pattern: source,
+          negated: enableSourceNot ? not : false,
+        })
       }
       replaceWith([])
       return
