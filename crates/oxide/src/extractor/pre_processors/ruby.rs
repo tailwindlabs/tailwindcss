@@ -153,4 +153,23 @@ mod tests {
             Ruby::test_extract_contains(input, expected);
         }
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17334
+    #[test]
+    fn test_embedded_slim_extraction() {
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              slim_template <<~SLIM
+                button.rounded-full.bg-red-500
+                  | Some text
+                button.rounded-full(
+                  class="flex"
+                )
+                  | Some text
+              SLIM
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["rounded-full", "bg-red-500", "flex"]);
+    }
 }
