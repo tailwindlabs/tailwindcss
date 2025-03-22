@@ -3,6 +3,13 @@
 use crate::cursor;
 use crate::extractor::bracket_stack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use crate::pre_process_input;
+use bstr::ByteSlice;
+use regex::Regex;
+use std::sync;
+
+static SLIM_TEMPLATE_REGEX: sync::LazyLock<Regex> =
+    sync::LazyLock::new(|| Regex::new(r#"<<[-~]SLIM\n([\s\S]*?)SLIM"#).unwrap());
 
 #[derive(Debug, Default)]
 pub struct Ruby;
@@ -14,6 +21,18 @@ impl PreProcessor for Ruby {
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = bracket_stack::BracketStack::default();
 
+        // Extract embedded Slim languages
+        // https://viewcomponent.org/guide/templates.html#interpolations
+        let content_as_str = std::str::from_utf8(content).unwrap();
+        for (_, [body]) in SLIM_TEMPLATE_REGEX
+            .captures_iter(content_as_str)
+            .map(|c| c.extract())
+        {
+            let replaced = pre_process_input(body.as_bytes(), "slim");
+            result = result.replace(body, replaced);
+        }
+
+        // Ruby extraction
         while cursor.pos < len {
             // Looking for `%w` or `%W`
             if cursor.curr != b'%' && !matches!(cursor.next, b'w' | b'W') {
