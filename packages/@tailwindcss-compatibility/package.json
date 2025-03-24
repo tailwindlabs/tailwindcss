@@ -1,0 +1,50 @@
+{
+  "name": "@tailwindcss/compatibility",
+  "version": "4.0.15",
+  "description": "PostCSS plugin for Tailwind CSS, a utility-first CSS framework for rapidly building custom user interfaces",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-postcss"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@csstools/postcss-cascade-layers": "^5.0.1",
+    "@csstools/postcss-color-mix-function": "^3.0.8",
+    "@csstools/postcss-oklab-function": "^4.0.8",
+    "@tailwindcss/node": "workspace:*",
+    "@tailwindcss/oxide": "workspace:*",
+    "autoprefixer": "^10.4.21",
+    "lightningcss": "catalog:",
+    "postcss": "^8.4.41",
+    "postcss-media-minmax": "^5.0.0",
+    "postcss-nesting": "^13.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "dedent": "1.5.3",
+    "@tailwindcss/postcss": "workspace:*",
+    "tailwindcss": "workspace:*"
+  }
+}
