@@ -1939,6 +1939,49 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/17332
+  test('extracts keyframe names followed by comma', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --animate-test: 500ms both fade-in, 1000ms linear 500ms spin infinite;
+
+            @keyframes fade-in {
+              from {
+                opacity: 0%;
+              }
+              to {
+                opacity: 100%;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['animate-test'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --animate-test: .5s both fade-in, 1s linear .5s spin infinite;
+      }
+
+      .animate-test {
+        animation: var(--animate-test);
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }"
+    `)
+  })
+
   test('keyframes outside of `@theme are always preserved', async () => {
     expect(
       await compileCss(
