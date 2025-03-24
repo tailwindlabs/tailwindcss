@@ -9,7 +9,7 @@ use fancy_regex::Regex;
 use std::sync;
 
 static TEMPLATE_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
-    Regex::new(r#"\s*(.*)_template\s*<<[-~]?([A-Z]+)\n([\s\S]*?)\2"#).unwrap()
+    Regex::new(r#"\s*(.*?)_template\s*<<[-~]?([A-Z]+?)\n([\s\S]*?)\2"#).unwrap()
 });
 
 #[derive(Debug, Default)]
@@ -22,7 +22,7 @@ impl PreProcessor for Ruby {
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = bracket_stack::BracketStack::default();
 
-        // Extract embedded Slim languages
+        // Extract embedded template languages
         // https://viewcomponent.org/guide/templates.html#interpolations
         let content_as_str = std::str::from_utf8(content).unwrap();
         for capture in TEMPLATE_REGEX
