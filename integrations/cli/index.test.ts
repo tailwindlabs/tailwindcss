@@ -1387,6 +1387,76 @@ test(
   },
 )
 
+test(
+  'fails when input file does not exist',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    await expect(exec('pnpm tailwindcss --input index.css --output dist/out.css')).rejects.toThrow(
+      /Specified input file.*does not exist./,
+    )
+  },
+)
+
+test(
+  'fails when input file and output file are the same',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'input.css': '',
+    },
+  },
+  async ({ exec, expect }) => {
+    await expect(exec('pnpm tailwindcss --input input.css --output input.css')).rejects.toThrow(
+      /Specified input file.*and output file.*are identical./,
+    )
+    await expect(
+      exec('pnpm tailwindcss --input input.css --output ./src/../input.css'),
+    ).rejects.toThrow(/Specified input file.*and output file.*are identical./)
+  },
+)
+
+test(
+  'input and output flags can be the same if `-` is used',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ exec, expect }) => {
+    expect(
+      await exec('pnpm tailwindcss --input - --output -', undefined, {
+        stdin: '@tailwind utilities;',
+      }),
+    ).toContain(candidate`flex`)
+  },
+)
+
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
