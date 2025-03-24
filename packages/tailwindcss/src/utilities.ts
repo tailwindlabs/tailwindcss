@@ -13,6 +13,7 @@ import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidat
 import type { DesignSystem } from './design-system'
 import {
   enableBaselineLast,
+  enableMaskUtilities,
   enableSafeAlignment,
   enableTextShadows,
   enableWrapAnywhere,
@@ -2820,6 +2821,32 @@ export function createUtilities(theme: Theme) {
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
   })
+
+  if (enableMaskUtilities) {
+    /**
+     * @css `mask-image`
+     */
+
+    staticUtility('mask-none', [['mask-image', 'none']])
+
+    utilities.functional('mask', (candidate) => {
+      if (!candidate.value) return
+      if (candidate.modifier) return
+      if (candidate.value.kind !== 'arbitrary') return
+
+      // Arbitrary values
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['image', 'url'])
+
+      switch (type) {
+        case 'image':
+        case 'url':
+        default: {
+          return [decl('mask-image', value)]
+        }
+      }
+    })
+  }
 
   /**
    * @css `box-decoration-break`
