@@ -1,5 +1,6 @@
 import type { DesignSystem } from './design-system'
 import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
+import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
 
 const COLON = 0x3a
@@ -326,6 +327,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     let property = baseWithoutModifier.slice(0, idx)
     let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(value)) return
+
     yield {
       kind: 'arbitrary',
       property,
@@ -443,6 +447,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
         let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
+        // Values can't contain `;` or `}` characters at the top-level.
+        if (!isValidArbitrary(arbitraryValue)) continue
+
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
         let typehint = ''
         for (let i = 0; i < arbitraryValue.length; i++) {
@@ -500,6 +507,9 @@ function parseModifier(modifier: string): CandidateModifier | null {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
     let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
 
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(arbitraryValue)) return null
+
     // Empty arbitrary values are invalid. E.g.: `data-[]:`
     //                                                 ^^
     if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
@@ -512,6 +522,9 @@ function parseModifier(modifier: string): CandidateModifier | null {
 
   if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
     let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(arbitraryValue)) return null
 
     // Empty arbitrary values are invalid. E.g.: `data-():`
     //                                                 ^^
@@ -551,6 +564,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     if (variant[1] === '@' && variant.includes('&')) return null
 
     let selector = decodeArbitraryValue(variant.slice(1, -1))
+
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(selector)) return null
 
     // Empty arbitrary values are invalid. E.g.: `[]:`
     //                                            ^^
@@ -629,6 +645,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
             let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
 
+            // Values can't contain `;` or `}` characters at the top-level.
+            if (!isValidArbitrary(arbitraryValue)) return null
+
             // Empty arbitrary values are invalid. E.g.: `data-[]:`
             //                                                 ^^
             if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
@@ -649,6 +668,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             if (value[0] !== '(') continue
 
             let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+
+            // Values can't contain `;` or `}` characters at the top-level.
+            if (!isValidArbitrary(arbitraryValue)) return null
 
             // Empty arbitrary values are invalid. E.g.: `data-():`
             //                                                 ^^
