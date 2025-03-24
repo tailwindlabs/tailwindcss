@@ -149,8 +149,14 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         'project-a/src/index.css': css`
           @reference 'tailwindcss/theme';
           @import 'tailwindcss/utilities';
+          @import './imported.css';
           @config '../tailwind.config.js';
           @source '../../project-b/src/**/*.html';
+        `,
+        'project-a/src/imported.css': css`
+          .imported {
+            color: red;
+          }
         `,
         'project-b/src/index.html': html`
           <div class="flex" />
@@ -179,6 +185,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
+        expect(styles).toContain(candidate`imported`)
       })
 
       await retryAssertion(async () => {
@@ -199,6 +206,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
+        expect(styles).toContain(candidate`imported`)
         expect(styles).toContain(candidate`m-2`)
       })
 
@@ -216,6 +224,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
+        expect(styles).toContain(candidate`imported`)
         expect(styles).toContain(candidate`m-2`)
         expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
       })
@@ -237,10 +246,49 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         let styles = await fetchStyles(url)
         expect(styles).toContain(candidate`red`)
         expect(styles).toContain(candidate`flex`)
+        expect(styles).toContain(candidate`imported`)
         expect(styles).toContain(candidate`m-2`)
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
         expect(styles).toContain(candidate`font-bold`)
+      })
+
+      await retryAssertion(async () => {
+        // Trigger a partial rebuild for the next test
+        await fs.write(
+          'project-a/index.html',
+          html`
+            <head>
+              <link rel="stylesheet" href="./src/index.css" />
+            </head>
+            <body>
+              <div class="m-4">Hello, world!</div>
+            </body>
+          `,
+        )
+        let styles = await fetchStyles(url)
+        expect(styles).toContain(candidate`m-4`)
+      })
+
+      await retryAssertion(async () => {
+        // Changing an `@imported` CSS file after a partial rebuild also triggers the correct update
+        await fs.write(
+          'project-a/src/imported.css',
+          css`
+            .imported-updated {
+              color: red;
+            }
+          `,
+        )
+
+        let styles = await fetchStyles(url)
+        expect(styles).toContain(candidate`red`)
+        expect(styles).toContain(candidate`flex`)
+        expect(styles).toContain(candidate`m-2`)
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
+        expect(styles).toContain(candidate`font-bold`)
+        expect(styles).toContain(candidate`imported-updated`)
       })
     },
   )
