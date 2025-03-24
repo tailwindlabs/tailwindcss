@@ -623,7 +623,12 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('first-line', ['&::first-line'])
 
   // TODO: Remove alpha vars or no?
-  staticVariant('marker', ['& *::marker', '&::marker'])
+  staticVariant('marker', [
+    '& *::marker',
+    '&::marker',
+    '& *::-webkit-details-marker',
+    '&::-webkit-details-marker',
+  ])
 
   staticVariant('selection', ['& *::selection', '&::selection'])
   staticVariant('file', ['&::file-selector-button'])
