@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for literal values in `--value('…')` and `--modifier('…')` ([#17304](https://github.com/tailwindlabs/tailwindcss/pull/17304))
 - Add suggestions when `--spacing(--value(integer, number))` is used ([#17308](https://github.com/tailwindlabs/tailwindcss/pull/17308))
 
+### Fixed
+
+- Error when input and output files resolve to the same file when using the CLI ([#17311](https://github.com/tailwindlabs/tailwindcss/pull/17311))
+
 ### [4.0.15] - 2025-03-20
 
 ### Fixed
