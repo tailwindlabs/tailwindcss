@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Error when input and output files resolve to the same file when using the CLI ([#17311](https://github.com/tailwindlabs/tailwindcss/pull/17311))
+- Fix class extraction followed by `(` in Pug ([#17320](https://github.com/tailwindlabs/tailwindcss/pull/17320))
 
 ### [4.0.15] - 2025-03-20
 
@@ -42,7 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove redundant `line-height: initial` from Preflight ([#15212](https://github.com/tailwindlabs/tailwindcss/pull/15212))
 - Increase Standalone hardware compatibility on macOS x64 builds ([#17267](https://github.com/tailwindlabs/tailwindcss/pull/17267))
 - Ensure that the CSS file rebuilds if a new CSS variable is used from templates ([#17301](https://github.com/tailwindlabs/tailwindcss/pull/17301))
-- Fix class extraction followed by `(` in Pug ([#17320](https://github.com/tailwindlabs/tailwindcss/pull/17320))
 
 ### Changed
 
