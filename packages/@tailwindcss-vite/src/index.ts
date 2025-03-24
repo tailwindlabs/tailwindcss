@@ -277,6 +277,10 @@ class Root {
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
+    } else {
+      for (let buildDependency of this.buildDependencies.keys()) {
+        addWatchFile(buildDependency)
+      }
     }
 
     if (
