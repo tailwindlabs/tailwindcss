@@ -1433,6 +1433,30 @@ test(
   },
 )
 
+test(
+  'input and output flags can be the same if `-` is used',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ exec, expect }) => {
+    expect(
+      await exec('pnpm tailwindcss --input - --output -', undefined, {
+        stdin: '@tailwind utilities;',
+      }),
+    ).toContain(candidate`flex`)
+  },
+)
+
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
