@@ -1408,7 +1408,6 @@ test(
   },
 )
 
-
 test(
   'fails when input file and output file are the same',
   {
@@ -1428,9 +1427,9 @@ test(
     await expect(exec('pnpm tailwindcss --input input.css --output input.css')).rejects.toThrow(
       /Specified input file.*and output file.*are identical./,
     )
-    await expect(exec('pnpm tailwindcss --input input.css --output ./src/../input.css')).rejects.toThrow(
-      /Specified input file.*and output file.*are identical./,
-    )
+    await expect(
+      exec('pnpm tailwindcss --input input.css --output ./src/../input.css'),
+    ).rejects.toThrow(/Specified input file.*and output file.*are identical./)
   },
 )
 

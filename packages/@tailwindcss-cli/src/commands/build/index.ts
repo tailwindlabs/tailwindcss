@@ -100,7 +100,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   if (args['--input'] === args['--output']) {
     eprintln(header())
     eprintln()
-    eprintln(`Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`)
+    eprintln(
+      `Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`,
+    )
     process.exit(1)
   }
 
