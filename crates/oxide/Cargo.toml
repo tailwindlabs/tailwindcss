@@ -19,6 +19,7 @@ bexpand = "1.2.0"
 fast-glob = "0.4.3"
 classification-macros = { path = "../classification-macros" }
 regex = "1.11.1"
+fancy-regex = "0.14.0"
 
 [dev-dependencies]
 tempfile = "3.13.0"

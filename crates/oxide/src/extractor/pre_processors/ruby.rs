@@ -3,6 +3,14 @@
 use crate::cursor;
 use crate::extractor::bracket_stack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use crate::pre_process_input;
+use bstr::ByteSlice;
+use fancy_regex::Regex;
+use std::sync;
+
+static TEMPLATE_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
+    Regex::new(r#"\s*(.*?)_template\s*<<[-~]?([A-Z]+?)\n([\s\S]*?)\2"#).unwrap()
+});
 
 #[derive(Debug, Default)]
 pub struct Ruby;
@@ -14,6 +22,20 @@ impl PreProcessor for Ruby {
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = bracket_stack::BracketStack::default();
 
+        // Extract embedded template languages
+        // https://viewcomponent.org/guide/templates.html#interpolations
+        let content_as_str = std::str::from_utf8(content).unwrap();
+        for capture in TEMPLATE_REGEX
+            .captures_iter(content_as_str)
+            .filter_map(Result::ok)
+        {
+            let lang = capture.get(1).unwrap().as_str();
+            let body = capture.get(3).unwrap().as_str();
+            let replaced = pre_process_input(body.as_bytes(), lang);
+            result = result.replace(body, replaced);
+        }
+
+        // Ruby extraction
         while cursor.pos < len {
             // Looking for `%w` or `%W`
             if cursor.curr != b'%' && !matches!(cursor.next, b'w' | b'W') {
@@ -152,5 +174,52 @@ mod tests {
         ] {
             Ruby::test_extract_contains(input, expected);
         }
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17334
+    #[test]
+    fn test_embedded_slim_extraction() {
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              slim_template <<~SLIM
+                button.rounded-full.bg-red-500
+                  | Some text
+                button.rounded-full(
+                  class="flex"
+                )
+                  | Some text
+              SLIM
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["rounded-full", "bg-red-500", "flex"]);
+
+        // Embedded Svelte just to verify that we properly pick up the `{x}_template`
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              svelte_template <<~HTML
+                  <div class:flex="true"></div>
+              HTML
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["flex"]);
+
+        // Together in the same file
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              slim_template <<~SLIM
+                button.z-1.z-2
+                  | Some text
+              SLIM
+            end
+
+            class QweComponent < ApplicationComponent
+              svelte_template <<~HTML
+                <div class:z-3="true"></div>
+              HTML
+            end
+        "#;
+        Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
     }
 }
