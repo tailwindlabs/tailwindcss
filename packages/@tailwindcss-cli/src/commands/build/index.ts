@@ -97,7 +97,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Check if the input and output file paths are identical, otherwise return an
   // error to the user.
-  if (args['--input'] === args['--output']) {
+  if (args['--input'] === args['--output'] && args['--input'] !== '-') {
     eprintln(header())
     eprintln()
     eprintln(
