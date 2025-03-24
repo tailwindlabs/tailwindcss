@@ -310,8 +310,8 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
 
       // Track used animation names
       if (node.property === 'animation') {
-        let parts = node.value.split(/\s+/)
-        for (let part of parts) usedKeyframeNames.add(part)
+        for (let keyframeName of extractKeyframeNames(node.value))
+          usedKeyframeNames.add(keyframeName)
       }
 
       parent.push(node)
@@ -438,8 +438,8 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       )
       if (variableUsed) {
         if (declaration.property.startsWith(designSystem.theme.prefixKey('--animate-'))) {
-          let parts = declaration.value!.split(/\s+/)
-          for (let part of parts) usedKeyframeNames.add(part)
+          for (let keyframeName of extractKeyframeNames(declaration.value!))
+            usedKeyframeNames.add(keyframeName)
         }
 
         continue
@@ -604,4 +604,8 @@ function isVariableUsed(
   }
 
   return false
+}
+
+function extractKeyframeNames(value: string): string[] {
+  return value.split(/[\s,]+/)
 }
