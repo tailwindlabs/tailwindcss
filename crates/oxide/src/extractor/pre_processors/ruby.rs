@@ -204,5 +204,22 @@ mod tests {
         "#;
 
         Ruby::test_extract_contains(input, vec!["flex"]);
+
+        // Together in the same file
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              slim_template <<~SLIM
+                button.z-1.z-2
+                  | Some text
+              SLIM
+            end
+
+            class QweComponent < ApplicationComponent
+              svelte_template <<~HTML
+                <div class:z-3="true"></div>
+              HTML
+            end
+        "#;
+        Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
     }
 }
