@@ -5,11 +5,12 @@ use crate::extractor::bracket_stack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
 use crate::pre_process_input;
 use bstr::ByteSlice;
-use regex::Regex;
+use fancy_regex::Regex;
 use std::sync;
 
-static SLIM_TEMPLATE_REGEX: sync::LazyLock<Regex> =
-    sync::LazyLock::new(|| Regex::new(r#"<<[-~]SLIM\n([\s\S]*?)SLIM"#).unwrap());
+static TEMPLATE_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
+    Regex::new(r#"\s*(.*)_template\s*<<[-~]?([A-Z]+)\n([\s\S]*?)\2"#).unwrap()
+});
 
 #[derive(Debug, Default)]
 pub struct Ruby;
@@ -24,11 +25,13 @@ impl PreProcessor for Ruby {
         // Extract embedded Slim languages
         // https://viewcomponent.org/guide/templates.html#interpolations
         let content_as_str = std::str::from_utf8(content).unwrap();
-        for (_, [body]) in SLIM_TEMPLATE_REGEX
+        for capture in TEMPLATE_REGEX
             .captures_iter(content_as_str)
-            .map(|c| c.extract())
+            .filter_map(Result::ok)
         {
-            let replaced = pre_process_input(body.as_bytes(), "slim");
+            let lang = capture.get(1).unwrap().as_str();
+            let body = capture.get(3).unwrap().as_str();
+            let replaced = pre_process_input(body.as_bytes(), lang);
             result = result.replace(body, replaced);
         }
 
@@ -190,5 +193,16 @@ mod tests {
         "#;
 
         Ruby::test_extract_contains(input, vec!["rounded-full", "bg-red-500", "flex"]);
+
+        // Embedded Svelte just to verify that we properly pick up the `{x}_template`
+        let input = r#"
+            class QweComponent < ApplicationComponent
+              svelte_template <<~HTML
+                  <div class:flex="true"></div>
+              HTML
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["flex"]);
     }
 }
