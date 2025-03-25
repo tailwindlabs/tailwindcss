@@ -1,0 +1,2 @@
+.git
+node_modules

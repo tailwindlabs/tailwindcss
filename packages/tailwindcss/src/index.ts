@@ -26,7 +26,7 @@ import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { enableSourceInline } from './feature-flags'
+import { enableSourceInline, enableSourceNot } from './feature-flags'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
@@ -128,7 +128,7 @@ async function parseCss(
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
-  let globs: { base: string; pattern: string }[] = []
+  let sources: { base: string; pattern: string; negated: boolean }[] = []
   let inlineCandidates: string[] = []
   let ignoredCandidates: string[] = []
   let root = null as Root
@@ -216,12 +216,14 @@ async function parseCss(
       let inline = false
       let path = node.params
 
-      if (enableSourceInline) {
+      if (enableSourceNot) {
         if (path[0] === 'n' && path.startsWith('not ')) {
           not = true
           path = path.slice(4)
         }
+      }
 
+      if (enableSourceInline) {
         if (path[0] === 'i' && path.startsWith('inline(')) {
           inline = true
           path = path.slice(7, -1)
@@ -247,7 +249,11 @@ async function parseCss(
           }
         }
       } else {
-        globs.push({ base: context.base as string, pattern: source })
+        sources.push({
+          base: context.base as string,
+          pattern: source,
+          negated: enableSourceNot ? not : false,
+        })
       }
       replaceWith([])
       return
@@ -552,7 +558,7 @@ async function parseCss(
     base,
     ast,
     loadModule,
-    globs,
+    sources,
   })
 
   for (let customVariant of customVariants) {
@@ -637,7 +643,7 @@ async function parseCss(
   return {
     designSystem,
     ast,
-    globs,
+    sources,
     root,
     utilitiesNode,
     features,
@@ -649,12 +655,12 @@ export async function compileAst(
   input: AstNode[],
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): AstNode[]
 }> {
-  let { designSystem, ast, globs, root, utilitiesNode, features, inlineCandidates } =
+  let { designSystem, ast, sources, root, utilitiesNode, features, inlineCandidates } =
     await parseCss(input, opts)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -682,7 +688,7 @@ export async function compileAst(
   }
 
   return {
-    globs,
+    sources,
     root,
     features,
     build(newRawCandidates: string[]) {
@@ -747,7 +753,7 @@ export async function compile(
   css: string,
   opts: CompileOptions = {},
 ): Promise<{
-  globs: { base: string; pattern: string }[]
+  sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
   build(candidates: string[]): string

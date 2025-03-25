@@ -474,9 +474,9 @@ test('emits the right base for @source directives inside nested files', async ()
     { base: '/root', loadStylesheet },
   )
 
-  expect(compiler.globs).toEqual([
-    { pattern: './nested/**/*.css', base: '/root/foo' },
-    { pattern: './root/**/*.css', base: '/root' },
+  expect(compiler.sources).toEqual([
+    { pattern: './nested/**/*.css', base: '/root/foo', negated: false },
+    { pattern: './root/**/*.css', base: '/root', negated: false },
   ])
 })
 
@@ -521,15 +521,15 @@ test('emits the right base for @source found inside JS configs and plugins from 
     { base: '/root', loadStylesheet, loadModule },
   )
 
-  expect(compiler.globs).toEqual([
-    { pattern: './nested-plugin/*.html', base: '/root/foo-plugin' },
-    { pattern: './root-plugin/*.html', base: '/root-plugin' },
+  expect(compiler.sources).toEqual([
+    { pattern: './nested-plugin/*.html', base: '/root/foo-plugin', negated: false },
+    { pattern: './root-plugin/*.html', base: '/root-plugin', negated: false },
 
-    { pattern: './nested-config-plugin/*.html', base: '/root/foo-config' },
-    { pattern: './nested-config/*.html', base: '/root/foo-config' },
+    { pattern: './nested-config-plugin/*.html', base: '/root/foo-config', negated: false },
+    { pattern: './nested-config/*.html', base: '/root/foo-config', negated: false },
 
-    { pattern: './root-config-plugin/*.html', base: '/root-config' },
-    { pattern: './root-config/*.html', base: '/root-config' },
+    { pattern: './root-config-plugin/*.html', base: '/root-config', negated: false },
+    { pattern: './root-config/*.html', base: '/root-config', negated: false },
   ])
 })
 

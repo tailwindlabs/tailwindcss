@@ -25,13 +25,13 @@ jobs:
             os: macos-14
 
         # Exclude windows and macos from being built on feature branches
-        on-main-branch:
-          - ${{ github.ref == 'refs/heads/main' }}
+        run-all:
+          - ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.body, '[ci-all]') }}
         exclude:
-          - on-main-branch: false
+          - run-all: false
             runner:
               name: Windows
-          - on-main-branch: false
+          - run-all: false
             runner:
               name: macOS
 
