@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod scanner {
+    use std::path::PathBuf;
     use std::process::Command;
     use std::thread::sleep;
     use std::time::Duration;
@@ -7,6 +8,26 @@ mod scanner {
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
+
+    fn public_source_entry_from_pattern(dir: PathBuf, pattern: &str) -> PublicSourceEntry {
+        let mut parts = pattern.split_whitespace();
+        let _ = parts.next().unwrap_or_default();
+        let not_or_pattern = parts.next().unwrap_or_default();
+        if not_or_pattern == "not" {
+            let pattern = parts.next().unwrap_or_default();
+            return PublicSourceEntry {
+                base: dir.to_string_lossy().into(),
+                pattern: pattern[1..pattern.len() - 1].to_string(),
+                negated: true,
+            };
+        }
+
+        PublicSourceEntry {
+            base: dir.to_string_lossy().into(),
+            pattern: not_or_pattern[1..not_or_pattern.len() - 1].to_string(),
+            negated: false,
+        }
+    }
 
     struct ScanResult {
         files: Vec<String>,
@@ -47,7 +68,7 @@ mod scanner {
         // Resolve all content paths for the (temporary) current working directory
         let sources: Vec<PublicSourceEntry> = source_directives
             .iter()
-            .map(|str| PublicSourceEntry::from_pattern(base.clone().into(), str))
+            .map(|str| public_source_entry_from_pattern(base.clone().into(), str))
             .collect();
 
         let mut scanner = Scanner::new(sources);
@@ -670,8 +691,8 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry::from_pattern(dir.join("project-a"), "@source '**/*'"),
-            PublicSourceEntry::from_pattern(dir.join("project-b"), "@source '**/*'"),
+            public_source_entry_from_pattern(dir.join("project-a"), "@source '**/*'"),
+            public_source_entry_from_pattern(dir.join("project-b"), "@source '**/*'"),
         ];
 
         let mut scanner = Scanner::new(sources);
@@ -1068,21 +1089,21 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry::from_pattern(
+            public_source_entry_from_pattern(
                 dir.join("home/project/apps/web")
                     .to_string_lossy()
                     .to_string()
                     .into(),
                 "@source '**/*'",
             ),
-            PublicSourceEntry::from_pattern(
+            public_source_entry_from_pattern(
                 dir.join("home/project/apps/web")
                     .to_string_lossy()
                     .to_string()
                     .into(),
                 "@source '../admin'",
             ),
-            PublicSourceEntry::from_pattern(
+            public_source_entry_from_pattern(
                 dir.join("home/project/apps/web")
                     .to_string_lossy()
                     .to_string()
@@ -1200,8 +1221,8 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
-            PublicSourceEntry::from_pattern(dir.clone(), "@source not 'src/ignore-me.html'"),
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*.html'"),
+            public_source_entry_from_pattern(dir.clone(), "@source not 'src/ignore-me.html'"),
         ];
 
         let candidates = Scanner::new(sources.clone()).scan();
@@ -1224,8 +1245,8 @@ mod scanner {
         );
 
         let sources = vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
-            PublicSourceEntry::from_pattern(
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*'"),
+            public_source_entry_from_pattern(
                 dir.clone(),
                 "@source not 'src/app/[foo]/ignore*.html'",
             ),
@@ -1248,8 +1269,8 @@ mod scanner {
         );
 
         let mut scanner = Scanner::new(vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
-            PublicSourceEntry::from_pattern(
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*.html'"),
+            public_source_entry_from_pattern(
                 dir.clone(),
                 "@source not 'src/ignored-by-source-not.html'",
             ),
@@ -1304,7 +1325,7 @@ mod scanner {
         // Create files
         create_files_in(&dir, &[("foo.styl", "content-['foo.styl']")]);
 
-        let sources = vec![PublicSourceEntry::from_pattern(
+        let sources = vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source '**/*'",
         )];
@@ -1316,8 +1337,8 @@ mod scanner {
 
         // Explicitly allow `.styl` files
         let mut scanner = Scanner::new(vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '*.styl'"),
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*'"),
+            public_source_entry_from_pattern(dir.clone(), "@source '*.styl'"),
         ]);
 
         let candidates = scanner.scan();
@@ -1338,7 +1359,7 @@ mod scanner {
             ],
         );
 
-        let mut scanner = Scanner::new(vec![PublicSourceEntry::from_pattern(
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source '**/*'",
         )]);
@@ -1347,8 +1368,8 @@ mod scanner {
         assert!(candidates.is_empty());
 
         let mut scanner = Scanner::new(vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*'"),
-            PublicSourceEntry::from_pattern(dir.clone(), "@source './*.html'"),
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*'"),
+            public_source_entry_from_pattern(dir.clone(), "@source './*.html'"),
         ]);
 
         let candidates = scanner.scan();
@@ -1377,7 +1398,10 @@ mod scanner {
         );
 
         // Default auto source detection
-        let sources = vec![PublicSourceEntry::from_pattern(dir.clone(), "@source './'")];
+        let sources = vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source './'",
+        )];
 
         let mut scanner = Scanner::new(sources.clone());
 
@@ -1386,7 +1410,7 @@ mod scanner {
 
         // Explicitly listing all `*.html` files, should not include `node_modules` because it's
         // ignored
-        let sources = vec![PublicSourceEntry::from_pattern(
+        let sources = vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source '**/*.html'",
         )];
@@ -1399,8 +1423,8 @@ mod scanner {
         // Explicitly list the `node_modules/my-ui-lib`
         //
         let sources = vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source '**/*.html'"),
-            PublicSourceEntry::from_pattern(dir.clone(), "@source 'node_modules/my-ui-lib'"),
+            public_source_entry_from_pattern(dir.clone(), "@source '**/*.html'"),
+            public_source_entry_from_pattern(dir.clone(), "@source 'node_modules/my-ui-lib'"),
         ];
 
         let mut scanner = Scanner::new(sources.clone());
@@ -1501,7 +1525,7 @@ mod scanner {
             ],
         );
 
-        let mut scanner = Scanner::new(vec![PublicSourceEntry::from_pattern(
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source '**/*'",
         )]);

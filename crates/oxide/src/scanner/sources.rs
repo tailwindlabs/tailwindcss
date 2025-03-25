@@ -1,7 +1,8 @@
-use crate::glob::optimize_public_source_entry;
+use crate::glob::split_pattern;
 use crate::GlobEntry;
 use bexpand::Expression;
 use std::path::PathBuf;
+use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
 
@@ -75,25 +76,103 @@ impl Sources {
 }
 
 impl PublicSourceEntry {
-    #[cfg(test)]
-    pub fn from_pattern(dir: PathBuf, pattern: &str) -> Self {
-        let mut parts = pattern.split_whitespace();
-        let _ = parts.next().unwrap_or_default();
-        let not_or_pattern = parts.next().unwrap_or_default();
-        if not_or_pattern == "not" {
-            let pattern = parts.next().unwrap_or_default();
-            return Self {
-                base: dir.to_string_lossy().into(),
-                pattern: pattern[1..pattern.len() - 1].to_string(),
-                negated: true,
+    /// Optimize the PublicSourceEntry by trying to move all the static parts of the pattern to the
+    /// base of the PublicSourceEntry.
+    ///
+    /// ```diff
+    /// - { base: '/', pattern: 'src/**/*.html'}
+    /// + { base: '/src', pattern: '**/*.html'}
+    /// ```
+    ///
+    /// A file stays in the `pattern` part, because the `base` should only be a directory.
+    ///
+    /// ```diff
+    /// - { base: '/', pattern: 'src/examples/index.html'}
+    /// + { base: '/src/examples', pattern: 'index.html'}
+    /// ```
+    ///
+    /// A folder will be moved to the `base` part, and the `pattern` will be set to `**/*`.
+    ///
+    /// ```diff
+    /// - { base: '/', pattern: 'src/examples'}
+    /// + { base: '/src/examples', pattern: '**/*'}
+    /// ```
+    ///
+    /// In addition, we will canonicalize the base path so we always work with the correctly
+    /// resolved path.
+    pub fn optimize(&mut self) {
+        // Resolve base path immediately
+        let Ok(base) = dunce::canonicalize(&self.base) else {
+            event!(Level::ERROR, "Failed to resolve base: {:?}", self.base);
+            return;
+        };
+        self.base = base.to_string_lossy().to_string();
+
+        // No dynamic part, figure out if we are dealing with a file or a directory.
+        if !self.pattern.contains('*') {
+            let combined_path = if self.pattern.starts_with("/") {
+                PathBuf::from(&self.pattern)
+            } else {
+                PathBuf::from(&self.base).join(&self.pattern)
             };
+
+            match dunce::canonicalize(combined_path) {
+                Ok(resolved_path) if resolved_path.is_dir() => {
+                    self.base = resolved_path.to_string_lossy().to_string();
+                    self.pattern = "**/*".to_owned();
+                }
+                Ok(resolved_path) if resolved_path.is_file() => {
+                    self.base = resolved_path
+                        .parent()
+                        .unwrap()
+                        .to_string_lossy()
+                        .to_string();
+                    // Ensure leading slash, otherwise it will match against all files in all folders/
+                    self.pattern = format!(
+                        "/{}",
+                        resolved_path
+                            .file_name()
+                            .unwrap()
+                            .to_string_lossy()
+                            .to_string()
+                    );
+                }
+                _ => {}
+            }
+            return;
         }
 
-        Self {
-            base: dir.to_string_lossy().into(),
-            pattern: not_or_pattern[1..not_or_pattern.len() - 1].to_string(),
-            negated: false,
-        }
+        // Contains dynamic part
+        let (static_part, dynamic_part) = split_pattern(&self.pattern);
+
+        let base: PathBuf = self.base.clone().into();
+        let base = match static_part {
+            Some(static_part) => base.join(static_part),
+            None => base,
+        };
+
+        // TODO: If the base does not exist on disk, try removing the last slash and try again.
+        let base = match dunce::canonicalize(&base) {
+            Ok(base) => base,
+            Err(err) => {
+                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                return;
+            }
+        };
+
+        let pattern = match dynamic_part {
+            Some(dynamic_part) => dynamic_part,
+            None => {
+                if base.is_dir() {
+                    "**/*".to_owned()
+                } else {
+                    "".to_owned()
+                }
+            }
+        };
+
+        self.base = base.to_string_lossy().to_string();
+        self.pattern = pattern;
     }
 }
 
@@ -139,7 +218,7 @@ pub fn public_source_entries_to_private_source_entries(
                 .collect::<Vec<_>>()
         })
         .map(|mut public_source| {
-            optimize_public_source_entry(&mut public_source);
+            public_source.optimize();
             public_source
         })
         .collect::<Vec<_>>();

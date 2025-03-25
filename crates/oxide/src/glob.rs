@@ -1,7 +1,6 @@
-use crate::PublicSourceEntry;
 use fxhash::{FxHashMap, FxHashSet};
 use std::path::PathBuf;
-use tracing::{event, Level};
+use tracing::event;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct GlobEntry {
@@ -10,105 +9,6 @@ pub struct GlobEntry {
 
     /// Glob pattern
     pub pattern: String,
-}
-
-/// Optimize the PublicSourceEntry by trying to move all the static parts of the pattern to the
-/// base of the PublicSourceEntry.
-///
-/// ```diff
-/// - { base: '/', pattern: 'src/**/*.html'}
-/// + { base: '/src', pattern: '**/*.html'}
-/// ```
-///
-/// A file stays in the `pattern` part, because the `base` should only be a directory.
-///
-/// ```diff
-/// - { base: '/', pattern: 'src/examples/index.html'}
-/// + { base: '/src/examples', pattern: 'index.html'}
-/// ```
-///
-/// A folder will be moved to the `base` part, and the `pattern` will be set to `**/*`.
-///
-/// ```diff
-/// - { base: '/', pattern: 'src/examples'}
-/// + { base: '/src/examples', pattern: '**/*'}
-/// ```
-///
-/// In addition, we will canonicalize the base path so we always work with the correctly resolved
-/// path.
-pub fn optimize_public_source_entry(source: &mut PublicSourceEntry) {
-    // Resolve base path immediately
-    let Ok(base) = dunce::canonicalize(&source.base) else {
-        event!(Level::ERROR, "Failed to resolve base: {:?}", source.base);
-        return;
-    };
-    source.base = base.to_string_lossy().to_string();
-
-    // No dynamic part, figure out if we are dealing with a file or a directory.
-    if !source.pattern.contains('*') {
-        let combined_path = if source.pattern.starts_with("/") {
-            PathBuf::from(&source.pattern)
-        } else {
-            PathBuf::from(&source.base).join(&source.pattern)
-        };
-
-        match dunce::canonicalize(combined_path) {
-            Ok(resolved_path) if resolved_path.is_dir() => {
-                source.base = resolved_path.to_string_lossy().to_string();
-                source.pattern = "**/*".to_owned();
-            }
-            Ok(resolved_path) if resolved_path.is_file() => {
-                source.base = resolved_path
-                    .parent()
-                    .unwrap()
-                    .to_string_lossy()
-                    .to_string();
-                // Ensure leading slash, otherwise it will match against all files in all folders/
-                source.pattern = format!(
-                    "/{}",
-                    resolved_path
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string()
-                );
-            }
-            _ => {}
-        }
-        return;
-    }
-
-    // Contains dynamic part
-    let (static_part, dynamic_part) = split_pattern(&source.pattern);
-
-    let base: PathBuf = source.base.clone().into();
-    let base = match static_part {
-        Some(static_part) => base.join(static_part),
-        None => base,
-    };
-
-    // TODO: If the base does not exist on disk, try removing the last slash and try again.
-    let base = match dunce::canonicalize(&base) {
-        Ok(base) => base,
-        Err(err) => {
-            event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-            return;
-        }
-    };
-
-    let pattern = match dynamic_part {
-        Some(dynamic_part) => dynamic_part,
-        None => {
-            if base.is_dir() {
-                "**/*".to_owned()
-            } else {
-                "".to_owned()
-            }
-        }
-    };
-
-    source.base = base.to_string_lossy().to_string();
-    source.pattern = pattern;
 }
 
 pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>, emit_parent_glob: bool) -> Vec<GlobEntry> {
@@ -254,7 +154,7 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 // Input: `../project-b/foo/bar.html`
 // Split results in: `("../project-b/foo", "bar.html")`
 //
-fn split_pattern(pattern: &str) -> (Option<String>, Option<String>) {
+pub fn split_pattern(pattern: &str) -> (Option<String>, Option<String>) {
     // No dynamic parts, so we can just return the input as-is.
     if !pattern.contains('*') {
         return (Some(pattern.to_owned()), None);
