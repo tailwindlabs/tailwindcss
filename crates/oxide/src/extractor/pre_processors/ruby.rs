@@ -4,12 +4,26 @@ use crate::cursor;
 use crate::extractor::bracket_stack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
 use crate::scanner::pre_process_input;
-use bstr::ByteSlice;
-use fancy_regex::Regex;
+use bstr::ByteVec;
+use regex::{Regex, RegexBuilder};
 use std::sync;
 
-static TEMPLATE_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
-    Regex::new(r#"\s*(.*?)_template\s*<<[-~]?([A-Z]+?)\n([\s\S]*?)\2"#).unwrap()
+// 1. Find the start of the literal
+// 2. Get the language from the regex
+// 3. Manually scan until we find `^\s+([A-Z]+)`
+
+static TEMPLATE_START_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
+    RegexBuilder::new(r#"\s*([a-z0-9_-]+)_template\s*<<[-~]?([A-Z]+)$"#)
+      .multi_line(true)
+      .build()
+      .unwrap()
+});
+
+static TEMPLATE_END_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
+  RegexBuilder::new(r#"^\s*([A-Z]+)"#)
+    .multi_line(true)
+    .build()
+    .unwrap()
 });
 
 #[derive(Debug, Default)]
@@ -25,14 +39,39 @@ impl PreProcessor for Ruby {
         // Extract embedded template languages
         // https://viewcomponent.org/guide/templates.html#interpolations
         let content_as_str = std::str::from_utf8(content).unwrap();
-        for capture in TEMPLATE_REGEX
-            .captures_iter(content_as_str)
-            .filter_map(Result::ok)
-        {
-            let lang = capture.get(1).unwrap().as_str();
-            let body = capture.get(3).unwrap().as_str();
-            let replaced = pre_process_input(body.as_bytes(), lang);
-            result = result.replace(body, replaced);
+
+        let starts = TEMPLATE_START_REGEX.captures_iter(content_as_str).collect::<Vec<_>>();
+        let ends = TEMPLATE_END_REGEX.captures_iter(content_as_str).collect::<Vec<_>>();
+
+        for start in starts.iter() {
+          // The language for this block
+          let lang = start.get(1).unwrap().as_str();
+
+          // The HEREDOC delimiter
+          let delimiter_start = start.get(2).unwrap().as_str();
+
+          // Where the "body" starts for the HEREDOC block
+          let body_start = start.get(0).unwrap().end();
+
+          // Look through all of the ends to find a matching language
+          for end in ends.iter() {
+            // 1. This must appear after the start
+            let body_end = end.get(0).unwrap().start();
+            if body_end < body_start {
+              continue;
+            }
+
+            // The languages must match otherwise we haven't found the end
+            let delimiter_end = end.get(1).unwrap().as_str();
+            if delimiter_end != delimiter_start {
+              continue;
+            }
+
+            let body = &content_as_str[body_start..body_end];
+            let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
+
+            result.replace_range(body_start..body_end, replaced);
+          }
         }
 
         // Ruby extraction
