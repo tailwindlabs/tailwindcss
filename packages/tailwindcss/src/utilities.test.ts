@@ -11602,6 +11602,23 @@ test('mask', async () => {
         'mask-[cover]',
         'mask-[contain]',
         'mask-[size:120px_120px]',
+
+        // mask-position
+        'mask-center',
+        'mask-top',
+        'mask-top-right',
+        'mask-top-left',
+        'mask-bottom',
+        'mask-bottom-right',
+        'mask-bottom-left',
+        'mask-left',
+        'mask-right',
+        'mask-center',
+        'mask-[50%]',
+        'mask-[120px]',
+        'mask-[120px_120px]',
+        'mask-[length:120px_120px]',
+        'mask-[position:120px_120px]',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -11676,7 +11693,7 @@ test('mask', async () => {
       mask-size: cover;
     }
 
-    .mask-\\[size\\:120px_120px\\] {
+    .mask-\\[length\\:120px_120px\\], .mask-\\[size\\:120px_120px\\] {
       -webkit-mask-size: 120px 120px;
       mask-size: 120px 120px;
     }
@@ -11694,6 +11711,66 @@ test('mask', async () => {
     .mask-cover {
       -webkit-mask-size: cover;
       mask-size: cover;
+    }
+
+    .mask-\\[50\\%\\] {
+      -webkit-mask-position: 50%;
+      mask-position: 50%;
+    }
+
+    .mask-\\[120px\\] {
+      -webkit-mask-position: 120px;
+      mask-position: 120px;
+    }
+
+    .mask-\\[120px_120px\\], .mask-\\[position\\:120px_120px\\] {
+      -webkit-mask-position: 120px 120px;
+      mask-position: 120px 120px;
+    }
+
+    .mask-bottom {
+      -webkit-mask-position: bottom;
+      mask-position: bottom;
+    }
+
+    .mask-bottom-left {
+      -webkit-mask-position: 0 100%;
+      mask-position: 0 100%;
+    }
+
+    .mask-bottom-right {
+      -webkit-mask-position: 100% 100%;
+      mask-position: 100% 100%;
+    }
+
+    .mask-center {
+      -webkit-mask-position: center;
+      mask-position: center;
+    }
+
+    .mask-left {
+      -webkit-mask-position: 0;
+      mask-position: 0;
+    }
+
+    .mask-right {
+      -webkit-mask-position: 100%;
+      mask-position: 100%;
+    }
+
+    .mask-top {
+      -webkit-mask-position: top;
+      mask-position: top;
+    }
+
+    .mask-top-left {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+
+    .mask-top-right {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
     }"
   `)
   expect(
@@ -11742,6 +11819,24 @@ test('mask', async () => {
       '-mask-auto/foo',
       '-mask-cover/foo',
       '-mask-contain/foo',
+
+      // mask-position
+      '-mask-center',
+      '-mask-top',
+      '-mask-right-top',
+      '-mask-right-bottom',
+      '-mask-bottom',
+      '-mask-left-bottom',
+      '-mask-left',
+      '-mask-left-top',
+      '-mask-center/foo',
+      '-mask-top/foo',
+      '-mask-right-top/foo',
+      '-mask-right-bottom/foo',
+      '-mask-bottom/foo',
+      '-mask-left-bottom/foo',
+      '-mask-left/foo',
+      '-mask-left-top/foo',
     ]),
   ).toEqual('')
 

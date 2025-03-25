@@ -2837,9 +2837,15 @@ export function createUtilities(theme: Theme) {
       // Arbitrary values
       let value: string | null = candidate.value.value
       let type =
-        candidate.value.dataType ?? inferDataType(value, ['image', 'bg-size', 'length', 'url'])
+        candidate.value.dataType ??
+        inferDataType(value, ['image', 'percentage', 'position', 'bg-size', 'length', 'url'])
 
       switch (type) {
+        case 'percentage':
+        case 'position': {
+          if (candidate.modifier) return
+          return [decl('mask-position', value)]
+        }
         case 'bg-size':
         case 'length':
         case 'size': {
@@ -2888,6 +2894,20 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-auto', [['mask-size', 'auto']])
     staticUtility('mask-cover', [['mask-size', 'cover']])
     staticUtility('mask-contain', [['mask-size', 'contain']])
+
+    /**
+     * @css `mask-position`
+     */
+
+    staticUtility('mask-top', [['mask-position', 'top']])
+    staticUtility('mask-top-left', [['mask-position', 'left top']])
+    staticUtility('mask-top-right', [['mask-position', 'right top']])
+    staticUtility('mask-bottom', [['mask-position', 'bottom']])
+    staticUtility('mask-bottom-left', [['mask-position', 'left bottom']])
+    staticUtility('mask-bottom-right', [['mask-position', 'right bottom']])
+    staticUtility('mask-left', [['mask-position', 'left']])
+    staticUtility('mask-right', [['mask-position', 'right']])
+    staticUtility('mask-center', [['mask-position', 'center']])
   }
 
   /**
