@@ -19,6 +19,16 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
     ])
   }
 
+  // Legacy `background-position` utilities for compatibility with v4.0 and earlier
+  designSystem.utilities.static('bg-left-top', () => [decl('background-position', 'left top')])
+  designSystem.utilities.static('bg-right-top', () => [decl('background-position', 'right top')])
+  designSystem.utilities.static('bg-left-bottom', () => [
+    decl('background-position', 'left bottom'),
+  ])
+  designSystem.utilities.static('bg-right-bottom', () => [
+    decl('background-position', 'right bottom'),
+  ])
+
   designSystem.utilities.functional('max-w-screen', (candidate) => {
     if (!candidate.value) return
     if (candidate.value.kind === 'arbitrary') return
