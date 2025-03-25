@@ -13,42 +13,53 @@ use std::sync;
 pub static RULES: sync::LazyLock<Gitignore> = sync::LazyLock::new(|| {
     let mut builder = GitignoreBuilder::new("");
 
-    builder
-        .add_line(None, &format!("{{{}}}", IGNORED_CONTENT_DIRS.join(",")))
-        .unwrap();
-    builder
-        .add_line(None, &format!("*.{{{}}}", IGNORED_EXTENSIONS.join(",")))
-        .unwrap();
-    builder
-        .add_line(None, &format!("*.{{{}}}", BINARY_EXTENSIONS.join(",")))
-        .unwrap();
-    builder
-        .add_line(None, &format!("{{{}}}", IGNORED_FILES.join(",")))
-        .unwrap();
+    builder.add_line(None, &IGNORED_CONTENT_DIRS_GLOB).unwrap();
+    builder.add_line(None, &IGNORED_EXTENSIONS_GLOB).unwrap();
+    builder.add_line(None, &BINARY_EXTENSIONS_GLOB).unwrap();
+    builder.add_line(None, &IGNORED_FILES_GLOB).unwrap();
 
     builder.build().unwrap()
 });
 
-static BINARY_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
-    include_str!("fixtures/binary-extensions.txt")
+pub static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
+    include_str!("fixtures/ignored-content-dirs.txt")
         .trim()
         .lines()
         .collect()
 });
 
-static IGNORED_EXTENSIONS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
-    include_str!("fixtures/ignored-extensions.txt")
-        .trim()
-        .lines()
-        .collect()
+static IGNORED_CONTENT_DIRS_GLOB: sync::LazyLock<String> =
+    sync::LazyLock::new(|| format!("{{{}}}/", IGNORED_CONTENT_DIRS.join(",")));
+
+static IGNORED_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
+    format!(
+        "*.{{{}}}",
+        include_str!("fixtures/ignored-extensions.txt")
+            .trim()
+            .lines()
+            .collect::<Vec<&str>>()
+            .join(",")
+    )
 });
 
-static IGNORED_FILES: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
-    include_str!("fixtures/ignored-files.txt")
-        .trim()
-        .lines()
-        .collect()
+pub static BINARY_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
+    format!(
+        "*.{{{}}}",
+        include_str!("fixtures/binary-extensions.txt")
+            .trim()
+            .lines()
+            .collect::<Vec<&str>>()
+            .join(",")
+    )
 });
 
-static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> =
-    sync::LazyLock::new(|| vec![".git", "node_modules"]);
+static IGNORED_FILES_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
+    format!(
+        "{{{}}}",
+        include_str!("fixtures/ignored-files.txt")
+            .trim()
+            .lines()
+            .collect::<Vec<&str>>()
+            .join(",")
+    )
+});

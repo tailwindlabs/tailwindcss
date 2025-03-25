@@ -3,6 +3,8 @@ use crate::GlobEntry;
 use bexpand::Expression;
 use std::path::PathBuf;
 
+use super::auto_source_detection::IGNORED_CONTENT_DIRS;
+
 #[derive(Debug, Clone)]
 pub struct PublicSourceEntry {
     /// Base path of the glob
@@ -27,16 +29,6 @@ pub enum SourceEntry {
     /// ```
     Auto { base: PathBuf },
 
-    /// Ignored auto source detection
-    ///
-    /// Represented by:
-    ///
-    /// ```css
-    /// @source not "src";`
-    /// @source not "src/**/*";`
-    /// ```
-    IgnoredAuto { base: PathBuf },
-
     /// Explicit source pattern regardless of any auto source detection rules
     ///
     /// Represented by:
@@ -46,14 +38,25 @@ pub enum SourceEntry {
     /// ```
     Pattern { base: PathBuf, pattern: String },
 
-    /// Explicit ignored source pattern regardless of any auto source detection rules
+    /// Ignored pattern
     ///
     /// Represented by:
     ///
     /// ```css
+    /// @source not "src";`
     /// @source not "src/**/*.html";`
     /// ```
-    IgnoredPattern { base: PathBuf, pattern: String },
+    Ignored { base: PathBuf, pattern: String },
+
+    /// External sources are sources outside of your git root which should not
+    /// follow gitignore rules.
+    ///
+    /// Represented by:
+    ///
+    /// ```css
+    /// @source "../node_modules/my-lib";`
+    /// ```
+    External { base: PathBuf },
 }
 
 #[derive(Debug, Clone, Default)]
@@ -153,18 +156,27 @@ impl From<PublicSourceEntry> for SourceEntry {
         let auto = value.pattern.ends_with("**/*")
             || PathBuf::from(&value.base).join(&value.pattern).is_dir();
 
-        match (value.negated, auto) {
-            (false, true) => SourceEntry::Auto {
+        let inside_ignored_content_dir = IGNORED_CONTENT_DIRS.iter().any(|dir| {
+            value.base.contains(&format!(
+                "{}{}{}",
+                std::path::MAIN_SEPARATOR,
+                dir,
+                std::path::MAIN_SEPARATOR
+            ))
+        });
+
+        match (value.negated, auto, inside_ignored_content_dir) {
+            (false, true, false) => SourceEntry::Auto {
                 base: value.base.into(),
             },
-            (false, false) => SourceEntry::Pattern {
+            (false, true, true) => SourceEntry::External {
+                base: value.base.into(),
+            },
+            (false, false, _) => SourceEntry::Pattern {
                 base: value.base.into(),
                 pattern: value.pattern,
             },
-            (true, true) => SourceEntry::IgnoredAuto {
-                base: value.base.into(),
-            },
-            (true, false) => SourceEntry::IgnoredPattern {
+            (true, _, _) => SourceEntry::Ignored {
                 base: value.base.into(),
                 pattern: value.pattern,
             },
@@ -184,7 +196,7 @@ impl From<GlobEntry> for SourceEntry {
 impl From<SourceEntry> for GlobEntry {
     fn from(value: SourceEntry) -> Self {
         match value {
-            SourceEntry::Auto { base } => GlobEntry {
+            SourceEntry::Auto { base } | SourceEntry::External { base } => GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: "**/*".into(),
             },
@@ -192,11 +204,7 @@ impl From<SourceEntry> for GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: pattern.clone(),
             },
-            SourceEntry::IgnoredAuto { base } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: "**/*".into(),
-            },
-            SourceEntry::IgnoredPattern { base, pattern } => GlobEntry {
+            SourceEntry::Ignored { base, pattern } => GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: pattern.clone(),
             },
@@ -207,7 +215,7 @@ impl From<SourceEntry> for GlobEntry {
 impl From<&SourceEntry> for GlobEntry {
     fn from(value: &SourceEntry) -> Self {
         match value {
-            SourceEntry::Auto { base } => GlobEntry {
+            SourceEntry::Auto { base } | SourceEntry::External { base } => GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: "**/*".into(),
             },
@@ -215,11 +223,7 @@ impl From<&SourceEntry> for GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: pattern.clone(),
             },
-            SourceEntry::IgnoredAuto { base } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: "**/*".into(),
-            },
-            SourceEntry::IgnoredPattern { base, pattern } => GlobEntry {
+            SourceEntry::Ignored { base, pattern } => GlobEntry {
                 base: base.to_string_lossy().into(),
                 pattern: pattern.clone(),
             },

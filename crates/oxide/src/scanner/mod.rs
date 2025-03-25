@@ -9,6 +9,7 @@ use crate::scanner::sources::{
     public_source_entries_to_private_source_entries, PublicSourceEntry, SourceEntry, Sources,
 };
 use crate::GlobEntry;
+use auto_source_detection::BINARY_EXTENSIONS_GLOB;
 use bstr::ByteSlice;
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
@@ -273,14 +274,18 @@ impl Scanner {
         self.scan_sources();
 
         for source in self.sources.iter() {
-            if let SourceEntry::Auto { base } = source {
-                let globs = resolve_globs((base).to_path_buf(), &self.dirs, &self.extensions);
-                self.globs.extend(globs);
-            } else if let SourceEntry::Pattern { base, pattern } = source {
-                self.globs.push(GlobEntry {
-                    base: base.to_string_lossy().to_string(),
-                    pattern: pattern.to_string(),
-                });
+            match source {
+                SourceEntry::Auto { base } | SourceEntry::External { base } => {
+                    let globs = resolve_globs((base).to_path_buf(), &self.dirs, &self.extensions);
+                    self.globs.extend(globs);
+                }
+                SourceEntry::Pattern { base, pattern } => {
+                    self.globs.push(GlobEntry {
+                        base: base.to_string_lossy().to_string(),
+                        pattern: pattern.to_string(),
+                    });
+                }
+                _ => {}
             }
         }
 
@@ -295,7 +300,7 @@ impl Scanner {
         self.sources
             .iter()
             .filter_map(|source| match source {
-                SourceEntry::Auto { base } => Some(GlobEntry {
+                SourceEntry::Auto { base } | SourceEntry::External { base } => Some(GlobEntry {
                     base: base.to_string_lossy().to_string(),
                     pattern: "**/*".to_string(),
                 }),
@@ -445,20 +450,14 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
     let mut first_root: Option<&PathBuf> = None;
     let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
 
-    let mut auto_content_roots = FxHashSet::default();
-
     for source in sources.iter() {
         match source {
             SourceEntry::Auto { base } => {
-                auto_content_roots.insert(base);
                 if first_root.is_none() {
                     first_root = Some(base);
                 } else {
                     other_roots.insert(base);
                 }
-            }
-            SourceEntry::IgnoredAuto { base } => {
-                ignores.entry(base).or_default().insert("**/*".to_string());
             }
             SourceEntry::Pattern { base, pattern } => {
                 let mut pattern = pattern.to_string();
@@ -492,13 +491,32 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
                     }
                 }
             }
-            SourceEntry::IgnoredPattern { base, pattern } => {
+            SourceEntry::Ignored { base, pattern } => {
                 let mut pattern = pattern.to_string();
                 // Ensure that the pattern is pinned to the base path.
                 if !pattern.starts_with("/") {
                     pattern = format!("/{pattern}");
                 }
                 ignores.entry(base).or_default().insert(pattern);
+            }
+            SourceEntry::External { base } => {
+                if first_root.is_none() {
+                    first_root = Some(base);
+                } else {
+                    other_roots.insert(base);
+                }
+
+                // External sources should take precedence even over git-ignored files:
+                ignores
+                    .entry(base)
+                    .or_default()
+                    .insert(format!("!{}", "/**/*"));
+
+                // External sources should still disallow binary extensions:
+                ignores
+                    .entry(base)
+                    .or_default()
+                    .insert(BINARY_EXTENSIONS_GLOB.clone());
             }
         }
     }
@@ -580,7 +598,7 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
                 let mut matches = false;
                 for source in sources.iter() {
                     match source {
-                        SourceEntry::Auto { base } => {
+                        SourceEntry::Auto { base } | SourceEntry::External { base } => {
                             if path.starts_with(base) {
                                 matches = true;
                                 break;

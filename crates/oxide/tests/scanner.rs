@@ -944,7 +944,7 @@ mod scanner {
     }
 
     #[test]
-    fn it_respects_gitignore_in_workspace_root2() {
+    fn it_respects_gitignore_in_workspace_root() {
         let ScanResult {
             candidates,
             files,
@@ -1417,38 +1417,67 @@ mod scanner {
         );
     }
 
-    // TODO: external(…) so that `.gitignore` from main project doesn't apply to external projects
     #[test]
-    #[ignore]
-    fn test_ignore_files_in_node_modules() {
-        // Create a temporary working directory
-        let dir = tempdir().unwrap().into_path();
+    fn test_ignore_node_modules_without_gitignore() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                (
+                    "packages/web/index.html",
+                    "content-['packages/web/index.html']",
+                ),
+                (
+                    "node_modules/index.html",
+                    "content-['node_modules/index.html']",
+                ),
+                (
+                    "packages/web/node_modules/index.html",
+                    "content-['packages/web/node_modules/index.html']",
+                ),
+            ],
+            vec!["@source '**/*'"],
+        );
 
-        // Create files
-        create_files_in(
-            &dir,
+        assert_eq!(candidates, vec!["content-['packages/web/index.html']"]);
+
+        assert_eq!(files, vec!["packages/web/index.html",]);
+        assert_eq!(globs, vec!["*", "packages/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}", "packages/web/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
+        assert_eq!(normalized_sources, vec!["**/*"]);
+    }
+
+    #[test]
+    fn test_ignore_gitignore_in_node_modules_source() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
             &[
                 (".gitignore", "node_modules\ndist"),
                 (
                     "node_modules/my-ui-lib/dist/index.html",
                     "content-['node_modules/my-ui-lib/dist/index.html']",
                 ),
+                (
+                    "node_modules/my-ui-lib/node.exe",
+                    "content-['node_modules/my-ui-lib/node.exe']",
+                ),
             ],
+            vec!["@source 'node_modules/my-ui-lib'"],
         );
 
-        // Explicitly listing all `*.html` files, should not include `node_modules` because it's
-        // ignored
-        let sources = vec![
-            PublicSourceEntry::from_pattern(dir.clone(), "@source './'"),
-            PublicSourceEntry::from_pattern(dir.clone(), "@source './node_modules/my-ui-lib'"),
-        ];
-
-        let mut scanner = Scanner::new(sources.clone());
-        let candidates = scanner.scan();
         assert_eq!(
             candidates,
             vec!["content-['node_modules/my-ui-lib/dist/index.html']"]
         );
+        assert_eq!(files, vec!["node_modules/my-ui-lib/dist/index.html"]);
+        assert_eq!(globs, vec!["node_modules/my-ui-lib/*", "node_modules/my-ui-lib/dist/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
+        assert_eq!(normalized_sources, vec!["node_modules/my-ui-lib/**/*"]);
     }
 
     #[test]
