@@ -147,17 +147,18 @@ impl PublicSourceEntry {
 
         let base: PathBuf = self.base.clone().into();
         let base = match static_part {
-            Some(static_part) => base.join(static_part),
-            None => base,
-        };
-
-        // TODO: If the base does not exist on disk, try removing the last slash and try again.
-        let base = match dunce::canonicalize(&base) {
-            Ok(base) => base,
-            Err(err) => {
-                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-                return;
+            Some(static_part) => {
+                // TODO: If the base does not exist on disk, try removing the last slash and try
+                // again.
+                match dunce::canonicalize(base.join(static_part)) {
+                    Ok(base) => base,
+                    Err(err) => {
+                        event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                        return;
+                    }
+                }
             }
+            None => base,
         };
 
         let pattern = match dynamic_part {

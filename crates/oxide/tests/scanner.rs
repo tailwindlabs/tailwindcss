@@ -1585,4 +1585,30 @@ mod scanner {
 
         assert!(candidates.is_empty());
     }
+
+    #[test]
+    fn test_works_with_utf8_special_character_paths() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                ("src/💩.js", "content-['src/💩.js']"),
+                ("src/🤦‍♂️.tsx", "content-['src/🤦‍♂️.tsx']"),
+                ("src/🤦‍♂️/foo.tsx", "content-['src/🤦‍♂️/foo.tsx']"),
+            ],
+            vec!["@source '**/*'", "@source not 'src/🤦‍♂️'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['src/💩.js']", "content-['src/🤦‍♂️.tsx']"]
+        );
+
+        assert_eq!(files, vec!["src/💩.js", "src/🤦‍♂️.tsx"]);
+        assert_eq!(globs, vec!["*", "src/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
+        assert_eq!(normalized_sources, vec!["**/*"]);
+    }
 }

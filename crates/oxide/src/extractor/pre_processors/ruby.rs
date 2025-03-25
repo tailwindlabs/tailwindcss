@@ -3,7 +3,7 @@
 use crate::cursor;
 use crate::extractor::bracket_stack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
-use crate::pre_process_input;
+use crate::scanner::pre_process_input;
 use bstr::ByteSlice;
 use fancy_regex::Regex;
 use std::sync;
