@@ -75,6 +75,7 @@ impl Sources {
 }
 
 impl PublicSourceEntry {
+    #[cfg(test)]
     pub fn from_pattern(dir: PathBuf, pattern: &str) -> Self {
         let mut parts = pattern.split_whitespace();
         let _ = parts.next().unwrap_or_default();
