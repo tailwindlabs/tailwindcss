@@ -239,10 +239,7 @@ pub fn optimize_patterns(entries: &Vec<GlobEntry>) -> Vec<GlobEntry> {
 //
 // E.g.:
 //
-//  Original input:
-//  - `../project-b/**/*.{html,js}`
-//
-//  Expanded input:
+//  Input:
 //  - `../project-b/**/*.html`
 //  - `../project-b/**/*.js`
 //
