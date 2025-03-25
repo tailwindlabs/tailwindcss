@@ -15,7 +15,6 @@ mod scanner {
         candidates: Vec<String>,
     }
 
-    #[cfg(test)]
     fn create_files_in(dir: &path::Path, paths: &[(&str, &str)]) {
         // Create the necessary files
         for (path, contents) in paths {
@@ -30,7 +29,6 @@ mod scanner {
         }
     }
 
-    #[cfg(test)]
     fn scan_with_globs(
         paths_with_content: &[(&str, &str)],
         source_directives: Vec<&str>,
@@ -108,7 +106,6 @@ mod scanner {
         }
     }
 
-    #[cfg(test)]
     fn scan(paths_with_content: &[(&str, &str)]) -> ScanResult {
         scan_with_globs(paths_with_content, vec!["@source '**/*'"])
     }
