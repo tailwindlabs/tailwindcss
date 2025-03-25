@@ -50,6 +50,14 @@ test('marker', async () => {
 
     .marker\\:flex::marker {
       display: flex;
+    }
+
+    .marker\\:flex ::-webkit-details-marker {
+      display: flex;
+    }
+
+    .marker\\:flex::-webkit-details-marker {
+      display: flex;
     }"
   `)
   expect(await run(['marker/foo:flex'])).toEqual('')
@@ -2252,6 +2260,14 @@ test('variant order', async () => {
     }
 
     .marker\\:flex::marker {
+      display: flex;
+    }
+
+    .marker\\:flex ::-webkit-details-marker {
+      display: flex;
+    }
+
+    .marker\\:flex::-webkit-details-marker {
       display: flex;
     }
 
