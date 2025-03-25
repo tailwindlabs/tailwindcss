@@ -491,31 +491,22 @@ impl Ignore {
         // CHANGED: We added logic to configure an order in which the ignore files are respected and
         // allowed a whitelist in a later file to overrule a block on an earlier file.
         let order = [
-            // Global gitignore
-            &m_global,
-            // .git/info/exclude
-            &m_gi_exclude,
-            // .gitignore
-            &m_gi,
-            // .ignore
-            &m_ignore,
-            // .custom-ignore
-            &m_custom_ignore,
             // Manually added ignores
             &m_explicit,
+            // .custom-ignore
+            &m_custom_ignore,
+            // .ignore
+            &m_ignore,
+            // .gitignore
+            &m_gi,
+            // .git/info/exclude
+            &m_gi_exclude,
+            // Global gitignore
+            &m_global,
         ];
 
-        for (idx, check) in order.into_iter().enumerate() {
+        for check in order.into_iter() {
             if check.is_none() {
-                continue;
-            }
-
-            let remaining = &order[idx + 1..];
-            if check.is_ignore() {
-                if remaining.iter().any(|other| other.is_whitelist()) {
-                    continue;
-                }
-            } else if remaining.iter().any(|other| other.is_ignore()) {
                 continue;
             }
 
