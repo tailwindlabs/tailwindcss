@@ -8,10 +8,6 @@ use bstr::ByteVec;
 use regex::{Regex, RegexBuilder};
 use std::sync;
 
-// 1. Find the start of the literal
-// 2. Get the language from the regex
-// 3. Manually scan until we find `^\s+([A-Z]+)`
-
 static TEMPLATE_START_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
     RegexBuilder::new(r#"\s*([a-z0-9_-]+)_template\s*<<[-~]?([A-Z]+)$"#)
       .multi_line(true)
