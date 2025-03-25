@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix class extraction followed by `(` in Pug ([#17320](https://github.com/tailwindlabs/tailwindcss/pull/17320))
-- Ensure `@keyframes` for theme animations are emitted if they are referenced following a comma
+- Ensure `@keyframes` for theme animations are emitted if they are referenced following a comma ([#17352](https://github.com/tailwindlabs/tailwindcss/pull/17352))
 - Vite: Ensure that updates to an imported CSS file are properly propagated after updating templates ([#17347](https://github.com/tailwindlabs/tailwindcss/pull/17347))
 - Pre process `Slim` templates embedded in Ruby files ([#17336](https://github.com/tailwindlabs/tailwindcss/pull/17336))
 - Error when input and output files resolve to the same file when using the CLI ([#17311](https://github.com/tailwindlabs/tailwindcss/pull/17311))
