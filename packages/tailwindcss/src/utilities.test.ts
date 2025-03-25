@@ -10190,20 +10190,26 @@ test('bg', async () => {
         'bg-scroll',
 
         // background-position
-        'bg-center',
         'bg-top',
-        'bg-right-top',
-        'bg-right-bottom',
+        'bg-top-left',
+        'bg-top-right',
         'bg-bottom',
-        'bg-left-bottom',
+        'bg-bottom-left',
+        'bg-bottom-right',
         'bg-left',
-        'bg-left-top',
+        'bg-right',
+        'bg-center',
         'bg-[50%]',
         'bg-[120px]',
         'bg-[120px_120px]',
         'bg-[length:120px_120px]',
         'bg-[position:120px_120px]',
         'bg-[size:120px_120px]',
+        // Legacy versions in v4.0 and earlier
+        'bg-right-top',
+        'bg-right-bottom',
+        'bg-left-bottom',
+        'bg-left-top',
 
         // background-repeat
         'bg-repeat',
@@ -10610,6 +10616,14 @@ test('bg', async () => {
       background-position: bottom;
     }
 
+    .bg-bottom-left {
+      background-position: 0 100%;
+    }
+
+    .bg-bottom-right {
+      background-position: 100% 100%;
+    }
+
     .bg-center {
       background-position: center;
     }
@@ -10626,6 +10640,10 @@ test('bg', async () => {
       background-position: 0 0;
     }
 
+    .bg-right {
+      background-position: 100%;
+    }
+
     .bg-right-bottom {
       background-position: 100% 100%;
     }
@@ -10636,6 +10654,14 @@ test('bg', async () => {
 
     .bg-top {
       background-position: top;
+    }
+
+    .bg-top-left {
+      background-position: 0 0;
+    }
+
+    .bg-top-right {
+      background-position: 100% 0;
     }
 
     .bg-no-repeat {
