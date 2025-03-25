@@ -622,7 +622,6 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('first-letter', ['&::first-letter'])
   staticVariant('first-line', ['&::first-line'])
 
-  // TODO: Remove alpha vars or no?
   staticVariant('marker', [
     '& *::marker',
     '&::marker',
