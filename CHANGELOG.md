@@ -19,17 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
+
+## [4.0.16] - 2025-03-25
+
+### Added
+
 - Add support for literal values in `--value('…')` and `--modifier('…')` ([#17304](https://github.com/tailwindlabs/tailwindcss/pull/17304))
-- Add suggestions when `--spacing(--value(integer, number))` is used ([#17308](https://github.com/tailwindlabs/tailwindcss/pull/17308))
-- Add `::-webkit-details-marker` pseudo to `marker` variant ([#17362](https://github.com/tailwindlabs/tailwindcss/pull/17362))
 
 ### Fixed
 
 - Fix class extraction followed by `(` in Pug ([#17320](https://github.com/tailwindlabs/tailwindcss/pull/17320))
-- Ensure `@keyframes` for theme animations are emitted if they are referenced following a comma
-- Vite: Ensure that updates to an imported CSS file are properly propagated after updating templates ([#17347](https://github.com/tailwindlabs/tailwindcss/pull/17347))
+- Ensure `@keyframes` for theme animations are emitted if they are referenced following a comma ([#17352](https://github.com/tailwindlabs/tailwindcss/pull/17352))
+- Vite: Ensure that updates to an imported CSS file are properly propagated after updating source files ([#17347](https://github.com/tailwindlabs/tailwindcss/pull/17347))
 - Pre process `Slim` templates embedded in Ruby files ([#17336](https://github.com/tailwindlabs/tailwindcss/pull/17336))
 - Error when input and output files resolve to the same file when using the CLI ([#17311](https://github.com/tailwindlabs/tailwindcss/pull/17311))
+- Add missing suggestions when `--spacing(--value(integer, number))` is used ([#17308](https://github.com/tailwindlabs/tailwindcss/pull/17308))
+- Add `::-webkit-details-marker` pseudo to `marker` variant ([#17362](https://github.com/tailwindlabs/tailwindcss/pull/17362))
 
 ### [4.0.15] - 2025-03-20
 
@@ -3572,7 +3577,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.15...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.16...HEAD
+[4.0.16]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.15...v4.0.16
 [4.0.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...v4.0.15
 [4.0.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.13...v4.0.14
 [4.0.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.12...v4.0.13
