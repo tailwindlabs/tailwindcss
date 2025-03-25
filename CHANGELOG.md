@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 - _Experimental_: Add `@source not` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 
+### Added
+
+- Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
+
+### Changed
+
+- Deprecated `bg-{left,right}-{top,bottom}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
+
 ## [4.0.16] - 2025-03-25
 
 ### Added
