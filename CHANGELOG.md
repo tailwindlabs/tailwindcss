@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix an issue causing the CLI to hang when processing Ruby files ([#17383](https://github.com/tailwindlabs/tailwindcss/pull/17383))
+- Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
 
 ## [4.0.16] - 2025-03-25
 
