@@ -446,7 +446,7 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: Features.Nesting,
+      include: Features.Nesting | Features.MediaQueries,
       exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
       targets: {
         safari: (16 << 16) | (4 << 8),

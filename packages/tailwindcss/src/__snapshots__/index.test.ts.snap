@@ -2,7 +2,7 @@
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
 ":root, :host {
-  --color-red-500: oklch(.637 .237 25.331);
+  --color-red-500: oklch(63.7% .237 25.331);
   --spacing: .25rem;
 }
 
@@ -266,7 +266,13 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
     ::placeholder {
-      color: color-mix(in oklab, currentColor 50%, transparent);
+      color: currentColor;
+    }
+
+    @supports (color: color-mix(in srgb, red 50%, green)) {
+      ::placeholder {
+        color: color-mix(in oklab, currentColor 50%, transparent);
+      }
     }
   }
 

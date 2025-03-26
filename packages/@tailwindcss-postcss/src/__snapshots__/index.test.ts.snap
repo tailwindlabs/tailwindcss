@@ -164,8 +164,10 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
-    ::placeholder {
-      color: color-mix(in oklab, currentColor 50%, transparent);
+    @supports (color: color-mix(in srgb, red 0%, red)) {
+      ::placeholder {
+        color: color-mix(in oklab, currentColor 50%, transparent);
+      }
     }
   }
 
@@ -259,8 +261,10 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
-  .text-black\\/50 {
-    color: color-mix(in oklab, var(--color-black) 50%, transparent);
+  @supports (color: color-mix(in srgb, red 0%, red)) {
+    .text-black\\/50 {
+      color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    }
   }
 
   .underline {

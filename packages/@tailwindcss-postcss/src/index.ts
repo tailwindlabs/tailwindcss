@@ -52,6 +52,7 @@ export type PluginOptions = {
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
+  console.log({ opts, flag: process.env.NODE_ENV })
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -324,13 +325,13 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: LightningCssFeatures.Nesting,
+      include: LightningCssFeatures.Nesting | LightningCssFeatures.MediaRangeSyntax,
       exclude:
         LightningCssFeatures.LogicalProperties |
         LightningCssFeatures.DirSelector |
         LightningCssFeatures.LightDark,
       targets: {
-        safari: (16 << 16) | (4 << 8),
+        safari: (15 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
         firefox: 128 << 16,
         chrome: 111 << 16,
@@ -339,9 +340,14 @@ function optimizeCss(
     }).code
   }
 
+  let out = optimize(optimize(Buffer.from(input))).toString()
+  console.log({ out })
+
+  out = out.replaceAll(/\@media (\()?not /g, '@media $1not all and ')
+
   // Running Lightning CSS twice to ensure that adjacent rules are merged after
   // nesting is applied. This creates a more optimized output.
-  return optimize(optimize(Buffer.from(input))).toString()
+  return out
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
