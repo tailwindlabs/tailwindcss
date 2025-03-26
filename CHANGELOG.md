@@ -21,8 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 - _Experimental_: Add `@source not` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 
-## [4.0.17] - 2025-03-26
-
 ### Fixed
 
 - Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
