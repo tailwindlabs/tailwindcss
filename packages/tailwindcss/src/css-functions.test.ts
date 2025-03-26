@@ -16,8 +16,10 @@ describe('--alpha(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo {
-        margin: oklab(62.7955% .22486 .12584 / .5);
+      "@supports (color: color-mix(in srgb, red 0%, red)) {
+        .foo {
+          margin: oklab(62.7955% .22486 .12584 / .5);
+        }
       }"
     `)
   })
@@ -195,8 +197,10 @@ describe('--theme(…)', () => {
         --color-red-500: red;
       }
 
-      .red {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      @supports (color: color-mix(in srgb, red 0%, red)) {
+        .red {
+          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        }
       }"
     `)
   })
@@ -212,8 +216,10 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
-        color: oklab(62.7955% .224863 .125846);
+      "@supports (color: color-mix(in srgb, red 0%, red)) {
+        .red {
+          color: oklab(62.7955% .224863 .125846);
+        }
       }"
     `)
   })
@@ -502,8 +508,10 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+          "@supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .75);
+            }
           }"
         `)
       })
@@ -519,8 +527,10 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+          "@supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .75);
+            }
           }"
         `)
       })
@@ -536,8 +546,10 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+          "@supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .75);
+            }
           }"
         `)
       })
@@ -761,8 +773,10 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: oklab(62.7955% .22486 .12584 / .25);
+          "@supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .25);
+            }
           }"
         `)
       })
@@ -834,7 +848,13 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .25);
+            color: color-mix(in oklab, red 50%, transparent / 50%);
+          }
+
+          @supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .25);
+            }
           }"
         `)
       })
@@ -869,8 +889,10 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: oklab(62.7955% .22486 .12584 / .5);
+          "@supports (color: color-mix(in srgb, red 0%, red)) {
+            .red {
+              color: oklab(62.7955% .22486 .12584 / .5);
+            }
           }"
         `)
       })
@@ -922,7 +944,7 @@ describe('theme(…)', () => {
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['letterSpacing.wide', '.025em'],
         ['lineHeight.tight', '1.25'],
-        ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
+        ['backgroundColor.red.500', 'oklch(63.7% .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
         let compiled = await compileCss(css`
@@ -1043,7 +1065,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width < 64rem) {
+        "@media (width >= 48rem) and ((width < 64rem)) {
           .red {
             color: red;
           }
@@ -1163,8 +1185,15 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklab(87% .06947 .00853 / .1);
-          outline-color: oklab(79% .05814 .15974 / .15);
+          border-color: oklch(87% .07 7 / .1);
+          outline-color: oklch(79% .17 70 / .15);
+        }
+
+        @supports (color: color-mix(in srgb, red 0%, red)) {
+          .my-base-rule {
+            border-color: oklab(87% .06947 .00853 / .1);
+            outline-color: oklab(79% .05814 .15974 / .15);
+          }
         }
       }
 

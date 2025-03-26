@@ -2,7 +2,9 @@ import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 import { extractUsedVariables } from './utils/variables'
+import * as ValueParser from './value-parser'
 
 const AT_SIGN = 0x40
 
@@ -312,6 +314,50 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       if (node.property === 'animation') {
         for (let keyframeName of extractKeyframeNames(node.value))
           usedKeyframeNames.add(keyframeName)
+      }
+
+      // "Polyfill" `color-mix(…)`
+      if (node.value.includes('color-mix(')) {
+        let ast = ValueParser.parse(node.value)
+        let didGenerateFallback = false
+        ValueParser.walk(ast, (node, { replaceWith }) => {
+          if (node.kind === 'function' && node.value === 'color-mix') {
+            let args = ValueParser.toCss(node.nodes)
+            let match = args.match(/in \w+, (.+) ?(\d+%), transparent/)
+            if (match) {
+              let color = match[1]
+              let percentage = match[2]
+
+              if (color.startsWith('var(')) {
+                let name = segment(color.slice(4, -1), ',')[0]
+                if (!name) return
+                let resolved = designSystem.theme.resolveValue(null, [name as any])
+                if (!resolved) return
+                color = resolved
+              }
+
+              if (
+                (color.startsWith('oklch(') ||
+                  color.startsWith('oklab(') ||
+                  color.startsWith('lab(') ||
+                  color.startsWith('lch(')) &&
+                color.endsWith(')')
+              ) {
+                let fallback = `${color.slice(0, -1)} / ${percentage})`
+                didGenerateFallback = true
+                replaceWith({ kind: 'word', value: fallback })
+              }
+            }
+          }
+        })
+
+        if (didGenerateFallback) {
+          let fallback = { ...node, value: ValueParser.toCss(ast) }
+          let colorMixQuery = rule('@supports (color: color-mix(in srgb, red 0%, red))', [node])
+
+          parent.push(fallback, colorMixQuery)
+          return
+        }
       }
 
       parent.push(node)

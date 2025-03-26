@@ -246,7 +246,13 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklab(62.7955% .22486 .12584 / .5);
+        color: red;
+      }
+
+      @supports (color: color-mix(in srgb, red 50%, green)) {
+        .\\[color\\:red\\]\\/50 {
+          color: oklab(62.7955% .22486 .12584 / .5);
+        }
       }"
     `)
   })
@@ -258,7 +264,13 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with variables and with modifiers', async () => {
     expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        color: color-mix(in oklab, var(--my-color) 50%, transparent);
+        color: var(--my-color);
+      }
+
+      @supports (color: color-mix(in srgb, red 50%, green)) {
+        .\\[color\\:var\\(--my-color\\)\\]\\/50 {
+          color: color-mix(in oklab, var(--my-color) 50%, transparent);
+        }
       }"
     `)
   })
@@ -4652,4 +4664,32 @@ describe('@variant', () => {
       }"
     `)
   })
+})
+
+it.only('does the `color-mix(…)` thing', async () => {
+  await expect(
+    compileCss(
+      css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+        @tailwind utilities;
+      `,
+      ['text-red-500/50'],
+    ),
+  ).resolves.toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: oklch(63.7% .237 25.331);
+    }
+
+    .text-red-500\\/50 {
+      color: oklch(63.7% .237 25.331 / .5);
+    }
+
+    @supports (color: color-mix(in srgb, red 0%, red)) {
+      .text-red-500\\/50 {
+        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      }
+    }"
+  `)
 })
