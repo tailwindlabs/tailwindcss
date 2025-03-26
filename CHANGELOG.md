@@ -20,14 +20,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
 - _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
 - _Experimental_: Add `@source not` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-
-### Added
-
 - Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
+
+### Fixed
+
+- Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
 
 ### Changed
 
 - Deprecated `bg-{left,right}-{top,bottom}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
+
+## [4.0.17] - 2025-03-26
+
+### Fixed
+
+- Fix an issue causing the CLI to hang when processing Ruby files ([#17383](https://github.com/tailwindlabs/tailwindcss/pull/17383))
 
 ## [4.0.16] - 2025-03-25
 
@@ -3586,7 +3593,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.16...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.17...HEAD
+[4.0.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.16...v4.0.17
 [4.0.16]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.15...v4.0.16
 [4.0.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...v4.0.15
 [4.0.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.13...v4.0.14

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod scanner {
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use std::process::Command;
     use std::thread::sleep;
     use std::time::Duration;
@@ -8,6 +8,16 @@ mod scanner {
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
+
+    fn symlink<P: AsRef<Path>, Q: AsRef<Path>>(original: P, link: Q) -> std::io::Result<()> {
+        #[cfg(not(windows))]
+        let result = std::os::unix::fs::symlink(original, link);
+
+        #[cfg(windows)]
+        let result = std::os::windows::fs::symlink_dir(original, link);
+
+        result
+    }
 
     fn public_source_entry_from_pattern(dir: PathBuf, pattern: &str) -> PublicSourceEntry {
         let mut parts = pattern.split_whitespace();
@@ -646,8 +656,8 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-b/index.html']"
             ]
         );
     }
@@ -702,8 +712,8 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-b/index.html']"
             ]
         );
 
@@ -726,10 +736,10 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']"
             ]
         );
 
@@ -758,12 +768,12 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-a/sub1/sub2/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
-                "content-['project-b/sub1/sub2/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-a/sub1/sub2/index.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']",
+                "content-['project-b/sub1/sub2/index.html']"
             ]
         );
 
@@ -792,14 +802,14 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-a/sub1/sub2/index.html']".to_owned(),
-                "content-['project-a/sub1/sub2/new.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
-                "content-['project-b/sub1/sub2/index.html']".to_owned(),
-                "content-['project-b/sub1/sub2/new.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-a/sub1/sub2/index.html']",
+                "content-['project-a/sub1/sub2/new.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']",
+                "content-['project-b/sub1/sub2/index.html']",
+                "content-['project-b/sub1/sub2/new.html']"
             ]
         );
     }
@@ -1610,5 +1620,118 @@ mod scanner {
         assert_eq!(files, vec!["src/💩.js", "src/🤦‍♂️.tsx"]);
         assert_eq!(globs, vec!["*", "src/*/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
         assert_eq!(normalized_sources, vec!["**/*"]);
+    }
+
+    #[test]
+    fn test_glob_with_symlinks() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                (".gitignore", "node_modules\ndist"),
+                (
+                    "node_modules/.pnpm/@org+my-ui-library/dist/index.ts",
+                    "content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']",
+                ),
+                // Make sure the `@org` does exist
+                ("node_modules/@org/.gitkeep", ""),
+            ],
+        );
+        let _ = symlink(
+            dir.join("node_modules/.pnpm/@org+my-ui-library"),
+            dir.join("node_modules/@org/my-ui-library"),
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'node_modules'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']"]
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'node_modules/@org/my-ui-library'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']"]
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'node_modules/@org'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']"]
+        );
+    }
+
+    #[test]
+    fn test_globs_with_recursive_symlinks() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                ("b/index.html", "content-['b/index.html']"),
+                ("z/index.html", "content-['z/index.html']"),
+            ],
+        );
+
+        // Create recursive symlinks
+        let _ = symlink(dir.join("a"), dir.join("b"));
+        let _ = symlink(dir.join("b/c"), dir.join("c"));
+        let _ = symlink(dir.join("b/root"), &dir);
+        let _ = symlink(dir.join("c"), dir.join("a"));
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '.'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec!["content-['b/index.html']", "content-['z/index.html']"]
+        );
+    }
+
+    #[test]
+    fn test_partial_globs_with_symlinks() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(&dir, &[("abcd/xyz.html", "content-['abcd/xyz.html']")]);
+        let _ = symlink(dir.join("abcd"), dir.join("efgh"));
+
+        // No sources should find nothing
+        let mut scanner = Scanner::new(vec![]);
+        let candidates = scanner.scan();
+        assert!(candidates.is_empty());
+
+        // Full symlinked folder name, should find the file
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'efgh/*.html'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['abcd/xyz.html']"]);
+
+        // Partially referencing the symlinked folder with a glob, should find the file
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'ef*/*.html'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['abcd/xyz.html']"]);
     }
 }
