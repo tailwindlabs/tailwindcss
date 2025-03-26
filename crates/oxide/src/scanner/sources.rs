@@ -243,7 +243,9 @@ impl From<PublicSourceEntry> for SourceEntry {
                 std::path::MAIN_SEPARATOR,
                 dir,
                 std::path::MAIN_SEPARATOR
-            ))
+            )) || value
+                .base
+                .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir,))
         });
 
         match (value.negated, auto, inside_ignored_content_dir) {
