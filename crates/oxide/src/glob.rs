@@ -191,6 +191,7 @@ mod tests {
     use super::optimize_patterns;
     use crate::GlobEntry;
     use bexpand::Expression;
+    use pretty_assertions::assert_eq;
     use std::process::Command;
     use std::{fs, path};
     use tempfile::tempdir;

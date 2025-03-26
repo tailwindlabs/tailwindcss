@@ -664,6 +664,7 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
 #[cfg(test)]
 mod tests {
     use super::{ChangedContent, Scanner};
+    use pretty_assertions::assert_eq;
 
     #[test]
     fn test_positions() {

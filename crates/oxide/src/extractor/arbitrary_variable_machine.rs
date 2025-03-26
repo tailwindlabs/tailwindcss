@@ -336,6 +336,7 @@ enum Class {
 mod tests {
     use super::ArbitraryVariableMachine;
     use crate::extractor::{arbitrary_variable_machine::IdleState, machine::Machine};
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]

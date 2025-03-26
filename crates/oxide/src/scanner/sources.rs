@@ -128,14 +128,8 @@ impl PublicSourceEntry {
                         .to_string_lossy()
                         .to_string();
                     // Ensure leading slash, otherwise it will match against all files in all folders/
-                    self.pattern = format!(
-                        "/{}",
-                        resolved_path
-                            .file_name()
-                            .unwrap()
-                            .to_string_lossy()
-                            .to_string()
-                    );
+                    self.pattern =
+                        format!("/{}", resolved_path.file_name().unwrap().to_string_lossy());
                 }
                 _ => {}
             }
