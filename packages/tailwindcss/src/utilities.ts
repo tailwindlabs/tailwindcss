@@ -182,6 +182,23 @@ export function withAlpha(value: string, alpha: string): string {
 }
 
 /**
+ * Apply opacity to a color using `color-mix`.
+ */
+export function replaceAlpha(value: string, alpha: string): string {
+  if (alpha === null) return value
+
+  // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
+  // work properly with `color-mix`. Assume anything that isn't a number is
+  // safe to pass through as-is, like `var(--my-opacity)`.
+  let alphaAsNumber = Number(alpha)
+  if (!Number.isNaN(alphaAsNumber)) {
+    alpha = `${alphaAsNumber * 100}%`
+  }
+
+  return `oklab(from ${value} l a b / ${alpha})`
+}
+
+/**
  * Resolve a color value + optional opacity modifier to a final color.
  */
 export function asColor(
@@ -4261,7 +4278,10 @@ export function createUtilities(theme: Theme) {
 
   if (enableTextShadows) {
     let textShadowProperties = () => {
-      return atRoot([property('--tw-text-shadow-color')])
+      return atRoot([
+        property('--tw-text-shadow-color'),
+        property('--tw-text-shadow-intensity', '100%'),
+      ])
     }
 
     staticUtility('text-shadow-initial', [
@@ -4270,15 +4290,32 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('text-shadow', (candidate) => {
+      let intensity: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          intensity = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            intensity = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--text-shadow'])
         if (value === null) return
 
         return [
           textShadowProperties(),
+          decl('--tw-text-shadow-intensity', intensity),
           decl(
             'text-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+            replaceShadowColors(
+              value,
+              (color) =>
+                `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+            ),
           ),
         ]
       }
@@ -4291,15 +4328,22 @@ export function createUtilities(theme: Theme) {
           case 'color': {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
-
-            return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+            return [
+              textShadowProperties(),
+              decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-intensity)')),
+            ]
           }
           default: {
             return [
               textShadowProperties(),
+              decl('--tw-text-shadow-intensity', intensity),
               decl(
                 'text-shadow',
-                replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+                replaceShadowColors(
+                  value,
+                  (color) =>
+                    `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+                ),
               ),
             ]
           }
@@ -4316,12 +4360,16 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--text-shadow-${candidate.value.value}`])
         if (value) {
-          if (candidate.modifier) return
           return [
             textShadowProperties(),
+            decl('--tw-text-shadow-intensity', intensity),
             decl(
               'text-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+              replaceShadowColors(
+                value,
+                (color) =>
+                  `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+              ),
             ),
           ]
         }
@@ -4331,7 +4379,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--text-shadow-color', '--color'])
         if (value) {
-          return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+          return [
+            textShadowProperties(),
+            decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-intensity)')),
+          ]
         }
       }
     })
@@ -4344,7 +4395,10 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: ['none'],
+      },
+      {
         valueThemeKeys: ['--text-shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
