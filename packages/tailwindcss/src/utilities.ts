@@ -3404,6 +3404,115 @@ export function createUtilities(theme: Theme) {
         decl('--tw-mask-radial-to-position', value),
       ],
     })
+
+    /**
+     * Conic masks
+     */
+
+    let maskPropertiesConic = () =>
+      atRoot([
+        property('--tw-mask-conic-position', '0deg'),
+        property('--tw-mask-conic-from-position', '0%'),
+        property('--tw-mask-conic-to-position', '100%'),
+        property('--tw-mask-conic-from-color', 'black'),
+        property('--tw-mask-conic-to-color', 'transparent'),
+      ])
+
+    functionalUtility('mask-conic', {
+      defaultValue: null,
+      supportsNegative: false,
+      supportsFractions: false,
+      handleBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * ${value.value})`
+      },
+      handleNegativeBareValue(value) {
+        let type = inferDataType(value.value, ['integer'])
+        if (!type) return null
+        if (type !== 'integer') return null
+
+        if (!isPositiveInteger(value.value)) return null
+
+        return `calc(1deg * -${value.value})`
+      },
+      handle: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic',
+          'conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)))',
+        ),
+        decl('--tw-mask-conic-position', value),
+      ],
+    })
+
+    suggest('mask-conic', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+      },
+    ])
+
+    maskStopUtility('mask-conic-from', {
+      color: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic-stops',
+          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+        ),
+        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+        decl('--tw-mask-conic-from-color', value),
+      ],
+      position: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic-stops',
+          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+        ),
+        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+        decl('--tw-mask-conic-from-position', value),
+      ],
+    })
+
+    maskStopUtility('mask-conic-to', {
+      color: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic-stops',
+          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+        ),
+        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+        decl('--tw-mask-conic-to-color', value),
+      ],
+      position: (value) => [
+        maskPropertiesGradient(),
+        maskPropertiesConic(),
+        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+        decl('mask-composite', 'intersect'),
+        decl(
+          '--tw-mask-conic-stops',
+          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+        ),
+        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+        decl('--tw-mask-conic-to-position', value),
+      ],
+    })
   }
 
   /**
