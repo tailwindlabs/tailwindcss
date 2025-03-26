@@ -67,6 +67,7 @@ impl PreProcessor for Ruby {
             let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
 
             result.replace_range(body_start..body_end, replaced);
+            break;
           }
         }
 
