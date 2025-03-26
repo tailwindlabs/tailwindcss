@@ -414,7 +414,7 @@ mod tests {
         ] {
             let actual = NamedVariantMachine::<IdleState>::test_extract_all(input);
             if actual != expected {
-                dbg!(&input, &actual, &expected);
+                dbg!(&input);
             }
             assert_eq!(actual, expected);
         }

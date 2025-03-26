@@ -17,10 +17,6 @@ pub trait PreProcessor: Sized + Default {
         let actual = String::from_utf8_lossy(&actual);
         let expected = String::from_utf8_lossy(expected);
 
-        if actual != expected {
-            dbg!((&input, &actual, &expected));
-        }
-
         // The input and output should have the exact same length.
         assert_eq!(input.len(), actual.len());
         assert_eq!(actual.len(), expected.len());

@@ -245,7 +245,7 @@ mod tests {
         expected.dedup();
 
         if actual != expected {
-            dbg!(&input, &actual, &expected);
+            dbg!(&input);
         }
         assert_eq!(actual, expected);
     }
@@ -273,7 +273,7 @@ mod tests {
         expected.sort();
 
         if actual != expected {
-            dbg!(&input, &actual, &expected);
+            dbg!(&input);
         }
         assert_eq!(actual, expected);
     }

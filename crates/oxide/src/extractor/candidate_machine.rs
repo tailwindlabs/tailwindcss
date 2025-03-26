@@ -308,7 +308,7 @@ mod tests {
                 actual.sort();
 
                 if actual != expected {
-                    dbg!(&input, &expected, &actual);
+                    dbg!(&input);
                 }
 
                 assert_eq!(actual, expected);
