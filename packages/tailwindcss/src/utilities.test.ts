@@ -12054,43 +12054,43 @@ test('mask-t-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top-from-position {
@@ -12279,43 +12279,43 @@ test('mask-t-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top-from-position {
@@ -12505,43 +12505,43 @@ test('mask-r-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right-from-position {
@@ -12731,43 +12731,43 @@ test('mask-r-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right-from-position {
@@ -12957,43 +12957,43 @@ test('mask-b-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom-from-position {
@@ -13183,43 +13183,43 @@ test('mask-b-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom-from-position {
@@ -13409,43 +13409,43 @@ test('mask-l-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left-from-position {
@@ -13635,43 +13635,43 @@ test('mask-l-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left-from-position {
@@ -13879,43 +13879,43 @@ test('mask-x-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right-from-position {
@@ -14147,43 +14147,43 @@ test('mask-x-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right-from-position {
@@ -14415,43 +14415,43 @@ test('mask-y-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top-from-position {
@@ -14683,43 +14683,43 @@ test('mask-y-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-left {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-right {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-bottom {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-top-from-position {
@@ -14839,19 +14839,19 @@ test('mask-linear', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-linear-position {
@@ -15037,19 +15037,19 @@ test('mask-linear-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-linear-position {
@@ -15245,19 +15245,19 @@ test('mask-linear-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-linear-position {
@@ -15369,19 +15369,19 @@ test('mask-radial', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial-from-position {
@@ -15671,19 +15671,19 @@ test('mask-radial-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial-from-position {
@@ -15891,19 +15891,19 @@ test('mask-radial-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial-from-position {
@@ -16006,19 +16006,19 @@ test('mask-conic', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic-position {
@@ -16204,19 +16204,19 @@ test('mask-conic-from', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic-position {
@@ -16412,19 +16412,19 @@ test('mask-conic-to', async () => {
     @property --tw-mask-linear {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-radial {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic {
       syntax: "*";
       inherits: false;
-      initial-value: linear-gradient(#000, #000);
+      initial-value: linear-gradient(#fff, #fff);
     }
 
     @property --tw-mask-conic-position {

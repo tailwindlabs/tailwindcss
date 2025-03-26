@@ -2951,9 +2951,9 @@ export function createUtilities(theme: Theme) {
 
     let maskPropertiesGradient = () =>
       atRoot([
-        property('--tw-mask-linear', 'linear-gradient(#000, #000)'),
-        property('--tw-mask-radial', 'linear-gradient(#000, #000)'),
-        property('--tw-mask-conic', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-linear', 'linear-gradient(#fff, #fff)'),
+        property('--tw-mask-radial', 'linear-gradient(#fff, #fff)'),
+        property('--tw-mask-conic', 'linear-gradient(#fff, #fff)'),
       ])
 
     type MaskStopDescription = {
@@ -3066,10 +3066,10 @@ export function createUtilities(theme: Theme) {
 
     let maskPropertiesEdge = () =>
       atRoot([
-        property('--tw-mask-left', 'linear-gradient(#000, #000)'),
-        property('--tw-mask-right', 'linear-gradient(#000, #000)'),
-        property('--tw-mask-bottom', 'linear-gradient(#000, #000)'),
-        property('--tw-mask-top', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-left', 'linear-gradient(#fff, #fff)'),
+        property('--tw-mask-right', 'linear-gradient(#fff, #fff)'),
+        property('--tw-mask-bottom', 'linear-gradient(#fff, #fff)'),
+        property('--tw-mask-top', 'linear-gradient(#fff, #fff)'),
       ])
 
     type MaskEdge = 'top' | 'right' | 'bottom' | 'left'
