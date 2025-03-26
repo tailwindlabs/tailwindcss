@@ -4418,6 +4418,7 @@ export function createUtilities(theme: Theme) {
       return atRoot([
         property('--tw-shadow', nullShadow),
         property('--tw-shadow-color'),
+        property('--tw-shadow-intensity', '100%'),
         property('--tw-inset-shadow', nullShadow),
         property('--tw-inset-shadow-color'),
         property('--tw-ring-color'),
@@ -4436,15 +4437,32 @@ export function createUtilities(theme: Theme) {
     staticUtility('shadow-initial', [boxShadowProperties, ['--tw-shadow-color', 'initial']])
 
     utilities.functional('shadow', (candidate) => {
+      let intensity: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          intensity = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            intensity = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--shadow'])
         if (value === null) return
 
         return [
           boxShadowProperties(),
+          decl('--tw-shadow-intensity', intensity),
           decl(
             '--tw-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+            replaceShadowColors(
+              value,
+              (color) =>
+                `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+            ),
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -4459,14 +4477,22 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
-            return [boxShadowProperties(), decl('--tw-shadow-color', value)]
+            return [
+              boxShadowProperties(),
+              decl('--tw-shadow-color', withAlpha(value, 'var(--tw-shadow-intensity)')),
+            ]
           }
           default: {
             return [
               boxShadowProperties(),
+              decl('--tw-shadow-intensity', intensity),
               decl(
                 '--tw-shadow',
-                replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+                replaceShadowColors(
+                  value,
+                  (color) =>
+                    `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+                ),
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4488,12 +4514,16 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
-          if (candidate.modifier) return
           return [
             boxShadowProperties(),
+            decl('--tw-shadow-intensity', intensity),
             decl(
               '--tw-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+              replaceShadowColors(
+                value,
+                (color) =>
+                  `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+              ),
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -4504,7 +4534,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [boxShadowProperties(), decl('--tw-shadow-color', value)]
+          return [
+            boxShadowProperties(),
+            decl('--tw-shadow-color', withAlpha(value, 'var(--tw-shadow-intensity)')),
+          ]
         }
       }
     })
@@ -4517,7 +4550,10 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: ['none'],
+      },
+      {
         valueThemeKeys: ['--shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
