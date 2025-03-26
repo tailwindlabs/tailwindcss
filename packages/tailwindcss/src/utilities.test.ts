@@ -15334,15 +15334,15 @@ test('text-shadow', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.1);
-          --text-shadow-xl: 0px 2px 4px rgb(0 0 0 / 0.15), 0px 2px 6px rgb(0 0 0 / 0.15);
+          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
+          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
         }
         @tailwind utilities;
       `,
       [
         // Shadows
+        'text-shadow-2xs',
         'text-shadow-sm',
-        'text-shadow-xl',
         'text-shadow-none',
         'text-shadow-[12px_12px_#0088cc]',
         'text-shadow-[10px_10px]',
@@ -15376,6 +15376,10 @@ test('text-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+    }
+
+    .text-shadow-2xs {
+      text-shadow: 0px 1px 0px var(--tw-text-shadow-color, #0000001a);
     }
 
     .text-shadow-\\[\\#0088cc\\] {
@@ -15443,15 +15447,11 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-sm {
-      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, #0000001a);
+      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, #0000000f), 0px 2px 2px var(--tw-text-shadow-color, #0000000f);
     }
 
     .text-shadow-transparent {
       --tw-text-shadow-color: transparent;
-    }
-
-    .text-shadow-xl {
-      text-shadow: 0px 2px 4px var(--tw-text-shadow-color, #00000026), 0px 2px 6px var(--tw-text-shadow-color, #00000026);
     }
 
     @property --tw-text-shadow-color {
