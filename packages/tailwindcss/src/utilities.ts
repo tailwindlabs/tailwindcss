@@ -2942,6 +2942,240 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-origin-fill', [['mask-origin', 'fill-box']])
     staticUtility('mask-origin-stroke', [['mask-origin', 'stroke-box']])
     staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
+
+    /**
+     * @css `mask-image`
+     */
+
+    staticUtility('mask-none', [['mask-image', 'none']])
+
+    let maskPropertiesGradient = () =>
+      atRoot([
+        property('--tw-mask-linear', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-radial', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-conic', 'linear-gradient(#000, #000)'),
+      ])
+
+    type MaskStopDescription = {
+      color: (value: string) => AstNode[] | undefined
+      position: (value: string) => AstNode[] | undefined
+    }
+
+    function maskStopUtility(classRoot: string, desc: MaskStopDescription) {
+      utilities.functional(classRoot, (candidate) => {
+        if (!candidate.value) return
+
+        // Arbitrary values
+        if (candidate.value.kind === 'arbitrary') {
+          let value: string | null = candidate.value.value
+          let type =
+            candidate.value.dataType ?? inferDataType(value, ['length', 'percentage', 'color'])
+
+          switch (type) {
+            case 'color': {
+              value = asColor(value, candidate.modifier, theme)
+              if (value === null) return
+
+              return desc.color(value)
+            }
+            case 'percentage': {
+              if (candidate.modifier) return
+              if (!isPositiveInteger(value.slice(0, -1))) return
+
+              return desc.position(value)
+            }
+            default: {
+              if (candidate.modifier) return
+
+              return desc.position(value)
+            }
+          }
+        }
+
+        // Known values: Color Stops
+        {
+          let value = resolveThemeColor(candidate, theme, ['--background-color', '--color'])
+          if (value) {
+            return desc.color(value)
+          }
+        }
+
+        // Known values: Positions
+        {
+          if (candidate.modifier) return
+
+          let type = inferDataType(candidate.value.value, ['number', 'percentage'])
+          if (!type) return
+
+          switch (type) {
+            case 'number': {
+              let multiplier = theme.resolve(null, ['--spacing'])
+              if (!multiplier) return
+              if (!isValidSpacingMultiplier(candidate.value.value)) return
+
+              return desc.position(`--spacing(${candidate.value.value})`)
+            }
+
+            case 'percentage': {
+              if (!isPositiveInteger(candidate.value.value.slice(0, -1))) return
+              return desc.position(candidate.value.value)
+            }
+
+            default: {
+              return
+            }
+          }
+        }
+      })
+
+      suggest(classRoot, () => [
+        {
+          values: ['current', 'inherit', 'transparent'],
+          valueThemeKeys: ['--background-color', '--color'],
+          modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+        },
+        {
+          values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+          valueThemeKeys: ['--gradient-color-stop-positions'],
+        },
+      ])
+
+      suggest(classRoot, () => [
+        // Percentages
+        {
+          values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+        },
+
+        // Spacing Scale
+        {
+          values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+        },
+
+        // Colors
+        {
+          values: ['current', 'inherit', 'transparent'],
+          valueThemeKeys: ['--background-color', '--color'],
+          modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+        },
+      ])
+    }
+
+    /**
+     * Edge masks
+     */
+
+    let maskPropertiesEdge = () =>
+      atRoot([
+        property('--tw-mask-left', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-right', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-bottom', 'linear-gradient(#000, #000)'),
+        property('--tw-mask-top', 'linear-gradient(#000, #000)'),
+      ])
+
+    type MaskEdge = 'top' | 'right' | 'bottom' | 'left'
+    type MaskStop = 'from' | 'to'
+
+    function maskEdgeUtility(name: string, stop: MaskStop, edges: Record<MaskEdge, boolean>) {
+      maskStopUtility(name, {
+        color(value) {
+          let nodes: AstNode[] = [
+            // Common @property declarations
+            maskPropertiesGradient(),
+            maskPropertiesEdge(),
+
+            // Common properties to all edge utilities
+            decl(
+              'mask-image',
+              'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)',
+            ),
+            decl('mask-composite', 'intersect'),
+            decl(
+              '--tw-mask-linear',
+              'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
+            ),
+          ]
+
+          for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
+            if (!edges[edge]) continue
+
+            nodes.push(
+              decl(
+                `--tw-mask-${edge}`,
+                `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
+              ),
+            )
+
+            nodes.push(
+              atRoot([
+                property(`--tw-mask-${edge}-from-position`, '0%'),
+                property(`--tw-mask-${edge}-to-position`, '100%'),
+                property(`--tw-mask-${edge}-from-color`, 'black'),
+                property(`--tw-mask-${edge}-to-color`, 'transparent'),
+              ]),
+            )
+
+            nodes.push(decl(`--tw-mask-${edge}-${stop}-color`, value))
+          }
+
+          return nodes
+        },
+        position(value) {
+          let nodes: AstNode[] = [
+            // Common @property declarations
+            maskPropertiesGradient(),
+            maskPropertiesEdge(),
+
+            // Common properties to all edge utilities
+            decl(
+              'mask-image',
+              'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)',
+            ),
+            decl('mask-composite', 'intersect'),
+            decl(
+              '--tw-mask-linear',
+              'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
+            ),
+          ]
+
+          for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
+            if (!edges[edge]) continue
+
+            nodes.push(
+              decl(
+                `--tw-mask-${edge}`,
+                `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
+              ),
+            )
+
+            nodes.push(
+              atRoot([
+                property(`--tw-mask-${edge}-from-position`, '0%'),
+                property(`--tw-mask-${edge}-to-position`, '100%'),
+                property(`--tw-mask-${edge}-from-color`, 'black'),
+                property(`--tw-mask-${edge}-to-color`, 'transparent'),
+              ]),
+            )
+
+            nodes.push(decl(`--tw-mask-${edge}-${stop}-position`, value))
+          }
+
+          return nodes
+        },
+      })
+    }
+
+    maskEdgeUtility('mask-x-from', 'from', { top: false, right: true, bottom: false, left: true })
+    maskEdgeUtility('mask-x-to', 'to', { top: false, right: true, bottom: false, left: true })
+    maskEdgeUtility('mask-y-from', 'from', { top: true, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-y-to', 'to', { top: true, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-t-from', 'from', { top: true, right: false, bottom: false, left: false })
+    maskEdgeUtility('mask-t-to', 'to', { top: true, right: false, bottom: false, left: false })
+    maskEdgeUtility('mask-r-from', 'from', { top: false, right: true, bottom: false, left: false })
+    maskEdgeUtility('mask-r-to', 'to', { top: false, right: true, bottom: false, left: false })
+    maskEdgeUtility('mask-b-from', 'from', { top: false, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-b-to', 'to', { top: false, right: false, bottom: true, left: false })
+    maskEdgeUtility('mask-l-from', 'from', { top: false, right: false, bottom: false, left: true })
+    maskEdgeUtility('mask-l-to', 'to', { top: false, right: false, bottom: false, left: true })
   }
 
   /**
