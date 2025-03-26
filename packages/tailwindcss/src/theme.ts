@@ -21,10 +21,11 @@ const ignoredThemeKeyMap = new Map([
     '--text',
     [
       '--text-color',
-      '--text-underline-offset',
-      '--text-indent',
-      '--text-decoration-thickness',
       '--text-decoration-color',
+      '--text-decoration-thickness',
+      '--text-indent',
+      '--text-shadow',
+      '--text-underline-offset',
     ],
   ],
 ])

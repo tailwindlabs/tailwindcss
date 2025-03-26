@@ -11,7 +11,12 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableBaselineLast, enableSafeAlignment, enableWrapAnywhere } from './feature-flags'
+import {
+  enableBaselineLast,
+  enableSafeAlignment,
+  enableTextShadows,
+  enableWrapAnywhere,
+} from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -4241,6 +4246,97 @@ export function createUtilities(theme: Theme) {
       modifierThemeKeys: ['--leading'],
     },
   ])
+
+  if (enableTextShadows) {
+    let textShadowProperties = () => {
+      return atRoot([property('--tw-text-shadow-color')])
+    }
+
+    staticUtility('text-shadow-initial', [
+      textShadowProperties,
+      ['--tw-text-shadow-color', 'initial'],
+    ])
+
+    utilities.functional('text-shadow', (candidate) => {
+      if (!candidate.value) {
+        let value = theme.get(['--text-shadow'])
+        if (value === null) return
+
+        return [
+          textShadowProperties(),
+          decl(
+            'text-shadow',
+            replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+          ),
+        ]
+      }
+
+      if (candidate.value.kind === 'arbitrary') {
+        let value: string | null = candidate.value.value
+        let type = candidate.value.dataType ?? inferDataType(value, ['color'])
+
+        switch (type) {
+          case 'color': {
+            value = asColor(value, candidate.modifier, theme)
+            if (value === null) return
+
+            return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+          }
+          default: {
+            return [
+              textShadowProperties(),
+              decl(
+                'text-shadow',
+                replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+              ),
+            ]
+          }
+        }
+      }
+
+      switch (candidate.value.value) {
+        case 'none':
+          if (candidate.modifier) return
+          return [textShadowProperties(), decl('text-shadow', 'none')]
+      }
+
+      // Shadow size
+      {
+        let value = theme.get([`--text-shadow-${candidate.value.value}`])
+        if (value) {
+          if (candidate.modifier) return
+          return [
+            textShadowProperties(),
+            decl(
+              'text-shadow',
+              replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+            ),
+          ]
+        }
+      }
+
+      // Shadow color
+      {
+        let value = resolveThemeColor(candidate, theme, ['--text-shadow-color', '--color'])
+        if (value) {
+          return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+        }
+      }
+    })
+
+    suggest('text-shadow', () => [
+      {
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--text-shadow-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      },
+      {
+        values: ['none'],
+        valueThemeKeys: ['--text-shadow'],
+        hasDefaultValue: true,
+      },
+    ])
+  }
 
   {
     let cssBoxShadowValue = [

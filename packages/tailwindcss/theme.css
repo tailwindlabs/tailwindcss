@@ -374,6 +374,12 @@
   --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
   --drop-shadow-2xl: 0 25px 25px rgb(0 0 0 / 0.15);
 
+  --text-shadow-xs: 0px 1px 0px rgb(0 0 0 / 0.1);
+  --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.1);
+  --text-shadow-md: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
+  --text-shadow-lg: 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1);
+  --text-shadow-xl: 0px 2px 4px rgb(0 0 0 / 0.15), 0px 2px 6px rgb(0 0 0 / 0.15);
+
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
