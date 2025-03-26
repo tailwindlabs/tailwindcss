@@ -656,8 +656,8 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-b/index.html']"
             ]
         );
     }
@@ -712,8 +712,8 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-b/index.html']"
             ]
         );
 
@@ -736,10 +736,10 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']"
             ]
         );
 
@@ -768,12 +768,12 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-a/sub1/sub2/index.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
-                "content-['project-b/sub1/sub2/index.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-a/sub1/sub2/index.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']",
+                "content-['project-b/sub1/sub2/index.html']"
             ]
         );
 
@@ -802,14 +802,14 @@ mod scanner {
         assert_eq!(
             candidates,
             vec![
-                "content-['project-a/index.html']".to_owned(),
-                "content-['project-a/new.html']".to_owned(),
-                "content-['project-a/sub1/sub2/index.html']".to_owned(),
-                "content-['project-a/sub1/sub2/new.html']".to_owned(),
-                "content-['project-b/index.html']".to_owned(),
-                "content-['project-b/new.html']".to_owned(),
-                "content-['project-b/sub1/sub2/index.html']".to_owned(),
-                "content-['project-b/sub1/sub2/new.html']".to_owned(),
+                "content-['project-a/index.html']",
+                "content-['project-a/new.html']",
+                "content-['project-a/sub1/sub2/index.html']",
+                "content-['project-a/sub1/sub2/new.html']",
+                "content-['project-b/index.html']",
+                "content-['project-b/new.html']",
+                "content-['project-b/sub1/sub2/index.html']",
+                "content-['project-b/sub1/sub2/new.html']"
             ]
         );
     }
