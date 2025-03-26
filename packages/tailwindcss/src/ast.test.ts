@@ -17,14 +17,14 @@ const css = String.raw
 it('should pretty print an AST', () => {
   expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'))))
     .toMatchInlineSnapshot(`
-    ".foo {
-      color: red;
-      &:hover {
-        color: blue;
+      ".foo {
+        color: red;
+        &:hover {
+          color: blue;
+        }
       }
-    }
-    "
-  `)
+      "
+    `)
 })
 
 it('allows the placement of context nodes', () => {

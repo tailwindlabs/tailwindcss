@@ -4683,13 +4683,7 @@ it.only('does the `color-mix(…)` thing', async () => {
     }
 
     .text-red-500\\/50 {
-      color: oklch(63.7% .237 25.331 / .5);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .text-red-500\\/50 {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+      color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }"
   `)
 })

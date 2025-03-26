@@ -143,7 +143,7 @@ function optimizeCss(
       nonStandard: {
         deepSelectorCombinator: true,
       },
-      include: LightningCssFeatures.Nesting | LightningCssFeatures.MediaQueries,
+      include: LightningCssFeatures.Nesting | LightningCssFeatures.MediaRangeSyntax,
       exclude:
         LightningCssFeatures.LogicalProperties |
         LightningCssFeatures.DirSelector |

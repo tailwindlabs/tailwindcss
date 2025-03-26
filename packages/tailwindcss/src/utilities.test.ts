@@ -1286,26 +1286,26 @@ test('row-start', async () => {
   expect(
     await run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']),
   ).toMatchInlineSnapshot(`
-      ".-row-start-4 {
-        grid-row-start: calc(4 * -1);
-      }
+    ".-row-start-4 {
+      grid-row-start: calc(4 * -1);
+    }
 
-      .row-start-4 {
-        grid-row-start: 4;
-      }
+    .row-start-4 {
+      grid-row-start: 4;
+    }
 
-      .row-start-99 {
-        grid-row-start: 99;
-      }
+    .row-start-99 {
+      grid-row-start: 99;
+    }
 
-      .row-start-\\[123\\] {
-        grid-row-start: 123;
-      }
+    .row-start-\\[123\\] {
+      grid-row-start: 123;
+    }
 
-      .row-start-auto {
-        grid-row-start: auto;
-      }"
-    `)
+    .row-start-auto {
+      grid-row-start: auto;
+    }"
+  `)
   expect(
     await run([
       'row-start',
@@ -3180,31 +3180,31 @@ describe('container', () => {
         width: 100%;
       }
 
-      @media (width >= 40rem) {
+      @media (min-width: 40rem) {
         .container {
           max-width: 40rem;
         }
       }
 
-      @media (width >= 48rem) {
+      @media (min-width: 48rem) {
         .container {
           max-width: 48rem;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .container {
           max-width: 64rem;
         }
       }
 
-      @media (width >= 80rem) {
+      @media (min-width: 80rem) {
         .container {
           max-width: 80rem;
         }
       }
 
-      @media (width >= 96rem) {
+      @media (min-width: 96rem) {
         .container {
           max-width: 96rem;
         }
@@ -3242,43 +3242,43 @@ describe('container', () => {
         width: 100%;
       }
 
-      @media (width >= 40em) {
+      @media (min-width: 40em) {
         .container {
           max-width: 40em;
         }
       }
 
-      @media (width >= 48em) {
+      @media (min-width: 48em) {
         .container {
           max-width: 48em;
         }
       }
 
-      @media (width >= 30px) {
+      @media (min-width: 30px) {
         .container {
           max-width: 30px;
         }
       }
 
-      @media (width >= 1600px) {
+      @media (min-width: 1600px) {
         .container {
           max-width: 1600px;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .container {
           max-width: 64rem;
         }
       }
 
-      @media (width >= 80rem) {
+      @media (min-width: 80rem) {
         .container {
           max-width: 80rem;
         }
       }
 
-      @media (width >= 96rem) {
+      @media (min-width: 96rem) {
         .container {
           max-width: 96rem;
         }
@@ -3319,31 +3319,31 @@ describe('container', () => {
         width: 100%;
       }
 
-      @media (width >= 40rem) {
+      @media (min-width: 40rem) {
         .container {
           max-width: 40rem;
         }
       }
 
-      @media (width >= 48rem) {
+      @media (min-width: 48rem) {
         .container {
           max-width: 48rem;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .container {
           max-width: 64rem;
         }
       }
 
-      @media (width >= 80rem) {
+      @media (min-width: 80rem) {
         .container {
           max-width: 80rem;
         }
       }
 
-      @media (width >= 96rem) {
+      @media (min-width: 96rem) {
         .container {
           max-width: 96rem;
         }
@@ -3354,7 +3354,7 @@ describe('container', () => {
         padding-inline: 1rem;
       }
 
-      @media (width >= 40rem) {
+      @media (min-width: 40rem) {
         .container {
           padding-inline: 2rem;
         }
@@ -4228,39 +4228,39 @@ test('translate-y', async () => {
 test('translate-z', async () => {
   expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
     .toMatchInlineSnapshot(`
-    ".-translate-z-\\[var\\(--value\\)\\] {
-      --tw-translate-z: calc(var(--value) * -1);
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+      ".-translate-z-\\[var\\(--value\\)\\] {
+        --tw-translate-z: calc(var(--value) * -1);
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
 
-    .-translate-z-px {
-      --tw-translate-z: -1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+      .-translate-z-px {
+        --tw-translate-z: -1px;
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
 
-    .translate-z-px {
-      --tw-translate-z: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+      .translate-z-px {
+        --tw-translate-z: 1px;
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
 
-    @property --tw-translate-x {
-      syntax: "*";
-      inherits: false;
-      initial-value: 0;
-    }
+      @property --tw-translate-x {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0;
+      }
 
-    @property --tw-translate-y {
-      syntax: "*";
-      inherits: false;
-      initial-value: 0;
-    }
+      @property --tw-translate-y {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0;
+      }
 
-    @property --tw-translate-z {
-      syntax: "*";
-      inherits: false;
-      initial-value: 0;
-    }"
-  `)
+      @property --tw-translate-z {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0;
+      }"
+    `)
   expect(
     await run([
       'translate-z',
@@ -4307,22 +4307,22 @@ test('translate-3d', async () => {
 test('rotate', async () => {
   expect(await run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
     .toMatchInlineSnapshot(`
-    ".-rotate-45 {
-      rotate: -45deg;
-    }
+      ".-rotate-45 {
+        rotate: -45deg;
+      }
 
-    .rotate-45 {
-      rotate: 45deg;
-    }
+      .rotate-45 {
+        rotate: 45deg;
+      }
 
-    .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
-      rotate: .3 .7 1 45deg;
-    }
+      .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
+        rotate: .3 .7 1 45deg;
+      }
 
-    .rotate-\\[123deg\\] {
-      rotate: 123deg;
-    }"
-  `)
+      .rotate-\\[123deg\\] {
+        rotate: 123deg;
+      }"
+    `)
   expect(
     await run([
       'rotate',
@@ -5042,42 +5042,42 @@ test('transform', async () => {
       'backface-hidden',
     ]),
   ).toMatchInlineSnapshot(`
-      ".backface-hidden {
-        backface-visibility: hidden;
-      }
+    ".backface-hidden {
+      backface-visibility: hidden;
+    }
 
-      .backface-visible {
-        backface-visibility: visible;
-      }
+    .backface-visible {
+      backface-visibility: visible;
+    }
 
-      .transform-3d {
-        transform-style: preserve-3d;
-      }
+    .transform-3d {
+      transform-style: preserve-3d;
+    }
 
-      .transform-border {
-        transform-box: border-box;
-      }
+    .transform-border {
+      transform-box: border-box;
+    }
 
-      .transform-content {
-        transform-box: content-box;
-      }
+    .transform-content {
+      transform-box: content-box;
+    }
 
-      .transform-fill {
-        transform-box: fill-box;
-      }
+    .transform-fill {
+      transform-box: fill-box;
+    }
 
-      .transform-flat {
-        transform-style: flat;
-      }
+    .transform-flat {
+      transform-style: flat;
+    }
 
-      .transform-stroke {
-        transform-box: stroke-box;
-      }
+    .transform-stroke {
+      transform-box: stroke-box;
+    }
 
-      .transform-view {
-        transform-box: view-box;
-      }"
-    `)
+    .transform-view {
+      transform-box: view-box;
+    }"
+  `)
   expect(
     await run([
       '-transform',
@@ -5568,26 +5568,26 @@ test('touch-pinch-zoom', async () => {
 test('select', async () => {
   expect(await run(['select-none', 'select-text', 'select-all', 'select-auto']))
     .toMatchInlineSnapshot(`
-    ".select-all {
-      -webkit-user-select: all;
-      user-select: all;
-    }
+      ".select-all {
+        -webkit-user-select: all;
+        user-select: all;
+      }
 
-    .select-auto {
-      -webkit-user-select: auto;
-      user-select: auto;
-    }
+      .select-auto {
+        -webkit-user-select: auto;
+        user-select: auto;
+      }
 
-    .select-none {
-      -webkit-user-select: none;
-      user-select: none;
-    }
+      .select-none {
+        -webkit-user-select: none;
+        user-select: none;
+      }
 
-    .select-text {
-      -webkit-user-select: text;
-      user-select: text;
-    }"
-  `)
+      .select-text {
+        -webkit-user-select: text;
+        user-select: text;
+      }"
+    `)
   expect(
     await run([
       '-select-none',
@@ -5696,22 +5696,22 @@ test('--tw-scroll-snap-strictness', async () => {
 test('scroll-snap-align', async () => {
   expect(await run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center']))
     .toMatchInlineSnapshot(`
-    ".snap-align-none {
-      scroll-snap-align: none;
-    }
+      ".snap-align-none {
+        scroll-snap-align: none;
+      }
 
-    .snap-center {
-      scroll-snap-align: center;
-    }
+      .snap-center {
+        scroll-snap-align: center;
+      }
 
-    .snap-end {
-      scroll-snap-align: end;
-    }
+      .snap-end {
+        scroll-snap-align: end;
+      }
 
-    .snap-start {
-      scroll-snap-align: start;
-    }"
-  `)
+      .snap-start {
+        scroll-snap-align: start;
+      }"
+    `)
   expect(
     await run([
       '-snap-align-none',
@@ -7065,22 +7065,22 @@ test('grid-rows', async () => {
 test('flex-direction', async () => {
   expect(await run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
     .toMatchInlineSnapshot(`
-    ".flex-col {
-      flex-direction: column;
-    }
+      ".flex-col {
+        flex-direction: column;
+      }
 
-    .flex-col-reverse {
-      flex-direction: column-reverse;
-    }
+      .flex-col-reverse {
+        flex-direction: column-reverse;
+      }
 
-    .flex-row {
-      flex-direction: row;
-    }
+      .flex-row {
+        flex-direction: row;
+      }
 
-    .flex-row-reverse {
-      flex-direction: row-reverse;
-    }"
-  `)
+      .flex-row-reverse {
+        flex-direction: row-reverse;
+      }"
+    `)
   expect(
     await run([
       '-flex-row',
@@ -7969,31 +7969,31 @@ test('divide-style', async () => {
   expect(
     await run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']),
   ).toMatchInlineSnapshot(`
-      ":where(.divide-dashed > :not(:last-child)) {
-        --tw-border-style: dashed;
-        border-style: dashed;
-      }
+    ":where(.divide-dashed > :not(:last-child)) {
+      --tw-border-style: dashed;
+      border-style: dashed;
+    }
 
-      :where(.divide-dotted > :not(:last-child)) {
-        --tw-border-style: dotted;
-        border-style: dotted;
-      }
+    :where(.divide-dotted > :not(:last-child)) {
+      --tw-border-style: dotted;
+      border-style: dotted;
+    }
 
-      :where(.divide-double > :not(:last-child)) {
-        --tw-border-style: double;
-        border-style: double;
-      }
+    :where(.divide-double > :not(:last-child)) {
+      --tw-border-style: double;
+      border-style: double;
+    }
 
-      :where(.divide-none > :not(:last-child)) {
-        --tw-border-style: none;
-        border-style: none;
-      }
+    :where(.divide-none > :not(:last-child)) {
+      --tw-border-style: none;
+      border-style: none;
+    }
 
-      :where(.divide-solid > :not(:last-child)) {
-        --tw-border-style: solid;
-        border-style: solid;
-      }"
-    `)
+    :where(.divide-solid > :not(:last-child)) {
+      --tw-border-style: solid;
+      border-style: solid;
+    }"
+  `)
   expect(
     await run([
       'divide',
@@ -8049,20 +8049,16 @@ test('accent', async () => {
       accent-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .accent-\\[\\#0088cc\\]\\/50, .accent-\\[\\#0088cc\\]\\/\\[0\\.5\\], .accent-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        accent-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .accent-\\[\\#0088cc\\]\\/50, .accent-\\[\\#0088cc\\]\\/\\[0\\.5\\], .accent-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      accent-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .accent-current {
       accent-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .accent-current\\/50, .accent-current\\/\\[0\\.5\\], .accent-current\\/\\[50\\%\\] {
-        accent-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .accent-current\\/50, .accent-current\\/\\[0\\.5\\], .accent-current\\/\\[50\\%\\] {
+      accent-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .accent-inherit {
@@ -8085,10 +8081,8 @@ test('accent', async () => {
       accent-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
-        accent-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
+      accent-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .accent-transparent {
@@ -8170,20 +8164,16 @@ test('caret', async () => {
       caret-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .caret-\\[\\#0088cc\\]\\/50, .caret-\\[\\#0088cc\\]\\/\\[0\\.5\\], .caret-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        caret-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .caret-\\[\\#0088cc\\]\\/50, .caret-\\[\\#0088cc\\]\\/\\[0\\.5\\], .caret-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      caret-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .caret-current {
       caret-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .caret-current\\/50, .caret-current\\/\\[0\\.5\\], .caret-current\\/\\[50\\%\\] {
-        caret-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .caret-current\\/50, .caret-current\\/\\[0\\.5\\], .caret-current\\/\\[50\\%\\] {
+      caret-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .caret-inherit {
@@ -8206,10 +8196,8 @@ test('caret', async () => {
       caret-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
-        caret-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
+      caret-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .caret-transparent {
@@ -8289,20 +8277,16 @@ test('divide-color', async () => {
       border-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
-        border-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
+      border-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     :where(.divide-current > :not(:last-child)) {
       border-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
-        border-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
+      border-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     :where(.divide-inherit > :not(:last-child)) {
@@ -8325,10 +8309,8 @@ test('divide-color', async () => {
       border-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
-        border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    :where(.divide-red-500\\/50 > :not(:last-child)), :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
+      border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     :where(.divide-transparent > :not(:last-child)) {
@@ -8695,18 +8677,18 @@ test('overflow-y', async () => {
 test('overscroll', async () => {
   expect(await run(['overscroll-auto', 'overscroll-contain', 'overscroll-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-auto {
-      overscroll-behavior: auto;
-    }
+      ".overscroll-auto {
+        overscroll-behavior: auto;
+      }
 
-    .overscroll-contain {
-      overscroll-behavior: contain;
-    }
+      .overscroll-contain {
+        overscroll-behavior: contain;
+      }
 
-    .overscroll-none {
-      overscroll-behavior: none;
-    }"
-  `)
+      .overscroll-none {
+        overscroll-behavior: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll',
@@ -8723,18 +8705,18 @@ test('overscroll', async () => {
 test('overscroll-x', async () => {
   expect(await run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-x-auto {
-      overscroll-behavior-x: auto;
-    }
+      ".overscroll-x-auto {
+        overscroll-behavior-x: auto;
+      }
 
-    .overscroll-x-contain {
-      overscroll-behavior-x: contain;
-    }
+      .overscroll-x-contain {
+        overscroll-behavior-x: contain;
+      }
 
-    .overscroll-x-none {
-      overscroll-behavior-x: none;
-    }"
-  `)
+      .overscroll-x-none {
+        overscroll-behavior-x: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll-x',
@@ -8751,18 +8733,18 @@ test('overscroll-x', async () => {
 test('overscroll-y', async () => {
   expect(await run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-y-auto {
-      overscroll-behavior-y: auto;
-    }
+      ".overscroll-y-auto {
+        overscroll-behavior-y: auto;
+      }
 
-    .overscroll-y-contain {
-      overscroll-behavior-y: contain;
-    }
+      .overscroll-y-contain {
+        overscroll-behavior-y: contain;
+      }
 
-    .overscroll-y-none {
-      overscroll-behavior-y: none;
-    }"
-  `)
+      .overscroll-y-none {
+        overscroll-behavior-y: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll-y',
@@ -8904,22 +8886,22 @@ test('whitespace', async () => {
 test('text-wrap', async () => {
   expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
     .toMatchInlineSnapshot(`
-    ".text-balance {
-      text-wrap: balance;
-    }
+      ".text-balance {
+        text-wrap: balance;
+      }
 
-    .text-nowrap {
-      text-wrap: nowrap;
-    }
+      .text-nowrap {
+        text-wrap: nowrap;
+      }
 
-    .text-pretty {
-      text-wrap: pretty;
-    }
+      .text-pretty {
+        text-wrap: pretty;
+      }
 
-    .text-wrap {
-      text-wrap: wrap;
-    }"
-  `)
+      .text-wrap {
+        text-wrap: wrap;
+      }"
+    `)
   expect(
     await run([
       '-text-wrap',
@@ -10241,10 +10223,8 @@ test('bg', async () => {
       background-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .bg-\\[\\#0088cc\\]\\/50, .bg-\\[\\#0088cc\\]\\/\\[0\\.5\\], .bg-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        background-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .bg-\\[\\#0088cc\\]\\/50, .bg-\\[\\#0088cc\\]\\/\\[0\\.5\\], .bg-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      background-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .bg-\\[color\\:var\\(--some-var\\)\\] {
@@ -10267,10 +10247,8 @@ test('bg', async () => {
       background-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .bg-current\\/50, .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
-        background-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .bg-current\\/50, .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
+      background-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
@@ -10297,10 +10275,8 @@ test('bg', async () => {
       background-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
-        background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
+      background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .bg-transparent {
@@ -10861,34 +10837,9 @@ test('from', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .from-\\[\\#0088cc\\]\\/50 {
+    .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-\\[\\#0088cc\\]\\/50 {
-        --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .from-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-        --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
-      }
     }
 
     .from-\\[color\\:var\\(--my-color\\)\\] {
@@ -10916,34 +10867,9 @@ test('from', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .from-current\\/50 {
+    .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
+      --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-current\\/50 {
-        --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .from-current\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-current\\/\\[0\\.5\\] {
-        --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .from-current\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-current\\/\\[50\\%\\] {
-        --tw-gradient-from: color-mix(in oklab, currentColor 50%, transparent);
-      }
     }
 
     .from-inherit {
@@ -10956,34 +10882,9 @@ test('from', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .from-red-500\\/50 {
+    .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
+      --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-red-500\\/50 {
-        --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .from-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-red-500\\/\\[0\\.5\\] {
-        --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .from-red-500\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .from-red-500\\/\\[50\\%\\] {
-        --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
     }
 
     .from-transparent {
@@ -11156,37 +11057,10 @@ test('via', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
-    .via-\\[\\#0088cc\\]\\/50 {
+    .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-\\[\\#0088cc\\]\\/50 {
-        --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .via-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-        --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
-      }
     }
 
     .via-\\[color\\:var\\(--my-color\\)\\] {
@@ -11219,37 +11093,10 @@ test('via', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
-    .via-current\\/50 {
+    .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
+      --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-current\\/50 {
-        --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .via-current\\/\\[0\\.5\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-current\\/\\[0\\.5\\] {
-        --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .via-current\\/\\[50\\%\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-current\\/\\[50\\%\\] {
-        --tw-gradient-via: color-mix(in oklab, currentColor 50%, transparent);
-      }
     }
 
     .via-inherit {
@@ -11264,37 +11111,10 @@ test('via', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
-    .via-red-500\\/50 {
+    .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
+      --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-red-500\\/50 {
-        --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .via-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-red-500\\/\\[0\\.5\\] {
-        --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .via-red-500\\/\\[50\\%\\] {
-      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-      --tw-gradient-stops: var(--tw-gradient-via-stops);
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .via-red-500\\/\\[50\\%\\] {
-        --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
     }
 
     .via-transparent {
@@ -11465,34 +11285,9 @@ test('to', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .to-\\[\\#0088cc\\]\\/50 {
+    .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-\\[\\#0088cc\\]\\/50 {
-        --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .to-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-        --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
-      }
-    }
-
-    .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
-      }
     }
 
     .to-\\[color\\:var\\(--my-color\\)\\] {
@@ -11520,34 +11315,9 @@ test('to', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .to-current\\/50 {
+    .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
+      --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-current\\/50 {
-        --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .to-current\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-current\\/\\[0\\.5\\] {
-        --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
-      }
-    }
-
-    .to-current\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-current\\/\\[50\\%\\] {
-        --tw-gradient-to: color-mix(in oklab, currentColor 50%, transparent);
-      }
     }
 
     .to-inherit {
@@ -11560,34 +11330,9 @@ test('to', async () => {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
-    .to-red-500\\/50 {
+    .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
+      --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-red-500\\/50 {
-        --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .to-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-red-500\\/\\[0\\.5\\] {
-        --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
-    }
-
-    .to-red-500\\/\\[50\\%\\] {
-      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-    }
-
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .to-red-500\\/\\[50\\%\\] {
-        --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
     }
 
     .to-transparent {
@@ -11765,18 +11510,18 @@ test('bg-clip', async () => {
 test('bg-origin', async () => {
   expect(await run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
     .toMatchInlineSnapshot(`
-    ".bg-origin-border {
-      background-origin: border-box;
-    }
+      ".bg-origin-border {
+        background-origin: border-box;
+      }
 
-    .bg-origin-content {
-      background-origin: content-box;
-    }
+      .bg-origin-content {
+        background-origin: content-box;
+      }
 
-    .bg-origin-padding {
-      background-origin: padding-box;
-    }"
-  `)
+      .bg-origin-padding {
+        background-origin: padding-box;
+      }"
+    `)
   expect(
     await run([
       'bg-origin',
@@ -12089,20 +11834,16 @@ test('fill', async () => {
       fill: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .fill-\\[\\#0088cc\\]\\/50, .fill-\\[\\#0088cc\\]\\/\\[0\\.5\\], .fill-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        fill: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .fill-\\[\\#0088cc\\]\\/50, .fill-\\[\\#0088cc\\]\\/\\[0\\.5\\], .fill-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      fill: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .fill-current {
       fill: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .fill-current\\/50, .fill-current\\/\\[0\\.5\\], .fill-current\\/\\[50\\%\\] {
-        fill: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .fill-current\\/50, .fill-current\\/\\[0\\.5\\], .fill-current\\/\\[50\\%\\] {
+      fill: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .fill-inherit {
@@ -12125,10 +11866,8 @@ test('fill', async () => {
       fill: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
-        fill: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
+      fill: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .fill-transparent {
@@ -12216,10 +11955,8 @@ test('stroke', async () => {
       stroke: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .stroke-\\[\\#0088cc\\]\\/50, .stroke-\\[\\#0088cc\\]\\/\\[0\\.5\\], .stroke-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        stroke: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .stroke-\\[\\#0088cc\\]\\/50, .stroke-\\[\\#0088cc\\]\\/\\[0\\.5\\], .stroke-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      stroke: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .stroke-\\[color\\:var\\(--my-color\\)\\] {
@@ -12242,10 +11979,8 @@ test('stroke', async () => {
       stroke: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .stroke-current\\/50, .stroke-current\\/\\[0\\.5\\], .stroke-current\\/\\[50\\%\\] {
-        stroke: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .stroke-current\\/50, .stroke-current\\/\\[0\\.5\\], .stroke-current\\/\\[50\\%\\] {
+      stroke: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .stroke-inherit {
@@ -12272,10 +12007,8 @@ test('stroke', async () => {
       stroke: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
-        stroke: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
+      stroke: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .stroke-transparent {
@@ -13146,22 +12879,22 @@ test('font-stretch', async () => {
 test('text-decoration-line', async () => {
   expect(await run(['underline', 'overline', 'line-through', 'no-underline']))
     .toMatchInlineSnapshot(`
-    ".line-through {
-      text-decoration-line: line-through;
-    }
+      ".line-through {
+        text-decoration-line: line-through;
+      }
 
-    .no-underline {
-      text-decoration-line: none;
-    }
+      .no-underline {
+        text-decoration-line: none;
+      }
 
-    .overline {
-      text-decoration-line: overline;
-    }
+      .overline {
+        text-decoration-line: overline;
+      }
 
-    .underline {
-      text-decoration-line: underline;
-    }"
-  `)
+      .underline {
+        text-decoration-line: underline;
+      }"
+    `)
   expect(
     await run([
       '-underline',
@@ -13214,20 +12947,16 @@ test('placeholder', async () => {
       color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
-        color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
+      color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .placeholder-current::placeholder {
       color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
-        color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
+      color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .placeholder-inherit::placeholder {
@@ -13250,10 +12979,8 @@ test('placeholder', async () => {
       color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .placeholder-red-500\\/50::placeholder, .placeholder-red-500\\/\\[0\\.5\\]::placeholder, .placeholder-red-500\\/\\[50\\%\\]::placeholder {
+      color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .placeholder-transparent::placeholder {
@@ -13345,10 +13072,8 @@ test('decoration', async () => {
       text-decoration-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .decoration-\\[\\#0088cc\\]\\/50, .decoration-\\[\\#0088cc\\]\\/\\[0\\.5\\], .decoration-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        text-decoration-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .decoration-\\[\\#0088cc\\]\\/50, .decoration-\\[\\#0088cc\\]\\/\\[0\\.5\\], .decoration-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      text-decoration-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .decoration-\\[color\\:var\\(--my-color\\)\\] {
@@ -13379,12 +13104,10 @@ test('decoration', async () => {
       text-decoration-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
-        -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
-        -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
-        text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
+      text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .decoration-inherit {
@@ -13399,12 +13122,10 @@ test('decoration', async () => {
       text-decoration-color: var(--color-red-500);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .decoration-red-500\\/50, .decoration-red-500\\/\\[0\\.5\\], .decoration-red-500\\/\\[50\\%\\] {
-        -webkit-text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-        -webkit-text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-        text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .decoration-red-500\\/50, .decoration-red-500\\/\\[0\\.5\\], .decoration-red-500\\/\\[50\\%\\] {
+      -webkit-text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      -webkit-text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+      text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .decoration-transparent {
@@ -14684,14 +14405,14 @@ test('content', async () => {
 test('forced-color-adjust', async () => {
   expect(await run(['forced-color-adjust-none', 'forced-color-adjust-auto']))
     .toMatchInlineSnapshot(`
-    ".forced-color-adjust-auto {
-      forced-color-adjust: auto;
-    }
+      ".forced-color-adjust-auto {
+        forced-color-adjust: auto;
+      }
 
-    .forced-color-adjust-none {
-      forced-color-adjust: none;
-    }"
-  `)
+      .forced-color-adjust-none {
+        forced-color-adjust: none;
+      }"
+    `)
   expect(
     await run([
       'forced',
@@ -15048,28 +14769,24 @@ test('outline', async () => {
       outline-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .outline-\\[\\#0088cc\\]\\/50, .outline-\\[\\#0088cc\\]\\/\\[0\\.5\\], .outline-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        outline-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .outline-\\[\\#0088cc\\]\\/50, .outline-\\[\\#0088cc\\]\\/\\[0\\.5\\], .outline-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      outline-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .outline-\\[black\\] {
       outline-color: #000;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .outline-\\[black\\]\\/50 {
-        outline-color: oklab(0% none none / .5);
-      }
+    .outline-\\[black\\]\\/50 {
+      outline-color: oklab(0% none none / .5);
+    }
 
-      .outline-\\[black\\]\\/\\[0\\.5\\] {
-        outline-color: oklab(0% none none / .5);
-      }
+    .outline-\\[black\\]\\/\\[0\\.5\\] {
+      outline-color: oklab(0% none none / .5);
+    }
 
-      .outline-\\[black\\]\\/\\[50\\%\\] {
-        outline-color: oklab(0% none none / .5);
-      }
+    .outline-\\[black\\]\\/\\[50\\%\\] {
+      outline-color: oklab(0% none none / .5);
     }
 
     .outline-\\[color\\:var\\(--value\\)\\] {
@@ -15092,10 +14809,8 @@ test('outline', async () => {
       outline-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .outline-current\\/50, .outline-current\\/\\[0\\.5\\], .outline-current\\/\\[50\\%\\] {
-        outline-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .outline-current\\/50, .outline-current\\/\\[0\\.5\\], .outline-current\\/\\[50\\%\\] {
+      outline-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .outline-inherit {
@@ -15106,10 +14821,8 @@ test('outline', async () => {
       outline-color: var(--color-red-500);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .outline-red-500\\/50, .outline-red-500\\/\\[0\\.5\\], .outline-red-500\\/\\[50\\%\\] {
-        outline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .outline-red-500\\/50, .outline-red-500\\/\\[0\\.5\\], .outline-red-500\\/\\[50\\%\\] {
+      outline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .outline-transparent {
@@ -15522,10 +15235,8 @@ test('text', async () => {
       color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .text-\\[color\\:var\\(--my-color\\)\\] {
@@ -15548,10 +15259,8 @@ test('text', async () => {
       color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .text-current\\/50, .text-current\\/\\[0\\.5\\], .text-current\\/\\[50\\%\\] {
-        color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .text-current\\/50, .text-current\\/\\[0\\.5\\], .text-current\\/\\[50\\%\\] {
+      color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .text-inherit {
@@ -15574,10 +15283,8 @@ test('text', async () => {
       color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
+      color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .text-transparent {
@@ -15705,10 +15412,8 @@ test('shadow', async () => {
       --tw-shadow-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .shadow-\\[color\\:var\\(--value\\)\\] {
@@ -15723,10 +15428,8 @@ test('shadow', async () => {
       --tw-shadow-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
-        --tw-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
+      --tw-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .shadow-inherit {
@@ -15749,10 +15452,8 @@ test('shadow', async () => {
       --tw-shadow-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
-        --tw-shadow-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
+      --tw-shadow-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .shadow-transparent {
@@ -15933,10 +15634,8 @@ test('inset-shadow', async () => {
       --tw-inset-shadow-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-inset-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-inset-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .inset-shadow-\\[color\\:var\\(--value\\)\\] {
@@ -15951,10 +15650,8 @@ test('inset-shadow', async () => {
       --tw-inset-shadow-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
-        --tw-inset-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
+      --tw-inset-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .inset-shadow-inherit {
@@ -15977,10 +15674,8 @@ test('inset-shadow', async () => {
       --tw-inset-shadow-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
-        --tw-inset-shadow-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
+      --tw-inset-shadow-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .inset-shadow-transparent {
@@ -16169,10 +15864,8 @@ test('ring', async () => {
       --tw-ring-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-\\[\\#0088cc\\]\\/50, .ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .ring-\\[\\#0088cc\\]\\/50, .ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -16195,10 +15888,8 @@ test('ring', async () => {
       --tw-ring-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-current\\/50, .ring-current\\/\\[0\\.5\\], .ring-current\\/\\[50\\%\\] {
-        --tw-ring-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .ring-current\\/50, .ring-current\\/\\[0\\.5\\], .ring-current\\/\\[50\\%\\] {
+      --tw-ring-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .ring-inherit {
@@ -16221,10 +15912,8 @@ test('ring', async () => {
       --tw-ring-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
-        --tw-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
+      --tw-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .ring-transparent {
@@ -16514,10 +16203,8 @@ test('inset-ring', async () => {
       --tw-inset-ring-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-ring-\\[\\#0088cc\\]\\/50, .inset-ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-inset-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .inset-ring-\\[\\#0088cc\\]\\/50, .inset-ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-inset-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .inset-ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -16540,10 +16227,8 @@ test('inset-ring', async () => {
       --tw-inset-ring-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-ring-current\\/50, .inset-ring-current\\/\\[0\\.5\\], .inset-ring-current\\/\\[50\\%\\] {
-        --tw-inset-ring-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .inset-ring-current\\/50, .inset-ring-current\\/\\[0\\.5\\], .inset-ring-current\\/\\[50\\%\\] {
+      --tw-inset-ring-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .inset-ring-inherit {
@@ -16566,10 +16251,8 @@ test('inset-ring', async () => {
       --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {
-        --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {
+      --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .inset-ring-transparent {
@@ -16764,10 +16447,8 @@ test('ring-offset', async () => {
       --tw-ring-offset-color: #08c;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-offset-\\[\\#0088cc\\]\\/50, .ring-offset-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-offset-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-        --tw-ring-offset-color: oklab(59.9824% -.06725 -.12414 / .5);
-      }
+    .ring-offset-\\[\\#0088cc\\]\\/50, .ring-offset-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-offset-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-ring-offset-color: oklab(59.9824% -.06725 -.12414 / .5);
     }
 
     .ring-offset-\\[color\\:var\\(--my-color\\)\\] {
@@ -16790,10 +16471,8 @@ test('ring-offset', async () => {
       --tw-ring-offset-color: currentColor;
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-offset-current\\/50, .ring-offset-current\\/\\[0\\.5\\], .ring-offset-current\\/\\[50\\%\\] {
-        --tw-ring-offset-color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    .ring-offset-current\\/50, .ring-offset-current\\/\\[0\\.5\\], .ring-offset-current\\/\\[50\\%\\] {
+      --tw-ring-offset-color: color-mix(in oklab, currentColor 50%, transparent);
     }
 
     .ring-offset-inherit {
@@ -16804,10 +16483,8 @@ test('ring-offset', async () => {
       --tw-ring-offset-color: var(--color-red-500);
     }
 
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      .ring-offset-red-500\\/50, .ring-offset-red-500\\/\\[0\\.5\\], .ring-offset-red-500\\/\\[50\\%\\] {
-        --tw-ring-offset-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-      }
+    .ring-offset-red-500\\/50, .ring-offset-red-500\\/\\[0\\.5\\], .ring-offset-red-500\\/\\[50\\%\\] {
+      --tw-ring-offset-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
     }
 
     .ring-offset-transparent {
@@ -17040,7 +16717,7 @@ describe('custom utilities', () => {
           text-box-edge: cap alphabetic;
         }
 
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .lg\\:text-trim {
             text-box-trim: both;
             text-box-edge: cap alphabetic;
@@ -17609,22 +17286,22 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
         .toMatchInlineSnapshot(`
-        ".example-0\\.5 {
-          --value-as-number: .5;
-        }
+          ".example-0\\.5 {
+            --value-as-number: .5;
+          }
 
-        .example-1 {
-          --value-as-number: 1;
-        }
+          .example-1 {
+            --value-as-number: 1;
+          }
 
-        .example-2\\/3 {
-          --value-as-ratio: 2 / 3;
-        }
+          .example-2\\/3 {
+            --value-as-ratio: 2 / 3;
+          }
 
-        .example-20\\% {
-          --value-as-percentage: 20%;
-        }"
-      `)
+          .example-20\\% {
+            --value-as-percentage: 20%;
+          }"
+        `)
       expect(
         await compileCss(input, [
           'example-1.23',

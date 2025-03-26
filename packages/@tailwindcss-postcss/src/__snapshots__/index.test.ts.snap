@@ -164,10 +164,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
-    @supports (color: color-mix(in srgb, red 0%, red)) {
-      ::placeholder {
-        color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+    ::placeholder {
+      color: color-mix(in oklab, currentColor 50%, transparent);
     }
   }
 
@@ -261,17 +259,15 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
-  @supports (color: color-mix(in srgb, red 0%, red)) {
-    .text-black\\/50 {
-      color: color-mix(in oklab, var(--color-black) 50%, transparent);
-    }
+  .text-black\\/50 {
+    color: color-mix(in oklab, var(--color-black) 50%, transparent);
   }
 
   .underline {
     text-decoration-line: underline;
   }
 
-  @media (width >= 96rem) {
+  @media (min-width: 96rem) {
     .\\32 xl\\:font-bold {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
