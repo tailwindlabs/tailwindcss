@@ -116,6 +116,7 @@ enum Class {
 mod tests {
     use super::CssVariableMachine;
     use crate::extractor::machine::Machine;
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]

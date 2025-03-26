@@ -199,6 +199,7 @@ fn drop_covered_spans(mut spans: Vec<Span>) -> Vec<Span> {
 mod tests {
     use super::{Extracted, Extractor};
     use crate::throughput::Throughput;
+    use pretty_assertions::assert_eq;
     use std::hint::black_box;
 
     fn pre_process_input(input: &str, extension: &str) -> String {

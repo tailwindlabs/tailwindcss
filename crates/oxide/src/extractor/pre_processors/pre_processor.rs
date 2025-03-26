@@ -3,6 +3,8 @@ pub trait PreProcessor: Sized + Default {
 
     #[cfg(test)]
     fn test(input: &str, expected: &str) {
+        use pretty_assertions::assert_eq;
+
         let input = input.as_bytes();
         let expected = expected.as_bytes();
 

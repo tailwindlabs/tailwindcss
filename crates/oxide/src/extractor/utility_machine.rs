@@ -192,6 +192,7 @@ enum Class {
 mod tests {
     use super::UtilityMachine;
     use crate::extractor::machine::Machine;
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]
