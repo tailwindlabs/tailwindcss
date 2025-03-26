@@ -427,26 +427,26 @@ test('text shadow colors', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#a', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 2px')
+  expect(await getPropertyValue('#a', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
   expect(await getPropertyValue('#b', 'text-shadow')).toEqual(
-    'rgb(255, 0, 0) 0px 2px 4px, rgb(255, 0, 0) 0px 2px 6px',
+    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
   )
   expect(await getPropertyValue('#c', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 2px 4px')
 
-  expect(await getPropertyValue('#d', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 2px')
+  expect(await getPropertyValue('#d', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
 
   await page.locator('#d').hover()
 
   expect(await getPropertyValue('#d', 'text-shadow')).toEqual(
-    'rgb(255, 0, 0) 0px 2px 4px, rgb(255, 0, 0) 0px 2px 6px',
+    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
   )
 
-  expect(await getPropertyValue('#e', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 2px')
+  expect(await getPropertyValue('#e', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
 
   await page.locator('#e').hover()
 
   expect(await getPropertyValue('#e', 'text-shadow')).toEqual(
-    'rgba(0, 0, 0, 0.15) 0px 2px 4px, rgba(0, 0, 0, 0.15) 0px 2px 6px',
+    'rgba(0, 0, 0, 0.1) 0px 1px 2px, rgba(0, 0, 0, 0.1) 0px 3px 2px, rgba(0, 0, 0, 0.1) 0px 4px 8px',
   )
 })
 
