@@ -1624,10 +1624,7 @@ mod scanner {
 
     #[test]
     fn test_glob_with_symlinks() {
-        // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
-
-        // Create files
         create_files_in(
             &dir,
             &[
@@ -1640,15 +1637,11 @@ mod scanner {
                 ("node_modules/@org/.gitkeep", ""),
             ],
         );
-
-        // Symlink folder
         let _ = symlink(
             dir.join("node_modules/.pnpm/@org+my-ui-library"),
             dir.join("node_modules/@org/my-ui-library"),
         );
 
-        // Should work with just node_modules (because we skip symlinks, and go straight into the
-        // `.pnpm` folder)
         let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source 'node_modules'",
@@ -1660,7 +1653,6 @@ mod scanner {
             vec!["content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']"]
         );
 
-        // Should work with the full folder name
         let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source 'node_modules/@org/my-ui-library'",
@@ -1672,7 +1664,6 @@ mod scanner {
             vec!["content-['node_modules/.pnpm/@org+my-ui-library/dist/index.ts']"]
         );
 
-        // This should work, but isn't
         let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
             "@source 'node_modules/@org'",
@@ -1687,10 +1678,7 @@ mod scanner {
 
     #[test]
     fn test_globs_with_recursive_symlinks() {
-        // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
-
-        // Create files
         create_files_in(
             &dir,
             &[
@@ -1719,13 +1707,8 @@ mod scanner {
 
     #[test]
     fn test_partial_globs_with_symlinks() {
-        // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
-
-        // Create files
         create_files_in(&dir, &[("abcd/xyz.html", "content-['abcd/xyz.html']")]);
-
-        // Symlink folder
         let _ = symlink(dir.join("abcd"), dir.join("efgh"));
 
         // No sources should find nothing
