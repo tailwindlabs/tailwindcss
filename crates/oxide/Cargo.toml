@@ -22,3 +22,4 @@ regex = "1.11.1"
 
 [dev-dependencies]
 tempfile = "3.13.0"
+pretty_assertions = "1.4.1"

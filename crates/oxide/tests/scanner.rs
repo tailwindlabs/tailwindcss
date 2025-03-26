@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod scanner {
+    use pretty_assertions::assert_eq;
     use std::path::{Path, PathBuf};
     use std::process::Command;
     use std::thread::sleep;
