@@ -15465,6 +15465,10 @@ test('text-shadow', async () => {
         'text-shadow-[var(--value)]',
         'text-shadow-[shadow:var(--value)]',
 
+        'text-shadow-sm/25',
+        'text-shadow-[12px_12px_#0088cc]/25',
+        'text-shadow-[10px_10px]/25',
+
         // Colors
         'text-shadow-red-500',
         'text-shadow-red-500/50',
@@ -15492,6 +15496,21 @@ test('text-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+    }
+
+    .text-shadow-\\[10px_10px\\]\\/25 {
+      --tw-text-shadow-intensity: 25%;
+      text-shadow: 10px 10px var(--tw-text-shadow-color, oklab(from currentcolor l a b / 25%));
+    }
+
+    .text-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
+      --tw-text-shadow-intensity: 25%;
+      text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+    }
+
+    .text-shadow-sm\\/25 {
+      --tw-text-shadow-intensity: 25%;
+      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .25)), 0px 2px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .25));
     }
 
     .text-shadow-2xs {
@@ -15625,6 +15644,10 @@ test('shadow', async () => {
         'shadow-[var(--value)]',
         'shadow-[shadow:var(--value)]',
 
+        'shadow-sm/25',
+        'shadow-[12px_12px_#0088cc]/25',
+        'shadow-[10px_10px]/25',
+
         // Colors
         'shadow-red-500',
         'shadow-red-500/50',
@@ -15652,6 +15675,24 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+    }
+
+    .shadow-\\[10px_10px\\]\\/25 {
+      --tw-shadow-intensity: 25%;
+      --tw-shadow: 10px 10px var(--tw-shadow-color, oklab(from currentcolor l a b / 25%));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
+      --tw-shadow-intensity: 25%;
+      --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-sm\\/25 {
+      --tw-shadow-intensity: 25%;
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, oklab(0% 0 0 / .25)), 0 1px 2px -1px var(--tw-shadow-color, oklab(0% 0 0 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-\\[10px_10px\\] {
@@ -15859,6 +15900,10 @@ test('inset-shadow', async () => {
         'inset-shadow-[var(--value)]',
         'inset-shadow-[shadow:var(--value)]',
 
+        'inset-shadow-sm/25',
+        'inset-shadow-[12px_12px_#0088cc]/25',
+        'inset-shadow-[10px_10px]/25',
+
         // Colors
         'inset-shadow-red-500',
         'inset-shadow-red-500/50',
@@ -15886,6 +15931,24 @@ test('inset-shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+    }
+
+    .inset-shadow-\\[10px_10px\\]\\/25 {
+      --tw-inset-shadow-intensity: 25%;
+      --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, oklab(from currentcolor l a b / 25%));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .inset-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
+      --tw-inset-shadow-intensity: 25%;
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .inset-shadow-sm\\/25 {
+      --tw-inset-shadow-intensity: 25%;
+      --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, oklab(0% 0 0 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .inset-shadow {
