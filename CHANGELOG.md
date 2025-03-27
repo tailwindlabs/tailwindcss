@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
+- Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
 
 ### Changed
 
