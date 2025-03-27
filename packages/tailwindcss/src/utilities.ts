@@ -4280,7 +4280,7 @@ export function createUtilities(theme: Theme) {
     let textShadowProperties = () => {
       return atRoot([
         property('--tw-text-shadow-color'),
-        property('--tw-text-shadow-intensity', '100%'),
+        property('--tw-text-shadow-intensity', '100%', '<percentage>'),
       ])
     }
 
@@ -4418,10 +4418,10 @@ export function createUtilities(theme: Theme) {
       return atRoot([
         property('--tw-shadow', nullShadow),
         property('--tw-shadow-color'),
-        property('--tw-shadow-intensity', '100%'),
+        property('--tw-shadow-intensity', '100%', '<percentage>'),
         property('--tw-inset-shadow', nullShadow),
         property('--tw-inset-shadow-color'),
-        property('--tw-inset-shadow-intensity', '100%'),
+        property('--tw-inset-shadow-intensity', '100%', '<percentage>'),
         property('--tw-ring-color'),
         property('--tw-ring-shadow', nullShadow),
         property('--tw-inset-ring-color'),
