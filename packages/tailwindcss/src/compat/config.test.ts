@@ -348,6 +348,13 @@ describe('theme callbacks', () => {
           --tw-leading: 201rem;
           line-height: 201rem;
         }
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          @layer base {
+            *, ::before, ::after, ::backdrop {
+              --tw-leading: initial;
+            }
+          }
+        }
         @property --tw-leading {
           syntax: "*";
           inherits: false;

@@ -119,6 +119,14 @@ test('before', async () => {
       display: flex;
     }
 
+    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-content: "";
+        }
+      }
+    }
+
     @property --tw-content {
       syntax: "*";
       inherits: false;
@@ -133,6 +141,14 @@ test('after', async () => {
     ".after\\:flex:after {
       content: var(--tw-content);
       display: flex;
+    }
+
+    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-content: "";
+        }
+      }
     }
 
     @property --tw-content {
@@ -793,31 +809,31 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 640px) {
+    "@media (min-width: 640px) {
       .sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1024px) {
+    @media (min-width: 1024px) {
       .lg\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1280px) {
+    @media (min-width: 1280px) {
       .xl\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1536px) {
+    @media (min-width: 1536px) {
       .\\32 xl\\:flex {
         display: flex;
       }
@@ -853,7 +869,7 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 5000px) {
+    "@media (min-width: 5000px) {
       .\\31 0xl\\:flex {
         display: flex;
       }
@@ -876,19 +892,19 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width < 1024px) {
+    "@media not (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 768px) {
+    @media not (min-width: 768px) {
       .max-md\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 640px) {
+    @media not (min-width: 640px) {
       .max-sm\\:flex {
         display: flex;
       }
@@ -925,19 +941,19 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 640px) {
+    "@media (min-width: 640px) {
       .min-sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .min-md\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1024px) {
+    @media (min-width: 1024px) {
       .min-lg\\:flex {
         display: flex;
       }
@@ -976,30 +992,30 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 280px) {
-      @media (width < 640px) {
+    "@media (min-width: 280px) {
+      @media not (min-width: 640px) {
         .min-xs\\:max-sm\\:flex {
           display: flex;
         }
       }
     }
 
-    @media (width >= 640px) {
-      @media (width < 1280px) {
+    @media (min-width: 640px) {
+      @media not (min-width: 1280px) {
         .min-sm\\:max-xl\\:flex {
           display: flex;
         }
       }
 
-      @media (width < 1024px) {
+      @media not (min-width: 1024px) {
         .min-sm\\:max-lg\\:flex {
           display: flex;
         }
       }
     }
 
-    @media (width >= 768px) {
-      @media (width < 1024px) {
+    @media (min-width: 768px) {
+      @media not (min-width: 1024px) {
         .min-md\\:max-lg\\:flex {
           display: flex;
         }
@@ -1023,24 +1039,24 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width >= 640px) {
+    "@media (min-width: 640px) {
       .sm\\:flex {
         display: flex;
       }
 
-      @media (width < 1024px) {
+      @media not (min-width: 1024px) {
         .min-sm\\:max-lg\\:flex {
           display: flex;
         }
       }
     }
 
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\\:flex {
         display: flex;
       }
 
-      @media (width < 1024px) {
+      @media not (min-width: 1024px) {
         .min-md\\:max-lg\\:flex {
           display: flex;
         }
@@ -1079,49 +1095,49 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (width < 1024px) {
+    "@media not (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 1000px) {
+    @media not (min-width: 1000px) {
       .max-\\[1000px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 768px) {
+    @media not (min-width: 768px) {
       .max-md\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 640px) {
+    @media not (min-width: 640px) {
       .max-sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .min-sm\\:flex, .sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 700px) {
+    @media (min-width: 700px) {
       .min-\\[700px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\\:flex, .min-md\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1024px) {
+    @media (min-width: 1024px) {
       .lg\\:flex, .min-lg\\:flex {
         display: flex;
       }
@@ -1154,121 +1170,121 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       'max-[12vh]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    "@media (width < calc(1000px + 12em)) {
+    "@media not (min-width: calc(1000px + 12em)) {
       .max-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < calc(50vh + 12em)) {
+    @media not (min-width: calc(50vh + 12em)) {
       .max-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 12em) {
+    @media not (min-width: 12em) {
       .max-\\[12em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 10em) {
+    @media not (min-width: 10em) {
       .max-\\[10em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 12px) {
+    @media not (min-width: 12px) {
       .max-\\[12px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 10px) {
+    @media not (min-width: 10px) {
       .max-\\[10px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 12rem) {
+    @media not (min-width: 12rem) {
       .max-\\[12rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 10rem) {
+    @media not (min-width: 10rem) {
       .max-\\[10rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 12vh) {
+    @media not (min-width: 12vh) {
       .max-\\[12vh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 10vh) {
+    @media not (min-width: 10vh) {
       .max-\\[10vh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= calc(1000px + 12em)) {
+    @media (min-width: calc(1000px + 12em)) {
       .min-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= calc(50vh + 12em)) {
+    @media (min-width: calc(50vh + 12em)) {
       .min-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 10em) {
+    @media (min-width: 10em) {
       .min-\\[10em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 12em) {
+    @media (min-width: 12em) {
       .min-\\[12em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 10px) {
+    @media (min-width: 10px) {
       .min-\\[10px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 12px) {
+    @media (min-width: 12px) {
       .min-\\[12px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 10rem) {
+    @media (min-width: 10rem) {
       .min-\\[10rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 12rem) {
+    @media (min-width: 12rem) {
       .min-\\[12rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 10vh) {
+    @media (min-width: 10vh) {
       .min-\\[10vh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 12vh) {
+    @media (min-width: 12vh) {
       .min-\\[12vh\\]\\:flex {
         display: flex;
       }
@@ -1503,25 +1519,25 @@ test('not', async () => {
       }
     }
 
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .not-max-sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 130px) {
+    @media (min-width: 130px) {
       .not-max-\\[130px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 130px) {
+    @media not (min-width: 130px) {
       .not-min-\\[130px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 640px) {
+    @media not (min-width: 640px) {
       .not-min-sm\\:flex, .not-sm\\:flex {
         display: flex;
       }
@@ -2079,61 +2095,61 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@container name (width < 1024px) {
+    "@container name not (min-width: 1024px) {
       .\\@max-lg\\/name\\:flex {
         display: flex;
       }
     }
 
-    @container (width < 1024px) {
+    @container not (min-width: 1024px) {
       .\\@max-lg\\:flex {
         display: flex;
       }
     }
 
-    @container name (width < 456px) {
+    @container name not (min-width: 456px) {
       .\\@max-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }
 
-    @container (width < 123px) {
+    @container not (min-width: 123px) {
       .\\@max-\\[123px\\]\\:flex {
         display: flex;
       }
     }
 
-    @container (width >= 123px) {
+    @container (min-width: 123px) {
       .\\@\\[123px\\]\\:flex, .\\@min-\\[123px\\]\\:flex {
         display: flex;
       }
     }
 
-    @container name (width >= 456px) {
+    @container name (min-width: 456px) {
       .\\@\\[456px\\]\\/name\\:flex, .\\@min-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }
 
-    @container name (width >= 1024px) {
+    @container name (min-width: 1024px) {
       .\\@lg\\/name\\:flex {
         display: flex;
       }
     }
 
-    @container (width >= 1024px) {
+    @container (min-width: 1024px) {
       .\\@lg\\:flex {
         display: flex;
       }
     }
 
-    @container name (width >= 1024px) {
+    @container name (min-width: 1024px) {
       .\\@min-lg\\/name\\:flex {
         display: flex;
       }
     }
 
-    @container (width >= 1024px) {
+    @container (min-width: 1024px) {
       .\\@min-lg\\:flex {
         display: flex;
       }
@@ -2327,31 +2343,31 @@ test('variant order', async () => {
       }
     }
 
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1024px) {
+    @media (min-width: 1024px) {
       .lg\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1280px) {
+    @media (min-width: 1280px) {
       .xl\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 1536px) {
+    @media (min-width: 1536px) {
       .\\32 xl\\:flex {
         display: flex;
       }
@@ -2393,6 +2409,14 @@ test('variant order', async () => {
 
     .\\[\\&_p\\]\\:flex p {
       display: flex;
+    }
+
+    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-content: "";
+        }
+      }
     }
 
     @property --tw-content {

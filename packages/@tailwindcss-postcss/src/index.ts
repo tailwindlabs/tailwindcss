@@ -52,7 +52,6 @@ export type PluginOptions = {
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
-  console.log({ opts, flag: process.env.NODE_ENV })
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -341,8 +340,6 @@ function optimizeCss(
   }
 
   let out = optimize(optimize(Buffer.from(input))).toString()
-  console.log({ out })
-
   out = out.replaceAll(/\@media (\()?not /g, '@media $1not all and ')
 
   // Running Lightning CSS twice to ensure that adjacent rules are merged after

@@ -24407,3 +24407,50 @@ describe('custom utilities', () => {
     `)
   })
 })
+
+test.only('test the thing', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      ['translate-x-1/2'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".translate-x-1\\/2 {
+      --tw-translate-x: calc(1 / 2 * 100%);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
+    }
+
+    @property --tw-translate-x {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "*";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+})

@@ -269,6 +269,9 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
 
+  let propertyFallbacksRoot: Declaration[] = []
+  let propertyFallbacksUniversal: Declaration[] = []
+
   let variableDependencies = new DefaultMap<string, Set<string>>(() => new Set())
 
   function transform(
@@ -323,37 +326,50 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         ValueParser.walk(ast, (node, { replaceWith }) => {
           if (node.kind === 'function' && node.value === 'color-mix') {
             let args = ValueParser.toCss(node.nodes)
-            let match = args.match(/in \w+, (.+) ?(\d+%), transparent/)
-            if (match) {
-              let color = match[1]
-              let percentage = match[2]
 
-              if (color.startsWith('var(')) {
-                let name = segment(color.slice(4, -1), ',')[0]
-                if (!name) return
-                let resolved = designSystem.theme.resolveValue(null, [name as any])
-                if (!resolved) return
-                color = resolved
-              }
+            let segments = segment(args, ',')
 
-              if (
-                (color.startsWith('oklch(') ||
-                  color.startsWith('oklab(') ||
-                  color.startsWith('lab(') ||
-                  color.startsWith('lch(')) &&
-                color.endsWith(')')
-              ) {
-                let fallback = `${color.slice(0, -1)} / ${percentage})`
-                didGenerateFallback = true
-                replaceWith({ kind: 'word', value: fallback })
-              }
+            if (segments.length !== 3) {
+              return
             }
+
+            let [, colorA, colorB] = segments
+
+            colorA = colorA.trim()
+            colorB = colorB.trim()
+
+            if (colorB !== 'transparent') {
+              return
+            }
+
+            if (colorA.startsWith('var(')) {
+              let lastClosingParen = colorA.lastIndexOf(')')
+              if (lastClosingParen === -1) {
+                return
+              }
+              colorA =
+                colorA.slice(0, lastClosingParen + 1) + ' ' + colorA.slice(lastClosingParen + 1)
+            }
+
+            let [color, percentage] = segment(colorA.replaceAll(/ +/g, ' '), ' ')
+
+            let fallback = color
+            if (color.startsWith('var(')) {
+              let name = segment(color.slice(4, -1), ',')[0]
+              if (!name) return
+              let inlinedColor = designSystem.theme.resolveValue(null, [name as any])
+              if (!inlinedColor) return
+              fallback = `color-mix(in srgb, ${inlinedColor} ${percentage}, transparent)`
+            }
+
+            didGenerateFallback = true
+            replaceWith({ kind: 'word', value: fallback })
           }
         })
 
         if (didGenerateFallback) {
           let fallback = { ...node, value: ValueParser.toCss(ast) }
-          let colorMixQuery = rule('@supports (color: color-mix(in srgb, red 0%, red))', [node])
+          let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
 
           parent.push(fallback, colorMixQuery)
           return
@@ -393,6 +409,28 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       // Don't output duplicate `@property` rules
       if (seenAtProperties.has(node.params)) {
         return
+      }
+
+      // Collect fallbacks for `@property` rules for Firefox support
+      // We turn these into rules on `:root` or `*` and some pseudo-elements
+      // based on the value of `inherits``
+      let property = node.params
+      let initialValue = null
+      let inherits = false
+
+      for (let prop of node.nodes) {
+        if (prop.kind !== 'declaration') continue
+        if (prop.property === 'initial-value') {
+          initialValue = prop.value
+        } else if (prop.property === 'inherits') {
+          inherits = prop.value === 'true'
+        }
+      }
+
+      if (inherits) {
+        propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+      } else {
+        propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
       }
 
       seenAtProperties.add(node.params)
@@ -534,6 +572,29 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     if (!usedKeyframeNames.has(keyframe.params)) {
       let idx = atRoots.indexOf(keyframe)
       atRoots.splice(idx, 1)
+    }
+  }
+
+  // Fallbacks
+  {
+    let fallbackAst = []
+
+    if (propertyFallbacksRoot.length > 0) {
+      fallbackAst.push(rule(':root', propertyFallbacksRoot))
+    }
+
+    if (propertyFallbacksUniversal.length > 0) {
+      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    }
+
+    if (fallbackAst.length > 0) {
+      newAst.push(
+        atRule(
+          '@supports',
+          '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+          [atRule('@layer', 'base', fallbackAst)],
+        ),
+      )
     }
   }
 
