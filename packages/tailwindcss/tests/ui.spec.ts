@@ -245,6 +245,9 @@ test('shadow colors', async ({ page }) => {
       <div id="e" class="shadow-sm shadow-red hover:shadow-xl hover:shadow-initial">
         Hello world
       </div>
+
+      <div id="f" class="shadow-xs/75">Hello world</div>
+      <div id="g" class="shadow-xs/75 shadow-red/75">Hello world</div>
     `,
   )
 
@@ -289,6 +292,22 @@ test('shadow colors', async ({ page }) => {
     //
     expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 3px 0px/),
     expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px -1px/),
+  ])
+
+  expect(await getPropertyList('#f', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'oklab(0 0 0 / 0.75) 0px 1px 2px 0px',
+  ])
+
+  expect(await getPropertyList('#g', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+ \/ 0.56\d+\) 0px 1px 2px 0px/),
   ])
 
   await page.locator('#d').hover()
@@ -343,6 +362,9 @@ test('inset shadow colors', async ({ page }) => {
       >
         Hello world
       </div>
+
+      <div id="f" class="inset-shadow-xs/75">Hello world</div>
+      <div id="g" class="inset-shadow-xs/75 inset-shadow-red/75">Hello world</div>
     `,
   )
 
@@ -370,6 +392,22 @@ test('inset shadow colors', async ({ page }) => {
 
   expect(await getPropertyList('#d', 'box-shadow')).toEqual([
     expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
+
+  expect(await getPropertyList('#f', 'box-shadow')).toEqual([
+    'oklab(0 0 0 / 0.75) 0px 1px 1px 0px inset',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
+
+  expect(await getPropertyList('#g', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+ \/ 0.56\d+\) 0px 1px 1px 0px inset/),
     'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
     'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
     'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
@@ -419,6 +457,9 @@ test('text shadow colors', async ({ page }) => {
       >
         Hello world
       </div>
+
+      <div id="f" class="text-shadow-xs/75">Hello world</div>
+      <div id="g" class="text-shadow-xs/75 text-shadow-red/75">Hello world</div>
     `,
   )
 
@@ -433,6 +474,11 @@ test('text shadow colors', async ({ page }) => {
   )
   expect(await getPropertyValue('#d', 'text-shadow')).toMatch(
     /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px/,
+  )
+
+  expect(await getPropertyValue('#f', 'text-shadow')).toEqual('oklab(0 0 0 / 0.75) 0px 1px 1px')
+  expect(await getPropertyValue('#g', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+ \/ 0.56\d+\) 0px 1px 1px/,
   )
 
   await page.locator('#d').hover()
