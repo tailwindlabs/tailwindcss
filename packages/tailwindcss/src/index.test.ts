@@ -1500,7 +1500,7 @@ describe('Parsing theme values from CSS', () => {
       }
 
       @property --tw-shadow-intensity {
-        syntax: "*";
+        syntax: "<percentage>";
         inherits: false;
         initial-value: 100%;
       }
@@ -1517,7 +1517,7 @@ describe('Parsing theme values from CSS', () => {
       }
 
       @property --tw-inset-shadow-intensity {
-        syntax: "*";
+        syntax: "<percentage>";
         inherits: false;
         initial-value: 100%;
       }

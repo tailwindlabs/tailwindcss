@@ -37,7 +37,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 }
 
 @property --tw-shadow-intensity {
-  syntax: "*";
+  syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
 }
@@ -54,7 +54,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 }
 
 @property --tw-inset-shadow-intensity {
-  syntax: "*";
+  syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
 }

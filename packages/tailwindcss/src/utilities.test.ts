@@ -199,7 +199,7 @@ test('inset', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -216,7 +216,7 @@ test('inset', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -15595,7 +15595,7 @@ test('text-shadow', async () => {
     }
 
     @property --tw-text-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -15789,7 +15789,7 @@ test('shadow', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -15806,7 +15806,7 @@ test('shadow', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16045,7 +16045,7 @@ test('inset-shadow', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16062,7 +16062,7 @@ test('inset-shadow', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16299,7 +16299,7 @@ test('ring', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16316,7 +16316,7 @@ test('ring', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16394,7 +16394,7 @@ test('ring', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16411,7 +16411,7 @@ test('ring', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16658,7 +16658,7 @@ test('inset-ring', async () => {
     }
 
     @property --tw-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
@@ -16675,7 +16675,7 @@ test('inset-ring', async () => {
     }
 
     @property --tw-inset-shadow-intensity {
-      syntax: "*";
+      syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
     }
