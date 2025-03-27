@@ -4421,6 +4421,7 @@ export function createUtilities(theme: Theme) {
         property('--tw-shadow-intensity', '100%'),
         property('--tw-inset-shadow', nullShadow),
         property('--tw-inset-shadow-color'),
+        property('--tw-inset-shadow-intensity', '100%'),
         property('--tw-ring-color'),
         property('--tw-ring-shadow', nullShadow),
         property('--tw-inset-ring-color'),
@@ -4564,15 +4565,32 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('inset-shadow', (candidate) => {
+      let intensity: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          intensity = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            intensity = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--inset-shadow'])
         if (value === null) return
 
         return [
           boxShadowProperties(),
+          decl('--tw-inset-shadow-intensity', intensity),
           decl(
             '--tw-inset-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
+            replaceShadowColors(
+              value,
+              (color) =>
+                `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`,
+            ),
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -4587,14 +4605,18 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
-            return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
+            return [
+              boxShadowProperties(),
+              decl('--tw-inset-shadow-color', withAlpha(value, 'var(--tw-inset-shadow-intensity)')),
+            ]
           }
           default: {
             return [
               boxShadowProperties(),
+              decl('--tw-inset-shadow-intensity', intensity),
               decl(
                 '--tw-inset-shadow',
-                `inset ${replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`)}`,
+                `inset ${replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`)}`,
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4617,12 +4639,16 @@ export function createUtilities(theme: Theme) {
         let value = theme.get([`--inset-shadow-${candidate.value.value}`])
 
         if (value) {
-          if (candidate.modifier) return
           return [
             boxShadowProperties(),
+            decl('--tw-inset-shadow-intensity', intensity),
             decl(
               '--tw-inset-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
+              replaceShadowColors(
+                value,
+                (color) =>
+                  `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`,
+              ),
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -4633,7 +4659,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
+          return [
+            boxShadowProperties(),
+            decl('--tw-inset-shadow-color', withAlpha(value, 'var(--tw-inset-shadow-intensity)')),
+          ]
         }
       }
     })
@@ -4647,6 +4676,7 @@ export function createUtilities(theme: Theme) {
       {
         values: [],
         valueThemeKeys: ['--inset-shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
