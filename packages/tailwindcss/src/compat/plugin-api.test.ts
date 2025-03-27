@@ -285,19 +285,22 @@ describe('theme', async () => {
 
     expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
       ".fraction {
-        color: #ef444 / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: #ef4444;
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, #ef4444 50%, transparent);
         }
       }
       .percentage {
-        color: #ef444 / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: #ef4444;
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, #ef4444 50%, transparent);
         }
       }
       .variable {
-        color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
+        color: #ef4444;
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
+        }
       }
       "
     `)
@@ -365,34 +368,40 @@ describe('theme', async () => {
       ]),
     ).toMatchInlineSnapshot(`
       ".css-fraction {
-        color: rgba(255 0 0 / <alpha-value> / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: rgba(255 0 0 / <alpha-value>);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
         }
       }
       .css-percentage {
-        color: rgba(255 0 0 / <alpha-value> / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: rgba(255 0 0 / <alpha-value>);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
         }
       }
       .css-variable {
-        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+        color: rgba(255 0 0 / <alpha-value>);
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+        }
       }
       .js-fraction {
-        color: rgb(255 0 0 / 1 / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: rgb(255 0 0 / 1);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
         }
       }
       .js-percentage {
-        color: rgb(255 0 0 / 1 / 50%);
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        color: rgb(255 0 0 / 1);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
         }
       }
       .js-variable {
-        color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+        color: rgb(255 0 0 / 1);
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+        }
       }
       "
     `)
@@ -1752,7 +1761,7 @@ describe('addVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width <= 400px) {
+        @media (max-width: 400px) {
           @supports (font: bold) {
             .potato\\:flex:large-potato {
               display: flex;
@@ -2071,19 +2080,19 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 500px) {
+        @media (min-width: 500px) {
           .testmin-\\[500px\\]\\:underline {
             text-decoration-line: underline;
           }
         }
 
-        @media (width >= 600px) {
+        @media (min-width: 600px) {
           .testmin-\\[600px\\]\\:flex {
             display: flex;
           }
         }
 
-        @media (width >= 700px) {
+        @media (min-width: 700px) {
           .testmin-\\[700px\\]\\:italic {
             font-style: italic;
           }
@@ -2126,19 +2135,19 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 500px) {
+        @media (min-width: 500px) {
           .testmin-\\[500px\\]\\:italic {
             font-style: italic;
           }
         }
 
-        @media (width >= 600px) {
+        @media (min-width: 600px) {
           .testmin-example\\:italic {
             font-style: italic;
           }
         }
 
-        @media (width >= 700px) {
+        @media (min-width: 700px) {
           .testmin-\\[700px\\]\\:italic {
             font-style: italic;
           }
@@ -2186,30 +2195,30 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 100px) {
-          @media (width <= 400px) {
+        @media (min-width: 100px) {
+          @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
               order: 1;
             }
           }
         }
 
-        @media (width >= 150px) {
-          @media (width <= 400px) {
+        @media (min-width: 150px) {
+          @media (max-width: 400px) {
             .testmin-\\[150px\\]\\:testmax-\\[400px\\]\\:order-2 {
               order: 2;
             }
           }
         }
 
-        @media (width >= 100px) {
-          @media (width <= 350px) {
+        @media (min-width: 100px) {
+          @media (max-width: 350px) {
             .testmin-\\[100px\\]\\:testmax-\\[350px\\]\\:order-3 {
               order: 3;
             }
           }
 
-          @media (width <= 300px) {
+          @media (max-width: 300px) {
             .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-4 {
               order: 4;
             }
@@ -2256,8 +2265,8 @@ describe('matchVariant', () => {
     // Expect :focus to come after :hover
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 100px) {
-          @media (width <= 200px) {
+        @media (min-width: 100px) {
+          @media (max-width: 200px) {
             @media (hover: hover) {
               .testmin-\\[100px\\]\\:testmax-\\[200px\\]\\:hover\\:underline:hover {
                 text-decoration-line: underline;
@@ -2310,32 +2319,32 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 100px) {
-          @media (width <= 400px) {
+        @media (min-width: 100px) {
+          @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
               order: 1;
             }
           }
         }
 
-        @media (width >= 200px) {
-          @media (width <= 400px) {
+        @media (min-width: 200px) {
+          @media (max-width: 400px) {
             .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
               order: 2;
             }
           }
         }
 
-        @media (width >= 100px) {
-          @media (width <= 300px) {
+        @media (min-width: 100px) {
+          @media (max-width: 300px) {
             .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
               order: 3;
             }
           }
         }
 
-        @media (width >= 200px) {
-          @media (width <= 300px) {
+        @media (min-width: 200px) {
+          @media (max-width: 300px) {
             .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
               order: 4;
             }
@@ -2382,28 +2391,28 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width <= 400px) {
-          @media (width >= 100px) {
+        @media (max-width: 400px) {
+          @media (min-width: 100px) {
             .testmax-\\[400px\\]\\:testmin-\\[100px\\]\\:underline {
               text-decoration-line: underline;
             }
           }
 
-          @media (width >= 200px) {
+          @media (min-width: 200px) {
             .testmax-\\[400px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
             }
           }
         }
 
-        @media (width <= 300px) {
-          @media (width >= 100px) {
+        @media (max-width: 300px) {
+          @media (min-width: 100px) {
             .testmax-\\[300px\\]\\:testmin-\\[100px\\]\\:underline {
               text-decoration-line: underline;
             }
           }
 
-          @media (width >= 200px) {
+          @media (min-width: 200px) {
             .testmax-\\[300px\\]\\:testmin-\\[200px\\]\\:underline {
               text-decoration-line: underline;
             }
@@ -2458,32 +2467,32 @@ describe('matchVariant', () => {
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        @media (width >= 100px) {
-          @media (width <= 400px) {
+        @media (min-width: 100px) {
+          @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
               order: 1;
             }
           }
         }
 
-        @media (width >= 200px) {
-          @media (width <= 400px) {
+        @media (min-width: 200px) {
+          @media (max-width: 400px) {
             .testmin-\\[200px\\]\\:testmax-\\[400px\\]\\:order-2 {
               order: 2;
             }
           }
         }
 
-        @media (width >= 100px) {
-          @media (width <= 300px) {
+        @media (min-width: 100px) {
+          @media (max-width: 300px) {
             .testmin-\\[100px\\]\\:testmax-\\[300px\\]\\:order-3 {
               order: 3;
             }
           }
         }
 
-        @media (width >= 200px) {
-          @media (width <= 300px) {
+        @media (min-width: 200px) {
+          @media (max-width: 300px) {
             .testmin-\\[200px\\]\\:testmax-\\[300px\\]\\:order-4 {
               order: 4;
             }
@@ -2647,13 +2656,13 @@ describe('matchVariant', () => {
       'my-container-[250px]/placement:underline',
     ])
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@container (width >= 250px) {
+      "@container (min-width: 250px) {
         .my-container-\\[250px\\]\\:underline {
           text-decoration-line: underline;
         }
       }
 
-      @container placement (width >= 250px) {
+      @container placement (min-width: 250px) {
         .my-container-\\[250px\\]\\/placement\\:underline {
           text-decoration-line: underline;
         }
@@ -2694,20 +2703,20 @@ describe('addUtilities()', () => {
 
     expect(optimizeCss(compiled.build(['text-trim', 'lg:text-trim'])).trim())
       .toMatchInlineSnapshot(`
-      "@layer utilities {
-        .text-trim {
-          text-box-trim: both;
-          text-box-edge: cap alphabetic;
-        }
-
-        @media (width >= 1024px) {
-          .lg\\:text-trim {
+        "@layer utilities {
+          .text-trim {
             text-box-trim: both;
             text-box-edge: cap alphabetic;
           }
-        }
-      }"
-    `)
+
+          @media (min-width: 1024px) {
+            .lg\\:text-trim {
+              text-box-trim: both;
+              text-box-edge: cap alphabetic;
+            }
+          }
+        }"
+      `)
   })
 
   test('return multiple rule objects from a custom utility', async () => {
@@ -2891,7 +2900,7 @@ describe('addUtilities()', () => {
           }
         }
 
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .lg\\:foo {
             display: flex;
           }
@@ -2972,7 +2981,7 @@ describe('addUtilities()', () => {
           background-color: #fff;
         }
 
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .lg\\:form-textarea {
             appearance: none;
             background-color: #fff;
@@ -3298,7 +3307,7 @@ describe('matchUtilities()', () => {
         border-block-width: var(--foo);
       }
 
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .lg\\:border-block-2 {
           border-block-width: 2px;
         }
@@ -3592,11 +3601,11 @@ describe('matchUtilities()', () => {
           await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50']),
         ).trim(),
       ).toMatchInlineSnapshot(`
-        ".scrollbar-\\[\\#08c\\] {
+        ".scrollbar-\\[\\#08c\\], .scrollbar-\\[\\#08c\\]\\/50 {
           scrollbar-color: #08c;
         }
 
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        @supports (color: color-mix(in lab, red, red)) {
           .scrollbar-\\[\\#08c\\]\\/50 {
             scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
           }
@@ -3757,11 +3766,11 @@ describe('matchUtilities()', () => {
         scrollbar-width: 2px;
       }
 
-      .scrollbar-\\[\\#fff\\] {
+      .scrollbar-\\[\\#fff\\], .scrollbar-\\[\\#fff\\]\\/50 {
         scrollbar-color: #fff;
       }
 
-      @supports (color: color-mix(in srgb, red 0%, red)) {
+      @supports (color: color-mix(in lab, red, red)) {
         .scrollbar-\\[\\#fff\\]\\/50 {
           scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
         }
@@ -3791,11 +3800,11 @@ describe('matchUtilities()', () => {
         scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
-      .scrollbar-black {
+      .scrollbar-black, .scrollbar-black\\/50 {
         scrollbar-color: black;
       }
 
-      @supports (color: color-mix(in srgb, red 0%, red)) {
+      @supports (color: color-mix(in lab, red, red)) {
         .scrollbar-black\\/50 {
           scrollbar-color: oklab(0% none none / .5);
         }
@@ -3867,25 +3876,31 @@ describe('matchUtilities()', () => {
         scrollbar-color: color-mix(in oklab, var(--my-color) 25%, transparent);
       }
 
-      .scrollbar-black {
+      .scrollbar-black, .scrollbar-black\\/33 {
         scrollbar-color: black;
       }
 
-      @supports (color: color-mix(in srgb, red 0%, red)) {
+      @supports (color: color-mix(in lab, red, red)) {
         .scrollbar-black\\/33 {
           scrollbar-color: oklab(0% none none / .33);
         }
+      }
 
+      .scrollbar-black\\/\\[50\\%\\] {
+        scrollbar-color: black;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
         .scrollbar-black\\/\\[50\\%\\] {
           scrollbar-color: oklab(0% none none / .5);
         }
       }
 
-      .scrollbar-current {
+      .scrollbar-current, .scrollbar-current\\/45 {
         scrollbar-color: currentColor;
       }
 
-      @supports (color: color-mix(in srgb, red 0%, red)) {
+      @supports (color: color-mix(in lab, red, red)) {
         .scrollbar-current\\/45 {
           scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
         }
@@ -4003,7 +4018,7 @@ describe('matchUtilities()', () => {
           display: flex;
         }
 
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .lg\\:foo-\\[12px\\] {
             --foo: 12px;
             display: flex;

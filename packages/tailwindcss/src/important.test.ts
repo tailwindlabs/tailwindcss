@@ -114,6 +114,14 @@ test('variables in utilities should not be marked as important', async () => {
       transition-timing-function: var(--ease-out) !important;
     }
 
+    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
+      }
+    }
+
     @property --tw-ease {
       syntax: "*";
       inherits: false

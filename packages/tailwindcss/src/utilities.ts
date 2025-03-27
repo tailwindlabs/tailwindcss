@@ -2,6 +2,7 @@ import {
   atRoot,
   atRule,
   decl,
+  rule,
   styleRule,
   walk,
   type AstNode,
@@ -2496,7 +2497,10 @@ export function createUtilities(theme: Theme) {
         let interpolationMethod = resolveInterpolationModifier(candidate.modifier)
 
         return [
-          decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
+          decl('--tw-gradient-position', `${value}`),
+          rule('@supports (background-image:linear-gradient(in lab, red, red))', [
+            decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
+          ]),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),
         ]
       }

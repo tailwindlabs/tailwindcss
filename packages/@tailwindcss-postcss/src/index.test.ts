@@ -267,7 +267,7 @@ test('handle CSS when only using a `@reference` (we should not bail early)', asy
   )
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
-    "@media (width >= 48rem) {
+    "@media (min-width: 48rem) {
       .foo {
         bar: baz;
       }

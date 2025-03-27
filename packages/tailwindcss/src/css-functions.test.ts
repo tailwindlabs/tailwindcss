@@ -16,7 +16,11 @@ describe('--alpha(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@supports (color: color-mix(in srgb, red 0%, red)) {
+      ".foo {
+        margin: red;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
         .foo {
           margin: oklab(62.7955% .22486 .12584 / .5);
         }
@@ -197,7 +201,11 @@ describe('--theme(…)', () => {
         --color-red-500: red;
       }
 
-      @supports (color: color-mix(in srgb, red 0%, red)) {
+      .red {
+        color: #ff000080;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
         .red {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
@@ -216,7 +224,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@supports (color: color-mix(in srgb, red 0%, red)) {
+      ".red {
+        color: red;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
         .red {
           color: oklab(62.7955% .224863 .125846);
         }
@@ -349,13 +361,13 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .blue {
           color: #00f;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .red {
           color: red;
         }
@@ -508,7 +520,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          "@supports (color: color-mix(in srgb, red 0%, red)) {
+          ".red {
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .75);
             }
@@ -527,7 +543,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          "@supports (color: color-mix(in srgb, red 0%, red)) {
+          ".red {
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .75);
             }
@@ -546,7 +566,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          "@supports (color: color-mix(in srgb, red 0%, red)) {
+          ".red {
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .75);
             }
@@ -566,7 +590,13 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: color-mix(in oklab, red var(--opacity), transparent);
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
+            .red {
+              color: color-mix(in oklab, red var(--opacity), transparent);
+            }
           }"
         `)
       })
@@ -584,7 +614,13 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: color-mix(in oklab, red var(--opacity, 50%), transparent);
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
+            .red {
+              color: color-mix(in oklab, red var(--opacity, 50%), transparent);
+            }
           }"
         `)
       })
@@ -773,7 +809,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          "@supports (color: color-mix(in srgb, red 0%, red)) {
+          ".red {
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .25);
             }
@@ -847,11 +887,15 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
-            color: color-mix(in oklab, red 50%, transparent / 50%);
+          ":root, :host {
+            --color-foo: red;
           }
 
-          @supports (color: color-mix(in srgb, red 0%, red)) {
+          .red {
+            color: oklab(62.7955% .22486 .12584 / .5);
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .25);
             }
@@ -889,7 +933,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          "@supports (color: color-mix(in srgb, red 0%, red)) {
+          ".red {
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
             .red {
               color: oklab(62.7955% .22486 .12584 / .5);
             }
@@ -982,7 +1030,7 @@ describe('theme(…)', () => {
           ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 40rem) {
+        "@media (min-width: 40rem) {
           .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
             --color: red;
           }
@@ -1043,7 +1091,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width <= 64rem) {
+        "@media (min-width: 48rem) and (max-width: 64rem) {
           .red {
             color: red;
           }
@@ -1065,7 +1113,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and ((width < 64rem)) {
+        "@media (min-width: 48rem) and (not (min-width: 64rem)) {
           .red {
             color: red;
           }
@@ -1088,7 +1136,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .red {
           color: red;
         }
@@ -1109,7 +1157,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@container (width > 48rem) {
+      "@container not (max-width: 48rem) {
         .red {
           color: red;
         }
@@ -1185,11 +1233,11 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklch(87% .07 7 / .1);
-          outline-color: oklch(79% .17 70 / .15);
+          border-color: oklch(87% .07 7);
+          outline-color: oklch(79% .17 70);
         }
 
-        @supports (color: color-mix(in srgb, red 0%, red)) {
+        @supports (color: color-mix(in lab, red, red)) {
           .my-base-rule {
             border-color: oklab(87% .06947 .00853 / .1);
             outline-color: oklab(79% .05814 .15974 / .15);
