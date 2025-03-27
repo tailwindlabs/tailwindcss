@@ -184,7 +184,7 @@ export function withAlpha(value: string, alpha: string): string {
 /**
  * Apply opacity to a color using `color-mix`.
  */
-export function replaceAlpha(value: string, alpha: string): string {
+export function replaceAlpha(value: string, alpha: string | null): string {
   if (alpha === null) return value
 
   // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
@@ -4313,8 +4313,8 @@ export function createUtilities(theme: Theme) {
             'text-shadow',
             replaceShadowColors(
               value,
-              (color) =>
-                `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+              intensity ? 'var(--tw-text-shadow-intensity)' : null,
+              (color) => `var(--tw-text-shadow-color, ${color})`,
             ),
           ),
         ]
@@ -4341,8 +4341,8 @@ export function createUtilities(theme: Theme) {
                 'text-shadow',
                 replaceShadowColors(
                   value,
-                  (color) =>
-                    `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+                  intensity ? 'var(--tw-text-shadow-intensity)' : null,
+                  (color) => `var(--tw-text-shadow-color, ${color})`,
                 ),
               ),
             ]
@@ -4367,8 +4367,8 @@ export function createUtilities(theme: Theme) {
               'text-shadow',
               replaceShadowColors(
                 value,
-                (color) =>
-                  `var(--tw-text-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-text-shadow-intensity)') : color})`,
+                intensity ? 'var(--tw-text-shadow-intensity)' : null,
+                (color) => `var(--tw-text-shadow-color, ${color})`,
               ),
             ),
           ]
@@ -4461,8 +4461,8 @@ export function createUtilities(theme: Theme) {
             '--tw-shadow',
             replaceShadowColors(
               value,
-              (color) =>
-                `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+              intensity ? 'var(--tw-shadow-intensity)' : null,
+              (color) => `var(--tw-shadow-color, ${color})`,
             ),
           ),
           decl('box-shadow', cssBoxShadowValue),
@@ -4491,8 +4491,8 @@ export function createUtilities(theme: Theme) {
                 '--tw-shadow',
                 replaceShadowColors(
                   value,
-                  (color) =>
-                    `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+                  intensity ? 'var(--tw-shadow-intensity)' : null,
+                  (color) => `var(--tw-shadow-color, ${color})`,
                 ),
               ),
               decl('box-shadow', cssBoxShadowValue),
@@ -4522,8 +4522,8 @@ export function createUtilities(theme: Theme) {
               '--tw-shadow',
               replaceShadowColors(
                 value,
-                (color) =>
-                  `var(--tw-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-shadow-intensity)') : color})`,
+                intensity ? 'var(--tw-shadow-intensity)' : null,
+                (color) => `var(--tw-shadow-color, ${color})`,
               ),
             ),
             decl('box-shadow', cssBoxShadowValue),
@@ -4588,8 +4588,8 @@ export function createUtilities(theme: Theme) {
             '--tw-inset-shadow',
             replaceShadowColors(
               value,
-              (color) =>
-                `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`,
+              intensity ? 'var(--tw-inset-shadow-intensity)' : null,
+              (color) => `var(--tw-inset-shadow-color, ${color})`,
             ),
           ),
           decl('box-shadow', cssBoxShadowValue),
@@ -4616,7 +4616,11 @@ export function createUtilities(theme: Theme) {
               decl('--tw-inset-shadow-intensity', intensity),
               decl(
                 '--tw-inset-shadow',
-                `inset ${replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`)}`,
+                `inset ${replaceShadowColors(
+                  value,
+                  intensity ? 'var(--tw-inset-shadow-intensity)' : null,
+                  (color) => `var(--tw-inset-shadow-color, ${color})`,
+                )}`,
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4646,8 +4650,8 @@ export function createUtilities(theme: Theme) {
               '--tw-inset-shadow',
               replaceShadowColors(
                 value,
-                (color) =>
-                  `var(--tw-inset-shadow-color, ${intensity ? replaceAlpha(color, 'var(--tw-inset-shadow-intensity)') : color})`,
+                intensity ? 'var(--tw-inset-shadow-intensity)' : null,
+                (color) => `var(--tw-inset-shadow-color, ${color})`,
               ),
             ),
             decl('box-shadow', cssBoxShadowValue),

@@ -38,12 +38,35 @@ const table = [
       '0 0 1px var(--tw-shadow-color, var(--my-color))',
     ].join(', '),
   },
+  {
+    input: '1px 1px var(--my-color)',
+    intensity: '50%',
+    output: '1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))',
+  },
+  {
+    input: '1px 2px 3px 4px',
+    intensity: '50%',
+    output: '1px 2px 3px 4px var(--tw-shadow-color, oklab(from currentcolor l a b / 50%))',
+  },
+  {
+    input: ['var(--my-shadow)', '1px 1px var(--my-color)', '0 0 1px var(--my-color)'].join(', '),
+    intensity: '50%',
+    output: [
+      'var(--my-shadow)',
+      '1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))',
+      '0 0 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))',
+    ].join(', '),
+  },
 ]
 
 it.each(table)(
   'should replace the color of box-shadow $input with $output',
-  ({ input, output }) => {
-    let parsed = replaceShadowColors(input, (color) => `var(--tw-shadow-color, ${color})`)
+  ({ input, intensity = null, output }) => {
+    let parsed = replaceShadowColors(
+      input,
+      intensity,
+      (color) => `var(--tw-shadow-color, ${color})`,
+    )
     expect(parsed).toEqual(output)
   },
 )
