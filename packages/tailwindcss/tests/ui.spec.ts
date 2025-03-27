@@ -186,68 +186,68 @@ for (let [classes, expected] of [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       'linear-gradient(to right, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-y-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       'linear-gradient(to top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-t-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-r-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to right, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-b-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
@@ -255,13 +255,13 @@ for (let [classes, expected] of [
     [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -274,68 +274,68 @@ for (let [classes, expected] of [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       'linear-gradient(to right, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-y-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-t-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-r-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to right, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-b-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
@@ -343,13 +343,13 @@ for (let [classes, expected] of [
     [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -362,68 +362,68 @@ for (let [classes, expected] of [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       'linear-gradient(to right, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-y-from-20% mask-y-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       'linear-gradient(to top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-t-from-20% mask-t-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-r-from-20% mask-r-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(to right, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-b-from-20% mask-b-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
@@ -431,13 +431,13 @@ for (let [classes, expected] of [
     [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -453,9 +453,9 @@ for (let [classes, expected] of [
       'linear-gradient(rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0) 60%)',
       'linear-gradient(to top, rgb(0, 0, 0) 10%, rgba(0, 0, 0, 0) 20%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
@@ -467,9 +467,9 @@ for (let [classes, expected] of [
       'linear-gradient(rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0) 40%)',
       'linear-gradient(to top, rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0) 40%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -483,26 +483,26 @@ for (let [classes, expected] of [
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0) 80%)',
       'linear-gradient(to right, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 70%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-y-from-20% mask-y-to-80% mask-t-from-30% mask-b-to-70%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       'linear-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 70%)',
       'linear-gradient(to top, rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0) 80%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 ]) {
@@ -535,9 +535,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(45deg, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
@@ -545,9 +545,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(calc(45deg), rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -559,9 +559,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(45deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
@@ -569,9 +569,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(calc(45deg), rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -587,9 +587,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(45deg, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
@@ -597,9 +597,9 @@ for (let [classes, expected] of [
         // Linear
         'linear-gradient(calc(45deg), rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -629,22 +629,22 @@ for (let [classes, expected] of [
     'mask-radial-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-radial-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -655,11 +655,11 @@ for (let [classes, expected] of [
     'mask-radial-from-20% mask-radial-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -670,22 +670,22 @@ for (let [classes, expected] of [
     'mask-circle mask-radial-from-20% mask-radial-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(circle, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
   [
     'mask-ellipse mask-radial-from-20% mask-radial-to-80%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -698,21 +698,21 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(at 0% 0%, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(at left top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -722,21 +722,21 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(circle at 0% 0%, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(circle at left top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -748,11 +748,11 @@ for (let [classes, expected] of [
     'mask-radial-[100%_100%] mask-radial-from-20%',
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(100% 100%, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ],
 
@@ -765,21 +765,21 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(25% 150% at 50% 0%, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
 
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
         'radial-gradient(25% 150% at center top, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
         // Conic
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       ].join(', '),
     ],
   ],
@@ -811,9 +811,9 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from 45deg, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       ].join(', '),
@@ -821,9 +821,9 @@ for (let [classes, expected] of [
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from calc(45deg), rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 100%)',
       ].join(', '),
@@ -835,9 +835,9 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from 45deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       ].join(', '),
@@ -845,9 +845,9 @@ for (let [classes, expected] of [
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from calc(45deg), rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%)',
       ].join(', '),
@@ -863,9 +863,9 @@ for (let [classes, expected] of [
       // WebKit / Firefox
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from 45deg, rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       ].join(', '),
@@ -873,9 +873,9 @@ for (let [classes, expected] of [
       // Chromium
       [
         // Linear
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Radial
-        'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+        'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
         // Conic
         'conic-gradient(from calc(45deg), rgb(0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%)',
       ].join(', '),
@@ -953,12 +953,12 @@ test('mask edges can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       'linear-gradient(to right, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 
@@ -969,12 +969,12 @@ test('mask edges can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
       'linear-gradient(to right, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 })
@@ -994,12 +994,12 @@ test('mask edge colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(to left, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       'linear-gradient(to right, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 
@@ -1010,12 +1010,12 @@ test('mask edge colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(to left, rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
       'linear-gradient(to right, rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 })
@@ -1034,9 +1034,9 @@ test('linear mask direction can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1044,9 +1044,9 @@ test('linear mask direction can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 
@@ -1058,9 +1058,9 @@ test('linear mask direction can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(45deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1068,9 +1068,9 @@ test('linear mask direction can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(45deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 })
@@ -1091,9 +1091,9 @@ test('linear mask position can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1101,9 +1101,9 @@ test('linear mask position can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 
@@ -1115,9 +1115,9 @@ test('linear mask position can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1125,9 +1125,9 @@ test('linear mask position can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 })
@@ -1151,9 +1151,9 @@ test('linear mask colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1161,9 +1161,9 @@ test('linear mask colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 
@@ -1175,9 +1175,9 @@ test('linear mask colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(15deg, rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
 
     // Chromium
@@ -1185,9 +1185,9 @@ test('linear mask colors can be changed on hover', async ({ page }) => {
       // Linear
       'linear-gradient(calc(15deg), rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 })
@@ -1205,11 +1205,11 @@ test('radial mask size can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(50% 50%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 
@@ -1218,11 +1218,11 @@ test('radial mask size can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(125% 25%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 })
@@ -1240,11 +1240,11 @@ test('radial mask position can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(50% 50%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 
@@ -1253,11 +1253,11 @@ test('radial mask position can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(50% 50%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 })
@@ -1278,11 +1278,11 @@ test('radial mask color can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(50% 50%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 
@@ -1291,11 +1291,11 @@ test('radial mask color can be changed on hover', async ({ page }) => {
   expect(await getPropertyValue('#x', 'mask-image')).toEqual(
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
       'radial-gradient(50% 50%, rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
       // Conic
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
     ].join(', '),
   )
 })
@@ -1312,9 +1312,9 @@ test('conic mask direction can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1322,9 +1322,9 @@ test('conic mask direction can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1336,9 +1336,9 @@ test('conic mask direction can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 45deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1346,9 +1346,9 @@ test('conic mask direction can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(45deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1369,9 +1369,9 @@ test('conic mask position can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1379,9 +1379,9 @@ test('conic mask position can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1393,9 +1393,9 @@ test('conic mask position can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
     ].join(', '),
@@ -1403,9 +1403,9 @@ test('conic mask position can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%)',
     ].join(', '),
@@ -1429,9 +1429,9 @@ test('conic mask color can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 15deg, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1439,9 +1439,9 @@ test('conic mask color can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(15deg), rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 100%)',
     ].join(', '),
@@ -1453,9 +1453,9 @@ test('conic mask color can be changed on hover', async ({ page }) => {
     // WebKit / Firefox
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from 15deg, rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
     ].join(', '),
@@ -1463,9 +1463,9 @@ test('conic mask color can be changed on hover', async ({ page }) => {
     // Chromium
     [
       // Linear
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Radial
-      'linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0))',
+      'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255))',
       // Conic
       'conic-gradient(from calc(15deg), rgba(0, 0, 0, 0) 25%, rgb(0, 0, 0) 100%)',
     ].join(', '),
