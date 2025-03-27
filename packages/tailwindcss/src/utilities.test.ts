@@ -15981,7 +15981,18 @@ test('mask-conic', async () => {
       ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-conic-45 {
+    ".-mask-conic-45 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
+      --tw-mask-conic-position: calc(1deg * -45);
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-conic-45 {
       -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);

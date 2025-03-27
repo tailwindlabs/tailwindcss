@@ -3420,7 +3420,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('mask-conic', {
       defaultValue: null,
-      supportsNegative: false,
+      supportsNegative: true,
       supportsFractions: false,
       handleBareValue(value) {
         let type = inferDataType(value.value, ['integer'])
