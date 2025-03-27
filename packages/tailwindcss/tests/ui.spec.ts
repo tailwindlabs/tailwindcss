@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { compile } from '../src'
 import { optimizeCss } from '../src/test-utils/run'
+import { segment } from '../src/utils/segment'
 
 const html = String.raw
 const css = String.raw
@@ -214,7 +215,7 @@ test.skip("::file-selector-button can receive a border with just the 'border' ut
 })
 
 test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) => {
-  let { getPropertyValue } = await render(
+  let { getPropertyList } = await render(
     page,
     html`<div
       id="x"
@@ -222,19 +223,19 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
     ></div>`,
   )
 
-  expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
-    [
-      'rgb(0, 255, 0) 0px 2px 4px 0px inset', // inset-shadow
-      'rgb(0, 0, 255) 0px 0px 0px 1px inset', // inset-ring
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px', // ring-offset (disabled)
-      'rgb(255, 255, 255) 0px 0px 0px 1px', // ring
-      'rgb(255, 0, 0) 0px 1px 3px 0px, rgb(255, 0, 0) 0px 1px 2px -1px', // shadow
-    ].join(', '),
-  )
+  expect(await getPropertyList('#x', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.866\d+ -0.233\d+ 0.179\d+\) 0px 2px 4px 0px inset/), // inset-shadow
+    'rgb(0, 0, 255) 0px 0px 0px 1px inset', // inset-ring
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px', // ring-offset (disabled)
+    'rgb(255, 255, 255) 0px 0px 0px 1px', // ring
+
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 3px 0px/), // shadow
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px -1px/), // shadow
+  ])
 })
 
 test('shadow colors', async ({ page }) => {
-  let { getPropertyValue } = await render(
+  let { getPropertyList } = await render(
     page,
     html`
       <div id="a" class="shadow-sm shadow-red"></div>
@@ -247,81 +248,89 @@ test('shadow colors', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#a', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 1px 3px 0px, rgb(255, 0, 0) 0px 1px 2px -1px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#b', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 20px 25px -5px, rgb(255, 0, 0) 0px 8px 10px -6px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#c', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 2px 4px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#a', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
 
-  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 1px 3px 0px, rgb(255, 0, 0) 0px 1px 2px -1px',
-    ].join(', '),
-  )
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 3px 0px/),
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px -1px/),
+  ])
+
+  expect(await getPropertyList('#b', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 20px 25px -5px/),
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 8px 10px -6px/),
+  ])
+
+  expect(await getPropertyList('#c', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 2px 4px 0px/),
+  ])
+
+  expect(await getPropertyList('#d', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 3px 0px/),
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px -1px/),
+  ])
 
   await page.locator('#d').hover()
 
-  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 20px 25px -5px, rgb(255, 0, 0) 0px 8px 10px -6px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#d', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
 
-  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(255, 0, 0) 0px 1px 3px 0px, rgb(255, 0, 0) 0px 1px 2px -1px',
-    ].join(', '),
-  )
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 20px 25px -5px/),
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 8px 10px -6px/),
+  ])
+
+  expect(await getPropertyList('#e', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+
+    //
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 3px 0px/),
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px -1px/),
+  ])
 
   await page.locator('#e').hover()
 
-  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#e', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+
+    //
+    'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px',
+    'rgba(0, 0, 0, 0.1) 0px 8px 10px -6px',
+  ])
 })
 
 test('inset shadow colors', async ({ page }) => {
-  let { getPropertyValue } = await render(
+  let { getPropertyList } = await render(
     page,
     html`
       <div id="a" class="inset-shadow-xs inset-shadow-red"></div>
@@ -337,77 +346,63 @@ test('inset shadow colors', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#a', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 1px 1px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#b', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 2px 4px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#c', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 3px 6px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#a', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
+  expect(await getPropertyList('#b', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 2px 4px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
+  expect(await getPropertyList('#c', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 3px 6px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
 
-  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 1px 1px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#d', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
 
   await page.locator('#d').hover()
 
-  expect(await getPropertyValue('#d', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 2px 4px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#d', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 2px 4px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
 
-  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
-    [
-      'rgb(255, 0, 0) 0px 1px 1px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#e', 'box-shadow')).toEqual([
+    expect.stringMatching(/oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px 0px inset/),
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
 
   await page.locator('#e').hover()
 
-  expect(await getPropertyValue('#e', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-    ].join(', '),
-  )
+  expect(await getPropertyList('#e', 'box-shadow')).toEqual([
+    'rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+    'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+  ])
 })
 
 test('text shadow colors', async ({ page }) => {
@@ -427,21 +422,28 @@ test('text shadow colors', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#a', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
-  expect(await getPropertyValue('#b', 'text-shadow')).toEqual(
-    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
+  expect(await getPropertyValue('#a', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px/,
   )
-  expect(await getPropertyValue('#c', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 2px 4px')
-
-  expect(await getPropertyValue('#d', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
+  expect(await getPropertyValue('#b', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px, oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 3px 2px, oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 4px 8px/,
+  )
+  expect(await getPropertyValue('#c', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 2px 4px/,
+  )
+  expect(await getPropertyValue('#d', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px/,
+  )
 
   await page.locator('#d').hover()
 
-  expect(await getPropertyValue('#d', 'text-shadow')).toEqual(
-    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
+  expect(await getPropertyValue('#d', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 2px, oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 3px 2px, oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 4px 8px/,
   )
 
-  expect(await getPropertyValue('#e', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
+  expect(await getPropertyValue('#e', 'text-shadow')).toMatch(
+    /oklab\(0.627\d+ 0.224\d+ 0.125\d+\) 0px 1px 1px/,
+  )
 
   await page.locator('#e').hover()
 
@@ -802,6 +804,16 @@ async function render(page: Page, content: string, extraCss: string = '') {
         Array.isArray(selector) ? selector : [selector, undefined],
         property,
       )
+    },
+
+    async getPropertyList(selector: string | [string, string], property: string) {
+      let value = await getPropertyValue(
+        page,
+        Array.isArray(selector) ? selector : [selector, undefined],
+        property,
+      )
+
+      return segment(value, ',').map((item) => item.trim())
     },
   }
 }
