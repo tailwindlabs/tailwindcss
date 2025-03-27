@@ -36,6 +36,12 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   inherits: false
 }
 
+@property --tw-shadow-intensity {
+  syntax: "*";
+  inherits: false;
+  initial-value: 100%;
+}
+
 @property --tw-inset-shadow {
   syntax: "*";
   inherits: false;
@@ -45,6 +51,12 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 @property --tw-inset-shadow-color {
   syntax: "*";
   inherits: false
+}
+
+@property --tw-inset-shadow-intensity {
+  syntax: "*";
+  inherits: false;
+  initial-value: 100%;
 }
 
 @property --tw-ring-color {
