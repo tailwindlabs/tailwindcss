@@ -24,4 +24,19 @@ mod tests {
         Razor::test(input, expected);
         Razor::test_extract_contains(input, vec!["@sm:text-red-500"]);
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17424
+    #[test]
+    fn test_razor_syntax_with() {
+        let (input, expected) = (
+            r#"<p class="@("@")md:bg-red-500 @@md:border-green-500 border-8">With 2 elements</p>"#,
+            r#"<p class="     @md:bg-red-500  @md:border-green-500 border-8">With 2 elements</p>"#,
+        );
+
+        Razor::test(input, expected);
+        Razor::test_extract_contains(
+            input,
+            vec!["@md:bg-red-500", "@md:border-green-500", "border-8"],
+        );
+    }
 }
