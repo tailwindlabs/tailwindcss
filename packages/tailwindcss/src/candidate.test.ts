@@ -1790,3 +1790,31 @@ it.each([
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
 })
+
+it.each([
+  // Arbitrary properties with `;` or `}`
+  '[color:red;color:blue]',
+  '[color:red}html{color:blue]',
+
+  // Arbitrary values that end the declaration
+  'bg-[red;color:blue]',
+
+  // Arbitrary values that end the block
+  'bg-[red}html{color:blue]',
+
+  // Arbitrary variants that end the block
+  '[&{color:red}]:flex',
+
+  // Arbitrary variant values that end the block
+  'data-[a]{color:red}foo[a]:flex',
+])('should not parse invalid arbitrary values: %s', (rawCandidate) => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  let variants = new Variants()
+  variants.functional('data', () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
+
+  expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
