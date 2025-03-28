@@ -1,5 +1,6 @@
 use crate::cursor;
 use crate::extractor::machine::Span;
+use bstr::ByteSlice;
 use candidate_machine::CandidateMachine;
 use css_variable_machine::CssVariableMachine;
 use machine::{Machine, MachineState};
@@ -135,6 +136,41 @@ impl<'a> Extractor<'a> {
                         .map(|span| Extracted::Candidate(span.slice(self.cursor.input))),
                 );
             }
+        }
+
+        extracted
+    }
+
+    pub fn extract_variables_from_css(&mut self) -> Vec<Extracted<'a>> {
+        let mut extracted = Vec::with_capacity(100);
+
+        let len = self.cursor.input.len();
+
+        let cursor = &mut self.cursor.clone();
+        while cursor.pos < len {
+            if cursor.curr.is_ascii_whitespace() {
+                cursor.advance();
+                continue;
+            }
+
+            if let MachineState::Done(span) = self.css_variable_machine.next(cursor) {
+                // We are only interested in variables that are used, not defined. Therefore we
+                // need to ensure that the variable is prefixed with `var(`.
+                if span.start < 4 {
+                    cursor.advance();
+                    continue;
+                }
+
+                let slice_before = Span::new(span.start - 4, span.start - 1);
+                if !slice_before.slice(self.cursor.input).starts_with(b"var(") {
+                    cursor.advance();
+                    continue;
+                }
+
+                extracted.push(Extracted::CssVariable(span.slice(self.cursor.input)));
+            }
+
+            cursor.advance();
         }
 
         extracted

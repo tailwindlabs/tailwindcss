@@ -84,6 +84,9 @@ pub struct Scanner {
     /// All found extensions
     extensions: FxHashSet<String>,
 
+    /// All CSS files we want to scan for CSS variable usage
+    css_files: Vec<PathBuf>,
+
     /// All files that we have to scan
     files: Vec<PathBuf>,
 
@@ -212,11 +215,25 @@ impl Scanner {
     fn extract_candidates(&mut self) -> Vec<String> {
         let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
 
-        let candidates = parse_all_blobs(read_all_files(changed_content));
+        // Extract all candidates from the changed content
+        let mut new_candidates = parse_all_blobs(read_all_files(changed_content));
+
+        // Extract all CSS variables from the CSS files
+        let css_files = self.css_files.drain(..).collect::<Vec<_>>();
+        if !css_files.is_empty() {
+            let css_variables = extract_css_variables(read_all_files(
+                css_files
+                    .into_iter()
+                    .map(|file| ChangedContent::File(file, "css".into()))
+                    .collect(),
+            ));
+
+            new_candidates.extend(css_variables);
+        }
 
         // Only compute the new candidates and ignore the ones we already have. This is for
         // subsequent calls to prevent serializing the entire set of candidates every time.
-        let mut new_candidates = candidates
+        let mut new_candidates = new_candidates
             .into_par_iter()
             .filter(|candidate| !self.candidates.contains(candidate))
             .collect::<Vec<_>>();
@@ -247,6 +264,12 @@ impl Scanner {
                     .extension()
                     .and_then(|x| x.to_str())
                     .unwrap_or_default(); // In case the file has no extension
+
+                // Special handing for CSS files to extract CSS variables
+                if extension == "css" {
+                    self.css_files.push(path);
+                    continue;
+                }
 
                 self.extensions.insert(extension.to_owned());
                 self.changed_content.push(ChangedContent::File(
@@ -400,6 +423,43 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
         .into_par_iter()
         .filter_map(read_changed_content)
         .collect()
+}
+
+#[tracing::instrument(skip_all)]
+fn extract_css_variables(blobs: Vec<Vec<u8>>) -> Vec<String> {
+    let mut result: Vec<_> = blobs
+        .par_iter()
+        .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
+        .filter_map(|blob| {
+            if blob.is_empty() {
+                return None;
+            }
+
+            let extracted = crate::extractor::Extractor::new(blob).extract_variables_from_css();
+            if extracted.is_empty() {
+                return None;
+            }
+
+            Some(FxHashSet::from_iter(extracted.into_iter().map(
+                |x| match x {
+                    Extracted::CssVariable(bytes) => bytes,
+                    _ => &[],
+                },
+            )))
+        })
+        .reduce(Default::default, |mut a, b| {
+            a.extend(b);
+            a
+        })
+        .into_iter()
+        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+        .collect();
+
+    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
+    //         guaranteed to have unique candidates.
+    result.par_sort_unstable();
+
+    result
 }
 
 #[tracing::instrument(skip_all)]
