@@ -12155,6 +12155,13 @@ test('mask-t-from', async () => {
       '-mask-t-from-(--my-var)',
       '-mask-t-from-(color:--my-var)',
       '-mask-t-from-(length:--my-var)',
+
+      'mask-l-from-[-25%]',
+      'mask-l-from-[25%]/foo',
+      'mask-l-from-[-25%]/foo',
+      '-mask-l-from-[-25%]',
+      '-mask-l-from-[25%]/foo',
+      '-mask-l-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -12380,6 +12387,13 @@ test('mask-t-to', async () => {
       '-mask-t-to-(--my-var)',
       '-mask-t-to-(color:--my-var)',
       '-mask-t-to-(length:--my-var)',
+
+      'mask-l-from-[-25%]',
+      'mask-l-from-[25%]/foo',
+      'mask-l-from-[-25%]/foo',
+      '-mask-l-from-[-25%]',
+      '-mask-l-from-[25%]/foo',
+      '-mask-l-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -12606,6 +12620,13 @@ test('mask-r-from', async () => {
       '-mask-r-from-(--my-var)',
       '-mask-r-from-(color:--my-var)',
       '-mask-r-from-(length:--my-var)',
+
+      'mask-r-from-[-25%]',
+      'mask-r-from-[25%]/foo',
+      'mask-r-from-[-25%]/foo',
+      '-mask-r-from-[-25%]',
+      '-mask-r-from-[25%]/foo',
+      '-mask-r-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -12832,6 +12853,13 @@ test('mask-r-to', async () => {
       '-mask-r-to-(--my-var)',
       '-mask-r-to-(color:--my-var)',
       '-mask-r-to-(length:--my-var)',
+
+      'mask-r-to-[-25%]',
+      'mask-r-to-[25%]/foo',
+      'mask-r-to-[-25%]/foo',
+      '-mask-r-to-[-25%]',
+      '-mask-r-to-[25%]/foo',
+      '-mask-r-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -13058,6 +13086,13 @@ test('mask-b-from', async () => {
       '-mask-b-from-(--my-var)',
       '-mask-b-from-(color:--my-var)',
       '-mask-b-from-(length:--my-var)',
+
+      'mask-b-from-[-25%]',
+      'mask-b-from-[25%]/foo',
+      'mask-b-from-[-25%]/foo',
+      '-mask-b-from-[-25%]',
+      '-mask-b-from-[25%]/foo',
+      '-mask-b-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -13284,6 +13319,13 @@ test('mask-b-to', async () => {
       '-mask-b-to-(--my-var)',
       '-mask-b-to-(color:--my-var)',
       '-mask-b-to-(length:--my-var)',
+
+      'mask-b-to-[-25%]',
+      'mask-b-to-[25%]/foo',
+      'mask-b-to-[-25%]/foo',
+      '-mask-b-to-[-25%]',
+      '-mask-b-to-[25%]/foo',
+      '-mask-b-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -13510,6 +13552,13 @@ test('mask-l-from', async () => {
       '-mask-l-from-(--my-var)',
       '-mask-l-from-(color:--my-var)',
       '-mask-l-from-(length:--my-var)',
+
+      'mask-l-from-[-25%]',
+      'mask-l-from-[25%]/foo',
+      'mask-l-from-[-25%]/foo',
+      '-mask-l-from-[-25%]',
+      '-mask-l-from-[25%]/foo',
+      '-mask-l-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -13736,6 +13785,13 @@ test('mask-l-to', async () => {
       '-mask-l-to-(--my-var)',
       '-mask-l-to-(color:--my-var)',
       '-mask-l-to-(length:--my-var)',
+
+      'mask-l-to-[-25%]',
+      'mask-l-to-[25%]/foo',
+      'mask-l-to-[-25%]/foo',
+      '-mask-l-to-[-25%]',
+      '-mask-l-to-[25%]/foo',
+      '-mask-l-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -14004,6 +14060,13 @@ test('mask-x-from', async () => {
       '-mask-x-from-(--my-var)',
       '-mask-x-from-(color:--my-var)',
       '-mask-x-from-(length:--my-var)',
+
+      'mask-x-from-[-25%]',
+      'mask-x-from-[25%]/foo',
+      'mask-x-from-[-25%]/foo',
+      '-mask-x-from-[-25%]',
+      '-mask-x-from-[25%]/foo',
+      '-mask-x-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -14272,6 +14335,13 @@ test('mask-x-to', async () => {
       '-mask-x-to-(--my-var)',
       '-mask-x-to-(color:--my-var)',
       '-mask-x-to-(length:--my-var)',
+
+      'mask-x-to-[-25%]',
+      'mask-x-to-[25%]/foo',
+      'mask-x-to-[-25%]/foo',
+      '-mask-x-to-[-25%]',
+      '-mask-x-to-[25%]/foo',
+      '-mask-x-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -14540,6 +14610,13 @@ test('mask-y-from', async () => {
       '-mask-y-from-(--my-var)',
       '-mask-y-from-(color:--my-var)',
       '-mask-y-from-(length:--my-var)',
+
+      'mask-y-from-[-25%]',
+      'mask-y-from-[25%]/foo',
+      'mask-y-from-[-25%]/foo',
+      '-mask-y-from-[-25%]',
+      '-mask-y-from-[25%]/foo',
+      '-mask-y-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -14808,6 +14885,13 @@ test('mask-y-to', async () => {
       '-mask-y-to-(--my-var)',
       '-mask-y-to-(color:--my-var)',
       '-mask-y-to-(length:--my-var)',
+
+      'mask-y-to-[-25%]',
+      'mask-y-to-[25%]/foo',
+      'mask-y-to-[-25%]/foo',
+      '-mask-y-to-[-25%]',
+      '-mask-y-to-[25%]/foo',
+      '-mask-y-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15120,6 +15204,13 @@ test('mask-linear-from', async () => {
       '-mask-linear-from-(--my-var)',
       '-mask-linear-from-(color:--my-var)',
       '-mask-linear-from-(length:--my-var)',
+
+      'mask-linear-from-[-25%]',
+      'mask-linear-from-[25%]/foo',
+      'mask-linear-from-[-25%]/foo',
+      '-mask-linear-from-[-25%]',
+      '-mask-linear-from-[25%]/foo',
+      '-mask-linear-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15328,6 +15419,13 @@ test('mask-linear-to', async () => {
       '-mask-linear-to-(--my-var)',
       '-mask-linear-to-(color:--my-var)',
       '-mask-linear-to-(length:--my-var)',
+
+      'mask-linear-to-[-25%]',
+      'mask-linear-to-[25%]/foo',
+      'mask-linear-to-[-25%]/foo',
+      '-mask-linear-to-[-25%]',
+      '-mask-linear-to-[25%]/foo',
+      '-mask-linear-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15453,6 +15551,13 @@ test('mask-radial', async () => {
       '-mask-radial-[25%_25%]',
       '-mask-radial/foo',
       '-mask-radial-[25%_25%]/foo',
+
+      'mask-radial-from-[-25%]',
+      'mask-radial-from-[25%]/foo',
+      'mask-radial-from-[-25%]/foo',
+      '-mask-radial-from-[-25%]',
+      '-mask-radial-from-[25%]/foo',
+      '-mask-radial-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15546,6 +15651,12 @@ test('mask-radial-at', async () => {
       '-mask-radial-at-bottom-right',
       '-mask-radial-at-left',
       '-mask-radial-at-right',
+
+      'mask-radial-at-[25%]/foo',
+      'mask-radial-at-[-25%]/foo',
+      '-mask-radial-at-[-25%]',
+      '-mask-radial-at-[25%]/foo',
+      '-mask-radial-at-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15766,6 +15877,13 @@ test('mask-radial-from', async () => {
       '-mask-radial-from-(--my-var)',
       '-mask-radial-from-(color:--my-var)',
       '-mask-radial-from-(length:--my-var)',
+
+      'mask-radial-from-[-25%]',
+      'mask-radial-from-[25%]/foo',
+      'mask-radial-from-[-25%]/foo',
+      '-mask-radial-from-[-25%]',
+      '-mask-radial-from-[25%]/foo',
+      '-mask-radial-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -15986,6 +16104,13 @@ test('mask-radial-to', async () => {
       '-mask-radial-to-(--my-var)',
       '-mask-radial-to-(color:--my-var)',
       '-mask-radial-to-(length:--my-var)',
+
+      'mask-radial-to-[-25%]',
+      'mask-radial-to-[25%]/foo',
+      'mask-radial-to-[-25%]/foo',
+      '-mask-radial-to-[-25%]',
+      '-mask-radial-to-[25%]/foo',
+      '-mask-radial-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -16298,6 +16423,13 @@ test('mask-conic-from', async () => {
       '-mask-conic-from-(--my-var)',
       '-mask-conic-from-(color:--my-var)',
       '-mask-conic-from-(length:--my-var)',
+
+      'mask-conic-from-[-25%]',
+      'mask-conic-from-[25%]/foo',
+      'mask-conic-from-[-25%]/foo',
+      '-mask-conic-from-[-25%]',
+      '-mask-conic-from-[25%]/foo',
+      '-mask-conic-from-[-25%]/foo',
     ]),
   ).toEqual('')
 })
@@ -16506,6 +16638,13 @@ test('mask-conic-to', async () => {
       '-mask-conic-to-(--my-var)',
       '-mask-conic-to-(color:--my-var)',
       '-mask-conic-to-(length:--my-var)',
+
+      'mask-conic-to-[-25%]',
+      'mask-conic-to-[25%]/foo',
+      'mask-conic-to-[-25%]/foo',
+      '-mask-conic-to-[-25%]',
+      '-mask-conic-to-[25%]/foo',
+      '-mask-conic-to-[-25%]/foo',
     ]),
   ).toEqual('')
 })
