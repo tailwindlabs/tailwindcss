@@ -2894,6 +2894,12 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-auto', [['mask-size', 'auto']])
     staticUtility('mask-cover', [['mask-size', 'cover']])
     staticUtility('mask-contain', [['mask-size', 'contain']])
+    functionalUtility('mask-size', {
+      handle(value) {
+        if (!value) return
+        return [decl('mask-size', value)]
+      },
+    })
 
     /**
      * @css `mask-position`
@@ -2908,6 +2914,12 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-left', [['mask-position', 'left']])
     staticUtility('mask-right', [['mask-position', 'right']])
     staticUtility('mask-center', [['mask-position', 'center']])
+    functionalUtility('mask-position', {
+      handle(value) {
+        if (!value) return
+        return [decl('mask-position', value)]
+      },
+    })
 
     /**
      * @css `mask-repeat`

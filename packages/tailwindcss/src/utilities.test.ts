@@ -11934,6 +11934,92 @@ test('mask', async () => {
   `)
 })
 
+test('mask-position', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      ['mask-position-[120px]', 'mask-position-[120px_120px]', 'mask-position-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".mask-position-\\[120px\\] {
+      -webkit-mask-position: 120px;
+      mask-position: 120px;
+    }
+
+    .mask-position-\\[120px_120px\\] {
+      -webkit-mask-position: 120px 120px;
+      mask-position: 120px 120px;
+    }
+
+    .mask-position-\\[var\\(--some-var\\)\\] {
+      -webkit-mask-position: var(--some-var);
+      -webkit-mask-position: var(--some-var);
+      mask-position: var(--some-var);
+    }"
+  `)
+  expect(
+    await run([
+      'mask-position',
+      'mask-position/foo',
+      '-mask-position',
+      '-mask-position/foo',
+
+      'mask-position-[120px_120px]/foo',
+
+      '-mask-position-[120px_120px]',
+      '-mask-position-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('mask-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      ['mask-size-[120px]', 'mask-size-[120px_120px]', 'mask-size-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".mask-size-\\[120px\\] {
+      -webkit-mask-size: 120px;
+      mask-size: 120px;
+    }
+
+    .mask-size-\\[120px_120px\\] {
+      -webkit-mask-size: 120px 120px;
+      mask-size: 120px 120px;
+    }
+
+    .mask-size-\\[var\\(--some-var\\)\\] {
+      -webkit-mask-size: var(--some-var);
+      -webkit-mask-size: var(--some-var);
+      mask-size: var(--some-var);
+    }"
+  `)
+  expect(
+    await run([
+      'mask-size',
+      'mask-size/foo',
+      '-mask-size',
+      '-mask-size/foo',
+
+      'mask-size-[120px_120px]/foo',
+
+      '-mask-size-[120px_120px]',
+      '-mask-size-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('mask-t-from', async () => {
   expect(
     await compileCss(
