@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="[&_h1]:font-thin">
+    <html lang="en">
       <head>{/* <script src="https://cdn.tailwindcss.com"></script> */}</head>
       <body className={inter.className}>{children}</body>
     </html>
