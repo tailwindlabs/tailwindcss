@@ -2,7 +2,6 @@ import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
-import { segment } from './utils/segment'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
 
@@ -319,52 +318,26 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
           usedKeyframeNames.add(keyframeName)
       }
 
-      // "Polyfill" `color-mix(…)`
+      // Create fallback values for usages of the `color-mix(…)` function that reference variables
+      // found in the theme config.
       if (node.value.includes('color-mix(')) {
         let ast = ValueParser.parse(node.value)
+
         let didGenerateFallback = false
-        ValueParser.walk(ast, (node, { replaceWith }) => {
-          if (node.kind === 'function' && node.value === 'color-mix') {
-            let args = ValueParser.toCss(node.nodes)
+        ValueParser.walk(ast, (node) => {
+          if (node.kind !== 'function' || node.value !== 'color-mix') return
 
-            let segments = segment(args, ',')
+          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+            if (node.kind !== 'function' || node.value !== 'var') return
+            let firstChild = node.nodes[0]
+            if (!firstChild || firstChild.kind !== 'word') return
 
-            if (segments.length !== 3) {
-              return
-            }
-
-            let [, colorA, colorB] = segments
-
-            colorA = colorA.trim()
-            colorB = colorB.trim()
-
-            if (colorB !== 'transparent') {
-              return
-            }
-
-            if (colorA.startsWith('var(')) {
-              let lastClosingParen = colorA.lastIndexOf(')')
-              if (lastClosingParen === -1) {
-                return
-              }
-              colorA =
-                colorA.slice(0, lastClosingParen + 1) + ' ' + colorA.slice(lastClosingParen + 1)
-            }
-
-            let [color, percentage] = segment(colorA.replaceAll(/ +/g, ' '), ' ')
-
-            let fallback = color
-            if (color.startsWith('var(')) {
-              let name = segment(color.slice(4, -1), ',')[0]
-              if (!name) return
-              let inlinedColor = designSystem.theme.resolveValue(null, [name as any])
-              if (!inlinedColor) return
-              fallback = `color-mix(in srgb, ${inlinedColor} ${percentage}, transparent)`
-            }
+            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+            if (!inlinedColor) return
 
             didGenerateFallback = true
-            replaceWith({ kind: 'word', value: fallback })
-          }
+            replaceWith({ kind: 'word', value: inlinedColor })
+          })
         })
 
         if (didGenerateFallback) {

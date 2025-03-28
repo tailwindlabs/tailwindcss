@@ -11,11 +11,14 @@ import {
   type AstNode,
 } from './ast'
 import * as CSS from './css-parser'
+import { buildDesignSystem } from './design-system'
+import { Theme } from './theme'
 
 const css = String.raw
+const defaultDesignSystem = buildDesignSystem(new Theme())
 
 it('should pretty print an AST', () => {
-  expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'))))
+  expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'), defaultDesignSystem)))
     .toMatchInlineSnapshot(`
     ".foo {
       color: red;
@@ -64,7 +67,7 @@ it('allows the placement of context nodes', () => {
   expect(blueContext).toEqual({ context: 'a' })
   expect(greenContext).toEqual({ context: 'b' })
 
-  expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
+  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
     ".foo {
       color: red;
     }
@@ -189,7 +192,7 @@ it('should not emit empty rules once optimized', () => {
     "
   `)
 
-  expect(toCss(optimizeAst(ast))).toMatchInlineSnapshot(`
+  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
     "@charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
