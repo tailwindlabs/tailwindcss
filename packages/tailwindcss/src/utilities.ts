@@ -3639,15 +3639,15 @@ export function createUtilities(theme: Theme) {
   staticUtility('object-none', [['object-fit', 'none']])
   staticUtility('object-scale-down', [['object-fit', 'scale-down']])
 
-  staticUtility('object-bottom', [['object-position', 'bottom']])
-  staticUtility('object-center', [['object-position', 'center']])
-  staticUtility('object-left', [['object-position', 'left']])
-  staticUtility('object-left-bottom', [['object-position', 'left bottom']])
-  staticUtility('object-left-top', [['object-position', 'left top']])
-  staticUtility('object-right', [['object-position', 'right']])
-  staticUtility('object-right-bottom', [['object-position', 'right bottom']])
-  staticUtility('object-right-top', [['object-position', 'right top']])
   staticUtility('object-top', [['object-position', 'top']])
+  staticUtility('object-top-left', [['object-position', 'left top']])
+  staticUtility('object-top-right', [['object-position', 'right top']])
+  staticUtility('object-bottom', [['object-position', 'bottom']])
+  staticUtility('object-bottom-left', [['object-position', 'left bottom']])
+  staticUtility('object-bottom-right', [['object-position', 'right bottom']])
+  staticUtility('object-left', [['object-position', 'left']])
+  staticUtility('object-right', [['object-position', 'right']])
+  staticUtility('object-center', [['object-position', 'center']])
   functionalUtility('object', {
     themeKeys: ['--object-position'],
     handle: (value) => [decl('object-position', value)],
