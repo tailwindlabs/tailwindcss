@@ -3,6 +3,7 @@
 exports[`border-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border {
@@ -99,6 +100,10 @@ exports[`border-* 1`] = `
   border-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-blue-500 {
+  border-color: var(--border-color-blue-500);
+}
+
 .border-current {
   border-color: currentColor;
 }
@@ -145,6 +150,7 @@ exports[`border-* 1`] = `
 exports[`border-b-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-b {
@@ -241,6 +247,10 @@ exports[`border-b-* 1`] = `
   border-bottom-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-b-blue-500 {
+  border-bottom-color: var(--border-color-blue-500);
+}
+
 .border-b-current {
   border-bottom-color: currentColor;
 }
@@ -287,6 +297,7 @@ exports[`border-b-* 1`] = `
 exports[`border-e-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-e {
@@ -383,6 +394,10 @@ exports[`border-e-* 1`] = `
   border-inline-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-e-blue-500 {
+  border-inline-end-color: var(--border-color-blue-500);
+}
+
 .border-e-current {
   border-inline-end-color: currentColor;
 }
@@ -429,6 +444,7 @@ exports[`border-e-* 1`] = `
 exports[`border-l-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-l {
@@ -525,6 +541,10 @@ exports[`border-l-* 1`] = `
   border-left-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-l-blue-500 {
+  border-left-color: var(--border-color-blue-500);
+}
+
 .border-l-current {
   border-left-color: currentColor;
 }
@@ -571,6 +591,7 @@ exports[`border-l-* 1`] = `
 exports[`border-r-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-r {
@@ -667,6 +688,10 @@ exports[`border-r-* 1`] = `
   border-right-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-r-blue-500 {
+  border-right-color: var(--border-color-blue-500);
+}
+
 .border-r-current {
   border-right-color: currentColor;
 }
@@ -713,6 +738,7 @@ exports[`border-r-* 1`] = `
 exports[`border-s-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-s {
@@ -809,6 +835,10 @@ exports[`border-s-* 1`] = `
   border-inline-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-s-blue-500 {
+  border-inline-start-color: var(--border-color-blue-500);
+}
+
 .border-s-current {
   border-inline-start-color: currentColor;
 }
@@ -855,6 +885,7 @@ exports[`border-s-* 1`] = `
 exports[`border-t-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-t {
@@ -951,6 +982,10 @@ exports[`border-t-* 1`] = `
   border-top-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-t-blue-500 {
+  border-top-color: var(--border-color-blue-500);
+}
+
 .border-t-current {
   border-top-color: currentColor;
 }
@@ -997,6 +1032,7 @@ exports[`border-t-* 1`] = `
 exports[`border-x-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-x {
@@ -1093,6 +1129,10 @@ exports[`border-x-* 1`] = `
   border-inline-color: color-mix(in oklab, var(--my-color) 50%, transparent);
 }
 
+.border-x-blue-500 {
+  border-inline-color: var(--border-color-blue-500);
+}
+
 .border-x-current {
   border-inline-color: currentColor;
 }
@@ -1139,6 +1179,7 @@ exports[`border-x-* 1`] = `
 exports[`border-y-* 1`] = `
 ":root, :host {
   --color-red-500: #ef4444;
+  --border-color-blue-500: #3b82f6;
 }
 
 .border-y {
@@ -1233,6 +1274,10 @@ exports[`border-y-* 1`] = `
 
 .border-y-\\[var\\(--my-color\\)\\]\\/50 {
   border-block-color: color-mix(in oklab, var(--my-color) 50%, transparent);
+}
+
+.border-y-blue-500 {
+  border-block-color: var(--border-color-blue-500);
 }
 
 .border-y-current {
