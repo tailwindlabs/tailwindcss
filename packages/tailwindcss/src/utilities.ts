@@ -2944,10 +2944,8 @@ export function createUtilities(theme: Theme) {
     staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
 
     /**
-     * @css `mask-image`
+     * @css `mask-image` gradients
      */
-
-    staticUtility('mask-none', [['mask-image', 'none']])
 
     let maskPropertiesGradient = () =>
       atRoot([
