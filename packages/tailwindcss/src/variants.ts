@@ -1165,9 +1165,7 @@ export function createVariants(theme: Theme): Variants {
   }
 
   if (enableScripting) {
-    staticVariant('scripting-initial', ['@media (scripting: initial-only)'])
-    staticVariant('scripting-none', ['@media (scripting: none)'])
-    staticVariant('scripting', ['@media (scripting: enabled)'])
+    staticVariant('noscript', ['@media (scripting: none)'])
   }
 
   return variants
