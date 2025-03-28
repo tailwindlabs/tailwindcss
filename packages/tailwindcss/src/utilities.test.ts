@@ -17751,6 +17751,14 @@ test('object', async () => {
       object-position: bottom;
     }
 
+    .object-bottom-left {
+      object-position: left bottom;
+    }
+
+    .object-bottom-right {
+      object-position: right bottom;
+    }
+
     .object-center {
       object-position: center;
     }
@@ -17781,6 +17789,14 @@ test('object', async () => {
 
     .object-top {
       object-position: top;
+    }
+
+    .object-top-left {
+      object-position: left top;
+    }
+
+    .object-top-right {
+      object-position: right top;
     }"
   `)
   expect(
