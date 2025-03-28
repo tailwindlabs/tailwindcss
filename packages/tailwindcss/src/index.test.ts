@@ -1499,7 +1499,7 @@ describe('Parsing theme values from CSS', () => {
         inherits: false
       }
 
-      @property --tw-shadow-intensity {
+      @property --tw-shadow-alpha {
         syntax: "<percentage>";
         inherits: false;
         initial-value: 100%;
@@ -1516,7 +1516,7 @@ describe('Parsing theme values from CSS', () => {
         inherits: false
       }
 
-      @property --tw-inset-shadow-intensity {
+      @property --tw-inset-shadow-alpha {
         syntax: "<percentage>";
         inherits: false;
         initial-value: 100%;

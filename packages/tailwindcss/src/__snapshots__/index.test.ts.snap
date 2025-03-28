@@ -36,7 +36,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   inherits: false
 }
 
-@property --tw-shadow-intensity {
+@property --tw-shadow-alpha {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
@@ -53,7 +53,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   inherits: false
 }
 
-@property --tw-inset-shadow-intensity {
+@property --tw-inset-shadow-alpha {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
