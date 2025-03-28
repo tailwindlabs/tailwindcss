@@ -11576,6 +11576,8 @@ test('mask', async () => {
       [
         // mask-image
         'mask-none',
+        'mask-[linear-gradient(#ffff,#0000)]',
+        'mask-[url(http://example.com)]',
         'mask-[var(--some-var)]',
         'mask-[image:var(--some-var)]',
         'mask-[url:var(--some-var)]',
