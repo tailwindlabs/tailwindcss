@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
 - _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
 - _Experimental_: Add `noscript` variant ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929), [#17431](https://github.com/tailwindlabs/tailwindcss/pull/17431))
-- _Experimental_: Add `items-baseline-last` utility ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+- _Experimental_: Add `items-baseline-last` utility ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888))
 - _Experimental_: Add `pointer-none`, `pointer-coarse`, and `pointer-fine` variant ([#16946](https://github.com/tailwindlabs/tailwindcss/pull/16946))
 - _Experimental_: Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
 - _Experimental_: Add safe alignment utilities ([#14607](https://github.com/tailwindlabs/tailwindcss/pull/14607))
