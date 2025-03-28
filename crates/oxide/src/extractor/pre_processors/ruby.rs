@@ -10,16 +10,16 @@ use std::sync;
 
 static TEMPLATE_START_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
     RegexBuilder::new(r#"\s*([a-z0-9_-]+)_template\s*<<[-~]?([A-Z]+)$"#)
-      .multi_line(true)
-      .build()
-      .unwrap()
+        .multi_line(true)
+        .build()
+        .unwrap()
 });
 
 static TEMPLATE_END_REGEX: sync::LazyLock<Regex> = sync::LazyLock::new(|| {
-  RegexBuilder::new(r#"^\s*([A-Z]+)"#)
-    .multi_line(true)
-    .build()
-    .unwrap()
+    RegexBuilder::new(r#"^\s*([A-Z]+)"#)
+        .multi_line(true)
+        .build()
+        .unwrap()
 });
 
 #[derive(Debug, Default)]
@@ -36,39 +36,43 @@ impl PreProcessor for Ruby {
         // https://viewcomponent.org/guide/templates.html#interpolations
         let content_as_str = std::str::from_utf8(content).unwrap();
 
-        let starts = TEMPLATE_START_REGEX.captures_iter(content_as_str).collect::<Vec<_>>();
-        let ends = TEMPLATE_END_REGEX.captures_iter(content_as_str).collect::<Vec<_>>();
+        let starts = TEMPLATE_START_REGEX
+            .captures_iter(content_as_str)
+            .collect::<Vec<_>>();
+        let ends = TEMPLATE_END_REGEX
+            .captures_iter(content_as_str)
+            .collect::<Vec<_>>();
 
         for start in starts.iter() {
-          // The language for this block
-          let lang = start.get(1).unwrap().as_str();
+            // The language for this block
+            let lang = start.get(1).unwrap().as_str();
 
-          // The HEREDOC delimiter
-          let delimiter_start = start.get(2).unwrap().as_str();
+            // The HEREDOC delimiter
+            let delimiter_start = start.get(2).unwrap().as_str();
 
-          // Where the "body" starts for the HEREDOC block
-          let body_start = start.get(0).unwrap().end();
+            // Where the "body" starts for the HEREDOC block
+            let body_start = start.get(0).unwrap().end();
 
-          // Look through all of the ends to find a matching language
-          for end in ends.iter() {
-            // 1. This must appear after the start
-            let body_end = end.get(0).unwrap().start();
-            if body_end < body_start {
-              continue;
+            // Look through all of the ends to find a matching language
+            for end in ends.iter() {
+                // 1. This must appear after the start
+                let body_end = end.get(0).unwrap().start();
+                if body_end < body_start {
+                    continue;
+                }
+
+                // The languages must match otherwise we haven't found the end
+                let delimiter_end = end.get(1).unwrap().as_str();
+                if delimiter_end != delimiter_start {
+                    continue;
+                }
+
+                let body = &content_as_str[body_start..body_end];
+                let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
+
+                result.replace_range(body_start..body_end, replaced);
+                break;
             }
-
-            // The languages must match otherwise we haven't found the end
-            let delimiter_end = end.get(1).unwrap().as_str();
-            if delimiter_end != delimiter_start {
-              continue;
-            }
-
-            let body = &content_as_str[body_start..body_end];
-            let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
-
-            result.replace_range(body_start..body_end, replaced);
-            break;
-          }
         }
 
         // Ruby extraction

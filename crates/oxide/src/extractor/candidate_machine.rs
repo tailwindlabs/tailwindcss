@@ -181,6 +181,7 @@ impl CandidateMachine {
 mod tests {
     use super::CandidateMachine;
     use crate::extractor::machine::Machine;
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]
@@ -307,7 +308,7 @@ mod tests {
                 actual.sort();
 
                 if actual != expected {
-                    dbg!(&input, &expected, &actual);
+                    dbg!(&input);
                 }
 
                 assert_eq!(actual, expected);
