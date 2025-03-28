@@ -11632,7 +11632,23 @@ test('mask', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-\\[image\\:var\\(--some-var\\)\\], .mask-\\[url\\:var\\(--some-var\\)\\], .mask-\\[var\\(--some-var\\)\\] {
+    ".mask-\\[image\\:var\\(--some-var\\)\\] {
+      -webkit-mask-image: var(--some-var);
+      -webkit-mask-image: var(--some-var);
+      mask-image: var(--some-var);
+    }
+
+    .mask-\\[linear-gradient\\(\\#ffff\\,\\#0000\\)\\] {
+      -webkit-mask-image: linear-gradient(#fff, #0000);
+      mask-image: linear-gradient(#fff, #0000);
+    }
+
+    .mask-\\[url\\(http\\:\\/\\/example\\.com\\)\\] {
+      -webkit-mask-image: url("http://example.com");
+      mask-image: url("http://example.com");
+    }
+
+    .mask-\\[url\\:var\\(--some-var\\)\\], .mask-\\[var\\(--some-var\\)\\] {
       -webkit-mask-image: var(--some-var);
       -webkit-mask-image: var(--some-var);
       mask-image: var(--some-var);
