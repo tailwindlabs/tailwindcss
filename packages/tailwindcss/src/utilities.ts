@@ -3193,21 +3193,11 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       supportsFractions: false,
       handleBareValue(value) {
-        let type = inferDataType(value.value, ['integer'])
-        if (!type) return null
-        if (type !== 'integer') return null
-
         if (!isPositiveInteger(value.value)) return null
-
         return `calc(1deg * ${value.value})`
       },
       handleNegativeBareValue(value) {
-        let type = inferDataType(value.value, ['integer'])
-        if (!type) return null
-        if (type !== 'integer') return null
-
         if (!isPositiveInteger(value.value)) return null
-
         return `calc(1deg * -${value.value})`
       },
       handle: (value) => [
@@ -3421,21 +3411,11 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       supportsFractions: false,
       handleBareValue(value) {
-        let type = inferDataType(value.value, ['integer'])
-        if (!type) return null
-        if (type !== 'integer') return null
-
         if (!isPositiveInteger(value.value)) return null
-
         return `calc(1deg * ${value.value})`
       },
       handleNegativeBareValue(value) {
-        let type = inferDataType(value.value, ['integer'])
-        if (!type) return null
-        if (type !== 'integer') return null
-
         if (!isPositiveInteger(value.value)) return null
-
         return `calc(1deg * -${value.value})`
       },
       handle: (value) => [
