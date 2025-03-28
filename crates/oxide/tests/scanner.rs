@@ -1735,4 +1735,39 @@ mod scanner {
 
         assert_eq!(candidates, vec!["content-['abcd/xyz.html']"]);
     }
+
+    #[test]
+    fn test_extract_used_css_variables_from_css() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "src/index.css",
+                    r#"
+                        @theme {
+                            --color-red: #ff0000; /* Not used, so don't extract */
+                            --color-green: #00ff00; /* Not used, so don't extract */
+                        }
+
+                        .button {
+                            color: var(--color-red); /* Used, so extract */
+                        }
+                    "#,
+                ),
+                ("src/used-at-start.css", "var(--color-used-at-start)"),
+                // Here to verify that we don't crash when trying to find `var(` in front of the
+                // variable.
+                ("src/defined-at-start.css", "--color-defined-at-start: red;"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source './'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["--color-red", "--color-used-at-start"]);
+    }
 }
