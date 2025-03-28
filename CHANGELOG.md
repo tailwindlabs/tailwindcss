@@ -30,9 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- _Experimental_: Ignore `node_modules` by default (but can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- _Experimental_: Order of `@source` rules matter if you want to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- _Experimental_: `@source` rules that include file extensions or point inside `node_modules/` no longer consider `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Ignore `node_modules` by default (but can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Order of `@source` rules matter if you want to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- `@source` rules that include file extensions or point inside `node_modules/` no longer consider `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Deprecated `bg-{left,right}-{top,bottom}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 
 ## [4.0.17] - 2025-03-26
