@@ -3011,7 +3011,7 @@ export function createUtilities(theme: Theme) {
               if (!multiplier) return
               if (!isValidSpacingMultiplier(candidate.value.value)) return
 
-              return desc.position(`--spacing(${candidate.value.value})`)
+              return desc.position(`calc(${multiplier} * ${candidate.value.value})`)
             }
 
             case 'percentage': {
