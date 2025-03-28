@@ -141,7 +141,7 @@ impl<'a> Extractor<'a> {
         extracted
     }
 
-    pub fn extract_css_variables_from_css_files(&mut self) -> Vec<Extracted<'a>> {
+    pub fn extract_variables_from_css(&mut self) -> Vec<Extracted<'a>> {
         let mut extracted = Vec::with_capacity(100);
 
         let len = self.cursor.input.len();

@@ -435,8 +435,7 @@ fn extract_css_variables(blobs: Vec<Vec<u8>>) -> Vec<String> {
                 return None;
             }
 
-            let extracted =
-                crate::extractor::Extractor::new(blob).extract_css_variables_from_css_files();
+            let extracted = crate::extractor::Extractor::new(blob).extract_variables_from_css();
             if extracted.is_empty() {
                 return None;
             }
