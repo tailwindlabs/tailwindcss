@@ -1499,6 +1499,12 @@ describe('Parsing theme values from CSS', () => {
         inherits: false
       }
 
+      @property --tw-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+
       @property --tw-inset-shadow {
         syntax: "*";
         inherits: false;
@@ -1508,6 +1514,12 @@ describe('Parsing theme values from CSS', () => {
       @property --tw-inset-shadow-color {
         syntax: "*";
         inherits: false
+      }
+
+      @property --tw-inset-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
       }
 
       @property --tw-ring-color {

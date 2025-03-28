@@ -182,6 +182,23 @@ export function withAlpha(value: string, alpha: string): string {
 }
 
 /**
+ * Apply opacity to a color using `color-mix`.
+ */
+export function replaceAlpha(value: string, alpha: string | null): string {
+  if (alpha === null) return value
+
+  // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
+  // work properly with `color-mix`. Assume anything that isn't a number is
+  // safe to pass through as-is, like `var(--my-opacity)`.
+  let alphaAsNumber = Number(alpha)
+  if (!Number.isNaN(alphaAsNumber)) {
+    alpha = `${alphaAsNumber * 100}%`
+  }
+
+  return `oklab(from ${value} l a b / ${alpha})`
+}
+
+/**
  * Resolve a color value + optional opacity modifier to a final color.
  */
 export function asColor(
@@ -4261,7 +4278,10 @@ export function createUtilities(theme: Theme) {
 
   if (enableTextShadows) {
     let textShadowProperties = () => {
-      return atRoot([property('--tw-text-shadow-color')])
+      return atRoot([
+        property('--tw-text-shadow-color'),
+        property('--tw-text-shadow-alpha', '100%', '<percentage>'),
+      ])
     }
 
     staticUtility('text-shadow-initial', [
@@ -4270,15 +4290,28 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('text-shadow', (candidate) => {
+      let alpha: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          alpha = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            alpha = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--text-shadow'])
         if (value === null) return
 
         return [
           textShadowProperties(),
+          decl('--tw-text-shadow-alpha', alpha),
           decl(
             'text-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+            replaceShadowColors(value, alpha, (color) => `var(--tw-text-shadow-color, ${color})`),
           ),
         ]
       }
@@ -4291,15 +4324,22 @@ export function createUtilities(theme: Theme) {
           case 'color': {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
-
-            return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+            return [
+              textShadowProperties(),
+              decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
+            ]
           }
           default: {
             return [
               textShadowProperties(),
+              decl('--tw-text-shadow-alpha', alpha),
               decl(
                 'text-shadow',
-                replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+                replaceShadowColors(
+                  value,
+                  alpha,
+                  (color) => `var(--tw-text-shadow-color, ${color})`,
+                ),
               ),
             ]
           }
@@ -4316,12 +4356,12 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--text-shadow-${candidate.value.value}`])
         if (value) {
-          if (candidate.modifier) return
           return [
             textShadowProperties(),
+            decl('--tw-text-shadow-alpha', alpha),
             decl(
               'text-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-text-shadow-color, ${color})`),
+              replaceShadowColors(value, alpha, (color) => `var(--tw-text-shadow-color, ${color})`),
             ),
           ]
         }
@@ -4331,7 +4371,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--text-shadow-color', '--color'])
         if (value) {
-          return [textShadowProperties(), decl('--tw-text-shadow-color', value)]
+          return [
+            textShadowProperties(),
+            decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
+          ]
         }
       }
     })
@@ -4344,7 +4387,10 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: ['none'],
+      },
+      {
         valueThemeKeys: ['--text-shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
@@ -4364,8 +4410,10 @@ export function createUtilities(theme: Theme) {
       return atRoot([
         property('--tw-shadow', nullShadow),
         property('--tw-shadow-color'),
+        property('--tw-shadow-alpha', '100%', '<percentage>'),
         property('--tw-inset-shadow', nullShadow),
         property('--tw-inset-shadow-color'),
+        property('--tw-inset-shadow-alpha', '100%', '<percentage>'),
         property('--tw-ring-color'),
         property('--tw-ring-shadow', nullShadow),
         property('--tw-inset-ring-color'),
@@ -4382,15 +4430,28 @@ export function createUtilities(theme: Theme) {
     staticUtility('shadow-initial', [boxShadowProperties, ['--tw-shadow-color', 'initial']])
 
     utilities.functional('shadow', (candidate) => {
+      let alpha: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          alpha = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            alpha = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--shadow'])
         if (value === null) return
 
         return [
           boxShadowProperties(),
+          decl('--tw-shadow-alpha', alpha),
           decl(
             '--tw-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+            replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -4405,14 +4466,18 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
-            return [boxShadowProperties(), decl('--tw-shadow-color', value)]
+            return [
+              boxShadowProperties(),
+              decl('--tw-shadow-color', withAlpha(value, 'var(--tw-shadow-alpha)')),
+            ]
           }
           default: {
             return [
               boxShadowProperties(),
+              decl('--tw-shadow-alpha', alpha),
               decl(
                 '--tw-shadow',
-                replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+                replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4434,12 +4499,12 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
-          if (candidate.modifier) return
           return [
             boxShadowProperties(),
+            decl('--tw-shadow-alpha', alpha),
             decl(
               '--tw-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-shadow-color, ${color})`),
+              replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -4450,7 +4515,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [boxShadowProperties(), decl('--tw-shadow-color', value)]
+          return [
+            boxShadowProperties(),
+            decl('--tw-shadow-color', withAlpha(value, 'var(--tw-shadow-alpha)')),
+          ]
         }
       }
     })
@@ -4463,7 +4531,10 @@ export function createUtilities(theme: Theme) {
       },
       {
         values: ['none'],
+      },
+      {
         valueThemeKeys: ['--shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
@@ -4474,15 +4545,28 @@ export function createUtilities(theme: Theme) {
     ])
 
     utilities.functional('inset-shadow', (candidate) => {
+      let alpha: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          alpha = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            alpha = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
       if (!candidate.value) {
         let value = theme.get(['--inset-shadow'])
         if (value === null) return
 
         return [
           boxShadowProperties(),
+          decl('--tw-inset-shadow-alpha', alpha),
           decl(
             '--tw-inset-shadow',
-            replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
+            replaceShadowColors(value, alpha, (color) => `var(--tw-inset-shadow-color, ${color})`),
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -4497,14 +4581,22 @@ export function createUtilities(theme: Theme) {
             value = asColor(value, candidate.modifier, theme)
             if (value === null) return
 
-            return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
+            return [
+              boxShadowProperties(),
+              decl('--tw-inset-shadow-color', withAlpha(value, 'var(--tw-inset-shadow-alpha)')),
+            ]
           }
           default: {
             return [
               boxShadowProperties(),
+              decl('--tw-inset-shadow-alpha', alpha),
               decl(
                 '--tw-inset-shadow',
-                `inset ${replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`)}`,
+                `inset ${replaceShadowColors(
+                  value,
+                  alpha,
+                  (color) => `var(--tw-inset-shadow-color, ${color})`,
+                )}`,
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -4527,12 +4619,16 @@ export function createUtilities(theme: Theme) {
         let value = theme.get([`--inset-shadow-${candidate.value.value}`])
 
         if (value) {
-          if (candidate.modifier) return
           return [
             boxShadowProperties(),
+            decl('--tw-inset-shadow-alpha', alpha),
             decl(
               '--tw-inset-shadow',
-              replaceShadowColors(value, (color) => `var(--tw-inset-shadow-color, ${color})`),
+              replaceShadowColors(
+                value,
+                alpha,
+                (color) => `var(--tw-inset-shadow-color, ${color})`,
+              ),
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -4543,7 +4639,10 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--box-shadow-color', '--color'])
         if (value) {
-          return [boxShadowProperties(), decl('--tw-inset-shadow-color', value)]
+          return [
+            boxShadowProperties(),
+            decl('--tw-inset-shadow-color', withAlpha(value, 'var(--tw-inset-shadow-alpha)')),
+          ]
         }
       }
     })
@@ -4555,8 +4654,11 @@ export function createUtilities(theme: Theme) {
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       },
       {
-        values: [],
+        values: ['none'],
+      },
+      {
         valueThemeKeys: ['--inset-shadow'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         hasDefaultValue: true,
       },
     ])
