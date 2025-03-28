@@ -15432,6 +15432,160 @@ test('text', async () => {
   ).toEqual('')
 })
 
+test('text-shadow', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
+          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
+        }
+        @tailwind utilities;
+      `,
+      [
+        // Shadows
+        'text-shadow-2xs',
+        'text-shadow-sm',
+        'text-shadow-none',
+        'text-shadow-[12px_12px_#0088cc]',
+        'text-shadow-[10px_10px]',
+        'text-shadow-[var(--value)]',
+        'text-shadow-[shadow:var(--value)]',
+
+        // Colors
+        'text-shadow-red-500',
+        'text-shadow-red-500/50',
+        'text-shadow-red-500/2.25',
+        'text-shadow-red-500/2.5',
+        'text-shadow-red-500/2.75',
+        'text-shadow-red-500/[0.5]',
+        'text-shadow-red-500/[50%]',
+        'text-shadow-current',
+        'text-shadow-current/50',
+        'text-shadow-current/[0.5]',
+        'text-shadow-current/[50%]',
+        'text-shadow-inherit',
+        'text-shadow-transparent',
+        'text-shadow-[#0088cc]',
+        'text-shadow-[#0088cc]/50',
+        'text-shadow-[#0088cc]/[0.5]',
+        'text-shadow-[#0088cc]/[50%]',
+        'text-shadow-[color:var(--value)]',
+        'text-shadow-[color:var(--value)]/50',
+        'text-shadow-[color:var(--value)]/[0.5]',
+        'text-shadow-[color:var(--value)]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-red-500: #ef4444;
+    }
+
+    .text-shadow-2xs {
+      text-shadow: 0px 1px 0px var(--tw-text-shadow-color, #0000001a);
+    }
+
+    .text-shadow-\\[\\#0088cc\\] {
+      --tw-text-shadow-color: #08c;
+    }
+
+    .text-shadow-\\[\\#0088cc\\]\\/50, .text-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-text-shadow-color: oklab(59.9824% -.06725 -.12414 / .5);
+    }
+
+    .text-shadow-\\[10px_10px\\] {
+      text-shadow: 10px 10px var(--tw-text-shadow-color, currentcolor);
+    }
+
+    .text-shadow-\\[12px_12px_\\#0088cc\\] {
+      text-shadow: 12px 12px var(--tw-text-shadow-color, #08c);
+    }
+
+    .text-shadow-\\[color\\:var\\(--value\\)\\] {
+      --tw-text-shadow-color: var(--value);
+    }
+
+    .text-shadow-\\[color\\:var\\(--value\\)\\]\\/50, .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\], .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      --tw-text-shadow-color: color-mix(in oklab, var(--value) 50%, transparent);
+    }
+
+    .text-shadow-\\[shadow\\:var\\(--value\\)\\], .text-shadow-\\[var\\(--value\\)\\] {
+      text-shadow: var(--value);
+    }
+
+    .text-shadow-current {
+      --tw-text-shadow-color: currentColor;
+    }
+
+    .text-shadow-current\\/50, .text-shadow-current\\/\\[0\\.5\\], .text-shadow-current\\/\\[50\\%\\] {
+      --tw-text-shadow-color: color-mix(in oklab, currentColor 50%, transparent);
+    }
+
+    .text-shadow-inherit {
+      --tw-text-shadow-color: inherit;
+    }
+
+    .text-shadow-none {
+      text-shadow: none;
+    }
+
+    .text-shadow-red-500 {
+      --tw-text-shadow-color: var(--color-red-500);
+    }
+
+    .text-shadow-red-500\\/2\\.5 {
+      --tw-text-shadow-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
+    }
+
+    .text-shadow-red-500\\/2\\.25 {
+      --tw-text-shadow-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
+    }
+
+    .text-shadow-red-500\\/2\\.75 {
+      --tw-text-shadow-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
+    }
+
+    .text-shadow-red-500\\/50, .text-shadow-red-500\\/\\[0\\.5\\], .text-shadow-red-500\\/\\[50\\%\\] {
+      --tw-text-shadow-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+    }
+
+    .text-shadow-sm {
+      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, #0000000f), 0px 2px 2px var(--tw-text-shadow-color, #0000000f);
+    }
+
+    .text-shadow-transparent {
+      --tw-text-shadow-color: transparent;
+    }
+
+    @property --tw-text-shadow-color {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
+  expect(
+    await run([
+      '-shadow-xl',
+      '-shadow-none',
+      '-shadow-red-500',
+      '-shadow-red-500/50',
+      '-shadow-red-500/[0.5]',
+      '-shadow-red-500/[50%]',
+      '-shadow-current',
+      '-shadow-current/50',
+      '-shadow-current/[0.5]',
+      '-shadow-current/[50%]',
+      '-shadow-inherit',
+      '-shadow-transparent',
+      '-shadow-[#0088cc]',
+      '-shadow-[#0088cc]/50',
+      '-shadow-[#0088cc]/[0.5]',
+      '-shadow-[#0088cc]/[50%]',
+      '-shadow-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
+
 test('shadow', async () => {
   expect(
     await compileCss(

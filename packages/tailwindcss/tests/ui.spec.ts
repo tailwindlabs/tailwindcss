@@ -410,6 +410,46 @@ test('inset shadow colors', async ({ page }) => {
   )
 })
 
+test('text shadow colors', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="a" class="text-shadow-xs text-shadow-red"></div>
+      <div id="b" class="text-shadow-lg text-shadow-red"></div>
+      <div id="c" class="text-shadow-[0px_2px_4px] text-shadow-red"></div>
+      <div id="d" class="text-shadow-xs text-shadow-red hover:text-shadow-lg">Hello world</div>
+      <div
+        id="e"
+        class="text-shadow-xs text-shadow-red hover:text-shadow-lg hover:text-shadow-initial"
+      >
+        Hello world
+      </div>
+    `,
+  )
+
+  expect(await getPropertyValue('#a', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
+  expect(await getPropertyValue('#b', 'text-shadow')).toEqual(
+    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
+  )
+  expect(await getPropertyValue('#c', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 2px 4px')
+
+  expect(await getPropertyValue('#d', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
+
+  await page.locator('#d').hover()
+
+  expect(await getPropertyValue('#d', 'text-shadow')).toEqual(
+    'rgb(255, 0, 0) 0px 1px 2px, rgb(255, 0, 0) 0px 3px 2px, rgb(255, 0, 0) 0px 4px 8px',
+  )
+
+  expect(await getPropertyValue('#e', 'text-shadow')).toEqual('rgb(255, 0, 0) 0px 1px 1px')
+
+  await page.locator('#e').hover()
+
+  expect(await getPropertyValue('#e', 'text-shadow')).toEqual(
+    'rgba(0, 0, 0, 0.1) 0px 1px 2px, rgba(0, 0, 0, 0.1) 0px 3px 2px, rgba(0, 0, 0, 0.1) 0px 4px 8px',
+  )
+})
+
 test('filter', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
