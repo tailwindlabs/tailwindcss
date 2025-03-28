@@ -84,6 +84,9 @@ pub struct Scanner {
     /// All found extensions
     extensions: FxHashSet<String>,
 
+    /// All CSS files we want to scan for CSS variable usage
+    css_files: Vec<PathBuf>,
+
     /// All files that we have to scan
     files: Vec<PathBuf>,
 
@@ -247,6 +250,12 @@ impl Scanner {
                     .extension()
                     .and_then(|x| x.to_str())
                     .unwrap_or_default(); // In case the file has no extension
+
+                // Special handing for CSS files to extract CSS variables
+                if extension == "css" {
+                    self.css_files.push(path);
+                    continue;
+                }
 
                 self.extensions.insert(extension.to_owned());
                 self.changed_content.push(ChangedContent::File(
