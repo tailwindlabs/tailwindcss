@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
-import { compile } from '.'
+import { compile, Polyfills } from '.'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -4905,6 +4905,129 @@ describe('`color-mix(…)` polyfill', () => {
     ).resolves.toMatchInlineSnapshot(`
       ".text-current\\/50 {
         color: color-mix(in oklab, currentColor 50%, transparent);
+      }"
+    `)
+  })
+})
+
+describe('`@property` polyfill', async () => {
+  it('emits fallbacks', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+
+          @property --no-inherit-no-value {
+            syntax: '*';
+            inherits: false;
+          }
+          @property --no-inherit-value {
+            syntax: '*';
+            inherits: false;
+            initial-value: red;
+          }
+          @property --inherit-no-value {
+            syntax: '*';
+            inherits: true;
+          }
+          @property --inherit-value {
+            syntax: '*';
+            inherits: true;
+            initial-value: red;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@property --no-inherit-no-value {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --no-inherit-value {
+        syntax: "*";
+        inherits: false;
+        initial-value: red;
+      }
+
+      @property --inherit-no-value {
+        syntax: "*";
+        inherits: true
+      }
+
+      @property --inherit-value {
+        syntax: "*";
+        inherits: true;
+        initial-value: red;
+      }
+
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          :root, :host {
+            --inherit-no-value: initial;
+            --inherit-value: red;
+          }
+
+          *, :before, :after, ::backdrop {
+            --no-inherit-no-value: initial;
+            --no-inherit-value: red;
+          }
+        }
+      }"
+    `)
+  })
+
+  it.only('can be disabled to not emit fallbacks (necessary for CSS modules)', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+
+          @property --no-inherit-no-value {
+            syntax: '*';
+            inherits: false;
+          }
+          @property --no-inherit-value {
+            syntax: '*';
+            inherits: false;
+            initial-value: red;
+          }
+          @property --inherit-no-value {
+            syntax: '*';
+            inherits: true;
+          }
+          @property --inherit-value {
+            syntax: '*';
+            inherits: true;
+            initial-value: red;
+          }
+        `,
+        [],
+        {
+          polyfills: Polyfills.None,
+        },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@property --no-inherit-no-value {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --no-inherit-value {
+        syntax: "*";
+        inherits: false;
+        initial-value: red;
+      }
+
+      @property --inherit-no-value {
+        syntax: "*";
+        inherits: true
+      }
+
+      @property --inherit-value {
+        syntax: "*";
+        inherits: true;
+        initial-value: red;
       }"
     `)
   })
