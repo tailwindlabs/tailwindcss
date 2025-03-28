@@ -2385,6 +2385,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-auto', [['background-size', 'auto']])
   staticUtility('bg-cover', [['background-size', 'cover']])
   staticUtility('bg-contain', [['background-size', 'contain']])
+  functionalUtility('bg-size', {
+    handle(value) {
+      if (!value) return
+      return [decl('background-size', value)]
+    },
+  })
 
   staticUtility('bg-fixed', [['background-attachment', 'fixed']])
   staticUtility('bg-local', [['background-attachment', 'local']])
@@ -2399,6 +2405,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('bg-left', [['background-position', 'left']])
   staticUtility('bg-right', [['background-position', 'right']])
   staticUtility('bg-center', [['background-position', 'center']])
+  functionalUtility('bg-position', {
+    handle(value) {
+      if (!value) return
+      return [decl('background-position', value)]
+    },
+  })
 
   staticUtility('bg-repeat', [['background-repeat', 'repeat']])
   staticUtility('bg-no-repeat', [['background-repeat', 'no-repeat']])
