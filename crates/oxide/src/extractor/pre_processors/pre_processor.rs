@@ -33,7 +33,7 @@ pub trait PreProcessor: Sized + Default {
         let processor = Self::default();
         let transformed = processor.process(input);
 
-        let extracted = Extractor::new(&transformed).extract();
+        let extracted = Extractor::new(&transformed, None).extract();
 
         // Extract all candidates and css variables.
         let candidates = extracted

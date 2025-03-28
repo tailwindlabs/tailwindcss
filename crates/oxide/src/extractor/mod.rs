@@ -56,15 +56,17 @@ impl fmt::Display for Extracted<'_> {
 #[derive(Debug)]
 pub struct Extractor<'a> {
     cursor: cursor::Cursor<'a>,
+    extension: Option<&'a str>,
 
     css_variable_machine: CssVariableMachine,
     candidate_machine: CandidateMachine,
 }
 
 impl<'a> Extractor<'a> {
-    pub fn new(input: &'a [u8]) -> Self {
+    pub fn new(input: &'a [u8], extension: Option<&'a str>) -> Self {
         Self {
             cursor: cursor::Cursor::new(input),
+            extension,
 
             css_variable_machine: Default::default(),
             candidate_machine: Default::default(),
@@ -208,7 +210,7 @@ mod tests {
     }
 
     fn extract_sorted_candidates(input: &str) -> Vec<&str> {
-        let mut machine = Extractor::new(input.as_bytes());
+        let mut machine = Extractor::new(input.as_bytes(), None);
         let mut actual = machine
             .extract()
             .iter()
@@ -222,7 +224,7 @@ mod tests {
     }
 
     fn extract_sorted_css_variables(input: &str) -> Vec<&str> {
-        let mut machine = Extractor::new(input.as_bytes());
+        let mut machine = Extractor::new(input.as_bytes(), None);
         let mut actual = machine
             .extract()
             .iter()
@@ -287,12 +289,12 @@ mod tests {
             let input = include_bytes!("../fixtures/example.html");
 
             let throughput = Throughput::compute(iterations, input.len(), || {
-                let mut extractor = Extractor::new(input);
+                let mut extractor = Extractor::new(input, None);
                 _ = black_box(extractor.extract());
             });
             eprintln!("Extractor throughput: {:}", throughput);
 
-            let mut extractor = Extractor::new(input);
+            let mut extractor = Extractor::new(input, None);
             let start = std::time::Instant::now();
             _ = black_box(extractor.extract().len());
             let end = start.elapsed();
