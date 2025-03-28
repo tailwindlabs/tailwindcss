@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Ignore `node_modules` by default (but can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - _Experimental_: Order of `@source` rules matter if you want to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- _Experimental_: Custom `@source` definitions win from `.gitignore` file and auto content rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- _Experimental_: `@source` rules that include file extensions or point inside `node_modules/` no longer consider `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 
 ## [4.0.16] - 2025-03-25
 
