@@ -523,6 +523,9 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
 
     let mut builder = WalkBuilder::new(first_root?);
 
+    // We have to follow symlinks
+    builder.follow_links(true);
+
     // Scan hidden files / directories
     builder.hidden(false);
 
@@ -661,6 +664,7 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
 #[cfg(test)]
 mod tests {
     use super::{ChangedContent, Scanner};
+    use pretty_assertions::assert_eq;
 
     #[test]
     fn test_positions() {

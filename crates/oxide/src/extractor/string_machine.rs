@@ -87,6 +87,7 @@ enum Class {
 mod tests {
     use super::StringMachine;
     use crate::extractor::machine::Machine;
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]

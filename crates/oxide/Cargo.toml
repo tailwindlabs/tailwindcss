@@ -19,8 +19,7 @@ fast-glob = "0.4.3"
 classification-macros = { path = "../classification-macros" }
 ignore = { path = "../ignore" }
 regex = "1.11.1"
-fancy-regex = "0.14.0"
 
 [dev-dependencies]
 tempfile = "3.13.0"
-
+pretty_assertions = "1.4.1"

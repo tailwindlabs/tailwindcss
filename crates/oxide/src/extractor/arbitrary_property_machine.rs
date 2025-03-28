@@ -307,6 +307,7 @@ enum Class {
 mod tests {
     use super::{ArbitraryPropertyMachine, IdleState};
     use crate::extractor::machine::Machine;
+    use pretty_assertions::assert_eq;
 
     #[test]
     #[ignore]
@@ -413,7 +414,7 @@ mod tests {
                 let actual = ArbitraryPropertyMachine::<IdleState>::test_extract_all(&input);
 
                 if actual != expected {
-                    dbg!(&input, &actual, &expected);
+                    dbg!(&input);
                 }
                 assert_eq!(actual, expected);
             }

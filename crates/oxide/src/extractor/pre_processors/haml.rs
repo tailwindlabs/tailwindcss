@@ -93,6 +93,7 @@ impl PreProcessor for Haml {
 mod tests {
     use super::Haml;
     use crate::extractor::pre_processors::pre_processor::PreProcessor;
+    use pretty_assertions::assert_eq;
 
     #[test]
     fn test_haml_pre_processor() {
