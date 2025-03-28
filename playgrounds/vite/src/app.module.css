@@ -1,0 +1,5 @@
+@reference "./index.css";
+
+.foo {
+  @apply skew-7;
+}

@@ -130,6 +130,13 @@ test(
         --tw-content: "src/nested/index.html";
         content: var(--tw-content);
       }
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -364,6 +371,13 @@ test(
         --tw-content: 'project-d/src/index.html';
         content: var(--tw-content);
       }
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -591,6 +605,13 @@ test(
         --tw-content: "pages/nested/foo.html";
         content: var(--tw-content);
       }
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
@@ -690,6 +711,13 @@ test(
       .content-\\[\\'project-b\\/src\\/keep-me\\.html\\'\\] {
         --tw-content: 'project-b/src/keep-me.html';
         content: var(--tw-content);
+      }
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       @property --tw-content {
         syntax: "*";
