@@ -1826,6 +1826,43 @@ test('filter', async ({ page }) => {
   expect(await getPropertyValue('#b', 'filter')).toEqual('contrast(1)')
 })
 
+test('drop shadow colors', async ({ page }) => {
+  let { getPropertyList } = await render(
+    page,
+    html`
+      <div id="a" class="drop-shadow-md"></div>
+      <div id="b" class="drop-shadow-md drop-shadow-red"></div>
+      <div id="c" class="drop-shadow-md/50"></div>
+      <div id="d" class="drop-shadow-md/50 drop-shadow-red"></div>
+      <div id="e" class="drop-shadow-md/50 drop-shadow-red/50"></div>
+    `,
+  )
+
+  expect(await getPropertyList('#a', 'filter')).toEqual([
+    'drop-shadow(rgba(0, 0, 0, 0.12) 0px 3px 3px)',
+  ])
+
+  expect(await getPropertyList('#b', 'filter')).toEqual([
+    expect.stringMatching(/drop-shadow\(oklab\(0\.627\d+ 0\.224\d+ 0\.125\d+\) 0px 3px 3px\)/),
+  ])
+
+  expect(await getPropertyList('#c', 'filter')).toEqual([
+    'drop-shadow(oklab(0 0 0 / 0.5) 0px 3px 3px)',
+  ])
+
+  expect(await getPropertyList('#d', 'filter')).toEqual([
+    expect.stringMatching(
+      /drop-shadow\(oklab\(0\.627\d+ 0\.224\d+ 0\.125\d+ \/ 0\.5\) 0px 3px 3px\)/,
+    ),
+  ])
+
+  expect(await getPropertyList('#e', 'filter')).toEqual([
+    expect.stringMatching(
+      /drop-shadow\(oklab\(0\.627\d+ 0\.224\d+ 0\.125\d+ \/ 0\.25\) 0px 3px 3px\)/,
+    ),
+  ])
+})
+
 test('outline style is optional', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
