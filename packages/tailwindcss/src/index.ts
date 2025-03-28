@@ -37,8 +37,19 @@ export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
 
+export const enum Polyfills {
+  None = 0,
+
+  // Control if fallbacks for `@property` rules are emitted
+  PolyfillAtProperty = 1 << 0,
+
+  // Enable all
+  All = PolyfillAtProperty,
+}
+
 type CompileOptions = {
   base?: string
+  polyfills?: Polyfills
   loadModule?: (
     id: string,
     base: string,
@@ -697,7 +708,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
         return compiled
       }
 
@@ -723,7 +734,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
         return compiled
       }
 
@@ -735,7 +746,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (!didAddExternalVariable && previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast, designSystem)
+        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
         return compiled
       }
 
@@ -743,7 +754,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast, designSystem)
+      compiled = optimizeAst(ast, designSystem, opts.polyfills)
       return compiled
     },
   }

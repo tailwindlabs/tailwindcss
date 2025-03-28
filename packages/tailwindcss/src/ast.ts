@@ -1,3 +1,4 @@
+import { Polyfills } from '.'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
@@ -258,7 +259,11 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
+export function optimizeAst(
+  ast: AstNode[],
+  designSystem: DesignSystem,
+  polyfills: Polyfills = Polyfills.All,
+) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let cssThemeVariables = new DefaultMap<
@@ -387,23 +392,25 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
       // Collect fallbacks for `@property` rules for Firefox support
       // We turn these into rules on `:root` or `*` and some pseudo-elements
       // based on the value of `inherits``
-      let property = node.params
-      let initialValue = null
-      let inherits = false
+      if (polyfills & Polyfills.PolyfillAtProperty) {
+        let property = node.params
+        let initialValue = null
+        let inherits = false
 
-      for (let prop of node.nodes) {
-        if (prop.kind !== 'declaration') continue
-        if (prop.property === 'initial-value') {
-          initialValue = prop.value
-        } else if (prop.property === 'inherits') {
-          inherits = prop.value === 'true'
+        for (let prop of node.nodes) {
+          if (prop.kind !== 'declaration') continue
+          if (prop.property === 'initial-value') {
+            initialValue = prop.value
+          } else if (prop.property === 'inherits') {
+            inherits = prop.value === 'true'
+          }
         }
-      }
 
-      if (inherits) {
-        propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
-      } else {
-        propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+        if (inherits) {
+          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+        } else {
+          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+        }
       }
 
       seenAtProperties.add(node.params)
@@ -549,25 +556,27 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   }
 
   // Fallbacks
-  {
-    let fallbackAst = []
+  if (polyfills & Polyfills.PolyfillAtProperty) {
+    {
+      let fallbackAst = []
 
-    if (propertyFallbacksRoot.length > 0) {
-      fallbackAst.push(rule(':root', propertyFallbacksRoot))
-    }
+      if (propertyFallbacksRoot.length > 0) {
+        fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
+      }
 
-    if (propertyFallbacksUniversal.length > 0) {
-      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
-    }
+      if (propertyFallbacksUniversal.length > 0) {
+        fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+      }
 
-    if (fallbackAst.length > 0) {
-      newAst.push(
-        atRule(
-          '@supports',
-          '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-          [atRule('@layer', 'base', fallbackAst)],
-        ),
-      )
+      if (fallbackAst.length > 0) {
+        newAst.push(
+          atRule(
+            '@supports',
+            '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+            [atRule('@layer', 'base', fallbackAst)],
+          ),
+        )
+      }
     }
   }
 

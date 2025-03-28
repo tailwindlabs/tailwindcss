@@ -1,3 +1,4 @@
+import { Polyfills } from '.'
 import { optimizeAst, toCss } from './ast'
 import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
@@ -94,7 +95,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
           },
         })
 
-        astNodes = optimizeAst(astNodes, designSystem)
+        // Disable all polyfills to not unnecessarily pollute IntelliSense output
+        astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
 
         if (astNodes.length === 0 || wasInvalid) {
           result.push(null)
