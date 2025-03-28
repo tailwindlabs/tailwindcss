@@ -12136,36 +12136,44 @@ test('mask-t-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-t-from',
-      'mask-t-from-2.8175',
-      'mask-t-from--1.5',
-      'mask-t-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-t-from',
+        'mask-t-from-2.8175',
+        'mask-t-from--1.5',
+        'mask-t-from--2',
 
-      'mask-t-from-2.5%',
-      'mask-t-from--5%',
-      'mask-t-from-unknown',
-      'mask-t-from-unknown%',
+        'mask-t-from-2.5%',
+        'mask-t-from--5%',
+        'mask-t-from-unknown',
+        'mask-t-from-unknown%',
 
-      '-mask-t-from-0',
-      '-mask-t-from-1.5',
-      '-mask-t-from-2',
-      '-mask-t-from-0%',
-      '-mask-t-from-2%',
-      '-mask-t-from-[0px]',
-      '-mask-t-from-[0%]',
+        '-mask-t-from-0',
+        '-mask-t-from-1.5',
+        '-mask-t-from-2',
+        '-mask-t-from-0%',
+        '-mask-t-from-2%',
+        '-mask-t-from-[0px]',
+        '-mask-t-from-[0%]',
 
-      '-mask-t-from-(--my-var)',
-      '-mask-t-from-(color:--my-var)',
-      '-mask-t-from-(length:--my-var)',
+        '-mask-t-from-(--my-var)',
+        '-mask-t-from-(color:--my-var)',
+        '-mask-t-from-(length:--my-var)',
 
-      'mask-l-from-[-25%]',
-      'mask-l-from-[25%]/foo',
-      'mask-l-from-[-25%]/foo',
-      '-mask-l-from-[-25%]',
-      '-mask-l-from-[25%]/foo',
-      '-mask-l-from-[-25%]/foo',
-    ]),
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -12371,36 +12379,44 @@ test('mask-t-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-t-to',
-      'mask-t-to-2.8175',
-      'mask-t-to--1.5',
-      'mask-t-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-t-to',
+        'mask-t-to-2.8175',
+        'mask-t-to--1.5',
+        'mask-t-to--2',
 
-      'mask-t-to-2.5%',
-      'mask-t-to--5%',
-      'mask-t-to-unknown',
-      'mask-t-to-unknown%',
+        'mask-t-to-2.5%',
+        'mask-t-to--5%',
+        'mask-t-to-unknown',
+        'mask-t-to-unknown%',
 
-      '-mask-t-to-0',
-      '-mask-t-to-1.5',
-      '-mask-t-to-2',
-      '-mask-t-to-0%',
-      '-mask-t-to-2%',
-      '-mask-t-to-[0px]',
-      '-mask-t-to-[0%]',
+        '-mask-t-to-0',
+        '-mask-t-to-1.5',
+        '-mask-t-to-2',
+        '-mask-t-to-0%',
+        '-mask-t-to-2%',
+        '-mask-t-to-[0px]',
+        '-mask-t-to-[0%]',
 
-      '-mask-t-to-(--my-var)',
-      '-mask-t-to-(color:--my-var)',
-      '-mask-t-to-(length:--my-var)',
+        '-mask-t-to-(--my-var)',
+        '-mask-t-to-(color:--my-var)',
+        '-mask-t-to-(length:--my-var)',
 
-      'mask-l-from-[-25%]',
-      'mask-l-from-[25%]/foo',
-      'mask-l-from-[-25%]/foo',
-      '-mask-l-from-[-25%]',
-      '-mask-l-from-[25%]/foo',
-      '-mask-l-from-[-25%]/foo',
-    ]),
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -12607,36 +12623,44 @@ test('mask-r-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-r-from',
-      'mask-r-from-2.8175',
-      'mask-r-from--1.5',
-      'mask-r-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-r-from',
+        'mask-r-from-2.8175',
+        'mask-r-from--1.5',
+        'mask-r-from--2',
 
-      'mask-r-from-2.5%',
-      'mask-r-from--5%',
-      'mask-r-from-unknown',
-      'mask-r-from-unknown%',
+        'mask-r-from-2.5%',
+        'mask-r-from--5%',
+        'mask-r-from-unknown',
+        'mask-r-from-unknown%',
 
-      '-mask-r-from-0',
-      '-mask-r-from-1.5',
-      '-mask-r-from-2',
-      '-mask-r-from-0%',
-      '-mask-r-from-2%',
-      '-mask-r-from-[0px]',
-      '-mask-r-from-[0%]',
+        '-mask-r-from-0',
+        '-mask-r-from-1.5',
+        '-mask-r-from-2',
+        '-mask-r-from-0%',
+        '-mask-r-from-2%',
+        '-mask-r-from-[0px]',
+        '-mask-r-from-[0%]',
 
-      '-mask-r-from-(--my-var)',
-      '-mask-r-from-(color:--my-var)',
-      '-mask-r-from-(length:--my-var)',
+        '-mask-r-from-(--my-var)',
+        '-mask-r-from-(color:--my-var)',
+        '-mask-r-from-(length:--my-var)',
 
-      'mask-r-from-[-25%]',
-      'mask-r-from-[25%]/foo',
-      'mask-r-from-[-25%]/foo',
-      '-mask-r-from-[-25%]',
-      '-mask-r-from-[25%]/foo',
-      '-mask-r-from-[-25%]/foo',
-    ]),
+        'mask-r-from-[-25%]',
+        'mask-r-from-[25%]/foo',
+        'mask-r-from-[-25%]/foo',
+        '-mask-r-from-[-25%]',
+        '-mask-r-from-[25%]/foo',
+        '-mask-r-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -12843,36 +12867,44 @@ test('mask-r-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-r-to',
-      'mask-r-to-2.8175',
-      'mask-r-to--1.5',
-      'mask-r-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-r-to',
+        'mask-r-to-2.8175',
+        'mask-r-to--1.5',
+        'mask-r-to--2',
 
-      'mask-r-to-2.5%',
-      'mask-r-to--5%',
-      'mask-r-to-unknown',
-      'mask-r-to-unknown%',
+        'mask-r-to-2.5%',
+        'mask-r-to--5%',
+        'mask-r-to-unknown',
+        'mask-r-to-unknown%',
 
-      '-mask-r-to-0',
-      '-mask-r-to-1.5',
-      '-mask-r-to-2',
-      '-mask-r-to-0%',
-      '-mask-r-to-2%',
-      '-mask-r-to-[0px]',
-      '-mask-r-to-[0%]',
+        '-mask-r-to-0',
+        '-mask-r-to-1.5',
+        '-mask-r-to-2',
+        '-mask-r-to-0%',
+        '-mask-r-to-2%',
+        '-mask-r-to-[0px]',
+        '-mask-r-to-[0%]',
 
-      '-mask-r-to-(--my-var)',
-      '-mask-r-to-(color:--my-var)',
-      '-mask-r-to-(length:--my-var)',
+        '-mask-r-to-(--my-var)',
+        '-mask-r-to-(color:--my-var)',
+        '-mask-r-to-(length:--my-var)',
 
-      'mask-r-to-[-25%]',
-      'mask-r-to-[25%]/foo',
-      'mask-r-to-[-25%]/foo',
-      '-mask-r-to-[-25%]',
-      '-mask-r-to-[25%]/foo',
-      '-mask-r-to-[-25%]/foo',
-    ]),
+        'mask-r-to-[-25%]',
+        'mask-r-to-[25%]/foo',
+        'mask-r-to-[-25%]/foo',
+        '-mask-r-to-[-25%]',
+        '-mask-r-to-[25%]/foo',
+        '-mask-r-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -13079,36 +13111,44 @@ test('mask-b-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-b-from',
-      'mask-b-from-2.8175',
-      'mask-b-from--1.5',
-      'mask-b-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-b-from',
+        'mask-b-from-2.8175',
+        'mask-b-from--1.5',
+        'mask-b-from--2',
 
-      'mask-b-from-2.5%',
-      'mask-b-from--5%',
-      'mask-b-from-unknown',
-      'mask-b-from-unknown%',
+        'mask-b-from-2.5%',
+        'mask-b-from--5%',
+        'mask-b-from-unknown',
+        'mask-b-from-unknown%',
 
-      '-mask-b-from-0',
-      '-mask-b-from-1.5',
-      '-mask-b-from-2',
-      '-mask-b-from-0%',
-      '-mask-b-from-2%',
-      '-mask-b-from-[0px]',
-      '-mask-b-from-[0%]',
+        '-mask-b-from-0',
+        '-mask-b-from-1.5',
+        '-mask-b-from-2',
+        '-mask-b-from-0%',
+        '-mask-b-from-2%',
+        '-mask-b-from-[0px]',
+        '-mask-b-from-[0%]',
 
-      '-mask-b-from-(--my-var)',
-      '-mask-b-from-(color:--my-var)',
-      '-mask-b-from-(length:--my-var)',
+        '-mask-b-from-(--my-var)',
+        '-mask-b-from-(color:--my-var)',
+        '-mask-b-from-(length:--my-var)',
 
-      'mask-b-from-[-25%]',
-      'mask-b-from-[25%]/foo',
-      'mask-b-from-[-25%]/foo',
-      '-mask-b-from-[-25%]',
-      '-mask-b-from-[25%]/foo',
-      '-mask-b-from-[-25%]/foo',
-    ]),
+        'mask-b-from-[-25%]',
+        'mask-b-from-[25%]/foo',
+        'mask-b-from-[-25%]/foo',
+        '-mask-b-from-[-25%]',
+        '-mask-b-from-[25%]/foo',
+        '-mask-b-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -13315,36 +13355,44 @@ test('mask-b-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-b-to',
-      'mask-b-to-2.8175',
-      'mask-b-to--1.5',
-      'mask-b-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-b-to',
+        'mask-b-to-2.8175',
+        'mask-b-to--1.5',
+        'mask-b-to--2',
 
-      'mask-b-to-2.5%',
-      'mask-b-to--5%',
-      'mask-b-to-unknown',
-      'mask-b-to-unknown%',
+        'mask-b-to-2.5%',
+        'mask-b-to--5%',
+        'mask-b-to-unknown',
+        'mask-b-to-unknown%',
 
-      '-mask-b-to-0',
-      '-mask-b-to-1.5',
-      '-mask-b-to-2',
-      '-mask-b-to-0%',
-      '-mask-b-to-2%',
-      '-mask-b-to-[0px]',
-      '-mask-b-to-[0%]',
+        '-mask-b-to-0',
+        '-mask-b-to-1.5',
+        '-mask-b-to-2',
+        '-mask-b-to-0%',
+        '-mask-b-to-2%',
+        '-mask-b-to-[0px]',
+        '-mask-b-to-[0%]',
 
-      '-mask-b-to-(--my-var)',
-      '-mask-b-to-(color:--my-var)',
-      '-mask-b-to-(length:--my-var)',
+        '-mask-b-to-(--my-var)',
+        '-mask-b-to-(color:--my-var)',
+        '-mask-b-to-(length:--my-var)',
 
-      'mask-b-to-[-25%]',
-      'mask-b-to-[25%]/foo',
-      'mask-b-to-[-25%]/foo',
-      '-mask-b-to-[-25%]',
-      '-mask-b-to-[25%]/foo',
-      '-mask-b-to-[-25%]/foo',
-    ]),
+        'mask-b-to-[-25%]',
+        'mask-b-to-[25%]/foo',
+        'mask-b-to-[-25%]/foo',
+        '-mask-b-to-[-25%]',
+        '-mask-b-to-[25%]/foo',
+        '-mask-b-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -13551,36 +13599,44 @@ test('mask-l-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-l-from',
-      'mask-l-from-2.8175',
-      'mask-l-from--1.5',
-      'mask-l-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-l-from',
+        'mask-l-from-2.8175',
+        'mask-l-from--1.5',
+        'mask-l-from--2',
 
-      'mask-l-from-2.5%',
-      'mask-l-from--5%',
-      'mask-l-from-unknown',
-      'mask-l-from-unknown%',
+        'mask-l-from-2.5%',
+        'mask-l-from--5%',
+        'mask-l-from-unknown',
+        'mask-l-from-unknown%',
 
-      '-mask-l-from-0',
-      '-mask-l-from-1.5',
-      '-mask-l-from-2',
-      '-mask-l-from-0%',
-      '-mask-l-from-2%',
-      '-mask-l-from-[0px]',
-      '-mask-l-from-[0%]',
+        '-mask-l-from-0',
+        '-mask-l-from-1.5',
+        '-mask-l-from-2',
+        '-mask-l-from-0%',
+        '-mask-l-from-2%',
+        '-mask-l-from-[0px]',
+        '-mask-l-from-[0%]',
 
-      '-mask-l-from-(--my-var)',
-      '-mask-l-from-(color:--my-var)',
-      '-mask-l-from-(length:--my-var)',
+        '-mask-l-from-(--my-var)',
+        '-mask-l-from-(color:--my-var)',
+        '-mask-l-from-(length:--my-var)',
 
-      'mask-l-from-[-25%]',
-      'mask-l-from-[25%]/foo',
-      'mask-l-from-[-25%]/foo',
-      '-mask-l-from-[-25%]',
-      '-mask-l-from-[25%]/foo',
-      '-mask-l-from-[-25%]/foo',
-    ]),
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -13787,36 +13843,44 @@ test('mask-l-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-l-to',
-      'mask-l-to-2.8175',
-      'mask-l-to--1.5',
-      'mask-l-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-l-to',
+        'mask-l-to-2.8175',
+        'mask-l-to--1.5',
+        'mask-l-to--2',
 
-      'mask-l-to-2.5%',
-      'mask-l-to--5%',
-      'mask-l-to-unknown',
-      'mask-l-to-unknown%',
+        'mask-l-to-2.5%',
+        'mask-l-to--5%',
+        'mask-l-to-unknown',
+        'mask-l-to-unknown%',
 
-      '-mask-l-to-0',
-      '-mask-l-to-1.5',
-      '-mask-l-to-2',
-      '-mask-l-to-0%',
-      '-mask-l-to-2%',
-      '-mask-l-to-[0px]',
-      '-mask-l-to-[0%]',
+        '-mask-l-to-0',
+        '-mask-l-to-1.5',
+        '-mask-l-to-2',
+        '-mask-l-to-0%',
+        '-mask-l-to-2%',
+        '-mask-l-to-[0px]',
+        '-mask-l-to-[0%]',
 
-      '-mask-l-to-(--my-var)',
-      '-mask-l-to-(color:--my-var)',
-      '-mask-l-to-(length:--my-var)',
+        '-mask-l-to-(--my-var)',
+        '-mask-l-to-(color:--my-var)',
+        '-mask-l-to-(length:--my-var)',
 
-      'mask-l-to-[-25%]',
-      'mask-l-to-[25%]/foo',
-      'mask-l-to-[-25%]/foo',
-      '-mask-l-to-[-25%]',
-      '-mask-l-to-[25%]/foo',
-      '-mask-l-to-[-25%]/foo',
-    ]),
+        'mask-l-to-[-25%]',
+        'mask-l-to-[25%]/foo',
+        'mask-l-to-[-25%]/foo',
+        '-mask-l-to-[-25%]',
+        '-mask-l-to-[25%]/foo',
+        '-mask-l-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -14065,36 +14129,44 @@ test('mask-x-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-x-from',
-      'mask-x-from-2.8175',
-      'mask-x-from--1.5',
-      'mask-x-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-x-from',
+        'mask-x-from-2.8175',
+        'mask-x-from--1.5',
+        'mask-x-from--2',
 
-      'mask-x-from-2.5%',
-      'mask-x-from--5%',
-      'mask-x-from-unknown',
-      'mask-x-from-unknown%',
+        'mask-x-from-2.5%',
+        'mask-x-from--5%',
+        'mask-x-from-unknown',
+        'mask-x-from-unknown%',
 
-      '-mask-x-from-0',
-      '-mask-x-from-1.5',
-      '-mask-x-from-2',
-      '-mask-x-from-0%',
-      '-mask-x-from-2%',
-      '-mask-x-from-[0px]',
-      '-mask-x-from-[0%]',
+        '-mask-x-from-0',
+        '-mask-x-from-1.5',
+        '-mask-x-from-2',
+        '-mask-x-from-0%',
+        '-mask-x-from-2%',
+        '-mask-x-from-[0px]',
+        '-mask-x-from-[0%]',
 
-      '-mask-x-from-(--my-var)',
-      '-mask-x-from-(color:--my-var)',
-      '-mask-x-from-(length:--my-var)',
+        '-mask-x-from-(--my-var)',
+        '-mask-x-from-(color:--my-var)',
+        '-mask-x-from-(length:--my-var)',
 
-      'mask-x-from-[-25%]',
-      'mask-x-from-[25%]/foo',
-      'mask-x-from-[-25%]/foo',
-      '-mask-x-from-[-25%]',
-      '-mask-x-from-[25%]/foo',
-      '-mask-x-from-[-25%]/foo',
-    ]),
+        'mask-x-from-[-25%]',
+        'mask-x-from-[25%]/foo',
+        'mask-x-from-[-25%]/foo',
+        '-mask-x-from-[-25%]',
+        '-mask-x-from-[25%]/foo',
+        '-mask-x-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -14343,36 +14415,44 @@ test('mask-x-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-x-to',
-      'mask-x-to-2.8175',
-      'mask-x-to--1.5',
-      'mask-x-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-x-to',
+        'mask-x-to-2.8175',
+        'mask-x-to--1.5',
+        'mask-x-to--2',
 
-      'mask-x-to-2.5%',
-      'mask-x-to--5%',
-      'mask-x-to-unknown',
-      'mask-x-to-unknown%',
+        'mask-x-to-2.5%',
+        'mask-x-to--5%',
+        'mask-x-to-unknown',
+        'mask-x-to-unknown%',
 
-      '-mask-x-to-0',
-      '-mask-x-to-1.5',
-      '-mask-x-to-2',
-      '-mask-x-to-0%',
-      '-mask-x-to-2%',
-      '-mask-x-to-[0px]',
-      '-mask-x-to-[0%]',
+        '-mask-x-to-0',
+        '-mask-x-to-1.5',
+        '-mask-x-to-2',
+        '-mask-x-to-0%',
+        '-mask-x-to-2%',
+        '-mask-x-to-[0px]',
+        '-mask-x-to-[0%]',
 
-      '-mask-x-to-(--my-var)',
-      '-mask-x-to-(color:--my-var)',
-      '-mask-x-to-(length:--my-var)',
+        '-mask-x-to-(--my-var)',
+        '-mask-x-to-(color:--my-var)',
+        '-mask-x-to-(length:--my-var)',
 
-      'mask-x-to-[-25%]',
-      'mask-x-to-[25%]/foo',
-      'mask-x-to-[-25%]/foo',
-      '-mask-x-to-[-25%]',
-      '-mask-x-to-[25%]/foo',
-      '-mask-x-to-[-25%]/foo',
-    ]),
+        'mask-x-to-[-25%]',
+        'mask-x-to-[25%]/foo',
+        'mask-x-to-[-25%]/foo',
+        '-mask-x-to-[-25%]',
+        '-mask-x-to-[25%]/foo',
+        '-mask-x-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -14621,36 +14701,44 @@ test('mask-y-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-y-from',
-      'mask-y-from-2.8175',
-      'mask-y-from--1.5',
-      'mask-y-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-y-from',
+        'mask-y-from-2.8175',
+        'mask-y-from--1.5',
+        'mask-y-from--2',
 
-      'mask-y-from-2.5%',
-      'mask-y-from--5%',
-      'mask-y-from-unknown',
-      'mask-y-from-unknown%',
+        'mask-y-from-2.5%',
+        'mask-y-from--5%',
+        'mask-y-from-unknown',
+        'mask-y-from-unknown%',
 
-      '-mask-y-from-0',
-      '-mask-y-from-1.5',
-      '-mask-y-from-2',
-      '-mask-y-from-0%',
-      '-mask-y-from-2%',
-      '-mask-y-from-[0px]',
-      '-mask-y-from-[0%]',
+        '-mask-y-from-0',
+        '-mask-y-from-1.5',
+        '-mask-y-from-2',
+        '-mask-y-from-0%',
+        '-mask-y-from-2%',
+        '-mask-y-from-[0px]',
+        '-mask-y-from-[0%]',
 
-      '-mask-y-from-(--my-var)',
-      '-mask-y-from-(color:--my-var)',
-      '-mask-y-from-(length:--my-var)',
+        '-mask-y-from-(--my-var)',
+        '-mask-y-from-(color:--my-var)',
+        '-mask-y-from-(length:--my-var)',
 
-      'mask-y-from-[-25%]',
-      'mask-y-from-[25%]/foo',
-      'mask-y-from-[-25%]/foo',
-      '-mask-y-from-[-25%]',
-      '-mask-y-from-[25%]/foo',
-      '-mask-y-from-[-25%]/foo',
-    ]),
+        'mask-y-from-[-25%]',
+        'mask-y-from-[25%]/foo',
+        'mask-y-from-[-25%]/foo',
+        '-mask-y-from-[-25%]',
+        '-mask-y-from-[25%]/foo',
+        '-mask-y-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -14899,36 +14987,44 @@ test('mask-y-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-y-to',
-      'mask-y-to-2.8175',
-      'mask-y-to--1.5',
-      'mask-y-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-y-to',
+        'mask-y-to-2.8175',
+        'mask-y-to--1.5',
+        'mask-y-to--2',
 
-      'mask-y-to-2.5%',
-      'mask-y-to--5%',
-      'mask-y-to-unknown',
-      'mask-y-to-unknown%',
+        'mask-y-to-2.5%',
+        'mask-y-to--5%',
+        'mask-y-to-unknown',
+        'mask-y-to-unknown%',
 
-      '-mask-y-to-0',
-      '-mask-y-to-1.5',
-      '-mask-y-to-2',
-      '-mask-y-to-0%',
-      '-mask-y-to-2%',
-      '-mask-y-to-[0px]',
-      '-mask-y-to-[0%]',
+        '-mask-y-to-0',
+        '-mask-y-to-1.5',
+        '-mask-y-to-2',
+        '-mask-y-to-0%',
+        '-mask-y-to-2%',
+        '-mask-y-to-[0px]',
+        '-mask-y-to-[0%]',
 
-      '-mask-y-to-(--my-var)',
-      '-mask-y-to-(color:--my-var)',
-      '-mask-y-to-(length:--my-var)',
+        '-mask-y-to-(--my-var)',
+        '-mask-y-to-(color:--my-var)',
+        '-mask-y-to-(length:--my-var)',
 
-      'mask-y-to-[-25%]',
-      'mask-y-to-[25%]/foo',
-      'mask-y-to-[-25%]/foo',
-      '-mask-y-to-[-25%]',
-      '-mask-y-to-[25%]/foo',
-      '-mask-y-to-[-25%]/foo',
-    ]),
+        'mask-y-to-[-25%]',
+        'mask-y-to-[25%]/foo',
+        'mask-y-to-[-25%]/foo',
+        '-mask-y-to-[-25%]',
+        '-mask-y-to-[25%]/foo',
+        '-mask-y-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -15226,36 +15322,44 @@ test('mask-linear-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-linear-from',
-      'mask-linear-from-2.8175',
-      'mask-linear-from--1.5',
-      'mask-linear-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-linear-from',
+        'mask-linear-from-2.8175',
+        'mask-linear-from--1.5',
+        'mask-linear-from--2',
 
-      'mask-linear-from-2.5%',
-      'mask-linear-from--5%',
-      'mask-linear-from-unknown',
-      'mask-linear-from-unknown%',
+        'mask-linear-from-2.5%',
+        'mask-linear-from--5%',
+        'mask-linear-from-unknown',
+        'mask-linear-from-unknown%',
 
-      '-mask-linear-from-0',
-      '-mask-linear-from-1.5',
-      '-mask-linear-from-2',
-      '-mask-linear-from-0%',
-      '-mask-linear-from-2%',
-      '-mask-linear-from-[0px]',
-      '-mask-linear-from-[0%]',
+        '-mask-linear-from-0',
+        '-mask-linear-from-1.5',
+        '-mask-linear-from-2',
+        '-mask-linear-from-0%',
+        '-mask-linear-from-2%',
+        '-mask-linear-from-[0px]',
+        '-mask-linear-from-[0%]',
 
-      '-mask-linear-from-(--my-var)',
-      '-mask-linear-from-(color:--my-var)',
-      '-mask-linear-from-(length:--my-var)',
+        '-mask-linear-from-(--my-var)',
+        '-mask-linear-from-(color:--my-var)',
+        '-mask-linear-from-(length:--my-var)',
 
-      'mask-linear-from-[-25%]',
-      'mask-linear-from-[25%]/foo',
-      'mask-linear-from-[-25%]/foo',
-      '-mask-linear-from-[-25%]',
-      '-mask-linear-from-[25%]/foo',
-      '-mask-linear-from-[-25%]/foo',
-    ]),
+        'mask-linear-from-[-25%]',
+        'mask-linear-from-[25%]/foo',
+        'mask-linear-from-[-25%]/foo',
+        '-mask-linear-from-[-25%]',
+        '-mask-linear-from-[25%]/foo',
+        '-mask-linear-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -15444,36 +15548,44 @@ test('mask-linear-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-linear-to',
-      'mask-linear-to-2.8175',
-      'mask-linear-to--1.5',
-      'mask-linear-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-linear-to',
+        'mask-linear-to-2.8175',
+        'mask-linear-to--1.5',
+        'mask-linear-to--2',
 
-      'mask-linear-to-2.5%',
-      'mask-linear-to--5%',
-      'mask-linear-to-unknown',
-      'mask-linear-to-unknown%',
+        'mask-linear-to-2.5%',
+        'mask-linear-to--5%',
+        'mask-linear-to-unknown',
+        'mask-linear-to-unknown%',
 
-      '-mask-linear-to-0',
-      '-mask-linear-to-1.5',
-      '-mask-linear-to-2',
-      '-mask-linear-to-0%',
-      '-mask-linear-to-2%',
-      '-mask-linear-to-[0px]',
-      '-mask-linear-to-[0%]',
+        '-mask-linear-to-0',
+        '-mask-linear-to-1.5',
+        '-mask-linear-to-2',
+        '-mask-linear-to-0%',
+        '-mask-linear-to-2%',
+        '-mask-linear-to-[0px]',
+        '-mask-linear-to-[0%]',
 
-      '-mask-linear-to-(--my-var)',
-      '-mask-linear-to-(color:--my-var)',
-      '-mask-linear-to-(length:--my-var)',
+        '-mask-linear-to-(--my-var)',
+        '-mask-linear-to-(color:--my-var)',
+        '-mask-linear-to-(length:--my-var)',
 
-      'mask-linear-to-[-25%]',
-      'mask-linear-to-[25%]/foo',
-      'mask-linear-to-[-25%]/foo',
-      '-mask-linear-to-[-25%]',
-      '-mask-linear-to-[25%]/foo',
-      '-mask-linear-to-[-25%]/foo',
-    ]),
+        'mask-linear-to-[-25%]',
+        'mask-linear-to-[25%]/foo',
+        'mask-linear-to-[-25%]/foo',
+        '-mask-linear-to-[-25%]',
+        '-mask-linear-to-[25%]/foo',
+        '-mask-linear-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -15905,36 +16017,44 @@ test('mask-radial-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-radial-from',
-      'mask-radial-from-2.8175',
-      'mask-radial-from--1.5',
-      'mask-radial-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-radial-from',
+        'mask-radial-from-2.8175',
+        'mask-radial-from--1.5',
+        'mask-radial-from--2',
 
-      'mask-radial-from-2.5%',
-      'mask-radial-from--5%',
-      'mask-radial-from-unknown',
-      'mask-radial-from-unknown%',
+        'mask-radial-from-2.5%',
+        'mask-radial-from--5%',
+        'mask-radial-from-unknown',
+        'mask-radial-from-unknown%',
 
-      '-mask-radial-from-0',
-      '-mask-radial-from-1.5',
-      '-mask-radial-from-2',
-      '-mask-radial-from-0%',
-      '-mask-radial-from-2%',
-      '-mask-radial-from-[0px]',
-      '-mask-radial-from-[0%]',
+        '-mask-radial-from-0',
+        '-mask-radial-from-1.5',
+        '-mask-radial-from-2',
+        '-mask-radial-from-0%',
+        '-mask-radial-from-2%',
+        '-mask-radial-from-[0px]',
+        '-mask-radial-from-[0%]',
 
-      '-mask-radial-from-(--my-var)',
-      '-mask-radial-from-(color:--my-var)',
-      '-mask-radial-from-(length:--my-var)',
+        '-mask-radial-from-(--my-var)',
+        '-mask-radial-from-(color:--my-var)',
+        '-mask-radial-from-(length:--my-var)',
 
-      'mask-radial-from-[-25%]',
-      'mask-radial-from-[25%]/foo',
-      'mask-radial-from-[-25%]/foo',
-      '-mask-radial-from-[-25%]',
-      '-mask-radial-from-[25%]/foo',
-      '-mask-radial-from-[-25%]/foo',
-    ]),
+        'mask-radial-from-[-25%]',
+        'mask-radial-from-[25%]/foo',
+        'mask-radial-from-[-25%]/foo',
+        '-mask-radial-from-[-25%]',
+        '-mask-radial-from-[25%]/foo',
+        '-mask-radial-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -16135,36 +16255,44 @@ test('mask-radial-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-radial-to',
-      'mask-radial-to-2.8175',
-      'mask-radial-to--1.5',
-      'mask-radial-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-radial-to',
+        'mask-radial-to-2.8175',
+        'mask-radial-to--1.5',
+        'mask-radial-to--2',
 
-      'mask-radial-to-2.5%',
-      'mask-radial-to--5%',
-      'mask-radial-to-unknown',
-      'mask-radial-to-unknown%',
+        'mask-radial-to-2.5%',
+        'mask-radial-to--5%',
+        'mask-radial-to-unknown',
+        'mask-radial-to-unknown%',
 
-      '-mask-radial-to-0',
-      '-mask-radial-to-1.5',
-      '-mask-radial-to-2',
-      '-mask-radial-to-0%',
-      '-mask-radial-to-2%',
-      '-mask-radial-to-[0px]',
-      '-mask-radial-to-[0%]',
+        '-mask-radial-to-0',
+        '-mask-radial-to-1.5',
+        '-mask-radial-to-2',
+        '-mask-radial-to-0%',
+        '-mask-radial-to-2%',
+        '-mask-radial-to-[0px]',
+        '-mask-radial-to-[0%]',
 
-      '-mask-radial-to-(--my-var)',
-      '-mask-radial-to-(color:--my-var)',
-      '-mask-radial-to-(length:--my-var)',
+        '-mask-radial-to-(--my-var)',
+        '-mask-radial-to-(color:--my-var)',
+        '-mask-radial-to-(length:--my-var)',
 
-      'mask-radial-to-[-25%]',
-      'mask-radial-to-[25%]/foo',
-      'mask-radial-to-[-25%]/foo',
-      '-mask-radial-to-[-25%]',
-      '-mask-radial-to-[25%]/foo',
-      '-mask-radial-to-[-25%]/foo',
-    ]),
+        'mask-radial-to-[-25%]',
+        'mask-radial-to-[25%]/foo',
+        'mask-radial-to-[-25%]/foo',
+        '-mask-radial-to-[-25%]',
+        '-mask-radial-to-[25%]/foo',
+        '-mask-radial-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -16462,36 +16590,44 @@ test('mask-conic-from', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-conic-from',
-      'mask-conic-from-2.8175',
-      'mask-conic-from--1.5',
-      'mask-conic-from--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-conic-from',
+        'mask-conic-from-2.8175',
+        'mask-conic-from--1.5',
+        'mask-conic-from--2',
 
-      'mask-conic-from-2.5%',
-      'mask-conic-from--5%',
-      'mask-conic-from-unknown',
-      'mask-conic-from-unknown%',
+        'mask-conic-from-2.5%',
+        'mask-conic-from--5%',
+        'mask-conic-from-unknown',
+        'mask-conic-from-unknown%',
 
-      '-mask-conic-from-0',
-      '-mask-conic-from-1.5',
-      '-mask-conic-from-2',
-      '-mask-conic-from-0%',
-      '-mask-conic-from-2%',
-      '-mask-conic-from-[0px]',
-      '-mask-conic-from-[0%]',
+        '-mask-conic-from-0',
+        '-mask-conic-from-1.5',
+        '-mask-conic-from-2',
+        '-mask-conic-from-0%',
+        '-mask-conic-from-2%',
+        '-mask-conic-from-[0px]',
+        '-mask-conic-from-[0%]',
 
-      '-mask-conic-from-(--my-var)',
-      '-mask-conic-from-(color:--my-var)',
-      '-mask-conic-from-(length:--my-var)',
+        '-mask-conic-from-(--my-var)',
+        '-mask-conic-from-(color:--my-var)',
+        '-mask-conic-from-(length:--my-var)',
 
-      'mask-conic-from-[-25%]',
-      'mask-conic-from-[25%]/foo',
-      'mask-conic-from-[-25%]/foo',
-      '-mask-conic-from-[-25%]',
-      '-mask-conic-from-[25%]/foo',
-      '-mask-conic-from-[-25%]/foo',
-    ]),
+        'mask-conic-from-[-25%]',
+        'mask-conic-from-[25%]/foo',
+        'mask-conic-from-[-25%]/foo',
+        '-mask-conic-from-[-25%]',
+        '-mask-conic-from-[25%]/foo',
+        '-mask-conic-from-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
@@ -16680,36 +16816,44 @@ test('mask-conic-to', async () => {
     }"
   `)
   expect(
-    await run([
-      'mask-conic-to',
-      'mask-conic-to-2.8175',
-      'mask-conic-to--1.5',
-      'mask-conic-to--2',
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mask-conic-to',
+        'mask-conic-to-2.8175',
+        'mask-conic-to--1.5',
+        'mask-conic-to--2',
 
-      'mask-conic-to-2.5%',
-      'mask-conic-to--5%',
-      'mask-conic-to-unknown',
-      'mask-conic-to-unknown%',
+        'mask-conic-to-2.5%',
+        'mask-conic-to--5%',
+        'mask-conic-to-unknown',
+        'mask-conic-to-unknown%',
 
-      '-mask-conic-to-0',
-      '-mask-conic-to-1.5',
-      '-mask-conic-to-2',
-      '-mask-conic-to-0%',
-      '-mask-conic-to-2%',
-      '-mask-conic-to-[0px]',
-      '-mask-conic-to-[0%]',
+        '-mask-conic-to-0',
+        '-mask-conic-to-1.5',
+        '-mask-conic-to-2',
+        '-mask-conic-to-0%',
+        '-mask-conic-to-2%',
+        '-mask-conic-to-[0px]',
+        '-mask-conic-to-[0%]',
 
-      '-mask-conic-to-(--my-var)',
-      '-mask-conic-to-(color:--my-var)',
-      '-mask-conic-to-(length:--my-var)',
+        '-mask-conic-to-(--my-var)',
+        '-mask-conic-to-(color:--my-var)',
+        '-mask-conic-to-(length:--my-var)',
 
-      'mask-conic-to-[-25%]',
-      'mask-conic-to-[25%]/foo',
-      'mask-conic-to-[-25%]/foo',
-      '-mask-conic-to-[-25%]',
-      '-mask-conic-to-[25%]/foo',
-      '-mask-conic-to-[-25%]/foo',
-    ]),
+        'mask-conic-to-[-25%]',
+        'mask-conic-to-[25%]/foo',
+        'mask-conic-to-[-25%]/foo',
+        '-mask-conic-to-[-25%]',
+        '-mask-conic-to-[25%]/foo',
+        '-mask-conic-to-[-25%]/foo',
+      ],
+    ),
   ).toEqual('')
 })
 
