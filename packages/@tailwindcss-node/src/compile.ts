@@ -9,12 +9,13 @@ import {
   compile as _compile,
   compileAst as _compileAst,
   Features,
+  Polyfills,
 } from 'tailwindcss'
 import type { AstNode } from '../../tailwindcss/src/ast'
 import { getModuleDependencies } from './get-module-dependencies'
 import { rewriteUrls } from './urls'
 
-export { Features }
+export { Features, Polyfills }
 
 export type Resolver = (id: string, base: string) => Promise<string | false | undefined>
 
@@ -22,6 +23,7 @@ export interface CompileOptions {
   base: string
   onDependency: (path: string) => void
   shouldRewriteUrls?: boolean
+  polyfills?: Polyfills
 
   customCssResolver?: Resolver
   customJsResolver?: Resolver
@@ -29,6 +31,7 @@ export interface CompileOptions {
 
 function createCompileOptions({
   base,
+  polyfills,
   onDependency,
   shouldRewriteUrls,
 
@@ -37,6 +40,7 @@ function createCompileOptions({
 }: CompileOptions) {
   return {
     base,
+    polyfills,
     async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },

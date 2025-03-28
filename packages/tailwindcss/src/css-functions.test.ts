@@ -196,7 +196,13 @@ describe('--theme(…)', () => {
       }
 
       .red {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        color: oklab(62.7955% .22486 .12584 / .5);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .red {
+          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        }
       }"
     `)
   })
@@ -343,13 +349,13 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .blue {
           color: #00f;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .red {
           color: red;
         }
@@ -922,7 +928,7 @@ describe('theme(…)', () => {
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['letterSpacing.wide', '.025em'],
         ['lineHeight.tight', '1.25'],
-        ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
+        ['backgroundColor.red.500', 'oklch(63.7% .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
         let compiled = await compileCss(css`
@@ -960,7 +966,7 @@ describe('theme(…)', () => {
           ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 40rem) {
+        "@media (min-width: 40rem) {
           .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
             --color: red;
           }
@@ -1021,7 +1027,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width <= 64rem) {
+        "@media (min-width: 48rem) and (max-width: 64rem) {
           .red {
             color: red;
           }
@@ -1043,7 +1049,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width < 64rem) {
+        "@media (min-width: 48rem) and (not (min-width: 64rem)) {
           .red {
             color: red;
           }
@@ -1066,7 +1072,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .red {
           color: red;
         }
@@ -1087,7 +1093,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@container (width > 48rem) {
+      "@container not (max-width: 48rem) {
         .red {
           color: red;
         }

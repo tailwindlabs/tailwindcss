@@ -48,7 +48,7 @@ test(
       'app/page.module.css': css`
         @reference './globals.css';
         .heading {
-          @apply text-red-500 animate-ping;
+          @apply text-red-500 animate-ping skew-7;
         }
       `,
       'app/globals.css': css`
@@ -77,9 +77,10 @@ test(
     ])
 
     await fs.expectFileToContain(moduleCss!, [
-      'color:var(--color-red-500,oklch(.637 .237 25.331)',
+      'color:var(--color-red-500,oklch(63.7% .237 25.331)',
       'animation:var(--animate-ping,ping 1s cubic-bezier(0,0,.2,1) infinite)',
       /@keyframes page_ping.*{75%,to{transform:scale\(2\);opacity:0}/,
+      '--tw-skew-x:skewX(7deg);',
     ])
   },
 )
@@ -130,7 +131,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
         'app/page.module.css': css`
           @reference './globals.css';
           .heading {
-            @apply text-red-500 animate-ping content-['module'];
+            @apply text-red-500 animate-ping skew-7 content-['module'];
           }
         `,
         'app/globals.css': css`
@@ -173,6 +174,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
         let css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`bg-red-500`)
+        expect(css).toContain('--tw-skew-x: skewX(7deg);')
         expect(css).toContain('content: var(--tw-content)')
         expect(css).toContain('@keyframes')
       })

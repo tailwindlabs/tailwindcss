@@ -260,17 +260,31 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    color: oklab(0% none none / .5);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-black\\/50 {
+      color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    }
   }
 
   .underline {
     text-decoration-line: underline;
   }
 
-  @media (width >= 96rem) {
+  @media (min-width: 96rem) {
     .\\32 xl\\:font-bold {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
+    }
+  }
+}
+
+@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+  @layer base {
+    *, :before, :after, ::backdrop {
+      --tw-font-weight: initial;
     }
   }
 }

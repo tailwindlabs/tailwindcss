@@ -1,7 +1,6 @@
-import { compile, env, Features, Instrumentation, normalizePath } from '@tailwindcss/node'
+import { compile, env, Features, Instrumentation, normalizePath, optimize } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
@@ -102,7 +101,7 @@ export default function tailwindcss(): Plugin[] {
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-        generated = optimizeCss(generated, { minify })
+        generated = optimize(generated, { minify })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 
         return { code: generated }
@@ -125,42 +124,6 @@ function isPotentialCssRootFile(id: string) {
     !SPECIAL_QUERY_RE.test(id) &&
     !COMMON_JS_PROXY_RE.test(id)
   return isCssFile
-}
-
-function optimizeCss(
-  input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-) {
-  function optimize(code: Buffer | Uint8Array | any) {
-    return transform({
-      filename: file,
-      code,
-      minify,
-      sourceMap: false,
-      drafts: {
-        customMedia: true,
-      },
-      nonStandard: {
-        deepSelectorCombinator: true,
-      },
-      include: LightningCssFeatures.Nesting,
-      exclude:
-        LightningCssFeatures.LogicalProperties |
-        LightningCssFeatures.DirSelector |
-        LightningCssFeatures.LightDark,
-      targets: {
-        safari: (16 << 16) | (4 << 8),
-        ios_saf: (16 << 16) | (4 << 8),
-        firefox: 128 << 16,
-        chrome: 111 << 16,
-      },
-      errorRecovery: true,
-    }).code
-  }
-
-  // Running Lightning CSS twice to ensure that adjacent rules are merged after
-  // nesting is applied. This creates a more optimized output.
-  return optimize(optimize(Buffer.from(input))).toString()
 }
 
 function idToPath(id: string) {

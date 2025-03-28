@@ -33,7 +33,6 @@
     "@alloc/quick-lru": "^5.2.0",
     "@tailwindcss/node": "workspace:*",
     "@tailwindcss/oxide": "workspace:*",
-    "lightningcss": "catalog:",
     "postcss": "^8.4.41",
     "tailwindcss": "workspace:*"
   },
