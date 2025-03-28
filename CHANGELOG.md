@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
 - `@tailwindcss/cli` considers ignore rules in `--watch` mode ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Fix negated `content` rules in legacy JavaScript configuration ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 
 ### Changed
 
