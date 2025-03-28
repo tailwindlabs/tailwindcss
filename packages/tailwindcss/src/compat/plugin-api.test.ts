@@ -285,22 +285,13 @@ describe('theme', async () => {
 
     expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
       ".fraction {
-        color: #ef4444;
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, #ef4444 50%, transparent);
-        }
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .percentage {
-        color: #ef4444;
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, #ef4444 50%, transparent);
-        }
+        color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .variable {
-        color: #ef4444;
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
-        }
+        color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
       }
       "
     `)
@@ -368,40 +359,22 @@ describe('theme', async () => {
       ]),
     ).toMatchInlineSnapshot(`
       ".css-fraction {
-        color: rgba(255 0 0 / <alpha-value>);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
-        }
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
       }
       .css-percentage {
-        color: rgba(255 0 0 / <alpha-value>);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
-        }
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
       }
       .css-variable {
-        color: rgba(255 0 0 / <alpha-value>);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
-        }
+        color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
       }
       .js-fraction {
-        color: rgb(255 0 0 / 1);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
-        }
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
       }
       .js-percentage {
-        color: rgb(255 0 0 / 1);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
-        }
+        color: color-mix(in oklab, rgb(255 0 0 / 1) 50%, transparent);
       }
       .js-variable {
-        color: rgb(255 0 0 / 1);
-        @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
-        }
+        color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
       }
       "
     `)
@@ -3601,14 +3574,12 @@ describe('matchUtilities()', () => {
           await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50']),
         ).trim(),
       ).toMatchInlineSnapshot(`
-        ".scrollbar-\\[\\#08c\\], .scrollbar-\\[\\#08c\\]\\/50 {
+        ".scrollbar-\\[\\#08c\\] {
           scrollbar-color: #08c;
         }
 
-        @supports (color: color-mix(in lab, red, red)) {
-          .scrollbar-\\[\\#08c\\]\\/50 {
-            scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
-          }
+        .scrollbar-\\[\\#08c\\]\\/50 {
+          scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
         }
 
         .scrollbar-\\[2px\\] {
@@ -3766,14 +3737,12 @@ describe('matchUtilities()', () => {
         scrollbar-width: 2px;
       }
 
-      .scrollbar-\\[\\#fff\\], .scrollbar-\\[\\#fff\\]\\/50 {
+      .scrollbar-\\[\\#fff\\] {
         scrollbar-color: #fff;
       }
 
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-\\[\\#fff\\]\\/50 {
-          scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
-        }
+      .scrollbar-\\[\\#fff\\]\\/50 {
+        scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
       }
 
       .scrollbar-\\[2px\\] {
@@ -3800,14 +3769,12 @@ describe('matchUtilities()', () => {
         scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
 
-      .scrollbar-black, .scrollbar-black\\/50 {
+      .scrollbar-black {
         scrollbar-color: black;
       }
 
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-black\\/50 {
-          scrollbar-color: oklab(0% none none / .5);
-        }
+      .scrollbar-black\\/50 {
+        scrollbar-color: oklab(0% none none / .5);
       }"
     `)
 
@@ -3876,34 +3843,24 @@ describe('matchUtilities()', () => {
         scrollbar-color: color-mix(in oklab, var(--my-color) 25%, transparent);
       }
 
-      .scrollbar-black, .scrollbar-black\\/33 {
+      .scrollbar-black {
         scrollbar-color: black;
       }
 
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-black\\/33 {
-          scrollbar-color: oklab(0% none none / .33);
-        }
+      .scrollbar-black\\/33 {
+        scrollbar-color: oklab(0% none none / .33);
       }
 
       .scrollbar-black\\/\\[50\\%\\] {
-        scrollbar-color: black;
+        scrollbar-color: oklab(0% none none / .5);
       }
 
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-black\\/\\[50\\%\\] {
-          scrollbar-color: oklab(0% none none / .5);
-        }
-      }
-
-      .scrollbar-current, .scrollbar-current\\/45 {
+      .scrollbar-current {
         scrollbar-color: currentColor;
       }
 
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-current\\/45 {
-          scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
-        }
+      .scrollbar-current\\/45 {
+        scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
       }"
     `)
   })

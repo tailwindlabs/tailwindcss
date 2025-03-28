@@ -165,13 +165,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
     ::placeholder {
-      color: currentColor;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      ::placeholder {
-        color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+      color: color-mix(in oklab, currentColor 50%, transparent);
     }
   }
 
@@ -266,7 +260,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: #00000080;
+    color: oklab(0% none none / .5);
   }
 
   @supports (color: color-mix(in lab, red, red)) {
