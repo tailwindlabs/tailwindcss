@@ -892,19 +892,19 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media not (min-width: 1024px) {
+    "@media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 768px) {
+    @media not all and (min-width: 768px) {
       .max-md\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 640px) {
+    @media not all and (min-width: 640px) {
       .max-sm\\:flex {
         display: flex;
       }
@@ -993,7 +993,7 @@ test('sorting stacked min-* and max-* variants', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@media (min-width: 280px) {
-      @media not (min-width: 640px) {
+      @media not all and (min-width: 640px) {
         .min-xs\\:max-sm\\:flex {
           display: flex;
         }
@@ -1001,13 +1001,13 @@ test('sorting stacked min-* and max-* variants', async () => {
     }
 
     @media (min-width: 640px) {
-      @media not (min-width: 1280px) {
+      @media not all and (min-width: 1280px) {
         .min-sm\\:max-xl\\:flex {
           display: flex;
         }
       }
 
-      @media not (min-width: 1024px) {
+      @media not all and (min-width: 1024px) {
         .min-sm\\:max-lg\\:flex {
           display: flex;
         }
@@ -1015,7 +1015,7 @@ test('sorting stacked min-* and max-* variants', async () => {
     }
 
     @media (min-width: 768px) {
-      @media not (min-width: 1024px) {
+      @media not all and (min-width: 1024px) {
         .min-md\\:max-lg\\:flex {
           display: flex;
         }
@@ -1044,7 +1044,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
         display: flex;
       }
 
-      @media not (min-width: 1024px) {
+      @media not all and (min-width: 1024px) {
         .min-sm\\:max-lg\\:flex {
           display: flex;
         }
@@ -1056,7 +1056,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
         display: flex;
       }
 
-      @media not (min-width: 1024px) {
+      @media not all and (min-width: 1024px) {
         .min-md\\:max-lg\\:flex {
           display: flex;
         }
@@ -1095,25 +1095,25 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media not (min-width: 1024px) {
+    "@media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 1000px) {
+    @media not all and (min-width: 1000px) {
       .max-\\[1000px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 768px) {
+    @media not all and (min-width: 768px) {
       .max-md\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 640px) {
+    @media not all and (min-width: 640px) {
       .max-sm\\:flex {
         display: flex;
       }
@@ -1170,61 +1170,61 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       'max-[12vh]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    "@media not (min-width: calc(1000px + 12em)) {
+    "@media not all and (min-width: calc(1000px + 12em)) {
       .max-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: calc(50vh + 12em)) {
+    @media not all and (min-width: calc(50vh + 12em)) {
       .max-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 12em) {
+    @media not all and (min-width: 12em) {
       .max-\\[12em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 10em) {
+    @media not all and (min-width: 10em) {
       .max-\\[10em\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 12px) {
+    @media not all and (min-width: 12px) {
       .max-\\[12px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 10px) {
+    @media not all and (min-width: 10px) {
       .max-\\[10px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 12rem) {
+    @media not all and (min-width: 12rem) {
       .max-\\[12rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 10rem) {
+    @media not all and (min-width: 10rem) {
       .max-\\[10rem\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 12vh) {
+    @media not all and (min-width: 12vh) {
       .max-\\[12vh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 10vh) {
+    @media not all and (min-width: 10vh) {
       .max-\\[10vh\\]\\:flex {
         display: flex;
       }
@@ -1479,7 +1479,7 @@ test('not', async () => {
       display: flex;
     }
 
-    @media not (hover: hover) {
+    @media not all and (hover: hover) {
       .not-hover\\:flex {
         display: flex;
       }
@@ -1495,25 +1495,25 @@ test('not', async () => {
       }
     }
 
-    @media not (prefers-reduced-motion: no-preference) {
+    @media not all and (prefers-reduced-motion: no-preference) {
       .not-motion-safe\\:flex {
         display: flex;
       }
     }
 
-    @media not (prefers-reduced-motion: reduce) {
+    @media not all and (prefers-reduced-motion: reduce) {
       .not-motion-reduce\\:flex {
         display: flex;
       }
     }
 
-    @media not (prefers-contrast: more) {
+    @media not all and (prefers-contrast: more) {
       .not-contrast-more\\:flex {
         display: flex;
       }
     }
 
-    @media not (prefers-contrast: less) {
+    @media not all and (prefers-contrast: less) {
       .not-contrast-less\\:flex {
         display: flex;
       }
@@ -1531,25 +1531,25 @@ test('not', async () => {
       }
     }
 
-    @media not (min-width: 130px) {
+    @media not all and (min-width: 130px) {
       .not-min-\\[130px\\]\\:flex {
         display: flex;
       }
     }
 
-    @media not (min-width: 640px) {
+    @media not all and (min-width: 640px) {
       .not-min-sm\\:flex, .not-sm\\:flex {
         display: flex;
       }
     }
 
-    @media not (orientation: portrait) {
+    @media not all and (orientation: portrait) {
       .not-portrait\\:flex {
         display: flex;
       }
     }
 
-    @media not (orientation: landscape) {
+    @media not all and (orientation: landscape) {
       .not-landscape\\:flex {
         display: flex;
       }
@@ -1559,7 +1559,7 @@ test('not', async () => {
       display: flex;
     }
 
-    @media not (prefers-color-scheme: dark) {
+    @media not all and (prefers-color-scheme: dark) {
       .not-dark\\:flex {
         display: flex;
       }
@@ -1571,7 +1571,7 @@ test('not', async () => {
       }
     }
 
-    @media not (forced-colors: active) {
+    @media not all and (forced-colors: active) {
       .not-forced-colors\\:flex {
         display: flex;
       }
@@ -1587,7 +1587,7 @@ test('not', async () => {
       display: flex;
     }
 
-    @media not (hover: hover) {
+    @media not all and (hover: hover) {
       .not-device-hocus\\:flex {
         display: flex;
       }
@@ -1597,7 +1597,7 @@ test('not', async () => {
       display: flex;
     }
 
-    @media not (orientation: landscape) {
+    @media not all and (orientation: landscape) {
       .not-\\[\\@media_\\(orientation\\:landscape\\)\\]\\:flex {
         display: flex;
       }
@@ -1615,7 +1615,7 @@ test('not', async () => {
       }
     }
 
-    @media not (orientation: portrait) {
+    @media not all and (orientation: portrait) {
       .not-\\[\\@media\\(orientation\\:portrait\\)\\]\\:flex {
         display: flex;
       }

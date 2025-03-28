@@ -1,8 +1,13 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compileAst, env, Features, Instrumentation } from '@tailwindcss/node'
+import {
+  compileAst,
+  env,
+  Features,
+  Instrumentation,
+  optimize as optimizeCss,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path, { relative } from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
@@ -268,6 +273,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               DEBUG && I.end('AST -> CSS')
 
               DEBUG && I.start('Lightning CSS')
+              // @ts-ignore
               let ast = optimizeCss(css, {
                 minify: typeof optimize === 'object' ? optimize.minify : true,
               })
@@ -306,45 +312,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       },
     ],
   }
-}
-
-function optimizeCss(
-  input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-) {
-  function optimize(code: Buffer | Uint8Array) {
-    return transform({
-      filename: file,
-      code,
-      minify,
-      sourceMap: false,
-      drafts: {
-        customMedia: true,
-      },
-      nonStandard: {
-        deepSelectorCombinator: true,
-      },
-      include: LightningCssFeatures.Nesting | LightningCssFeatures.MediaRangeSyntax,
-      exclude:
-        LightningCssFeatures.LogicalProperties |
-        LightningCssFeatures.DirSelector |
-        LightningCssFeatures.LightDark,
-      targets: {
-        safari: (15 << 16) | (4 << 8),
-        ios_saf: (16 << 16) | (4 << 8),
-        firefox: 128 << 16,
-        chrome: 111 << 16,
-      },
-      errorRecovery: true,
-    }).code
-  }
-
-  let out = optimize(optimize(Buffer.from(input))).toString()
-  out = out.replaceAll(/\@media (\()?not /g, '@media $1not all and ')
-
-  // Running Lightning CSS twice to ensure that adjacent rules are merged after
-  // nesting is applied. This creates a more optimized output.
-  return out
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
