@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
 - _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
-- _Experimental_: Add `scripting`, `scripting-none`, and `scripting-initial` variants ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929))
-- _Experimental_: Add `items-baseline-last` utility ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+- _Experimental_: Add `noscript` variant ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929), [#17431](https://github.com/tailwindlabs/tailwindcss/pull/17431))
+- _Experimental_: Add `items-baseline-last` utility ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888))
 - _Experimental_: Add `pointer-none`, `pointer-coarse`, and `pointer-fine` variant ([#16946](https://github.com/tailwindlabs/tailwindcss/pull/16946))
 - _Experimental_: Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
 - _Experimental_: Add safe alignment utilities ([#14607](https://github.com/tailwindlabs/tailwindcss/pull/14607))
@@ -25,10 +25,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
+- `@tailwindcss/cli` considers ignore rules in `--watch` mode ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Fix negated `content` rules in legacy JavaScript configuration ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 - Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
 
 ### Changed
 
+- Ignore `node_modules` by default (but can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Order of `@source` rules matter if you want to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- `@source` rules that include file extensions or point inside `node_modules/` no longer consider `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Deprecated `bg-{left,right}-{top,bottom}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 
 ## [4.0.17] - 2025-03-26

@@ -1449,6 +1449,7 @@ test('not', async () => {
         'not-contrast-less:flex',
         'not-forced-colors:flex',
         'not-nth-2:flex',
+        'not-noscript:flex',
 
         'not-sm:flex',
         'not-min-sm:flex',
@@ -1556,6 +1557,12 @@ test('not', async () => {
 
     @media not (forced-colors: active) {
       .not-forced-colors\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (scripting: none) {
+      .not-noscript\\:flex {
         display: flex;
       }
     }
@@ -1987,30 +1994,10 @@ test('any-pointer-fine', async () => {
   `)
 })
 
-test('scripting-initial', async () => {
-  expect(await run(['scripting-initial:flex'])).toMatchInlineSnapshot(`
-    "@media (scripting: initial-only) {
-      .scripting-initial\\:flex {
-        display: flex;
-      }
-    }"
-  `)
-})
-
 test('scripting-none', async () => {
-  expect(await run(['scripting-none:flex'])).toMatchInlineSnapshot(`
+  expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
     "@media (scripting: none) {
-      .scripting-none\\:flex {
-        display: flex;
-      }
-    }"
-  `)
-})
-
-test('scripting', async () => {
-  expect(await run(['scripting:flex'])).toMatchInlineSnapshot(`
-    "@media (scripting: enabled) {
-      .scripting\\:flex {
+      .noscript\\:flex {
         display: flex;
       }
     }"
