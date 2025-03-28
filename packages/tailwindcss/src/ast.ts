@@ -392,7 +392,7 @@ export function optimizeAst(
       // Collect fallbacks for `@property` rules for Firefox support
       // We turn these into rules on `:root` or `*` and some pseudo-elements
       // based on the value of `inherits``
-      if (polyfills & Polyfills.PolyfillAtProperty) {
+      if (polyfills & Polyfills.AtProperty) {
         let property = node.params
         let initialValue = null
         let inherits = false
@@ -556,7 +556,7 @@ export function optimizeAst(
   }
 
   // Fallbacks
-  if (polyfills & Polyfills.PolyfillAtProperty) {
+  if (polyfills & Polyfills.AtProperty) {
     {
       let fallbackAst = []
 

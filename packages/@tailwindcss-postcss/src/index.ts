@@ -5,6 +5,7 @@ import {
   Features,
   Instrumentation,
   optimize as optimizeCss,
+  Polyfills,
 } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
@@ -72,6 +73,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           using I = new Instrumentation()
 
           let inputFile = result.opts.from ?? ''
+          let isCSSModuleFile = inputFile.endsWith('.module.css')
 
           DEBUG && I.start(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
 
@@ -119,6 +121,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
+              // In CSS Module files, we have to disable the `@property` polyfill since these will
+              // emit global `*` rules which are considered to be non-pure and will cause builds
+              // to fail.
+              polyfills: isCSSModuleFile ? Polyfills.All ^ Polyfills.AtProperty : Polyfills.All,
             })
             DEBUG && I.end('Create compiler')
 

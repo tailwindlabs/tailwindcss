@@ -1,3 +1,5 @@
+@reference "./globals.css";
+
 .heading {
-  color: var(--color-red-500);
+  @apply skew-7;
 }

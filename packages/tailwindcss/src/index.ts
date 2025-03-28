@@ -41,10 +41,10 @@ export const enum Polyfills {
   None = 0,
 
   // Control if fallbacks for `@property` rules are emitted
-  PolyfillAtProperty = 1 << 0,
+  AtProperty = 1 << 0,
 
   // Enable all
-  All = PolyfillAtProperty,
+  All = AtProperty,
 }
 
 type CompileOptions = {
