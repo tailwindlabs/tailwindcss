@@ -6,7 +6,7 @@ pub struct Razor;
 
 impl PreProcessor for Razor {
     fn process(&self, content: &[u8]) -> Vec<u8> {
-        content.replace("@@", " @")
+        content.replace("@@", " @").replace(r#"@("@")"#, "     @")
     }
 }
 
