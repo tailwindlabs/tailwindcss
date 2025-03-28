@@ -12138,8 +12138,11 @@ test('mask-t-from', async () => {
   expect(
     await run([
       'mask-t-from',
+      'mask-t-from-2.8175',
       'mask-t-from--1.5',
       'mask-t-from--2',
+
+      'mask-t-from-2.5%',
       'mask-t-from--5%',
       'mask-t-from-unknown',
       'mask-t-from-unknown%',
@@ -12370,8 +12373,11 @@ test('mask-t-to', async () => {
   expect(
     await run([
       'mask-t-to',
+      'mask-t-to-2.8175',
       'mask-t-to--1.5',
       'mask-t-to--2',
+
+      'mask-t-to-2.5%',
       'mask-t-to--5%',
       'mask-t-to-unknown',
       'mask-t-to-unknown%',
@@ -12603,8 +12609,11 @@ test('mask-r-from', async () => {
   expect(
     await run([
       'mask-r-from',
+      'mask-r-from-2.8175',
       'mask-r-from--1.5',
       'mask-r-from--2',
+
+      'mask-r-from-2.5%',
       'mask-r-from--5%',
       'mask-r-from-unknown',
       'mask-r-from-unknown%',
@@ -12836,8 +12845,11 @@ test('mask-r-to', async () => {
   expect(
     await run([
       'mask-r-to',
+      'mask-r-to-2.8175',
       'mask-r-to--1.5',
       'mask-r-to--2',
+
+      'mask-r-to-2.5%',
       'mask-r-to--5%',
       'mask-r-to-unknown',
       'mask-r-to-unknown%',
@@ -13069,8 +13081,11 @@ test('mask-b-from', async () => {
   expect(
     await run([
       'mask-b-from',
+      'mask-b-from-2.8175',
       'mask-b-from--1.5',
       'mask-b-from--2',
+
+      'mask-b-from-2.5%',
       'mask-b-from--5%',
       'mask-b-from-unknown',
       'mask-b-from-unknown%',
@@ -13302,8 +13317,11 @@ test('mask-b-to', async () => {
   expect(
     await run([
       'mask-b-to',
+      'mask-b-to-2.8175',
       'mask-b-to--1.5',
       'mask-b-to--2',
+
+      'mask-b-to-2.5%',
       'mask-b-to--5%',
       'mask-b-to-unknown',
       'mask-b-to-unknown%',
@@ -13535,8 +13553,11 @@ test('mask-l-from', async () => {
   expect(
     await run([
       'mask-l-from',
+      'mask-l-from-2.8175',
       'mask-l-from--1.5',
       'mask-l-from--2',
+
+      'mask-l-from-2.5%',
       'mask-l-from--5%',
       'mask-l-from-unknown',
       'mask-l-from-unknown%',
@@ -13768,8 +13789,11 @@ test('mask-l-to', async () => {
   expect(
     await run([
       'mask-l-to',
+      'mask-l-to-2.8175',
       'mask-l-to--1.5',
       'mask-l-to--2',
+
+      'mask-l-to-2.5%',
       'mask-l-to--5%',
       'mask-l-to-unknown',
       'mask-l-to-unknown%',
@@ -14043,8 +14067,11 @@ test('mask-x-from', async () => {
   expect(
     await run([
       'mask-x-from',
+      'mask-x-from-2.8175',
       'mask-x-from--1.5',
       'mask-x-from--2',
+
+      'mask-x-from-2.5%',
       'mask-x-from--5%',
       'mask-x-from-unknown',
       'mask-x-from-unknown%',
@@ -14318,8 +14345,11 @@ test('mask-x-to', async () => {
   expect(
     await run([
       'mask-x-to',
+      'mask-x-to-2.8175',
       'mask-x-to--1.5',
       'mask-x-to--2',
+
+      'mask-x-to-2.5%',
       'mask-x-to--5%',
       'mask-x-to-unknown',
       'mask-x-to-unknown%',
@@ -14593,8 +14623,11 @@ test('mask-y-from', async () => {
   expect(
     await run([
       'mask-y-from',
+      'mask-y-from-2.8175',
       'mask-y-from--1.5',
       'mask-y-from--2',
+
+      'mask-y-from-2.5%',
       'mask-y-from--5%',
       'mask-y-from-unknown',
       'mask-y-from-unknown%',
@@ -14868,8 +14901,11 @@ test('mask-y-to', async () => {
   expect(
     await run([
       'mask-y-to',
+      'mask-y-to-2.8175',
       'mask-y-to--1.5',
       'mask-y-to--2',
+
+      'mask-y-to-2.5%',
       'mask-y-to--5%',
       'mask-y-to-unknown',
       'mask-y-to-unknown%',
@@ -14990,6 +15026,11 @@ test('mask-linear', async () => {
     await run([
       'mask-linear',
       '-mask-linear',
+
+      'mask-linear--75',
+      'mask-linear-unknown',
+      'mask-linear--75/foo',
+      'mask-linear-unknown/foo',
 
       'mask-linear-45/foo',
       '-mask-linear-45/foo',
@@ -15187,8 +15228,11 @@ test('mask-linear-from', async () => {
   expect(
     await run([
       'mask-linear-from',
+      'mask-linear-from-2.8175',
       'mask-linear-from--1.5',
       'mask-linear-from--2',
+
+      'mask-linear-from-2.5%',
       'mask-linear-from--5%',
       'mask-linear-from-unknown',
       'mask-linear-from-unknown%',
@@ -15402,8 +15446,11 @@ test('mask-linear-to', async () => {
   expect(
     await run([
       'mask-linear-to',
+      'mask-linear-to-2.8175',
       'mask-linear-to--1.5',
       'mask-linear-to--2',
+
+      'mask-linear-to-2.5%',
       'mask-linear-to--5%',
       'mask-linear-to-unknown',
       'mask-linear-to-unknown%',
@@ -15860,8 +15907,11 @@ test('mask-radial-from', async () => {
   expect(
     await run([
       'mask-radial-from',
+      'mask-radial-from-2.8175',
       'mask-radial-from--1.5',
       'mask-radial-from--2',
+
+      'mask-radial-from-2.5%',
       'mask-radial-from--5%',
       'mask-radial-from-unknown',
       'mask-radial-from-unknown%',
@@ -16087,8 +16137,11 @@ test('mask-radial-to', async () => {
   expect(
     await run([
       'mask-radial-to',
+      'mask-radial-to-2.8175',
       'mask-radial-to--1.5',
       'mask-radial-to--2',
+
+      'mask-radial-to-2.5%',
       'mask-radial-to--5%',
       'mask-radial-to-unknown',
       'mask-radial-to-unknown%',
@@ -16209,6 +16262,11 @@ test('mask-conic', async () => {
     await run([
       'mask-conic',
       '-mask-conic',
+
+      'mask-conic--75',
+      'mask-conic-unknown',
+      'mask-conic--75/foo',
+      'mask-conic-unknown/foo',
 
       'mask-conic-45/foo',
       '-mask-conic-45/foo',
@@ -16406,8 +16464,11 @@ test('mask-conic-from', async () => {
   expect(
     await run([
       'mask-conic-from',
+      'mask-conic-from-2.8175',
       'mask-conic-from--1.5',
       'mask-conic-from--2',
+
+      'mask-conic-from-2.5%',
       'mask-conic-from--5%',
       'mask-conic-from-unknown',
       'mask-conic-from-unknown%',
@@ -16621,8 +16682,11 @@ test('mask-conic-to', async () => {
   expect(
     await run([
       'mask-conic-to',
+      'mask-conic-to-2.8175',
       'mask-conic-to--1.5',
       'mask-conic-to--2',
+
+      'mask-conic-to-2.5%',
       'mask-conic-to--5%',
       'mask-conic-to-unknown',
       'mask-conic-to-unknown%',
