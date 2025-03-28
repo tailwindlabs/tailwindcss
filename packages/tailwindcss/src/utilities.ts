@@ -2535,7 +2535,7 @@ export function createUtilities(theme: Theme) {
 
         return [
           decl('--tw-gradient-position', `${value}`),
-          rule('@supports (background-image:linear-gradient(in lab, red, red))', [
+          rule('@supports (background-image: linear-gradient(in lab, red, red))', [
             decl('--tw-gradient-position', `${value} ${interpolationMethod}`),
           ]),
           decl('background-image', `linear-gradient(var(--tw-gradient-stops))`),

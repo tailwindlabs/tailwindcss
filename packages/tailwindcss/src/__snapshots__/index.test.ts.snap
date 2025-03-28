@@ -19,9 +19,28 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
-@media (width >= 40rem) {
+@media (min-width: 40rem) {
   .sm\\:flex {
     display: flex;
+  }
+}
+
+@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+  @layer base {
+    *, :before, :after, ::backdrop {
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+    }
   }
 }
 
@@ -266,13 +285,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
     ::placeholder {
-      color: currentColor;
-    }
-
-    @supports (color: color-mix(in srgb, red 50%, green)) {
-      ::placeholder {
-        color: color-mix(in oklab, currentColor 50%, transparent);
-      }
+      color: color-mix(in oklab, currentColor 50%, transparent);
     }
   }
 

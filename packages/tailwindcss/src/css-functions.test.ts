@@ -17,13 +17,7 @@ describe('--alpha(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       ".foo {
-        margin: red;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .foo {
-          margin: oklab(62.7955% .22486 .12584 / .5);
-        }
+        margin: oklab(62.7955% .22486 .12584 / .5);
       }"
     `)
   })
@@ -202,7 +196,7 @@ describe('--theme(…)', () => {
       }
 
       .red {
-        color: #ff000080;
+        color: oklab(62.7955% .22486 .12584 / .5);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -225,13 +219,7 @@ describe('--theme(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       ".red {
-        color: red;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .red {
-          color: oklab(62.7955% .224863 .125846);
-        }
+        color: oklab(62.7955% .224863 .125846);
       }"
     `)
   })
@@ -563,13 +551,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .75);
-            }
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -586,13 +568,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .75);
-            }
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -609,13 +585,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .75);
-            }
+            color: oklab(62.7955% .22486 .12584 / .75);
           }"
         `)
       })
@@ -632,13 +602,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: color-mix(in oklab, red var(--opacity), transparent);
-            }
+            color: color-mix(in oklab, red var(--opacity), transparent);
           }"
         `)
       })
@@ -656,13 +620,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: color-mix(in oklab, red var(--opacity, 50%), transparent);
-            }
+            color: color-mix(in oklab, red var(--opacity, 50%), transparent);
           }"
         `)
       })
@@ -852,13 +810,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .25);
-            }
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -929,18 +881,8 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ":root, :host {
-            --color-foo: red;
-          }
-
-          .red {
-            color: oklab(62.7955% .22486 .12584 / .5);
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .25);
-            }
+          ".red {
+            color: oklab(62.7955% .22486 .12584 / .25);
           }"
         `)
       })
@@ -976,13 +918,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: oklab(62.7955% .22486 .12584 / .5);
-            }
+            color: oklab(62.7955% .22486 .12584 / .5);
           }"
         `)
       })
@@ -1275,15 +1211,8 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklch(87% .07 7);
-          outline-color: oklch(79% .17 70);
-        }
-
-        @supports (color: color-mix(in lab, red, red)) {
-          .my-base-rule {
-            border-color: oklab(87% .06947 .00853 / .1);
-            outline-color: oklab(79% .05814 .15974 / .15);
-          }
+          border-color: oklab(87% .06947 .00853 / .1);
+          outline-color: oklab(79% .05814 .15974 / .15);
         }
       }
 
