@@ -5,7 +5,7 @@ use tailwindcss_oxide::extractor::{Extracted, Extractor};
 use tailwindcss_oxide::throughput::Throughput;
 
 fn run_full_extractor(input: &[u8]) -> Vec<&[u8]> {
-    Extractor::new(input, None)
+    Extractor::new(input)
         .extract()
         .into_iter()
         .map(|x| match x {

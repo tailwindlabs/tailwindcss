@@ -327,7 +327,7 @@ impl Scanner {
         &mut self,
         changed_content: ChangedContent,
     ) -> Vec<(String, usize)> {
-        let (content, extension) = read_changed_content(changed_content).unwrap_or_default();
+        let content = read_changed_content(changed_content).unwrap_or_default();
         let original_content = &content;
 
         // Workaround for legacy upgrades:
@@ -337,7 +337,7 @@ impl Scanner {
         let content = content.replace("-[]", "XYZ");
         let offset = content.as_ptr() as usize;
 
-        let mut extractor = Extractor::new(&content[..], Some(&extension));
+        let mut extractor = Extractor::new(&content[..]);
 
         extractor
             .extract()
@@ -364,7 +364,7 @@ impl Scanner {
     }
 }
 
-fn read_changed_content(c: ChangedContent) -> Option<(Vec<u8>, String)> {
+fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
     let (content, extension) = match c {
         ChangedContent::File(file, extension) => match std::fs::read(&file) {
             Ok(content) => (content, extension),
@@ -377,7 +377,7 @@ fn read_changed_content(c: ChangedContent) -> Option<(Vec<u8>, String)> {
         ChangedContent::Content(contents, extension) => (contents.into_bytes(), extension),
     };
 
-    Some((pre_process_input(&content, &extension), extension))
+    Some(pre_process_input(&content, &extension))
 }
 
 pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
@@ -398,7 +398,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
 }
 
 #[tracing::instrument(skip_all)]
-fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<(Vec<u8>, String)> {
+fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
     event!(
         tracing::Level::INFO,
         "Reading {:?} file(s)",
@@ -412,16 +412,16 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<(Vec<u8>, String)
 }
 
 #[tracing::instrument(skip_all)]
-fn parse_all_blobs(blobs: Vec<(Vec<u8>, String)>) -> Vec<String> {
+fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let mut result: Vec<_> = blobs
         .par_iter()
-        .flat_map(|(blob, extension)| blob.par_split(|x| *x == b'\n').map(move |x| (x, extension)))
-        .filter_map(|(blob, extension)| {
+        .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
+        .filter_map(|blob| {
             if blob.is_empty() {
                 return None;
             }
 
-            let extracted = crate::extractor::Extractor::new(blob, Some(extension)).extract();
+            let extracted = crate::extractor::Extractor::new(blob).extract();
             if extracted.is_empty() {
                 return None;
             }
