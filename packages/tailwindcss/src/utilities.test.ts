@@ -10809,6 +10809,84 @@ test('bg', async () => {
   `)
 })
 
+test('bg-position', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".bg-position-\\[120px\\] {
+      background-position: 120px;
+    }
+
+    .bg-position-\\[120px_120px\\] {
+      background-position: 120px 120px;
+    }
+
+    .bg-position-\\[var\\(--some-var\\)\\] {
+      background-position: var(--some-var);
+    }"
+  `)
+  expect(
+    await run([
+      'bg-position',
+      'bg-position/foo',
+      '-bg-position',
+      '-bg-position/foo',
+
+      'bg-position-[120px_120px]/foo',
+
+      '-bg-position-[120px_120px]',
+      '-bg-position-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('bg-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".bg-size-\\[120px\\] {
+      background-size: 120px;
+    }
+
+    .bg-size-\\[120px_120px\\] {
+      background-size: 120px 120px;
+    }
+
+    .bg-size-\\[var\\(--some-var\\)\\] {
+      background-size: var(--some-var);
+    }"
+  `)
+  expect(
+    await run([
+      'bg-size',
+      'bg-size/foo',
+      '-bg-size',
+      '-bg-size/foo',
+
+      'bg-size-[120px_120px]/foo',
+
+      '-bg-size-[120px_120px]',
+      '-bg-size-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('from', async () => {
   expect(
     await compileCss(
