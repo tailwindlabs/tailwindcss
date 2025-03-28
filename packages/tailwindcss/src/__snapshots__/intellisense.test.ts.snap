@@ -8472,9 +8472,7 @@ exports[`getVariants 1`] = `
       "any-pointer-none",
       "any-pointer-coarse",
       "any-pointer-fine",
-      "scripting-initial",
-      "scripting-none",
-      "scripting",
+      "noscript",
     ],
   },
   {
@@ -9255,21 +9253,7 @@ exports[`getVariants 1`] = `
   {
     "hasDash": true,
     "isArbitrary": false,
-    "name": "scripting-initial",
-    "selectors": [Function],
-    "values": [],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": false,
-    "name": "scripting-none",
-    "selectors": [Function],
-    "values": [],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": false,
-    "name": "scripting",
+    "name": "noscript",
     "selectors": [Function],
     "values": [],
   },
