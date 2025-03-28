@@ -17706,15 +17706,21 @@ test('object', async () => {
 
       // object-position
       'object-[var(--value)]',
+      'object-top',
+      'object-top-left',
+      'object-top-right',
       'object-bottom',
-      'object-center',
+      'object-bottom-left',
+      'object-bottom-right',
       'object-left',
+      'object-right',
+      'object-center',
+
+      // Legacy versions in v4.0 and earlier
       'object-left-bottom',
       'object-left-top',
-      'object-right',
       'object-right-bottom',
       'object-right-top',
-      'object-top',
     ]),
   ).toMatchInlineSnapshot(`
     ".object-contain {
