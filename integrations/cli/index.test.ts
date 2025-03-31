@@ -713,6 +713,11 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        *, ::before, ::after, ::backdrop {
+          --tw-content: "";
+        }
+      }
       .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
         --tw-content: "components/my-component.tsx";
         content: var(--tw-content);
@@ -748,13 +753,6 @@ test(
       .content-\\[\\"src\\/nested\\/index\\.html\\"\\] {
         --tw-content: "src/nested/index.html";
         content: var(--tw-content);
-      }
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
       }
       @property --tw-content {
         syntax: "*";
@@ -951,6 +949,11 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        *, ::before, ::after, ::backdrop {
+          --tw-content: "";
+        }
+      }
       .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
         content: var(--tw-content);
@@ -998,13 +1001,6 @@ test(
       .content-\\[\\'project-e\\/nested\\/index\\.html\\'\\] {
         --tw-content: 'project-e/nested/index.html';
         content: var(--tw-content);
-      }
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
       }
       @property --tw-content {
         syntax: "*";
@@ -1195,6 +1191,11 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        *, ::before, ::after, ::backdrop {
+          --tw-content: "";
+        }
+      }
       .content-\\[\\"pages\\/foo\\.html\\"\\] {
         --tw-content: "pages/foo.html";
         content: var(--tw-content);
@@ -1206,13 +1207,6 @@ test(
       .content-\\[\\"pages\\/nested\\/foo\\.html\\"\\] {
         --tw-content: "pages/nested/foo.html";
         content: var(--tw-content);
-      }
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
       }
       @property --tw-content {
         syntax: "*";

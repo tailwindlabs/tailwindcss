@@ -575,6 +575,8 @@ export function optimizeAst(
           0,
           atRule(
             '@supports',
+            // We can't write a supports query for `@property` directly so we have to test for
+            // features that are added around the same time in Mozilla and Safari.
             '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
             fallbackAst,
           ),
