@@ -310,10 +310,12 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-translate-z: 0;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
         }
       }
 
@@ -425,8 +427,10 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
 
@@ -662,8 +666,10 @@ describe('variant stacking', () => {
   it('pseudo element variants are re-ordered', async () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
 
@@ -828,8 +834,10 @@ describe('sorting', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-space-x-reverse: 0;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-space-x-reverse: 0;
+          }
         }
       }
 
@@ -1463,8 +1471,10 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-font-weight: initial;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-font-weight: initial;
+          }
         }
       }
 
@@ -1508,21 +1518,23 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-shadow: 0 0 #0000;
-          --tw-shadow-color: initial;
-          --tw-shadow-alpha: 100%;
-          --tw-inset-shadow: 0 0 #0000;
-          --tw-inset-shadow-color: initial;
-          --tw-inset-shadow-alpha: 100%;
-          --tw-ring-color: initial;
-          --tw-ring-shadow: 0 0 #0000;
-          --tw-inset-ring-color: initial;
-          --tw-inset-ring-shadow: 0 0 #0000;
-          --tw-ring-inset: initial;
-          --tw-ring-offset-width: 0px;
-          --tw-ring-offset-color: #fff;
-          --tw-ring-offset-shadow: 0 0 #0000;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-shadow-alpha: 100%;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-inset-shadow-alpha: 100%;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+          }
         }
       }
 
@@ -4735,7 +4747,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/50 {
-        color: oklab(63.7% .214 .101 / .5);
+        color: #fb2c3680;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4768,7 +4780,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .mixed {
-        color: lch(59.8767% 98.2495 45.3639);
+        color: #fc4d1b;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4803,7 +4815,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.4814% 89.568 33.053 / .25);
+        color: lch(55.5764% 89.7903 33.1932 / .25098);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4841,7 +4853,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .gradient {
-        background: linear-gradient(90deg, oklab(63.7% .214 .101 / .5) 0%, oklab(70.5% .143 .157 / .5) 0%, 100%);
+        background: linear-gradient(90deg, #fb2c3680 0%, #fe6e0080 0%, 100%);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4873,7 +4885,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/50 {
-        color: oklab(63.7% .214 .101 / .5);
+        color: #fb2c3680;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4918,7 +4930,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/\\(--my-half\\) {
-        color: oklab(63.7% .214 .101 / .5);
+        color: #fb2c3680;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4960,14 +4972,16 @@ describe('`@property` polyfill', async () => {
       ),
     ).resolves.toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        :root, :host {
-          --inherit-no-value: initial;
-          --inherit-value: red;
-        }
+        @layer base {
+          :root, :host {
+            --inherit-no-value: initial;
+            --inherit-value: red;
+          }
 
-        *, :before, :after, ::backdrop {
-          --no-inherit-no-value: initial;
-          --no-inherit-value: red;
+          *, :before, :after, ::backdrop {
+            --no-inherit-no-value: initial;
+            --no-inherit-value: red;
+          }
         }
       }
 

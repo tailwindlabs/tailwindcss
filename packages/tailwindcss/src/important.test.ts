@@ -102,8 +102,10 @@ test('variables in utilities should not be marked as important', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-ease: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
       }
     }
 

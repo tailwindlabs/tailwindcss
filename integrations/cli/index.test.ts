@@ -714,8 +714,10 @@ test(
       "
       --- ./dist/out.css ---
       @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        *, ::before, ::after, ::backdrop {
-          --tw-content: "";
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
       .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
@@ -950,8 +952,10 @@ test(
       "
       --- ./project-a/dist/out.css ---
       @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        *, ::before, ::after, ::backdrop {
-          --tw-content: "";
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
       .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
@@ -1192,8 +1196,10 @@ test(
       "
       --- ./dist/out.css ---
       @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        *, ::before, ::after, ::backdrop {
-          --tw-content: "";
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
       .content-\\[\\"pages\\/foo\\.html\\"\\] {

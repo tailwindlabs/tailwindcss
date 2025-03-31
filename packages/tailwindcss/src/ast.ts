@@ -343,10 +343,25 @@ export function optimizeAst(
             didGenerateFallback = true
             replaceWith({ kind: 'word', value: inlinedColor })
           })
+
+          // Change the colorspace to `srgb` since the fallback values should not be represented as
+          // `oklab(…)` functions again as their support in Safari <16 is very limited.
+          let colorspace = node.nodes[2]
+          if (
+            (colorspace.kind === 'word' && colorspace.value === 'oklab') ||
+            colorspace.value === 'oklch' ||
+            colorspace.value === 'lab' ||
+            colorspace.value === 'lch'
+          ) {
+            colorspace.value = 'srgb'
+          }
         })
 
         if (didGenerateFallback) {
-          let fallback = { ...node, value: ValueParser.toCss(ast) }
+          let fallback = {
+            ...node,
+            value: ValueParser.toCss(ast),
+          }
           let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
 
           parent.push(fallback, colorMixQuery)

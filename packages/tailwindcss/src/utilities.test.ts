@@ -146,21 +146,23 @@ test('inset', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -3640,9 +3642,11 @@ test('border-spacing', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-border-spacing-x: 0;
-        --tw-border-spacing-y: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
       }
     }
 
@@ -3698,9 +3702,11 @@ test('border-spacing-x', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-border-spacing-x: 0;
-        --tw-border-spacing-y: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
       }
     }
 
@@ -3754,9 +3760,11 @@ test('border-spacing-y', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-border-spacing-x: 0;
-        --tw-border-spacing-y: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
       }
     }
 
@@ -3966,10 +3974,12 @@ test('translate', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4047,10 +4057,12 @@ test('translate-x', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4118,10 +4130,12 @@ test('translate-x', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4187,10 +4201,12 @@ test('translate-y', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4258,10 +4274,12 @@ test('translate-y', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4321,10 +4339,12 @@ test('translate-z', async () => {
   expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
     .toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-translate-z: 0;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
         }
       }
 
@@ -4380,10 +4400,12 @@ test('translate-z', async () => {
 test('translate-3d', async () => {
   expect(await run(['translate-3d'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-translate-z: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
       }
     }
 
@@ -4448,12 +4470,14 @@ test('rotate', async () => {
 test('rotate-x', async () => {
   expect(await run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-rotate-x: rotateX(0);
-        --tw-rotate-y: rotateY(0);
-        --tw-rotate-z: rotateZ(0);
-        --tw-skew-x: skewX(0);
-        --tw-skew-y: skewY(0);
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
       }
     }
 
@@ -4519,12 +4543,14 @@ test('rotate-y', async () => {
   expect(await run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]', '-rotate-y-[123deg]']))
     .toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-rotate-x: rotateX(0);
+            --tw-rotate-y: rotateY(0);
+            --tw-rotate-z: rotateZ(0);
+            --tw-skew-x: skewX(0);
+            --tw-skew-y: skewY(0);
+          }
         }
       }
 
@@ -4595,12 +4621,14 @@ test('rotate-z', async () => {
   expect(await run(['rotate-z-45', '-rotate-z-45', 'rotate-z-[123deg]', '-rotate-z-[123deg]']))
     .toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-rotate-x: rotateX(0);
+            --tw-rotate-y: rotateY(0);
+            --tw-rotate-z: rotateZ(0);
+            --tw-skew-x: skewX(0);
+            --tw-skew-y: skewY(0);
+          }
         }
       }
 
@@ -4670,12 +4698,14 @@ test('rotate-z', async () => {
 test('skew', async () => {
   expect(await run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-rotate-x: rotateX(0);
-        --tw-rotate-y: rotateY(0);
-        --tw-rotate-z: rotateZ(0);
-        --tw-skew-x: skewX(0);
-        --tw-skew-y: skewY(0);
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
       }
     }
 
@@ -4742,12 +4772,14 @@ test('skew', async () => {
 test('skew-x', async () => {
   expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-rotate-x: rotateX(0);
-        --tw-rotate-y: rotateY(0);
-        --tw-rotate-z: rotateZ(0);
-        --tw-skew-x: skewX(0);
-        --tw-skew-y: skewY(0);
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
       }
     }
 
@@ -4811,12 +4843,14 @@ test('skew-x', async () => {
 test('skew-y', async () => {
   expect(await run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-rotate-x: rotateX(0);
-        --tw-rotate-y: rotateY(0);
-        --tw-rotate-z: rotateZ(0);
-        --tw-skew-x: skewX(0);
-        --tw-skew-y: skewY(0);
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
       }
     }
 
@@ -4881,10 +4915,12 @@ test('scale', async () => {
   expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
     .toMatchInlineSnapshot(`
       "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-          --tw-scale-z: 1;
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-scale-z: 1;
+          }
         }
       }
 
@@ -4945,10 +4981,12 @@ test('scale', async () => {
 test('scale-3d', async () => {
   expect(await run(['scale-3d'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-scale-z: 1;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
       }
     }
 
@@ -4980,10 +5018,12 @@ test('scale-3d', async () => {
 test('scale-x', async () => {
   expect(await run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-scale-z: 1;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
       }
     }
 
@@ -5022,10 +5062,12 @@ test('scale-x', async () => {
   `)
   expect(await run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-scale-z: 1;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
       }
     }
 
@@ -5077,10 +5119,12 @@ test('scale-x', async () => {
 test('scale-y', async () => {
   expect(await run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-scale-z: 1;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
       }
     }
 
@@ -5133,10 +5177,12 @@ test('scale-y', async () => {
 test('scale-z', async () => {
   expect(await run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-scale-z: 1;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
       }
     }
 
@@ -5196,12 +5242,14 @@ test('transform', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-rotate-x: rotateX(0);
-        --tw-rotate-y: rotateY(0);
-        --tw-rotate-z: rotateZ(0);
-        --tw-skew-x: skewX(0);
-        --tw-skew-y: skewY(0);
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
       }
     }
 
@@ -5704,10 +5752,12 @@ test('touch-pan', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-pan-x: initial;
-        --tw-pan-y: initial;
-        --tw-pinch-zoom: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-pan-x: initial;
+          --tw-pan-y: initial;
+          --tw-pinch-zoom: initial;
+        }
       }
     }
 
@@ -5777,10 +5827,12 @@ test('touch-pan', async () => {
 test('touch-pinch-zoom', async () => {
   expect(await run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-pan-x: initial;
-        --tw-pan-y: initial;
-        --tw-pinch-zoom: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-pan-x: initial;
+          --tw-pan-y: initial;
+          --tw-pinch-zoom: initial;
+        }
       }
     }
 
@@ -5879,8 +5931,10 @@ test('resize', async () => {
 test('scroll-snap-type', async () => {
   expect(await run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scroll-snap-strictness: proximity;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scroll-snap-strictness: proximity;
+        }
       }
     }
 
@@ -5923,8 +5977,10 @@ test('scroll-snap-type', async () => {
 test('--tw-scroll-snap-strictness', async () => {
   expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-scroll-snap-strictness: proximity;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scroll-snap-strictness: proximity;
+        }
       }
     }
 
@@ -7885,8 +7941,10 @@ test('space-x', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-space-x-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-x-reverse: 0;
+        }
       }
     }
 
@@ -7934,8 +7992,10 @@ test('space-y', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-space-y-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-y-reverse: 0;
+        }
       }
     }
 
@@ -7973,8 +8033,10 @@ test('space-y', async () => {
 test('space-x-reverse', async () => {
   expect(await run(['space-x-reverse'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-space-x-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-x-reverse: 0;
+        }
       }
     }
 
@@ -7994,8 +8056,10 @@ test('space-x-reverse', async () => {
 test('space-y-reverse', async () => {
   expect(await run(['space-y-reverse'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-space-y-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-y-reverse: 0;
+        }
       }
     }
 
@@ -8022,9 +8086,11 @@ test('divide-x', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-x-reverse: 0;
-        --tw-border-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+          --tw-border-style: solid;
+        }
       }
     }
 
@@ -8096,9 +8162,11 @@ test('divide-x with custom default border width', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-x-reverse: 0;
-        --tw-border-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+          --tw-border-style: solid;
+        }
       }
     }
 
@@ -8134,9 +8202,11 @@ test('divide-y', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-y-reverse: 0;
-        --tw-border-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+          --tw-border-style: solid;
+        }
       }
     }
 
@@ -8212,9 +8282,11 @@ test('divide-y with custom default border width', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-y-reverse: 0;
-        --tw-border-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+          --tw-border-style: solid;
+        }
       }
     }
 
@@ -8244,8 +8316,10 @@ test('divide-y with custom default border width', async () => {
 test('divide-x-reverse', async () => {
   expect(await run(['divide-x-reverse'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-x-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+        }
       }
     }
 
@@ -8265,8 +8339,10 @@ test('divide-x-reverse', async () => {
 test('divide-y-reverse', async () => {
   expect(await run(['divide-y-reverse'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-divide-y-reverse: 0;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+        }
       }
     }
 
@@ -8388,7 +8464,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/2\\.5 {
-      accent-color: oklab(63.6834% .187864 .0889286 / .025);
+      accent-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8398,7 +8474,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/2\\.25 {
-      accent-color: oklab(63.6834% .187864 .0889286 / .0225);
+      accent-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8408,7 +8484,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/2\\.75 {
-      accent-color: oklab(63.6834% .187864 .0889286 / .0275);
+      accent-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8418,7 +8494,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/50 {
-      accent-color: oklab(63.6834% .187 .088 / .5);
+      accent-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8428,7 +8504,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/\\[0\\.5\\] {
-      accent-color: oklab(63.6834% .187 .088 / .5);
+      accent-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8438,7 +8514,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/\\[50\\%\\] {
-      accent-color: oklab(63.6834% .187 .088 / .5);
+      accent-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8547,7 +8623,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/2\\.5 {
-      caret-color: oklab(63.6834% .187864 .0889286 / .025);
+      caret-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8557,7 +8633,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/2\\.25 {
-      caret-color: oklab(63.6834% .187864 .0889286 / .0225);
+      caret-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8567,7 +8643,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/2\\.75 {
-      caret-color: oklab(63.6834% .187864 .0889286 / .0275);
+      caret-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8577,7 +8653,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/50 {
-      caret-color: oklab(63.6834% .187 .088 / .5);
+      caret-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8587,7 +8663,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/\\[0\\.5\\] {
-      caret-color: oklab(63.6834% .187 .088 / .5);
+      caret-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8597,7 +8673,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/\\[50\\%\\] {
-      caret-color: oklab(63.6834% .187 .088 / .5);
+      caret-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8704,7 +8780,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/2\\.5 > :not(:last-child)) {
-      border-color: oklab(63.6834% .187864 .0889286 / .025);
+      border-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8714,7 +8790,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/2\\.25 > :not(:last-child)) {
-      border-color: oklab(63.6834% .187864 .0889286 / .0225);
+      border-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8724,7 +8800,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/2\\.75 > :not(:last-child)) {
-      border-color: oklab(63.6834% .187864 .0889286 / .0275);
+      border-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8734,7 +8810,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/50 > :not(:last-child)) {
-      border-color: oklab(63.6834% .187 .088 / .5);
+      border-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8744,7 +8820,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: oklab(63.6834% .187 .088 / .5);
+      border-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8754,7 +8830,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: oklab(63.6834% .187 .088 / .5);
+      border-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10509,8 +10585,10 @@ test('border with custom default border width', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-border-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-style: solid;
+        }
       }
     }
 
@@ -10726,7 +10804,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/2\\.5 {
-      background-color: oklab(63.6834% .187864 .0889286 / .025);
+      background-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10736,7 +10814,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/2\\.25 {
-      background-color: oklab(63.6834% .187864 .0889286 / .0225);
+      background-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10746,7 +10824,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/2\\.75 {
-      background-color: oklab(63.6834% .187864 .0889286 / .0275);
+      background-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10756,7 +10834,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/50 {
-      background-color: oklab(63.6834% .187 .088 / .5);
+      background-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10766,7 +10844,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/\\[0\\.5\\] {
-      background-color: oklab(63.6834% .187 .088 / .5);
+      background-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10776,7 +10854,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/\\[50\\%\\] {
-      background-color: oklab(63.6834% .187 .088 / .5);
+      background-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -11445,7 +11523,7 @@ test('bg', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".bg-current\\/custom {
-      background-color: color-mix(in oklab, currentColor var(--custom-opacity), transparent);
+      background-color: color-mix(in srgb, currentColor var(--custom-opacity), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -11455,7 +11533,7 @@ test('bg', async () => {
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in oklab, currentColor .5, transparent);
+      background-color: color-mix(in srgb, currentColor .5, transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -11465,7 +11543,7 @@ test('bg', async () => {
     }
 
     .\\[color\\:red\\]\\/half {
-      color: color-mix(in oklab, red .5, transparent);
+      color: color-mix(in srgb, red .5, transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -11600,16 +11678,18 @@ test('from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-gradient-position: initial;
-        --tw-gradient-from: #0000;
-        --tw-gradient-via: #0000;
-        --tw-gradient-to: #0000;
-        --tw-gradient-stops: initial;
-        --tw-gradient-via-stops: initial;
-        --tw-gradient-from-position: 0%;
-        --tw-gradient-via-position: 50%;
-        --tw-gradient-to-position: 100%;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
       }
     }
 
@@ -11668,7 +11748,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/50 {
-      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-from: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11679,7 +11759,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-from: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11690,7 +11770,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/\\[50\\%\\] {
-      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-from: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11861,16 +11941,18 @@ test('via', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-gradient-position: initial;
-        --tw-gradient-from: #0000;
-        --tw-gradient-via: #0000;
-        --tw-gradient-to: #0000;
-        --tw-gradient-stops: initial;
-        --tw-gradient-via-stops: initial;
-        --tw-gradient-from-position: 0%;
-        --tw-gradient-via-position: 50%;
-        --tw-gradient-to-position: 100%;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
       }
     }
 
@@ -11939,7 +12021,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/50 {
-      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-via: #ef444480;
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11951,7 +12033,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-via: #ef444480;
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11963,7 +12045,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/\\[50\\%\\] {
-      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-via: #ef444480;
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -12134,16 +12216,18 @@ test('to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-gradient-position: initial;
-        --tw-gradient-from: #0000;
-        --tw-gradient-via: #0000;
-        --tw-gradient-to: #0000;
-        --tw-gradient-stops: initial;
-        --tw-gradient-via-stops: initial;
-        --tw-gradient-from-position: 0%;
-        --tw-gradient-via-position: 50%;
-        --tw-gradient-to-position: 100%;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-position: initial;
+          --tw-gradient-from: #0000;
+          --tw-gradient-via: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
       }
     }
 
@@ -12202,7 +12286,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/50 {
-      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-to: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12213,7 +12297,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-to: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12224,7 +12308,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/\\[50\\%\\] {
-      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
+      --tw-gradient-to: #ef444480;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12712,7 +12796,7 @@ test('mask', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ".\\[color\\:red\\]\\/half {
-      color: color-mix(in oklab, red .5, transparent);
+      color: color-mix(in srgb, red .5, transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -12833,18 +12917,20 @@ test('mask-t-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-top-from-position: 0%;
-        --tw-mask-top-to-position: 100%;
-        --tw-mask-top-from-color: black;
-        --tw-mask-top-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-top-from-position: 0%;
+          --tw-mask-top-to-position: 100%;
+          --tw-mask-top-from-color: black;
+          --tw-mask-top-to-color: transparent;
+        }
       }
     }
 
@@ -13092,18 +13178,20 @@ test('mask-t-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-top-from-position: 0%;
-        --tw-mask-top-to-position: 100%;
-        --tw-mask-top-from-color: black;
-        --tw-mask-top-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-top-from-position: 0%;
+          --tw-mask-top-to-position: 100%;
+          --tw-mask-top-from-color: black;
+          --tw-mask-top-to-color: transparent;
+        }
       }
     }
 
@@ -13352,18 +13440,20 @@ test('mask-r-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-right-from-position: 0%;
-        --tw-mask-right-to-position: 100%;
-        --tw-mask-right-from-color: black;
-        --tw-mask-right-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-right-from-position: 0%;
+          --tw-mask-right-to-position: 100%;
+          --tw-mask-right-from-color: black;
+          --tw-mask-right-to-color: transparent;
+        }
       }
     }
 
@@ -13612,18 +13702,20 @@ test('mask-r-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-right-from-position: 0%;
-        --tw-mask-right-to-position: 100%;
-        --tw-mask-right-from-color: black;
-        --tw-mask-right-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-right-from-position: 0%;
+          --tw-mask-right-to-position: 100%;
+          --tw-mask-right-from-color: black;
+          --tw-mask-right-to-color: transparent;
+        }
       }
     }
 
@@ -13872,18 +13964,20 @@ test('mask-b-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-bottom-from-position: 0%;
-        --tw-mask-bottom-to-position: 100%;
-        --tw-mask-bottom-from-color: black;
-        --tw-mask-bottom-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-bottom-from-position: 0%;
+          --tw-mask-bottom-to-position: 100%;
+          --tw-mask-bottom-from-color: black;
+          --tw-mask-bottom-to-color: transparent;
+        }
       }
     }
 
@@ -14132,18 +14226,20 @@ test('mask-b-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-bottom-from-position: 0%;
-        --tw-mask-bottom-to-position: 100%;
-        --tw-mask-bottom-from-color: black;
-        --tw-mask-bottom-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-bottom-from-position: 0%;
+          --tw-mask-bottom-to-position: 100%;
+          --tw-mask-bottom-from-color: black;
+          --tw-mask-bottom-to-color: transparent;
+        }
       }
     }
 
@@ -14392,18 +14488,20 @@ test('mask-l-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-left-from-position: 0%;
-        --tw-mask-left-to-position: 100%;
-        --tw-mask-left-from-color: black;
-        --tw-mask-left-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-left-from-position: 0%;
+          --tw-mask-left-to-position: 100%;
+          --tw-mask-left-from-color: black;
+          --tw-mask-left-to-color: transparent;
+        }
       }
     }
 
@@ -14652,18 +14750,20 @@ test('mask-l-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-left-from-position: 0%;
-        --tw-mask-left-to-position: 100%;
-        --tw-mask-left-from-color: black;
-        --tw-mask-left-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-left-from-position: 0%;
+          --tw-mask-left-to-position: 100%;
+          --tw-mask-left-from-color: black;
+          --tw-mask-left-to-color: transparent;
+        }
       }
     }
 
@@ -14912,22 +15012,24 @@ test('mask-x-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-right-from-position: 0%;
-        --tw-mask-right-to-position: 100%;
-        --tw-mask-right-from-color: black;
-        --tw-mask-right-to-color: transparent;
-        --tw-mask-left-from-position: 0%;
-        --tw-mask-left-to-position: 100%;
-        --tw-mask-left-from-color: black;
-        --tw-mask-left-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-right-from-position: 0%;
+          --tw-mask-right-to-position: 100%;
+          --tw-mask-right-from-color: black;
+          --tw-mask-right-to-color: transparent;
+          --tw-mask-left-from-position: 0%;
+          --tw-mask-left-to-position: 100%;
+          --tw-mask-left-from-color: black;
+          --tw-mask-left-to-color: transparent;
+        }
       }
     }
 
@@ -15218,22 +15320,24 @@ test('mask-x-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-right-from-position: 0%;
-        --tw-mask-right-to-position: 100%;
-        --tw-mask-right-from-color: black;
-        --tw-mask-right-to-color: transparent;
-        --tw-mask-left-from-position: 0%;
-        --tw-mask-left-to-position: 100%;
-        --tw-mask-left-from-color: black;
-        --tw-mask-left-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-right-from-position: 0%;
+          --tw-mask-right-to-position: 100%;
+          --tw-mask-right-from-color: black;
+          --tw-mask-right-to-color: transparent;
+          --tw-mask-left-from-position: 0%;
+          --tw-mask-left-to-position: 100%;
+          --tw-mask-left-from-color: black;
+          --tw-mask-left-to-color: transparent;
+        }
       }
     }
 
@@ -15524,22 +15628,24 @@ test('mask-y-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-top-from-position: 0%;
-        --tw-mask-top-to-position: 100%;
-        --tw-mask-top-from-color: black;
-        --tw-mask-top-to-color: transparent;
-        --tw-mask-bottom-from-position: 0%;
-        --tw-mask-bottom-to-position: 100%;
-        --tw-mask-bottom-from-color: black;
-        --tw-mask-bottom-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-top-from-position: 0%;
+          --tw-mask-top-to-position: 100%;
+          --tw-mask-top-from-color: black;
+          --tw-mask-top-to-color: transparent;
+          --tw-mask-bottom-from-position: 0%;
+          --tw-mask-bottom-to-position: 100%;
+          --tw-mask-bottom-from-color: black;
+          --tw-mask-bottom-to-color: transparent;
+        }
       }
     }
 
@@ -15830,22 +15936,24 @@ test('mask-y-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-left: linear-gradient(#fff, #fff);
-        --tw-mask-right: linear-gradient(#fff, #fff);
-        --tw-mask-bottom: linear-gradient(#fff, #fff);
-        --tw-mask-top: linear-gradient(#fff, #fff);
-        --tw-mask-top-from-position: 0%;
-        --tw-mask-top-to-position: 100%;
-        --tw-mask-top-from-color: black;
-        --tw-mask-top-to-color: transparent;
-        --tw-mask-bottom-from-position: 0%;
-        --tw-mask-bottom-to-position: 100%;
-        --tw-mask-bottom-from-color: black;
-        --tw-mask-bottom-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-left: linear-gradient(#fff, #fff);
+          --tw-mask-right: linear-gradient(#fff, #fff);
+          --tw-mask-bottom: linear-gradient(#fff, #fff);
+          --tw-mask-top: linear-gradient(#fff, #fff);
+          --tw-mask-top-from-position: 0%;
+          --tw-mask-top-to-position: 100%;
+          --tw-mask-top-from-color: black;
+          --tw-mask-top-to-color: transparent;
+          --tw-mask-bottom-from-position: 0%;
+          --tw-mask-bottom-to-position: 100%;
+          --tw-mask-bottom-from-color: black;
+          --tw-mask-bottom-to-color: transparent;
+        }
       }
     }
 
@@ -16121,15 +16229,17 @@ test('mask-linear', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-linear-position: 0deg;
-        --tw-mask-linear-from-position: 0%;
-        --tw-mask-linear-to-position: 100%;
-        --tw-mask-linear-from-color: black;
-        --tw-mask-linear-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-linear-position: 0deg;
+          --tw-mask-linear-from-position: 0%;
+          --tw-mask-linear-to-position: 100%;
+          --tw-mask-linear-from-color: black;
+          --tw-mask-linear-to-color: transparent;
+        }
       }
     }
 
@@ -16258,15 +16368,17 @@ test('mask-linear-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-linear-position: 0deg;
-        --tw-mask-linear-from-position: 0%;
-        --tw-mask-linear-to-position: 100%;
-        --tw-mask-linear-from-color: black;
-        --tw-mask-linear-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-linear-position: 0deg;
+          --tw-mask-linear-from-position: 0%;
+          --tw-mask-linear-to-position: 100%;
+          --tw-mask-linear-from-color: black;
+          --tw-mask-linear-to-color: transparent;
+        }
       }
     }
 
@@ -16497,15 +16609,17 @@ test('mask-linear-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-linear-position: 0deg;
-        --tw-mask-linear-from-position: 0%;
-        --tw-mask-linear-to-position: 100%;
-        --tw-mask-linear-from-color: black;
-        --tw-mask-linear-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-linear-position: 0deg;
+          --tw-mask-linear-from-position: 0%;
+          --tw-mask-linear-to-position: 100%;
+          --tw-mask-linear-from-color: black;
+          --tw-mask-linear-to-color: transparent;
+        }
       }
     }
 
@@ -16729,17 +16843,19 @@ test('mask-radial', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-radial-from-position: 0%;
-        --tw-mask-radial-to-position: 100%;
-        --tw-mask-radial-from-color: black;
-        --tw-mask-radial-to-color: transparent;
-        --tw-mask-radial-shape: ellipse;
-        --tw-mask-radial-size: farthest-corner;
-        --tw-mask-radial-position: center;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-radial-from-position: 0%;
+          --tw-mask-radial-to-position: 100%;
+          --tw-mask-radial-from-color: black;
+          --tw-mask-radial-to-color: transparent;
+          --tw-mask-radial-shape: ellipse;
+          --tw-mask-radial-size: farthest-corner;
+          --tw-mask-radial-position: center;
+        }
       }
     }
 
@@ -16982,17 +17098,19 @@ test('mask-radial-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-radial-from-position: 0%;
-        --tw-mask-radial-to-position: 100%;
-        --tw-mask-radial-from-color: black;
-        --tw-mask-radial-to-color: transparent;
-        --tw-mask-radial-shape: ellipse;
-        --tw-mask-radial-size: farthest-corner;
-        --tw-mask-radial-position: center;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-radial-from-position: 0%;
+          --tw-mask-radial-to-position: 100%;
+          --tw-mask-radial-from-color: black;
+          --tw-mask-radial-to-color: transparent;
+          --tw-mask-radial-shape: ellipse;
+          --tw-mask-radial-size: farthest-corner;
+          --tw-mask-radial-position: center;
+        }
       }
     }
 
@@ -17235,17 +17353,19 @@ test('mask-radial-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-radial-from-position: 0%;
-        --tw-mask-radial-to-position: 100%;
-        --tw-mask-radial-from-color: black;
-        --tw-mask-radial-to-color: transparent;
-        --tw-mask-radial-shape: ellipse;
-        --tw-mask-radial-size: farthest-corner;
-        --tw-mask-radial-position: center;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-radial-from-position: 0%;
+          --tw-mask-radial-to-position: 100%;
+          --tw-mask-radial-from-color: black;
+          --tw-mask-radial-to-color: transparent;
+          --tw-mask-radial-shape: ellipse;
+          --tw-mask-radial-size: farthest-corner;
+          --tw-mask-radial-position: center;
+        }
       }
     }
 
@@ -17473,15 +17593,17 @@ test('mask-conic', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-conic-position: 0deg;
-        --tw-mask-conic-from-position: 0%;
-        --tw-mask-conic-to-position: 100%;
-        --tw-mask-conic-from-color: black;
-        --tw-mask-conic-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-conic-position: 0deg;
+          --tw-mask-conic-from-position: 0%;
+          --tw-mask-conic-to-position: 100%;
+          --tw-mask-conic-from-color: black;
+          --tw-mask-conic-to-color: transparent;
+        }
       }
     }
 
@@ -17610,15 +17732,17 @@ test('mask-conic-from', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-conic-position: 0deg;
-        --tw-mask-conic-from-position: 0%;
-        --tw-mask-conic-to-position: 100%;
-        --tw-mask-conic-from-color: black;
-        --tw-mask-conic-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-conic-position: 0deg;
+          --tw-mask-conic-from-position: 0%;
+          --tw-mask-conic-to-position: 100%;
+          --tw-mask-conic-from-color: black;
+          --tw-mask-conic-to-color: transparent;
+        }
       }
     }
 
@@ -17849,15 +17973,17 @@ test('mask-conic-to', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-mask-linear: linear-gradient(#fff, #fff);
-        --tw-mask-radial: linear-gradient(#fff, #fff);
-        --tw-mask-conic: linear-gradient(#fff, #fff);
-        --tw-mask-conic-position: 0deg;
-        --tw-mask-conic-from-position: 0%;
-        --tw-mask-conic-to-position: 100%;
-        --tw-mask-conic-from-color: black;
-        --tw-mask-conic-to-color: transparent;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-mask-linear: linear-gradient(#fff, #fff);
+          --tw-mask-radial: linear-gradient(#fff, #fff);
+          --tw-mask-conic: linear-gradient(#fff, #fff);
+          --tw-mask-conic-position: 0deg;
+          --tw-mask-conic-from-position: 0%;
+          --tw-mask-conic-to-position: 100%;
+          --tw-mask-conic-from-color: black;
+          --tw-mask-conic-to-color: transparent;
+        }
       }
     }
 
@@ -18598,7 +18724,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/2\\.5 {
-      fill: oklab(63.6834% .187864 .0889286 / .025);
+      fill: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18608,7 +18734,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/2\\.25 {
-      fill: oklab(63.6834% .187864 .0889286 / .0225);
+      fill: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18618,7 +18744,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/2\\.75 {
-      fill: oklab(63.6834% .187864 .0889286 / .0275);
+      fill: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18628,7 +18754,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/50 {
-      fill: oklab(63.6834% .187 .088 / .5);
+      fill: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18638,7 +18764,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/\\[0\\.5\\] {
-      fill: oklab(63.6834% .187 .088 / .5);
+      fill: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18648,7 +18774,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/\\[50\\%\\] {
-      fill: oklab(63.6834% .187 .088 / .5);
+      fill: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18783,7 +18909,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/2\\.5 {
-      stroke: oklab(63.6834% .187864 .0889286 / .025);
+      stroke: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18793,7 +18919,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/2\\.25 {
-      stroke: oklab(63.6834% .187864 .0889286 / .0225);
+      stroke: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18803,7 +18929,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/2\\.75 {
-      stroke: oklab(63.6834% .187864 .0889286 / .0275);
+      stroke: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18813,7 +18939,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/50 {
-      stroke: oklab(63.6834% .187 .088 / .5);
+      stroke: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18823,7 +18949,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/\\[0\\.5\\] {
-      stroke: oklab(63.6834% .187 .088 / .5);
+      stroke: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18833,7 +18959,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/\\[50\\%\\] {
-      stroke: oklab(63.6834% .187 .088 / .5);
+      stroke: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19575,8 +19701,10 @@ test('font', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-font-weight: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-font-weight: initial;
+        }
       }
     }
 
@@ -19827,7 +19955,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/2\\.5::placeholder {
-      color: oklab(63.6834% .187864 .0889286 / .025);
+      color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19837,7 +19965,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/2\\.25::placeholder {
-      color: oklab(63.6834% .187864 .0889286 / .0225);
+      color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19847,7 +19975,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/2\\.75::placeholder {
-      color: oklab(63.6834% .187864 .0889286 / .0275);
+      color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19857,7 +19985,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/50::placeholder {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19867,7 +19995,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19877,7 +20005,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/\\[50\\%\\]::placeholder {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20026,7 +20154,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/50 {
-      text-decoration-color: oklab(63.6834% .187 .088 / .5);
+      text-decoration-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20038,7 +20166,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/\\[0\\.5\\] {
-      text-decoration-color: oklab(63.6834% .187 .088 / .5);
+      text-decoration-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20050,7 +20178,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/\\[50\\%\\] {
-      text-decoration-color: oklab(63.6834% .187 .088 / .5);
+      text-decoration-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20269,17 +20397,19 @@ test('filter', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-blur: initial;
-        --tw-brightness: initial;
-        --tw-contrast: initial;
-        --tw-grayscale: initial;
-        --tw-hue-rotate: initial;
-        --tw-invert: initial;
-        --tw-opacity: initial;
-        --tw-saturate: initial;
-        --tw-sepia: initial;
-        --tw-drop-shadow: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-blur: initial;
+          --tw-brightness: initial;
+          --tw-contrast: initial;
+          --tw-grayscale: initial;
+          --tw-hue-rotate: initial;
+          --tw-invert: initial;
+          --tw-opacity: initial;
+          --tw-saturate: initial;
+          --tw-sepia: initial;
+          --tw-drop-shadow: initial;
+        }
       }
     }
 
@@ -20604,16 +20734,18 @@ test('backdrop-filter', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-backdrop-blur: initial;
-        --tw-backdrop-brightness: initial;
-        --tw-backdrop-contrast: initial;
-        --tw-backdrop-grayscale: initial;
-        --tw-backdrop-hue-rotate: initial;
-        --tw-backdrop-invert: initial;
-        --tw-backdrop-opacity: initial;
-        --tw-backdrop-saturate: initial;
-        --tw-backdrop-sepia: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-backdrop-blur: initial;
+          --tw-backdrop-brightness: initial;
+          --tw-backdrop-contrast: initial;
+          --tw-backdrop-grayscale: initial;
+          --tw-backdrop-hue-rotate: initial;
+          --tw-backdrop-invert: initial;
+          --tw-backdrop-opacity: initial;
+          --tw-backdrop-saturate: initial;
+          --tw-backdrop-sepia: initial;
+        }
       }
     }
 
@@ -21127,8 +21259,10 @@ test('delay', async () => {
 test('duration', async () => {
   expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-duration: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-duration: initial;
+        }
       }
     }
 
@@ -21179,8 +21313,10 @@ test('ease', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-ease: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
       }
     }
 
@@ -21283,11 +21419,13 @@ test('contain', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-contain-size: initial;
-        --tw-contain-layout: initial;
-        --tw-contain-paint: initial;
-        --tw-contain-style: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-contain-size: initial;
+          --tw-contain-layout: initial;
+          --tw-contain-paint: initial;
+          --tw-contain-style: initial;
+        }
       }
     }
 
@@ -21370,8 +21508,10 @@ test('contain', async () => {
 test('content', async () => {
   expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-content: "";
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-content: "";
+        }
       }
     }
 
@@ -21429,8 +21569,10 @@ test('leading', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-leading: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
       }
     }
 
@@ -21486,8 +21628,10 @@ test('tracking', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-tracking: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-tracking: initial;
+        }
       }
     }
 
@@ -21569,12 +21713,14 @@ test('font-variant-numeric', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-ordinal: initial;
-        --tw-slashed-zero: initial;
-        --tw-numeric-figure: initial;
-        --tw-numeric-spacing: initial;
-        --tw-numeric-fraction: initial;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ordinal: initial;
+          --tw-slashed-zero: initial;
+          --tw-numeric-figure: initial;
+          --tw-numeric-spacing: initial;
+          --tw-numeric-fraction: initial;
+        }
       }
     }
 
@@ -21731,8 +21877,10 @@ test('outline', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-outline-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-outline-style: solid;
+        }
       }
     }
 
@@ -21839,7 +21987,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/50 {
-      outline-color: oklab(63.6834% .187 .088 / .5);
+      outline-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21849,7 +21997,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/\\[0\\.5\\] {
-      outline-color: oklab(63.6834% .187 .088 / .5);
+      outline-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21859,7 +22007,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/\\[50\\%\\] {
-      outline-color: oklab(63.6834% .187 .088 / .5);
+      outline-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21915,8 +22063,10 @@ test('outline', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-outline-style: solid;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-outline-style: solid;
+        }
       }
     }
 
@@ -22321,7 +22471,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/2\\.5 {
-      color: oklab(63.6834% .187864 .0889286 / .025);
+      color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22331,7 +22481,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/2\\.25 {
-      color: oklab(63.6834% .187864 .0889286 / .0225);
+      color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22341,7 +22491,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/2\\.75 {
-      color: oklab(63.6834% .187864 .0889286 / .0275);
+      color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22351,7 +22501,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/50 {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22361,7 +22511,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/\\[0\\.5\\] {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22371,7 +22521,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/\\[50\\%\\] {
-      color: oklab(63.6834% .187 .088 / .5);
+      color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22472,9 +22622,11 @@ test('text-shadow', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-text-shadow-color: initial;
-        --tw-text-shadow-alpha: 100%;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-text-shadow-color: initial;
+          --tw-text-shadow-alpha: 100%;
+        }
       }
     }
 
@@ -22546,7 +22698,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500 {
-      --tw-text-shadow-color: color-mix(in oklab, #ef4444 var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef4444 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22556,7 +22708,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/2\\.5 {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .025) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444406 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22566,7 +22718,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/2\\.25 {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0225) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444406 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22576,7 +22728,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/2\\.75 {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0275) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444407 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22586,7 +22738,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/50 {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444480 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22596,7 +22748,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/\\[0\\.5\\] {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444480 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22606,7 +22758,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/\\[50\\%\\] {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in srgb, #ef444480 var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22708,21 +22860,23 @@ test('shadow', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -22807,7 +22961,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500 {
-      --tw-shadow-color: color-mix(in oklab, #ef4444 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef4444 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22817,7 +22971,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.5 {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .025) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444406 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22827,7 +22981,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.25 {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0225) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444406 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22837,7 +22991,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.75 {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0275) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444407 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22847,7 +23001,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/50 {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22857,7 +23011,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[0\\.5\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22867,7 +23021,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23033,21 +23187,23 @@ test('inset-shadow', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -23132,7 +23288,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500 {
-      --tw-inset-shadow-color: color-mix(in oklab, #ef4444 var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef4444 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23142,7 +23298,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/2\\.5 {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .025) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444406 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23152,7 +23308,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/2\\.25 {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0225) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444406 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23162,7 +23318,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/2\\.75 {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187864 .0889286 / .0275) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444407 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23172,7 +23328,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/50 {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444480 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23182,7 +23338,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/\\[0\\.5\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444480 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23192,7 +23348,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in srgb, #ef444480 var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23357,21 +23513,23 @@ test('ring', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -23455,7 +23613,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/2\\.5 {
-      --tw-ring-color: oklab(63.6834% .187864 .0889286 / .025);
+      --tw-ring-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23465,7 +23623,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/2\\.25 {
-      --tw-ring-color: oklab(63.6834% .187864 .0889286 / .0225);
+      --tw-ring-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23475,7 +23633,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/2\\.75 {
-      --tw-ring-color: oklab(63.6834% .187864 .0889286 / .0275);
+      --tw-ring-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23485,7 +23643,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/50 {
-      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23495,7 +23653,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/\\[0\\.5\\] {
-      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23505,7 +23663,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/\\[50\\%\\] {
-      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23613,21 +23771,23 @@ test('ring', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -23802,21 +23962,23 @@ test('inset-ring', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      *, :before, :after, ::backdrop {
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-color: initial;
-        --tw-shadow-alpha: 100%;
-        --tw-inset-shadow: 0 0 #0000;
-        --tw-inset-shadow-color: initial;
-        --tw-inset-shadow-alpha: 100%;
-        --tw-ring-color: initial;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-inset-ring-color: initial;
-        --tw-inset-ring-shadow: 0 0 #0000;
-        --tw-ring-inset: initial;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-offset-shadow: 0 0 #0000;
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-color: initial;
+          --tw-shadow-alpha: 100%;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-color: initial;
+          --tw-inset-shadow-alpha: 100%;
+          --tw-ring-color: initial;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: initial;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: initial;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
       }
     }
 
@@ -23900,7 +24062,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/2\\.5 {
-      --tw-inset-ring-color: oklab(63.6834% .187864 .0889286 / .025);
+      --tw-inset-ring-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23910,7 +24072,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/2\\.25 {
-      --tw-inset-ring-color: oklab(63.6834% .187864 .0889286 / .0225);
+      --tw-inset-ring-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23920,7 +24082,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/2\\.75 {
-      --tw-inset-ring-color: oklab(63.6834% .187864 .0889286 / .0275);
+      --tw-inset-ring-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23930,7 +24092,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/50 {
-      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-inset-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23940,7 +24102,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/\\[0\\.5\\] {
-      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-inset-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23950,7 +24112,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/\\[50\\%\\] {
-      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
+      --tw-inset-ring-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24200,7 +24362,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/50 {
-      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-offset-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24210,7 +24372,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/\\[0\\.5\\] {
-      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-offset-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24220,7 +24382,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/\\[50\\%\\] {
-      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
+      --tw-ring-offset-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {

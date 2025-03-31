@@ -196,7 +196,7 @@ describe('--theme(…)', () => {
       }
 
       .red {
-        color: oklab(62.7955% .224 .125 / .5);
+        color: #ff000080;
       }
 
       @supports (color: color-mix(in lab, red, red)) {

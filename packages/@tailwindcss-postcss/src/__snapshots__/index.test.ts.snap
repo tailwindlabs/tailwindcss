@@ -2,8 +2,10 @@
 
 exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-  *, :before, :after, ::backdrop {
-    --tw-font-weight: initial;
+  @layer base {
+    *, :before, :after, ::backdrop {
+      --tw-font-weight: initial;
+    }
   }
 }
 
@@ -266,7 +268,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: oklab(0% none none / .5);
+    color: #00000080;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
