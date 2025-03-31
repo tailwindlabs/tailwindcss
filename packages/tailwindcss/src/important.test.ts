@@ -101,7 +101,7 @@ test('variables in utilities should not be marked as important', async () => {
       ['ease-out!', 'z-10!'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
       *, :before, :after, ::backdrop {
         --tw-ease: initial;
       }

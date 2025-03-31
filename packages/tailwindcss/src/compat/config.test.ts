@@ -322,7 +322,7 @@ describe('theme callbacks', () => {
 
     expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
       .toMatchInlineSnapshot(`
-        "@supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        "@supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           *, ::before, ::after, ::backdrop {
             --tw-leading: initial;
           }

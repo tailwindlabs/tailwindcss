@@ -713,7 +713,7 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
         *, ::before, ::after, ::backdrop {
           --tw-content: "";
         }
@@ -949,7 +949,7 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
         *, ::before, ::after, ::backdrop {
           --tw-content: "";
         }
@@ -1191,7 +1191,7 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
         *, ::before, ::after, ::backdrop {
           --tw-content: "";
         }
