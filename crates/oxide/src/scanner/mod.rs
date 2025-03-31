@@ -264,18 +264,21 @@ impl Scanner {
                     .and_then(|x| x.to_str())
                     .unwrap_or_default(); // In case the file has no extension
 
-                // Special handing for CSS files to extract CSS variables
-                if extension == "css" {
-                    self.css_files.push(path);
-                    continue;
+                match extension {
+                    // Special handing for CSS files, we don't want to extract candidates from
+                    // these files, but we do want to extract used CSS variables.
+                    "css" => {
+                        self.css_files.push(path.clone());
+                    }
+                    _ => {
+                        self.changed_content.push(ChangedContent::File(
+                            path.to_path_buf(),
+                            extension.to_owned(),
+                        ));
+                    }
                 }
 
                 self.extensions.insert(extension.to_owned());
-                self.changed_content.push(ChangedContent::File(
-                    path.to_path_buf(),
-                    extension.to_owned(),
-                ));
-
                 self.files.push(path);
             }
         }
