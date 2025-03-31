@@ -569,7 +569,8 @@ export function optimizeAst(
       }
 
       if (fallbackAst.length > 0) {
-        let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment') ?? 0
+        let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
+        if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
         newAst.splice(
           firstNonCommentIndex,
           0,
@@ -577,8 +578,8 @@ export function optimizeAst(
             '@supports',
             // We can't write a supports query for `@property` directly so we have to test for
             // features that are added around the same time in Mozilla and Safari.
-            '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-            fallbackAst,
+            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+            [rule('@layer base', fallbackAst)],
           ),
         )
       }
