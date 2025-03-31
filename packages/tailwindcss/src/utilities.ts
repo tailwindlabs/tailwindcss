@@ -5692,6 +5692,16 @@ export function createUtilities(theme: Theme) {
   return utilities
 }
 
+// Only allowed bare value data types, to prevent creating new syntax that we
+// typically don't support right now. E.g.: `--value(color)` would allow you to
+// use `text-#0088cc` as a valid utility, which is not what we want.
+export const BARE_VALUE_DATA_TYPES = [
+  'number', // 2.5
+  'integer', // 8
+  'ratio', // 2/3
+  'percentage', // 25%
+]
+
 export function createCssUtility(node: AtRule) {
   let name = node.params
 
@@ -6084,12 +6094,7 @@ function resolveValueFunction(
       // Limit the bare value types, to prevent new syntax that we
       // don't want to support. E.g.: `text-#000` is something we
       // don't want to support, but could be built this way.
-      if (
-        arg.value !== 'number' &&
-        arg.value !== 'integer' &&
-        arg.value !== 'ratio' &&
-        arg.value !== 'percentage'
-      ) {
+      if (!BARE_VALUE_DATA_TYPES.includes(arg.value)) {
         continue
       }
 
