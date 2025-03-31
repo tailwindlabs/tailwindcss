@@ -5858,7 +5858,7 @@ export function createCssUtility(node: AtRule) {
               !BARE_VALUE_DATA_TYPES.includes(node.value)
             ) {
               console.warn(
-                `Unsupported bare value data type: "${node.value}".\nOnly valid data types are: ${BARE_VALUE_DATA_TYPES.map((x) => `"${x}"`).join(', ')}\n`,
+                `Unsupported bare value data type: "${node.value}".\nOnly valid data types are: ${BARE_VALUE_DATA_TYPES.map((x) => `"${x}"`).join(', ')}.\n`,
               )
               // TODO: Once we properly track the location of the node, we can
               //       clean this up in a better way.

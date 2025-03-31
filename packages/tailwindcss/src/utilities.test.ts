@@ -26545,7 +26545,7 @@ describe('custom utilities', () => {
         [
           [
             "Unsupported bare value data type: "color".
-        Only valid data types are: "number", "integer", "ratio", "percentage"
+        Only valid data types are: "number", "integer", "ratio", "percentage".
         ",
           ],
           [
