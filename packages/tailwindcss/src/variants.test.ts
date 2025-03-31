@@ -1577,7 +1577,7 @@ test('not', async () => {
       }
     }
 
-    @media not (scripting: none) {
+    @media not all and (scripting: none) {
       .not-noscript\\:flex {
         display: flex;
       }
