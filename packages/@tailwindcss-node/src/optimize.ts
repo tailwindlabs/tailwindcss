@@ -34,7 +34,7 @@ export function optimize(
 
   // Work around an issue where the media query range syntax transpilation
   // generates code that is invalid with `@media` queries level 3.
-  out = out.replaceAll(/\@media not \(/g, '@media not all and (')
+  out = out.replaceAll('@media not (', '@media not all and (')
 
   return out
 }
