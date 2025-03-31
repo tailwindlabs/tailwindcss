@@ -4898,6 +4898,36 @@ describe('`color-mix(…)` polyfill', () => {
       }"
     `)
   })
+
+  it.only('also replaces eventual variables in opacity values', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --my-half: 50%;
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-red-500/(--my-half)'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --my-half: 50%;
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-red-500\\/\\(--my-half\\) {
+        color: oklab(63.7% .214213 .1014 / .5);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/\\(--my-half\\) {
+          color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);
+        }
+      }"
+    `)
+  })
 })
 
 describe('`@property` polyfill', async () => {
