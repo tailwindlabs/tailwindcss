@@ -5834,8 +5834,7 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          // Track information for suggestions
-          for (let node of fn.nodes) {
+          for (let [idx, node] of fn.nodes.entries()) {
             // Track literal values
             if (
               node.kind === 'word' &&
@@ -5850,6 +5849,36 @@ export function createCssUtility(node: AtRule) {
             else if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
               let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
               storage[fn.value].themeKeys.add(value)
+            }
+
+            // Validate bare value data types
+            else if (
+              node.kind === 'word' &&
+              !(node.value[0] === '[' && node.value[node.value.length - 1] === ']') && // Ignore arbitrary values
+              !BARE_VALUE_DATA_TYPES.includes(node.value)
+            ) {
+              console.warn(
+                `Unsupported bare value data type: "${node.value}".\nOnly valid data types are: ${BARE_VALUE_DATA_TYPES.map((x) => `"${x}"`).join(', ')}\n`,
+              )
+              // TODO: Once we properly track the location of the node, we can
+              //       clean this up in a better way.
+              let dataType = node.value
+              let copy = structuredClone(fn)
+              let sentinelValue = '¶'
+              ValueParser.walk(copy.nodes, (node, { replaceWith }) => {
+                if (node.kind === 'word' && node.value === dataType) {
+                  replaceWith({ kind: 'word', value: sentinelValue })
+                }
+              })
+              let underline = '^'.repeat(ValueParser.toCss([node]).length)
+              let offset = ValueParser.toCss([copy]).indexOf(sentinelValue)
+              let output = [
+                '```css',
+                ValueParser.toCss([fn]),
+                ' '.repeat(offset) + underline,
+                '```',
+              ].join('\n')
+              console.warn(output)
             }
           }
         })
