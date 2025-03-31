@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
@@ -26528,6 +26528,34 @@ describe('custom utilities', () => {
         }"
       `)
       expect(await compileCss(input, ['tab-foo'])).toEqual('')
+    })
+
+    test('bare values with unsupported data types should result in a warning', async () => {
+      let spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      let input = css`
+        @utility paint-* {
+          paint: --value([color], color);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['paint-#0088cc', 'paint-red'])).toMatchInlineSnapshot(`""`)
+      expect(spy.mock.calls).toMatchInlineSnapshot(`
+        [
+          [
+            "Unsupported bare value data type: "color".
+        Only valid data types are: "number", "integer", "ratio", "percentage"
+        ",
+          ],
+          [
+            "\`\`\`css
+        --value([color],color)
+                        ^^^^^
+        \`\`\`",
+          ],
+        ]
+      `)
     })
 
     test('resolve literal values', async () => {
