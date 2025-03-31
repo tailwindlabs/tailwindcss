@@ -32,6 +32,9 @@ test(
         let MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
         module.exports = {
+          output: {
+            clean: true,
+          },
           plugins: [new MiniCssExtractPlugin()],
           module: {
             rules: [
