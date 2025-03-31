@@ -22484,7 +22484,7 @@ test('text-shadow', async () => {
 
     .text-shadow-\\[10px_10px\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
-      text-shadow: 10px 10px var(--tw-text-shadow-color, oklab(from currentcolor l a b / 25%));
+      text-shadow: 10px 10px var(--tw-text-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
     }
 
     .text-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
@@ -22732,7 +22732,7 @@ test('shadow', async () => {
 
     .shadow-\\[10px_10px\\]\\/25 {
       --tw-shadow-alpha: 25%;
-      --tw-shadow: 10px 10px var(--tw-shadow-color, oklab(from currentcolor l a b / 25%));
+      --tw-shadow: 10px 10px var(--tw-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -23057,7 +23057,7 @@ test('inset-shadow', async () => {
 
     .inset-shadow-\\[10px_10px\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
-      --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, oklab(from currentcolor l a b / 25%));
+      --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
