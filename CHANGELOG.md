@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 - Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
 - Extract used CSS variables from `.css` files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433))
+- Ensure the `--theme(…)` function still resolves to the CSS variables even when legacy JS plugins are enabled
 
 ### Changed
 
