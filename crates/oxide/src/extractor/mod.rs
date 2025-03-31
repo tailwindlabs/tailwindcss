@@ -1,6 +1,5 @@
 use crate::cursor;
 use crate::extractor::machine::Span;
-use bstr::ByteSlice;
 use candidate_machine::CandidateMachine;
 use css_variable_machine::CssVariableMachine;
 use machine::{Machine, MachineState};

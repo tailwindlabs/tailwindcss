@@ -16,8 +16,7 @@ use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::Path;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::{self, Arc, Mutex};
 use std::time::SystemTime;
 use tracing::event;
@@ -265,18 +264,21 @@ impl Scanner {
                     .and_then(|x| x.to_str())
                     .unwrap_or_default(); // In case the file has no extension
 
-                // Special handing for CSS files to extract CSS variables
-                if extension == "css" {
-                    self.css_files.push(path);
-                    continue;
+                match extension {
+                    // Special handing for CSS files, we don't want to extract candidates from
+                    // these files, but we do want to extract used CSS variables.
+                    "css" => {
+                        self.css_files.push(path.clone());
+                    }
+                    _ => {
+                        self.changed_content.push(ChangedContent::File(
+                            path.to_path_buf(),
+                            extension.to_owned(),
+                        ));
+                    }
                 }
 
                 self.extensions.insert(extension.to_owned());
-                self.changed_content.push(ChangedContent::File(
-                    path.to_path_buf(),
-                    extension.to_owned(),
-                ));
-
                 self.files.push(path);
             }
         }
@@ -427,43 +429,21 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
 #[tracing::instrument(skip_all)]
 fn extract_css_variables(blobs: Vec<Vec<u8>>) -> Vec<String> {
-    let mut result: Vec<_> = blobs
-        .par_iter()
-        .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
-        .filter_map(|blob| {
-            if blob.is_empty() {
-                return None;
-            }
-
-            let extracted = crate::extractor::Extractor::new(blob).extract_variables_from_css();
-            if extracted.is_empty() {
-                return None;
-            }
-
-            Some(FxHashSet::from_iter(extracted.into_iter().map(
-                |x| match x {
-                    Extracted::CssVariable(bytes) => bytes,
-                    _ => &[],
-                },
-            )))
-        })
-        .reduce(Default::default, |mut a, b| {
-            a.extend(b);
-            a
-        })
-        .into_iter()
-        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
-        .collect();
-
-    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
-    //         guaranteed to have unique candidates.
-    result.par_sort_unstable();
-
-    result
+    extract(blobs, |mut extractor| {
+        extractor.extract_variables_from_css()
+    })
 }
 
 #[tracing::instrument(skip_all)]
 fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
+    extract(blobs, |mut extractor| extractor.extract())
+}
+
+#[tracing::instrument(skip_all)]
+fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
+where
+    H: Fn(Extractor) -> Vec<Extracted> + std::marker::Sync,
+{
     let mut result: Vec<_> = blobs
         .par_iter()
         .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
@@ -472,7 +452,7 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
                 return None;
             }
 
-            let extracted = crate::extractor::Extractor::new(blob).extract();
+            let extracted = handle(crate::extractor::Extractor::new(blob));
             if extracted.is_empty() {
                 return None;
             }

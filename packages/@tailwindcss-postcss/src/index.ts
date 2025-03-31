@@ -211,10 +211,15 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
+              let absolutePath = path.resolve(file)
+              // The CSS file cannot be a dependency of itself
+              if (absolutePath === result.opts.from) {
+                continue
+              }
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file: path.resolve(file),
+                file: absolutePath,
                 parent: result.opts.from,
               })
             }

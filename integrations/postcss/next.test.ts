@@ -257,3 +257,100 @@ test(
     ])
   },
 )
+
+test(
+  'changes to CSS files should pick up new CSS variables (if any)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "react": "^18",
+            "react-dom": "^18",
+            "next": "^14"
+          },
+          "devDependencies": {
+            "@tailwindcss/postcss": "workspace:^",
+            "tailwindcss": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.mjs': js`
+        export default {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'next.config.mjs': js`export default {}`,
+      'app/layout.js': js`
+        import './globals.css'
+
+        export default function RootLayout({ children }) {
+          return (
+            <html>
+              <body>{children}</body>
+            </html>
+          )
+        }
+      `,
+      'app/page.js': js`
+        export default function Page() {
+          return <div className="flex"></div>
+        }
+      `,
+      'unrelated.module.css': css`
+        .module {
+          color: var(--color-blue-500);
+        }
+      `,
+      'app/globals.css': css`
+        @import 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ spawn, exec, fs, expect }) => {
+    // Generate the initial build so output CSS files exist on disk
+    await exec('pnpm next build')
+
+    // NOTE: We are writing to an output CSS file which is not being ignored by
+    // `.gitignore` nor marked with `@source not`. This should not result in an
+    // infinite loop.
+    let process = await spawn(`pnpm next dev`)
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)/.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((m) => m.includes('Ready in'))
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`flex`)
+      expect(css).toContain('--color-blue-500:')
+      expect(css).not.toContain('--color-red-500:')
+    })
+
+    await fs.write(
+      'unrelated.module.css',
+      css`
+        .module {
+          color: var(--color-blue-500);
+          background-color: var(--color-red-500);
+        }
+      `,
+    )
+    await process.onStdout((m) => m.includes('Compiled in'))
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`flex`)
+      expect(css).toContain('--color-blue-500:')
+      expect(css).toContain('--color-red-500:')
+    })
+  },
+)
