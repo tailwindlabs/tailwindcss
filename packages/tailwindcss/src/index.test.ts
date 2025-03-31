@@ -4899,7 +4899,7 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
-  it.only('also replaces eventual variables in opacity values', async () => {
+  it('also replaces eventual variables in opacity values', async () => {
     await expect(
       compileCss(
         css`
