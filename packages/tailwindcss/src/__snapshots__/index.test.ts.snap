@@ -1,7 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
-":root, :host {
+"@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+  *, :before, :after, ::backdrop {
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-color: initial;
+    --tw-shadow-alpha: 100%;
+    --tw-inset-shadow: 0 0 #0000;
+    --tw-inset-shadow-color: initial;
+    --tw-inset-shadow-alpha: 100%;
+    --tw-ring-color: initial;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-inset-ring-color: initial;
+    --tw-inset-ring-shadow: 0 0 #0000;
+    --tw-ring-inset: initial;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-offset-shadow: 0 0 #0000;
+  }
+}
+
+:root, :host {
   --color-red-500: oklch(63.7% .237 25.331);
   --spacing: .25rem;
 }
@@ -22,25 +41,6 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 @media (min-width: 40rem) {
   .sm\\:flex {
     display: flex;
-  }
-}
-
-@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-shadow: 0 0 #0000;
-      --tw-shadow-color: initial;
-      --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-color: initial;
-      --tw-ring-color: initial;
-      --tw-ring-shadow: 0 0 #0000;
-      --tw-inset-ring-color: initial;
-      --tw-inset-ring-shadow: 0 0 #0000;
-      --tw-ring-inset: initial;
-      --tw-ring-offset-width: 0px;
-      --tw-ring-offset-color: #fff;
-      --tw-ring-offset-shadow: 0 0 #0000;
-    }
   }
 }
 

@@ -114,17 +114,15 @@ test('details-content', async () => {
 
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
-    ".before\\:flex:before {
-      content: var(--tw-content);
-      display: flex;
+    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      *, :before, :after, ::backdrop {
+        --tw-content: "";
+      }
     }
 
-    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
+    .before\\:flex:before {
+      content: var(--tw-content);
+      display: flex;
     }
 
     @property --tw-content {
@@ -138,17 +136,15 @@ test('before', async () => {
 
 test('after', async () => {
   expect(await run(['after:flex'])).toMatchInlineSnapshot(`
-    ".after\\:flex:after {
-      content: var(--tw-content);
-      display: flex;
+    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      *, :before, :after, ::backdrop {
+        --tw-content: "";
+      }
     }
 
-    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
+    .after\\:flex:after {
+      content: var(--tw-content);
+      display: flex;
     }
 
     @property --tw-content {
@@ -2248,7 +2244,13 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+      *, :before, :after, ::backdrop {
+        --tw-content: "";
+      }
+    }
+
+    @media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }
@@ -2409,14 +2411,6 @@ test('variant order', async () => {
 
     .\\[\\&_p\\]\\:flex p {
       display: flex;
-    }
-
-    @supports (((-webkit-hyphens: none)) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
-        }
-      }
     }
 
     @property --tw-content {

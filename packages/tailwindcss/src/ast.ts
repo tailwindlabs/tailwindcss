@@ -569,11 +569,14 @@ export function optimizeAst(
       }
 
       if (fallbackAst.length > 0) {
-        newAst.push(
+        let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment') ?? 0
+        newAst.splice(
+          firstNonCommentIndex,
+          0,
           atRule(
             '@supports',
             '((-webkit-hyphens: none) and (not (margin-trim: 1lh))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-            [atRule('@layer', 'base', fallbackAst)],
+            fallbackAst,
           ),
         )
       }
