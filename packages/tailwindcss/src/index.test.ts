@@ -4803,7 +4803,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.4814% 89.5689 33.0534 / .25);
+        color: lch(55.4814% 89.568 33.053 / .25);
       }
 
       @supports (color: color-mix(in lab, red, red)) {

@@ -4,7 +4,7 @@ import type { SnapshotSerializer } from 'vitest'
 // our snapshots as we've observed lightningcss generating different decimal
 // places in the last position when run on different operating systems.
 const HIGH_PRECISION_COLOR_FUNCTION =
-  /(oklab\(|oklch\(|lab\(|lch\()\d{1,2}\.?\d{0,4}% -?\.(\d{4,8}) -?\.(\d{4,8}) \/ \.\d{1,2}\)/g
+  /(oklab\(|oklch\(|lab\(|lch\()\d{1,2}\.?\d{0,4}% -?\d{0,2}\.(\d{4,8}) -?\d{0,2}.(\d{4,8}) \/ \.\d{1,2}\)/g
 
 export default {
   test(val) {
