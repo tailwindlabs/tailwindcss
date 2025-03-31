@@ -63,12 +63,12 @@ test(
   },
   async ({ fs, spawn, exec, expect }) => {
     // Generate the initial build so output CSS files exist on disk
-    await exec('webpack --mode=development')
+    await exec('pnpm webpack --mode=development')
 
     // NOTE: We are writing to an output CSS file which is not being ignored by
     // `.gitignore` nor marked with `@source not`. This should not result in an
     // infinite loop.
-    let process = await spawn('webpack --mode=development --watch')
+    let process = await spawn('pnpm webpack --mode=development --watch')
     await process.onStdout((m) => m.includes('compiled successfully in'))
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
