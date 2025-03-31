@@ -1,3 +1,4 @@
+import { decl, type AstNode } from '../ast'
 import { replaceAlpha } from '../utilities'
 import { segment } from './segment'
 
@@ -5,10 +6,12 @@ const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
 const LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 
 export function replaceShadowColors(
+  property: string,
   input: string,
   intensity: string | null | undefined,
   replacement: (color: string) => string,
-) {
+  prefix: string = '',
+): AstNode[] {
   let shadows = segment(input, ',').map((shadow) => {
     shadow = shadow.trim()
     let parts = segment(shadow, ' ').filter((part) => part.trim() !== '')
@@ -49,5 +52,5 @@ export function replaceShadowColors(
     return `${shadow} ${replacementColor}`
   })
 
-  return shadows.join(', ')
+  return [decl(property, `${prefix}${shadows.join(', ')}`)]
 }

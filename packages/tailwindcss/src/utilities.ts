@@ -4999,9 +4999,11 @@ export function createUtilities(theme: Theme) {
         return [
           textShadowProperties(),
           decl('--tw-text-shadow-alpha', alpha),
-          decl(
+          ...replaceShadowColors(
             'text-shadow',
-            replaceShadowColors(value, alpha, (color) => `var(--tw-text-shadow-color, ${color})`),
+            value,
+            alpha,
+            (color) => `var(--tw-text-shadow-color, ${color})`,
           ),
         ]
       }
@@ -5023,13 +5025,11 @@ export function createUtilities(theme: Theme) {
             return [
               textShadowProperties(),
               decl('--tw-text-shadow-alpha', alpha),
-              decl(
+              ...replaceShadowColors(
                 'text-shadow',
-                replaceShadowColors(
-                  value,
-                  alpha,
-                  (color) => `var(--tw-text-shadow-color, ${color})`,
-                ),
+                value,
+                alpha,
+                (color) => `var(--tw-text-shadow-color, ${color})`,
               ),
             ]
           }
@@ -5049,9 +5049,11 @@ export function createUtilities(theme: Theme) {
           return [
             textShadowProperties(),
             decl('--tw-text-shadow-alpha', alpha),
-            decl(
+            ...replaceShadowColors(
               'text-shadow',
-              replaceShadowColors(value, alpha, (color) => `var(--tw-text-shadow-color, ${color})`),
+              value,
+              alpha,
+              (color) => `var(--tw-text-shadow-color, ${color})`,
             ),
           ]
         }
@@ -5139,9 +5141,11 @@ export function createUtilities(theme: Theme) {
         return [
           boxShadowProperties(),
           decl('--tw-shadow-alpha', alpha),
-          decl(
+          ...replaceShadowColors(
             '--tw-shadow',
-            replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
+            value,
+            alpha,
+            (color) => `var(--tw-shadow-color, ${color})`,
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -5165,9 +5169,11 @@ export function createUtilities(theme: Theme) {
             return [
               boxShadowProperties(),
               decl('--tw-shadow-alpha', alpha),
-              decl(
+              ...replaceShadowColors(
                 '--tw-shadow',
-                replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
+                value,
+                alpha,
+                (color) => `var(--tw-shadow-color, ${color})`,
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -5192,9 +5198,11 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-shadow-alpha', alpha),
-            decl(
+            ...replaceShadowColors(
               '--tw-shadow',
-              replaceShadowColors(value, alpha, (color) => `var(--tw-shadow-color, ${color})`),
+              value,
+              alpha,
+              (color) => `var(--tw-shadow-color, ${color})`,
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
@@ -5254,9 +5262,11 @@ export function createUtilities(theme: Theme) {
         return [
           boxShadowProperties(),
           decl('--tw-inset-shadow-alpha', alpha),
-          decl(
+          ...replaceShadowColors(
             '--tw-inset-shadow',
-            replaceShadowColors(value, alpha, (color) => `var(--tw-inset-shadow-color, ${color})`),
+            value,
+            alpha,
+            (color) => `var(--tw-inset-shadow-color, ${color})`,
           ),
           decl('box-shadow', cssBoxShadowValue),
         ]
@@ -5280,13 +5290,12 @@ export function createUtilities(theme: Theme) {
             return [
               boxShadowProperties(),
               decl('--tw-inset-shadow-alpha', alpha),
-              decl(
+              ...replaceShadowColors(
                 '--tw-inset-shadow',
-                `inset ${replaceShadowColors(
-                  value,
-                  alpha,
-                  (color) => `var(--tw-inset-shadow-color, ${color})`,
-                )}`,
+                value,
+                alpha,
+                (color) => `var(--tw-inset-shadow-color, ${color})`,
+                'inset ',
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -5312,13 +5321,11 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow-alpha', alpha),
-            decl(
+            ...replaceShadowColors(
               '--tw-inset-shadow',
-              replaceShadowColors(
-                value,
-                alpha,
-                (color) => `var(--tw-inset-shadow-color, ${color})`,
-              ),
+              value,
+              alpha,
+              (color) => `var(--tw-inset-shadow-color, ${color})`,
             ),
             decl('box-shadow', cssBoxShadowValue),
           ]
