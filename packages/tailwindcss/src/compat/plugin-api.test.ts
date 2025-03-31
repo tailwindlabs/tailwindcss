@@ -3579,7 +3579,7 @@ describe('matchUtilities()', () => {
         }
 
         .scrollbar-\\[\\#08c\\]\\/50 {
-          scrollbar-color: oklab(59.9824% -.06725 -.12414 / .5);
+          scrollbar-color: oklab(59.9824% -.067 -.124 / .5);
         }
 
         .scrollbar-\\[2px\\] {

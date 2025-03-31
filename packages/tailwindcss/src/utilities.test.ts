@@ -8368,7 +8368,7 @@ test('accent', async () => {
     }
 
     .accent-\\[\\#0088cc\\]\\/50, .accent-\\[\\#0088cc\\]\\/\\[0\\.5\\], .accent-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      accent-color: oklab(59.9824% -.06725 -.12414 / .5);
+      accent-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .accent-current {
@@ -8418,7 +8418,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/50 {
-      accent-color: oklab(63.6834% .18786 .08892 / .5);
+      accent-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8428,7 +8428,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/\\[0\\.5\\] {
-      accent-color: oklab(63.6834% .18786 .08892 / .5);
+      accent-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8438,7 +8438,7 @@ test('accent', async () => {
     }
 
     .accent-red-500\\/\\[50\\%\\] {
-      accent-color: oklab(63.6834% .18786 .08892 / .5);
+      accent-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8527,7 +8527,7 @@ test('caret', async () => {
     }
 
     .caret-\\[\\#0088cc\\]\\/50, .caret-\\[\\#0088cc\\]\\/\\[0\\.5\\], .caret-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      caret-color: oklab(59.9824% -.06725 -.12414 / .5);
+      caret-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .caret-current {
@@ -8577,7 +8577,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/50 {
-      caret-color: oklab(63.6834% .18786 .08892 / .5);
+      caret-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8587,7 +8587,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/\\[0\\.5\\] {
-      caret-color: oklab(63.6834% .18786 .08892 / .5);
+      caret-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8597,7 +8597,7 @@ test('caret', async () => {
     }
 
     .caret-red-500\\/\\[50\\%\\] {
-      caret-color: oklab(63.6834% .18786 .08892 / .5);
+      caret-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8684,7 +8684,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: oklab(59.9824% -.06725 -.12414 / .5);
+      border-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     :where(.divide-current > :not(:last-child)) {
@@ -8734,7 +8734,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/50 > :not(:last-child)) {
-      border-color: oklab(63.6834% .18786 .08892 / .5);
+      border-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8744,7 +8744,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
-      border-color: oklab(63.6834% .18786 .08892 / .5);
+      border-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -8754,7 +8754,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
-      border-color: oklab(63.6834% .18786 .08892 / .5);
+      border-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10686,7 +10686,7 @@ test('bg', async () => {
     }
 
     .bg-\\[\\#0088cc\\]\\/50, .bg-\\[\\#0088cc\\]\\/\\[0\\.5\\], .bg-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      background-color: oklab(59.9824% -.06725 -.12414 / .5);
+      background-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .bg-\\[color\\:var\\(--some-var\\)\\] {
@@ -10756,7 +10756,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/50 {
-      background-color: oklab(63.6834% .18786 .08892 / .5);
+      background-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10766,7 +10766,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/\\[0\\.5\\] {
-      background-color: oklab(63.6834% .18786 .08892 / .5);
+      background-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -10776,7 +10776,7 @@ test('bg', async () => {
     }
 
     .bg-red-500\\/\\[50\\%\\] {
-      background-color: oklab(63.6834% .18786 .08892 / .5);
+      background-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -11623,7 +11623,7 @@ test('from', async () => {
     }
 
     .from-\\[\\#0088cc\\]\\/50, .from-\\[\\#0088cc\\]\\/\\[0\\.5\\], .from-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-from: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-gradient-from: oklab(59.9824% -.067 -.124 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11668,7 +11668,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/50 {
-      --tw-gradient-from: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11679,7 +11679,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-from: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11690,7 +11690,7 @@ test('from', async () => {
     }
 
     .from-red-500\\/\\[50\\%\\] {
-      --tw-gradient-from: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-from: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -11885,7 +11885,7 @@ test('via', async () => {
     }
 
     .via-\\[\\#0088cc\\]\\/50, .via-\\[\\#0088cc\\]\\/\\[0\\.5\\], .via-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-via: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-gradient-via: oklab(59.9824% -.067 -.124 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11939,7 +11939,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/50 {
-      --tw-gradient-via: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11951,7 +11951,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-via: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -11963,7 +11963,7 @@ test('via', async () => {
     }
 
     .via-red-500\\/\\[50\\%\\] {
-      --tw-gradient-via: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-via: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -12157,7 +12157,7 @@ test('to', async () => {
     }
 
     .to-\\[\\#0088cc\\]\\/50, .to-\\[\\#0088cc\\]\\/\\[0\\.5\\], .to-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-gradient-to: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-gradient-to: oklab(59.9824% -.067 -.124 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12202,7 +12202,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/50 {
-      --tw-gradient-to: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12213,7 +12213,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/\\[0\\.5\\] {
-      --tw-gradient-to: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -12224,7 +12224,7 @@ test('to', async () => {
     }
 
     .to-red-500\\/\\[50\\%\\] {
-      --tw-gradient-to: oklab(63.6834% .18786 .08892 / .5);
+      --tw-gradient-to: oklab(63.6834% .187 .088 / .5);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -18578,7 +18578,7 @@ test('fill', async () => {
     }
 
     .fill-\\[\\#0088cc\\]\\/50, .fill-\\[\\#0088cc\\]\\/\\[0\\.5\\], .fill-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      fill: oklab(59.9824% -.06725 -.12414 / .5);
+      fill: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .fill-current {
@@ -18628,7 +18628,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/50 {
-      fill: oklab(63.6834% .18786 .08892 / .5);
+      fill: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18638,7 +18638,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/\\[0\\.5\\] {
-      fill: oklab(63.6834% .18786 .08892 / .5);
+      fill: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18648,7 +18648,7 @@ test('fill', async () => {
     }
 
     .fill-red-500\\/\\[50\\%\\] {
-      fill: oklab(63.6834% .18786 .08892 / .5);
+      fill: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18743,7 +18743,7 @@ test('stroke', async () => {
     }
 
     .stroke-\\[\\#0088cc\\]\\/50, .stroke-\\[\\#0088cc\\]\\/\\[0\\.5\\], .stroke-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      stroke: oklab(59.9824% -.06725 -.12414 / .5);
+      stroke: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .stroke-\\[color\\:var\\(--my-color\\)\\] {
@@ -18813,7 +18813,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/50 {
-      stroke: oklab(63.6834% .18786 .08892 / .5);
+      stroke: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18823,7 +18823,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/\\[0\\.5\\] {
-      stroke: oklab(63.6834% .18786 .08892 / .5);
+      stroke: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -18833,7 +18833,7 @@ test('stroke', async () => {
     }
 
     .stroke-red-500\\/\\[50\\%\\] {
-      stroke: oklab(63.6834% .18786 .08892 / .5);
+      stroke: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19807,7 +19807,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-\\[\\#0088cc\\]\\/50::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[0\\.5\\]::placeholder, .placeholder-\\[\\#0088cc\\]\\/\\[50\\%\\]::placeholder {
-      color: oklab(59.9824% -.06725 -.12414 / .5);
+      color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .placeholder-current::placeholder {
@@ -19857,7 +19857,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/50::placeholder {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19867,7 +19867,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19877,7 +19877,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-red-500\\/\\[50\\%\\]::placeholder {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -19976,7 +19976,7 @@ test('decoration', async () => {
     }
 
     .decoration-\\[\\#0088cc\\]\\/50, .decoration-\\[\\#0088cc\\]\\/\\[0\\.5\\], .decoration-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      text-decoration-color: oklab(59.9824% -.06725 -.12414 / .5);
+      text-decoration-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .decoration-\\[color\\:var\\(--my-color\\)\\] {
@@ -20026,7 +20026,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/50 {
-      text-decoration-color: oklab(63.6834% .18786 .08892 / .5);
+      text-decoration-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20038,7 +20038,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/\\[0\\.5\\] {
-      text-decoration-color: oklab(63.6834% .18786 .08892 / .5);
+      text-decoration-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -20050,7 +20050,7 @@ test('decoration', async () => {
     }
 
     .decoration-red-500\\/\\[50\\%\\] {
-      text-decoration-color: oklab(63.6834% .18786 .08892 / .5);
+      text-decoration-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21787,7 +21787,7 @@ test('outline', async () => {
     }
 
     .outline-\\[\\#0088cc\\]\\/50, .outline-\\[\\#0088cc\\]\\/\\[0\\.5\\], .outline-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      outline-color: oklab(59.9824% -.06725 -.12414 / .5);
+      outline-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .outline-\\[black\\] {
@@ -21839,7 +21839,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/50 {
-      outline-color: oklab(63.6834% .18786 .08892 / .5);
+      outline-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21849,7 +21849,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/\\[0\\.5\\] {
-      outline-color: oklab(63.6834% .18786 .08892 / .5);
+      outline-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -21859,7 +21859,7 @@ test('outline', async () => {
     }
 
     .outline-red-500\\/\\[50\\%\\] {
-      outline-color: oklab(63.6834% .18786 .08892 / .5);
+      outline-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22285,7 +22285,7 @@ test('text', async () => {
     }
 
     .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      color: oklab(59.9824% -.06725 -.12414 / .5);
+      color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .text-\\[color\\:var\\(--my-color\\)\\] {
@@ -22351,7 +22351,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/50 {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22361,7 +22361,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/\\[0\\.5\\] {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22371,7 +22371,7 @@ test('text', async () => {
     }
 
     .text-red-500\\/\\[50\\%\\] {
-      color: oklab(63.6834% .18786 .08892 / .5);
+      color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22489,7 +22489,7 @@ test('text-shadow', async () => {
 
     .text-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
-      text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+      text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(59.9824% -.067 -.124 / .25));
     }
 
     .text-shadow-sm\\/25 {
@@ -22506,7 +22506,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-\\[\\#0088cc\\]\\/50, .text-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(59.9824% -.06725 -.12414 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-text-shadow-alpha), transparent);
     }
 
     .text-shadow-\\[10px_10px\\] {
@@ -22586,7 +22586,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/50 {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22596,7 +22596,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/\\[0\\.5\\] {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22606,7 +22606,7 @@ test('text-shadow', async () => {
     }
 
     .text-shadow-red-500\\/\\[50\\%\\] {
-      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-text-shadow-alpha), transparent);
+      --tw-text-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-text-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22738,7 +22738,7 @@ test('shadow', async () => {
 
     .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-shadow-alpha: 25%;
-      --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+      --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(59.9824% -.067 -.124 / .25));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -22783,7 +22783,7 @@ test('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.06725 -.12414 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-shadow-alpha), transparent);
     }
 
     .shadow-\\[color\\:var\\(--value\\)\\] {
@@ -22847,7 +22847,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/50 {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22857,7 +22857,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[0\\.5\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -22867,7 +22867,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23063,7 +23063,7 @@ test('inset-shadow', async () => {
 
     .inset-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
-      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(59.9824% -.06725 -.12414 / .25));
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(59.9824% -.067 -.124 / .25));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -23108,7 +23108,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-\\[\\#0088cc\\]\\/50, .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(59.9824% -.06725 -.12414 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-inset-shadow-alpha), transparent);
     }
 
     .inset-shadow-\\[color\\:var\\(--value\\)\\] {
@@ -23172,7 +23172,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/50 {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23182,7 +23182,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/\\[0\\.5\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23192,7 +23192,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-red-500\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .18786 .08892 / .5) var(--tw-inset-shadow-alpha), transparent);
+      --tw-inset-shadow-color: color-mix(in oklab, oklab(63.6834% .187 .088 / .5) var(--tw-inset-shadow-alpha), transparent);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23419,7 +23419,7 @@ test('ring', async () => {
     }
 
     .ring-\\[\\#0088cc\\]\\/50, .ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-ring-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -23485,7 +23485,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/50 {
-      --tw-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23495,7 +23495,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/\\[0\\.5\\] {
-      --tw-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23505,7 +23505,7 @@ test('ring', async () => {
     }
 
     .ring-red-500\\/\\[50\\%\\] {
-      --tw-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23864,7 +23864,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-\\[\\#0088cc\\]\\/50, .inset-ring-\\[\\#0088cc\\]\\/\\[0\\.5\\], .inset-ring-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-inset-ring-color: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-inset-ring-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .inset-ring-\\[color\\:var\\(--my-color\\)\\] {
@@ -23930,7 +23930,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/50 {
-      --tw-inset-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23940,7 +23940,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/\\[0\\.5\\] {
-      --tw-inset-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23950,7 +23950,7 @@ test('inset-ring', async () => {
     }
 
     .inset-ring-red-500\\/\\[50\\%\\] {
-      --tw-inset-ring-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-inset-ring-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24164,7 +24164,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-\\[\\#0088cc\\]\\/50, .ring-offset-\\[\\#0088cc\\]\\/\\[0\\.5\\], .ring-offset-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-ring-offset-color: oklab(59.9824% -.06725 -.12414 / .5);
+      --tw-ring-offset-color: oklab(59.9824% -.067 -.124 / .5);
     }
 
     .ring-offset-\\[color\\:var\\(--my-color\\)\\] {
@@ -24200,7 +24200,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/50 {
-      --tw-ring-offset-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24210,7 +24210,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/\\[0\\.5\\] {
-      --tw-ring-offset-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -24220,7 +24220,7 @@ test('ring-offset', async () => {
     }
 
     .ring-offset-red-500\\/\\[50\\%\\] {
-      --tw-ring-offset-color: oklab(63.6834% .18786 .08892 / .5);
+      --tw-ring-offset-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {

@@ -86,7 +86,7 @@ exports[`border-* 1`] = `
 }
 
 .border-\\[\\#0088cc\\]\\/50 {
-  border-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-\\[color\\:var\\(--my-color\\)\\] {
@@ -152,7 +152,7 @@ exports[`border-* 1`] = `
 }
 
 .border-red-500\\/50 {
-  border-color: oklab(63.6834% .18786 .08892 / .5);
+  border-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -258,7 +258,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-\\[\\#0088cc\\]\\/50 {
-  border-bottom-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-bottom-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-b-\\[color\\:var\\(--my-color\\)\\] {
@@ -324,7 +324,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-red-500\\/50 {
-  border-bottom-color: oklab(63.6834% .18786 .08892 / .5);
+  border-bottom-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -430,7 +430,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-\\[\\#0088cc\\]\\/50 {
-  border-inline-end-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-inline-end-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-e-\\[color\\:var\\(--my-color\\)\\] {
@@ -496,7 +496,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-red-500\\/50 {
-  border-inline-end-color: oklab(63.6834% .18786 .08892 / .5);
+  border-inline-end-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -602,7 +602,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-\\[\\#0088cc\\]\\/50 {
-  border-left-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-left-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-l-\\[color\\:var\\(--my-color\\)\\] {
@@ -668,7 +668,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-red-500\\/50 {
-  border-left-color: oklab(63.6834% .18786 .08892 / .5);
+  border-left-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -774,7 +774,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-\\[\\#0088cc\\]\\/50 {
-  border-right-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-right-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-r-\\[color\\:var\\(--my-color\\)\\] {
@@ -840,7 +840,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-red-500\\/50 {
-  border-right-color: oklab(63.6834% .18786 .08892 / .5);
+  border-right-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -946,7 +946,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-\\[\\#0088cc\\]\\/50 {
-  border-inline-start-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-inline-start-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-s-\\[color\\:var\\(--my-color\\)\\] {
@@ -1012,7 +1012,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-red-500\\/50 {
-  border-inline-start-color: oklab(63.6834% .18786 .08892 / .5);
+  border-inline-start-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -1118,7 +1118,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-\\[\\#0088cc\\]\\/50 {
-  border-top-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-top-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-t-\\[color\\:var\\(--my-color\\)\\] {
@@ -1184,7 +1184,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-red-500\\/50 {
-  border-top-color: oklab(63.6834% .18786 .08892 / .5);
+  border-top-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -1290,7 +1290,7 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-\\[\\#0088cc\\]\\/50 {
-  border-inline-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-inline-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-x-\\[color\\:var\\(--my-color\\)\\] {
@@ -1356,7 +1356,7 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-red-500\\/50 {
-  border-inline-color: oklab(63.6834% .18786 .08892 / .5);
+  border-inline-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
@@ -1462,7 +1462,7 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-\\[\\#0088cc\\]\\/50 {
-  border-block-color: oklab(59.9824% -.06725 -.12414 / .5);
+  border-block-color: oklab(59.9824% -.067 -.124 / .5);
 }
 
 .border-y-\\[color\\:var\\(--my-color\\)\\] {
@@ -1528,7 +1528,7 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-red-500\\/50 {
-  border-block-color: oklab(63.6834% .18786 .08892 / .5);
+  border-block-color: oklab(63.6834% .187 .088 / .5);
 }
 
 @supports (color: color-mix(in lab, red, red)) {

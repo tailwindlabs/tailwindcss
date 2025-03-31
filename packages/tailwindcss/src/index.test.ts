@@ -246,7 +246,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklab(62.7955% .22486 .12584 / .5);
+        color: oklab(62.7955% .224 .125 / .5);
       }"
     `)
   })
@@ -4735,7 +4735,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/50 {
-        color: oklab(63.7% .214213 .1014 / .5);
+        color: oklab(63.7% .214 .101 / .5);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4841,7 +4841,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .gradient {
-        background: linear-gradient(90deg, oklab(63.7% .214213 .1014 / .5) 0%, oklab(70.5% .14361 .15730 / .5) 0%, 100%);
+        background: linear-gradient(90deg, oklab(63.7% .214 .101 / .5) 0%, oklab(70.5% .143 .157 / .5) 0%, 100%);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4873,7 +4873,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/50 {
-        color: oklab(63.7% .214213 .1014 / .5);
+        color: oklab(63.7% .214 .101 / .5);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4918,7 +4918,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .text-red-500\\/\\(--my-half\\) {
-        color: oklab(63.7% .214213 .1014 / .5);
+        color: oklab(63.7% .214 .101 / .5);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
