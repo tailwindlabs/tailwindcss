@@ -5834,7 +5834,7 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          for (let [idx, node] of fn.nodes.entries()) {
+          for (let node of fn.nodes) {
             // Track literal values
             if (
               node.kind === 'word' &&
