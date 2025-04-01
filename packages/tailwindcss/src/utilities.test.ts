@@ -23118,7 +23118,13 @@ test('shadow', async () => {
     }
 
     .shadow-blue-500 {
-      --tw-shadow-color: color-mix(in oklab, var(--box-shadow-color-blue-500) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: color-mix(in srgb, #3b82f6 var(--tw-shadow-alpha), transparent);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-blue-500 {
+        --tw-shadow-color: color-mix(in oklab, var(--box-shadow-color-blue-500) var(--tw-shadow-alpha), transparent);
+      }
     }
 
     .shadow-current {
