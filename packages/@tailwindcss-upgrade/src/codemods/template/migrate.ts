@@ -11,7 +11,7 @@ import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-va
 import { migrateImportant } from './migrate-important'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
-import { maxWidthScreen } from './migrate-max-width-screen'
+import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { modernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { prefix } from './migrate-prefix'
 import { simpleLegacyClasses } from './migrate-simple-legacy-classes'
@@ -36,7 +36,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateBgGradient,
   simpleLegacyClasses,
   migrateLegacyClasses,
-  maxWidthScreen,
+  migrateMaxWidthScreen,
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
