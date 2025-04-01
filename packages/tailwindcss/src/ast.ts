@@ -582,18 +582,22 @@ export function optimizeAst(
     }
 
     if (fallbackAst.length > 0) {
-      let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
-      if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
-      newAst.splice(
-        firstNonCommentIndex,
-        0,
-        atRule(
-          '@supports',
-          // We can't write a supports query for `@property` directly so we have to test for
-          // features that are added around the same time in Mozilla and Safari.
-          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-          [rule('@layer base', fallbackAst)],
-        ),
+      // Inject `@layer __tw-properties;` at the top, such that external
+      // `@import url(…)` can still be placed after it.
+      newAst.unshift(atRule('@layer', '__tw-properties'))
+
+      // Inject the `@layer __tw-properties { … }` at the end with all the
+      // fallbacks.
+      newAst.push(
+        atRule('@layer', '__tw-properties', [
+          atRule(
+            '@supports',
+            // We can't write a supports query for `@property` directly so we have to test for
+            // features that are added around the same time in Mozilla and Safari.
+            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+            [rule('@layer base', fallbackAst)],
+          ),
+        ]),
       )
     }
   }
