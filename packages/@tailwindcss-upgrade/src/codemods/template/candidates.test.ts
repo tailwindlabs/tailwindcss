@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
+import { spliceChangesIntoString } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates, printCandidate } from './candidates'
-import { spliceChangesIntoString } from './splice-changes-into-string'
 
 let html = String.raw
 

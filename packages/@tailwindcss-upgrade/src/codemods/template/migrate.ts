@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
 import { arbitraryValueToBareValue } from './codemods/arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './codemods/automatic-var-injection'
@@ -16,7 +17,6 @@ import { prefix } from './codemods/prefix'
 import { simpleLegacyClasses } from './codemods/simple-legacy-classes'
 import { themeToVar } from './codemods/theme-to-var'
 import { variantOrder } from './codemods/variant-order'
-import { spliceChangesIntoString, type StringChange } from './splice-changes-into-string'
 
 export type Migration = (
   designSystem: DesignSystem,
