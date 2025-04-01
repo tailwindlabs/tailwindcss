@@ -10,10 +10,14 @@ const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
-export default function tailwindcss(): Plugin[] {
+export interface TailwindPluginOptions {
+  ignore?: (string | RegExp | ((id: string) => boolean))[]
+}
+
+export default function tailwindcss(pluginOptions?: TailwindPluginOptions): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
-
+  let ignoredFiles = pluginOptions?.ignore??[];
   let isSSR = false
   let minify = false
 
@@ -61,7 +65,7 @@ export default function tailwindcss(): Plugin[] {
       enforce: 'pre',
 
       async transform(src, id, options) {
-        if (!isPotentialCssRootFile(id)) return
+        if (!isPotentialCssRootFile(id, ignoredFiles)) return
 
         using I = new Instrumentation()
         DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
@@ -86,7 +90,7 @@ export default function tailwindcss(): Plugin[] {
       enforce: 'pre',
 
       async transform(src, id) {
-        if (!isPotentialCssRootFile(id)) return
+        if (!isPotentialCssRootFile(id, ignoredFiles)) return
 
         using I = new Instrumentation()
         DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
@@ -115,10 +119,23 @@ function getExtension(id: string) {
   return path.extname(filename).slice(1)
 }
 
-function isPotentialCssRootFile(id: string) {
+function isPotentialCssRootFile(id: string, ignoredFiles: Exclude<TailwindPluginOptions["ignore"], undefined>) {
   if (id.includes('/.vite/')) return
+  let isIgnoredPattern = ignoredFiles.some(matcher => {
+    if(matcher instanceof RegExp){
+      return matcher.test(id);
+    }
+    if(matcher instanceof Function){
+      return matcher(id);
+    }
+
+    return matcher.includes(matcher)
+  });
+  // User defined ignore pattern
+  if(isIgnoredPattern) return
+
   let extension = getExtension(id)
-  let isCssFile =
+  const isCssFile =
     (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id) &&
