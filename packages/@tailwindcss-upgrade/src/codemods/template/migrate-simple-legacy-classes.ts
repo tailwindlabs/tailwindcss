@@ -20,7 +20,7 @@ const LEGACY_CLASS_MAP = {
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
-export function simpleLegacyClasses(
+export function migrateSimpleLegacyClasses(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,

@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { simpleLegacyClasses } from './migrate-simple-legacy-classes'
+import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 
 test.each([
   ['overflow-ellipsis', 'text-ellipsis'],
@@ -24,5 +24,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(simpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateSimpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
 })

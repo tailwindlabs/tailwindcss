@@ -14,7 +14,7 @@ import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { prefix } from './migrate-prefix'
-import { simpleLegacyClasses } from './migrate-simple-legacy-classes'
+import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { themeToVar } from './migrate-theme-to-var'
 import { variantOrder } from './migrate-variant-order'
 
@@ -34,7 +34,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   prefix,
   migrateImportant,
   migrateBgGradient,
-  simpleLegacyClasses,
+  migrateSimpleLegacyClasses,
   migrateLegacyClasses,
   migrateMaxWidthScreen,
   themeToVar,
