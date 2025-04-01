@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { pkg } from './utils/packages'
-import { highlight, success } from './utils/renderer'
+import { pkg } from '../../utils/packages'
+import { highlight, success } from '../../utils/renderer'
 
 export async function migratePrettierPlugin(base: string) {
   let packageJsonPath = path.resolve(base, 'package.json')
