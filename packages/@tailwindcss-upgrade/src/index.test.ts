@@ -3,9 +3,9 @@ import dedent from 'dedent'
 import path from 'node:path'
 import postcss from 'postcss'
 import { expect, it } from 'vitest'
-import { formatNodes } from './codemods/format-nodes'
-import { sortBuckets } from './codemods/sort-buckets'
-import { migrateContents } from './migrate'
+import { formatNodes } from './codemods/css/format-nodes'
+import { migrateContents } from './codemods/css/migrate'
+import { sortBuckets } from './codemods/css/sort-buckets'
 
 const css = dedent
 
