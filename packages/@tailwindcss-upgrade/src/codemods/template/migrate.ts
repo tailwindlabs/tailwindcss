@@ -12,7 +12,7 @@ import { migrateImportant } from './migrate-important'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
-import { modernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
+import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { prefix } from './migrate-prefix'
 import { simpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { themeToVar } from './migrate-theme-to-var'
@@ -42,7 +42,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
   migrateArbitraryValueToBareValue,
-  modernizeArbitraryValues,
+  migrateModernizeArbitraryValues,
 ]
 
 export async function migrateCandidate(

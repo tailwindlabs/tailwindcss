@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
-import { modernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
+import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { prefix } from './migrate-prefix'
 
 test.each([
@@ -96,7 +96,7 @@ test.each([
   })
 
   expect(
-    [migrateEmptyArbitraryValues, modernizeArbitraryValues].reduce(
+    [migrateEmptyArbitraryValues, migrateModernizeArbitraryValues].reduce(
       (acc, step) => step(designSystem, {}, acc),
       candidate,
     ),
@@ -130,7 +130,7 @@ test.each([
   })
 
   expect(
-    [migrateEmptyArbitraryValues, prefix, modernizeArbitraryValues].reduce(
+    [migrateEmptyArbitraryValues, prefix, migrateModernizeArbitraryValues].reduce(
       (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
       candidate,
     ),

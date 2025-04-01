@@ -13,7 +13,7 @@ function memcpy<T extends object, U extends object | null>(target: T, source: U)
   return Object.assign(target, source)
 }
 
-export function modernizeArbitraryValues(
+export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
