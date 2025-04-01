@@ -16,7 +16,7 @@ import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-v
 import { prefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
-import { variantOrder } from './migrate-variant-order'
+import { migrateVariantOrder } from './migrate-variant-order'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -38,7 +38,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateLegacyClasses,
   migrateMaxWidthScreen,
   migrateThemeToVar,
-  variantOrder, // Has to happen before migrations that modify variants
+  migrateVariantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
   migrateArbitraryValueToBareValue,

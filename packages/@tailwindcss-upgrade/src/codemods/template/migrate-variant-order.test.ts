@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import { expect, test } from 'vitest'
-import { variantOrder } from './migrate-variant-order'
+import { migrateVariantOrder } from './migrate-variant-order'
 
 let css = dedent
 
@@ -53,7 +53,7 @@ test.each([
     base: __dirname,
   })
 
-  expect(variantOrder(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateVariantOrder(designSystem, {}, candidate)).toEqual(result)
 })
 
 test('it works with custom variants', async () => {
@@ -83,7 +83,7 @@ test('it works with custom variants', async () => {
     },
   )
 
-  expect(variantOrder(designSystem, {}, 'combinator:pseudo:atrule:underline')).toEqual(
+  expect(migrateVariantOrder(designSystem, {}, 'combinator:pseudo:atrule:underline')).toEqual(
     'atrule:combinator:pseudo:underline',
   )
 })
