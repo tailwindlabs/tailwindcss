@@ -12,13 +12,6 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import {
-  enableBaselineLast,
-  enableMaskUtilities,
-  enableSafeAlignment,
-  enableTextShadows,
-  enableWrapAnywhere,
-} from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -1873,10 +1866,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-content-center', [['place-content', 'center']])
   staticUtility('place-content-start', [['place-content', 'start']])
   staticUtility('place-content-end', [['place-content', 'end']])
-  if (enableSafeAlignment) {
-    staticUtility('place-content-center-safe', [['place-content', 'safe center']])
-    staticUtility('place-content-end-safe', [['place-content', 'safe end']])
-  }
+  staticUtility('place-content-center-safe', [['place-content', 'safe center']])
+  staticUtility('place-content-end-safe', [['place-content', 'safe end']])
   staticUtility('place-content-between', [['place-content', 'space-between']])
   staticUtility('place-content-around', [['place-content', 'space-around']])
   staticUtility('place-content-evenly', [['place-content', 'space-evenly']])
@@ -1886,10 +1877,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-items-center', [['place-items', 'center']])
   staticUtility('place-items-start', [['place-items', 'start']])
   staticUtility('place-items-end', [['place-items', 'end']])
-  if (enableSafeAlignment) {
-    staticUtility('place-items-center-safe', [['place-items', 'safe center']])
-    staticUtility('place-items-end-safe', [['place-items', 'safe end']])
-  }
+  staticUtility('place-items-center-safe', [['place-items', 'safe center']])
+  staticUtility('place-items-end-safe', [['place-items', 'safe end']])
   staticUtility('place-items-baseline', [['place-items', 'baseline']])
   staticUtility('place-items-stretch', [['place-items', 'stretch']])
 
@@ -1897,10 +1886,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('content-center', [['align-content', 'center']])
   staticUtility('content-start', [['align-content', 'flex-start']])
   staticUtility('content-end', [['align-content', 'flex-end']])
-  if (enableSafeAlignment) {
-    staticUtility('content-center-safe', [['align-content', 'safe center']])
-    staticUtility('content-end-safe', [['align-content', 'safe flex-end']])
-  }
+  staticUtility('content-center-safe', [['align-content', 'safe center']])
+  staticUtility('content-end-safe', [['align-content', 'safe flex-end']])
   staticUtility('content-between', [['align-content', 'space-between']])
   staticUtility('content-around', [['align-content', 'space-around']])
   staticUtility('content-evenly', [['align-content', 'space-evenly']])
@@ -1910,24 +1897,18 @@ export function createUtilities(theme: Theme) {
   staticUtility('items-center', [['align-items', 'center']])
   staticUtility('items-start', [['align-items', 'flex-start']])
   staticUtility('items-end', [['align-items', 'flex-end']])
-  if (enableSafeAlignment) {
-    staticUtility('items-center-safe', [['align-items', 'safe center']])
-    staticUtility('items-end-safe', [['align-items', 'safe flex-end']])
-  }
+  staticUtility('items-center-safe', [['align-items', 'safe center']])
+  staticUtility('items-end-safe', [['align-items', 'safe flex-end']])
   staticUtility('items-baseline', [['align-items', 'baseline']])
-  if (enableBaselineLast) {
-    staticUtility('items-baseline-last', [['align-items', 'last baseline']])
-  }
+  staticUtility('items-baseline-last', [['align-items', 'last baseline']])
   staticUtility('items-stretch', [['align-items', 'stretch']])
 
   staticUtility('justify-normal', [['justify-content', 'normal']])
   staticUtility('justify-center', [['justify-content', 'center']])
   staticUtility('justify-start', [['justify-content', 'flex-start']])
   staticUtility('justify-end', [['justify-content', 'flex-end']])
-  if (enableSafeAlignment) {
-    staticUtility('justify-center-safe', [['justify-content', 'safe center']])
-    staticUtility('justify-end-safe', [['justify-content', 'safe flex-end']])
-  }
+  staticUtility('justify-center-safe', [['justify-content', 'safe center']])
+  staticUtility('justify-end-safe', [['justify-content', 'safe flex-end']])
   staticUtility('justify-between', [['justify-content', 'space-between']])
   staticUtility('justify-around', [['justify-content', 'space-around']])
   staticUtility('justify-evenly', [['justify-content', 'space-evenly']])
@@ -1938,10 +1919,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-items-center', [['justify-items', 'center']])
   staticUtility('justify-items-start', [['justify-items', 'start']])
   staticUtility('justify-items-end', [['justify-items', 'end']])
-  if (enableSafeAlignment) {
-    staticUtility('justify-items-center-safe', [['justify-items', 'safe center']])
-    staticUtility('justify-items-end-safe', [['justify-items', 'safe end']])
-  }
+  staticUtility('justify-items-center-safe', [['justify-items', 'safe center']])
+  staticUtility('justify-items-end-safe', [['justify-items', 'safe end']])
   staticUtility('justify-items-stretch', [['justify-items', 'stretch']])
 
   spacingUtility('gap', ['--gap', '--spacing'], (value) => [decl('gap', value)])
@@ -2022,34 +2001,26 @@ export function createUtilities(theme: Theme) {
   staticUtility('place-self-start', [['place-self', 'start']])
   staticUtility('place-self-end', [['place-self', 'end']])
   staticUtility('place-self-center', [['place-self', 'center']])
-  if (enableSafeAlignment) {
-    staticUtility('place-self-end-safe', [['place-self', 'safe end']])
-    staticUtility('place-self-center-safe', [['place-self', 'safe center']])
-  }
+  staticUtility('place-self-end-safe', [['place-self', 'safe end']])
+  staticUtility('place-self-center-safe', [['place-self', 'safe center']])
   staticUtility('place-self-stretch', [['place-self', 'stretch']])
 
   staticUtility('self-auto', [['align-self', 'auto']])
   staticUtility('self-start', [['align-self', 'flex-start']])
   staticUtility('self-end', [['align-self', 'flex-end']])
   staticUtility('self-center', [['align-self', 'center']])
-  if (enableSafeAlignment) {
-    staticUtility('self-end-safe', [['align-self', 'safe flex-end']])
-    staticUtility('self-center-safe', [['align-self', 'safe center']])
-  }
+  staticUtility('self-end-safe', [['align-self', 'safe flex-end']])
+  staticUtility('self-center-safe', [['align-self', 'safe center']])
   staticUtility('self-stretch', [['align-self', 'stretch']])
   staticUtility('self-baseline', [['align-self', 'baseline']])
-  if (enableBaselineLast) {
-    staticUtility('self-baseline-last', [['align-self', 'last baseline']])
-  }
+  staticUtility('self-baseline-last', [['align-self', 'last baseline']])
 
   staticUtility('justify-self-auto', [['justify-self', 'auto']])
   staticUtility('justify-self-start', [['justify-self', 'flex-start']])
   staticUtility('justify-self-end', [['justify-self', 'flex-end']])
   staticUtility('justify-self-center', [['justify-self', 'center']])
-  if (enableSafeAlignment) {
-    staticUtility('justify-self-end-safe', [['justify-self', 'safe flex-end']])
-    staticUtility('justify-self-center-safe', [['justify-self', 'safe center']])
-  }
+  staticUtility('justify-self-end-safe', [['justify-self', 'safe flex-end']])
+  staticUtility('justify-self-center-safe', [['justify-self', 'safe center']])
   staticUtility('justify-self-stretch', [['justify-self', 'stretch']])
 
   for (let value of ['auto', 'hidden', 'clip', 'visible', 'scroll']) {
@@ -2108,11 +2079,9 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'keep-all']])
 
-  if (enableWrapAnywhere) {
-    staticUtility('wrap-anywhere', [['overflow-wrap', 'anywhere']])
-    staticUtility('wrap-break-word', [['overflow-wrap', 'break-word']])
-    staticUtility('wrap-normal', [['overflow-wrap', 'normal']])
-  }
+  staticUtility('wrap-anywhere', [['overflow-wrap', 'anywhere']])
+  staticUtility('wrap-break-word', [['overflow-wrap', 'break-word']])
+  staticUtility('wrap-normal', [['overflow-wrap', 'normal']])
 
   {
     // border-radius
@@ -2827,508 +2796,501 @@ export function createUtilities(theme: Theme) {
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
   })
 
-  if (enableMaskUtilities) {
-    /**
-     * @css `mask-image`
-     */
+  /**
+   * @css `mask-image`
+   */
 
-    staticUtility('mask-none', [['mask-image', 'none']])
+  staticUtility('mask-none', [['mask-image', 'none']])
 
-    utilities.functional('mask', (candidate) => {
+  utilities.functional('mask', (candidate) => {
+    if (!candidate.value) return
+    if (candidate.modifier) return
+    if (candidate.value.kind !== 'arbitrary') return
+
+    // Arbitrary values
+    let value: string | null = candidate.value.value
+    let type =
+      candidate.value.dataType ??
+      inferDataType(value, ['image', 'percentage', 'position', 'bg-size', 'length', 'url'])
+
+    switch (type) {
+      case 'percentage':
+      case 'position': {
+        if (candidate.modifier) return
+        return [decl('mask-position', value)]
+      }
+      case 'bg-size':
+      case 'length':
+      case 'size': {
+        return [decl('mask-size', value)]
+      }
+      case 'image':
+      case 'url':
+      default: {
+        return [decl('mask-image', value)]
+      }
+    }
+  })
+
+  /**
+   * @css `mask-composite`
+   */
+
+  staticUtility('mask-add', [['mask-composite', 'add']])
+  staticUtility('mask-subtract', [['mask-composite', 'subtract']])
+  staticUtility('mask-intersect', [['mask-composite', 'intersect']])
+  staticUtility('mask-exclude', [['mask-composite', 'exclude']])
+
+  /**
+   * @css `mask-mode`
+   *
+   * Sets the "mode" of the mask given by mask-image
+   */
+
+  staticUtility('mask-alpha', [['mask-mode', 'alpha']])
+  staticUtility('mask-luminance', [['mask-mode', 'luminance']])
+  staticUtility('mask-match', [['mask-mode', 'match-source']])
+
+  /**
+   * @css `mask-type`
+   *
+   * Sets the "mode" of the current `<mask>` element
+   * Is overridden by `mask-mode` if used
+   */
+  staticUtility('mask-type-alpha', [['mask-type', 'alpha']])
+  staticUtility('mask-type-luminance', [['mask-type', 'luminance']])
+
+  /**
+   * @css `mask-size`
+   */
+
+  staticUtility('mask-auto', [['mask-size', 'auto']])
+  staticUtility('mask-cover', [['mask-size', 'cover']])
+  staticUtility('mask-contain', [['mask-size', 'contain']])
+  functionalUtility('mask-size', {
+    handle(value) {
+      if (!value) return
+      return [decl('mask-size', value)]
+    },
+  })
+
+  /**
+   * @css `mask-position`
+   */
+
+  staticUtility('mask-top', [['mask-position', 'top']])
+  staticUtility('mask-top-left', [['mask-position', 'left top']])
+  staticUtility('mask-top-right', [['mask-position', 'right top']])
+  staticUtility('mask-bottom', [['mask-position', 'bottom']])
+  staticUtility('mask-bottom-left', [['mask-position', 'left bottom']])
+  staticUtility('mask-bottom-right', [['mask-position', 'right bottom']])
+  staticUtility('mask-left', [['mask-position', 'left']])
+  staticUtility('mask-right', [['mask-position', 'right']])
+  staticUtility('mask-center', [['mask-position', 'center']])
+  functionalUtility('mask-position', {
+    handle(value) {
+      if (!value) return
+      return [decl('mask-position', value)]
+    },
+  })
+
+  /**
+   * @css `mask-repeat`
+   */
+
+  staticUtility('mask-repeat', [['mask-repeat', 'repeat']])
+  staticUtility('mask-no-repeat', [['mask-repeat', 'no-repeat']])
+  staticUtility('mask-repeat-x', [['mask-repeat', 'repeat-x']])
+  staticUtility('mask-repeat-y', [['mask-repeat', 'repeat-y']])
+  staticUtility('mask-repeat-round', [['mask-repeat', 'round']])
+  staticUtility('mask-repeat-space', [['mask-repeat', 'space']])
+
+  /**
+   * @css `mask-clip`
+   */
+
+  staticUtility('mask-clip-border', [['mask-clip', 'border-box']])
+  staticUtility('mask-clip-padding', [['mask-clip', 'padding-box']])
+  staticUtility('mask-clip-content', [['mask-clip', 'content-box']])
+  staticUtility('mask-clip-fill', [['mask-clip', 'fill-box']])
+  staticUtility('mask-clip-stroke', [['mask-clip', 'stroke-box']])
+  staticUtility('mask-clip-view', [['mask-clip', 'view-box']])
+  staticUtility('mask-no-clip', [['mask-clip', 'no-clip']])
+
+  /**
+   * @css `mask-origin`
+   */
+
+  staticUtility('mask-origin-border', [['mask-origin', 'border-box']])
+  staticUtility('mask-origin-padding', [['mask-origin', 'padding-box']])
+  staticUtility('mask-origin-content', [['mask-origin', 'content-box']])
+  staticUtility('mask-origin-fill', [['mask-origin', 'fill-box']])
+  staticUtility('mask-origin-stroke', [['mask-origin', 'stroke-box']])
+  staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
+
+  /**
+   * @css `mask-image` gradients
+   */
+
+  let maskPropertiesGradient = () =>
+    atRoot([
+      property('--tw-mask-linear', 'linear-gradient(#fff, #fff)'),
+      property('--tw-mask-radial', 'linear-gradient(#fff, #fff)'),
+      property('--tw-mask-conic', 'linear-gradient(#fff, #fff)'),
+    ])
+
+  type MaskStopDescription = {
+    color: (value: string) => AstNode[] | undefined
+    position: (value: string) => AstNode[] | undefined
+  }
+
+  function maskStopUtility(classRoot: string, desc: MaskStopDescription) {
+    utilities.functional(classRoot, (candidate) => {
       if (!candidate.value) return
-      if (candidate.modifier) return
-      if (candidate.value.kind !== 'arbitrary') return
 
       // Arbitrary values
-      let value: string | null = candidate.value.value
-      let type =
-        candidate.value.dataType ??
-        inferDataType(value, ['image', 'percentage', 'position', 'bg-size', 'length', 'url'])
+      if (candidate.value.kind === 'arbitrary') {
+        let value: string | null = candidate.value.value
+        let type =
+          candidate.value.dataType ?? inferDataType(value, ['length', 'percentage', 'color'])
 
-      switch (type) {
-        case 'percentage':
-        case 'position': {
-          if (candidate.modifier) return
-          return [decl('mask-position', value)]
+        switch (type) {
+          case 'color': {
+            value = asColor(value, candidate.modifier, theme)
+            if (value === null) return
+
+            return desc.color(value)
+          }
+          case 'percentage': {
+            if (candidate.modifier) return
+            if (!isPositiveInteger(value.slice(0, -1))) return
+
+            return desc.position(value)
+          }
+          default: {
+            if (candidate.modifier) return
+
+            return desc.position(value)
+          }
         }
-        case 'bg-size':
-        case 'length':
-        case 'size': {
-          return [decl('mask-size', value)]
+      }
+
+      // Known values: Color Stops
+      {
+        let value = resolveThemeColor(candidate, theme, ['--background-color', '--color'])
+        if (value) {
+          return desc.color(value)
         }
-        case 'image':
-        case 'url':
-        default: {
-          return [decl('mask-image', value)]
+      }
+
+      // Known values: Positions
+      {
+        if (candidate.modifier) return
+
+        let type = inferDataType(candidate.value.value, ['number', 'percentage'])
+        if (!type) return
+
+        switch (type) {
+          case 'number': {
+            let multiplier = theme.resolve(null, ['--spacing'])
+            if (!multiplier) return
+            if (!isValidSpacingMultiplier(candidate.value.value)) return
+
+            return desc.position(`calc(${multiplier} * ${candidate.value.value})`)
+          }
+
+          case 'percentage': {
+            if (!isPositiveInteger(candidate.value.value.slice(0, -1))) return
+            return desc.position(candidate.value.value)
+          }
+
+          default: {
+            return
+          }
         }
       }
     })
 
-    /**
-     * @css `mask-composite`
-     */
-
-    staticUtility('mask-add', [['mask-composite', 'add']])
-    staticUtility('mask-subtract', [['mask-composite', 'subtract']])
-    staticUtility('mask-intersect', [['mask-composite', 'intersect']])
-    staticUtility('mask-exclude', [['mask-composite', 'exclude']])
-
-    /**
-     * @css `mask-mode`
-     *
-     * Sets the "mode" of the mask given by mask-image
-     */
-
-    staticUtility('mask-alpha', [['mask-mode', 'alpha']])
-    staticUtility('mask-luminance', [['mask-mode', 'luminance']])
-    staticUtility('mask-match', [['mask-mode', 'match-source']])
-
-    /**
-     * @css `mask-type`
-     *
-     * Sets the "mode" of the current `<mask>` element
-     * Is overridden by `mask-mode` if used
-     */
-    staticUtility('mask-type-alpha', [['mask-type', 'alpha']])
-    staticUtility('mask-type-luminance', [['mask-type', 'luminance']])
-
-    /**
-     * @css `mask-size`
-     */
-
-    staticUtility('mask-auto', [['mask-size', 'auto']])
-    staticUtility('mask-cover', [['mask-size', 'cover']])
-    staticUtility('mask-contain', [['mask-size', 'contain']])
-    functionalUtility('mask-size', {
-      handle(value) {
-        if (!value) return
-        return [decl('mask-size', value)]
-      },
-    })
-
-    /**
-     * @css `mask-position`
-     */
-
-    staticUtility('mask-top', [['mask-position', 'top']])
-    staticUtility('mask-top-left', [['mask-position', 'left top']])
-    staticUtility('mask-top-right', [['mask-position', 'right top']])
-    staticUtility('mask-bottom', [['mask-position', 'bottom']])
-    staticUtility('mask-bottom-left', [['mask-position', 'left bottom']])
-    staticUtility('mask-bottom-right', [['mask-position', 'right bottom']])
-    staticUtility('mask-left', [['mask-position', 'left']])
-    staticUtility('mask-right', [['mask-position', 'right']])
-    staticUtility('mask-center', [['mask-position', 'center']])
-    functionalUtility('mask-position', {
-      handle(value) {
-        if (!value) return
-        return [decl('mask-position', value)]
-      },
-    })
-
-    /**
-     * @css `mask-repeat`
-     */
-
-    staticUtility('mask-repeat', [['mask-repeat', 'repeat']])
-    staticUtility('mask-no-repeat', [['mask-repeat', 'no-repeat']])
-    staticUtility('mask-repeat-x', [['mask-repeat', 'repeat-x']])
-    staticUtility('mask-repeat-y', [['mask-repeat', 'repeat-y']])
-    staticUtility('mask-repeat-round', [['mask-repeat', 'round']])
-    staticUtility('mask-repeat-space', [['mask-repeat', 'space']])
-
-    /**
-     * @css `mask-clip`
-     */
-
-    staticUtility('mask-clip-border', [['mask-clip', 'border-box']])
-    staticUtility('mask-clip-padding', [['mask-clip', 'padding-box']])
-    staticUtility('mask-clip-content', [['mask-clip', 'content-box']])
-    staticUtility('mask-clip-fill', [['mask-clip', 'fill-box']])
-    staticUtility('mask-clip-stroke', [['mask-clip', 'stroke-box']])
-    staticUtility('mask-clip-view', [['mask-clip', 'view-box']])
-    staticUtility('mask-no-clip', [['mask-clip', 'no-clip']])
-
-    /**
-     * @css `mask-origin`
-     */
-
-    staticUtility('mask-origin-border', [['mask-origin', 'border-box']])
-    staticUtility('mask-origin-padding', [['mask-origin', 'padding-box']])
-    staticUtility('mask-origin-content', [['mask-origin', 'content-box']])
-    staticUtility('mask-origin-fill', [['mask-origin', 'fill-box']])
-    staticUtility('mask-origin-stroke', [['mask-origin', 'stroke-box']])
-    staticUtility('mask-origin-view', [['mask-origin', 'view-box']])
-
-    /**
-     * @css `mask-image` gradients
-     */
-
-    let maskPropertiesGradient = () =>
-      atRoot([
-        property('--tw-mask-linear', 'linear-gradient(#fff, #fff)'),
-        property('--tw-mask-radial', 'linear-gradient(#fff, #fff)'),
-        property('--tw-mask-conic', 'linear-gradient(#fff, #fff)'),
-      ])
-
-    type MaskStopDescription = {
-      color: (value: string) => AstNode[] | undefined
-      position: (value: string) => AstNode[] | undefined
-    }
-
-    function maskStopUtility(classRoot: string, desc: MaskStopDescription) {
-      utilities.functional(classRoot, (candidate) => {
-        if (!candidate.value) return
-
-        // Arbitrary values
-        if (candidate.value.kind === 'arbitrary') {
-          let value: string | null = candidate.value.value
-          let type =
-            candidate.value.dataType ?? inferDataType(value, ['length', 'percentage', 'color'])
-
-          switch (type) {
-            case 'color': {
-              value = asColor(value, candidate.modifier, theme)
-              if (value === null) return
-
-              return desc.color(value)
-            }
-            case 'percentage': {
-              if (candidate.modifier) return
-              if (!isPositiveInteger(value.slice(0, -1))) return
-
-              return desc.position(value)
-            }
-            default: {
-              if (candidate.modifier) return
-
-              return desc.position(value)
-            }
-          }
-        }
-
-        // Known values: Color Stops
-        {
-          let value = resolveThemeColor(candidate, theme, ['--background-color', '--color'])
-          if (value) {
-            return desc.color(value)
-          }
-        }
-
-        // Known values: Positions
-        {
-          if (candidate.modifier) return
-
-          let type = inferDataType(candidate.value.value, ['number', 'percentage'])
-          if (!type) return
-
-          switch (type) {
-            case 'number': {
-              let multiplier = theme.resolve(null, ['--spacing'])
-              if (!multiplier) return
-              if (!isValidSpacingMultiplier(candidate.value.value)) return
-
-              return desc.position(`calc(${multiplier} * ${candidate.value.value})`)
-            }
-
-            case 'percentage': {
-              if (!isPositiveInteger(candidate.value.value.slice(0, -1))) return
-              return desc.position(candidate.value.value)
-            }
-
-            default: {
-              return
-            }
-          }
-        }
-      })
-
-      suggest(classRoot, () => [
-        {
-          values: ['current', 'inherit', 'transparent'],
-          valueThemeKeys: ['--background-color', '--color'],
-          modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        },
-        {
-          values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
-          valueThemeKeys: ['--gradient-color-stop-positions'],
-        },
-      ])
-
-      suggest(classRoot, () => [
-        // Percentages
-        {
-          values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
-        },
-
-        // Spacing Scale
-        {
-          values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
-        },
-
-        // Colors
-        {
-          values: ['current', 'inherit', 'transparent'],
-          valueThemeKeys: ['--background-color', '--color'],
-          modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        },
-      ])
-    }
-
-    /**
-     * Edge masks
-     */
-
-    let maskPropertiesEdge = () =>
-      atRoot([
-        property('--tw-mask-left', 'linear-gradient(#fff, #fff)'),
-        property('--tw-mask-right', 'linear-gradient(#fff, #fff)'),
-        property('--tw-mask-bottom', 'linear-gradient(#fff, #fff)'),
-        property('--tw-mask-top', 'linear-gradient(#fff, #fff)'),
-      ])
-
-    type MaskEdge = 'top' | 'right' | 'bottom' | 'left'
-    type MaskStop = 'from' | 'to'
-
-    function maskEdgeUtility(name: string, stop: MaskStop, edges: Record<MaskEdge, boolean>) {
-      maskStopUtility(name, {
-        color(value) {
-          let nodes: AstNode[] = [
-            // Common @property declarations
-            maskPropertiesGradient(),
-            maskPropertiesEdge(),
-
-            // Common properties to all edge utilities
-            decl(
-              'mask-image',
-              'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)',
-            ),
-            decl('mask-composite', 'intersect'),
-            decl(
-              '--tw-mask-linear',
-              'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
-            ),
-          ]
-
-          for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
-            if (!edges[edge]) continue
-
-            nodes.push(
-              decl(
-                `--tw-mask-${edge}`,
-                `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
-              ),
-            )
-
-            nodes.push(
-              atRoot([
-                property(`--tw-mask-${edge}-from-position`, '0%'),
-                property(`--tw-mask-${edge}-to-position`, '100%'),
-                property(`--tw-mask-${edge}-from-color`, 'black'),
-                property(`--tw-mask-${edge}-to-color`, 'transparent'),
-              ]),
-            )
-
-            nodes.push(decl(`--tw-mask-${edge}-${stop}-color`, value))
-          }
-
-          return nodes
-        },
-        position(value) {
-          let nodes: AstNode[] = [
-            // Common @property declarations
-            maskPropertiesGradient(),
-            maskPropertiesEdge(),
-
-            // Common properties to all edge utilities
-            decl(
-              'mask-image',
-              'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)',
-            ),
-            decl('mask-composite', 'intersect'),
-            decl(
-              '--tw-mask-linear',
-              'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
-            ),
-          ]
-
-          for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
-            if (!edges[edge]) continue
-
-            nodes.push(
-              decl(
-                `--tw-mask-${edge}`,
-                `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
-              ),
-            )
-
-            nodes.push(
-              atRoot([
-                property(`--tw-mask-${edge}-from-position`, '0%'),
-                property(`--tw-mask-${edge}-to-position`, '100%'),
-                property(`--tw-mask-${edge}-from-color`, 'black'),
-                property(`--tw-mask-${edge}-to-color`, 'transparent'),
-              ]),
-            )
-
-            nodes.push(decl(`--tw-mask-${edge}-${stop}-position`, value))
-          }
-
-          return nodes
-        },
-      })
-    }
-
-    maskEdgeUtility('mask-x-from', 'from', { top: false, right: true, bottom: false, left: true })
-    maskEdgeUtility('mask-x-to', 'to', { top: false, right: true, bottom: false, left: true })
-    maskEdgeUtility('mask-y-from', 'from', { top: true, right: false, bottom: true, left: false })
-    maskEdgeUtility('mask-y-to', 'to', { top: true, right: false, bottom: true, left: false })
-    maskEdgeUtility('mask-t-from', 'from', { top: true, right: false, bottom: false, left: false })
-    maskEdgeUtility('mask-t-to', 'to', { top: true, right: false, bottom: false, left: false })
-    maskEdgeUtility('mask-r-from', 'from', { top: false, right: true, bottom: false, left: false })
-    maskEdgeUtility('mask-r-to', 'to', { top: false, right: true, bottom: false, left: false })
-    maskEdgeUtility('mask-b-from', 'from', { top: false, right: false, bottom: true, left: false })
-    maskEdgeUtility('mask-b-to', 'to', { top: false, right: false, bottom: true, left: false })
-    maskEdgeUtility('mask-l-from', 'from', { top: false, right: false, bottom: false, left: true })
-    maskEdgeUtility('mask-l-to', 'to', { top: false, right: false, bottom: false, left: true })
-
-    /**
-     *  Linear Masks
-     */
-
-    let maskPropertiesLinear = () =>
-      atRoot([
-        property('--tw-mask-linear-position', '0deg'),
-        property('--tw-mask-linear-from-position', '0%'),
-        property('--tw-mask-linear-to-position', '100%'),
-        property('--tw-mask-linear-from-color', 'black'),
-        property('--tw-mask-linear-to-color', 'transparent'),
-      ])
-
-    functionalUtility('mask-linear', {
-      defaultValue: null,
-      supportsNegative: true,
-      supportsFractions: false,
-      handleBareValue(value) {
-        if (!isPositiveInteger(value.value)) return null
-        return `calc(1deg * ${value.value})`
-      },
-      handleNegativeBareValue(value) {
-        if (!isPositiveInteger(value.value)) return null
-        return `calc(1deg * -${value.value})`
-      },
-      handle: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesLinear(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-linear',
-          `linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)))`,
-        ),
-        decl('--tw-mask-linear-position', value),
-      ],
-    })
-
-    suggest('mask-linear', () => [
+    suggest(classRoot, () => [
       {
-        supportsNegative: true,
-        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--background-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      },
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+        valueThemeKeys: ['--gradient-color-stop-positions'],
       },
     ])
 
-    maskStopUtility('mask-linear-from', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesLinear(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-linear-stops',
-          'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
-        ),
-        decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
-        decl('--tw-mask-linear-from-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesLinear(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-linear-stops',
-          'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
-        ),
-        decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
-        decl('--tw-mask-linear-from-position', value),
-      ],
+    suggest(classRoot, () => [
+      // Percentages
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+      },
+
+      // Spacing Scale
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+      },
+
+      // Colors
+      {
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--background-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      },
+    ])
+  }
+
+  /**
+   * Edge masks
+   */
+
+  let maskPropertiesEdge = () =>
+    atRoot([
+      property('--tw-mask-left', 'linear-gradient(#fff, #fff)'),
+      property('--tw-mask-right', 'linear-gradient(#fff, #fff)'),
+      property('--tw-mask-bottom', 'linear-gradient(#fff, #fff)'),
+      property('--tw-mask-top', 'linear-gradient(#fff, #fff)'),
+    ])
+
+  type MaskEdge = 'top' | 'right' | 'bottom' | 'left'
+  type MaskStop = 'from' | 'to'
+
+  function maskEdgeUtility(name: string, stop: MaskStop, edges: Record<MaskEdge, boolean>) {
+    maskStopUtility(name, {
+      color(value) {
+        let nodes: AstNode[] = [
+          // Common @property declarations
+          maskPropertiesGradient(),
+          maskPropertiesEdge(),
+
+          // Common properties to all edge utilities
+          decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+          decl('mask-composite', 'intersect'),
+          decl(
+            '--tw-mask-linear',
+            'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
+          ),
+        ]
+
+        for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
+          if (!edges[edge]) continue
+
+          nodes.push(
+            decl(
+              `--tw-mask-${edge}`,
+              `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
+            ),
+          )
+
+          nodes.push(
+            atRoot([
+              property(`--tw-mask-${edge}-from-position`, '0%'),
+              property(`--tw-mask-${edge}-to-position`, '100%'),
+              property(`--tw-mask-${edge}-from-color`, 'black'),
+              property(`--tw-mask-${edge}-to-color`, 'transparent'),
+            ]),
+          )
+
+          nodes.push(decl(`--tw-mask-${edge}-${stop}-color`, value))
+        }
+
+        return nodes
+      },
+      position(value) {
+        let nodes: AstNode[] = [
+          // Common @property declarations
+          maskPropertiesGradient(),
+          maskPropertiesEdge(),
+
+          // Common properties to all edge utilities
+          decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+          decl('mask-composite', 'intersect'),
+          decl(
+            '--tw-mask-linear',
+            'var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top)',
+          ),
+        ]
+
+        for (let edge of ['top', 'right', 'bottom', 'left'] as const) {
+          if (!edges[edge]) continue
+
+          nodes.push(
+            decl(
+              `--tw-mask-${edge}`,
+              `linear-gradient(to ${edge}, var(--tw-mask-${edge}-from-color) var(--tw-mask-${edge}-from-position), var(--tw-mask-${edge}-to-color) var(--tw-mask-${edge}-to-position))`,
+            ),
+          )
+
+          nodes.push(
+            atRoot([
+              property(`--tw-mask-${edge}-from-position`, '0%'),
+              property(`--tw-mask-${edge}-to-position`, '100%'),
+              property(`--tw-mask-${edge}-from-color`, 'black'),
+              property(`--tw-mask-${edge}-to-color`, 'transparent'),
+            ]),
+          )
+
+          nodes.push(decl(`--tw-mask-${edge}-${stop}-position`, value))
+        }
+
+        return nodes
+      },
     })
+  }
 
-    maskStopUtility('mask-linear-to', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesLinear(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-linear-stops',
-          'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
-        ),
-        decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
-        decl('--tw-mask-linear-to-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesLinear(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-linear-stops',
-          'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
-        ),
-        decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
-        decl('--tw-mask-linear-to-position', value),
-      ],
-    })
+  maskEdgeUtility('mask-x-from', 'from', { top: false, right: true, bottom: false, left: true })
+  maskEdgeUtility('mask-x-to', 'to', { top: false, right: true, bottom: false, left: true })
+  maskEdgeUtility('mask-y-from', 'from', { top: true, right: false, bottom: true, left: false })
+  maskEdgeUtility('mask-y-to', 'to', { top: true, right: false, bottom: true, left: false })
+  maskEdgeUtility('mask-t-from', 'from', { top: true, right: false, bottom: false, left: false })
+  maskEdgeUtility('mask-t-to', 'to', { top: true, right: false, bottom: false, left: false })
+  maskEdgeUtility('mask-r-from', 'from', { top: false, right: true, bottom: false, left: false })
+  maskEdgeUtility('mask-r-to', 'to', { top: false, right: true, bottom: false, left: false })
+  maskEdgeUtility('mask-b-from', 'from', { top: false, right: false, bottom: true, left: false })
+  maskEdgeUtility('mask-b-to', 'to', { top: false, right: false, bottom: true, left: false })
+  maskEdgeUtility('mask-l-from', 'from', { top: false, right: false, bottom: false, left: true })
+  maskEdgeUtility('mask-l-to', 'to', { top: false, right: false, bottom: false, left: true })
 
-    /**
-     * Radial masks
-     */
+  /**
+   *  Linear Masks
+   */
 
-    let maskPropertiesRadial = () =>
-      atRoot([
-        property('--tw-mask-radial-from-position', '0%'),
-        property('--tw-mask-radial-to-position', '100%'),
-        property('--tw-mask-radial-from-color', 'black'),
-        property('--tw-mask-radial-to-color', 'transparent'),
-        property('--tw-mask-radial-shape', 'ellipse'),
-        property('--tw-mask-radial-size', 'farthest-corner'),
-        property('--tw-mask-radial-position', 'center'),
-      ])
+  let maskPropertiesLinear = () =>
+    atRoot([
+      property('--tw-mask-linear-position', '0deg'),
+      property('--tw-mask-linear-from-position', '0%'),
+      property('--tw-mask-linear-to-position', '100%'),
+      property('--tw-mask-linear-from-color', 'black'),
+      property('--tw-mask-linear-to-color', 'transparent'),
+    ])
 
-    staticUtility('mask-circle', [['--tw-mask-radial-shape', 'circle']])
-    staticUtility('mask-ellipse', [['--tw-mask-radial-shape', 'ellipse']])
-    staticUtility('mask-radial-closest-side', [['--tw-mask-radial-size', 'closest-side']])
-    staticUtility('mask-radial-farthest-side', [['--tw-mask-radial-size', 'farthest-side']])
-    staticUtility('mask-radial-closest-corner', [['--tw-mask-radial-size', 'closest-corner']])
-    staticUtility('mask-radial-farthest-corner', [['--tw-mask-radial-size', 'farthest-corner']])
-    staticUtility('mask-radial-at-top', [['--tw-mask-radial-position', 'top']])
-    staticUtility('mask-radial-at-top-left', [['--tw-mask-radial-position', 'top left']])
-    staticUtility('mask-radial-at-top-right', [['--tw-mask-radial-position', 'top right']])
-    staticUtility('mask-radial-at-bottom', [['--tw-mask-radial-position', 'bottom']])
-    staticUtility('mask-radial-at-bottom-left', [['--tw-mask-radial-position', 'bottom left']])
-    staticUtility('mask-radial-at-bottom-right', [['--tw-mask-radial-position', 'bottom right']])
-    staticUtility('mask-radial-at-left', [['--tw-mask-radial-position', 'left']])
-    staticUtility('mask-radial-at-right', [['--tw-mask-radial-position', 'right']])
-    staticUtility('mask-radial-at-center', [['--tw-mask-radial-position', 'center']])
-    functionalUtility('mask-radial-at', {
-      defaultValue: null,
-      supportsNegative: false,
-      supportsFractions: false,
-      handle: (value) => [decl('--tw-mask-radial-position', value)],
-    })
+  functionalUtility('mask-linear', {
+    defaultValue: null,
+    supportsNegative: true,
+    supportsFractions: false,
+    handleBareValue(value) {
+      if (!isPositiveInteger(value.value)) return null
+      return `calc(1deg * ${value.value})`
+    },
+    handleNegativeBareValue(value) {
+      if (!isPositiveInteger(value.value)) return null
+      return `calc(1deg * -${value.value})`
+    },
+    handle: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesLinear(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-linear',
+        `linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)))`,
+      ),
+      decl('--tw-mask-linear-position', value),
+    ],
+  })
 
-    /*
+  suggest('mask-linear', () => [
+    {
+      supportsNegative: true,
+      values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+    },
+  ])
+
+  maskStopUtility('mask-linear-from', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesLinear(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-linear-stops',
+        'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
+      ),
+      decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
+      decl('--tw-mask-linear-from-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesLinear(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-linear-stops',
+        'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
+      ),
+      decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
+      decl('--tw-mask-linear-from-position', value),
+    ],
+  })
+
+  maskStopUtility('mask-linear-to', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesLinear(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-linear-stops',
+        'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
+      ),
+      decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
+      decl('--tw-mask-linear-to-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesLinear(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-linear-stops',
+        'var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position)',
+      ),
+      decl('--tw-mask-linear', 'linear-gradient(var(--tw-mask-linear-stops))'),
+      decl('--tw-mask-linear-to-position', value),
+    ],
+  })
+
+  /**
+   * Radial masks
+   */
+
+  let maskPropertiesRadial = () =>
+    atRoot([
+      property('--tw-mask-radial-from-position', '0%'),
+      property('--tw-mask-radial-to-position', '100%'),
+      property('--tw-mask-radial-from-color', 'black'),
+      property('--tw-mask-radial-to-color', 'transparent'),
+      property('--tw-mask-radial-shape', 'ellipse'),
+      property('--tw-mask-radial-size', 'farthest-corner'),
+      property('--tw-mask-radial-position', 'center'),
+    ])
+
+  staticUtility('mask-circle', [['--tw-mask-radial-shape', 'circle']])
+  staticUtility('mask-ellipse', [['--tw-mask-radial-shape', 'ellipse']])
+  staticUtility('mask-radial-closest-side', [['--tw-mask-radial-size', 'closest-side']])
+  staticUtility('mask-radial-farthest-side', [['--tw-mask-radial-size', 'farthest-side']])
+  staticUtility('mask-radial-closest-corner', [['--tw-mask-radial-size', 'closest-corner']])
+  staticUtility('mask-radial-farthest-corner', [['--tw-mask-radial-size', 'farthest-corner']])
+  staticUtility('mask-radial-at-top', [['--tw-mask-radial-position', 'top']])
+  staticUtility('mask-radial-at-top-left', [['--tw-mask-radial-position', 'top left']])
+  staticUtility('mask-radial-at-top-right', [['--tw-mask-radial-position', 'top right']])
+  staticUtility('mask-radial-at-bottom', [['--tw-mask-radial-position', 'bottom']])
+  staticUtility('mask-radial-at-bottom-left', [['--tw-mask-radial-position', 'bottom left']])
+  staticUtility('mask-radial-at-bottom-right', [['--tw-mask-radial-position', 'bottom right']])
+  staticUtility('mask-radial-at-left', [['--tw-mask-radial-position', 'left']])
+  staticUtility('mask-radial-at-right', [['--tw-mask-radial-position', 'right']])
+  staticUtility('mask-radial-at-center', [['--tw-mask-radial-position', 'center']])
+  functionalUtility('mask-radial-at', {
+    defaultValue: null,
+    supportsNegative: false,
+    supportsFractions: false,
+    handle: (value) => [decl('--tw-mask-radial-position', value)],
+  })
+
+  /*
       This can be used to set just the size in conjunction with `mask-radial-from-*` et al,
       or can set the whole gradient if it's the only utility you use.
 
@@ -3339,176 +3301,175 @@ export function createUtilities(theme: Theme) {
       This will produce nonsense though and break, which is fine:
       `mask-radial-[96px_at_top,black_40%,transparent_80%,black_90%]  mask-radial-from-50%`
     */
-    functionalUtility('mask-radial', {
-      defaultValue: null,
-      supportsNegative: false,
-      supportsFractions: false,
-      handle: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesRadial(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-radial',
-          'radial-gradient(var(--tw-mask-radial-stops, var(--tw-mask-radial-size)))',
-        ),
-        decl('--tw-mask-radial-size', value),
-      ],
-    })
+  functionalUtility('mask-radial', {
+    defaultValue: null,
+    supportsNegative: false,
+    supportsFractions: false,
+    handle: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesRadial(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-radial',
+        'radial-gradient(var(--tw-mask-radial-stops, var(--tw-mask-radial-size)))',
+      ),
+      decl('--tw-mask-radial-size', value),
+    ],
+  })
 
-    maskStopUtility('mask-radial-from', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesRadial(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-radial-stops',
-          'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
-        ),
-        decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
-        decl('--tw-mask-radial-from-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesRadial(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-radial-stops',
-          'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
-        ),
-        decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
-        decl('--tw-mask-radial-from-position', value),
-      ],
-    })
+  maskStopUtility('mask-radial-from', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesRadial(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-radial-stops',
+        'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
+      ),
+      decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
+      decl('--tw-mask-radial-from-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesRadial(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-radial-stops',
+        'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
+      ),
+      decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
+      decl('--tw-mask-radial-from-position', value),
+    ],
+  })
 
-    maskStopUtility('mask-radial-to', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesRadial(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-radial-stops',
-          'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
-        ),
-        decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
-        decl('--tw-mask-radial-to-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesRadial(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-radial-stops',
-          'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
-        ),
-        decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
-        decl('--tw-mask-radial-to-position', value),
-      ],
-    })
+  maskStopUtility('mask-radial-to', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesRadial(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-radial-stops',
+        'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
+      ),
+      decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
+      decl('--tw-mask-radial-to-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesRadial(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-radial-stops',
+        'var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position)',
+      ),
+      decl('--tw-mask-radial', 'radial-gradient(var(--tw-mask-radial-stops))'),
+      decl('--tw-mask-radial-to-position', value),
+    ],
+  })
 
-    /**
-     * Conic masks
-     */
+  /**
+   * Conic masks
+   */
 
-    let maskPropertiesConic = () =>
-      atRoot([
-        property('--tw-mask-conic-position', '0deg'),
-        property('--tw-mask-conic-from-position', '0%'),
-        property('--tw-mask-conic-to-position', '100%'),
-        property('--tw-mask-conic-from-color', 'black'),
-        property('--tw-mask-conic-to-color', 'transparent'),
-      ])
-
-    functionalUtility('mask-conic', {
-      defaultValue: null,
-      supportsNegative: true,
-      supportsFractions: false,
-      handleBareValue(value) {
-        if (!isPositiveInteger(value.value)) return null
-        return `calc(1deg * ${value.value})`
-      },
-      handleNegativeBareValue(value) {
-        if (!isPositiveInteger(value.value)) return null
-        return `calc(1deg * -${value.value})`
-      },
-      handle: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesConic(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-conic',
-          'conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)))',
-        ),
-        decl('--tw-mask-conic-position', value),
-      ],
-    })
-
-    suggest('mask-conic', () => [
-      {
-        supportsNegative: true,
-        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
-      },
+  let maskPropertiesConic = () =>
+    atRoot([
+      property('--tw-mask-conic-position', '0deg'),
+      property('--tw-mask-conic-from-position', '0%'),
+      property('--tw-mask-conic-to-position', '100%'),
+      property('--tw-mask-conic-from-color', 'black'),
+      property('--tw-mask-conic-to-color', 'transparent'),
     ])
 
-    maskStopUtility('mask-conic-from', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesConic(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-conic-stops',
-          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
-        ),
-        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
-        decl('--tw-mask-conic-from-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesConic(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-conic-stops',
-          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
-        ),
-        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
-        decl('--tw-mask-conic-from-position', value),
-      ],
-    })
+  functionalUtility('mask-conic', {
+    defaultValue: null,
+    supportsNegative: true,
+    supportsFractions: false,
+    handleBareValue(value) {
+      if (!isPositiveInteger(value.value)) return null
+      return `calc(1deg * ${value.value})`
+    },
+    handleNegativeBareValue(value) {
+      if (!isPositiveInteger(value.value)) return null
+      return `calc(1deg * -${value.value})`
+    },
+    handle: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesConic(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-conic',
+        'conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)))',
+      ),
+      decl('--tw-mask-conic-position', value),
+    ],
+  })
 
-    maskStopUtility('mask-conic-to', {
-      color: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesConic(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-conic-stops',
-          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
-        ),
-        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
-        decl('--tw-mask-conic-to-color', value),
-      ],
-      position: (value) => [
-        maskPropertiesGradient(),
-        maskPropertiesConic(),
-        decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
-        decl('mask-composite', 'intersect'),
-        decl(
-          '--tw-mask-conic-stops',
-          'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
-        ),
-        decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
-        decl('--tw-mask-conic-to-position', value),
-      ],
-    })
-  }
+  suggest('mask-conic', () => [
+    {
+      supportsNegative: true,
+      values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+    },
+  ])
+
+  maskStopUtility('mask-conic-from', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesConic(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-conic-stops',
+        'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+      ),
+      decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+      decl('--tw-mask-conic-from-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesConic(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-conic-stops',
+        'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+      ),
+      decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+      decl('--tw-mask-conic-from-position', value),
+    ],
+  })
+
+  maskStopUtility('mask-conic-to', {
+    color: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesConic(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-conic-stops',
+        'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+      ),
+      decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+      decl('--tw-mask-conic-to-color', value),
+    ],
+    position: (value) => [
+      maskPropertiesGradient(),
+      maskPropertiesConic(),
+      decl('mask-image', 'var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)'),
+      decl('mask-composite', 'intersect'),
+      decl(
+        '--tw-mask-conic-stops',
+        'from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position)',
+      ),
+      decl('--tw-mask-conic', 'conic-gradient(var(--tw-mask-conic-stops))'),
+      decl('--tw-mask-conic-to-position', value),
+    ],
+  })
 
   /**
    * @css `box-decoration-break`
@@ -5084,86 +5045,61 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  if (enableTextShadows) {
-    let textShadowProperties = () => {
-      return atRoot([
-        property('--tw-text-shadow-color'),
-        property('--tw-text-shadow-alpha', '100%', '<percentage>'),
-      ])
+  let textShadowProperties = () => {
+    return atRoot([
+      property('--tw-text-shadow-color'),
+      property('--tw-text-shadow-alpha', '100%', '<percentage>'),
+    ])
+  }
+
+  staticUtility('text-shadow-initial', [
+    textShadowProperties,
+    ['--tw-text-shadow-color', 'initial'],
+  ])
+
+  utilities.functional('text-shadow', (candidate) => {
+    let alpha: string | undefined
+
+    if (candidate.modifier) {
+      if (candidate.modifier.kind === 'arbitrary') {
+        alpha = candidate.modifier.value
+      } else {
+        if (isPositiveInteger(candidate.modifier.value)) {
+          alpha = `${candidate.modifier.value}%`
+        }
+      }
     }
 
-    staticUtility('text-shadow-initial', [
-      textShadowProperties,
-      ['--tw-text-shadow-color', 'initial'],
-    ])
+    if (!candidate.value) {
+      let value = theme.get(['--text-shadow'])
+      if (value === null) return
 
-    utilities.functional('text-shadow', (candidate) => {
-      let alpha: string | undefined
+      return [
+        textShadowProperties(),
+        decl('--tw-text-shadow-alpha', alpha),
+        ...alphaReplacedShadowProperties(
+          'text-shadow',
+          value,
+          alpha,
+          (color) => `var(--tw-text-shadow-color, ${color})`,
+        ),
+      ]
+    }
 
-      if (candidate.modifier) {
-        if (candidate.modifier.kind === 'arbitrary') {
-          alpha = candidate.modifier.value
-        } else {
-          if (isPositiveInteger(candidate.modifier.value)) {
-            alpha = `${candidate.modifier.value}%`
-          }
+    if (candidate.value.kind === 'arbitrary') {
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['color'])
+
+      switch (type) {
+        case 'color': {
+          value = asColor(value, candidate.modifier, theme)
+          if (value === null) return
+          return [
+            textShadowProperties(),
+            decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
+          ]
         }
-      }
-
-      if (!candidate.value) {
-        let value = theme.get(['--text-shadow'])
-        if (value === null) return
-
-        return [
-          textShadowProperties(),
-          decl('--tw-text-shadow-alpha', alpha),
-          ...alphaReplacedShadowProperties(
-            'text-shadow',
-            value,
-            alpha,
-            (color) => `var(--tw-text-shadow-color, ${color})`,
-          ),
-        ]
-      }
-
-      if (candidate.value.kind === 'arbitrary') {
-        let value: string | null = candidate.value.value
-        let type = candidate.value.dataType ?? inferDataType(value, ['color'])
-
-        switch (type) {
-          case 'color': {
-            value = asColor(value, candidate.modifier, theme)
-            if (value === null) return
-            return [
-              textShadowProperties(),
-              decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
-            ]
-          }
-          default: {
-            return [
-              textShadowProperties(),
-              decl('--tw-text-shadow-alpha', alpha),
-              ...alphaReplacedShadowProperties(
-                'text-shadow',
-                value,
-                alpha,
-                (color) => `var(--tw-text-shadow-color, ${color})`,
-              ),
-            ]
-          }
-        }
-      }
-
-      switch (candidate.value.value) {
-        case 'none':
-          if (candidate.modifier) return
-          return [textShadowProperties(), decl('text-shadow', 'none')]
-      }
-
-      // Shadow size
-      {
-        let value = theme.get([`--text-shadow-${candidate.value.value}`])
-        if (value) {
+        default: {
           return [
             textShadowProperties(),
             decl('--tw-text-shadow-alpha', alpha),
@@ -5176,35 +5112,58 @@ export function createUtilities(theme: Theme) {
           ]
         }
       }
+    }
 
-      // Shadow color
-      {
-        let value = resolveThemeColor(candidate, theme, ['--text-shadow-color', '--color'])
-        if (value) {
-          return [
-            textShadowProperties(),
-            decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
-          ]
-        }
+    switch (candidate.value.value) {
+      case 'none':
+        if (candidate.modifier) return
+        return [textShadowProperties(), decl('text-shadow', 'none')]
+    }
+
+    // Shadow size
+    {
+      let value = theme.get([`--text-shadow-${candidate.value.value}`])
+      if (value) {
+        return [
+          textShadowProperties(),
+          decl('--tw-text-shadow-alpha', alpha),
+          ...alphaReplacedShadowProperties(
+            'text-shadow',
+            value,
+            alpha,
+            (color) => `var(--tw-text-shadow-color, ${color})`,
+          ),
+        ]
       }
-    })
+    }
 
-    suggest('text-shadow', () => [
-      {
-        values: ['current', 'inherit', 'transparent'],
-        valueThemeKeys: ['--text-shadow-color', '--color'],
-        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      },
-      {
-        values: ['none'],
-      },
-      {
-        valueThemeKeys: ['--text-shadow'],
-        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        hasDefaultValue: true,
-      },
-    ])
-  }
+    // Shadow color
+    {
+      let value = resolveThemeColor(candidate, theme, ['--text-shadow-color', '--color'])
+      if (value) {
+        return [
+          textShadowProperties(),
+          decl('--tw-text-shadow-color', withAlpha(value, 'var(--tw-text-shadow-alpha)')),
+        ]
+      }
+    }
+  })
+
+  suggest('text-shadow', () => [
+    {
+      values: ['current', 'inherit', 'transparent'],
+      valueThemeKeys: ['--text-shadow-color', '--color'],
+      modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+    },
+    {
+      values: ['none'],
+    },
+    {
+      valueThemeKeys: ['--text-shadow'],
+      modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      hasDefaultValue: true,
+    },
+  ])
 
   {
     let cssBoxShadowValue = [

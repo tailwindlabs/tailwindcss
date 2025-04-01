@@ -12,13 +12,6 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
-import {
-  enableDetailsContent,
-  enableInvertedColors,
-  enablePointerVariants,
-  enableScripting,
-  enableUserValid,
-} from './feature-flags'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -633,9 +626,7 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('file', ['&::file-selector-button'])
   staticVariant('placeholder', ['&::placeholder'])
   staticVariant('backdrop', ['&::backdrop'])
-  if (enableDetailsContent) {
-    staticVariant('details-content', ['&::details-content'])
-  }
+  staticVariant('details-content', ['&::details-content'])
 
   {
     function contentProperties() {
@@ -701,10 +692,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('required', ['&:required'])
   staticVariant('valid', ['&:valid'])
   staticVariant('invalid', ['&:invalid'])
-  if (enableUserValid) {
-    staticVariant('user-valid', ['&:user-valid'])
-    staticVariant('user-invalid', ['&:user-invalid'])
-  }
+  staticVariant('user-valid', ['&:user-valid'])
+  staticVariant('user-invalid', ['&:user-invalid'])
   staticVariant('in-range', ['&:in-range'])
   staticVariant('out-of-range', ['&:out-of-range'])
   staticVariant('read-only', ['&:read-only'])
@@ -1151,22 +1140,16 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
 
-  if (enableInvertedColors) {
-    staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
-  }
+  staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
 
-  if (enablePointerVariants) {
-    staticVariant('pointer-none', ['@media (pointer: none)'])
-    staticVariant('pointer-coarse', ['@media (pointer: coarse)'])
-    staticVariant('pointer-fine', ['@media (pointer: fine)'])
-    staticVariant('any-pointer-none', ['@media (any-pointer: none)'])
-    staticVariant('any-pointer-coarse', ['@media (any-pointer: coarse)'])
-    staticVariant('any-pointer-fine', ['@media (any-pointer: fine)'])
-  }
+  staticVariant('pointer-none', ['@media (pointer: none)'])
+  staticVariant('pointer-coarse', ['@media (pointer: coarse)'])
+  staticVariant('pointer-fine', ['@media (pointer: fine)'])
+  staticVariant('any-pointer-none', ['@media (any-pointer: none)'])
+  staticVariant('any-pointer-coarse', ['@media (any-pointer: coarse)'])
+  staticVariant('any-pointer-fine', ['@media (any-pointer: fine)'])
 
-  if (enableScripting) {
-    staticVariant('noscript', ['@media (scripting: none)'])
-  }
+  staticVariant('noscript', ['@media (scripting: none)'])
 
   return variants
 }
