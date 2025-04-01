@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { pkg } from './utils/packages'
-import { highlight, info, relative, success, warn } from './utils/renderer'
+import { pkg } from '../../utils/packages'
+import { highlight, info, relative, success, warn } from '../../utils/renderer'
 
 // Migrates simple PostCSS setups. This is to cover non-dynamic config files
 // similar to the ones we have all over our docs:
