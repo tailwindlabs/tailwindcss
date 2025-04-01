@@ -21218,7 +21218,7 @@ test('shadow', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --shadow-blue-500: #3b82f6;
+          --box-shadow-color-blue-500: #3b82f6;
           --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
           --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
@@ -21266,6 +21266,7 @@ test('shadow', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --box-shadow-color-blue-500: #3b82f6;
     }
 
     .shadow-\\[10px_10px\\]\\/25 {
@@ -21301,11 +21302,6 @@ test('shadow', async () => {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
-    .shadow-blue-500 {
-      --tw-shadow: #3b82f6;
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-
     .shadow-none {
       --tw-shadow: 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -21335,6 +21331,10 @@ test('shadow', async () => {
 
     .shadow-\\[color\\:var\\(--value\\)\\]\\/50, .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\], .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+
+    .shadow-blue-500 {
+      --tw-shadow-color: color-mix(in oklab, var(--box-shadow-color-blue-500) var(--tw-shadow-alpha), transparent);
     }
 
     .shadow-current {
