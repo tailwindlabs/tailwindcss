@@ -33,7 +33,6 @@
     "@tailwindcss/node": "workspace:*",
     "@tailwindcss/oxide": "workspace:*",
     "enhanced-resolve": "^5.18.1",
-    "lightningcss": "catalog:",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
     "tailwindcss": "workspace:*"

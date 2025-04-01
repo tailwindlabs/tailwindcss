@@ -321,7 +321,7 @@ export function test(
                 return [
                   file,
                   // Drop license comment
-                  content.replace(/[\s\n]*\/\*! tailwindcss .*? \*\/[\s\n]*/g, ''),
+                  content.replace(/[\s\n]*\/\*![\s\S]*?\*\/[\s\n]*/g, ''),
                 ]
               }),
             )

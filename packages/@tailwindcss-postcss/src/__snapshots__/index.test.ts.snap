@@ -1,7 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
-"@layer theme {
+"@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+  @layer base {
+    *, :before, :after, ::backdrop {
+      --tw-font-weight: initial;
+    }
+  }
+}
+
+@layer theme {
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -260,14 +268,20 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   .text-black\\/50 {
-    color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    color: #00000080;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-black\\/50 {
+      color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    }
   }
 
   .underline {
     text-decoration-line: underline;
   }
 
-  @media (width >= 96rem) {
+  @media (min-width: 96rem) {
     .\\32 xl\\:font-bold {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);

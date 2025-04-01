@@ -2,8 +2,8 @@ import { expect, test, type Page } from '@playwright/test'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs'
 import path from 'node:path'
+import { optimize } from '../../@tailwindcss-node/src/optimize'
 import { compile } from '../src'
-import { optimizeCss } from '../src/test-utils/run'
 import { segment } from '../src/utils/segment'
 
 const html = String.raw
@@ -2174,7 +2174,7 @@ async function render(page: Page, content: string, extraCss: string = '') {
   let scanner = new Scanner({})
   let candidates = scanner.scanFiles([{ content, extension: 'html' }])
 
-  let styles = optimizeCss(build(candidates))
+  let styles = optimize(build(candidates))
 
   content = `<style type="text/css">${styles}</style>${content}`
   await page.setContent(content)

@@ -1,8 +1,14 @@
 import QuickLRU from '@alloc/quick-lru'
-import { compileAst, env, Features, Instrumentation } from '@tailwindcss/node'
+import {
+  compileAst,
+  env,
+  Features,
+  Instrumentation,
+  optimize as optimizeCss,
+  Polyfills,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
-import { Features as LightningCssFeatures, transform } from 'lightningcss'
 import fs from 'node:fs'
 import path, { relative } from 'node:path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
@@ -67,6 +73,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           using I = new Instrumentation()
 
           let inputFile = result.opts.from ?? ''
+          let isCSSModuleFile = inputFile.endsWith('.module.css')
 
           DEBUG && I.start(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
 
@@ -114,6 +121,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               onDependency: (path) => {
                 context.fullRebuildPaths.push(path)
               },
+              // In CSS Module files, we have to disable the `@property` polyfill since these will
+              // emit global `*` rules which are considered to be non-pure and will cause builds
+              // to fail.
+              polyfills: isCSSModuleFile ? Polyfills.All ^ Polyfills.AtProperty : Polyfills.All,
             })
             DEBUG && I.end('Create compiler')
 
@@ -211,10 +222,15 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
+              let absolutePath = path.resolve(file)
+              // The CSS file cannot be a dependency of itself
+              if (absolutePath === result.opts.from) {
+                continue
+              }
               result.messages.push({
                 type: 'dependency',
                 plugin: '@tailwindcss/postcss',
-                file: path.resolve(file),
+                file: absolutePath,
                 parent: result.opts.from,
               })
             }
@@ -301,42 +317,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       },
     ],
   }
-}
-
-function optimizeCss(
-  input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-) {
-  function optimize(code: Buffer | Uint8Array) {
-    return transform({
-      filename: file,
-      code,
-      minify,
-      sourceMap: false,
-      drafts: {
-        customMedia: true,
-      },
-      nonStandard: {
-        deepSelectorCombinator: true,
-      },
-      include: LightningCssFeatures.Nesting,
-      exclude:
-        LightningCssFeatures.LogicalProperties |
-        LightningCssFeatures.DirSelector |
-        LightningCssFeatures.LightDark,
-      targets: {
-        safari: (16 << 16) | (4 << 8),
-        ios_saf: (16 << 16) | (4 << 8),
-        firefox: 128 << 16,
-        chrome: 111 << 16,
-      },
-      errorRecovery: true,
-    }).code
-  }
-
-  // Running Lightning CSS twice to ensure that adjacent rules are merged after
-  // nesting is applied. This creates a more optimized output.
-  return optimize(optimize(Buffer.from(input))).toString()
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>

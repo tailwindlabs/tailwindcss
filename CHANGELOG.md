@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
 - _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
 - _Experimental_: Add `noscript` variant ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929), [#17431](https://github.com/tailwindlabs/tailwindcss/pull/17431))
-- _Experimental_: Add `items-baseline-last` utility ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888))
+- _Experimental_: Add `items-baseline-last` and `self-baseline-last` utilities ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888), [#17476](https://github.com/tailwindlabs/tailwindcss/pull/17476))
 - _Experimental_: Add `pointer-none`, `pointer-coarse`, and `pointer-fine` variant ([#16946](https://github.com/tailwindlabs/tailwindcss/pull/16946))
 - _Experimental_: Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
 - _Experimental_: Add safe alignment utilities ([#14607](https://github.com/tailwindlabs/tailwindcss/pull/14607))
@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 - Added new `bg-{position,size}-*` utilities for arbitrary values ([#17432](https://github.com/tailwindlabs/tailwindcss/pull/17432))
 - Added new `shadow-*/{alpha}`, `inset-shadow-*/{alpha}`, and `text-shadow-*/{alpha}` utilities to control shadow opacity ([#17398](https://github.com/tailwindlabs/tailwindcss/pull/17398))
+- Added new `object-{top,bottom}-{left,right}` utilities ([#17437](https://github.com/tailwindlabs/tailwindcss/pull/17437))
 - Added new `drop-shadow-{color}` utilities ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
 - Added new `drop-shadow-*/{alpha}` utilities to control drop shadow opacity ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
 
@@ -35,7 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix negated `content` rules in legacy JavaScript configuration ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 - Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
-- Extract used CSS variables from `.css` files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433))
+- Ensure the `--theme(…)` function still resolves to the CSS variables even when legacy JS plugins are enabled
+- Extract used CSS variables from `.css` files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433), [#17467](https://github.com/tailwindlabs/tailwindcss/pull/17467))
+- Improve compatibility with Safari 15 ([#17435](https://github.com/tailwindlabs/tailwindcss/pull/17435))
 
 ### Changed
 

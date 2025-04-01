@@ -713,6 +713,13 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
         --tw-content: "components/my-component.tsx";
         content: var(--tw-content);
@@ -944,6 +951,13 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
         content: var(--tw-content);
@@ -1181,6 +1195,13 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\"pages\\/foo\\.html\\"\\] {
         --tw-content: "pages/foo.html";
         content: var(--tw-content);
@@ -1465,6 +1486,80 @@ test(
         stdin: '@tailwind utilities;',
       }),
     ).toContain(candidate`flex`)
+  },
+)
+
+test(
+  'changes to CSS files should pick up new CSS variables (if any)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'unrelated.module.css': css`
+        .module {
+          color: var(--color-blue-500);
+        }
+      `,
+      'index.css': css`
+        @import 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ spawn, exec, fs, expect }) => {
+    // Generate the initial build so output CSS files exist on disk
+    await exec('pnpm tailwindcss --input ./index.css --output ./dist/out.css')
+
+    // NOTE: We are writing to an output CSS file which is not being ignored by
+    // `.gitignore` nor marked with `@source not`. This should not result in an
+    // infinite loop.
+    let process = await spawn(
+      'pnpm tailwindcss --input ./index.css --output ./dist/out.css --watch',
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      :root, :host {
+        --color-blue-500: oklch(62.3% 0.214 259.815);
+      }
+      .flex {
+        display: flex;
+      }
+      "
+    `)
+
+    await fs.write(
+      'unrelated.module.css',
+      css`
+        .module {
+          color: var(--color-blue-500);
+          background-color: var(--color-red-500);
+        }
+      `,
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      :root, :host {
+        --color-red-500: oklch(63.7% 0.237 25.331);
+        --color-blue-500: oklch(62.3% 0.214 259.815);
+      }
+      .flex {
+        display: flex;
+      }
+      "
+    `)
   },
 )
 

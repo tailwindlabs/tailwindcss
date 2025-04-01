@@ -325,7 +325,7 @@ mod scanner {
             ("c.less", ""),
         ]);
 
-        assert_eq!(files, vec!["index.html"]);
+        assert_eq!(files, vec!["a.css", "index.html"]);
         assert_eq!(globs, vec!["*"]);
         assert_eq!(normalized_sources, vec!["**/*"]);
     }
