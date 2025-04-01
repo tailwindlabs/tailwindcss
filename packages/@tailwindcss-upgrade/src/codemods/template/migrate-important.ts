@@ -16,7 +16,7 @@ import { isSafeMigration } from './is-safe-migration'
 // Should turn into:
 //
 //   flex! md:block!
-export function important(
+export function migrateImportant(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,

@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { important } from './migrate-important'
+import { migrateImportant } from './migrate-important'
 
 test.each([
   ['!flex', 'flex!'],
@@ -16,7 +16,7 @@ test.each([
   })
 
   expect(
-    important(designSystem, {}, candidate, {
+    migrateImportant(designSystem, {}, candidate, {
       contents: `"${candidate}"`,
       start: 1,
       end: candidate.length + 1,
@@ -30,7 +30,7 @@ test('does not match false positives', async () => {
   })
 
   expect(
-    important(designSystem, {}, '!border', {
+    migrateImportant(designSystem, {}, '!border', {
       contents: `let notBorder = !border\n`,
       start: 16,
       end: 16 + '!border'.length,
@@ -45,7 +45,7 @@ test('does not replace classes in invalid positions', async () => {
 
   function shouldNotReplace(example: string, candidate = '!border') {
     expect(
-      important(designSystem, {}, candidate, {
+      migrateImportant(designSystem, {}, candidate, {
         contents: example,
         start: example.indexOf(candidate),
         end: example.indexOf(candidate) + candidate.length,

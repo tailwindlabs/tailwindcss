@@ -8,7 +8,7 @@ import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-b
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
-import { important } from './migrate-important'
+import { migrateImportant } from './migrate-important'
 import { legacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { legacyClasses } from './migrate-legacy-classes'
 import { maxWidthScreen } from './migrate-max-width-screen'
@@ -32,7 +32,7 @@ export type Migration = (
 export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
   prefix,
-  important,
+  migrateImportant,
   migrateBgGradient,
   simpleLegacyClasses,
   legacyClasses,
