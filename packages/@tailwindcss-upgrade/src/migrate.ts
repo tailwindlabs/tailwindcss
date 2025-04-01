@@ -2,68 +2,13 @@ import { normalizePath } from '@tailwindcss/node'
 import { isGitIgnored } from 'globby'
 import path from 'node:path'
 import postcss, { type Result } from 'postcss'
-import type { Config } from '../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { segment } from '../../tailwindcss/src/utils/segment'
-import { migrateAtApply } from './codemods/css/migrate-at-apply'
-import { migrateAtLayerUtilities } from './codemods/css/migrate-at-layer-utilities'
-import { migrateConfig } from './codemods/css/migrate-config'
-import { migrateImport } from './codemods/css/migrate-import'
-import { migrateMediaScreen } from './codemods/css/migrate-media-screen'
-import { migrateMissingLayers } from './codemods/css/migrate-missing-layers'
-import { migratePreflight } from './codemods/css/migrate-preflight'
-import { migrateTailwindDirectives } from './codemods/css/migrate-tailwind-directives'
-import { migrateThemeToVar } from './codemods/css/migrate-theme-to-var'
-import { migrateVariantsDirective } from './codemods/css/migrate-variants-directive'
 import { detectConfigPath } from './codemods/template/prepare-config'
-import type { JSConfigMigration } from './migrate-js-config'
 import { Stylesheet, type StylesheetConnection, type StylesheetId } from './stylesheet'
 import { error, highlight, relative, success } from './utils/renderer'
 import { resolveCssId } from './utils/resolve'
 import { walk, WalkAction } from './utils/walk'
-
-export interface MigrateOptions {
-  newPrefix: string | null
-  designSystem: DesignSystem
-  userConfig: Config
-  configFilePath: string
-  jsConfigMigration: JSConfigMigration
-}
-
-export async function migrateContents(
-  stylesheet: Stylesheet | string,
-  options: MigrateOptions,
-  file?: string,
-) {
-  if (typeof stylesheet === 'string') {
-    stylesheet = await Stylesheet.fromString(stylesheet)
-    stylesheet.file = file ?? null
-  }
-
-  return postcss()
-    .use(migrateImport())
-    .use(migrateAtApply(options))
-    .use(migrateMediaScreen(options))
-    .use(migrateVariantsDirective())
-    .use(migrateAtLayerUtilities(stylesheet))
-    .use(migrateMissingLayers())
-    .use(migrateTailwindDirectives(options))
-    .use(migrateConfig(stylesheet, options))
-    .use(migratePreflight(options))
-    .use(migrateThemeToVar(options))
-    .process(stylesheet.root, { from: stylesheet.file ?? undefined })
-}
-
-export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
-  if (!stylesheet.file) {
-    throw new Error('Cannot migrate a stylesheet without a file path')
-  }
-
-  if (!stylesheet.canMigrate) return
-
-  await migrateContents(stylesheet, options)
-}
 
 export async function analyze(stylesheets: Stylesheet[]) {
   let isIgnored = await isGitIgnored()
