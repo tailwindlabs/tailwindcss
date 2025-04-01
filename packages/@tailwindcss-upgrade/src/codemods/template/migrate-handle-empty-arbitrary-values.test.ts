@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
+import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { prefix } from './migrate-prefix'
 
 test.each([
@@ -14,7 +14,7 @@ test.each([
     base: __dirname,
   })
 
-  expect(handleEmptyArbitraryValues(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateEmptyArbitraryValues(designSystem, {}, candidate)).toEqual(result)
 })
 
 test.each([
@@ -29,7 +29,7 @@ test.each([
   })
 
   expect(
-    [handleEmptyArbitraryValues, prefix].reduce(
+    [migrateEmptyArbitraryValues, prefix].reduce(
       (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
       candidate,
     ),

@@ -7,7 +7,7 @@ import { extractRawCandidates } from './candidates'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
-import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
+import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { important } from './migrate-important'
 import { legacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { legacyClasses } from './migrate-legacy-classes'
@@ -30,7 +30,7 @@ export type Migration = (
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
-  handleEmptyArbitraryValues,
+  migrateEmptyArbitraryValues,
   prefix,
   important,
   migrateBgGradient,

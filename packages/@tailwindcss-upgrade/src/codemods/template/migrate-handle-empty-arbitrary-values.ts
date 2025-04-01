@@ -1,7 +1,7 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 
-export function handleEmptyArbitraryValues(
+export function migrateEmptyArbitraryValues(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
