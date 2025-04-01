@@ -1,8 +1,8 @@
-import { parseCandidate } from '../../../../../tailwindcss/src/candidate'
-import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
-import { printCandidate } from '../candidates'
-import { isSafeMigration } from '../is-safe-migration'
+import { parseCandidate } from '../../../../tailwindcss/src/candidate'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { printCandidate } from './candidates'
+import { isSafeMigration } from './is-safe-migration'
 
 // In v3 the important modifier `!` sits in front of the utility itself, not
 // before any of the variants. In v4, we want it to be at the end of the utility

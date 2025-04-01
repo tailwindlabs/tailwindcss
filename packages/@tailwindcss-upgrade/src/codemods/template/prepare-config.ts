@@ -7,7 +7,7 @@ import { resolveConfig } from '../../../../tailwindcss/src/compat/config/resolve
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { error, highlight, relative } from '../../utils/renderer'
-import { migratePrefix } from './codemods/migrate-prefix'
+import { migratePrefix } from './migrate-prefix'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

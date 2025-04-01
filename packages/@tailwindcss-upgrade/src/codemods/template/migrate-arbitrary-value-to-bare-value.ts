@@ -1,13 +1,9 @@
-import {
-  parseCandidate,
-  type Candidate,
-  type Variant,
-} from '../../../../../tailwindcss/src/candidate'
-import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
-import { isPositiveInteger } from '../../../../../tailwindcss/src/utils/infer-data-type'
-import { segment } from '../../../../../tailwindcss/src/utils/segment'
-import { printCandidate } from '../candidates'
+import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
+import { printCandidate } from './candidates'
 
 export function arbitraryValueToBareValue(
   designSystem: DesignSystem,

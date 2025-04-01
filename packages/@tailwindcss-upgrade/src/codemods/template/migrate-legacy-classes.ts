@@ -1,12 +1,12 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import path from 'node:path'
 import url from 'node:url'
-import type { Candidate } from '../../../../../tailwindcss/src/candidate'
-import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
-import { DefaultMap } from '../../../../../tailwindcss/src/utils/default-map'
-import { printCandidate } from '../candidates'
-import { isSafeMigration } from '../is-safe-migration'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import { printCandidate } from './candidates'
+import { isSafeMigration } from './is-safe-migration'
 
 const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
