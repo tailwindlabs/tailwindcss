@@ -9,7 +9,7 @@ import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateImportant } from './migrate-important'
-import { legacyArbitraryValues } from './migrate-legacy-arbitrary-values'
+import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { legacyClasses } from './migrate-legacy-classes'
 import { maxWidthScreen } from './migrate-max-width-screen'
 import { modernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
@@ -40,7 +40,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
-  legacyArbitraryValues,
+  migrateLegacyArbitraryValues,
   migrateArbitraryValueToBareValue,
   modernizeArbitraryValues,
 ]

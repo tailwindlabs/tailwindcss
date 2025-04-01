@@ -4,7 +4,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from './candidates'
 
-export function legacyArbitraryValues(
+export function migrateLegacyArbitraryValues(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
