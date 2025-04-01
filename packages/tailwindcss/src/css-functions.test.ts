@@ -17,7 +17,7 @@ describe('--alpha(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       ".foo {
-        margin: oklab(62.7955% .22486 .12584 / .5);
+        margin: oklab(62.7955% .224 .125 / .5);
       }"
     `)
   })
@@ -196,7 +196,13 @@ describe('--theme(…)', () => {
       }
 
       .red {
-        color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        color: #ff000080;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .red {
+          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        }
       }"
     `)
   })
@@ -343,13 +349,13 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .blue {
           color: #00f;
         }
       }
 
-      @media (width >= 64rem) {
+      @media (min-width: 64rem) {
         .red {
           color: red;
         }
@@ -545,7 +551,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+            color: oklab(62.7955% .224 .125 / .75);
           }"
         `)
       })
@@ -562,7 +568,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+            color: oklab(62.7955% .224 .125 / .75);
           }"
         `)
       })
@@ -579,7 +585,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .75);
+            color: oklab(62.7955% .224 .125 / .75);
           }"
         `)
       })
@@ -804,7 +810,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .25);
+            color: oklab(62.7955% .224 .125 / .25);
           }"
         `)
       })
@@ -876,7 +882,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .25);
+            color: oklab(62.7955% .224 .125 / .25);
           }"
         `)
       })
@@ -912,7 +918,7 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: oklab(62.7955% .22486 .12584 / .5);
+            color: oklab(62.7955% .224 .125 / .5);
           }"
         `)
       })
@@ -964,7 +970,7 @@ describe('theme(…)', () => {
         ['transitionTimingFunction.in-out', 'cubic-bezier(.4, 0, .2, 1)'],
         ['letterSpacing.wide', '.025em'],
         ['lineHeight.tight', '1.25'],
-        ['backgroundColor.red.500', 'oklch(.637 .237 25.331)'],
+        ['backgroundColor.red.500', 'oklch(63.7% .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
         let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
         let compiled = await compileCss(css`
@@ -1002,7 +1008,7 @@ describe('theme(…)', () => {
           ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 40rem) {
+        "@media (min-width: 40rem) {
           .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
             --color: red;
           }
@@ -1063,7 +1069,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width <= 64rem) {
+        "@media (min-width: 48rem) and (max-width: 64rem) {
           .red {
             color: red;
           }
@@ -1085,7 +1091,7 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (width >= 48rem) and (width < 64rem) {
+        "@media (min-width: 48rem) and (not (min-width: 64rem)) {
           .red {
             color: red;
           }
@@ -1108,7 +1114,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .red {
           color: red;
         }
@@ -1129,7 +1135,7 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@container (width > 48rem) {
+      "@container not (max-width: 48rem) {
         .red {
           color: red;
         }
@@ -1205,8 +1211,8 @@ describe('in plugins', () => {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
-          border-color: oklab(87% .06947 .00853 / .1);
-          outline-color: oklab(79% .05814 .15974 / .15);
+          border-color: oklab(87% .069 .008 / .1);
+          outline-color: oklab(79% .058 .159 / .15);
         }
       }
 

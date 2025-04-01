@@ -1,8 +1,10 @@
+import { Polyfills } from '.'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
+import * as ValueParser from './value-parser'
 
 const AT_SIGN = 0x40
 
@@ -257,7 +259,11 @@ export function walkDepth(
 
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
-export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
+export function optimizeAst(
+  ast: AstNode[],
+  designSystem: DesignSystem,
+  polyfills: Polyfills = Polyfills.All,
+) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let cssThemeVariables = new DefaultMap<
@@ -266,6 +272,9 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
   >(() => new Set())
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
+
+  let propertyFallbacksRoot: Declaration[] = []
+  let propertyFallbacksUniversal: Declaration[] = []
 
   let variableDependencies = new DefaultMap<string, Set<string>>(() => new Set())
 
@@ -314,6 +323,53 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
           usedKeyframeNames.add(keyframeName)
       }
 
+      // Create fallback values for usages of the `color-mix(…)` function that reference variables
+      // found in the theme config.
+      if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
+        let ast = ValueParser.parse(node.value)
+
+        let didGenerateFallback = false
+        ValueParser.walk(ast, (node) => {
+          if (node.kind !== 'function' || node.value !== 'color-mix') return
+
+          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+            if (node.kind !== 'function' || node.value !== 'var') return
+            let firstChild = node.nodes[0]
+            if (!firstChild || firstChild.kind !== 'word') return
+
+            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+            if (!inlinedColor) return
+
+            didGenerateFallback = true
+            replaceWith({ kind: 'word', value: inlinedColor })
+          })
+
+          // Change the colorspace to `srgb` since the fallback values should not be represented as
+          // `oklab(…)` functions again as their support in Safari <16 is very limited.
+          let colorspace = node.nodes[2]
+          if (
+            colorspace.kind === 'word' &&
+            (colorspace.value === 'oklab' ||
+              colorspace.value === 'oklch' ||
+              colorspace.value === 'lab' ||
+              colorspace.value === 'lch')
+          ) {
+            colorspace.value = 'srgb'
+          }
+        })
+
+        if (didGenerateFallback) {
+          let fallback = {
+            ...node,
+            value: ValueParser.toCss(ast),
+          }
+          let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
+
+          parent.push(fallback, colorMixQuery)
+          return
+        }
+      }
+
       parent.push(node)
     }
 
@@ -349,6 +405,29 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         return
       }
 
+      // Collect fallbacks for `@property` rules for Firefox support We turn these into rules on
+      // `:root` or `*` and some pseudo-elements based on the value of `inherits`
+      if (polyfills & Polyfills.AtProperty) {
+        let property = node.params
+        let initialValue = null
+        let inherits = false
+
+        for (let prop of node.nodes) {
+          if (prop.kind !== 'declaration') continue
+          if (prop.property === 'initial-value') {
+            initialValue = prop.value
+          } else if (prop.property === 'inherits') {
+            inherits = prop.value === 'true'
+          }
+        }
+
+        if (inherits) {
+          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+        } else {
+          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+        }
+      }
+
       seenAtProperties.add(node.params)
 
       let copy = { ...node, nodes: [] }
@@ -369,8 +448,7 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
         transform(child, copy.nodes, context, depth + 1)
       }
 
-      // Only track `@keyframes` that could be removed, when they were defined
-      // inside of a `@theme`.
+      // Only track `@keyframes` that could be removed, when they were defined inside of a `@theme`.
       if (node.name === '@keyframes' && context.theme) {
         keyframes.add(copy)
       }
@@ -488,6 +566,35 @@ export function optimizeAst(ast: AstNode[], designSystem: DesignSystem) {
     if (!usedKeyframeNames.has(keyframe.params)) {
       let idx = atRoots.indexOf(keyframe)
       atRoots.splice(idx, 1)
+    }
+  }
+
+  // Fallbacks
+  if (polyfills & Polyfills.AtProperty) {
+    let fallbackAst = []
+
+    if (propertyFallbacksRoot.length > 0) {
+      fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
+    }
+
+    if (propertyFallbacksUniversal.length > 0) {
+      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    }
+
+    if (fallbackAst.length > 0) {
+      let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
+      if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
+      newAst.splice(
+        firstNonCommentIndex,
+        0,
+        atRule(
+          '@supports',
+          // We can't write a supports query for `@property` directly so we have to test for
+          // features that are added around the same time in Mozilla and Safari.
+          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+          [rule('@layer base', fallbackAst)],
+        ),
+      )
     }
   }
 

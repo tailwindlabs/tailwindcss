@@ -94,6 +94,13 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
         --tw-content: "components/my-component.tsx";
         content: var(--tw-content);
@@ -324,6 +331,13 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
         content: var(--tw-content);
@@ -579,6 +593,13 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\"pages\\/foo\\.html\\"\\] {
         --tw-content: "pages/foo.html";
         content: var(--tw-content);
@@ -683,6 +704,13 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
       .content-\\[\\'keep-me\\.html\\'\\] {
         --tw-content: 'keep-me.html';
         content: var(--tw-content);

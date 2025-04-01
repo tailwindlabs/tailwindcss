@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
-import { compile } from '.'
+import { compile, Polyfills } from '.'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -40,7 +40,7 @@ describe('compiling CSS', () => {
           }
         }
 
-        @media (width >= 768px) {
+        @media (min-width: 768px) {
           .md\\:grid {
             display: grid;
           }
@@ -246,7 +246,7 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with modifiers', async () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
-        color: oklab(62.7955% .22486 .12584 / .5);
+        color: oklab(62.7955% .224 .125 / .5);
       }"
     `)
   })
@@ -309,7 +309,17 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
+        }
+      }
+
+      :root, :host {
         --color-red-200: #fecaca;
         --color-red-500: #ef4444;
         --color-blue-500: #3b82f6;
@@ -332,7 +342,7 @@ describe('@apply', () => {
         }
       }
 
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .foo {
           background-color: var(--color-green-500);
         }
@@ -342,7 +352,7 @@ describe('@apply', () => {
         background-color: var(--color-red-200);
       }
 
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .foo:hover:focus {
           background-color: var(--color-green-200);
         }
@@ -416,7 +426,15 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo, .bar {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+
+      .foo, .bar {
         --tw-content: "b";
         content: var(--tw-content);
         content: var(--tw-content);
@@ -601,7 +619,7 @@ describe('arbitrary variants', () => {
 
   it('should generate arbitrary at-rule variants', async () => {
     expect(await run(['[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
-      "@media (width >= 123px) {
+      "@media (min-width: 123px) {
         .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
           display: flex;
         }
@@ -637,7 +655,7 @@ describe('variant stacking', () => {
 
   it('should stack multiple arbitrary variants', async () => {
     expect(await run(['[&_p]:[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
-      "@media (width >= 123px) {
+      "@media (min-width: 123px) {
         .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex p {
           display: flex;
         }
@@ -647,7 +665,15 @@ describe('variant stacking', () => {
 
   it('pseudo element variants are re-ordered', async () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
-      ".before\\:hover\\:flex:before {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+
+      .before\\:hover\\:flex:before {
         content: var(--tw-content);
       }
 
@@ -807,7 +833,15 @@ describe('sorting', () => {
         ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-space-x-reverse: 0;
+          }
+        }
+      }
+
+      :root, :host {
         --spacing-0: 0px;
         --spacing-2: .5rem;
         --spacing-4: 1rem;
@@ -1436,7 +1470,15 @@ describe('Parsing theme values from CSS', () => {
         ['font-bold', 'font-sans', 'font-serif', 'font-body'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-font-weight: initial;
+          }
+        }
+      }
+
+      :root, :host {
         --font-weight-bold: bold;
         --font-body: Inter;
       }
@@ -1475,7 +1517,28 @@ describe('Parsing theme values from CSS', () => {
         ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-shadow-alpha: 100%;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-inset-shadow-alpha: 100%;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+          }
+        }
+      }
+
+      :root, :host {
         --inset-md: 50px;
       }
 
@@ -3607,13 +3670,13 @@ describe('@custom-variant', () => {
             text-decoration-line: underline;
           }
 
-          @media not (any-hover: hover) {
+          @media not all and (any-hover: hover) {
             .cant-hover\\:focus\\:underline:focus {
               text-decoration-line: underline;
             }
           }
 
-          @media not (pointer: fine) {
+          @media not all and (pointer: fine) {
             .cant-hover\\:focus\\:underline:focus {
               text-decoration-line: underline;
             }
@@ -4168,7 +4231,7 @@ describe('`@reference "…" imports`', () => {
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 768px) {
+      "@media (min-width: 768px) {
         .bar:hover, .bar:focus {
           color: red;
         }
@@ -4398,12 +4461,12 @@ describe('`@reference "…" imports`', () => {
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
-        "@media (width >= 768px) {
-          .bar:hover, .bar:focus {
-            color: red;
-          }
-        }"
-      `)
+      "@media (min-width: 768px) {
+        .bar:hover, .bar:focus {
+          color: red;
+        }
+      }"
+    `)
   })
 
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
@@ -4432,7 +4495,7 @@ describe('`@reference "…" imports`', () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@media (width >= 48rem) {
+      "@media (min-width: 48rem) {
         .bar:hover, .bar:focus {
           color: red;
         }
@@ -4657,10 +4720,346 @@ describe('@variant', () => {
         background: #000;
       }
 
-      @container (width >= 768px) {
+      @container (min-width: 768px) {
         .btn.foo {
           background: #fff;
         }
+      }"
+    `)
+  })
+})
+
+describe('`color-mix(…)` polyfill', () => {
+  it('creates an inlined variable version of the color-mix(…) usages', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-red-500/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-red-500\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/50 {
+          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        }
+      }"
+    `)
+  })
+
+  it('works for color values in the first and second position', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+            --color-orange-500: oklch(70.5% 0.213 47.604);
+          }
+          @tailwind utilities;
+          .mixed {
+            color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+        --color-orange-500: oklch(70.5% .213 47.604);
+      }
+
+      .mixed {
+        color: #fc4d1b;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .mixed {
+          color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
+        }
+      }"
+    `)
+  })
+
+  it('works for nested `color-mix(…)` calls', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+          .stacked {
+            color: color-mix(
+              in lch,
+              color-mix(in lch, var(--color-red-500) 50%, transparent) 50%,
+              transparent
+            );
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .stacked {
+        color: lch(55.5764% 89.7903 33.1932 / .25098);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .stacked {
+          color: color-mix(in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent);
+        }
+      }"
+    `)
+  })
+
+  it('works with multiple `color-mix(…)` functions in one declaration', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+            --color-orange-500: oklch(70.5% 0.213 47.604);
+          }
+          @tailwind utilities;
+          .gradient {
+            background: linear-gradient(
+              90deg,
+              color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%,
+              color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%,
+              100%
+            );
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+        --color-orange-500: oklch(70.5% .213 47.604);
+      }
+
+      .gradient {
+        background: linear-gradient(90deg, #fb2c3680 0%, #fe6e0080 0%, 100%);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .gradient {
+          background: linear-gradient(90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100%);
+        }
+      }"
+    `)
+  })
+
+  it('works with no spaces after the `var(…)`', async () => {
+    await expect(
+      compileCss(
+        // prettier-ignore
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+          .text-red-500\/50 {
+            color: color-mix(in oklab,var(--color-red-500)50%,transparent);
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-red-500\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/50 {
+          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+        }
+      }"
+    `)
+  })
+
+  it('does not replace `currentColor` inside `color-mix(…)`', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+        `,
+        ['text-current/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".text-current\\/50 {
+        color: color-mix(in oklab, currentColor 50%, transparent);
+      }"
+    `)
+  })
+
+  it('also replaces eventual variables in opacity values', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --my-half: 50%;
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-red-500/(--my-half)'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --my-half: 50%;
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-red-500\\/\\(--my-half\\) {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/\\(--my-half\\) {
+          color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);
+        }
+      }"
+    `)
+  })
+})
+
+describe('`@property` polyfill', async () => {
+  it('emits fallbacks', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+
+          @property --no-inherit-no-value {
+            syntax: '*';
+            inherits: false;
+          }
+          @property --no-inherit-value {
+            syntax: '*';
+            inherits: false;
+            initial-value: red;
+          }
+          @property --inherit-no-value {
+            syntax: '*';
+            inherits: true;
+          }
+          @property --inherit-value {
+            syntax: '*';
+            inherits: true;
+            initial-value: red;
+          }
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          :root, :host {
+            --inherit-no-value: initial;
+            --inherit-value: red;
+          }
+
+          *, :before, :after, ::backdrop {
+            --no-inherit-no-value: initial;
+            --no-inherit-value: red;
+          }
+        }
+      }
+
+      @property --no-inherit-no-value {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --no-inherit-value {
+        syntax: "*";
+        inherits: false;
+        initial-value: red;
+      }
+
+      @property --inherit-no-value {
+        syntax: "*";
+        inherits: true
+      }
+
+      @property --inherit-value {
+        syntax: "*";
+        inherits: true;
+        initial-value: red;
+      }"
+    `)
+  })
+
+  it('emitting fallbacks can be disabled (necessary for CSS modules)', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+
+          @property --no-inherit-no-value {
+            syntax: '*';
+            inherits: false;
+          }
+          @property --no-inherit-value {
+            syntax: '*';
+            inherits: false;
+            initial-value: red;
+          }
+          @property --inherit-no-value {
+            syntax: '*';
+            inherits: true;
+          }
+          @property --inherit-value {
+            syntax: '*';
+            inherits: true;
+            initial-value: red;
+          }
+        `,
+        [],
+        {
+          polyfills: Polyfills.None,
+        },
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@property --no-inherit-no-value {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --no-inherit-value {
+        syntax: "*";
+        inherits: false;
+        initial-value: red;
+      }
+
+      @property --inherit-no-value {
+        syntax: "*";
+        inherits: true
+      }
+
+      @property --inherit-value {
+        syntax: "*";
+        inherits: true;
+        initial-value: red;
       }"
     `)
   })

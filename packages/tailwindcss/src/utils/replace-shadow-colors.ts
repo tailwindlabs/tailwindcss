@@ -1,14 +1,9 @@
-import { replaceAlpha } from '../utilities'
 import { segment } from './segment'
 
 const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
 const LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 
-export function replaceShadowColors(
-  input: string,
-  intensity: string | null | undefined,
-  replacement: (color: string) => string,
-) {
+export function replaceShadowColors(input: string, replacement: (color: string) => string) {
   let shadows = segment(input, ',').map((shadow) => {
     shadow = shadow.trim()
     let parts = segment(shadow, ' ').filter((part) => part.trim() !== '')
@@ -38,7 +33,7 @@ export function replaceShadowColors(
     // we can't know what to replace.
     if (offsetX === null || offsetY === null) return shadow
 
-    let replacementColor = replacement(replaceAlpha(color ?? 'currentcolor', intensity ?? null))
+    let replacementColor = replacement(color ?? 'currentcolor')
 
     if (color !== null) {
       // If a color was found, replace the color.
