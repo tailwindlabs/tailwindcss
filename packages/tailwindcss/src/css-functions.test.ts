@@ -384,6 +384,48 @@ describe('--theme(…)', () => {
       `[Error: Could not resolve value for theme function: \`theme(--color-green-500)\`. Consider checking if the variable name is correct or provide a fallback value to silence this error.]`,
     )
   })
+
+  test('--theme(…) function still works as expected, even when a plugin is imported', async () => {
+    expect(
+      await compileCss(
+        css`
+          @layer base {
+            html,
+            :host {
+              font-family: --theme(--default-font-family, system-ui);
+            }
+          }
+          @layer theme {
+            @theme {
+              --font-sans: sans-serif;
+              --default-font-family: --theme(--font-sans, initial);
+            }
+          }
+          @plugin "my-plugin.js";
+        `,
+        [],
+        {
+          loadModule: async () => ({
+            module: () => {},
+            base: '/root',
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "@layer base {
+        html, :host {
+          font-family: var(--default-font-family, system-ui);
+        }
+      }
+
+      @layer theme {
+        :root, :host {
+          --font-sans: sans-serif;
+          --default-font-family: var(--font-sans);
+        }
+      }"
+    `)
+  })
 })
 
 describe('theme(…)', () => {

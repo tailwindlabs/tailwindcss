@@ -7,4 +7,4 @@ playwright-report/
 blob-report/
 playwright/.cache/
 target/
-.debug
+.debug/

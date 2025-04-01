@@ -1,7 +1,9 @@
 import dedent from 'dedent'
-import { unlink, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, unlink, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'path'
 import postcss from 'postcss'
-import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import tailwindcss from './index'
 
 // We give this file path to PostCSS for processing.
@@ -106,14 +108,21 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
 })
 
 describe('processing without specifying a base path', () => {
-  let filepath = `${process.cwd()}/my-test-file.html`
+  let filepath: string
+  let dir: string
 
-  beforeEach(() =>
-    writeFile(filepath, `<div class="md:[&:hover]:content-['testing_default_base_path']">`),
-  )
+  beforeEach(async () => {
+    dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
+    await mkdir(dir, { recursive: true })
+    filepath = path.join(dir, 'my-test-file.html')
+    await writeFile(filepath, `<div class="md:[&:hover]:content-['testing_default_base_path']">`)
+  })
   afterEach(() => unlink(filepath))
 
   test('the current working directory is used by default', async () => {
+    const spy = vi.spyOn(process, 'cwd')
+    spy.mockReturnValue(dir)
+
     let processor = postcss([tailwindcss({ optimize: { minify: false } })])
 
     let result = await processor.process(`@import "tailwindcss"`, { from: inputCssFilePath() })

@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 - Added new `bg-{position,size}-*` utilities for arbitrary values ([#17432](https://github.com/tailwindlabs/tailwindcss/pull/17432))
 - Added new `shadow-*/{alpha}`, `inset-shadow-*/{alpha}`, and `text-shadow-*/{alpha}` utilities to control shadow opacity ([#17398](https://github.com/tailwindlabs/tailwindcss/pull/17398))
+- Added new `object-{top,bottom}-{left,right}` utilities ([#17437](https://github.com/tailwindlabs/tailwindcss/pull/17437))
 
 ### Fixed
 
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 - Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
 - Extract used CSS variables from `.css` files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433))
+- Ensure the `--theme(…)` function still resolves to the CSS variables even when legacy JS plugins are enabled
 
 ### Changed
 

@@ -17743,15 +17743,21 @@ test('object', async () => {
 
       // object-position
       'object-[var(--value)]',
+      'object-top',
+      'object-top-left',
+      'object-top-right',
       'object-bottom',
-      'object-center',
+      'object-bottom-left',
+      'object-bottom-right',
       'object-left',
+      'object-right',
+      'object-center',
+
+      // Legacy versions in v4.0 and earlier
       'object-left-bottom',
       'object-left-top',
-      'object-right',
       'object-right-bottom',
       'object-right-top',
-      'object-top',
     ]),
   ).toMatchInlineSnapshot(`
     ".object-contain {
@@ -17780,6 +17786,14 @@ test('object', async () => {
 
     .object-bottom {
       object-position: bottom;
+    }
+
+    .object-bottom-left {
+      object-position: left bottom;
+    }
+
+    .object-bottom-right {
+      object-position: right bottom;
     }
 
     .object-center {
@@ -17812,6 +17826,14 @@ test('object', async () => {
 
     .object-top {
       object-position: top;
+    }
+
+    .object-top-left {
+      object-position: left top;
+    }
+
+    .object-top-right {
+      object-position: right top;
     }"
   `)
   expect(

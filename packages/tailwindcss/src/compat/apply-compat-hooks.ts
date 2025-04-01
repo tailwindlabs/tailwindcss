@@ -260,8 +260,13 @@ function upgradeToFullPluginSupport({
   // config files are actually being used. In the future we may want to optimize
   // this further by only doing this if plugins or config files _actually_
   // registered JS config objects.
+  let defaultResolveThemeValue = designSystem.resolveThemeValue
   designSystem.resolveThemeValue = function resolveThemeValue(path: string, forceInline?: boolean) {
-    let resolvedValue = pluginApi.theme(path, forceInline)
+    if (path[0] === '-' && path[1] === '-') {
+      return defaultResolveThemeValue(path, forceInline)
+    }
+
+    let resolvedValue = pluginApi.theme(path, undefined)
 
     if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
       // When a tuple is returned, return the first element
