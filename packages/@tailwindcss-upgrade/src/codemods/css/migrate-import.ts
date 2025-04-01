@@ -16,6 +16,7 @@ export function migrateImport(): Plugin {
         let [firstParam, ...rest] = segment(rule.params, ' ')
 
         let params = parseImportParams(ValueParser.parse(firstParam))
+        if (!params) return
 
         let isRelative = params.uri[0] === '.'
         let hasCssExtension = params.uri.endsWith('.css')
