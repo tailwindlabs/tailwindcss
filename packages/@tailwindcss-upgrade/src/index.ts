@@ -4,17 +4,14 @@ import { globby } from 'globby'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
+import { analyze as analyzeStylesheets } from './codemods/css/analyze'
 import { formatNodes } from './codemods/css/format-nodes'
 import { migrate as migrateStylesheet } from './codemods/css/migrate'
 import { sortBuckets } from './codemods/css/sort-buckets'
 import { migrate as migrateTemplate } from './codemods/template/migrate'
 import { prepareConfig } from './codemods/template/prepare-config'
 import { help } from './commands/help'
-import {
-  analyze as analyzeStylesheets,
-  linkConfigs as linkConfigsToStylesheets,
-  split as splitStylesheets,
-} from './migrate'
+import { linkConfigs as linkConfigsToStylesheets, split as splitStylesheets } from './migrate'
 import { migrateJsConfig } from './migrate-js-config'
 import { migratePostCSSConfig } from './migrate-postcss'
 import { migratePrettierPlugin } from './migrate-prettier'
