@@ -115,7 +115,7 @@ function extractV3Base(
 }
 
 const VALID_PREFIX = /([a-z]+)/
-export function migratePrefix(prefix: string): string {
+export function migratePrefixValue(prefix: string): string {
   let result = VALID_PREFIX.exec(prefix.toLocaleLowerCase())
   if (!result) {
     console.warn(

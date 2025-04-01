@@ -7,7 +7,7 @@ import { resolveConfig } from '../../../../tailwindcss/src/compat/config/resolve
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { error, highlight, relative } from '../../utils/renderer'
-import { migratePrefix } from './migrate-prefix'
+import { migratePrefixValue } from './migrate-prefix'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -46,7 +46,7 @@ export async function prepareConfig(
 
     let userConfig = await createResolvedUserConfig(configFilePath)
 
-    let newPrefix = userConfig.prefix ? migratePrefix(userConfig.prefix) : null
+    let newPrefix = userConfig.prefix ? migratePrefixValue(userConfig.prefix) : null
     let input = css`
       @import 'tailwindcss' ${newPrefix ? `prefix(${newPrefix})` : ''};
       @config '${relative}';
