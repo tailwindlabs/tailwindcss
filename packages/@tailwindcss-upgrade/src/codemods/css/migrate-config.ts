@@ -1,8 +1,8 @@
 import path from 'node:path'
 import postcss, { AtRule, type Plugin } from 'postcss'
 import { normalizePath } from '../../../../@tailwindcss-node/src/normalize-path'
-import type { JSConfigMigration } from '../../migrate-js-config'
 import type { Stylesheet } from '../../stylesheet'
+import type { JSConfigMigration } from '../config/migrate-js-config'
 
 const ALREADY_INJECTED = new WeakMap<Stylesheet, string[]>()
 

@@ -2,27 +2,30 @@ import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { loadModule } from '../../@tailwindcss-node/src/compile'
-import defaultTheme from '../../tailwindcss/dist/default-theme'
-import { atRule, toCss, type AstNode } from '../../tailwindcss/src/ast'
+import { loadModule } from '../../../../@tailwindcss-node/src/compile'
+import defaultTheme from '../../../../tailwindcss/dist/default-theme'
+import { atRule, toCss, type AstNode } from '../../../../tailwindcss/src/ast'
 import {
   keyPathToCssProperty,
   themeableValues,
-} from '../../tailwindcss/src/compat/apply-config-to-theme'
-import { keyframesToRules } from '../../tailwindcss/src/compat/apply-keyframes-to-theme'
-import { resolveConfig, type ConfigFile } from '../../tailwindcss/src/compat/config/resolve-config'
-import type { ResolvedConfig, ThemeConfig } from '../../tailwindcss/src/compat/config/types'
-import { buildCustomContainerUtilityRules } from '../../tailwindcss/src/compat/container'
-import { darkModePlugin } from '../../tailwindcss/src/compat/dark-mode'
-import type { Config } from '../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../tailwindcss/src/design-system'
-import { escape } from '../../tailwindcss/src/utils/escape'
+} from '../../../../tailwindcss/src/compat/apply-config-to-theme'
+import { keyframesToRules } from '../../../../tailwindcss/src/compat/apply-keyframes-to-theme'
+import {
+  resolveConfig,
+  type ConfigFile,
+} from '../../../../tailwindcss/src/compat/config/resolve-config'
+import type { ResolvedConfig, ThemeConfig } from '../../../../tailwindcss/src/compat/config/types'
+import { buildCustomContainerUtilityRules } from '../../../../tailwindcss/src/compat/container'
+import { darkModePlugin } from '../../../../tailwindcss/src/compat/dark-mode'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { escape } from '../../../../tailwindcss/src/utils/escape'
 import {
   isValidOpacityValue,
   isValidSpacingMultiplier,
-} from '../../tailwindcss/src/utils/infer-data-type'
-import { findStaticPlugins, type StaticPluginOptions } from './utils/extract-static-plugins'
-import { highlight, info, relative } from './utils/renderer'
+} from '../../../../tailwindcss/src/utils/infer-data-type'
+import { findStaticPlugins, type StaticPluginOptions } from '../../utils/extract-static-plugins'
+import { highlight, info, relative } from '../../utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
