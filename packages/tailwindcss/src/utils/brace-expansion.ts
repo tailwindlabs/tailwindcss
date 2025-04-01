@@ -72,9 +72,6 @@ function expandSequence(seq: string): string[] {
     let startNum = parseInt(start, 10)
     let endNum = parseInt(end, 10)
 
-    // Determine padding length (if any) but don't count the sign as length
-    let padLength = Math.max(start.replace(/^-/, '').length, end.replace(/^-/, '').length)
-
     if (step === undefined) {
       step = startNum <= endNum ? 1 : -1
     }
@@ -84,17 +81,11 @@ function expandSequence(seq: string): string[] {
     if (step > 0) {
       for (let i = startNum; i <= endNum; i += step) {
         let numStr = i.toString()
-        if (numStr.length < padLength) {
-          numStr = numStr.padStart(padLength, '0')
-        }
         result.push(numStr)
       }
     } else {
       for (let i = startNum; i >= endNum; i += step) {
         let numStr = i.toString()
-        if (numStr.length < padLength) {
-          numStr = numStr.padStart(padLength, '0')
-        }
         result.push(numStr)
       }
     }

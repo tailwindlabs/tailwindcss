@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Disable padding in `@source inline(…)` brace expansion ([#17491](https://github.com/tailwindlabs/tailwindcss/pull/17491))
 
 ## [4.1.0] - 2025-04-01
 
