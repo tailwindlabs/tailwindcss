@@ -325,7 +325,7 @@ export function optimizeAst(
 
       // Create fallback values for usages of the `color-mix(…)` function that reference variables
       // found in the theme config.
-      if (node.value.includes('color-mix(')) {
+      if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
         let ast = ValueParser.parse(node.value)
 
         let didGenerateFallback = false
@@ -348,10 +348,11 @@ export function optimizeAst(
           // `oklab(…)` functions again as their support in Safari <16 is very limited.
           let colorspace = node.nodes[2]
           if (
-            (colorspace.kind === 'word' && colorspace.value === 'oklab') ||
-            colorspace.value === 'oklch' ||
-            colorspace.value === 'lab' ||
-            colorspace.value === 'lch'
+            colorspace.kind === 'word' &&
+            (colorspace.value === 'oklab' ||
+              colorspace.value === 'oklch' ||
+              colorspace.value === 'lab' ||
+              colorspace.value === 'lch')
           ) {
             colorspace.value = 'srgb'
           }
@@ -404,9 +405,8 @@ export function optimizeAst(
         return
       }
 
-      // Collect fallbacks for `@property` rules for Firefox support
-      // We turn these into rules on `:root` or `*` and some pseudo-elements
-      // based on the value of `inherits``
+      // Collect fallbacks for `@property` rules for Firefox support We turn these into rules on
+      // `:root` or `*` and some pseudo-elements based on the value of `inherits`
       if (polyfills & Polyfills.AtProperty) {
         let property = node.params
         let initialValue = null
@@ -448,8 +448,7 @@ export function optimizeAst(
         transform(child, copy.nodes, context, depth + 1)
       }
 
-      // Only track `@keyframes` that could be removed, when they were defined
-      // inside of a `@theme`.
+      // Only track `@keyframes` that could be removed, when they were defined inside of a `@theme`.
       if (node.name === '@keyframes' && context.theme) {
         keyframes.add(copy)
       }
@@ -572,32 +571,30 @@ export function optimizeAst(
 
   // Fallbacks
   if (polyfills & Polyfills.AtProperty) {
-    {
-      let fallbackAst = []
+    let fallbackAst = []
 
-      if (propertyFallbacksRoot.length > 0) {
-        fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
-      }
+    if (propertyFallbacksRoot.length > 0) {
+      fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
+    }
 
-      if (propertyFallbacksUniversal.length > 0) {
-        fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
-      }
+    if (propertyFallbacksUniversal.length > 0) {
+      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+    }
 
-      if (fallbackAst.length > 0) {
-        let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
-        if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
-        newAst.splice(
-          firstNonCommentIndex,
-          0,
-          atRule(
-            '@supports',
-            // We can't write a supports query for `@property` directly so we have to test for
-            // features that are added around the same time in Mozilla and Safari.
-            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-            [rule('@layer base', fallbackAst)],
-          ),
-        )
-      }
+    if (fallbackAst.length > 0) {
+      let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
+      if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
+      newAst.splice(
+        firstNonCommentIndex,
+        0,
+        atRule(
+          '@supports',
+          // We can't write a supports query for `@property` directly so we have to test for
+          // features that are added around the same time in Mozilla and Safari.
+          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+          [rule('@layer base', fallbackAst)],
+        ),
+      )
     }
   }
 

@@ -84,7 +84,7 @@ export function replaceShadowColors(
       requiresFallback = true
     }
 
-    shadows.push(replace(replaceAlpha(color ?? 'currentcolor', intensity ?? null)))
+    shadows.push(replace(replaceAlpha(color ?? 'currentcolor', intensity)))
     fallbackShadows.push(replace(color ?? 'currentcolor'))
   })
 

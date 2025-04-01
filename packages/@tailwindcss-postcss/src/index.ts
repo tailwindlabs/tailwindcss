@@ -279,7 +279,6 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               DEBUG && I.end('AST -> CSS')
 
               DEBUG && I.start('Lightning CSS')
-              // @ts-ignore
               let ast = optimizeCss(css, {
                 minify: typeof optimize === 'object' ? optimize.minify : true,
               })

@@ -5009,7 +5009,7 @@ describe('`@property` polyfill', async () => {
     `)
   })
 
-  it('can be disabled to not emit fallbacks (necessary for CSS modules)', async () => {
+  it('emitting fallbacks can be disabled (necessary for CSS modules)', async () => {
     await expect(
       compileCss(
         css`

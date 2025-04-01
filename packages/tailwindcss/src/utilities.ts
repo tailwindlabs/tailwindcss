@@ -187,8 +187,6 @@ export function withAlpha(value: string, alpha: string): string {
  * Apply opacity to a color using `color-mix`.
  */
 export function replaceAlpha(value: string, alpha: string): string {
-  if (alpha === null) return value
-
   // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
   // work properly with `color-mix`. Assume anything that isn't a number is
   // safe to pass through as-is, like `var(--my-opacity)`.
