@@ -1061,7 +1061,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: oklch(0.623 0.214 259.815);
+            border-color: oklch(62.3% 0.214 259.815);
           }
         }
         "
