@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { automaticVarInjection } from './migrate-automatic-var-injection'
+import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 
 test.each([
   // Arbitrary candidates
@@ -58,6 +58,6 @@ test.each([
     base: __dirname,
   })
 
-  let migrated = automaticVarInjection(designSystem, {}, candidate)
+  let migrated = migrateAutomaticVarInjection(designSystem, {}, candidate)
   expect(migrated).toEqual(result)
 })

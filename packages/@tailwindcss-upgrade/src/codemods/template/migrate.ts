@@ -5,7 +5,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
-import { automaticVarInjection } from './migrate-automatic-var-injection'
+import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { bgGradient } from './migrate-bg-gradient'
 import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { important } from './migrate-important'
@@ -39,7 +39,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   maxWidthScreen,
   themeToVar,
   variantOrder, // Has to happen before migrations that modify variants
-  automaticVarInjection,
+  migrateAutomaticVarInjection,
   legacyArbitraryValues,
   migrateArbitraryValueToBareValue,
   modernizeArbitraryValues,
