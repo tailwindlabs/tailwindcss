@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
-import { prefix } from './migrate-prefix'
+import { migratePrefix } from './migrate-prefix'
 
 test.each([
   ['group-[]:flex', 'group-[&]:flex'],
@@ -29,7 +29,7 @@ test.each([
   })
 
   expect(
-    [migrateEmptyArbitraryValues, prefix].reduce(
+    [migrateEmptyArbitraryValues, migratePrefix].reduce(
       (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
       candidate,
     ),

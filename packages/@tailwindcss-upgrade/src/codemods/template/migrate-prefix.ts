@@ -6,7 +6,7 @@ import { printCandidate } from './candidates'
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
-export function prefix(
+export function migratePrefix(
   designSystem: DesignSystem,
   userConfig: Config,
   rawCandidate: string,

@@ -13,7 +13,7 @@ import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
-import { prefix } from './migrate-prefix'
+import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
 import { migrateVariantOrder } from './migrate-variant-order'
@@ -31,7 +31,7 @@ export type Migration = (
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
-  prefix,
+  migratePrefix,
   migrateImportant,
   migrateBgGradient,
   migrateSimpleLegacyClasses,

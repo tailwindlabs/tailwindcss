@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
-import { prefix } from './migrate-prefix'
+import { migratePrefix } from './migrate-prefix'
 
 describe('for projects with configured prefix', () => {
   test.each([
@@ -31,7 +31,7 @@ describe('for projects with configured prefix', () => {
       base: __dirname,
     })
 
-    expect(prefix(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
+    expect(migratePrefix(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
   })
 })
 
@@ -40,7 +40,7 @@ test('can handle complex prefix separators', async () => {
     base: __dirname,
   })
 
-  expect(prefix(designSystem, { prefix: 'tw__' }, 'tw__flex')).toEqual('tw:flex')
+  expect(migratePrefix(designSystem, { prefix: 'tw__' }, 'tw__flex')).toEqual('tw:flex')
 })
 
 describe('for projects without configured prefix', () => {
@@ -49,6 +49,6 @@ describe('for projects without configured prefix', () => {
       base: __dirname,
     })
 
-    expect(prefix(designSystem, {}, 'tw-flex')).toEqual('tw-flex')
+    expect(migratePrefix(designSystem, {}, 'tw-flex')).toEqual('tw-flex')
   })
 })
