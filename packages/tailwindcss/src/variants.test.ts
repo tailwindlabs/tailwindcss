@@ -114,10 +114,12 @@ test('details-content', async () => {
 
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
+    "@layer __tw-properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
     }
@@ -138,10 +140,12 @@ test('before', async () => {
 
 test('after', async () => {
   expect(await run(['after:flex'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
+    "@layer __tw-properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
     }
@@ -2248,10 +2252,12 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
-        *, :before, :after, ::backdrop {
-          --tw-content: "";
+    "@layer __tw-properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
         }
       }
     }

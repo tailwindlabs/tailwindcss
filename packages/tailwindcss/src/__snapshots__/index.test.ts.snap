@@ -1,23 +1,25 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
-"@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-shadow: 0 0 #0000;
-      --tw-shadow-color: initial;
-      --tw-shadow-alpha: 100%;
-      --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-color: initial;
-      --tw-inset-shadow-alpha: 100%;
-      --tw-ring-color: initial;
-      --tw-ring-shadow: 0 0 #0000;
-      --tw-inset-ring-color: initial;
-      --tw-inset-ring-shadow: 0 0 #0000;
-      --tw-ring-inset: initial;
-      --tw-ring-offset-width: 0px;
-      --tw-ring-offset-color: #fff;
-      --tw-ring-offset-shadow: 0 0 #0000;
+"@layer __tw-properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    @layer base {
+      *, :before, :after, ::backdrop {
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-color: initial;
+        --tw-shadow-alpha: 100%;
+        --tw-inset-shadow: 0 0 #0000;
+        --tw-inset-shadow-color: initial;
+        --tw-inset-shadow-alpha: 100%;
+        --tw-ring-color: initial;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-inset-ring-color: initial;
+        --tw-inset-ring-shadow: 0 0 #0000;
+        --tw-ring-inset: initial;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-offset-shadow: 0 0 #0000;
+      }
     }
   }
 }

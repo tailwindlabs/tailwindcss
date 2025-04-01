@@ -1,10 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
-"@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-  @layer base {
-    *, :before, :after, ::backdrop {
-      --tw-font-weight: initial;
+"@layer __tw-properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    @layer base {
+      *, :before, :after, ::backdrop {
+        --tw-font-weight: initial;
+      }
     }
   }
 }
