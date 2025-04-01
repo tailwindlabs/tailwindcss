@@ -135,7 +135,7 @@ function isPotentialCssRootFile(id: string, ignoredFiles: Exclude<TailwindPlugin
   if(isIgnoredPattern) return
 
   let extension = getExtension(id)
-  const isCssFile =
+  let isCssFile =
     (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
     // Don't intercept special static asset resources
     !SPECIAL_QUERY_RE.test(id) &&
