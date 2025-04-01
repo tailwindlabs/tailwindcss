@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { themeToVar } from './migrate-theme-to-var'
+import { migrateThemeToVar } from './migrate-theme-to-var'
 
 let css = String.raw
 
@@ -139,7 +139,7 @@ test.each([
     },
   )
 
-  expect(themeToVar(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateThemeToVar(designSystem, {}, candidate)).toEqual(result)
 })
 
 test('extended space scale converts to var or calc', async () => {
@@ -155,16 +155,16 @@ test('extended space scale converts to var or calc', async () => {
       base: __dirname,
     },
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
     '[--value:--spacing(1)]',
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
     '[--value:var(--spacing-2)]',
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.miami)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.miami)]')).toEqual(
     '[--value:var(--spacing-miami)]',
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.nyc)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.nyc)]')).toEqual(
     '[--value:theme(spacing.nyc)]',
   )
 })
@@ -183,13 +183,13 @@ test('custom space scale converts to var', async () => {
       base: __dirname,
     },
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.1)]')).toEqual(
     '[--value:var(--spacing-1)]',
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.2)]')).toEqual(
     '[--value:var(--spacing-2)]',
   )
-  expect(themeToVar(designSystem, {}, '[--value:theme(spacing.3)]')).toEqual(
+  expect(migrateThemeToVar(designSystem, {}, '[--value:theme(spacing.3)]')).toEqual(
     '[--value:theme(spacing.3)]',
   )
 })

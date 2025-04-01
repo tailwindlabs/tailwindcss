@@ -15,7 +15,7 @@ import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { prefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
-import { themeToVar } from './migrate-theme-to-var'
+import { migrateThemeToVar } from './migrate-theme-to-var'
 import { variantOrder } from './migrate-variant-order'
 
 export type Migration = (
@@ -37,7 +37,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateSimpleLegacyClasses,
   migrateLegacyClasses,
   migrateMaxWidthScreen,
-  themeToVar,
+  migrateThemeToVar,
   variantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,

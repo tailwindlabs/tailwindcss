@@ -19,7 +19,7 @@ export const enum Convert {
   MigrateThemeOnly = 1 << 1,
 }
 
-export function themeToVar(
+export function migrateThemeToVar(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
