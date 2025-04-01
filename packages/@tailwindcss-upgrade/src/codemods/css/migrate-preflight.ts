@@ -1,10 +1,10 @@
 import dedent from 'dedent'
 import postcss, { type Plugin, type Root } from 'postcss'
-import { keyPathToCssProperty } from '../../../tailwindcss/src/compat/apply-config-to-theme'
-import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { toKeyPath } from '../../../tailwindcss/src/utils/to-key-path'
-import * as ValueParser from '../../../tailwindcss/src/value-parser'
+import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 // Defaults in v4
 const DEFAULT_BORDER_COLOR = 'currentColor'

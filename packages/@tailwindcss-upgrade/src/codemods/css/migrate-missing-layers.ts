@@ -1,5 +1,5 @@
 import { AtRule, type ChildNode, type Plugin, type Root } from 'postcss'
-import { segment } from '../../../tailwindcss/src/utils/segment'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
 
 export function migrateMissingLayers(): Plugin {
   function migrate(root: Root) {

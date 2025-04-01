@@ -1,9 +1,9 @@
 import { type Plugin, type Root } from 'postcss'
-import { resolveConfig } from '../../../tailwindcss/src/compat/config/resolve-config'
-import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
-import { buildMediaQuery } from '../../../tailwindcss/src/compat/screens-config'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
+import { resolveConfig } from '../../../../tailwindcss/src/compat/config/resolve-config'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import { buildMediaQuery } from '../../../../tailwindcss/src/compat/screens-config'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 
 export function migrateMediaScreen({
   designSystem,

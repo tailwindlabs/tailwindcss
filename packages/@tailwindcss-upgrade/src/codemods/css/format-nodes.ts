@@ -1,6 +1,6 @@
 import postcss, { type ChildNode, type Plugin, type Root } from 'postcss'
 import { format, type Options } from 'prettier'
-import { walk } from '../utils/walk'
+import { walk } from '../../utils/walk'
 
 const FORMAT_OPTIONS: Options = {
   parser: 'css',

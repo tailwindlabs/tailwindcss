@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
 import { describe, expect, it } from 'vitest'
-import { Stylesheet } from '../stylesheet'
+import { Stylesheet } from '../../stylesheet'
 import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 import { sortBuckets } from './sort-buckets'

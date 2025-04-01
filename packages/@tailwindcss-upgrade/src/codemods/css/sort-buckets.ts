@@ -1,6 +1,6 @@
 import postcss, { type AtRule, type ChildNode, type Comment, type Plugin, type Root } from 'postcss'
-import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
-import { walk, WalkAction } from '../utils/walk'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import { walk, WalkAction } from '../../utils/walk'
 
 const BUCKET_ORDER = [
   // Imports

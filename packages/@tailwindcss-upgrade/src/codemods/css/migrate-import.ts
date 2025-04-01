@@ -1,9 +1,9 @@
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { type Plugin, type Root } from 'postcss'
-import { parseImportParams } from '../../../tailwindcss/src/at-import'
-import { segment } from '../../../tailwindcss/src/utils/segment'
-import * as ValueParser from '../../../tailwindcss/src/value-parser'
+import { parseImportParams } from '../../../../tailwindcss/src/at-import'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 export function migrateImport(): Plugin {
   async function migrate(root: Root) {

@@ -1,7 +1,7 @@
 import type { AtRule, Plugin } from 'postcss'
-import type { Config } from '../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { segment } from '../../../tailwindcss/src/utils/segment'
+import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { migrateCandidate } from '../template/migrate'
 
 export function migrateAtApply({

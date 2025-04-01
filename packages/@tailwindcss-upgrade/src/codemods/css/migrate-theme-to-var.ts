@@ -1,6 +1,6 @@
 import { type Plugin } from 'postcss'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import { Convert, createConverter } from '../template/codemods/theme-to-var'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { Convert, createConverter } from '../../template/codemods/theme-to-var'
 
 export function migrateThemeToVar({
   designSystem,
