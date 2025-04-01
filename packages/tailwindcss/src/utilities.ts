@@ -2039,6 +2039,9 @@ export function createUtilities(theme: Theme) {
   }
   staticUtility('self-stretch', [['align-self', 'stretch']])
   staticUtility('self-baseline', [['align-self', 'baseline']])
+  if (enableBaselineLast) {
+    staticUtility('self-baseline-last', [['align-self', 'last baseline']])
+  }
 
   staticUtility('justify-self-auto', [['justify-self', 'auto']])
   staticUtility('justify-self-start', [['justify-self', 'flex-start']])
