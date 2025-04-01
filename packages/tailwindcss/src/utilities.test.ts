@@ -22588,12 +22588,14 @@ test('text-shadow', async () => {
         'text-shadow-sm',
         'text-shadow-none',
         'text-shadow-[12px_12px_#0088cc]',
+        'text-shadow-[12px_12px_var(--value)]',
         'text-shadow-[10px_10px]',
         'text-shadow-[var(--value)]',
         'text-shadow-[shadow:var(--value)]',
 
         'text-shadow-sm/25',
         'text-shadow-[12px_12px_#0088cc]/25',
+        'text-shadow-[12px_12px_var(--value)]/25',
         'text-shadow-[10px_10px]/25',
 
         // Colors
@@ -22634,6 +22636,17 @@ test('text-shadow', async () => {
       --color-red-500: #ef4444;
     }
 
+    .text-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      --tw-text-shadow-alpha: 25%;
+      text-shadow: 12px 12px var(--tw-text-shadow-color, var(--value));
+    }
+
+    @supports (color: lab(from red l a b)) {
+      .text-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+        text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(from var(--value) l a b / 25%));
+      }
+    }
+
     .text-shadow-\\[10px_10px\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
       text-shadow: 10px 10px var(--tw-text-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
@@ -22667,6 +22680,10 @@ test('text-shadow', async () => {
 
     .text-shadow-\\[12px_12px_\\#0088cc\\] {
       text-shadow: 12px 12px var(--tw-text-shadow-color, #08c);
+    }
+
+    .text-shadow-\\[12px_12px_var\\(--value\\)\\] {
+      text-shadow: 12px 12px var(--tw-text-shadow-color, var(--value));
     }
 
     .text-shadow-\\[color\\:var\\(--value\\)\\] {
@@ -22826,12 +22843,14 @@ test('shadow', async () => {
         'shadow-xl',
         'shadow-none',
         'shadow-[12px_12px_#0088cc]',
+        'shadow-[12px_12px_var(--value)]',
         'shadow-[10px_10px]',
         'shadow-[var(--value)]',
         'shadow-[shadow:var(--value)]',
 
         'shadow-sm/25',
         'shadow-[12px_12px_#0088cc]/25',
+        'shadow-[12px_12px_var(--value)]/25',
         'shadow-[10px_10px]/25',
 
         // Colors
@@ -22884,6 +22903,18 @@ test('shadow', async () => {
       --color-red-500: #ef4444;
     }
 
+    .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      --tw-shadow-alpha: 25%;
+      --tw-shadow: 12px 12px var(--tw-shadow-color, var(--value));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    @supports (color: lab(from red l a b)) {
+      .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+        --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(from var(--value) l a b / 25%));
+      }
+    }
+
     .shadow-\\[10px_10px\\]\\/25 {
       --tw-shadow-alpha: 25%;
       --tw-shadow: 10px 10px var(--tw-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
@@ -22909,6 +22940,11 @@ test('shadow', async () => {
 
     .shadow-\\[12px_12px_\\#0088cc\\] {
       --tw-shadow: 12px 12px var(--tw-shadow-color, #08c);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-\\[12px_12px_var\\(--value\\)\\] {
+      --tw-shadow: 12px 12px var(--tw-shadow-color, var(--value));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -23153,12 +23189,14 @@ test('inset-shadow', async () => {
         'inset-shadow-sm',
         'inset-shadow-none',
         'inset-shadow-[12px_12px_#0088cc]',
+        'inset-shadow-[12px_12px_var(--value)]',
         'inset-shadow-[10px_10px]',
         'inset-shadow-[var(--value)]',
         'inset-shadow-[shadow:var(--value)]',
 
         'inset-shadow-sm/25',
         'inset-shadow-[12px_12px_#0088cc]/25',
+        'inset-shadow-[12px_12px_var(--value)]/25',
         'inset-shadow-[10px_10px]/25',
 
         // Colors
@@ -23211,6 +23249,18 @@ test('inset-shadow', async () => {
       --color-red-500: #ef4444;
     }
 
+    .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      --tw-inset-shadow-alpha: 25%;
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, var(--value));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    @supports (color: lab(from red l a b)) {
+      .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+        --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(from var(--value) l a b / 25%));
+      }
+    }
+
     .inset-shadow-\\[10px_10px\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
@@ -23241,6 +23291,11 @@ test('inset-shadow', async () => {
 
     .inset-shadow-\\[12px_12px_\\#0088cc\\] {
       --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #08c);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .inset-shadow-\\[12px_12px_var\\(--value\\)\\] {
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, var(--value));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 

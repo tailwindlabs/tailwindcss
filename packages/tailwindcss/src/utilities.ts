@@ -4997,7 +4997,7 @@ export function createUtilities(theme: Theme) {
         return [
           textShadowProperties(),
           decl('--tw-text-shadow-alpha', alpha),
-          ...replaceShadowColors(
+          ...alphaReplacedShadowProperties(
             'text-shadow',
             value,
             alpha,
@@ -5023,7 +5023,7 @@ export function createUtilities(theme: Theme) {
             return [
               textShadowProperties(),
               decl('--tw-text-shadow-alpha', alpha),
-              ...replaceShadowColors(
+              ...alphaReplacedShadowProperties(
                 'text-shadow',
                 value,
                 alpha,
@@ -5047,7 +5047,7 @@ export function createUtilities(theme: Theme) {
           return [
             textShadowProperties(),
             decl('--tw-text-shadow-alpha', alpha),
-            ...replaceShadowColors(
+            ...alphaReplacedShadowProperties(
               'text-shadow',
               value,
               alpha,
@@ -5139,7 +5139,7 @@ export function createUtilities(theme: Theme) {
         return [
           boxShadowProperties(),
           decl('--tw-shadow-alpha', alpha),
-          ...replaceShadowColors(
+          ...alphaReplacedShadowProperties(
             '--tw-shadow',
             value,
             alpha,
@@ -5167,7 +5167,7 @@ export function createUtilities(theme: Theme) {
             return [
               boxShadowProperties(),
               decl('--tw-shadow-alpha', alpha),
-              ...replaceShadowColors(
+              ...alphaReplacedShadowProperties(
                 '--tw-shadow',
                 value,
                 alpha,
@@ -5196,7 +5196,7 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-shadow-alpha', alpha),
-            ...replaceShadowColors(
+            ...alphaReplacedShadowProperties(
               '--tw-shadow',
               value,
               alpha,
@@ -5260,7 +5260,7 @@ export function createUtilities(theme: Theme) {
         return [
           boxShadowProperties(),
           decl('--tw-inset-shadow-alpha', alpha),
-          ...replaceShadowColors(
+          ...alphaReplacedShadowProperties(
             '--tw-inset-shadow',
             value,
             alpha,
@@ -5288,7 +5288,7 @@ export function createUtilities(theme: Theme) {
             return [
               boxShadowProperties(),
               decl('--tw-inset-shadow-alpha', alpha),
-              ...replaceShadowColors(
+              ...alphaReplacedShadowProperties(
                 '--tw-inset-shadow',
                 value,
                 alpha,
@@ -5319,7 +5319,7 @@ export function createUtilities(theme: Theme) {
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow-alpha', alpha),
-            ...replaceShadowColors(
+            ...alphaReplacedShadowProperties(
               '--tw-inset-shadow',
               value,
               alpha,
@@ -6072,5 +6072,44 @@ function resolveValueFunction(
         return { nodes: ValueParser.parse(value.value) }
       }
     }
+  }
+}
+
+function alphaReplacedShadowProperties(
+  property: string,
+  value: string,
+  alpha: string | null | undefined,
+  varInjector: (color: string) => string,
+  prefix: string = '',
+): AstNode[] {
+  let requiresFallback = false
+  let replacedValue = replaceShadowColors(value, (color) => {
+    if (alpha == null) {
+      return varInjector(color)
+    }
+
+    // When the input is currentcolor, we use our existing `color-mix(…)` approach to increase
+    // browser support. Note that the fallback of this is handled more generically in
+    // post-processing.
+    if (color.startsWith('current')) {
+      return varInjector(withAlpha(color, alpha))
+    }
+
+    // If any dynamic values are needed for the relative color syntax, we need to insert a
+    // replacement as lightningcss won't be able to resolve them statically.
+    if (color.startsWith('var(') || alpha.startsWith('var(')) {
+      requiresFallback = true
+    }
+
+    return varInjector(replaceAlpha(color, alpha))
+  })
+
+  if (requiresFallback) {
+    return [
+      decl(property, prefix + replaceShadowColors(value, varInjector)),
+      rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
+    ]
+  } else {
+    return [decl(property, prefix + replacedValue)]
   }
 }
