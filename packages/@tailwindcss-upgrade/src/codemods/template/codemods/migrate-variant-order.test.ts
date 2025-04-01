@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import { expect, test } from 'vitest'
-import { variantOrder } from './variant-order'
+import { variantOrder } from './migrate-variant-order'
 
 let css = dedent
 

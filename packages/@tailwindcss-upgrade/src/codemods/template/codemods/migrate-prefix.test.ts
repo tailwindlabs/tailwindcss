@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { describe, expect, test } from 'vitest'
-import { prefix } from './prefix'
+import { prefix } from './migrate-prefix'
 
 describe('for projects with configured prefix', () => {
   test.each([

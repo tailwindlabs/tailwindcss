@@ -1,7 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { handleEmptyArbitraryValues } from './handle-empty-arbitrary-values'
-import { prefix } from './prefix'
+import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
+import { prefix } from './migrate-prefix'
 
 test.each([
   ['group-[]:flex', 'group-[&]:flex'],

@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { important } from './important'
+import { important } from './migrate-important'
 
 test.each([
   ['!flex', 'flex!'],

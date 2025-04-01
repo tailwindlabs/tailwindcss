@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { simpleLegacyClasses } from './simple-legacy-classes'
+import { simpleLegacyClasses } from './migrate-simple-legacy-classes'
 
 test.each([
   ['overflow-ellipsis', 'text-ellipsis'],

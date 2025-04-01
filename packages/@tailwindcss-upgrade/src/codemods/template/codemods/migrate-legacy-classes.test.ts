@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { legacyClasses } from './legacy-classes'
+import { legacyClasses } from './migrate-legacy-classes'
 
 test.each([
   ['shadow', 'shadow-sm'],

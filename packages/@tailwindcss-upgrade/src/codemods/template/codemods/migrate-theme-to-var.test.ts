@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { themeToVar } from './theme-to-var'
+import { themeToVar } from './migrate-theme-to-var'
 
 let css = String.raw
 

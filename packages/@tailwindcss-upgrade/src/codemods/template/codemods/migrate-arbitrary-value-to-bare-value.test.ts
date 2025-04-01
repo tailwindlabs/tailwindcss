@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { arbitraryValueToBareValue } from './arbitrary-value-to-bare-value'
+import { arbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 
 test.each([
   ['aspect-[12/34]', 'aspect-12/34'],

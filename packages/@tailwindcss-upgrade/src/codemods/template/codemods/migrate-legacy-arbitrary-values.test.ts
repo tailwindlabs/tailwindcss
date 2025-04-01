@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { legacyArbitraryValues } from './legacy-arbitrary-values'
+import { legacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 
 test.each([
   ['grid-cols-[auto,1fr]', 'grid-cols-[auto_1fr]'],

@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { automaticVarInjection } from './automatic-var-injection'
+import { automaticVarInjection } from './migrate-automatic-var-injection'
 
 test.each([
   // Arbitrary candidates

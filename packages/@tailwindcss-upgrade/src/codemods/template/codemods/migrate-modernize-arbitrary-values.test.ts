@@ -1,8 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { handleEmptyArbitraryValues } from './handle-empty-arbitrary-values'
-import { modernizeArbitraryValues } from './modernize-arbitrary-values'
-import { prefix } from './prefix'
+import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
+import { modernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
+import { prefix } from './migrate-prefix'
 
 test.each([
   // Arbitrary variants
