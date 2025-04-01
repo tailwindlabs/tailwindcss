@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { legacyClasses } from './migrate-legacy-classes'
+import { migrateLegacyClasses } from './migrate-legacy-classes'
 
 test.each([
   ['shadow', 'shadow-sm'],
@@ -37,7 +37,7 @@ test.each([
     base: __dirname,
   })
 
-  expect(await legacyClasses(designSystem, {}, candidate)).toEqual(result)
+  expect(await migrateLegacyClasses(designSystem, {}, candidate)).toEqual(result)
 })
 
 test('does not replace classes in invalid positions', async () => {
@@ -47,7 +47,7 @@ test('does not replace classes in invalid positions', async () => {
 
   async function shouldNotReplace(example: string, candidate = 'shadow') {
     expect(
-      await legacyClasses(designSystem, {}, candidate, {
+      await migrateLegacyClasses(designSystem, {}, candidate, {
         contents: example,
         start: example.indexOf(candidate),
         end: example.indexOf(candidate) + candidate.length,

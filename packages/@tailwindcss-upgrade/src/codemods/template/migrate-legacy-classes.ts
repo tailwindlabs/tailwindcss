@@ -65,7 +65,7 @@ const DESIGN_SYSTEMS = new DefaultMap((base) => {
   return __unstable__loadDesignSystem('@import "tailwindcss";', { base })
 })
 
-export async function legacyClasses(
+export async function migrateLegacyClasses(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
