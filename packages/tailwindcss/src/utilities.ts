@@ -3926,6 +3926,9 @@ export function createUtilities(theme: Theme) {
         property('--tw-saturate'),
         property('--tw-sepia'),
         property('--tw-drop-shadow'),
+        property('--tw-drop-shadow-color'),
+        property('--tw-drop-shadow-alpha', '100%', '<percentage>'),
+        property('--tw-drop-shadow-size'),
       ])
     }
 
@@ -4318,19 +4321,133 @@ export function createUtilities(theme: Theme) {
       ['--tw-drop-shadow', ' '],
       ['filter', cssFilterValue],
     ])
-    functionalUtility('drop-shadow', {
-      themeKeys: ['--drop-shadow'],
-      handle: (value) => [
-        filterProperties(),
-        decl(
-          '--tw-drop-shadow',
-          segment(value, ',')
-            .map((v) => `drop-shadow(${v})`)
-            .join(' '),
-        ),
-        decl('filter', cssFilterValue),
-      ],
+
+    utilities.functional('drop-shadow', (candidate) => {
+      let alpha: string | undefined
+
+      if (candidate.modifier) {
+        if (candidate.modifier.kind === 'arbitrary') {
+          alpha = candidate.modifier.value
+        } else {
+          if (isPositiveInteger(candidate.modifier.value)) {
+            alpha = `${candidate.modifier.value}%`
+          }
+        }
+      }
+
+      if (!candidate.value) {
+        let value = theme.get(['--drop-shadow'])
+        if (value === null) return
+
+        return [
+          filterProperties(),
+          decl('--tw-drop-shadow-alpha', alpha),
+          ...alphaReplacedDropShadowProperties(
+            '--tw-drop-shadow-size',
+            value,
+            alpha,
+            (color) => `var(--tw-drop-shadow-color, ${color})`,
+          ),
+          decl('--tw-drop-shadow', `drop-shadow(${theme.resolve(null, ['--drop-shadow'])})`),
+          decl('filter', cssFilterValue),
+        ]
+      }
+
+      if (candidate.value.kind === 'arbitrary') {
+        let value: string | null = candidate.value.value
+        let type = candidate.value.dataType ?? inferDataType(value, ['color'])
+
+        switch (type) {
+          case 'color': {
+            value = asColor(value, candidate.modifier, theme)
+            if (value === null) return
+            return [
+              filterProperties(),
+              decl('--tw-drop-shadow-color', withAlpha(value, 'var(--tw-drop-shadow-alpha)')),
+              decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+            ]
+          }
+          default: {
+            if (candidate.modifier && !alpha) return
+
+            return [
+              filterProperties(),
+              decl('--tw-drop-shadow-alpha', alpha),
+              ...alphaReplacedDropShadowProperties(
+                '--tw-drop-shadow-size',
+                value,
+                alpha,
+                (color) => `var(--tw-drop-shadow-color, ${color})`,
+              ),
+              decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+              decl('filter', cssFilterValue),
+            ]
+          }
+        }
+      }
+
+      // Shadow size
+      {
+        let value = theme.get([`--drop-shadow-${candidate.value.value}`])
+        if (value) {
+          if (candidate.modifier && !alpha) return
+
+          if (alpha) {
+            return [
+              filterProperties(),
+              decl('--tw-drop-shadow-alpha', alpha),
+              ...alphaReplacedDropShadowProperties(
+                '--tw-drop-shadow-size',
+                value,
+                alpha,
+                (color) => `var(--tw-drop-shadow-color, ${color})`,
+              ),
+              decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+              decl('filter', cssFilterValue),
+            ]
+          }
+
+          return [
+            filterProperties(),
+            decl('--tw-drop-shadow-alpha', alpha),
+            ...alphaReplacedDropShadowProperties(
+              '--tw-drop-shadow-size',
+              value,
+              alpha,
+              (color) => `var(--tw-drop-shadow-color, ${color})`,
+            ),
+            decl(
+              '--tw-drop-shadow',
+              `drop-shadow(${theme.resolve(candidate.value.value, ['--drop-shadow'])})`,
+            ),
+            decl('filter', cssFilterValue),
+          ]
+        }
+      }
+
+      // Shadow color
+      {
+        let value = resolveThemeColor(candidate, theme, ['--drop-shadow-color', '--color'])
+        if (value) {
+          return [
+            filterProperties(),
+            decl('--tw-drop-shadow-color', withAlpha(value, 'var(--tw-drop-shadow-alpha)')),
+            decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+          ]
+        }
+      }
     })
+
+    suggest('drop-shadow', () => [
+      {
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--drop-shadow-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+      },
+      {
+        valueThemeKeys: ['--drop-shadow'],
+      },
+    ])
 
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
@@ -6110,6 +6227,57 @@ function alphaReplacedShadowProperties(
   if (requiresFallback) {
     return [
       decl(property, prefix + replaceShadowColors(value, varInjector)),
+      rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
+    ]
+  } else {
+    return [decl(property, prefix + replacedValue)]
+  }
+}
+
+function alphaReplacedDropShadowProperties(
+  property: string,
+  value: string,
+  alpha: string | null | undefined,
+  varInjector: (color: string) => string,
+  prefix: string = '',
+): AstNode[] {
+  let requiresFallback = false
+
+  let replacedValue = segment(value, ',')
+    .map((value) =>
+      replaceShadowColors(value, (color) => {
+        if (alpha == null) {
+          return varInjector(color)
+        }
+
+        // When the input is currentcolor, we use our existing `color-mix(…)` approach to increase
+        // browser support. Note that the fallback of this is handled more generically in
+        // post-processing.
+        if (color.startsWith('current')) {
+          return varInjector(withAlpha(color, alpha))
+        }
+
+        // If any dynamic values are needed for the relative color syntax, we need to insert a
+        // replacement as lightningcss won't be able to resolve them statically.
+        if (color.startsWith('var(') || alpha.startsWith('var(')) {
+          requiresFallback = true
+        }
+
+        return varInjector(replaceAlpha(color, alpha))
+      }),
+    )
+    .map((value) => `drop-shadow(${value})`)
+    .join(' ')
+
+  if (requiresFallback) {
+    return [
+      decl(
+        property,
+        prefix +
+          segment(value, ',')
+            .map((value) => `drop-shadow(${replaceShadowColors(value, varInjector)})`)
+            .join(' '),
+      ),
       rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
     ]
   } else {

@@ -20362,6 +20362,7 @@ test('filter', async () => {
       css`
         @theme {
           --blur-xl: 24px;
+          --color-red-500: #ef4444;
           --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
           --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
         }
@@ -20389,8 +20390,11 @@ test('filter', async () => {
         'invert-0',
         'invert-[var(--value)]',
         'drop-shadow',
+        'drop-shadow/25',
         'drop-shadow-xl',
         'drop-shadow-[0_0_red]',
+        'drop-shadow-red-500',
+        'drop-shadow-red-500/50',
         'saturate-0',
         'saturate-[1.75]',
         'saturate-[var(--value)]',
@@ -20414,12 +20418,16 @@ test('filter', async () => {
           --tw-saturate: initial;
           --tw-sepia: initial;
           --tw-drop-shadow: initial;
+          --tw-drop-shadow-color: initial;
+          --tw-drop-shadow-alpha: 100%;
+          --tw-drop-shadow-size: initial;
         }
       }
     }
 
     :root, :host {
       --blur-xl: 24px;
+      --color-red-500: #ef4444;
       --drop-shadow: 0 1px 1px #0000000d;
       --drop-shadow-xl: 0 9px 7px #0000001a;
     }
@@ -20459,19 +20467,51 @@ test('filter', async () => {
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
+    .drop-shadow\\/25 {
+      --tw-drop-shadow-alpha: 25%;
+      --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, oklab(0% 0 0 / .25)));
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow));
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
     .drop-shadow {
+      --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, #0000000d));
       --tw-drop-shadow: drop-shadow(var(--drop-shadow));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
     .drop-shadow-\\[0_0_red\\] {
-      --tw-drop-shadow: drop-shadow(0 0 red);
+      --tw-drop-shadow-size: drop-shadow(0 0 var(--tw-drop-shadow-color, red));
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
     .drop-shadow-xl {
+      --tw-drop-shadow-size: drop-shadow(0 9px 7px var(--tw-drop-shadow-color, #0000001a));
       --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-red-500 {
+      --tw-drop-shadow-color: color-mix(in srgb, #ef4444 var(--tw-drop-shadow-alpha), transparent);
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .drop-shadow-red-500 {
+        --tw-drop-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-drop-shadow-alpha), transparent);
+      }
+    }
+
+    .drop-shadow-red-500\\/50 {
+      --tw-drop-shadow-color: color-mix(in srgb, #ef444480 var(--tw-drop-shadow-alpha), transparent);
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .drop-shadow-red-500\\/50 {
+        --tw-drop-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-drop-shadow-alpha), transparent);
+      }
     }
 
     .grayscale {
@@ -20619,6 +20659,22 @@ test('filter', async () => {
     @property --tw-drop-shadow {
       syntax: "*";
       inherits: false
+    }
+
+    @property --tw-drop-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-drop-shadow-alpha {
+      syntax: "<percentage>";
+      inherits: false;
+      initial-value: 100%;
+    }
+
+    @property --tw-drop-shadow-size {
+      syntax: "*";
+      inherits: false
     }"
   `)
   expect(
@@ -20650,6 +20706,15 @@ test('filter', async () => {
       'invert-unknown',
       '-drop-shadow-xl',
       '-drop-shadow-[0_0_red]',
+
+      'drop-shadow/foo',
+      '-drop-shadow/foo',
+      '-drop-shadow/25',
+      '-drop-shadow-red-500',
+      'drop-shadow-red-500/foo',
+      '-drop-shadow-red-500/foo',
+      '-drop-shadow-red-500/50',
+
       '-saturate-0',
       'saturate--5',
       '-saturate-[1.75]',
