@@ -601,7 +601,7 @@ export function optimizeAst(
       })
 
       newAst.splice(
-        Math.max(firstValidNodeIndex, 0),
+        firstValidNodeIndex < 0 ? newAst.length : firstValidNodeIndex,
         0,
         atRule(
           '@supports',
