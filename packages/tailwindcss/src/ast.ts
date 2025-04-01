@@ -582,10 +582,26 @@ export function optimizeAst(
     }
 
     if (fallbackAst.length > 0) {
-      let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
-      if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
+      let firstValidNodeIndex = newAst.findIndex((node) => {
+        // License comments
+        if (node.kind === 'comment') return false
+
+        if (node.kind === 'at-rule') {
+          // Charset
+          if (node.name === '@charset') return false
+
+          // External imports
+          if (node.name === '@import') return false
+
+          // Body-less `@layer …;`
+          if (node.name === '@layer' && node.nodes.length === 0) return false
+        }
+
+        return true
+      })
+
       newAst.splice(
-        firstNonCommentIndex,
+        Math.max(firstValidNodeIndex, 0),
         0,
         atRule(
           '@supports',
