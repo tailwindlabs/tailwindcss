@@ -20418,6 +20418,9 @@ test('filter', async () => {
           --tw-saturate: initial;
           --tw-sepia: initial;
           --tw-drop-shadow: initial;
+          --tw-drop-shadow-color: initial;
+          --tw-drop-shadow-alpha: 100%;
+          --tw-drop-shadow-size: initial;
         }
       }
     }
@@ -20490,13 +20493,25 @@ test('filter', async () => {
     }
 
     .drop-shadow-red-500 {
-      --tw-drop-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-drop-shadow-alpha), transparent);
+      --tw-drop-shadow-color: color-mix(in srgb, #ef4444 var(--tw-drop-shadow-alpha), transparent);
       --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
 
+    @supports (color: color-mix(in lab, red, red)) {
+      .drop-shadow-red-500 {
+        --tw-drop-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-drop-shadow-alpha), transparent);
+      }
+    }
+
     .drop-shadow-red-500\\/50 {
-      --tw-drop-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-drop-shadow-alpha), transparent);
+      --tw-drop-shadow-color: color-mix(in srgb, #ef444480 var(--tw-drop-shadow-alpha), transparent);
       --tw-drop-shadow: var(--tw-drop-shadow-size);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .drop-shadow-red-500\\/50 {
+        --tw-drop-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-drop-shadow-alpha), transparent);
+      }
     }
 
     .grayscale {
