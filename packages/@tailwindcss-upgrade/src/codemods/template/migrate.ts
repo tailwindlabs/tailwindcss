@@ -4,7 +4,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
-import { arbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
+import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { automaticVarInjection } from './migrate-automatic-var-injection'
 import { bgGradient } from './migrate-bg-gradient'
 import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
@@ -41,7 +41,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   variantOrder, // Has to happen before migrations that modify variants
   automaticVarInjection,
   legacyArbitraryValues,
-  arbitraryValueToBareValue,
+  migrateArbitraryValueToBareValue,
   modernizeArbitraryValues,
 ]
 

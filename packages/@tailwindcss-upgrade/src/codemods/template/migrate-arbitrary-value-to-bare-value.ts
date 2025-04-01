@@ -5,7 +5,7 @@ import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from './candidates'
 
-export function arbitraryValueToBareValue(
+export function migrateArbitraryValueToBareValue(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,
