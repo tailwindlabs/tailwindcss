@@ -1,5 +1,5 @@
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
 export function maxWidthScreen(

@@ -1,8 +1,12 @@
 import SelectorParser from 'postcss-selector-parser'
-import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
+import {
+  parseCandidate,
+  type Candidate,
+  type Variant,
+} from '../../../../../tailwindcss/src/candidate'
+import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
+import { isPositiveInteger } from '../../../../../tailwindcss/src/utils/infer-data-type'
 import { printCandidate } from '../candidates'
 
 function memcpy<T extends object, U extends object | null>(target: T, source: U): U {

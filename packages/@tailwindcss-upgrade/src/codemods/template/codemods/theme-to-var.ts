@@ -3,14 +3,14 @@ import {
   type Candidate,
   type CandidateModifier,
   type Variant,
-} from '../../../../tailwindcss/src/candidate'
-import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
-import { segment } from '../../../../tailwindcss/src/utils/segment'
-import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
-import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+} from '../../../../../tailwindcss/src/candidate'
+import { keyPathToCssProperty } from '../../../../../tailwindcss/src/compat/apply-config-to-theme'
+import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
+import { isValidSpacingMultiplier } from '../../../../../tailwindcss/src/utils/infer-data-type'
+import { segment } from '../../../../../tailwindcss/src/utils/segment'
+import { toKeyPath } from '../../../../../tailwindcss/src/utils/to-key-path'
+import * as ValueParser from '../../../../../tailwindcss/src/value-parser'
 import { printCandidate } from '../candidates'
 
 export const enum Convert {

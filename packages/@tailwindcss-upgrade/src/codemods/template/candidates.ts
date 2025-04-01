@@ -1,7 +1,7 @@
 import { Scanner } from '@tailwindcss/oxide'
-import type { Candidate, Variant } from '../../../tailwindcss/src/candidate'
-import type { DesignSystem } from '../../../tailwindcss/src/design-system'
-import * as ValueParser from '../../../tailwindcss/src/value-parser'
+import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 export async function extractRawCandidates(
   content: string,

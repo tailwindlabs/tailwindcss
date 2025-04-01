@@ -1,7 +1,7 @@
-import { parseCandidate, type Candidate } from '../../../../tailwindcss/src/candidate'
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { segment } from '../../../../tailwindcss/src/utils/segment'
+import { parseCandidate, type Candidate } from '../../../../../tailwindcss/src/candidate'
+import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
+import { segment } from '../../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from '../candidates'
 
 let seenDesignSystems = new WeakSet<DesignSystem>()

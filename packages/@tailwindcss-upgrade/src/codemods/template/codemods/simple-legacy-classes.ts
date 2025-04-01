@@ -1,5 +1,5 @@
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import type { Config } from '../../../../../tailwindcss/src/compat/plugin-api'
+import type { DesignSystem } from '../../../../../tailwindcss/src/design-system'
 import { printCandidate } from '../candidates'
 
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
