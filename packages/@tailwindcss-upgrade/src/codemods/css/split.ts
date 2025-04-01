@@ -1,7 +1,7 @@
 import postcss from 'postcss'
-import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
-import { Stylesheet, type StylesheetId } from './stylesheet'
-import { walk, WalkAction } from './utils/walk'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import { Stylesheet, type StylesheetId } from '../../stylesheet'
+import { walk, WalkAction } from '../../utils/walk'
 
 export async function split(stylesheets: Stylesheet[]) {
   let stylesheetsById = new Map<StylesheetId, Stylesheet>()
