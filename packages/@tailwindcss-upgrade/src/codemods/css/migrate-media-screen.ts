@@ -15,7 +15,9 @@ export function migrateMediaScreen({
   function migrate(root: Root) {
     if (!designSystem || !userConfig) return
 
-    let { resolvedConfig } = resolveConfig(designSystem, [{ base: '', config: userConfig }])
+    let { resolvedConfig } = resolveConfig(designSystem, [
+      { base: '', config: userConfig, reference: false },
+    ])
     let screens = resolvedConfig?.theme?.screens || {}
 
     let mediaQueries = new DefaultMap<string, string | null>((name) => {
