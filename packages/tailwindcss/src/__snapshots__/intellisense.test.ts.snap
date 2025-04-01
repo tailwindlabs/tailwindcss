@@ -9608,6 +9608,7 @@ exports[`getClassList 1`] = `
   "select-text",
   "self-auto",
   "self-baseline",
+  "self-baseline-last",
   "self-center",
   "self-center-safe",
   "self-end",

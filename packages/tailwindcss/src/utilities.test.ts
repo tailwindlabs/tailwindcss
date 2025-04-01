@@ -8946,6 +8946,7 @@ test('self', async () => {
       'self-center-safe',
       'self-stretch',
       'self-baseline',
+      'self-baseline-last',
     ]),
   ).toMatchInlineSnapshot(`
     ".self-auto {
@@ -8954,6 +8955,10 @@ test('self', async () => {
 
     .self-baseline {
       align-self: baseline;
+    }
+
+    .self-baseline-last {
+      align-self: last baseline;
     }
 
     .self-center {
