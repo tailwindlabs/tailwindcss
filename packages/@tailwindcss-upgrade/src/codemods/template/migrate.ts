@@ -6,7 +6,7 @@ import { spliceChangesIntoString, type StringChange } from '../../utils/splice-c
 import { extractRawCandidates } from './candidates'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
-import { bgGradient } from './migrate-bg-gradient'
+import { migrateBgGradient } from './migrate-bg-gradient'
 import { handleEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { important } from './migrate-important'
 import { legacyArbitraryValues } from './migrate-legacy-arbitrary-values'
@@ -33,7 +33,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   handleEmptyArbitraryValues,
   prefix,
   important,
-  bgGradient,
+  migrateBgGradient,
   simpleLegacyClasses,
   legacyClasses,
   maxWidthScreen,

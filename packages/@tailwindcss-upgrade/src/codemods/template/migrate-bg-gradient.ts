@@ -4,7 +4,7 @@ import { printCandidate } from './candidates'
 
 const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
 
-export function bgGradient(
+export function migrateBgGradient(
   designSystem: DesignSystem,
   _userConfig: Config,
   rawCandidate: string,

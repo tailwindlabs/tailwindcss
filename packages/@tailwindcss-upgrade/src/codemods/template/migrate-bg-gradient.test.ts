@@ -1,6 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test } from 'vitest'
-import { bgGradient } from './migrate-bg-gradient'
+import { migrateBgGradient } from './migrate-bg-gradient'
 
 test.each([
   ['bg-gradient-to-t', 'bg-linear-to-t'],
@@ -18,5 +18,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(bgGradient(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateBgGradient(designSystem, {}, candidate)).toEqual(result)
 })
