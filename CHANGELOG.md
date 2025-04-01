@@ -7,44 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.0] - 2025-04-01
+
 ### Added
 
-- _Experimental_: Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
-- _Experimental_: Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
-- _Experimental_: Add `noscript` variant ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929), [#17431](https://github.com/tailwindlabs/tailwindcss/pull/17431))
-- _Experimental_: Add `items-baseline-last` and `self-baseline-last` utilities ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888), [#17476](https://github.com/tailwindlabs/tailwindcss/pull/17476))
-- _Experimental_: Add `pointer-none`, `pointer-coarse`, and `pointer-fine` variant ([#16946](https://github.com/tailwindlabs/tailwindcss/pull/16946))
-- _Experimental_: Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
-- _Experimental_: Add safe alignment utilities ([#14607](https://github.com/tailwindlabs/tailwindcss/pull/14607))
-- _Experimental_: Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
-- _Experimental_: Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
-- _Experimental_: Add `@source inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
-- _Experimental_: Add `@source not` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- _Experimental_: Add `text-shadow-*` utilities ([#17389](https://github.com/tailwindlabs/tailwindcss/pull/17389))
-- _Experimental_: Add `mask-*` utilities ([#17134](https://github.com/tailwindlabs/tailwindcss/pull/17134))
-- Added new `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
-- Added new `bg-{position,size}-*` utilities for arbitrary values ([#17432](https://github.com/tailwindlabs/tailwindcss/pull/17432))
-- Added new `shadow-*/{alpha}`, `inset-shadow-*/{alpha}`, and `text-shadow-*/{alpha}` utilities to control shadow opacity ([#17398](https://github.com/tailwindlabs/tailwindcss/pull/17398))
-- Added new `object-{top,bottom}-{left,right}` utilities ([#17437](https://github.com/tailwindlabs/tailwindcss/pull/17437))
-- Added new `drop-shadow-{color}` utilities ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
-- Added new `drop-shadow-*/{alpha}` utilities to control drop shadow opacity ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
+- Add `details-content` variant ([#15319](https://github.com/tailwindlabs/tailwindcss/pull/15319))
+- Add `inverted-colors` variant ([#11693](https://github.com/tailwindlabs/tailwindcss/pull/11693))
+- Add `noscript` variant ([#11929](https://github.com/tailwindlabs/tailwindcss/pull/11929), [#17431](https://github.com/tailwindlabs/tailwindcss/pull/17431))
+- Add `items-baseline-last` and `self-baseline-last` utilities ([#13888](https://github.com/tailwindlabs/tailwindcss/pull/13888), [#17476](https://github.com/tailwindlabs/tailwindcss/pull/17476))
+- Add `pointer-none`, `pointer-coarse`, and `pointer-fine` variant ([#16946](https://github.com/tailwindlabs/tailwindcss/pull/16946))
+- Add `any-pointer-none`, `any-pointer-coarse`, and `any-pointer-fine` variants ([#16941](https://github.com/tailwindlabs/tailwindcss/pull/16941))
+- Add safe alignment utilities ([#14607](https://github.com/tailwindlabs/tailwindcss/pull/14607))
+- Add `user-valid` and `user-invalid` variants ([#12370](https://github.com/tailwindlabs/tailwindcss/pull/12370))
+- Add `wrap-anywhere`, `wrap-break-word`, and `wrap-normal` utilities ([#12128](https://github.com/tailwindlabs/tailwindcss/pull/12128))
+- Add `@source inline(…)` and `@source not inline(…)` ([#17147](https://github.com/tailwindlabs/tailwindcss/pull/17147))
+- Add `@source not "…"` ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Add `text-shadow-*` utilities ([#17389](https://github.com/tailwindlabs/tailwindcss/pull/17389))
+- Add `mask-*` utilities ([#17134](https://github.com/tailwindlabs/tailwindcss/pull/17134))
+- Add `bg-{top,bottom}-{left,right}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
+- Add `bg-{position,size}-*` utilities for arbitrary values ([#17432](https://github.com/tailwindlabs/tailwindcss/pull/17432))
+- Add `shadow-*/<alpha>`, `inset-shadow-*/<alpha>`, and `text-shadow-*/<alpha>` utilities to control shadow opacity ([#17398](https://github.com/tailwindlabs/tailwindcss/pull/17398))
+- Add `object-{top,bottom}-{left,right}` utilities ([#17437](https://github.com/tailwindlabs/tailwindcss/pull/17437))
+- Add `drop-shadow-<color>` utilities ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
+- Add `drop-shadow-*/<alpha>` utilities to control drop shadow opacity ([#17434](https://github.com/tailwindlabs/tailwindcss/pull/17434))
 
 ### Fixed
 
 - Fix symlink issues when resolving `@source` directives ([#17391](https://github.com/tailwindlabs/tailwindcss/pull/17391))
-- `@tailwindcss/cli` considers ignore rules in `--watch` mode ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- Fix negated `content` rules in legacy JavaScript configuration ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Ensure `@tailwindcss/cli` respects ignore rules in `--watch` mode ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Support negated `content` rules in legacy JavaScript configuration ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Extract special `@("@")md:…` syntax in Razor files ([#17427](https://github.com/tailwindlabs/tailwindcss/pull/17427))
 - Disallow arbitrary values with top-level braces and semicolons as well as unbalanced parentheses and brackets ([#17361](https://github.com/tailwindlabs/tailwindcss/pull/17361))
-- Ensure the `--theme(…)` function still resolves to the CSS variables even when legacy JS plugins are enabled
-- Extract used CSS variables from `.css` files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433), [#17467](https://github.com/tailwindlabs/tailwindcss/pull/17467))
-- Improve compatibility with Safari 15 ([#17435](https://github.com/tailwindlabs/tailwindcss/pull/17435))
+- Ensure the `--theme(…)` function still resolves to the CSS variables even when legacy JS plugins are enabled ([#17458](https://github.com/tailwindlabs/tailwindcss/pull/17458))
+- Extract used theme variables from CSS module files ([#17433](https://github.com/tailwindlabs/tailwindcss/pull/17433), [#17467](https://github.com/tailwindlabs/tailwindcss/pull/17467))
 
 ### Changed
 
-- Ignore `node_modules` by default (but can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- Order of `@source` rules matter if you want to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
-- `@source` rules that include file extensions or point inside `node_modules/` no longer consider `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Improve compatibility with Safari 15 ([#17435](https://github.com/tailwindlabs/tailwindcss/pull/17435))
+- Ignore `node_modules` by default (can be overridden by `@source not …` rules) ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- Order of `@source` rules now matter, allowing you to negate previous `@source` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
+- `@source` rules that include file extensions or point inside `node_modules/` folders no longer consider your `.gitignore` rules ([#17255](https://github.com/tailwindlabs/tailwindcss/pull/17255))
 - Deprecated `bg-{left,right}-{top,bottom}` utilities ([#17378](https://github.com/tailwindlabs/tailwindcss/pull/17378))
 
 ## [4.0.17] - 2025-03-26
