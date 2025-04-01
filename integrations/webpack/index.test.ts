@@ -75,7 +75,7 @@ test(
       "
       --- ./dist/main.css ---
       :root, :host {
-        --color-blue-500: oklch(0.623 0.214 259.815);
+        --color-blue-500: oklch(62.3% 0.214 259.815);
       }
       .flex {
         display: flex;
@@ -98,8 +98,8 @@ test(
       "
       --- ./dist/main.css ---
       :root, :host {
-        --color-red-500: oklch(0.637 0.237 25.331);
-        --color-blue-500: oklch(0.623 0.214 259.815);
+        --color-red-500: oklch(63.7% 0.237 25.331);
+        --color-blue-500: oklch(62.3% 0.214 259.815);
       }
       .flex {
         display: flex;

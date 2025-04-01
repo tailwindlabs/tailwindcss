@@ -318,7 +318,7 @@ test('@supports', async () => {
     ),
   ).resolves.toMatchInlineSnapshot(`
     "@supports (display: grid) {
-      @media screen and (width <= 400px) {
+      @media screen and (max-width: 400px) {
         a {
           color: red;
         }
@@ -337,7 +337,7 @@ test('@supports', async () => {
     ),
   ).resolves.toMatchInlineSnapshot(`
     "@supports (not (display: grid)) and (display: flex) {
-      @media screen and (width <= 400px) {
+      @media screen and (max-width: 400px) {
         a {
           color: red;
         }

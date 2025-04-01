@@ -2,10 +2,10 @@ import watcher from '@parcel/watcher'
 import { compile, env, Instrumentation } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
-import { Features, transform } from 'lightningcss'
 import { existsSync, type Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { optimize } from '../../../../@tailwindcss-node/src'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
 import {
@@ -128,7 +128,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     if (args['--minify'] || args['--optimize']) {
       if (css !== previous.css) {
         DEBUG && I.start('Optimize CSS')
-        let optimizedCss = optimizeCss(css, {
+        let optimizedCss = optimize(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
         })
@@ -428,39 +428,6 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
     await watchers.dispose()
     await debounceQueue.dispose()
   }
-}
-
-function optimizeCss(
-  input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-) {
-  function optimize(code: Buffer | Uint8Array) {
-    return transform({
-      filename: file,
-      code,
-      minify,
-      sourceMap: false,
-      drafts: {
-        customMedia: true,
-      },
-      nonStandard: {
-        deepSelectorCombinator: true,
-      },
-      include: Features.Nesting,
-      exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
-      targets: {
-        safari: (16 << 16) | (4 << 8),
-        ios_saf: (16 << 16) | (4 << 8),
-        firefox: 128 << 16,
-        chrome: 111 << 16,
-      },
-      errorRecovery: true,
-    }).code
-  }
-
-  // Running Lightning CSS twice to ensure that adjacent rules are merged after
-  // nesting is applied. This creates a more optimized output.
-  return optimize(optimize(Buffer.from(input))).toString()
 }
 
 function watchDirectories(scanner: Scanner) {
