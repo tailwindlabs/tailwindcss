@@ -45,7 +45,9 @@ describe('without replacer', () => {
       ['var(--my-shadow)', '1px 1px var(--my-color)', '0 0 1px var(--my-color)'].join(', '),
       replacer,
     )
-    expect(parsed).toMatchInlineSnapshot(`"var(--my-shadow), 1px 1px var(--tw-shadow-color, var(--my-color)), 0 0 1px var(--tw-shadow-color, var(--my-color))"`)
+    expect(parsed).toMatchInlineSnapshot(
+      `"var(--my-shadow), 1px 1px var(--tw-shadow-color, var(--my-color)), 0 0 1px var(--tw-shadow-color, var(--my-color))"`,
+    )
   })
 })
 
@@ -54,12 +56,16 @@ describe('with replacer', () => {
 
   it('should handle var color with intensity', () => {
     let parsed = replaceShadowColors('1px 1px var(--my-color)', replacer)
-    expect(parsed).toMatchInlineSnapshot(`"1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`)
+    expect(parsed).toMatchInlineSnapshot(
+      `"1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`,
+    )
   })
 
   it('should handle box-shadow with intensity', () => {
     let parsed = replaceShadowColors('1px 1px var(--my-color)', replacer)
-    expect(parsed).toMatchInlineSnapshot(`"1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`)
+    expect(parsed).toMatchInlineSnapshot(
+      `"1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`,
+    )
   })
 
   it('should handle four values with intensity and no color value', () => {
@@ -74,6 +80,8 @@ describe('with replacer', () => {
       ['var(--my-shadow)', '1px 1px var(--my-color)', '0 0 1px var(--my-color)'].join(', '),
       replacer,
     )
-    expect(parsed).toMatchInlineSnapshot(`"var(--my-shadow), 1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%)), 0 0 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`)
+    expect(parsed).toMatchInlineSnapshot(
+      `"var(--my-shadow), 1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%)), 0 0 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`,
+    )
   })
 })
