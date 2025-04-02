@@ -22906,7 +22906,7 @@ test('text-shadow', async () => {
   ).toEqual('')
 })
 
-test('shadow', async () => {
+test.only('shadow', async () => {
   expect(
     await compileCss(
       css`
@@ -22997,8 +22997,14 @@ test('shadow', async () => {
 
     .shadow-\\[10px_10px\\]\\/25 {
       --tw-shadow-alpha: 25%;
-      --tw-shadow: 10px 10px var(--tw-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
+      --tw-shadow: 10px 10px var(--tw-shadow-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[10px_10px\\]\\/25 {
+        --tw-shadow: 10px 10px var(--tw-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
+      }
     }
 
     .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
@@ -23049,35 +23055,137 @@ test('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\] {
-      --tw-shadow-color: color-mix(in oklab, #08c var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: #08c;
     }
 
-    .shadow-\\[\\#0088cc\\]\\/50, .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\], .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-shadow-alpha), transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[\\#0088cc\\] {
+        --tw-shadow-color: color-mix(in oklab, #08c var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[\\#0088cc\\]\\/50 {
+      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[\\#0088cc\\]\\/50 {
+        --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
+      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
+        --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+        --tw-shadow-color: color-mix(in oklab, oklab(59.9824% -.067 -.124 / .5) var(--tw-shadow-alpha), transparent);
+      }
     }
 
     .shadow-\\[color\\:var\\(--value\\)\\] {
-      --tw-shadow-color: color-mix(in oklab, var(--value) var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: var(--value);
     }
 
-    .shadow-\\[color\\:var\\(--value\\)\\]\\/50, .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\], .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[color\\:var\\(--value\\)\\] {
+        --tw-shadow-color: color-mix(in oklab, var(--value) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
+      --tw-shadow-color: var(--value);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      --tw-shadow-color: var(--value);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      --tw-shadow-color: var(--value);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
     }
 
     .shadow-current {
-      --tw-shadow-color: color-mix(in oklab, currentcolor var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: currentcolor;
     }
 
-    .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-current {
+        --tw-shadow-color: color-mix(in oklab, currentcolor var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-current\\/50 {
+      --tw-shadow-color: currentcolor;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-current\\/50 {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-current\\/\\[0\\.5\\] {
+      --tw-shadow-color: currentcolor;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-current\\/\\[0\\.5\\] {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
+    .shadow-current\\/\\[50\\%\\] {
+      --tw-shadow-color: currentcolor;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-current\\/\\[50\\%\\] {
+        --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
+      }
     }
 
     .shadow-inherit {
-      --tw-shadow-color: color-mix(in oklab, inherit var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: inherit;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-inherit {
+        --tw-shadow-color: color-mix(in oklab, inherit var(--tw-shadow-alpha), transparent);
+      }
     }
 
     .shadow-red-500 {
-      --tw-shadow-color: color-mix(in srgb, #ef4444 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: #ef4444;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23087,7 +23195,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.5 {
-      --tw-shadow-color: color-mix(in srgb, #ef444406 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .025);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23097,7 +23205,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.25 {
-      --tw-shadow-color: color-mix(in srgb, #ef444406 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .0225);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23107,7 +23215,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.75 {
-      --tw-shadow-color: color-mix(in srgb, #ef444407 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .0275);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23117,7 +23225,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/50 {
-      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23127,7 +23235,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[0\\.5\\] {
-      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23137,7 +23245,7 @@ test('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: color-mix(in srgb, #ef444480 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23147,7 +23255,13 @@ test('shadow', async () => {
     }
 
     .shadow-transparent {
-      --tw-shadow-color: color-mix(in oklab, transparent var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: transparent;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-transparent {
+        --tw-shadow-color: color-mix(in oklab, transparent var(--tw-shadow-alpha), transparent);
+      }
     }
 
     @property --tw-shadow {

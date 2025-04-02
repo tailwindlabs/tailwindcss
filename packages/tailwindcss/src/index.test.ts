@@ -247,6 +247,12 @@ describe('arbitrary properties', () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
         color: oklab(62.7955% .224 .125 / .5);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .\\[color\\:red\\]\\/50 {
+          color: oklab(62.7955% .224 .125 / .5);
+        }
       }"
     `)
   })
@@ -258,7 +264,13 @@ describe('arbitrary properties', () => {
   it('should generate arbitrary properties with variables and with modifiers', async () => {
     expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
-        color: color-mix(in oklab, var(--my-color) 50%, transparent);
+        color: var(--my-color);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .\\[color\\:var\\(--my-color\\)\\]\\/50 {
+          color: color-mix(in oklab, var(--my-color) 50%, transparent);
+        }
       }"
     `)
   })
@@ -4815,7 +4827,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.5764% 89.7903 33.1932 / .25098);
+        color: lch(55.4814% 89.568 33.053 / .25);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4906,7 +4918,13 @@ describe('`color-mix(…)` polyfill', () => {
       ),
     ).resolves.toMatchInlineSnapshot(`
       ".text-current\\/50 {
-        color: color-mix(in oklab, currentcolor 50%, transparent);
+        color: currentColor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-current\\/50 {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
       }"
     `)
   })
