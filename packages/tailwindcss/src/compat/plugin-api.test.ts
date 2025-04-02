@@ -3856,11 +3856,11 @@ describe('matchUtilities()', () => {
       }
 
       .scrollbar-current {
-        scrollbar-color: currentColor;
+        scrollbar-color: currentcolor;
       }
 
       .scrollbar-current\\/45 {
-        scrollbar-color: color-mix(in oklab, currentColor 45%, transparent);
+        scrollbar-color: color-mix(in oklab, currentcolor 45%, transparent);
       }"
     `)
   })

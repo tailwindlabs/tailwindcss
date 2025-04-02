@@ -97,7 +97,7 @@ it('should migrate a stylesheet', async () => {
     "@import 'tailwindcss';
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -110,7 +110,7 @@ it('should migrate a stylesheet', async () => {
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }
 
@@ -168,7 +168,7 @@ it('should migrate a stylesheet (with imports)', async () => {
     @import './my-utilities.css' layer(utilities);
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -181,7 +181,7 @@ it('should migrate a stylesheet (with imports)', async () => {
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }"
   `)
@@ -210,7 +210,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
     @import 'tailwindcss';
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -223,7 +223,7 @@ it('should migrate a stylesheet (with preceding rules that should be wrapped in 
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }
 

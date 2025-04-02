@@ -33,7 +33,7 @@ it("should add compatibility CSS after the `@import 'tailwindcss'`", async () =>
     "@import 'tailwindcss';
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -46,7 +46,7 @@ it("should add compatibility CSS after the `@import 'tailwindcss'`", async () =>
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }"
   `)
@@ -65,7 +65,7 @@ it('should add the compatibility CSS after the last `@import`', async () => {
     @import './bar.css';
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -78,7 +78,7 @@ it('should add the compatibility CSS after the last `@import`', async () => {
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }"
   `)
@@ -111,7 +111,7 @@ it('should add the compatibility CSS after the last import, even if a body-less 
     @import './bar.css';
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -124,7 +124,7 @@ it('should add the compatibility CSS after the last import, even if a body-less 
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }"
   `)
@@ -157,7 +157,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     }
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -170,7 +170,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }
 
@@ -215,7 +215,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
     }
 
     /*
-      The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+      The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still
       looks the same as it did with Tailwind CSS v3.
 
@@ -228,7 +228,7 @@ it('should add the compatibility CSS before the first `@layer base` (if the "tai
       ::before,
       ::backdrop,
       ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
       }
     }
 

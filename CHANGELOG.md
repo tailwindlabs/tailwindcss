@@ -3522,7 +3522,7 @@ No release notes
 
 - Lists now have no margins by default
 - `.pin` no longer sets width and height to 100%
-- SVG `fill` no longer defaults to currentColor
+- SVG `fill` no longer defaults to currentcolor
 
 ## [0.2.2] - 2017-11-19
 
