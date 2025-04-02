@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Disable padding in `@source inline(…)` brace expansion ([#17491](https://github.com/tailwindlabs/tailwindcss/pull/17491))
 - Inject polyfills after `@import` and body-less `@layer` ([#17493](https://github.com/tailwindlabs/tailwindcss/pull/17493))
+- Ensure `@tailwindcss/cli` does not contain an import for `jiti` ([#17502](https://github.com/tailwindlabs/tailwindcss/pull/17502))
 
 ## [4.1.0] - 2025-04-01
 
