@@ -145,8 +145,8 @@ test('inset', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;
@@ -3641,8 +3641,8 @@ test('border-spacing', async () => {
       ['border-spacing-1', 'border-spacing-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
           --tw-border-spacing-y: 0;
@@ -3701,8 +3701,8 @@ test('border-spacing-x', async () => {
       ['border-spacing-x-1', 'border-spacing-x-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
           --tw-border-spacing-y: 0;
@@ -3759,8 +3759,8 @@ test('border-spacing-y', async () => {
       ['border-spacing-y-1', 'border-spacing-y-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
           --tw-border-spacing-y: 0;
@@ -3973,8 +3973,8 @@ test('translate', async () => {
       '-translate-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4056,8 +4056,8 @@ test('translate-x', async () => {
       '-translate-x-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4129,8 +4129,8 @@ test('translate-x', async () => {
       ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4200,8 +4200,8 @@ test('translate-y', async () => {
       '-translate-y-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4273,8 +4273,8 @@ test('translate-y', async () => {
       ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4338,8 +4338,8 @@ test('translate-y', async () => {
 test('translate-z', async () => {
   expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
     .toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-translate-x: 0;
             --tw-translate-y: 0;
@@ -4399,8 +4399,8 @@ test('translate-z', async () => {
 
 test('translate-3d', async () => {
   expect(await run(['translate-3d'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -4469,8 +4469,8 @@ test('rotate', async () => {
 
 test('rotate-x', async () => {
   expect(await run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: rotateX(0);
           --tw-rotate-y: rotateY(0);
@@ -4542,8 +4542,8 @@ test('rotate-x', async () => {
 test('rotate-y', async () => {
   expect(await run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]', '-rotate-y-[123deg]']))
     .toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-rotate-x: rotateX(0);
             --tw-rotate-y: rotateY(0);
@@ -4620,8 +4620,8 @@ test('rotate-y', async () => {
 test('rotate-z', async () => {
   expect(await run(['rotate-z-45', '-rotate-z-45', 'rotate-z-[123deg]', '-rotate-z-[123deg]']))
     .toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-rotate-x: rotateX(0);
             --tw-rotate-y: rotateY(0);
@@ -4697,8 +4697,8 @@ test('rotate-z', async () => {
 
 test('skew', async () => {
   expect(await run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: rotateX(0);
           --tw-rotate-y: rotateY(0);
@@ -4771,8 +4771,8 @@ test('skew', async () => {
 
 test('skew-x', async () => {
   expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: rotateX(0);
           --tw-rotate-y: rotateY(0);
@@ -4842,8 +4842,8 @@ test('skew-x', async () => {
 
 test('skew-y', async () => {
   expect(await run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: rotateX(0);
           --tw-rotate-y: rotateY(0);
@@ -4914,8 +4914,8 @@ test('skew-y', async () => {
 test('scale', async () => {
   expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
     .toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-scale-x: 1;
             --tw-scale-y: 1;
@@ -4980,8 +4980,8 @@ test('scale', async () => {
 
 test('scale-3d', async () => {
   expect(await run(['scale-3d'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
@@ -5017,8 +5017,8 @@ test('scale-3d', async () => {
 
 test('scale-x', async () => {
   expect(await run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
@@ -5061,8 +5061,8 @@ test('scale-x', async () => {
     }"
   `)
   expect(await run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
@@ -5118,8 +5118,8 @@ test('scale-x', async () => {
 
 test('scale-y', async () => {
   expect(await run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
@@ -5176,8 +5176,8 @@ test('scale-y', async () => {
 
 test('scale-z', async () => {
   expect(await run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
@@ -5241,8 +5241,8 @@ test('transform', async () => {
       'transform-[scaleZ(2)_rotateY(45deg)]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: rotateX(0);
           --tw-rotate-y: rotateY(0);
@@ -5751,8 +5751,8 @@ test('touch-pan', async () => {
       'touch-pan-down',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-pan-x: initial;
           --tw-pan-y: initial;
@@ -5826,8 +5826,8 @@ test('touch-pan', async () => {
 
 test('touch-pinch-zoom', async () => {
   expect(await run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-pan-x: initial;
           --tw-pan-y: initial;
@@ -5930,8 +5930,8 @@ test('resize', async () => {
 
 test('scroll-snap-type', async () => {
   expect(await run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scroll-snap-strictness: proximity;
         }
@@ -5976,8 +5976,8 @@ test('scroll-snap-type', async () => {
 
 test('--tw-scroll-snap-strictness', async () => {
   expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scroll-snap-strictness: proximity;
         }
@@ -7940,8 +7940,8 @@ test('space-x', async () => {
       ['space-x-4', 'space-x-[4px]', '-space-x-4'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-x-reverse: 0;
         }
@@ -7991,8 +7991,8 @@ test('space-y', async () => {
       ['space-y-4', 'space-y-[4px]', '-space-y-4'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-y-reverse: 0;
         }
@@ -8032,8 +8032,8 @@ test('space-y', async () => {
 
 test('space-x-reverse', async () => {
   expect(await run(['space-x-reverse'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-x-reverse: 0;
         }
@@ -8055,8 +8055,8 @@ test('space-x-reverse', async () => {
 
 test('space-y-reverse', async () => {
   expect(await run(['space-y-reverse'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-y-reverse: 0;
         }
@@ -8085,8 +8085,8 @@ test('divide-x', async () => {
       ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-x-reverse: 0;
           --tw-border-style: solid;
@@ -8161,8 +8161,8 @@ test('divide-x with custom default border width', async () => {
       ['divide-x'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-x-reverse: 0;
           --tw-border-style: solid;
@@ -8201,8 +8201,8 @@ test('divide-y', async () => {
       ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-y-reverse: 0;
           --tw-border-style: solid;
@@ -8281,8 +8281,8 @@ test('divide-y with custom default border width', async () => {
       ['divide-y'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-y-reverse: 0;
           --tw-border-style: solid;
@@ -8315,8 +8315,8 @@ test('divide-y with custom default border width', async () => {
 
 test('divide-x-reverse', async () => {
   expect(await run(['divide-x-reverse'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-x-reverse: 0;
         }
@@ -8338,8 +8338,8 @@ test('divide-x-reverse', async () => {
 
 test('divide-y-reverse', async () => {
   expect(await run(['divide-y-reverse'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-divide-y-reverse: 0;
         }
@@ -10589,8 +10589,8 @@ test('border with custom default border width', async () => {
       ['border'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-style: solid;
         }
@@ -11682,8 +11682,8 @@ test('from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
@@ -11945,8 +11945,8 @@ test('via', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
@@ -12220,8 +12220,8 @@ test('to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
           --tw-gradient-from: #0000;
@@ -12921,8 +12921,8 @@ test('mask-t-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -13182,8 +13182,8 @@ test('mask-t-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -13444,8 +13444,8 @@ test('mask-r-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -13706,8 +13706,8 @@ test('mask-r-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -13968,8 +13968,8 @@ test('mask-b-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -14230,8 +14230,8 @@ test('mask-b-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -14492,8 +14492,8 @@ test('mask-l-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -14754,8 +14754,8 @@ test('mask-l-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -15016,8 +15016,8 @@ test('mask-x-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -15324,8 +15324,8 @@ test('mask-x-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -15632,8 +15632,8 @@ test('mask-y-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -15940,8 +15940,8 @@ test('mask-y-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -16233,8 +16233,8 @@ test('mask-linear', async () => {
       ['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -16372,8 +16372,8 @@ test('mask-linear-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -16613,8 +16613,8 @@ test('mask-linear-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -16847,8 +16847,8 @@ test('mask-radial', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -17102,8 +17102,8 @@ test('mask-radial-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -17357,8 +17357,8 @@ test('mask-radial-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -17597,8 +17597,8 @@ test('mask-conic', async () => {
       ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -17736,8 +17736,8 @@ test('mask-conic-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -17977,8 +17977,8 @@ test('mask-conic-to', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
           --tw-mask-radial: linear-gradient(#fff, #fff);
@@ -19705,8 +19705,8 @@ test('font', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-font-weight: initial;
         }
@@ -20405,8 +20405,8 @@ test('filter', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-blur: initial;
           --tw-brightness: initial;
@@ -20803,8 +20803,8 @@ test('backdrop-filter', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-backdrop-blur: initial;
           --tw-backdrop-brightness: initial;
@@ -21328,8 +21328,8 @@ test('delay', async () => {
 
 test('duration', async () => {
   expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-duration: initial;
         }
@@ -21382,8 +21382,8 @@ test('ease', async () => {
       ['ease-in', 'ease-out', 'ease-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-ease: initial;
         }
@@ -21488,8 +21488,8 @@ test('contain', async () => {
       'contain-[unset]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-contain-size: initial;
           --tw-contain-layout: initial;
@@ -21577,8 +21577,8 @@ test('contain', async () => {
 
 test('content', async () => {
   expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
         }
@@ -21638,8 +21638,8 @@ test('leading', async () => {
       ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-leading: initial;
         }
@@ -21697,8 +21697,8 @@ test('tracking', async () => {
       ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-tracking: initial;
         }
@@ -21782,8 +21782,8 @@ test('font-variant-numeric', async () => {
       'stacked-fractions',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-ordinal: initial;
           --tw-slashed-zero: initial;
@@ -21946,8 +21946,8 @@ test('outline', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-outline-style: solid;
         }
@@ -22132,8 +22132,8 @@ test('outline', async () => {
       ['outline'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-outline-style: solid;
         }
@@ -22693,8 +22693,8 @@ test('text-shadow', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-text-shadow-color: initial;
           --tw-text-shadow-alpha: 100%;
@@ -22948,8 +22948,8 @@ test('shadow', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;
@@ -23294,8 +23294,8 @@ test('inset-shadow', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;
@@ -23637,8 +23637,8 @@ test('ring', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;
@@ -23895,8 +23895,8 @@ test('ring', async () => {
       ['ring'],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;
@@ -24086,8 +24086,8 @@ test('inset-ring', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-      @layer base {
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-color: initial;

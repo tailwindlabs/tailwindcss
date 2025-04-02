@@ -309,8 +309,8 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-translate-x: 0;
             --tw-translate-y: 0;
@@ -426,8 +426,8 @@ describe('@apply', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -665,8 +665,8 @@ describe('variant stacking', () => {
 
   it('pseudo element variants are re-ordered', async () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -833,8 +833,8 @@ describe('sorting', () => {
         ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-space-x-reverse: 0;
           }
@@ -1470,8 +1470,8 @@ describe('Parsing theme values from CSS', () => {
         ['font-bold', 'font-sans', 'font-serif', 'font-body'],
       ),
     ).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-font-weight: initial;
           }
@@ -1517,8 +1517,8 @@ describe('Parsing theme values from CSS', () => {
         ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
       ),
     ).toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -4971,8 +4971,8 @@ describe('`@property` polyfill', async () => {
         [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      "@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        @layer base {
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           :root, :host {
             --inherit-no-value: initial;
             --inherit-value: red;
