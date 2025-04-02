@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don't rely on `@layer base` for the `@property` polyfills ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
+
+## [4.1.1] - 2025-04-02
+
+### Fixed
+
+- Disable padding in `@source inline(…)` brace expansion ([#17491](https://github.com/tailwindlabs/tailwindcss/pull/17491))
+- Inject polyfills after `@import` and body-less `@layer` ([#17493](https://github.com/tailwindlabs/tailwindcss/pull/17493))
+- Ensure `@tailwindcss/cli` does not contain an import for `jiti` ([#17502](https://github.com/tailwindlabs/tailwindcss/pull/17502))
 
 ## [4.1.0] - 2025-04-01
 
@@ -3611,7 +3621,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.17...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.1...HEAD
+[4.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.17...v4.1.0
 [4.0.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.16...v4.0.17
 [4.0.16]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.15...v4.0.16
 [4.0.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.14...v4.0.15
