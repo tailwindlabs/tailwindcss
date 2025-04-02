@@ -20,7 +20,7 @@ const DEBUG = env.DEBUG
 
 interface CacheEntry {
   mtimes: Map<string, number>
-  compiler: null | Awaited<ReturnType<typeof compileAst>>
+  compiler: null | ReturnType<typeof compileAst>
   scanner: null | Scanner
   tailwindCssAst: AstNode[]
   cachedPostCssAst: postcss.Root
@@ -138,9 +138,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
-          context.compiler ??= await createCompiler()
+          context.compiler ??= createCompiler()
 
-          if (context.compiler.features === Features.None) {
+          if ((await context.compiler).features === Features.None) {
             return
           }
 
@@ -188,25 +188,26 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             // initial build. If it wasn't, we need to create a new one.
             !isInitialBuild
           ) {
-            context.compiler = await createCompiler()
+            context.compiler = createCompiler()
           }
 
           if (context.scanner === null || rebuildStrategy === 'full') {
             DEBUG && I.start('Setup scanner')
+            let compiler = await context.compiler
             let sources = (() => {
               // Disable auto source detection
-              if (context.compiler.root === 'none') {
+              if (compiler.root === 'none') {
                 return []
               }
 
               // No root specified, use the base directory
-              if (context.compiler.root === null) {
+              if (compiler.root === null) {
                 return [{ base, pattern: '**/*', negated: false }]
               }
 
               // Use the specified root
-              return [{ ...context.compiler.root, negated: false }]
-            })().concat(context.compiler.sources)
+              return [{ ...compiler.root, negated: false }]
+            })().concat(compiler.sources)
 
             // Look for candidates used to generate the CSS
             context.scanner = new Scanner({ sources })
@@ -215,10 +216,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
           DEBUG && I.start('Scan for candidates')
           let candidates =
-            context.compiler.features & Features.Utilities ? context.scanner.scan() : []
+            (await context.compiler).features & Features.Utilities ? context.scanner.scan() : []
           DEBUG && I.end('Scan for candidates')
 
-          if (context.compiler.features & Features.Utilities) {
+          if ((await context.compiler).features & Features.Utilities) {
             DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
@@ -267,7 +268,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           DEBUG && I.start('Build utilities')
-          let tailwindCssAst = context.compiler.build(candidates)
+          let tailwindCssAst = (await context.compiler).build(candidates)
           DEBUG && I.end('Build utilities')
 
           if (context.tailwindCssAst !== tailwindCssAst) {
