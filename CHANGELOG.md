@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don't rely on `@layer base` for the `@property` polyfills ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
 
 ## [4.1.1] - 2025-04-02
 
