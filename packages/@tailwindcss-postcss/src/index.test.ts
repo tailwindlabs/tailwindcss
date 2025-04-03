@@ -378,7 +378,7 @@ describe('concurrent builds', () => {
   })
   afterEach(() => rm(dir, { recursive: true, force: true }))
 
-  test('the current working directory is used by default', async () => {
+  test('does experience a race-condition when calling the plugin two times for the same change', async () => {
     const spy = vi.spyOn(process, 'cwd')
     spy.mockReturnValue(dir)
 
@@ -401,6 +401,8 @@ describe('concurrent builds', () => {
 
     expect(result).toContain('.underline')
 
+    // Ensure that the mtime is updated
+    await new Promise((resolve) => setTimeout(resolve, 100))
     await writeFile(
       path.join(dir, 'dependency.css'),
       css`
