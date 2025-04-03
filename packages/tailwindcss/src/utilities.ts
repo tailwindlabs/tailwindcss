@@ -6183,11 +6183,12 @@ function alphaReplacedShadowProperties(
     return varInjector(replaceAlpha(color, alpha))
   })
 
-  const applyPrefix = prefix
-    ? (x: string) => segment(x, ',')
-      .map((value) => `${prefix} ${value}`)
+  function applyPrefix(x: string) {
+    if (!prefix) return x
+    return segment(x, ',')
+      .map((value) => prefix + value)
       .join(',')
-    : (x: string) => x;
+  }
 
   if (requiresFallback) {
     return [
