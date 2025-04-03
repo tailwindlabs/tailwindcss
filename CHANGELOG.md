@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix `drop-shadow-*` utilities that use multiple shadows in `@theme inline` ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
 - PostCSS: Fix race condition when two changes are queued concurrently ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
 - PostCSS: Ensure we process files containing an `@tailwind utilities;` directive ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
+- Ensure the `color-mix(…)` polyfill creates fallbacks even when using colors that can not be statically analyzed ([#17513](https://github.com/tailwindlabs/tailwindcss/pull/17513))
 - Fix slow incremental builds with `@tailwindcss/vite` and `@tailwindcss/postscss` (especially on Windows) ([#17511](https://github.com/tailwindlabs/tailwindcss/pull/17511))
 
 ## [4.1.1] - 2025-04-02

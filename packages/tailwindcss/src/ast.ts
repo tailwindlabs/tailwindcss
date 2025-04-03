@@ -328,37 +328,59 @@ export function optimizeAst(
       if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
         let ast = ValueParser.parse(node.value)
 
-        let didGenerateFallback = false
-        ValueParser.walk(ast, (node) => {
+        let requiresPolyfill = false
+        ValueParser.walk(ast, (node, { replaceWith }) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
+          let containsUnresolvableVars = false
+          let containsCurrentcolor = false
           ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+            if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
+              containsCurrentcolor = true
+              requiresPolyfill = true
+              return
+            }
             if (node.kind !== 'function' || node.value !== 'var') return
             let firstChild = node.nodes[0]
             if (!firstChild || firstChild.kind !== 'word') return
 
-            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
-            if (!inlinedColor) return
+            requiresPolyfill = true
 
-            didGenerateFallback = true
+            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+            if (!inlinedColor) {
+              containsUnresolvableVars = true
+              return
+            }
+
             replaceWith({ kind: 'word', value: inlinedColor })
           })
 
-          // Change the colorspace to `srgb` since the fallback values should not be represented as
-          // `oklab(…)` functions again as their support in Safari <16 is very limited.
-          let colorspace = node.nodes[2]
-          if (
-            colorspace.kind === 'word' &&
-            (colorspace.value === 'oklab' ||
-              colorspace.value === 'oklch' ||
-              colorspace.value === 'lab' ||
-              colorspace.value === 'lch')
-          ) {
-            colorspace.value = 'srgb'
+          if (containsUnresolvableVars || containsCurrentcolor) {
+            let separatorIndex = node.nodes.findIndex(
+              (node) => node.kind === 'separator' && node.value.trim().includes(','),
+            )
+            if (separatorIndex === -1) return
+            let firstColorValue =
+              node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
+            if (!firstColorValue) return
+            replaceWith(firstColorValue)
+          } else if (requiresPolyfill) {
+            // Change the colorspace to `srgb` since the fallback values should not be represented as
+            // `oklab(…)` functions again as their support in Safari <16 is very limited.
+            let colorspace = node.nodes[2]
+            if (
+              colorspace.kind === 'word' &&
+              (colorspace.value === 'oklab' ||
+                colorspace.value === 'oklch' ||
+                colorspace.value === 'lab' ||
+                colorspace.value === 'lch')
+            ) {
+              colorspace.value = 'srgb'
+            }
           }
         })
 
-        if (didGenerateFallback) {
+        if (requiresPolyfill) {
           let fallback = {
             ...node,
             value: ValueParser.toCss(ast),
@@ -366,6 +388,7 @@ export function optimizeAst(
           let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
 
           parent.push(fallback, colorMixQuery)
+
           return
         }
       }

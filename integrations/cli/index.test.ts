@@ -1711,7 +1711,10 @@ test(
         }
         @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
           ::placeholder {
-            color: color-mix(in oklab, currentcolor 50%, transparent);
+            color: currentcolor;
+            @supports (color: color-mix(in lab, red, red)) {
+              color: color-mix(in oklab, currentcolor 50%, transparent);
+            }
           }
         }
         textarea {
