@@ -589,6 +589,8 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
 async function gracefullyRemove(dir: string) {
   // Skip removing the directory in CI because it can stall on Windows
   if (!process.env.CI) {
-    await fs.rm(dir, { recursive: true, force: true })
+    await fs.rm(dir, { recursive: true, force: true }).catch((error) => {
+      console.log(`Failed to remove ${dir}`, error)
+    })
   }
 }

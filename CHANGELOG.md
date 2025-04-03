@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix multi-value inset shadow ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
 - Fix `drop-shadow` utility ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
 - Fix `drop-shadow-*` utilities that use multiple shadows in `@theme inline` ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
+- PostCSS: Fix race condition when two changes are queued concurrently ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
+- PostCSS: Ensure we process files containing an `@tailwind utilities;` directive ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
 
 ## [4.1.1] - 2025-04-02
 
