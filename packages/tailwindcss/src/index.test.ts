@@ -4950,6 +4950,27 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('uses the first color value as the fallback when the `color-mix(…)` function contains currentcolor', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+        `,
+        ['text-current/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".text-current\\/50 {
+        color: currentColor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-current\\/50 {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }"
+    `)
+  })
+
   it('uses the first color value of the inner most `color-mix(…)` function as the fallback when nested `color-mix(…)` function all contain non-theme variables', async () => {
     await expect(
       compileCss(
