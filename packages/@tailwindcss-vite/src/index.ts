@@ -184,7 +184,15 @@ class Root {
     _addWatchFile: (file: string) => void,
     I: Instrumentation,
   ): Promise<string | false> {
+    let inputPath = idToPath(this.id)
+
     function addWatchFile(file: string) {
+      // Don't watch the input file since it's already a dependency anc causes
+      // issues with some setups (e.g. Qwik).
+      if (file === inputPath) {
+        return
+      }
+
       // Scanning `.svg` file containing a `#` or `?` in the path will
       // crash Vite. We work around this for now by ignoring updates to them.
       //
@@ -196,7 +204,6 @@ class Root {
     }
 
     let requiresBuildPromise = this.requiresBuild()
-    let inputPath = idToPath(this.id)
     let inputBase = path.dirname(path.resolve(inputPath))
 
     if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
