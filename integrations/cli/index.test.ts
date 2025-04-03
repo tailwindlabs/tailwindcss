@@ -1711,9 +1711,9 @@ test(
         }
         @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
           ::placeholder {
-            color: currentColor;
+            color: currentcolor;
             @supports (color: color-mix(in lab, red, red)) {
-              color: color-mix(in oklab, currentColor 50%, transparent);
+              color: color-mix(in oklab, currentcolor 50%, transparent);
             }
           }
         }
