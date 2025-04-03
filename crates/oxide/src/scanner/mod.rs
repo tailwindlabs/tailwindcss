@@ -307,7 +307,7 @@ impl Scanner {
             match source {
                 SourceEntry::Auto { base } | SourceEntry::External { base } => {
                     globs.extend(resolve_globs(
-                        (base).to_path_buf(),
+                        base.to_path_buf(),
                         &self.dirs,
                         &self.extensions,
                     ));
