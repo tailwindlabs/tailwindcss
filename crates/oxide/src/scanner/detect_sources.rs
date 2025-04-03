@@ -1,3 +1,4 @@
+use crate::scanner::auto_source_detection::IGNORED_CONTENT_DIRS;
 use crate::GlobEntry;
 use fxhash::FxHashSet;
 use globwalk::DirEntry;
@@ -98,6 +99,17 @@ pub fn resolve_globs(
         }
 
         if path == base {
+            continue;
+        }
+
+        if IGNORED_CONTENT_DIRS
+            .iter()
+            .any(|dir| match path.file_name() {
+                Some(name) => name == *dir,
+                None => false,
+            })
+        {
+            it.skip_current_dir();
             continue;
         }
 

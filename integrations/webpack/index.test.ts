@@ -1,7 +1,7 @@
 import { css, html, js, json, test } from '../utils'
 
 test(
-  'Webpack + PostCSS (watch)',
+  'webpack + PostCSS (watch)',
   {
     fs: {
       'package.json': json`
