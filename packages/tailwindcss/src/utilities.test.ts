@@ -23065,7 +23065,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\]\\/50 {
-      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+      --tw-shadow-color: #0088cc80;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23075,7 +23075,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
-      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+      --tw-shadow-color: #0088cc80;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23085,7 +23085,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
-      --tw-shadow-color: oklab(59.9824% -.067 -.124 / .5);
+      --tw-shadow-color: #0088cc80;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23195,7 +23195,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.5 {
-      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .025);
+      --tw-shadow-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23205,7 +23205,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.25 {
-      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .0225);
+      --tw-shadow-color: #ef444406;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23215,7 +23215,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/2\\.75 {
-      --tw-shadow-color: oklab(63.6834% .187864 .0889286 / .0275);
+      --tw-shadow-color: #ef444407;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23225,7 +23225,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/50 {
-      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
+      --tw-shadow-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23235,7 +23235,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[0\\.5\\] {
-      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
+      --tw-shadow-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -23245,7 +23245,7 @@ test.only('shadow', async () => {
     }
 
     .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: oklab(63.6834% .187 .088 / .5);
+      --tw-shadow-color: #ef444480;
     }
 
     @supports (color: color-mix(in lab, red, red)) {

@@ -247,12 +247,6 @@ describe('arbitrary properties', () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
         color: oklab(62.7955% .224 .125 / .5);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .\\[color\\:red\\]\\/50 {
-          color: oklab(62.7955% .224 .125 / .5);
-        }
       }"
     `)
   })
@@ -4827,7 +4821,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.4814% 89.568 33.053 / .25);
+        color: lch(55.5764% 89.7903 33.1932 / .25098);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -4908,23 +4902,97 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
-  it('does not replace `currentcolor` inside `color-mix(…)`', async () => {
+  it('uses the first color value as the fallback when the `color-mix(…)` function contains non-theme variables', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-(--my-color)/50', 'text-red-500/(--my-opacity)', 'text-(--my-color)/(--my-opacity)'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
+        color: var(--my-color);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
+          color: color-mix(in oklab, var(--my-color) var(--my-opacity), transparent);
+        }
+      }
+
+      .text-\\(--my-color\\)\\/50 {
+        color: var(--my-color);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-\\(--my-color\\)\\/50 {
+          color: color-mix(in oklab, var(--my-color) 50%, transparent);
+        }
+      }
+
+      .text-red-500\\/\\(--my-opacity\\) {
+        color: oklch(63.7% .237 25.331);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/\\(--my-opacity\\) {
+          color: color-mix(in oklab, var(--color-red-500) var(--my-opacity), transparent);
+        }
+      }"
+    `)
+  })
+
+  it('uses the first color value of the inner most `color-mix(…)` function as the fallback when nested `color-mix(…)` function all contain non-theme variables', async () => {
     await expect(
       compileCss(
         css`
           @tailwind utilities;
+          .stacked {
+            color: color-mix(
+              in oklab,
+              color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent)
+                var(--my-outer-opacity),
+              transparent
+            );
+          }
         `,
-        ['text-current/50'],
+        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      ".text-current\\/50 {
-        color: currentColor;
+      ".stacked {
+        color: var(--my-color);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
-        .text-current\\/50 {
-          color: color-mix(in oklab, currentcolor 50%, transparent);
+        .stacked {
+          color: color-mix(in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent);
         }
+      }"
+    `)
+  })
+
+  it('does not create a fallback when all color values are statically analyzable (lightningcss will flatten this)', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme inline {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-red-500/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".text-red-500\\/50 {
+        color: oklab(63.7% .214 .101 / .5);
       }"
     `)
   })

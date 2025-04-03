@@ -328,6 +328,7 @@ export function optimizeAst(
       if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
         let ast = ValueParser.parse(node.value)
 
+        let requiresPolyfill = false
         ValueParser.walk(ast, (node, { replaceWith }) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
@@ -337,11 +338,14 @@ export function optimizeAst(
           ValueParser.walk(node.nodes, (node, { replaceWith }) => {
             if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
               containsCurrentcolor = true
+              requiresPolyfill = true
               return
             }
             if (node.kind !== 'function' || node.value !== 'var') return
             let firstChild = node.nodes[0]
             if (!firstChild || firstChild.kind !== 'word') return
+
+            requiresPolyfill = true
 
             let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
             if (!inlinedColor) {
@@ -350,7 +354,6 @@ export function optimizeAst(
             }
 
             replaceWith({ kind: 'word', value: inlinedColor })
-            didInlineVars = true
           })
 
           if (containsUnresolvableVars || containsCurrentcolor) {
@@ -362,7 +365,7 @@ export function optimizeAst(
               node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
             if (!firstColorValue) return
             replaceWith(firstColorValue)
-          } else if (didInlineVars) {
+          } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
             let colorspace = node.nodes[2]
@@ -378,14 +381,17 @@ export function optimizeAst(
           }
         })
 
-        let fallback = {
-          ...node,
-          value: ValueParser.toCss(ast),
-        }
-        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
+        if (requiresPolyfill) {
+          let fallback = {
+            ...node,
+            value: ValueParser.toCss(ast),
+          }
+          let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
 
-        parent.push(fallback, colorMixQuery)
-        return
+          parent.push(fallback, colorMixQuery)
+
+          return
+        }
       }
 
       parent.push(node)
