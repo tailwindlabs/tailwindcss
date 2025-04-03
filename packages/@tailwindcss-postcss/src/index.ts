@@ -192,9 +192,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             context.compiler = createCompiler()
           }
 
+          let compiler = await context.compiler
+
           if (context.scanner === null || rebuildStrategy === 'full') {
             DEBUG && I.start('Setup scanner')
-            let compiler = await context.compiler
             let sources = (() => {
               // Disable auto source detection
               if (compiler.root === 'none') {
@@ -216,11 +217,10 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           DEBUG && I.start('Scan for candidates')
-          let candidates =
-            (await context.compiler).features & Features.Utilities ? context.scanner.scan() : []
+          let candidates = compiler.features & Features.Utilities ? context.scanner.scan() : []
           DEBUG && I.end('Scan for candidates')
 
-          if ((await context.compiler).features & Features.Utilities) {
+          if (compiler.features & Features.Utilities) {
             DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
             for (let file of context.scanner.files) {
@@ -269,7 +269,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           DEBUG && I.start('Build utilities')
-          let tailwindCssAst = (await context.compiler).build(candidates)
+          let tailwindCssAst = compiler.build(candidates)
           DEBUG && I.end('Build utilities')
 
           if (context.tailwindCssAst !== tailwindCssAst) {
