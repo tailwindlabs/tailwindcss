@@ -6183,13 +6183,19 @@ function alphaReplacedShadowProperties(
     return varInjector(replaceAlpha(color, alpha))
   })
 
+  const applyPrefix = prefix
+    ? (x: string) => segment(x, ',')
+      .map((value) => `${prefix} ${value}`)
+      .join(',')
+    : (x: string) => x;
+
   if (requiresFallback) {
     return [
-      decl(property, prefix + replaceShadowColors(value, varInjector)),
-      rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
+      decl(property, applyPrefix(replaceShadowColors(value, varInjector))),
+      rule('@supports (color: lab(from red l a b))', [decl(property, applyPrefix(replacedValue))]),
     ]
   } else {
-    return [decl(property, prefix + replacedValue)]
+    return [decl(property, applyPrefix(replacedValue))]
   }
 }
 
