@@ -334,7 +334,6 @@ export function optimizeAst(
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
-          let didInlineVars = false
           ValueParser.walk(node.nodes, (node, { replaceWith }) => {
             if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
               containsCurrentcolor = true
