@@ -4298,7 +4298,8 @@ export function createUtilities(theme: Theme) {
 
       if (!candidate.value) {
         let value = theme.get(['--drop-shadow'])
-        if (value === null) return
+        let resolved = theme.resolve(null, ['--drop-shadow'])
+        if (value === null || resolved === null) return
 
         return [
           filterProperties(),
@@ -4309,7 +4310,12 @@ export function createUtilities(theme: Theme) {
             alpha,
             (color) => `var(--tw-drop-shadow-color, ${color})`,
           ),
-          decl('--tw-drop-shadow', `drop-shadow(${theme.resolve(null, ['--drop-shadow'])})`),
+          decl(
+            '--tw-drop-shadow',
+            segment(resolved, ',')
+              .map((value) => `drop-shadow(${value})`)
+              .join(' '),
+          ),
           decl('filter', cssFilterValue),
         ]
       }
@@ -4350,7 +4356,8 @@ export function createUtilities(theme: Theme) {
       // Shadow size
       {
         let value = theme.get([`--drop-shadow-${candidate.value.value}`])
-        if (value) {
+        let resolved = theme.resolve(candidate.value.value, ['--drop-shadow'])
+        if (value && resolved) {
           if (candidate.modifier && !alpha) return
 
           if (alpha) {
@@ -4379,7 +4386,9 @@ export function createUtilities(theme: Theme) {
             ),
             decl(
               '--tw-drop-shadow',
-              `drop-shadow(${theme.resolve(candidate.value.value, ['--drop-shadow'])})`,
+              segment(resolved, ',')
+                .map((value) => `drop-shadow(${value})`)
+                .join(' '),
             ),
             decl('filter', cssFilterValue),
           ]
