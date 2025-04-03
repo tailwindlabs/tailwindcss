@@ -13,13 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Don't rely on `@layer base` for the `@property` polyfills ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
-- Fix multi-value inset shadow ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
-- Fix `drop-shadow` utility ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
-- Fix `drop-shadow-*` utilities that use multiple shadows in `@theme inline` ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
+- Don't rely on the presence of `@layer base` to polyfill `@property` ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
+- Support setting multiple inset shadows as arbitrary values ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
+- Fix `drop-shadow-*` utilities that are defined with multiple shadows ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
 - PostCSS: Fix race condition when two changes are queued concurrently ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
-- PostCSS: Ensure we process files containing an `@tailwind utilities;` directive ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
-- Ensure the `color-mix(…)` polyfill creates fallbacks even when using colors that can not be statically analyzed ([#17513](https://github.com/tailwindlabs/tailwindcss/pull/17513))
+- PostCSS: Ensure files containing `@tailwind utilities` are processed ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
+- Ensure the `color-mix(…)` polyfill creates fallbacks even when using colors that cannot be statically analyzed ([#17513](https://github.com/tailwindlabs/tailwindcss/pull/17513))
 - Fix slow incremental builds with `@tailwindcss/vite` and `@tailwindcss/postscss` (especially on Windows) ([#17511](https://github.com/tailwindlabs/tailwindcss/pull/17511))
 
 ## [4.1.1] - 2025-04-02
