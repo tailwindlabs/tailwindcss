@@ -1,6 +1,6 @@
 export default {
   inherit: 'inherit',
-  current: 'currentColor',
+  current: 'currentcolor',
   transparent: 'transparent',
   black: '#000',
   white: '#fff',

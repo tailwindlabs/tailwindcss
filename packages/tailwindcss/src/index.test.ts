@@ -4896,7 +4896,7 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
-  it('does not replace `currentColor` inside `color-mix(…)`', async () => {
+  it('does not replace `currentcolor` inside `color-mix(…)`', async () => {
     await expect(
       compileCss(
         css`
@@ -4906,7 +4906,7 @@ describe('`color-mix(…)` polyfill', () => {
       ),
     ).resolves.toMatchInlineSnapshot(`
       ".text-current\\/50 {
-        color: color-mix(in oklab, currentColor 50%, transparent);
+        color: color-mix(in oklab, currentcolor 50%, transparent);
       }"
     `)
   })

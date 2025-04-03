@@ -112,7 +112,7 @@ exports[`border-* 1`] = `
 }
 
 .border-current\\/50 {
-  border-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-inherit {
@@ -286,7 +286,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-current\\/50 {
-  border-bottom-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-bottom-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-b-inherit {
@@ -460,7 +460,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-current\\/50 {
-  border-inline-end-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-inline-end-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-e-inherit {
@@ -634,7 +634,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-current\\/50 {
-  border-left-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-left-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-l-inherit {
@@ -808,7 +808,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-current\\/50 {
-  border-right-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-right-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-r-inherit {
@@ -982,7 +982,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-current\\/50 {
-  border-inline-start-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-inline-start-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-s-inherit {
@@ -1156,7 +1156,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-current\\/50 {
-  border-top-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-top-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-t-inherit {
@@ -1330,7 +1330,7 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-current\\/50 {
-  border-inline-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-inline-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-x-inherit {
@@ -1504,7 +1504,7 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-current\\/50 {
-  border-block-color: color-mix(in oklab, currentColor 50%, transparent);
+  border-block-color: color-mix(in oklab, currentcolor 50%, transparent);
 }
 
 .border-y-inherit {
