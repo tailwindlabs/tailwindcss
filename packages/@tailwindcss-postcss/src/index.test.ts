@@ -1,5 +1,5 @@
 import dedent from 'dedent'
-import { mkdir, mkdtemp, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'path'
 import postcss from 'postcss'
@@ -356,4 +356,65 @@ test('runs `Once` plugins in the right order', async () => {
       color: red;
     }"
   `)
+})
+
+describe('concurrent builds', () => {
+  let dir: string
+  beforeEach(async () => {
+    dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
+    await writeFile(path.join(dir, 'index.html'), `<div class="underline"></div>`)
+    await writeFile(
+      path.join(dir, 'index.css'),
+      css`
+        @import './dependency.css';
+      `,
+    )
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+      `,
+    )
+  })
+  afterEach(() => rm(dir, { recursive: true, force: true }))
+
+  test('the current working directory is used by default', async () => {
+    const spy = vi.spyOn(process, 'cwd')
+    spy.mockReturnValue(dir)
+
+    let from = path.join(dir, 'index.css')
+    let input = (await readFile(path.join(dir, 'index.css'))).toString()
+
+    let plugin = tailwindcss({ optimize: { minify: false } })
+
+    async function run(input: string): Promise<string> {
+      let ast = postcss.parse(input)
+      for (let runner of (plugin as any).plugins) {
+        if (runner.Once) {
+          await runner.Once(ast, { result: { opts: { from }, messages: [] } })
+        }
+      }
+      return ast.toString()
+    }
+
+    let result = await run(input)
+
+    expect(result).toContain('.underline')
+
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+        .red {
+          color: red;
+        }
+      `,
+    )
+
+    let promise1 = run(input)
+    let promise2 = run(input)
+
+    expect(await promise1).toContain('.red')
+    expect(await promise2).toContain('.red')
+  })
 })

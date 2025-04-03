@@ -89,7 +89,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 node.name === 'variant' ||
                 node.name === 'config' ||
                 node.name === 'plugin' ||
-                node.name === 'apply'
+                node.name === 'apply' ||
+                node.name === 'tailwind'
               ) {
                 canBail = false
                 return false
