@@ -23263,11 +23263,13 @@ test('inset-shadow', async () => {
         'inset-shadow-[10px_10px]',
         'inset-shadow-[var(--value)]',
         'inset-shadow-[shadow:var(--value)]',
+        'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]',
 
         'inset-shadow-sm/25',
         'inset-shadow-[12px_12px_#0088cc]/25',
         'inset-shadow-[12px_12px_var(--value)]/25',
         'inset-shadow-[10px_10px]/25',
+        'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]/25',
 
         // Colors
         'inset-shadow-red-500',
@@ -23319,6 +23321,18 @@ test('inset-shadow', async () => {
       --color-red-500: #ef4444;
     }
 
+    .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\]\\/25 {
+      --tw-inset-shadow-alpha: 25%;
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #08c), inset 12px 12px var(--tw-inset-shadow-color, var(--value, #08c));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    @supports (color: lab(from red l a b)) {
+      .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\]\\/25 {
+        --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(59.9824% -.067 -.124 / .25)), inset 12px 12px var(--tw-inset-shadow-color, oklab(from var(--value, #08c) l a b / 25%));
+      }
+    }
+
     .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, var(--value));
@@ -23356,6 +23370,11 @@ test('inset-shadow', async () => {
 
     .inset-shadow-\\[10px_10px\\] {
       --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\] {
+      --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #08c), inset 12px 12px var(--tw-inset-shadow-color, var(--value, #08c));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
