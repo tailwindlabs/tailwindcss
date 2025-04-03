@@ -412,8 +412,8 @@ describe('--theme(…)', () => {
         [],
         {
           loadModule: async () => ({
-            module: () => {},
             base: '/root',
+            module: () => {},
           }),
         },
       ),
@@ -771,7 +771,10 @@ describe('theme(…)', () => {
               }
             `,
             {
-              loadModule: async () => ({ module: {}, base: '/root' }),
+              loadModule: async () => ({
+                base: '/root',
+                module: {},
+              }),
             },
           )
 
@@ -1196,6 +1199,7 @@ describe('in plugins', () => {
       {
         async loadModule() {
           return {
+            base: '/root',
             module: plugin(({ addBase, addUtilities }) => {
               addBase({
                 '.my-base-rule': {
@@ -1212,7 +1216,6 @@ describe('in plugins', () => {
                 },
               })
             }),
-            base: '/root',
           }
         },
       },
@@ -1253,6 +1256,7 @@ describe('in JS config files', () => {
       `,
       {
         loadModule: async () => ({
+          base: '/root',
           module: {
             theme: {
               extend: {
@@ -1279,7 +1283,6 @@ describe('in JS config files', () => {
               }),
             ],
           },
-          base: '/root',
         }),
       },
     )

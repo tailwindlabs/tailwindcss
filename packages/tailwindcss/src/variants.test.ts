@@ -2526,7 +2526,7 @@ test('matchVariant sorts deterministically', async () => {
 
   for (let classList of classLists) {
     let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
-      loadModule(id: string) {
+      async loadModule(id: string) {
         return {
           base: '/',
           module: createPlugin(({ matchVariant }) => {

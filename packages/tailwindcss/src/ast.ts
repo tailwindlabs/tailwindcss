@@ -378,10 +378,12 @@ export function optimizeAst(
           }
         }
 
+        let fallback = decl(property, initialValue ?? 'initial')
+
         if (inherits) {
-          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+          propertyFallbacksRoot.push(fallback)
         } else {
-          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+          propertyFallbacksUniversal.push(fallback)
         }
       }
 
@@ -632,11 +634,13 @@ export function optimizeAst(
     let fallbackAst = []
 
     if (propertyFallbacksRoot.length > 0) {
-      fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
+      let wrapper = rule(':root, :host', propertyFallbacksRoot)
+      fallbackAst.push(wrapper)
     }
 
     if (propertyFallbacksUniversal.length > 0) {
-      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+      let wrapper = rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal)
+      fallbackAst.push(wrapper)
     }
 
     if (fallbackAst.length > 0) {
@@ -658,23 +662,25 @@ export function optimizeAst(
         return true
       })
 
+      let layerPropertiesStatement = atRule('@layer', 'properties', [])
+
       newAst.splice(
         firstValidNodeIndex < 0 ? newAst.length : firstValidNodeIndex,
         0,
-        atRule('@layer', 'properties', []),
+        layerPropertiesStatement,
       )
 
-      newAst.push(
-        rule('@layer properties', [
-          atRule(
-            '@supports',
-            // We can't write a supports query for `@property` directly so we have to test for
-            // features that are added around the same time in Mozilla and Safari.
-            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-            fallbackAst,
-          ),
-        ]),
-      )
+      let block = rule('@layer properties', [
+        atRule(
+          '@supports',
+          // We can't write a supports query for `@property` directly so we have to test for
+          // features that are added around the same time in Mozilla and Safari.
+          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+          fallbackAst,
+        ),
+      ])
+
+      newAst.push(block)
     }
   }
 
@@ -710,7 +716,8 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       if (node.nodes.length === 0) {
-        return `${indent}${node.name} ${node.params};\n`
+        let css = `${indent}${node.name} ${node.params};\n`
+        return css
       }
 
       css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
@@ -725,7 +732,7 @@ export function toCss(ast: AstNode[]) {
       css += `${indent}/*${node.value}*/\n`
     }
 
-    // These should've been handled already by `prepareAstForPrinting` which
+    // These should've been handled already by `optimizeAst` which
     // means we can safely ignore them here. We return an empty string
     // immediately to signal that something went wrong.
     else if (node.kind === 'context' || node.kind === 'at-root') {
@@ -743,10 +750,7 @@ export function toCss(ast: AstNode[]) {
   let css = ''
 
   for (let node of ast) {
-    let result = stringify(node)
-    if (result !== '') {
-      css += result
-    }
+    css += stringify(node, 0)
   }
 
   return css

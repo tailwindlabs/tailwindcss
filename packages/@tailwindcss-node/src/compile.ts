@@ -2,7 +2,7 @@ import EnhancedResolve from 'enhanced-resolve'
 import { createJiti, type Jiti } from 'jiti'
 import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
-import path, { dirname } from 'node:path'
+import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
@@ -125,7 +125,7 @@ export async function loadModule(
 
     let module = await importModule(pathToFileURL(resolvedPath).href)
     return {
-      base: dirname(resolvedPath),
+      base: path.dirname(resolvedPath),
       module: module.default ?? module,
     }
   }
@@ -144,7 +144,7 @@ export async function loadModule(
     onDependency(file)
   }
   return {
-    base: dirname(resolvedPath),
+    base: path.dirname(resolvedPath),
     module: module.default ?? module,
   }
 }

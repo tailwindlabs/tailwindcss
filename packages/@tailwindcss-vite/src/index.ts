@@ -68,14 +68,14 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!generated) {
+        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+        if (!result) {
           roots.delete(id)
           return src
         }
 
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
-        return { code: generated }
+        return result
       },
     },
 
@@ -93,18 +93,18 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!generated) {
+        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+        if (!result) {
           roots.delete(id)
           return src
         }
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-        generated = optimize(generated, { minify })
+        result.code = optimize(result.code, { minify })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 
-        return { code: generated }
+        return result
       },
     },
   ] satisfies Plugin[]
@@ -183,7 +183,12 @@ class Root {
     content: string,
     _addWatchFile: (file: string) => void,
     I: Instrumentation,
-  ): Promise<string | false> {
+  ): Promise<
+    | {
+        code: string
+      }
+    | false
+  > {
     let inputPath = idToPath(this.id)
 
     function addWatchFile(file: string) {
@@ -313,10 +318,12 @@ class Root {
     }
 
     DEBUG && I.start('Build CSS')
-    let result = this.compiler.build([...this.candidates])
+    let code = this.compiler.build([...this.candidates])
     DEBUG && I.end('Build CSS')
 
-    return result
+    return {
+      code,
+    }
   }
 
   private async addBuildDependency(path: string) {

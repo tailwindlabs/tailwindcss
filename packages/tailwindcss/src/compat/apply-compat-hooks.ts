@@ -30,7 +30,10 @@ export async function applyCompatibilityHooks({
     path: string,
     base: string,
     resourceHint: 'plugin' | 'config',
-  ) => Promise<{ module: any; base: string }>
+  ) => Promise<{
+    base: string
+    module: any
+  }>
   sources: { base: string; pattern: string; negated: boolean }[]
 }) {
   let features = Features.None
