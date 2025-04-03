@@ -602,7 +602,13 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: color-mix(in oklab, red var(--opacity), transparent);
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
+            .red {
+              color: color-mix(in oklab, red var(--opacity), transparent);
+            }
           }"
         `)
       })
@@ -620,7 +626,13 @@ describe('theme(…)', () => {
           `),
         ).toMatchInlineSnapshot(`
           ".red {
-            color: color-mix(in oklab, red var(--opacity, 50%), transparent);
+            color: red;
+          }
+
+          @supports (color: color-mix(in lab, red, red)) {
+            .red {
+              color: color-mix(in oklab, red var(--opacity, 50%), transparent);
+            }
           }"
         `)
       })
