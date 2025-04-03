@@ -569,6 +569,8 @@ export function optimizeAst(
     }
   }
 
+  newAst = newAst.concat(atRoots)
+
   // Fallbacks
   if (polyfills & Polyfills.AtProperty) {
     let fallbackAst = []
@@ -582,23 +584,45 @@ export function optimizeAst(
     }
 
     if (fallbackAst.length > 0) {
-      let firstNonCommentIndex = newAst.findIndex((item) => item.kind !== 'comment')
-      if (firstNonCommentIndex === -1) firstNonCommentIndex = 0
+      // Insert an empty `@layer properties;` at the beginning of the document. We need to place it
+      // after eventual external imports as `lightningcss` would otherwise move the content into the
+      // same place.
+      let firstValidNodeIndex = newAst.findIndex((node) => {
+        // License comments
+        if (node.kind === 'comment') return false
+
+        if (node.kind === 'at-rule') {
+          // Charset
+          if (node.name === '@charset') return false
+
+          // External imports
+          if (node.name === '@import') return false
+        }
+
+        return true
+      })
+
       newAst.splice(
-        firstNonCommentIndex,
+        firstValidNodeIndex < 0 ? newAst.length : firstValidNodeIndex,
         0,
-        atRule(
-          '@supports',
-          // We can't write a supports query for `@property` directly so we have to test for
-          // features that are added around the same time in Mozilla and Safari.
-          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-          [rule('@layer base', fallbackAst)],
-        ),
+        atRule('@layer', 'properties', []),
+      )
+
+      newAst.push(
+        rule('@layer properties', [
+          atRule(
+            '@supports',
+            // We can't write a supports query for `@property` directly so we have to test for
+            // features that are added around the same time in Mozilla and Safari.
+            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+            fallbackAst,
+          ),
+        ]),
       )
     }
   }
 
-  return newAst.concat(atRoots)
+  return newAst
 }
 
 export function toCss(ast: AstNode[]) {

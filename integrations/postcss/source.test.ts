@@ -94,13 +94,7 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
+      @layer properties;
       .content-\\[\\"components\\/my-component\\.tsx\\"\\] {
         --tw-content: "components/my-component.tsx";
         content: var(--tw-content);
@@ -141,6 +135,13 @@ test(
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
@@ -331,13 +332,7 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
+      @layer properties;
       .content-\\[\\'project-a\\/node_modules\\/my-lib-1\\/src\\/index\\.html\\'\\] {
         --tw-content: 'project-a/node modules/my-lib-1/src/index.html';
         content: var(--tw-content);
@@ -382,6 +377,13 @@ test(
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
@@ -593,13 +595,7 @@ test(
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
+      @layer properties;
       .content-\\[\\"pages\\/foo\\.html\\"\\] {
         --tw-content: "pages/foo.html";
         content: var(--tw-content);
@@ -616,6 +612,13 @@ test(
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
@@ -704,13 +707,7 @@ test(
     expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
       "
       --- ./project-a/dist/out.css ---
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
+      @layer properties;
       .content-\\[\\'keep-me\\.html\\'\\] {
         --tw-content: 'keep-me.html';
         content: var(--tw-content);
@@ -723,6 +720,13 @@ test(
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
