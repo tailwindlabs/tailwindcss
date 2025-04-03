@@ -8448,7 +8448,7 @@ test('accent', async () => {
     }
 
     .accent-current {
-      accent-color: currentcolor;
+      accent-color: currentColor;
     }
 
     .accent-current\\/50, .accent-current\\/\\[0\\.5\\], .accent-current\\/\\[50\\%\\] {
@@ -8607,7 +8607,7 @@ test('caret', async () => {
     }
 
     .caret-current {
-      caret-color: currentcolor;
+      caret-color: currentColor;
     }
 
     .caret-current\\/50, .caret-current\\/\\[0\\.5\\], .caret-current\\/\\[50\\%\\] {
@@ -8764,7 +8764,7 @@ test('divide-color', async () => {
     }
 
     :where(.divide-current > :not(:last-child)) {
-      border-color: currentcolor;
+      border-color: currentColor;
     }
 
     :where(.divide-current\\/50 > :not(:last-child)), :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
@@ -10789,7 +10789,7 @@ test('bg', async () => {
     }
 
     .bg-current {
-      background-color: currentcolor;
+      background-color: currentColor;
     }
 
     .bg-current\\/50, .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
@@ -18713,7 +18713,7 @@ test('fill', async () => {
     }
 
     .fill-current {
-      fill: currentcolor;
+      fill: currentColor;
     }
 
     .fill-current\\/50, .fill-current\\/\\[0\\.5\\], .fill-current\\/\\[50\\%\\] {
@@ -18894,7 +18894,7 @@ test('stroke', async () => {
     }
 
     .stroke-current {
-      stroke: currentcolor;
+      stroke: currentColor;
     }
 
     .stroke-current\\/50, .stroke-current\\/\\[0\\.5\\], .stroke-current\\/\\[50\\%\\] {
@@ -19944,7 +19944,7 @@ test('placeholder', async () => {
     }
 
     .placeholder-current::placeholder {
-      color: currentcolor;
+      color: currentColor;
     }
 
     .placeholder-current\\/50::placeholder, .placeholder-current\\/\\[0\\.5\\]::placeholder, .placeholder-current\\/\\[50\\%\\]::placeholder {
@@ -20137,7 +20137,7 @@ test('decoration', async () => {
     }
 
     .decoration-current {
-      text-decoration-color: currentcolor;
+      text-decoration-color: currentColor;
     }
 
     .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
@@ -22041,7 +22041,7 @@ test('outline', async () => {
     }
 
     .outline-current {
-      outline-color: currentcolor;
+      outline-color: currentColor;
     }
 
     .outline-current\\/50, .outline-current\\/\\[0\\.5\\], .outline-current\\/\\[50\\%\\] {
@@ -22525,7 +22525,7 @@ test('text', async () => {
     }
 
     .text-current {
-      color: currentcolor;
+      color: currentColor;
     }
 
     .text-current\\/50, .text-current\\/\\[0\\.5\\], .text-current\\/\\[50\\%\\] {

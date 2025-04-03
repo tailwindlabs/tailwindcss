@@ -108,7 +108,7 @@ exports[`border-* 1`] = `
 }
 
 .border-current {
-  border-color: currentcolor;
+  border-color: currentColor;
 }
 
 .border-current\\/50 {
@@ -282,7 +282,7 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-current {
-  border-bottom-color: currentcolor;
+  border-bottom-color: currentColor;
 }
 
 .border-b-current\\/50 {
@@ -456,7 +456,7 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-current {
-  border-inline-end-color: currentcolor;
+  border-inline-end-color: currentColor;
 }
 
 .border-e-current\\/50 {
@@ -630,7 +630,7 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-current {
-  border-left-color: currentcolor;
+  border-left-color: currentColor;
 }
 
 .border-l-current\\/50 {
@@ -804,7 +804,7 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-current {
-  border-right-color: currentcolor;
+  border-right-color: currentColor;
 }
 
 .border-r-current\\/50 {
@@ -978,7 +978,7 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-current {
-  border-inline-start-color: currentcolor;
+  border-inline-start-color: currentColor;
 }
 
 .border-s-current\\/50 {
@@ -1152,7 +1152,7 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-current {
-  border-top-color: currentcolor;
+  border-top-color: currentColor;
 }
 
 .border-t-current\\/50 {
@@ -1326,7 +1326,7 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-current {
-  border-inline-color: currentcolor;
+  border-inline-color: currentColor;
 }
 
 .border-x-current\\/50 {
@@ -1500,7 +1500,7 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-current {
-  border-block-color: currentcolor;
+  border-block-color: currentColor;
 }
 
 .border-y-current\\/50 {
