@@ -31,8 +31,11 @@ const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 
 export function parse(input: string) {
-  if (input[0] === '\uFEFF') input = input.slice(1)
-  input = input.replaceAll('\r\n', '\n')
+  // Note: it is important that any transformations of the input string
+  // *before* processing do NOT change the length of the string. This
+  // would invalidate the mechanism used to track source locations.
+  if (input[0] === '\uFEFF') input = ' ' + input.slice(1)
+  input = input.replaceAll('\r\n', ' \n')
 
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
@@ -104,7 +107,8 @@ export function parse(input: string) {
       // Collect all license comments so that we can hoist them to the top of
       // the AST.
       if (commentString.charCodeAt(2) === EXCLAMATION_MARK) {
-        licenseComments.push(comment(commentString.slice(2, -2)))
+        let node = comment(commentString.slice(2, -2))
+        licenseComments.push(node)
       }
     }
 
@@ -503,7 +507,9 @@ export function parse(input: string) {
   // means that we have an at-rule that is not terminated with a semicolon at
   // the end of the input.
   if (buffer.charCodeAt(0) === AT_SIGN) {
-    ast.push(parseAtRule(buffer))
+    let node = parseAtRule(buffer)
+
+    ast.push(node)
   }
 
   // When we are done parsing then everything should be balanced. If we still
@@ -525,6 +531,9 @@ export function parse(input: string) {
 }
 
 export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
+  let name = buffer
+  let params = ''
+
   // Assumption: The smallest at-rule in CSS right now is `@page`, this means
   //             that we can always skip the first 5 characters and start at the
   //             sixth (at index 5).
@@ -545,13 +554,13 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
   for (let i = 5 /* '@page'.length */; i < buffer.length; i++) {
     let currentChar = buffer.charCodeAt(i)
     if (currentChar === SPACE || currentChar === OPEN_PAREN) {
-      let name = buffer.slice(0, i).trim()
-      let params = buffer.slice(i).trim()
-      return atRule(name, params, nodes)
+      name = buffer.slice(0, i)
+      params = buffer.slice(i)
+      break
     }
   }
 
-  return atRule(buffer.trim(), '', nodes)
+  return atRule(name.trim(), params.trim(), nodes)
 }
 
 function parseDeclaration(

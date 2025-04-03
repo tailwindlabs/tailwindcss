@@ -56,8 +56,17 @@ type CompileOptions = {
     id: string,
     base: string,
     resourceHint: 'plugin' | 'config',
-  ) => Promise<{ module: Plugin | Config; base: string }>
-  loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
+  ) => Promise<{
+    base: string
+    module: Plugin | Config
+  }>
+  loadStylesheet?: (
+    id: string,
+    base: string,
+  ) => Promise<{
+    base: string
+    content: string
+  }>
 }
 
 function throwOnLoadModule(): never {
@@ -593,8 +602,8 @@ async function parseCss(
 
     for (let [key, value] of designSystem.theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-
-      nodes.push(decl(escape(key), value.value))
+      let node = decl(escape(key), value.value)
+      nodes.push(node)
     }
 
     let keyframesRules = designSystem.theme.getKeyframes()
