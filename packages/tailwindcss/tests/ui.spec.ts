@@ -1863,6 +1863,48 @@ test('drop shadow colors', async ({ page }) => {
   ])
 })
 
+test('multiple drop shadow filters with `@theme inline`', async ({ page }) => {
+  let { getPropertyList } = await render(
+    page,
+    html`
+      <div id="a" class="drop-shadow-inlined"></div>
+      <div id="b" class="drop-shadow-inlined drop-shadow-red"></div>
+      <div style="--drop-shadow-var: 0 20px 20px rgb(0 0 0 / 0.75)">
+        <div id="c" class="drop-shadow-var"></div>
+      </div>
+      <div style="--drop-shadow-var: 0 10px 10px rgb(0 0 0 / 0.75), 0 20px 20px rgb(0 0 0 / 0.75)">
+        <div id="d" class="drop-shadow-var"></div>
+      </div>
+    `,
+    css`
+      @theme {
+        --drop-shadow-var: 0 1px 1px rgb(0 0 0 / 0.5), 0 10px 10px rgb(0 0 0 / 0.25);
+      }
+      @theme inline {
+        --drop-shadow-inlined: 0 1px 1px rgb(0 0 0 / 0.5), 0 10px 10px rgb(0 0 0 / 0.25);
+      }
+    `,
+  )
+
+  expect(await getPropertyList('#a', 'filter')).toEqual([
+    'drop-shadow(rgba(0, 0, 0, 0.5) 0px 1px 1px) drop-shadow(rgba(0, 0, 0, 0.25) 0px 10px 10px)',
+  ])
+
+  expect(await getPropertyList('#b', 'filter')).toEqual([
+    expect.stringMatching(
+      /drop-shadow\(oklab\(0\.627\d+ 0\.224\d+ 0\.125\d+\) 0px 1px 1px\) drop-shadow\(oklab\(0\.627\d+ 0\.224\d+ 0\.125\d+\) 0px 10px 10px\)/,
+    ),
+  ])
+
+  expect(await getPropertyList('#c', 'filter')).toEqual([
+    'drop-shadow(rgba(0, 0, 0, 0.75) 0px 20px 20px)',
+  ])
+
+  // Multiple values are only supported with `@theme inline` because otherwise we use var(…)
+  // inside of drop-shadow(…) which can only ever be a single shadow
+  expect(await getPropertyList('#d', 'filter')).toEqual(['none'])
+})
+
 test('outline style is optional', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
