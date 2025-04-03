@@ -254,7 +254,7 @@ function resolveThemeColor<T extends ThemeKey>(
       break
     }
     case 'current': {
-      value = 'currentColor'
+      value = 'currentcolor'
       break
     }
     default: {
@@ -4298,7 +4298,8 @@ export function createUtilities(theme: Theme) {
 
       if (!candidate.value) {
         let value = theme.get(['--drop-shadow'])
-        if (value === null) return
+        let resolved = theme.resolve(null, ['--drop-shadow'])
+        if (value === null || resolved === null) return
 
         return [
           filterProperties(),
@@ -4309,7 +4310,12 @@ export function createUtilities(theme: Theme) {
             alpha,
             (color) => `var(--tw-drop-shadow-color, ${color})`,
           ),
-          decl('--tw-drop-shadow', `drop-shadow(${theme.resolve(null, ['--drop-shadow'])})`),
+          decl(
+            '--tw-drop-shadow',
+            segment(resolved, ',')
+              .map((value) => `drop-shadow(${value})`)
+              .join(' '),
+          ),
           decl('filter', cssFilterValue),
         ]
       }
@@ -4350,7 +4356,8 @@ export function createUtilities(theme: Theme) {
       // Shadow size
       {
         let value = theme.get([`--drop-shadow-${candidate.value.value}`])
-        if (value) {
+        let resolved = theme.resolve(candidate.value.value, ['--drop-shadow'])
+        if (value && resolved) {
           if (candidate.modifier && !alpha) return
 
           if (alpha) {
@@ -4379,7 +4386,9 @@ export function createUtilities(theme: Theme) {
             ),
             decl(
               '--tw-drop-shadow',
-              `drop-shadow(${theme.resolve(candidate.value.value, ['--drop-shadow'])})`,
+              segment(resolved, ',')
+                .map((value) => `drop-shadow(${value})`)
+                .join(' '),
             ),
             decl('filter', cssFilterValue),
           ]
@@ -5439,7 +5448,7 @@ export function createUtilities(theme: Theme) {
 
     staticUtility('ring-inset', [boxShadowProperties, ['--tw-ring-inset', 'inset']])
 
-    let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentColor'
+    let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentcolor'
     function ringShadowValue(value: string) {
       return `var(--tw-ring-inset,) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
     }
@@ -5515,7 +5524,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     function insetRingShadowValue(value: string) {
-      return `inset 0 0 0 ${value} var(--tw-inset-ring-color, currentColor)`
+      return `inset 0 0 0 ${value} var(--tw-inset-ring-color, currentcolor)`
     }
     utilities.functional('inset-ring', (candidate) => {
       if (!candidate.value) {
@@ -6183,13 +6192,20 @@ function alphaReplacedShadowProperties(
     return varInjector(replaceAlpha(color, alpha))
   })
 
+  function applyPrefix(x: string) {
+    if (!prefix) return x
+    return segment(x, ',')
+      .map((value) => prefix + value)
+      .join(',')
+  }
+
   if (requiresFallback) {
     return [
-      decl(property, prefix + replaceShadowColors(value, varInjector)),
-      rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
+      decl(property, applyPrefix(replaceShadowColors(value, varInjector))),
+      rule('@supports (color: lab(from red l a b))', [decl(property, applyPrefix(replacedValue))]),
     ]
   } else {
-    return [decl(property, prefix + replacedValue)]
+    return [decl(property, applyPrefix(replacedValue))]
   }
 }
 

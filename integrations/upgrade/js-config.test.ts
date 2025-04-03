@@ -270,7 +270,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -283,7 +283,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
 
@@ -404,7 +404,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -417,7 +417,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -486,7 +486,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -499,7 +499,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -560,7 +560,7 @@ test(
       @config '../tailwind.config.ts';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -573,7 +573,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -638,7 +638,7 @@ test(
       @config '../tailwind.config.ts';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -651,7 +651,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -712,7 +712,7 @@ test(
       @config '../tailwind.config.ts';
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -725,7 +725,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -824,7 +824,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -837,7 +837,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
 
@@ -849,7 +849,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -862,7 +862,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -926,7 +926,7 @@ test(
       }
 
       /*
-        The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
         so we've added these compatibility styles to make sure everything still
         looks the same as it did with Tailwind CSS v3.
 
@@ -939,7 +939,7 @@ test(
         ::before,
         ::backdrop,
         ::file-selector-button {
-          border-color: var(--color-gray-200, currentColor);
+          border-color: var(--color-gray-200, currentcolor);
         }
       }
       "
@@ -986,7 +986,7 @@ describe('border compatibility', () => {
         @import 'tailwindcss';
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -999,7 +999,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
         "
@@ -1048,7 +1048,7 @@ describe('border compatibility', () => {
         @import 'tailwindcss';
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1088,7 +1088,7 @@ describe('border compatibility', () => {
             theme: {
               extend: {
                 borderColor: ({ colors }) => ({
-                  DEFAULT: 'currentColor',
+                  DEFAULT: 'currentcolor',
                 }),
               },
             },
@@ -1152,7 +1152,7 @@ describe('border compatibility', () => {
         @import 'tailwindcss';
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1165,7 +1165,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
         "
@@ -1221,7 +1221,7 @@ describe('border compatibility', () => {
         @import 'tailwindcss/preflight' layer(base);
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1234,7 +1234,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
 
@@ -1339,7 +1339,7 @@ describe('border compatibility', () => {
         }
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1352,7 +1352,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
 
@@ -1453,7 +1453,7 @@ describe('border compatibility', () => {
         }
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1466,7 +1466,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
 
@@ -1556,7 +1556,7 @@ describe('border compatibility', () => {
         }
 
         /*
-          The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+          The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
           so we've added these compatibility styles to make sure everything still
           looks the same as it did with Tailwind CSS v3.
 
@@ -1569,7 +1569,7 @@ describe('border compatibility', () => {
           ::before,
           ::backdrop,
           ::file-selector-button {
-            border-color: var(--color-gray-200, currentColor);
+            border-color: var(--color-gray-200, currentcolor);
           }
         }
         "
