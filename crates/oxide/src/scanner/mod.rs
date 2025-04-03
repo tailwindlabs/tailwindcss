@@ -321,7 +321,7 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_normalized_sources(&mut self) -> Vec<GlobEntry> {
+    pub fn get_normalized_sources(&self) -> Vec<GlobEntry> {
         self.sources
             .iter()
             .filter_map(|source| match source {
