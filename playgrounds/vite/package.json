@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "bun": "^1.2.4",
+    "bun": "^1.2.8",
     "vite": "catalog:"
   }
 }
