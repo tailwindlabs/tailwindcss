@@ -145,7 +145,7 @@ async function parseCss(
   let features = Features.None
   ast = [contextNode({ base }, ast)] as AstNode[]
 
-  features |= await substituteAtImports(ast, base, loadStylesheet)
+  features |= await substituteAtImports(ast, base, loadStylesheet, 0, from !== undefined)
 
   let important = null as boolean | null
   let theme = new Theme()
