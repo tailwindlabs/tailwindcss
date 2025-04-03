@@ -165,11 +165,13 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
       {
         // Parse the candidates to an AST that we can replace the `@apply` rule
         // with.
-        let candidateAst = compileCandidates(candidates, designSystem, {
+        let compiled = compileCandidates(candidates, designSystem, {
           onInvalidCandidate: (candidate) => {
             throw new Error(`Cannot apply unknown utility class: ${candidate}`)
           },
-        }).astNodes
+        })
+
+        let candidateAst = compiled.astNodes
 
         // Collect the nodes to insert in place of the `@apply` rule. When a rule
         // was used, we want to insert its children instead of the rule because we

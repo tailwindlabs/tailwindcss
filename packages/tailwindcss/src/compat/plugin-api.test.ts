@@ -1508,10 +1508,10 @@ describe('addBase', () => {
       },
       async loadStylesheet() {
         return {
+          base: '',
           content: css`
             @plugin "inside";
           `,
-          base: '',
         }
       },
     })
@@ -1533,6 +1533,7 @@ describe('addBase', () => {
 
     let compiler = await compile(input, {
       loadModule: async () => ({
+        base: '/root',
         module: plugin(function ({ addBase }) {
           addBase({
             ':root': {
@@ -1542,7 +1543,6 @@ describe('addBase', () => {
             },
           })
         }),
-        base: '/root',
       }),
     })
 

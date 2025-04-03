@@ -3,7 +3,13 @@ import { atRule, context, walk, WalkAction, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
 
-type LoadStylesheet = (id: string, basedir: string) => Promise<{ base: string; content: string }>
+type LoadStylesheet = (
+  id: string,
+  basedir: string,
+) => Promise<{
+  base: string
+  content: string
+}>
 
 export async function substituteAtImports(
   ast: AstNode[],
@@ -148,15 +154,18 @@ function buildImportNodes(
   let root = importedAst
 
   if (layer !== null) {
-    root = [atRule('@layer', layer, root)]
+    let node = atRule('@layer', layer, root)
+    root = [node]
   }
 
   if (media !== null) {
-    root = [atRule('@media', media, root)]
+    let node = atRule('@media', media, root)
+    root = [node]
   }
 
   if (supports !== null) {
-    root = [atRule('@supports', supports[0] === '(' ? supports : `(${supports})`, root)]
+    let node = atRule('@supports', supports[0] === '(' ? supports : `(${supports})`, root)
+    root = [node]
   }
 
   return root

@@ -39,7 +39,7 @@
   "dependencies": {
     "enhanced-resolve": "^5.18.1",
     "jiti": "^2.4.2",
-    "tailwindcss": "workspace:*",
-    "lightningcss": "catalog:"
+    "lightningcss": "catalog:",
+    "tailwindcss": "workspace:*"
   }
 }
