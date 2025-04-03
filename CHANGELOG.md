@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Don't rely on `@layer base` for the `@property` polyfills ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
 - Fix multi-value inset shadow ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
+- Fix `drop-shadow` utility ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
+- Fix `drop-shadow-*` utilities that use multiple shadows in `@theme inline` ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
 
 ## [4.1.1] - 2025-04-02
 
