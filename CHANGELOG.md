@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- PostCSS: Resolve an issue where changes to the input CSS file showed outdated content when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
 
 ## [4.1.2] - 2025-04-03
 

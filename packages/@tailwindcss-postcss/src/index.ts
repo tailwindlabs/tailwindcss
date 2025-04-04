@@ -223,10 +223,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           if (compiler.features & Features.Utilities) {
             DEBUG && I.start('Register dependency messages')
             // Add all found files as direct dependencies
+            // Note: With Turbopack, the input file might not be a resolved path
+            let resolvedInputFile = path.resolve(base, inputFile)
             for (let file of context.scanner.files) {
               let absolutePath = path.resolve(file)
               // The CSS file cannot be a dependency of itself
-              if (absolutePath === result.opts.from) {
+              if (absolutePath === resolvedInputFile) {
                 continue
               }
               result.messages.push({
