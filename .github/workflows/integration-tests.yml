@@ -30,7 +30,7 @@ jobs:
           - vite
           - cli
           - postcss
-          - workers
+          - oxide
           - webpack
 
         # Exclude windows and macos from being built on feature branches
@@ -58,6 +58,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo

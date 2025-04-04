@@ -50,6 +50,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
+
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
         uses: actions/cache@v4

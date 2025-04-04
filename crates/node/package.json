@@ -9,7 +9,6 @@
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "tailwindcss-oxide",
     "binaryName": "tailwindcss-oxide",
     "packageName": "@tailwindcss/oxide",
     "targets": [
@@ -35,6 +34,7 @@
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^3.0.0-alpha.77",
+    "@napi-rs/wasm-runtime": "^0.2.8",
     "emnapi": "1.3.1"
   },
   "engines": {
@@ -50,7 +50,9 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release --no-const-enum",
+    "build": "pnpm run build:platform && pnpm run build:wasm",
+    "postbuild": "node ./scripts/move-artifacts.mjs",
+    "build:platform": "napi build --platform --release --no-const-enum",
     "build:wasm": "napi build --release --target wasm32-wasip1-threads",
     "dev": "cargo watch --quiet --shell 'npm run build'",
     "build:debug": "napi build --platform --no-const-enum",
@@ -66,8 +68,8 @@
     "@tailwindcss/oxide-linux-arm64-musl": "workspace:*",
     "@tailwindcss/oxide-linux-x64-gnu": "workspace:*",
     "@tailwindcss/oxide-linux-x64-musl": "workspace:*",
+    "@tailwindcss/oxide-wasm32-wasi": "workspace:*",
     "@tailwindcss/oxide-win32-arm64-msvc": "workspace:*",
-    "@tailwindcss/oxide-win32-x64-msvc": "workspace:*",
-    "@tailwindcss/oxide-wasm32-wasi": "workspace:*"
+    "@tailwindcss/oxide-win32-x64-msvc": "workspace:*"
   }
 }
