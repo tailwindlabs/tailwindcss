@@ -5692,6 +5692,16 @@ export function createUtilities(theme: Theme) {
   return utilities
 }
 
+// Only allowed bare value data types, to prevent creating new syntax that we
+// typically don't support right now. E.g.: `--value(color)` would allow you to
+// use `text-#0088cc` as a valid utility, which is not what we want.
+export const BARE_VALUE_DATA_TYPES = [
+  'number', // 2.5
+  'integer', // 8
+  'ratio', // 2/3
+  'percentage', // 25%
+]
+
 export function createCssUtility(node: AtRule) {
   let name = node.params
 
@@ -5824,7 +5834,6 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          // Track information for suggestions
           for (let node of fn.nodes) {
             // Track literal values
             if (
@@ -5840,6 +5849,36 @@ export function createCssUtility(node: AtRule) {
             else if (node.kind === 'word' && node.value[0] === '-' && node.value[1] === '-') {
               let value = node.value.replace(/-\*.*$/g, '') as `--${string}`
               storage[fn.value].themeKeys.add(value)
+            }
+
+            // Validate bare value data types
+            else if (
+              node.kind === 'word' &&
+              !(node.value[0] === '[' && node.value[node.value.length - 1] === ']') && // Ignore arbitrary values
+              !BARE_VALUE_DATA_TYPES.includes(node.value)
+            ) {
+              console.warn(
+                `Unsupported bare value data type: "${node.value}".\nOnly valid data types are: ${BARE_VALUE_DATA_TYPES.map((x) => `"${x}"`).join(', ')}.\n`,
+              )
+              // TODO: Once we properly track the location of the node, we can
+              //       clean this up in a better way.
+              let dataType = node.value
+              let copy = structuredClone(fn)
+              let sentinelValue = '¶'
+              ValueParser.walk(copy.nodes, (node, { replaceWith }) => {
+                if (node.kind === 'word' && node.value === dataType) {
+                  replaceWith({ kind: 'word', value: sentinelValue })
+                }
+              })
+              let underline = '^'.repeat(ValueParser.toCss([node]).length)
+              let offset = ValueParser.toCss([copy]).indexOf(sentinelValue)
+              let output = [
+                '```css',
+                ValueParser.toCss([fn]),
+                ' '.repeat(offset) + underline,
+                '```',
+              ].join('\n')
+              console.warn(output)
             }
           }
         })
@@ -6084,12 +6123,7 @@ function resolveValueFunction(
       // Limit the bare value types, to prevent new syntax that we
       // don't want to support. E.g.: `text-#000` is something we
       // don't want to support, but could be built this way.
-      if (
-        arg.value !== 'number' &&
-        arg.value !== 'integer' &&
-        arg.value !== 'ratio' &&
-        arg.value !== 'percentage'
-      ) {
+      if (!BARE_VALUE_DATA_TYPES.includes(arg.value)) {
         continue
       }
 
