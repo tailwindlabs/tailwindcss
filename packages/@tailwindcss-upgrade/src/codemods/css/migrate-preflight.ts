@@ -7,12 +7,12 @@ import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 // Defaults in v4
-const DEFAULT_BORDER_COLOR = 'currentColor'
+const DEFAULT_BORDER_COLOR = 'currentcolor'
 
 const css = dedent
 const BORDER_COLOR_COMPATIBILITY_CSS = css`
   /*
-    The default border color has changed to \`currentColor\` in Tailwind CSS v4,
+    The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
     so we've added these compatibility styles to make sure everything still
     looks the same as it did with Tailwind CSS v3.
 
@@ -78,7 +78,7 @@ export function migratePreflight({
             return defaultBorderColor
           } else {
             if (path === 'borderColor.DEFAULT') {
-              return 'var(--color-gray-200, currentColor)'
+              return 'var(--color-gray-200, currentcolor)'
             }
           }
           return null

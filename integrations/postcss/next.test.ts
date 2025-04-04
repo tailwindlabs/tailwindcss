@@ -1,5 +1,5 @@
 import { describe } from 'vitest'
-import { candidate, css, fetchStyles, js, json, retryAssertion, test } from '../utils'
+import { candidate, css, fetchStyles, js, json, jsx, retryAssertion, test, txt } from '../utils'
 
 test(
   'production build',
@@ -354,5 +354,133 @@ test(
       expect(css).toContain('--color-blue-500:')
       expect(css).toContain('--color-red-500:')
     })
+  },
+)
+
+test(
+  'changes to `public/` should not trigger an infinite loop',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "react": "^18",
+            "react-dom": "^18",
+            "next": "^15",
+            "@ducanh2912/next-pwa": "^10.2.9"
+          },
+          "devDependencies": {
+            "@tailwindcss/postcss": "workspace:^",
+            "tailwindcss": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        .next/
+        public/workbox-*.js
+        public/sw.js
+      `,
+      'postcss.config.mjs': js`
+        export default {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'next.config.mjs': js`
+        import withPWA from '@ducanh2912/next-pwa'
+
+        const pwaConfig = {
+          dest: 'public',
+          register: true,
+          skipWaiting: true,
+          reloadOnOnline: false,
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+        }
+
+        const nextConfig = {}
+
+        const configWithPWA = withPWA(pwaConfig)(nextConfig)
+
+        export default configWithPWA
+      `,
+      'app/layout.js': js`
+        import './globals.css'
+
+        export default function RootLayout({ children }) {
+          return (
+            <html>
+              <body>{children}</body>
+            </html>
+          )
+        }
+      `,
+      'app/page.js': js`
+        export default function Page() {
+          return <div className="flex"></div>
+        }
+      `,
+      'app/globals.css': css`
+        @import 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm next dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)/.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((m) => m.includes('Ready in'))
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`flex`)
+      expect(css).not.toContain(candidate`underline`)
+    })
+
+    await fs.write(
+      'app/page.js',
+      jsx`
+        export default function Page() {
+          return <div className="flex underline"></div>
+        }
+      `,
+    )
+    await process.onStdout((m) => m.includes('Compiled in'))
+
+    await retryAssertion(async () => {
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`flex`)
+      expect(css).toContain(candidate`underline`)
+    })
+    // Flush all existing messages in the queue
+    process.flush()
+
+    // Fetch the styles one more time, to ensure we see the latest version of
+    // the CSS
+    await fetchStyles(url)
+
+    // At this point, no changes should triger a compile step. If we see any
+    // changes, there is an infinite loop because we (the user) didn't write any
+    // files to disk.
+    //
+    // Ensure there are no more changes in stdout (signaling no infinite loop)
+    let result = await Promise.race([
+      // If this succeeds, it means that it saw another change which indicates
+      // an infinite loop.
+      process.onStdout((m) => m.includes('Compiled in')).then(() => 'infinite loop detected'),
+
+      // There should be no changes in stdout
+      new Promise((resolve) => setTimeout(() => resolve('no infinite loop detected'), 2_000)),
+    ])
+    expect(result).toBe('no infinite loop detected')
   },
 )

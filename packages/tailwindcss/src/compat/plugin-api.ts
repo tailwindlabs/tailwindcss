@@ -344,13 +344,13 @@ export function buildPluginApi({
               let values = options?.values ?? {}
 
               if (isColor) {
-                // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
+                // Color utilities implicitly support `inherit`, `transparent`, and `currentcolor`
                 // for backwards compatibility but still allow them to be overridden
                 values = Object.assign(
                   {
                     inherit: 'inherit',
                     transparent: 'transparent',
-                    current: 'currentColor',
+                    current: 'currentcolor',
                   },
                   values,
                 )

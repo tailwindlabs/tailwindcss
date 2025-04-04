@@ -156,7 +156,7 @@ export default {
     '3xl': '64px',
   },
   borderColor: ({ theme }) => ({
-    DEFAULT: 'currentColor',
+    DEFAULT: 'currentcolor',
     ...theme('colors'),
   }),
   borderOpacity: ({ theme }) => theme('opacity'),
@@ -825,7 +825,7 @@ export default {
   placeholderColor: ({ theme }) => theme('colors'),
   placeholderOpacity: ({ theme }) => theme('opacity'),
   ringColor: ({ theme }) => ({
-    DEFAULT: 'currentColor',
+    DEFAULT: 'currentcolor',
     ...theme('colors'),
   }),
   ringOffsetColor: ({ theme }) => theme('colors'),
