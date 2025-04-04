@@ -420,3 +420,25 @@ describe('concurrent builds', () => {
     expect(await promise2).toContain('.red')
   })
 })
+
+test('does not register the input file as a dependency, even if it is passed in as relative path', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(`@tailwind utilities`, { from: './input.css' })
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ".underline {
+      text-decoration-line: underline;
+    }"
+  `)
+
+  // Check for dependency messages
+  expect(result.messages).not.toContainEqual({
+    type: 'dependency',
+    file: expect.stringMatching(/input.css$/g),
+    parent: expect.any(String),
+    plugin: expect.any(String),
+  })
+})
