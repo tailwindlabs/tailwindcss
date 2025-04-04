@@ -5047,6 +5047,150 @@ describe('`color-mix(…)` polyfill', () => {
       }"
     `)
   })
+
+  it('does not delete theme variables from the output', async () => {
+    await expect(
+      compileCss(
+        css`
+          @layer theme {
+            @theme {
+              --color-red-500: red;
+              --shadow-xl: 0 6px 18px 4px color-mix(in oklab, var(--color-red-500) 25%, transparent);
+              --opacity-disabled: 50%;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['text-red-500', 'shadow-xl', 'opacity-disabled'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *, :before, :after, ::backdrop {
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-shadow-alpha: 100%;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-inset-shadow-alpha: 100%;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+          }
+        }
+      }
+
+      @layer theme {
+        :root, :host {
+          --color-red-500: red;
+          --opacity-disabled: 50%;
+        }
+      }
+
+      .text-red-500 {
+        color: var(--color-red-500);
+      }
+
+      .opacity-disabled {
+        opacity: var(--opacity-disabled);
+      }
+
+      .shadow-xl {
+        --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, #ff000040);
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .shadow-xl {
+          --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
+        }
+      }
+
+      @property --tw-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-shadow-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+
+      @property --tw-inset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-inset-shadow-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-inset-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+
+      @property --tw-ring-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-inset-ring-color {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-inset-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+
+      @property --tw-ring-inset {
+        syntax: "*";
+        inherits: false
+      }
+
+      @property --tw-ring-offset-width {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0;
+      }
+
+      @property --tw-ring-offset-color {
+        syntax: "*";
+        inherits: false;
+        initial-value: #fff;
+      }
+
+      @property --tw-ring-offset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }"
+    `)
+  })
 })
 
 describe('`@property` polyfill', async () => {
