@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Show warning when using unsupported bare value data type in `--value(…)` ([#17464](https://github.com/tailwindlabs/tailwindcss/pull/17464))
 
 ## [4.1.2] - 2025-04-03
 
