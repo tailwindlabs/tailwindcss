@@ -10917,6 +10917,10 @@ test('bg', async () => {
       }
     }
 
+    .bg-blue-500 {
+      background-color: var(--background-color-blue-500);
+    }
+
     .bg-current, .bg-current\\/50 {
       background-color: currentColor;
     }
@@ -10935,10 +10939,6 @@ test('bg', async () => {
       .bg-current\\/\\[0\\.5\\] {
         background-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-
-    .bg-blue-500 {
-      background-color: var(--background-color-blue-500);
     }
 
     .bg-current\\/\\[50\\%\\] {
@@ -19340,6 +19340,10 @@ test('stroke', async () => {
       }
     }
 
+    .stroke-blue-500 {
+      stroke: var(--stroke-blue-500);
+    }
+
     .stroke-current, .stroke-current\\/50 {
       stroke: currentColor;
     }
@@ -19358,10 +19362,6 @@ test('stroke', async () => {
       .stroke-current\\/\\[0\\.5\\] {
         stroke: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-
-    .stroke-blue-500 {
-      stroke: var(--stroke-blue-500);
     }
 
     .stroke-current\\/\\[50\\%\\] {
@@ -20694,6 +20694,12 @@ test('decoration', async () => {
       }
     }
 
+    .decoration-blue-500 {
+      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
+      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
+      text-decoration-color: var(--text-decoration-color-blue-500);
+    }
+
     .decoration-current, .decoration-current\\/50 {
       text-decoration-color: currentColor;
     }
@@ -20716,12 +20722,6 @@ test('decoration', async () => {
         -webkit-text-decoration-color: color-mix(in oklab, currentcolor 50%, transparent);
         text-decoration-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-
-    .decoration-blue-500 {
-      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
-      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
-      text-decoration-color: var(--text-decoration-color-blue-500);
     }
 
     .decoration-current\\/\\[50\\%\\] {
@@ -22687,6 +22687,10 @@ test('outline', async () => {
       }
     }
 
+    .outline-blue-500 {
+      outline-color: var(--outline-color-blue-500);
+    }
+
     .outline-current, .outline-current\\/50 {
       outline-color: currentColor;
     }
@@ -22705,10 +22709,6 @@ test('outline', async () => {
       .outline-current\\/\\[0\\.5\\] {
         outline-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-
-    .outline-blue-500 {
-      outline-color: var(--outline-color-blue-500);
     }
 
     .outline-current\\/\\[50\\%\\] {
@@ -23244,6 +23244,10 @@ test('text', async () => {
       }
     }
 
+    .text-blue-500 {
+      color: var(--text-color-blue-500);
+    }
+
     .text-current, .text-current\\/50 {
       color: currentColor;
     }
@@ -23262,10 +23266,6 @@ test('text', async () => {
       .text-current\\/\\[0\\.5\\] {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-
-    .text-blue-500 {
-      color: var(--text-color-blue-500);
     }
 
     .text-current\\/\\[50\\%\\] {
@@ -23988,7 +23988,7 @@ test('shadow', async () => {
     }
 
     .shadow-blue-500 {
-      --tw-shadow-color: color-mix(in srgb, #3b82f6 var(--tw-shadow-alpha), transparent);
+      --tw-shadow-color: #3b82f6;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -25736,14 +25736,6 @@ test('ring-offset', async () => {
       }
     }
 
-    .ring-offset-blue-500 {
-      --tw-ring-offset-color: var(--ring-offset-color-blue-500);
-    }
-
-    .ring-offset-current {
-      --tw-ring-offset-color: currentColor;
-    }
-
     .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-ring-offset-color: var(--my-color);
     }
@@ -25782,6 +25774,10 @@ test('ring-offset', async () => {
       .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .ring-offset-blue-500 {
+      --tw-ring-offset-color: var(--ring-offset-color-blue-500);
     }
 
     .ring-offset-current, .ring-offset-current\\/50 {
