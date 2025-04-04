@@ -542,6 +542,7 @@ export function optimizeAst(
         let requiresPolyfill = false
         ValueParser.walk(ast, (node, { replaceWith }) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
+
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
           ValueParser.walk(node.nodes, (node, { replaceWith }) => {
@@ -550,17 +551,47 @@ export function optimizeAst(
               requiresPolyfill = true
               return
             }
-            if (node.kind !== 'function' || node.value !== 'var') return
-            let firstChild = node.nodes[0]
-            if (!firstChild || firstChild.kind !== 'word') return
-            requiresPolyfill = true
-            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
-            if (!inlinedColor) {
-              containsUnresolvableVars = true
-              return
-            }
+
+            let varNode: ValueParser.ValueAstNode | null = node
+            let inlinedColor: string | null = null
+            let seenVariables = new Set<string>()
+            do {
+              if (varNode.kind !== 'function' || varNode.value !== 'var') return
+              let firstChild = varNode.nodes[0]
+              if (!firstChild || firstChild.kind !== 'word') return
+
+              let variableName = firstChild.value
+
+              if (seenVariables.has(variableName)) {
+                containsUnresolvableVars = true
+                return
+              }
+
+              seenVariables.add(variableName)
+
+              requiresPolyfill = true
+
+              inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+              if (!inlinedColor) {
+                containsUnresolvableVars = true
+                return
+              }
+              if (inlinedColor.toLowerCase() === 'currentcolor') {
+                containsCurrentcolor = true
+                return
+              }
+
+              if (inlinedColor.startsWith('var(')) {
+                let subAst = ValueParser.parse(inlinedColor)
+                varNode = subAst[0]
+              } else {
+                varNode = null
+              }
+            } while (varNode)
+
             replaceWith({ kind: 'word', value: inlinedColor })
           })
+
           if (containsUnresolvableVars || containsCurrentcolor) {
             let separatorIndex = node.nodes.findIndex(
               (node) => node.kind === 'separator' && node.value.trim().includes(','),
