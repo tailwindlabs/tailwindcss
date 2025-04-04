@@ -1,0 +1,32 @@
+{
+  "name": "@tailwindcss/oxide-wasm32-wasi",
+  "version": "4.1.2",
+  "cpu": [
+    "wasm32"
+  ],
+  "main": "tailwindcss-oxide.wasi.cjs",
+  "files": [
+    "tailwindcss-oxide.wasm32-wasi.wasm",
+    "tailwindcss-oxide.wasi.cjs",
+    "tailwindcss-oxide.wasi-browser.js",
+    "wasi-worker.mjs",
+    "wasi-worker-browser.mjs"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node"
+  },
+  "browser": "tailwindcss-oxide.wasi-browser.js",
+  "dependencies": {
+    "@napi-rs/wasm-runtime": "^0.2.8"
+  }
+}

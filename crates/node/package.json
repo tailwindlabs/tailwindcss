@@ -10,24 +10,32 @@
   "types": "index.d.ts",
   "napi": {
     "name": "tailwindcss-oxide",
-    "triples": {
-      "additional": [
-        "armv7-linux-androideabi",
-        "aarch64-linux-android",
-        "aarch64-apple-darwin",
-        "aarch64-unknown-linux-gnu",
-        "aarch64-unknown-linux-musl",
-        "armv7-unknown-linux-gnueabihf",
-        "x86_64-unknown-linux-musl",
-        "x86_64-unknown-freebsd",
-        "i686-pc-windows-msvc",
-        "aarch64-pc-windows-msvc"
-      ]
+    "binaryName": "tailwindcss-oxide",
+    "packageName": "@tailwindcss/oxide",
+    "targets": [
+      "armv7-linux-androideabi",
+      "aarch64-linux-android",
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-unknown-linux-musl",
+      "armv7-unknown-linux-gnueabihf",
+      "x86_64-unknown-linux-musl",
+      "x86_64-unknown-freebsd",
+      "i686-pc-windows-msvc",
+      "aarch64-pc-windows-msvc",
+      "wasm32-wasip1-threads"
+    ],
+    "wasm": {
+      "initialMemory": 16384,
+      "browser": {
+        "fs": true
+      }
     }
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "^2.18.4"
+    "@napi-rs/cli": "^3.0.0-alpha.77",
+    "emnapi": "1.3.1"
   },
   "engines": {
     "node": ">= 10"
@@ -43,6 +51,7 @@
   "scripts": {
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release --no-const-enum",
+    "build:wasm": "napi build --release --target wasm32-wasip1-threads",
     "dev": "cargo watch --quiet --shell 'npm run build'",
     "build:debug": "napi build --platform --no-const-enum",
     "version": "napi version"
@@ -57,7 +66,8 @@
     "@tailwindcss/oxide-linux-arm64-musl": "workspace:*",
     "@tailwindcss/oxide-linux-x64-gnu": "workspace:*",
     "@tailwindcss/oxide-linux-x64-musl": "workspace:*",
+    "@tailwindcss/oxide-win32-arm64-msvc": "workspace:*",
     "@tailwindcss/oxide-win32-x64-msvc": "workspace:*",
-    "@tailwindcss/oxide-win32-arm64-msvc": "workspace:*"
+    "@tailwindcss/oxide-wasm32-wasi": "workspace:*"
   }
 }
