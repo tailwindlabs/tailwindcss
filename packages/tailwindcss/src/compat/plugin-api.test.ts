@@ -243,14 +243,14 @@ describe('theme', async () => {
 
     expect(compiler.build(['animate-duration-316', 'animate-duration-slow']))
       .toMatchInlineSnapshot(`
-      ".animate-duration-316 {
-        animation-duration: 316ms;
-      }
-      .animate-duration-slow {
-        animation-duration: 800ms;
-      }
-      "
-    `)
+        ".animate-duration-316 {
+          animation-duration: 316ms;
+        }
+        .animate-duration-slow {
+          animation-duration: 800ms;
+        }
+        "
+      `)
   })
 
   test('plugin theme can have opacity modifiers', async () => {
@@ -3340,16 +3340,16 @@ describe('matchUtilities()', () => {
     }
 
     expect(optimizeCss(await run(['@w-1', 'hover:@w-1'])).trim()).toMatchInlineSnapshot(`
-        ".\\@w-1 {
+      ".\\@w-1 {
+        width: 1px;
+      }
+
+      @media (hover: hover) {
+        .hover\\:\\@w-1:hover {
           width: 1px;
         }
-
-        @media (hover: hover) {
-          .hover\\:\\@w-1:hover {
-            width: 1px;
-          }
-        }"
-      `)
+      }"
+    `)
   })
 
   test('custom functional utilities can return an array of rules', async () => {
@@ -4153,30 +4153,30 @@ describe('addComponents()', () => {
 
     expect(optimizeCss(compiled.build(['btn', 'btn-blue', 'btn-red'])).trim())
       .toMatchInlineSnapshot(`
-      ".btn {
-        border-radius: .25rem;
-        padding: .5rem 1rem;
-        font-weight: 600;
-      }
+        ".btn {
+          border-radius: .25rem;
+          padding: .5rem 1rem;
+          font-weight: 600;
+        }
 
-      .btn-blue {
-        color: #fff;
-        background-color: #3490dc;
-      }
+        .btn-blue {
+          color: #fff;
+          background-color: #3490dc;
+        }
 
-      .btn-blue:hover {
-        background-color: #2779bd;
-      }
+        .btn-blue:hover {
+          background-color: #2779bd;
+        }
 
-      .btn-red {
-        color: #fff;
-        background-color: #e3342f;
-      }
+        .btn-red {
+          color: #fff;
+          background-color: #e3342f;
+        }
 
-      .btn-red:hover {
-        background-color: #cc1f1a;
-      }"
-    `)
+        .btn-red:hover {
+          background-color: #cc1f1a;
+        }"
+      `)
   })
 })
 
@@ -4212,16 +4212,16 @@ describe('matchComponents()', () => {
 
     expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
       .toMatchInlineSnapshot(`
-      ".prose {
-        --container-size: normal;
-      }
-
-      @media (hover: hover) {
-        .hover\\:prose-lg:hover {
-          --container-size: lg;
+        ".prose {
+          --container-size: normal;
         }
-      }"
-    `)
+
+        @media (hover: hover) {
+          .hover\\:prose-lg:hover {
+            --container-size: lg;
+          }
+        }"
+      `)
   })
 })
 

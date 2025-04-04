@@ -756,10 +756,10 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-          ".fam {
-            font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-          }"
-        `)
+            ".fam {
+              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+            }"
+          `)
         })
 
         test('theme(fontFamily.sans) (config)', async () => {
@@ -776,10 +776,10 @@ describe('theme(…)', () => {
           )
 
           expect(optimizeCss(compiled.build([])).trim()).toMatchInlineSnapshot(`
-          ".fam {
-            font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-          }"
-        `)
+            ".fam {
+              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+            }"
+          `)
         })
       })
 
