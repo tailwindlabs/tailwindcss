@@ -4764,6 +4764,36 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('creates an inlined variable version of the color-mix(…) usages when it resolves to a var(…) containing another theme variable', async () => {
+    await expect(
+      compileCss(
+        css`
+          @theme {
+            --color-red: var(--color-red-500);
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+        ['text-red/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red: var(--color-red-500);
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .text-red\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red\\/50 {
+          color: color-mix(in oklab, var(--color-red) 50%, transparent);
+        }
+      }"
+    `)
+  })
+
   it('works for color values in the first and second position', async () => {
     await expect(
       compileCss(
@@ -4967,6 +4997,34 @@ describe('`color-mix(…)` polyfill', () => {
         .text-current\\/50 {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
+      }"
+    `)
+  })
+
+  it('uses the first color value as the fallback when the `color-mix(…)` function contains theme variables that resolves to other variables', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+          @theme {
+            --color-red: var(--my-red);
+          }
+        `,
+        ['text-red/50'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".text-red\\/50 {
+        color: var(--color-red);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red\\/50 {
+          color: color-mix(in oklab, var(--color-red) 50%, transparent);
+        }
+      }
+
+      :root, :host {
+        --color-red: var(--my-red);
       }"
     `)
   })
