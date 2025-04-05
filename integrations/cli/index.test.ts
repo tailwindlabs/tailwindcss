@@ -223,7 +223,7 @@ describe.each([
       },
     },
     async ({ root, expect, exec }) => {
-      let stdout = await exec(`${command} --input src/index.css --output -`, {
+      const stdout = await exec(`${command} --input src/index.css --output -`, {
         cwd: path.join(root, 'project-a'),
       })
 
@@ -299,9 +299,12 @@ describe.each([
       },
     },
     async ({ root, fs, spawn }) => {
-      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`, {
-        cwd: path.join(root, 'project-a'),
-      })
+      const process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --watch`,
+        {
+          cwd: path.join(root, 'project-a'),
+        },
+      )
       await process.onStderr((m) => m.includes('Done in'))
 
       await fs.expectFileToContain('project-a/dist/out.css', [
@@ -1017,7 +1020,7 @@ test(
     `)
 
     // Watch mode tests
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
       {
         cwd: path.join(root, 'project-a'),
@@ -1249,7 +1252,7 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn(
+    const process = await spawn(
       `pnpm tailwindcss --input src/index.css --output dist/out.css --watch`,
     )
     await process.onStderr((m) => m.includes('Done in'))
@@ -1315,7 +1318,7 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
     )
     await process.onStderr((m) => m.includes('Done in'))
@@ -1523,7 +1526,7 @@ test(
     // NOTE: We are writing to an output CSS file which is not being ignored by
     // `.gitignore` nor marked with `@source not`. This should not result in an
     // infinite loop.
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input ./index.css --output ./dist/out.css --watch',
     )
     await process.onStderr((m) => m.includes('Done in'))

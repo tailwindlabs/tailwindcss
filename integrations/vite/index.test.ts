@@ -79,9 +79,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ root, fs, exec, expect }) => {
       await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
-      let files = await fs.glob('project-a/dist/**/*.css')
+      const files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [filename] = files[0]
+      const [filename] = files[0]
 
       await fs.expectFileToContain(filename, [
         candidate`underline`,
@@ -168,20 +168,20 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       },
     },
     async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite dev', {
+      const process = await spawn('pnpm vite dev', {
         cwd: path.join(root, 'project-a'),
       })
       await process.onStdout((m) => m.includes('ready in'))
 
       let url = ''
       await process.onStdout((m) => {
-        let match = /Local:\s*(http.*)\//.exec(m)
+        const match = /Local:\s*(http.*)\//.exec(m)
         if (match) url = match[1]
         return Boolean(url)
       })
 
       await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/index.html')
+        const styles = await fetchStyles(url, '/index.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -202,7 +202,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(url)
+        const styles = await fetchStyles(url)
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -220,7 +220,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(url)
+        const styles = await fetchStyles(url)
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`font-bold`)
@@ -243,7 +243,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(url)
+        const styles = await fetchStyles(url)
         expect(styles).toContain(candidate`red`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`imported`)
@@ -266,7 +266,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             </body>
           `,
         )
-        let styles = await fetchStyles(url)
+        const styles = await fetchStyles(url)
         expect(styles).toContain(candidate`m-4`)
       })
 
@@ -281,7 +281,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let styles = await fetchStyles(url)
+        const styles = await fetchStyles(url)
         expect(styles).toContain(candidate`red`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`m-2`)
@@ -361,14 +361,14 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       },
     },
     async ({ root, spawn, fs, expect }) => {
-      let process = await spawn('pnpm vite build --watch', {
+      const process = await spawn('pnpm vite build --watch', {
         cwd: path.join(root, 'project-a'),
       })
       await process.onStdout((m) => m.includes('built in'))
 
       let filename = ''
       await retryAssertion(async () => {
-        let files = await fs.glob('project-a/dist/**/*.css')
+        const files = await fs.glob('project-a/dist/**/*.css')
         expect(files).toHaveLength(1)
         filename = files[0][0]
       })
@@ -394,9 +394,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let files = await fs.glob('project-a/dist/**/*.css')
+        const files = await fs.glob('project-a/dist/**/*.css')
         expect(files).toHaveLength(1)
-        let [, styles] = files[0]
+        const [, styles] = files[0]
 
         expect(styles).toContain(css`
           .text-primary {
@@ -419,9 +419,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let files = await fs.glob('project-a/dist/**/*.css')
+        const files = await fs.glob('project-a/dist/**/*.css')
         expect(files).toHaveLength(1)
-        let [, styles] = files[0]
+        const [, styles] = files[0]
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`m-2`)
@@ -437,9 +437,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let files = await fs.glob('project-a/dist/**/*.css')
+        const files = await fs.glob('project-a/dist/**/*.css')
         expect(files).toHaveLength(1)
-        let [, styles] = files[0]
+        const [, styles] = files[0]
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`m-2`)
@@ -460,9 +460,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           `,
         )
 
-        let files = await fs.glob('project-a/dist/**/*.css')
+        const files = await fs.glob('project-a/dist/**/*.css')
         expect(files).toHaveLength(1)
-        let [, styles] = files[0]
+        const [, styles] = files[0]
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`flex`)
         expect(styles).toContain(candidate`m-2`)
@@ -529,9 +529,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ root, fs, exec, expect }) => {
       await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
-      let files = await fs.glob('project-a/dist/**/*.css')
+      const files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [filename] = files[0]
+      const [filename] = files[0]
 
       // `underline` and `m-2` are only present from files in the module graph
       // which we've explicitly disabled with source(none) so they should not
@@ -622,9 +622,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ root, fs, exec, expect }) => {
       await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
-      let files = await fs.glob('project-a/dist/**/*.css')
+      const files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [filename] = files[0]
+      const [filename] = files[0]
 
       // `underline` and `m-2` are present in files in the module graph but
       // we've filtered the module graph such that we only look in
@@ -726,7 +726,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         exec('pnpm vite build', { cwd: path.join(root, 'project-a') }, { ignoreStdErr: true }),
       ).rejects.toThrowError('The `source(../i-do-not-exist)` does not exist')
 
-      let files = await fs.glob('project-a/dist/**/*.css')
+      const files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(0)
     },
   )
@@ -777,18 +777,18 @@ test(
     },
   },
   async ({ spawn, fs, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/index.html')
+      const styles = await fetchStyles(url, '/index.html')
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
@@ -797,7 +797,7 @@ test(
       // We change the CSS file so it is no longer a valid Tailwind root.
       await fs.write('src/index.css', css`@import 'tailwindcss';`)
 
-      let styles = await fetchStyles(url)
+      const styles = await fetchStyles(url)
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`font-bold`)
     })
@@ -842,12 +842,12 @@ test(
     },
   },
   async ({ spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let baseUrl = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) baseUrl = match[1]
       return Boolean(baseUrl)
     })
@@ -857,7 +857,7 @@ test(
       // resolved
       await fetch(`${baseUrl}/src/index.js`).then((r) => r.text())
 
-      let [raw, url] = await Promise.all([
+      const [raw, url] = await Promise.all([
         fetch(`${baseUrl}/src/index.css?raw`).then((r) => r.text()),
         fetch(`${baseUrl}/src/index.css?url`).then((r) => r.text()),
       ])
@@ -903,9 +903,9 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [candidate`maplibregl-map`])
   },

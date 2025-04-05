@@ -33,9 +33,9 @@ test(
 
     // Verify that `prose-stone` is defined before `prose-invert`
     {
-      let contents = await fs.read('dist/out.css')
-      let proseInvertIdx = contents.indexOf('.prose-invert')
-      let proseStoneIdx = contents.indexOf('.prose-stone')
+      const contents = await fs.read('dist/out.css')
+      const proseInvertIdx = contents.indexOf('.prose-invert')
+      const proseStoneIdx = contents.indexOf('.prose-stone')
 
       expect(proseStoneIdx).toBeLessThan(proseInvertIdx)
     }

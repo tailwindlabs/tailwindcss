@@ -148,7 +148,9 @@ test(
     },
   },
   async ({ fs, spawn }) => {
-    let process = await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose')
+    const process = await spawn(
+      'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
+    )
     await process.onStderr((m) => m.includes('Waiting for file changes'))
 
     await fs.expectFileToContain('dist/out.css', [
@@ -219,7 +221,9 @@ test(
     },
   },
   async ({ fs, spawn }) => {
-    let process = await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose')
+    const process = await spawn(
+      'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
+    )
     await process.onStderr((m) => m.includes('Waiting for file changes'))
 
     await fs.expectFileToContain('dist/out.css', [

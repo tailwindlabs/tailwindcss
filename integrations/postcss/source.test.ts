@@ -389,7 +389,7 @@ test(
     `)
 
     // Watch mode tests
-    let process = await spawn(
+    const process = await spawn(
       'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
       {
         cwd: path.join(root, 'project-a'),
@@ -732,7 +732,7 @@ test(
     `)
 
     // Watch mode tests
-    let process = await spawn(
+    const process = await spawn(
       'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
       {
         cwd: path.join(root, 'project-a'),

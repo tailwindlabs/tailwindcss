@@ -37,7 +37,7 @@ const SETUP = {
 }
 
 test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
-  let process = await spawn('pnpm nuxt dev', {
+  const process = await spawn('pnpm nuxt dev', {
     env: {
       TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
       NODE_ENV: 'development',
@@ -46,7 +46,7 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Local:\s*(http.*)\//.exec(m)
+    const match = /Local:\s*(http.*)\//.exec(m)
     if (match) url = match[1]
     return Boolean(url)
   })
@@ -54,7 +54,7 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
   await process.onStdout((m) => m.includes('server warmed up in'))
 
   await retryAssertion(async () => {
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
   })
 
@@ -68,7 +68,7 @@ test('dev mode', SETUP, async ({ fs, spawn, expect }) => {
       `,
     )
 
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
     expect(css).toContain(candidate`font-bold`)
   })
@@ -78,7 +78,7 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
   await exec('pnpm nuxt build')
   // The Nuxt preview server does not automatically assign a free port if 3000
   // is taken, so we use a random port instead.
-  let process = await spawn(`pnpm nuxt preview --port 8724`, {
+  const process = await spawn(`pnpm nuxt preview --port 8724`, {
     env: {
       TEST: 'false',
       NODE_ENV: 'development',
@@ -87,13 +87,13 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Listening on\s*(http.*)\/?/.exec(m)
+    const match = /Listening on\s*(http.*)\/?/.exec(m)
     if (match) url = match[1].replace('http://[::]', 'http://127.0.0.1')
     return m.includes('Listening on')
   })
 
   await retryAssertion(async () => {
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
   })
 })

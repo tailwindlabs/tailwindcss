@@ -29,7 +29,7 @@ test(
         }
       `,
       'webpack.config.js': js`
-        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+        const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
         module.exports = {
           output: {
@@ -68,7 +68,7 @@ test(
     // NOTE: We are writing to an output CSS file which is not being ignored by
     // `.gitignore` nor marked with `@source not`. This should not result in an
     // infinite loop.
-    let process = await spawn('pnpm webpack --mode=development --watch')
+    const process = await spawn('pnpm webpack --mode=development --watch')
     await process.onStdout((m) => m.includes('compiled successfully in'))
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`

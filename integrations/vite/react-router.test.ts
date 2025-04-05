@@ -72,17 +72,17 @@ const WORKSPACE = {
 }
 
 test('dev mode', { fs: WORKSPACE }, async ({ fs, spawn, expect }) => {
-  let process = await spawn('pnpm react-router dev')
+  const process = await spawn('pnpm react-router dev')
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /Local:\s*(http.*)\//.exec(m)
+    const match = /Local:\s*(http.*)\//.exec(m)
     if (match) url = match[1]
     return Boolean(url)
   })
 
   await retryAssertion(async () => {
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`font-bold`)
   })
 
@@ -96,7 +96,7 @@ test('dev mode', { fs: WORKSPACE }, async ({ fs, spawn, expect }) => {
       `,
     )
 
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`underline`)
     expect(css).toContain(candidate`font-bold`)
   })
@@ -104,17 +104,17 @@ test('dev mode', { fs: WORKSPACE }, async ({ fs, spawn, expect }) => {
 
 test('build mode', { fs: WORKSPACE }, async ({ spawn, exec, expect }) => {
   await exec('pnpm react-router build')
-  let process = await spawn('pnpm react-router-serve ./build/server/index.js')
+  const process = await spawn('pnpm react-router-serve ./build/server/index.js')
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /\[react-router-serve\]\s*(http.*)\ \/?/.exec(m)
+    const match = /\[react-router-serve\]\s*(http.*)\ \/?/.exec(m)
     if (match) url = match[1]
     return url != ''
   })
 
   await retryAssertion(async () => {
-    let css = await fetchStyles(url)
+    const css = await fetchStyles(url)
     expect(css).toContain(candidate`font-bold`)
   })
 })
@@ -168,10 +168,10 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm react-router build')
 
-    let files = await fs.glob('build/client/assets/**/*.css')
+    const files = await fs.glob('build/client/assets/**/*.css')
 
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [candidate`font-bold`])
   },

@@ -55,9 +55,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ exec, fs, expect }) => {
       await exec(`pnpm vite build`)
 
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [filename] = files[0]
+      const [filename] = files[0]
 
       await fs.expectFileToContain(filename, [/text-decoration-line: underline;/gi])
     },

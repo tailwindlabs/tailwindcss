@@ -161,7 +161,7 @@ test(
     },
   },
   async ({ fs, spawn }) => {
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
     )
     await process.onStderr((m) => m.includes('Done in'))
@@ -217,7 +217,7 @@ test(
     },
   },
   async ({ fs, spawn }) => {
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
     )
     await process.onStderr((m) => m.includes('Done in'))
@@ -273,7 +273,7 @@ test(
     },
   },
   async ({ fs, spawn }) => {
-    let process = await spawn(
+    const process = await spawn(
       'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
     )
     await process.onStderr((m) => m.includes('Done in'))

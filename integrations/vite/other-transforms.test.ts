@@ -62,9 +62,9 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
   test(`production build`, createSetup(transformer), async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       css`
@@ -82,18 +82,18 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
   })
 
   test('dev mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/index.html')
+      const styles = await fetchStyles(url, '/index.html')
       expect(styles).toContain(css`
         .foo {
           color: blue;
@@ -120,7 +120,7 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
         `,
       )
 
-      let styles = await fetchStyles(url)
+      const styles = await fetchStyles(url)
       expect(styles).toContain(css`
         .foo {
           background-color: blue;
@@ -130,13 +130,13 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
   })
 
   test('watch mode', createSetup(transformer), async ({ spawn, fs, expect }) => {
-    let process = await spawn('pnpm vite build --watch')
+    const process = await spawn('pnpm vite build --watch')
     await process.onStdout((m) => m.includes('built in'))
 
     await retryAssertion(async () => {
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [, styles] = files[0]
+      const [, styles] = files[0]
 
       expect(styles).toContain(css`
         .foo {
@@ -164,9 +164,9 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
         `,
       )
 
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [, styles] = files[0]
+      const [, styles] = files[0]
 
       expect(styles).toContain(css`
         .foo {

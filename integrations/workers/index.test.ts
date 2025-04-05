@@ -12,7 +12,7 @@ test(
         }
       `,
       'start.js': js`
-        let { Worker } = require('worker_threads')
+        const { Worker } = require('worker_threads')
         new Worker('./worker.js')
       `,
       'worker.js': js`
@@ -22,7 +22,7 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('node ./start.js').then(
+    const output = await exec('node ./start.js').then(
       (out) => out.trim(),
       (err) => `${err}`,
     )

@@ -60,9 +60,9 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build --ssr server.ts')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       candidate`underline`,
@@ -107,9 +107,9 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build --ssr server.ts')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       candidate`underline`,

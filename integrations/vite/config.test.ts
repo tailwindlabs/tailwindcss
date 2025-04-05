@@ -53,9 +53,9 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       //
@@ -117,9 +117,9 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       //
@@ -181,18 +181,18 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url, '/index.html')
+      const css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -200,7 +200,7 @@ test(
     await retryAssertion(async () => {
       await fs.write('my-color.cjs', js`module.exports = 'red'`)
 
-      let css = await fetchStyles(url, '/index.html')
+      const css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })
@@ -260,18 +260,18 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url, '/index.html')
+      const css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: blue')
     })
@@ -279,7 +279,7 @@ test(
     await retryAssertion(async () => {
       await fs.write('my-color.mjs', js`export default 'red'`)
 
-      let css = await fetchStyles(url, '/index.html')
+      const css = await fetchStyles(url, '/index.html')
       expect(css).toContain(candidate`text-primary`)
       expect(css).toContain('color: red')
     })
